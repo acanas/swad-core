@@ -2105,15 +2105,10 @@ static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility)
 /*********** Show form to sign up and edit my shared record card *************/
 /*****************************************************************************/
 
-void Rec_ShowFormSignUpWithMySharedRecord (void)
+void Rec_ShowFormSignUpInCrsWithMySharedRecord (void)
   {
-   extern const char *Txt_Sign_up;
-
    /***** Show the form *****/
-   Act_FormStart (ActSignUp);
-   Rec_ShowSharedUsrRecord (Rec_SHA_SIGN_UP_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
-   Lay_PutConfirmButton (Txt_Sign_up);
-   Act_FormEnd ();
+   Rec_ShowSharedUsrRecord (Rec_SHA_SIGN_UP_IN_CRS_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -2212,12 +2207,13 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Sign_up;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
    extern const char *Txt_Confirm;
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
-      Hlp_USERS_SignUp,				// Rec_SHA_SIGN_UP_FORM
+      Hlp_USERS_SignUp,				// Rec_SHA_SIGN_UP_IN_CRS_FORM
 
       Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_FORM
       Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_CHECK
@@ -2301,7 +2297,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
 	 ICanEdit = Usr_ICanChangeOtherUsrData (UsrDat);
 	 break;
-      default:	// In other options, I can not edit another user's data
+      default:	// In other options, I can not edit user's data
 	 ICanEdit = false;
          break;
      }
@@ -2309,7 +2305,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    /* Class for labels */
    switch (TypeOfView)
      {
-      case Rec_SHA_SIGN_UP_FORM:
+      case Rec_SHA_SIGN_UP_IN_CRS_FORM:
       case Rec_SHA_MY_RECORD_FORM:
       case Rec_SHA_OTHER_NEW_USR_FORM:
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
@@ -2389,9 +2385,31 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       /***** Start form *****/
       switch (TypeOfView)
         {
+	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+            Act_FormStart (ActSignUp);
+            break;
 	 case Rec_SHA_MY_RECORD_FORM:
 	    Act_FormStart (ActChgMyData);
             break;
+         case Rec_SHA_OTHER_EXISTING_USR_FORM:
+            switch (Gbl.Action.Act)
+	      {
+               case ActReqMdfStd:
+		  NextAction = ActUpdStd;
+		  break;
+	       case ActReqMdfNET:
+		  NextAction = ActUpdNET;
+		  break;
+	       case ActReqMdfTch:
+		  NextAction = ActUpdTch;
+		  break;
+	       default:
+		  NextAction = ActUpdOth;
+		  break;
+	      }
+	    Act_FormStart (NextAction);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
+	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
 	    switch (Gbl.Action.Act)
 	      {
@@ -2410,25 +2428,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	      }
 	    Act_FormStart (NextAction);
 	    ID_PutParamOtherUsrIDPlain ();				// New user
-	    break;
-         case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	    switch (UsrDat->RoleInCurrentCrsDB)
-	      {
-	       case Rol_STD:
-		  NextAction = ActUpdStd;
-		  break;
-	       case Rol_NET:
-		  NextAction = ActUpdNET;
-		  break;
-	       case Rol_TCH:
-		  NextAction = ActUpdTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActUpdOth;
-		  break;
-	      }
-	    Act_FormStart (NextAction);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
 	    break;
          default:
             break;
@@ -2498,6 +2497,10 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       /***** Button and end form *****/
       switch (TypeOfView)
         {
+	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+	    Lay_PutConfirmButton (Txt_Sign_up);
+	    Act_FormEnd ();
+	    break;
 	 case Rec_SHA_MY_RECORD_FORM:
 	    Lay_PutConfirmButton (Txt_Save_changes);
 	    Act_FormEnd ();
@@ -2970,16 +2973,17 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    extern const char *Txt_Sex;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   bool RoleForm = (TypeOfView == Rec_SHA_SIGN_UP_FORM ||
-                    TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ||
-                    TypeOfView == Rec_SHA_OTHER_EXISTING_USR_FORM);
+   bool RoleForm = (TypeOfView == Rec_SHA_SIGN_UP_IN_CRS_FORM ||
+                    TypeOfView == Rec_SHA_OTHER_EXISTING_USR_FORM ||
+                    TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM);
    bool SexForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
-   Rol_Role_t DefaultRoleInCurrentCrs;
+   Rol_Role_t DefaultRoleInForm;
    Rol_Role_t Role;
    Usr_Sex_t Sex;
 
    if (RoleForm)
      {
+      /***** Form to select a role *****/
       /* Get user's roles if not got */
       Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
@@ -2991,21 +2995,24 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       ClassForm,Txt_Role);
       switch (TypeOfView)
 	{
-	 case Rec_SHA_SIGN_UP_FORM:			// I want to apply for enrolment
+	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
+            /***** Set default role *****/
 	    if (UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod ||	// Creator of the course
-	        (UsrDat->Roles & (1 << Rol_TCH)))			// Teacher in other courses
-	       DefaultRoleInCurrentCrs = Rol_TCH;
+		(UsrDat->Roles & (1 << Rol_TCH)))			// Teacher in other courses
+	       DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
 	    else if ((UsrDat->Roles & (1 << Rol_NET)))			// Non-editing teacher in other courses
-	       DefaultRoleInCurrentCrs = Rol_NET;
+	       DefaultRoleInForm = Rol_NET;	// Request sign up as a non-editing teacher
 	    else
-	       DefaultRoleInCurrentCrs = Rol_STD;
+	       DefaultRoleInForm = Rol_STD;	// Request sign up as a student
+
+	    /***** Selector of role *****/
 	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 	    for (Role = Rol_STD;
 		 Role <= Rol_TCH;
 		 Role++)
 	      {
 	       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-	       if (Role == DefaultRoleInCurrentCrs)
+	       if (Role == DefaultRoleInForm)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
 	       fprintf (Gbl.F.Out,">%s</option>",
 			Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
@@ -3013,25 +3020,53 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"</select>");
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
-	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
-	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+            if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	      {
-	       if (UsrDat->RoleInCurrentCrsDB < Rol_STD)	// The other user does not belong to current course
+               /***** Set default role *****/
+	       switch (UsrDat->RoleInCurrentCrsDB)
 		 {
-		  /* If there is a request of this user, default role is the requested role */
-		  if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_UNK)
-		    {
-		     if ((UsrDat->Roles & (1 << Rol_TCH)))	// Teacher in other courses
-			DefaultRoleInCurrentCrs = Rol_TCH;
-		     else if ((UsrDat->Roles & (1 << Rol_NET)))	// Non-editing teacher in other courses
-			DefaultRoleInCurrentCrs = Rol_NET;
-		     else
-			DefaultRoleInCurrentCrs = Rol_STD;
-		    }
-		 }
-	       else
-		  DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
+		  case Rol_STD:	// Student in current course
+		  case Rol_NET:	// Non-editing teacher in current course
+		  case Rol_TCH:	// Teacher in current course
+		     DefaultRoleInForm = UsrDat->RoleInCurrentCrsDB;
+		  default:	// User does not belong to current course
+		     /* If there is a request of this user, default role is the requested role */
+		     DefaultRoleInForm = Rol_GetRequestedRole (UsrDat->UsrCod);
 
+	             switch (DefaultRoleInForm)
+	               {
+			case Rol_STD:	// Role requested: student
+			case Rol_NET:	// Role requested: non-editing teacher
+			case Rol_TCH:	// Role requested: teacher
+			   break;
+			default:	// No role requested
+			   switch (Gbl.Action.Act)
+			     {
+			      case ActReqMdfStd:
+				 DefaultRoleInForm = Rol_STD;
+				 break;
+			      case ActReqMdfNET:
+				 DefaultRoleInForm = Rol_NET;
+				 break;
+			      case ActReqMdfTch:
+				 DefaultRoleInForm = Rol_TCH;
+				 break;
+			      default:
+				 if ((UsrDat->Roles & (1 << Rol_TCH)))		// Teacher in other courses
+				    DefaultRoleInForm = Rol_TCH;
+				 else if ((UsrDat->Roles & (1 << Rol_NET)))	// Non-editing teacher in other courses
+				    DefaultRoleInForm = Rol_NET;
+				 else
+				    DefaultRoleInForm = Rol_STD;
+			         break;
+			     }
+			   break;
+		       }
+		     break;
+		 }
+
+	       /***** Selector of role *****/
+	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
 		  case Rol_GST:
@@ -3055,7 +3090,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			  Role++)
 		       {
 			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-			if (Role == DefaultRoleInCurrentCrs)
+			if (Role == DefaultRoleInForm)
 			   fprintf (Gbl.F.Out," selected=\"selected\"");
 			fprintf (Gbl.F.Out,">%s</option>",
 				 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
@@ -3064,23 +3099,26 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  default: // The rest of users can not register other users
 		     break;
 		 }
-
+	       fprintf (Gbl.F.Out,"</select>");
 	      }
-	    else	// No course selected
+	    else				// No course selected
 	      {
-	       DefaultRoleInCurrentCrs = (UsrDat->Roles & ((1 << Rol_STD) |
-		                                           (1 << Rol_NET) |
-							   (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
-								              Rol_GST;	// If user don't belong to any course
-	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\""
-		                  " disabled=\"disabled\">%s</option>",
-			(unsigned) DefaultRoleInCurrentCrs,
-			Txt_ROLES_SINGUL_Abc[DefaultRoleInCurrentCrs][UsrDat->Sex]);
+               /***** Set default role *****/
+	       DefaultRoleInForm = (UsrDat->Roles & ((1 << Rol_STD) |
+		                                     (1 << Rol_NET) |
+						     (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
+								        Rol_GST;	// If user don't belong to any course
+
+	       /***** Selector of role *****/
+	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"
+	                          "<option value=\"%u\" selected=\"selected\""
+		                  " disabled=\"disabled\">%s</option>"
+	                          "</select>",
+			(unsigned) DefaultRoleInForm,
+			Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
 	      }
-	    fprintf (Gbl.F.Out,"</select>");
 	    break;
-	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The other user does not exist in platform
-	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
@@ -3089,36 +3127,54 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
-		     /* In this case UsrDat->RoleInCurrentCrsDB
-		        is not the current role in current course.
-		        Instead it is initialized with the preferred role. */
-		     DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
+                     /***** Set default role *****/
+		     switch (Gbl.Action.Act)
+		       {
+			case ActReqMdfStd:
+			   DefaultRoleInForm = Rol_STD;
+			   break;
+			case ActReqMdfNET:
+			   DefaultRoleInForm = Rol_NET;
+			   break;
+			case ActReqMdfTch:
+			   DefaultRoleInForm = Rol_TCH;
+			   break;
+			default:
+			   DefaultRoleInForm = Rol_STD;
+			   break;
+		       }
+
+		     /***** Selector of role *****/
+		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 		     for (Role = Rol_STD;
 			  Role <= Rol_TCH;
 			  Role++)
 		       {
 			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-			if (Role == DefaultRoleInCurrentCrs)
+			if (Role == DefaultRoleInForm)
 			   fprintf (Gbl.F.Out," selected=\"selected\"");
 			fprintf (Gbl.F.Out,">%s</option>",
 				 Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 		       }
+		     fprintf (Gbl.F.Out,"</select>");
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
 		 }
-	    else	// No course selected
+	    else				// No course selected
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
 		  case Rol_SYS_ADM:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\""
-			                " selected=\"selected\">%s</option>",
+		     /***** Selector of role *****/
+		     fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"
+		                        "<option value=\"%u\""
+			                " selected=\"selected\">%s</option>"
+		                        "</select>",
 			      (unsigned) Rol_GST,Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
 		 }
-	    fprintf (Gbl.F.Out,"</select>");
 	    break;
 	 default:
 	    break;
@@ -3128,6 +3184,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
      }
    else if (SexForm)
      {
+      /***** Form to select a sex *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s*:</td>"
@@ -3156,6 +3213,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			 "</tr>");
      }
    else	// RoleForm == false, SexForm == false
+      /***** No form, only text *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s:"

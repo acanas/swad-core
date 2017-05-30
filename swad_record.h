@@ -55,7 +55,7 @@
 #define Rec_SHARED_NUM_VIEW_TYPES 9
 typedef enum
   {
-   Rec_SHA_SIGN_UP_FORM,
+   Rec_SHA_SIGN_UP_IN_CRS_FORM,
 
    Rec_SHA_MY_RECORD_FORM,
    Rec_SHA_MY_RECORD_CHECK,
@@ -160,7 +160,7 @@ void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbo
 void Rec_AllocMemFieldsRecordsCrs (void);
 void Rec_FreeMemFieldsRecordsCrs (void);
 
-void Rec_ShowFormSignUpWithMySharedRecord (void);
+void Rec_ShowFormSignUpInCrsWithMySharedRecord (void);
 void Rec_ShowFormMySharedRecord (void);
 void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole);
 void Rec_ShowMySharedRecordUpd (void);

@@ -1952,7 +1952,7 @@ void Enr_ReqSignUpInCrs (void)
    else if (Gbl.Usrs.Me.LoggedRole == Rol_GST ||
 	    Gbl.Usrs.Me.LoggedRole == Rol_USR)
       /***** Show form to modify only the user's role or the user's data *****/
-      Rec_ShowFormSignUpWithMySharedRecord ();
+      Rec_ShowFormSignUpInCrsWithMySharedRecord ();
    else
       Lay_ShowErrorAndExit ("You must be logged to sign up in a course.");        // This never should happen
   }

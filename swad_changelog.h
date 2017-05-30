@@ -235,13 +235,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.226.1 (2017-05-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.227 (2017-05-30)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.227:   May 30, 2017	Changes in selector or roles in record cards. (220694 lines)
         Version 16.226.1: May 29, 2017	Changes in contextual links related to users enrolment. (220637 lines)
         Version 16.226:   May 29, 2017	Code refactoring in buttons. (220607 lines)
         Version 16.225.12:May 29, 2017	Button to register students in connected and requests. (220587 lines)
