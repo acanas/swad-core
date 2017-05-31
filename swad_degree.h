@@ -112,7 +112,7 @@ void Deg_RecFormNewDeg (void);
 void Deg_RemoveDegree (void);
 
 void Deg_PutParamDegCod (long DegCod);
-long Deg_GetAndCheckParamOtherDegCod (void);
+long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed);
 
 bool Deg_GetDataOfDegreeByCod (struct Degree *Deg);
 void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg);

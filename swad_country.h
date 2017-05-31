@@ -101,7 +101,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink);
 bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData);
 void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1]);
 void Cty_PutParamCtyCod (long CtyCod);
-long Cty_GetAndCheckParamOtherCtyCod (void);
+long Cty_GetAndCheckParamOtherCtyCod (long MinCodAllowed);
 void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);
 void Cty_ChangeCtyWWW (void);

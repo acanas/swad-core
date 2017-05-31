@@ -1647,13 +1647,13 @@ static void Cty_PutParamOtherCtyCod (long CtyCod)
 /******************* Get parameter with code of country **********************/
 /*****************************************************************************/
 
-long Cty_GetAndCheckParamOtherCtyCod (void)
+long Cty_GetAndCheckParamOtherCtyCod (long MinCodAllowed)
   {
    long CtyCod;
 
    /***** Get and check parameter with code of country *****/
-   if ((CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of country is missing.");
+   if ((CtyCod = Cty_GetParamOtherCtyCod ()) < MinCodAllowed)
+      Lay_ShowErrorAndExit ("Code of country is missing or invalid.");
 
    return CtyCod;
   }
@@ -1676,7 +1676,7 @@ void Cty_RemoveCountry (void)
    struct Country Cty;
 
    /***** Get country code *****/
-   Cty.CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
+   Cty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Get data of the country from database *****/
    Cty_GetDataOfCountryByCod (&Cty,Cty_GET_EXTRA_DATA);
@@ -1693,12 +1693,12 @@ void Cty_RemoveCountry (void)
 
       /***** Remove country *****/
       sprintf (Query,"DELETE FROM countries WHERE CtyCod='%03ld'",
-               Cty.CtyCod);
+	       Cty.CtyCod);
       DB_QueryDELETE (Query,"can not remove a country");
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Country_X_removed,
-               Cty.Name[Gbl.Prefs.Language]);
+	       Cty.Name[Gbl.Prefs.Language]);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1724,14 +1724,13 @@ void Cty_RenameCountry (void)
 
    Cty = &Gbl.Ctys.EditingCty;
 
-   /***** Get parameters from form *****/
-   /* Get the code of the country */
-   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
+   /***** Get the code of the country *****/
+   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
-   /* Get the lenguage */
+   /***** Get the lenguage *****/
    Language = Lan_GetParamLanguage ();
 
-   /* Get the new name for the country */
+   /***** Get the new name for the country *****/
    Par_GetParToText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
 
    /***** Get from the database the data of the country *****/
@@ -1741,44 +1740,46 @@ void Cty_RenameCountry (void)
    if (!NewCtyName[0])
      {
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_country_X_empty,
-               Cty->Name[Language]);
+	       Cty->Name[Language]);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
       /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
       if (strcmp (Cty->Name[Language],NewCtyName))	// Different names
-        {
-         /***** If country was in database... *****/
-         if (Cty_CheckIfCountryNameExists (Language,NewCtyName,Cty->CtyCod))
-           {
-            sprintf (Gbl.Alert.Txt,Txt_The_country_X_already_exists,
-                     NewCtyName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-           }
-         else
-           {
-            /* Update the table changing old name by new name */
-            sprintf (FieldName,"Name_%s",Txt_STR_LANG_ID[Language]);
-            Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
+	{
+	 /***** If country was in database... *****/
+	 if (Cty_CheckIfCountryNameExists (Language,NewCtyName,Cty->CtyCod))
+	   {
+	    sprintf (Gbl.Alert.Txt,Txt_The_country_X_already_exists,
+		     NewCtyName);
+	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	   }
+	 else
+	   {
+	    /* Update the table changing old name by new name */
+	    sprintf (FieldName,"Name_%s",Txt_STR_LANG_ID[Language]);
+	    Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
 
-            /* Write message to show the change made */
-            sprintf (Gbl.Alert.Txt,Txt_The_country_X_has_been_renamed_as_Y,
-                     Cty->Name[Language],NewCtyName);
-            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-           }
-        }
+	    /* Write message to show the change made */
+	    sprintf (Gbl.Alert.Txt,Txt_The_country_X_has_been_renamed_as_Y,
+		     Cty->Name[Language],NewCtyName);
+	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+
+	    /* Update country name */
+	    Str_Copy (Cty->Name[Language],NewCtyName,
+		      Cty_MAX_BYTES_NAME);
+	   }
+	}
       else	// The same name
-        {
-         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_country_X_has_not_changed,
-                  Cty->Name[Language]);
-         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
-        }
+	{
+	 sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_country_X_has_not_changed,
+		  Cty->Name[Language]);
+	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+	}
      }
 
    /***** Show the form again *****/
-   Str_Copy (Cty->Name[Language],NewCtyName,
-             Cty_MAX_BYTES_NAME);
    Cty_EditCountries ();
   }
 
@@ -1855,14 +1856,13 @@ void Cty_ChangeCtyWWW (void)
 
    Cty = &Gbl.Ctys.EditingCty;
 
-   /***** Get parameters from form *****/
-   /* Get the code of the country */
-   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
+   /***** Get the code of the country *****/
+   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
-   /* Get the lenguage */
+   /***** Get the lenguage *****/
    Language = Lan_GetParamLanguage ();
 
-   /* Get the new WWW for the country */
+   /***** Get the new WWW for the country *****/
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
@@ -1873,14 +1873,14 @@ void Cty_ChangeCtyWWW (void)
 		  " WHERE CtyCod='%03ld'",
 	    Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
    DB_QueryUPDATE (Query,"can not update the web of a country");
+   Str_Copy (Cty->WWW[Language],NewWWW,
+	     Cns_MAX_BYTES_WWW);
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
-   Str_Copy (Cty->WWW[Language],NewWWW,
-             Cns_MAX_BYTES_WWW);
    Cty_EditCountries ();
   }
 

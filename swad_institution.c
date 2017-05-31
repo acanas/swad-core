@@ -1641,13 +1641,13 @@ static void Ins_PutParamOtherInsCod (long InsCod)
 /******************* Get parameter with code of institution ******************/
 /*****************************************************************************/
 
-long Ins_GetAndCheckParamOtherInsCod (void)
+long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed)
   {
    long InsCod;
 
    /***** Get and check parameter with code of institution *****/
-   if ((InsCod = Ins_GetParamOtherInsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution is missing.");
+   if ((InsCod = Ins_GetParamOtherInsCod ()) < MinCodAllowed)
+      Lay_ShowErrorAndExit ("Code of institution is missing or invalid.");
 
    return InsCod;
   }
@@ -1671,7 +1671,7 @@ void Ins_RemoveInstitution (void)
    char PathIns[PATH_MAX + 1];
 
    /***** Get institution code *****/
-   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Get data of the institution from database *****/
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_EXTRA_DATA);
@@ -1722,7 +1722,7 @@ void Ins_RemoveInstitution (void)
 
 void Ins_RenameInsShort (void)
   {
-   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHRT_NAME);
   }
 
@@ -1737,7 +1737,7 @@ void Ins_RenameInsShortInConfig (void)
 
 void Ins_RenameInsFull (void)
   {
-   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_FULL_NAME);
   }
 
@@ -1867,7 +1867,7 @@ void Ins_ChangeInsCtyInConfig (void)
    struct Country NewCty;
 
    /***** Get the new country code for the institution *****/
-   NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
+   NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Check if country has changed *****/
    if (NewCty.CtyCod != Gbl.CurrentIns.Ins.CtyCod)
@@ -1945,7 +1945,7 @@ void Ins_ChangeInsWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
-   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /* Get the new WWW for the institution */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -2030,7 +2030,7 @@ void Ins_ChangeInsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get institution code */
-   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /* Get parameter with status */
    Status = (Ins_Status_t)

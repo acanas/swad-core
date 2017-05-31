@@ -601,13 +601,18 @@ static void Dpt_PutParamDptCod (long DptCod)
   }
 
 /*****************************************************************************/
-/******************* Get parameter with code of degree type ******************/
+/******************* Get parameter with code of department *******************/
 /*****************************************************************************/
 
-long Dpt_GetParamDptCod (void)
+long Dpt_GetAndCheckParamDptCod (long MinCodAllowed)
   {
-   /***** Get code of department *****/
-   return Par_GetParToLong ("DptCod");
+   long DptCod;
+
+   /***** Get and check parameter with code of department *****/
+   if ((DptCod = Par_GetParToLong ("DptCod")) < MinCodAllowed)
+      Lay_ShowErrorAndExit ("Code of department is missing or invalid.");
+
+   return DptCod;
   }
 
 /*****************************************************************************/
@@ -622,8 +627,7 @@ void Dpt_RemoveDepartment (void)
    struct Department Dpt;
 
    /***** Get department code *****/
-   if ((Dpt.DptCod = Dpt_GetParamDptCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of department is missing.");
+   Dpt.DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /***** Get data of the department from database *****/
    Dpt_GetDataOfDepartmentByCod (&Dpt);
@@ -661,11 +665,10 @@ void Dpt_ChangeDepartIns (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   if ((Dpt->DptCod = Dpt_GetParamDptCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of department is missing.");
+   Dpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get parameter with institution code */
-   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Update institution in table of departments *****/
    sprintf (Query,"UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
@@ -733,8 +736,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   if ((Dpt->DptCod = Dpt_GetParamDptCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of department is missing.");
+   Dpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get the new name for the department */
    Par_GetParToText (ParamName,NewDptName,MaxBytes);
@@ -831,8 +833,7 @@ void Dpt_ChangeDptWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   if ((Dpt->DptCod = Dpt_GetParamDptCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of department is missing.");
+   Dpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get the new WWW for the department */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1020,7 +1021,7 @@ void Dpt_RecFormNewDpt (void)
 
    /***** Get parameters from form *****/
    /* Get institution */
-   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /* Get department short name */
    Par_GetParToText ("ShortName",Dpt->ShrtName,Hie_MAX_BYTES_SHRT_NAME);

@@ -222,11 +222,12 @@ static void Ind_GetParamsIndicators (void)
    Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
-   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? DT_GetParamOtherDegTypCod () :
-                                                               -1L;
+   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ?
+	                DT_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
+                        -1L;
 
    /***** Get department code *****/
-   Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
+   Gbl.Stat.DptCod = Dpt_GetAndCheckParamDptCod (-1L);	// -1L (any department) is allowed here
 
    /***** Get number of indicators *****/
    Ind_GetParamNumIndicators ();

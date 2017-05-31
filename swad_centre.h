@@ -102,7 +102,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr);
 void Ctr_FreeListCentres (void);
 void Ctr_WriteSelectorOfCentre (void);
 void Ctr_PutParamCtrCod (long CtrCod);
-long Ctr_GetAndCheckParamOtherCtrCod (void);
+long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed);
 void Ctr_RemoveCentre (void);
 void Ctr_ChangeCtrInsInConfig (void);
 void Ctr_ContEditAfterChgCtrInConfig (void);

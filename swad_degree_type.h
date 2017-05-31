@@ -74,7 +74,7 @@ void DT_RecFormNewDegreeType (void);
 
 void DT_RemoveDegreeType (void);
 
-long DT_GetParamOtherDegTypCod (void);
+long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed);
 
 bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
 void DT_RenameDegreeType (void);

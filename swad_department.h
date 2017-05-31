@@ -61,7 +61,7 @@ void Dpt_GetListDepartments (long InsCod);
 void Dpt_FreeListDepartments (void);
 unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod);
 void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt);
-long Dpt_GetParamDptCod (void);
+long Dpt_GetAndCheckParamDptCod (long MinCodAllowed);
 void Dpt_RemoveDepartment (void);
 void Dpt_ChangeDepartIns (void);
 void Dpt_RenameDepartShort (void);

@@ -227,17 +227,20 @@
 
 // TODO: Fix bug: An URL like https://openswad.org/es?a gives Internal Server Error
 
+// TODO: Limit lenght of very big institution name in record card
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.231.4 (2017-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 16.232 (2017-05-31)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.232:   May 31, 2017	Fix bug in selection of user's centre. (221042 lines)
         Version 16.231.4: May 31, 2017	Changes in layout of statistics about institutions.
 					Fixed bug in search. (221039 lines)
         Version 16.231.3: May 31, 2017	Changes in layout of statistics about institutions. (221037 lines)

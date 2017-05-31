@@ -122,7 +122,7 @@ static void Crs_PutLinkToSearchCourses (void);
 static void Sch_PutLinkToSearchCoursesParams (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
-static long Crs_GetAndCheckParamOtherCrsCod (void);
+static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
 
@@ -1948,7 +1948,7 @@ void Crs_RemoveCourse (void)
    struct Course Crs;
 
    /***** Get course code *****/
-   Crs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
+   Crs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /***** Get data of the course from database *****/
    Crs_GetDataOfCourseByCod (&Crs);
@@ -2113,16 +2113,19 @@ void Crs_RemoveCourseCompletely (long CrsCod)
   {
    char Query[128];
 
-   /***** Empty course *****/
-   Crs_EmptyCourseCompletely (CrsCod);
+   if (CrsCod > 0)
+     {
+      /***** Empty course *****/
+      Crs_EmptyCourseCompletely (CrsCod);
 
-   /***** Remove course from table of last accesses to courses in database *****/
-   sprintf (Query,"DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove a course");
+      /***** Remove course from table of last accesses to courses in database *****/
+      sprintf (Query,"DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove a course");
 
-   /***** Remove course from table of courses in database *****/
-   sprintf (Query,"DELETE FROM courses WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove a course");
+      /***** Remove course from table of courses in database *****/
+      sprintf (Query,"DELETE FROM courses WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove a course");
+     }
   }
 
 /*****************************************************************************/
@@ -2137,122 +2140,125 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    char PathRelCrs[PATH_MAX + 1];
    char Query[512];
 
-   /***** Get course data *****/
-   Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
+   if (CrsCod > 0)
+     {
+      /***** Get course data *****/
+      Crs.CrsCod = CrsCod;
+      Crs_GetDataOfCourseByCod (&Crs);
 
-   /***** Remove all the students in the course *****/
-   Enr_RemAllStdsInCrs (&Crs);
+      /***** Remove all the students in the course *****/
+      Enr_RemAllStdsInCrs (&Crs);
 
-   /***** Set all the notifications from the course as removed,
-          except notifications about new messages *****/
-   Ntf_MarkNotifInCrsAsRemoved (-1L,CrsCod);
+      /***** Set all the notifications from the course as removed,
+	     except notifications about new messages *****/
+      Ntf_MarkNotifInCrsAsRemoved (-1L,CrsCod);
 
-   /***** Remove information of the course ****/
-   /* Remove timetable of the course */
-   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove the timetable of a course");
+      /***** Remove information of the course ****/
+      /* Remove timetable of the course */
+      sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove the timetable of a course");
 
-   /* Remove other information of the course */
-   sprintf (Query,"DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove info sources of a course");
+      /* Remove other information of the course */
+      sprintf (Query,"DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove info sources of a course");
 
-   sprintf (Query,"DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove info of a course");
+      sprintf (Query,"DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove info of a course");
 
-   /***** Remove exam announcements in the course *****/
-   /* Mark all exam announcements in the course as deleted */
-   sprintf (Query,"UPDATE exam_announcements SET Status=%u"
-	          " WHERE CrsCod=%ld",
-            (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
-   DB_QueryUPDATE (Query,"can not remove exam announcements of a course");
+      /***** Remove exam announcements in the course *****/
+      /* Mark all exam announcements in the course as deleted */
+      sprintf (Query,"UPDATE exam_announcements SET Status=%u"
+		     " WHERE CrsCod=%ld",
+	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
+      DB_QueryUPDATE (Query,"can not remove exam announcements of a course");
 
-   /***** Remove course cards of the course *****/
-   /* Remove content of course cards */
-   sprintf (Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
-                  " WHERE crs_record_fields.CrsCod=%ld"
-                  " AND crs_record_fields.FieldCod=crs_records.FieldCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove content of cards in a course");
+      /***** Remove course cards of the course *****/
+      /* Remove content of course cards */
+      sprintf (Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
+		     " WHERE crs_record_fields.CrsCod=%ld"
+		     " AND crs_record_fields.FieldCod=crs_records.FieldCod",
+	       CrsCod);
+      DB_QueryDELETE (Query,"can not remove content of cards in a course");
 
-   /* Remove definition of fields in course cards */
-   sprintf (Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove fields of cards in a course");
+      /* Remove definition of fields in course cards */
+      sprintf (Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove fields of cards in a course");
 
-   /***** Remove assignments of the course *****/
-   Asg_RemoveCrsAssignments (CrsCod);
+      /***** Remove assignments of the course *****/
+      Asg_RemoveCrsAssignments (CrsCod);
 
-   /***** Remove attendance events of the course *****/
-   Att_RemoveCrsAttEvents (CrsCod);
+      /***** Remove attendance events of the course *****/
+      Att_RemoveCrsAttEvents (CrsCod);
 
-   /***** Remove notices in the course *****/
-   /* Copy all notices from the course to table of deleted notices */
-   sprintf (Query,"INSERT INTO notices_deleted"
-	          " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-                  " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif FROM notices"
-                  " WHERE CrsCod=%ld",
-            CrsCod);
-   DB_QueryINSERT (Query,"can not remove notices in a course");
-   /* Remove all notices from the course */
-   sprintf (Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove notices in a course");
+      /***** Remove notices in the course *****/
+      /* Copy all notices from the course to table of deleted notices */
+      sprintf (Query,"INSERT INTO notices_deleted"
+		     " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		     " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif FROM notices"
+		     " WHERE CrsCod=%ld",
+	       CrsCod);
+      DB_QueryINSERT (Query,"can not remove notices in a course");
+      /* Remove all notices from the course */
+      sprintf (Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE (Query,"can not remove notices in a course");
 
-   /***** Remove all the threads and posts in forums of the course *****/
-   For_RemoveForums (Sco_SCOPE_CRS,CrsCod);
+      /***** Remove all the threads and posts in forums of the course *****/
+      For_RemoveForums (Sco_SCOPE_CRS,CrsCod);
 
-   /***** Remove surveys of the course *****/
-   Svy_RemoveSurveys (Sco_SCOPE_CRS,CrsCod);
+      /***** Remove surveys of the course *****/
+      Svy_RemoveSurveys (Sco_SCOPE_CRS,CrsCod);
 
-   /***** Remove all test exams made in the course *****/
-   Tst_RemoveCrsTestResults (CrsCod);
+      /***** Remove all test exams made in the course *****/
+      Tst_RemoveCrsTestResults (CrsCod);
 
-   /***** Remove all tests questions in the course *****/
-   Tst_RemoveCrsTests (CrsCod);
+      /***** Remove all tests questions in the course *****/
+      Tst_RemoveCrsTests (CrsCod);
 
-   /***** Remove groups in the course *****/
-   /* Remove all the users in groups in the course */
-   sprintf (Query,"DELETE FROM crs_grp_usr"
-	          " USING crs_grp_types,crs_grp,crs_grp_usr"
-                  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-                  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove users from groups of a course");
+      /***** Remove groups in the course *****/
+      /* Remove all the users in groups in the course */
+      sprintf (Query,"DELETE FROM crs_grp_usr"
+		     " USING crs_grp_types,crs_grp,crs_grp_usr"
+		     " WHERE crs_grp_types.CrsCod=%ld"
+		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
+	       CrsCod);
+      DB_QueryDELETE (Query,"can not remove users from groups of a course");
 
-   /* Remove all the groups in the course */
-   sprintf (Query,"DELETE FROM crs_grp"
-	          " USING crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove groups of a course");
+      /* Remove all the groups in the course */
+      sprintf (Query,"DELETE FROM crs_grp"
+		     " USING crs_grp_types,crs_grp"
+		     " WHERE crs_grp_types.CrsCod=%ld"
+		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
+	       CrsCod);
+      DB_QueryDELETE (Query,"can not remove groups of a course");
 
-   /* Remove all the group types in the course */
-   sprintf (Query,"DELETE FROM crs_grp_types"
-	          " WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove types of group of a course");
+      /* Remove all the group types in the course */
+      sprintf (Query,"DELETE FROM crs_grp_types"
+		     " WHERE CrsCod=%ld",
+	       CrsCod);
+      DB_QueryDELETE (Query,"can not remove types of group of a course");
 
-   /***** Remove users' requests for inscription in the course *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove requests for inscription to a course");
+      /***** Remove users' requests for inscription in the course *****/
+      sprintf (Query,"DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
+	       CrsCod);
+      DB_QueryDELETE (Query,"can not remove requests for inscription to a course");
 
-   /***** Remove possible users remaining in the course (teachers) *****/
-   sprintf (Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove users from a course");
+      /***** Remove possible users remaining in the course (teachers) *****/
+      sprintf (Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
+	       CrsCod);
+      DB_QueryDELETE (Query,"can not remove users from a course");
 
-   /***** Remove information related to files in course *****/
-   Brw_RemoveCrsFilesFromDB (CrsCod);
+      /***** Remove information related to files in course *****/
+      Brw_RemoveCrsFilesFromDB (CrsCod);
 
-   /***** Remove directories of the course *****/
-   sprintf (PathRelCrs,"%s/%s/%ld",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod);
-   Fil_RemoveTree (PathRelCrs);
-   sprintf (PathRelCrs,"%s/%s/%ld",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod);
-   Fil_RemoveTree (PathRelCrs);
+      /***** Remove directories of the course *****/
+      sprintf (PathRelCrs,"%s/%s/%ld",
+	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod);
+      Fil_RemoveTree (PathRelCrs);
+      sprintf (PathRelCrs,"%s/%s/%ld",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod);
+      Fil_RemoveTree (PathRelCrs);
+     }
   }
 
 /*****************************************************************************/
@@ -2295,7 +2301,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /* Get institutional code */
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
@@ -2339,7 +2345,7 @@ void Crs_ChangeCrsDegInConfig (void)
    struct Degree NewDeg;
 
    /***** Get parameter with degree code *****/
-   NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod ();
+   NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /***** Check if degree has changed *****/
    if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)
@@ -2477,7 +2483,7 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /* Get parameter with year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
@@ -2572,7 +2578,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
 
 void Crs_RenameCourseShort (void)
   {
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHRT_NAME);
   }
 
@@ -2587,7 +2593,7 @@ void Crs_RenameCourseShortInConfig (void)
 
 void Crs_RenameCourseFull (void)
   {
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_FULL_NAME);
   }
 
@@ -2732,7 +2738,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /* Get parameter with status */
    Status = (Crs_Status_t)
@@ -2938,13 +2944,13 @@ static void Crs_PutParamOtherCrsCod (long CrsCod)
 /********************* Get parameter with code of course *********************/
 /*****************************************************************************/
 
-static long Crs_GetAndCheckParamOtherCrsCod (void)
+static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed)
   {
    long CrsCod;
 
    /***** Get and check parameter with code of course *****/
-   if ((CrsCod = Par_GetParToLong ("OthCrsCod")) <= 0)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
+   if ((CrsCod = Par_GetParToLong ("OthCrsCod")) < MinCodAllowed)
+      Lay_ShowErrorAndExit ("Code of course is missing or invalid.");
 
    return CrsCod;
   }

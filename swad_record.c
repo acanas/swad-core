@@ -4249,7 +4249,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 void Rec_ChgCountryOfMyInstitution (void)
   {
    /***** Get country code of my institution *****/
-   Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetAndCheckParamOtherCtyCod ();
+   Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Update institution, centre and department *****/
    // When country changes, the institution, centre and department must be reset
@@ -4272,7 +4272,7 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Get my institution *****/
    /* Get institution code */
-   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod (0);	// 0 (another institution) is allowed here
 
    /* Get country of institution */
    if (Ins.InsCod > 0)
@@ -4302,7 +4302,7 @@ void Rec_UpdateMyCentre (void)
 
    /***** Get my centre *****/
    /* Get centre code */
-   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (0);	// 0 (another centre) is allowed here
 
    /* Get institution of centre */
    if (Ctr.CtrCod > 0)
@@ -4333,8 +4333,7 @@ void Rec_UpdateMyDepartment (void)
 
    /***** Get my department *****/
    /* Get department code */
-   if ((Dpt.DptCod = Dpt_GetParamDptCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of department is missing.");
+   Dpt.DptCod = Dpt_GetAndCheckParamDptCod (0);	// 0 (another department) is allowed here
 
    /* Get institution of department */
    if (Dpt.DptCod > 0)

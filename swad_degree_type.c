@@ -746,8 +746,7 @@ void DT_RemoveDegreeType (void)
    struct DegreeType DegTyp;
 
    /***** Get the code of the degree type *****/
-   if ((DegTyp.DegTypCod = DT_GetParamOtherDegTypCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of type of degree is missing.");
+   DegTyp.DegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
 
    /***** Get data of the degree type from database *****/
    if (!DT_GetDataOfDegreeTypeByCod (&DegTyp))
@@ -784,10 +783,15 @@ static void DT_PutParamOtherDegTypCod (long DegTypCod)
 /******************* Get parameter with code of degree type ******************/
 /*****************************************************************************/
 
-long DT_GetParamOtherDegTypCod (void)
+long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
   {
-   /***** Get code of degree type *****/
-   return Par_GetParToLong ("OthDegTypCod");
+   long DegTypCod;
+
+   /***** Get and check parameter with code of degree type *****/
+   if ((DegTypCod = Par_GetParToLong ("OthDegTypCod")) < MinCodAllowed)
+      Lay_ShowErrorAndExit ("Code of degree type is missing or invalid.");
+
+   return DegTypCod;
   }
 
 /*****************************************************************************/
@@ -919,8 +923,7 @@ void DT_RenameDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree type */
-   if ((DegTyp->DegTypCod = DT_GetParamOtherDegTypCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of type of degree is missing.");
+   DegTyp->DegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
 
    /* Get the new name for the degree type */
    Par_GetParToText ("DegTypName",NewNameDegTyp,Deg_MAX_BYTES_DEGREE_TYPE_NAME);
@@ -1003,10 +1006,10 @@ void DT_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod ();
+   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /* Get the new degree type */
-   NewDegTypCod = DT_GetParamOtherDegTypCod ();
+   NewDegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);

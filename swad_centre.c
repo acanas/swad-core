@@ -1674,13 +1674,13 @@ static void Ctr_PutParamOtherCtrCod (long CtrCod)
 /****************** Get parameter with code of other centre ******************/
 /*****************************************************************************/
 
-long Ctr_GetAndCheckParamOtherCtrCod (void)
+long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed)
   {
    long CtrCod;
 
    /***** Get and check parameter with code of centre *****/
-   if ((CtrCod = Par_GetParToLong ("OthCtrCod")) <= 0)
-      Lay_ShowErrorAndExit ("Code of centre is missing.");
+   if ((CtrCod = Par_GetParToLong ("OthCtrCod")) < MinCodAllowed)
+      Lay_ShowErrorAndExit ("Code of centre is missing or invalid.");
 
    return CtrCod;
   }
@@ -1698,7 +1698,7 @@ void Ctr_RemoveCentre (void)
    char PathCtr[PATH_MAX + 1];
 
    /***** Get centre code *****/
-   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get data of the centre from database *****/
    Ctr_GetDataOfCentreByCod (&Ctr);
@@ -1728,12 +1728,12 @@ void Ctr_RemoveCentre (void)
 
       /***** Remove centre *****/
       sprintf (Query,"DELETE FROM centres WHERE CtrCod=%ld",
-               Ctr.CtrCod);
+	       Ctr.CtrCod);
       DB_QueryDELETE (Query,"can not remove a centre");
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Centre_X_removed,
-               Ctr.FullName);
+	       Ctr.FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1752,7 +1752,7 @@ void Ctr_ChangeCtrInsInConfig (void)
    struct Instit NewIns;
 
    /***** Get parameter with institution code *****/
-   NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Check if institution has changed *****/
    if (NewIns.InsCod != Gbl.CurrentCtr.Ctr.InsCod)
@@ -1834,11 +1834,10 @@ void Ctr_ChangeCentrePlace (void)
    long NewPlcCod;
    char Query[512];
 
-   /***** Get parameters from form *****/
-   /* Get centre code */
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   /***** Get centre code *****/
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
-   /* Get parameter with centre code */
+   /***** Get parameter with place code *****/
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Get data of centre from database *****/
@@ -1846,12 +1845,12 @@ void Ctr_ChangeCentrePlace (void)
 
    /***** Update place in table of centres *****/
    sprintf (Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
-            NewPlcCod,Gbl.Ctrs.EditingCtr.CtrCod);
+	    NewPlcCod,Gbl.Ctrs.EditingCtr.CtrCod);
    DB_QueryUPDATE (Query,"can not update the place of a centre");
    Gbl.Ctrs.EditingCtr.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made
-          and put button to go to centre changed *****/
+	  and put button to go to centre changed *****/
    Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,"%s",Txt_The_place_of_the_centre_has_changed);
    Ctr_ShowAlertAndButtonToGoToCtr ();
@@ -1866,7 +1865,7 @@ void Ctr_ChangeCentrePlace (void)
 
 void Ctr_RenameCentreShort (void)
   {
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
    Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHRT_NAME);
   }
 
@@ -1881,7 +1880,7 @@ void Ctr_RenameCentreShortInConfig (void)
 
 void Ctr_RenameCentreFull (void)
   {
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
    Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_FULL_NAME);
   }
 
@@ -2010,11 +2009,10 @@ void Ctr_ChangeCtrWWW (void)
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
-   /***** Get parameters from form *****/
-   /* Get the code of the centre */
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   /***** Get the code of the centre *****/
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
-   /* Get the new WWW for the centre */
+   /***** Get the new WWW for the centre *****/
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of centre *****/
@@ -2026,7 +2024,7 @@ void Ctr_ChangeCtrWWW (void)
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Gbl.Ctrs.EditingCtr.CtrCod,NewWWW);
       Str_Copy (Gbl.Ctrs.EditingCtr.WWW,NewWWW,
-                Cns_MAX_BYTES_WWW);
+		Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made
 	     and put button to go to centre changed *****/
@@ -2096,16 +2094,15 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
-   /***** Get parameters from form *****/
-   /* Get centre code */
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   /***** Get centre code *****/
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
-   /* Get parameter with status */
+   /***** Get parameter with status *****/
    Status = (Ctr_Status_t)
 	    Par_GetParToUnsignedLong ("Status",
-	                              0,
-	                              (unsigned long) Ctr_MAX_STATUS,
-                                      (unsigned long) Ctr_WRONG_STATUS);
+				      0,
+				      (unsigned long) Ctr_MAX_STATUS,
+				      (unsigned long) Ctr_WRONG_STATUS);
    if (Status == Ctr_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Status);
@@ -2116,7 +2113,7 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Update status in table of centres *****/
    sprintf (Query,"UPDATE centres SET Status=%u WHERE CtrCod=%ld",
-            (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
+	    (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
    DB_QueryUPDATE (Query,"can not update the status of a centre");
    Gbl.Ctrs.EditingCtr.Status = Status;
 
@@ -2124,7 +2121,7 @@ void Ctr_ChangeCtrStatus (void)
 	  and put button to go to centre changed *****/
    Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_centre_X_has_changed,
-            Gbl.Ctrs.EditingCtr.ShrtName);
+	    Gbl.Ctrs.EditingCtr.ShrtName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
