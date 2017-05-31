@@ -4954,30 +4954,31 @@ static void Sta_GetAndShowInstitutionsStats (void)
    extern const char *Hlp_STATS_Figures_institutions;
    extern const char *Txt_Institutions;
 
-   /***** Get and update type of list, number of columns in class photo
-          and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
-
-   /***** Form to select type of list used to display degree photos *****/
+   /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Institutions,
                         NULL,Hlp_STATS_Figures_institutions);
-   Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl);
-   Lay_EndRoundFrame ();
 
-   /****** Institutions ordered by number of centres ******/
+   /***** Form to select type of list used to display degree photos *****/
+   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl);
+
+   /***** Institutions ordered by number of centres *****/
    Sta_GetAndShowInssOrderedByNumCtrs ();
 
-   /****** Institutions ordered by number of degrees ******/
+   /***** Institutions ordered by number of degrees *****/
    Sta_GetAndShowInssOrderedByNumDegs ();
 
-   /****** Institutions ordered by number of courses ******/
+   /***** Institutions ordered by number of courses *****/
    Sta_GetAndShowInssOrderedByNumCrss ();
 
-   /****** Institutions ordered by number of users in courses ******/
+   /***** Institutions ordered by number of users in courses *****/
    Sta_GetAndShowInssOrderedByNumUsrsInCrss ();
 
-   /****** Institutions ordered by number of users who claim to belong to them ******/
+   /***** Institutions ordered by number of users who claim to belong to them *****/
    Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

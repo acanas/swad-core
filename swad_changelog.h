@@ -208,8 +208,6 @@
 
 // TODO: En información de un centro, poner icono que enlace a edición de lugares, y posibilidad de editar lugar del centro en un menú desplegable. Lugar debería ir encima de Acceso directo.
 
-// TODO: Fix bug: An URL like https://openswad.org/es?a gives Internal Server Error
-
 // TODO: Fix bug: En Compartidos, si se borra la posibilidad de carpetas en un grupo ==> sale mensaje "The group has no file zones."
 
 // TODO: Change numbers of notifications in program and database to match order in tabs
@@ -227,17 +225,20 @@
 
 // TODO: Green lock in documents is not shown when name is shortened (see OpenSWAD -> Creative Commons -> Files -> Documents)
 
+// TODO: Fix bug: An URL like https://openswad.org/es?a gives Internal Server Error
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.231.2 (2017-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 16.231.3 (2017-05-31)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.231.3: May 31, 2017	Changes in layout of statistics about institutions. (221037 lines)
         Version 16.231.2: May 31, 2017	Fixed bug in connected users. (221036 lines)
         Version 16.231.1: May 31, 2017	Fixed bugs in enrolment and groups. (221031 lines)
         Version 16.231:   May 31, 2017	Non-editing teachers can edit (with restrictions) in private zones. (221031 lines)

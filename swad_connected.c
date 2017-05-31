@@ -1014,7 +1014,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 break;
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW %s\">",Font);	// Limited width
+   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
    Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
    fprintf (Gbl.F.Out,"</a>"
