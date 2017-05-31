@@ -1846,7 +1846,6 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
-   unsigned NumStds;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,
@@ -1857,7 +1856,8 @@ void Enr_AskRemAllStdsThisCrs (void)
       /***** Show question and button to remove students *****/
       /* Start alert */
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
-               NumStds,Gbl.CurrentCrs.Crs.FullName);
+               Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD],
+               Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
       /* Show form to request confirmation */

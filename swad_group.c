@@ -40,10 +40,10 @@
 /*************************** Internal constants ******************************/
 /*****************************************************************************/
 
-#define Grp_GROUP_TYPES_SECTION_ID		"grp_types"
+#define Grp_GROUP_TYPES_SECTION_ID	"grp_types"
 #define Grp_NEW_GROUP_TYPE_SECTION_ID	"new_grp_type"
 #define Grp_GROUPS_SECTION_ID		"grps"
-#define Grp_NEW_GROUP_SECTION_ID		"new_grp"
+#define Grp_NEW_GROUP_SECTION_ID	"new_grp"
 
 /*****************************************************************************/
 /***************************** Internal types ********************************/
@@ -3078,7 +3078,6 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
       bool IBelongToGrp;
      } Cached =
      {
-      -1L,
       -1L,
       false
      };	// A cache. If this function is called consecutive times

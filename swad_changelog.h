@@ -231,13 +231,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.231 (2017-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 16.231.1 (2017-05-31)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.231.1: May 31, 2017	Fixed bugs in enrolment and groups. (221031 lines)
         Version 16.231:   May 31, 2017	Non-editing teachers can edit (with restrictions) in private zones. (221031 lines)
         Version 16.230:   May 30, 2017	Number of teachers and non-editing teachers in list of groups. (220953 lines)
         Version 16.229.1: May 30, 2017	Code refactoring in selection of groups.
