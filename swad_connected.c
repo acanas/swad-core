@@ -1010,14 +1010,15 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 Act_FormStartUnique (ActSeeRecOneTch);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role");
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
+   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW %s\">",Font);	// Limited width
    Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
    fprintf (Gbl.F.Out,"</a>"
-	              "</div>");
+                      "</div>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 
@@ -1058,8 +1059,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    char PhotoURL[PATH_MAX + 1];
    const char *Font;
    struct UsrData UsrDat;
-   bool PutLinkToRecord = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-	                   Gbl.Scope.Current == Sco_SCOPE_CRS);
+   bool PutLinkToRecord = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+	                   Gbl.Scope.Current == Sco_SCOPE_CRS &&	// Scope is current course
+	                   (Role == Rol_STD ||				// Role is student,...
+	                    Role == Rol_NET ||				// ...non-editing teacher...
+	                    Role == Rol_TCH));				// ...or teacher
 
    /***** Get connected users who belong to current location from database *****/
    switch (Role)
@@ -1213,7 +1217,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     Act_FormStart (ActSeeRecOneTch);
 		     break;
 		  default:
-		     Lay_ShowErrorAndExit ("Wrong role");
+		     Lay_ShowErrorAndExit ("Wrong role.");
 		 }
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	      }
