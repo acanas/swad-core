@@ -298,19 +298,19 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
    unsigned Permissions[Sch_NUM_WHAT_TO_SEARCH] =
      {
       0x000,	// Sch_SEARCH_UNKNOWN
-      0x1FF,	// Sch_SEARCH_ALL
-      0x1FF,	// Sch_SEARCH_COUNTRIES
-      0x1FF,	// Sch_SEARCH_INSTITS
-      0x1FF,	// Sch_SEARCH_CENTRES
-      0x1FF,	// Sch_SEARCH_DEGREES
-      0x1FF,	// Sch_SEARCH_COURSES
-      0x1FF,	// Sch_SEARCH_USERS
-      0x1FF,	// Sch_SEARCH_TEACHERS
-      0x1FF,	// Sch_SEARCH_STUDENTS
-      0x1FF,	// Sch_SEARCH_GUESTS
-      0x1FF,	// Sch_SEARCH_OPEN_DOCUMENTS
-      0x1FE,	// Sch_SEARCH_DOCUM_IN_MY_COURSES	Only if I am logged
-      0x1FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
+      0x3FF,	// Sch_SEARCH_ALL
+      0x3FF,	// Sch_SEARCH_COUNTRIES
+      0x3FF,	// Sch_SEARCH_INSTITS
+      0x3FF,	// Sch_SEARCH_CENTRES
+      0x3FF,	// Sch_SEARCH_DEGREES
+      0x3FF,	// Sch_SEARCH_COURSES
+      0x3FF,	// Sch_SEARCH_USERS
+      0x3FF,	// Sch_SEARCH_TEACHERS
+      0x3FF,	// Sch_SEARCH_STUDENTS
+      0x3FF,	// Sch_SEARCH_GUESTS
+      0x3FF,	// Sch_SEARCH_OPEN_DOCUMENTS
+      0x3FE,	// Sch_SEARCH_DOCUM_IN_MY_COURSES	Only if I am logged
+      0x3FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
      };
 
    return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.LoggedRole));

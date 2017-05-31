@@ -1462,7 +1462,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       /***** Put the table with the clicks *****/
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks,
+	 Lay_StartRoundFrame ("100%",Txt_List_of_detailed_clicks,
 	                      NULL,NULL);
       else
 	 Lay_StartRoundFrame (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],
@@ -4992,7 +4992,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_centres,
+   Lay_StartRoundFrameTable ("100%",Txt_Institutions_by_number_of_centres,
                              NULL,NULL,2);
 
    /***** Get institutions ordered by number of centres *****/
@@ -5044,7 +5044,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_degrees,
+   Lay_StartRoundFrameTable ("100%",Txt_Institutions_by_number_of_degrees,
                              NULL,NULL,2);
 
    /***** Get institutions ordered by number of degrees *****/
@@ -5099,7 +5099,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_courses,
+   Lay_StartRoundFrameTable ("100%",Txt_Institutions_by_number_of_courses,
                              NULL,NULL,2);
 
    /***** Get institutions ordered by number of courses *****/
@@ -5157,7 +5157,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_users_in_courses,
+   Lay_StartRoundFrameTable ("100%",Txt_Institutions_by_number_of_users_in_courses,
                              NULL,NULL,2);
 
    /***** Get institutions ordered by number of users in courses *****/
@@ -5219,7 +5219,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
+   Lay_StartRoundFrameTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
                              NULL,NULL,2);
 
    /***** Get institutions ordered by number of users who claim to belong to them *****/
