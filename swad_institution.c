@@ -1066,7 +1066,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                Ins->NumCrss = Crs_GetNumCrssInIns (Ins->InsCod);
 
                /* Get number of departments in this institution */
-               Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
+               Ins->NumDpts = Dpt_GetNumDptsInIns (Ins->InsCod);
 
                /* Get number of users in courses */
 	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
@@ -1165,7 +1165,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	    Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
 	    /* Get number of departments in this institution */
-	    Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
+	    Ins->NumDpts = Dpt_GetNumDptsInIns (Ins->InsCod);
 
 	    /* Get number of degrees in this institution */
 	    Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);

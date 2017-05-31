@@ -69,7 +69,7 @@ void Dpt_RenameDepartFull (void);
 void Dpt_ChangeDptWWW (void);
 void Dpt_RecFormNewDpt (void);
 unsigned Dpt_GetTotalNumberOfDepartments (void);
-unsigned Dpt_GetNumberOfDepartmentsInInstitution (long InsCod);
+unsigned Dpt_GetNumDptsInIns (long InsCod);
 
 void Dpt_WriteSelectorDepartment (long InsCod);
 

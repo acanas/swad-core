@@ -1111,7 +1111,7 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 /**************** Get number of departments in a institution *****************/
 /*****************************************************************************/
 
-unsigned Dpt_GetNumberOfDepartmentsInInstitution (long InsCod)
+unsigned Dpt_GetNumDptsInIns (long InsCod)
   {
    char Query[128];
 

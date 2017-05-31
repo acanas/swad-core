@@ -28930,25 +28930,46 @@ const char *Txt_Please_enter_your_ID =
 	"Por favor, digite n&ordm; de identifica&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_Please_fill_in_your_centre_and_department =
+const char *Txt_Please_fill_in_your_centre =
 #if   L==1
-	"Si us plau, ompli el seu centre i department.";
+	"Si us plau, ompli el seu centre.";
 #elif L==2
-	"Bitte geben Sie Ihre Zentrum und Abteilung zu f&uuml;llen.";
+	"Bitte geben Sie Ihre Zentrum zu f&uuml;llen.";
 #elif L==3
-	"Please fill in your centre and department.";
+	"Please fill in your centre.";
 #elif L==4
-	"Por favor, rellene su centro y departamento.";
+	"Por favor, rellene su centro.";
 #elif L==5
-	"S'il vous pla&iacute;t, indiquez votre centre et d&eacute;partement.";
+	"S'il vous pla&iacute;t, indiquez votre centre.";
 #elif L==6
-	"Por favor, rellene su centro y departamento.";	// Okoteve traducción
+	"Por favor, rellene su centro.";	// Okoteve traducción
 #elif L==7
-	"Per favore, inserisci il tuo centro e dipartimento.";
+	"Per favore, inserisci il tuo centro.";
 #elif L==8
-	"Prosz&eogon;, wpisz swoje tym centrum i dzia&lstrok;u.";
+	"Prosz&eogon;, wpisz swoje tym centrum.";
 #elif L==9
-	"Por favor, preencha o seu centro e departamento.";
+	"Por favor, preencha o seu centro.";
+#endif
+
+const char *Txt_Please_fill_in_your_department =
+#if   L==1
+	"Si us plau, ompli el seu department.";
+#elif L==2
+	"Bitte geben Sie Ihre Abteilung zu f&uuml;llen.";
+#elif L==3
+	"Please fill in your department.";
+#elif L==4
+	"Por favor, rellene su departamento.";
+#elif L==5
+	"S'il vous pla&iacute;t, indiquez votre d&eacute;partement.";
+#elif L==6
+	"Por favor, rellene su departamento.";	// Okoteve traducción
+#elif L==7
+	"Per favore, inserisci il tuo dipartimento.";
+#elif L==8
+	"Prosz&eogon;, wpisz swoje tym dzia&lstrok;u.";
+#elif L==9
+	"Por favor, preencha o seu departamento.";
 #endif
 
 const char *Txt_Please_fill_in_your_email_address =

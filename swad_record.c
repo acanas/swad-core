@@ -3973,7 +3973,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Please_select_the_country_of_your_institution;
    extern const char *Txt_Please_fill_in_your_institution;
-   extern const char *Txt_Please_fill_in_your_centre_and_department;
+   extern const char *Txt_Please_fill_in_your_centre;
+   extern const char *Txt_Please_fill_in_your_department;
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country_of_your_institution;
@@ -4002,10 +4003,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
    else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
-   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH)) &&
-            (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
-             Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0))
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre_and_department);
+   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH)))
+     {
+      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
+         Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre);
+      else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)
+         Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_department);
+     }
 
    /***** Start table *****/
    Lay_StartRoundFrameTable ("800px",
@@ -4248,14 +4252,27 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
 void Rec_ChgCountryOfMyInstitution (void)
   {
+   unsigned NumInss;
+
    /***** Get country code of my institution *****/
    Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
+   /***** When country changes, the institution, centre and department must be reset *****/
+   NumInss = Ins_GetNumInssInCty (Gbl.Usrs.Me.UsrDat.InsCtyCod);
+   if (NumInss)
+     {
+      Gbl.Usrs.Me.UsrDat.InsCod     = -1L;
+      Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
+      Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
+     }
+   else	// Country has no institutions
+     {
+      Gbl.Usrs.Me.UsrDat.InsCod     = 0;	// Another institution
+      Gbl.Usrs.Me.UsrDat.Tch.CtrCod = 0;	// Another centre
+      Gbl.Usrs.Me.UsrDat.Tch.DptCod = 0;	// Another department
+    }
+
    /***** Update institution, centre and department *****/
-   // When country changes, the institution, centre and department must be reset
-   Gbl.Usrs.Me.UsrDat.InsCod     = -1L;
-   Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
-   Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
@@ -4269,6 +4286,8 @@ void Rec_ChgCountryOfMyInstitution (void)
 void Rec_UpdateMyInstitution (void)
   {
    struct Instit Ins;
+   unsigned NumCtrs;
+   unsigned NumDpts;
 
    /***** Get my institution *****/
    /* Get institution code */
@@ -4282,10 +4301,16 @@ void Rec_UpdateMyInstitution (void)
 	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
      }
 
-   /***** Update institution, centre and department *****/
+   /* Set institution code */
    Gbl.Usrs.Me.UsrDat.InsCod = Ins.InsCod;
-   Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
-   Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
+
+   /***** When institution changes, the centre and department must be reset *****/
+   NumCtrs = Ctr_GetNumCtrsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
+   NumDpts = Dpt_GetNumDptsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
+   Gbl.Usrs.Me.UsrDat.Tch.CtrCod = (NumCtrs ? -1L : 0);
+   Gbl.Usrs.Me.UsrDat.Tch.DptCod = (NumDpts ? -1L : 0);
+
+   /***** Update institution, centre and department *****/
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
@@ -4315,8 +4340,10 @@ void Rec_UpdateMyCentre (void)
 	}
      }
 
-   /***** Update institution, centre and department *****/
+   /* Set centre code */
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.CtrCod;
+
+   /***** Update institution, centre and department *****/
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
