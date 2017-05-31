@@ -5099,11 +5099,14 @@ void Act_AdjustCurrentAction (void)
             return;
         }
 
+   /***** Check if I am a teacher *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & ((1 << Rol_NET) |	// I am a non-editing teacher...
+	                                      (1 << Rol_TCH)));	// ...or a teacher in any course
+
    /***** If I haven't filled my institution,
           or if I'm a teacher and I haven't filled my centre or department,
           the only action possible is to show a form to change my common record *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH));
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0 ||
        (IAmATeacher && (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
                         Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))

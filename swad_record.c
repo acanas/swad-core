@@ -3990,20 +3990,21 @@ void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumIns;
    unsigned NumCtr;
    unsigned NumDpt;
-   bool IAmTeacher;
+   bool IAmATeacher;
 
    /***** Get my roles if not yet got *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check if I am a teacher *****/
-   IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH));
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & ((1 << Rol_NET) |	// I am a non-editing teacher...
+	                                      (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** If there is no country, institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
    else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
-   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH)))
+   else if (IAmATeacher)
      {
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
          Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre);
@@ -4013,8 +4014,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Start table *****/
    Lay_StartRoundFrameTable ("800px",
-                             IAmTeacher ? Txt_Institution_centre_and_department :
-	                                  Txt_Institution,
+                             IAmATeacher ? Txt_Institution_centre_and_department :
+	                                   Txt_Institution,
 	                     NULL,Hlp_PROFILE_Institution,2);
 
    /***** Country *****/
@@ -4104,7 +4105,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
-   if (IAmTeacher)
+   if (IAmATeacher)
      {
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
