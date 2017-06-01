@@ -40,7 +40,7 @@
 	<td align="center">
 		<h1>What is SWAD?</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2015
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2017
 	</td>
 	</tr>
 
@@ -49,19 +49,20 @@
 
 <dl>
 
-<dt><h2>Abstract</h2></dt>
+<dt><h2>Introduction</h2></dt>
 
 <dd>
 
 <p>
-<a href="http://openswad.org/">SWAD</a> (shared workspace at a distance)
+<a href="http://openswad.org/">SWAD</a> (Shared Workspace At a Distance)
 is a <a href="http://openswad.org/source/">free</a> platform
-for distance learning and teaching management.
+for <a href="https://en.wikipedia.org/wiki/Blended_learning">blended learning</a>
+and teaching management.
 
 It has been developed and used at the
 <a href="http://www.ugr.es/">University of Granada (UGR)</a>
 <a href="http://swad.ugr.es/stat/">since 1999</a>
-and since 2012 is used in other universities.
+and since 2012 it is used in other universities.
 </p>
 
 <p>
@@ -70,17 +71,29 @@ and management of data from students and teachers.
 
 These include access to information on the courses (teaching guide, timetables, bibliography,...),
 documents storage (notes, presentations, problems, practice outlines...),
-lists and record cards of students and teachers, discussion forums,
+lists and record cards of students and teachers, social network, discussion forums,
 assignments, student's self-assessment through interactive tests,
 and individual consultation of marks.
 
 Some of its main features are also available as an
-<a href="http://openswad.org/swadroid/">app for Android mobile devices</a>.
+<a href="http://openswad.org/swadroid/">app for Android</a>
+and will be available in a future <a href="https://twitter.com/iswad_ugr">app for iOS</a>.
 </a>
 
 <p>
 SWAD is a very useful tool that has become an important complement to classroom teaching,
 with a cost of implementation very low even in large educational institutions.
+</p>
+
+<p>
+The name SWAD originally stood for
+&quot;<u>S</u>istema <u>W</u>eb de <u>A</u>poyo a la <u>D</u>ocencia&quot; in Spanish
+(&quot;Web System for Education Support&quot;).
+Currently we prefer &quot;<u>S</u>hared <u>W</u>orkspace <u>At</u> a <u>D</u>istance&quot;.
+Furthermore, the main meaning of the word <em>swad</em>, barely used,
+is &quot;bunch of things&quot;, a concept that fits the idea of a system that includes various services;
+and in Punjabi language <em>swad</em> means &quot;tasty&quot;,
+which adds a positive connotation to the platform name.
 </p>
 
 </dd>
@@ -143,7 +156,7 @@ SWAD began in September 1999
 in the <a href="http://atc.ugr.es/">Department of Architecture and Computer Technology</a>
 of the <a href="http://www.ugr.es/">UGR</a>,
 grew since 2003 until 2008 under three teaching innovation projects,
-and since 2008 until 2015 it has been one of the three tools of PRADO,
+and since 2008 until 2016 it has been one of the three tools of PRADO,
 the platform of resources to support teaching of the UGR,
 supported by the <a href="http://cevug.ugr.es/">Virtual Learning Center</a>
 and provided free to all UGR as a support to face-to-face teaching.
@@ -153,7 +166,7 @@ and has been <a href="https://swad.ugr.es/stat/">very well received by students 
 
 <p>
 In recent years its <a href="http://openswad.org/tool/">functions</a>
-have become more widespread and more independent of an individual institution,
+have become independent of an individual institution,
 resulting in a configurable tool for any educational institution.
 
 In January 2010 the <a href="http://openswad.org/source/">SWAD source code</a>
@@ -162,21 +175,10 @@ was released under the
 so that it could be installed at other universities or educational institutions.
 
 Today SWAD is not only used in the <a href="http://www.ugr.es/">UGR</a>.
-In April 2012 came into use in the <a href="http://openswad.org/">OpenSWAD project (openswad.org)</a>
-as a free cloud platform for any institution,
-and since July 2012 is used in the <a href="http://www.cevuna.una.py/swad/">National University of Asunci&oacute;n (Paraguay)</a>.
+In April 2012 it came into use in the <a href="http://openswad.org/">OpenSWAD project (openswad.org)</a>
+as a free cloud platform for any institution.
 </p>
 
-<p>
-The name SWAD originally stood for
-&quot;<u>S</u>istema <u>W</u>eb de <u>A</u>poyo a la <u>D</u>ocencia&quot; in Spanish
-(&quot;Web System for Education Support&quot;).
-Currently we prefer &quot;<u>S</u>hared <u>W</u>orkspace <u>At</u> a <u>D</u>istance&quot;.
-Furthermore, the main meaning of the word <em>swad</em>, barely used,
-is &quot;bunch of things&quot;, a concept that fits the idea of a system that includes various services;
-and in Punjabi language <em>swad</em> means &quot;tasty&quot;,
-which adds a positive connotation to the platform name.
-</p>
 </dd>
 
 <dt><h2>Goals</h2></dt>
@@ -217,33 +219,51 @@ which adds a positive connotation to the platform name.
 	</p>
 </dd>
 
-<dt><h2>Hierarchy and roles</h2></dt>
+<dt><h2>Hierarchical organization</h2></dt>
 
 <dd>
-	<h3>Hierarchical organization</h3>
-
 	<p>
 	SWAD can accommodate in a single platform one or multiple educational organizations.
 	It uses the following hierarchical structure:
+	</p>
+
 	<ul>
     		<li>Countries</li>
     		<li>Institutions (universities, academies, organizations, companies,...)</li>
-    		<li>Centres (faculties, buildings,...)</li>
+    		<li>Centres (faculties, schools, buildings,...)</li>
     		<li>Degrees (degrees, masters,...)</li>
-    		<li>Courses</li>
+    		<li>Courses (subjects)</li>
     		<li>Group types (lectures, practicals, seminars,...)</li>
     		<li>Groups (A, B, morning, afternoon,...)</li>
 	</ul>
-	The central element of this hierarchy is the course, which can register several teachers and students.
-	</p>
-
-	<h3>Roles</h3>
 
 	<p>
-	Each user has a role of student or teacher at each of the course in which he/she is enrolled.
-	In addition, some users may be administrators of one or more degrees,
-	or superusers (global administrators of the platform).
+	The central element of this hierarchy is the course, which can register several teachers and students.
 	</p>
+</dd>
+
+<dt><h2>Roles</h2></dt>
+
+<dd>
+	<p>
+	Each user has a role of student or teacher at each of the courses in which he/she is enrolled.
+	In addition, some users may be administrators.
+	</p>
+	
+	<p>These are all available roles:</p>
+	
+	<ol start="0">
+    		<li><var>Unknown</var>: User not logged in</li>
+    		<li><var>Guest</var>: User not belonging to any course</li>
+    		<li><var>Visitor</var>: Student or teacher in other courses but not belonging to the current course</li>
+    		<li><var>Student</var>: Student in current course</li>
+    		<li><var>Teacher</var>: Teacher in current course</li>
+    		<li><var>Degree admin</var>: Degree administrator</li>
+    		<li><var>Centre admin</var>: Centre administrator</li>
+    		<li><var>Institution admin</var>: Institution administrator</li>
+    		<li><var>System admin</var>: System administrator (superuser)</li>
+	</ol>
+
 </dd>
 
 <dt><h2>Summary of tools and functionalities</h2></dt>
@@ -251,69 +271,73 @@ which adds a positive connotation to the platform name.
 <dd>
 
 	<p>
-	The SWAD platform aims to achieve these objectives by providing the features listed below,
-	grouped into 11 groups (tabs):
+	The SWAD platform aims to achieve its objectives by providing the features listed below,
+	grouped into 12 groups (tabs):
 		<ul>
 
-		<li><strong>System</strong>: Global configuration and administration of countries
+		<li>First tab, one of the following 6:
 			<ul>
-			<li>search institutions, centres, degrees, courses, users and documents</li>
-			<li>listing and editing countries</li>
-			<li>list of pending institutions, centres, degrees and courses</li>
-			<li>removing old unused courses</li>
-			<li>listing and editing types of degrees</li>
-			<li>listing and editing allowed mail domains for notifications</li>
-			<li>listing and editing banners</li>
-			<li>listing and editing institutional links</li>
-			<li>listing and editing <a href="http://openswad.org/ws/">plugins</a></li>
+			<li><strong>System</strong>: Global configuration and administration of countries
+				<ul>
+				<li>search institutions, centres, degrees, courses, users and documents</li>
+				<li>listing and editing countries</li>
+				<li>list of pending institutions, centres, degrees and courses</li>
+				<li>removing old unused courses</li>
+				<li>listing and editing types of degrees</li>
+				<li>listing and editing allowed mail domains for notifications</li>
+				<li>listing and editing banners</li>
+				<li>listing and editing institutional links</li>
+				<li>listing and editing <a href="http://openswad.org/ws/">plugins</a></li>
+				</ul>
+			</li>
+			<li><strong>Country</strong>: Management of institutions of the selected country
+				<ul>
+				<li>search institutions, centres, degrees, courses, users and documents</li>
+				<li>information about the selected country</li>
+				<li>listing and editing institutions of the selected country</li>
+				</ul>
+			</li>
+			<li><strong>Institution</strong>: Management of centres of the selected institution
+				<ul>
+				<li>search institutions, centres, degrees, courses, users and documents</li>
+				<li>information about the selected institution</li>
+				<li>listing and editing centres of the selected institution</li>
+				<li>listing and editing departments of the selected institution</li>
+				<li>listing and editing places (campuses) of the selected institution</li>
+				<li>listing and editing holidays in the campuses of the selected institution</li>
+				</ul>
+			</li>
+			<li><strong>Centre</strong>: Management of degrees of the selected centre
+				<ul>
+				<li>search institutions, centres, degrees, courses, users and documents</li>
+				<li>information about the selected centre</li>
+				<li>listing and editing degrees of the selected centre</li>
+				</ul>
+			</li>
+			<li><strong>Degree</strong>: Management of courses of the selected degree
+				<ul>
+				<li>search institutions, centres, degrees, courses, users and documents</li>
+				<li>information about the selected degree</li>
+				<li>listing and editing courses of the selected degree</li>
+				</ul>
+			</li>
+			<li><strong>Course</strong>: Information and documentation of the selected course
+				<ul>
+				<li>search institutions, centres, degrees, courses, users and documents</li>
+				<li>information about the selected course</li>
+				<li>teaching guide of the course</li>
+				<li>agenda / program of lectures and practicals</li>
+				<li>documents (notes, presentations, problems,...)</li>
+				<li>shared files between students and teachers</li>
+				<li>class schedule</li>
+				<li>bibliography</li>
+				<li>FAQ (Frequently Asked Questions)</li>
+				<li>links</li>
+				</ul>
+			</li>
 			</ul>
 		</li>
-		<li><strong>Country</strong>: Management of institutions of the selected country
-			<ul>
-			<li>search institutions, centres, degrees, courses, users and documents</li>
-			<li>information about the selected country</li>
-			<li>listing and editing institutions of the selected country</li>
-			</ul>
-		</li>
-		<li><strong>Institution</strong>: Management of centres of the selected institution
-			<ul>
-			<li>search institutions, centres, degrees, courses, users and documents</li>
-			<li>information about the selected institution</li>
-			<li>listing and editing centres of the selected institution</li>
-			<li>listing and editing departaments of the selected institution</li>
-			<li>listing and editing places (campuses) of the selected institution</li>
-			<li>listing and editing holidays in the campuses of the selected institution</li>
-			</ul>
-		</li>
-		<li><strong>Centre</strong>: Management of degrees of the selected centre
-			<ul>
-			<li>search institutions, centres, degrees, courses, users and documents</li>
-			<li>information about the selected centre</li>
-			<li>listing and editing degrees of the selected centre</li>
-			</ul>
-		</li>
-		<li><strong>Degree</strong>: Management of courses of the selected degree
-			<ul>
-			<li>search institutions, centres, degrees, courses, users and documents</li>
-			<li>information about the selected degree</li>
-			<li>listing and editing courses of the selected degree</li>
-			</ul>
-		</li>
-		<li><strong>Course</strong>: Informaci&oacute;n y documentaci&oacute;n de la asignatura seleccionada
-			<ul>
-			<li>search institutions, centres, degrees, courses, users and documents</li>
-			<li>information about the selected course</li>
-			<li>teaching guide of the course</li>
-			<li>agenda / program of lectures and practicals</li>
-			<li>documents (notes, presentations, problems,...)</li>
-			<li>shared files between students and teachers</li>
-			<li>class schedule</li>
-			<li>bibliography</li>
-			<li>FAQ (Frequently Asked Questions)</li>
-			<li>links</li>
-			</ul>
-		</li>
-		<li><strong>Assessment</strong>: Evaluation of students in the selected subject
+		<li>Second tab, <strong>Assessment</strong>: Evaluation of students in the selected subject
 			<ul>
 			<li>information on the evaluation system</li>
 			<li>management of assignments</li>
@@ -326,33 +350,39 @@ which adds a positive connotation to the platform name.
 			<li>student record card in the course</li>
 			</ul>
 		</li>
-		<li><strong>Users</strong>: Information and group management of groups and users
+		<li>Third tab, <strong>Users</strong>: Information and group management of groups and users
 			<ul>
-			<li>enrollment in groups</li>
+			<li>enrolment in groups</li>
 			<li>management of types of groups and groups</li>
 			<li>lists and record cards of guests</li>	
 			<li>lists and record cards of students</li>	
 			<li>editing fields of custom record cards</li>
 			<li>attendance control</li>
 			<li>lists, record cards and scheduling of tutorials of teachers</li>	
-			<li>listis of administrators</li>
+			<li>lists of administrators</li>
 			<li>management of requests for registration</li>
 			<li>user administration</li>
 			<li>lists of connected users</li>
 			</ul>
 		</li>
-		<li><strong>Messages</strong>: Communication between users, forums, chat
+		<li>Fourth tab, <strong>Social</strong>: Social networks, forums, chat
+			<ul>
+			<li>social network (time line)</li>
+			<li>social network (users' public profiles)</li>
+			<li>discussion forums</li>
+			<li>chat</li>
+			</ul>
+		</li>
+		<li>Fifth tab, <strong>Messages</strong>: Communication between users
 			<ul>
 			<li>event notifications to users</li>
 			<li>global announcements</li>
 			<li>notices</li>
-			<li>discussion forums</li>
-			<li>chat</li>
 			<li>internal web messaging between users of the platform</li>
 			<li>email sending to students</li>
 			</ul>
 		</li>
-		<li><strong>Statistics</strong>: Statistics and monitoring of visits
+		<li>Sixth tab, <strong>Statistics</strong>: Statistics and monitoring of visits
 			<ul>
 			<li>surveys</li>
 			<li>big figures (system utilization)</li>
@@ -372,7 +402,7 @@ which adds a positive connotation to the platform name.
 			<li>clicks in real time</li>
 			</ul>
 		</li>
-		<li><strong>Profile</strong>: Personal information of the user identified
+		<li>Seventh tab, <strong>Profile</strong>: Personal information of the user identified
 			<ul>
 			<li>sign up</li>
 			<li>login and logout</li>
@@ -386,7 +416,7 @@ which adds a positive connotation to the platform name.
 			<li>websites and social networking</li>
 			<li>personal preferences</li>
 			<li>briefcase (personal virtual drive)</li>
-			<li>frecuent actions</li>
+			<li>frequent actions</li>
 			</ul>
 		</li>
 		</ul>
@@ -418,7 +448,8 @@ which adds a positive connotation to the platform name.
 	
 	<p>
 	Being a web application, the client can be any modern web browser.
-	To use the chat you must have Java runtime environment.
+	To use the chat you must have
+	<a href="https://www.java.com/download/">Java runtime environment</a>.
 	Besides the web client, there is an M-learning application for Android devices
 	called <a href="https://openswad.org/swadroid/">SWADroid</a>,
 	which implements some of the most used features in the web version.
@@ -433,8 +464,8 @@ which adds a positive connotation to the platform name.
 			<ul>
 			<li><a href="https://openswad.org/info/" target="_blank" title="What is SWAD?">
 			What is SWAD?</a></li>
-			<li><a href="https://twitter.com/openswad" target="_blank" title="@OpenSWAD">
-			@OpenSWAD</a></li>
+			<li><a href="https://openswad.org/association/" target="_blank" title="About us (OpenSWAD Association)">
+			About us</a></li>
 			<li><a href="http://openswad.wordpress.com/" target="_blank" title="Blog">
 			Blog</a></li>
 			<li><a href="https://openswad.org/paper/" target="_blank" title="Publications">
@@ -461,16 +492,26 @@ which adds a positive connotation to the platform name.
 			Tools</a></li>
 			</ul>
 		</li>
-		<li>Mobile
+		<li>Social
 			<ul>
-			<li><a href="https://openswad.org/swadroid/" target="_blank" title="SWADroid: SWAD App para Android">
-			SWADroid</a></li>
-			<li><a href="https://twitter.com/swadroid" target="_blank" title="@SWADroid">
-			@SWADroid</a></li>
-			<li><a href="http://swadroid.wordpress.com/" target="_blank" title="SWADroid Blog">
-			SWADroid Blog</a></li>
-			<li><a href="https://twitter.com/iswad_ugr" target="_blank" title="@iswad_ugr">
-			@iswad_ugr</a></li>
+			<li><a href="https://twitter.com/openswad" target="_blank" title="Twitter">
+			Twitter</a></li>
+			<li><a href="https://www.facebook.com/OpenSWAD/" target="_blank" title="Facebook">
+			Facebook</a></li>
+			<li><a href="https://en.wikipedia.org/wiki/SWAD_%28software%29" target="_blank" title="Wikipedia">
+			Wikipedia</a></li>
+			<li><a href="https://plus.google.com/109453568780563947088/about/p/pub" target="_blank" title="Google+">
+			Google+</a></li>
+			<li><a href="https://www.youtube.com/channel/UCDk02lUBCoqp_v2A25t6orQ/about" target="_blank" title="YouTube">
+			YouTube</a></li>
+			<li><a href="http://alternativeto.net/software/swad/" target="_blank" title="alternativeTo">
+			alternativeTo</a></li>
+			<li><a href="http://www.startupranking.com/openswad" target="_blank" title="startupRANKING">
+			startupRANKING</a></li>
+			<li><a href="https://github.com/acanas/swad-core" target="_blank" title="GitHub">
+			GitHub</a></li>
+			<li><a href="https://www.openhub.net/p/swad-core" target="_blank" title="Open HUB">
+			Open HUB</a></li>
 			</ul>
 		</li>
 		<li>Free software
@@ -493,8 +534,26 @@ which adds a positive connotation to the platform name.
 			Roadmap</a></li>
 			<li><a href="https://openswad.org/author/" target="_blank" title="Authors">
 			Authors</a></li>
-			<li><a href="https://openswad.org/pfc/" target="_blank" title="Proyectos fin de carrera">
-			Proyectos fin de carrera</a></li>
+			</ul>
+		</li>
+		<li>Mobile
+			<ul>
+			<li><a href="https://openswad.org/swadroid/" target="_blank" title="SWADroid: SWAD App para Android">
+			SWADroid</a></li>
+			<li><a href="https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid" target="_blank" title="SWADroid Google Play">
+			SWADroid Google Play</a></li>
+			<li><a href="http://swadroid.wordpress.com/" target="_blank" title="SWADroid Blog">
+			SWADroid Blog</a></li>
+			<li><a href="https://twitter.com/swadroid" target="_blank" title="SWADroid Twitter">
+			SWADroid Twitter</a></li>
+			<li><a href="https://plus.google.com/115615684349730524355/posts" target="_blank" title="SWADroid Google+">
+			SWADroid Google+</a></li>
+			<li><a href="https://github.com/Amab/SWADroid" target="_blank" title="SWADroid GitHub">
+			SWADroid GitHub</a></li>
+			<li><a href="https://www.openhub.net/p/swadroid" target="_blank" title="SWADroid Open HUB">
+			SWADroid Open HUB</a></li>
+			<li><a href="https://twitter.com/iswad_ugr" target="_blank" title="iSWAD Twitter">
+			iSWAD Twitter</a></li>
 			</ul>
 		</li>
 		<li>Installations
@@ -503,7 +562,7 @@ which adds a positive connotation to the platform name.
 			<li><a href="https://swad.ugr.es/">UGR</a>
 				<ul>
 				<li><a href="https://twitter.com/swad_ugr" target="_blank">
-				@swad_ugr</a></li>
+				Twitter</a></li>
 				<li><a href="https://swad.ugr.es/stat/" target="_blank">
 				Stats</a></li>
 				<li><a href="https://swad.ugr.es/server/" target="_blank">
@@ -511,8 +570,6 @@ which adds a positive connotation to the platform name.
 				<li><a href="https://swad.ugr.es/encuentro/" target="_blank">
 				Meeting</a></li>
 				</ul>
-			</li>
-			<li><a href="http://www.cevuna.una.py/swad/">UNA (Paraguay)</a>
 			</li>
 		</li>
 	</ul>

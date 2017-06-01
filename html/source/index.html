@@ -3,17 +3,7 @@
 
  <head>
   <title>SWAD: Source code</title>
-  <style type="text/css">
-A:link {text-decoration: none;}
-A:visited {text-decoration: none;}
-A:active {text-decoration: none;}
-A:hover	{color:#000000;}
-body		{margin:0px;}
-td,p,.h		{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#404040;font-size:11pt;}
-table		{border-width:0px; border-style:none;}
-img		{border-width:0px; border-style:none;}
-.SWAD{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#F8B000;font-size:16pt;font-weight:bold;}
-  </style>
+  <link rel="StyleSheet" href="/swad.css" type="text/css" />
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -50,7 +40,17 @@ img		{border-width:0px; border-style:none;}
 	<td align="center">
 		<h1>Source code</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2014
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2017
+	</td>
+	</tr>
+
+	<tr>
+	<td align="center">
+		<cite>
+		You're frozen<br />
+		When your heart's not open<br />
+		</cite>
+		Frozen, Madonna
 	</td>
 	</tr>
 
@@ -100,15 +100,14 @@ img		{border-width:0px; border-style:none;}
 	This program runs on the <a href="http://swad.ugr.es/server/">server</a>
 	every time a user clicks a button or link within the platform,
 	queries database and performs the necessary calculations for the current action,
-	and generates all the <a href="http://en.wikipedia.org/wiki/XHTML">XHTML</a> code
+	and generates all the <a href="https://en.wikipedia.org/wiki/HTML5">HTML5</a> code
 	that is sent to <a href="http://en.wikipedia.org/wiki/Client_%28computing%29">client</a>.
 	</p>
 
 	<h3>Main core (<code>swad-core</code>)</h3>
-	<a href="img/lineas-codigo-modulo-principal.png"><img src="img/lineas-codigo-modulo-principal.png" width="50%" height="50%" border="0" alt="Main swad core code lines" align="right" hspace="30" vspace="30"></a>
 	
 	<p align="justify">
-	Programmed by <a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>.
+	Programmed by <a href="https://github.com/acanas">Antonio Ca&ntilde;as Vargas</a>.
 	</p>
 
 	<p align="justify">
@@ -124,14 +123,24 @@ img		{border-width:0px; border-style:none;}
 	<a href="http://www.mysql.com/">MySQL</a> or <a href="https://mariadb.org/">MariaDB</a>.
 	The reader will probably think &quot;a web application written in C?&quot;
 	Yes, it is not usual, <a href="http://www.youtube.com/watch?v=1S1fISh-pag">but... ;-)</a>
+	A little more seriously, we could say that we have developed swad-core
+	following the philosophy of <a href="http://handmadedev.org/manifesto/">The Handmade Manifesto</a>.
 	</p>
 
 	<p align="justify">
-	SWAD core has more than 170 000 <a href="http://en.wikipedia.org/wiki/Source_lines_of_code">lines of source code</a>.
-	Each executable program (one for each language) has a size of 1.8 <a href="http://en.wikipedia.org/wiki/Mebibyte">MiB</a>
+	SWAD core has about 212 000 <a href="http://en.wikipedia.org/wiki/Source_lines_of_code">lines of source code</a>.
+	Each executable program (one for each language) has a size of 2 <a href="http://en.wikipedia.org/wiki/Mebibyte">MiB</a>
 	and in most of the possible actions
 	generates the <a href="http://en.wikipedia.org/wiki/Web_page">page</a> in few milliseconds.
 	</p>
+
+	<p align="justify">
+	The following graph shows the evolution of the number of lines of code.
+	Each point on the graph represents a version.
+	All versions are listed in the <a href="https://openswad.org/changelog/">change log</a>.
+	</p>
+
+	<a href="img/lineas-codigo-modulo-principal.png"><img src="img/lineas-codigo-modulo-principal.png" width="100%" height="50%" border="0" alt="Main swad core code lines" align="right" hspace="30" vspace="30"></a>
 
 	<p align="justify">
 	For <a href="http://en.wikipedia.org/wiki/Cryptography">encryption</a> of passwords
@@ -205,20 +214,7 @@ img		{border-width:0px; border-style:none;}
 
 	<h3>Application for Android devices (SWADroid)</h3>
 
-	<p align="justify">
-	<a href="https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid">SWADroid</a>,
-	the app for <a href="http://es.wikipedia.org/wiki/Android">Android</a> devices,
-	is written in <a href="http://es.wikipedia.org/wiki/Java_%28lenguaje_de_programaci%C3%B3n%29">Java</a>
-	and has been programmed by
-	<a href="http://es.linkedin.com/pub/juan-miguel-boyero-corral/27/362/163">Juan Miguel Boyero Corral</a>,
-	<a href="http://www.slideshare.net/antonioaguileramalagon">Antonio Aguilera Malag&oacute;n</a>
-	and <a href="http://prezi.com/user/7ofwrjzwrfsq/">Helena Rodr&iacute;guez Gij&oacute;n</a>.
-	</p>
-
-	<p align="justify">
-	You can find more information about SWADroid on the blog
-	<a href="http://swadroid.wordpress.com/">http://swadroid.wordpress.com/</a>
-	</p>
+	<a href="/swadroid/">Information about SWADroid</a>.
 	
 	</td>
 	</tr>

@@ -40,7 +40,7 @@
 	<td align="center">
 		<h1>Translation of SWAD</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2015
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2017
 	</td>
 	</tr>
 
@@ -115,14 +115,14 @@
 			</dd>
 		</li>
 			
-		<dt lang="en">English (traducci&oacute;n completa)</dt>
+		<dt lang="en">English (full translation)</dt>
 			<dd>
 			<ul>
 			<li>Antonio Ca&ntilde;as Vargas</li>
 			</ul>
 			</dd>
 
-		<dt lang="es">Espa&ntilde;ol (traducci&oacute;n completa)</dt>
+		<dt lang="es">Espa&ntilde;ol (full translation)</dt>
 			<dd>
 			<ul>
 			<li>Antonio Ca&ntilde;as Vargas</li>
@@ -177,23 +177,37 @@
 
 	<p align="justify">
 	If you want to translate SWAD to other languages
-	or collaborate in the translation or revision of current languages,
-	please contact with:
-	<address>
-	Antonio Ca&ntilde;as Vargas<br />
-	E-mail: acanas@ugr.es
-	</address>
+	or suggest changes in the translation to current languages,
+	you can do it in swad-core GitHub repository:
+	<a href="https://github.com/acanas/swad-core/">swad-core</a>
 	</p>
 
+	<ul>
+
+	<li>
+
 	<p align="justify">
-	Within the <a href="https://github.com/acanas/swad-core">source code of the SWAD main core</a>
-	you can find the file <code>swad_text.c</code> containing all the texts in the different languages.
+	If you want to <strong>suggest changes in translation of SWAD</strong>, please do it in
+	<a href="https://github.com/acanas/swad-core/issues">swad-core issues</a>.
+	</p>
+
+	</li>
+
+	<li>
+
+	<p align="justify">
+	If you want to <strong>translate SWAD into other languages
+	or to do a full review existing translations</strong>,
+	you can edit the file <code><a href="https://github.com/acanas/swad-core/blob/master/swad_text.c">swad_text.c</a></code>
+	containing all texts in the different languages
+	within <a href="https://github.com/acanas/swad-core">source code of the SWAD main core</a>
+	a do a <a href="https://github.com/acanas/swad-core/pulls">pull request</a>.
 	</p>
 
 	<p align="justify">
 	Translators must respect the following rules:
 	<ul>
-		<li>Download <code>swad_text.c</code> and load it in your editor using
+		<li>Download <code><a href="https://github.com/acanas/swad-core/blob/master/swad_text.c">swad_text.c</a></code> and load it in your editor using
 		<a href="https://en.wikipedia.org/wiki/Windows-1252">Windows-1252</a> or
 		<a href="https://en.wikipedia.org/wiki/ISO/IEC_8859-1">ISO-8859-1</a>
 		character encoding.</li>
@@ -206,8 +220,10 @@
 		<li>Except those texts marked with NO_HTML at the beginning of the file,
 		all the texts should use <a href="http://www.w3schools.com/HTML/html_entities.asp">HTML entities</a>
 		instead of certain special characters and accents.
-		In <a href="http://www.w3schools.com/tags/ref_entities.asp">w3schools</a> you can find
-		the most common <a href="http://www.w3schools.com/tags/ref_entities.asp">ISO-8859-1 HTML entities</a>.
+		You can find the most common HTML entities in
+		<a href="https://dev.w3.org/html5/html-author/charref">dev.w3.org</a>
+		or
+		<a href="http://www.freeformatter.com/html-entities.html">freeformatter.com</a>.
 		For example, you should write &amp;aacute; instead of &aacute;,
 		&amp;Ntilde; instead of &Ntilde; or &amp;szlig; instead of &szlig;.
 		<ul>
@@ -249,6 +265,10 @@
 	When you make a change in a sentence, you must write a special comment (<code>// something like your name</code>) 
 	at the end of the sentence to make it easy to review the changes.
 	</p>
+	
+	</li>
+
+	</ul>
 
 	<h2>Translating other modules</h2>
 

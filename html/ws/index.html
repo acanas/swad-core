@@ -53,7 +53,7 @@
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES"
 		title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png"
 		style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2015
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2017
 	</td>
 	</tr>
 
@@ -195,6 +195,7 @@
 
 		<li><a href="#getAttendanceEvents"><code>getAttendanceEvents</code></a></li>
 		<li><a href="#sendAttendanceEvent"><code>sendAttendanceEvent</code></a></li>
+		<li><a href="#removeAttendanceEvent"><code>removeAttendanceEvent</code></a></li>
 		<li><a href="#getAttendanceUsers"><code>getAttendanceUsers</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#sendAttendanceUsers"><code>sendAttendanceUsers</code></a></li>
 
@@ -279,7 +280,7 @@
 						with one of the following 4 values:
 						<ul>
 							<li><var>0</var>: unknown, an error has occurred.</li>
-							<li><var>1</var>: guest, not enrolled in any course.</li>
+							<li><var>1</var>: guest, not enroled in any course.</li>
 							<li><var>2</var>: student in all his/her courses.</li>
 							<li><var>3</var>: teacher in at least one of his/her courses.</li>
 						</ul>
@@ -322,7 +323,7 @@
 						with one of the following 4 values:
 						<ul>
 							<li><var>0</var>: unknown, an error has occurred.</li>
-							<li><var>1</var>: guest, not enrolled in any course.</li>
+							<li><var>1</var>: guest, not enroled in any course.</li>
 							<li><var>2</var>: student in all his/her courses.</li>
 							<li><var>3</var>: teacher in at least one of his/her courses.</li>
 						</ul>
@@ -466,11 +467,11 @@
 								with the name of the type of group
 								(for example: &quot;Theory&quot;, &quot;Lab&quot;).</li>
 							<li><strong>mandatory</strong>: integer. If not 0 &rArr;
-								the enrollment in group(s) of this type is mandatory
+								the enrolment in group(s) of this type is mandatory
 								for students of the course,
 								if there is at least a group of that type open and with vacancies.</li>
 							<li><strong>multiple</strong>: integer. If not 0 &rArr;
-								the students of the course can enroll
+								the students of the course can enrol
 								in more than a group of this type.</li>
 							<li><strong>openTime</strong>: integer of 32 bits with sign,
 								<a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.
@@ -513,7 +514,7 @@
 							<li><strong>groupTypeName</strong>: string with the name of the type of group
 								(for example: &quot;Theory&quot;, &quot;Lab&quot;).</li>
 							<li><strong>open</strong>: integer. If not 0 &rArr; the group is open,
-								meaning that the students can enroll in or remove from the group.</li>
+								meaning that the students can enrol in or remove from the group.</li>
 							<li><strong>maxStudents</strong>: integer, maximum number of students in the group.
 								If &lt; 0 &rArr; there is no limit of students in the group.</li>
 							<li><strong>numStudents</strong>: integer, current number of students in the group.</li>
@@ -529,7 +530,7 @@
 	<p align="justify">
 	It sends to the server a list with all the groups in a course
 	to which the requester wants to belong.
-	It tries to enroll the user in those groups if possible,
+	It tries to enrol the user in those groups if possible,
 	and remove from the groups not in the list.
 	If all the changes are not possible, no change is performed.
 	Returns the updated list of all the groups of the course
@@ -917,7 +918,7 @@
 	<a name="getUsers"><h3 class="WS_FUNCTION"><code>getUsers</code></h3></a>
 	<p align="justify">
 	Returns the list of users with a given role (students or teachers)
-	enrolled in a course (and optionally in some groups of the course).
+	enroled in a course (and optionally in some groups of the course).
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1001,7 +1002,7 @@
 						with one of the following 4 values:
 						<ul>
 							<li><var>0</var>: unknown, any role (guests, students, teachers).</li>
-							<li><var>1</var>: guests, not enrolled in any course.</li>
+							<li><var>1</var>: guests, not enroled in any course.</li>
 							<li><var>2</var>: students.</li>
 							<li><var>3</var>: teachers.</li>
 						</ul>
@@ -1087,7 +1088,6 @@
 	<a name="sendAttendanceEvent"><h3 class="WS_FUNCTION"><code>sendAttendanceEvent</code></h3></a>
 	<p align="justify">
 	Sends an attendance event.
-	The requester must be a teacher in the course.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1103,7 +1103,11 @@
 							</li>
 						</ul>
 					</li>
-					<li><strong>courseCode</strong>: integer.</li>
+					<li><strong>courseCode</strong>: integer.
+						The requester must be a teacher in this course.
+						If <code>attendanceEventCode</code> &gt; 0 &rArr;
+						<code>courseCode</code> must be the course associated to the attendance event.
+						</li>
 					<li><strong>hidden</strong>: integer. If not 0 &rArr; this attendance event is hidden for students.</li>
 					<li><strong>startTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
 					<li><strong>endTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
@@ -1126,10 +1130,34 @@
 			</li>
 		</ul>
 
+	<a name="removeAttendanceEvent"><h3 class="WS_FUNCTION"><code>removeAttendanceEvent</code></h3></a>
+	<p align="justify">
+	Removes an existing attendance event.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>attendanceEventCode</strong>: integer, identifier of the attendance event to be removed.
+						The code must be a valid value &gt; 0 corresponding to an existing attendance event
+						returned by <a href="#getAttendanceEvents"><code>getAttendanceEvents</code></a>.
+						The requester must be a teacher in the course to which this event is associated.
+					</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>attendanceEventCode</strong>: integer, unique identifier of the attendance event, &gt; 0 on success.
+						On error, this code will be &lt;= 0.</li>
+				</ul>
+			</li>
+		</ul>
+
 	<a name="getAttendanceUsers"><h3 class="WS_FUNCTION"><code>getAttendanceUsers</code></h3></a>
 	<p align="justify">
 	Returns the list of users (students) in an attendance event.
-	The requester must be teacher in the selected course.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1141,6 +1169,7 @@
 						one of the codes returned
 						by <a href="#getAttendanceEvents"><code>getAttendanceEvents</code></a>
 						or <a href="#sendAttendanceEvent"><code>sendAttendanceEvent</code></a>.
+						The requester must be a teacher in the course to which this event is associated.
 					</li>
 				</ul>
 			</li>
@@ -1175,7 +1204,6 @@
 	who have attended to an attendance event.
 	All users in this list will be marked as present;
 	other users formerly marked as present will be marked as absent when <code>setOthersAsAbsent</code> = 1.
-	The requester must be teacher in the selected course.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1187,6 +1215,7 @@
 						one of the codes returned
 						by <a href="#getAttendanceEvents"><code>getAttendanceEvents</code></a>
 						or <a href="#sendAttendanceEvent"><code>sendAttendanceEvent</code></a>.
+						The requester must be a teacher in the course to which this event is associated.
 					</li>
 					<li><strong>users</strong>: string, list of numbers separated by commas.
 						Each number is the user's code
@@ -1279,9 +1308,9 @@
 											</li>
 										</ul>
 									</li>
-									<li><var>enrollmentStudent</var>: I have been enrolled in a course as a student.</li>
-									<li><var>enrollmentTeacher</var>: I have been enrolled in a course as a teacher.</li>
-									<li><var>enrollmentRequest</var>: enrollment request.</li>
+									<li><var>enrollmentStudent</var>: I have been enroled in a course as a student.</li>
+									<li><var>enrollmentTeacher</var>: I have been enroled in a course as a teacher.</li>
+									<li><var>enrollmentRequest</var>: enrolment request.</li>
 									<li><var>timelineComment</var>: comment to one of my social publishings (posts or comments).</li>
 									<li><var>timelineFav</var>: fav to one of my social publishings (posts or comments).</li>
 									<li><var>timelineShare</var>: sharing of one of my social posts.</li>
