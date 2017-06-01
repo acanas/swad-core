@@ -229,17 +229,20 @@
 
 // TODO: Limit lenght of very big institution name in record card
 
+// TODO: FIX BUG: Button remove in forums was missing.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.232.2 (2017-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 16.232.3 (2017-06-01)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.232.3: Jun 01, 2017	Fixed bug in permission of deletion of forum threads. (? lines)
         Version 16.232.2: May 31, 2017	Fixed bug in selection of user's centre and department. (221089 lines)
         Version 16.232.1: May 31, 2017	Improvements in selection of user's institution, centre and department. (221085 lines)
         Version 16.232:   May 31, 2017	Fix bug in selection of user's centre. (221042 lines)
