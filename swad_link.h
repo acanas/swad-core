@@ -49,6 +49,7 @@ struct Link
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Lnk_PutLinkToViewLinks (void);
 void Lnk_SeeLinks (void);
 void Lnk_WriteMenuWithInstitutionalLinks (void);
 

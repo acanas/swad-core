@@ -233,15 +233,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.232.6 (2017-06-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.232.7 (2017-06-03)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.232.7: Jun 03, 2017	Changed contextual links in institutional links and banners. (? lines)
         Version 16.232.6: Jun 03, 2017	Changed layout of edition of banners. (221123 lines)
-        Version 16.232.5: Jun 03, 2017	Changed layout of edition of links. (221108 lines)
+        Version 16.232.5: Jun 03, 2017	Changed layout of edition of institutional links. (221108 lines)
         Version 16.232.4: Jun 01, 2017	Changed alert when session expired. (221092 lines)
         Version 16.232.3: Jun 01, 2017	Fixed bug in permission of deletion of forum threads. (221091 lines)
         Version 16.232.2: May 31, 2017	Fixed bug in selection of user's centre and department. (221089 lines)

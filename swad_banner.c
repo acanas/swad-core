@@ -100,6 +100,14 @@ void Ban_SeeBanners (void)
    extern const char *Txt_No_banners;
    extern const char *Txt_New_banner;
 
+   /***** Put contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put link to view links */
+   Lnk_PutLinkToViewLinks ();
+
+   fprintf (Gbl.F.Out,"</div>");
+
    /***** Get list of banners *****/
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
 	               " FROM banners"
@@ -183,6 +191,14 @@ void Ban_EditBanners (void)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
+
+   /***** Put contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put link to view links */
+   Lnk_PutLinkToViewLinks ();
+
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of banners *****/
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"

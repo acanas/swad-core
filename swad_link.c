@@ -74,6 +74,20 @@ static void Lnk_PutHeadLinks (void);
 static void Lnk_CreateLink (struct Link *Lnk);
 
 /*****************************************************************************/
+/************************** Put link to view links ***************************/
+/*****************************************************************************/
+
+void Lnk_PutLinkToViewLinks (void)
+  {
+   extern const char *Txt_Links;
+
+   Lay_PutContextualLink (ActSeeLnk,NULL,NULL,
+                          "link64x64.gif",
+                          Txt_Links,Txt_Links,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /*************************** List all the links ******************************/
 /*****************************************************************************/
 
@@ -85,15 +99,12 @@ void Lnk_SeeLinks (void)
    extern const char *Txt_New_link;
 
    /***** Put contextual links *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only for system admins
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      /* Put link to view banners */
-      Ban_PutLinkToViewBanners ();
+   /* Put link to view banners */
+   Ban_PutLinkToViewBanners ();
 
-      fprintf (Gbl.F.Out,"</div>");
-     }
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of links *****/
    Lnk_GetListLinks ();
@@ -203,6 +214,14 @@ void Lnk_EditLinks (void)
   {
    extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_Links;
+
+   /***** Put contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put link to view banners */
+   Ban_PutLinkToViewBanners ();
+
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of links *****/
    Lnk_GetListLinks ();
