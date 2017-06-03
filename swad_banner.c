@@ -62,6 +62,7 @@ extern struct Globals Gbl;
 static void Ban_WriteListOfBanners (void);
 static void Ban_PutFormToEditBanners (void);
 static void Ban_GetListBanners (const char *Query);
+static void Ban_PutIconToViewBanners (void);
 static void Ban_ListBannersForEdition (void);
 static void Ban_PutParamBanCod (long BanCod);
 static void Ban_ShowOrHideBanner (bool Hide);
@@ -180,9 +181,16 @@ static void Ban_PutFormToEditBanners (void)
 
 void Ban_EditBanners (void)
   {
+   extern const char *Hlp_SYSTEM_Banners_edit;
+   extern const char *Txt_Banners;
+
    /***** Get list of banners *****/
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
 	               " FROM banners ORDER BY ShortName");
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutIconToViewBanners,
+                        Hlp_SYSTEM_Banners_edit);
 
    /***** Put a form to create a new banner *****/
    Ban_PutFormToCreateBanner ();
@@ -190,6 +198,9 @@ void Ban_EditBanners (void)
    /***** Forms to edit current banners *****/
    if (Gbl.Banners.Num)
       Ban_ListBannersForEdition ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -332,19 +343,27 @@ void Ban_FreeListBanners (void)
   }
 
 /*****************************************************************************/
+/**************** Put contextual icons in edition of banners *****************/
+/*****************************************************************************/
+
+static void Ban_PutIconToViewBanners (void)
+  {
+   Lay_PutContextualIconToView (ActSeeBan,NULL);
+  }
+
+/*****************************************************************************/
 /*************************** List all the banners ****************************/
 /*****************************************************************************/
 
 static void Ban_ListBannersForEdition (void)
   {
-   extern const char *Hlp_SYSTEM_Banners_edit;
-   extern const char *Txt_Banners;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
    unsigned NumBan;
    struct Banner *Ban;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Banners,NULL,Hlp_SYSTEM_Banners_edit,2);
+   /***** Start table *****/
+   Lay_StartTableWide (2);
 
    /***** Table head *****/
    Ban_PutHeadBanners ();
@@ -439,7 +458,8 @@ static void Ban_ListBannersForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/
