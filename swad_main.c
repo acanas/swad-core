@@ -67,7 +67,7 @@ extern struct Globals Gbl;
 /****************************** Main function ********************************/
 /*****************************************************************************/
 
-int main (int argc, char *argv[])
+int main (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
@@ -94,12 +94,6 @@ int main (int argc, char *argv[])
 	       Cfg_PLATFORM_SHORT_NAME,
 	       Cfg_PLATFORM_SHORT_NAME);
       exit (0);
-     }
-
-   if (argc > 1)
-     {
-      fprintf (stdout,"Call %s without parameters",argv[0]);
-      return -1;
      }
 
    /***** Initialize global variables *****/

@@ -225,22 +225,27 @@
 
 // TODO: Green lock in documents is not shown when name is shortened (see OpenSWAD -> Creative Commons -> Files -> Documents)
 
-// TODO: Fix bug: An URL like https://openswad.org/es?a gives Internal Server Error
+// TODO: Limit length of very big institution name in record card
 
-// TODO: Limit lenght of very big institution name in record card
+// TODO: Link names are too short ==> add more length, for example: "A guide to building and understanding the physics of Water Rockets"
+// TODO: Fix bug: Error when a link end in a dot. Example: "A guide to building..." --> "A guide to building._..url" (two dots)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.232.7 (2017-06-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.232.8 (2017-06-03)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.232.7: Jun 03, 2017	Changed contextual links in institutional links and banners. (? lines)
+        Version 16.232.8: Jun 03, 2017	Fix bug (an URL like https://openswad.org/es?a gived Internal Server Error). (221147 lines)
+        Version 16.232.7: Jun 03, 2017	Changed contextual links in institutional links and banners. (221148 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/link64x64.gif /var/www/html/swad/icon/
+
         Version 16.232.6: Jun 03, 2017	Changed layout of edition of banners. (221123 lines)
         Version 16.232.5: Jun 03, 2017	Changed layout of edition of institutional links. (221108 lines)
         Version 16.232.4: Jun 01, 2017	Changed alert when session expired. (221092 lines)
