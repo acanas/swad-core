@@ -61,6 +61,7 @@ extern struct Globals Gbl;
 static void Lnk_PutIconToEditLinks (void);
 static void Lnk_WriteListOfLinks (void);
 
+static void Lnk_PutIconToViewLinks (void);
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
 
@@ -200,8 +201,15 @@ static void Lnk_WriteListOfLinks (void)
 
 void Lnk_EditLinks (void)
   {
+   extern const char *Hlp_SYSTEM_Links_edit;
+   extern const char *Txt_Links;
+
    /***** Get list of links *****/
    Lnk_GetListLinks ();
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Links,Lnk_PutIconToViewLinks,
+                        Hlp_SYSTEM_Links_edit);
 
    /***** Put a form to create a new link *****/
    Lnk_PutFormToCreateLink ();
@@ -209,6 +217,9 @@ void Lnk_EditLinks (void)
    /***** Forms to edit current links *****/
    if (Gbl.Links.Num)
       Lnk_ListLinksForEdition ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
@@ -339,17 +350,25 @@ void Lnk_FreeListLinks (void)
   }
 
 /*****************************************************************************/
+/***************** Put contextual icons in edition of links ******************/
+/*****************************************************************************/
+
+static void Lnk_PutIconToViewLinks (void)
+  {
+   Lay_PutContextualIconToView (ActSeeLnk,NULL);
+  }
+
+/*****************************************************************************/
 /*************************** List all the links ******************************/
 /*****************************************************************************/
 
 static void Lnk_ListLinksForEdition (void)
   {
-   extern const char *Hlp_SYSTEM_Links_edit;
-   extern const char *Txt_Links;
    unsigned NumLnk;
    struct Link *Lnk;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Links,NULL,Hlp_SYSTEM_Links_edit,2);
+   /***** Start table *****/
+   Lay_StartTableWide (2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -417,7 +436,8 @@ static void Lnk_ListLinksForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

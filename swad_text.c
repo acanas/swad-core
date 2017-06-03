@@ -45576,25 +45576,25 @@ const char *Txt_The_session_has_been_closed =	// Closed by user
 	"A sess&atilde;o foi encerrada.";
 #endif
 
-const char *Txt_The_session_has_expired_due_to_inactivity =	// Expired due to timeout
+const char *Txt_The_session_has_expired =
 #if   L==1
-	"La sessi&oacute; ha expirat per inactivitat.";
+	"La sessi&oacute; ha expirat.";
 #elif L==2
-	"Die Sitzung wurde wegen Inaktivit&uml;t abgelaufen.";
+	"Die Sitzung wurde.";
 #elif L==3
-	"The session has expired due to inactivity.";
+	"The session has expired.";
 #elif L==4
-	"La sesi&oacute;n ha expirado por inactividad.";
+	"La sesi&oacute;n ha expirado.";
 #elif L==5
-	"La session a expir&eacute; pour cause d'inactivit&eacute;.";
+	"La session a expir&eacute;.";
 #elif L==6
-	"La sesi&oacute;n ha expirado por inactividad.";	// Okoteve traducción
+	"La sesi&oacute;n ha expirado.";	// Okoteve traducción
 #elif L==7
-	"La sessione &egrave; scaduta per inattivit&agrave;.";
+	"La sessione &egrave; scaduta.";
 #elif L==8
-	"Sesja wygas&lstrok;a z powodu bezczynno&sacute;ci.";
+	"Sesja wygas&lstrok;a.";
 #elif L==9
-	"A sess&atilde;o expirou devido &agrave; inatividade.";
+	"A sess&atilde;o expirou.";
 #endif
 
 const char *Txt_The_status_of_the_centre_X_has_changed =	// Warning: it is very important to include %s in the following sentences

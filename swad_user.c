@@ -2542,7 +2542,7 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
 
 void Usr_ChkUsrAndGetUsrData (void)
   {
-   extern const char *Txt_The_session_has_expired_due_to_inactivity;
+   extern const char *Txt_The_session_has_expired;
    struct
      {
       bool PutForm;
@@ -2562,7 +2562,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	{
 	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_session_has_expired_due_to_inactivity);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_session_has_expired);
 	 FormLogin.PutForm = true;
 	}
      }
