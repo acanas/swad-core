@@ -202,7 +202,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 
    GetUsrsInCrs = !Gbl.Msg.ShowOnlyOneRecipient &&	// Show list of potential recipients
 	          (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-	           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+	           Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
    if (GetUsrsInCrs)
      {
       /***** Get and update type of list,
@@ -442,7 +442,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    unsigned Colspan;
    bool StdsAndTchsWritten = Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// If there is a course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
-                              Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+                              Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
 
    /***** How many columns? *****/
    if (StdsAndTchsWritten)
@@ -692,7 +692,7 @@ void Msg_RecMsgFromUsr (void)
    /***** Check number of recipients *****/
    if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedUsrs ()))
      {
-      if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&
+      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD &&
           NumRecipients > Cfg_MAX_RECIPIENTS)
         {
          /* Write warning message */
@@ -2946,7 +2946,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_MIDDLE\">");
       if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_USR)
+	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_USR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
       fprintf (Gbl.F.Out,"</td>"

@@ -129,10 +129,13 @@ struct UsrData
      } IDs;
    char Nickname        [Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
    char Password        [Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
-   Rol_Role_t RoleInCurrentCrsDB;
-   int Roles;		// Check always if filled/calculated
-			// >=0 ==> filled/calculated
-			//  <0 ==> not yet filled/calculated
+   struct
+     {
+      Rol_Role_t InCurrentCrsDB;
+      int InCrss;	// Check always if filled/calculated
+			   // >=0 ==> filled/calculated
+			   //  <0 ==> not yet filled/calculated
+     } Roles;
    bool Accepted;	// User has accepted joining to current course?
    char Surname1	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char Surname2	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];

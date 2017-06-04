@@ -378,7 +378,7 @@ static void Cal_PutIconToPrintCalendarIns (void)
 
    /***** View holidays *****/
    if (Gbl.Hlds.Num ||					// There are holidays
-       Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
+       Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
       Lay_PutContextualLink (ActSeeHld,NULL,NULL,
 			     "holiday64x64.png",
 			     Txt_Holidays,NULL,

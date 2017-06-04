@@ -313,7 +313,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       0x3FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
      };
 
-   return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.LoggedRole));
+   return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.Roles.LoggedRole));
   }
 
 /*****************************************************************************/
@@ -950,7 +950,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 return Brw_ListDocsFound (Query,
 	                           Txt_open_document,
@@ -1011,7 +1011,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_TEACH_GRP,
 		  (unsigned) Brw_ADMI_SHARE_GRP,
 		  (unsigned) Brw_ADMI_MARKS_GRP);
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
@@ -1071,7 +1071,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 NumDocs = Brw_ListDocsFound (Query,
 	                              Txt_document_in_my_courses,
@@ -1230,7 +1230,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_BRIEF_USR);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 return Brw_ListDocsFound (Query,
 	                           Txt_document_from_me,

@@ -188,7 +188,7 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);	// Course selected
       case TabAss:
 	 return (Gbl.CurrentCrs.Crs.CrsCod > 0 ||	// Course selected
-	         Gbl.Usrs.Me.LoggedRole >= Rol_STD);	// Surveys not available for unknown users and guests
+	         Gbl.Usrs.Me.Roles.LoggedRole >= Rol_STD);	// Surveys not available for unknown users and guests
       case TabFil:
 	 return (Gbl.CurrentIns.Ins.InsCod > 0);	// Institution selected
       default:

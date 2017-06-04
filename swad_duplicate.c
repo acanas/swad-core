@@ -85,7 +85,7 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
      {
       /* Check if it's allowed to me to report users as possible duplicatedr */
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TCH)
+      if (!ItsMe && Gbl.Usrs.Me.Roles.LoggedRole >= Rol_TCH)
 	{
 	 /***** Insert possible duplicate into database *****/
          sprintf (Query,"REPLACE INTO usr_duplicated"

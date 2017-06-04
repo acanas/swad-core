@@ -1023,7 +1023,7 @@ static void Lay_ShowRightColumn (void)
    Ban_WriteMenuWithBanners ();
 
    /***** Number of connected users in the whole platform *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div id=\"globalconnected\""	// Used for AJAX based refresh
 			 " class=\"LEFT_RIGHT_CELL\">");

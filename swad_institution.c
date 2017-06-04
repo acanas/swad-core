@@ -123,7 +123,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    const char *BgColor;
 
    /***** Get institutions with pending centres *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_INS_ADM:
          sprintf (Query,"SELECT centres.InsCod,COUNT(*)"
@@ -338,7 +338,7 @@ static void Ins_Configuration (bool PrintView)
 	       Txt_Country);
 
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	 // Only system admins can move an institution to another country
 	{
 	 /* Get list of countries */
@@ -379,7 +379,7 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Institution);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	 // Only system admins can edit institution full name
 	{
 	 /* Form to change institution full name */
@@ -408,7 +408,7 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	 // Only system admins can edit institution short name
 	{
 	 /* Form to change institution short name */
@@ -437,7 +437,7 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
 	 // Only institution admins and system admins
 	 // can change institution WWW
 	{
@@ -597,7 +597,7 @@ static void Ins_PutIconsToPrintAndUpload (void)
    /***** Link to print info about institution *****/
    Lay_PutContextualIconToPrint (ActPrnInsInf,NULL);
 
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
       /***** Link to upload logo of institution *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_INS);
   }
@@ -705,7 +705,7 @@ static void Ins_ListInstitutions (void)
 
 static bool Ins_CheckIfICanCreateInstitutions (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
+   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1536,7 +1536,7 @@ static void Ins_ListInstitutionsForEdition (void)
       /* Institution status */
       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM &&
+      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM &&
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgInsSta);
@@ -1572,7 +1572,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 static bool Ins_CheckIfICanEdit (struct Instit *Ins)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||		// I am a superuser
+   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||		// I am a superuser
                   ((Ins->Status & Ins_STATUS_BIT_PENDING) != 0 &&		// Institution is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod));		// I am the requester
   }
@@ -2144,9 +2144,9 @@ static void Ins_PutFormToCreateInstitution (void)
    extern const char *Txt_Create_institution;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       Act_FormStart (ActNewIns);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
+   else if (Gbl.Usrs.Me.Roles.Max >= Rol_GST)
       Act_FormStart (ActReqIns);
    else
       Lay_ShowErrorAndExit ("You can not edit institutions.");

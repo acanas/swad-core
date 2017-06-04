@@ -37,6 +37,8 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Rol_SetMyRoles (void);
+
 unsigned Rol_GetNumAvailableRoles (void);
 Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles);
 Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);

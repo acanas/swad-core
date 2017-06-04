@@ -135,13 +135,13 @@ void Ses_CloseSession (void)
       Ses_RemoveHiddenParFromExpiredSessions ();
 
       /***** Now, user is not logged in *****/
-      Gbl.Usrs.Me.LoggedRoleBeforeCloseSession = Gbl.Usrs.Me.LoggedRole;
+      Gbl.Usrs.Me.Roles.LoggedRoleBeforeCloseSession = Gbl.Usrs.Me.Roles.LoggedRole;
       Gbl.Usrs.Me.Logged = false;
       Gbl.Usrs.Me.IBelongToCurrentIns = false;
       Gbl.Usrs.Me.IBelongToCurrentCtr = false;
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
       Gbl.Usrs.Me.IBelongToCurrentCrs = false;
-      Gbl.Usrs.Me.LoggedRole = Rol_UNK;	// Don't uncomment this line. Don't change the role to unknown. Keep user's role in order to log the access
+      Gbl.Usrs.Me.Roles.LoggedRole = Rol_UNK;	// Don't uncomment this line. Don't change the role to unknown. Keep user's role in order to log the access
       Gbl.Usrs.Me.MyCrss.Filled = false;
       Gbl.Usrs.Me.MyCrss.Num = 0;
 
@@ -173,7 +173,7 @@ void Ses_InsertSessionInDB (void)
             Gbl.Session.Id,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Usrs.Me.UsrDat.Password,
-            (unsigned) Gbl.Usrs.Me.LoggedRole,
+            (unsigned) Gbl.Usrs.Me.Roles.LoggedRole,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentCtr.Ctr.CtrCod,
@@ -200,7 +200,7 @@ void Ses_UpdateSessionDataInDB (void)
                   " WHERE SessionId='%s'",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Usrs.Me.UsrDat.Password,
-            (unsigned) Gbl.Usrs.Me.LoggedRole,
+            (unsigned) Gbl.Usrs.Me.Roles.LoggedRole,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentCtr.Ctr.CtrCod,
@@ -298,8 +298,8 @@ bool Ses_GetSessionData (void)
                 Pwd_BYTES_ENCRYPTED_PASSWORD);
 
       /***** Get logged user type (row[2]) *****/
-      if (sscanf (row[2],"%u",&Gbl.Usrs.Me.RoleFromSession) != 1)
-         Gbl.Usrs.Me.RoleFromSession = Rol_UNK;
+      if (sscanf (row[2],"%u",&Gbl.Usrs.Me.Roles.RoleFromSession) != 1)
+         Gbl.Usrs.Me.Roles.RoleFromSession = Rol_UNK;
 
       /***** Get country code (row[3]) *****/
       Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);

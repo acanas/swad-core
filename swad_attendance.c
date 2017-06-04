@@ -163,7 +163,7 @@ void Att_SeeAttEvents (void)
 
       /* Put link to show list of attendance */
       if (Gbl.AttEvents.Num)
-	 switch (Gbl.Usrs.Me.LoggedRole)
+	 switch (Gbl.Usrs.Me.Roles.LoggedRole)
 	   {
 	    case Rol_STD:
 	       Att_PutFormToListMyAttendance ();
@@ -206,8 +206,8 @@ static void Att_ShowAllAttEvents (void)
    Dat_StartEndTime_t Order;
    struct Pagination Pagination;
    unsigned NumAttEvent;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
-		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
+		    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.AttEvents.Num;
@@ -375,7 +375,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
@@ -604,7 +604,7 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
       Att_FreeListAttEvents ();
 
    /***** Get list of attendance events from database *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
@@ -1826,7 +1826,7 @@ void Att_SeeOneAttEvent (void)
    Att_ShowOneAttEvent (&Att,true);
    Lay_EndRoundFrameTable ();
 
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_STD:
 	 Att_ListAttOnlyMeAsStudent (&Att);
@@ -2031,7 +2031,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
    bool ICanEditTchComment;
 
    /***** Set who can edit *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_STD:
 	 // A student can see only her/his attendance
@@ -3532,7 +3532,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	 Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
          ShowCommentStd = CommentStd[0];
 	 ShowCommentTch = CommentTch[0] &&
-	                  (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
+	                  (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
 	                   Gbl.AttEvents.Lst[NumAttEvent].CommentTchVisible);
 
 	 /***** Write a row for this event *****/

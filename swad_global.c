@@ -155,12 +155,12 @@ void Gbl_InitializeGlobals (void)
    Usr_ResetMyLastData ();
    Gbl.Session.Id[0] = '\0';
    Gbl.Usrs.Me.Logged = false;
-   Gbl.Usrs.Me.AvailableRoles = 0;
-   Gbl.Usrs.Me.RoleFromSession              =
-   Gbl.Usrs.Me.LoggedRole                   =
-   Gbl.Usrs.Me.LoggedRoleBeforeCloseSession =
-   Gbl.Usrs.Me.MaxRole                      = Rol_UNK;
-   Gbl.Usrs.Me.RoleHasChanged = false;
+   Gbl.Usrs.Me.Roles.Available = 0;
+   Gbl.Usrs.Me.Roles.RoleFromSession              =
+   Gbl.Usrs.Me.Roles.LoggedRole                   =
+   Gbl.Usrs.Me.Roles.LoggedRoleBeforeCloseSession =
+   Gbl.Usrs.Me.Roles.Max                          = Rol_UNK;
+   Gbl.Usrs.Me.Roles.RoleHasChanged = false;
    Gbl.Usrs.Me.IBelongToCurrentIns = false;
    Gbl.Usrs.Me.IBelongToCurrentCtr = false;
    Gbl.Usrs.Me.IBelongToCurrentDeg = false;

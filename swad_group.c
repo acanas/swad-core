@@ -344,8 +344,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
       ICanEdit = !Gbl.Form.Inside &&
-	         (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
-                  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+	         (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
+                  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_Groups,
@@ -607,7 +607,7 @@ void Grp_ChangeMyGrps (void)
    // ...is a radio-based form and not a checkbox-based form...
    // ...this check is made only to avoid problems...
    // ...if the student manipulates the form
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD &&
        LstGrpsIWant.NumGrps >= 2)
       MySelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsIWant);
 
@@ -653,7 +653,7 @@ void Grp_ChangeOtherUsrGrps (void)
 
    /***** A student can not be enroled in more than one group
           if the type of group is of single enrolment *****/
-   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD &&
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB == Rol_STD &&
        LstGrpsUsrWants.NumGrps >= 2)
       SelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsUsrWants);
 
@@ -710,7 +710,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,-1L,
 				Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
      {
       /***** Go across the list of groups which I belong to and check if I try to leave a closed group *****/
       for (NumGrpIBelong = 0;
@@ -844,7 +844,7 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    bool RegisterUsrInThisGrp;
    bool ChangesMade = false;
 
-   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB == Rol_STD)
      {
       /***** Lock tables to make the inscription atomic *****/
       DB_Query ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
@@ -894,7 +894,7 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
    /***** Unlock tables after changes in my groups *****/
-   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB == Rol_STD)
      {
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				     // ...to not retry the unlock if error in unlocking
@@ -1635,7 +1635,7 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
             fprintf (Gbl.F.Out," checked=\"checked\"");
         }
       if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+            Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" />"
 	                 "</td>");
@@ -1676,8 +1676,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    unsigned NumGrpsIBelong = 0;
    bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
    bool ICanEdit = !Gbl.Form.Inside &&
-	           (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+	           (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
+                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
    bool ICanChangeMySelection = false;
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
@@ -1687,7 +1687,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
       /***** Show warnings to students *****/
       // Students are required to join groups with mandatory enrolment; teachers don't
-      if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
+      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
 	 Grp_ShowWarningToStdsToChangeGrps ();
      }
 
@@ -1836,7 +1836,7 @@ static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&	// If user is a student
+      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD &&	// If user is a student
           !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
           GrpTyp->NumGrps > 1)			// ...and there are more than a group
 	{
@@ -1859,7 +1859,7 @@ static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
       if (IBelongToThisGroup)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");		// Group selected
 
-      switch (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB)
+      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB)
 	{
 	 case Rol_STD:
 	    if (Grp->Open)					// If group is open
@@ -1977,7 +1977,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       if (UsrBelongsToThisGroup)
       	 fprintf (Gbl.F.Out," checked=\"checked\"");
       if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+            Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," /></td>");
 

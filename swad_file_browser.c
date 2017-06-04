@@ -2084,7 +2084,7 @@ void Brw_GetParAndInitFileBrowser (void)
       /***** Marks *****/
       case ActSeeAdmMrk:	// Access to a marks zone from menu
          /* Set file browser type acording to last group accessed */
-	 switch (Gbl.Usrs.Me.LoggedRole)
+	 switch (Gbl.Usrs.Me.Roles.LoggedRole)
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
@@ -2275,7 +2275,7 @@ void Brw_GetParAndInitFileBrowser (void)
    // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
    // Else ==> show full tree (only public files)
    Gbl.FileBrowser.ShowOnlyPublicFiles = false;
-   if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
@@ -3066,7 +3066,7 @@ static void Brw_SetMaxQuota (void)
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_WORKS_PER_STD;
 	 break;
       case Brw_ADMI_BRIEF_USR:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_BRIEF[Gbl.Usrs.Me.MaxRole];
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_BRIEF[Gbl.Usrs.Me.Roles.Max];
          Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_BRIEF;
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_BRIEF;
 	 break;
@@ -3431,7 +3431,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-   switch (UsrDat->RoleInCurrentCrsDB)
+   switch (UsrDat->Roles.InCurrentCrsDB)
      {
       case Rol_STD:
 	 NextAction = ActSeeRecOneStd;
@@ -3556,8 +3556,8 @@ static void Brw_ShowFileBrowser (void)
    const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];
-   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
-	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
+	                     Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM;
 
    /***** Set title of file browser *****/
    Brw_TitleOfFileBrowser[Brw_UNKNOWN       ] = NULL;					// Brw_UNKNOWN
@@ -3622,27 +3622,27 @@ static void Brw_ShowFileBrowser (void)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
 	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
 	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
 	 break;
       case Brw_SHOW_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
 	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
 	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
 	 break;
       case Brw_SHOW_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
 	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
 	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
 	 break;
       case Brw_SHOW_DOCUM_CRS:
@@ -4015,7 +4015,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	 break;
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
-	 switch (Gbl.Usrs.Me.LoggedRole)
+	 switch (Gbl.Usrs.Me.Roles.LoggedRole)
 	   {
 	    case Rol_STD:
 	       sprintf (Subtitle,"(%s)",
@@ -5362,7 +5362,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
      {
       /***** Put icon to download ZIP of folder *****/
       fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
+      if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	  !SeeMarks &&				// Do not ZIP folders when seeing marks
 	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
@@ -9063,20 +9063,20 @@ void Brw_ShowFileMetadata (void)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_INS_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CTR:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_CTR_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_DEG:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_DEG_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CRS:
 	 case Brw_SHOW_DOCUM_GRP:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_TCH)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_TCH)
                ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
@@ -9452,20 +9452,20 @@ void Brw_DownloadFile (void)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_INS_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CTR:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_CTR_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_DEG:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_DEG_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CRS:
 	 case Brw_SHOW_DOCUM_GRP:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_TCH)
+	    if (Gbl.Usrs.Me.Roles.LoggedRole < Rol_TCH)
                ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
@@ -9631,7 +9631,7 @@ static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod)
       else									// The file has no publisher
 	{
 	 ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-	 if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
+	 if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
 	     ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
 	    return true;
 	}
@@ -10906,20 +10906,20 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       return false;
 
    /***** I must be student or a superior role to edit *****/
-   if (Gbl.Usrs.Me.MaxRole < Rol_STD)
+   if (Gbl.Usrs.Me.Roles.Max < Rol_STD)
       return false;
 
    /***** Set depending on browser, level, logged role... *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOCUM_CRS:
-         return Gbl.Usrs.Me.LoggedRole >= Rol_TCH;
+         return Gbl.Usrs.Me.Roles.LoggedRole >= Rol_TCH;
       case Brw_ADMI_DOCUM_GRP:
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)		// A teacher...
+	 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH)		// A teacher...
 							// ...can edit only if he/she belongs to group
 	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
 	 // An administrator can edit
-         return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
+         return (Gbl.Usrs.Me.Roles.LoggedRole > Rol_TCH);
       case Brw_ADMI_TEACH_CRS:
       case Brw_ADMI_TEACH_GRP:
          // Check if I am the publisher of the file/folder
@@ -10943,7 +10943,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not edit this assignment
 
-	 switch (Gbl.Usrs.Me.LoggedRole)
+	 switch (Gbl.Usrs.Me.Roles.LoggedRole)
 	   {
 	    case Rol_STD:			// Students...
 	    case Rol_NET:			// ...and non-editing teachers...
@@ -10970,7 +10970,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
       return false;
 
    /***** I must be student, teacher, admin or superuser to edit *****/
-   if (Gbl.Usrs.Me.MaxRole < Rol_STD)
+   if (Gbl.Usrs.Me.Roles.Max < Rol_STD)
       return false;
 
    /***** If maximum level is reached, I can not create/paste *****/
@@ -10981,31 +10981,31 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOCUM_CRS:
-         return Gbl.Usrs.Me.LoggedRole >= Rol_TCH;
+         return Gbl.Usrs.Me.Roles.LoggedRole >= Rol_TCH;
       case Brw_ADMI_DOCUM_GRP:
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)		// A teacher
+	 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH)		// A teacher
 							// ...can create/paste only if he/she belongs to group
 	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
+         return (Gbl.Usrs.Me.Roles.LoggedRole > Rol_TCH);
       case Brw_ADMI_TEACH_CRS:
-         return Gbl.Usrs.Me.LoggedRole >= Rol_NET;
+         return Gbl.Usrs.Me.Roles.LoggedRole >= Rol_NET;
       case Brw_ADMI_TEACH_GRP:
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_NET ||	// A non-editing teacher...
-	     Gbl.Usrs.Me.LoggedRole == Rol_TCH)		// ...or a teacher
+	 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_NET ||	// A non-editing teacher...
+	     Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH)		// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
 	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
+         return (Gbl.Usrs.Me.Roles.LoggedRole > Rol_TCH);
       case Brw_ADMI_SHARE_CRS:
-         return Gbl.Usrs.Me.LoggedRole >= Rol_STD;
+         return Gbl.Usrs.Me.Roles.LoggedRole >= Rol_STD;
       case Brw_ADMI_SHARE_GRP:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_STD &&	// A student, non-editing teacher...
-	     Gbl.Usrs.Me.LoggedRole <= Rol_TCH)		// ...or a teacher
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_STD &&	// A student, non-editing teacher...
+	     Gbl.Usrs.Me.Roles.LoggedRole <= Rol_TCH)		// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
 	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
 	 // An administrator can create/paste
-         return Gbl.Usrs.Me.LoggedRole >= Rol_STD;
+         return Gbl.Usrs.Me.Roles.LoggedRole >= Rol_STD;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_ASSIG_CRS:
 	 if (Level == 0)	// If root folder
@@ -11021,7 +11021,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not create anything inside this assignment
 
-	 switch (Gbl.Usrs.Me.LoggedRole)
+	 switch (Gbl.Usrs.Me.Roles.LoggedRole)
 	   {
 	    case Rol_STD:			// Students...
 	    case Rol_NET:			// ...and non-editing teachers...
@@ -11047,7 +11047,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
   {
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_STD:	// If I am a student or a non-editing teacher...
       case Rol_NET:	// ...I can modify the file/folder if I am the publisher
@@ -11065,7 +11065,7 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
 
 static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
   {
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_NET:	// If I am a student or a non-editing teacher...
 			// ...I can modify the file/folder if I am the publisher

@@ -137,7 +137,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    const char *BgColor;
 
    /***** Get centres with pending degrees *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_CTR_ADM:
          sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
@@ -355,7 +355,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /* Photo attribution */
 	 if (!PrintView &&
-	     Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	     Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
 	    // Only centre admins, institution admins and centre admins
 	    // have permission to edit photo attribution
 	   {
@@ -394,7 +394,7 @@ static void Ctr_Configuration (bool PrintView)
 	       Txt_Institution);
 
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	 // Only system admins can move a centre to another institution
 	{
 	 /* Get list of institutions of the current country */
@@ -435,7 +435,7 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Centre);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
 	 // Only institution admins and system admins can edit centre full name
 	{
 	 /* Form to change centre full name */
@@ -464,7 +464,7 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
 	 // Only institution admins and system admins can edit centre short name
 	{
 	 /* Form to change centre short name */
@@ -493,7 +493,7 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
 	 // Only centre admins, institution admins and system admins
 	 // can change centre WWW
 	{
@@ -642,7 +642,7 @@ static void Ctr_PutIconsToPrintAndUpload (void)
    /***** Link to print info about centre *****/
    Lay_PutContextualIconToPrint (ActPrnCtrInf,NULL);
 
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
       // have permission to upload logo and photo of the centre
      {
@@ -783,7 +783,7 @@ static void Ctr_ListCentres (void)
 
 static bool Ctr_CheckIfICanCreateCentres (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
+   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1569,7 +1569,7 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM &&
+      if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgCtrSta);
@@ -1605,7 +1605,7 @@ static void Ctr_ListCentresForEdition (void)
 
 static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ||		// I am an institution administrator or higher
+   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM ||		// I am an institution administrator or higher
                   ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&	// Centre is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));	// I am the requester
   }
@@ -2402,9 +2402,9 @@ static void Ctr_PutFormToCreateCentre (void)
    unsigned NumPlc;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
       Act_FormStart (ActNewCtr);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
+   else if (Gbl.Usrs.Me.Roles.Max >= Rol_GST)
       Act_FormStart (ActReqCtr);
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");

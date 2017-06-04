@@ -89,7 +89,7 @@ void Cht_ShowChatRooms (void)
 
    Ale_ShowAlert (Ale_WARNING,Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_);
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       Cht_ShowListOfChatRoomsWithUsrs ();
   }
 
@@ -152,7 +152,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
    IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegs.Num;
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_STD:
          sprintf (ThisRoomFullName,"%s (%s)",
@@ -463,7 +463,7 @@ void Cht_OpenChatWindow (void)
                   Cht_MAX_BYTES_ROOM_FULL_NAMES);
      }
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
       if (strcmp (RoomCode,"GBL_STD"))
         {
          Str_Concat (ListRoomCodes,"|#GBL_STD",
@@ -479,8 +479,8 @@ void Cht_OpenChatWindow (void)
 	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_NET ||
-       Gbl.Usrs.Me.LoggedRole == Rol_TCH)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_NET ||
+       Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH)
       if (strcmp (RoomCode,"GBL_TCH"))
         {
          Str_Concat (ListRoomCodes,"|#GBL_TCH",

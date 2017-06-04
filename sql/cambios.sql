@@ -11926,7 +11926,7 @@ BEGIN
   DECLARE LogCodStart INT;
   DECLARE LogCodEnd INT;
   SET LogCodStart = 0;
-  WHILE LogCodStart <= 440000000 DO
+  WHILE LogCodStart <= 450000000 DO
     SET LogCodEnd = LogCodStart + 99999;
     UPDATE log_full SET Role = Role + (Role >= 4) WHERE LogCod BETWEEN LogCodStart AND LogCodEnd;
     SET LogCodStart = LogCodEnd + 1;

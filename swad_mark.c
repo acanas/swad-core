@@ -622,7 +622,7 @@ void Mrk_ShowMyMarks (void)
    Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
    /***** Set the student whose marks will be shown *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)	// If I am logged as student...
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)	// If I am logged as student...
       UsrDat = &Gbl.Usrs.Me.UsrDat;		// ...use my list of IDs
    else						// If I am logged as non-editing teacher, teacher or admin
      {

@@ -244,7 +244,7 @@ bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
       return true;
 
    /***** System admins always can see others' profiles *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       return true;
 
    /***** Check if I can see the other's photo *****/

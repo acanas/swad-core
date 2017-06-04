@@ -58,6 +58,133 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/******************************* Set my roles ********************************/
+/*****************************************************************************/
+
+void Rol_SetMyRoles (void)
+  {
+   bool ICanBeInsAdm = false;
+   bool ICanBeCtrAdm = false;
+   bool ICanBeDegAdm = false;
+
+   // In this point Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB is set
+
+   /***** Set the user's role I am logged *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
+   Gbl.Usrs.Me.Roles.Max = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
+   Gbl.Usrs.Me.Roles.LoggedRole = (Gbl.Usrs.Me.Roles.RoleFromSession == Rol_UNK) ?	// If no logged role retrieved from session...
+	                       ((Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_UNK) ? Rol_USR :
+	                                                                             Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB) :
+                               Gbl.Usrs.Me.Roles.RoleFromSession;		// Get logged role from session
+
+   /***** Check if I am administrator of current institution/centre/degree *****/
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      /* Check if I am and administrator of current institution */
+      ICanBeInsAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                          Sco_SCOPE_INS,
+                                          Gbl.CurrentIns.Ins.InsCod);
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	{
+	 /* Check if I am and administrator of current centre */
+	 ICanBeCtrAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                     Sco_SCOPE_CTR,
+	                                     Gbl.CurrentCtr.Ctr.CtrCod);
+	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    /* Check if I am and administrator of current degree */
+	    ICanBeDegAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                        Sco_SCOPE_DEG,
+	                                        Gbl.CurrentDeg.Deg.DegCod);
+	}
+     }
+
+   /***** Check if I belong to current course *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+     {
+      Gbl.Usrs.Me.IBelongToCurrentCrs = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_STD ||
+                                        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_NET ||
+                                        Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_TCH;
+      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+         Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                                   Gbl.CurrentCrs.Crs.CrsCod,
+                                                                   true);
+      else
+         Gbl.Usrs.Me.UsrDat.Accepted = false;
+     }
+   else					// No course selected
+     {
+      Gbl.Usrs.Me.IBelongToCurrentCrs = false;
+      Gbl.Usrs.Me.UsrDat.Accepted = false;
+     }
+
+   /***** Check if I belong to current degree *****/
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = true;
+      else
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod);
+     }
+   else
+      Gbl.Usrs.Me.IBelongToCurrentDeg = false;
+
+   /***** Check if I belong to current centre *****/
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentDeg)
+         Gbl.Usrs.Me.IBelongToCurrentCtr = true;
+      else
+         Gbl.Usrs.Me.IBelongToCurrentCtr = Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod);
+     }
+   else
+      Gbl.Usrs.Me.IBelongToCurrentCtr = false;
+
+   /***** Check if I belong to current institution *****/
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentCtr)
+	 Gbl.Usrs.Me.IBelongToCurrentIns = true;
+      else
+	 Gbl.Usrs.Me.IBelongToCurrentIns = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
+     }
+   else
+      Gbl.Usrs.Me.IBelongToCurrentIns = false;
+
+   /***** Build my list of available roles for current course *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+         Gbl.Usrs.Me.Roles.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB);
+      else if (Gbl.Usrs.Me.Roles.Max >= Rol_STD)
+         Gbl.Usrs.Me.Roles.Available = (1 << Rol_USR);
+      else
+         Gbl.Usrs.Me.Roles.Available = (1 << Rol_GST);
+     }
+   else if (Gbl.Usrs.Me.Roles.Max >= Rol_STD)
+      Gbl.Usrs.Me.Roles.Available = (1 << Rol_USR);
+   else
+      Gbl.Usrs.Me.Roles.Available = (1 << Rol_GST);
+
+   if (ICanBeInsAdm)
+      Gbl.Usrs.Me.Roles.Available |= (1 << Rol_INS_ADM);
+   if (ICanBeCtrAdm)
+      Gbl.Usrs.Me.Roles.Available |= (1 << Rol_CTR_ADM);
+   if (ICanBeDegAdm)
+      Gbl.Usrs.Me.Roles.Available |= (1 << Rol_DEG_ADM);
+   if (Usr_CheckIfUsrIsSuperuser (Gbl.Usrs.Me.UsrDat.UsrCod))
+      Gbl.Usrs.Me.Roles.Available |= (1 << Rol_SYS_ADM);
+
+   /***** Check if the role I am logged is now available for me *****/
+   if (!(Gbl.Usrs.Me.Roles.Available & (1 << Gbl.Usrs.Me.Roles.LoggedRole)))        // Current type I am logged is not available for me
+      /* Set the lowest role available for me */
+      for (Gbl.Usrs.Me.Roles.LoggedRole = Rol_UNK;
+           Gbl.Usrs.Me.Roles.LoggedRole < Rol_NUM_ROLES;
+           Gbl.Usrs.Me.Roles.LoggedRole++)
+         if (Gbl.Usrs.Me.Roles.Available & (1 << Gbl.Usrs.Me.Roles.LoggedRole))
+            break;
+  }
+
+/*****************************************************************************/
 /****************** Get number of available roles for me *********************/
 /*****************************************************************************/
 
@@ -69,7 +196,7 @@ unsigned Rol_GetNumAvailableRoles (void)
    for (Role = Rol_GST;
         Role < Rol_NUM_ROLES;
         Role++)
-      if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
+      if (Gbl.Usrs.Me.Roles.Available & (1 << Role))
          NumAvailableRoles++;
 
    return NumAvailableRoles;
@@ -240,7 +367,7 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
    unsigned NumRoles;
 
    /***** If roles is already filled ==> nothing to do *****/
-   if (UsrDat->Roles < 0)	// Not yet filled
+   if (UsrDat->Roles.InCrss < 0)	// Not yet filled
      {
       /***** Get distinct roles in all courses of the user from database *****/
       sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod=%ld",
@@ -248,12 +375,12 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
       NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,
 					    "can not get the roles of a user"
 					    " in all his/her courses");
-      for (NumRole = 0, UsrDat->Roles = 0;
+      for (NumRole = 0, UsrDat->Roles.InCrss = 0;
 	   NumRole < NumRoles;
 	   NumRole++)
 	{
 	 row = mysql_fetch_row (mysql_res);
-	 UsrDat->Roles |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
+	 UsrDat->Roles.InCrss |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
 	}
 
       /***** Free structure that stores the query result *****/
@@ -305,10 +432,10 @@ void Rol_PutFormToChangeMyRole (void)
    for (Role = Rol_GST;
         Role < Rol_NUM_ROLES;
         Role++)
-     if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
+     if (Gbl.Usrs.Me.Roles.Available & (1 << Role))
         {
          fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-         if (Role == Gbl.Usrs.Me.LoggedRole)
+         if (Role == Gbl.Usrs.Me.Roles.LoggedRole)
             fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",
                   Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
@@ -334,16 +461,16 @@ void Rol_ChangeMyRole (void)
    if (NewRole != Rol_UNK)
      {
       /* Check if new role is allowed for me */
-      if (!(Gbl.Usrs.Me.AvailableRoles & (1 << NewRole)))
+      if (!(Gbl.Usrs.Me.Roles.Available & (1 << NewRole)))
          return;
 
       /* New role is correct and is allowed for me */
-      if (NewRole != Gbl.Usrs.Me.LoggedRole)
+      if (NewRole != Gbl.Usrs.Me.Roles.LoggedRole)
 	{
          /* New role is distinct to current role,
             so change my role... */
-	 Gbl.Usrs.Me.LoggedRole = NewRole;
-	 Gbl.Usrs.Me.RoleHasChanged = true;
+	 Gbl.Usrs.Me.Roles.LoggedRole = NewRole;
+	 Gbl.Usrs.Me.Roles.RoleHasChanged = true;
 
 	 /* ...update logged role in session... */
 	 Ses_UpdateSessionDataInDB ();

@@ -108,7 +108,7 @@ void Mai_SeeMailDomains (void)
 
    /***** Table head *****/
    Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
-                             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
+                             Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                      NULL,
                              Hlp_MESSAGES_Domains,2);
    fprintf (Gbl.F.Out,"<tr>");
@@ -1144,7 +1144,7 @@ void Mai_PutLinkToChangeOtherUsrEmails (void)
                              NULL);
    else									// Not me
      {
-      switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
         {
 	 case Rol_STD:
 	    NextAction = ActFrmMaiStd;
@@ -1270,7 +1270,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActRemMaiMe);
       else
 	{
-	 switch (UsrDat->RoleInCurrentCrsDB)
+	 switch (UsrDat->Roles.InCurrentCrsDB)
 	   {
 	    case Rol_STD:
 	       NextAction = ActRemMaiStd;
@@ -1317,7 +1317,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	    Act_FormStart (ActNewMaiMe);
 	 else
 	   {
-	    switch (UsrDat->RoleInCurrentCrsDB)
+	    switch (UsrDat->Roles.InCurrentCrsDB)
 	      {
 	       case Rol_STD:
 		  NextAction = ActNewMaiStd;
@@ -1358,7 +1358,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Act_FormStart (ActNewMaiMe);
    else
      {
-      switch (UsrDat->RoleInCurrentCrsDB)
+      switch (UsrDat->Roles.InCurrentCrsDB)
 	{
 	 case Rol_STD:
 	    NextAction = ActNewMaiStd;
@@ -1884,21 +1884,21 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
       return true;
 
    /***** Check if I have permission to see another user's email *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
       case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_NET ||	// A non-editing teacher
-	         UsrDat->RoleInCurrentCrsDB == Rol_TCH) &&	// or a teacher
+	 return (UsrDat->Roles.InCurrentCrsDB == Rol_NET ||	// A non-editing teacher
+	         UsrDat->Roles.InCurrentCrsDB == Rol_TCH) &&	// or a teacher
 	         UsrDat->Accepted;				// who accepted registration
       case Rol_NET:
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return (UsrDat->RoleInCurrentCrsDB == Rol_STD ||	// A student
-                 UsrDat->RoleInCurrentCrsDB == Rol_NET ||	// or a non-editing teacher
-                 UsrDat->RoleInCurrentCrsDB == Rol_TCH) &&	// or a teacher
+         return (UsrDat->Roles.InCurrentCrsDB == Rol_STD ||	// A student
+                 UsrDat->Roles.InCurrentCrsDB == Rol_NET ||	// or a non-editing teacher
+                 UsrDat->Roles.InCurrentCrsDB == Rol_TCH) &&	// or a teacher
 	         UsrDat->Accepted;				// who accepted registration
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,

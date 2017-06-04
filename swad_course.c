@@ -178,15 +178,15 @@ static void Crs_Configuration (bool PrintView)
    unsigned Year;
    int NumIndicatorsFromDB;
    struct Ind_IndicatorsCrs Indicators;
-   bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TCH);
+   bool IsForm = (!PrintView && Gbl.Usrs.Me.Roles.LoggedRole >= Rol_TCH);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
    /***** Messages and links above the frame *****/
    if (!PrintView)
      {
       /* Link to request enrolment in the current course */
-      if (Gbl.Usrs.Me.LoggedRole == Rol_GST ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_USR)
+      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_GST ||
+	  Gbl.Usrs.Me.Roles.LoggedRole == Rol_USR)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Enr_PutLinkToRequestSignUp ();
@@ -229,7 +229,7 @@ static void Crs_Configuration (bool PrintView)
             Txt_Degree);
 
    if (!PrintView &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+       Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admin can move a course to another degree
      {
       /* Get list of degrees of the current centre */
@@ -270,7 +270,7 @@ static void Crs_Configuration (bool PrintView)
 	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_Course);
    if (!PrintView &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+       Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins can edit course full name
      {
       /* Form to change course full name */
@@ -299,7 +299,7 @@ static void Crs_Configuration (bool PrintView)
 	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_Short_name);
    if (!PrintView &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+       Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins can edit course short name
      {
       /* Form to change course short name */
@@ -1175,7 +1175,7 @@ static void Crs_ListCourses (void)
 
 static bool Crs_CheckIfICanCreateCourses (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
+   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1536,7 +1536,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
 	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
+	 if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM &&
 	     StatusTxt == Crs_STATUS_PENDING)
 	   {
 	    Act_FormStart (ActChgCrsSta);
@@ -1570,7 +1570,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 static bool Crs_CheckIfICanEdit (struct Course *Crs)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||		// I am a degree administrator or higher
+   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM ||		// I am a degree administrator or higher
                   ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&		// Course is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));		// I am the requester
   }
@@ -1629,9 +1629,9 @@ static void Crs_PutFormToCreateCourse (void)
    unsigned Year;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+   if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
       Act_FormStart (ActNewCrs);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
+   else if (Gbl.Usrs.Me.Roles.Max >= Rol_GST)
       Act_FormStart (ActReqCrs);
    else
       Lay_ShowErrorAndExit ("You can not edit courses.");
@@ -2784,7 +2784,7 @@ void Crs_ContEditAfterChgCrs (void)
 
       /***** Put button to request my registration in course *****/
       PutButtonToRequestRegistration = false;
-      switch (Gbl.Usrs.Me.LoggedRole)
+      switch (Gbl.Usrs.Me.Roles.LoggedRole)
         {
 	 case Rol_GST:	// I do not belong to any course
 	    PutButtonToRequestRegistration = true;
@@ -3270,7 +3270,7 @@ void Crs_UpdateCrsLast (void)
    char Query[128];
 
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_STD)
+       Gbl.Usrs.Me.Roles.LoggedRole >= Rol_STD)
      {
       /***** Update my last access to current course *****/
       sprintf (Query,"REPLACE INTO crs_last (CrsCod,LastTime)"
