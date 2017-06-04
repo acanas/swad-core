@@ -73,9 +73,9 @@ void Rol_SetMyRoles (void)
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
    Gbl.Usrs.Me.Roles.Max = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
    Gbl.Usrs.Me.Roles.LoggedRole = (Gbl.Usrs.Me.Roles.RoleFromSession == Rol_UNK) ?	// If no logged role retrieved from session...
-	                       ((Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_UNK) ? Rol_USR :
-	                                                                             Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB) :
-                               Gbl.Usrs.Me.Roles.RoleFromSession;		// Get logged role from session
+	                          ((Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_UNK) ? Rol_USR :
+	                                                                                  Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB) :
+                                  Gbl.Usrs.Me.Roles.RoleFromSession;		// Get logged role from session
 
    /***** Check if I am administrator of current institution/centre/degree *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0)

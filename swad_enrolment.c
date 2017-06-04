@@ -137,13 +137,15 @@ static void Enr_ShowFormToEditOtherUsr (void);
 static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName);
 static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                long Cod,const char *InsCtrDegName);
-static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
+
+static bool Enr_CheckIfICanRemUsrFromCrs (void);
+
 static void Enr_ReqRemAdmOfDeg (void);
 static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t Scope,
                                 long Cod,const char *InsCtrDegName);
 
 static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName);
-static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe);
+static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
                                           Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose);
 
@@ -3438,7 +3440,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
 
 void Enr_ReqRemMeFromCrs (void)
   {
-   Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Me.UsrDat,true);
+   Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Me.UsrDat);
   }
 
 /*****************************************************************************/
@@ -3447,69 +3449,81 @@ void Enr_ReqRemMeFromCrs (void)
 
 void Enr_ReqRemUsrFromCrs (void)
   {
-   Enr_ReqRemOrRemUsrFromCrs (Enr_REQUEST_REMOVE_USR);
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user to be removed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Enr_CheckIfICanRemUsrFromCrs ())
+	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
+      else
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
 /********************* Remove a user from current course *********************/
 /*****************************************************************************/
 
-void Enr_RemUsrFromCrs (void)
+void Enr_RemUsrFromCrs1 (void)
   {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
    if (Pwd_GetConfirmationOnDangerousAction ())
-      Enr_ReqRemOrRemUsrFromCrs (Enr_REMOVE_USR);
+     {
+      /***** Get user to be removed *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+	{
+	 if (Enr_CheckIfICanRemUsrFromCrs ())
+	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.CurrentCrs.Crs,
+					  Enr_REMOVE_WORKS,Cns_VERBOSE);
+	 else
+	   {
+	    Gbl.Alert.Type = Ale_WARNING;
+	    sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	   }
+	}
+      else
+	{
+	 Gbl.Alert.Type = Ale_WARNING;
+	 sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	}
+     }
+  }
+
+void Enr_RemUsrFromCrs2 (void)
+  {
+   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
-/******************** Remove of a user from current course *******************/
+/*********** Check if I can remove another user in current course ************/
 /*****************************************************************************/
 
-static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
+static bool Enr_CheckIfICanRemUsrFromCrs (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   bool ItsMe;
-   bool ICanRemove;
+   /* Check if it's forbidden remove that user */
+   // A teacher can remove a student or himself
+   // An administrator can remove anyone
 
-   /***** Get user to be removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   switch (Gbl.Usrs.Me.Roles.LoggedRole)
      {
-      /* Check if it's forbidden remove that user */
-      // A teacher can remove a student or himself
-      // An administrator can remove anyone
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      switch (Gbl.Usrs.Me.Roles.LoggedRole)
-        {
-	 case Rol_STD:
-	 case Rol_NET:
-	    ICanRemove = ItsMe;
-	    break;
-	 case Rol_TCH:
-	 case Rol_DEG_ADM:
-	 case Rol_CTR_ADM:
-	 case Rol_INS_ADM:
-	 case Rol_SYS_ADM:
-	    ICanRemove = true;
-	    break;
-	 default:
-	    ICanRemove = false;
-	    break;
-        }
-      if (ICanRemove)
-	 switch (ReqDelOrDelUsr)
-	   {
-	    case Enr_REQUEST_REMOVE_USR:        // Ask if remove user from current course
-	       Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat,ItsMe);
-	       break;
-	    case Enr_REMOVE_USR:                // Remove user from current course
-	       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.CurrentCrs.Crs,
-	                                     Enr_REMOVE_WORKS,Cns_VERBOSE);
-	       break;
-	   }
-      else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      case Rol_STD:
+      case Rol_NET:
+	 return (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);	// It's me?
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 return true;
+	 break;
+      default:
+	 return false;
+	 break;
      }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -4069,19 +4083,22 @@ void Enr_AcceptUsrInCrs (long UsrCod)
 /******************* Ask if really wanted to remove a user *******************/
 /*****************************************************************************/
 
-static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
+static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X;
    extern const char *Txt_Remove_me_from_this_course;
    extern const char *Txt_Remove_user_from_this_course;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
    Act_Action_t NextAction;
 
    if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
                                    Gbl.CurrentCrs.Crs.CrsCod,
                                    false))
      {
+      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+
       /***** Show question and button to remove user as administrator *****/
       /* Start alert */
       sprintf (Gbl.Alert.Txt,
@@ -4134,6 +4151,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[1024];
+   bool ItsMe;
 
    if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
                                    Crs->CrsCod,
@@ -4143,17 +4161,17 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       Att_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from all the groups in course *****/
-      Grp_RemUsrFromAllGrpsInCrs (UsrDat,Crs,QuietOrVerbose);
+      Grp_RemUsrFromAllGrpsInCrs (UsrDat,Crs);
 
       /***** Remove user's status about reading of course information *****/
       Inf_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove works zone of this user in course *****/
       if (RemoveUsrWorks == Enr_REMOVE_WORKS)
-         Brw_RemoveUsrWorksInCrs (UsrDat,Crs,QuietOrVerbose);
+         Brw_RemoveUsrWorksInCrs (UsrDat,Crs);
 
       /***** Remove fields of this user in its course record *****/
-      Rec_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs,QuietOrVerbose);
+      Rec_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs);
 
       /***** Remove some information about files in course and groups *****/
       Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (UsrDat->UsrCod,Crs->CrsCod);
@@ -4171,16 +4189,28 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
                Crs->CrsCod,UsrDat->UsrCod);
       DB_QueryDELETE (Query,"can not remove a user from a course");
 
+      /***** If it's me, change my roles *****/
+      ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (ItsMe)
+	{
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB = UsrDat->Roles.InCurrentCrsDB = Rol_UNK;
+	 Gbl.Usrs.Me.UsrDat.Roles.InCrss         = UsrDat->Roles.InCrss = -1;	// not yet filled/calculated
+	 Rol_SetMyRoles ();
+	}
+
       if (QuietOrVerbose == Cns_VERBOSE)
         {
+	 Gbl.Alert.Type = Ale_SUCCESS;
          sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_the_course_Y,
                   UsrDat->FullName,Crs->FullName);
-         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
         }
      }
    else        // User does not belong to course
       if (QuietOrVerbose == Cns_VERBOSE)
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	{
+	 Gbl.Alert.Type = Ale_WARNING;
+         sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	}
   }
 
 /*****************************************************************************/

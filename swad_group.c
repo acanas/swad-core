@@ -1113,9 +1113,8 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 /*************** Remove a user of all the groups of a course *****************/
 /*****************************************************************************/
 
-void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose)
+void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs)
   {
-   extern const char *Txt_THE_USER_X_has_been_removed_from_all_groups_of_the_course_Y;
    char Query[512];
 
    /***** Remove user from all the groups of the course *****/
@@ -1126,37 +1125,20 @@ void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_Q
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
             UsrDat->UsrCod,Crs->CrsCod);
    DB_QueryDELETE (Query,"can not remove a user from all groups of a course");
-
-   /***** Write message to show the change made *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_all_groups_of_the_course_Y,
-               UsrDat->FullName,Crs->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-     }
   }
 
 /*****************************************************************************/
 /******* Remove a user from all the groups of all the user's courses *********/
 /*****************************************************************************/
 
-void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose)
+void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat)
   {
-   extern const char *Txt_THE_USER_X_has_been_removed_from_all_groups_in_all_courses;
    char Query[128];
 
    /***** Remove user from all groups *****/
    sprintf (Query,"DELETE FROM crs_grp_usr WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from the groups he/she belongs to");
-
-   /***** Write message to show the change made *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_all_groups_in_all_courses,
-               UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-     }
   }
 
 /*****************************************************************************/

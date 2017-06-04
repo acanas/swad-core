@@ -1994,9 +1994,8 @@ void Rec_UpdateCrsRecord (long UsrCod)
 /************ Remove fields of record of a user in current course ************/
 /*****************************************************************************/
 
-void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose)
+void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs)
   {
-   extern const char *Txt_User_record_card_in_the_course_X_has_been_removed;
    char Query[256];
 
    /***** Remove text of the field of record course *****/
@@ -2005,32 +2004,19 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs,Cns_QuietOrV
                   " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
             UsrCod,Crs->CrsCod);
    DB_QueryDELETE (Query,"can not remove user's record in a course");
-
-   /***** Write mensaje *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Alert.Txt,Txt_User_record_card_in_the_course_X_has_been_removed,
-               Crs->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-     }
   }
 
 /*****************************************************************************/
 /************* Remove fields of record of a user in all courses **************/
 /*****************************************************************************/
 
-void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbose)
+void Rec_RemoveFieldsCrsRecordAll (long UsrCod)
   {
-   extern const char *Txt_User_record_cards_in_all_courses_have_been_removed;
    char Query[128];
 
    /***** Remove text of the field of record course *****/
    sprintf (Query,"DELETE FROM crs_records WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove user's records in all courses");
-
-   /***** Write mensaje *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowAlert (Ale_SUCCESS,Txt_User_record_cards_in_all_courses_have_been_removed);
   }
 
 /*****************************************************************************/

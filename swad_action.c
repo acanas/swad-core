@@ -2599,9 +2599,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewMaiStd	*/{1482,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_NewOtherUsrEmail		,NULL},
    /* ActNewMaiTch	*/{1483,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_NewOtherUsrEmail		,NULL},
 
-   /* ActRemStdCrs	*/{1462,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
-   /* ActRemNETCrs	*/{1647,-1,TabUnk,ActLstTch		,0x3F0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
-   /* ActRemTchCrs	*/{1463,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemStdCrs	*/{1462,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,NULL},
+   /* ActRemNETCrs	*/{1647,-1,TabUnk,ActLstTch		,0x3F0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,NULL},
+   /* ActRemTchCrs	*/{1463,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,NULL},
 
    /* ActRemUsrGbl	*/{  62,-1,TabUnk,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_GetUsrCodAndRemUsrGbl	,NULL},
 

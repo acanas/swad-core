@@ -980,16 +980,16 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    bool PhotoRemoved = false;
 
    /***** Remove the works zones of the user in all courses *****/
-   Brw_RemoveUsrWorksInAllCrss (UsrDat,QuietOrVerbose);        // Make this before of removing the user from the courses
+   Brw_RemoveUsrWorksInAllCrss (UsrDat);        // Make this before of removing the user from the courses
 
    /***** Remove the fields of course record in all courses *****/
-   Rec_RemoveFieldsCrsRecordAll (UsrDat->UsrCod,QuietOrVerbose);
+   Rec_RemoveFieldsCrsRecordAll (UsrDat->UsrCod);
 
    /***** Remove user from all the attendance events *****/
    Att_RemoveUsrFromAllAttEvents (UsrDat->UsrCod);
 
    /***** Remove user from all the groups of all courses *****/
-   Grp_RemUsrFromAllGrps (UsrDat,QuietOrVerbose);
+   Grp_RemUsrFromAllGrps (UsrDat);
 
    /***** Remove user's requests for inscription *****/
    sprintf (Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",

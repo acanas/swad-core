@@ -46269,66 +46269,6 @@ const char *Txt_THE_USER_X_has_been_removed_as_administrator =	// Warning: it is
 	"<strong>%s</strong> has been removed as administrator.";	// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_has_been_removed_from_all_groups_in_all_courses =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de todos los grupos de todas sus asignaturas.";	// Necessita traduccio
-#elif L==2
-	"<strong>%s</strong> has been removed"
-	" from all groups in all courses.";			// Übersetzung notwendig
-#elif L==3
-	"<strong>%s</strong> has been removed"
-	" from all groups in all courses.";
-#elif L==4
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de todos los grupos de todas sus asignaturas.";
-#elif L==5
-	"<strong>%s</strong> has been removed"
-	" from all groups in all courses.";			// Besoin de traduction
-#elif L==6
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de todos los grupos de todas sus asignaturas.";	// Okoteve traducción
-#elif L==7
-	"<strong>%s</strong> &egrave; stato rimosso"
-	" da tutti i gruppi di tutti i corsi.";
-#elif L==8
-	"<strong>%s</strong> has been removed"
-	" from all groups in all courses.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"<strong>%s</strong> has been removed"
-	" from all groups in all courses.";			// Necessita de tradução
-#endif
-
-const char *Txt_THE_USER_X_has_been_removed_from_all_groups_of_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de todos los grupos de la asignatura <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2
-	"<strong>%s</strong> has been removed"
-	" from all groups of the course <strong>%s</strong>.";		// Übersetzung notwendig
-#elif L==3
-	"<strong>%s</strong> has been removed"
-	" from all groups of the course <strong>%s</strong>.";
-#elif L==4
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de todos los grupos de la asignatura <strong>%s</strong>.";
-#elif L==5
-	"<strong>%s</strong> has been removed"
-	" from all groups of the course <strong>%s</strong>.";		// Besoin de traduction
-#elif L==6
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de todos los grupos de la asignatura <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"<strong>%s</strong> &egrave; stato rimosso"
-	" da tutti i gruppi del corso <strong>%s</strong>.";
-#elif L==8
-	"<strong>%s</strong> has been removed"
-	" from all groups of the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"<strong>%s</strong> has been removed"
-	" from all groups of the course <strong>%s</strong>.";		// Necessita de tradução
-#endif
-
 const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ha sido eliminado/a de todas sus asignaturas.";	// Necessita traduccio
@@ -46747,39 +46687,6 @@ const char *Txt_The_whole_course =
 	"The whole course";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"Toda a disciplina";
-#endif
-
-const char *Txt_The_works_of_X_have_been_removed_in_a_total_of_Y_of_his_her_Z_courses =	// Warning: it is very important to include all %s and %u, in the correct order, in the following sentences
-#if   L==1
-	"Se han eliminado todos los trabajos"
-	" de <strong>%s</strong>"
-	" en un total de %u de sus %u asignaturas.";			// Necessita traduccio
-#elif L==2
-	"The works of <strong>%s</strong>"
-	" have been removed in a total of %u of her/his %u courses.";	// Need Übersetzung
-#elif L==3
-	"The works of <strong>%s</strong>"
-	" have been removed in a total of %u of her/his %u courses.";
-#elif L==4
-	"Se han eliminado todos los trabajos"
-	" de <strong>%s</strong>"
-	" en un total de %u de sus %u asignaturas.";
-#elif L==5
-	"The works of <strong>%s</strong>"
-	" have been removed in a total of %u of her/his %u courses.";	// Besoin de traduction
-#elif L==6
-	"Se han eliminado todos los trabajos"
-	" de <strong>%s</strong>"
-	" en un total de %u de sus %u asignaturas.";			// Okoteve traducción
-#elif L==7
-	"I lavori de <strong>%s</strong>"
-	" sono stati rimossi in un totale di %u dei suoi corsi.";
-#elif L==8
-	"The works of <strong>%s</strong>"
-	" have been removed in a total of %u of her/his %u courses.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"The works of <strong>%s</strong>"
-	" have been removed in a total of %u of her/his %u courses.";	// Necessita de tradução
 #endif
 
 const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to include %u in the following sentences
@@ -50306,48 +50213,6 @@ const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 	" para realizar esta a&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_User_record_card_in_the_course_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"La ficha del usuario en la asignatura <strong>%s</strong> ha sido eliminada.";	// Necessita traduccio
-#elif L==2
-	"User record card in the course <strong>%s</strong> has been removed.";		// Need Übersetzung
-#elif L==3
-	"User record card in the course <strong>%s</strong> has been removed.";
-#elif L==4
-	"La ficha del usuario en la asignatura <strong>%s</strong> ha sido eliminada.";
-#elif L==5
-	"User record card in the course <strong>%s</strong> has been removed.";		// Besoin de traduction
-#elif L==6
-	"La ficha del usuario en la asignatura <strong>%s</strong> ha sido eliminada.";	// Okoteve traducción
-#elif L==7
-	"La scheda dell'utente nel corso <strong>%s</strong> &egrave; stata rimossa.";
-#elif L==8
-	"User record card in the course <strong>%s</strong> has been removed.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"User record card in the course <strong>%s</strong> has been removed.";		// Necessita de tradução
-#endif
-
-const char *Txt_User_record_cards_in_all_courses_have_been_removed =
-#if   L==1
-	"Se han eliminado las fichas del usuario en todas las asignaturas.";	// Necessita traduccio
-#elif L==2
-	"User record cards in all courses have been removed.";			// Need Übersetzung
-#elif L==3
-	"User record cards in all courses have been removed.";
-#elif L==4
-	"Se han eliminado las fichas del usuario en todas las asignaturas.";
-#elif L==5
-	"User record cards in all courses have been removed.";			// Besoin de traduction
-#elif L==6
-	"Se han eliminado las fichas del usuario en todas las asignaturas.";	// Okoteve traducción
-#elif L==7
-	"Le schede dell'utente in tutti i corsi sono state rimosse.";
-#elif L==8
-	"User record cards in all courses have been removed.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"User record cards in all courses have been removed.";			// Necessita de tradução
-#endif
-
 const char *Txt_Users =
 #if   L==1
 	"Usuaris";
@@ -51731,36 +51596,6 @@ const char *Txt_works_ZIP_FILE_NAME =	// Name (without extension) of the ZIP fil
 	"homework";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"trabalhos";
-#endif
-
-const char *Txt_Works_of_X_in_Y_removed =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1
-	"Trabajos de <strong>%s</strong>"
-	" en <strong>%s</strong> eliminados.";		// Necessita traduccio
-#elif L==2
-	"Die Hausarbeiten von <strong>%s</strong>"
-	" in <strong>%s</strong> wurden entfernt.";
-#elif L==3
-	"The homework of <strong>%s</strong>"
-	" in <strong>%s</strong> has been removed.";
-#elif L==4
-	"Trabajos de <strong>%s</strong>"
-	" en <strong>%s</strong> eliminados.";
-#elif L==5
-	"Homework of <strong>%s</strong>"
-	" in <strong>%s</strong> removed.";		// Besoin de traduction
-#elif L==6
-	"Trabajos de <strong>%s</strong>"
-	" en <strong>%s</strong> eliminados.";		// Okoteve traducción
-#elif L==7
-	"Lavori de <strong>%s</strong>"
-	" in <strong>%s</strong> rimossi.";
-#elif L==8
-	"The homework of <strong>%s</strong>"
-	" in <strong>%s</strong> has been removed.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"Homework of <strong>%s</strong>"
-	" in <strong>%s</strong> removed.";		// Necessita de tradução
 #endif
 
 const char *Txt_Works_area =

@@ -130,7 +130,8 @@ void Enr_AddAdmToDeg (void);
 
 void Enr_ReqRemMeFromCrs (void);
 void Enr_ReqRemUsrFromCrs (void);
-void Enr_RemUsrFromCrs (void);
+void Enr_RemUsrFromCrs1 (void);
+void Enr_RemUsrFromCrs2 (void);
 void Enr_RemAdmIns (void);
 void Enr_RemAdmCtr (void);
 void Enr_RemAdmDeg (void);

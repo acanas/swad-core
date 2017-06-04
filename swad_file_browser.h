@@ -248,8 +248,8 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 
-void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
-void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose);
+void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs);
+void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat);
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,

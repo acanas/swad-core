@@ -148,8 +148,8 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
 bool Grp_CheckIfSelectionGrpsIsValid (struct ListCodGrps *LstGrps);
 void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
-void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
-void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose);
+void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs);
+void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat);
 void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrSvy_t Grp_AsgOrSvy);
 
 void Grp_ReqRegisterInGrps (void);

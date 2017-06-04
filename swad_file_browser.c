@@ -11181,9 +11181,8 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 /***************** Remove the works of a user in a course ********************/
 /*****************************************************************************/
 
-void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose)
+void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs)
   {
-   extern const char *Txt_Works_of_X_in_Y_removed;
    char PathUsrInCrs[PATH_MAX + 1];
 
    /***** Remove user's works in the course from database *****/
@@ -11195,23 +11194,14 @@ void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_Quie
             (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
    Fil_RemoveTree (PathUsrInCrs);
    // If this was the last user in his/her subfolder ==> the subfolder will be empty
-
-   /***** Write message *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Alert.Txt,Txt_Works_of_X_in_Y_removed,
-               UsrDat->FullName,Crs->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-     }
   }
 
 /*****************************************************************************/
 /************* Remove the works of a user in all of his courses **************/
 /*****************************************************************************/
 
-void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose)
+void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
   {
-   extern const char *Txt_The_works_of_X_have_been_removed_in_a_total_of_Y_of_his_her_Z_courses;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -11231,21 +11221,13 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
          /* Get data of course */
          Crs_GetDataOfCourseByCod (&Crs);
-         Brw_RemoveUsrWorksInCrs (UsrDat,&Crs,QuietOrVerbose);
+         Brw_RemoveUsrWorksInCrs (UsrDat,&Crs);
          NumCrssWorksRemoved++;
 	}
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Write message *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Alert.Txt,Txt_The_works_of_X_have_been_removed_in_a_total_of_Y_of_his_her_Z_courses,
-               UsrDat->FullName,NumCrssWorksRemoved,(unsigned) NumRows);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-     }
   }
 
 /*****************************************************************************/
