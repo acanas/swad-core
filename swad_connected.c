@@ -426,7 +426,7 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&	// Right column visible
        Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// There is a course selected
        (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
-        Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM))
+        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
       Gbl.Usrs.Connected.NumUsrs       = 0;
       Gbl.Usrs.Connected.NumUsrsToList = 0;
@@ -487,7 +487,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
    fprintf (Gbl.F.Out,"</table>");
 
@@ -640,7 +640,7 @@ void Con_UpdateMeInConnectedList (void)
                   " VALUES"
                   " (%ld,%u,%ld,NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            (unsigned) Gbl.Usrs.Me.Roles.LoggedRole,
+            (unsigned) Gbl.Usrs.Me.Role.Logged,
             Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryREPLACE (Query,"can not update list of connected users");
   }

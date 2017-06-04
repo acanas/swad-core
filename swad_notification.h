@@ -68,7 +68,7 @@ typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
 
    /* Users tab */
    Ntf_EVENT_ENROLMENT_STD	=  7,
-   Ntf_EVENT_ENROLMENT_NED_TCH	= 20,
+   Ntf_EVENT_ENROLMENT_NET	= 20,
    Ntf_EVENT_ENROLMENT_TCH	=  8,
    Ntf_EVENT_ENROLMENT_REQUEST	=  9,
 

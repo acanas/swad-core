@@ -313,7 +313,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       0x3FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
      };
 
-   return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.Roles.LoggedRole));
+   return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.Role.Logged));
   }
 
 /*****************************************************************************/

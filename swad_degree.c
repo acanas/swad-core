@@ -139,7 +139,7 @@ void Deg_SeeDegWithPendingCrss (void)
    const char *BgColor;
 
    /***** Get degrees with pending courses *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_DEG_ADM:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
@@ -329,7 +329,7 @@ static void Deg_Configuration (bool PrintView)
 	       Txt_Centre);
 
       if (!PrintView &&
-	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)
+	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	 // Only institution admins and system admin can move a degree to another centre
 	{
 	 /* Get list of centres of the current institution */
@@ -370,7 +370,7 @@ static void Deg_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Degree);
       if (!PrintView &&
-	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
+	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 	 // Only centre admins, institution admins and system admins
 	 // can edit degree full name
 	{
@@ -400,7 +400,7 @@ static void Deg_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
-	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
+	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 	 // Only centre admins, institution admins and system admins
 	 // can edit degree short name
 	{
@@ -430,7 +430,7 @@ static void Deg_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
+	  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 	 // Only degree admins, centre admins, institution admins
 	 // and system admins can change degree WWW
 	{
@@ -538,7 +538,7 @@ static void Deg_PutIconsToPrintAndUpload (void)
    /***** Link to print info about degree *****/
    Lay_PutContextualIconToPrint (ActPrnDegInf,NULL);
 
-   if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
@@ -830,7 +830,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-      if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM &&
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgDegSta);
@@ -866,7 +866,7 @@ static void Deg_ListDegreesForEdition (void)
 
 static bool Deg_CheckIfICanEditADegree (struct Degree *Deg)
   {
-   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM ||		// I am a centre administrator or higher
+   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a centre administrator or higher
                   ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&		// Degree is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));		// I am the requester
   }
@@ -929,9 +929,9 @@ static void Deg_PutFormToCreateDegree (void)
    Deg = &Gbl.Degs.EditingDeg;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM)
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       Act_FormStart (ActNewDeg);
-   else if (Gbl.Usrs.Me.Roles.Max >= Rol_GST)
+   else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Act_FormStart (ActReqDeg);
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
@@ -1209,7 +1209,7 @@ static void Deg_ListDegrees (void)
 
 static bool Deg_CheckIfICanCreateDegrees (void)
   {
-   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_GST);
+   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_GST);
   }
 
 /*****************************************************************************/

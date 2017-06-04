@@ -125,7 +125,7 @@ void Ban_SeeBanners (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_banners);
 
    /***** Button to create banner *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiBan);
       Lay_PutConfirmButton (Txt_New_banner);
@@ -179,7 +179,7 @@ static void Ban_WriteListOfBanners (void)
 
 static void Ban_PutFormToEditBanners (void)
   {
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Lay_PutContextualIconToEdit (ActEdiBan,NULL);
   }
 

@@ -277,8 +277,8 @@ void Sta_LogAccess (const char *Comments)
    char Query[Sta_MAX_BYTES_QUERY_LOG +
               Sch_MAX_BYTES_STRING_TO_FIND + 1];
    long LogCod;
-   Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Roles.LoggedRoleBeforeCloseSession :
-                                                            Gbl.Usrs.Me.Roles.LoggedRole;
+   Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
+                                                            Gbl.Usrs.Me.Role.Logged;
 
    /***** Insert access into database *****/
    /* Log access in historical log (log_full) */
@@ -647,7 +647,7 @@ void Sta_AskShowGblHits (void)
 
    /* Put form to go to test edition and configuration */
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
-      switch (Gbl.Usrs.Me.Roles.LoggedRole)
+      switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_NET:
 	 case Rol_TCH:
@@ -1016,18 +1016,18 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date);
-   ICanQueryWholeRange = (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_TCH && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
-			 (Gbl.Usrs.Me.Roles.LoggedRole == Rol_DEG_ADM && (Gbl.Scope.Current == Sco_SCOPE_DEG   ||
+   ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Sco_SCOPE_DEG   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
-			 (Gbl.Usrs.Me.Roles.LoggedRole == Rol_CTR_ADM && (Gbl.Scope.Current == Sco_SCOPE_CTR   ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Sco_SCOPE_CTR   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_DEG   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
-			 (Gbl.Usrs.Me.Roles.LoggedRole == Rol_INS_ADM && (Gbl.Scope.Current == Sco_SCOPE_INS   ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Sco_SCOPE_INS   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_CTR   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_DEG   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
-			  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM;
+			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
@@ -1763,7 +1763,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
-	 Lay_ShowErrorAndExit ("Wrong user's role.");
+	 Lay_ShowErrorAndExit ("Wrong role.");
 
       /* Write the number of row */
       fprintf (Gbl.F.Out,"<tr>"
@@ -1949,7 +1949,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.RowEvenOdd,
-	       Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrsDB][UsrDat.Sex]);
+	       Txt_ROLES_SINGUL_Abc[UsrDat.Role.InCurrentCrs][UsrDat.Sex]);
 
       /* Write the number of clicks */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
@@ -1972,7 +1972,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 	                    " style=\"width:%upx; height:18px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
-		  UsrDat.Roles.InCurrentCrsDB == Rol_STD ? 'c' :	// Student
+		  UsrDat.Role.InCurrentCrs == Rol_STD ? 'c' :	// Student
 			                                 'v',	// Non-editing teacher or teacher
 		  BarWidth);
       Str_WriteFloatNum (Gbl.F.Out,Hits.Num);

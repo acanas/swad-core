@@ -140,13 +140,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    if (Gbl.Action.Act != ActLogIn &&
 		Gbl.Action.Act != ActLogInNew &&
                 Gbl.Action.Act != ActLogInLan)	// I am not just logged
-	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB] != ActUnk)
+	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs] != ActUnk)
 		 {
 		  /* Request my removing from this course */
 		  sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
 			   Gbl.CurrentCrs.Crs.ShrtName);
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
-						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB],
+						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs],
 						       Lay_REMOVE_BUTTON,Txt_Remove_me);
 		 }
 	   }
@@ -165,7 +165,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	{
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
 	     !Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
-	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB == Rol_TCH)	// I am a teacher in current course
+	     Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
 	   {
 	    /* Request students enrolment */
 	    sprintf (Gbl.Title,Txt_Register_students_in_the_course_X,

@@ -94,7 +94,7 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
 
    "survey",				// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "enrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   "enrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
@@ -134,7 +134,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
 
    ActSeeAllSvy,	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   ActReqAccEnrNET,	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   ActReqAccEnrNET,	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
@@ -179,7 +179,7 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
 
    "NotifyNtfEventSurvey",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "NotifyNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   "NotifyNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 // Email me about notification events
@@ -220,7 +220,7 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
 
    "EmailNtfEventSurvey",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "EmailNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   "EmailNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 // Icons for notification events
@@ -261,7 +261,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
 
    "survey16x16.gif",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
@@ -899,7 +899,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);
          break;
       case Ntf_EVENT_ENROLMENT_STD:
-      case Ntf_EVENT_ENROLMENT_NED_TCH:
+      case Ntf_EVENT_ENROLMENT_NET:
       case Ntf_EVENT_ENROLMENT_TCH:
 	 Enr_GetNotifEnrolment (SummaryStr,CrsCod,UsrCod);
          break;
@@ -1276,7 +1276,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
-      case Ntf_EVENT_ENROLMENT_NED_TCH:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLMENT_NET:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
@@ -1695,7 +1695,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
 	       case Ntf_EVENT_MARKS_FILE:
 	       case Ntf_EVENT_ENROLMENT_STD:
-	       case Ntf_EVENT_ENROLMENT_NED_TCH:
+	       case Ntf_EVENT_ENROLMENT_NET:
 	       case Ntf_EVENT_ENROLMENT_TCH:
 	       case Ntf_EVENT_ENROLMENT_REQUEST:
 	       case Ntf_EVENT_NOTICE:

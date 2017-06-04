@@ -416,7 +416,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
 bool DT_CheckIfICanCreateDegreeTypes (void)
   {
-   return (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/

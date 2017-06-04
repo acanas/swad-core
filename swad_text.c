@@ -814,7 +814,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Novo inqu&eacute;rito",
 	},
 	{
-	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
 	"",
 	"Nova inscripció com a professor/a no editor/a",
 	"New Einschreibung als nicht bearbeiteter Lehrkraft",
@@ -26726,7 +26726,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos inqu&eacute;ritos"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+#if   L==1	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
 	 "Novas inscripci&oacute;s com a professor/a no editor/a"
 #elif L==2
 	 "New Einschreibungen als nicht bearbeiteter Lehrkraft"
@@ -27149,7 +27149,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Inqu&eacute;rito"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+#if   L==1	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
 	 "Inscripci&oacute; com a professor/a no editor/a"
 #elif L==2
 	 "Einschreibung als nicht bearbeiteter Lehrkraft"

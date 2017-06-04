@@ -101,7 +101,7 @@ void Dpt_SeeDepts (void)
 
       /***** Table head *****/
       Lay_StartRoundFrameTable (NULL,Txt_Departments,
-                                Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
+                                Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
                         	                                        NULL,
                                 Hlp_INSTITUTION_Departments,2);
       fprintf (Gbl.F.Out,"<tr>");

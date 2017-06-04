@@ -404,7 +404,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
       return true;
 
    /***** Check if I have permission to see another user's IDs *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
       case Rol_TCH:
@@ -413,7 +413,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
             return true;
 
 	 /* Check 2: I can see the IDs of confirmed students */
-         if (UsrDat->Roles.InCurrentCrsDB == Rol_STD &&	// A student
+         if (UsrDat->Role.InCurrentCrs == Rol_STD &&	// A student
 	     UsrDat->Accepted)				// who accepted registration
             return true;
 
@@ -452,7 +452,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Act_Action_t NextAction;
 
    /***** Start form *****/
-   switch (UsrDat->Roles.InCurrentCrsDB)
+   switch (UsrDat->Role.InCurrentCrs)
      {
       case Rol_STD:
 	 NextAction = ActCnfID_Std;
@@ -512,7 +512,7 @@ void ID_PutLinkToChangeUsrIDs (void)
                              NULL);
    else									// Not me
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActFrmIDsStd;
@@ -614,7 +614,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       Act_FormStart (ActRemID_Me);
 	    else
 	      {
-	       switch (UsrDat->Roles.InCurrentCrsDB)
+	       switch (UsrDat->Role.InCurrentCrs)
 		 {
 		  case Rol_STD:
 		     NextAction = ActRemID_Std;
@@ -679,7 +679,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActNewIDMe);
       else
 	{
-	 switch (UsrDat->Roles.InCurrentCrsDB)
+	 switch (UsrDat->Role.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActNewID_Std;

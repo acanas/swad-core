@@ -293,8 +293,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EncryptedUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->Roles.InCurrentCrsDB = Rol_UNK;
-   UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
+   UsrDat->Role.InCurrentCrs = Rol_UNK;
+   UsrDat->Role.InCrss = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = true;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
@@ -517,12 +517,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
              Pwd_BYTES_ENCRYPTED_PASSWORD);
 
    /* Get roles */
-   UsrDat->Roles.InCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+   UsrDat->Role.InCurrentCrs = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
                                                   UsrDat->UsrCod);
-   UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
+   UsrDat->Role.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (UsrDat->Roles.InCurrentCrsDB == Rol_UNK)
-      UsrDat->Roles.InCurrentCrsDB = (UsrDat->Roles.InCrss < (1 << Rol_STD)) ?
+   if (UsrDat->Role.InCurrentCrs == Rol_UNK)
+      UsrDat->Role.InCurrentCrs = (UsrDat->Role.InCrss < (1 << Rol_STD)) ?
 	                              Rol_GST :	// User does not belong to any course
 	                              Rol_USR;	// User belongs to some courses
 
@@ -844,7 +844,7 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
       return true;
 
    /***** Check if I have permission to see another user's IDs *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
 	 /* Check 1: I can change data of users who do not exist in database */
@@ -875,7 +875,7 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
@@ -1050,11 +1050,11 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
   {
-   if (UsrDat->Roles.InCurrentCrsDB != Rol_STD)	// Not a student in the current course
+   if (UsrDat->Role.InCurrentCrs != Rol_STD)	// Not a student in the current course
       return false;
 
    // The user is a student in the current course
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
@@ -1081,7 +1081,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
 
    /***** 2. Fast/slow check: Is he/she a non-editing teacher or a teacher in any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if ((UsrDat->Roles.InCrss & ((1 << Rol_NET) |
+   if ((UsrDat->Role.InCrss & ((1 << Rol_NET) |
 	                 (1 << Rol_TCH))) == 0)
       return false;
 
@@ -1092,7 +1092,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
       return true;
 
    /***** 4. Fast check: Am I logged as system admin? *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       return true;
 
    /***** 5. Slow check: Get if user shares any course with me from database *****/
@@ -1114,7 +1114,7 @@ bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
       return true;
 
    /***** 3. Fast check: Am I logged as system admin? *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       return true;
 
    /***** 4. Slow check: Get if user shares any course with me from database *****/
@@ -1159,16 +1159,16 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
-      HeBelongsToCurrentCrs = UsrDat->Roles.InCurrentCrsDB == Rol_STD ||
-			      UsrDat->Roles.InCurrentCrsDB == Rol_NET ||
-			      UsrDat->Roles.InCurrentCrsDB == Rol_TCH;
+      HeBelongsToCurrentCrs = UsrDat->Role.InCurrentCrs == Rol_STD ||
+			      UsrDat->Role.InCurrentCrs == Rol_NET ||
+			      UsrDat->Role.InCurrentCrs == Rol_TCH;
       if (HeBelongsToCurrentCrs)	// Course selected and we both belong to it
          return true;
      }
 
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (!(UsrDat->Roles.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
+   if (!(UsrDat->Role.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
 	                  (1 << Rol_NET) |	// or non-editing teacher
 			  (1 << Rol_TCH))))	// or teacher?
       return false;
@@ -2314,7 +2314,7 @@ void Usr_WriteLoggedUsrHead (void)
       Act_FormStart (ActFrmRolSes);
       Act_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"%s</a>",
-               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Roles.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,":&nbsp;");
      }
@@ -2950,7 +2950,7 @@ static void Usr_SetMyPrefsAndRoles (void)
       	 Hie_InitHierarchy ();
 
 	 /* Get again my role in this course */
-      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+      	 Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
       	                                                           Gbl.Usrs.Me.UsrDat.UsrCod);
       	}
      }
@@ -2984,11 +2984,11 @@ void Usr_ShowFormsLogoutAndRole (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
-   if (Gbl.Usrs.Me.Roles.RoleHasChanged)
+   if (Gbl.Usrs.Me.Role.HasChanged)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_are_now_LOGGED_IN_as_X,
 	       Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
-	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Roles.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -3000,7 +3000,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       fprintf (Gbl.F.Out,"<span class=\"DAT\">%s:&nbsp;</span>"
 	                 "<span class=\"DAT_N_BOLD\">%s</span>",
                Txt_Role,
-               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Roles.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
    else
      {
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -3289,8 +3289,8 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Instit Ins;
-   bool ShowData = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH && UsrDat->Accepted) ||
-                    Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM;
+   bool ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH && UsrDat->Accepted) ||
+                    Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -3407,8 +3407,8 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    struct Instit Ins;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool ShowData = (ItsMe || UsrDat->Accepted ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_DEG_ADM ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+                    Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
+                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    struct Centre Ctr;
    struct Department Dpt;
 
@@ -4999,7 +4999,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
    UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
    UsrDat->CtyCod                = UsrInList->CtyCod;
    UsrDat->InsCod                = UsrInList->InsCod;
-   UsrDat->Roles.InCurrentCrsDB  = UsrInList->RoleInCurrentCrsDB;
+   UsrDat->Role.InCurrentCrs  = UsrInList->RoleInCurrentCrsDB;
    UsrDat->Accepted              = UsrInList->Accepted;
   }
 
@@ -6537,7 +6537,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 
 	 /* Write all the courses this user belongs to */
 	 if (Role != Rol_GST &&				// Guests do not belong to any course
-	     Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)		// Only admins can view the courses
+	     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
@@ -6600,7 +6600,7 @@ void Usr_ListDataAdms (void)
    const char *FieldNames[Usr_NUM_MAIN_FIELDS_DATA_ADM];
 
    /***** Put contextual links *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_DEG_ADM:
@@ -6609,7 +6609,7 @@ void Usr_ListDataAdms (void)
       case Rol_SYS_ADM:
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
 	    /* Put link to remove old users */
 	    Usr_PutLinkToSeeGuests ();
@@ -6621,7 +6621,7 @@ void Usr_ListDataAdms (void)
 	 /* Put link to go to admin one user */
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
 
-	 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	    /* Put link to remove old users */
 	    Enr_PutLinkToRemOldUsrs ();
 
@@ -7114,7 +7114,7 @@ void Usr_SeeGuests (void)
    /* Put link to go to admin one user */
    Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
 
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       /* Put link to remove old users */
       Enr_PutLinkToRemOldUsrs ();
 
@@ -7137,7 +7137,7 @@ void Usr_SeeGuests (void)
 			Usr_PutIconsListGsts,Hlp_USERS_Guests);
 
    /***** Form to select scope *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActLstGst);
@@ -7230,7 +7230,7 @@ void Usr_SeeStudents (void)
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_TCH:
@@ -7243,7 +7243,7 @@ void Usr_SeeStudents (void)
 	 /* Put link to go to admin student */
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_STD	&&	// Teacher or admin
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_STD	&&	// Teacher or admin
 	     Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
 	   {
 	    /* Put link to go to admin several students */
@@ -7269,7 +7269,7 @@ void Usr_SeeStudents (void)
    Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
 	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-	               Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM));
+	               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 
    /***** Get groups to show ******/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
@@ -7283,7 +7283,7 @@ void Usr_SeeStudents (void)
 			Usr_PutIconsListStds,Hlp_USERS_Students);
 
    /***** Form to select scope *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -7404,7 +7404,7 @@ void Usr_SeeTeachers (void)
    unsigned NumUsrs;
 
    /***** Put contextual links *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
       case Rol_TCH:
@@ -7419,7 +7419,7 @@ void Usr_SeeTeachers (void)
 
 	 /* Put link to go to admin several users */
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-	     Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)	// I am logged as admin
+	     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
 	   {
 	    Enr_PutLinkToAdminSeveralUsrs (Rol_NET);
 	    Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);
@@ -8081,7 +8081,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 
    if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
        Role == Rol_STD &&			// No students found
-       Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
+       Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_STD],
                               ActReqEnrSevStd,NULL,NULL,NULL,
@@ -8090,7 +8090,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
    else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
             Role == Rol_TCH &&				// No teachers found
             Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-            Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
+            Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_TCH],
                               ActReqMdfOneTch,NULL,NULL,NULL,

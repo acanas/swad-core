@@ -829,7 +829,7 @@ void Pwd_ShowFormOthPwd (void)
 
 	 /***** Form to change password *****/
 	 /* Start form */
-	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+	 switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActChgPwdStd;
@@ -893,7 +893,7 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
       Pwd_PutLinkToChangeMyPassword ();
    else									// Not me
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActFrmPwdStd;

@@ -45,6 +45,20 @@
 #define Grp_GROUPS_SECTION_ID		"grps"
 #define Grp_NEW_GROUP_SECTION_ID	"new_grp"
 
+static const bool Grp_ICanChangeGrps[Rol_NUM_ROLES] =
+  {
+   false,	// Rol_UNK
+   false,	// Rol_GST
+   false,	// Rol_USR
+   true,	// Rol_STD
+   false,	// Rol_NET
+   true,	// Rol_TCH
+   false,	// Rol_DEG_ADM
+   false,	// Rol_CTR_ADM
+   false,	// Rol_INS_ADM
+   true,	// Rol_SYS_ADM
+  };
+
 /*****************************************************************************/
 /***************************** Internal types ********************************/
 /*****************************************************************************/
@@ -92,8 +106,8 @@ static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (void);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
-static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
-                                   unsigned *NumGrpsThisTypeIBelong);
+static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
+                                              unsigned *NumGrpsThisTypeIBelong);
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod);
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp);
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
@@ -344,8 +358,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
       ICanEdit = !Gbl.Form.Inside &&
-	         (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+	         (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_Groups,
@@ -575,7 +589,7 @@ void Grp_FreeListCodSelectedGrps (void)
 void Grp_ChangeMyGrpsAndShowChanges (void)
   {
    /***** Change my groups *****/
-   Grp_ChangeMyGrps ();
+   Grp_ChangeMyGrps (Cns_VERBOSE);
 
    /***** Show again the table of selection of groups with the changes already made *****/
    Grp_ReqRegisterInGrps ();
@@ -585,50 +599,68 @@ void Grp_ChangeMyGrpsAndShowChanges (void)
 /****************************** Change my groups *****************************/
 /*****************************************************************************/
 
-void Grp_ChangeMyGrps (void)
+void Grp_ChangeMyGrps (Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_The_requested_group_changes_were_successful;
    extern const char *Txt_There_has_been_no_change_in_groups;
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    struct ListCodGrps LstGrpsIWant;
    bool MySelectionIsValid = true;
+   bool ChangesMade;
 
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   /***** Get the group codes which I want to join to *****/
-   LstGrpsIWant.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
-   LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
-   Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
-
-   /***** A student can not be enroled in more than one group
-          if the type of group is of single enrolment *****/
-   // As the form to register in groups of single enrolment...
-   // ...is a radio-based form and not a checkbox-based form...
-   // ...this check is made only to avoid problems...
-   // ...if the student manipulates the form
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD &&
-       LstGrpsIWant.NumGrps >= 2)
-      MySelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsIWant);
-
-   /***** Free list of groups types and groups in this course *****/
-   // The lists of group types and groups need to be freed here...
-   // ...in order to get them again when changing my groups atomically
-   Grp_FreeListGrpTypesAndGrps ();
-
-   /***** Change my groups *****/
-   if (MySelectionIsValid)
+   /***** Can I change my groups? *****/
+   if (Grp_ICanChangeGrps[Gbl.Usrs.Me.Role.Logged])
      {
-      if (Grp_ChangeMyGrpsAtomically (&LstGrpsIWant))
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_requested_group_changes_were_successful);
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_There_has_been_no_change_in_groups);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+      /***** Get list of groups types and groups in this course *****/
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Free memory with the list of groups which I want to belong to *****/
-   Grp_FreeListCodGrp (&LstGrpsIWant);
+      /***** Get the group codes which I want to join to *****/
+      LstGrpsIWant.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
+      LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+      Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
+
+      /***** A student can not be enroled in more than one group
+	     if the type of group is of single enrolment *****/
+      // As the form to register in groups of single enrolment...
+      // ...is a radio-based form and not a checkbox-based form...
+      // ...this check is made only to avoid problems...
+      // ...if the student manipulates the form
+      if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
+	  LstGrpsIWant.NumGrps >= 2)
+	 MySelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsIWant);
+
+      /***** Free list of groups types and groups in this course *****/
+      // The lists of group types and groups need to be freed here...
+      // ...in order to get them again when changing my groups atomically
+      Grp_FreeListGrpTypesAndGrps ();
+
+      /***** Change my groups *****/
+      if (MySelectionIsValid)
+	{
+	 ChangesMade = Grp_ChangeMyGrpsAtomically (&LstGrpsIWant);
+	 if (QuietOrVerbose == Cns_VERBOSE)
+	   {
+	    if (ChangesMade)
+	      {
+	       Gbl.Alert.Type = Ale_SUCCESS;
+	       sprintf (Gbl.Alert.Txt,"%s",Txt_The_requested_group_changes_were_successful);
+	      }
+	    else
+	      {
+	       Gbl.Alert.Type = Ale_WARNING;
+	       sprintf (Gbl.Alert.Txt,"%s",Txt_There_has_been_no_change_in_groups);
+	      }
+	   }
+	}
+      else if (QuietOrVerbose == Cns_VERBOSE)
+	{
+	 Gbl.Alert.Type = Ale_WARNING;
+	 sprintf (Gbl.Alert.Txt,"%s",Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+	}
+
+      /***** Free memory with the list of groups which I want to belong to *****/
+      Grp_FreeListCodGrp (&LstGrpsIWant);
+     }
   }
 
 /*****************************************************************************/
@@ -643,38 +675,35 @@ void Grp_ChangeOtherUsrGrps (void)
    struct ListCodGrps LstGrpsUsrWants;
    bool SelectionIsValid = true;
 
-   /***** Get list of groups types and groups in current course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   /***** Get the list of groups to which register this user *****/
-   LstGrpsUsrWants.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
-   LstGrpsUsrWants.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
-   Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
-
-   /***** A student can not be enroled in more than one group
-          if the type of group is of single enrolment *****/
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB == Rol_STD &&
-       LstGrpsUsrWants.NumGrps >= 2)
-      SelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsUsrWants);
-
-   /***** Free list of groups types and groups in this course *****/
-   // The lists of group types and groups need to be freed here...
-   // ...in order to get them again when changing groups atomically
-   Grp_FreeListGrpTypesAndGrps ();
-
-   /***** Register user in the selected groups *****/
-   if (SelectionIsValid)
+   /***** Can I change another user's groups? *****/
+   if (Grp_ICanChangeGrps[Gbl.Usrs.Me.Role.Logged])
      {
-      if (Grp_ChangeGrpsOtherUsrAtomically (&LstGrpsUsrWants))
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_requested_group_changes_were_successful);
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_There_has_been_no_change_in_groups);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+      /***** Get list of groups types and groups in current course *****/
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Free memory with the list of groups to/from which register/remove users *****/
-   Grp_FreeListCodGrp (&LstGrpsUsrWants);
+      /***** Get the list of groups to which register this user *****/
+      LstGrpsUsrWants.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
+      LstGrpsUsrWants.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+      Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
+
+      /***** A student can not be enroled in more than one group
+	     if the type of group is of single enrolment *****/
+      if (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs == Rol_STD &&
+	  LstGrpsUsrWants.NumGrps >= 2)
+	 SelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsUsrWants);
+
+      /***** Free list of groups types and groups in this course *****/
+      // The lists of group types and groups need to be freed here...
+      // ...in order to get them again when changing groups atomically
+      Grp_FreeListGrpTypesAndGrps ();
+
+      /***** Register user in the selected groups *****/
+      if (SelectionIsValid)
+	 Grp_ChangeGrpsOtherUsrAtomically (&LstGrpsUsrWants);
+
+      /***** Free memory with the list of groups to/from which register/remove users *****/
+      Grp_FreeListCodGrp (&LstGrpsUsrWants);
+     }
   }
 
 /*****************************************************************************/
@@ -710,7 +739,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,-1L,
 				Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
      {
       /***** Go across the list of groups which I belong to and check if I try to leave a closed group *****/
       for (NumGrpIBelong = 0;
@@ -833,18 +862,16 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 /*****************************************************************************/
 /********************** Change my groups atomically **************************/
 /*****************************************************************************/
-// Return true if desired changes are made
 
-bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
+void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
   {
    struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpUsrBelongs;
    unsigned NumGrpUsrWants;
    bool RemoveUsrFromThisGrp;
    bool RegisterUsrInThisGrp;
-   bool ChangesMade = false;
 
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs == Rol_STD)
      {
       /***** Lock tables to make the inscription atomic *****/
       DB_Query ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
@@ -888,13 +915,11 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 	 Grp_AddUsrToGroup (&Gbl.Usrs.Other.UsrDat,LstGrpsUsrWants->GrpCods[NumGrpUsrWants]);
      }
 
-   ChangesMade = true;
-
    /***** Free memory with the list of groups which I belonged to *****/
    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
    /***** Unlock tables after changes in my groups *****/
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs == Rol_STD)
      {
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				     // ...to not retry the unlock if error in unlocking
@@ -904,8 +929,6 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
-
-   return ChangesMade;
   }
 
 /*****************************************************************************/
@@ -1617,7 +1640,7 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
             fprintf (Gbl.F.Out," checked=\"checked\"");
         }
       if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM))
+            Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" />"
 	                 "</td>");
@@ -1658,9 +1681,9 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    unsigned NumGrpsIBelong = 0;
    bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
    bool ICanEdit = !Gbl.Form.Inside &&
-	           (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
-   bool ICanChangeMySelection = false;
+	           (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   bool ICanChangeMyGrps = false;
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
@@ -1669,7 +1692,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
       /***** Show warnings to students *****/
       // Students are required to join groups with mandatory enrolment; teachers don't
-      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
+      if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
 	 Grp_ShowWarningToStdsToChangeGrps ();
      }
 
@@ -1692,8 +1715,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	   NumGrpTyp++)
 	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
 	   {
-	    ICanChangeMySelection |= Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-	                                                    &NumGrpsThisTypeIBelong);
+	    ICanChangeMyGrps |= Grp_ListGrpsForChangeMySelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+	                                                          &NumGrpsThisTypeIBelong);
 	    NumGrpsIBelong += NumGrpsThisTypeIBelong;
 	   }
       Lay_EndTable ();
@@ -1701,7 +1724,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       /***** End form *****/
       if (PutFormToChangeGrps)
 	{
-	 if (ICanChangeMySelection)
+	 if (ICanChangeMyGrps)
 	    Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
 						   Txt_Enrol_in_groups);
 	 Act_FormEnd ();
@@ -1786,8 +1809,8 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 /*****************************************************************************/
 // Returns true if I can change my selection
 
-static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
-                                   unsigned *NumGrpsThisTypeIBelong)
+static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
+                                              unsigned *NumGrpsThisTypeIBelong)
   {
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
@@ -1818,7 +1841,7 @@ static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"");
-      if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD &&	// If user is a student
+      if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
           !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
           GrpTyp->NumGrps > 1)			// ...and there are more than a group
 	{
@@ -1841,7 +1864,7 @@ static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
       if (IBelongToThisGroup)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");		// Group selected
 
-      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB)
+      switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
 	    if (Grp->Open)					// If group is open
@@ -1853,14 +1876,13 @@ static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
 		  fprintf (Gbl.F.Out," disabled=\"disabled\"");	// I can not register in this group
 	      }
 	    break;
-	 case Rol_NET:
-	    fprintf (Gbl.F.Out," disabled=\"disabled\"");	// I can not register/unregister
-	    break;
 	 case Rol_TCH:
+	 case Rol_SYS_ADM:
 	    ICanChangeMySelection = true;			// I can not register/unregister
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong role.");
+	    fprintf (Gbl.F.Out," disabled=\"disabled\"");	// I can not register/unregister
+	    ICanChangeMySelection = false;
 	    break;
 	}
       fprintf (Gbl.F.Out," />"
@@ -1959,7 +1981,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       if (UsrBelongsToThisGroup)
       	 fprintf (Gbl.F.Out," checked=\"checked\"");
       if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM))
+            Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," /></td>");
 

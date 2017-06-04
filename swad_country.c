@@ -116,7 +116,7 @@ void Cty_SeeCtyWithPendingInss (void)
    const char *BgColor;
 
    /***** Get countries with pending institutions *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
          sprintf (Query,"SELECT institutions.CtyCod,COUNT(*)"
@@ -736,7 +736,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 
 static bool Cty_CheckIfICanEditCountries (void)
   {
-   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/

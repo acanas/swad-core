@@ -244,8 +244,8 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 
 static bool Asg_CheckIfICanCreateAssignments (void)
   {
-   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
@@ -511,7 +511,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
    bool ICanSendFiles = !Asg->Hidden &&				// It's visible (not hidden)
                         Asg->Open &&				// It's open (inside dates)
                         Asg->IBelongToCrsOrGrps &&		// I belong to course or groups
-                        Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD;	// I am a student
+                        Gbl.Usrs.Me.Role.Logged == Rol_STD;	// I am a student
 
    /***** Folder icon *****/
    if (!PrintView &&	// Not print view
@@ -575,7 +575,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
   {
    Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
 
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
@@ -632,7 +632,7 @@ void Asg_GetListAssignments (void)
       Asg_FreeListAssignments ();
 
    /***** Get list of assignments from database *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
@@ -1717,7 +1717,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   {
    char Query[512];
 
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:

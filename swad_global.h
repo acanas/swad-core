@@ -295,12 +295,12 @@ struct Globals
 	 struct
 	   {
 	    unsigned Available;
-	    Rol_Role_t RoleFromSession;
-	    Rol_Role_t LoggedRole;
-	    Rol_Role_t LoggedRoleBeforeCloseSession;
+	    Rol_Role_t FromSession;
+	    Rol_Role_t Logged;
+	    Rol_Role_t LoggedBeforeCloseSession;
 	    Rol_Role_t Max;
-	    bool RoleHasChanged;	// Set when I have changed my role
-	   } Roles;
+	    bool HasChanged;	// Set when I have changed my role
+	   } Role;
 	 char UsrIdLogin[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// String to store the ID, nickname or email entered in the user's login
          char LoginPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
          char LoginEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];

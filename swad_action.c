@@ -4696,7 +4696,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
    else
       Permission = Act_Actions[Action].PermissionSys;
 
-   return Permission & (1 << Gbl.Usrs.Me.Roles.LoggedRole);
+   return Permission & (1 << Gbl.Usrs.Me.Role.Logged);
   }
 
 /*****************************************************************************/
@@ -5101,7 +5101,7 @@ void Act_AdjustCurrentAction (void)
 
    /***** Check if I am a teacher *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
 	                                      (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** If I haven't filled my institution,
@@ -5144,7 +5144,7 @@ void Act_AdjustCurrentAction (void)
              the only action possible is show a form to ask for enrolment *****/
       if (!Gbl.Usrs.Me.UsrDat.Accepted && Gbl.Action.Act != ActLogOut)
 	{
-	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB)
+	 switch (Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       Gbl.Action.Act = ActReqAccEnrStd;
@@ -5163,7 +5163,7 @@ void Act_AdjustCurrentAction (void)
 	}
 
       /***** Depending on the role I am logged... *****/
-      switch (Gbl.Usrs.Me.Roles.LoggedRole)
+      switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
             switch (Gbl.Action.Act)

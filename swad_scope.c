@@ -239,7 +239,7 @@ void Sco_AdjustScope (void)
 
 void Sco_SetScopesForListingGuests (void)
   {
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_CTR_ADM:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR;
@@ -271,7 +271,7 @@ void Sco_SetScopesForListingGuests (void)
 void Sco_SetScopesForListingStudents (void)
   {
    Gbl.Scope.Default = Sco_SCOPE_CRS;
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:

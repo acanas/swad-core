@@ -484,8 +484,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 
 static bool Not_CheckIfICanEditNotices (void)
   {
-   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-	          Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/

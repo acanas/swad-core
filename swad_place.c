@@ -107,7 +107,7 @@ void Plc_SeePlaces (void)
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      ICanEdit = (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM);
+      ICanEdit = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
 
       /***** Get parameter with the type of order in the list of places *****/
       Plc_GetParamPlcOrder ();

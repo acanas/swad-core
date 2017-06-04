@@ -111,7 +111,7 @@ void Lnk_SeeLinks (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Links,
-			Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
+			Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
 								NULL,
 			Hlp_SYSTEM_Links);
 
@@ -122,7 +122,7 @@ void Lnk_SeeLinks (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_links);
 
    /***** Button to create link *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiLnk);
       Lay_PutConfirmButton (Txt_New_link);

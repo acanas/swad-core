@@ -238,8 +238,8 @@ bool Syl_CheckAndEditSyllabus (void)
    /***** Start frame *****/
    if (Gbl.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
-      ICanEdit = Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-		 Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM;
+      ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
       PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
       Lay_StartRoundFrameTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			        PutIconToEdit ? Inf_PutIconToEditInfo :

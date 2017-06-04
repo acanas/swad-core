@@ -341,8 +341,8 @@ void Inf_ShowInfo (void)
    Inf_InfoSrc_t InfoSrc;
    bool MustBeRead;
    bool Disabled;
-   bool ICanEdit = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    bool ShowWarningNoInfo = false;
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
@@ -374,7 +374,7 @@ void Inf_ShowInfo (void)
 	 break;
      }
 
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
          /* Put checkbox to force students to read this couse info */
@@ -392,7 +392,7 @@ void Inf_ShowInfo (void)
          if (InfoSrc != Inf_INFO_SRC_NONE)
            {
             fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-            Disabled = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_NET);	// Non-editing teachers can not change the status of checkbox
+            Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
             Inf_PutCheckboxForceStdsToReadInfo (MustBeRead,Disabled);
             fprintf (Gbl.F.Out,"</div>");
            }
@@ -1013,8 +1013,8 @@ static void Inf_ShowPage (const char *URL)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   bool ICanEdit = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
       Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
@@ -1762,8 +1762,8 @@ static bool Inf_CheckAndShowPlainTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   bool ICanEdit = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
       Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
@@ -1846,8 +1846,8 @@ static bool Inf_CheckAndShowRichTxt (void)
    char MathJaxURL[PATH_MAX];
    char Command[512 + PATH_MAX * 3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
-   bool ICanEdit = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                    Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
       Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION

@@ -325,7 +325,7 @@ void Soc_ShowTimelineGbl2 (void)
       /* Profile tab */
 
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
      };
 
    /***** Initialize social note code to -1 ==> no highlighted note *****/

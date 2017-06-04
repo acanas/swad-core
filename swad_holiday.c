@@ -100,7 +100,7 @@ void Hld_SeeHolidays (void)
 
       /***** Table head *****/
       Lay_StartRoundFrame (NULL,Txt_Holidays,
-                           Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
+                           Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
                                                                    NULL,
                            Hlp_INSTITUTION_Holidays);
       if (Gbl.Hlds.Num)
@@ -175,7 +175,7 @@ void Hld_SeeHolidays (void)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_holidays);
 
       /***** Button to create centre *****/
-      if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin
 	{
 	 Act_FormStart (ActEdiHld);
 	 Lay_PutConfirmButton (Txt_New_holiday);

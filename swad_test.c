@@ -300,7 +300,7 @@ void Tst_ShowFormAskTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Put link to view tests results *****/
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
          Tst_PutFormToViewResultsOfUsersTests (ActReqSeeMyTstRes);
@@ -476,7 +476,7 @@ void Tst_ShowNewTest (void)
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
 
             /***** Update date-time of my next allowed access to test *****/
-            if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
+            if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
                Tst_UpdateLastAccTst ();
            }
 
@@ -648,8 +648,8 @@ static bool Tst_CheckIfNextTstAllowed (void)
    time_t TimeNextTestUTC = (time_t) 0;
 
    /***** Teachers and superusers are allowed to do all tests they want *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-       Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
@@ -935,7 +935,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	    (*NumQstsNotBlank)++;
 
 	 /***** Update the number of accesses and the score of this question *****/
-	 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_STD)
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
 	    Tst_UpdateScoreQst (QstCod,ScoreThisQst,AnswerIsNotBlank);
 	}
       else
@@ -1322,8 +1322,8 @@ void Tst_ShowFormAskEditTsts (void)
 
 static bool Tst_CheckIfICanEditTests (void)
   {
-   return (bool) (Gbl.Usrs.Me.Roles.LoggedRole == Rol_TCH ||
-                  Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
@@ -7308,7 +7308,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
 	                                     "DAT_LIGHT";
 
-	 switch (Gbl.Usrs.Me.Roles.LoggedRole)
+	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
@@ -7433,7 +7433,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
         }
 
       /***** Write totals for this user *****/
-      switch (Gbl.Usrs.Me.Roles.LoggedRole)
+      switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
 	    ICanViewTotalScore = ItsMe &&
@@ -7558,7 +7558,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   switch (UsrDat->Roles.InCurrentCrsDB)
+   switch (UsrDat->Role.InCurrentCrs)
      {
       case Rol_STD:
 	 NextAction = ActSeeRecOneStd;
@@ -7646,7 +7646,7 @@ void Tst_ShowOneTestResult (void)
 
    /***** Check if I can view this test result *****/
    ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
 	 ICanViewTest = ItsMe;
@@ -7716,7 +7716,7 @@ void Tst_ShowOneTestResult (void)
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",
-	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
+	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
 	       Gbl.Usrs.Other.UsrDat.Surname1);

@@ -292,7 +292,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
 static bool Svy_CheckIfICanCreateSvy (void)
   {
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
          return (Gbl.CurrentCrs.Crs.CrsCod > 0);
@@ -978,7 +978,7 @@ void Svy_GetListSurveys (void)
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed)
   {
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_UNK:	// User not logged in *********************************
 	 *ScopesAllowed = 0;
@@ -1205,7 +1205,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       Svy->NumUsrs = Svy_GetNumUsrsWhoHaveAnsweredSvy (Svy->SvyCod);
 
       /* Am I logged with a valid role to answer this survey? */
-      Svy->Status.IAmLoggedWithAValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.Roles.LoggedRole));
+      Svy->Status.IAmLoggedWithAValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.Role.Logged));
 
       /* Do I belong to valid groups to answer this survey? */
       switch (Svy->Scope)
@@ -1247,7 +1247,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
 
       /* Can I view results of the survey?
          Can I edit survey? */
-      switch (Gbl.Usrs.Me.Roles.LoggedRole)
+      switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
             Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
@@ -1911,7 +1911,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
    Gbl.Scope.Default = Sco_SCOPE_UNK;
    Gbl.Scope.Allowed = 0;
 
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:	// Teachers only can edit course surveys
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
@@ -2084,41 +2084,41 @@ void Svy_RecFormSurvey (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
          NewSvy.Scope = Sco_SCOPE_SYS;
          NewSvy.Cod = -1L;
          break;
       case Sco_SCOPE_CTY:
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Sco_SCOPE_CTY;
 	 NewSvy.Cod = Gbl.CurrentCty.Cty.CtyCod;
          break;
       case Sco_SCOPE_INS:
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Roles.LoggedRole != Rol_INS_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Sco_SCOPE_INS;
 	 NewSvy.Cod = Gbl.CurrentIns.Ins.InsCod;
          break;
       case Sco_SCOPE_CTR:
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Roles.LoggedRole != Rol_CTR_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Sco_SCOPE_CTR;
 	 NewSvy.Cod = Gbl.CurrentCtr.Ctr.CtrCod;
          break;
       case Sco_SCOPE_DEG:
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Roles.LoggedRole != Rol_DEG_ADM)
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Sco_SCOPE_DEG;
 	 NewSvy.Cod = Gbl.CurrentDeg.Deg.DegCod;
          break;
       case Sco_SCOPE_CRS:
-	 if (Gbl.Usrs.Me.Roles.LoggedRole != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Roles.LoggedRole != Rol_TCH)
+	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Sco_SCOPE_CRS;
 	 NewSvy.Cod = Gbl.CurrentCrs.Crs.CrsCod;

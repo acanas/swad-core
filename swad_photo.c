@@ -137,11 +137,11 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
       return true;
 
    /* Check if I have permission to change user's photo */
-   switch (Gbl.Usrs.Me.Roles.LoggedRole)
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
 	 /* A teacher can change the photo of confirmed students */
-         if (UsrDat->Roles.InCurrentCrsDB == Rol_STD &&	// A student
+         if (UsrDat->Role.InCurrentCrs == Rol_STD &&	// A student
 	     UsrDat->Accepted)				// who accepted registration
             return true;
 
@@ -196,7 +196,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
-	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+	 switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	   {
 	    case Rol_STD:
 	       NextAction = ActReqStdPho;
@@ -248,7 +248,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActReqRemStdPho;
@@ -334,7 +334,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
       Act_FormStart (ActDetMyPho);
    else
      {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	{
 	 case Rol_STD:
 	    NextAction = ActDetStdPho;
@@ -524,7 +524,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+	    switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 	      {
 	       case Rol_STD:
 		  NextAction = ActRemStdPho;
@@ -706,7 +706,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         	  Act_FormStart (ActUpdMyPho);
                else
         	 {
-               	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrsDB)
+               	  switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
 		    {
 		     case Rol_STD:
 			NextAction = ActUpdStdPho;
@@ -2403,7 +2403,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
      }
 
    /***** Check if photo of degree can be shown *****/
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       ShowDegPhoto = (NumStds > 0);
    else
       ShowDegPhoto = (NumStds > 0 &&

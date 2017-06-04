@@ -230,20 +230,25 @@
 // TODO: Link names are too short ==> add more length, for example: "A guide to building and understanding the physics of Water Rockets"
 // TODO: Fix bug: Error when a link end in a dot. Example: "A guide to building..." --> "A guide to building._..url" (two dots)
 
-// TODO: Fix bug: soy profesor no editor y superusuario. Si me modifico en la asignatura, me borro sin querer de los grupos, ya que no me deja elegir grupos.
-// TODO: Fix bug: no llegan notificaciones de inscripción como profesor no editor.
+// TODO: Fix length of connected non-editing teachers at right column
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.234 (2017-06-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.235 (2017-06-04)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.235:   Jun 04, 2017	Fixed bug in notifications about enrolment as a non-editing teacher.
+					Fixed bugs and code refactoring related to users enrolment. (221018 lines)
+					1 change necessary in database:
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x100) << 12)) & 0x7FFFFFFF;
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x100) << 12)) & 0x7FFFFFFF;
+
         Version 16.234:   Jun 04, 2017	Removed some verbose messages when removing a user.
 					Modification / removing of a user is performed in an a priori function. (220995 lines)
         Version 16.233:   Jun 04, 2017	Code refactoring related with roles. (221175 lines)

@@ -1028,23 +1028,23 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
          case For_FORUM_GLOBAL_TCHS:
          case For_FORUM__SWAD__USRS:
          case For_FORUM__SWAD__TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);
+            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
             break;
          case For_FORUM_INSTIT_USRS:
          case For_FORUM_INSTIT_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_INS_ADM);
+            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
             break;
          case For_FORUM_CENTRE_USRS:
          case For_FORUM_CENTRE_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_CTR_ADM);
+            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
             break;
          case For_FORUM_DEGREE_USRS:
          case For_FORUM_DEGREE_TCHS:
          case For_FORUM_COURSE_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM);
+            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM);
             break;
          case For_FORUM_COURSE_USRS:
-            ICanModerateForum = (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_TCH);
+            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
             break;
          default:
             ICanModerateForum = false;
@@ -1620,7 +1620,7 @@ static void For_ShowForumList (void)
       case For_ONLY_CURRENT_FORUMS:
 	 if (Gbl.CurrentIns.Ins.InsCod > 0)
 	   {
-	    if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
+	    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 	       ICanSeeInsForum = true;
 	    else
 	       ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
@@ -1633,7 +1633,7 @@ static void For_ShowForumList (void)
 
          if (ICanSeeInsForum)
            {
-            if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
+            if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 	       ICanSeeCtrForum = true;
 	    else
 	       ICanSeeCtrForum = Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod);
@@ -1644,7 +1644,7 @@ static void For_ShowForumList (void)
 	                                   IsLastItemInLevel) > 0)
                if (ICanSeeCtrForum)
         	 {
-        	  if (Gbl.Usrs.Me.Roles.LoggedRole >= Rol_DEG_ADM)
+        	  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeDegForum = true;
 		  else
 		     ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod);
@@ -1659,7 +1659,7 @@ static void For_ShowForumList (void)
 			                               true,
 			                               IsLastItemInLevel) > 0)
 			   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-			       Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+			       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 			      /***** Links to forums of current degree *****/
 			      For_WriteLinksToCrsForums (Gbl.CurrentCrs.Crs.CrsCod,
 			                                 true,
@@ -1822,8 +1822,8 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
 
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   ICanSeeTeacherForum = Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
-	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
+   ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                 (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |
 	                                              (1 << Rol_TCH)));
 
    /***** Link to forum global *****/
@@ -1858,8 +1858,8 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
 
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   ICanSeeTeacherForum = Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
-	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
+   ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	                 (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |
 	                                              (1 << Rol_TCH)));
 
    /***** Link to forum of users about the platform *****/
@@ -1896,7 +1896,7 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,
    if (InsCod > 0)
      {
       MaxRoleInIns = Rol_GetMyMaxRoleInIns (InsCod);
-      ICanSeeTeacherForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+      ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MaxRoleInIns == Rol_NET ||
 	                     MaxRoleInIns == Rol_TCH);
 
@@ -1938,7 +1938,7 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,
    if (CtrCod > 0)
      {
       MaxRoleInCtr = Rol_GetMyMaxRoleInCtr (CtrCod);
-      ICanSeeTeacherForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+      ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MaxRoleInCtr == Rol_NET ||
 	                     MaxRoleInCtr == Rol_TCH);
 
@@ -1980,7 +1980,7 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
    if (DegCod > 0)
      {
       MaxRoleInDeg = Rol_GetMyMaxRoleInDeg (DegCod);
-      ICanSeeTeacherForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+      ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MaxRoleInDeg == Rol_NET ||
 	                     MaxRoleInDeg == Rol_TCH);
 
@@ -2022,7 +2022,7 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
    if (CrsCod > 0)
      {
       MyRoleInCrs = Rol_GetMyRoleInCrs (CrsCod);
-      ICanSeeTeacherForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+      ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MyRoleInCrs == Rol_NET ||
 	                     MyRoleInCrs == Rol_TCH);
 
@@ -3356,7 +3356,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Put button to remove the thread *****/
       if (PermissionThreadDeletion[Gbl.Forum.ForumSelected.Type] &
-	  (1 << Gbl.Usrs.Me.Roles.LoggedRole)) // If I have permission to remove thread in this forum...
+	  (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
         {
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStartAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
@@ -3775,58 +3775,58 @@ static void For_RestrictAccess (void)
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM__SWAD__TCHS:
          Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
+         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |
                                                      (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:
 	 MaxRole = Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTRE_USRS:
 	 MaxRole = Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTRE_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_USRS:
 	 MaxRole = Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 MaxRole = Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_USRS:
 	 MaxRole = Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_TCHS:
 	 MaxRole = Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location);
-         ICanSeeForum = (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM ||
+         ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
@@ -4196,7 +4196,7 @@ void For_RemoveThread (void)
    For_GetParamsForum ();
 
    if (PermissionThreadDeletion[Gbl.Forum.ForumSelected.Type] &
-       (1 << Gbl.Usrs.Me.Roles.LoggedRole)) // If I have permission to remove thread in this forum...
+       (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
      {
       /***** Get subject of thread to delete *****/
       For_GetThrSubject (Gbl.Forum.ForumSelected.ThrCod,Subject);
@@ -4321,7 +4321,7 @@ void For_PasteThread (void)
 
 static bool For_CheckIfICanMoveThreads (void)
   {
-   return (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// If I have permission to move threads...
   }
 
 /*****************************************************************************/
