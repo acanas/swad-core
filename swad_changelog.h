@@ -230,19 +230,18 @@
 // TODO: Link names are too short ==> add more length, for example: "A guide to building and understanding the physics of Water Rockets"
 // TODO: Fix bug: Error when a link end in a dot. Example: "A guide to building..." --> "A guide to building._..url" (two dots)
 
-// TODO: Fix length of connected non-editing teachers at right column
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.235 (2017-06-04)"
-#define CSS_FILE		"swad16.226.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.235.1 (2017-06-04)"
+#define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.235.1: Jun 04, 2017	Limited length of connected users at right column. (221027 lines)
         Version 16.235:   Jun 04, 2017	Fixed bug in notifications about enrolment as a non-editing teacher.
 					Fixed bugs and code refactoring related to users enrolment. (221018 lines)
 					1 change necessary in database:

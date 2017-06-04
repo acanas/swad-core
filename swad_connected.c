@@ -592,7 +592,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"CENTER_TOP\">"
+			 "<td colspan=\"3\" class=\"CON_USR_NARROW_TIT\">"
 			 "%u %s"
 			 "</td>"
 			 "</tr>",

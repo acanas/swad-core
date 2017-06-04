@@ -1103,6 +1103,15 @@ a:hover						/* Default ==> underlined */
 	color:#398000;
 	font-size:12pt;
 	}
+.CON_USR_NARROW_TIT
+	{
+	max-width:136px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	text-align:center;
+	vertical-align:middle;
+	}
 .CON_USR_NARROW
 	{
 	width:68px;
