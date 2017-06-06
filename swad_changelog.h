@@ -242,14 +242,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.235.2 (2017-06-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.235.3 (2017-06-04)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.235.2: Jun 04, 2017	Non-editing teacher can access and edit works of students. (221032 lines)
+        Version 16.235.3: Jun 04, 2017	Non-editing teachers can not select/unselect groups to which they don't belong. (221107 lines)
+        Version 16.235.2: Jun 04, 2017	Non-editing teachers can access and edit works of students. (221032 lines)
         Version 16.235.1: Jun 04, 2017	Limited length of connected users at right column. (221027 lines)
         Version 16.235:   Jun 04, 2017	Fixed bug in notifications about enrolment as a non-editing teacher.
 					Fixed bugs and code refactoring related to users enrolment. (221018 lines)

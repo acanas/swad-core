@@ -419,15 +419,40 @@ static void Grp_PutCheckboxAllGrps (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_All_groups;
+   bool ICanSelUnselGroup;
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+	 ICanSelUnselGroup = false;
+	 break;
+      case Rol_STD:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 ICanSelUnselGroup = true;
+	 break;
+      default:
+	 ICanSelUnselGroup = false;
+	 break;
+     }
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
 		      "<label class=\"%s\">"
 		      "<input type=\"checkbox\""
 		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
 	    The_ClassForm[Gbl.Prefs.Theme]);
-   if (Gbl.Usrs.ClassPhoto.AllGroups)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
+   if (ICanSelUnselGroup)
+     {
+      if (Gbl.Usrs.ClassPhoto.AllGroups)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\"");
+     }
+   else
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out," />"
 		      "&nbsp;%s"
 		      "</label>"
 		      "</div>",
@@ -2007,6 +2032,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    unsigned NumGrpSel;
    struct ListCodGrps LstGrpsIBelong;
    bool IBelongToThisGroup;
+   bool ICanSelUnselGroup;
    struct Group *Grp;
    Rol_Role_t Role;
 
@@ -2017,13 +2043,38 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod,
 	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
-   /***** List the groups *****/
+   /***** List the groups of this type *****/
    for (NumGrpThisType = 0;
 	NumGrpThisType < GrpTyp->NumGrps;
 	NumGrpThisType++)
      {
+      /* Pointer to group */
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+
+      /* Check if I belong to his group */
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
+
+      /* Check if I can select / unselect this group */
+      if (IBelongToThisGroup)
+	 ICanSelUnselGroup = true;
+      else
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_NET:
+	       ICanSelUnselGroup = IBelongToThisGroup;
+	       break;
+	    case Rol_STD:
+	    case Rol_TCH:
+	    case Rol_DEG_ADM:
+	    case Rol_CTR_ADM:
+	    case Rol_INS_ADM:
+	    case Rol_SYS_ADM:
+	       ICanSelUnselGroup = true;
+	       break;
+	    default:
+	       ICanSelUnselGroup = false;
+	       break;
+	   }
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
@@ -2046,7 +2097,11 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
                fprintf (Gbl.F.Out," checked=\"checked\"");
                break;
               }
-      fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" /></td>");
+      if (ICanSelUnselGroup)
+	 fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\"");
+      else
+         fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," /></td>");
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
@@ -2059,23 +2114,45 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    /***** Write rows to select the students who don't belong to any group *****/
    /* To get the students who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
    /* Write checkbox to select the group */
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+	 ICanSelUnselGroup = false;
+	 break;
+      case Rol_STD:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 ICanSelUnselGroup = true;
+	 break;
+      default:
+	 ICanSelUnselGroup = false;
+	 break;
+     }
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" id=\"Grp%ld\" name=\"GrpCods\""
                       " value=\"%ld\"",
             -(GrpTyp->GrpTypCod),
             -(GrpTyp->GrpTypCod));
-   if (Gbl.Usrs.ClassPhoto.AllGroups)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
+   if (ICanSelUnselGroup)
+     {
+      if (Gbl.Usrs.ClassPhoto.AllGroups)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      else
+	 for (NumGrpSel = 0;
+	      NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
+	      NumGrpSel++)
+	    if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
+	      {
+	       fprintf (Gbl.F.Out," checked=\"checked\"");
+	       break;
+	      }
+     }
    else
-      for (NumGrpSel = 0;
-	   NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
-	   NumGrpSel++)
-         if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
-           {
-            fprintf (Gbl.F.Out," checked=\"checked\"");
-            break;
-           }
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" />"
 	              "</td>");
 
