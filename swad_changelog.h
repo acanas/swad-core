@@ -230,17 +230,26 @@
 // TODO: Link names are too short ==> add more length, for example: "A guide to building and understanding the physics of Water Rockets"
 // TODO: Fix bug: Error when a link end in a dot. Example: "A guide to building..." --> "A guide to building._..url" (two dots)
 
+// TODO: List of places in drop-down menu should be ordered by name
+
+// TODO: Cuando sólo se cambian los grupos y no el rol de un profesor ya existente, no sale ningún mensaje. se haga lo que se haga en la edición debería salir un mensaje del tipo "Cambios realizados"
+
+// TODO: En listado de accesos, las fechas (no el día de la semana) deberían ir alineadas a la derecha.
+
+// TODO: Fix bug: un profesor no editor no puede confirmar DNI? Si es así, no le debería salir el enlace "Confirmar ID", y si queremos que pueda, hay que darle permisos
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.235.1 (2017-06-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.235.2 (2017-06-04)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.235.2: Jun 04, 2017	Non-editing teacher can access and edit works of students. (221032 lines)
         Version 16.235.1: Jun 04, 2017	Limited length of connected users at right column. (221027 lines)
         Version 16.235:   Jun 04, 2017	Fixed bug in notifications about enrolment as a non-editing teacher.
 					Fixed bugs and code refactoring related to users enrolment. (221018 lines)
