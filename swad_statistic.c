@@ -1949,7 +1949,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.RowEvenOdd,
-	       Txt_ROLES_SINGUL_Abc[UsrDat.Role.InCurrentCrs][UsrDat.Sex]);
+	       Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs.Role][UsrDat.Sex]);
 
       /* Write the number of clicks */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
@@ -1972,8 +1972,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 	                    " style=\"width:%upx; height:18px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
-		  UsrDat.Role.InCurrentCrs == Rol_STD ? 'c' :	// Student
-			                                 'v',	// Non-editing teacher or teacher
+		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'c' :	// Student
+			                                      'v',	// Non-editing teacher or teacher
 		  BarWidth);
       Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;</td>"

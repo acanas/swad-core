@@ -67,15 +67,20 @@ void Rol_SetMyRoles (void)
    bool ICanBeCtrAdm = false;
    bool ICanBeDegAdm = false;
 
-   // In this point Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB is set
+   /***** Get my role in current course if not yet filled *****/
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+     {
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetMyRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod);
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+     }
 
    /***** Set the user's role I am logged *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
-   Gbl.Usrs.Me.Role.Max = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Role.InCrss);
+   Gbl.Usrs.Me.Role.Max = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
    Gbl.Usrs.Me.Role.Logged = (Gbl.Usrs.Me.Role.FromSession == Rol_UNK) ?	// If no logged role retrieved from session...
-	                          ((Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs == Rol_UNK) ? Rol_USR :
-	                                                                                  Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs) :
-                                  Gbl.Usrs.Me.Role.FromSession;		// Get logged role from session
+	                          ((Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_UNK) ? Rol_USR :
+	                                                                                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role) :
+                                  Gbl.Usrs.Me.Role.FromSession;			// Get logged role from session
 
    /***** Check if I am administrator of current institution/centre/degree *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0)
@@ -101,9 +106,7 @@ void Rol_SetMyRoles (void)
    /***** Check if I belong to current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
      {
-      Gbl.Usrs.Me.IBelongToCurrentCrs = Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs == Rol_STD ||
-                                        Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs == Rol_NET ||
-                                        Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs == Rol_TCH;
+      Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
          Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
                                                                    Gbl.CurrentCrs.Crs.CrsCod,
@@ -154,7 +157,7 @@ void Rol_SetMyRoles (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-         Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs);
+         Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role);
       else if (Gbl.Usrs.Me.Role.Max >= Rol_STD)
          Gbl.Usrs.Me.Role.Available = (1 << Rol_USR);
       else
@@ -310,15 +313,15 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
       /***** Fill the list with the courses I belong to (if not already filled) *****/
       Usr_GetMyCourses ();
 
-      /***** Check if the course passed as parameter is any of my courses *****/
+      /***** Check if the course is any of my courses *****/
       for (NumMyCrs = 0;
            NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
            NumMyCrs++)
          if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
             return Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].Role;
-      return Rol_GST;
      }
-   return Rol_UNK;   // No course
+
+   return Rol_UNK;
   }
 
 /*****************************************************************************/
@@ -330,26 +333,45 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Rol_Role_t Role = Rol_UNK;	// Default role (if no course selected or user don't belong to it)
-
-   if (CrsCod > 0)
+   static struct
      {
-      /***** Get rol of a user in a course from database.
-             The result of the query will have one row or none *****/
-      sprintf (Query,"SELECT Role FROM crs_usr"
-                     " WHERE CrsCod=%ld AND UsrCod=%ld",
-               CrsCod,UsrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
-        {
-         row = mysql_fetch_row (mysql_res);
-         Role = Rol_ConvertUnsignedStrToRole (row[0]);
-        }
+      long CrsCod;
+      long UsrCod;
+      Rol_Role_t RoleInCrs;
+     } Cached =
+     {
+      -1L,
+      -1L,
+      Rol_UNK,
+     };	// A cache. If this function is called consecutive times
+	// with the same user, only the first time is slow
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+   /***** 1. Fast check: trivial cases *****/
+   if (CrsCod <= 0 ||
+       UsrCod <= 0)
+      return Rol_UNK;
+
+   /***** 2. Fast check: Is role in course already calculated *****/
+   if (CrsCod == Cached.CrsCod &&
+       UsrCod == Cached.UsrCod)
+      return Cached.RoleInCrs;
+
+   /***** 3. Slow check: Get rol of a user in a course from database.
+			 The result of the query will have one row or none *****/
+   Cached.UsrCod = UsrCod;
+   Cached.CrsCod = CrsCod;
+   Cached.RoleInCrs = Rol_UNK;
+   sprintf (Query,"SELECT Role FROM crs_usr"
+		  " WHERE CrsCod=%ld AND UsrCod=%ld",
+	    CrsCod,UsrCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
+     {
+      row = mysql_fetch_row (mysql_res);
+      Cached.RoleInCrs = Rol_ConvertUnsignedStrToRole (row[0]);
      }
+   DB_FreeMySQLResult (&mysql_res);
 
-   return Role;
+   return Cached.RoleInCrs;
   }
 
 /*****************************************************************************/
@@ -367,7 +389,7 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
    unsigned NumRoles;
 
    /***** If roles is already filled ==> nothing to do *****/
-   if (UsrDat->Role.InCrss < 0)	// Not yet filled
+   if (UsrDat->Roles.InCrss < 0)	// Not yet filled
      {
       /***** Get distinct roles in all courses of the user from database *****/
       sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod=%ld",
@@ -375,12 +397,12 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
       NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,
 					    "can not get the roles of a user"
 					    " in all his/her courses");
-      for (NumRole = 0, UsrDat->Role.InCrss = 0;
+      for (NumRole = 0, UsrDat->Roles.InCrss = 0;
 	   NumRole < NumRoles;
 	   NumRole++)
 	{
 	 row = mysql_fetch_row (mysql_res);
-	 UsrDat->Role.InCrss |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
+	 UsrDat->Roles.InCrss |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
 	}
 
       /***** Free structure that stores the query result *****/

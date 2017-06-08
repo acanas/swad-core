@@ -228,8 +228,9 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
 	  activate the sending of a notification *****/
    Enr_NotifyAfterEnrolment (UsrDat,NewRole);
 
-   UsrDat->Role.InCurrentCrs = NewRole;
-   UsrDat->Role.InCrss = -1;	// Force roles to be got from database
+   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
+   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
   }
 
@@ -276,8 +277,9 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 	    Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
 		                       'N');
    DB_QueryINSERT (Query,"can not register user in course");
-   UsrDat->Role.InCurrentCrs = NewRole;
-   UsrDat->Role.InCrss = -1;	// Force roles to be got from database
+   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
+   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
 
    /***** Create notification for this user.
@@ -379,12 +381,12 @@ void Enr_ReqAcceptRegisterInCrs (void)
 
    /***** Show message *****/
    sprintf (Gbl.Alert.Txt,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
-            Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
+            Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
             Gbl.CurrentCrs.Crs.FullName);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Send button to accept register in the current course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
 	 Act_FormStart (ActAccEnrStd);
@@ -402,7 +404,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
 	 Act_FormStart (ActRemMe_Std);
@@ -423,7 +425,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_EndRoundFrame ();
 
    /***** Mark possible notification as seen *****/
-   switch (Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
@@ -1808,7 +1810,7 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                                       Gbl.CurrentCrs.Crs.CrsCod,
                                       false))      // User does belong to current course
 	{
-	 if (RegRemRole != UsrDat->Role.InCurrentCrs)	// The role must be updated
+	 if (RegRemRole != UsrDat->Roles.InCurrentCrs.Role)	// The role must be updated
 	    /* Modify role */
 	    Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole);
 	}
@@ -1945,10 +1947,10 @@ void Enr_ReqSignUpInCrs (void)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Check if I already belong to course *****/
-   if (Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs >= Rol_STD)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_were_already_enroled_as_X_in_the_course_Y,
-               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
+               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
@@ -1976,10 +1978,10 @@ void Enr_SignUpInCrs (void)
    long ReqCod = -1L;
 
    /***** Check if I already belong to course *****/
-   if (Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs >= Rol_STD)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_were_already_enroled_as_X_in_the_course_Y,
-               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
+               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
@@ -3770,7 +3772,7 @@ void Enr_CreateNewUsr1 (void)
 	                                 Gbl.CurrentCrs.Crs.CrsCod,
 	                                 false))      // User does belong to current course
 	   {
-	    OldRole = Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs;	// Remember old role before changing it
+	    OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;	// Remember old role before changing it
 	    if (NewRole != OldRole)	// The role must be updated
 	      {
 	       /* Modify role */
@@ -3895,7 +3897,7 @@ void Enr_ModifyUsr1 (void)
 						  Gbl.CurrentCrs.Crs.CrsCod,
 						  false))      // User does belong to current course
 		    {
-		     OldRole = Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs;	// Remember old role before changing it
+		     OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;	// Remember old role before changing it
 		     if (NewRole != OldRole)	// The role must be updated
 		       {
 			/* Modify role */
@@ -3933,8 +3935,9 @@ void Enr_ModifyUsr1 (void)
 		  /***** If it's me, change my roles *****/
 		  if (ItsMe)
 		    {
-		     Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs = Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs;
-                     Gbl.Usrs.Me.UsrDat.Role.InCrss       = Gbl.Usrs.Other.UsrDat.Role.InCrss;
+		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
+                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
+                     Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
                      Rol_SetMyRoles ();
 		    }
 
@@ -4107,7 +4110,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
       /* Show form to request confirmation */
-      switch (UsrDat->Role.InCurrentCrs)
+      switch (UsrDat->Roles.InCurrentCrs.Role)
         {
 	 case Rol_STD:
 	    NextAction = ActRemStdCrs;
@@ -4189,8 +4192,9 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       if (ItsMe)
 	{
-	 Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs = UsrDat->Role.InCurrentCrs = Rol_UNK;
-	 Gbl.Usrs.Me.UsrDat.Role.InCrss         = UsrDat->Role.InCrss = -1;	// not yet filled/calculated
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	 Gbl.Usrs.Me.UsrDat.Roles.InCrss = UsrDat->Roles.InCrss = -1;	// not yet filled/calculated
 	 Rol_SetMyRoles ();
 	}
 

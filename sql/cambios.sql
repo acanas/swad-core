@@ -11941,5 +11941,4 @@ CALL update_log_full();
 
 
 
-
-
+SELECT COUNT(*) FROM crs_grp_usr WHERE UsrCod=1 AND GrpCod IN (SELECT crs_grp_usr.GrpCod FROM crs_grp_usr,crs_grp,crs_grp_types WHERE crs_grp_usr.UsrCod=7 AND crs_grp_usr.GrpCod=crs_grp.GrpCod AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod AND crs_grp_types.CrsCod=19);

@@ -131,11 +131,16 @@ struct UsrData
    char Password        [Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    struct
      {
-      Rol_Role_t InCurrentCrs;
-      int InCrss;	// Check always if filled/calculated
-			   // >=0 ==> filled/calculated
-			   //  <0 ==> not yet filled/calculated
-     } Role;
+      struct
+        {
+	 long UsrCod;	// Role was got from database for this user (used to not retrieve role if already retrieved)
+	 Rol_Role_t Role;
+        } InCurrentCrs;	// Role in current course (Rol_UNK is no course selected)
+      int InCrss;	// Roles in all his/her courses
+			// Check always if filled/calculated
+			// >=0 ==> filled/calculated
+			//  <0 ==> not yet filled/calculated
+     } Roles;
    bool Accepted;	// User has accepted joining to current course?
    char Surname1	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char Surname2	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
@@ -252,8 +257,10 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
 
+bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);

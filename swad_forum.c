@@ -1823,7 +1823,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                 (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |
+	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
 	                                              (1 << Rol_TCH)));
 
    /***** Link to forum global *****/
@@ -1859,7 +1859,7 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	                 (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |
+	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
 	                                              (1 << Rol_TCH)));
 
    /***** Link to forum of users about the platform *****/
@@ -3775,7 +3775,7 @@ static void For_RestrictAccess (void)
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM__SWAD__TCHS:
          Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |
+         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
                                                      (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:

@@ -141,8 +141,8 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
      {
       case Rol_TCH:
 	 /* A teacher can change the photo of confirmed students */
-         if (UsrDat->Role.InCurrentCrs == Rol_STD &&	// A student
-	     UsrDat->Accepted)				// who accepted registration
+         if (UsrDat->Roles.InCurrentCrs.Role == Rol_STD &&	// A student
+	     UsrDat->Accepted)					// who accepted registration
             return true;
 
          return false;
@@ -196,7 +196,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
-	 switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
+	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	   {
 	    case Rol_STD:
 	       NextAction = ActReqStdPho;
@@ -248,7 +248,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
      {
-      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
+      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	{
 	 case Rol_STD:
 	    NextAction = ActReqRemStdPho;
@@ -334,7 +334,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
       Act_FormStart (ActDetMyPho);
    else
      {
-      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
+      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	{
 	 case Rol_STD:
 	    NextAction = ActDetStdPho;
@@ -524,7 +524,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
+	    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	      {
 	       case Rol_STD:
 		  NextAction = ActRemStdPho;
@@ -706,7 +706,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         	  Act_FormStart (ActUpdMyPho);
                else
         	 {
-               	  switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
+               	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 		    {
 		     case Rol_STD:
 			NextAction = ActUpdStdPho;

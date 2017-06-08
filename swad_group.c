@@ -713,7 +713,7 @@ void Grp_ChangeOtherUsrGrps (void)
 
       /***** A student can not be enroled in more than one group
 	     if the type of group is of single enrolment *****/
-      if (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs == Rol_STD &&
+      if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD &&
 	  LstGrpsUsrWants.NumGrps >= 2)
 	 SelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsUsrWants);
 
@@ -896,7 +896,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    bool RemoveUsrFromThisGrp;
    bool RegisterUsrInThisGrp;
 
-   if (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
      {
       /***** Lock tables to make the inscription atomic *****/
       DB_Query ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
@@ -944,7 +944,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
    /***** Unlock tables after changes in my groups *****/
-   if (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs == Rol_STD)
+   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
      {
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				     // ...to not retry the unlock if error in unlocking
@@ -4680,4 +4680,72 @@ void Grp_GetParamWhichGrps (void)
 
       AlreadyGot = true;
      }
+  }
+
+/*****************************************************************************/
+/*************** Check if a user belongs to any of my courses ****************/
+/*****************************************************************************/
+
+bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
+  {
+   char Query[256];
+   static struct
+     {
+      long UsrCod;
+      bool UsrSharesAnyOfMyGrpsInCurrentCrs;
+     } Cached =
+     {
+      -1L,
+      false
+     };	// A cache. If this function is called consecutive times
+	// with the same user, only the first time is slow
+
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: Is it a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: Is it a course selected? *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 4. Fast check: Do I belong to the current course? *****/
+   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+      return false;
+
+   /***** 5. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 6. Fast check: Does he/she belong to the current course? *****/
+   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+      return false;
+
+   /***** 7. Fast check: Is already calculated if user shares
+                         any group in the current course with me? *****/
+   if (UsrDat->UsrCod == Cached.UsrCod)
+      return Cached.UsrSharesAnyOfMyGrpsInCurrentCrs;
+
+   /***** 8. Slow check: Get if user shares any group in this course with me from database *****/
+   /* Check if user shares any group with me */
+   sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
+	          " WHERE UsrCod=%ld"
+	          " AND GrpCod IN"
+	          " (SELECT crs_grp_usr.GrpCod"
+	          " FROM crs_grp_usr,crs_grp,crs_grp_types"
+	          " WHERE crs_grp_usr.UsrCod=%ld"
+	          " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+                  " AND crs_grp_types.CrsCod=%ld)",
+            UsrDat->UsrCod,
+            Gbl.Usrs.Me.UsrDat.UsrCod,
+            Gbl.CurrentCrs.Crs.CrsCod);
+   Cached.UsrSharesAnyOfMyGrpsInCurrentCrs = DB_QueryCOUNT (Query,"can not check"
+								  " if a user shares any group"
+								  " in the current course with you") != 0;
+   Cached.UsrCod = UsrDat->UsrCod;
+   return Cached.UsrSharesAnyOfMyGrpsInCurrentCrs;
   }

@@ -293,8 +293,9 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EncryptedUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->Role.InCurrentCrs = Rol_UNK;
-   UsrDat->Role.InCrss = -1;	// < 0 ==> not yet got from database
+   UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
+   UsrDat->Roles.InCurrentCrs.UsrCod = -1L;
+   UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = true;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
@@ -517,14 +518,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
              Pwd_BYTES_ENCRYPTED_PASSWORD);
 
    /* Get roles */
-   UsrDat->Role.InCurrentCrs = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-                                                  UsrDat->UsrCod);
-   UsrDat->Role.InCrss = -1;	// Force roles to be got from database
+   UsrDat->Roles.InCurrentCrs.Role   = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+                                                        UsrDat->UsrCod);
+   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (UsrDat->Role.InCurrentCrs == Rol_UNK)
-      UsrDat->Role.InCurrentCrs = (UsrDat->Role.InCrss < (1 << Rol_STD)) ?
-	                              Rol_GST :	// User does not belong to any course
-	                              Rol_USR;	// User belongs to some courses
 
    /* Get name */
    Str_Copy (UsrDat->Surname1,row[2],
@@ -1050,7 +1048,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
   {
-   if (UsrDat->Role.InCurrentCrs != Rol_STD)	// Not a student in the current course
+   if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)	// Not a student in the current course
       return false;
 
    // The user is a student in the current course
@@ -1081,7 +1079,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
 
    /***** 2. Fast/slow check: Is he/she a non-editing teacher or a teacher in any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if ((UsrDat->Role.InCrss & ((1 << Rol_NET) |
+   if ((UsrDat->Roles.InCrss & ((1 << Rol_NET) |
 	                 (1 << Rol_TCH))) == 0)
       return false;
 
@@ -1097,6 +1095,49 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
 
    /***** 5. Slow check: Get if user shares any course with me from database *****/
    return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
+  }
+
+/*****************************************************************************/
+/*** Check if a user belongs to any of my courses but has a different role ***/
+/*****************************************************************************/
+
+bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: Is it a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: Is it a course selected? *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 4. Fast check: Do I belong to the current course? *****/
+   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+      return false;
+
+   /***** 5. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 6. Fast check: Does he/she belong to the current course? *****/
+   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+      return false;
+
+   /***** 7. Fast / slow check depending on roles *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (Gbl.Record.UsrDat);
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
@@ -1128,7 +1169,6 @@ bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
   {
    char Query[256];
-   bool HeBelongsToCurrentCrs;
    static struct
      {
       long UsrCod;
@@ -1158,19 +1198,14 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-     {
-      HeBelongsToCurrentCrs = UsrDat->Role.InCurrentCrs == Rol_STD ||
-			      UsrDat->Role.InCurrentCrs == Rol_NET ||
-			      UsrDat->Role.InCurrentCrs == Rol_TCH;
-      if (HeBelongsToCurrentCrs)	// Course selected and we both belong to it
+      if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))	// Course selected and we both belong to it
          return true;
-     }
 
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (!(UsrDat->Role.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
-	                  (1 << Rol_NET) |	// or non-editing teacher
-			  (1 << Rol_TCH))))	// or teacher?
+   if (!(UsrDat->Roles.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
+	                        (1 << Rol_NET) |	// or non-editing teacher
+			        (1 << Rol_TCH))))	// or teacher?
       return false;
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/
@@ -1600,6 +1635,7 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
       false
      };
 
+   /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
        InsCod <= 0)
      {
@@ -1607,25 +1643,27 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
       Cached.UsrCod = -1L;
       Cached.InsCod = -1L;
       Cached.Belongs = false;
-     }
-   else if (UsrCod != Cached.UsrCod ||
-            InsCod != Cached.InsCod)	// If not cached...
-     {
-      /***** Get is a user belongs to an institution from database *****/
-      sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
-		     " FROM crs_usr,courses,degrees,centres"
-		     " WHERE crs_usr.UsrCod=%ld"
-		     " AND crs_usr.Accepted='Y'"
-		     " AND crs_usr.CrsCod=courses.CrsCod"
-		     " AND courses.DegCod=degrees.DegCod"
-		     " AND degrees.CtrCod=centres.CtrCod"
-		     " AND centres.InsCod=%ld",
-	       UsrCod,InsCod);
-      Cached.UsrCod = UsrCod;
-      Cached.InsCod = InsCod;
-      Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
+      return Cached.Belongs;
      }
 
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Cached.UsrCod &&
+       InsCod != Cached.InsCod)
+      return Cached.Belongs;
+
+   /***** 3. Slow check: Get is user belongs to institution from database *****/
+   sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
+		  " FROM crs_usr,courses,degrees,centres"
+		  " WHERE crs_usr.UsrCod=%ld"
+		  " AND crs_usr.Accepted='Y'"
+		  " AND crs_usr.CrsCod=courses.CrsCod"
+		  " AND courses.DegCod=degrees.DegCod"
+		  " AND degrees.CtrCod=centres.CtrCod"
+		  " AND centres.InsCod=%ld",
+	    UsrCod,InsCod);
+   Cached.UsrCod = UsrCod;
+   Cached.InsCod = InsCod;
+   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
    return Cached.Belongs;
   }
 
@@ -1648,31 +1686,33 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
       false
      };
 
+   /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
        CtrCod <= 0)
      {
-      /***** Trivial case *****/
       Cached.UsrCod = -1L;
       Cached.CtrCod = -1L;
       Cached.Belongs = false;
-     }
-   else if (UsrCod != Cached.UsrCod ||
-            CtrCod != Cached.CtrCod)	// If not cached...
-     {
-      /***** Get is a user belongs to a centre from database *****/
-      sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
-		     " FROM crs_usr,courses,degrees"
-		     " WHERE crs_usr.UsrCod=%ld"
-		     " AND crs_usr.Accepted='Y'"	// Only if user accepted
-		     " AND crs_usr.CrsCod=courses.CrsCod"
-		     " AND courses.DegCod=degrees.DegCod"
-		     " AND degrees.CtrCod=%ld",
-	       UsrCod,CtrCod);
-      Cached.UsrCod = UsrCod;
-      Cached.CtrCod = CtrCod;
-      Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
+      return Cached.Belongs;
      }
 
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Cached.UsrCod &&
+       CtrCod == Cached.CtrCod)
+      return Cached.Belongs;
+
+   /***** 3. Slow check: Get is user belongs to centre from database *****/
+   sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
+		  " FROM crs_usr,courses,degrees"
+		  " WHERE crs_usr.UsrCod=%ld"
+		  " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		  " AND crs_usr.CrsCod=courses.CrsCod"
+		  " AND courses.DegCod=degrees.DegCod"
+		  " AND degrees.CtrCod=%ld",
+	    UsrCod,CtrCod);
+   Cached.UsrCod = UsrCod;
+   Cached.CtrCod = CtrCod;
+   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
    return Cached.Belongs;
   }
 
@@ -1695,31 +1735,73 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
       false
      };
 
+   /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
        DegCod <= 0)
      {
-      /***** Trivial case *****/
       Cached.UsrCod = -1L;
       Cached.DegCod = -1L;
       Cached.Belongs = false;
-     }
-   else if (UsrCod != Cached.UsrCod ||
-            DegCod != Cached.DegCod)	// If not cached...
-     {
-      /***** Get is a user belongs to a degree from database *****/
-      sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
-		     " FROM crs_usr,courses"
-		     " WHERE crs_usr.UsrCod=%ld"
-		     " AND crs_usr.Accepted='Y'"	// Only if user accepted
-		     " AND crs_usr.CrsCod=courses.CrsCod"
-		     " AND courses.DegCod=%ld",
-	       UsrCod,DegCod);
-      Cached.UsrCod = UsrCod;
-      Cached.DegCod = DegCod;
-      Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
+      return Cached.Belongs;
      }
 
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Cached.UsrCod &&
+       DegCod == Cached.DegCod)
+      return Cached.Belongs;
+
+   /***** 3. Slow check: Get if user belongs to degree from database *****/
+   sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
+		  " FROM crs_usr,courses"
+		  " WHERE crs_usr.UsrCod=%ld"
+		  " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		  " AND crs_usr.CrsCod=courses.CrsCod"
+		  " AND courses.DegCod=%ld",
+	    UsrCod,DegCod);
+   Cached.UsrCod = UsrCod;
+   Cached.DegCod = DegCod;
+   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
    return Cached.Belongs;
+  }
+
+/*****************************************************************************/
+/*************** Check if user belongs to the current course *****************/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
+  {
+   static struct
+     {
+      long UsrCod;
+      bool Belongs;
+     } Cached =
+     {
+      -1L,
+      false
+     };
+
+   /***** 1. Fast check: trivial cases *****/
+   if (UsrDat->UsrCod <= 0 ||
+       Gbl.CurrentCrs.Crs.CrsCod <= 0)
+     {
+      Cached.UsrCod = -1L;
+      Cached.Belongs = false;
+      return Cached.Belongs;
+     }
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrDat->UsrCod == Cached.UsrCod)
+      return Cached.Belongs;
+
+   /***** 3. Fast check: If we know role of user in the current course *****/
+   if (UsrDat->Roles.InCurrentCrs.UsrCod == UsrDat->UsrCod)
+      return UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
+	     UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
+	     UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+
+   /***** 4. Fast / slow check: Get if user belongs to current course *****/
+   return Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod,
+                                      false);
   }
 
 /*****************************************************************************/
@@ -1731,19 +1813,48 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
   {
    char Query[512];
    const char *SubQuery;
+   static struct
+     {
+      long UsrCod;
+      long CrsCod;
+      bool CountOnlyAcceptedCourses;
+      bool Belongs;
+     } Cached =
+     {
+      -1L,
+      -1L,
+      false,
+      false
+     };
 
-   /***** Trivial case *****/
+   /***** 1. Fast check: trivial cases *****/
    if (UsrCod <= 0 ||
        CrsCod <= 0)
-      return false;
+     {
+      Cached.UsrCod = -1L;
+      Cached.CrsCod = -1L;
+      Cached.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
+      Cached.Belongs = false;
+      return Cached.Belongs;
+     }
 
-   /***** Get if a user belongs to a course from database *****/
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Cached.UsrCod &&
+       CrsCod == Cached.CrsCod &&
+       CountOnlyAcceptedCourses == Cached.CountOnlyAcceptedCourses)
+      return Cached.Belongs;
+
+   /***** 3. Slow check: Get if user belongs to course from database *****/
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
 	                                  "");
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
 	          " WHERE CrsCod=%ld AND UsrCod=%ld%s",
             CrsCod,UsrCod,SubQuery);
-   return (DB_QueryCOUNT (Query,"can not check if a user belongs to a course") != 0);
+   Cached.UsrCod = UsrCod;
+   Cached.CrsCod = CrsCod;
+   Cached.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
+   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a course") != 0);
+   return Cached.Belongs;
   }
 
 /*****************************************************************************/
@@ -2950,12 +3061,11 @@ static void Usr_SetMyPrefsAndRoles (void)
       	 Hie_InitHierarchy ();
 
 	 /* Get again my role in this course */
-      	 Gbl.Usrs.Me.UsrDat.Role.InCurrentCrs = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-      	                                                           Gbl.Usrs.Me.UsrDat.UsrCod);
+      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+      	                                                                 Gbl.Usrs.Me.UsrDat.UsrCod);
+      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       	}
      }
-
-   // In this point Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrsDB is set
 
    Rol_SetMyRoles ();
   }
@@ -4996,11 +5106,11 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
    UsrDat->Sex                   = UsrInList->Sex;
    Str_Copy (UsrDat->Photo,UsrInList->Photo,
              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-   UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
-   UsrDat->CtyCod                = UsrInList->CtyCod;
-   UsrDat->InsCod                = UsrInList->InsCod;
-   UsrDat->Role.InCurrentCrs  = UsrInList->RoleInCurrentCrsDB;
-   UsrDat->Accepted              = UsrInList->Accepted;
+   UsrDat->PhotoVisibility         = UsrInList->PhotoVisibility;
+   UsrDat->CtyCod                  = UsrInList->CtyCod;
+   UsrDat->InsCod                  = UsrInList->InsCod;
+   UsrDat->Roles.InCurrentCrs.Role = UsrInList->RoleInCurrentCrsDB;
+   UsrDat->Accepted                = UsrInList->Accepted;
   }
 
 /*****************************************************************************/

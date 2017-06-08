@@ -1144,7 +1144,7 @@ void Mai_PutLinkToChangeOtherUsrEmails (void)
                              NULL);
    else									// Not me
      {
-      switch (Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs)
+      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
         {
 	 case Rol_STD:
 	    NextAction = ActFrmMaiStd;
@@ -1270,7 +1270,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActRemMaiMe);
       else
 	{
-	 switch (UsrDat->Role.InCurrentCrs)
+	 switch (UsrDat->Roles.InCurrentCrs.Role)
 	   {
 	    case Rol_STD:
 	       NextAction = ActRemMaiStd;
@@ -1317,7 +1317,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	    Act_FormStart (ActNewMaiMe);
 	 else
 	   {
-	    switch (UsrDat->Role.InCurrentCrs)
+	    switch (UsrDat->Roles.InCurrentCrs.Role)
 	      {
 	       case Rol_STD:
 		  NextAction = ActNewMaiStd;
@@ -1358,7 +1358,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Act_FormStart (ActNewMaiMe);
    else
      {
-      switch (UsrDat->Role.InCurrentCrs)
+      switch (UsrDat->Roles.InCurrentCrs.Role)
 	{
 	 case Rol_STD:
 	    NextAction = ActNewMaiStd;
@@ -1889,17 +1889,15 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
       case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return (UsrDat->Role.InCurrentCrs == Rol_NET ||	// A non-editing teacher
-	         UsrDat->Role.InCurrentCrs == Rol_TCH) &&	// or a teacher
+	 return (UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||	// A non-editing teacher
+	         UsrDat->Roles.InCurrentCrs.Role == Rol_TCH) &&	// or a teacher
 	         UsrDat->Accepted;				// who accepted registration
       case Rol_NET:
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return (UsrDat->Role.InCurrentCrs == Rol_STD ||	// A student
-                 UsrDat->Role.InCurrentCrs == Rol_NET ||	// or a non-editing teacher
-                 UsrDat->Role.InCurrentCrs == Rol_TCH) &&	// or a teacher
-	         UsrDat->Accepted;				// who accepted registration
+         return Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
+	        UsrDat->Accepted;			// who accepted registration
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */

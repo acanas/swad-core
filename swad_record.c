@@ -2139,8 +2139,9 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
    /* In this case UsrDat->Roles.InCurrentCrsDB
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Role.InCurrentCrs = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
-	                                                          Rol_GST;	// No course selected
+   UsrDat->Roles.InCurrentCrs.Role   = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
+	                                                                Rol_UNK;	// No course selected
+   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 
@@ -2253,11 +2254,11 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	       UsrDat->Accepted);
    ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
 
-   StudentInCurrentCrs = UsrDat->Role.InCurrentCrs == Rol_STD;
-   TeacherInCurrentCrs = UsrDat->Role.InCurrentCrs == Rol_NET ||
-	                 UsrDat->Role.InCurrentCrs == Rol_TCH;
-   TeacherInAnyCrs = UsrDat->Role.InCrss & ((1 << Rol_NET) |
-			              (1 << Rol_TCH));
+   StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD;
+   TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
+	                 UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+   TeacherInAnyCrs = UsrDat->Roles.InCrss & ((1 << Rol_NET) |
+			                    (1 << Rol_TCH));
 
    ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
 		      TypeOfView == Rec_SHA_MY_RECORD_CHECK ||
@@ -2306,7 +2307,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          break;
      }
 
-   Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Role.InCurrentCrs];
+   Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs.Role];
 
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
@@ -2551,10 +2552,6 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
-   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.Role.Logged == Rol_STD);	// My current role is student
-   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// My current role is non-editing teacher
-	                      Gbl.Usrs.Me.Role.Logged == Rol_TCH);	// My current role is teacher
-   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// My current role is superuser
    bool ICanViewUsrProfile;
    Act_Action_t NextAction;
 
@@ -2618,7 +2615,7 @@ static void Rec_PutIconsCommands (void)
 	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM) ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
-	 switch (Gbl.Record.UsrDat->Role.InCurrentCrs)
+	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
 	   {
 	    case Rol_STD:
 	       NextAction = ActReqMdfStd;
@@ -2640,58 +2637,58 @@ static void Rec_PutIconsCommands (void)
 		                NULL);
 	}
 
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// A course is selected
-	  Gbl.Record.UsrDat->Role.InCurrentCrs == Rol_STD &&	// He/she is a student in the current course
-	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))	// I can view
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// A course is selected
 	{
-	 /***** Button to view user's assignments and works *****/
-	 if (ItsMe)	// I am a student
-	    Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
-			           "folder64x64.gif",
-			           Txt_View_homework,NULL,
-		                   NULL);
-	 else		// I am a teacher or superuser
-	    Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
-			           "folder64x64.gif",
-			           Txt_View_homework,NULL,
-		                   NULL);
+	 if (Usr_CheckIfICanViewWrkTstAtt (Gbl.Record.UsrDat))
+	   {
+	    /***** Button to view user's assignments and works *****/
+	    if (ItsMe)	// I am a student
+	       Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
+				      "folder64x64.gif",
+				      Txt_View_homework,NULL,
+				      NULL);
+	    else		// I am a teacher or superuser
+	       Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
+				      "folder64x64.gif",
+				      Txt_View_homework,NULL,
+				      NULL);
 
-	 /***** Button to view user's test exams *****/
-	 if (ItsMe)
-	    Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
-			           "exam64x64.png",
-			           Txt_View_test_results,NULL,
-		                   NULL);
-	 else
-	    Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
-			           "exam64x64.png",
-			           Txt_View_test_results,NULL,
-		                   NULL);
+	    /***** Button to view user's test exams *****/
+	    if (ItsMe)
+	       Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
+				      "exam64x64.png",
+				      Txt_View_test_results,NULL,
+				      NULL);
+	    else
+	       Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
+				      "exam64x64.png",
+				      Txt_View_test_results,NULL,
+				      NULL);
 
-	 /***** Button to view user's attendance *****/
-	 if (ItsMe && IAmLoggedAsStudent)
-	    // As student, I can see my attendance
-	    Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
-				   "rollcall64x64.png",
-				   Txt_View_attendance,NULL,
-				   NULL);
-	 else if (IAmLoggedAsTeacher || IAmLoggedAsSysAdm)
-	    // As teacher, I can see attendance of the student
-	    Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
-				   "rollcall64x64.png",
-				   Txt_View_attendance,NULL,
-				   NULL);
-	}
+	    /***** Button to view user's attendance *****/
+	    if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)
+	      {
+	       if (ItsMe)
+		  // As student, I can see my attendance
+		  Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
+					 "rollcall64x64.png",
+					 Txt_View_attendance,NULL,
+					 NULL);
+	       else
+		  // I can see attendance of the student
+		  Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
+					 "rollcall64x64.png",
+					 Txt_View_attendance,NULL,
+					 NULL);
+	      }
+	   }
 
-      /***** Button to print QR code *****/
-      if (ItsMe || IAmLoggedAsSysAdm ||
-	  (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// A course is selected
-	   Gbl.Record.UsrDat->Role.InCurrentCrs == Rol_STD &&	// He/she is a student in the current course
-	   IAmLoggedAsTeacher))					// I am a teacher in the current course
+	 /***** Button to print QR code *****/
 	 Lay_PutContextualLink (ActPrnUsrQR,NULL,Rec_PutParamUsrCodEncrypted,
 				"qr64x64.gif",
 				Txt_QR_code,NULL,
 				NULL);
+	}
 
       /***** Button to send a message *****/
       Lay_PutContextualLink (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
@@ -2984,9 +2981,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
             /***** Set default role *****/
 	    if (UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod ||	// Creator of the course
-		(UsrDat->Role.InCrss & (1 << Rol_TCH)))			// Teacher in other courses
+		(UsrDat->Roles.InCrss & (1 << Rol_TCH)))			// Teacher in other courses
 	       DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
-	    else if ((UsrDat->Role.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
+	    else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
 	       DefaultRoleInForm = Rol_NET;	// Request sign up as a non-editing teacher
 	    else
 	       DefaultRoleInForm = Rol_STD;	// Request sign up as a student
@@ -3009,12 +3006,12 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
             if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	      {
                /***** Set default role *****/
-	       switch (UsrDat->Role.InCurrentCrs)
+	       switch (UsrDat->Roles.InCurrentCrs.Role)
 		 {
 		  case Rol_STD:	// Student in current course
 		  case Rol_NET:	// Non-editing teacher in current course
 		  case Rol_TCH:	// Teacher in current course
-		     DefaultRoleInForm = UsrDat->Role.InCurrentCrs;
+		     DefaultRoleInForm = UsrDat->Roles.InCurrentCrs.Role;
 		  default:	// User does not belong to current course
 		     /* If there is a request of this user, default role is the requested role */
 		     DefaultRoleInForm = Rol_GetRequestedRole (UsrDat->UsrCod);
@@ -3038,9 +3035,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 				 DefaultRoleInForm = Rol_TCH;
 				 break;
 			      default:
-				 if ((UsrDat->Role.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
+				 if ((UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
 				    DefaultRoleInForm = Rol_TCH;
-				 else if ((UsrDat->Role.InCrss & (1 << Rol_NET)))	// Non-editing teacher in other courses
+				 else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))	// Non-editing teacher in other courses
 				    DefaultRoleInForm = Rol_NET;
 				 else
 				    DefaultRoleInForm = Rol_STD;
@@ -3090,7 +3087,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    else				// No course selected
 	      {
                /***** Set default role *****/
-	       DefaultRoleInForm = (UsrDat->Role.InCrss & ((1 << Rol_STD) |
+	       DefaultRoleInForm = (UsrDat->Roles.InCrss & ((1 << Rol_STD) |
 		                                     (1 << Rol_NET) |
 						     (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
 								        Rol_GST;	// If user don't belong to any course
@@ -3212,7 +3209,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       TypeOfView == Rec_SHA_MY_RECORD_CHECK ? Txt_Sex :
 					               Txt_Role,
 	       TypeOfView == Rec_SHA_MY_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
-						       Txt_ROLES_SINGUL_Abc[UsrDat->Role.InCurrentCrs][UsrDat->Sex]);
+						       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
   }
 
 /*****************************************************************************/
@@ -3982,7 +3979,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check if I am a teacher *****/
-   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Role.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
 	                                      (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** If there is no country, institution, centre or department *****/

@@ -7558,7 +7558,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   switch (UsrDat->Role.InCurrentCrs)
+   switch (UsrDat->Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
 	 NextAction = ActSeeRecOneStd;
@@ -7716,7 +7716,7 @@ void Tst_ShowOneTestResult (void)
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",
-	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Role.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
+	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
 	       Gbl.Usrs.Other.UsrDat.Surname1);

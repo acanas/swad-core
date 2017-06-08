@@ -3431,7 +3431,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-   switch (UsrDat->Role.InCurrentCrs)
+   switch (UsrDat->Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
 	 NextAction = ActSeeRecOneStd;
