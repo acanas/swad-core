@@ -4688,7 +4688,7 @@ void Grp_GetParamWhichGrps (void)
 
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
   {
-   char Query[256];
+   char Query[512];
    static struct
      {
       long UsrCod;
@@ -4731,6 +4731,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
 
    /***** 8. Slow check: Get if user shares any group in this course with me from database *****/
    /* Check if user shares any group with me */
+   Cached.UsrCod = UsrDat->UsrCod;
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
 	          " WHERE UsrCod=%ld"
 	          " AND GrpCod IN"
@@ -4746,6 +4747,5 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
    Cached.UsrSharesAnyOfMyGrpsInCurrentCrs = DB_QueryCOUNT (Query,"can not check"
 								  " if a user shares any group"
 								  " in the current course with you") != 0;
-   Cached.UsrCod = UsrDat->UsrCod;
    return Cached.UsrSharesAnyOfMyGrpsInCurrentCrs;
   }

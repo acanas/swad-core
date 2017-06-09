@@ -3225,9 +3225,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
-	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                                    Gbl.CurrentCrs.Crs.CrsCod,
-	                                    false))
+	    if (Usr_CheckIfICanViewWrkTstAtt (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show a row with the data of the owner of the works *****/
 	       fprintf (Gbl.F.Out,"<tr>");
@@ -3246,7 +3244,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	       Brw_ShowFileBrowser ();
 
 	       fprintf (Gbl.F.Out,"</td>"
-		                  "</tr>");
+				  "</tr>");
 	      }
 	}
 

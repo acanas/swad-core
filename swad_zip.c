@@ -184,9 +184,7 @@ void ZIP_CreateZIPAsgWrk (void)
 
 
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
-	 if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-					 Gbl.CurrentCrs.Crs.CrsCod,
-					 false))
+	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	    ZIP_CreateDirCompressionUsr (&UsrDat);
      }
 

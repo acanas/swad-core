@@ -3223,12 +3223,11 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
      {
       UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get from the database the data of the student
-	{
-	 UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-	                                               Gbl.CurrentCrs.Crs.CrsCod,
-	                                               true);
-	 Att_WriteRowStdSeveralAttEvents (NumStd,&UsrDat);
-	}
+	 if (Usr_CheckIfICanViewWrkTstAtt (&UsrDat))
+	   {
+	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+	    Att_WriteRowStdSeveralAttEvents (NumStd,&UsrDat);
+	   }
      }
 
    /***** Last row with the total of students present in each event *****/
@@ -3437,12 +3436,11 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
      {
       UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
-	{
-	 UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-	                                               Gbl.CurrentCrs.Crs.CrsCod,
-	                                               true);
-	 Att_ListAttEventsForAStd (NumStd,&UsrDat);
-	}
+	 if (Usr_CheckIfICanViewWrkTstAtt (&UsrDat))
+	   {
+	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+	    Att_ListAttEventsForAStd (NumStd,&UsrDat);
+	   }
      }
 
    /***** End frame *****/

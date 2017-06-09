@@ -1131,7 +1131,7 @@ bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (Gbl.Record.UsrDat);
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
@@ -1765,7 +1765,8 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
   }
 
 /*****************************************************************************/
-/*************** Check if user belongs to the current course *****************/
+/***** Check if user belongs (no matter if he/she has accepted or not) *******/
+/***** to the current course                                           *******/
 /*****************************************************************************/
 
 bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
@@ -1795,13 +1796,59 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
 
    /***** 3. Fast check: If we know role of user in the current course *****/
    if (UsrDat->Roles.InCurrentCrs.UsrCod == UsrDat->UsrCod)
-      return UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
-	     UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
-	     UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+     {
+      Cached.UsrCod = UsrDat->UsrCod;
+      Cached.Belongs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
+	               UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
+	               UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+      return Cached.Belongs;
+     }
 
    /***** 4. Fast / slow check: Get if user belongs to current course *****/
-   return Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod,
-                                      false);
+   Cached.UsrCod = UsrDat->UsrCod;
+   Cached.Belongs = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+						Gbl.CurrentCrs.Crs.CrsCod,
+						false);
+   return Cached.Belongs;
+  }
+
+/*****************************************************************************/
+/***** Check if user belongs (no matter if he/she has accepted or not) *******/
+/***** to the current course                                           *******/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
+  {
+   static struct
+     {
+      long UsrCod;
+      bool Accepted;
+     } Cached =
+     {
+      -1L,
+      false
+     };
+
+   /***** 1. Fast check: trivial cases *****/
+   if (UsrDat->UsrCod <= 0 ||
+       Gbl.CurrentCrs.Crs.CrsCod <= 0)
+     {
+      Cached.UsrCod = -1L;
+      Cached.Accepted = false;
+      return Cached.Accepted;
+     }
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrDat->UsrCod == Cached.UsrCod)
+      return Cached.Accepted;
+
+   /***** 3. Fast / slow check: Get if user belongs to current course
+                                and has accepted *****/
+   Cached.UsrCod = UsrDat->UsrCod;
+   Cached.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+						 Gbl.CurrentCrs.Crs.CrsCod,
+						 true);
+   return Cached.Accepted;
   }
 
 /*****************************************************************************/

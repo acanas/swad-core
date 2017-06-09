@@ -258,6 +258,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
 
 bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
+bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat);

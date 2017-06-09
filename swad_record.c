@@ -1098,9 +1098,7 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
 static void Rec_ShowRecordOneStdCrs (void)
   {
    /***** Get if student has accepted enrolment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                                                Gbl.CurrentCrs.Crs.CrsCod,
-                                                                true);
+   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
@@ -1236,15 +1234,11 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
-         if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-                                         Gbl.CurrentCrs.Crs.CrsCod,
-                                         false))
+         if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
-            UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-                                                          Gbl.CurrentCrs.Crs.CrsCod,
-                                                          true);
+            UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Start container for this user */
 	    sprintf (RecordSectionId,"record_%u",NumUsr);
@@ -1326,9 +1320,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    sprintf (Width,"%upx",Rec_RECORD_WIDTH);
 
    /***** Get if teacher has accepted enrolment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                                                Gbl.CurrentCrs.Crs.CrsCod,
-                                                                true);
+   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1459,15 +1451,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
-         if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-                                         Gbl.CurrentCrs.Crs.CrsCod,
-                                         false))
+         if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
-            UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-                                                          Gbl.CurrentCrs.Crs.CrsCod,
-                                                          true);
+            UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Start container for this user */
 	    sprintf (RecordSectionId,"record_%u",NumUsr);
@@ -2168,9 +2156,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
    Usr_GetAllUsrDataFromUsrCod (UsrDat);
-   UsrDat->Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-                                                  Gbl.CurrentCrs.Crs.CrsCod,
-                                                  true);
+   UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -2332,7 +2318,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Rec_ShowPhoto (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
-   /***** Commands and full name *****/
+   /***** Full name *****/
    fprintf (Gbl.F.Out,"<tr>");
    Rec_ShowFullName (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");

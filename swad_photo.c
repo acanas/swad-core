@@ -390,9 +390,7 @@ void Pho_SendPhotoUsr (void)
      {
       if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
 	{
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                                                              Gbl.CurrentCrs.Crs.CrsCod,
-	                                                              true);
+	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
          if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
 	    /***** Form to send my photo *****/
 	    Pho_ReqMyPhotoWithContextLinks ();

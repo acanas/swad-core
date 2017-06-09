@@ -108,9 +108,7 @@ void Rol_SetMyRoles (void)
      {
       Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-         Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                                   Gbl.CurrentCrs.Crs.CrsCod,
-                                                                   true);
+         Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       else
          Gbl.Usrs.Me.UsrDat.Accepted = false;
      }

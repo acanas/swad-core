@@ -287,9 +287,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	 UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
 
 	 /* Get if user has accepted enrolment in current course */
-	 UsrDat->Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-	                                                Gbl.CurrentCrs.Crs.CrsCod,
-	                                                true);
+	 UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 	}
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 
