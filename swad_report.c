@@ -28,6 +28,7 @@
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -155,7 +156,7 @@ void Rep_ReqMyUsageReport (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+   Box_StartBox (NULL,Gbl.Title,NULL,
                         Hlp_STATS_Report,
                         false);	// Not closable
 
@@ -163,7 +164,7 @@ void Rep_ReqMyUsageReport (void)
    Req_TitleReport (NULL);	// NULL means do not write date
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -261,7 +262,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+   Box_StartBox (NULL,Gbl.Title,NULL,
                         Hlp_STATS_Report,
                         false);	// Not closable
 
@@ -286,7 +287,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
             Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

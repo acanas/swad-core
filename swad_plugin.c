@@ -34,6 +34,7 @@ TODO: Check if web service is called from an authorized IP.
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_cryptography.h"
@@ -91,7 +92,7 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Plugins,
+   Box_StartBoxTable (NULL,Txt_Plugins,
                              Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
                                                                       NULL,
                              NULL,
@@ -141,7 +142,7 @@ void Plg_ListPlugins (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
@@ -346,7 +347,7 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Plugins,NULL,
+   Box_StartBoxTable (NULL,Txt_Plugins,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -457,7 +458,7 @@ static void Plg_ListPluginsForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -843,7 +844,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Act_FormStart (ActNewPlg);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_plugin,NULL,
+   Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -926,7 +927,7 @@ static void Plg_PutFormToCreatePlugin (void)
             Cns_MAX_CHARS_IP,Plg->IP);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_plugin);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/
    Act_FormEnd ();

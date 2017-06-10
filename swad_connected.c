@@ -31,6 +31,7 @@
 #include <stdio.h>		// For fprintf
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -97,7 +98,7 @@ void Con_ShowConnectedUsrs (void)
    /* Current time */
    sprintf (Gbl.Title,"%s<div id=\"connected_current_time\"></div>",
 	    Txt_Connected_users);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
+   Box_StartBox (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
 			Hlp_USERS_Connected,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
@@ -116,7 +117,7 @@ void Con_ShowConnectedUsrs (void)
       Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -160,7 +161,7 @@ void Con_ShowLastClicks (void)
    extern const char *Txt_Last_clicks_in_real_time;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time,NULL,
+   Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
                         Hlp_USERS_Connected_last_clicks,
                         false);	// Not closable
 
@@ -171,7 +172,7 @@ void Con_ShowLastClicks (void)
    fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

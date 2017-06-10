@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 #include <time.h>		// For time ()
 
+#include "swad_box.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -241,7 +242,7 @@ bool Syl_CheckAndEditSyllabus (void)
       ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
       PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
-      Lay_StartRoundFrameTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			        PutIconToEdit ? Inf_PutIconToEditInfo :
 					        NULL,
 			        Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
@@ -268,7 +269,7 @@ bool Syl_CheckAndEditSyllabus (void)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
 
       return true;
      }

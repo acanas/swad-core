@@ -28,6 +28,7 @@
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -129,7 +130,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    /***** Contextual buttons *****/
    /* Start table */
-   Lay_StartRoundFrameTable (NULL,Txt_What_would_you_like_to_do,NULL,
+   Box_StartBoxTable (NULL,Txt_What_would_you_like_to_do,NULL,
                              NULL,
 			     true,	// Closable
                              2);
@@ -253,7 +254,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
      }
 
    /* End table */
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/

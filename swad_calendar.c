@@ -27,9 +27,10 @@
 
 #include <string.h>		// For string functions
 
-#include "swad_exam.h"
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_database.h"
+#include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
@@ -83,11 +84,11 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    extern const char *Hlp_PROFILE_Preferences_calendar;
    extern const char *Txt_Calendar;
 
-   Lay_StartRoundFrame (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
+   Box_StartBox (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
                         Hlp_PROFILE_Preferences_calendar,
                         false);	// Not closable
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO25x25B");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -314,7 +315,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,NULL,FunctionToDrawContextualIcons,
+   Box_StartBox (NULL,NULL,FunctionToDrawContextualIcons,
 	                PrintView ? NULL :
 	                            Hlp_Calendar,
                         false);	// Not closable
@@ -352,7 +353,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	    ParamsStr);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_degree.h"
@@ -208,12 +209,12 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    switch (NextAction)
      {
       case ActSeeDegTyp:
-	 Lay_StartRoundFrame (NULL,Txt_Types_of_degree,DT_PutIconsListDegTypes,
+	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsListDegTypes,
 			      Hlp_CENTRE_DegreeTypes,
                               false);	// Not closable
 	 break;
       case ActSeeUseGbl:
-	 Lay_StartRoundFrame (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
+	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
 		              Hlp_STATS_Figures_types_of_degree,
                               false);	// Not closable
 	 break;
@@ -246,7 +247,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -262,7 +263,7 @@ void DT_EditDegreeTypes (void)
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
+   Box_StartBox (NULL,Txt_Types_of_degree,
                         DT_PutIconToViewDegreeTypesWhenEditing,
                         Hlp_CENTRE_DegreeTypes_edit,
                         false);	// Not closable
@@ -275,7 +276,7 @@ void DT_EditDegreeTypes (void)
       DT_ListDegreeTypesForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
@@ -435,7 +436,7 @@ void DT_PutFormToCreateDegreeType (void)
    Act_FormStart (ActNewDegTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,NULL,
+   Box_StartBoxTable (NULL,Txt_New_type_of_degree,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -465,7 +466,7 @@ void DT_PutFormToCreateDegreeType (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
 
    /***** End form *****/
    Act_FormEnd ();

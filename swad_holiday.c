@@ -29,6 +29,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_holiday.h"
@@ -99,7 +100,7 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Table head *****/
-      Lay_StartRoundFrame (NULL,Txt_Holidays,
+      Box_StartBox (NULL,Txt_Holidays,
                            Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
                                                                    NULL,
                            Hlp_INSTITUTION_Holidays,
@@ -184,7 +185,7 @@ void Hld_SeeHolidays (void)
 	}
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays ();
@@ -500,7 +501,7 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Holidays,NULL,
+   Box_StartBoxTable (NULL,Txt_Holidays,NULL,
                              Hlp_INSTITUTION_Holidays_edit,
 			     false,	// Not closable
                              2);
@@ -609,7 +610,7 @@ static void Hld_ListHolidaysForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -960,7 +961,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Act_FormStart (ActNewHld);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_holiday,NULL,
+   Box_StartBoxTable (NULL,Txt_New_holiday,NULL,
                              Hlp_INSTITUTION_Holidays_edit,
 			     false,	// Not closable
                              2);
@@ -1051,7 +1052,7 @@ static void Hld_PutFormToCreateHoliday (void)
             Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name);
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_holiday);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_holiday);
 
    /***** End of form *****/
    Act_FormEnd ();

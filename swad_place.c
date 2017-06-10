@@ -29,6 +29,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -116,7 +117,7 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Lay_StartRoundFrame (NULL,Txt_Places,
+      Box_StartBox (NULL,Txt_Places,
                            ICanEdit ? Plc_PutIconToEditPlaces :
                         	      NULL,
                            Hlp_INSTITUTION_Places,
@@ -206,7 +207,7 @@ void Plc_SeePlaces (void)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
 
       /***** Free list of places *****/
       Plc_FreeListPlaces ();
@@ -248,7 +249,7 @@ void Plc_EditPlaces (void)
    Plc_GetListPlaces ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Places,Plc_PutIconToViewPlacesWhenEditing,
+   Box_StartBox (NULL,Txt_Places,Plc_PutIconToViewPlacesWhenEditing,
                         Hlp_INSTITUTION_Places_edit,
                         false);	// Not closable
 
@@ -260,7 +261,7 @@ void Plc_EditPlaces (void)
       Plc_ListPlacesForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of places *****/
    Plc_FreeListPlaces ();
@@ -740,7 +741,7 @@ static void Plc_PutFormToCreatePlace (void)
    Act_FormStart (ActNewPlc);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_place,NULL,
+   Box_StartBoxTable (NULL,Txt_New_place,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -780,7 +781,7 @@ static void Plc_PutFormToCreatePlace (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_place);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_place);
 
    /***** End formn *****/
    Act_FormEnd ();

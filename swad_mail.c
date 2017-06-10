@@ -32,6 +32,7 @@
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
 
 #include "swad_account.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_mail.h"
@@ -107,7 +108,7 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif ();
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
+   Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,
                              Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                       NULL,
                              Hlp_MESSAGES_Domains,
@@ -154,7 +155,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains ();
@@ -448,7 +449,7 @@ static void Mai_ListMailDomainsForEdition (void)
    unsigned NumMai;
    struct Mail *Mai;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
+   Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
                              Hlp_MESSAGES_Domains_edit,
 			     false,	// Not closable
                              2);
@@ -510,7 +511,7 @@ static void Mai_ListMailDomainsForEdition (void)
                Mai->NumUsrs);
      }
 
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -717,7 +718,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Act_FormStart (ActNewMai);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,NULL,
+   Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
                              Hlp_MESSAGES_Domains_edit,
 			     false,	// Not closable
                              2);
@@ -755,7 +756,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_email_domain);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_email_domain);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -888,7 +889,7 @@ void Mai_ListEmails (void)
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start of the frame used to list the emails *****/
-   Lay_StartRoundFrame (NULL,Txt_Students_who_have_accepted_and_who_have_email,
+   Box_StartBox (NULL,Txt_Students_who_have_accepted_and_who_have_email,
 			NULL,
 			Hlp_MESSAGES_Email,
                         false);	// Not closable
@@ -993,7 +994,7 @@ void Mai_ListEmails (void)
    Lay_EndSection ();
 
    /***** End of the frame used to list the emails *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STD);
@@ -1187,7 +1188,7 @@ void Mai_ShowFormOthEmail (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Email,NULL,
+         Box_StartBox (NULL,Txt_Email,NULL,
                               NULL,
                               false);	// Not closable
 
@@ -1202,7 +1203,7 @@ void Mai_ShowFormOthEmail (void)
 	 Lay_EndTable ();
 
          /***** End frame *****/
-         Lay_EndRoundFrame ();
+         Box_EndBox ();
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -1628,13 +1629,13 @@ void Mai_PutButtonToCheckEmailAddress (void)
    extern const char *Txt_Check;
 
    /***** Frame with button to check email address *****/
-   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL,
+   Box_StartBox (NULL,Txt_Email_unconfirmed,NULL,
                         Hlp_PROFILE_Account_email,
                         true);	// Closable
    Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address,
                            ActFrmMyAcc,NULL,NULL,NULL,
                            Lay_CONFIRM_BUTTON,Txt_Check);
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

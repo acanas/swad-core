@@ -30,6 +30,7 @@
 
 #include "swad_account.h"
 #include "swad_announcement.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
@@ -376,7 +377,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Enrolment,NULL,
+   Box_StartBox (NULL,Txt_Enrolment,NULL,
                         Hlp_USERS_SignUp_confirm_enrolment,
                         false);	// Not closable
 
@@ -423,7 +424,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Mark possible notification as seen *****/
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
@@ -705,7 +706,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Act_FormStart (NextAction);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Title,NULL,
+   Box_StartBox (NULL,Title,NULL,
 	                Hlp_USERS_Administration_administer_multiple_users,
                         false);	// Not closable
 
@@ -758,7 +759,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Pwd_AskForConfirmationOnDangerousAction ();
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Confirm);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Confirm);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -796,7 +797,7 @@ void Enr_AskRemoveOldUsrs (void)
    Act_FormStart (ActRemOldUsr);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL,
+   Box_StartBox (NULL,Txt_Eliminate_old_users,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -820,7 +821,7 @@ void Enr_AskRemoveOldUsrs (void)
    fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
+   Box_EndBoxWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1853,7 +1854,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,
+   Box_StartBox (NULL,Txt_Remove_all_students,NULL,
                         Hlp_USERS_Administration_remove_all_students,
                         false);	// Not closable
 
@@ -1881,7 +1882,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -2306,7 +2307,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Enrolment_requests,NULL,
+   Box_StartBox ("100%",Txt_Enrolment_requests,NULL,
                         Hlp_USERS_Requests,
                         false);	// Not closable
 
@@ -2954,7 +2955,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -3125,7 +3126,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    Act_Action_t NextAction;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Administer_one_user,NULL,
+   Box_StartBox (NULL,Txt_Administer_one_user,NULL,
                         Hlp_USERS_Administration_administer_one_user,
                         false);	// Not closable
 
@@ -3152,7 +3153,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    Enr_WriteFormToReqAnotherUsrID (NextAction);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

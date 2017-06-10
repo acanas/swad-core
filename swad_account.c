@@ -29,6 +29,7 @@
 
 #include "swad_account.h"
 #include "swad_announcement.h"
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
@@ -143,7 +144,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_Check;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Title,NULL,
+   Box_StartBox (NULL,Title,NULL,
                         Hlp_PROFILE_SignUp,
                         true);	// Closable
 
@@ -164,7 +165,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -214,7 +215,7 @@ void Acc_CheckIfEmptyAccountExists (void)
       if (NumUsrs)
 	{
 	 /***** Start frame and write message with number of accounts found *****/
-	 Lay_StartRoundFrameTable (NULL,
+	 Box_StartBoxTable (NULL,
 	                           (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					            Txt_Do_you_think_you_are_one_of_these_users,
 			           NULL,
@@ -247,7 +248,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Usr_UsrDataDestructor (&UsrDat);
 
 	 /***** End frame *****/
-	 Lay_EndRoundFrameTable ();
+	 Box_EndBoxTable ();
 	}
       else
 	{
@@ -346,7 +347,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrameTable (NULL,Txt_Create_account,NULL,
+   Box_StartBoxTable (NULL,Txt_Create_account,NULL,
                              Hlp_PROFILE_SignUp,
                              false,	// Not closable
                              2);
@@ -395,7 +396,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Pwd_PutFormToGetNewPasswordOnce ();
 
    /***** Send button and form end *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
    Act_FormEnd ();
   }
 
@@ -411,7 +412,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+   Box_StartBox (NULL,Gbl.Title,NULL,
                         Hlp_PROFILE_SignUp,
                         false);	// Not closable
 
@@ -421,7 +422,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -472,7 +473,7 @@ void Acc_ShowFormChangeMyAccount (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_User_account,NULL,
+   Box_StartBoxTable (NULL,Txt_User_account,NULL,
                              Hlp_PROFILE_Account,
 			     false,	// Not closable
                              2);
@@ -518,7 +519,7 @@ void Acc_ShowFormChangeMyAccount (void)
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,true);
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/

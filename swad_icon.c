@@ -28,6 +28,7 @@
 #include <stdio.h>	// For fprintf, etc.
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -76,7 +77,7 @@ void Ico_PutIconsToSelectIconSet (void)
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
 
-   Lay_StartRoundFrame (NULL,Txt_Icons,
+   Box_StartBox (NULL,Txt_Icons,
                         Ico_PutIconsIconSet,Hlp_PROFILE_Preferences_icons,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -101,7 +102,7 @@ void Ico_PutIconsToSelectIconSet (void)
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

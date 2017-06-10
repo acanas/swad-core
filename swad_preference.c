@@ -30,6 +30,7 @@
 #include <stdio.h>		// For fprintf, etc.
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -74,7 +75,7 @@ void Pre_EditPrefs (void)
    extern const char *Txt_Design;
 
    /***** Internationalization: language, first day of week, date format *****/
-   Lay_StartRoundFrame (NULL,Txt_Internationalization,NULL,
+   Box_StartBox (NULL,Txt_Internationalization,NULL,
                         Hlp_PROFILE_Preferences_internationalization,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
@@ -86,10 +87,10 @@ void Pre_EditPrefs (void)
                       "<div class=\"FRAME_INLINE\">");
    Dat_PutBoxToSelectDateFormat ();		// 3. Date format
    fprintf (Gbl.F.Out,"</div>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Design: icon set, menu, theme, side columns *****/
-   Lay_StartRoundFrame (NULL,Txt_Design,NULL,
+   Box_StartBox (NULL,Txt_Design,NULL,
                         Hlp_PROFILE_Preferences_design,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
@@ -104,7 +105,7 @@ void Pre_EditPrefs (void)
                       "<div class=\"FRAME_INLINE\">");
    Pre_PutIconsToSelectSideCols ();		// 7. Side columns
    fprintf (Gbl.F.Out,"</div>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -238,7 +239,7 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrame (NULL,Txt_Columns,Pre_PutIconsSideColumns,
+   Box_StartBox (NULL,Txt_Columns,Pre_PutIconsSideColumns,
                         Hlp_PROFILE_Preferences_columns,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -261,7 +262,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

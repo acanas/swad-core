@@ -35,6 +35,7 @@
 #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_exam.h"
@@ -646,7 +647,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,
+   Box_StartBox (NULL,
                         (Gbl.ExamAnns.HighlightExaCod > 0 ||
 			 Gbl.ExamAnns.HighlightDate[0]) ? Txt_All_announcements_of_exams :
 								   Txt_Announcements_of_exams,
@@ -698,7 +699,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1070,7 +1071,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("625px",NULL,
+   Box_StartBox ("625px",NULL,
                         TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
                                                                       NULL,
                         TypeViewExamAnnouncement == Exa_FORM_VIEW ? ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Hlp_ASSESSMENT_Announcements_edit_announcement :
@@ -1525,11 +1526,11 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 
    /***** End frame *****/
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Lay_EndRoundFrameWithButton ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Lay_CONFIRM_BUTTON :
+      Box_EndBoxWithButton ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Lay_CONFIRM_BUTTON :
 	                                                                       Lay_CREATE_BUTTON,
 	                           Txt_Publish_announcement_OF_EXAM);
    else
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
 
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       QR_ExamAnnnouncement ();

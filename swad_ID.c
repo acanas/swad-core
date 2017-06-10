@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -548,7 +549,7 @@ void ID_ShowFormOthIDs (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ID,NULL,
+         Box_StartBox (NULL,Txt_ID,NULL,
                               NULL,
                               false);	// Not closable
 
@@ -563,7 +564,7 @@ void ID_ShowFormOthIDs (void)
          Lay_EndTable ();
 
          /***** End frame *****/
-         Lay_EndRoundFrame ();
+         Box_EndBox ();
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

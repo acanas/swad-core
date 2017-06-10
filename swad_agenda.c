@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_agenda.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -146,7 +147,7 @@ void Agd_ShowMyAgenda (void)
    Agd_GetParams (Agd_MY_AGENDA);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_My_agenda,
+   Box_StartBox ("100%",Txt_My_agenda,
 			Agd_PutIconsMyFullAgenda,
 			Hlp_PROFILE_Agenda,
                         false);	// Not closable
@@ -163,7 +164,7 @@ void Agd_ShowMyAgenda (void)
    Agd_ShowEvents (Agd_MY_AGENDA);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -366,7 +367,7 @@ void Agd_ShowUsrAgenda (void)
 	 /***** Start frame *****/
 	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-	 Lay_StartRoundFrame ("100%",Gbl.Title,
+	 Box_StartBox ("100%",Gbl.Title,
 			      ItsMe ? Agd_PutIconsMyPublicAgenda :
 				      Agd_PutIconsOtherPublicAgenda,
 			      Hlp_PROFILE_Agenda_public_agenda,
@@ -379,7 +380,7 @@ void Agd_ShowUsrAgenda (void)
 	 Agd_ShowEvents (Agd_ANOTHER_AGENDA);
 
 	 /***** End frame *****/
-	 Lay_EndRoundFrame ();
+	 Box_EndBox ();
 	}
 
    if (Error)
@@ -410,7 +411,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    /***** Start frame *****/
 	    sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	    ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-	    Lay_StartRoundFrame ("100%",Gbl.Title,
+	    Box_StartBox ("100%",Gbl.Title,
 				 ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 					 Agd_PutIconsOtherPublicAgenda,
 				 Hlp_PROFILE_Agenda_public_agenda,
@@ -423,7 +424,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Agd_ShowEvents (Agd_ANOTHER_AGENDA);
 
 	    /***** End frame *****/
-	    Lay_EndRoundFrame ();
+	    Box_EndBox ();
            }
 	 else
 	    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -533,13 +534,13 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
-	    Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
+	    Box_StartBoxTableShadow (NULL,Txt_Today,
 					    NULL,
 					    Hlp_PROFILE_Agenda,
 					    2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
-	    Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
+	    Box_StartBoxTableShadow (NULL,Txt_Today,
 					    NULL,
 					    Hlp_PROFILE_Agenda_public_agenda,
 					    2);
@@ -558,7 +559,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 	 Agd_ShowOneEvent (AgendaType,Gbl.Agenda.LstAgdCods[NumEvent]);
 
       /***** End table and frame *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free list of events *****/
@@ -1537,7 +1538,7 @@ void Agd_RequestCreatOrEditEvent (void)
    Agd_PutCurrentParamsMyAgenda ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,
+   Box_StartBoxTable (NULL,
                              ItsANewEvent ? Txt_New_event :
                                             Txt_Edit_event,
                              NULL,
@@ -1598,9 +1599,9 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** New event *****/
    if (ItsANewEvent)
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
+      Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
    else
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
    /***** Show current events, if any *****/
@@ -1945,7 +1946,7 @@ void Agd_PrintAgdQRCode (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+   Box_StartBox (NULL,Gbl.Title,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -1953,5 +1954,5 @@ void Agd_PrintAgdQRCode (void)
    QR_PrintQRCode ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }

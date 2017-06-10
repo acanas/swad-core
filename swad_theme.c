@@ -28,6 +28,7 @@
 #include <stdio.h>	// For fprintf, etc.
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -239,7 +240,7 @@ void The_PutIconsToSelectTheme (void)
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
+   Box_StartBox (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
                         Hlp_PROFILE_Preferences_theme,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -264,7 +265,7 @@ void The_PutIconsToSelectTheme (void)
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

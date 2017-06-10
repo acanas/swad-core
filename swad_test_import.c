@@ -30,6 +30,7 @@
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
@@ -135,7 +136,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_XML_file;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,
+   Box_StartBox (NULL,Txt_Import_questions,NULL,
                         Hlp_ASSESSMENT_Tests,
                         false);	// Not closable
 
@@ -156,7 +157,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -508,7 +509,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    XML_GetTree (XMLBuffer,&RootElem);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Imported_questions,NULL,
+   Box_StartBox (NULL,Txt_Imported_questions,NULL,
                         Hlp_ASSESSMENT_Tests,
                         false);	// Not closable
 
@@ -676,7 +677,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       Ale_ShowAlert (Ale_ERROR,"Root element &lt;test&gt; not found.");
 
    /***** End table *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free XML tree *****/
    XML_FreeTree (RootElem);

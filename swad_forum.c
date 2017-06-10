@@ -32,6 +32,7 @@
 #include <time.h>		// For time_t
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_forum.h"
@@ -1008,7 +1009,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
 
    /***** Start frame *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
-   Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewPost,
+   Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
                         Hlp_SOCIAL_Forums_posts,
                         false);	// Not closable
 
@@ -1136,7 +1137,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    Lay_EndSection ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
    Lay_EndSection ();
   }
 
@@ -1605,7 +1606,7 @@ static void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,
+   Box_StartBox (NULL,Txt_Forums,For_PutIconsForums,
                         Hlp_SOCIAL_Forums,
                         false);	// Not closable
 
@@ -1759,7 +1760,7 @@ static void For_ShowForumList (void)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -2572,7 +2573,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 
    /***** Start frame for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
-   Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewThread,
+   Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
 			Hlp_SOCIAL_Forums_threads,
                         false);	// Not closable
 
@@ -2653,7 +2654,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    Lay_EndSection ();
 
    /***** End frame with threads of this forum ****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
    Lay_EndSection ();
   }
 
@@ -3857,7 +3858,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    extern const char *Txt_Send;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,
+   Box_StartBox (NULL,
                         IsReply ? Txt_New_post :
         	                  Txt_New_thread,
         	        NULL,
@@ -3929,7 +3930,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
@@ -94,11 +95,6 @@ static void Lay_WriteTitleAction (void);
 
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
-
-static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
-                                         void (*FunctionToDrawContextualIcons) (void),
-                                         const char *HelpLink,bool Closable,
-                                         const char *ClassFrame);
 
 static void Lay_WriteAboutZone (void);
 static void Lay_WriteFootFromHTMLFile (void);
@@ -1438,161 +1434,8 @@ void Lay_PutRemoveButtonInline (const char *TxtButton)
   }
 
 /*****************************************************************************/
-/****************** Start and end a table with rounded frame *****************/
+/******************************* Start/end table *****************************/
 /*****************************************************************************/
-// CellPadding must be 0, 1, 2, 4 or 8
-
-void Lay_StartRoundFrameTable (const char *Width,const char *Title,
-                               void (*FunctionToDrawContextualIcons) (void),
-                               const char *HelpLink,bool Closable,
-                               unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
-  {
-   Lay_StartRoundFrame (Width,Title,FunctionToDrawContextualIcons,
-                        HelpLink,
-                        Closable);
-   Lay_StartTableWide (CellPadding);
-  }
-
-void Lay_StartRoundFrameTableShadow (const char *Width,const char *Title,
-                                     void (*FunctionToDrawContextualIcons) (void),
-                                     const char *HelpLink,
-                                     unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
-  {
-   Lay_StartRoundFrameShadow (Width,Title,
-                              FunctionToDrawContextualIcons,
-                              HelpLink);
-   Lay_StartTableWide (CellPadding);
-  }
-
-void Lay_StartRoundFrame (const char *Width,const char *Title,
-                          void (*FunctionToDrawContextualIcons) (void),
-                          const char *HelpLink,bool Closable)
-  {
-   Lay_StartRoundFrameInternal (Width,Title,
-			        FunctionToDrawContextualIcons,
-			        HelpLink,
-			        Closable,
-			        "FRAME");
-  }
-
-void Lay_StartRoundFrameShadow (const char *Width,const char *Title,
-                                void (*FunctionToDrawContextualIcons) (void),
-                                const char *HelpLink)
-  {
-   Lay_StartRoundFrameInternal (Width,Title,
-                                FunctionToDrawContextualIcons,
-			        HelpLink,
-			        false,	// Not closable
-			        "FRAME_SHADOW");
-  }
-
-static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
-                                         void (*FunctionToDrawContextualIcons) (void),
-                                         const char *HelpLink,bool Closable,
-                                         const char *ClassFrame)
-  {
-   extern const char *Txt_Help;
-   extern const char *Txt_Close;
-   char IdFrame[Act_MAX_BYTES_ID];
-
-   /***** Start frame container *****/
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");
-   if (Closable)
-     {
-      /* Create unique id for alert */
-      Act_SetUniqueId (IdFrame);
-      fprintf (Gbl.F.Out," id=\"%s\"",IdFrame);
-     }
-   fprintf (Gbl.F.Out,">");
-
-   /***** Start frame *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\"",ClassFrame);
-   if (Width)
-       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
-   fprintf (Gbl.F.Out,">");
-
-   /***** Row for left and right icons *****/
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
-
-   /* Contextual icons at left */
-   if (FunctionToDrawContextualIcons)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_LEFT\">");
-      FunctionToDrawContextualIcons ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
-   /* Icons at right: help and close */
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_RIGHT\">");
-
-   if (HelpLink)	// Link to help
-      fprintf (Gbl.F.Out,"<a href=\"%s%s\" target=\"_blank\">"
-                         "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
-	                 "<img src=\"%s/help64x64.png\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />"
-                         "</div>"
-                         "</a>",
-	       Hlp_WIKI,HelpLink,
-               Gbl.Prefs.IconsURL,
-               Txt_Help,Txt_Help);
-
-   if (Closable)	// Icon to close the frame
-      fprintf (Gbl.F.Out,"<a href=\"\""
-			 " onclick=\"toggleDisplay('%s');return false;\" />"
-                         "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
-			 "<img src=\"%s/close64x64.png\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
-                         "</div>"
-			 "</a>",
-	       IdFrame,
-	       Gbl.Prefs.IconsURL,
-	       Txt_Close,Txt_Close);
-
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** End row for left and right icons *****/
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Frame title *****/
-   if (Title)
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
-	                 "%s"
-	                 "</div>",
-	       Gbl.Layout.FrameNested ? "FRAME_TITLE_SMALL" :
-		                        "FRAME_TITLE_BIG",
-	       Title);
-
-   Gbl.Layout.FrameNested++;
-  }
-
-void Lay_EndRoundFrameTable (void)
-  {
-   Lay_EndTable ();
-   Lay_EndRoundFrame ();
-  }
-
-void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton)
-  {
-   Lay_EndTable ();
-   Lay_EndRoundFrameWithButton (Button,TxtButton);
-  }
-
-void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton)
-  {
-   Lay_PutButton (Button,TxtButton);
-   Lay_EndRoundFrame ();
-  }
-
-void Lay_EndRoundFrame (void)
-  {
-   Gbl.Layout.FrameNested--;
-
-   /***** End frame and frame container *****/
-   fprintf (Gbl.F.Out,"</div>"
-		      "</div>");
-  }
 
 void Lay_StartTable (unsigned CellPadding)
   {
@@ -1975,7 +1818,7 @@ void Lay_AdvertisementMobile (void)
       fprintf (Gbl.F.Out,"<div style=\"margin-top:25px;\">");
 
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,NULL,NULL,
+      Box_StartBoxTable (NULL,NULL,NULL,
                                 NULL,
 			        false,	// Not closable
                                 8);
@@ -1997,7 +1840,7 @@ void Lay_AdvertisementMobile (void)
                Txt_Stay_connected_with_SWADroid);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
 
       fprintf (Gbl.F.Out,"</div>");
      }

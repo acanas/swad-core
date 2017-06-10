@@ -30,6 +30,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
 #include "swad_global.h"
@@ -251,7 +252,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Act_FormStart (ActSndNewPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,
+   Box_StartBox (NULL,Txt_Forgotten_password,NULL,
                         Hlp_PROFILE_Password,
                         false);	// Not closable
 
@@ -268,7 +269,7 @@ void Pwd_ShowFormSendNewPwd (void)
             Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -697,7 +698,7 @@ void Pwd_ShowFormChgPwd (void)
    Act_FormStart (ActChgPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Password,NULL,
+   Box_StartBoxTable (NULL,Txt_Password,NULL,
                              Hlp_PROFILE_Password,
 			     false,	// Not closable
                              2);
@@ -732,7 +733,7 @@ void Pwd_ShowFormChgPwd (void)
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and end form *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,
+   Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,
                                      IHaveAPasswordInDB ? Txt_Change_password :
 	                                                  Txt_Set_password);
 
@@ -826,7 +827,7 @@ void Pwd_ShowFormOthPwd (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Password,NULL,
+         Box_StartBox (NULL,Txt_Password,NULL,
                               NULL,
                               false);	// Not closable
 
@@ -862,7 +863,7 @@ void Pwd_ShowFormOthPwd (void)
 	 Act_FormEnd ();
 
          /***** End frame *****/
-         Lay_EndRoundFrame ();
+         Box_EndBox ();
 	}
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

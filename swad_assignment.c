@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_assignment.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -135,7 +136,7 @@ static void Asg_ShowAllAssignments (void)
                                      &Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
+   Box_StartBox ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
                         Hlp_ASSESSMENT_Assignments,
                         false);	// Not closable
 
@@ -170,7 +171,7 @@ static void Asg_ShowAllAssignments (void)
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1171,7 +1172,7 @@ void Asg_RequestCreatOrEditAsg (void)
    Asg_PutParams ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,
+   Box_StartBoxTable (NULL,
                              ItsANewAssignment ? Txt_New_assignment :
                                                  Txt_Edit_assignment,
                              NULL,
@@ -1234,9 +1235,9 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** New assignment *****/
    if (ItsANewAssignment)
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_assignment);
+      Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_assignment);
    else
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
    /***** Show current assignments, if any *****/
@@ -1268,7 +1269,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
-      Lay_StartRoundFrameTable ("100%",NULL,NULL,
+      Box_StartBoxTable ("100%",NULL,NULL,
                                 Hlp_USERS_Groups,
 			        false,	// Not closable
                                 0);
@@ -1295,7 +1296,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AsgCod,Grp_ASSIGNMENT);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }

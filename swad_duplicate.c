@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_account.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
@@ -139,7 +140,7 @@ void Dup_ListDuplicateUsrs (void)
    unsigned NumInformants;
 
    /***** Start frame with list of possible duplicate users *****/
-   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL,
+   Box_StartBox (NULL,Txt_Possibly_duplicate_users,NULL,
                         Hlp_USERS_Duplicates_possibly_duplicate_users,
                         false);	// Not closable
 
@@ -229,7 +230,7 @@ void Dup_ListDuplicateUsrs (void)
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -259,7 +260,7 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsr;
 
    /***** Start frame with list of possible duplicate users *****/
-   Lay_StartRoundFrame (NULL,Txt_Similar_users,NULL,
+   Box_StartBox (NULL,Txt_Similar_users,NULL,
                         Hlp_USERS_Duplicates_similar_users,
                         false);	// Not closable
 
@@ -371,7 +372,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

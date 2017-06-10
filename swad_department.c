@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_department.h"
@@ -100,7 +101,7 @@ void Dpt_SeeDepts (void)
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Departments,
+      Box_StartBoxTable (NULL,Txt_Departments,
                                 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
                         	                                         NULL,
                                 Hlp_INSTITUTION_Departments,
@@ -187,7 +188,7 @@ void Dpt_SeeDepts (void)
 	       NumTchsInsWithDpt);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
 
       /***** Free list of departments *****/
       Dpt_FreeListDepartments ();
@@ -486,7 +487,7 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Instit Ins;
    unsigned NumIns;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Departments,NULL,
+   Box_StartBoxTable (NULL,Txt_Departments,NULL,
                              Hlp_INSTITUTION_Departments_edit,
 			     false,	// Not closable
                              2);
@@ -592,7 +593,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                Dpt->NumTchs);
      }
 
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -890,7 +891,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Act_FormStart (ActNewDpt);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_department,NULL,
+   Box_StartBoxTable (NULL,Txt_New_department,NULL,
                              Hlp_INSTITUTION_Departments_edit,
 			     false,	// Not closable
                              2);
@@ -963,7 +964,7 @@ static void Dpt_PutFormToCreateDepartment (void)
             Cns_MAX_CHARS_WWW,Dpt->WWW);
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_department);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_department);
 
    /***** End of form *****/
    Act_FormEnd ();

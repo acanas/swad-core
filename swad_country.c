@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_country.h"
 #include "swad_database.h"
@@ -136,7 +137,7 @@ void Cty_SeeCtyWithPendingInss (void)
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Countries_with_pending_institutions,
+      Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,
                                 NULL,Hlp_SYSTEM_Hierarchy_pending,
 			        false,	// Not closable
                                 2);
@@ -187,7 +188,7 @@ void Cty_SeeCtyWithPendingInss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
@@ -241,7 +242,7 @@ static void Cty_Configuration (bool PrintView)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,NULL,
+      Box_StartBox (NULL,NULL,
                            PrintView ? NULL :
 	                               Cty_PutIconToPrint,
 	                   PrintView ? NULL :
@@ -442,7 +443,7 @@ static void Cty_Configuration (bool PrintView)
       Lay_EndTable ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -511,7 +512,7 @@ void Cty_ListCountries2 (void)
    unsigned NumCty;
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
+   Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
                              Hlp_SYSTEM_Countries,
 			     false,	// Not closable
                              2);
@@ -599,7 +600,7 @@ void Cty_ListCountries2 (void)
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
@@ -946,7 +947,7 @@ void Cty_EditCountries (void)
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconToViewCountries,
+   Box_StartBox (NULL,Txt_Countries,Cty_PutIconToViewCountries,
                         Hlp_SYSTEM_Countries,
                         false);	// Not closable
 
@@ -958,7 +959,7 @@ void Cty_EditCountries (void)
       Cty_ListCountriesForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
@@ -1933,7 +1934,7 @@ static void Cty_PutFormToCreateCountry (void)
    Act_FormStart (ActNewCty);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,
+   Box_StartBoxTable (NULL,Txt_New_country,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -2016,7 +2017,7 @@ static void Cty_PutFormToCreateCountry (void)
      }
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_country);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_country);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2363,7 +2364,7 @@ unsigned Cty_ListCtysFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumCtys,NumCtys == 1 ? Txt_country :
 				      Txt_countries);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -2388,7 +2389,7 @@ unsigned Cty_ListCtysFound (const char *Query)
 	}
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/

@@ -27,6 +27,7 @@
 
 #include <stdio.h>	// For fprintf, etc.
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_layout.h"
@@ -398,7 +399,7 @@ void Mnu_PutIconsToSelectMenu (void)
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
 
-   Lay_StartRoundFrame (NULL,Txt_Menu,Mnu_PutIconsMenu,
+   Box_StartBox (NULL,Txt_Menu,Mnu_PutIconsMenu,
                         Hlp_PROFILE_Preferences_menu,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -421,7 +422,7 @@ void Mnu_PutIconsToSelectMenu (void)
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

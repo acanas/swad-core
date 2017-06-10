@@ -34,6 +34,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
@@ -324,7 +325,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    Act_Action_t NextAction;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Photo,
+   Box_StartBox (NULL,Txt_Photo,
                         ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
                                 Pho_PutIconToRequestRemoveOtherUsrPhoto,
                         Hlp_PROFILE_Photo,
@@ -375,7 +376,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1691,7 +1692,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Pho_PutLinkToCalculateDegreeStats ();
 
 	 /***** Start frame *****/
-	 Lay_StartRoundFrame (NULL,Txt_Degrees,
+	 Box_StartBox (NULL,Txt_Degrees,
 			      Pho_PutIconToPrintDegreeStats,
 			      Hlp_STATS_Degrees,
                               false);	// Not closable
@@ -1710,7 +1711,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 break;
       case Pho_DEGREES_PRINT:
 	 /***** Start frame *****/
-	 Lay_StartRoundFrame (NULL,Txt_Degrees,NULL,
+	 Box_StartBox (NULL,Txt_Degrees,NULL,
 	                      NULL,
                               false);	// Not closable
 	 break;
@@ -1735,7 +1736,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

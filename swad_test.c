@@ -37,6 +37,7 @@
 #include <sys/types.h>		// For mkdir
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -315,7 +316,7 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Take_a_test,Tst_PutIconsTests,
+   Box_StartBox (NULL,Txt_Take_a_test,Tst_PutIconsTests,
                         Hlp_ASSESSMENT_Tests,
                         false);	// Not closable
 
@@ -374,7 +375,7 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -434,7 +435,7 @@ void Tst_ShowNewTest (void)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
 	    /***** Start frame *****/
-	    Lay_StartRoundFrame (NULL,Txt_Test,NULL,
+	    Box_StartBox (NULL,Txt_Test,NULL,
 	                         Hlp_ASSESSMENT_Tests,
                                  false);	// Not closable
 	    Lay_WriteHeaderClassPhoto (false,false,
@@ -473,7 +474,7 @@ void Tst_ShowNewTest (void)
             Act_FormEnd ();
 
             /***** End frame *****/
-	    Lay_EndRoundFrame ();
+	    Box_EndBox ();
 
             /***** Set test status *****/
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
@@ -534,7 +535,7 @@ void Tst_AssessTest (void)
 	 TstCod = Tst_CreateTestResultInDB ();
 
 	 /***** Start frame *****/
-	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,
+	 Box_StartBox (NULL,Txt_Test_result,NULL,
 	                      Hlp_ASSESSMENT_Tests,
                               false);	// Not closable
 	 Lay_WriteHeaderClassPhoto (false,false,
@@ -560,7 +561,7 @@ void Tst_AssessTest (void)
 	    Tst_ShowTstTotalMark (TotalScore);
 
 	 /***** End frame *****/
-	 Lay_EndRoundFrame ();
+	 Box_EndBox ();
 
 	 /***** Store test result in database *****/
 	 Tst_StoreScoreOfTestResultInDB (TstCod,
@@ -1279,7 +1280,7 @@ void Tst_ShowFormAskEditTsts (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
+   Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
                         Hlp_ASSESSMENT_Tests,
                         false);	// Not closable
 
@@ -1316,7 +1317,7 @@ void Tst_ShowFormAskEditTsts (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -1736,7 +1737,7 @@ static void Tst_ShowFormEditTags (void)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Tags,NULL,
+      Box_StartBoxTable (NULL,Txt_Tags,NULL,
                                 Hlp_ASSESSMENT_Tests,
 			        false,	// Not closable
                                 2);
@@ -1772,7 +1773,7 @@ static void Tst_ShowFormEditTags (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
@@ -1851,7 +1852,7 @@ static void Tst_ShowFormConfigTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsTests,
+   Box_StartBox (NULL,Txt_Configure_tests,Tst_PutIconsTests,
                         Hlp_ASSESSMENT_Tests,
                         false);	// Not closable
 
@@ -1953,7 +1954,7 @@ static void Tst_ShowFormConfigTst (void)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -2732,7 +2733,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsTests,
+   Box_StartBox (NULL,Txt_Questions,Tst_PutIconsTests,
                         Hlp_ASSESSMENT_Tests,
                         false);	// Not closable
 
@@ -2988,7 +2989,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    Tst_PutButtonToAddQuestion ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -4524,12 +4525,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemoveOneQst,
+      Box_StartBox (NULL,Title,Tst_PutIconToRemoveOneQst,
                            Hlp_ASSESSMENT_Tests,
                            false);	// Not closable
      }
    else
-      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,
+      Box_StartBox (NULL,Txt_New_question,NULL,
                            Hlp_ASSESSMENT_Tests,
                            false);	// Not closable
 
@@ -4880,7 +4881,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -6990,7 +6991,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Test_results,NULL,
+   Box_StartBox (NULL,Txt_Test_results,NULL,
                         Hlp_ASSESSMENT_Tests_test_results,
                         false);	// Not closable
 
@@ -7048,7 +7049,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    Lay_EndSection ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
@@ -7076,14 +7077,14 @@ void Tst_SelDatesToSeeMyTestResults (void)
    Act_FormStart (ActSeeMyTstRes);
 
    /***** Starting and ending dates in the search *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,
+   Box_StartBoxTable (NULL,Txt_Test_results,NULL,
                              Hlp_ASSESSMENT_Tests_test_results,
 			     false,	// Not closable
                              2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_test_results);
+   Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_test_results);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -7151,7 +7152,7 @@ void Tst_ShowUsrsTestResults (void)
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,
+      Box_StartBoxTable (NULL,Txt_Test_results,NULL,
                                 Hlp_ASSESSMENT_Tests_test_results,
 			        false,	// Not closable
                                 2);
@@ -7171,7 +7172,7 @@ void Tst_ShowUsrsTestResults (void)
 	}
 
       /***** End of the table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else	// If no users are selected...
      {
@@ -7246,7 +7247,7 @@ void Tst_ShowMyTestResults (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Header of the table with the list of users *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,
+   Box_StartBoxTable (NULL,Txt_Test_results,NULL,
                              Hlp_ASSESSMENT_Tests_test_results,
 			     false,	// Not closable
                              2);
@@ -7257,7 +7258,7 @@ void Tst_ShowMyTestResults (void)
    Tst_ShowTestResults (&Gbl.Usrs.Me.UsrDat);
 
    /***** End of the table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -7714,7 +7715,7 @@ void Tst_ShowOneTestResult (void)
       Tst_GetTestResultQuestionsFromDB (TstCod);
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,
+      Box_StartBox (NULL,Txt_Test_result,NULL,
                            Hlp_ASSESSMENT_Tests_test_results,
                            false);	// Not closable
       Lay_WriteHeaderClassPhoto (false,false,
@@ -7823,7 +7824,7 @@ void Tst_ShowOneTestResult (void)
       Lay_EndTable ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
    else	// I am not allowed to view this test result
       Lay_ShowErrorAndExit ("You can not view this test result.");

@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 #include <sys/types.h>		// For time_t
 
+#include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_exam.h"
@@ -921,7 +922,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
+   Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
                         Hlp_SOCIAL_Timeline,
                         false);	// Not closable
 
@@ -986,7 +987,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1275,7 +1276,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    /***** Start frame ****/
    if (ShowNoteAlone)
      {
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL,NULL,
+      Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
                            NULL,
                            true);	// Closable
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -1525,7 +1526,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    if (ShowNoteAlone)
      {
       fprintf (Gbl.F.Out,"</ul>");
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -2531,7 +2532,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 
    if (ShowCommentAlone)
      {
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL,NULL,
+      Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
                            NULL,
                            false);	// Not closable
 
@@ -2619,7 +2620,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
      {
       fprintf (Gbl.F.Out,"</ul>"
                          "</div>");	// SOCIAL_NOTE_RIGHT_CONTAINER
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 

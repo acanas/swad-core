@@ -29,6 +29,7 @@
 #include <stdio.h>		// For sprintf
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_follow.h"
 #include "swad_global.h"
@@ -131,7 +132,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
                                           &mysql_res)))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrameTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
+      Box_StartBoxTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
                                 Hlp_SOCIAL_Profiles_who_to_follow,
 			        false,	// Not closable
                                 2);
@@ -164,7 +165,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
@@ -687,7 +688,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowingUsrDat);
 
 	 /***** Start listing *****/
-	 Lay_StartRoundFrameTable ("560px",Txt_Following,NULL,
+	 Box_StartBoxTable ("560px",Txt_Following,NULL,
 	                           NULL,
 			           false,	// Not closable
 	                           2);
@@ -713,7 +714,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	   }
 
 	 /***** End listing *****/
-	 Lay_EndRoundFrameTable ();
+	 Box_EndBoxTable ();
 
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&FollowingUsrDat);
@@ -773,7 +774,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
 
 	 /***** Start listing *****/
-	 Lay_StartRoundFrameTable ("560px",Txt_Followers,NULL,
+	 Box_StartBoxTable ("560px",Txt_Followers,NULL,
 	                           NULL,
 			           false,	// Not closable
 	                           2);
@@ -799,7 +800,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	   }
 
 	 /***** End listing *****/
-	 Lay_EndRoundFrameTable ();
+	 Box_EndBoxTable ();
 
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&FollowerUsrDat);

@@ -27,6 +27,7 @@
 
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
@@ -299,7 +300,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Webs_social_networks,
+   Box_StartBoxTable (NULL,Txt_Webs_social_networks,
                              Net_PutIconsWebsSocialNetworks,
                              Hlp_PROFILE_Webs,
 			     false,	// Not closable
@@ -363,7 +364,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -536,7 +537,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
                                         "can not get number of users with webs / social networks");
 
    /***** Number of users *****/
-   Lay_StartRoundFrameTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,
+   Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,
                              Hlp_STATS_Figures_webs_social_networks,
 			     false,	// Not closable
                              2);
@@ -603,7 +604,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

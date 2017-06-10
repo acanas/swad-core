@@ -31,6 +31,7 @@
 #include <string.h>
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
@@ -182,12 +183,12 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
      {
-      Lay_StartRoundFrameTable (NULL,Txt_Record_fields,NULL,
+      Box_StartBoxTable (NULL,Txt_Record_fields,NULL,
                                 Hlp_USERS_Students_course_record_card,
 			        false,	// Not closable
                                 2);
       Rec_ListFieldsRecordsForEdition ();
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else	// No fields of records found for current course in the database
      {
@@ -358,7 +359,7 @@ void Rec_ShowFormCreateRecordField (void)
    Act_FormStart (ActNewFie);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_record_field,NULL,
+   Box_StartBoxTable (NULL,Txt_New_record_field,NULL,
                              Hlp_USERS_Students_course_record_card,
 			     false,	// Not closable
                              2);
@@ -407,7 +408,7 @@ void Rec_ShowFormCreateRecordField (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_record_field);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1361,11 +1362,11 @@ static void Rec_ShowRecordOneTchCrs (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"REC_TT\">");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-      Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
+      Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
                            Hlp_USERS_Teachers_timetable,
                            false);	// Not closable
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1486,12 +1487,12 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
               {
 	       fprintf (Gbl.F.Out,"<div class=\"REC_TT\">");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+	       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
 	                            NULL,
 	                            Hlp_USERS_Teachers_timetable,
                                     false);	// Not closable
 	       TT_ShowTimeTable (UsrDat.UsrCod);
-	       Lay_EndRoundFrame ();
+	       Box_EndBox ();
                fprintf (Gbl.F.Out,"</div>");
               }
 
@@ -1777,7 +1778,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
-   Lay_StartRoundFrameTable (StrRecordWidth,NULL,NULL,
+   Box_StartBoxTable (StrRecordWidth,NULL,NULL,
                              Rec_RecordHelp[TypeOfView],
 			     false,	// Not closable
                              2);
@@ -1891,11 +1892,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    /***** Button to save changes and end frame *****/
    if (ICanEdit)
      {
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
       Act_FormEnd ();
      }
    else
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -2315,7 +2316,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
-   Lay_StartRoundFrameTable (StrRecordWidth,NULL,
+   Box_StartBoxTable (StrRecordWidth,NULL,
                              TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
                         	                                        Rec_PutIconsCommands,
                              Rec_RecordHelp[TypeOfView],
@@ -2523,7 +2524,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -3992,7 +3993,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable ("800px",
+   Box_StartBoxTable ("800px",
                              IAmATeacher ? Txt_Institution_centre_and_department :
 	                                   Txt_Institution,
 	                     NULL,
@@ -4226,7 +4227,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/

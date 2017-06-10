@@ -28,7 +28,7 @@
 
 OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_announcement.o swad_assignment.o swad_attendance.o \
-       swad_banner.o \
+       swad_banner.o swad_box.o \
        swad_calendar.o swad_centre.o swad_chat.o swad_config.o \
        swad_connected.o swad_country.o swad_course.o swad_cryptography.o \
        swad_database.o swad_date.o swad_degree.o swad_degree_type.o \
@@ -44,8 +44,8 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_MFU.o \
        swad_network.o swad_nickname.o swad_notice.o swad_notification.o \
        swad_pagination.o swad_parameter.o swad_password.o swad_photo.o \
-       swad_place.o swad_plugin.o swad_preference.o swad_profile.o \
-       swad_privacy.o \
+       swad_place.o swad_plugin.o swad_preference.o swad_privacy.o \
+       swad_profile.o \
        swad_QR.o \
        swad_record.o swad_report.o swad_role.o swad_RSS.o \
        swad_scope.o swad_search.o swad_session.o swad_setup.o swad_social.o \

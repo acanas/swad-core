@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_announcement.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
@@ -119,7 +120,7 @@ void Ann_ShowAllAnnouncements (void)
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("550px",Txt_Announcements,
+   Box_StartBox ("550px",Txt_Announcements,
                         ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 				   NULL,
 		        Hlp_MESSAGES_Announcements,
@@ -168,7 +169,7 @@ void Ann_ShowAllAnnouncements (void)
       Ann_PutButtonToAddNewAnnouncement ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -411,7 +412,7 @@ void Ann_ShowFormAnnouncement (void)
    Act_FormStart (ActRcvAnn);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_announcement,NULL,
+   Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
                              Hlp_MESSAGES_Announcements,
 			     false,	// Not closable
                              2);
@@ -443,7 +444,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "</tr>");
 
    /***** Button to create announcement and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_announcement);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
    Act_FormEnd ();

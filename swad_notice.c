@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_notice.h"
@@ -102,7 +103,7 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_New_notice,NULL,
+   Box_StartBox (NULL,Txt_New_notice,NULL,
                         Hlp_MESSAGES_Notices,
                         false);	// Not closable
 
@@ -112,7 +113,7 @@ void Not_ShowFormNotice (void)
                       "</textarea>");
 
    /***** Button to create notice and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_notice);
+   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -390,7 +391,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 /***** Start frame *****/
 	 sprintf (StrWidth,"%upx",
 	          Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-	 Lay_StartRoundFrame (StrWidth,
+	 Box_StartBox (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
 			      Not_PutIconsListNotices,
@@ -468,7 +469,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
             Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	    /***** End frame *****/
-	    Lay_EndRoundFrame ();
+	    Box_EndBox ();
 	    break;
 	}
 

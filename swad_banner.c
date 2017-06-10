@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_banner.h"
+#include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -115,7 +116,7 @@ void Ban_SeeBanners (void)
 	               " ORDER BY ShortName");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutFormToEditBanners,
+   Box_StartBox (NULL,Txt_Banners,Ban_PutFormToEditBanners,
                         Hlp_SYSTEM_Banners,
                         false);	// Not closable
 
@@ -134,7 +135,7 @@ void Ban_SeeBanners (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -206,7 +207,7 @@ void Ban_EditBanners (void)
 	               " FROM banners ORDER BY ShortName");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutIconToViewBanners,
+   Box_StartBox (NULL,Txt_Banners,Ban_PutIconToViewBanners,
                         Hlp_SYSTEM_Banners_edit,
                         false);	// Not closable
 
@@ -218,7 +219,7 @@ void Ban_EditBanners (void)
       Ban_ListBannersForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -831,7 +832,7 @@ static void Ban_PutFormToCreateBanner (void)
    Act_FormStart (ActNewBan);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_banner,NULL,
+   Box_StartBoxTable (NULL,Txt_New_banner,NULL,
                              Hlp_SYSTEM_Banners_edit,
 			     false,	// Not closable
                              2);
@@ -882,7 +883,7 @@ static void Ban_PutFormToCreateBanner (void)
             Cns_MAX_CHARS_WWW,Ban->WWW);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_banner);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End of form *****/
    Act_FormEnd ();

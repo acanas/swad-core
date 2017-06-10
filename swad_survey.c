@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -212,7 +213,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
                                      &Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
+   Box_StartBox ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
                         Hlp_ASSESSMENT_Surveys,
                         false);	// Not closable
 
@@ -275,7 +276,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Svy_PutButtonToCreateNewSvy ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -432,7 +433,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start frame *****/
    if (ShowOnlyThisSvyComplete)
-      Lay_StartRoundFrame (NULL,Txt_Survey,NULL,
+      Box_StartBox (NULL,Txt_Survey,NULL,
                            Hlp_ASSESSMENT_Surveys,
                            false);	// Not closable
 
@@ -673,7 +674,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       Lay_EndTable ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -1816,7 +1817,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Svy_PutParams ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,ItsANewSurvey ? Txt_New_survey :
+   Box_StartBoxTable (NULL,ItsANewSurvey ? Txt_New_survey :
 	                                          Txt_Edit_survey,
 	                     NULL,ItsANewSurvey ? Hlp_ASSESSMENT_Surveys_new_survey :
 	                                          Hlp_ASSESSMENT_Surveys_edit_survey,
@@ -1891,9 +1892,9 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Button to create/modify survey and end frame *****/
    if (ItsANewSurvey)
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_survey);
+      Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_survey);
    else
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2017,7 +2018,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
-      Lay_StartRoundFrameTable ("95%",NULL,NULL,
+      Box_StartBoxTable ("95%",NULL,NULL,
                                 NULL,
 			        false,	// Not closable
                                 0);
@@ -2045,7 +2046,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],SvyCod,Grp_SURVEY);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -2656,12 +2657,12 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
       sprintf (Gbl.Title,"%s %u",
                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Lay_StartRoundFrame (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
+      Box_StartBox (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
                            NULL,
                            false);	// Not closable
      }
    else
-      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,
+      Box_StartBox (NULL,Txt_New_question,NULL,
                            Hlp_ASSESSMENT_Surveys_questions,
                            false);	// Not closable
 
@@ -2761,7 +2762,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for answers *****/
    Svy_FreeTextChoiceAnswers (SvyQst,NumAnswers);
@@ -3178,7 +3179,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 
    /***** Start frame *****/
    Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
-   Lay_StartRoundFrame (NULL,Txt_Questions,
+   Box_StartBox (NULL,Txt_Questions,
                         Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                NULL,
                         Hlp_ASSESSMENT_Surveys_questions,
@@ -3302,7 +3303,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

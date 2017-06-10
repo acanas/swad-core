@@ -34,6 +34,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_info.h"
@@ -441,7 +442,7 @@ void Inf_ShowInfo (void)
 
    if (ShowWarningNoInfo)
      {
-      Lay_StartRoundFrame ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBox ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			   ICanEdit ? Inf_PutIconToEditInfo :
 				      NULL,
 		           Help[Gbl.CurrentCrs.Info.Type],
@@ -449,7 +450,7 @@ void Inf_ShowInfo (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -589,7 +590,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Inf_InfoType_t InfoType;
 
    /***** Start of frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Required_reading,NULL,
+   Box_StartBox (NULL,Txt_Required_reading,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -619,7 +620,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 	              "</div>");
 
    /***** End of frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1031,7 +1032,7 @@ static void Inf_ShowPage (const char *URL)
      };
 
    /***** Start of frame *****/
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                         ICanEdit ? Inf_PutIconToEditInfo :
                         	   NULL,
                         Help[Gbl.CurrentCrs.Info.Type],
@@ -1046,7 +1047,7 @@ static void Inf_ShowPage (const char *URL)
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End of frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1118,7 +1119,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Form to choice between alternatives *****/
    /* Start of table */
-   Lay_StartRoundFrameTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
+   Box_StartBoxTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
                              HelpEdit[Gbl.CurrentCrs.Info.Type],
 			     false,	// Not closable
                              4);
@@ -1171,7 +1172,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /* End of table */
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -1788,7 +1789,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
    if (TxtHTML[0])
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL,
                            Help[Gbl.CurrentCrs.Info.Type],
@@ -1810,7 +1811,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
       /***** End frame *****/
       fprintf (Gbl.F.Out,"</div>");
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
 
       return true;
      }
@@ -1873,7 +1874,7 @@ static bool Inf_CheckAndShowRichTxt (void)
    if (TxtMD[0])
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL,
                            Help[Gbl.CurrentCrs.Info.Type],
@@ -1944,7 +1945,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
       /***** End frame *****/
       fprintf (Gbl.F.Out,"</div>");
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
 
       return true;
      }
@@ -2062,7 +2063,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
+   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
                         HelpEdit[Gbl.CurrentCrs.Info.Type],
                         false);	// Not closable
 
@@ -2084,7 +2085,7 @@ void Inf_EditPlainTxtInfo (void)
             TxtHTML);
 
    /***** End frame and form *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 
@@ -2114,7 +2115,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
+   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
                         HelpEdit[Gbl.CurrentCrs.Info.Type],
                         false);	// Not closable
 
@@ -2136,7 +2137,7 @@ void Inf_EditRichTxtInfo (void)
             TxtHTML);
 
    /***** End frame and form *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 

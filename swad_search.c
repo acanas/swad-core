@@ -28,6 +28,7 @@
 #include <stdio.h>	// For fprintf...
 #include <string.h>	// For string functions...
 
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_layout.h"
@@ -236,7 +237,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (Action);
-   Lay_StartRoundFrame (NULL,Txt_Search,NULL,
+   Box_StartBox (NULL,Txt_Search,NULL,
                         Hlp_Search,
                         false);	// Not closable
 
@@ -284,7 +285,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Sch_PutMagnifyingGlassButton ("search64x64.png");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Search);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Search);
 
    /***** End form *****/
    Act_FormEnd ();

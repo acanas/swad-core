@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_privacy.h"
@@ -102,8 +103,10 @@ void Pri_EditMyPrivacy (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start frame and table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
-                             Hlp_PROFILE_Preferences_privacy,2);
+   Box_StartBoxTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
+                      Hlp_PROFILE_Preferences_privacy,
+                      false,	// Not closable
+                      2);
 
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,
@@ -130,7 +133,7 @@ void Pri_EditMyPrivacy (void)
                           (1 << Pri_VISIBILITY_SYSTEM));
 
    /***** End table and frame *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/

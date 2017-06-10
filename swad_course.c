@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For getenv, etc.
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_course.h"
 #include "swad_constant.h"
 #include "swad_database.h"
@@ -195,7 +196,7 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,NULL,
+   Box_StartBox (NULL,NULL,
                         PrintView ? NULL :
 	                            Crs_PutIconToPrint,
 	                PrintView ? NULL :
@@ -466,7 +467,7 @@ static void Crs_Configuration (bool PrintView)
    Lay_EndTable ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -546,7 +547,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_My_courses,NULL,
+   Box_StartBox (NULL,Txt_My_courses,NULL,
                         Hlp_PROFILE_Courses,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -776,7 +777,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</ul>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1136,7 +1137,7 @@ static void Crs_ListCourses (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Crs_PutIconsListCourses,
+   Box_StartBox (NULL,Gbl.Title,Crs_PutIconsListCourses,
                         Hlp_DEGREE_Courses,
                         false);	// Not closable
 
@@ -1170,7 +1171,7 @@ static void Crs_ListCourses (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1336,7 +1337,7 @@ void Crs_EditCourses (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Alert.Txt,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Alert.Txt,Crs_PutIconToViewCourses,
+   Box_StartBox (NULL,Gbl.Alert.Txt,Crs_PutIconToViewCourses,
                         Hlp_DEGREE_Courses,
                         false);	// Not closable
 
@@ -1348,7 +1349,7 @@ void Crs_EditCourses (void)
       Crs_ListCoursesForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of courses in this degree *****/
    Crs_FreeListCoursesInDegree (&Gbl.CurrentDeg.Deg);
@@ -1642,7 +1643,7 @@ static void Crs_PutFormToCreateCourse (void)
       Lay_ShowErrorAndExit ("You can not edit courses.");
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_course,NULL,
+   Box_StartBoxTable (NULL,Txt_New_course,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -1717,7 +1718,7 @@ static void Crs_PutFormToCreateCourse (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_course);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_course);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -3002,7 +3003,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Start frame and table */
-      Lay_StartRoundFrameTable ("100%",NULL,NULL,
+      Box_StartBoxTable ("100%",NULL,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -3053,7 +3054,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
         }
 
       /* End table and frame */
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3089,7 +3090,7 @@ unsigned Crs_ListCrssFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumCrss,(NumCrss == 1) ? Txt_course :
 	                                Txt_courses);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -3132,7 +3133,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 	}
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3328,7 +3329,7 @@ void Crs_AskRemoveOldCrss (void)
    Act_FormStart (ActRemOldCrs);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL,
+   Box_StartBox (NULL,Txt_Eliminate_old_courses,NULL,
                         Hlp_SYSTEM_Hierarchy_eliminate_old_courses,
                         false);	// Not closable
 
@@ -3352,7 +3353,7 @@ void Crs_AskRemoveOldCrss (void)
    fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
+   Box_EndBoxWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Act_FormEnd ();

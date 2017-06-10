@@ -32,6 +32,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -388,7 +389,7 @@ void Ntf_ShowMyNotifications (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+   Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                         Hlp_MESSAGES_Notifications,
                         false);	// Not closable
 
@@ -645,7 +646,7 @@ void Ntf_ShowMyNotifications (void)
 	                                         Txt_You_have_no_unread_notifications);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1897,7 +1898,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+   Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                         Hlp_PROFILE_Preferences_notifications,
                         false);	// Not closable
 
@@ -1960,7 +1961,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

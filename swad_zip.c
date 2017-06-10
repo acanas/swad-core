@@ -34,6 +34,7 @@
 #include <sys/types.h>		// For mkdir...
 #include <unistd.h>		// For chdir...
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_global.h"
 #include "swad_file_browser.h"
@@ -602,7 +603,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
+   Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -660,5 +661,5 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "</tr>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
   }

@@ -32,6 +32,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink
 
+#include "swad_box.h"
 #include "swad_centre.h"
 #include "swad_constant.h"
 #include "swad_database.h"
@@ -165,7 +166,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres with pending degrees")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Centres_with_pending_degrees,NULL,
+      Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
                                 Hlp_SYSTEM_Hierarchy_pending,
 			        false,	// Not closable
                                 2);
@@ -214,7 +215,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed);
@@ -309,7 +310,7 @@ static void Ctr_Configuration (bool PrintView)
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,NULL,
+      Box_StartBox (NULL,NULL,
                            PrintView ? NULL :
 	                               Ctr_PutIconsToPrintAndUpload,
 	                   PrintView ? NULL :
@@ -632,7 +633,7 @@ static void Ctr_Configuration (bool PrintView)
       Lay_EndTable ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -746,7 +747,7 @@ static void Ctr_ListCentres (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsListCentres,
+   Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListCentres,
                         Hlp_INSTITUTION_Centres,
                         false);	// Not closable
 
@@ -778,7 +779,7 @@ static void Ctr_ListCentres (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -939,7 +940,7 @@ void Ctr_EditCentres (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
+   Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
                         Hlp_INSTITUTION_Centres,
                         false);	// Not closable
 
@@ -951,7 +952,7 @@ void Ctr_EditCentres (void)
       Ctr_ListCentresForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of centres *****/
    Ctr_FreeListCentres ();
@@ -2221,7 +2222,7 @@ void Ctr_RequestPhoto (void)
    Act_FormStart (ActRecCtrPho);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Photo,NULL,
+   Box_StartBox (NULL,Txt_Photo,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -2248,7 +2249,7 @@ void Ctr_RequestPhoto (void)
             Gbl.Form.Id);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2417,7 +2418,7 @@ static void Ctr_PutFormToCreateCentre (void)
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_centre,NULL,
+   Box_StartBoxTable (NULL,Txt_New_centre,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -2508,7 +2509,7 @@ static void Ctr_PutFormToCreateCentre (void)
 		      "</tr>");
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_centre);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2895,7 +2896,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumCtrs,(NumCtrs == 1) ? Txt_centre :
 	                                Txt_centres);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -2920,7 +2921,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 	}
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/

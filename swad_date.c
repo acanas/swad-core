@@ -28,6 +28,7 @@
 #include <string.h>		// For string functions
 #include <time.h>		// For time functions (mktime...)
 
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -102,7 +103,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    Dat_Format_t Format;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Dates,Dat_PutIconsDateFormat,
+   Box_StartBox (NULL,Txt_Dates,Dat_PutIconsDateFormat,
                         Hlp_PROFILE_Preferences_dates,
                         false);	// Not closable
 
@@ -137,7 +138,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

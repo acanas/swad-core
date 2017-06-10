@@ -36,6 +36,7 @@
 
 #include "swad_account.h"
 #include "swad_announcement.h"
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_connected.h"
@@ -2260,7 +2261,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
       FuncParams ();
 
    /***** Start frame and table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Log_in,NULL,
+   Box_StartBoxTable (NULL,Txt_Log_in,NULL,
                              Hlp_PROFILE_LogIn,
 			     false,	// Not closable
                              2);
@@ -2299,7 +2300,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
             Txt_password);
 
    /***** Send button and end table and frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Log_in);
+   Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Log_in);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -3153,7 +3154,7 @@ void Usr_ShowFormsLogoutAndRole (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Role,NULL,
+   Box_StartBox (NULL,Txt_Role,NULL,
                         Hlp_PROFILE_Session_role,
                         false);	// Not closable
 
@@ -3172,7 +3173,7 @@ void Usr_ShowFormsLogoutAndRole (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -6672,7 +6673,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 		                                     Txt_users[Sex]) :
 		                   ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 		                                     Txt_ROLES_PLURAL_abc[Role][Sex]));
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -6729,7 +6730,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free memory for teachers list *****/
@@ -6823,7 +6824,7 @@ void Usr_ListDataAdms (void)
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
    /***** Start frame with list of administrators *****/
-   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
+   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
                         NULL,
                         Hlp_USERS_Administrators,
                         false);	// Not closable
@@ -6891,7 +6892,7 @@ void Usr_ListDataAdms (void)
       Usr_ShowWarningNoUsersFound (Rol_DEG_ADM);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for administrators list *****/
    Usr_FreeUsrsList (Rol_DEG_ADM);
@@ -7300,7 +7301,7 @@ void Usr_SeeGuests (void)
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
+   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
 			Usr_PutIconsListGsts,
 			Hlp_USERS_Guests,
                         false);	// Not closable
@@ -7379,7 +7380,7 @@ void Usr_SeeGuests (void)
    Lay_EndSection ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for guests list *****/
    Usr_FreeUsrsList (Rol_GST);
@@ -7448,7 +7449,7 @@ void Usr_SeeStudents (void)
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
 			Usr_PutIconsListStds,
 			Hlp_USERS_Students,
                         false);	// Not closable
@@ -7551,7 +7552,7 @@ void Usr_SeeStudents (void)
    Lay_EndSection ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STD);
@@ -7635,7 +7636,7 @@ void Usr_SeeTeachers (void)
 						    1 << Rol_TCH);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
 			Usr_PutIconsListTchs,
 			Hlp_USERS_Teachers,
                         false);	// Not closable
@@ -7731,7 +7732,7 @@ void Usr_SeeTeachers (void)
    Lay_EndSection ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for teachers lists *****/
    Usr_FreeUsrsList (Rol_TCH);	// Teachers
@@ -8809,7 +8810,7 @@ void Usr_PrintUsrQRCode (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
+      Box_StartBox (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
                            NULL,
                            false);	// Not closable
 
@@ -8821,7 +8822,7 @@ void Usr_PrintUsrQRCode (void)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

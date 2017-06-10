@@ -93,25 +93,6 @@ void Lay_PutConfirmButtonInline (const char *TxtButton);
 void Lay_PutRemoveButton (const char *TxtButton);
 void Lay_PutRemoveButtonInline (const char *TxtButton);
 
-void Lay_StartRoundFrameTable (const char *Width,const char *Title,
-                               void (*FunctionToDrawContextualIcons) (void),
-                               const char *HelpLink,bool Closable,
-                               unsigned CellPadding);
-void Lay_StartRoundFrame (const char *Width,const char *Title,
-                          void (*FunctionToDrawContextualIcons) (void),
-                          const char *HelpLink,bool Closable);
-void Lay_StartRoundFrameShadow (const char *Width,const char *Title,
-                                void (*FunctionToDrawContextualIcons) (void),
-                                const char *HelpLink);
-void Lay_StartRoundFrameTableShadow (const char *Width,const char *Title,
-                                     void (*FunctionToDrawContextualIcons) (void),
-                                     const char *HelpLink,
-                                     unsigned CellPadding);
-void Lay_EndRoundFrameTable (void);
-void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton);
-void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton);
-void Lay_EndRoundFrame (void);
-
 void Lay_StartTable (unsigned CellPadding);
 void Lay_StartTableCenter (unsigned CellPadding);
 void Lay_StartTableWide (unsigned CellPadding);

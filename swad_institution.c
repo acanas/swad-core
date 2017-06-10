@@ -29,6 +29,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_database.h"
@@ -150,7 +151,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Institutions_with_pending_centres,NULL,
+      Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
                                 Hlp_SYSTEM_Hierarchy_pending,
 			        false,	// Not closable
                                 2);
@@ -200,7 +201,7 @@ void Ins_SeeInsWithPendingCtrs (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
@@ -307,7 +308,7 @@ static void Ins_Configuration (bool PrintView)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,NULL,
+      Box_StartBox (NULL,NULL,
                            PrintView ? NULL :
 	                               Ins_PutIconsToPrintAndUpload,
 	                   PrintView ? NULL :
@@ -587,7 +588,7 @@ static void Ins_Configuration (bool PrintView)
       Lay_EndTable ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -669,7 +670,7 @@ static void Ins_ListInstitutions (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
+   Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
                         Hlp_COUNTRY_Institutions,
                         false);	// Not closable
 
@@ -700,7 +701,7 @@ static void Ins_ListInstitutions (void)
       Act_FormEnd ();
      }
 
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -920,7 +921,7 @@ void Ins_EditInstitutions (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
+   Box_StartBox (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
                         Hlp_COUNTRY_Institutions,
                         false);	// Not closable
 
@@ -932,7 +933,7 @@ void Ins_EditInstitutions (void)
       Ins_ListInstitutionsForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of institutions *****/
    Ins_FreeListInstitutions ();
@@ -2157,7 +2158,7 @@ static void Ins_PutFormToCreateInstitution (void)
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_institution,NULL,
+   Box_StartBoxTable (NULL,Txt_New_institution,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -2230,7 +2231,7 @@ static void Ins_PutFormToCreateInstitution (void)
 		      "</tr>");
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_institution);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2519,7 +2520,7 @@ unsigned Ins_ListInssFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumInss,NumInss == 1 ? Txt_institution :
 				      Txt_institutions);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -2544,7 +2545,7 @@ unsigned Ins_ListInssFound (const char *Query)
 	}
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/

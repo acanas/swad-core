@@ -28,6 +28,7 @@
 #include <linux/stddef.h>	// For NULL
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_follow.h"
@@ -174,7 +175,7 @@ void Prf_RequestUserProfile (void)
    Act_FormStart (ActSeeOthPubPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Another_user_s_profile,NULL,
+   Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
                         Hlp_SOCIAL_Profiles_view_public_profile,
                         false);	// Not closable
 
@@ -192,7 +193,7 @@ void Prf_RequestUserProfile (void)
             Gbl.Usrs.Me.UsrDat.Nickname);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Continue);
+   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
    Act_FormEnd ();

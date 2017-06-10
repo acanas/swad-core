@@ -32,6 +32,7 @@
 #include <time.h>		// For time
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_course.h"
 #include "swad_database.h"
@@ -223,7 +224,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,
+   Box_StartBox (NULL,
 			Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
 						Txt_New_message,
 			NULL,Hlp_MESSAGES_Write,
@@ -330,7 +331,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory used by the list of nicknames *****/
    Usr_FreeListOtherRecipients ();
@@ -1753,14 +1754,14 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Start frame with messages *****/
-   Lay_StartRoundFrame ("97%",
+   Box_StartBox ("97%",
                         Msg_WriteNumMsgs (NumUnreadMsgs),
                         Msg_PutIconsListMsgs,Help[Gbl.Msg.TypeOfMessages],
                         false);	// Not closable
 
    /***** Filter messages *****/
    /* Start frame with filter */
-   Lay_StartRoundFrame (NULL,Txt_Filter,NULL,
+   Box_StartBox (NULL,Txt_Filter,NULL,
                         HelpFilter[Gbl.Msg.TypeOfMessages],
                         true);	// Closable
 
@@ -1784,7 +1785,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Act_FormEnd ();
 
    /* End frame */
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
 
    if (Gbl.Msg.NumMsgs)		// If there are messages...
@@ -1851,7 +1852,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3778,7 +3779,7 @@ void Msg_ListBannedUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table with list of users *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Banned_users,NULL,
+      Box_StartBoxTable (NULL,Txt_Banned_users,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -3830,7 +3831,7 @@ void Msg_ListBannedUsrs (void)
         }
 
       /***** End of table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

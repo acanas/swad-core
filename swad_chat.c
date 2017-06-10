@@ -30,6 +30,7 @@
 #include <stdio.h>		// For sprintf
 #include <string.h>
 
+#include "swad_box.h"
 #include "swad_chat.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -123,7 +124,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Chat_rooms,NULL,
+   Box_StartBox (NULL,Txt_Chat_rooms,NULL,
                         NULL,
                         false);	// Not closable
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -238,7 +239,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</ul>");
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -263,7 +264,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Rooms_with_users,NULL,
+      Box_StartBoxTable (NULL,Txt_Rooms_with_users,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -297,7 +298,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/

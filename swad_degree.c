@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_box.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -168,7 +169,7 @@ void Deg_SeeDegWithPendingCrss (void)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees with pending courses")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Degrees_with_pending_courses,NULL,
+      Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
                                 Hlp_SYSTEM_Hierarchy_pending,
 			        false,	// Not closable
                                 2);
@@ -217,7 +218,7 @@ void Deg_SeeDegWithPendingCrss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
@@ -297,7 +298,7 @@ static void Deg_Configuration (bool PrintView)
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,NULL,
+      Box_StartBox (NULL,NULL,
                            PrintView ? NULL :
 	                               Deg_PutIconsToPrintAndUpload,
                            PrintView ? NULL :
@@ -528,7 +529,7 @@ static void Deg_Configuration (bool PrintView)
       Lay_EndTable ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -940,7 +941,7 @@ static void Deg_PutFormToCreateDegree (void)
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_degree,NULL,
+   Box_StartBoxTable (NULL,Txt_New_degree,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -1023,7 +1024,7 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_degree);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1175,7 +1176,7 @@ static void Deg_ListDegrees (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsListDegrees,
+   Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListDegrees,
                         Hlp_CENTRE_Degrees,
                         false);	// Not closable
 
@@ -1207,7 +1208,7 @@ static void Deg_ListDegrees (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1355,7 +1356,7 @@ void Deg_EditDegrees (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
+   Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
                         Hlp_CENTRE_Degrees,
                         false);	// Not closable
 
@@ -1379,7 +1380,7 @@ void Deg_EditDegrees (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
@@ -2576,7 +2577,7 @@ unsigned Deg_ListDegsFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumDegs,(NumDegs == 1) ? Txt_degree :
         	                        Txt_degrees);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -2601,7 +2602,7 @@ unsigned Deg_ListDegsFound (const char *Query)
 	}
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/

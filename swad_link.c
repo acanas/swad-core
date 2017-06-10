@@ -29,6 +29,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -110,7 +111,7 @@ void Lnk_SeeLinks (void)
    Lnk_GetListLinks ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Links,
+   Box_StartBox (NULL,Txt_Links,
 			Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
 								 NULL,
 			Hlp_SYSTEM_Links,
@@ -131,7 +132,7 @@ void Lnk_SeeLinks (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
@@ -228,7 +229,7 @@ void Lnk_EditLinks (void)
    Lnk_GetListLinks ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Links,Lnk_PutIconToViewLinks,
+   Box_StartBox (NULL,Txt_Links,Lnk_PutIconToViewLinks,
                         Hlp_SYSTEM_Links_edit,
                         false);	// Not closable
 
@@ -240,7 +241,7 @@ void Lnk_EditLinks (void)
       Lnk_ListLinksForEdition ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
@@ -707,7 +708,7 @@ static void Lnk_PutFormToCreateLink (void)
    Act_FormStart (ActNewLnk);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_link,NULL,
+   Box_StartBoxTable (NULL,Txt_New_link,NULL,
                              Hlp_SYSTEM_Links_edit,
 			     false,	// Not closable
                              2);
@@ -749,7 +750,7 @@ static void Lnk_PutFormToCreateLink (void)
             Cns_MAX_CHARS_WWW,Lnk->WWW);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
 
    /***** End of form *****/
    Act_FormEnd ();

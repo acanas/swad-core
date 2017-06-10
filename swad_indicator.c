@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_indicator.h"
@@ -105,7 +106,7 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetParamsIndicators ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL,
+   Box_StartBox (NULL,Txt_Indicators_of_courses,NULL,
                         Hlp_STATS_Indicators,
                         false);	// Not closable
 
@@ -200,7 +201,7 @@ void Ind_ReqIndicatorsCourses (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

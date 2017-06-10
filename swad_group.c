@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -265,7 +266,7 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Types_of_group,
+   Box_StartBox (NULL,Txt_Types_of_group,
                         Grp_PutIconsEditingGroupTypes,
                         Hlp_USERS_Groups,
                         false);	// Not closable
@@ -284,7 +285,7 @@ static void Grp_EditGroupTypes (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -298,7 +299,7 @@ static void Grp_EditGroups (void)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
+   Box_StartBox (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
                         Hlp_USERS_Groups,
                         false);	// Not closable
 
@@ -316,7 +317,7 @@ static void Grp_EditGroups (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -364,7 +365,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
                   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Groups,
+      Box_StartBox (NULL,Txt_Groups,
 			   ICanEdit ? Grp_PutIconToEditGroups :
 				      NULL,
 			   Hlp_USERS_Groups,
@@ -410,7 +411,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Act_FormEnd ();
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Box_EndBox ();
      }
   }
 
@@ -1725,7 +1726,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_My_groups,
+   Box_StartBox (NULL,Txt_My_groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
                                    NULL,
                         Hlp_USERS_Groups,
@@ -1775,7 +1776,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
       /***** Free list of groups types and groups in this course *****/
@@ -1944,7 +1945,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Groups,NULL,
+   Box_StartBoxTable (NULL,Txt_Groups,NULL,
                              Hlp_USERS_Groups,
 			     false,	// Not closable
                              0);
@@ -1957,7 +1958,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   Box_EndBoxTable ();
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -2348,7 +2349,7 @@ static void Grp_PutFormToCreateGroupType (void)
    Act_FormStartAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,NULL,
+   Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -2439,7 +2440,7 @@ static void Grp_PutFormToCreateGroupType (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2464,7 +2465,7 @@ static void Grp_PutFormToCreateGroup (void)
    Act_FormStartAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,
+   Box_StartBoxTable (NULL,Txt_New_group,NULL,
                              NULL,
 			     false,	// Not closable
                              2);
@@ -2535,7 +2536,7 @@ static void Grp_PutFormToCreateGroup (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_group);
+   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_group);
 
    /***** End of form *****/
    Act_FormEnd ();

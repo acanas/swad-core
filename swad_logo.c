@@ -28,6 +28,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_global.h"
 #include "swad_scope.h"
 #include "swad_theme.h"
@@ -283,7 +284,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Act_FormStart (ActionRec);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Logo,NULL,
+   Box_StartBox (NULL,Txt_Logo,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -304,7 +305,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
             Gbl.Form.Id);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** End form *****/
    Act_FormEnd ();

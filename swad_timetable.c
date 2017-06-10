@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For malloc, calloc, free
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -350,7 +351,7 @@ void TT_ShowClassTimeTable (void)
    Grp_GetParamWhichGrps ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+   Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
                         (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
                          Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
                          Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
@@ -384,7 +385,7 @@ void TT_ShowClassTimeTable (void)
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -432,12 +433,12 @@ void TT_EditCrsTimeTable (void)
 
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+   Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
                         TT_PutIconToViewCrsTT,
                         Hlp_COURSE_Timetable,
                         false);	// Not closable
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -451,12 +452,12 @@ void TT_EditMyTutTimeTable (void)
 
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+   Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
                         TT_PutIconToViewMyTT,
                         Hlp_PROFILE_Timetable,
                         false);	// Not closable
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

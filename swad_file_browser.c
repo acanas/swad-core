@@ -36,6 +36,7 @@
 #include <sys/stat.h>		// For lstat
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_file_browser.h"
@@ -3118,7 +3119,7 @@ void Brw_AskEditWorksCrs (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Draw class photos to select users *****/
-   Lay_StartRoundFrame (NULL,Txt_Users,NULL,
+   Box_StartBox (NULL,Txt_Users,NULL,
                         Hlp_FILES_Homework_for_teachers,
                         false);	// Not closable
 
@@ -3166,7 +3167,7 @@ void Brw_AskEditWorksCrs (void)
    Lay_EndSection ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
@@ -3215,7 +3216,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_WriteTopBeforeShowingFileBrowser ();
 
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable ("100%",Txt_Assignments_and_other_works,
+      Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
                                 Brw_PutIconShowFigure,
                                 Hlp_FILES_Homework_for_teachers,
 			        false,	// Not closable
@@ -3253,7 +3254,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	}
 
       /***** End of the table *****/
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
    else	// If no users are selected...
      {
@@ -3687,7 +3688,7 @@ static void Brw_ShowFileBrowser (void)
    Gbl.FileBrowser.Id++;
    sprintf (FileBrowserSectionId,"file_browser_%u",Gbl.FileBrowser.Id);
    Lay_StartSection (FileBrowserSectionId);
-   Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+   Box_StartBox ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                         Brw_PutIconsFileBrowser,
                         Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],
                         false);	// Not closable
@@ -3710,7 +3711,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_PutButtonToShowEdit ();
 
    /***** End of frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
    Lay_EndSection ();
   }
 
@@ -7983,7 +7984,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
                              Brw_IS_FOLDER,-1L);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Create_folder,NULL,
+   Box_StartBox (NULL,Txt_Create_folder,NULL,
                         NULL,
                         false);	// Not closable
    sprintf (Gbl.Alert.Txt,Txt_You_can_create_a_new_folder_inside_the_folder_X,
@@ -8001,7 +8002,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
             Brw_MAX_CHARS_FOLDER);
 
    /* Button to send and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_folder);
+   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Create_folder);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -8022,7 +8023,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");
-   Lay_StartRoundFrame ("95%",Txt_Upload_files,NULL,
+   Box_StartBox ("95%",Txt_Upload_files,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -8070,7 +8071,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -8085,7 +8086,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"classic-upload\" style=\"display:none;\">");
-   Lay_StartRoundFrame (NULL,Txt_Upload_file,NULL,
+   Box_StartBox (NULL,Txt_Upload_file,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -8108,7 +8109,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    Act_FormEnd ();
 
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Box_EndBox ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -8129,7 +8130,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
                              Brw_IS_FOLDER,-1L);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Paste,NULL,
+   Box_StartBox (NULL,Txt_Paste,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -8139,7 +8140,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Paste);
+   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Paste);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -8166,7 +8167,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                              Brw_IS_FOLDER,-1L);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Create_link,NULL,
+   Box_StartBox (NULL,Txt_Create_link,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -8211,7 +8212,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
             Brw_MAX_CHARS_FOLDER);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
+   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -9164,7 +9165,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 
 	 /***** Start frame *****/
-	 Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
+	 Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -9347,11 +9348,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** End frame *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save_file_properties);
+	    Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save_file_properties);
 	    Act_FormEnd ();
 	   }
 	 else
-	    Lay_EndRoundFrameTable ();
+	    Box_EndBoxTable ();
 
 	 /***** Mark possible notifications as seen *****/
 	 switch (Gbl.FileBrowser.Type)
@@ -11338,7 +11339,7 @@ unsigned Brw_ListDocsFound (const char *Query,
       sprintf (Gbl.Title,"%u %s",
                NumDocs,(NumDocs == 1) ? TitleSingular :
         	                        TitlePlural);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+      Box_StartBoxTable (NULL,Gbl.Title,NULL,
                                 NULL,
 			        false,	// Not closable
                                 2);
@@ -11399,7 +11400,7 @@ unsigned Brw_ListDocsFound (const char *Query,
 			 "</tr>");
 
       /* End table */
-      Lay_EndRoundFrameTable ();
+      Box_EndBoxTable ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -11698,7 +11699,7 @@ void Brw_AskRemoveOldFiles (void)
    Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Remove_old_files,NULL,
+   Box_StartBox (NULL,Txt_Remove_old_files,NULL,
                         NULL,
                         false);	// Not closable
 
@@ -11722,7 +11723,7 @@ void Brw_AskRemoveOldFiles (void)
    fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Remove);
+   Box_EndBoxWithButton (Lay_REMOVE_BUTTON,Txt_Remove);
 
    /***** End form *****/
    Act_FormEnd ();
