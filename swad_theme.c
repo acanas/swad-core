@@ -239,8 +239,9 @@ void The_PutIconsToSelectTheme (void)
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,
-                        The_PutIconsTheme,Hlp_PROFILE_Preferences_theme);
+   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
+                        Hlp_PROFILE_Preferences_theme,
+                        false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;

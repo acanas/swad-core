@@ -3772,34 +3772,34 @@ const char *Txt_Banners =
 	"Banners";
 #endif
 
-const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID =
+const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered =
 #if   L==1
 	"Abans de crear un compte nou,"
-	" comprovi si ja li han inscrit amb el seu ID";
+	" comprovi si ja li han inscrit";
 #elif L==2
 	"Bevor ein neues Benutzerkonto erstellen,"
-	" wenn Sie bereits mit Ihrer ID registriert worden sind";
+	" wenn Sie bereits registriert worden sind";
 #elif L==3
 	"Before creating a new account,"
-	" check if you have been already registered with your ID";
+	" check if you have been already registered";
 #elif L==4
 	"Antes de crear una nueva cuenta,"
-	" compruebe si ya le han inscrito con su ID";
+	" compruebe si ya le han inscrito";
 #elif L==5
 	"Avant de cr&eacute;er un nouveau compte,"
-	" v&eacute;rifiez si vous avez d&eacute;j&agrave; enregistr&eacute; avec votre ID";
+	" v&eacute;rifiez si vous avez d&eacute;j&agrave; enregistr&eacute;";
 #elif L==6
 	"Antes de crear una nueva cuenta,"
-	" compruebe si ya le han inscrito con su ID";	// Okoteve traducción
+	" compruebe si ya le han inscrito";	// Okoteve traducción
 #elif L==7
 	"Prima di creare un nuovo account,"
-	" verificare se sono stati gi&agrave; registrato con il tuo ID";
+	" verificare se sono stati gi&agrave; registrato";
 #elif L==8
-	"Przed utworzeniem nowego konta,"
-	" nale&zdot;y sprawdzi&cacute;, czy zosta&lstrok; on ju&zdot; zarejestrowany z identyfikatorem";
+	"Przed utworzeniem nowego konta sprawd&zacute;,"
+	" czy zosta&lstrok;e&sacute; ju&zdot; zarejestrowany";
 #elif L==9
 	"Antes de criar uma nova conta,"
-	" verifique se voc&ecirc; j&aacute; foi registrado/a com o seu ID";
+	" verifique se voc&ecirc; j&aacute; foi registrado/a";
 #endif
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
@@ -4741,23 +4741,23 @@ const char *Txt_Check =
 
 const char *Txt_Check_another_ID =
 #if   L==1
-	"Comprovar altre ID";
+	"Comprovar altre ID?";
 #elif L==2
-	"&Uuml;berpr&uuml;fen Sie eine andere ID";
+	"&Uuml;berpr&uuml;fen Sie eine andere ID?";
 #elif L==3
-	"Check another ID";
+	"Check another ID?";
 #elif L==4
-	"Comprobar otro ID";
+	"&iquest;Comprobar otro ID?";
 #elif L==5
-	"V&eacute;rifier un autre ID";
+	"V&eacute;rifier un autre ID?";
 #elif L==6
-	"Comprobar otro ID";	// Okoteve traducción
+	"&iquest;Comprobar otro ID?";	// Okoteve traducción
 #elif L==7
-	"Verificare un altro ID";
+	"Verificare un altro ID?";
 #elif L==8
-	"Sprawdzi&cacute; inny identyfikator";
+	"Sprawdzi&cacute; inny identyfikator?";
 #elif L==9
-	"Verificar outra ID";
+	"Verificar outra ID?";
 #endif
 
 const char *Txt_Check_marks_in_file_X =	// Warning: it is very important to include %s in the following sentences
@@ -15319,6 +15319,53 @@ const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 	"Se voc&ecirc; ter escrito o suo alcunha, email ou n&ordm; identif. corretamente,"
 	" bem como o endere&ccedil;o de email em seu cart&atilde;o est&aacute; correto,"
 	" voc&ecirc; receber&aacute; um email com uma nova senha.";
+#endif
+
+const char *Txt_If_you_think_you_may_have_been_registered_ =
+#if   L==1
+	"Si creu que pot haver estat inscrit/a"
+	" per un professor o administrador,"
+	" comprovi escrivint algun dels seus possibles ID"
+	" (DNI amb lletra final o sense, passaport, etc.).";
+#elif L==2
+	"Wenn Sie glauben, dass Sie"
+	" von einem Lehrer oder Administrator registriert worden sind,"
+	" &uuml;berpr&uuml;fen Sie ihn, indem Sie eine Ihrer m&ouml;glichen IDs"
+	" (ID, Reisepass usw.) schreiben.";
+#elif L==3
+	"If you think you may have been registered"
+	" by a teacher or administrator,"
+	" check it by writing one of your possible IDs (ID, passport, etc.).";
+#elif L==4
+	"Si cree que puede haber sido inscrito/a"
+	" por un profesor o administrador,"
+	" compru&eacute;belo escribiendo alguno de sus posibles ID"
+	" (DNI con letra final o sin ella, c&eacute;dula, pasaporte, etc.).";
+#elif L==5
+	"Si vous pensez que vous avez &eacute;t&eacute; enregistr&eacute;"
+	" par un enseignant ou un administrateur,"
+	" v&eacute;rifiez-le en &eacute;crivant l'un de vos identifiants possibles"
+	" (carte d'identit&eacute;, passeport, etc.).";
+#elif L==6
+	"Si cree que puede haber sido inscrito/a"
+	" por un profesor o administrador,"
+	" compru&eacute;belo escribiendo alguno de sus posibles ID"
+	" (DNI con letra final o sin ella, c&eacute;dula, pasaporte, etc.).";	// Okoteve traducción
+#elif L==7
+	"Se pensi di essere stato registrato"
+	" da un insegnante o da un amministratore,"
+	" controllarlo scrivendo uno dei tuoi possibili ID"
+	" (ID, passaporto, ecc.).";
+#elif L==8
+	"Je&sacute;li uwa&zdot;asz, &zdot;e mo&zdot;esz zosta&cacute; zarejestrowany"
+	" przez nauczyciela lub administratora,"
+	" sprawd&zacute; go, wpisuj&aogon;c jeden z mo&zdot;liwych identyfikator&oacute;w"
+	" (dowodu to&zdot;samo&sacute;ci, paszportu itp.).";
+#elif L==9
+	"Se voc&ecirc; acha que pode ter sido registrado"
+	" por um professor ou administrador,"
+	" verifique-o escrevendo uma das suas poss&iacute;veis IDs"
+	" (identifica&ccedil;&atilde;o, passaporte, etc.).";
 #endif
 
 const char *Txt_Image =
@@ -47118,52 +47165,34 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 	"There is already a non-empty folder named <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_There_is_no_empty_account_associated_with_your_ID_X_ =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"No hi ha cap compte buida (encara no usada)"
-	" associada al seu ID <strong>%s</strong>."
-	" Si creu que pot haver estat inscrit amb un altre ID,"
-	" comprovi-ho, per favor.";
+	" associada al seu ID <strong>%s</strong>.";
 #elif L==2
 	"Es gibt keine leeren Benutzerkonto (noch nicht verwendet)"
-	" im Zusammenhang mit Ihrer ID <strong>%s</strong>."
-	" Wenn Sie denken, dass Sie mit einer anderen ID registriert worden sein,"
-	" &uuml;berpr&uuml;fen Sie es bitte.";
+	" im Zusammenhang mit Ihrer ID <strong>%s</strong>.";
 #elif L==3
 	"There is no empty (not yet used) account"
-	" associated with your ID <strong>%s</strong>."
-	" If you think you may have been registered with another ID,"
-	" check it, please.";
+	" associated with your ID <strong>%s</strong>.";
 #elif L==4
 	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
-	" asociada a su ID <strong>%s</strong>."
-	" Si cree que puede haber sido inscrito/a con otro ID"
-	" (DNI con letra final o sin ella, NIE, c&eacute;dula, etc.), compru&eacute;belo, por favor.";
+	" asociada a su ID <strong>%s</strong>.";
 #elif L==5
 	"Il n'y a pas de compte vide (pas encore utilis&eacute;)"
-	" associ&eacute; &agrave; votre ID <strong>%s</strong>."
-	" Si vous pensez que vous avez &eacute;t&eacute; enregistr&eacute; avec un autre ID,"
-	" v&eacute;rifier, s'il vous pla&icirc;t.";
+	" associ&eacute; &agrave; votre ID <strong>%s</strong>.";
 #elif L==6
 	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
-	" asociada a su ID <strong>%s</strong>."
-	" Si cree que puede haber sido inscrito/a con otro ID,"
-	" compru&eacute;belo, por favor.";	// Okoteve traducción
+	" asociada a su ID <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
 	"Non vi &egrave; alcun conto vuoto (non ancora utilizzato)"
-	" associato con il tuo ID <strong>%s</strong>."
-	" Se si pensa che potrebbe essere stato registrato/a con un altro ID,"
-	" verificare, per favore.";
+	" associato con il tuo ID <strong>%s</strong>.";
 #elif L==8
 	"Nie ma pusta konta (jeszcze nie u&zdot;ywany)"
-	" powi&aogon;zany z identyfikatorem <strong>%s</strong>."
-	" Je&sacute;li uwa&zdot;asz, &zdot;e mog&lstrok;a zosta&cacute; zarejestrowana w innym ID,"
-	" sprawd&zacute; to, prosz&eogon;.";
+	" powi&aogon;zany z identyfikatorem <strong>%s</strong>.";
 #elif L==9
 	"N&atilde;o existe nenhuma conta vazio (ainda n&atilde;o utilizado)"
-	" associado ao seu ID <strong>%s</strong>."
-	" Se voc&ecirc; acha que pode ter sido registado/a com outro ID,"
-	" verifique-o, por favor.";
+	" associado ao seu ID <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =

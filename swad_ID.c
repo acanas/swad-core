@@ -548,7 +548,9 @@ void ID_ShowFormOthIDs (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
+         Lay_StartRoundFrame (NULL,Txt_ID,NULL,
+                              NULL,
+                              false);	// Not closable
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,

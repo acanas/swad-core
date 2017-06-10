@@ -109,8 +109,10 @@ void Mai_SeeMailDomains (void)
    /***** Table head *****/
    Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
                              Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
-                                                                     NULL,
-                             Hlp_MESSAGES_Domains,2);
+                                                                      NULL,
+                             Hlp_MESSAGES_Domains,
+			     false,	// Not closable
+                             2);
    fprintf (Gbl.F.Out,"<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
@@ -446,8 +448,10 @@ static void Mai_ListMailDomainsForEdition (void)
    unsigned NumMai;
    struct Mail *Mai;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
-                             NULL,Hlp_MESSAGES_Domains_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
+                             Hlp_MESSAGES_Domains_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Table head *****/
    Mai_PutHeadMailDomains ();
@@ -713,8 +717,10 @@ static void Mai_PutFormToCreateMailDomain (void)
    Act_FormStart (ActNewMai);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,
-                             NULL,Hlp_MESSAGES_Domains_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,NULL,
+                             Hlp_MESSAGES_Domains_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -882,9 +888,10 @@ void Mai_ListEmails (void)
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start of the frame used to list the emails *****/
-   Lay_StartRoundFrame (NULL,
-			Txt_Students_who_have_accepted_and_who_have_email,
-			NULL,Hlp_MESSAGES_Email);
+   Lay_StartRoundFrame (NULL,Txt_Students_who_have_accepted_and_who_have_email,
+			NULL,
+			Hlp_MESSAGES_Email,
+                        false);	// Not closable
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
@@ -1180,7 +1187,9 @@ void Mai_ShowFormOthEmail (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Email,NULL,NULL);
+         Lay_StartRoundFrame (NULL,Txt_Email,NULL,
+                              NULL,
+                              false);	// Not closable
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
@@ -1619,8 +1628,9 @@ void Mai_PutButtonToCheckEmailAddress (void)
    extern const char *Txt_Check;
 
    /***** Frame with button to check email address *****/
-   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,
-                        NULL,Hlp_PROFILE_Account_email);
+   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL,
+                        Hlp_PROFILE_Account_email,
+                        true);	// Closable
    Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address,
                            ActFrmMyAcc,NULL,NULL,NULL,
                            Lay_CONFIRM_BUTTON,Txt_Check);

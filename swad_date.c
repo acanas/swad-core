@@ -103,7 +103,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Dates,Dat_PutIconsDateFormat,
-                        Hlp_PROFILE_Preferences_dates);
+                        Hlp_PROFILE_Preferences_dates,
+                        false);	// Not closable
 
    /***** Form with list of options *****/
    Act_FormStart (ActChgDatFmt);

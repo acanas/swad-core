@@ -246,6 +246,7 @@ bool Syl_CheckAndEditSyllabus (void)
 					        NULL,
 			        Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
 			                                       Hlp_COURSE_Syllabus,
+			        false,	// Not closable
 			        1);
 
       /***** Write the current syllabus *****/

@@ -147,7 +147,9 @@ void Agd_ShowMyAgenda (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_My_agenda,
-			Agd_PutIconsMyFullAgenda,Hlp_PROFILE_Agenda);
+			Agd_PutIconsMyFullAgenda,
+			Hlp_PROFILE_Agenda,
+                        false);	// Not closable
 
    /***** Put forms to choice which events to show *****/
    Agd_ShowFormToSelPast__FutureEvents ();
@@ -367,7 +369,8 @@ void Agd_ShowUsrAgenda (void)
 	 Lay_StartRoundFrame ("100%",Gbl.Title,
 			      ItsMe ? Agd_PutIconsMyPublicAgenda :
 				      Agd_PutIconsOtherPublicAgenda,
-			      Hlp_PROFILE_Agenda_public_agenda);
+			      Hlp_PROFILE_Agenda_public_agenda,
+                              false);	// Not closable
 
 	 /***** Show the current events in the user's agenda *****/
 	 Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -410,7 +413,8 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Lay_StartRoundFrame ("100%",Gbl.Title,
 				 ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 					 Agd_PutIconsOtherPublicAgenda,
-				 Hlp_PROFILE_Agenda_public_agenda);
+				 Hlp_PROFILE_Agenda_public_agenda,
+                                 false);	// Not closable
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -1539,6 +1543,7 @@ void Agd_RequestCreatOrEditEvent (void)
                              NULL,
                              ItsANewEvent ? Hlp_PROFILE_Agenda_new_event :
                         	            Hlp_PROFILE_Agenda_edit_event,
+			     false,	// Not closable
                              2);
 
    /***** Event *****/
@@ -1940,7 +1945,9 @@ void Agd_PrintAgdQRCode (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+                        NULL,
+                        false);	// Not closable
 
    /***** Print QR code ****/
    QR_PrintQRCode ();

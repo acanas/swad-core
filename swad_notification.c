@@ -388,8 +388,9 @@ void Ntf_ShowMyNotifications (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,
-                        Ntf_PutIconsNotif,Hlp_MESSAGES_Notifications);
+   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+                        Hlp_MESSAGES_Notifications,
+                        false);	// Not closable
 
    /***** List my notifications *****/
    if (NumNotifications)	// Notifications found
@@ -1896,9 +1897,9 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,
-                        Ntf_PutIconsNotif,
-                        Hlp_PROFILE_Preferences_notifications);
+   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+                        Hlp_PROFILE_Preferences_notifications,
+                        false);	// Not closable
 
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);

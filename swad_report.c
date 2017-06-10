@@ -155,7 +155,9 @@ void Rep_ReqMyUsageReport (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Report);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+                        Hlp_STATS_Report,
+                        false);	// Not closable
 
    /***** Header *****/
    Req_TitleReport (NULL);	// NULL means do not write date
@@ -259,7 +261,9 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Report);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+                        Hlp_STATS_Report,
+                        false);	// Not closable
 
    /***** Header *****/
    Req_TitleReport (&Report->CurrentTimeUTC);

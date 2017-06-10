@@ -115,8 +115,9 @@ void Ban_SeeBanners (void)
 	               " ORDER BY ShortName");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Banners,
-                        Ban_PutFormToEditBanners,Hlp_SYSTEM_Banners);
+   Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutFormToEditBanners,
+                        Hlp_SYSTEM_Banners,
+                        false);	// Not closable
 
    /***** Write all frames *****/
    if (Gbl.Banners.Num)	// There are banners
@@ -206,7 +207,8 @@ void Ban_EditBanners (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutIconToViewBanners,
-                        Hlp_SYSTEM_Banners_edit);
+                        Hlp_SYSTEM_Banners_edit,
+                        false);	// Not closable
 
    /***** Put a form to create a new banner *****/
    Ban_PutFormToCreateBanner ();
@@ -829,8 +831,10 @@ static void Ban_PutFormToCreateBanner (void)
    Act_FormStart (ActNewBan);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_banner,
-                             NULL,Hlp_SYSTEM_Banners_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_banner,NULL,
+                             Hlp_SYSTEM_Banners_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    Ban_PutHeadBanners ();

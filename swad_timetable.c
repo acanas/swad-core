@@ -355,7 +355,8 @@ void TT_ShowClassTimeTable (void)
                          Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
                          Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
                                                                        NULL,
-                        Help[Gbl.TimeTable.Type]);
+                        Help[Gbl.TimeTable.Type],
+                        false);	// Not closable
 
    /***** Start time table drawing *****/
    if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
@@ -432,7 +433,9 @@ void TT_EditCrsTimeTable (void)
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
    Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        TT_PutIconToViewCrsTT,Hlp_COURSE_Timetable);
+                        TT_PutIconToViewCrsTT,
+                        Hlp_COURSE_Timetable,
+                        false);	// Not closable
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
@@ -449,7 +452,9 @@ void TT_EditMyTutTimeTable (void)
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
    Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        TT_PutIconToViewMyTT,Hlp_PROFILE_Timetable);
+                        TT_PutIconToViewMyTT,
+                        Hlp_PROFILE_Timetable,
+                        false);	// Not closable
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }

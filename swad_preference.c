@@ -75,7 +75,8 @@ void Pre_EditPrefs (void)
 
    /***** Internationalization: language, first day of week, date format *****/
    Lay_StartRoundFrame (NULL,Txt_Internationalization,NULL,
-                        Hlp_PROFILE_Preferences_internationalization);
+                        Hlp_PROFILE_Preferences_internationalization,
+                        false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Lan_PutBoxToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>"
@@ -88,7 +89,9 @@ void Pre_EditPrefs (void)
    Lay_EndRoundFrame ();
 
    /***** Design: icon set, menu, theme, side columns *****/
-   Lay_StartRoundFrame (NULL,Txt_Design,NULL,Hlp_PROFILE_Preferences_design);
+   Lay_StartRoundFrame (NULL,Txt_Design,NULL,
+                        Hlp_PROFILE_Preferences_design,
+                        false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Ico_PutIconsToSelectIconSet ();		// 4. Icon set
    fprintf (Gbl.F.Out,"</div>"
@@ -235,9 +238,9 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrame (NULL,Txt_Columns,
-                        Pre_PutIconsSideColumns,
-                        Hlp_PROFILE_Preferences_columns);
+   Lay_StartRoundFrame (NULL,Txt_Columns,Pre_PutIconsSideColumns,
+                        Hlp_PROFILE_Preferences_columns,
+                        false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;

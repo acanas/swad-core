@@ -102,7 +102,9 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_New_notice,NULL,Hlp_MESSAGES_Notices);
+   Lay_StartRoundFrame (NULL,Txt_New_notice,NULL,
+                        Hlp_MESSAGES_Notices,
+                        false);	// Not closable
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"30\" rows=\"10\""
@@ -391,7 +393,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 Lay_StartRoundFrame (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
-			      Not_PutIconsListNotices,Hlp_MESSAGES_Notices);
+			      Not_PutIconsListNotices,
+			      Hlp_MESSAGES_Notices,
+                              false);	// Not closable
          if (!NumNotices)
 	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
 	}

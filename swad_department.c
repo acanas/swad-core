@@ -102,8 +102,10 @@ void Dpt_SeeDepts (void)
       /***** Table head *****/
       Lay_StartRoundFrameTable (NULL,Txt_Departments,
                                 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
-                        	                                        NULL,
-                                Hlp_INSTITUTION_Departments,2);
+                        	                                         NULL,
+                                Hlp_INSTITUTION_Departments,
+			        false,	// Not closable
+                                2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
@@ -484,8 +486,10 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Instit Ins;
    unsigned NumIns;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Departments,
-                             NULL,Hlp_INSTITUTION_Departments_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Departments,NULL,
+                             Hlp_INSTITUTION_Departments_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Table head *****/
    Dpt_PutHeadDepartments ();
@@ -886,8 +890,10 @@ static void Dpt_PutFormToCreateDepartment (void)
    Act_FormStart (ActNewDpt);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_department,
-                             NULL,Hlp_INSTITUTION_Departments_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_department,NULL,
+                             Hlp_INSTITUTION_Departments_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

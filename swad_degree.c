@@ -168,8 +168,10 @@ void Deg_SeeDegWithPendingCrss (void)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees with pending courses")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Degrees_with_pending_courses,
-                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Degrees_with_pending_courses,NULL,
+                                Hlp_SYSTEM_Hierarchy_pending,
+			        false,	// Not closable
+                                2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -299,7 +301,8 @@ static void Deg_Configuration (bool PrintView)
                            PrintView ? NULL :
 	                               Deg_PutIconsToPrintAndUpload,
                            PrintView ? NULL :
-	                               Hlp_DEGREE_Information);
+	                               Hlp_DEGREE_Information,
+                           false);	// Not closable
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -937,7 +940,10 @@ static void Deg_PutFormToCreateDegree (void)
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_degree,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_degree,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Table head *****/
    Deg_PutHeadDegreesForEdition ();
@@ -1169,8 +1175,9 @@ static void Deg_ListDegrees (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,
-                        Deg_PutIconsListDegrees,Hlp_CENTRE_Degrees);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsListDegrees,
+                        Hlp_CENTRE_Degrees,
+                        false);	// Not closable
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
@@ -1349,7 +1356,8 @@ void Deg_EditDegrees (void)
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.FullName);
    Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
-                        Hlp_CENTRE_Degrees);
+                        Hlp_CENTRE_Degrees,
+                        false);	// Not closable
 
    if (Gbl.Degs.DegTypes.Num)
      {
@@ -2568,7 +2576,10 @@ unsigned Deg_ListDegsFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumDegs,(NumDegs == 1) ? Txt_degree :
         	                        Txt_degrees);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+                                NULL,
+			        false,	// Not closable
+                                2);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees (one row per degree) *****/

@@ -123,7 +123,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Chat_rooms,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Chat_rooms,NULL,
+                        NULL,
+                        false);	// Not closable
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Title of top level *****/
@@ -261,7 +263,10 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Rooms_with_users,NULL,NULL,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Rooms_with_users,NULL,
+                                NULL,
+			        false,	// Not closable
+                                2);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
 	                 "%s"

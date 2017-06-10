@@ -251,7 +251,9 @@ void Pwd_ShowFormSendNewPwd (void)
    Act_FormStart (ActSndNewPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,Hlp_PROFILE_Password);
+   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,
+                        Hlp_PROFILE_Password,
+                        false);	// Not closable
 
    /***** Help text *****/
    Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
@@ -695,7 +697,10 @@ void Pwd_ShowFormChgPwd (void)
    Act_FormStart (ActChgPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Password,NULL,Hlp_PROFILE_Password,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Password,NULL,
+                             Hlp_PROFILE_Password,
+			     false,	// Not closable
+                             2);
 
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...
@@ -821,7 +826,9 @@ void Pwd_ShowFormOthPwd (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Password,NULL,NULL);
+         Lay_StartRoundFrame (NULL,Txt_Password,NULL,
+                              NULL,
+                              false);	// Not closable
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,

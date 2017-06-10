@@ -174,7 +174,9 @@ void Prf_RequestUserProfile (void)
    Act_FormStart (ActSeeOthPubPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Another_user_s_profile,NULL,Hlp_SOCIAL_Profiles_view_public_profile);
+   Lay_StartRoundFrame (NULL,Txt_Another_user_s_profile,NULL,
+                        Hlp_SOCIAL_Profiles_view_public_profile,
+                        false);	// Not closable
 
    /***** Form to request user's @nickname *****/
    /* By default, the nickname is filled with my nickname

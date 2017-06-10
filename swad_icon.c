@@ -77,7 +77,8 @@ void Ico_PutIconsToSelectIconSet (void)
    Ico_IconSet_t IconSet;
 
    Lay_StartRoundFrame (NULL,Txt_Icons,
-                        Ico_PutIconsIconSet,Hlp_PROFILE_Preferences_icons);
+                        Ico_PutIconsIconSet,Hlp_PROFILE_Preferences_icons,
+                        false);	// Not closable
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;

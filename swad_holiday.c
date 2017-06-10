@@ -102,7 +102,8 @@ void Hld_SeeHolidays (void)
       Lay_StartRoundFrame (NULL,Txt_Holidays,
                            Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
                                                                    NULL,
-                           Hlp_INSTITUTION_Holidays);
+                           Hlp_INSTITUTION_Holidays,
+                           false);	// Not closable
       if (Gbl.Hlds.Num)
 	 {
          Lay_StartTableWideMargin (2);
@@ -499,8 +500,10 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Holidays,
-                             NULL,Hlp_INSTITUTION_Holidays_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Holidays,NULL,
+                             Hlp_INSTITUTION_Holidays_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Table head *****/
    Hld_PutHeadHolidays ();
@@ -957,8 +960,10 @@ static void Hld_PutFormToCreateHoliday (void)
    Act_FormStart (ActNewHld);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_holiday,
-                             NULL,Hlp_INSTITUTION_Holidays_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_holiday,NULL,
+                             Hlp_INSTITUTION_Holidays_edit,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

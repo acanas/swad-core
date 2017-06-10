@@ -129,7 +129,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    /***** Contextual buttons *****/
    /* Start table */
-   Lay_StartRoundFrameTable (NULL,Txt_What_would_you_like_to_do,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_What_would_you_like_to_do,NULL,
+                             NULL,
+			     true,	// Closable
+                             2);
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {

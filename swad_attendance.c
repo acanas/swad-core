@@ -225,7 +225,8 @@ static void Att_ShowAllAttEvents (void)
    Lay_StartRoundFrame ("100%",Txt_Events,
 			ICanEdit ? Att_PutIconToCreateNewAttEvent :
 				   NULL,
-		        Hlp_USERS_Attendance);
+		        Hlp_USERS_Attendance,
+                        false);	// Not closable
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -1092,6 +1093,7 @@ void Att_RequestCreatOrEditAttEvent (void)
                              NULL,
                              ItsANewAttEvent ? Hlp_USERS_Attendance_new_event :
                         	               Hlp_USERS_Attendance_edit_event,
+			     false,	// Not closable
                              2);
 
    /***** Attendance event title *****/
@@ -1191,7 +1193,10 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Groups);
-      Lay_StartRoundFrameTable ("100%",NULL,NULL,NULL,0);
+      Lay_StartRoundFrameTable ("100%",NULL,NULL,
+                                NULL,
+			        false,	// Not closable
+                                0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1821,7 +1826,10 @@ void Att_SeeOneAttEvent (void)
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Show attendance *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Event,NULL,Hlp_USERS_Attendance,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Event,NULL,
+                             Hlp_USERS_Attendance,
+			     false,	// Not closable
+                             2);
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
    Lay_EndRoundFrameTable ();
@@ -1867,7 +1875,10 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
    /***** List students' data *****/
    /* Header */
-   Lay_StartRoundFrameTable (NULL,NULL,NULL,Hlp_USERS_Attendance,2);
+   Lay_StartRoundFrameTable (NULL,NULL,NULL,
+                             Hlp_USERS_Attendance,
+			     false,	// Not closable
+                             2);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th></th>"
@@ -1925,7 +1936,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,Hlp_USERS_Attendance);
+   Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,
+                        Hlp_USERS_Attendance,
+                        false);	// Not closable
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
@@ -2662,7 +2675,9 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-			NULL,Hlp_USERS_Attendance_attendance_list);
+			NULL,
+			Hlp_USERS_Attendance_attendance_list,
+                        false);	// Not closable
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
@@ -3094,6 +3109,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    Lay_StartRoundFrameTable (NULL,Txt_Events,NULL,
                              TypeOfView == Att_PRINT_VIEW ? NULL :
                         	                            Hlp_USERS_Attendance_attendance_list,
+			     false,	// Not closable
                              2);
 
    /***** Heading row *****/
@@ -3207,7 +3223,8 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                         ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
                         	                                    NULL),
                         TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                       Hlp_USERS_Attendance_attendance_list);
+                        	                       Hlp_USERS_Attendance_attendance_list,
+                        false);	// Not closable
    if (PutButtonShowDetails)
       Lay_StartTableWideMargin (2);
    else
@@ -3427,6 +3444,7 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
    Lay_StartRoundFrameTable (NULL,Txt_Details,NULL,
                              TypeOfView == Att_PRINT_VIEW ? NULL :
                         	                            Hlp_USERS_Attendance_attendance_list,
+			     false,	// Not closable
                              2);
 
    /***** List students with attendance details *****/

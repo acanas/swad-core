@@ -135,7 +135,9 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_XML_file;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,Hlp_ASSESSMENT_Tests);
+   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,
+                        Hlp_ASSESSMENT_Tests,
+                        false);	// Not closable
 
    /***** Write help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
@@ -506,7 +508,9 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    XML_GetTree (XMLBuffer,&RootElem);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Imported_questions,NULL,Hlp_ASSESSMENT_Tests);
+   Lay_StartRoundFrame (NULL,Txt_Imported_questions,NULL,
+                        Hlp_ASSESSMENT_Tests,
+                        false);	// Not closable
 
    /***** Print XML tree *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""

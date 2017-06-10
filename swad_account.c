@@ -109,7 +109,7 @@ void Acc_PutLinkToCreateAccount (void)
 
 void Acc_ShowFormMyAccount (void)
   {
-   extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
+   extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
 
    if (Gbl.Usrs.Me.Logged)
       Acc_ShowFormChangeMyAccount ();
@@ -123,7 +123,7 @@ void Acc_ShowFormMyAccount (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /**** Show form to check if I have an account *****/
-      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
+      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
 
       /**** Show form to create a new account *****/
       Acc_ShowFormRequestNewAccountWithParams ("","");
@@ -138,11 +138,17 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_Check;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Title,NULL,Hlp_PROFILE_SignUp);
+   Lay_StartRoundFrame (NULL,Title,NULL,
+                        Hlp_PROFILE_SignUp,
+                        true);	// Closable
+
+   /***** Help alert *****/
+   Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -169,10 +175,10 @@ void Acc_CheckIfEmptyAccountExists (void)
   {
    extern const char *Txt_Do_you_think_you_are_this_user;
    extern const char *Txt_Do_you_think_you_are_one_of_these_users;
-   extern const char *Txt_There_is_no_empty_account_associated_with_your_ID_X_;
+   extern const char *Txt_There_is_no_empty_account_associated_with_your_ID_X;
    extern const char *Txt_Check_another_ID;
    extern const char *Txt_Please_enter_your_ID;
-   extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
+   extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
    char ID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumUsrs;
    unsigned NumUsr;
@@ -211,7 +217,10 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Lay_StartRoundFrameTable (NULL,
 	                           (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					            Txt_Do_you_think_you_are_one_of_these_users,
-			           NULL,NULL,5);
+			           NULL,
+			           NULL,
+				   true,	// Closable
+			           5);
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
@@ -242,7 +251,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	}
       else
 	{
-	 sprintf (Gbl.Alert.Txt,Txt_There_is_no_empty_account_associated_with_your_ID_X_,
+	 sprintf (Gbl.Alert.Txt,Txt_There_is_no_empty_account_associated_with_your_ID_X,
 		  ID);
 	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 	}
@@ -258,7 +267,7 @@ void Acc_CheckIfEmptyAccountExists (void)
       /**** Show again form to check if I have an account *****/
       Ale_ShowAlert (Ale_WARNING,Txt_Please_enter_your_ID);
 
-      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
+      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
      }
 
    /**** Show form to create a new account *****/
@@ -337,8 +346,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrameTable (NULL,Txt_Create_account,
-                             NULL,Hlp_PROFILE_SignUp,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Create_account,NULL,
+                             Hlp_PROFILE_SignUp,
+                             false,	// Not closable
+                             2);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
@@ -400,7 +411,9 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_PROFILE_SignUp);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,
+                        Hlp_PROFILE_SignUp,
+                        false);	// Not closable
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);
@@ -459,7 +472,10 @@ void Acc_ShowFormChangeMyAccount (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_User_account,NULL,Hlp_PROFILE_Account,2);
+   Lay_StartRoundFrameTable (NULL,Txt_User_account,NULL,
+                             Hlp_PROFILE_Account,
+			     false,	// Not closable
+                             2);
 
    /***** Nickname *****/
    if (IMustFillNickname)

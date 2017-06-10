@@ -150,8 +150,10 @@ void Ins_SeeInsWithPendingCtrs (void)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Institutions_with_pending_centres,
-                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Institutions_with_pending_centres,NULL,
+                                Hlp_SYSTEM_Hierarchy_pending,
+			        false,	// Not closable
+                                2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -309,7 +311,8 @@ static void Ins_Configuration (bool PrintView)
                            PrintView ? NULL :
 	                               Ins_PutIconsToPrintAndUpload,
 	                   PrintView ? NULL :
-	                               Hlp_INSTITUTION_Information);
+	                               Hlp_INSTITUTION_Information,
+                           false);	// Not closable
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -666,8 +669,9 @@ static void Ins_ListInstitutions (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,
-                        Ins_PutIconsListInstitutions,Hlp_COUNTRY_Institutions);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
+                        Hlp_COUNTRY_Institutions,
+                        false);	// Not closable
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
@@ -917,7 +921,8 @@ void Ins_EditInstitutions (void)
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
-                        Hlp_COUNTRY_Institutions);
+                        Hlp_COUNTRY_Institutions,
+                        false);	// Not closable
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();
@@ -2152,7 +2157,10 @@ static void Ins_PutFormToCreateInstitution (void)
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_institution,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_institution,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
@@ -2511,7 +2519,10 @@ unsigned Ins_ListInssFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumInss,NumInss == 1 ? Txt_institution :
 				      Txt_institutions);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+                                NULL,
+			        false,	// Not closable
+                                2);
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
       /***** List the institutions (one row per institution) *****/

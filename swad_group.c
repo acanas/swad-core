@@ -267,7 +267,8 @@ static void Grp_EditGroupTypes (void)
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Types_of_group,
                         Grp_PutIconsEditingGroupTypes,
-                        Hlp_USERS_Groups);
+                        Hlp_USERS_Groups,
+                        false);	// Not closable
 
    /***** Put a form to create a new group type *****/
    Grp_PutFormToCreateGroupType ();
@@ -298,7 +299,8 @@ static void Grp_EditGroups (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
-                        Hlp_USERS_Groups);
+                        Hlp_USERS_Groups,
+                        false);	// Not closable
 
    /***** Put a form to create a new group *****/
    Grp_PutFormToCreateGroup ();
@@ -365,7 +367,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Lay_StartRoundFrame (NULL,Txt_Groups,
 			   ICanEdit ? Grp_PutIconToEditGroups :
 				      NULL,
-			   Hlp_USERS_Groups);
+			   Hlp_USERS_Groups,
+                           true);	// Closable
 
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
@@ -1725,7 +1728,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    Lay_StartRoundFrame (NULL,Txt_My_groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
                                    NULL,
-                        Hlp_USERS_Groups);
+                        Hlp_USERS_Groups,
+                        false);	// Not closable
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
@@ -1940,7 +1944,10 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Groups,NULL,Hlp_USERS_Groups,0);
+   Lay_StartRoundFrameTable (NULL,Txt_Groups,NULL,
+                             Hlp_USERS_Groups,
+			     false,	// Not closable
+                             0);
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
@@ -2341,8 +2348,10 @@ static void Grp_PutFormToCreateGroupType (void)
    Act_FormStartAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,
-                             NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
@@ -2455,7 +2464,10 @@ static void Grp_PutFormToCreateGroup (void)
    Act_FormStartAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();

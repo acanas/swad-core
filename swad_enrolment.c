@@ -377,7 +377,8 @@ void Enr_ReqAcceptRegisterInCrs (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Enrolment,NULL,
-                        Hlp_USERS_SignUp_confirm_enrolment);
+                        Hlp_USERS_SignUp_confirm_enrolment,
+                        false);	// Not closable
 
    /***** Show message *****/
    sprintf (Gbl.Alert.Txt,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
@@ -705,7 +706,8 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Title,NULL,
-	                Hlp_USERS_Administration_administer_multiple_users);
+	                Hlp_USERS_Administration_administer_multiple_users,
+                        false);	// Not closable
 
    /***** Step 1: List of students to be enroled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
@@ -794,7 +796,9 @@ void Enr_AskRemoveOldUsrs (void)
    Act_FormStart (ActRemOldUsr);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL,
+                        NULL,
+                        false);	// Not closable
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
@@ -1850,7 +1854,8 @@ void Enr_AskRemAllStdsThisCrs (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,
-                        Hlp_USERS_Administration_remove_all_students);
+                        Hlp_USERS_Administration_remove_all_students,
+                        false);	// Not closable
 
    if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])
      {
@@ -2301,7 +2306,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Enrolment_requests,NULL,Hlp_USERS_Requests);
+   Lay_StartRoundFrame ("100%",Txt_Enrolment_requests,NULL,
+                        Hlp_USERS_Requests,
+                        false);	// Not closable
 
    /***** Selection of scope and roles *****/
    /* Start form and table */
@@ -3119,7 +3126,8 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Administer_one_user,NULL,
-                        Hlp_USERS_Administration_administer_one_user);
+                        Hlp_USERS_Administration_administer_one_user,
+                        false);	// Not closable
 
    /***** Write form to request another user's ID *****/
    switch (Role)

@@ -135,8 +135,9 @@ static void Asg_ShowAllAssignments (void)
                                      &Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Assignments,
-                        Asg_PutIconsListAssignments,Hlp_ASSESSMENT_Assignments);
+   Lay_StartRoundFrame ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
+                        Hlp_ASSESSMENT_Assignments,
+                        false);	// Not closable
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -1176,6 +1177,7 @@ void Asg_RequestCreatOrEditAsg (void)
                              NULL,
                              ItsANewAssignment ? Hlp_ASSESSMENT_Assignments_new_assignment :
                         	                 Hlp_ASSESSMENT_Assignments_edit_assignment,
+			     false,	// Not closable
                              2);
 
    /***** Assignment title *****/
@@ -1266,7 +1268,10 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
-      Lay_StartRoundFrameTable ("100%",NULL,NULL,Hlp_USERS_Groups,0);
+      Lay_StartRoundFrameTable ("100%",NULL,NULL,
+                                Hlp_USERS_Groups,
+			        false,	// Not closable
+                                0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

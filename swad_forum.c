@@ -1009,7 +1009,8 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    /***** Start frame *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewPost,
-                        Hlp_SOCIAL_Forums_posts);
+                        Hlp_SOCIAL_Forums_posts,
+                        false);	// Not closable
 
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
@@ -1605,7 +1606,8 @@ static void For_ShowForumList (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,
-                        Hlp_SOCIAL_Forums);
+                        Hlp_SOCIAL_Forums,
+                        false);	// Not closable
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2571,7 +2573,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    /***** Start frame for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
    Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewThread,
-			Hlp_SOCIAL_Forums_threads);
+			Hlp_SOCIAL_Forums_threads,
+                        false);	// Not closable
 
    /***** List the threads *****/
    if (NumThrs)
@@ -3859,7 +3862,8 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
         	                  Txt_New_thread,
         	        NULL,
         	        IsReply ? Hlp_SOCIAL_Forums_new_post :
-        	                  Hlp_SOCIAL_Forums_new_thread);
+        	                  Hlp_SOCIAL_Forums_new_thread,
+                        false);	// Not closable
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread

@@ -93,8 +93,10 @@ void Plg_ListPlugins (void)
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,Txt_Plugins,
                              Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
-                                                                     NULL,
-                             NULL,2);
+                                                                      NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -344,7 +346,10 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Plugins,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Plugins,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Table head *****/
    Plg_PutHeadPlugins ();
@@ -838,7 +843,10 @@ static void Plg_PutFormToCreatePlugin (void)
    Act_FormStart (ActNewPlg);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_plugin,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_plugin,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

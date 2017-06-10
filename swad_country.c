@@ -137,7 +137,9 @@ void Cty_SeeCtyWithPendingInss (void)
      {
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,Txt_Countries_with_pending_institutions,
-                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
+                                NULL,Hlp_SYSTEM_Hierarchy_pending,
+			        false,	// Not closable
+                                2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -243,7 +245,8 @@ static void Cty_Configuration (bool PrintView)
                            PrintView ? NULL :
 	                               Cty_PutIconToPrint,
 	                   PrintView ? NULL :
-	                	       Hlp_COUNTRY_Information);
+	                	       Hlp_COUNTRY_Information,
+                           false);	// Not closable
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -508,8 +511,10 @@ void Cty_ListCountries2 (void)
    unsigned NumCty;
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Countries,
-                             Cty_PutIconsListCountries,Hlp_SYSTEM_Countries,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
+                             Hlp_SYSTEM_Countries,
+			     false,	// Not closable
+                             2);
    Cty_PutHeadCountriesForSeeing (true);	// Order selectable
 
    /***** Write all the countries and their number of users and institutions *****/
@@ -942,7 +947,8 @@ void Cty_EditCountries (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconToViewCountries,
-                        Hlp_SYSTEM_Countries);
+                        Hlp_SYSTEM_Countries,
+                        false);	// Not closable
 
    /***** Put a form to create a new country *****/
    Cty_PutFormToCreateCountry ();
@@ -1927,7 +1933,10 @@ static void Cty_PutFormToCreateCountry (void)
    Act_FormStart (ActNewCty);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,
+                             NULL,
+			     false,	// Not closable
+                             2);
 
    /***** Write heading *****/
    Cty_PutHeadCountriesForEdition ();
@@ -2354,7 +2363,10 @@ unsigned Cty_ListCtysFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumCtys,NumCtys == 1 ? Txt_country :
 				      Txt_countries);
-      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,
+                                NULL,
+			        false,	// Not closable
+                                2);
       Cty_PutHeadCountriesForSeeing (false);	// Order not selectable
 
       /***** List the countries (one row per country) *****/
