@@ -69,7 +69,7 @@ extern struct Globals Gbl;
 
 const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
   {
-   1,	// Sta_CLICKS_CRS_DETAILED_LIST
+   2,	// Sta_CLICKS_CRS_DETAILED_LIST
 
    1,	// Sta_CLICKS_CRS_PER_USR
    1,	// Sta_CLICKS_CRS_PER_DAYS
@@ -1469,13 +1469,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       /***** Put the table with the clicks *****/
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	 Box_StartBox ("100%",Txt_List_of_detailed_clicks,NULL,
-	                      NULL,
-                              false);	// Not closable
+	               NULL,
+                       false);	// Not closable
       else
-	 Box_StartBox (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],
-	                      NULL,
-	                      NULL,
-                              false);	// Not closable
+	 Box_StartBox (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL,
+	               NULL,
+                       false);	// Not closable
 
       fprintf (Gbl.F.Out,"<table");
       if (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy])
@@ -1802,7 +1801,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 		                             "?");
 
       /* Write the date-time (row[3]) */
-      fprintf (Gbl.F.Out,"<td id=\"log_date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
+      fprintf (Gbl.F.Out,"<td id=\"log_date_%u\" class=\"LOG RIGHT_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('log_date_%u',%ld,"
 			 "%u,',&nbsp;','%s',true,false,0x7);"
@@ -1826,6 +1825,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
                             "?&nbsp;"
                             "</td>",
 	          Gbl.RowEvenOdd);
+
       /* Write the comments of the access */
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
                Gbl.RowEvenOdd);
@@ -2019,7 +2019,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -2064,7 +2064,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
          /* Write the date */
 	 Dat_ConvDateToDateStr (&Date,StrDate);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s LEFT_TOP\">"
+                            "<td class=\"%s RIGHT_TOP\">"
                             "%s&nbsp;"
                             "</td>",
 	          NumDayWeek == 6 ? "LOG_R" :
@@ -2218,7 +2218,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th rowspan=\"3\" class=\"LEFT_TOP\">"
+                      "<th rowspan=\"3\" class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th rowspan=\"3\" class=\"LEFT_TOP\">"
@@ -2292,7 +2292,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
             /* Write the date */
             Dat_ConvDateToDateStr (&Date,StrDate);
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"%s LEFT_TOP\">"
+        	               "<td class=\"%s RIGHT_TOP\">"
         	               "%s&nbsp;"
         	               "</td>",
 	             NumDayWeek == 6 ? "LOG_R" :

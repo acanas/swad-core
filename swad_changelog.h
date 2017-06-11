@@ -235,8 +235,6 @@
 
 // TODO: Cuando sólo se cambian los grupos y no el rol de un profesor ya existente, no sale ningún mensaje. se haga lo que se haga en la edición debería salir un mensaje del tipo "Cambios realizados"
 
-// TODO: En listado de accesos, las fechas (no el día de la semana) deberían ir alineadas a la derecha.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -248,6 +246,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.241.2: Jun 11, 2017	Changes in alignment of dates in statistics. (222131 lines)
         Version 16.241.1: Jun 11, 2017	Fix bug confirming another user's ID. (222132 lines)
         Version 16.241:   Jun 11, 2017	New module swad_table to draw tables. (222132 lines)
         Version 16.240.1: Jun 11, 2017	Some functions moved from swad_layout to swad_icon. (222024 lines)
