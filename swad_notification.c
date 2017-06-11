@@ -45,6 +45,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_social.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -400,7 +401,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -636,7 +637,7 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1910,7 +1911,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       Mai_WriteWarningEmailNotifications ();
 
    /***** List of notifications *****/
-   Lay_StartTableCenter (2);
+   Tbl_StartTableCenter (2);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th class=\"CENTER_MIDDLE\">"
@@ -1952,7 +1953,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "</tr>");
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Button to save changes *****/
    Btn_PutConfirmButton (Txt_Save_changes);

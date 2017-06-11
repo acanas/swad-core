@@ -32,6 +32,7 @@
 #include "swad_degree.h"
 #include "swad_global.h"
 #include "swad_logo.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -97,7 +98,7 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Course;
 
    /***** Start of table *****/
-   Lay_StartTableCenter (2);
+   Tbl_StartTableCenter (2);
 
    /***** Write a 1st selector
           with all the countries *****/
@@ -172,7 +173,7 @@ void Hie_WriteMenuHierarchy (void)
      }
 
    /***** End of table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

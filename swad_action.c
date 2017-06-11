@@ -2568,9 +2568,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvFrmEnrSevNET*/{1643,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminNonEditTchs,NULL},
    /* ActRcvFrmEnrSevTch*/{1429,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminTchs	,NULL},
 
-   /* ActCnfID_Oth	*/{1568,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
-   /* ActCnfID_Std	*/{1569,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
-   /* ActCnfID_Tch	*/{1570,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Oth	*/{1568,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Std	*/{1569,-1,TabUnk,ActLstStd		,0x3F0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Tch	*/{1570,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
 
    /* ActFrmIDsOth	*/{1447,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ShowFormOthIDs		,NULL},
    /* ActFrmIDsStd	*/{1448,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ShowFormOthIDs		,NULL},

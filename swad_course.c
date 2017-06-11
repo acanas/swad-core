@@ -49,6 +49,7 @@
 #include "swad_role.h"
 #include "swad_RSS.h"
 #include "swad_tab.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -219,7 +220,7 @@ static void Crs_Configuration (bool PrintView)
             Gbl.CurrentCrs.Crs.FullName);
 
    /***** Start table *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -464,7 +465,7 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** End frame *****/
    Box_EndBox ();
@@ -1144,7 +1145,7 @@ static void Crs_ListCourses (void)
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
       /***** Start table *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       Crs_PutHeadCoursesForSeeing ();
 
       /***** List the courses *****/
@@ -1156,7 +1157,7 @@ static void Crs_ListCourses (void)
       Crs_ListCoursesOfAYearForSeeing (0);		// Courses without a year selected
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No courses created in the current degree
       Ale_ShowAlert (Ale_INFO,Txt_No_courses);
@@ -1376,7 +1377,7 @@ static void Crs_ListCoursesForEdition (void)
    unsigned Year;
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1387,7 +1388,7 @@ static void Crs_ListCoursesForEdition (void)
    Crs_ListCoursesOfAYearForEdition (0);
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

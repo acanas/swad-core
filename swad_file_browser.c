@@ -50,6 +50,7 @@
 #include "swad_profile.h"
 #include "swad_social.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_zip.h"
 
 /*****************************************************************************/
@@ -3146,11 +3147,11 @@ void Brw_AskEditWorksCrs (void)
          Brw_PutHiddenParamFullTreeIfSelected ();
 
          /* Put list of users to select some of them */
-         Lay_StartTableCenter (0);
+         Tbl_StartTableCenter (0);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          /* Send button */
 	 Btn_PutConfirmButton (Txt_View_homework);

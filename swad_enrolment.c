@@ -39,6 +39,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -917,7 +918,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
-   Lay_StartTableCenter (2);
+   Tbl_StartTableCenter (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
                       "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>"
@@ -930,7 +931,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -2314,7 +2315,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /***** Selection of scope and roles *****/
    /* Start form and table */
    Act_FormStart (ActUpdSignUpReq);
-   Lay_StartTableWideMargin (2);
+   Tbl_StartTableWideMargin (2);
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2343,7 +2344,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "</tr>");
 
    /* End table and form */
-   Lay_EndTable ();
+   Tbl_EndTable ();
    Act_FormEnd ();
 
    /***** Build query *****/
@@ -2786,7 +2787,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Start table */
-      Lay_StartTableCenter (2);
+      Tbl_StartTableCenter (2);
       fprintf (Gbl.F.Out,"<th></th>"
                          "<th class=\"LEFT_TOP\">"
                          "%s"
@@ -2943,7 +2944,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         }
 
       /* End table */
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);

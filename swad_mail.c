@@ -39,6 +39,7 @@
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_tab.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -1197,10 +1198,10 @@ void Mai_ShowFormOthEmail (void)
 	                          &Gbl.Usrs.Other.UsrDat,NULL);
 
 	 /***** Form with the user's email *****/
-	 Lay_StartTableCenter (2);
+	 Tbl_StartTableCenter (2);
 	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
                                      (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
-	 Lay_EndTable ();
+	 Tbl_EndTable ();
 
          /***** End frame *****/
          Box_EndBox ();

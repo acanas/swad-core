@@ -40,6 +40,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_string.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -147,7 +148,7 @@ static void Asg_ShowAllAssignments (void)
    if (Gbl.Asgs.Num)
      {
       /***** Table head *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       Asg_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the assignments *****/
@@ -158,7 +159,7 @@ static void Asg_ShowAllAssignments (void)
 	                        false);	// Not print view
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No assignments created
       Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
@@ -331,7 +332,7 @@ void Asg_PrintOneAssignment (void)
 			      Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Table head *****/
-   Lay_StartTableWideMargin (2);
+   Tbl_StartTableWideMargin (2);
    Asg_PutHeadForSeeing (true);		// Print view
 
    /***** Write assignment *****/
@@ -339,7 +340,7 @@ void Asg_PrintOneAssignment (void)
                           true);	// Print view
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

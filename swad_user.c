@@ -61,6 +61,7 @@
 #include "swad_record.h"
 #include "swad_role.h"
 #include "swad_tab.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -6199,7 +6200,7 @@ void Usr_ListAllDataGsts (void)
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_GST;
 
       /***** Start table with list of guests *****/
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
 
       /* Start row */
       fprintf (Gbl.F.Out,"<tr>");
@@ -6241,7 +6242,7 @@ void Usr_ListAllDataGsts (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
       /***** Show warning indicating no guests found *****/
@@ -6347,7 +6348,7 @@ void Usr_ListAllDataStds (void)
 	}
 
       /***** Start table with list of students *****/
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
@@ -6441,7 +6442,7 @@ void Usr_ListAllDataStds (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
@@ -6569,7 +6570,7 @@ void Usr_ListAllDataTchs (void)
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
 
       /***** Start table with lists of teachers *****/
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
 
       /***** List teachers and non-editing teachers *****/
       Gbl.RowEvenOdd = 0;
@@ -6577,7 +6578,7 @@ void Usr_ListAllDataTchs (void)
       Usr_ListRowsAllDataTchs (Rol_NET,FieldNames,NumColumns);
 
       /***** End of table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else        // NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
@@ -7346,7 +7347,7 @@ void Usr_SeeGuests (void)
 	 Act_FormStart (ActSeeRecSevGst);
 
          /* Start table */
-	 Lay_StartTableWide (0);
+	 Tbl_StartTableWide (0);
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -7363,7 +7364,7 @@ void Usr_SeeGuests (void)
            }
 
          /* End table */
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          /* Send button */
 	 Btn_PutConfirmButton (Txt_Show_records);
@@ -7514,7 +7515,7 @@ void Usr_SeeStudents (void)
            }
 
          /* Start table */
-         Lay_StartTableWide (0);
+         Tbl_StartTableWide (0);
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -7532,7 +7533,7 @@ void Usr_SeeStudents (void)
            }
 
          /* End table */
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          if (ICanViewRecords)
            {
@@ -7685,7 +7686,7 @@ void Usr_SeeTeachers (void)
             Act_FormStart (ActSeeRecSevTch);
 
          /* Start table */
-         Lay_StartTableWide (0);
+         Tbl_StartTableWide (0);
 
          /***** Draw the classphoto/list  *****/
          switch (Gbl.Usrs.Me.ListType)
@@ -7712,7 +7713,7 @@ void Usr_SeeTeachers (void)
            }
 
          /* End table */
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          if (ICanViewRecords)
            {
@@ -7919,10 +7920,10 @@ void Usr_SeeGstClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
                                                                         -1L,
 				 -1L,-1L);
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
                           Rol_GST,false);
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
       /***** Show warning indicating no guests found *****/
@@ -7967,10 +7968,10 @@ void Usr_SeeStdClassPhotoPrn (void)
 					                                -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
                           Rol_STD,false);
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -8034,7 +8035,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 					                                -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
 
       /* List teachers and non-editing teachers */
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
@@ -8042,7 +8043,7 @@ void Usr_SeeTchClassPhotoPrn (void)
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			  Rol_NET,false);
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// NumUsrs == 0
       /***** Show warning indicating no teachers found *****/

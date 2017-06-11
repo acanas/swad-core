@@ -44,6 +44,7 @@
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_social.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1067,7 +1068,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
                                         &PaginationPsts);
 
       /***** Start table *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
       /***** Show posts from this page, the author and the date of last reply *****/
       mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
@@ -1119,7 +1120,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
         }
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Write again links to pages *****/
       if (PaginationPsts.MoreThanOnePage)
@@ -2587,7 +2588,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                         &PaginationThrs);
 
       /***** Heading row *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th style=\"width:20px;\"></th>"
                          "<th class=\"CONTEXT_COL\"></th>"	// Column for contextual icons
@@ -2639,7 +2640,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       For_ListForumThrs (ThrCods,ThrCodHighlighted,&PaginationThrs);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Write links to all the pages in the listing of threads *****/
       if (PaginationThrs.MoreThanOnePage)
@@ -3881,7 +3882,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      }
 
    /***** Subject and content *****/
-   Lay_StartTableCenter (2);
+   Tbl_StartTableCenter (2);
 
    // If writing a reply to a message of an existing thread ==> write subject
    /* Subject */
@@ -3915,7 +3916,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 	              "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Content);
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Help for text editor *****/
    Lay_HelpPlainEditor ();

@@ -52,6 +52,7 @@
 #include "swad_social.h"
 #include "swad_statistic.h"
 #include "swad_tab.h"
+#include "swad_table.h"
 #include "swad_web_service.h"
 
 /*****************************************************************************/
@@ -503,7 +504,7 @@ void Sta_AskShowCrsHits (void)
          Par_PutHiddenParamLong ("LastRow",0);
 
          /***** Put list of users to select some of them *****/
-         Lay_StartTableCenter (2);
+         Tbl_StartTableCenter (2);
          fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"RIGHT_TOP %s\">%s:"
 			    "</td>"
@@ -595,7 +596,7 @@ void Sta_AskShowCrsHits (void)
                             "</label>"
                             "</td>"
                             "</tr>");
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
 	 /***** Hidden param used to get client time zone *****/
 	 Dat_PutHiddenParBrowserTZDiff ();
@@ -1653,7 +1654,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /***** Put heading with backward and forward buttons *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    fprintf (Gbl.F.Out,"<tr>");
 
    /* Put link to jump to previous page (older clicks) */
@@ -1718,7 +1719,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -2431,7 +2432,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
    unsigned B;
 
    /***** Write numbers from 0 to Hits.Max *****/
-   Lay_StartTableWide (0);
+   Tbl_StartTableWide (0);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
 	              " style=\"width:%upx;\">"
@@ -2473,7 +2474,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
                R,G,B,Gbl.Prefs.IconsURL);
      }
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

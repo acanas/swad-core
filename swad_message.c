@@ -45,6 +45,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -283,7 +284,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start table *****/
-   Lay_StartTableCenter (2);
+   Tbl_StartTableCenter (2);
 
    /***** "To:" section (recipients) *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -298,7 +299,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    else
      {
       /***** Show potential recipients *****/
-      Lay_StartTableWide (0);
+      Tbl_StartTableWide (0);
       if (ShowUsrsInCrs)
 	{
 	 Usr_ListUsersToSelect (Rol_TCH);	// All teachers in course
@@ -306,7 +307,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 Usr_ListUsersToSelect (Rol_STD);	// All students in selected groups
 	}
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
 
    fprintf (Gbl.F.Out,"</td>"
@@ -316,7 +317,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Help for text editor and send button *****/
    Lay_HelpPlainEditor ();
@@ -1827,7 +1828,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
                                         &Pagination);
 
       /***** Show received / sent messages in this page *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1842,7 +1843,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
          Msg_ShowASentOrReceivedMessage (NumMsg,MsgCod);
         }
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -2579,7 +2580,7 @@ void Msg_ShowFormToFilterMsgs (void)
      };
 
    /***** Table start *****/
-   Lay_StartTableCenter (2);
+   Tbl_StartTableCenter (2);
 
    /***** Filter authors/recipients *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2608,7 +2609,7 @@ void Msg_ShowFormToFilterMsgs (void)
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -2937,7 +2938,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td rowspan=\"3\" colspan=\"2\" class=\"LEFT_TOP\">");
-      Lay_StartTable (2);
+      Tbl_StartTable (2);
 
       /***** Write course origin of message *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2956,7 +2957,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write "From:" *****/
@@ -3131,7 +3132,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
    bool WriteAuthor = false;
 
    /***** Start table *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
 
    /***** Start first column *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3182,7 +3183,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
                       "</tr>");
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

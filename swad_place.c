@@ -35,6 +35,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_place.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -122,7 +123,7 @@ void Plc_SeePlaces (void)
                         	      NULL,
                            Hlp_INSTITUTION_Places,
                            false);	// Not closable
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
@@ -196,7 +197,7 @@ void Plc_SeePlaces (void)
 	       NumCtrsWithPlc);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Button to create place *****/
       if (ICanEdit)
@@ -465,7 +466,7 @@ static void Plc_ListPlacesForEdition (void)
    struct Place *Plc;
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Plc_PutHeadPlaces ();
 
    /***** Write all the places *****/
@@ -528,7 +529,7 @@ static void Plc_ListPlacesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

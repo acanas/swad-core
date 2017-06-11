@@ -43,6 +43,7 @@
 #include "swad_ID.h"
 #include "swad_image.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_test.h"
 #include "swad_test_import.h"
@@ -328,7 +329,7 @@ void Tst_ShowFormAskTst (void)
         {
          Act_FormStart (ActSeeTst);
 
-         Lay_StartTable (2);
+         Tbl_StartTable (2);
 
          /***** Selection of tags *****/
          Tst_ShowFormSelTags (NumRows,mysql_res,true,1);
@@ -357,7 +358,7 @@ void Tst_ShowFormAskTst (void)
                             "</td>"
                             "</tr>");
 
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          /***** Send button *****/
          Btn_PutConfirmButton (Txt_Generate_test);
@@ -450,9 +451,9 @@ void Tst_ShowNewTest (void)
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
-            Lay_StartTableWideMargin (10);
+            Tbl_StartTableWideMargin (10);
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
-	    Lay_EndTable ();
+	    Tbl_EndTable ();
 
 	    /***** Test result will be saved? *****/
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
@@ -552,9 +553,9 @@ void Tst_AssessTest (void)
 	   }
 
 	 /***** Write answers and solutions *****/
-         Lay_StartTableWideMargin (10);
+         Tbl_StartTableWideMargin (10);
 	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
-	 Lay_EndTable ();
+	 Tbl_EndTable ();
 
 	 /***** Write total mark of test *****/
 	 if (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING)
@@ -1290,7 +1291,7 @@ void Tst_ShowFormAskEditTsts (void)
       Act_FormStart (ActLstTstQst);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
 
-      Lay_StartTable (2);
+      Tbl_StartTable (2);
 
       /***** Selection of tags *****/
       Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
@@ -1301,7 +1302,7 @@ void Tst_ShowFormAskEditTsts (void)
       /***** Starting and ending dates in the search *****/
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Send button *****/
       Btn_PutConfirmButton (Txt_Show_questions);
@@ -1651,7 +1652,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    if (NumCols > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">");
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
@@ -1714,7 +1715,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 	       row[1]);
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
@@ -1860,7 +1861,7 @@ static void Tst_ShowFormConfigTst (void)
    Act_FormStart (ActRcvCfgTst);
 
    /***** Tests are visible from plugins? *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
@@ -1893,14 +1894,14 @@ static void Tst_ShowFormConfigTst (void)
                       "<td class=\"LEFT_BOTTOM\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_No_of_questions);
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
                             Gbl.Test.Config.Min);	// Minimum number of questions
    Tst_PutInputFieldNumQst ("NumQstDef",Txt_default,
                             Gbl.Test.Config.Def);	// Default number of questions
    Tst_PutInputFieldNumQst ("NumQstMax",Txt_maximum,
                             Gbl.Test.Config.Max);	// Maximum number of questions
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -1945,7 +1946,7 @@ static void Tst_ShowFormConfigTst (void)
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Send button *****/
    Btn_PutConfirmButton (Txt_Save);
@@ -2270,7 +2271,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    if (NumCols > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">");
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
@@ -2310,7 +2311,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
                Txt_TST_STR_ANSWER_TYPES[AnsType]);
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
@@ -2738,7 +2739,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
                         false);	// Not closable
 
    /***** Write the heading *****/
-   Lay_StartTableWideMargin (2);
+   Tbl_StartTableWideMargin (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"2\"></th>"
                       "<th class=\"CENTER_TOP\">"
@@ -2983,7 +2984,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Button to add a new question *****/
    Tst_PutButtonToAddQuestion ();
@@ -3092,7 +3093,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         Lay_StartTable (2);
+         Tbl_StartTable (2);
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
@@ -3168,7 +3169,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
 	    if (LengthFeedback)
 	       free ((void *) Feedback);
            }
-         Lay_EndTable ();
+         Tbl_EndTable ();
 	 break;
       default:
          break;
@@ -3340,7 +3341,7 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3381,7 +3382,7 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Tst_WriteScoreEnd ();
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -3410,7 +3411,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    */
 
    /***** Start table *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
 
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -3484,7 +3485,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3590,7 +3591,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
         }
 
    /***** Start table *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"<td></td>"
@@ -3727,7 +3728,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** End of table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -3799,7 +3800,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3854,7 +3855,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">");
-      Lay_StartTable (2);
+      Tbl_StartTable (2);
 
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
@@ -3883,7 +3884,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 			    "</tr>");
         }
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else
       fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_TOP\">"
@@ -3921,7 +3922,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Tst_WriteScoreEnd ();
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -3963,7 +3964,7 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Lay_ShowErrorAndExit ("Wrong integer answer.");
 
    /***** Header with the title of each column *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -4033,7 +4034,7 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Tst_WriteScoreEnd ();
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -4089,7 +4090,7 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -4158,7 +4159,7 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Tst_WriteScoreEnd ();
      }
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -4255,7 +4256,7 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
    if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
      {
       /***** Write the tags *****/
-      Lay_StartTable (2);
+      Tbl_StartTable (2);
 
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -4273,7 +4274,7 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
                   row[0]);
         }
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else
       fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">&nbsp;(%s)&nbsp;</span>",
@@ -4540,7 +4541,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       Tst_PutParamQstCod ();
 
    /***** Start table *****/
-   Lay_StartTable (2);	// Table for this question
+   Tbl_StartTable (2);	// Table for this question
 
    /***** Help for text editor *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4559,7 +4560,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       "</td>"
                       "<td class=\"LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Tags);
-   Lay_StartTable (2);	// Table for tags
+   Tbl_StartTable (2);	// Table for tags
 
    for (NumTag = 0;
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
@@ -4609,7 +4610,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       fprintf (Gbl.F.Out,"</tr>");
      }
 
-   Lay_EndTable ();	// Table for tags
+   Tbl_EndTable ();	// Table for tags
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -4739,7 +4740,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
 	              "<td class=\"LEFT_TOP\">");
-   Lay_StartTable (2);	// Table with choice answers
+   Tbl_StartTable (2);	// Table with choice answers
 
    OptionsDisabled = Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
                      Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE &&
@@ -4864,12 +4865,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          "</td>"
 	                 "</tr>");
      }
-   Lay_EndTable ();	// Table with choice answers
+   Tbl_EndTable ();	// Table with choice answers
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End table *****/
-   Lay_EndTable ();	// Table for this question
+   Tbl_EndTable ();	// Table for this question
 
    /***** Send button *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
@@ -7013,7 +7014,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         Lay_StartTableCenter (2);
+         Tbl_StartTableCenter (2);
          fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
@@ -7021,18 +7022,18 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassForm[Gbl.Prefs.Theme]);
-         Lay_StartTable (2);
+         Tbl_StartTable (2);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
-         Lay_EndTable ();
+         Tbl_EndTable ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
          /***** Starting and ending dates in the search *****/
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          /***** Send button *****/
 	 Btn_PutConfirmButton (Txt_View_test_results);
@@ -7724,7 +7725,7 @@ void Tst_ShowOneTestResult (void)
 				 Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Start table *****/
-      Lay_StartTableWideMargin (10);
+      Tbl_StartTableWideMargin (10);
 
       /***** Header row *****/
       /* Get data of the user who made the test */
@@ -7821,7 +7822,7 @@ void Tst_ShowOneTestResult (void)
 	 Tst_ShowTstTotalMark (TotalScore);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** End frame *****/
       Box_EndBox ();

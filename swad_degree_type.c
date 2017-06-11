@@ -40,6 +40,7 @@
 #include "swad_degree_type.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -225,14 +226,14 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (Gbl.Degs.DegTypes.Num)
      {
       /***** Write heading *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No degree types created
       Ale_ShowAlert (Ale_INFO,Txt_No_types_of_degree);
@@ -361,7 +362,7 @@ static void DT_ListDegreeTypesForEdition (void)
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -411,7 +412,7 @@ static void DT_ListDegreeTypesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

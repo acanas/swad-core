@@ -52,6 +52,7 @@
 #include "swad_RSS.h"
 #include "swad_string.h"
 #include "swad_tab.h"
+#include "swad_table.h"
 #include "swad_text.h"
 #include "swad_theme.h"
 
@@ -321,7 +322,7 @@ static void Deg_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start table *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -526,7 +527,7 @@ static void Deg_Configuration (bool PrintView)
 	}
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** End frame *****/
       Box_EndBox ();
@@ -684,7 +685,7 @@ static void Deg_ListDegreesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -858,7 +859,7 @@ static void Deg_ListDegreesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1183,7 +1184,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Write heading *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/
@@ -1193,7 +1194,7 @@ static void Deg_ListDegrees (void)
 	 Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No degrees created in the current centre
       Ale_ShowAlert (Ale_INFO,Txt_No_degrees);

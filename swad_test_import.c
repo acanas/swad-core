@@ -34,6 +34,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 #include "swad_test.h"
 #include "swad_xml.h"
 
@@ -536,7 +537,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       /* Current element is <test> */
 
       /***** Write heading of list of imported questions *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       TsI_WriteHeadingListImportedQst ();
 
       /***** For each question... *****/
@@ -671,7 +672,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	   }
 	}
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// TestElem not found
       Ale_ShowAlert (Ale_ERROR,"Root element &lt;test&gt; not found.");

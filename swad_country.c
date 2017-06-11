@@ -40,6 +40,7 @@
 #include "swad_language.h"
 #include "swad_preference.h"
 #include "swad_QR.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -304,7 +305,7 @@ static void Cty_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
       /***** Country name (an link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -440,7 +441,7 @@ static void Cty_Configuration (bool PrintView)
 	}
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** End frame *****/
       Box_EndBox ();
@@ -1530,7 +1531,7 @@ static void Cty_ListCountriesForEdition (void)
    Txt_Language_t Lan;
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Cty_PutHeadCountriesForEdition ();
 
    /***** Write all the countries *****/
@@ -1629,7 +1630,7 @@ static void Cty_ListCountriesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

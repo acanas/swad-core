@@ -34,6 +34,7 @@
 #include "swad_layout.h"
 #include "swad_profile.h"
 #include "swad_role_type.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -161,7 +162,7 @@ void Dup_ListDuplicateUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Lay_StartTableCenter (2);
+      Tbl_StartTableCenter (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -220,7 +221,7 @@ void Dup_ListDuplicateUsrs (void)
         }
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -294,7 +295,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Lay_StartTableCenter (2);
+      Tbl_StartTableCenter (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -362,7 +363,7 @@ static void Dup_ListSimilarUsrs (void)
         }
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

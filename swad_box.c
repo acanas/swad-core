@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -73,7 +74,7 @@ void Box_StartBoxTable (const char *Width,const char *Title,
    Box_StartBox (Width,Title,FunctionToDrawContextualIcons,
                  HelpLink,
                  Closable);
-   Lay_StartTableWide (CellPadding);
+   Tbl_StartTableWide (CellPadding);
   }
 
 void Box_StartBoxTableShadow (const char *Width,const char *Title,
@@ -84,7 +85,7 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
    Box_StartBoxShadow (Width,Title,
                               FunctionToDrawContextualIcons,
                               HelpLink);
-   Lay_StartTableWide (CellPadding);
+   Tbl_StartTableWide (CellPadding);
   }
 
 void Box_StartBox (const char *Width,const char *Title,
@@ -192,13 +193,13 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 
 void Box_EndBoxTable (void)
   {
-   Lay_EndTable ();
+   Tbl_EndTable ();
    Box_EndBox ();
   }
 
 void Box_EndBoxTableWithButton (Btn_Button_t Button,const char *TxtButton)
   {
-   Lay_EndTable ();
+   Tbl_EndTable ();
    Box_EndBoxWithButton (Button,TxtButton);
   }
 

@@ -35,6 +35,7 @@
 #include "swad_global.h"
 #include "swad_indicator.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -113,7 +114,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Form to update indicators *****/
    /* Start form and table */
    Act_FormStart (ActReqStaCrs);
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
 
    /* Scope */
    fprintf (Gbl.F.Out,"<tr>"
@@ -175,7 +176,7 @@ void Ind_ReqIndicatorsCourses (void)
 	              "</tr>");
 
    /* End table and form */
-   Lay_EndTable ();
+   Tbl_EndTable ();
    Act_FormEnd ();
 
    /***** Show the stats of courses *****/
@@ -593,7 +594,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    const char *ClassHighlight = "DAT RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
 
    fprintf (Gbl.F.Out,"<tr>");
    if (PutForm)
@@ -665,7 +666,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
             NumCrss,
             100.0);
 
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

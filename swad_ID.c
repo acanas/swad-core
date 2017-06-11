@@ -37,6 +37,7 @@
 #include "swad_ID.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -415,7 +416,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 
 	 /* Check 2: I can see the IDs of confirmed students */
          if (UsrDat->Roles.InCurrentCrs.Role == Rol_STD &&	// A student
-	     UsrDat->Accepted)				// who accepted registration
+	     UsrDat->Accepted)					// who accepted registration
             return true;
 
          /* Check 3: I can see the IDs of users with user's data empty */
@@ -441,7 +442,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/****************** Put a link to confirm of another user's ID ***************/
+/****************** Put a link to confirm another user's ID ******************/
 /*****************************************************************************/
 
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
@@ -558,10 +559,10 @@ void ID_ShowFormOthIDs (void)
 	                          &Gbl.Usrs.Other.UsrDat,NULL);
 
 	 /***** Form with the user's ID *****/
-         Lay_StartTableWide (2);
+         Tbl_StartTableWide (2);
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
          /***** End frame *****/
          Box_EndBox ();

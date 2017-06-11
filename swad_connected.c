@@ -39,6 +39,7 @@
 #include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -217,7 +218,7 @@ void Con_GetAndShowLastClicks (void)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last clicks");
 
    /***** Write list of connected users *****/
-   Lay_StartTableCenter (1);
+   Tbl_StartTableCenter (1);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:85px;\">"
@@ -335,7 +336,7 @@ void Con_GetAndShowLastClicks (void)
                ClassRow,Deg.ShrtName,
 	       ClassRow,row[8]);
      }
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Free structure that stores the query result *****/
    mysql_free_result (mysql_res);

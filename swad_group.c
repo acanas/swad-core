@@ -36,6 +36,7 @@
 #include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /*************************** Internal constants ******************************/
@@ -386,13 +387,13 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** List the groups for each group type *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
 	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
 	    Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Free list of groups types and groups in this course *****/
       Grp_FreeListGrpTypesAndGrps ();
@@ -1243,7 +1244,7 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1321,7 +1322,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStartAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      Lay_StartTableCenter (2);
+      Tbl_StartTableCenter (2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/%s16x16.gif\""
@@ -1347,7 +1348,7 @@ static void Grp_ListGroupTypesForEdition (void)
 				                   true);		// Submit on change
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
-      Lay_EndTable ();
+      Tbl_EndTable ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1360,7 +1361,7 @@ static void Grp_ListGroupTypesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -1449,7 +1450,7 @@ static void Grp_ListGroupsForEdition (void)
    Rol_Role_t Role;
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1572,7 +1573,7 @@ static void Grp_ListGroupsForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -1739,7 +1740,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 Act_FormStart (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
@@ -1749,7 +1750,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	                                                          &NumGrpsThisTypeIBelong);
 	    NumGrpsIBelong += NumGrpsThisTypeIBelong;
 	   }
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** End form *****/
       if (PutFormToChangeGrps)
@@ -2405,7 +2406,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Open time *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
@@ -2430,7 +2431,7 @@ static void Grp_PutFormToCreateGroupType (void)
 				                false);			// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of groups of this type *****/

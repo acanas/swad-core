@@ -41,6 +41,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_QR.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -236,7 +237,7 @@ static void Att_ShowAllAttEvents (void)
    if (Gbl.AttEvents.Num)
      {
       /***** Table head *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Dat_START_TIME;
@@ -275,7 +276,7 @@ static void Att_ShowAllAttEvents (void)
 	 Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent - 1],false);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No events created
       Ale_ShowAlert (Ale_INFO,Txt_No_events);
@@ -1961,7 +1962,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Grp_PutParamsCodGrps ();
 
       /***** List students' data *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
 
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
@@ -1997,7 +1998,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
          Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
         }
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /* Send button */
       Btn_PutConfirmButton (Txt_Save);
@@ -2702,9 +2703,9 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Grp_PutParamsCodGrps ();
 
 	 /* Write list of students to select some of them */
-	 Lay_StartTableCenter (0);
+	 Tbl_StartTableCenter (0);
 	 Usr_ListUsersToSelect (Rol_STD);
-	 Lay_EndTable ();
+	 Tbl_EndTable ();
 
 	 /* Send button */
 	 Btn_PutConfirmButton (Txt_Show_list);
@@ -3227,9 +3228,9 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                         	                       Hlp_USERS_Attendance_attendance_list,
                         false);	// Not closable
    if (PutButtonShowDetails)
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
    else
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3277,7 +3278,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Button to show more details *****/
    if (PutButtonShowDetails)

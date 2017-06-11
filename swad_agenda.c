@@ -42,6 +42,7 @@
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_string.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -477,7 +478,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    if (Gbl.Agenda.Num)
      {
       /***** Start table *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
 
       /***** Table head *****/
       Agd_WriteHeaderListEvents (AgendaType);
@@ -489,7 +490,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 	 Agd_ShowOneEvent (AgendaType,Gbl.Agenda.LstAgdCods[NumEvent - 1]);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_No_events);

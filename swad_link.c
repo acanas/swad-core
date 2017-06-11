@@ -35,6 +35,7 @@
 #include "swad_global.h"
 #include "swad_link.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -390,7 +391,7 @@ static void Lnk_ListLinksForEdition (void)
    struct Link *Lnk;
 
    /***** Start table *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -459,7 +460,7 @@ static void Lnk_ListLinksForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

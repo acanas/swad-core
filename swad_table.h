@@ -1,7 +1,7 @@
-// swad_layout.h: page layout
+// swad_table.h: tables
 
-#ifndef _SWAD_LAY
-#define _SWAD_LAY
+#ifndef _SWAD_TBL
+#define _SWAD_TBL
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,18 +27,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
-
-#define Lay_MAX_BYTES_TITLE (4096 - 1)
-
-#define Lay_HIDE_BOTH_COLUMNS	0						// 00
-#define Lay_SHOW_RIGHT_COLUMN	1						// 01
-#define Lay_SHOW_LEFT_COLUMN	2						// 10
-#define Lay_SHOW_BOTH_COLUMNS (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN)	// 11
 
 /*****************************************************************************/
 /********************************* Public types ******************************/
@@ -48,37 +39,10 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Lay_WriteStartOfPage (void);
-
-void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
-                            void (*FuncParams) (),
-                            const char *Icon,
-                            const char *Title,const char *Text,
-                            const char *OnSubmit);
-void Lay_PutContextualCheckbox (Act_Action_t NextAction,
-                                void (*FuncParams) (),
-                                const char *CheckboxName,
-                                bool Checked,bool Disabled,
-                                const char *Title,const char *Text);
-
-void Lay_StartSection (const char *SectionId);
-void Lay_EndSection (void);
-
-void Lay_ShowErrorAndExit (const char *Txt);
-
-void Lay_RefreshNotifsAndConnected (void);
-void Lay_RefreshLastClicks (void);
-
-void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
-                                long InsCod,long DegCod,long CrsCod);
-
-void Lay_AdvertisementMobile (void);
-
-void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[]);
-
-void Lay_HelpPlainEditor (void);
-void Lay_HelpRichEditor (void);
-
-void Lay_StartHTMLFile (FILE *File,const char *Title);
+void Tbl_StartTable (unsigned CellPadding);
+void Tbl_StartTableCenter (unsigned CellPadding);
+void Tbl_StartTableWide (unsigned CellPadding);
+void Tbl_StartTableWideMargin (unsigned CellPadding);
+void Tbl_EndTable (void);
 
 #endif

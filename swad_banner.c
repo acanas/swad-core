@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -382,7 +383,7 @@ static void Ban_ListBannersForEdition (void)
    struct Banner *Ban;
 
    /***** Start table *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
 
    /***** Table head *****/
    Ban_PutHeadBanners ();
@@ -478,7 +479,7 @@ static void Ban_ListBannersForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

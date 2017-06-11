@@ -39,6 +39,7 @@
 #include "swad_parameter.h"
 #include "swad_role.h"
 #include "swad_survey.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -224,7 +225,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.Svys.Num)
      {
       /***** Table head *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Svy_ORDER_BY_START_DATE;
@@ -266,7 +267,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy - 1],SvyQst,false);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No surveys created
       Ale_ShowAlert (Ale_INFO,Txt_No_surveys);
@@ -443,7 +444,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start table *****/
    if (ShowOnlyThisSvyComplete)
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
@@ -671,7 +672,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    if (ShowOnlyThisSvyComplete)
      {
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** End frame *****/
       Box_EndBox ();
@@ -2673,7 +2674,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Svy_PutParamQstCod (SvyQst->QstCod);
 
    /***** Start table *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2722,7 +2723,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
                       "<td class=\"LEFT_TOP\">");
-   Lay_StartTable (2);
+   Tbl_StartTable (2);
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -2745,12 +2746,12 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	                 "</td>"
 	                 "</tr>");
      }
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Send button *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
@@ -3195,7 +3196,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	}
 
       /***** Write the heading *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
@@ -3279,7 +3280,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
                             "</tr>");
         }
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       if (PutFormAnswerSurvey)
 	{
@@ -3379,7 +3380,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    /***** Write the answers *****/
    if (NumAnswers)
      {
-      Lay_StartTable (5);
+      Tbl_StartTable (5);
       for (NumAns = 0;
 	   NumAns < NumAnswers;
 	   NumAns++)
@@ -3443,7 +3444,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	 /* Free memory allocated for the answer */
 	 free ((void *) Answer);
 	}
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
 
    /***** Free structure that stores the query result *****/

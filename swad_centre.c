@@ -44,6 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -386,7 +387,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
       /***** Institution *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -630,7 +631,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** End frame *****/
       Box_EndBox ();
@@ -754,7 +755,7 @@ static void Ctr_ListCentres (void)
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Start table *****/
-      Lay_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (2);
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
       /***** Write all the centres and their nuber of teachers *****/
@@ -764,7 +765,7 @@ static void Ctr_ListCentres (void)
 	 Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
       /***** End table *****/
-      Lay_EndTable ();
+      Tbl_EndTable ();
      }
    else	// No centres created in the current institution
       Ale_ShowAlert (Ale_INFO,Txt_No_centres);
@@ -1410,7 +1411,7 @@ static void Ctr_ListCentresForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Lay_StartTableWide (2);
+   Tbl_StartTableWide (2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -1599,7 +1600,7 @@ static void Ctr_ListCentresForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndTable ();
+   Tbl_EndTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

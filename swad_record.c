@@ -47,6 +47,7 @@
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_role.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -1786,7 +1787,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP\">");
-   Lay_StartTableWide (0);
+   Tbl_StartTableWide (0);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Rec_DEGREE_LOGO_SIZE);
@@ -1799,7 +1800,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                       "</tr>",
             Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentCrs.Crs.FullName,
             UsrDat->FullName);
-   Lay_EndTable ();
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -2355,7 +2356,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       /***** Show email and user's IDs *****/
       if (ShowIDRows)
 	{
-         Lay_StartTableWide (2);
+         Tbl_StartTableWide (2);
 
          /* Show email */
 	 Rec_ShowEmail (UsrDat,ClassForm);
@@ -2363,7 +2364,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 /* Show user's IDs */
 	 Rec_ShowUsrIDs (UsrDat,ClassForm,Anchor);
 
-         Lay_EndTable ();
+         Tbl_EndTable ();
 	}
 
       /***** Start form *****/
@@ -2417,7 +2418,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
             break;
         }
 
-      Lay_StartTableWide (2);
+      Tbl_StartTableWide (2);
 
       if (ShowIDRows)
 	{
@@ -2476,7 +2477,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          Rec_ShowOfficePhone (UsrDat,ShowData,ClassForm);
 	}
 
-      Lay_EndTable ();
+      Tbl_EndTable ();
 
       /***** Button and end form *****/
       switch (TypeOfView)

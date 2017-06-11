@@ -1155,47 +1155,6 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
   }
 
 /*****************************************************************************/
-/******************************* Start/end table *****************************/
-/*****************************************************************************/
-
-void Lay_StartTable (unsigned CellPadding)
-  {
-   fprintf (Gbl.F.Out,"<table");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," class=\"CELLS_PAD_%u\"",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,">");
-  }
-
-void Lay_StartTableCenter (unsigned CellPadding)
-  {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,"\">");
-  }
-
-void Lay_StartTableWide (unsigned CellPadding)
-  {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,"\">");
-  }
-
-void Lay_StartTableWideMargin (unsigned CellPadding)
-  {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,"\">");
-  }
-
-void Lay_EndTable (void)
-  {
-   fprintf (Gbl.F.Out,"</table>");
-  }
-
-/*****************************************************************************/
 /****************************** Start/end section ****************************/
 /*****************************************************************************/
 

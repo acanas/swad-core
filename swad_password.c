@@ -37,6 +37,7 @@
 #include "swad_ID.h"
 #include "swad_password.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -854,9 +855,9 @@ void Pwd_ShowFormOthPwd (void)
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
-	 Lay_StartTableCenter (2);
+	 Tbl_StartTableCenter (2);
          Pwd_PutFormToGetNewPasswordTwice ();
-         Lay_EndTable ();
+         Tbl_EndTable ();
 
 	 /* End form */
 	 Btn_PutConfirmButton (Txt_Change_password);

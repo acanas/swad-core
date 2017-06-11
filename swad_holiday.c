@@ -34,6 +34,7 @@
 #include "swad_global.h"
 #include "swad_holiday.h"
 #include "swad_parameter.h"
+#include "swad_table.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -107,7 +108,7 @@ void Hld_SeeHolidays (void)
                            false);	// Not closable
       if (Gbl.Hlds.Num)
 	 {
-         Lay_StartTableWideMargin (2);
+         Tbl_StartTableWideMargin (2);
          fprintf (Gbl.F.Out,"<tr>");
 	 for (Order = Hld_ORDER_BY_PLACE;
 	      Order <= Hld_ORDER_BY_START_DATE;
@@ -171,7 +172,7 @@ void Hld_SeeHolidays (void)
 			       "</tr>",
 		     Gbl.Hlds.Lst[NumHld].Name);
 	   }
-	 Lay_EndTable ();
+	 Tbl_EndTable ();
 	}
       else	// No holidays created in the current institution
 	 Ale_ShowAlert (Ale_INFO,Txt_No_holidays);
