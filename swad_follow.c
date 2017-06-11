@@ -133,9 +133,9 @@ void Fol_SuggestUsrsToFollowMainZone (void)
      {
       /***** Start frame *****/
       Box_StartBoxTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
-                                Hlp_SOCIAL_Profiles_who_to_follow,
-			        false,	// Not closable
-                                2);
+                         Hlp_SOCIAL_Profiles_who_to_follow,
+			 false,	// Not closable
+                         2);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -689,9 +689,9 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 
 	 /***** Start listing *****/
 	 Box_StartBoxTable ("560px",Txt_Following,NULL,
-	                           NULL,
-			           false,	// Not closable
-	                           2);
+	                    NULL,
+			    false,	// Not closable
+	                    2);
 
 	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;
@@ -775,9 +775,9 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 	 /***** Start listing *****/
 	 Box_StartBoxTable ("560px",Txt_Followers,NULL,
-	                           NULL,
-			           false,	// Not closable
-	                           2);
+	                    NULL,
+			    false,	// Not closable
+	                    2);
 
 	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;

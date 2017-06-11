@@ -176,8 +176,8 @@ void Prf_RequestUserProfile (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
-                        Hlp_SOCIAL_Profiles_view_public_profile,
-                        false);	// Not closable
+                 Hlp_SOCIAL_Profiles_view_public_profile,
+                 false);	// Not closable
 
    /***** Form to request user's @nickname *****/
    /* By default, the nickname is filled with my nickname

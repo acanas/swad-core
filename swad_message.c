@@ -225,11 +225,11 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start frame *****/
-   Box_StartBox (NULL,
-			Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
-						Txt_New_message,
-			NULL,Hlp_MESSAGES_Write,
-                        false);	// Not closable
+   Box_StartBox (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
+					      Txt_New_message,
+		 NULL,
+		 Hlp_MESSAGES_Write,
+                 false);	// Not closable
 
    if (Gbl.Msg.ShowOnlyOneRecipient)
       /***** Form to show several potential recipients *****/
@@ -1755,16 +1755,15 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Start frame with messages *****/
-   Box_StartBox ("97%",
-                        Msg_WriteNumMsgs (NumUnreadMsgs),
-                        Msg_PutIconsListMsgs,Help[Gbl.Msg.TypeOfMessages],
-                        false);	// Not closable
+   Box_StartBox ("97%",Msg_WriteNumMsgs (NumUnreadMsgs),Msg_PutIconsListMsgs,
+                 Help[Gbl.Msg.TypeOfMessages],
+                 false);	// Not closable
 
    /***** Filter messages *****/
    /* Start frame with filter */
    Box_StartBox (NULL,Txt_Filter,NULL,
-                        HelpFilter[Gbl.Msg.TypeOfMessages],
-                        true);	// Closable
+                 HelpFilter[Gbl.Msg.TypeOfMessages],
+                 true);	// Closable
 
    /* Form to see messages again */
    Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
@@ -3781,9 +3780,9 @@ void Msg_ListBannedUsrs (void)
 
       /***** Start table with list of users *****/
       Box_StartBoxTable (NULL,Txt_Banned_users,NULL,
-                                NULL,
-			        false,	// Not closable
-                                2);
+                         NULL,
+			 false,	// Not closable
+                         2);
 
       /***** List users *****/
       for (NumUsr = 1;

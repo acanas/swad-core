@@ -267,10 +267,9 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
    /***** Start frame *****/
-   Box_StartBox (NULL,Txt_Types_of_group,
-                        Grp_PutIconsEditingGroupTypes,
-                        Hlp_USERS_Groups,
-                        false);	// Not closable
+   Box_StartBox (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
+                 Hlp_USERS_Groups,
+                 false);	// Not closable
 
    /***** Put a form to create a new group type *****/
    Grp_PutFormToCreateGroupType ();
@@ -301,8 +300,8 @@ static void Grp_EditGroups (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
-                        Hlp_USERS_Groups,
-                        false);	// Not closable
+                 Hlp_USERS_Groups,
+                 false);	// Not closable
 
    /***** Put a form to create a new group *****/
    Grp_PutFormToCreateGroup ();
@@ -366,11 +365,10 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
                   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
       /***** Start frame *****/
-      Box_StartBox (NULL,Txt_Groups,
-			   ICanEdit ? Grp_PutIconToEditGroups :
-				      NULL,
-			   Hlp_USERS_Groups,
-                           true);	// Closable
+      Box_StartBox (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
+				               NULL,
+		    Hlp_USERS_Groups,
+                    true);	// Closable
 
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
@@ -1727,11 +1725,10 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** Start frame *****/
-   Box_StartBox (NULL,Txt_My_groups,
-                        ICanEdit ? Grp_PutIconToEditGroups :
-                                   NULL,
-                        Hlp_USERS_Groups,
-                        false);	// Not closable
+   Box_StartBox (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
+                                               NULL,
+                 Hlp_USERS_Groups,
+                 false);	// Not closable
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
@@ -1947,9 +1944,9 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
    /***** Start table *****/
    Box_StartBoxTable (NULL,Txt_Groups,NULL,
-                             Hlp_USERS_Groups,
-			     false,	// Not closable
-                             0);
+                      Hlp_USERS_Groups,
+		      false,	// Not closable
+                      0);
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
@@ -2351,9 +2348,9 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
@@ -2467,9 +2464,9 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_group,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();

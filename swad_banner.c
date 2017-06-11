@@ -118,8 +118,8 @@ void Ban_SeeBanners (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutFormToEditBanners,
-                        Hlp_SYSTEM_Banners,
-                        false);	// Not closable
+                 Hlp_SYSTEM_Banners,
+                 false);	// Not closable
 
    /***** Write all frames *****/
    if (Gbl.Banners.Num)	// There are banners
@@ -209,8 +209,8 @@ void Ban_EditBanners (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutIconToViewBanners,
-                        Hlp_SYSTEM_Banners_edit,
-                        false);	// Not closable
+                 Hlp_SYSTEM_Banners_edit,
+                 false);	// Not closable
 
    /***** Put a form to create a new banner *****/
    Ban_PutFormToCreateBanner ();
@@ -834,9 +834,9 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_banner,NULL,
-                             Hlp_SYSTEM_Banners_edit,
-			     false,	// Not closable
-                             2);
+                      Hlp_SYSTEM_Banners_edit,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    Ban_PutHeadBanners ();

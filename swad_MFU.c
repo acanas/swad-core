@@ -225,8 +225,8 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_My_frequent_actions,NULL,
-                        Hlp_STATS_Frequent,
-                        false);	// Not closable
+                 Hlp_STATS_Frequent,
+                 false);	// Not closable
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions_big\">");
 
    /***** Write list of frequently used actions *****/

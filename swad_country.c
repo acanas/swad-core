@@ -138,10 +138,10 @@ void Cty_SeeCtyWithPendingInss (void)
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
      {
       /***** Write heading *****/
-      Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,
-                                NULL,Hlp_SYSTEM_Hierarchy_pending,
-			        false,	// Not closable
-                                2);
+      Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
+                         Hlp_SYSTEM_Hierarchy_pending,
+			 false,	// Not closable
+                         2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -243,12 +243,14 @@ static void Cty_Configuration (bool PrintView)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Start frame *****/
-      Box_StartBox (NULL,NULL,
-                           PrintView ? NULL :
-	                               Cty_PutIconToPrint,
-	                   PrintView ? NULL :
-	                	       Hlp_COUNTRY_Information,
-                           false);	// Not closable
+      if (PrintView)
+	 Box_StartBox (NULL,NULL,NULL,
+		       NULL,
+		       false);	// Not closable
+      else
+	 Box_StartBox (NULL,NULL,Cty_PutIconToPrint,
+		       Hlp_COUNTRY_Information,
+		       false);	// Not closable
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -514,9 +516,9 @@ void Cty_ListCountries2 (void)
 
    /***** Table head *****/
    Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
-                             Hlp_SYSTEM_Countries,
-			     false,	// Not closable
-                             2);
+                      Hlp_SYSTEM_Countries,
+		      false,	// Not closable
+                      2);
    Cty_PutHeadCountriesForSeeing (true);	// Order selectable
 
    /***** Write all the countries and their number of users and institutions *****/
@@ -949,8 +951,8 @@ void Cty_EditCountries (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Countries,Cty_PutIconToViewCountries,
-                        Hlp_SYSTEM_Countries,
-                        false);	// Not closable
+                 Hlp_SYSTEM_Countries,
+                 false);	// Not closable
 
    /***** Put a form to create a new country *****/
    Cty_PutFormToCreateCountry ();
@@ -1936,9 +1938,9 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** Start frame *****/
    Box_StartBoxTable (NULL,Txt_New_country,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    Cty_PutHeadCountriesForEdition ();
@@ -2366,9 +2368,9 @@ unsigned Cty_ListCtysFound (const char *Query)
                NumCtys,NumCtys == 1 ? Txt_country :
 				      Txt_countries);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                                NULL,
-			        false,	// Not closable
-                                2);
+                         NULL,
+			 false,	// Not closable
+                         2);
       Cty_PutHeadCountriesForSeeing (false);	// Order not selectable
 
       /***** List the countries (one row per country) *****/

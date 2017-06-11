@@ -104,8 +104,8 @@ void Not_ShowFormNotice (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_New_notice,NULL,
-                        Hlp_MESSAGES_Notices,
-                        false);	// Not closable
+                 Hlp_MESSAGES_Notices,
+                 false);	// Not closable
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"30\" rows=\"10\""
@@ -392,11 +392,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 sprintf (StrWidth,"%upx",
 	          Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
 	 Box_StartBox (StrWidth,
-	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
-	                	                                           Txt_Notices,
-			      Not_PutIconsListNotices,
-			      Hlp_MESSAGES_Notices,
-                              false);	// Not closable
+	               Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
+	                	                                    Txt_Notices,
+		       Not_PutIconsListNotices,
+		       Hlp_MESSAGES_Notices,
+                       false);	// Not closable
          if (!NumNotices)
 	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
 	}

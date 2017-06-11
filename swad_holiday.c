@@ -102,10 +102,10 @@ void Hld_SeeHolidays (void)
 
       /***** Table head *****/
       Box_StartBox (NULL,Txt_Holidays,
-                           Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
-                                                                   NULL,
-                           Hlp_INSTITUTION_Holidays,
-                           false);	// Not closable
+                    Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
+                                                             NULL,
+                    Hlp_INSTITUTION_Holidays,
+                    false);	// Not closable
       if (Gbl.Hlds.Num)
 	 {
          Tbl_StartTableWideMargin (2);
@@ -503,9 +503,9 @@ static void Hld_ListHolidaysForEdition (void)
    Hld_HolidayType_t HolidayType;
 
    Box_StartBoxTable (NULL,Txt_Holidays,NULL,
-                             Hlp_INSTITUTION_Holidays_edit,
-			     false,	// Not closable
-                             2);
+                      Hlp_INSTITUTION_Holidays_edit,
+		      false,	// Not closable
+                      2);
 
    /***** Table head *****/
    Hld_PutHeadHolidays ();
@@ -963,9 +963,9 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_holiday,NULL,
-                             Hlp_INSTITUTION_Holidays_edit,
-			     false,	// Not closable
-                             2);
+                      Hlp_INSTITUTION_Holidays_edit,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

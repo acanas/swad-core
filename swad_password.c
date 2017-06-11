@@ -254,8 +254,8 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Forgotten_password,NULL,
-                        Hlp_PROFILE_Password,
-                        false);	// Not closable
+                 Hlp_PROFILE_Password,
+                 false);	// Not closable
 
    /***** Help text *****/
    Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
@@ -700,9 +700,9 @@ void Pwd_ShowFormChgPwd (void)
 
    /***** Start frame *****/
    Box_StartBoxTable (NULL,Txt_Password,NULL,
-                             Hlp_PROFILE_Password,
-			     false,	// Not closable
-                             2);
+                      Hlp_PROFILE_Password,
+		      false,	// Not closable
+                      2);
 
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...
@@ -829,8 +829,8 @@ void Pwd_ShowFormOthPwd (void)
 	{
 	 /***** Start frame *****/
          Box_StartBox (NULL,Txt_Password,NULL,
-                              NULL,
-                              false);	// Not closable
+                       NULL,
+                       false);	// Not closable
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,

@@ -85,8 +85,8 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    extern const char *Txt_Calendar;
 
    Box_StartBox (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
-                        Hlp_PROFILE_Preferences_calendar,
-                        false);	// Not closable
+                 Hlp_PROFILE_Preferences_calendar,
+                 false);	// Not closable
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO25x25B");
    Box_EndBox ();
   }
@@ -316,9 +316,9 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
    /***** Start frame *****/
    Box_StartBox (NULL,NULL,FunctionToDrawContextualIcons,
-	                PrintView ? NULL :
-	                            Hlp_Calendar,
-                        false);	// Not closable
+	         PrintView ? NULL :
+	                     Hlp_Calendar,
+                 false);	// Not closable
    Lay_WriteHeaderClassPhoto (PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,

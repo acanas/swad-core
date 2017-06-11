@@ -243,12 +243,12 @@ bool Syl_CheckAndEditSyllabus (void)
 		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
       PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
       Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
-			        PutIconToEdit ? Inf_PutIconToEditInfo :
-					        NULL,
-			        Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
-			                                       Hlp_COURSE_Syllabus,
-			        false,	// Not closable
-			        1);
+			 PutIconToEdit ? Inf_PutIconToEditInfo :
+					 NULL,
+			 Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
+			                                Hlp_COURSE_Syllabus,
+			 false,	// Not closable
+			 1);
 
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus ();

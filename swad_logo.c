@@ -285,8 +285,8 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Logo,NULL,
-                        NULL,
-                        false);	// Not closable
+                 NULL,
+                 false);	// Not closable
 
    /***** Write help message *****/
    sprintf (Gbl.Alert.Txt,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,

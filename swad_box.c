@@ -83,8 +83,8 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
    Box_StartBoxShadow (Width,Title,
-                              FunctionToDrawContextualIcons,
-                              HelpLink);
+                       FunctionToDrawContextualIcons,
+                       HelpLink);
    Tbl_StartTableWide (CellPadding);
   }
 

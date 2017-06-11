@@ -113,10 +113,10 @@ void Lnk_SeeLinks (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Links,
-			Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
-								 NULL,
-			Hlp_SYSTEM_Links,
-                        false);	// Not closable
+		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
+							  NULL,
+		 Hlp_SYSTEM_Links,
+                 false);	// Not closable
 
    /***** Write all links *****/
    if (Gbl.Links.Num)	// There are links
@@ -231,8 +231,8 @@ void Lnk_EditLinks (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Links,Lnk_PutIconToViewLinks,
-                        Hlp_SYSTEM_Links_edit,
-                        false);	// Not closable
+                 Hlp_SYSTEM_Links_edit,
+                 false);	// Not closable
 
    /***** Put a form to create a new link *****/
    Lnk_PutFormToCreateLink ();
@@ -710,9 +710,9 @@ static void Lnk_PutFormToCreateLink (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_link,NULL,
-                             Hlp_SYSTEM_Links_edit,
-			     false,	// Not closable
-                             2);
+                      Hlp_SYSTEM_Links_edit,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    Lnk_PutHeadLinks ();

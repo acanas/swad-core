@@ -224,11 +224,10 @@ static void Att_ShowAllAttEvents (void)
                                      &Pagination);
 
    /***** Start frame *****/
-   Box_StartBox ("100%",Txt_Events,
-			ICanEdit ? Att_PutIconToCreateNewAttEvent :
-				   NULL,
-		        Hlp_USERS_Attendance,
-                        false);	// Not closable
+   Box_StartBox ("100%",Txt_Events,ICanEdit ? Att_PutIconToCreateNewAttEvent :
+				              NULL,
+		 Hlp_USERS_Attendance,
+                 false);	// Not closable
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -1089,14 +1088,16 @@ void Att_RequestCreatOrEditAttEvent (void)
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /***** Table start *****/
-   Box_StartBoxTable (NULL,
-                             ItsANewAttEvent ? Txt_New_event :
-                                               Txt_Edit_event,
-                             NULL,
-                             ItsANewAttEvent ? Hlp_USERS_Attendance_new_event :
-                        	               Hlp_USERS_Attendance_edit_event,
-			     false,	// Not closable
-                             2);
+   if (ItsANewAttEvent)
+      Box_StartBoxTable (NULL,Txt_New_event,NULL,
+			 Hlp_USERS_Attendance_new_event,
+		         false,	// Not closable
+		         2);
+   else
+      Box_StartBoxTable (NULL,Txt_Edit_event,NULL,
+			 Hlp_USERS_Attendance_edit_event,
+			 false,	// Not closable
+			 2);
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1196,9 +1197,9 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Groups);
       Box_StartBoxTable ("100%",NULL,NULL,
-                                NULL,
-			        false,	// Not closable
-                                0);
+                         NULL,
+			 false,	// Not closable
+                         0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1829,9 +1830,9 @@ void Att_SeeOneAttEvent (void)
 
    /***** Show attendance *****/
    Box_StartBoxTable (NULL,Txt_Event,NULL,
-                             Hlp_USERS_Attendance,
-			     false,	// Not closable
-                             2);
+                      Hlp_USERS_Attendance,
+		      false,	// Not closable
+                      2);
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
    Box_EndBoxTable ();
@@ -1878,9 +1879,9 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /***** List students' data *****/
    /* Header */
    Box_StartBoxTable (NULL,NULL,NULL,
-                             Hlp_USERS_Attendance,
-			     false,	// Not closable
-                             2);
+                      Hlp_USERS_Attendance,
+		      false,	// Not closable
+                      2);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th></th>"
@@ -1939,8 +1940,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Attendance,NULL,
-                        Hlp_USERS_Attendance,
-                        false);	// Not closable
+                 Hlp_USERS_Attendance,
+                 false);	// Not closable
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
@@ -2676,10 +2677,9 @@ void Usr_ReqListStdsAttendanceCrs (void)
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start frame *****/
-   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-			NULL,
-			Hlp_USERS_Attendance_attendance_list,
-                        false);	// Not closable
+   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],NULL,
+		 Hlp_USERS_Attendance_attendance_list,
+                 false);	// Not closable
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
@@ -3109,10 +3109,10 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
    /***** Start frame *****/
    Box_StartBoxTable (NULL,Txt_Events,NULL,
-                             TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                            Hlp_USERS_Attendance_attendance_list,
-			     false,	// Not closable
-                             2);
+                      TypeOfView == Att_PRINT_VIEW ? NULL :
+                        	                     Hlp_USERS_Attendance_attendance_list,
+		      false,	// Not closable
+                      2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3221,12 +3221,12 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Attendance,
-                         (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
-                        ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
-                        	                                    NULL),
-                        TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                       Hlp_USERS_Attendance_attendance_list,
-                        false);	// Not closable
+                  (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
+                 ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
+                        	                             NULL),
+                 TypeOfView == Att_PRINT_VIEW ? NULL :
+                        	                Hlp_USERS_Attendance_attendance_list,
+                 false);	// Not closable
    if (PutButtonShowDetails)
       Tbl_StartTableWideMargin (2);
    else
@@ -3444,10 +3444,10 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
 
    /***** Start frame *****/
    Box_StartBoxTable (NULL,Txt_Details,NULL,
-                             TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                            Hlp_USERS_Attendance_attendance_list,
-			     false,	// Not closable
-                             2);
+                      TypeOfView == Att_PRINT_VIEW ? NULL :
+                        	                     Hlp_USERS_Attendance_attendance_list,
+		      false,	// Not closable
+                      2);
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;

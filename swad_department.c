@@ -102,11 +102,11 @@ void Dpt_SeeDepts (void)
 
       /***** Table head *****/
       Box_StartBoxTable (NULL,Txt_Departments,
-                                Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
-                        	                                         NULL,
-                                Hlp_INSTITUTION_Departments,
-			        false,	// Not closable
-                                2);
+                         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
+                        	                                  NULL,
+                         Hlp_INSTITUTION_Departments,
+			 false,	// Not closable
+                         2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
@@ -488,9 +488,9 @@ static void Dpt_ListDepartmentsForEdition (void)
    unsigned NumIns;
 
    Box_StartBoxTable (NULL,Txt_Departments,NULL,
-                             Hlp_INSTITUTION_Departments_edit,
-			     false,	// Not closable
-                             2);
+                      Hlp_INSTITUTION_Departments_edit,
+		      false,	// Not closable
+                      2);
 
    /***** Table head *****/
    Dpt_PutHeadDepartments ();
@@ -892,9 +892,9 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_department,NULL,
-                             Hlp_INSTITUTION_Departments_edit,
-			     false,	// Not closable
-                             2);
+                      Hlp_INSTITUTION_Departments_edit,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

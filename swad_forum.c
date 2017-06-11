@@ -1011,8 +1011,8 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    /***** Start frame *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
-                        Hlp_SOCIAL_Forums_posts,
-                        false);	// Not closable
+                 Hlp_SOCIAL_Forums_posts,
+                 false);	// Not closable
 
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
@@ -1608,8 +1608,8 @@ static void For_ShowForumList (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Forums,For_PutIconsForums,
-                        Hlp_SOCIAL_Forums,
-                        false);	// Not closable
+                 Hlp_SOCIAL_Forums,
+                 false);	// Not closable
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2575,8 +2575,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    /***** Start frame for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
-			Hlp_SOCIAL_Forums_threads,
-                        false);	// Not closable
+		 Hlp_SOCIAL_Forums_threads,
+                 false);	// Not closable
 
    /***** List the threads *****/
    if (NumThrs)
@@ -3859,13 +3859,14 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    extern const char *Txt_Send;
 
    /***** Start frame *****/
-   Box_StartBox (NULL,
-                        IsReply ? Txt_New_post :
-        	                  Txt_New_thread,
-        	        NULL,
-        	        IsReply ? Hlp_SOCIAL_Forums_new_post :
-        	                  Hlp_SOCIAL_Forums_new_thread,
-                        false);	// Not closable
+   if (IsReply)
+      Box_StartBox (NULL,Txt_New_post,NULL,
+		    Hlp_SOCIAL_Forums_new_post,
+		    false);	// Not closable
+   else
+      Box_StartBox (NULL,Txt_New_thread,NULL,
+		    Hlp_SOCIAL_Forums_new_thread,
+		    false);	// Not closable
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread

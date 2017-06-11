@@ -129,11 +129,11 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
      }
 
    /***** Contextual buttons *****/
-   /* Start table */
+   /* Start box and table */
    Box_StartBoxTable (NULL,Txt_What_would_you_like_to_do,NULL,
-                             NULL,
-			     true,	// Closable
-                             2);
+                      NULL,
+		      true,	// Closable
+                      2);
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
@@ -253,7 +253,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 					   Btn_CREATE_BUTTON,Txt_Create_account);
      }
 
-   /* End table */
+   /* End table and box */
    Box_EndBoxTable ();
   }
 

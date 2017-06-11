@@ -318,8 +318,8 @@ void Tst_ShowFormAskTst (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Take_a_test,Tst_PutIconsTests,
-                        Hlp_ASSESSMENT_Tests,
-                        false);	// Not closable
+                 Hlp_ASSESSMENT_Tests,
+                 false);	// Not closable
 
    /***** Get tags *****/
    if ((NumRows = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
@@ -437,8 +437,8 @@ void Tst_ShowNewTest (void)
 
 	    /***** Start frame *****/
 	    Box_StartBox (NULL,Txt_Test,NULL,
-	                         Hlp_ASSESSMENT_Tests,
-                                 false);	// Not closable
+	                  Hlp_ASSESSMENT_Tests,
+                          false);	// Not closable
 	    Lay_WriteHeaderClassPhoto (false,false,
 				       Gbl.CurrentIns.Ins.InsCod,
 				       Gbl.CurrentDeg.Deg.DegCod,
@@ -537,8 +537,8 @@ void Tst_AssessTest (void)
 
 	 /***** Start frame *****/
 	 Box_StartBox (NULL,Txt_Test_result,NULL,
-	                      Hlp_ASSESSMENT_Tests,
-                              false);	// Not closable
+	               Hlp_ASSESSMENT_Tests,
+                       false);	// Not closable
 	 Lay_WriteHeaderClassPhoto (false,false,
 				    Gbl.CurrentIns.Ins.InsCod,
 				    Gbl.CurrentDeg.Deg.DegCod,
@@ -1282,8 +1282,8 @@ void Tst_ShowFormAskEditTsts (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
-                        Hlp_ASSESSMENT_Tests,
-                        false);	// Not closable
+                 Hlp_ASSESSMENT_Tests,
+                 false);	// Not closable
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1739,9 +1739,9 @@ static void Tst_ShowFormEditTags (void)
      {
       /***** Start table *****/
       Box_StartBoxTable (NULL,Txt_Tags,NULL,
-                                Hlp_ASSESSMENT_Tests,
-			        false,	// Not closable
-                                2);
+                         Hlp_ASSESSMENT_Tests,
+			 false,	// Not closable
+                         2);
 
       /***** Show tags *****/
       for (NumRow = 0;
@@ -1854,8 +1854,8 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Configure_tests,Tst_PutIconsTests,
-                        Hlp_ASSESSMENT_Tests,
-                        false);	// Not closable
+                 Hlp_ASSESSMENT_Tests,
+                 false);	// Not closable
 
    /***** Start form *****/
    Act_FormStart (ActRcvCfgTst);
@@ -2735,8 +2735,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 
    /***** Table start *****/
    Box_StartBox (NULL,Txt_Questions,Tst_PutIconsTests,
-                        Hlp_ASSESSMENT_Tests,
-                        false);	// Not closable
+                 Hlp_ASSESSMENT_Tests,
+                 false);	// Not closable
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
@@ -4527,13 +4527,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
      {
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
       Box_StartBox (NULL,Title,Tst_PutIconToRemoveOneQst,
-                           Hlp_ASSESSMENT_Tests,
-                           false);	// Not closable
+                    Hlp_ASSESSMENT_Tests,
+                    false);	// Not closable
      }
    else
       Box_StartBox (NULL,Txt_New_question,NULL,
-                           Hlp_ASSESSMENT_Tests,
-                           false);	// Not closable
+                    Hlp_ASSESSMENT_Tests,
+                    false);	// Not closable
 
    /***** Start form *****/
    Act_FormStart (ActRcvTstQst);
@@ -6993,8 +6993,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Test_results,NULL,
-                        Hlp_ASSESSMENT_Tests_test_results,
-                        false);	// Not closable
+                 Hlp_ASSESSMENT_Tests_test_results,
+                 false);	// Not closable
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes);
@@ -7079,9 +7079,9 @@ void Tst_SelDatesToSeeMyTestResults (void)
 
    /***** Starting and ending dates in the search *****/
    Box_StartBoxTable (NULL,Txt_Test_results,NULL,
-                             Hlp_ASSESSMENT_Tests_test_results,
-			     false,	// Not closable
-                             2);
+                      Hlp_ASSESSMENT_Tests_test_results,
+		      false,	// Not closable
+                      2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
    /***** Send button and end frame *****/
@@ -7154,9 +7154,9 @@ void Tst_ShowUsrsTestResults (void)
      {
       /***** Header of the table with the list of users *****/
       Box_StartBoxTable (NULL,Txt_Test_results,NULL,
-                                Hlp_ASSESSMENT_Tests_test_results,
-			        false,	// Not closable
-                                2);
+                         Hlp_ASSESSMENT_Tests_test_results,
+			 false,	// Not closable
+                         2);
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -7249,9 +7249,9 @@ void Tst_ShowMyTestResults (void)
 
    /***** Header of the table with the list of users *****/
    Box_StartBoxTable (NULL,Txt_Test_results,NULL,
-                             Hlp_ASSESSMENT_Tests_test_results,
-			     false,	// Not closable
-                             2);
+                      Hlp_ASSESSMENT_Tests_test_results,
+		      false,	// Not closable
+                      2);
    Tst_ShowHeaderTestResults ();
 
    /***** List my test results *****/
@@ -7717,8 +7717,8 @@ void Tst_ShowOneTestResult (void)
 
       /***** Start frame *****/
       Box_StartBox (NULL,Txt_Test_result,NULL,
-                           Hlp_ASSESSMENT_Tests_test_results,
-                           false);	// Not closable
+                    Hlp_ASSESSMENT_Tests_test_results,
+                    false);	// Not closable
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentDeg.Deg.DegCod,

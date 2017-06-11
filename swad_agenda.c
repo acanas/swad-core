@@ -148,10 +148,9 @@ void Agd_ShowMyAgenda (void)
    Agd_GetParams (Agd_MY_AGENDA);
 
    /***** Start frame *****/
-   Box_StartBox ("100%",Txt_My_agenda,
-			Agd_PutIconsMyFullAgenda,
-			Hlp_PROFILE_Agenda,
-                        false);	// Not closable
+   Box_StartBox ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
+		 Hlp_PROFILE_Agenda,
+                 false);	// Not closable
 
    /***** Put forms to choice which events to show *****/
    Agd_ShowFormToSelPast__FutureEvents ();
@@ -369,10 +368,10 @@ void Agd_ShowUsrAgenda (void)
 	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Box_StartBox ("100%",Gbl.Title,
-			      ItsMe ? Agd_PutIconsMyPublicAgenda :
-				      Agd_PutIconsOtherPublicAgenda,
-			      Hlp_PROFILE_Agenda_public_agenda,
-                              false);	// Not closable
+		       ItsMe ? Agd_PutIconsMyPublicAgenda :
+			       Agd_PutIconsOtherPublicAgenda,
+		       Hlp_PROFILE_Agenda_public_agenda,
+                       false);	// Not closable
 
 	 /***** Show the current events in the user's agenda *****/
 	 Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -413,10 +412,10 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	    ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	    Box_StartBox ("100%",Gbl.Title,
-				 ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-					 Agd_PutIconsOtherPublicAgenda,
-				 Hlp_PROFILE_Agenda_public_agenda,
-                                 false);	// Not closable
+			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
+				  Agd_PutIconsOtherPublicAgenda,
+			  Hlp_PROFILE_Agenda_public_agenda,
+                          false);	// Not closable
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -535,16 +534,14 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
-	    Box_StartBoxTableShadow (NULL,Txt_Today,
-					    NULL,
-					    Hlp_PROFILE_Agenda,
-					    2);
+	    Box_StartBoxTableShadow (NULL,Txt_Today,NULL,
+				     Hlp_PROFILE_Agenda,
+				     2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
-	    Box_StartBoxTableShadow (NULL,Txt_Today,
-					    NULL,
-					    Hlp_PROFILE_Agenda_public_agenda,
-					    2);
+	    Box_StartBoxTableShadow (NULL,Txt_Today,NULL,
+			             Hlp_PROFILE_Agenda_public_agenda,
+				     2);
             break;
 	 default:
 	    break;
@@ -1539,14 +1536,16 @@ void Agd_RequestCreatOrEditEvent (void)
    Agd_PutCurrentParamsMyAgenda ();
 
    /***** Table start *****/
-   Box_StartBoxTable (NULL,
-                             ItsANewEvent ? Txt_New_event :
-                                            Txt_Edit_event,
-                             NULL,
-                             ItsANewEvent ? Hlp_PROFILE_Agenda_new_event :
-                        	            Hlp_PROFILE_Agenda_edit_event,
-			     false,	// Not closable
-                             2);
+   if (ItsANewEvent)
+      Box_StartBoxTable (NULL,Txt_New_event,NULL,
+			 Hlp_PROFILE_Agenda_new_event,
+			 false,	// Not closable
+			 2);
+   else
+      Box_StartBoxTable (NULL,Txt_Edit_event,NULL,
+			 Hlp_PROFILE_Agenda_edit_event,
+			 false,	// Not closable
+			 2);
 
    /***** Event *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1948,8 +1947,8 @@ void Agd_PrintAgdQRCode (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                        NULL,
-                        false);	// Not closable
+                 NULL,
+                 false);	// Not closable
 
    /***** Print QR code ****/
    QR_PrintQRCode ();

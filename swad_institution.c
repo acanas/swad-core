@@ -153,9 +153,9 @@ void Ins_SeeInsWithPendingCtrs (void)
      {
       /***** Write heading *****/
       Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
-                                Hlp_SYSTEM_Hierarchy_pending,
-			        false,	// Not closable
-                                2);
+                         Hlp_SYSTEM_Hierarchy_pending,
+			 false,	// Not closable
+                         2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -309,12 +309,14 @@ static void Ins_Configuration (bool PrintView)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Start frame *****/
-      Box_StartBox (NULL,NULL,
-                           PrintView ? NULL :
-	                               Ins_PutIconsToPrintAndUpload,
-	                   PrintView ? NULL :
-	                               Hlp_INSTITUTION_Information,
-                           false);	// Not closable
+      if (PrintView)
+	 Box_StartBox (NULL,NULL,NULL,
+		       NULL,
+		       false);	// Not closable
+      else
+	 Box_StartBox (NULL,NULL,Ins_PutIconsToPrintAndUpload,
+		       Hlp_INSTITUTION_Information,
+		       false);	// Not closable
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -672,8 +674,8 @@ static void Ins_ListInstitutions (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
-                        Hlp_COUNTRY_Institutions,
-                        false);	// Not closable
+                 Hlp_COUNTRY_Institutions,
+                 false);	// Not closable
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
@@ -923,8 +925,8 @@ void Ins_EditInstitutions (void)
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
-                        Hlp_COUNTRY_Institutions,
-                        false);	// Not closable
+                 Hlp_COUNTRY_Institutions,
+                 false);	// Not closable
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();
@@ -2160,9 +2162,9 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Start frame *****/
    Box_StartBoxTable (NULL,Txt_New_institution,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
@@ -2522,9 +2524,9 @@ unsigned Ins_ListInssFound (const char *Query)
                NumInss,NumInss == 1 ? Txt_institution :
 				      Txt_institutions);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                                NULL,
-			        false,	// Not closable
-                                2);
+                         NULL,
+			 false,	// Not closable
+                         2);
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
       /***** List the institutions (one row per institution) *****/

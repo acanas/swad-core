@@ -91,13 +91,13 @@ void Plg_ListPlugins (void)
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
 
-   /***** Table start *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Plugins,
-                             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
-                                                                      NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
+                                                               NULL,
+                      NULL,
+		      false,	// Not closable
+                      2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -141,7 +141,7 @@ void Plg_ListPlugins (void)
                Plg->Name);
      }
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    /***** Free list of plugins *****/
@@ -347,12 +347,11 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   Box_StartBoxTable (NULL,Txt_Plugins,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
-
    /***** Table head *****/
+   Box_StartBoxTable (NULL,Txt_Plugins,NULL,
+                      NULL,
+		      false,	// Not closable
+                      2);
    Plg_PutHeadPlugins ();
 
    /***** Write all the plugins *****/
@@ -845,9 +844,9 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+	              false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

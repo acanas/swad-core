@@ -238,8 +238,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (Action);
    Box_StartBox (NULL,Txt_Search,NULL,
-                        Hlp_Search,
-                        false);	// Not closable
+                 Hlp_Search,
+                 false);	// Not closable
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/

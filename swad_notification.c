@@ -391,8 +391,8 @@ void Ntf_ShowMyNotifications (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
-                        Hlp_MESSAGES_Notifications,
-                        false);	// Not closable
+                 Hlp_MESSAGES_Notifications,
+                 false);	// Not closable
 
    /***** List my notifications *****/
    if (NumNotifications)	// Notifications found
@@ -1900,8 +1900,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
-                        Hlp_PROFILE_Preferences_notifications,
-                        false);	// Not closable
+                 Hlp_PROFILE_Preferences_notifications,
+                 false);	// Not closable
 
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);

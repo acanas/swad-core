@@ -197,12 +197,14 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** Start frame *****/
-   Box_StartBox (NULL,NULL,
-                        PrintView ? NULL :
-	                            Crs_PutIconToPrint,
-	                PrintView ? NULL :
-	                            Hlp_COURSE_Information,
-                        false);	// Not closable
+   if (PrintView)
+      Box_StartBox (NULL,NULL,NULL,
+		    NULL,
+		    false);	// Not closable
+   else
+      Box_StartBox (NULL,NULL,Crs_PutIconToPrint,
+		    Hlp_COURSE_Information,
+		    false);	// Not closable
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -549,8 +551,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Table start *****/
    Box_StartBox (NULL,Txt_My_courses,NULL,
-                        Hlp_PROFILE_Courses,
-                        false);	// Not closable
+                 Hlp_PROFILE_Courses,
+                 false);	// Not closable
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
@@ -1139,8 +1141,8 @@ static void Crs_ListCourses (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Crs_PutIconsListCourses,
-                        Hlp_DEGREE_Courses,
-                        false);	// Not closable
+                 Hlp_DEGREE_Courses,
+                 false);	// Not closable
 
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
@@ -1339,8 +1341,8 @@ void Crs_EditCourses (void)
    /***** Start frame *****/
    sprintf (Gbl.Alert.Txt,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Alert.Txt,Crs_PutIconToViewCourses,
-                        Hlp_DEGREE_Courses,
-                        false);	// Not closable
+                 Hlp_DEGREE_Courses,
+                 false);	// Not closable
 
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
@@ -1645,9 +1647,9 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Write heading *****/
    Box_StartBoxTable (NULL,Txt_New_course,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+		      false,	// Not closable
+                      2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** Column to remove course, disabled here *****/
@@ -3005,9 +3007,9 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
      {
       /* Start frame and table */
       Box_StartBoxTable ("100%",NULL,NULL,
-                                NULL,
-			        false,	// Not closable
-                                2);
+                         NULL,
+			 false,	// Not closable
+                         2);
 
       /* Heading row */
       sprintf (Gbl.Title,Txt_USER_in_COURSE,
@@ -3092,9 +3094,9 @@ unsigned Crs_ListCrssFound (const char *Query)
                NumCrss,(NumCrss == 1) ? Txt_course :
 	                                Txt_courses);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                                NULL,
-			        false,	// Not closable
-                                2);
+                         NULL,
+			 false,	// Not closable
+                         2);
 
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
@@ -3331,8 +3333,8 @@ void Crs_AskRemoveOldCrss (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Eliminate_old_courses,NULL,
-                        Hlp_SYSTEM_Hierarchy_eliminate_old_courses,
-                        false);	// Not closable
+                 Hlp_SYSTEM_Hierarchy_eliminate_old_courses,
+                 false);	// Not closable
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"

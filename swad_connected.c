@@ -100,8 +100,8 @@ void Con_ShowConnectedUsrs (void)
    sprintf (Gbl.Title,"%s<div id=\"connected_current_time\"></div>",
 	    Txt_Connected_users);
    Box_StartBox (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
-			Hlp_USERS_Connected,
-                        false);	// Not closable
+		 Hlp_USERS_Connected,
+                 false);	// Not closable
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('connected_current_time',%ld,"
                       "%u,',&nbsp;',null,false,true,0x7);"
@@ -163,8 +163,8 @@ void Con_ShowLastClicks (void)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
-                        Hlp_USERS_Connected_last_clicks,
-                        false);	// Not closable
+                 Hlp_USERS_Connected_last_clicks,
+                 false);	// Not closable
 
    /***** Get and show last clicks *****/
    fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh

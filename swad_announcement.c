@@ -121,10 +121,10 @@ void Ann_ShowAllAnnouncements (void)
 
    /***** Start frame *****/
    Box_StartBox ("550px",Txt_Announcements,
-                        ICanEdit ? Ann_PutIconToAddNewAnnouncement :
-				   NULL,
-		        Hlp_MESSAGES_Announcements,
-                        false);	// Not closable
+                 ICanEdit ? Ann_PutIconToAddNewAnnouncement :
+			    NULL,
+		 Hlp_MESSAGES_Announcements,
+                 false);	// Not closable
 
    if (!NumAnnouncements)
       Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
@@ -413,9 +413,9 @@ void Ann_ShowFormAnnouncement (void)
 
    /***** Start frame *****/
    Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
-                             Hlp_MESSAGES_Announcements,
-			     false,	// Not closable
-                             2);
+                      Hlp_MESSAGES_Announcements,
+		      false,	// Not closable
+                      2);
 
    /***** Announcement subject and body *****/
    Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);

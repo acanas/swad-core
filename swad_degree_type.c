@@ -211,13 +211,13 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
      {
       case ActSeeDegTyp:
 	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsListDegTypes,
-			      Hlp_CENTRE_DegreeTypes,
-                              false);	// Not closable
+		       Hlp_CENTRE_DegreeTypes,
+                       false);	// Not closable
 	 break;
       case ActSeeUseGbl:
 	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
-		              Hlp_STATS_Figures_types_of_degree,
-                              false);	// Not closable
+		       Hlp_STATS_Figures_types_of_degree,
+                       false);	// Not closable
 	 break;
       default:	// Bad call
 	 return;
@@ -264,10 +264,9 @@ void DT_EditDegreeTypes (void)
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Start frame *****/
-   Box_StartBox (NULL,Txt_Types_of_degree,
-                        DT_PutIconToViewDegreeTypesWhenEditing,
-                        Hlp_CENTRE_DegreeTypes_edit,
-                        false);	// Not closable
+   Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToViewDegreeTypesWhenEditing,
+                 Hlp_CENTRE_DegreeTypes_edit,
+                 false);	// Not closable
 
    /***** Put a form to create a new degree type *****/
    DT_PutFormToCreateDegreeType ();
@@ -438,9 +437,9 @@ void DT_PutFormToCreateDegreeType (void)
 
    /***** Start of frame *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_degree,NULL,
-                             NULL,
-			     false,	// Not closable
-                             2);
+                      NULL,
+		      false,	// Not closable
+                      2);
 
    /***** Write heading *****/
    DT_PutHeadDegreeTypesForEdition ();

@@ -138,8 +138,8 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Start frame *****/
    Box_StartBox ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
-                        Hlp_ASSESSMENT_Assignments,
-                        false);	// Not closable
+                 Hlp_ASSESSMENT_Assignments,
+                 false);	// Not closable
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -1173,14 +1173,16 @@ void Asg_RequestCreatOrEditAsg (void)
    Asg_PutParams ();
 
    /***** Table start *****/
-   Box_StartBoxTable (NULL,
-                             ItsANewAssignment ? Txt_New_assignment :
-                                                 Txt_Edit_assignment,
-                             NULL,
-                             ItsANewAssignment ? Hlp_ASSESSMENT_Assignments_new_assignment :
-                        	                 Hlp_ASSESSMENT_Assignments_edit_assignment,
-			     false,	// Not closable
-                             2);
+   if (ItsANewAssignment)
+      Box_StartBoxTable (NULL,Txt_New_assignment,NULL,
+			 Hlp_ASSESSMENT_Assignments_new_assignment,
+		         false,	// Not closable
+			 2);
+   else
+      Box_StartBoxTable (NULL,Txt_Edit_assignment,NULL,
+			 Hlp_ASSESSMENT_Assignments_edit_assignment,
+			 false,	// Not closable
+			 2);
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1271,9 +1273,9 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
       Box_StartBoxTable ("100%",NULL,NULL,
-                                Hlp_USERS_Groups,
-			        false,	// Not closable
-                                0);
+                         Hlp_USERS_Groups,
+			 false,	// Not closable
+                         0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

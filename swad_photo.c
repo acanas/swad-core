@@ -327,10 +327,10 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
 
    /***** Start frame *****/
    Box_StartBox (NULL,Txt_Photo,
-                        ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
-                                Pho_PutIconToRequestRemoveOtherUsrPhoto,
-                        Hlp_PROFILE_Photo,
-                        false);	// Not closable
+                 ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
+                         Pho_PutIconToRequestRemoveOtherUsrPhoto,
+                 Hlp_PROFILE_Photo,
+                 false);	// Not closable
 
    /***** Start form *****/
    if (ItsMe)
@@ -1693,10 +1693,9 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Pho_PutLinkToCalculateDegreeStats ();
 
 	 /***** Start frame *****/
-	 Box_StartBox (NULL,Txt_Degrees,
-			      Pho_PutIconToPrintDegreeStats,
-			      Hlp_STATS_Degrees,
-                              false);	// Not closable
+	 Box_StartBox (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
+		       Hlp_STATS_Degrees,
+                       false);	// Not closable
 	 Tbl_StartTableCenter (2);
 
 	 /***** Put a selector for the type of average *****/
@@ -1713,8 +1712,8 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       case Pho_DEGREES_PRINT:
 	 /***** Start frame *****/
 	 Box_StartBox (NULL,Txt_Degrees,NULL,
-	                      NULL,
-                              false);	// Not closable
+	               NULL,
+                       false);	// Not closable
 	 break;
      }
 
