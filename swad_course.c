@@ -476,7 +476,7 @@ static void Crs_Configuration (bool PrintView)
 
 static void Crs_PutIconToPrint (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCrsInf,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL);
   }
 
 /*****************************************************************************/
@@ -1204,7 +1204,7 @@ static void Crs_PutIconsListCourses (void)
 
 static void Crs_PutIconToEditCourses (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiCrs,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCrs,NULL);
   }
 
 /*****************************************************************************/
@@ -1364,7 +1364,7 @@ void Crs_EditCourses (void)
 
 static void Crs_PutIconToViewCourses (void)
   {
-   Lay_PutContextualIconToView (ActSeeCrs,NULL);
+   Ico_PutContextualIconToView (ActSeeCrs,NULL);
   }
 
 /*****************************************************************************/
@@ -1423,12 +1423,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			    "<td class=\"BM\">");
 	 if (Crs->NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
 	     !ICanEdit)
-	    Lay_PutIconRemovalNotAllowed ();
+	    Ico_PutIconRemovalNotAllowed ();
 	 else	// Crs->NumUsrs == 0 && ICanEdit
 	   {
 	    Act_FormStart (ActRemCrs);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    Lay_PutIconRemove ();
+	    Ico_PutIconRemove ();
 	    Act_FormEnd ();
 	   }
 	 fprintf (Gbl.F.Out,"</td>");

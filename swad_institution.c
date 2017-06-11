@@ -599,7 +599,7 @@ static void Ins_Configuration (bool PrintView)
 static void Ins_PutIconsToPrintAndUpload (void)
   {
    /***** Link to print info about institution *****/
-   Lay_PutContextualIconToPrint (ActPrnInsInf,NULL);
+   Ico_PutContextualIconToPrint (ActPrnInsInf,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       /***** Link to upload logo of institution *****/
@@ -734,7 +734,7 @@ static void Ins_PutIconsListInstitutions (void)
 
 static void Ins_PutIconToEditInstitutions (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiIns,NULL);
+   Ico_PutContextualIconToEdit (ActEdiIns,NULL);
   }
 
 /*****************************************************************************/
@@ -945,7 +945,7 @@ void Ins_EditInstitutions (void)
 
 static void Ins_PutIconToViewInstitutions (void)
   {
-   Lay_PutContextualIconToView (ActSeeIns,NULL);
+   Ico_PutContextualIconToView (ActSeeIns,NULL);
   }
 
 /*****************************************************************************/
@@ -1424,12 +1424,12 @@ static void Ins_ListInstitutionsForEdition (void)
 	  Ins->NumUsrsWhoClaimToBelongToIns ||
 	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden
           !ICanEdit)
-         Lay_PutIconRemovalNotAllowed ();
+         Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemIns);
          Ins_PutParamOtherInsCod (Ins->InsCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

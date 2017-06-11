@@ -214,7 +214,7 @@ static void Dpt_GetParamDptOrder (void)
 
 static void Dpt_PutIconToEditDpts (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiDpt,NULL);
+   Ico_PutContextualIconToEdit (ActEdiDpt,NULL);
   }
 
 /*****************************************************************************/
@@ -510,12 +510,12 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
-         Lay_PutIconRemovalNotAllowed ();
+         Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemDpt);
          Dpt_PutParamDptCod (Dpt->DptCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

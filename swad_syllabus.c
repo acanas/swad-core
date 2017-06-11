@@ -601,13 +601,13 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 /***** Icon to remove the row *****/
          fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (LstItemsSyllabus.Lst[NumItem].HasChildren)
-            Lay_PutIconRemovalNotAllowed ();
+            Ico_PutIconRemovalNotAllowed ();
 	 else
 	   {
 	    Act_FormStart (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 		                                                      ActDelItmSylPra);
 	    Syl_PutParamNumItem (NumItem);
-            Lay_PutIconRemove ();
+            Ico_PutIconRemove ();
             Act_FormEnd ();
 	   }
          fprintf (Gbl.F.Out,"</td>");

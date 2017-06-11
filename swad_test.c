@@ -1346,7 +1346,7 @@ static void Tst_PutIconsTests (void)
      {
       /***** Put form to edit existing test questions *****/
       if (Gbl.Action.Act != ActEdiTstQst)
-         Lay_PutContextualIconToEdit (ActEdiTstQst,NULL);
+         Ico_PutContextualIconToEdit (ActEdiTstQst,NULL);
 
       /***** Put form to create a new test question *****/
       if (Gbl.Action.Act != ActEdiOneTstQst)
@@ -2835,7 +2835,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Sta_WriteParamsDatesSeeAccesses ();
       Tst_WriteParamEditQst ();
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -5860,7 +5860,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
 
 static void Tst_PutIconToRemoveOneQst (void)
   {
-   Lay_PutContextualIconToRemove (ActReqRemTstQst,Tst_PutParamsRemoveOneQst);
+   Ico_PutContextualIconToRemove (ActReqRemTstQst,Tst_PutParamsRemoveOneQst);
   }
 
 /*****************************************************************************/

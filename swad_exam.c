@@ -1546,27 +1546,27 @@ static void Exa_PutIconsExamAnnouncement (void)
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       /***** Link to remove this exam announcement *****/
-      Lay_PutContextualIconToRemove (ActReqRemExaAnn,Exa_PutParamExaCodToEdit);
+      Ico_PutContextualIconToRemove (ActReqRemExaAnn,Exa_PutParamExaCodToEdit);
 
       /***** Put form to hide/show exam announement *****/
       switch (Gbl.ExamAnns.ExaDat.Status)
         {
 	 case Exa_VISIBLE_EXAM_ANNOUNCEMENT:
-            Lay_PutContextualIconToHide (ActHidExaAnn,Exa_PutParamExaCodToEdit);
+            Ico_PutContextualIconToHide (ActHidExaAnn,Exa_PutParamExaCodToEdit);
 	    break;
 	 case Exa_HIDDEN_EXAM_ANNOUNCEMENT:
-            Lay_PutContextualIconToUnhide (ActShoExaAnn,Exa_PutParamExaCodToEdit);
+            Ico_PutContextualIconToUnhide (ActShoExaAnn,Exa_PutParamExaCodToEdit);
 	    break;
 	 case Exa_DELETED_EXAM_ANNOUNCEMENT:	// Not applicable here
 	    break;
         }
 
       /***** Link to edit this exam announcement *****/
-      Lay_PutContextualIconToEdit (ActEdiExaAnn,Exa_PutParamExaCodToEdit);
+      Ico_PutContextualIconToEdit (ActEdiExaAnn,Exa_PutParamExaCodToEdit);
      }
 
    /***** Link to print view *****/
-   Lay_PutContextualIconToPrint (ActPrnExaAnn,Exa_PutParamExaCodToEdit);
+   Ico_PutContextualIconToPrint (ActPrnExaAnn,Exa_PutParamExaCodToEdit);
   }
 
 /*****************************************************************************/

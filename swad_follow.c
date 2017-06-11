@@ -434,7 +434,7 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
    Act_FormStart (ActSeeSocPrf);
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
                                NULL);
-   Lay_PutCalculateIcon (Txt_Update);
+   Ico_PutCalculateIcon (Txt_Update);
    Act_FormEnd ();
   }
 

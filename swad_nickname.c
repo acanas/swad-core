@@ -241,7 +241,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\""
 	                    " value=\"%s\" />",
 		  row[0]);
-	 Lay_PutIconRemove ();
+	 Ico_PutIconRemove ();
 	 Act_FormEnd ();
 	}
 

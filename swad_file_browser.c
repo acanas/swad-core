@@ -3727,11 +3727,11 @@ static void Brw_PutIconsFileBrowser (void)
       case Brw_ICON_NONE:
 	 break;
       case Brw_ICON_VIEW:
-	 Lay_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
+	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
 	                    Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
       case Brw_ICON_EDIT:
-         Lay_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
+         Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
                             Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
      }
@@ -5521,7 +5521,7 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
       Act_FormEnd ();
      }
    else
-      Lay_PutIconBRemovalNotAllowed ();
+      Ico_PutIconBRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5553,7 +5553,7 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
       Act_FormEnd ();
      }
    else
-      Lay_PutIconBRemovalNotAllowed ();
+      Ico_PutIconBRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 

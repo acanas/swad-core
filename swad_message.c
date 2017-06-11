@@ -1779,7 +1779,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Act_LinkFormSubmitAnimated (Txt_Update_messages,
                                The_ClassFormBold[Gbl.Prefs.Theme],
                                NULL);
-   Lay_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
+   Ico_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
    Act_FormEnd ();
@@ -2425,7 +2425,7 @@ static void Msg_PutIconsListMsgs (void)
      };
 
    /***** Put icon to remove messages *****/
-   Lay_PutContextualIconToRemove (ActionReqDelAllMsg[Gbl.Msg.TypeOfMessages],
+   Ico_PutContextualIconToRemove (ActionReqDelAllMsg[Gbl.Msg.TypeOfMessages],
                                   Msg_PutHiddenParamsMsgsFilters);
 
    /***** Put icon to show a figure *****/
@@ -2908,7 +2908,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    /***** Form to delete message *****/
    fprintf (Gbl.F.Out,"<br />");
    Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
-   Lay_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
+   Ico_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
                                   Msg_PutHiddenParamsOneMsg);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -3272,7 +3272,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
 				     (Replied ? Txt_Go_to_course_and_reply_again :
 						Txt_Go_to_course_and_reply),
 		       The_ClassFormBold[Gbl.Prefs.Theme],NULL);
-   Lay_PutIconWithText ("reply16x16.gif",
+   Ico_PutIconWithText ("reply16x16.gif",
                         Replied ? Txt_Reply_again :
 			          Txt_Reply,
 			NULL);

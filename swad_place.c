@@ -233,7 +233,7 @@ static void Plc_GetParamPlcOrder (void)
 
 static void Plc_PutIconToEditPlaces (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiPlc,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlc,NULL);
   }
 
 /*****************************************************************************/
@@ -273,7 +273,7 @@ void Plc_EditPlaces (void)
 
 static void Plc_PutIconToViewPlacesWhenEditing (void)
   {
-   Lay_PutContextualIconToView (ActSeePlc,NULL);
+   Ico_PutContextualIconToView (ActSeePlc,NULL);
   }
 
 /*****************************************************************************/
@@ -479,12 +479,12 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
-         Lay_PutIconRemovalNotAllowed ();
+         Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemPlc);
          Plc_PutParamPlcCod (Plc->PlcCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

@@ -1314,7 +1314,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
 				   PstCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>");
@@ -3372,7 +3372,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 				      Gbl.Forum.ForumSelected.Location,
 				      Thr.ThrCod,
 				      -1L);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
 

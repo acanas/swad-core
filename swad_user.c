@@ -7826,17 +7826,17 @@ static void Usr_PutIconsListTchs (void)
 
 static void Usr_PutIconToPrintGsts (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataParams);
+   Ico_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataParams);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataParams);
+   Ico_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataParams);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataParams);
+   Ico_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataParams);
   }
 
 /*****************************************************************************/

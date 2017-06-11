@@ -473,12 +473,12 @@ static void Inf_PutButtonToEditInfo (void)
 
 static void Inf_PutIconToViewInfo (void)
   {
-   Lay_PutContextualIconToView (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL);
+   Ico_PutContextualIconToView (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL);
   }
 
 void Inf_PutIconToEditInfo (void)
   {
-   Lay_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL);
+   Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL);
   }
 
 /*****************************************************************************/
@@ -1041,7 +1041,7 @@ static void Inf_ShowPage (const char *URL)
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
 	    URL,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("fullscreen16x16.gif",
+   Ico_PutIconWithText ("fullscreen16x16.gif",
 		        Txt_View_in_a_new_window,
 		        Txt_View_in_a_new_window);
    fprintf (Gbl.F.Out,"</a>");

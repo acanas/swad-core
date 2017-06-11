@@ -140,7 +140,7 @@ void DT_PutIconToViewDegreeTypes (void)
 
 static void DT_PutIconToViewDegreeTypesWhenEditing (void)
   {
-   Lay_PutContextualIconToView (ActSeeDegTyp,NULL);
+   Ico_PutContextualIconToView (ActSeeDegTyp,NULL);
   }
 
 /*****************************************************************************/
@@ -349,7 +349,7 @@ static void DT_PutIconToEditDegTypes (void)
 
    if (CentreTabVisible &&	// Only editable if centre tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
-      Lay_PutContextualIconToEdit (ActEdiDegTyp,NULL);
+      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL);
   }
 
 /*****************************************************************************/
@@ -373,12 +373,12 @@ static void DT_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
-         Lay_PutIconRemovalNotAllowed ();
+         Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemDegTyp);
          DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
 

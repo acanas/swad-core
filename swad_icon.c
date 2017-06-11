@@ -1,4 +1,4 @@
-// swad_icon.c: icon selection
+// swad_icon.c: icons
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -178,3 +178,185 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
 
    return Ico_ICON_SET_DEFAULT;
   }
+
+/*****************************************************************************/
+/***** Show contextual icons to remove, edit, view, hide, unhide, print ******/
+/*****************************************************************************/
+
+void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Remove;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL,
+                          NULL);
+  }
+
+void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
+  }
+
+void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_View;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
+  }
+
+void Ico_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Hide;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "eye-on64x64.png",
+                          Txt_Hide,NULL,
+                          NULL);
+  }
+
+void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Show;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "eye-slash-on64x64.png",
+                          Txt_Show,NULL,
+                          NULL);
+  }
+
+void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
+/****************** Show an icon with a link (without text) ******************/
+/*****************************************************************************/
+
+void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
+                      const char *LinkStyle,const char *OnSubmit)
+  {
+   Act_LinkFormSubmit (Title,LinkStyle,OnSubmit);
+   Ico_PutIconWithText (Icon,Title,Text);
+   fprintf (Gbl.F.Out,"</a>");
+  }
+
+/*****************************************************************************/
+/**************** Put a icon with a text to submit a form ********************/
+/*****************************************************************************/
+
+void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
+  {
+   /***** Print icon and optional text *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
+	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+	              " class=\"ICO20x20\" />",
+            Gbl.Prefs.IconsURL,Icon,
+            Alt,Text ? Text : Alt);
+   if (Text)
+      if (Text[0])
+	 fprintf (Gbl.F.Out,"&nbsp;%s",Text);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********** Put a icon to submit a form.                            **********/
+/********** When clicked, the icon will be replaced by an animation **********/
+/*****************************************************************************/
+
+void Ico_PutCalculateIcon (const char *Alt)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
+	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
+	              " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" />"
+		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
+		      "</div>"
+		      "</a>",
+	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Alt,
+	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Alt);
+  }
+
+/*****************************************************************************/
+/********** Put a icon with a text to submit a form.                **********/
+/********** When clicked, the icon will be replaced by an animation **********/
+/*****************************************************************************/
+
+void Ico_PutCalculateIconWithText (const char *Alt,const char *Text)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
+	              " style=\"margin:0 6px 0 0; display:inline;\">"
+	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" />"
+		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
+		      "&nbsp;%s"
+		      "</div>"
+		      "</a>",
+	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Text,
+	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Text,
+	    Text);
+  }
+
+/*****************************************************************************/
+/******** Put a disabled icon indicating that removal is not allowed *********/
+/*****************************************************************************/
+
+void Ico_PutIconRemovalNotAllowed (void)
+  {
+   extern const char *Txt_Removal_not_allowed;
+
+   fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,
+	    Txt_Removal_not_allowed);
+  }
+
+void Ico_PutIconBRemovalNotAllowed (void)
+  {
+   extern const char *Txt_Removal_not_allowed;
+
+   fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20B\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,
+	    Txt_Removal_not_allowed);
+  }
+
+/*****************************************************************************/
+/******** Put an icon indicating that removal is not allowed *********/
+/*****************************************************************************/
+
+void Ico_PutIconRemove (void)
+  {
+   extern const char *Txt_Remove;
+
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Remove,
+	    Txt_Remove);
+  }
+

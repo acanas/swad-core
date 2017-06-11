@@ -182,7 +182,7 @@ static void Ban_WriteListOfBanners (void)
 static void Ban_PutFormToEditBanners (void)
   {
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Lay_PutContextualIconToEdit (ActEdiBan,NULL);
+      Ico_PutContextualIconToEdit (ActEdiBan,NULL);
   }
 
 /*****************************************************************************/
@@ -367,7 +367,7 @@ void Ban_FreeListBanners (void)
 
 static void Ban_PutIconToViewBanners (void)
   {
-   Lay_PutContextualIconToView (ActSeeBan,NULL);
+   Ico_PutContextualIconToView (ActSeeBan,NULL);
   }
 
 /*****************************************************************************/
@@ -399,7 +399,7 @@ static void Ban_ListBannersForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemBan);
       Ban_PutParamBanCod (Ban->BanCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

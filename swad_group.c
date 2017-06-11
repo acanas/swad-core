@@ -403,7 +403,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Act_LinkFormSubmitAnimated (Txt_Update_users_according_to_selected_groups,
 				  The_ClassFormBold[Gbl.Prefs.Theme],
 				  "CopyMessageToHiddenFields()");
-      Lay_PutCalculateIconWithText (Txt_Update_users_according_to_selected_groups,
+      Ico_PutCalculateIconWithText (Txt_Update_users_according_to_selected_groups,
 				    Txt_Update_users);
       fprintf (Gbl.F.Out,"</div>");
 
@@ -1256,7 +1256,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStartAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1378,7 +1378,7 @@ static void Grp_PutIconsEditingGroupTypes (void)
 
 static void Grp_PutIconToViewGroups (void)
   {
-   Lay_PutContextualIconToView (ActReqSelGrp,NULL);
+   Ico_PutContextualIconToView (ActReqSelGrp,NULL);
   }
 
 static void Grp_PutIconToCreateNewGroupType (void)
@@ -1469,7 +1469,7 @@ static void Grp_ListGroupsForEdition (void)
                             "<td class=\"BM\">");
          Act_FormStartAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -1789,7 +1789,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 static void Grp_PutIconToEditGroups (void)
   {
-   Lay_PutContextualIconToEdit (ActReqEdiGrp,NULL);
+   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL);
   }
 
 /*****************************************************************************/

@@ -290,7 +290,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Act_FormStart (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -370,7 +370,7 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Write disabled icon to remove the field *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
+   Ico_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Field name *****/
@@ -1523,7 +1523,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    unsigned i;
 
    Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
-   Lay_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
+   Ico_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
                       "<label class=\"%s\">"
                       "(<select name=\"RecsPerPag\">",

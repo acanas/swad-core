@@ -133,7 +133,7 @@ static void Con_PutIconToUpdateConnected (void)
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
                                NULL);
-   Lay_PutCalculateIcon (Txt_Update);
+   Ico_PutCalculateIcon (Txt_Update);
    Act_FormEnd ();
   }
 

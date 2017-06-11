@@ -243,13 +243,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.240 (2017-06-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.240.1 (2017-06-11)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.240.1: Jun 11, 2017	Some functions moved from swad_layout to swad_icon. (222024 lines)
         Version 16.240:   Jun 11, 2017	New module swad_button to draw buttons. (222023 lines)
         Version 16.239:   Jun 10, 2017	New module swad_box to draw boxes. (221970 lines)
         Version 16.238:   Jun 10, 2017	Icon to close frames. (221803 lines)

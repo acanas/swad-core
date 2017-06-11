@@ -362,12 +362,12 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
 static void Cal_PutIconToPrintCalendarSys (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCalSys,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCalSys,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarCty (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCalCty,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCalCty,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarIns (void)
@@ -375,7 +375,7 @@ static void Cal_PutIconToPrintCalendarIns (void)
    extern const char *Txt_Holidays;
 
    /***** Print calendar *****/
-   Lay_PutContextualIconToPrint (ActPrnCalIns,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCalIns,NULL);
 
    /***** View holidays *****/
    if (Gbl.Hlds.Num ||					// There are holidays
@@ -388,15 +388,15 @@ static void Cal_PutIconToPrintCalendarIns (void)
 
 static void Cal_PutIconToPrintCalendarCtr (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCalCtr,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCalCtr,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarDeg (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCalDeg,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCalDeg,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarCrs (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCalCrs,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCalCrs,NULL);
   }

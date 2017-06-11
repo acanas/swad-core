@@ -564,16 +564,16 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
-   Lay_PutContextualIconToRemove (ActReqRemAtt,Att_PutParams);
+   Ico_PutContextualIconToRemove (ActReqRemAtt,Att_PutParams);
 
    /***** Put form to hide/show attendance event *****/
    if (Hidden)
-      Lay_PutContextualIconToUnhide (ActShoAtt,Att_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoAtt,Att_PutParams);
    else
-      Lay_PutContextualIconToHide (ActHidAtt,Att_PutParams);
+      Ico_PutContextualIconToHide (ActHidAtt,Att_PutParams);
 
    /***** Put form to edit attendance event *****/
-   Lay_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);
   }
 
 /*****************************************************************************/
@@ -3030,7 +3030,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 
 static void Att_PutIconToPrintMyList (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams);
+   Ico_PutContextualIconToPrint (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams);
   }
 
 static void Att_PutFormToPrintMyListParams (void)
@@ -3047,7 +3047,7 @@ static void Att_PutFormToPrintMyListParams (void)
 
 static void Att_PutIconToPrintStdsList (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList);
+   Ico_PutContextualIconToPrint (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList);
   }
 
 static void Att_PutParamsToPrintStdsList (void)
@@ -3181,7 +3181,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);
-      Lay_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,
+      Ico_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,
                                     Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

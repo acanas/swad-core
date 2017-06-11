@@ -211,7 +211,7 @@ static void Hld_GetParamHldOrder (void)
 
 static void Hld_PutIconToEditHlds (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiHld,NULL);
+   Ico_PutContextualIconToEdit (ActEdiHld,NULL);
   }
 
 /*****************************************************************************/
@@ -521,7 +521,7 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemHld);
       Hld_PutParamHldCod (Hld->HldCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

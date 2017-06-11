@@ -800,7 +800,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
-   Lay_PutContextualIconToRemove (ActReqRemSvy,Svy_PutParams);
+   Ico_PutContextualIconToRemove (ActReqRemSvy,Svy_PutParams);
 
    /***** Put form to reset survey *****/
    Lay_PutContextualLink (ActReqRstSvy,NULL,Svy_PutParams,
@@ -810,12 +810,12 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    /***** Put form to hide/show survey *****/
    if (Visible)
-      Lay_PutContextualIconToHide (ActHidSvy,Svy_PutParams);
+      Ico_PutContextualIconToHide (ActHidSvy,Svy_PutParams);
    else
-      Lay_PutContextualIconToUnhide (ActShoSvy,Svy_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoSvy,Svy_PutParams);
 
    /***** Put form to edit survey *****/
-   Lay_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);
   }
 
 /*****************************************************************************/
@@ -3235,7 +3235,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Act_FormStart (ActReqRemSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
-            Lay_PutIconRemove ();
+            Ico_PutIconRemove ();
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
 
@@ -3501,7 +3501,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
 static void Svy_PutIconToRemoveOneQst (void)
   {
-   Lay_PutContextualIconToRemove (ActReqRemSvyQst,Svy_PutParamsRemoveOneQst);
+   Ico_PutContextualIconToRemove (ActReqRemSvyQst,Svy_PutParamsRemoveOneQst);
   }
 
 /*****************************************************************************/

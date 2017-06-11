@@ -644,7 +644,7 @@ static void Ctr_Configuration (bool PrintView)
 static void Ctr_PutIconsToPrintAndUpload (void)
   {
    /***** Link to print info about centre *****/
-   Lay_PutContextualIconToPrint (ActPrnCtrInf,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCtrInf,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -815,7 +815,7 @@ static void Ctr_PutIconsListCentres (void)
 
 static void Ctr_PutIconToEditCentres (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiCtr,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCtr,NULL);
   }
 
 /*****************************************************************************/
@@ -976,7 +976,7 @@ static void Ctr_PutIconsEditingCentres (void)
 
 static void Ctr_PutIconToViewCentres (void)
   {
-   Lay_PutContextualIconToView (ActSeeCtr,NULL);
+   Ico_PutContextualIconToView (ActSeeCtr,NULL);
   }
 
 /*****************************************************************************/
@@ -1429,12 +1429,12 @@ static void Ctr_ListCentresForEdition (void)
 	  Ctr->NumUsrsWhoClaimToBelongToCtr ||
 	  Ctr->NumUsrs ||	// Centre has degrees or users ==> deletion forbidden
           !ICanEdit)
-	 Lay_PutIconRemovalNotAllowed ();
+	 Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemCtr);
          Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

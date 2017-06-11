@@ -50,12 +50,6 @@
 
 void Lay_WriteStartOfPage (void);
 
-void Lay_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ());
 void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                             void (*FuncParams) (),
                             const char *Icon,
@@ -66,15 +60,6 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 const char *CheckboxName,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text);
-void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
-                      const char *LinkStyle,const char *OnSubmit);
-void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
-void Lay_PutCalculateIcon (const char *Alt);
-void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
-
-void Lay_PutIconRemovalNotAllowed (void);
-void Lay_PutIconBRemovalNotAllowed (void);
-void Lay_PutIconRemove (void);
 
 void Lay_StartTable (unsigned CellPadding);
 void Lay_StartTableCenter (unsigned CellPadding);

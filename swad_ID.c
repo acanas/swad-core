@@ -489,7 +489,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	    UsrDat->IDs.List[NumID].ID);
 
    /***** Put link *****/
-   Lay_PutIconLink ("ok_on16x16.gif",Txt_Confirm_ID,Txt_Confirm_ID,
+   Ico_PutIconLink ("ok_on16x16.gif",Txt_Confirm_ID,Txt_Confirm_ID,
                     The_ClassFormBold[Gbl.Prefs.Theme],NULL);
 
    /***** End form *****/
@@ -609,7 +609,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	{
 	 if (ItsMe && UsrDat->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
             /* Put disabled icon to remove user's ID */
-            Lay_PutIconRemovalNotAllowed ();
+            Ico_PutIconRemovalNotAllowed ();
 	 else							// I can remove
 	   {
 	    /* Form to remove user's ID */
@@ -635,7 +635,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	      }
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
 		     UsrDat->IDs.List[NumID].ID);
-	    Lay_PutIconRemove ();
+	    Ico_PutIconRemove ();
 	    Act_FormEnd ();
 	   }
 	}

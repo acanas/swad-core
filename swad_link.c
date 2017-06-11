@@ -144,7 +144,7 @@ void Lnk_SeeLinks (void)
 
 static void Lnk_PutIconToEditLinks (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiLnk,NULL);
+   Ico_PutContextualIconToEdit (ActEdiLnk,NULL);
   }
 
 /*****************************************************************************/
@@ -377,7 +377,7 @@ void Lnk_FreeListLinks (void)
 
 static void Lnk_PutIconToViewLinks (void)
   {
-   Lay_PutContextualIconToView (ActSeeLnk,NULL);
+   Ico_PutContextualIconToView (ActSeeLnk,NULL);
   }
 
 /*****************************************************************************/
@@ -407,7 +407,7 @@ static void Lnk_ListLinksForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

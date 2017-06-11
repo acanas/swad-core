@@ -582,21 +582,21 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove assignment *****/
-	 Lay_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
+	 Ico_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
 
 	 /***** Put form to hide/show assignment *****/
 	 if (Hidden)
-	    Lay_PutContextualIconToUnhide (ActShoAsg,Asg_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoAsg,Asg_PutParams);
 	 else
-	    Lay_PutContextualIconToHide (ActHidAsg,Asg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidAsg,Asg_PutParams);
 
 	 /***** Put form to edit assignment *****/
-	 Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
+	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
 	 // no break
       case Rol_STD:
       case Rol_NET:
 	 /***** Put form to print assignment *****/
-	 Lay_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
+	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
 	 break;
       default:
          break;

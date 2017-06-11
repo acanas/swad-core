@@ -180,7 +180,7 @@ static void Mai_GetParamMaiOrder (void)
 
 static void Mai_PutIconToEditMailDomains (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiMai,NULL);
+   Ico_PutContextualIconToEdit (ActEdiMai,NULL);
   }
 
 /*****************************************************************************/
@@ -469,7 +469,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemMai);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -979,7 +979,7 @@ void Mai_ListEmails (void)
 	          StrAddresses,
                   Txt_Create_email_message,
                   The_ClassFormBold[Gbl.Prefs.Theme]);
-         Lay_PutIconWithText ("editnewmsg16x16.gif",
+         Ico_PutIconWithText ("editnewmsg16x16.gif",
                               Txt_Create_email_message,
                               Txt_Create_email_message);
          fprintf (Gbl.F.Out,"</a>"
@@ -1298,7 +1298,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	}
       fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />",
 	       row[0]);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
 
       /* Email */

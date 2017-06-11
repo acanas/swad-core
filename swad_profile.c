@@ -609,7 +609,7 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
    Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
                                NULL);
-   Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
+   Ico_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
    Act_FormEnd ();
   }
 

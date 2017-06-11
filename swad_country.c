@@ -453,7 +453,7 @@ static void Cty_Configuration (bool PrintView)
 
 static void Cty_PutIconToPrint (void)
   {
-   Lay_PutContextualIconToPrint (ActPrnCtyInf,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCtyInf,NULL);
   }
 
 /*****************************************************************************/
@@ -766,7 +766,7 @@ static void Cty_PutIconsListCountries (void)
 
 static void Cty_PutIconToEditCountries (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiCty,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCty,NULL);
   }
 
 /*****************************************************************************/
@@ -971,7 +971,7 @@ void Cty_EditCountries (void)
 
 static void Cty_PutIconToViewCountries (void)
   {
-   Lay_PutContextualIconToView (ActSeeCty,NULL);
+   Ico_PutContextualIconToView (ActSeeCty,NULL);
   }
 
 /*****************************************************************************/
@@ -1547,12 +1547,12 @@ static void Cty_ListCountriesForEdition (void)
       if (Cty->NumInss ||
 	  Cty->NumUsrsWhoClaimToBelongToCty ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
-	 Lay_PutIconRemovalNotAllowed ();
+	 Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

@@ -154,7 +154,7 @@ void Plg_ListPlugins (void)
 
 static void Plg_PutIconToEditPlugins (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiPlg,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlg,NULL);
   }
 
 /*****************************************************************************/
@@ -367,7 +367,7 @@ static void Plg_ListPluginsForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      Lay_PutIconRemove ();
+      Ico_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

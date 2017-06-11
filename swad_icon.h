@@ -1,4 +1,4 @@
-// swad_icon.h: icon selection
+// swad_icon.h: icons
 
 #ifndef _SWAD_ICO
 #define _SWAD_ICO
@@ -52,5 +52,23 @@ void Ico_PutIconsToSelectIconSet (void);
 void Ico_ChangeIconSet (void);
 Ico_IconSet_t Ico_GetParamIconSet (void);
 Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str);
+
+void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ());
+void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ());
+void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ());
+void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ());
+void Ico_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ());
+void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ());
+
+void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
+                      const char *LinkStyle,const char *OnSubmit);
+void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
+
+void Ico_PutCalculateIcon (const char *Alt);
+void Ico_PutCalculateIconWithText (const char *Alt,const char *Text);
+
+void Ico_PutIconRemovalNotAllowed (void);
+void Ico_PutIconBRemovalNotAllowed (void);
+void Ico_PutIconRemove (void);
 
 #endif

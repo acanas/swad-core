@@ -540,7 +540,7 @@ static void Deg_Configuration (bool PrintView)
 static void Deg_PutIconsToPrintAndUpload (void)
   {
    /***** Link to print info about degree *****/
-   Lay_PutContextualIconToPrint (ActPrnDegInf,NULL);
+   Ico_PutContextualIconToPrint (ActPrnDegInf,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins
@@ -703,12 +703,12 @@ static void Deg_ListDegreesForEdition (void)
 	                 "<td class=\"BM\">");
       if (NumCrss ||	// Degree has courses ==> deletion forbidden
 	  !ICanEdit)
-         Lay_PutIconRemovalNotAllowed ();
+         Ico_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemDeg);
          Deg_PutParamOtherDegCod (Deg->DegCod);
-         Lay_PutIconRemove ();
+         Ico_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
@@ -1244,7 +1244,7 @@ static void Deg_PutIconsListDegrees (void)
 
 static void Deg_PutIconToEditDegrees (void)
   {
-   Lay_PutContextualIconToEdit (ActEdiDeg,NULL);
+   Ico_PutContextualIconToEdit (ActEdiDeg,NULL);
   }
 
 /*****************************************************************************/
@@ -1404,7 +1404,7 @@ static void Deg_PutIconsEditingDegrees (void)
 
 static void Deg_PutIconToViewDegrees (void)
   {
-   Lay_PutContextualIconToView (ActSeeDeg,NULL);
+   Ico_PutContextualIconToView (ActSeeDeg,NULL);
   }
 
 /*****************************************************************************/
