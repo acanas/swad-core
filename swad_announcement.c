@@ -198,7 +198,7 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
    extern const char *Txt_New_announcement;
 
    Act_FormStart (ActWriAnn);
-   Lay_PutConfirmButton (Txt_New_announcement);
+   Btn_PutConfirmButton (Txt_New_announcement);
    Act_FormEnd ();
   }
 
@@ -444,7 +444,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "</tr>");
 
    /***** Button to create announcement and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_announcement);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
    Act_FormEnd ();

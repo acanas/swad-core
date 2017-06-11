@@ -1024,7 +1024,7 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Send button and end of frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_degree);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1202,7 +1202,7 @@ static void Deg_ListDegrees (void)
    if (Deg_CheckIfICanCreateDegrees ())
      {
       Act_FormStart (ActEdiDeg);
-      Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
+      Btn_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
 	                                                  Txt_Create_degree);
       Act_FormEnd ();
      }
@@ -2285,7 +2285,7 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingDeg.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeCrs,NULL,NULL,Deg_PutParamGoToDeg,
-                              Lay_CONFIRM_BUTTON,Gbl.Title);
+                              Btn_CONFIRM_BUTTON,Gbl.Title);
      }
    else
       /***** Alert *****/

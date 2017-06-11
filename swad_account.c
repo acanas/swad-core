@@ -161,7 +161,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      "</label>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
-   Lay_PutConfirmButton (Txt_Check);
+   Btn_PutConfirmButton (Txt_Check);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -312,7 +312,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 	    Gbl.RowEvenOdd);
    Act_FormStart (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Lay_PutCreateButtonInline (Txt_Its_me);
+   Btn_PutCreateButtonInline (Txt_Its_me);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -396,7 +396,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Pwd_PutFormToGetNewPasswordOnce ();
 
    /***** Send button and form end *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_account);
    Act_FormEnd ();
   }
 
@@ -418,7 +418,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);
-   Lay_PutCreateButton (Txt_Create_account);
+   Btn_PutCreateButton (Txt_Create_account);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -933,11 +933,11 @@ void Acc_AskIfRemoveMyAccount (void)
    /* Show form to request confirmation */
    Act_FormStart (ActRemMyAcc);
    Pwd_AskForConfirmationOnDangerousAction ();
-   Lay_PutRemoveButton (Txt_Eliminate_my_user_account);
+   Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
    Act_FormEnd ();
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -959,11 +959,11 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Act_FormStart (ActRemUsrGbl);
       Usr_PutParamOtherUsrCodEncrypted ();
       Pwd_AskForConfirmationOnDangerousAction ();
-      Lay_PutRemoveButton (Txt_Eliminate_user_account);
+      Btn_PutRemoveButton (Txt_Eliminate_user_account);
       Act_FormEnd ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

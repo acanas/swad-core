@@ -292,7 +292,7 @@ static void Asg_PutButtonToCreateNewAsg (void)
    Gbl.Asgs.AsgCodToEdit = -1L;
    Act_FormStart (ActFrmNewAsg);
    Asg_PutParams ();
-   Lay_PutConfirmButton (Txt_New_assignment);
+   Btn_PutConfirmButton (Txt_New_assignment);
    Act_FormEnd ();
   }
 
@@ -980,7 +980,7 @@ void Asg_ReqRemAssignment (void)
             Asg.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemAsg,NULL,NULL,Asg_PutParams,
-                           Lay_REMOVE_BUTTON,Txt_Remove_assignment);
+                           Btn_REMOVE_BUTTON,Txt_Remove_assignment);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1235,9 +1235,9 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** New assignment *****/
    if (ItsANewAssignment)
-      Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_assignment);
+      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_assignment);
    else
-      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
    /***** Show current assignments, if any *****/

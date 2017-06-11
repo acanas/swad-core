@@ -339,7 +339,7 @@ static void Att_PutButtonToCreateNewAttEvent (void)
 
    Act_FormStart (ActFrmNewAtt);
    Att_PutParamsToCreateNewAttEvent ();
-   Lay_PutConfirmButton (Txt_New_event);
+   Btn_PutConfirmButton (Txt_New_event);
    Act_FormEnd ();
   }
 
@@ -891,7 +891,7 @@ void Att_AskRemAttEvent (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
             Att.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-   Lay_PutRemoveButton (Txt_Remove_event);
+   Btn_PutRemoveButton (Txt_Remove_event);
    Act_FormEnd ();
 
    /***** Show attendance events again *****/
@@ -1159,9 +1159,9 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Button and end frame *****/
    if (ItsANewAttEvent)
-      Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
+      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
    else
-      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1909,7 +1909,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    if (Att->Open)
      {
       /***** Send button *****/
-      Lay_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
      }
   }
@@ -2000,7 +2000,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Lay_EndTable ();
 
       /* Send button */
-      Lay_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save);
 
       /***** End form *****/
       Act_FormEnd ();
@@ -2707,7 +2707,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Lay_EndTable ();
 
 	 /* Send button */
-	 Lay_PutConfirmButton (Txt_Show_list);
+	 Btn_PutConfirmButton (Txt_Show_list);
 
 	 /* End form */
 	 Act_FormEnd ();
@@ -3075,7 +3075,7 @@ static void Att_PutButtonToShowDetails (void)
    Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
-   Lay_PutConfirmButton (Txt_Show_more_details);
+   Btn_PutConfirmButton (Txt_Show_more_details);
    Act_FormEnd ();
   }
 

@@ -25,35 +25,13 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For fprintf
-// #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc
-// #include <string.h>		// For string functions
 
 #include "swad_action.h"
 #include "swad_box.h"
-// #include "swad_calendar.h"
-// #include "swad_changelog.h"
-// #include "swad_config.h"
-// #include "swad_connected.h"
-// #include "swad_database.h"
-// #include "swad_exam.h"
-// #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_help.h"
-// #include "swad_hierarchy.h"
-// #include "swad_language.h"
-// #include "swad_logo.h"
-// #include "swad_MFU.h"
-// #include "swad_notice.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_preference.h"
-// #include "swad_social.h"
-// #include "swad_tab.h"
-// #include "swad_theme.h"
-// #include "swad_web_service.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -218,15 +196,15 @@ void Box_EndBoxTable (void)
    Box_EndBox ();
   }
 
-void Box_EndBoxTableWithButton (Lay_Button_t Button,const char *TxtButton)
+void Box_EndBoxTableWithButton (Btn_Button_t Button,const char *TxtButton)
   {
    Lay_EndTable ();
    Box_EndBoxWithButton (Button,TxtButton);
   }
 
-void Box_EndBoxWithButton (Lay_Button_t Button,const char *TxtButton)
+void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton)
   {
-   Lay_PutButton (Button,TxtButton);
+   Btn_PutButton (Button,TxtButton);
    Box_EndBox ();
   }
 

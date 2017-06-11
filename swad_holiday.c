@@ -180,7 +180,7 @@ void Hld_SeeHolidays (void)
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin
 	{
 	 Act_FormStart (ActEdiHld);
-	 Lay_PutConfirmButton (Txt_New_holiday);
+	 Btn_PutConfirmButton (Txt_New_holiday);
 	 Act_FormEnd ();
 	}
 
@@ -1052,7 +1052,7 @@ static void Hld_PutFormToCreateHoliday (void)
             Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name);
 
    /***** Send button and end of frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_holiday);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_holiday);
 
    /***** End of form *****/
    Act_FormEnd ();

@@ -269,7 +269,7 @@ void Pwd_ShowFormSendNewPwd (void)
             Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end frame *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -733,7 +733,7 @@ void Pwd_ShowFormChgPwd (void)
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and end form *****/
-   Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,
+   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,
                                      IHaveAPasswordInDB ? Txt_Change_password :
 	                                                  Txt_Set_password);
 
@@ -859,7 +859,7 @@ void Pwd_ShowFormOthPwd (void)
          Lay_EndTable ();
 
 	 /* End form */
-	 Lay_PutConfirmButton (Txt_Change_password);
+	 Btn_PutConfirmButton (Txt_Change_password);
 	 Act_FormEnd ();
 
          /***** End frame *****/

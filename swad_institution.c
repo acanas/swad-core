@@ -696,7 +696,7 @@ static void Ins_ListInstitutions (void)
    if (Ins_CheckIfICanCreateInstitutions ())
      {
       Act_FormStart (ActEdiIns);
-      Lay_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
+      Btn_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
 	                                   Txt_Create_institution);
       Act_FormEnd ();
      }
@@ -2101,7 +2101,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Inss.EditingIns.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
-                              Lay_CONFIRM_BUTTON,Gbl.Title);
+                              Btn_CONFIRM_BUTTON,Gbl.Title);
      }
    else
       /***** Alert *****/
@@ -2231,7 +2231,7 @@ static void Ins_PutFormToCreateInstitution (void)
 		      "</tr>");
 
    /***** Send button and end of frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_institution);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End form *****/
    Act_FormEnd ();

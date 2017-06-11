@@ -3672,11 +3672,11 @@ static void Soc_RequestRemovalSocialNote (void)
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
 	                             Soc_PutParamsRemoveSocialNote,
-				     Lay_REMOVE_BUTTON,Txt_Remove);
+				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
 	                             Soc_PutParamsRemoveSocialNote,
-				     Lay_REMOVE_BUTTON,Txt_Remove);
+				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
    else
@@ -4010,11 +4010,11 @@ static void Soc_RequestRemovalSocialComment (void)
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
 	                             Soc_PutParamsRemoveSocialCommment,
-				     Lay_REMOVE_BUTTON,Txt_Remove);
+				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
 	                             Soc_PutParamsRemoveSocialCommment,
-				     Lay_REMOVE_BUTTON,Txt_Remove);
+				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
    else

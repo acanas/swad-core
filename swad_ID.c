@@ -705,7 +705,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       ID_MAX_BYTES_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "");	// Show the most recent ID
-      Lay_PutCreateButtonInline (Txt_Add_this_ID);
+      Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>"

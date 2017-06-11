@@ -3153,7 +3153,7 @@ void Brw_AskEditWorksCrs (void)
          Lay_EndTable ();
 
          /* Send button */
-	 Lay_PutConfirmButton (Txt_View_homework);
+	 Btn_PutConfirmButton (Txt_View_homework);
 
          /* End form */
          Act_FormEnd ();
@@ -3766,7 +3766,7 @@ static void Brw_PutButtonToShowEdit (void)
            {
 	    Act_FormStart (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
 	    Brw_PutHiddenParamFullTreeIfSelected ();
-	    Lay_PutConfirmButton (Txt_View);
+	    Btn_PutConfirmButton (Txt_View);
             Act_FormEnd ();
            }
 	 break;
@@ -3775,7 +3775,7 @@ static void Brw_PutButtonToShowEdit (void)
            {
 	    Act_FormStart (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
 	    Brw_PutHiddenParamFullTreeIfSelected ();
-	    Lay_PutConfirmButton (Txt_Edit);
+	    Btn_PutConfirmButton (Txt_Edit);
             Act_FormEnd ();
            }
 	 break;
@@ -6253,7 +6253,7 @@ void Brw_AskRemFileFromTree (void)
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                               Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
                               Brw_PutParamsRemFile,
-                              Lay_REMOVE_BUTTON,
+                              Btn_REMOVE_BUTTON,
                               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
         	                                                        Txt_Remove_link);
      }
@@ -6398,7 +6398,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
 			   Brw_PutParamsRemFolder,
-			   Lay_REMOVE_BUTTON,Txt_Remove_folder);
+			   Btn_REMOVE_BUTTON,Txt_Remove_folder);
   }
 
 /*****************************************************************************/
@@ -8002,7 +8002,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
             Brw_MAX_CHARS_FOLDER);
 
    /* Button to send and end frame *****/
-   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Create_folder);
+   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_folder);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -8065,7 +8065,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                              -1L);
 
    /***** Button to send *****/
-   Lay_PutConfirmButton (Txt_Done);
+   Btn_PutConfirmButton (Txt_Done);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -8105,7 +8105,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /* Button to send */
-   Lay_PutCreateButton (Txt_Upload_file);
+   Btn_PutCreateButton (Txt_Upload_file);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -8140,7 +8140,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Send button and end frame *****/
-   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Paste);
+   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Paste);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -8212,7 +8212,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
             Brw_MAX_CHARS_FOLDER);
 
    /***** Send button and end frame *****/
-   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
+   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -9348,7 +9348,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** End frame *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save_file_properties);
+	    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
 	    Act_FormEnd ();
 	   }
 	 else
@@ -11723,7 +11723,7 @@ void Brw_AskRemoveOldFiles (void)
    fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
-   Box_EndBoxWithButton (Lay_REMOVE_BUTTON,Txt_Remove);
+   Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** End form *****/
    Act_FormEnd ();

@@ -374,7 +374,7 @@ void Exa_ReqRemoveExamAnnouncement (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,NULL,Exa_PutParamExaCodToEdit,
-			    Lay_REMOVE_BUTTON,Txt_Remove);
+			    Btn_REMOVE_BUTTON,Txt_Remove);
   }
 
 /*****************************************************************************/
@@ -725,7 +725,7 @@ static void Exa_PutButtonToCreateNewExamAnnouncement (void)
    extern const char *Txt_New_announcement_OF_EXAM;
 
    Act_FormStart (ActEdiExaAnn);
-   Lay_PutConfirmButton (Txt_New_announcement_OF_EXAM);
+   Btn_PutConfirmButton (Txt_New_announcement_OF_EXAM);
    Act_FormEnd ();
   }
 
@@ -1526,8 +1526,8 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 
    /***** End frame *****/
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Box_EndBoxWithButton ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Lay_CONFIRM_BUTTON :
-	                                                                       Lay_CREATE_BUTTON,
+      Box_EndBoxWithButton ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Btn_CONFIRM_BUTTON :
+	                                                                       Btn_CREATE_BUTTON,
 	                           Txt_Publish_announcement_OF_EXAM);
    else
       Box_EndBox ();

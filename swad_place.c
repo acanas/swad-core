@@ -202,7 +202,7 @@ void Plc_SeePlaces (void)
       if (ICanEdit)
 	{
 	 Act_FormStart (ActEdiPlc);
-	 Lay_PutConfirmButton (Txt_New_place);
+	 Btn_PutConfirmButton (Txt_New_place);
 	 Act_FormEnd ();
 	}
 
@@ -781,7 +781,7 @@ static void Plc_PutFormToCreatePlace (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_place);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_place);
 
    /***** End formn *****/
    Act_FormEnd ();

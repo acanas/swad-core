@@ -29,7 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
-#include "swad_layout.h"
+#include "swad_button.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -58,8 +58,8 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
                               const char *HelpLink,
                               unsigned CellPadding);
 void Box_EndBoxTable (void);
-void Box_EndBoxTableWithButton (Lay_Button_t Button,const char *TxtButton);
-void Box_EndBoxWithButton (Lay_Button_t Button,const char *TxtButton);
+void Box_EndBoxTableWithButton (Btn_Button_t Button,const char *TxtButton);
+void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton);
 void Box_EndBox (void);
 
 #endif

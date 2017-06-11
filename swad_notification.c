@@ -1955,7 +1955,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Lay_EndTable ();
 
    /***** Button to save changes *****/
-   Lay_PutConfirmButton (Txt_Save_changes);
+   Btn_PutConfirmButton (Txt_Save_changes);
 
    /***** End form *****/
    Act_FormEnd ();

@@ -1755,7 +1755,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       if (PutFormToChangeGrps)
 	{
 	 if (ICanChangeMyGrps)
-	    Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+	    Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
 						   Txt_Enrol_in_groups);
 	 Act_FormEnd ();
 	}
@@ -1770,7 +1770,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       if (ICanEdit)
 	{
 	 Act_FormStart (ActReqEdiGrp);
-	 Lay_PutConfirmButton (Txt_Create_group);
+	 Btn_PutConfirmButton (Txt_Create_group);
 	 Act_FormEnd ();
 	}
      }
@@ -2440,7 +2440,7 @@ static void Grp_PutFormToCreateGroupType (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2536,7 +2536,7 @@ static void Grp_PutFormToCreateGroup (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_group);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_group);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -3698,7 +3698,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
                            Grp_PutParamRemGrpTyp,
-			   Lay_REMOVE_BUTTON,Txt_Remove_type_of_group);
+			   Btn_REMOVE_BUTTON,Txt_Remove_type_of_group);
 
    /***** Show the form to edit group types and groups again *****/
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
@@ -3751,7 +3751,7 @@ static void Grp_AskConfirmRemGrp (void)
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
                            Grp_PutParamRemGrp,
-			   Lay_REMOVE_BUTTON,Txt_Remove_group);
+			   Btn_REMOVE_BUTTON,Txt_Remove_group);
 
    /***** Show the form to edit groups again *****/
    Grp_ReqEditGroupsInternal2 (Ale_INFO,NULL);

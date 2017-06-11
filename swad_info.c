@@ -463,7 +463,7 @@ static void Inf_PutButtonToEditInfo (void)
    extern const char *Txt_Edit;
 
    Act_FormStart (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_PutConfirmButton (Txt_Edit);
+   Btn_PutConfirmButton (Txt_Edit);
    Act_FormEnd ();
   }
 
@@ -1221,7 +1221,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_Edit;
 
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
-   Lay_PutConfirmButton (Txt_Edit);
+   Btn_PutConfirmButton (Txt_Edit);
    Act_FormEnd ();
   }
 
@@ -1234,7 +1234,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_Edit_plain_text;
 
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
-   Lay_PutConfirmButton (Txt_Edit_plain_text);
+   Btn_PutConfirmButton (Txt_Edit_plain_text);
    Act_FormEnd ();
   }
 
@@ -1247,7 +1247,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_Edit_rich_text;
 
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
-   Lay_PutConfirmButton (Txt_Edit_rich_text);
+   Btn_PutConfirmButton (Txt_Edit_rich_text);
    Act_FormEnd ();
   }
 
@@ -1275,7 +1275,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /***** Send button *****/
-   Lay_PutCreateButton (Txt_Upload_file);
+   Btn_PutCreateButton (Txt_Upload_file);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1321,7 +1321,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
 	              "</div>");
 
    /***** Send button *****/
-   Lay_PutCreateButton (Txt_Send_URL);
+   Btn_PutCreateButton (Txt_Send_URL);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2085,7 +2085,7 @@ void Inf_EditPlainTxtInfo (void)
             TxtHTML);
 
    /***** End frame and form *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 
@@ -2137,7 +2137,7 @@ void Inf_EditRichTxtInfo (void)
             TxtHTML);
 
    /***** End frame and form *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 

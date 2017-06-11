@@ -601,7 +601,7 @@ void Sta_AskShowCrsHits (void)
 	 Dat_PutHiddenParBrowserTZDiff ();
 
          /***** Send button *****/
-	 Lay_PutConfirmButton (Txt_Show_hits);
+	 Btn_PutConfirmButton (Txt_Show_hits);
 
          /***** End form *****/
          Act_FormEnd ();
@@ -762,7 +762,7 @@ void Sta_AskShowGblHits (void)
    Dat_PutHiddenParBrowserTZDiff ();
 
    /***** End frame with button *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Show_hits);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_hits);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -3954,7 +3954,7 @@ void Sta_ReqShowFigures (void)
 	              "</label>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Show_statistic);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_statistic);
 
    /***** End of form *****/
    Act_FormEnd ();

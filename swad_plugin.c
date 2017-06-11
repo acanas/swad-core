@@ -927,7 +927,7 @@ static void Plg_PutFormToCreatePlugin (void)
             Cns_MAX_CHARS_IP,Plg->IP);
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_plugin);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/
    Act_FormEnd ();

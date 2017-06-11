@@ -360,7 +360,7 @@ void Tst_ShowFormAskTst (void)
          Lay_EndTable ();
 
          /***** Send button *****/
-         Lay_PutConfirmButton (Txt_Generate_test);
+         Btn_PutConfirmButton (Txt_Generate_test);
          Act_FormEnd ();
         }
      }
@@ -470,7 +470,7 @@ void Tst_ShowNewTest (void)
 		     Txt_Allow_teachers_to_consult_this_test);
 
             /***** End form *****/
-            Lay_PutConfirmButton (Txt_Done_assess_test);
+            Btn_PutConfirmButton (Txt_Done_assess_test);
             Act_FormEnd ();
 
             /***** End frame *****/
@@ -1304,7 +1304,7 @@ void Tst_ShowFormAskEditTsts (void)
       Lay_EndTable ();
 
       /***** Send button *****/
-      Lay_PutConfirmButton (Txt_Show_questions);
+      Btn_PutConfirmButton (Txt_Show_questions);
       Act_FormEnd ();
      }
    else	// No test questions
@@ -1377,7 +1377,7 @@ static void Tst_PutButtonToAddQuestion (void)
    extern const char *Txt_New_question;
 
    Act_FormStart (ActEdiOneTstQst);
-   Lay_PutConfirmButton (Txt_New_question);
+   Btn_PutConfirmButton (Txt_New_question);
    Act_FormEnd ();
   }
 
@@ -1948,7 +1948,7 @@ static void Tst_ShowFormConfigTst (void)
    Lay_EndTable ();
 
    /***** Send button *****/
-   Lay_PutConfirmButton (Txt_Save);
+   Btn_PutConfirmButton (Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -4873,9 +4873,9 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Send button *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Lay_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save);
    else
-      Lay_PutCreateButton (Txt_Create_question);
+      Btn_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -5895,13 +5895,13 @@ void Tst_RequestRemoveQst (void)
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                               ActRemTstQst,NULL,NULL,
 			      Tst_PutParamsRemoveOneQst,
-			      Lay_REMOVE_BUTTON,Txt_Remove_question);
+			      Btn_REMOVE_BUTTON,Txt_Remove_question);
    else
      {
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                               ActRemTstQst,NULL,NULL,
 			      Tst_PutParamsRemoveQst,
-			      Lay_REMOVE_BUTTON,Txt_Remove_question);
+			      Btn_REMOVE_BUTTON,Txt_Remove_question);
       Tst_FreeTagsList ();
      }
 
@@ -7035,7 +7035,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
          Lay_EndTable ();
 
          /***** Send button *****/
-	 Lay_PutConfirmButton (Txt_View_test_results);
+	 Btn_PutConfirmButton (Txt_View_test_results);
 
          /***** End form *****/
          Act_FormEnd ();
@@ -7084,7 +7084,7 @@ void Tst_SelDatesToSeeMyTestResults (void)
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_test_results);
+   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_View_test_results);
 
    /***** End form *****/
    Act_FormEnd ();

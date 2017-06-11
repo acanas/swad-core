@@ -196,7 +196,7 @@ void Ind_ReqIndicatorsCourses (void)
       Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
       if (Gbl.Stat.StrIndicatorsSelected[0])
          Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
-      Lay_PutConfirmButton (Txt_Show_more_details);
+      Btn_PutConfirmButton (Txt_Show_more_details);
       Act_FormEnd ();
      }
 
@@ -527,7 +527,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
                            Gbl.Action.Act,NULL,NULL,
                            Ind_PutParamsConfirmIWantToSeeBigList,
-                           Lay_CONFIRM_BUTTON,Txt_Show_anyway);
+                           Btn_CONFIRM_BUTTON,Txt_Show_anyway);
   }
 
 static void Ind_PutParamsConfirmIWantToSeeBigList (void)

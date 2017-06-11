@@ -44,14 +44,6 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Lay_NO_BUTTON,
-   Lay_CREATE_BUTTON,
-   Lay_CONFIRM_BUTTON,
-   Lay_REMOVE_BUTTON,
-  } Lay_Button_t;
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -83,15 +75,6 @@ void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
 void Lay_PutIconRemovalNotAllowed (void);
 void Lay_PutIconBRemovalNotAllowed (void);
 void Lay_PutIconRemove (void);
-
-void Lay_PutButton (Lay_Button_t Button,const char *TxtButton);
-void Lay_PutButtonInline (Lay_Button_t Button,const char *TxtButton);
-void Lay_PutCreateButton (const char *TxtButton);
-void Lay_PutCreateButtonInline (const char *TxtButton);
-void Lay_PutConfirmButton (const char *TxtButton);
-void Lay_PutConfirmButtonInline (const char *TxtButton);
-void Lay_PutRemoveButton (const char *TxtButton);
-void Lay_PutRemoveButtonInline (const char *TxtButton);
 
 void Lay_StartTable (unsigned CellPadding);
 void Lay_StartTableCenter (unsigned CellPadding);

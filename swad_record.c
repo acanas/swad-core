@@ -408,7 +408,7 @@ void Rec_ShowFormCreateRecordField (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_record_field);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -661,7 +661,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
      }
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemFie,NULL,NULL,Rec_PutParamFielCod,
-			   Lay_REMOVE_BUTTON,Txt_Remove_record_field);
+			   Btn_REMOVE_BUTTON,Txt_Remove_record_field);
 
    /***** List record fields again *****/
    Rec_ReqEditRecordFields ();
@@ -1892,7 +1892,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    /***** Button to save changes and end frame *****/
    if (ICanEdit)
      {
-      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
       Act_FormEnd ();
      }
    else
@@ -2482,17 +2482,17 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       switch (TypeOfView)
         {
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-	    Lay_PutConfirmButton (Txt_Sign_up);
+	    Btn_PutConfirmButton (Txt_Sign_up);
 	    Act_FormEnd ();
 	    break;
 	 case Rec_SHA_MY_RECORD_FORM:
-	    Lay_PutConfirmButton (Txt_Save_changes);
+	    Btn_PutConfirmButton (Txt_Save_changes);
 	    Act_FormEnd ();
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
 	    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
 	       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-	    Lay_PutConfirmButton (Txt_Register);
+	    Btn_PutConfirmButton (Txt_Register);
 	    Act_FormEnd ();
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:
@@ -2511,7 +2511,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 	    /***** Which action, register or removing? *****/
 	    if (Enr_PutActionsRegRemOneUsr (ItsMe))
-	       Lay_PutConfirmButton (Txt_Confirm);
+	       Btn_PutConfirmButton (Txt_Confirm);
 
 	    Act_FormEnd ();
 	    break;

@@ -264,7 +264,7 @@ bool Syl_CheckAndEditSyllabus (void)
 	{
 	 /***** Button to view *****/
          Act_FormStart (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type]);
-	 Lay_PutConfirmButton (Txt_Done);
+	 Btn_PutConfirmButton (Txt_Done);
 	 Act_FormEnd ();
 	}
 

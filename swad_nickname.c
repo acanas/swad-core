@@ -267,7 +267,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\""
 	                    " value=\"@%s\" />",
 		  row[0]);	// Nickname
-	 Lay_PutConfirmButtonInline (Txt_Use_this_nickname);
+	 Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
 	 Act_FormEnd ();
 	}
 
@@ -291,7 +291,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 	              "</div>",
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
-   Lay_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
+   Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save);			// I have no nickname yet);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"

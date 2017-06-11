@@ -263,7 +263,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
                   Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
          Ale_ShowAlertAndButton (Ale_WARNING,Message,
                                  ActReqMyPho,NULL,NULL,NULL,
-                                 Lay_CONFIRM_BUTTON,Txt_Upload_photo);
+                                 Btn_CONFIRM_BUTTON,Txt_Upload_photo);
         }
      }
   }
@@ -2300,7 +2300,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
             Txt_password);
 
    /***** Send button and end table and frame *****/
-   Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Log_in);
+   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Log_in);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -5241,7 +5241,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char
    Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
                            Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParamsConfirmIWantToSeeBigList,
-                           Lay_CONFIRM_BUTTON,Txt_Show_anyway);
+                           Btn_CONFIRM_BUTTON,Txt_Show_anyway);
   }
 
 static void Usr_PutParamsConfirmIWantToSeeBigList (void)
@@ -7366,7 +7366,7 @@ void Usr_SeeGuests (void)
          Lay_EndTable ();
 
          /* Send button */
-	 Lay_PutConfirmButton (Txt_Show_records);
+	 Btn_PutConfirmButton (Txt_Show_records);
 
          /* End form */
          Act_FormEnd ();
@@ -7537,7 +7537,7 @@ void Usr_SeeStudents (void)
          if (ICanViewRecords)
            {
             /* Send button */
-	    Lay_PutConfirmButton (Txt_Show_records);
+	    Btn_PutConfirmButton (Txt_Show_records);
 
 	    /* End form */
 	    Act_FormEnd ();
@@ -7717,7 +7717,7 @@ void Usr_SeeTeachers (void)
          if (ICanViewRecords)
            {
             /* Send button */
-	    Lay_PutConfirmButton (Txt_Show_records);
+	    Btn_PutConfirmButton (Txt_Show_records);
 
 	    /* End form */
 	    Act_FormEnd ();
@@ -8259,7 +8259,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_STD],
                               ActReqEnrSevStd,NULL,NULL,NULL,
-                              Lay_CREATE_BUTTON,Txt_Register_students);
+                              Btn_CREATE_BUTTON,Txt_Register_students);
 
    else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
             Role == Rol_TCH &&				// No teachers found
@@ -8268,7 +8268,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_TCH],
                               ActReqMdfOneTch,NULL,NULL,NULL,
-                              Lay_CREATE_BUTTON,Txt_Register_teacher);
+                              Btn_CREATE_BUTTON,Txt_Register_teacher);
    else
       /***** Show alert *****/
       Ale_ShowAlert (Ale_INFO,Txt_No_users_found[Role]);

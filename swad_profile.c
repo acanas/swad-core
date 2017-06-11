@@ -193,7 +193,7 @@ void Prf_RequestUserProfile (void)
             Gbl.Usrs.Me.UsrDat.Nickname);
 
    /***** Send button and end frame *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Continue);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
    Act_FormEnd ();

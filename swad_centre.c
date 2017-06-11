@@ -773,7 +773,7 @@ static void Ctr_ListCentres (void)
    if (Ctr_CheckIfICanCreateCentres ())
      {
       Act_FormStart (ActEdiCtr);
-      Lay_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
+      Btn_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
 	                                   Txt_Create_centre);
       Act_FormEnd ();
      }
@@ -2166,7 +2166,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Ctrs.EditingCtr.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
-                              Lay_CONFIRM_BUTTON,Gbl.Title);
+                              Btn_CONFIRM_BUTTON,Gbl.Title);
      }
    else
       /***** Alert *****/
@@ -2509,7 +2509,7 @@ static void Ctr_PutFormToCreateCentre (void)
 		      "</tr>");
 
    /***** Send button and end of frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_centre);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End form *****/
    Act_FormEnd ();

@@ -756,7 +756,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_email_domain);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_email_domain);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -1345,7 +1345,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
 		  row[0]);	// Email
-         Lay_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
+         Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 			                                        Txt_Use_this_email);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
@@ -1390,7 +1390,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	              "</div>",
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Gbl.Usrs.Me.UsrDat.Email);
-   Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
+   Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save);		// User has no email address yet
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
@@ -1634,7 +1634,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
                         true);	// Closable
    Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address,
                            ActFrmMyAcc,NULL,NULL,NULL,
-                           Lay_CONFIRM_BUTTON,Txt_Check);
+                           Btn_CONFIRM_BUTTON,Txt_Check);
    Box_EndBox ();
   }
 

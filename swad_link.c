@@ -127,7 +127,7 @@ void Lnk_SeeLinks (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiLnk);
-      Lay_PutConfirmButton (Txt_New_link);
+      Btn_PutConfirmButton (Txt_New_link);
       Act_FormEnd ();
      }
 
@@ -750,7 +750,7 @@ static void Lnk_PutFormToCreateLink (void)
             Cns_MAX_CHARS_WWW,Lnk->WWW);
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End of form *****/
    Act_FormEnd ();

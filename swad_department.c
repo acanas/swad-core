@@ -964,7 +964,7 @@ static void Dpt_PutFormToCreateDepartment (void)
             Cns_MAX_CHARS_WWW,Dpt->WWW);
 
    /***** Send button and end of frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_department);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_department);
 
    /***** End of form *****/
    Act_FormEnd ();

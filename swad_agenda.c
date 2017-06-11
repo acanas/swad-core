@@ -718,7 +718,7 @@ static void Agd_PutButtonToCreateNewEvent (void)
 		          Gbl.Agenda.HiddenVisiblEvents,
 		          Gbl.Agenda.CurrentPage,
 		          -1L);
-   Lay_PutConfirmButton (Txt_New_event);
+   Btn_PutConfirmButton (Txt_New_event);
    Act_FormEnd ();
   }
 
@@ -1309,7 +1309,7 @@ void Agd_AskRemEvent (void)
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemEvtMyAgd,NULL,NULL,
                            Agd_PutCurrentParamsMyAgenda,
-			   Lay_REMOVE_BUTTON,Txt_Remove_event);
+			   Btn_REMOVE_BUTTON,Txt_Remove_event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1599,9 +1599,9 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** New event *****/
    if (ItsANewEvent)
-      Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
+      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
    else
-      Box_EndBoxTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
    /***** Show current events, if any *****/

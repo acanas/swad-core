@@ -1165,7 +1165,7 @@ static void Crs_ListCourses (void)
    if (Crs_CheckIfICanCreateCourses ())
      {
       Act_FormStart (ActEdiCrs);
-      Lay_PutConfirmButton (Gbl.CurrentDeg.NumCrss ? Txt_Create_another_course :
+      Btn_PutConfirmButton (Gbl.CurrentDeg.NumCrss ? Txt_Create_another_course :
 	                                             Txt_Create_course);
       Act_FormEnd ();
      }
@@ -1718,7 +1718,7 @@ static void Crs_PutFormToCreateCourse (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_course);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_course);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2820,7 +2820,7 @@ void Crs_ContEditAfterChgCrs (void)
      }
 
    /***** End alert *****/
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 
    /***** Show the form again *****/
    Crs_EditCourses ();
@@ -2842,7 +2842,7 @@ static void Crs_PutButtonToGoToCrs (void)
       Act_FormStart (ActSeeCrsInf);
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingCrs.ShrtName);
-      Lay_PutConfirmButton (Gbl.Title);
+      Btn_PutConfirmButton (Gbl.Title);
       Act_FormEnd ();
      }
   }
@@ -2862,7 +2862,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
    sprintf (Gbl.Title,Txt_Register_me_in_X,Gbl.Degs.EditingCrs.ShrtName);
-   Lay_PutCreateButton (Gbl.Title);
+   Btn_PutCreateButton (Gbl.Title);
    Act_FormEnd ();
   }
 
@@ -3353,7 +3353,7 @@ void Crs_AskRemoveOldCrss (void)
    fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
-   Box_EndBoxWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
+   Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Act_FormEnd ();

@@ -463,7 +463,7 @@ void Pho_ReqRemoveMyPhoto (void)
 
       /* End alert */
       Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,NULL,
-                               Lay_REMOVE_BUTTON,Txt_Remove_photo);
+                               Btn_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
@@ -539,7 +539,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 	      }
 	    Ale_ShowAlertAndButton2 (NextAction,NULL,NULL,
 	                             Usr_PutParamOtherUsrCodEncrypted,
-				     Lay_REMOVE_BUTTON,Txt_Remove_photo);
+				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
 	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);

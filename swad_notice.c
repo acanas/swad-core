@@ -113,7 +113,7 @@ void Not_ShowFormNotice (void)
                       "</textarea>");
 
    /***** Button to create notice and end frame *****/
-   Box_EndBoxWithButton (Lay_CREATE_BUTTON,Txt_Create_notice);
+   Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -284,7 +284,7 @@ void Not_RequestRemNotice (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,Not_PutParams,
-			    Lay_REMOVE_BUTTON,Txt_Remove);
+			    Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES);
@@ -531,7 +531,7 @@ static void Not_PutButtonToAddNewNotice (void)
    extern const char *Txt_New_notice;
 
    Act_FormStart (ActWriNot);
-   Lay_PutConfirmButton (Txt_New_notice);
+   Btn_PutConfirmButton (Txt_New_notice);
    Act_FormEnd ();
   }
 

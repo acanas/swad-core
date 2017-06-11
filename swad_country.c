@@ -2017,7 +2017,7 @@ static void Cty_PutFormToCreateCountry (void)
      }
 
    /***** Send button and end of frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_country);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_country);
 
    /***** End of form *****/
    Act_FormEnd ();

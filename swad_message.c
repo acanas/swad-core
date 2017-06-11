@@ -325,7 +325,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Img_PutImageUploader (-1,"MSG_IMG_TIT_URL");
 
    /***** Send button *****/
-   Lay_PutCreateButton (Txt_Send_message);
+   Btn_PutCreateButton (Txt_Send_message);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -899,7 +899,7 @@ void Msg_ReqDelAllRecMsgs (void)
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,NULL,
                             Msg_PutHiddenParamsMsgsFilters,
-                            Lay_REMOVE_BUTTON,Txt_Delete_messages_received);
+                            Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
 
 /*****************************************************************************/
@@ -939,7 +939,7 @@ void Msg_ReqDelAllSntMsgs (void)
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,NULL,
                             Msg_PutHiddenParamsMsgsFilters,
-                            Lay_REMOVE_BUTTON,Txt_Delete_messages_sent);
+                            Btn_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }
 
 /*****************************************************************************/

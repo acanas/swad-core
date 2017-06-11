@@ -179,7 +179,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
 	{
 	 Act_FormStart (ActReqEnrSevStd);
 	 Crs_PutParamCrsCod (CrsCod);
-	 Lay_PutCreateButtonInline (Txt_Register_students);
+	 Btn_PutCreateButtonInline (Txt_Register_students);
 	 Act_FormEnd ();
 	}
   }
@@ -358,7 +358,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
             Cns_MAX_CHARS_EMAIL_ADDRESS);
 
    /***** Send button*****/
-   Lay_PutConfirmButton (Txt_Continue);
+   Btn_PutConfirmButton (Txt_Continue);
    Act_FormEnd ();
   }
 
@@ -402,7 +402,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
       default:
 	 Lay_ShowErrorAndExit ("Wrong role.");
      }
-   Lay_PutCreateButtonInline (Txt_Confirm_my_enrolment);
+   Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
    Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
@@ -420,7 +420,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
       default:
 	 Lay_ShowErrorAndExit ("Wrong role.");
      }
-   Lay_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
+   Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -759,7 +759,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Pwd_AskForConfirmationOnDangerousAction ();
 
    /***** Send button and end frame *****/
-   Box_EndBoxWithButton (Lay_CONFIRM_BUTTON,Txt_Confirm);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Confirm);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -821,7 +821,7 @@ void Enr_AskRemoveOldUsrs (void)
    fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
-   Box_EndBoxWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
+   Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1871,11 +1871,11 @@ void Enr_AskRemAllStdsThisCrs (void)
       Act_FormStart (ActRemAllStdCrs);
       Grp_PutParamAllGroups ();
       Pwd_AskForConfirmationOnDangerousAction ();
-      Lay_PutRemoveButton (Txt_Remove_all_students);
+      Btn_PutRemoveButton (Txt_Remove_all_students);
       Act_FormEnd ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else	// Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD] == 0
       /***** Show warning indicating no students found *****/
@@ -2164,7 +2164,7 @@ void Enr_AskIfRejectSignUp (void)
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
 	                             Usr_PutParamOtherUsrCodEncrypted,
-				     Lay_REMOVE_BUTTON,Txt_Reject);
+				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
          else
             Lay_ShowErrorAndExit ("Wrong role.");
@@ -2919,7 +2919,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Act_FormStart (NextAction);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Lay_PutCreateButtonInline (Txt_Register);
+            Btn_PutCreateButtonInline (Txt_Register);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
 
@@ -2928,7 +2928,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Act_FormStart (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Lay_PutRemoveButtonInline (Txt_Reject);
+            Btn_PutRemoveButtonInline (Txt_Reject);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>"
                                "</tr>");
@@ -3693,7 +3693,7 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
 	       /* End alert */
 	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
 	                                Usr_PutParamOtherUsrCodEncrypted,
-	                                Lay_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
+	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
          else
@@ -4120,12 +4120,12 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Act_FormStart (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
-      Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
+      Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
                                    Txt_Remove_user_from_this_course);
       Act_FormEnd ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else	      // User does not belong to current course
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -4239,7 +4239,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
       /* End alert */
       Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
                                Usr_PutParamOtherUsrCodEncrypted,
-                               Lay_REMOVE_BUTTON,
+                               Btn_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :
                                        Txt_Remove_USER_as_an_administrator);
      }

@@ -130,7 +130,7 @@ void Ban_SeeBanners (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiBan);
-      Lay_PutConfirmButton (Txt_New_banner);
+      Btn_PutConfirmButton (Txt_New_banner);
       Act_FormEnd ();
      }
 
@@ -883,7 +883,7 @@ static void Ban_PutFormToCreateBanner (void)
             Cns_MAX_CHARS_WWW,Ban->WWW);
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_banner);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End of form *****/
    Act_FormEnd ();

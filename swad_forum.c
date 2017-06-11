@@ -3924,7 +3924,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    Img_PutImageUploader (-1,"FOR_IMG_TIT_URL");
 
    /***** Send button *****/
-   Lay_PutCreateButton (Txt_Send);
+   Btn_PutCreateButton (Txt_Send);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -4168,7 +4168,7 @@ void For_RequestRemoveThread (void)
 			   For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			   For_FORUM_THREADS_SECTION_ID,NULL,
 			   For_PutAllHiddenParamsRemThread,
-			   Lay_REMOVE_BUTTON,Txt_Remove_thread);
+			   Btn_REMOVE_BUTTON,Txt_Remove_thread);
    Lay_EndSection ();
 
    /***** Show the threads again *****/

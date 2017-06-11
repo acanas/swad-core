@@ -241,7 +241,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (DT_CheckIfICanCreateDegreeTypes ())
      {
       Act_FormStart (ActEdiDegTyp);
-      Lay_PutConfirmButton (Gbl.Degs.DegTypes.Num ? Txt_Create_another_type_of_degree :
+      Btn_PutConfirmButton (Gbl.Degs.DegTypes.Num ? Txt_Create_another_type_of_degree :
 	                                            Txt_Create_type_of_degree);
       Act_FormEnd ();
      }
@@ -466,7 +466,7 @@ void DT_PutFormToCreateDegreeType (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Box_EndBoxTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
+   Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
 
    /***** End form *****/
    Act_FormEnd ();
