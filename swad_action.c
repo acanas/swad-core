@@ -245,6 +245,7 @@ Centre:
 	128. ActChgCtrInsCfg		Request change of the institution of a centre in centre configuration
 	129. ActRenCtrShoCfg		Change short name centre in centre configuration
 	130. ActRenCtrFulCfg		Change full name centre in centre configuration
+	NEW. ActChgCtrPlcCfg		Change place of centre in centre configuration
 	131. ActChgCtrWWWCfg		Change web of centre in centre configuration
 	132. ActReqCtrLog		Show form to send the logo of the current centre
 	133. ActRecCtrLog		Receive and store the logo of the current centre
@@ -1627,7 +1628,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqCtr		*/{1208,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RecFormReqCtr		,NULL},
    /* ActNewCtr		*/{ 685,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RecFormNewCtr		,NULL},
    /* ActRemCtr		*/{ 686,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RemoveCentre		,NULL},
-   /* ActChgDegPlc	*/{ 706,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCentrePlace		,NULL},
+   /* ActChgDegPlc	*/{ 706,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrPlc		,NULL},
    /* ActRenCtrSho	*/{ 682,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreShort		,Ctr_ContEditAfterChgCtr	,NULL},
    /* ActRenCtrFul	*/{ 684,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreFull		,Ctr_ContEditAfterChgCtr	,NULL},
    /* ActChgCtrWWW	*/{ 683,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrWWW		,NULL},
@@ -1675,6 +1676,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCtrInsCfg	*/{1589,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_ChangeCtrInsInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    /* ActRenCtrShoCfg	*/{1595,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreShortInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    /* ActRenCtrFulCfg	*/{1594,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x300,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreFullInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
+   /* ActChgCtrPlcCfg	*/{1648,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrPlcInConfig	,NULL},
    /* ActChgCtrWWWCfg	*/{1596,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrWWWInConfig	,NULL},
    /* ActReqCtrLog	*/{1244,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RequestLogo		,NULL},
    /* ActRecCtrLog	*/{1051,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
@@ -4650,6 +4652,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActCreNET,		// #1645
 	ActUpdNET,		// #1646
 	ActRemNETCrs,		// #1647
+	ActChgCtrPlcCfg,	// #1648
 	};
 
 /*****************************************************************************/

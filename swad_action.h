@@ -57,9 +57,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 32 + 24 + 115 + 72 + 416 + 165 + 172 + 42 + 14 + 97)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 72 + 416 + 165 + 172 + 42 + 14 + 97)
 
-#define Act_MAX_ACTION_COD 1647
+#define Act_MAX_ACTION_COD 1648
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 12
 
@@ -238,32 +238,33 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActChgCtrInsCfg		(ActChgCalIns1stDay +  7)
 #define ActRenCtrShoCfg		(ActChgCalIns1stDay +  8)
 #define ActRenCtrFulCfg		(ActChgCalIns1stDay +  9)
-#define ActChgCtrWWWCfg		(ActChgCalIns1stDay + 10)
-#define ActReqCtrLog		(ActChgCalIns1stDay + 11)
-#define ActRecCtrLog		(ActChgCalIns1stDay + 12)
-#define ActRemCtrLog		(ActChgCalIns1stDay + 13)
-#define ActReqCtrPho		(ActChgCalIns1stDay + 14)
-#define ActRecCtrPho		(ActChgCalIns1stDay + 15)
-#define ActChgCtrPhoAtt		(ActChgCalIns1stDay + 16)
+#define ActChgCtrPlcCfg		(ActChgCalIns1stDay + 10)
+#define ActChgCtrWWWCfg		(ActChgCalIns1stDay + 11)
+#define ActReqCtrLog		(ActChgCalIns1stDay + 12)
+#define ActRecCtrLog		(ActChgCalIns1stDay + 13)
+#define ActRemCtrLog		(ActChgCalIns1stDay + 14)
+#define ActReqCtrPho		(ActChgCalIns1stDay + 15)
+#define ActRecCtrPho		(ActChgCalIns1stDay + 16)
+#define ActChgCtrPhoAtt		(ActChgCalIns1stDay + 17)
 
-#define ActSeeDegTyp		(ActChgCalIns1stDay + 17)
-#define ActEdiDegTyp		(ActChgCalIns1stDay + 18)
-#define ActNewDegTyp		(ActChgCalIns1stDay + 19)
-#define ActRemDegTyp		(ActChgCalIns1stDay + 20)
-#define ActRenDegTyp		(ActChgCalIns1stDay + 21)
+#define ActSeeDegTyp		(ActChgCalIns1stDay + 18)
+#define ActEdiDegTyp		(ActChgCalIns1stDay + 19)
+#define ActNewDegTyp		(ActChgCalIns1stDay + 20)
+#define ActRemDegTyp		(ActChgCalIns1stDay + 21)
+#define ActRenDegTyp		(ActChgCalIns1stDay + 22)
 
-#define ActEdiDeg		(ActChgCalIns1stDay + 22)
-#define ActReqDeg		(ActChgCalIns1stDay + 23)
-#define ActNewDeg		(ActChgCalIns1stDay + 24)
-#define ActRemDeg		(ActChgCalIns1stDay + 25)
-#define ActRenDegSho		(ActChgCalIns1stDay + 26)
-#define ActRenDegFul		(ActChgCalIns1stDay + 27)
-#define ActChgDegTyp		(ActChgCalIns1stDay + 28)
-#define ActChgDegWWW		(ActChgCalIns1stDay + 29)
-#define ActChgDegSta		(ActChgCalIns1stDay + 30)
+#define ActEdiDeg		(ActChgCalIns1stDay + 23)
+#define ActReqDeg		(ActChgCalIns1stDay + 24)
+#define ActNewDeg		(ActChgCalIns1stDay + 25)
+#define ActRemDeg		(ActChgCalIns1stDay + 26)
+#define ActRenDegSho		(ActChgCalIns1stDay + 27)
+#define ActRenDegFul		(ActChgCalIns1stDay + 28)
+#define ActChgDegTyp		(ActChgCalIns1stDay + 29)
+#define ActChgDegWWW		(ActChgCalIns1stDay + 30)
+#define ActChgDegSta		(ActChgCalIns1stDay + 31)
 
-#define ActPrnCalCtr		(ActChgCalIns1stDay + 31)
-#define ActChgCalCtr1stDay	(ActChgCalIns1stDay + 32)
+#define ActPrnCalCtr		(ActChgCalIns1stDay + 32)
+#define ActChgCalCtr1stDay	(ActChgCalIns1stDay + 33)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/

@@ -103,6 +103,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
+static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod);
 
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
@@ -285,6 +286,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
+   extern const char *Txt_Another_place;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
@@ -295,6 +297,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_Courses;
    unsigned NumIns;
+   unsigned NumPlc;
    struct Place Plc;
    char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
@@ -490,12 +493,59 @@ static void Ctr_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
+      /***** Place *****/
+      Plc.PlcCod = Gbl.CurrentCtr.Ctr.PlcCod;
+      Plc_GetDataOfPlaceByCod (&Plc);
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Place);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and system admins
+	 // can change centre place
+	{
+	 /* Get list of places of the current institution */
+	 Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
+	 Plc_GetListPlaces ();
+
+	 /* Put form to select place */
+	 Act_FormStart (ActChgCtrPlcCfg);
+	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"INPUT_SHORT_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\">",
+		  Gbl.Form.Id);
+	 fprintf (Gbl.F.Out,"<option value=\"0\"");
+	 if (Gbl.CurrentCtr.Ctr.PlcCod == 0)
+	    fprintf (Gbl.F.Out," selected=\"selected\"");
+	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
+	 for (NumPlc = 0;
+	      NumPlc < Gbl.Plcs.Num;
+	      NumPlc++)
+	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		     Gbl.Plcs.Lst[NumPlc].PlcCod,
+		     (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.CurrentCtr.Ctr.PlcCod) ? " selected=\"selected\"" :
+			                                                          "",
+		     Gbl.Plcs.Lst[NumPlc].ShrtName);
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
+
+	 /* Free list of places */
+	 Plc_FreeListPlaces ();
+	}
+      else	// I can not change centre place
+         fprintf (Gbl.F.Out,"%s",Plc.FullName);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
       /***** Centre WWW *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"RIGHT_MIDDLE\">"
 	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
+			 "<td class=\"LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
@@ -561,21 +611,6 @@ static void Ctr_Configuration (bool PrintView)
 	}
       else
 	{
-	 /***** Place *****/
-	 Plc.PlcCod = Gbl.CurrentCtr.Ctr.PlcCod;
-         Plc_GetDataOfPlaceByCod (&Plc);
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%s"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Place,
-		  Plc.FullName);
-
 	 /***** Number of users who claim to belong to this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
@@ -1836,11 +1871,10 @@ static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
 /************************ Change the place of a centre ***********************/
 /*****************************************************************************/
 
-void Ctr_ChangeCentrePlace (void)
+void Ctr_ChangeCtrPlc (void)
   {
    extern const char *Txt_The_place_of_the_centre_has_changed;
    long NewPlcCod;
-   char Query[512];
 
    /***** Get centre code *****/
    Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
@@ -1852,9 +1886,7 @@ void Ctr_ChangeCentrePlace (void)
    Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Update place in table of centres *****/
-   sprintf (Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
-	    NewPlcCod,Gbl.Ctrs.EditingCtr.CtrCod);
-   DB_QueryUPDATE (Query,"can not update the place of a centre");
+   Ctr_UpdateCtrPlcDB (Gbl.Ctrs.EditingCtr.CtrCod,NewPlcCod);
    Gbl.Ctrs.EditingCtr.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made
@@ -1865,6 +1897,38 @@ void Ctr_ChangeCentrePlace (void)
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
+  }
+
+void Ctr_ChangeCtrPlcInConfig (void)
+  {
+   extern const char *Txt_The_place_of_the_centre_has_changed;
+   long NewPlcCod;
+
+   /***** Get parameter with place code *****/
+   NewPlcCod = Plc_GetParamPlcCod ();
+
+   /***** Update place in table of centres *****/
+   Ctr_UpdateCtrPlcDB (Gbl.CurrentCtr.Ctr.CtrCod,NewPlcCod);
+   Gbl.CurrentCtr.Ctr.PlcCod = NewPlcCod;
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_centre_has_changed);
+
+   /***** Show the form again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/************** Update database changing old place by new place **************/
+/*****************************************************************************/
+
+static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
+  {
+   char Query[256];
+
+   sprintf (Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
+	    NewPlcCod,CtrCod);
+   DB_QueryUPDATE (Query,"can not update the place of a centre");
   }
 
 /*****************************************************************************/
