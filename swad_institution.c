@@ -153,9 +153,7 @@ void Ins_SeeInsWithPendingCtrs (void)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,
-			 false,	// Not closable
-                         2);
+                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -313,12 +311,10 @@ static void Ins_Configuration (bool PrintView)
       /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,
-		       false);	// Not closable
+		       NULL,Box_NOT_CLOSABLE);
       else
 	 Box_StartBox (NULL,NULL,Ins_PutIconsToPrintAndUpload,
-		       Hlp_INSTITUTION_Information,
-		       false);	// Not closable
+		       Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -676,8 +672,7 @@ static void Ins_ListInstitutions (void)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
-                 Hlp_COUNTRY_Institutions,
-                 false);	// Not closable
+                 Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
@@ -927,8 +922,7 @@ void Ins_EditInstitutions (void)
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
-                 Hlp_COUNTRY_Institutions,
-                 false);	// Not closable
+                 Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();
@@ -2164,9 +2158,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_institution,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
@@ -2526,9 +2518,7 @@ unsigned Ins_ListInssFound (const char *Query)
                NumInss,NumInss == 1 ? Txt_institution :
 				      Txt_institutions);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable

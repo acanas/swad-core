@@ -120,8 +120,7 @@ void Plc_SeePlaces (void)
       /***** Table head *****/
       Box_StartBox (NULL,Txt_Places,ICanEdit ? Plc_PutIconToEditPlaces :
                         	               NULL,
-                    Hlp_INSTITUTION_Places,
-                    false);	// Not closable
+                    Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
@@ -250,8 +249,7 @@ void Plc_EditPlaces (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Places,Plc_PutIconToViewPlacesWhenEditing,
-                 Hlp_INSTITUTION_Places_edit,
-                 false);	// Not closable
+                 Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new place *****/
    Plc_PutFormToCreatePlace ();
@@ -742,9 +740,7 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_place,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Plc_PutHeadPlaces ();

@@ -400,8 +400,7 @@ void Mnu_PutIconsToSelectMenu (void)
    Mnu_Menu_t Menu;
 
    Box_StartBox (NULL,Txt_Menu,Mnu_PutIconsMenu,
-                 Hlp_PROFILE_Preferences_menu,
-                 false);	// Not closable
+                 Hlp_PROFILE_Preferences_menu,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;

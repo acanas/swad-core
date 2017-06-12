@@ -239,13 +239,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.243 (2017-06-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.244 (2017-06-11)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.244:   Jun 12, 2017	Code refactoring related with boxes. (221815 lines)
         Version 16.243:   Jun 12, 2017	Code refactoring related with boxes. (222174 lines)
         Version 16.242:   Jun 11, 2017	Code refactoring related with boxes. (222128 lines)
         Version 16.241.2: Jun 11, 2017	Changes in alignment of dates in statistics. (222131 lines)

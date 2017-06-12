@@ -215,8 +215,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Start box *****/
    Box_StartBox ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
-                 Hlp_ASSESSMENT_Surveys,
-                 false);	// Not closable
+                 Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -435,8 +434,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Start box *****/
    if (ShowOnlyThisSvyComplete)
       Box_StartBox (NULL,Txt_Survey,NULL,
-                    Hlp_ASSESSMENT_Surveys,
-                    false);	// Not closable
+                    Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Get data of this survey *****/
    Svy.SvyCod = SvyCod;
@@ -1820,14 +1818,10 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Start box and table *****/
    if (ItsANewSurvey)
       Box_StartBoxTable (NULL,Txt_New_survey,NULL,
-                         Hlp_ASSESSMENT_Surveys_new_survey,
-			 false,	// Not closable
-			 2);
+                         Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
    else
       Box_StartBoxTable (NULL,Txt_Edit_survey,NULL,
-                         Hlp_ASSESSMENT_Surveys_edit_survey,
-			 false,	// Not closable
-			 2);
+                         Hlp_ASSESSMENT_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
 
    /***** Scope of the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2024,9 +2018,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
       Box_StartBoxTable ("95%",NULL,NULL,
-                         NULL,
-			 false,	// Not closable
-                         0);
+                         NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2663,13 +2655,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       sprintf (Gbl.Title,"%s %u",
                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
       Box_StartBox (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
-                    NULL,
-                    false);	// Not closable
+                    NULL,Box_NOT_CLOSABLE);
      }
    else
       Box_StartBox (NULL,Txt_New_question,NULL,
-                    Hlp_ASSESSMENT_Surveys_questions,
-                    false);	// Not closable
+                    Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    Act_FormStart (ActRcvSvyQst);
@@ -3186,8 +3176,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
    Box_StartBox (NULL,Txt_Questions,Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                            NULL,
-                 Hlp_ASSESSMENT_Surveys_questions,
-                 false);	// Not closable
+                 Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
    if (NumQsts)
      {

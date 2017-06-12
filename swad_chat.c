@@ -125,8 +125,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Chat_rooms,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Title of top level *****/
@@ -265,9 +264,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Rooms_with_users,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"

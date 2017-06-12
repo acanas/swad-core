@@ -551,8 +551,7 @@ void ID_ShowFormOthIDs (void)
 	{
 	 /***** Start box *****/
          Box_StartBox (NULL,Txt_ID,NULL,
-                       NULL,
-                       false);	// Not closable
+                       NULL,Box_NOT_CLOSABLE);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,

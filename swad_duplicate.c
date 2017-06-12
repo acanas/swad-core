@@ -142,8 +142,7 @@ void Dup_ListDuplicateUsrs (void)
 
    /***** Start box with list of possible duplicate users *****/
    Box_StartBox (NULL,Txt_Possibly_duplicate_users,NULL,
-                 Hlp_USERS_Duplicates_possibly_duplicate_users,
-                 false);	// Not closable
+                 Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
    /***** Build query *****/
    sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
@@ -262,8 +261,7 @@ static void Dup_ListSimilarUsrs (void)
 
    /***** Start box with list of possible duplicate users *****/
    Box_StartBox (NULL,Txt_Similar_users,NULL,
-                 Hlp_USERS_Duplicates_similar_users,
-                 false);	// Not closable
+                 Hlp_USERS_Duplicates_similar_users,Box_NOT_CLOSABLE);
 
    /***** Build query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&

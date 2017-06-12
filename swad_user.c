@@ -2263,9 +2263,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Log_in,NULL,
-                      Hlp_PROFILE_LogIn,
-		      false,	// Not closable
-                      2);
+                      Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
@@ -3156,8 +3154,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Role,NULL,
-                 Hlp_PROFILE_Session_role,
-                 false);	// Not closable
+                 Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
    /***** Put a form to change my role *****/
    if (Rol_GetNumAvailableRoles () == 1)
@@ -6675,9 +6672,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 		                   ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 		                                     Txt_ROLES_PLURAL_abc[Role][Sex]));
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -6826,8 +6821,7 @@ void Usr_ListDataAdms (void)
 
    /***** Start box with list of administrators *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,
-                 Hlp_USERS_Administrators,
-                 false);	// Not closable
+                 Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -7302,8 +7296,7 @@ void Usr_SeeGuests (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts,
-		 Hlp_USERS_Guests,
-                 false);	// Not closable
+		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -7449,8 +7442,7 @@ void Usr_SeeStudents (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Usr_PutIconsListStds,
-		 Hlp_USERS_Students,
-                 false);	// Not closable
+		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -7635,8 +7627,7 @@ void Usr_SeeTeachers (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs,
-		 Hlp_USERS_Teachers,
-                 false);	// Not closable
+		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -8808,8 +8799,7 @@ void Usr_PrintUsrQRCode (void)
      {
       /***** Start box *****/
       Box_StartBox (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
-                    NULL,
-                    false);	// Not closable
+                    NULL,Box_NOT_CLOSABLE);
 
       /***** Show QR code *****/
       if (Gbl.Usrs.Other.UsrDat.Nickname[0])

@@ -241,8 +241,7 @@ void The_PutIconsToSelectTheme (void)
    The_Theme_t Theme;
 
    Box_StartBox (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
-                 Hlp_PROFILE_Preferences_theme,
-                 false);	// Not closable
+                 Hlp_PROFILE_Preferences_theme,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;

@@ -130,9 +130,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_What_would_you_like_to_do,NULL,
-                      NULL,
-		      true,	// Closable
-                      2);
+                      NULL,Box_CLOSABLE,2);
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {

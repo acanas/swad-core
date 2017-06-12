@@ -104,8 +104,7 @@ void Not_ShowFormNotice (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_New_notice,NULL,
-                 Hlp_MESSAGES_Notices,
-                 false);	// Not closable
+                 Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"30\" rows=\"10\""
@@ -395,8 +394,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	               Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                    Txt_Notices,
 		       Not_PutIconsListNotices,
-		       Hlp_MESSAGES_Notices,
-                       false);	// Not closable
+		       Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
          if (!NumNotices)
 	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
 	}

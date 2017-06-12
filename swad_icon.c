@@ -78,8 +78,7 @@ void Ico_PutIconsToSelectIconSet (void)
    Ico_IconSet_t IconSet;
 
    Box_StartBox (NULL,Txt_Icons,Ico_PutIconsIconSet,
-                 Hlp_PROFILE_Preferences_icons,
-                 false);	// Not closable
+                 Hlp_PROFILE_Preferences_icons,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;

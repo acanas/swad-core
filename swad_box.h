@@ -39,17 +39,23 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Box_NOT_CLOSABLE,
+   Box_CLOSABLE,
+  } Box_Closable_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
 void Box_StartBoxTable (const char *Width,const char *Title,
                         void (*FunctionToDrawContextualIcons) (void),
-                        const char *HelpLink,bool Closable,
+                        const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding);
 void Box_StartBox (const char *Width,const char *Title,
                    void (*FunctionToDrawContextualIcons) (void),
-                   const char *HelpLink,bool Closable);
+                   const char *HelpLink,Box_Closable_t Closable);
 void Box_StartBoxShadow (const char *Width,const char *Title,
                          void (*FunctionToDrawContextualIcons) (void),
                          const char *HelpLink);

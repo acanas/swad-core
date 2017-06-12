@@ -1499,9 +1499,7 @@ void Lay_AdvertisementMobile (void)
 
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,NULL,NULL,
-                         NULL,
-			 false,	// Not closable
-                         8);
+                         NULL,Box_NOT_CLOSABLE,8);
 
       /***** Show advertisement *****/
       fprintf (Gbl.F.Out,"<tr>"

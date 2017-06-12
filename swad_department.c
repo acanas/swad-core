@@ -104,9 +104,7 @@ void Dpt_SeeDepts (void)
       Box_StartBoxTable (NULL,Txt_Departments,
                          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
                         	                                  NULL,
-                         Hlp_INSTITUTION_Departments,
-			 false,	// Not closable
-                         2);
+                         Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>");
@@ -491,9 +489,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Departments,NULL,
-                      Hlp_INSTITUTION_Departments_edit,
-		      false,	// Not closable
-                      2);
+                      Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Dpt_PutHeadDepartments ();
@@ -896,9 +892,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_department,NULL,
-                      Hlp_INSTITUTION_Departments_edit,
-		      false,	// Not closable
-                      2);
+                      Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

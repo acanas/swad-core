@@ -186,9 +186,7 @@ void Rec_ReqEditRecordFields (void)
      {
       /* Start box and table */
       Box_StartBoxTable (NULL,Txt_Record_fields,NULL,
-                         Hlp_USERS_Students_course_record_card,
-			 false,	// Not closable
-                         2);
+                         Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
       Rec_ListFieldsRecordsForEdition ();
 
@@ -365,9 +363,7 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_record_field,NULL,
-                      Hlp_USERS_Students_course_record_card,
-		      false,	// Not closable
-                      2);
+                      Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
@@ -1368,8 +1364,7 @@ static void Rec_ShowRecordOneTchCrs (void)
       fprintf (Gbl.F.Out,"<div class=\"REC_TT\">");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
-                    Hlp_USERS_Teachers_timetable,
-                    false);	// Not closable
+                    Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
       Box_EndBox ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1492,10 +1487,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
               {
 	       fprintf (Gbl.F.Out,"<div class=\"REC_TT\">");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-	       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-	                     NULL,
-	                     Hlp_USERS_Teachers_timetable,
-                             false);	// Not closable
+	       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
+	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
 	       Box_EndBox ();
                fprintf (Gbl.F.Out,"</div>");
@@ -1784,9 +1777,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    /***** Start box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Box_StartBoxTable (StrRecordWidth,NULL,NULL,
-                      Rec_RecordHelp[TypeOfView],
-		      false,	// Not closable
-                      2);
+                      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2328,9 +2319,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Box_StartBoxTable (StrRecordWidth,NULL,
                       TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
                         	                                 Rec_PutIconsCommands,
-                      Rec_RecordHelp[TypeOfView],
-		      false,	// Not closable
-                      2);
+                      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Institution and user's photo *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -4005,9 +3994,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    Box_StartBoxTable ("800px",IAmATeacher ? Txt_Institution_centre_and_department :
 	                                    Txt_Institution,
 	              NULL,
-	              Hlp_PROFILE_Institution,
-		      false,	// Not closable
-	              2);
+	              Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"

@@ -171,9 +171,7 @@ void Deg_SeeDegWithPendingCrss (void)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,
-			 false,	// Not closable
-                         2);
+                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -304,12 +302,10 @@ static void Deg_Configuration (bool PrintView)
       /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,
-		       false);	// Not closable
+		       NULL,Box_NOT_CLOSABLE);
       else
 	 Box_StartBox (NULL,NULL,Deg_PutIconsToPrintAndUpload,
-		       Hlp_DEGREE_Information,
-		       false);	// Not closable
+		       Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -948,9 +944,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_degree,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
@@ -1180,8 +1174,7 @@ static void Deg_ListDegrees (void)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListDegrees,
-                 Hlp_CENTRE_Degrees,
-                 false);	// Not closable
+                 Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
@@ -1360,8 +1353,7 @@ void Deg_EditDegrees (void)
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.FullName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
-                 Hlp_CENTRE_Degrees,
-                 false);	// Not closable
+                 Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
    if (Gbl.Degs.DegTypes.Num)
      {
@@ -2581,9 +2573,7 @@ unsigned Deg_ListDegsFound (const char *Query)
                NumDegs,(NumDegs == 1) ? Txt_degree :
         	                        Txt_degrees);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       Deg_PutHeadDegreesForSeeing ();

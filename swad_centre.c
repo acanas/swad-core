@@ -168,9 +168,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,
-			 false,	// Not closable
-                         2);
+                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Wrtie heading *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -316,12 +314,10 @@ static void Ctr_Configuration (bool PrintView)
       /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,
-		       false);	// Not closable
+		       NULL,Box_NOT_CLOSABLE);
       else
 	 Box_StartBox (NULL,NULL,Ctr_PutIconsToPrintAndUpload,
-		       Hlp_CENTRE_Information,
-		       false);	// Not closable
+		       Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -754,8 +750,7 @@ static void Ctr_ListCentres (void)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListCentres,
-                 Hlp_INSTITUTION_Centres,
-                 false);	// Not closable
+                 Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
@@ -947,8 +942,7 @@ void Ctr_EditCentres (void)
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
-                 Hlp_INSTITUTION_Centres,
-                 false);	// Not closable
+                 Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new centre *****/
    Ctr_PutFormToCreateCentre ();
@@ -2229,8 +2223,7 @@ void Ctr_RequestPhoto (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Photo,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
    sprintf (Gbl.Alert.Txt,"%s: %s<br />"
@@ -2425,9 +2418,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_centre,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
@@ -2903,9 +2894,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
                NumCtrs,(NumCtrs == 1) ? Txt_centre :
 	                                Txt_centres);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable

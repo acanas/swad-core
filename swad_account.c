@@ -145,8 +145,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
    /***** Start box *****/
    Box_StartBox (NULL,Title,NULL,
-                 Hlp_PROFILE_SignUp,
-                 true);	// Closable
+                 Hlp_PROFILE_SignUp,Box_CLOSABLE);
 
    /***** Help alert *****/
    Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
@@ -219,9 +218,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	                    (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					     Txt_Do_you_think_you_are_one_of_these_users,
 			    NULL,
-			    NULL,
-			    true,	// Closable
-			    5);
+			    NULL,Box_CLOSABLE,5);
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
@@ -350,9 +347,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Create_account,NULL,
-                      Hlp_PROFILE_SignUp,
-                      false,	// Not closable
-                      2);
+                      Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
@@ -417,8 +412,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                 Hlp_PROFILE_SignUp,
-                 false);	// Not closable
+                 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);
@@ -478,9 +472,7 @@ void Acc_ShowFormChangeMyAccount (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_User_account,NULL,
-                      Hlp_PROFILE_Account,
-		      false,	// Not closable
-                      2);
+                      Hlp_PROFILE_Account,Box_NOT_CLOSABLE,2);
 
    /***** Nickname *****/
    if (IMustFillNickname)

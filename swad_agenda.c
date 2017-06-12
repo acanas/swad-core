@@ -149,8 +149,7 @@ void Agd_ShowMyAgenda (void)
 
    /***** Start box *****/
    Box_StartBox ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
-		 Hlp_PROFILE_Agenda,
-                 false);	// Not closable
+		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
    Agd_ShowFormToSelPast__FutureEvents ();
@@ -370,8 +369,7 @@ void Agd_ShowUsrAgenda (void)
 	 Box_StartBox ("100%",Gbl.Title,
 		       ItsMe ? Agd_PutIconsMyPublicAgenda :
 			       Agd_PutIconsOtherPublicAgenda,
-		       Hlp_PROFILE_Agenda_public_agenda,
-                       false);	// Not closable
+		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 
 	 /***** Show the current events in the user's agenda *****/
 	 Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -414,8 +412,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Box_StartBox ("100%",Gbl.Title,
 			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 				  Agd_PutIconsOtherPublicAgenda,
-			  Hlp_PROFILE_Agenda_public_agenda,
-                          false);	// Not closable
+			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (Agd_ANOTHER_AGENDA_TODAY);
@@ -1538,14 +1535,10 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Start box and table *****/
    if (ItsANewEvent)
       Box_StartBoxTable (NULL,Txt_New_event,NULL,
-			 Hlp_PROFILE_Agenda_new_event,
-			 false,	// Not closable
-			 2);
+			 Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
    else
       Box_StartBoxTable (NULL,Txt_Edit_event,NULL,
-			 Hlp_PROFILE_Agenda_edit_event,
-			 false,	// Not closable
-			 2);
+			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
    /***** Event *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1949,8 +1942,7 @@ void Agd_PrintAgdQRCode (void)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Print QR code ****/
    QR_PrintQRCode ();

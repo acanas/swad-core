@@ -104,9 +104,7 @@ void Pri_EditMyPrivacy (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
-                      Hlp_PROFILE_Preferences_privacy,
-                      false,	// Not closable
-                      2);
+                      Hlp_PROFILE_Preferences_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,

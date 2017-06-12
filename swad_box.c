@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 
 static void Box_StartBoxInternal (const char *Width,const char *Title,
                                   void (*FunctionToDrawContextualIcons) (void),
-                                  const char *HelpLink,bool Closable,
+                                  const char *HelpLink,Box_Closable_t Closable,
                                   const char *ClassFrame);
 
 /*****************************************************************************/
@@ -68,12 +68,11 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 
 void Box_StartBoxTable (const char *Width,const char *Title,
                         void (*FunctionToDrawContextualIcons) (void),
-                        const char *HelpLink,bool Closable,
+                        const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
    Box_StartBox (Width,Title,FunctionToDrawContextualIcons,
-                 HelpLink,
-                 Closable);
+                 HelpLink,Closable);
    Tbl_StartTableWide (CellPadding);
   }
 
@@ -90,12 +89,11 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
 
 void Box_StartBox (const char *Width,const char *Title,
                    void (*FunctionToDrawContextualIcons) (void),
-                   const char *HelpLink,bool Closable)
+                   const char *HelpLink,Box_Closable_t Closable)
   {
    Box_StartBoxInternal (Width,Title,
 			 FunctionToDrawContextualIcons,
-			 HelpLink,
-			 Closable,
+			 HelpLink,Closable,
 			 "FRAME");
   }
 
@@ -105,14 +103,13 @@ void Box_StartBoxShadow (const char *Width,const char *Title,
   {
    Box_StartBoxInternal (Width,Title,
                          FunctionToDrawContextualIcons,
-			 HelpLink,
-			 false,	// Not closable
+			 HelpLink,Box_NOT_CLOSABLE,
 			 "FRAME_SHADOW");
   }
 
 static void Box_StartBoxInternal (const char *Width,const char *Title,
                                   void (*FunctionToDrawContextualIcons) (void),
-                                  const char *HelpLink,bool Closable,
+                                  const char *HelpLink,Box_Closable_t Closable,
                                   const char *ClassFrame)
   {
    extern const char *Txt_Help;
@@ -121,7 +118,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 
    /***** Start box container *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");
-   if (Closable)
+   if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
       Act_SetUniqueId (IdFrame);
@@ -161,7 +158,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
                Gbl.Prefs.IconsURL,
                Txt_Help,Txt_Help);
 
-   if (Closable)	// Icon to close the box
+   if (Closable == Box_CLOSABLE)	// Icon to close the box
       fprintf (Gbl.F.Out,"<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
                          "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"

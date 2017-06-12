@@ -477,8 +477,7 @@ void Sta_AskShowCrsHits (void)
    sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
 	    Gbl.CurrentCrs.Crs.ShrtName);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                 Hlp_STATS_Visits_visits_to_course,
-                 false);	// Not closable
+                 Hlp_STATS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
@@ -675,9 +674,7 @@ void Sta_AskShowGblHits (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Statistics_of_all_visits,NULL,
-                      Hlp_STATS_Visits_global_visits,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
    /***** Start and end dates for the search *****/
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccGbl);
@@ -1471,12 +1468,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       /***** Put the table with the clicks *****/
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	 Box_StartBox ("100%",Txt_List_of_detailed_clicks,NULL,
-	               NULL,
-                       false);	// Not closable
+	               NULL,Box_NOT_CLOSABLE);
       else
 	 Box_StartBox (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL,
-	               NULL,
-                       false);	// Not closable
+	               NULL,Box_NOT_CLOSABLE);
 
       fprintf (Gbl.F.Out,"<table");
       if (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy])
@@ -3919,8 +3914,7 @@ void Sta_ReqShowFigures (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Figures,NULL,
-                 Hlp_STATS_Figures,
-                 false);	// Not closable
+                 Hlp_STATS_Figures,Box_NOT_CLOSABLE);
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -4084,9 +4078,7 @@ static void Sta_GetAndShowUsersStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS],NULL,
-                      Hlp_STATS_Figures_users,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_users,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4219,9 +4211,7 @@ static void Sta_GetAndShowUsersRanking (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS_RANKING],NULL,
-                      Hlp_STATS_Figures_ranking,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4289,9 +4279,7 @@ static void Sta_GetAndShowHierarchyStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY],NULL,
-                      Hlp_STATS_Figures_hierarchy,
-		      false,	// Not closable
-		      2);
+                      Hlp_STATS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
    Sta_WriteHeadDegsCrssInSWAD ();
    Sta_GetAndShowNumCtysInSWAD ();
@@ -4982,8 +4970,7 @@ static void Sta_GetAndShowInstitutionsStats (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Institutions,NULL,
-                 Hlp_STATS_Figures_institutions,
-                 false);	// Not closable
+                 Hlp_STATS_Figures_institutions,Box_NOT_CLOSABLE);
 
    /***** Form to select type of list used to display degree photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
@@ -5020,9 +5007,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_centres,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Get institutions ordered by number of centres *****/
    switch (Gbl.Scope.Current)
@@ -5075,9 +5060,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_degrees,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Get institutions ordered by number of degrees *****/
    switch (Gbl.Scope.Current)
@@ -5133,9 +5116,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_courses,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Get institutions ordered by number of courses *****/
    switch (Gbl.Scope.Current)
@@ -5194,9 +5175,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_in_courses,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Get institutions ordered by number of users in courses *****/
    switch (Gbl.Scope.Current)
@@ -5260,9 +5239,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
                       NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Get institutions ordered by number of users who claim to belong to them *****/
    switch (Gbl.Scope.Current)
@@ -5492,9 +5469,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLDERS_AND_FILES],NULL,
-                      Hlp_STATS_Figures_folders_and_files,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_folders_and_files,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    Sta_WriteStatsExpTreesTableHead ();
@@ -6570,9 +6545,7 @@ static void Sta_GetAndShowOERsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_OER],NULL,
-                      Hlp_STATS_Figures_open_educational_resources_oer,
-                      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6762,9 +6735,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ASSIGNMENTS],NULL,
-                      Hlp_STATS_Figures_assignments,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6834,9 +6805,7 @@ static void Sta_GetAndShowTestsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_TESTS],NULL,
-                      Hlp_STATS_Figures_tests,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_tests,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7006,9 +6975,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY],NULL,
-                      Hlp_STATS_Figures_timeline,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7296,9 +7263,7 @@ static void Sta_GetAndShowFollowStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLLOW],NULL,
-                      Hlp_STATS_Figures_followed_followers,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7559,9 +7524,7 @@ static void Sta_GetAndShowForumStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FORUMS],NULL,
-                      Hlp_STATS_Figures_forums,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_forums,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7918,9 +7881,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS],NULL,
-                      Hlp_STATS_Figures_notifications,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8265,9 +8226,7 @@ static void Sta_GetAndShowNoticesStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_NOTICES],NULL,
-                      Hlp_STATS_Figures_notices,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_notices,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8350,9 +8309,7 @@ static void Sta_GetAndShowMsgsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES],NULL,
-                      Hlp_STATS_Figures_messages,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_messages,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8457,9 +8414,7 @@ static void Sta_GetAndShowSurveysStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SURVEYS],NULL,
-                      Hlp_STATS_Figures_surveys,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8526,9 +8481,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY],NULL,
-                      Hlp_STATS_Figures_privacy,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Privacy for photo *****/
    Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,"PhotoVisibility");
@@ -8696,9 +8649,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_LANGUAGES],NULL,
-                      Hlp_STATS_Figures_language,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_language,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8839,9 +8790,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK],NULL,
-                      Hlp_STATS_Figures_calendar,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8981,9 +8930,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_DATE_FORMAT],NULL,
-                      Hlp_STATS_Figures_dates,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_dates,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9121,9 +9068,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ICON_SETS],NULL,
-                      Hlp_STATS_Figures_icons,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_icons,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9266,9 +9211,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MENUS],NULL,
-                      Hlp_STATS_Figures_menu,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_menu,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9408,9 +9351,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_THEMES],NULL,
-                      Hlp_STATS_Figures_theme,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_theme,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9549,9 +9490,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SIDE_COLUMNS],NULL,
-                      Hlp_STATS_Figures_columns,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_columns,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"

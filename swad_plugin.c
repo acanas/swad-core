@@ -95,9 +95,7 @@ void Plg_ListPlugins (void)
    Box_StartBoxTable (NULL,Txt_Plugins,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
                                                                NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -349,9 +347,7 @@ static void Plg_ListPluginsForEdition (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Plugins,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Plg_PutHeadPlugins ();
@@ -847,9 +843,7 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
-                      NULL,
-	              false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

@@ -139,9 +139,7 @@ void Cty_SeeCtyWithPendingInss (void)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
-                         Hlp_SYSTEM_Hierarchy_pending,
-			 false,	// Not closable
-                         2);
+                         Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -248,12 +246,10 @@ static void Cty_Configuration (bool PrintView)
       /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,
-		       false);	// Not closable
+		       NULL,Box_NOT_CLOSABLE);
       else
 	 Box_StartBox (NULL,NULL,Cty_PutIconToPrint,
-		       Hlp_COUNTRY_Information,
-		       false);	// Not closable
+		       Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
@@ -519,9 +515,7 @@ void Cty_ListCountries2 (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
-                      Hlp_SYSTEM_Countries,
-		      false,	// Not closable
-                      2);
+                      Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Cty_PutHeadCountriesForSeeing (true);	// Order selectable
@@ -955,8 +949,7 @@ void Cty_EditCountries (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Countries,Cty_PutIconToViewCountries,
-                 Hlp_SYSTEM_Countries,
-                 false);	// Not closable
+                 Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new country *****/
    Cty_PutFormToCreateCountry ();
@@ -1942,9 +1935,7 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_country,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Cty_PutHeadCountriesForEdition ();
@@ -2372,9 +2363,7 @@ unsigned Cty_ListCtysFound (const char *Query)
                NumCtys,NumCtys == 1 ? Txt_country :
 				      Txt_countries);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       Cty_PutHeadCountriesForSeeing (false);	// Order not selectable

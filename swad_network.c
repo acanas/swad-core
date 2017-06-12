@@ -301,9 +301,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Webs_social_networks,Net_PutIconsWebsSocialNetworks,
-                      Hlp_PROFILE_Webs,
-		      false,	// Not closable
-                      2);
+                      Hlp_PROFILE_Webs,Box_NOT_CLOSABLE,2);
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
@@ -537,9 +535,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,
-                      Hlp_STATS_Figures_webs_social_networks,
-		      false,	// Not closable
-                      2);
+                      Hlp_STATS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

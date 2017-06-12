@@ -1011,8 +1011,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    /***** Start box *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
-                 Hlp_SOCIAL_Forums_posts,
-                 false);	// Not closable
+                 Hlp_SOCIAL_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
@@ -1608,8 +1607,7 @@ static void For_ShowForumList (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Forums,For_PutIconsForums,
-                 Hlp_SOCIAL_Forums,
-                 false);	// Not closable
+                 Hlp_SOCIAL_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2575,8 +2573,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    /***** Start box for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
-		 Hlp_SOCIAL_Forums_threads,
-                 false);	// Not closable
+		 Hlp_SOCIAL_Forums_threads,Box_NOT_CLOSABLE);
 
    /***** List the threads *****/
    if (NumThrs)
@@ -3861,12 +3858,10 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /***** Start box *****/
    if (IsReply)
       Box_StartBox (NULL,Txt_New_post,NULL,
-		    Hlp_SOCIAL_Forums_new_post,
-		    false);	// Not closable
+		    Hlp_SOCIAL_Forums_new_post,Box_NOT_CLOSABLE);
    else
       Box_StartBox (NULL,Txt_New_thread,NULL,
-		    Hlp_SOCIAL_Forums_new_thread,
-		    false);	// Not closable
+		    Hlp_SOCIAL_Forums_new_thread,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread

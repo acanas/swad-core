@@ -445,8 +445,7 @@ void Inf_ShowInfo (void)
       Box_StartBox ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 		    ICanEdit ? Inf_PutIconToEditInfo :
 			       NULL,
-		    Help[Gbl.CurrentCrs.Info.Type],
-                    false);	// Not closable
+		    Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
       Ale_ShowAlert (Ale_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
@@ -591,8 +590,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Required_reading,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
@@ -1035,8 +1033,7 @@ static void Inf_ShowPage (const char *URL)
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                  ICanEdit ? Inf_PutIconToEditInfo :
                             NULL,
-                 Help[Gbl.CurrentCrs.Info.Type],
-                 false);	// Not closable
+                 Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
@@ -1120,9 +1117,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Form to choice between alternatives *****/
    /* Start box and table */
    Box_StartBoxTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
-                      HelpEdit[Gbl.CurrentCrs.Info.Type],
-		      false,	// Not closable
-                      4);
+                      HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
    for (InfoSrc = (Inf_InfoSrc_t) 0;
@@ -1792,8 +1787,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
-                    Help[Gbl.CurrentCrs.Info.Type],
-                    false);	// Not closable
+                    Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -1877,8 +1871,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
-                    Help[Gbl.CurrentCrs.Info.Type],
-                    false);	// Not closable
+                    Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -2064,8 +2057,7 @@ void Inf_EditPlainTxtInfo (void)
    /***** Start form and box *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
-                 HelpEdit[Gbl.CurrentCrs.Info.Type],
-                 false);	// Not closable
+                 HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -2116,8 +2108,7 @@ void Inf_EditRichTxtInfo (void)
    /***** Start form and box *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
-                 HelpEdit[Gbl.CurrentCrs.Info.Type],
-                 false);	// Not closable
+                 HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)

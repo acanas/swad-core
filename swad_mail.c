@@ -112,9 +112,7 @@ void Mai_SeeMailDomains (void)
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                NULL,
-                      Hlp_MESSAGES_Domains,
-		      false,	// Not closable
-                      2);
+                      Hlp_MESSAGES_Domains,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -454,9 +452,7 @@ static void Mai_ListMailDomainsForEdition (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
-                      Hlp_MESSAGES_Domains_edit,
-		      false,	// Not closable
-                      2);
+                      Hlp_MESSAGES_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Mai_PutHeadMailDomains ();
@@ -724,9 +720,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
-                      Hlp_MESSAGES_Domains_edit,
-		      false,	// Not closable
-                      2);
+                      Hlp_MESSAGES_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -894,10 +888,8 @@ void Mai_ListEmails (void)
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start the box used to list the emails *****/
-   Box_StartBox (NULL,Txt_Students_who_have_accepted_and_who_have_email,
-		 NULL,
-		 Hlp_MESSAGES_Email,
-                 false);	// Not closable
+   Box_StartBox (NULL,Txt_Students_who_have_accepted_and_who_have_email,NULL,
+		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
@@ -1194,8 +1186,7 @@ void Mai_ShowFormOthEmail (void)
 	{
 	 /***** Start box *****/
          Box_StartBox (NULL,Txt_Email,NULL,
-                       NULL,
-                       false);	// Not closable
+                       NULL,Box_NOT_CLOSABLE);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
@@ -1635,8 +1626,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
 
    /***** Box with button to check email address *****/
    Box_StartBox (NULL,Txt_Email_unconfirmed,NULL,
-                 Hlp_PROFILE_Account_email,
-                 true);	// Closable
+                 Hlp_PROFILE_Account_email,Box_CLOSABLE);
    Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address,
                            ActFrmMyAcc,NULL,NULL,NULL,
                            Btn_CONFIRM_BUTTON,Txt_Check);

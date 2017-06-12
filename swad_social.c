@@ -923,8 +923,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
 
    /***** Start box *****/
    Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
-                 Hlp_SOCIAL_Timeline,
-                 false);	// Not closable
+                 Hlp_SOCIAL_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
    if (GlobalTimeline)
@@ -1277,8 +1276,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    if (ShowNoteAlone)
      {
       Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
-                    NULL,
-                    true);	// Closable
+                    NULL,Box_CLOSABLE);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
      }
 
@@ -2533,8 +2531,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    if (ShowCommentAlone)
      {
       Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
-                    NULL,
-                    false);	// Not closable
+                    NULL,Box_NOT_CLOSABLE);
 
       /***** Write sharer/commenter if distinct to author *****/
       Soc_WriteTopMessage (TopMessage,UsrCod);

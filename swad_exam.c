@@ -653,8 +653,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 						   Txt_Announcements_of_exams,
 		 ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
 			    NULL,
-		 Hlp_ASSESSMENT_Announcements,
-                 false);	// Not closable
+		 Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
 
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
@@ -1077,7 +1076,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
                  TypeViewExamAnnouncement == Exa_FORM_VIEW ? ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Hlp_ASSESSMENT_Announcements_edit_announcement :
                                                                                                  Hlp_ASSESSMENT_Announcements_new_announcement) :
                                                              NULL,
-                 false);	// Not closable
+                 Box_NOT_CLOSABLE);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {

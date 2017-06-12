@@ -379,8 +379,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Enrolment,NULL,
-                 Hlp_USERS_SignUp_confirm_enrolment,
-                 false);	// Not closable
+                 Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
    /***** Show message *****/
    sprintf (Gbl.Alert.Txt,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
@@ -708,8 +707,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
    /***** Start box *****/
    Box_StartBox (NULL,Title,NULL,
-	         Hlp_USERS_Administration_administer_multiple_users,
-                 false);	// Not closable
+	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
    /***** Step 1: List of students to be enroled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
@@ -799,8 +797,7 @@ void Enr_AskRemoveOldUsrs (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Eliminate_old_users,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
@@ -1856,8 +1853,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Remove_all_students,NULL,
-                 Hlp_USERS_Administration_remove_all_students,
-                 false);	// Not closable
+                 Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
    if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])
      {
@@ -2309,8 +2305,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    /***** Start box *****/
    Box_StartBox ("100%",Txt_Enrolment_requests,NULL,
-                 Hlp_USERS_Requests,
-                 false);	// Not closable
+                 Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
    /***** Selection of scope and roles *****/
    /* Start form and table */
@@ -3128,8 +3123,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Administer_one_user,NULL,
-                 Hlp_USERS_Administration_administer_one_user,
-                 false);	// Not closable
+                 Hlp_USERS_Administration_administer_one_user,Box_NOT_CLOSABLE);
 
    /***** Write form to request another user's ID *****/
    switch (Role)

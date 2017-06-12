@@ -108,8 +108,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Indicators_of_courses,NULL,
-                 Hlp_STATS_Indicators,
-                 false);	// Not closable
+                 Hlp_STATS_Indicators,Box_NOT_CLOSABLE);
 
    /***** Form to update indicators *****/
    /* Start form and table */

@@ -268,8 +268,7 @@ static void Grp_EditGroupTypes (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
-                 Hlp_USERS_Groups,
-                 false);	// Not closable
+                 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group type *****/
    Grp_PutFormToCreateGroupType ();
@@ -300,8 +299,7 @@ static void Grp_EditGroups (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
-                 Hlp_USERS_Groups,
-                 false);	// Not closable
+                 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group *****/
    Grp_PutFormToCreateGroup ();
@@ -367,8 +365,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       /***** Start box *****/
       Box_StartBox (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
 				               NULL,
-		    Hlp_USERS_Groups,
-                    true);	// Closable
+		    Hlp_USERS_Groups,Box_CLOSABLE);
 
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
@@ -1727,8 +1724,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    /***** Start box *****/
    Box_StartBox (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
                                                NULL,
-                 Hlp_USERS_Groups,
-                 false);	// Not closable
+                 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
@@ -1944,9 +1940,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Groups,NULL,
-                      Hlp_USERS_Groups,
-		      false,	// Not closable
-                      0);
+                      Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
@@ -2348,9 +2342,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Start box *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
@@ -2464,9 +2456,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_group,NULL,
-                      NULL,
-		      false,	// Not closable
-                      2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();

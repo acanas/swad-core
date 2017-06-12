@@ -3121,8 +3121,7 @@ void Brw_AskEditWorksCrs (void)
 
    /***** Draw class photos to select users *****/
    Box_StartBox (NULL,Txt_Users,NULL,
-                 Hlp_FILES_Homework_for_teachers,
-                 false);	// Not closable
+                 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
@@ -3219,9 +3218,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       /***** Start box and table *****/
       Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
                          Brw_PutIconShowFigure,
-                         Hlp_FILES_Homework_for_teachers,
-			 false,	// Not closable
-                         0);
+                         Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select[Rol_UNK];
@@ -3691,8 +3688,7 @@ static void Brw_ShowFileBrowser (void)
    Lay_StartSection (FileBrowserSectionId);
    Box_StartBox ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                  Brw_PutIconsFileBrowser,
-                 Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],
-                 false);	// Not closable
+                 Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
    /***** Subtitle *****/
    Brw_WriteSubtitleOfFileBrowser ();
@@ -7986,8 +7982,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_folder,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
    sprintf (Gbl.Alert.Txt,Txt_You_can_create_a_new_folder_inside_the_folder_X,
 	    FileNameToShow);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
@@ -8025,8 +8020,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    /***** Start box *****/
    fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");
    Box_StartBox ("95%",Txt_Upload_files,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
    sprintf (Gbl.Alert.Txt,Txt_or_you_can_upload_new_files_to_the_folder_X,
@@ -8088,8 +8082,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    /***** Start box *****/
    fprintf (Gbl.F.Out,"<div id=\"classic-upload\" style=\"display:none;\">");
    Box_StartBox (NULL,Txt_Upload_file,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
    sprintf (Gbl.Alert.Txt,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
@@ -8132,8 +8125,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Paste,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
    sprintf (Gbl.Alert.Txt,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
@@ -8169,8 +8161,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_link,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
    sprintf (Gbl.Alert.Txt,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
@@ -11345,9 +11336,7 @@ unsigned Brw_ListDocsFound (const char *Query,
                NumDocs,(NumDocs == 1) ? TitleSingular :
         	                        TitlePlural);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
-                         NULL,
-			 false,	// Not closable
-                         2);
+                         NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -11705,8 +11694,7 @@ void Brw_AskRemoveOldFiles (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Remove_old_files,NULL,
-                 NULL,
-                 false);	// Not closable
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months (to remove files older) *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
