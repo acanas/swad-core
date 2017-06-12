@@ -299,7 +299,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Webs_social_networks,Net_PutIconsWebsSocialNetworks,
                       Hlp_PROFILE_Webs,
 		      false,	// Not closable
@@ -362,7 +362,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "</tr>");
      }
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -535,12 +535,13 @@ void Net_ShowWebAndSocialNetworksStats (void)
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,
                                         "can not get number of users with webs / social networks");
 
-   /***** Number of users *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,
                       Hlp_STATS_Figures_webs_social_networks,
 		      false,	// Not closable
                       2);
 
+   /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
@@ -602,7 +603,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	}
      }
 
-   /***** End frame *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    /***** Free structure that stores the query result *****/

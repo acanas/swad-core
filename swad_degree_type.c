@@ -206,7 +206,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    extern const char *Txt_Create_another_type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    switch (NextAction)
      {
       case ActSeeDegTyp:
@@ -247,7 +247,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -263,7 +263,7 @@ void DT_EditDegreeTypes (void)
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToViewDegreeTypesWhenEditing,
                  Hlp_CENTRE_DegreeTypes_edit,
                  false);	// Not closable
@@ -275,7 +275,7 @@ void DT_EditDegreeTypes (void)
    if (Gbl.Degs.DegTypes.Num)
       DT_ListDegreeTypesForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of degree types *****/
@@ -435,7 +435,7 @@ void DT_PutFormToCreateDegreeType (void)
    /***** Start form *****/
    Act_FormStart (ActNewDegTyp);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_degree,NULL,
                       NULL,
 		      false,	// Not closable
@@ -465,7 +465,7 @@ void DT_PutFormToCreateDegreeType (void)
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
 
    /***** End form *****/

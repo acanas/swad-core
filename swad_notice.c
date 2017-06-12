@@ -102,7 +102,7 @@ void Not_ShowFormNotice (void)
    /***** Start form *****/
    Act_FormStart (ActRcvNot);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_New_notice,NULL,
                  Hlp_MESSAGES_Notices,
                  false);	// Not closable
@@ -112,7 +112,7 @@ void Not_ShowFormNotice (void)
 	              " autofocus=\"autofocus\" required=\"required\">"
                       "</textarea>");
 
-   /***** Button to create notice and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
@@ -388,7 +388,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
 	{
-	 /***** Start frame *****/
+	 /***** Start box *****/
 	 sprintf (StrWidth,"%upx",
 	          Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
 	 Box_StartBox (StrWidth,
@@ -468,7 +468,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	    /***** Put link to register students *****/
             Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-	    /***** End frame *****/
+	    /***** End box *****/
 	    Box_EndBox ();
 	    break;
 	}

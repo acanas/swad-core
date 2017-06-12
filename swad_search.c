@@ -284,7 +284,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Magnifying glass icon *****/
    Sch_PutMagnifyingGlassButton ("search64x64.png");
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Search);
 
    /***** End form *****/

@@ -100,13 +100,15 @@ void Dpt_SeeDepts (void)
       /***** Get list of departments *****/
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
-      /***** Table head *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Departments,
                          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
                         	                                  NULL,
                          Hlp_INSTITUTION_Departments,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
@@ -187,7 +189,7 @@ void Dpt_SeeDepts (void)
 	                                           1 << Rol_TCH) -
 	       NumTchsInsWithDpt);
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
 
       /***** Free list of departments *****/
@@ -487,12 +489,13 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Instit Ins;
    unsigned NumIns;
 
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Departments,NULL,
                       Hlp_INSTITUTION_Departments_edit,
 		      false,	// Not closable
                       2);
 
-   /***** Table head *****/
+   /***** Write heading *****/
    Dpt_PutHeadDepartments ();
 
    /***** Write all the departments *****/
@@ -593,6 +596,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                Dpt->NumTchs);
      }
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -890,7 +894,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Start form *****/
    Act_FormStart (ActNewDpt);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_department,NULL,
                       Hlp_INSTITUTION_Departments_edit,
 		      false,	// Not closable
@@ -963,10 +967,10 @@ static void Dpt_PutFormToCreateDepartment (void)
                       "</tr>",
             Cns_MAX_CHARS_WWW,Dpt->WWW);
 
-   /***** Send button and end of frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_department);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

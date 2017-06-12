@@ -136,7 +136,7 @@ static void Asg_ShowAllAssignments (void)
                                      0,
                                      &Pagination);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
                  Hlp_ASSESSMENT_Assignments,
                  false);	// Not closable
@@ -171,7 +171,7 @@ static void Asg_ShowAllAssignments (void)
    /***** Put link to register students *****/
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Write again links to pages *****/
@@ -325,7 +325,7 @@ void Asg_PrintOneAssignment (void)
    /***** Get the code of the assignment *****/
    AsgCod = Asg_GetParamAsgCod ();
 
-   /***** Start frame *****/
+   /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,
@@ -1172,7 +1172,7 @@ void Asg_RequestCreatOrEditAsg (void)
      }
    Asg_PutParams ();
 
-   /***** Table start *****/
+   /***** Start box and table *****/
    if (ItsANewAssignment)
       Box_StartBoxTable (NULL,Txt_New_assignment,NULL,
 			 Hlp_ASSESSMENT_Assignments_new_assignment,
@@ -1236,11 +1236,13 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Groups *****/
    Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
 
-   /***** New assignment *****/
+   /***** End table, send button and end box *****/
    if (ItsANewAssignment)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_assignment);
    else
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+
+   /***** End form *****/
    Act_FormEnd ();
 
    /***** Show current assignments, if any *****/
@@ -1264,7 +1266,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num)
      {
-      /***** Start table *****/
+      /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
@@ -1298,7 +1300,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
          if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AsgCod,Grp_ASSIGNMENT);
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

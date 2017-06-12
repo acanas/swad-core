@@ -223,7 +223,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_My_frequent_actions,NULL,
                  Hlp_STATS_Frequent,
                  false);	// Not closable
@@ -261,7 +261,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         }
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    fprintf (Gbl.F.Out,"</div>");
    Box_EndBox ();
   }

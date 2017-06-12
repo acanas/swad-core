@@ -223,7 +223,7 @@ static void Att_ShowAllAttEvents (void)
                                      0,
                                      &Pagination);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("100%",Txt_Events,ICanEdit ? Att_PutIconToCreateNewAttEvent :
 				              NULL,
 		 Hlp_USERS_Attendance,
@@ -284,7 +284,7 @@ static void Att_ShowAllAttEvents (void)
    if (ICanEdit)
       Att_PutButtonToCreateNewAttEvent ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Write again links to pages *****/
@@ -1087,7 +1087,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
-   /***** Table start *****/
+   /***** Start box and table *****/
    if (ItsANewAttEvent)
       Box_StartBoxTable (NULL,Txt_New_event,NULL,
 			 Hlp_USERS_Attendance_new_event,
@@ -1159,7 +1159,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Groups *****/
    Att_ShowLstGrpsToEditAttEvent (Att.AttCod);
 
-   /***** Button and end frame *****/
+   /***** End table, send button and end box *****/
    if (ItsANewAttEvent)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
    else
@@ -1189,7 +1189,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num)
      {
-      /***** Start table *****/
+      /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
@@ -1222,7 +1222,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
          if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AttCod,Grp_ATT_EVENT);
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -1828,13 +1828,16 @@ void Att_SeeOneAttEvent (void)
    Grp_GetParamWhichGrps ();
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
-   /***** Show attendance *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Event,NULL,
                       Hlp_USERS_Attendance,
 		      false,	// Not closable
                       2);
+
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
+
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1877,7 +1880,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
      }
 
    /***** List students' data *****/
-   /* Header */
+   /* Start box and table */
    Box_StartBoxTable (NULL,NULL,NULL,
                       Hlp_USERS_Attendance,
 		      false,	// Not closable
@@ -1905,7 +1908,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /* List of students (only me) */
    Att_WriteRowStdToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Att);
 
-   /* Footer */
+   /* End table and box */
    Box_EndBoxTable ();
 
    if (Att->Open)
@@ -1938,7 +1941,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    /***** Get and order list of students in this course *****/
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Attendance,NULL,
                  Hlp_USERS_Attendance,
                  false);	// Not closable
@@ -2017,7 +2020,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for students list *****/
@@ -2676,7 +2679,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
    /***** Get and order lists of users from current course *****/
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],NULL,
 		 Hlp_USERS_Attendance_attendance_list,
                  false);	// Not closable
@@ -2724,7 +2727,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for students list *****/
@@ -3107,7 +3110,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
      }
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Events,NULL,
                       TypeOfView == Att_PRINT_VIEW ? NULL :
                         	                     Hlp_USERS_Attendance_attendance_list,
@@ -3188,7 +3191,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "</tr>");
      }
 
-   /***** End frame *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    /***** End form *****/
@@ -3219,7 +3222,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Attendance,
                   (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
                  ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
@@ -3284,7 +3287,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    if (PutButtonShowDetails)
       Att_PutButtonToShowDetails ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory used for user's data *****/
@@ -3442,7 +3445,7 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Details,NULL,
                       TypeOfView == Att_PRINT_VIEW ? NULL :
                         	                     Hlp_USERS_Attendance_attendance_list,
@@ -3463,7 +3466,7 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
 	   }
      }
 
-   /***** End frame *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    /***** Free memory used for user's data *****/

@@ -316,7 +316,7 @@ void Tst_ShowFormAskTst (void)
 	 break;
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Take_a_test,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,
                  false);	// Not closable
@@ -375,7 +375,7 @@ void Tst_ShowFormAskTst (void)
          Tst_PutButtonToAddQuestion ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
@@ -435,7 +435,7 @@ void Tst_ShowNewTest (void)
             if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
-	    /***** Start frame *****/
+	    /***** Start box *****/
 	    Box_StartBox (NULL,Txt_Test,NULL,
 	                  Hlp_ASSESSMENT_Tests,
                           false);	// Not closable
@@ -474,7 +474,7 @@ void Tst_ShowNewTest (void)
             Btn_PutConfirmButton (Txt_Done_assess_test);
             Act_FormEnd ();
 
-            /***** End frame *****/
+            /***** End box *****/
 	    Box_EndBox ();
 
             /***** Set test status *****/
@@ -535,7 +535,7 @@ void Tst_AssessTest (void)
 	 /***** Create new test in database to store the result *****/
 	 TstCod = Tst_CreateTestResultInDB ();
 
-	 /***** Start frame *****/
+	 /***** Start box *****/
 	 Box_StartBox (NULL,Txt_Test_result,NULL,
 	               Hlp_ASSESSMENT_Tests,
                        false);	// Not closable
@@ -561,7 +561,7 @@ void Tst_AssessTest (void)
 	 if (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING)
 	    Tst_ShowTstTotalMark (TotalScore);
 
-	 /***** End frame *****/
+	 /***** End box *****/
 	 Box_EndBox ();
 
 	 /***** Store test result in database *****/
@@ -1280,7 +1280,7 @@ void Tst_ShowFormAskEditTsts (void)
    TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,
                  false);	// Not closable
@@ -1317,7 +1317,7 @@ void Tst_ShowFormAskEditTsts (void)
       Tst_PutButtonToAddQuestion ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /* Free structure that stores the query result */
@@ -1737,7 +1737,7 @@ static void Tst_ShowFormEditTags (void)
    /***** Get current tags in current course *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      /***** Start table *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Tags,NULL,
                          Hlp_ASSESSMENT_Tests,
 			 false,	// Not closable
@@ -1773,7 +1773,7 @@ static void Tst_ShowFormEditTags (void)
                             "</tr>");
         }
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else
@@ -1852,7 +1852,7 @@ static void Tst_ShowFormConfigTst (void)
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Configure_tests,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,
                  false);	// Not closable
@@ -1954,7 +1954,7 @@ static void Tst_ShowFormConfigTst (void)
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -2733,7 +2733,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    unsigned long NumHitsNotBlankThisQst;
    double TotalScoreThisQst;
 
-   /***** Table start *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Questions,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,
                  false);	// Not closable
@@ -2989,7 +2989,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    /***** Button to add a new question *****/
    Tst_PutButtonToAddQuestion ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -3727,7 +3727,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Tst_WriteScoreEnd ();
      }
 
-   /***** End of table *****/
+   /***** End table *****/
    Tbl_EndTable ();
   }
 
@@ -4522,7 +4522,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    bool AnswerHasContent;
    bool DisplayRightColumn;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
@@ -4881,7 +4881,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -6991,7 +6991,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Test_results,NULL,
                  Hlp_ASSESSMENT_Tests_test_results,
                  false);	// Not closable
@@ -7049,7 +7049,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for users' list *****/
@@ -7077,14 +7077,14 @@ void Tst_SelDatesToSeeMyTestResults (void)
    /***** Start form *****/
    Act_FormStart (ActSeeMyTstRes);
 
-   /***** Starting and ending dates in the search *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Test_results,NULL,
                       Hlp_ASSESSMENT_Tests_test_results,
 		      false,	// Not closable
                       2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_View_test_results);
 
    /***** End form *****/
@@ -7152,11 +7152,13 @@ void Tst_ShowUsrsTestResults (void)
    /***** Check the number of users whose tests results will be shown *****/
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
-      /***** Header of the table with the list of users *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Test_results,NULL,
                          Hlp_ASSESSMENT_Tests_test_results,
 			 false,	// Not closable
                          2);
+
+      /***** Header of the table with the list of users *****/
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -7172,7 +7174,7 @@ void Tst_ShowUsrsTestResults (void)
 	       Tst_ShowTestResults (&Gbl.Usrs.Other.UsrDat);
 	}
 
-      /***** End of the table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else	// If no users are selected...
@@ -7247,18 +7249,20 @@ void Tst_ShowMyTestResults (void)
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
-   /***** Header of the table with the list of users *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Test_results,NULL,
                       Hlp_ASSESSMENT_Tests_test_results,
 		      false,	// Not closable
                       2);
+
+   /***** Header of the table with the list of users *****/
    Tst_ShowHeaderTestResults ();
 
    /***** List my test results *****/
    Tst_GetConfigTstFromDB ();	// To get feedback type
    Tst_ShowTestResults (&Gbl.Usrs.Me.UsrDat);
 
-   /***** End of the table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -7715,7 +7719,7 @@ void Tst_ShowOneTestResult (void)
       /***** Get questions and user's answers of the test result from database *****/
       Tst_GetTestResultQuestionsFromDB (TstCod);
 
-      /***** Start frame *****/
+      /***** Start box *****/
       Box_StartBox (NULL,Txt_Test_result,NULL,
                     Hlp_ASSESSMENT_Tests_test_results,
                     false);	// Not closable
@@ -7824,7 +7828,7 @@ void Tst_ShowOneTestResult (void)
       /***** End table *****/
       Tbl_EndTable ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
    else	// I am not allowed to view this test result

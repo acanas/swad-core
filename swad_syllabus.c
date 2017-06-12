@@ -40,6 +40,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_xml.h"
 
 /*****************************************************************************/
@@ -236,12 +237,13 @@ bool Syl_CheckAndEditSyllabus (void)
        Gbl.Action.Act == ActEditorSylPra)
       Gbl.Syllabus.EditionIsActive = true;
 
-   /***** Start frame *****/
    if (Gbl.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
       ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
       PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
+
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			 PutIconToEdit ? Inf_PutIconToEditInfo :
 					 NULL,
@@ -258,7 +260,7 @@ bool Syl_CheckAndEditSyllabus (void)
          Syl_ShowRowSyllabus (0,1,LstItemsSyllabus.Lst[0].CodItem,"",true);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
 
       if (Gbl.Syllabus.EditionIsActive)
 	{
@@ -268,7 +270,7 @@ bool Syl_CheckAndEditSyllabus (void)
 	 Act_FormEnd ();
 	}
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
 
       return true;

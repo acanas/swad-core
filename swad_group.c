@@ -266,7 +266,7 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_Types_of_group;
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
                  Hlp_USERS_Groups,
                  false);	// Not closable
@@ -284,7 +284,7 @@ static void Grp_EditGroupTypes (void)
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -298,7 +298,7 @@ static void Grp_EditGroups (void)
    extern const char *Txt_Groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
                  Hlp_USERS_Groups,
                  false);	// Not closable
@@ -316,7 +316,7 @@ static void Grp_EditGroups (void)
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -364,7 +364,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 	         (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
-      /***** Start frame *****/
+      /***** Start box *****/
       Box_StartBox (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
 				               NULL,
 		    Hlp_USERS_Groups,
@@ -409,7 +409,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       /***** End form *****/
       Act_FormEnd ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
   }
@@ -1724,7 +1724,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 Grp_ShowWarningToStdsToChangeGrps ();
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
                                                NULL,
                  Hlp_USERS_Groups,
@@ -1773,7 +1773,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	}
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
@@ -1942,7 +1942,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    /***** Get list of groups types and groups in current course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Groups,NULL,
                       Hlp_USERS_Groups,
 		      false,	// Not closable
@@ -1955,7 +1955,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
       if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
 	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    /***** Free list of groups types and groups in current course *****/
@@ -2346,7 +2346,7 @@ static void Grp_PutFormToCreateGroupType (void)
    Lay_StartSection (Grp_NEW_GROUP_TYPE_SECTION_ID);
    Act_FormStartAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
-   /***** Start of frame *****/
+   /***** Start box *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
                       NULL,
 		      false,	// Not closable
@@ -2437,7 +2437,7 @@ static void Grp_PutFormToCreateGroupType (void)
 		      "</td>"
 		      "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
 
    /***** End form *****/
@@ -2462,7 +2462,7 @@ static void Grp_PutFormToCreateGroup (void)
    Lay_StartSection (Grp_NEW_GROUP_SECTION_ID);
    Act_FormStartAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_group,NULL,
                       NULL,
 		      false,	// Not closable
@@ -2533,10 +2533,10 @@ static void Grp_PutFormToCreateGroup (void)
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_group);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
    Lay_EndSection ();
   }

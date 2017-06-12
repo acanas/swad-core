@@ -3167,7 +3167,7 @@ void Brw_AskEditWorksCrs (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for users' list *****/
@@ -3216,7 +3216,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       /***** Write top before showing file browser *****/
       Brw_WriteTopBeforeShowingFileBrowser ();
 
-      /***** Header of the table with the list of users *****/
+      /***** Start box and table *****/
       Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
                          Brw_PutIconShowFigure,
                          Hlp_FILES_Homework_for_teachers,
@@ -3254,7 +3254,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	      }
 	}
 
-      /***** End of the table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else	// If no users are selected...
@@ -3621,7 +3621,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_HelpOfFileBrowser[Brw_ADMI_TEACH_CRS] = Hlp_FILES_Private;		// Brw_ADMI_TEACH_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_TEACH_GRP] = Hlp_FILES_Private;		// Brw_ADMI_TEACH_GRP
 
-   /***** Set contextual icon in frame *****/
+   /***** Set contextual icon in box *****/
    Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;
    switch (Gbl.FileBrowser.Type)
      {
@@ -3685,7 +3685,7 @@ static void Brw_ShowFileBrowser (void)
    /***** Check if the clipboard is in this tree *****/
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Gbl.FileBrowser.Id++;
    sprintf (FileBrowserSectionId,"file_browser_%u",Gbl.FileBrowser.Id);
    Lay_StartSection (FileBrowserSectionId);
@@ -3711,7 +3711,7 @@ static void Brw_ShowFileBrowser (void)
    /***** Put button to show / edit *****/
    Brw_PutButtonToShowEdit ();
 
-   /***** End of frame *****/
+   /***** End box *****/
    Box_EndBox ();
    Lay_EndSection ();
   }
@@ -5304,7 +5304,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
      }
 
    /***** Indentation depending on level, icon, and file/folder name *****/
-   /* Start of the column */
+   /* Start column */
    fprintf (Gbl.F.Out,"<td class=\"NO_BR LEFT_TOP COLOR%u\""
 	              " style=\"width:99%%;\">"
                       "<table>"
@@ -5347,7 +5347,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
    Brw_WriteFileName (Level,FileMetadata.IsPublic,
                       PathInTree,FileName,FileNameToShow);
 
-   /* End of the column */
+   /* End column */
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>"
 	              "</td>");
@@ -5882,7 +5882,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
-   /* End of the link and of the form */
+   /* End link and form */
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
@@ -5942,7 +5942,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
    /***** Name and link of the folder, file or link *****/
    if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
      {
-      /***** Start of cell *****/
+      /***** Start cell *****/
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE",
                Gbl.FileBrowser.TxtStyle);
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
@@ -5989,7 +5989,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
             fprintf (Gbl.F.Out,"</span>");
         }
 
-      /***** End of cell *****/
+      /***** End cell *****/
       fprintf (Gbl.F.Out,"</div>");
 
       fprintf (Gbl.F.Out,"</td>");
@@ -7984,7 +7984,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_folder,NULL,
                  NULL,
                  false);	// Not closable
@@ -8002,7 +8002,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
             The_ClassForm[Gbl.Prefs.Theme],Txt_Folder,
             Brw_MAX_CHARS_FOLDER);
 
-   /* Button to send and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_folder);
 
    /***** End form *****/
@@ -8022,7 +8022,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Done;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");
    Box_StartBox ("95%",Txt_Upload_files,NULL,
                  NULL,
@@ -8071,7 +8071,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -8085,7 +8085,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    extern const char *Txt_Upload_file;
    extern const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    fprintf (Gbl.F.Out,"<div id=\"classic-upload\" style=\"display:none;\">");
    Box_StartBox (NULL,Txt_Upload_file,NULL,
                  NULL,
@@ -8109,7 +8109,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    Btn_PutCreateButton (Txt_Upload_file);
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -8130,7 +8130,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Paste,NULL,
                  NULL,
                  false);	// Not closable
@@ -8140,7 +8140,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 	    FileNameToShow);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Paste);
 
    /***** End form *****/
@@ -8167,7 +8167,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_link,NULL,
                  NULL,
                  false);	// Not closable
@@ -8212,7 +8212,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
             The_ClassForm[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
             Brw_MAX_CHARS_FOLDER);
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
@@ -9165,7 +9165,7 @@ void Brw_ShowFileMetadata (void)
 				      FileMetadata.FileType,-1L);
 	   }
 
-	 /***** Start frame *****/
+         /***** Start box and table *****/
 	 Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
@@ -9346,13 +9346,17 @@ void Brw_ShowFileMetadata (void)
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Public_views,
 		  FileMetadata.NumPublicViews);
 
-	 /***** End frame *****/
+	 /***** End box *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
+            /* End table, send button and end box */
 	    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
+
+	    /* End form */
 	    Act_FormEnd ();
 	   }
 	 else
+            /* End table and box */
 	    Box_EndBoxTable ();
 
 	 /***** Mark possible notifications as seen *****/
@@ -11335,8 +11339,8 @@ unsigned Brw_ListDocsFound (const char *Query,
    /***** Query database *****/
    if ((NumDocs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get files")))
      {
-      /***** Write heading *****/
-      /* Write header with number of documents found */
+      /***** Start box and table *****/
+      /* Number of documents found */
       sprintf (Gbl.Title,"%u %s",
                NumDocs,(NumDocs == 1) ? TitleSingular :
         	                        TitlePlural);
@@ -11345,7 +11349,7 @@ unsigned Brw_ListDocsFound (const char *Query,
 			 false,	// Not closable
                          2);
 
-      /* Heading row */
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"BM\"></th>"
 			 "<th class=\"LEFT_MIDDLE\">"
@@ -11400,7 +11404,7 @@ unsigned Brw_ListDocsFound (const char *Query,
 	                 "</th>"
 			 "</tr>");
 
-      /* End table */
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 
@@ -11699,7 +11703,7 @@ void Brw_AskRemoveOldFiles (void)
    Act_FormStart (ActRemOldBrf);
    Brw_PutHiddenParamFullTreeIfSelected ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Remove_old_files,NULL,
                  NULL,
                  false);	// Not closable
@@ -11723,7 +11727,7 @@ void Brw_AskRemoveOldFiles (void)
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</label>");
 
-   /***** End frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** End form *****/

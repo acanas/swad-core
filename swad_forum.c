@@ -1008,7 +1008,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
                  Hlp_SOCIAL_Forums_posts,
@@ -1137,7 +1137,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    For_WriteFormForumPst (true,LastSubject);
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
    Lay_EndSection ();
   }
@@ -1606,7 +1606,7 @@ static void For_ShowForumList (void)
    /***** Fill the list with the institutions I belong to *****/
    Usr_GetMyInstits ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Forums,For_PutIconsForums,
                  Hlp_SOCIAL_Forums,
                  false);	// Not closable
@@ -1760,7 +1760,7 @@ static void For_ShowForumList (void)
    /***** End list *****/
    fprintf (Gbl.F.Out,"</ul>");
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -2572,7 +2572,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
 
-   /***** Start frame for threads of this forum *****/
+   /***** Start box for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
 		 Hlp_SOCIAL_Forums_threads,
@@ -2654,7 +2654,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    For_WriteFormForumPst (false,NULL);
    Lay_EndSection ();
 
-   /***** End frame with threads of this forum ****/
+   /***** End box with threads of this forum ****/
    Box_EndBox ();
    Lay_EndSection ();
   }
@@ -3858,7 +3858,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Send;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    if (IsReply)
       Box_StartBox (NULL,Txt_New_post,NULL,
 		    Hlp_SOCIAL_Forums_new_post,
@@ -3931,7 +3931,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

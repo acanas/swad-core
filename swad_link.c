@@ -111,7 +111,7 @@ void Lnk_SeeLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Links,
 		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
 							  NULL,
@@ -132,7 +132,7 @@ void Lnk_SeeLinks (void)
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of links *****/
@@ -229,7 +229,7 @@ void Lnk_EditLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Links,Lnk_PutIconToViewLinks,
                  Hlp_SYSTEM_Links_edit,
                  false);	// Not closable
@@ -241,7 +241,7 @@ void Lnk_EditLinks (void)
    if (Gbl.Links.Num)
       Lnk_ListLinksForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of links *****/
@@ -708,7 +708,7 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Start form *****/
    Act_FormStart (ActNewLnk);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_link,NULL,
                       Hlp_SYSTEM_Links_edit,
 		      false,	// Not closable
@@ -750,10 +750,10 @@ static void Lnk_PutFormToCreateLink (void)
                       "</tr>",
             Cns_MAX_CHARS_WWW,Lnk->WWW);
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

@@ -921,7 +921,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
                  Hlp_SOCIAL_Timeline,
                  false);	// Not closable
@@ -986,7 +986,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
       fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1273,7 +1273,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    unsigned NumComments;
    char IdNewComment[Act_MAX_BYTES_ID];
 
-   /***** Start frame ****/
+   /***** Start box ****/
    if (ShowNoteAlone)
      {
       Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
@@ -1522,7 +1522,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    /***** End list item *****/
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** End frame ****/
+   /***** End box ****/
    if (ShowNoteAlone)
      {
       fprintf (Gbl.F.Out,"</ul>");

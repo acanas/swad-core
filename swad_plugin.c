@@ -347,11 +347,13 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   /***** Table head *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Plugins,NULL,
                       NULL,
 		      false,	// Not closable
                       2);
+
+   /***** Write heading *****/
    Plg_PutHeadPlugins ();
 
    /***** Write all the plugins *****/
@@ -457,6 +459,7 @@ static void Plg_ListPluginsForEdition (void)
                          "</tr>");
      }
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -842,7 +845,7 @@ static void Plg_PutFormToCreatePlugin (void)
    /***** Start form *****/
    Act_FormStart (ActNewPlg);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
                       NULL,
 	              false,	// Not closable
@@ -925,7 +928,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       "</tr>",
             Cns_MAX_CHARS_IP,Plg->IP);
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/

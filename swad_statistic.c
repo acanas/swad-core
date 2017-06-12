@@ -473,7 +473,7 @@ void Sta_AskShowCrsHits (void)
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
 	    Gbl.CurrentCrs.Crs.ShrtName);
    Box_StartBox (NULL,Gbl.Title,NULL,
@@ -614,7 +614,7 @@ void Sta_AskShowCrsHits (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory used by the lists *****/
@@ -673,7 +673,7 @@ void Sta_AskShowGblHits (void)
    /***** Start form *****/
    Act_FormStartAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Statistics_of_all_visits,NULL,
                       Hlp_STATS_Visits_global_visits,
 		      false,	// Not closable
@@ -756,13 +756,15 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"</select>"
 	              "</label>"
 		      "</td>"
-		      "</tr>"
-		      "</table>");
+		      "</tr>");
+
+   /***** End table *****/
+   Tbl_EndTable ();
 
    /***** Hidden param used to get client time zone *****/
    Dat_PutHiddenParBrowserTZDiff ();
 
-   /***** End frame with button *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_hits);
 
    /***** End form *****/
@@ -1545,7 +1547,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	}
       fprintf (Gbl.F.Out,"</table>");
 
-      /* End of frame */
+      /* End box and section */
       Box_EndBox ();
       Lay_EndSection ();
      }
@@ -3065,7 +3067,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 "</td>",
                Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,(Minute + 30) / 60);
 
-   /***** Start of cell for the graphic *****/
+   /***** Start cell for the graphic *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
 	              " style=\"width:%upx; height:1px;"
 	              " background-image:url('%s/malla%c48x1.gif');"
@@ -3087,7 +3089,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
                 	               'b',
                   BarWidth);
 
-   /***** End of cell of graphic and end of row *****/
+   /***** End cell of graphic and end row *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
@@ -3915,7 +3917,7 @@ void Sta_ReqShowFigures (void)
    /***** Form to show statistic *****/
    Act_FormStart (ActSeeUseGbl);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Figures,NULL,
                  Hlp_STATS_Figures,
                  false);	// Not closable
@@ -3954,10 +3956,10 @@ void Sta_ReqShowFigures (void)
    fprintf (Gbl.F.Out,"</select>"
 	              "</label>");
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_statistic);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -4080,12 +4082,13 @@ static void Sta_GetAndShowUsersStats (void)
    extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
    extern const char *Txt_Average_number_of_users_belonging_to_a_course;
 
-   /***** Number of users *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS],NULL,
                       Hlp_STATS_Figures_users,
 		      false,	// Not closable
                       2);
 
+   /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
@@ -4104,6 +4107,7 @@ static void Sta_GetAndShowUsersStats (void)
             Txt_No_of_users,
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
+
    Sta_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
    Sta_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
    Sta_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
@@ -4113,6 +4117,7 @@ static void Sta_GetAndShowUsersStats (void)
                       "</tr>");
    Sta_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -4212,13 +4217,13 @@ static void Sta_GetAndShowUsersRanking (void)
    extern const char *Txt_Messages;
    extern const char *Txt_Followers;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS_RANKING],NULL,
                       Hlp_STATS_Figures_ranking,
 		      false,	// Not closable
                       2);
 
-   /***** Header *****/
+   /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
@@ -4268,7 +4273,7 @@ static void Sta_GetAndShowUsersRanking (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -4282,16 +4287,20 @@ static void Sta_GetAndShowHierarchyStats (void)
    extern const char *Hlp_STATS_Figures_hierarchy;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY],NULL,
                       Hlp_STATS_Figures_hierarchy,
 		      false,	// Not closable
 		      2);
+
    Sta_WriteHeadDegsCrssInSWAD ();
    Sta_GetAndShowNumCtysInSWAD ();
    Sta_GetAndShowNumInssInSWAD ();
    Sta_GetAndShowNumCtrsInSWAD ();
    Sta_GetAndShowNumDegsInSWAD ();
    Sta_GetAndShowNumCrssInSWAD ();
+
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -4971,7 +4980,7 @@ static void Sta_GetAndShowInstitutionsStats (void)
    extern const char *Hlp_STATS_Figures_institutions;
    extern const char *Txt_Institutions;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Institutions,NULL,
                  Hlp_STATS_Figures_institutions,
                  false);	// Not closable
@@ -4995,7 +5004,7 @@ static void Sta_GetAndShowInstitutionsStats (void)
    /***** Institutions ordered by number of users who claim to belong to them *****/
    Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -5009,7 +5018,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
    extern const char *Txt_Centres;
    char Query[1024];
 
-   /****** Institutions ordered by number of centres ******/
+   /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_centres,NULL,
                       NULL,
 		      false,	// Not closable
@@ -5050,6 +5059,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
      }
    Sta_GetAndShowInss (Query,Txt_Centres);
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -5063,7 +5073,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
    extern const char *Txt_Degrees;
    char Query[1024];
 
-   /****** Institutions ordered by number of centres ******/
+   /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_degrees,NULL,
                       NULL,
 		      false,	// Not closable
@@ -5107,6 +5117,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
      }
    Sta_GetAndShowInss (Query,Txt_Degrees);
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -5120,7 +5131,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
    extern const char *Txt_Courses;
    char Query[1024];
 
-   /****** Institutions ordered by number of centres ******/
+   /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_courses,NULL,
                       NULL,
 		      false,	// Not closable
@@ -5167,6 +5178,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
      }
    Sta_GetAndShowInss (Query,Txt_Courses);
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -5180,7 +5192,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
    extern const char *Txt_Users;
    char Query[1024];
 
-   /****** Institutions ordered by number of centres ******/
+   /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_in_courses,NULL,
                       NULL,
 		      false,	// Not closable
@@ -5230,6 +5242,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
      }
    Sta_GetAndShowInss (Query,Txt_Users);
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -5244,7 +5257,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    extern const char *Txt_Users;
    char Query[1024];
 
-   /****** Institutions ordered by number of centres ******/
+   /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
                       NULL,
                       NULL,
@@ -5287,6 +5300,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
      }
    Sta_GetAndShowInss (Query,Txt_Users);
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -5334,7 +5348,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
                fprintf (Gbl.F.Out,"<br />%u</td>",
 	                NumberThisRow);
 
-	       /***** End of user's cell *****/
+	       /***** End user's cell *****/
 	       fprintf (Gbl.F.Out,"</td>");
 
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
@@ -5476,7 +5490,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
      };
    unsigned NumStat;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLDERS_AND_FILES],NULL,
                       Hlp_STATS_Figures_folders_and_files,
 		      false,	// Not closable
@@ -5497,7 +5511,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    /***** Write size of briefcases *****/
    Sta_WriteRowStatsFileBrowsers (Brw_ADMI_BRIEF_USR,Txt_Briefcases);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -6554,7 +6568,7 @@ static void Sta_GetAndShowOERsStats (void)
    Brw_License_t License;
    unsigned long NumFiles[2];
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_OER],NULL,
                       Hlp_STATS_Figures_open_educational_resources_oer,
                       false,	// Not closable
@@ -6598,7 +6612,7 @@ static void Sta_GetAndShowOERsStats (void)
                NumFiles[1]);
      }
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -6746,7 +6760,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
       if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
          NumAssignmentsPerCourse = (float) NumAssignments / (float) NumCoursesWithAssignments;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ASSIGNMENTS],NULL,
                       Hlp_STATS_Figures_assignments,
 		      false,	// Not closable
@@ -6792,7 +6806,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
             NumAssignmentsPerCourse,
             NumNotif);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -6818,7 +6832,7 @@ static void Sta_GetAndShowTestsStats (void)
    Tst_AnswerType_t AnsType;
    struct Tst_Stats Stats;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_TESTS],NULL,
                       Hlp_STATS_Figures_tests,
 		      false,	// Not closable
@@ -6963,7 +6977,7 @@ static void Sta_GetAndShowTestsStats (void)
             Stats.AvgHitsPerQuestion,
             Stats.AvgScorePerQuestion);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -6990,7 +7004,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY],NULL,
                       Hlp_STATS_Figures_timeline,
 		      false,	// Not closable
@@ -7249,7 +7263,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 	    NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
 		      0.0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -7280,7 +7294,7 @@ static void Sta_GetAndShowFollowStats (void)
    unsigned NumUsrs;
    float Average;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLLOW],NULL,
                       Hlp_STATS_Figures_followed_followers,
 		      false,	// Not closable
@@ -7514,7 +7528,7 @@ static void Sta_GetAndShowFollowStats (void)
 	       Average);
      }
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8211,7 +8225,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
             NumEventsTotal,
             NumMailsTotal);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8409,7 +8423,7 @@ static void Sta_GetAndShowMsgsStats (void)
             NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted,
             NumMsgsReceivedAndNotified);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8441,7 +8455,7 @@ static void Sta_GetAndShowSurveysStats (void)
       NumQstsPerSurvey = Svy_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
      }
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SURVEYS],NULL,
                       Hlp_STATS_Figures_surveys,
 		      false,	// Not closable
@@ -8495,7 +8509,7 @@ static void Sta_GetAndShowSurveysStats (void)
             NumQstsPerSurvey,
             NumNotif);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8510,7 +8524,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void)
    extern const char *Txt_Public_profile;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY],NULL,
                       Hlp_STATS_Figures_privacy,
 		      false,	// Not closable
@@ -8522,7 +8536,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void)
    /***** Privacy for public profile *****/
    Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Public_profile,"ProfileVisibility");
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8680,7 +8694,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
    unsigned NumUsrs[1 + Txt_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_LANGUAGES],NULL,
                       Hlp_STATS_Figures_language,
 		      false,	// Not closable
@@ -8800,7 +8814,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8823,7 +8837,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK],NULL,
                       Hlp_STATS_Figures_calendar,
 		      false,	// Not closable
@@ -8945,7 +8959,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 				 (float) NumUsrsTotal :
 				 0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -8965,7 +8979,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
    unsigned NumUsrs[Dat_NUM_OPTIONS_FORMAT];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_DATE_FORMAT],NULL,
                       Hlp_STATS_Figures_dates,
 		      false,	// Not closable
@@ -9083,7 +9097,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 			      0);
      }
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -9105,7 +9119,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
    unsigned NumUsrs[Ico_NUM_ICON_SETS];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ICON_SETS],NULL,
                       Hlp_STATS_Figures_icons,
 		      false,	// Not closable
@@ -9228,7 +9242,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -9250,7 +9264,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
    unsigned NumUsrs[Mnu_NUM_MENUS];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MENUS],NULL,
                       Hlp_STATS_Figures_menu,
 		      false,	// Not closable
@@ -9370,7 +9384,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -9392,7 +9406,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
    unsigned NumUsrs[The_NUM_THEMES];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_THEMES],NULL,
                       Hlp_STATS_Figures_theme,
 		      false,	// Not closable
@@ -9512,7 +9526,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -9533,7 +9547,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
    unsigned NumUsrsTotal = 0;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SIDE_COLUMNS],NULL,
                       Hlp_STATS_Figures_columns,
 		      false,	// Not closable
@@ -9653,7 +9667,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 

@@ -549,7 +549,7 @@ void ID_ShowFormOthIDs (void)
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Start frame *****/
+	 /***** Start box *****/
          Box_StartBox (NULL,Txt_ID,NULL,
                        NULL,
                        false);	// Not closable
@@ -564,7 +564,7 @@ void ID_ShowFormOthIDs (void)
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
          Tbl_EndTable ();
 
-         /***** End frame *****/
+         /***** End box *****/
          Box_EndBox ();
 	}
       else

@@ -128,8 +128,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
-   /***** Contextual buttons *****/
-   /* Start box and table */
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_What_would_you_like_to_do,NULL,
                       NULL,
 		      true,	// Closable
@@ -253,7 +252,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 					   Btn_CREATE_BUTTON,Txt_Create_account);
      }
 
-   /* End table and box */
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 

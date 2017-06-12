@@ -2261,7 +2261,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    if (FuncParams)
       FuncParams ();
 
-   /***** Start frame and table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Log_in,NULL,
                       Hlp_PROFILE_LogIn,
 		      false,	// Not closable
@@ -2300,7 +2300,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Txt_password);
 
-   /***** Send button and end table and frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Log_in);
 
    /***** End form *****/
@@ -3154,7 +3154,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Role,NULL,
                  Hlp_PROFILE_Session_role,
                  false);	// Not closable
@@ -3173,7 +3173,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       fprintf (Gbl.F.Out,"</label>");
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -6241,7 +6241,7 @@ void Usr_ListAllDataGsts (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End of table *****/
+      /***** End table *****/
       Tbl_EndTable ();
      }
    else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
@@ -6441,7 +6441,7 @@ void Usr_ListAllDataStds (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End of table *****/
+      /***** End table *****/
       Tbl_EndTable ();
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
@@ -6577,7 +6577,7 @@ void Usr_ListAllDataTchs (void)
       Usr_ListRowsAllDataTchs (Rol_TCH,FieldNames,NumColumns);
       Usr_ListRowsAllDataTchs (Rol_NET,FieldNames,NumColumns);
 
-      /***** End of table *****/
+      /***** End table *****/
       Tbl_EndTable ();
      }
    else        // NumUsrs == 0
@@ -6665,7 +6665,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
    Usr_SearchListUsrs (Role);
    if ((NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
       sprintf (Gbl.Title,"%u %s",
@@ -6730,7 +6730,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 
@@ -6824,7 +6824,7 @@ void Usr_ListDataAdms (void)
    /***** Get list of administrators *****/
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
-   /***** Start frame with list of administrators *****/
+   /***** Start box with list of administrators *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,
                  Hlp_USERS_Administrators,
                  false);	// Not closable
@@ -6884,14 +6884,14 @@ void Usr_ListDataAdms (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End of table *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
    else        // Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs == 0
       /***** Show warning indicating no admins found *****/
       Usr_ShowWarningNoUsersFound (Rol_DEG_ADM);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for administrators list *****/
@@ -7300,7 +7300,7 @@ void Usr_SeeGuests (void)
    /***** Get list of guests in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts,
 		 Hlp_USERS_Guests,
                  false);	// Not closable
@@ -7378,7 +7378,7 @@ void Usr_SeeGuests (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for guests list *****/
@@ -7447,7 +7447,7 @@ void Usr_SeeStudents (void)
    /***** Get list of students *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Usr_PutIconsListStds,
 		 Hlp_USERS_Students,
                  false);	// Not closable
@@ -7549,7 +7549,7 @@ void Usr_SeeStudents (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for students list *****/
@@ -7633,7 +7633,7 @@ void Usr_SeeTeachers (void)
 						    1 << Rol_NET |
 						    1 << Rol_TCH);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs,
 		 Hlp_USERS_Teachers,
                  false);	// Not closable
@@ -7728,7 +7728,7 @@ void Usr_SeeTeachers (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for teachers lists *****/
@@ -8151,7 +8151,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 fprintf (Gbl.F.Out,"</div>");
 
-	 /***** End of user's cell *****/
+	 /***** End user's cell *****/
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 if ((++NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
@@ -8806,7 +8806,7 @@ void Usr_PrintUsrQRCode (void)
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Start frame *****/
+      /***** Start box *****/
       Box_StartBox (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
                     NULL,
                     false);	// Not closable
@@ -8818,7 +8818,7 @@ void Usr_PrintUsrQRCode (void)
 	 QR_ImageQRCode (NewNicknameWithArroba);
 	}
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
    else

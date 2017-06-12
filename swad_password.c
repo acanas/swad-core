@@ -249,10 +249,10 @@ void Pwd_ShowFormSendNewPwd (void)
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Get_a_new_password;
 
-   /***** Start of form *****/
+   /***** Start form *****/
    Act_FormStart (ActSndNewPwd);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Forgotten_password,NULL,
                  Hlp_PROFILE_Password,
                  false);	// Not closable
@@ -269,7 +269,7 @@ void Pwd_ShowFormSendNewPwd (void)
             The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
@@ -698,7 +698,7 @@ void Pwd_ShowFormChgPwd (void)
    /***** Start form *****/
    Act_FormStart (ActChgPwd);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Password,NULL,
                       Hlp_PROFILE_Password,
 		      false,	// Not closable
@@ -733,10 +733,10 @@ void Pwd_ShowFormChgPwd (void)
    /* New password */
    Pwd_PutFormToGetNewPasswordTwice ();
 
-   /***** Send button and end form *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,
-                                     IHaveAPasswordInDB ? Txt_Change_password :
-	                                                  Txt_Set_password);
+                              IHaveAPasswordInDB ? Txt_Change_password :
+	                                           Txt_Set_password);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -827,7 +827,7 @@ void Pwd_ShowFormOthPwd (void)
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Start frame *****/
+	 /***** Start box *****/
          Box_StartBox (NULL,Txt_Password,NULL,
                        NULL,
                        false);	// Not closable
@@ -863,7 +863,7 @@ void Pwd_ShowFormOthPwd (void)
 	 Btn_PutConfirmButton (Txt_Change_password);
 	 Act_FormEnd ();
 
-         /***** End frame *****/
+         /***** End box *****/
          Box_EndBox ();
 	}
       else

@@ -314,7 +314,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
       Hld_GetListHolidays ();
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,NULL,FunctionToDrawContextualIcons,
 	         PrintView ? NULL :
 	                     Hlp_Calendar,
@@ -352,7 +352,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	              "</script>",
 	    ParamsStr);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

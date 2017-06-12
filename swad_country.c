@@ -137,11 +137,13 @@ void Cty_SeeCtyWithPendingInss (void)
    /***** Get countries *****/
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -189,6 +191,7 @@ void Cty_SeeCtyWithPendingInss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else
@@ -242,7 +245,7 @@ static void Cty_Configuration (bool PrintView)
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
-      /***** Start frame *****/
+      /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
 		       NULL,
@@ -445,7 +448,7 @@ static void Cty_Configuration (bool PrintView)
       /***** End table *****/
       Tbl_EndTable ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
   }
@@ -514,11 +517,13 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
 
-   /***** Table head *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
                       Hlp_SYSTEM_Countries,
 		      false,	// Not closable
                       2);
+
+   /***** Write heading *****/
    Cty_PutHeadCountriesForSeeing (true);	// Order selectable
 
    /***** Write all the countries and their number of users and institutions *****/
@@ -601,9 +606,8 @@ void Cty_ListCountries2 (void)
             Deg_GetNumDegsInCty (-1L),
             Crs_GetNumCrssInCty (-1L));
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Box_EndBox ();
+   /***** End table and box *****/
+   Box_EndBoxTable ();
 
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
@@ -949,7 +953,7 @@ void Cty_EditCountries (void)
    Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Countries,Cty_PutIconToViewCountries,
                  Hlp_SYSTEM_Countries,
                  false);	// Not closable
@@ -961,7 +965,7 @@ void Cty_EditCountries (void)
    if (Gbl.Ctys.Num)
       Cty_ListCountriesForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of countries *****/
@@ -1936,7 +1940,7 @@ static void Cty_PutFormToCreateCountry (void)
    /***** Start form *****/
    Act_FormStart (ActNewCty);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_country,NULL,
                       NULL,
 		      false,	// Not closable
@@ -2019,10 +2023,10 @@ static void Cty_PutFormToCreateCountry (void)
 	       Cty->WWW[Lan]);
      }
 
-   /***** Send button and end of frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_country);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -2362,7 +2366,7 @@ unsigned Cty_ListCtysFound (const char *Query)
    /***** Query database *****/
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       /* Number of countries found */
       sprintf (Gbl.Title,"%u %s",
                NumCtys,NumCtys == 1 ? Txt_country :
@@ -2371,6 +2375,8 @@ unsigned Cty_ListCtysFound (const char *Query)
                          NULL,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       Cty_PutHeadCountriesForSeeing (false);	// Order not selectable
 
       /***** List the countries (one row per country) *****/
@@ -2391,7 +2397,7 @@ unsigned Cty_ListCtysFound (const char *Query)
 	 Cty_ListOneCountryForSeeing (&Cty,NumCty);
 	}
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 

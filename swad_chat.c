@@ -123,7 +123,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Fill the list with the degrees I belong to *****/ 
    Usr_GetMyDegrees ();
 
-   /***** Table start *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Chat_rooms,NULL,
                  NULL,
                  false);	// Not closable
@@ -263,11 +263,13 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
    if (NumRows > 0) // If not empty chat rooms found
      {
-      /***** Table start *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Rooms_with_users,NULL,
                          NULL,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
 	                 "%s"
@@ -297,7 +299,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
                   row[0],row[1]);
         }
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 

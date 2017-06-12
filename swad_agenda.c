@@ -147,7 +147,7 @@ void Agd_ShowMyAgenda (void)
    /***** Get parameters *****/
    Agd_GetParams (Agd_MY_AGENDA);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
 		 Hlp_PROFILE_Agenda,
                  false);	// Not closable
@@ -163,7 +163,7 @@ void Agd_ShowMyAgenda (void)
    /***** Show all my events *****/
    Agd_ShowEvents (Agd_MY_AGENDA);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -364,7 +364,7 @@ void Agd_ShowUsrAgenda (void)
 	{
 	 Error = false;
 
-	 /***** Start frame *****/
+	 /***** Start box *****/
 	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Box_StartBox ("100%",Gbl.Title,
@@ -379,7 +379,7 @@ void Agd_ShowUsrAgenda (void)
 	 /***** Show all the visible events in the user's agenda *****/
 	 Agd_ShowEvents (Agd_ANOTHER_AGENDA);
 
-	 /***** End frame *****/
+	 /***** End box *****/
 	 Box_EndBox ();
 	}
 
@@ -408,7 +408,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	 /* If nickname is correct, user code is already got from nickname */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
 	   {
-	    /***** Start frame *****/
+	    /***** Start box *****/
 	    sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	    ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	    Box_StartBox ("100%",Gbl.Title,
@@ -423,7 +423,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    /***** Show all the visible events in the user's agenda *****/
 	    Agd_ShowEvents (Agd_ANOTHER_AGENDA);
 
-	    /***** End frame *****/
+	    /***** End box *****/
 	    Box_EndBox ();
            }
 	 else
@@ -530,7 +530,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 
    if (Gbl.Agenda.Num)
      {
-      /***** Start frame *****/
+      /***** Start box and table *****/
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
@@ -556,7 +556,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 	   NumEvent++)
 	 Agd_ShowOneEvent (AgendaType,Gbl.Agenda.LstAgdCods[NumEvent]);
 
-      /***** End table and frame *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 
@@ -1535,7 +1535,7 @@ void Agd_RequestCreatOrEditEvent (void)
      }
    Agd_PutCurrentParamsMyAgenda ();
 
-   /***** Table start *****/
+   /***** Start box and table *****/
    if (ItsANewEvent)
       Box_StartBoxTable (NULL,Txt_New_event,NULL,
 			 Hlp_PROFILE_Agenda_new_event,
@@ -1597,11 +1597,13 @@ void Agd_RequestCreatOrEditEvent (void)
                       "</td>"
                       "</tr>");
 
-   /***** New event *****/
+   /***** End table, send button and end box *****/
    if (ItsANewEvent)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
    else
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+
+   /***** End form *****/
    Act_FormEnd ();
 
    /***** Show current events, if any *****/
@@ -1944,7 +1946,7 @@ void Agd_PrintAgdQRCode (void)
   {
    extern const char *Txt_Where_s_USER;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  NULL,
@@ -1953,6 +1955,6 @@ void Agd_PrintAgdQRCode (void)
    /***** Print QR code ****/
    QR_PrintQRCode ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }

@@ -97,7 +97,7 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
 
-   /***** Start of table *****/
+   /***** Start table *****/
    Tbl_StartTableCenter (2);
 
    /***** Write a 1st selector
@@ -172,7 +172,7 @@ void Hie_WriteMenuHierarchy (void)
         }
      }
 
-   /***** End of table *****/
+   /***** End table *****/
    Tbl_EndTable ();
   }
 

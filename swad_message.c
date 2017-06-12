@@ -224,7 +224,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;		// Teachers
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
 					      Txt_New_message,
 		 NULL,
@@ -331,7 +331,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory used by the list of nicknames *****/
@@ -583,7 +583,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
      }
    else	// It's not a reply
      {
-      /* End of message subject */
+      /* End message subject */
       fprintf (Gbl.F.Out,"%s</textarea>"
 	                 "</td>"
 	                 "</tr>",
@@ -1754,13 +1754,13 @@ static void Msg_ShowSentOrReceivedMessages (void)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get messages");
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
-   /***** Start frame with messages *****/
+   /***** Start box with messages *****/
    Box_StartBox ("97%",Msg_WriteNumMsgs (NumUnreadMsgs),Msg_PutIconsListMsgs,
                  Help[Gbl.Msg.TypeOfMessages],
                  false);	// Not closable
 
    /***** Filter messages *****/
-   /* Start frame with filter */
+   /* Start box with filter */
    Box_StartBox (NULL,Txt_Filter,NULL,
                  HelpFilter[Gbl.Msg.TypeOfMessages],
                  true);	// Closable
@@ -1784,7 +1784,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    Act_FormEnd ();
 
-   /* End frame */
+   /* End box */
    Box_EndBox ();
 
 
@@ -1851,7 +1851,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
                                         &Pagination);
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
@@ -2578,7 +2578,7 @@ void Msg_ShowFormToFilterMsgs (void)
       Txt_MSG_To
      };
 
-   /***** Table start *****/
+   /***** Start table *****/
    Tbl_StartTableCenter (2);
 
    /***** Filter authors/recipients *****/
@@ -3778,7 +3778,7 @@ void Msg_ListBannedUsrs (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start table with list of users *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Banned_users,NULL,
                          NULL,
 			 false,	// Not closable
@@ -3830,7 +3830,7 @@ void Msg_ListBannedUsrs (void)
            }
         }
 
-      /***** End of table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
 
       /***** Free memory used for user's data *****/

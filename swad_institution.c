@@ -151,11 +151,13 @@ void Ins_SeeInsWithPendingCtrs (void)
    /***** Get institutions *****/
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -201,7 +203,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else
@@ -308,7 +310,7 @@ static void Ins_Configuration (bool PrintView)
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      /***** Start frame *****/
+      /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
 		       NULL,
@@ -590,7 +592,7 @@ static void Ins_Configuration (bool PrintView)
       /***** End table *****/
       Tbl_EndTable ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
   }
@@ -671,7 +673,7 @@ static void Ins_ListInstitutions (void)
    extern const char *Txt_Create_institution;
    unsigned NumIns;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
                  Hlp_COUNTRY_Institutions,
@@ -921,7 +923,7 @@ void Ins_EditInstitutions (void)
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
@@ -935,7 +937,7 @@ void Ins_EditInstitutions (void)
    if (Gbl.Inss.Num)
       Ins_ListInstitutionsForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of institutions *****/
@@ -2160,7 +2162,7 @@ static void Ins_PutFormToCreateInstitution (void)
    else
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_institution,NULL,
                       NULL,
 		      false,	// Not closable
@@ -2233,7 +2235,7 @@ static void Ins_PutFormToCreateInstitution (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** Send button and end of frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End form *****/
@@ -2518,7 +2520,7 @@ unsigned Ins_ListInssFound (const char *Query)
    /***** Query database *****/
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       /* Number of institutions found */
       sprintf (Gbl.Title,"%u %s",
                NumInss,NumInss == 1 ? Txt_institution :
@@ -2527,6 +2529,8 @@ unsigned Ins_ListInssFound (const char *Query)
                          NULL,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
       /***** List the institutions (one row per institution) *****/
@@ -2547,7 +2551,7 @@ unsigned Ins_ListInssFound (const char *Query)
 	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);
 	}
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 

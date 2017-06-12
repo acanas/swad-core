@@ -70,7 +70,7 @@ extern struct Globals Gbl;
 #define TT_PERCENT_WIDTH_OF_A_MINICOLUMN	  2	// Width (%) of each minicolumn
 #define TT_PERCENT_WIDTH_OF_A_DAY		(TT_PERCENT_WIDTH_OF_A_MINICOLUMN * TT_NUM_MINICOLUMNS_PER_DAY)	// Width (%) of each day
 #define TT_PERCENT_WIDTH_OF_ALL_DAYS		(TT_PERCENT_WIDTH_OF_A_DAY * TT_DAYS_PER_WEEK)			// Width (%) of all days
-#define TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN	  1								// Width (%) of left and right columns (frame)
+#define TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN	  1								// Width (%) of left and right columns
 #define TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100 - TT_PERCENT_WIDTH_OF_ALL_DAYS - TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN * 2) / 2)	// Width (%) of the separation columns
 
 #define TT_MAX_BYTES_STR_CLASS_TYPE		256
@@ -350,7 +350,7 @@ void TT_ShowClassTimeTable (void)
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
                  (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
                   Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
@@ -384,7 +384,7 @@ void TT_ShowClassTimeTable (void)
    /***** Show the time table *****/
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1151,7 +1151,7 @@ static void TT_DrawTimeTable (void)
    unsigned ColumnsToDrawIncludingExtraColumn;
    unsigned ContinuousFreeMinicolumns;
 
-   /***** Table start *****/
+   /***** Start table *****/
    fprintf (Gbl.F.Out,"<table id=\"timetable\">");
 
    /***** Top row used for column adjustement *****/
@@ -1286,7 +1286,7 @@ static void TT_DrawTimeTable (void)
    /***** Bottom row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();
 
-   /***** End of the table *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
   }
 
@@ -1698,11 +1698,11 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 break;
      }
 
-   /***** End of form *****/
+   /***** End form *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT ||
        Gbl.TimeTable.View == TT_TUT_EDIT)
       Act_FormEnd ();
 
-   /***** End of cell *****/
+   /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
   }

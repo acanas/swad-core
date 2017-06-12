@@ -185,7 +185,7 @@ void Hld_SeeHolidays (void)
 	 Act_FormEnd ();
 	}
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
 
       /***** Free list of holidays *****/
@@ -502,12 +502,13 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Holidays,NULL,
                       Hlp_INSTITUTION_Holidays_edit,
 		      false,	// Not closable
                       2);
 
-   /***** Table head *****/
+   /***** Write heading *****/
    Hld_PutHeadHolidays ();
 
    /***** Write all the holidays *****/
@@ -611,6 +612,7 @@ static void Hld_ListHolidaysForEdition (void)
                          "</tr>");
      }
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -961,7 +963,7 @@ static void Hld_PutFormToCreateHoliday (void)
    /***** Start form *****/
    Act_FormStart (ActNewHld);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_holiday,NULL,
                       Hlp_INSTITUTION_Holidays_edit,
 		      false,	// Not closable
@@ -1052,10 +1054,10 @@ static void Hld_PutFormToCreateHoliday (void)
                       "</tr>",
             Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name);
 
-   /***** Send button and end of frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_holiday);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

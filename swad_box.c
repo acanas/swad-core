@@ -62,7 +62,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
                                   const char *ClassFrame);
 
 /*****************************************************************************/
-/****************** Start and end a table with rounded frame *****************/
+/******************* Start and end a table with rounded box ******************/
 /*****************************************************************************/
 // CellPadding must be 0, 1, 2, 4 or 8
 
@@ -119,7 +119,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    extern const char *Txt_Close;
    char IdFrame[Act_MAX_BYTES_ID];
 
-   /***** Start frame container *****/
+   /***** Start box container *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");
    if (Closable)
      {
@@ -129,7 +129,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
      }
    fprintf (Gbl.F.Out,">");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\"",ClassFrame);
    if (Width)
        fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
@@ -161,7 +161,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
                Gbl.Prefs.IconsURL,
                Txt_Help,Txt_Help);
 
-   if (Closable)	// Icon to close the frame
+   if (Closable)	// Icon to close the box
       fprintf (Gbl.F.Out,"<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
                          "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
@@ -184,11 +184,11 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
 	                 "%s"
 	                 "</div>",
-	       Gbl.Layout.FrameNested ? "FRAME_TITLE_SMALL" :
+	       Gbl.Layout.NestedBox ? "FRAME_TITLE_SMALL" :
 		                        "FRAME_TITLE_BIG",
 	       Title);
 
-   Gbl.Layout.FrameNested++;
+   Gbl.Layout.NestedBox++;
   }
 
 void Box_EndBoxTable (void)
@@ -211,9 +211,9 @@ void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton)
 
 void Box_EndBox (void)
   {
-   Gbl.Layout.FrameNested--;
+   Gbl.Layout.NestedBox--;
 
-   /***** End frame and frame container *****/
+   /***** End box and box container *****/
    fprintf (Gbl.F.Out,"</div>"
 		      "</div>");
   }

@@ -116,12 +116,12 @@ void Ban_SeeBanners (void)
                        " WHERE Hidden='N'"
 	               " ORDER BY ShortName");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutFormToEditBanners,
                  Hlp_SYSTEM_Banners,
                  false);	// Not closable
 
-   /***** Write all frames *****/
+   /***** Write all banners *****/
    if (Gbl.Banners.Num)	// There are banners
       Ban_WriteListOfBanners ();
    else			// No banners created
@@ -135,7 +135,7 @@ void Ban_SeeBanners (void)
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of banners *****/
@@ -207,7 +207,7 @@ void Ban_EditBanners (void)
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
 	               " FROM banners ORDER BY ShortName");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutIconToViewBanners,
                  Hlp_SYSTEM_Banners_edit,
                  false);	// Not closable
@@ -219,7 +219,7 @@ void Ban_EditBanners (void)
    if (Gbl.Banners.Num)
       Ban_ListBannersForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of banners *****/
@@ -832,7 +832,7 @@ static void Ban_PutFormToCreateBanner (void)
    /***** Start form *****/
    Act_FormStart (ActNewBan);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_banner,NULL,
                       Hlp_SYSTEM_Banners_edit,
 		      false,	// Not closable
@@ -883,10 +883,10 @@ static void Ban_PutFormToCreateBanner (void)
                       "</tr>",
             Cns_MAX_CHARS_WWW,Ban->WWW);
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_banner);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

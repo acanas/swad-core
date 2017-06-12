@@ -325,7 +325,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    Act_Action_t NextAction;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Photo,
                  ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
                          Pho_PutIconToRequestRemoveOtherUsrPhoto,
@@ -376,7 +376,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1692,7 +1692,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 /***** Link to computation of average photos *****/
 	 Pho_PutLinkToCalculateDegreeStats ();
 
-	 /***** Start frame *****/
+	 /***** Start box *****/
 	 Box_StartBox (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
 		       Hlp_STATS_Degrees,
                        false);	// Not closable
@@ -1710,7 +1710,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Tbl_EndTable ();
 	 break;
       case Pho_DEGREES_PRINT:
-	 /***** Start frame *****/
+	 /***** Start box *****/
 	 Box_StartBox (NULL,Txt_Degrees,NULL,
 	               NULL,
                        false);	// Not closable
@@ -1735,7 +1735,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 break;
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

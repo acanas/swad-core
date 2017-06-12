@@ -439,7 +439,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.WebService.Function = Svc_unknown;
 
-   Gbl.Layout.FrameNested = 0;
+   Gbl.Layout.NestedBox = 0;
   }
 
 /*****************************************************************************/

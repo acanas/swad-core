@@ -377,7 +377,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    extern const char *Txt_Remove_me_from_this_course;
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Enrolment,NULL,
                  Hlp_USERS_SignUp_confirm_enrolment,
                  false);	// Not closable
@@ -424,7 +424,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Mark possible notification as seen *****/
@@ -706,7 +706,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
    Act_FormStart (NextAction);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Title,NULL,
 	         Hlp_USERS_Administration_administer_multiple_users,
                  false);	// Not closable
@@ -759,10 +759,10 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
             Txt_Step_4_Confirm_the_enrolment_removing);
    Pwd_AskForConfirmationOnDangerousAction ();
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Confirm);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -797,7 +797,7 @@ void Enr_AskRemoveOldUsrs (void)
    /***** Start form *****/
    Act_FormStart (ActRemOldUsr);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Eliminate_old_users,NULL,
                  NULL,
                  false);	// Not closable
@@ -821,7 +821,7 @@ void Enr_AskRemoveOldUsrs (void)
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</label>");
 
-   /***** End frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
@@ -1854,7 +1854,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Remove_all_students,NULL,
                  Hlp_USERS_Administration_remove_all_students,
                  false);	// Not closable
@@ -1882,7 +1882,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -2307,7 +2307,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ("ScopeEnr");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("100%",Txt_Enrolment_requests,NULL,
                  Hlp_USERS_Requests,
                  false);	// Not closable
@@ -2955,7 +2955,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /***** Put link to register students *****/
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -3126,7 +3126,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    extern const char *Txt_Administer_one_user;
    Act_Action_t NextAction;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Administer_one_user,NULL,
                  Hlp_USERS_Administration_administer_one_user,
                  false);	// Not closable
@@ -3153,7 +3153,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
      }
    Enr_WriteFormToReqAnotherUsrID (NextAction);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

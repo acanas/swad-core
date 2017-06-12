@@ -213,7 +213,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
                                      0,
                                      &Pagination);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
                  Hlp_ASSESSMENT_Surveys,
                  false);	// Not closable
@@ -276,7 +276,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Svy_CheckIfICanCreateSvy ())
       Svy_PutButtonToCreateNewSvy ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Write again links to pages *****/
@@ -432,7 +432,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    struct Survey Svy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Start frame *****/
+   /***** Start box *****/
    if (ShowOnlyThisSvyComplete)
       Box_StartBox (NULL,Txt_Survey,NULL,
                     Hlp_ASSESSMENT_Surveys,
@@ -674,7 +674,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       /***** End table *****/
       Tbl_EndTable ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
   }
@@ -1817,7 +1817,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	                          ActChgSvy);
    Svy_PutParams ();
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    if (ItsANewSurvey)
       Box_StartBoxTable (NULL,Txt_New_survey,NULL,
                          Hlp_ASSESSMENT_Surveys_new_survey,
@@ -1895,7 +1895,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Groups *****/
    Svy_ShowLstGrpsToEditSurvey (Svy.SvyCod);
 
-   /***** Button to create/modify survey and end frame *****/
+   /***** End table, send button and end box *****/
    if (ItsANewSurvey)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_survey);
    else
@@ -2015,7 +2015,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num)
      {
-      /***** Start table *****/
+      /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
@@ -2050,7 +2050,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
          if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],SvyCod,Grp_SURVEY);
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -2653,7 +2653,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
         }
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
      {
       /* Parameters for contextual icon */
@@ -2766,7 +2766,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free memory for answers *****/
@@ -3182,7 +3182,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy->SvyCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
    Box_StartBox (NULL,Txt_Questions,Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                            NULL,
@@ -3306,7 +3306,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

@@ -283,7 +283,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    /***** Start form to upload logo *****/
    Act_FormStart (ActionRec);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Logo,NULL,
                  NULL,
                  false);	// Not closable
@@ -304,7 +304,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** End form *****/

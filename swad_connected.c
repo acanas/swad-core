@@ -95,7 +95,7 @@ void Con_ShowConnectedUsrs (void)
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeCon");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    /* Current time */
    sprintf (Gbl.Title,"%s<div id=\"connected_current_time\"></div>",
 	    Txt_Connected_users);
@@ -117,7 +117,7 @@ void Con_ShowConnectedUsrs (void)
    if (Gbl.Scope.Current != Sco_SCOPE_UNK)
       Con_ShowConnectedUsrsBelongingToLocation ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -161,7 +161,7 @@ void Con_ShowLastClicks (void)
    extern const char *Hlp_USERS_Connected_last_clicks;
    extern const char *Txt_Last_clicks_in_real_time;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
                  Hlp_USERS_Connected_last_clicks,
                  false);	// Not closable
@@ -172,7 +172,7 @@ void Con_ShowLastClicks (void)
    Con_GetAndShowLastClicks ();
    fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -381,7 +381,7 @@ void Con_ShowGlobalConnectedUsrs (void)
             Gbl.Session.NumSessions,
             (Gbl.Session.NumSessions == 1) ? Txt_session :
         	                             Txt_sessions);
-   /* End of link to view more details about connected users */
+   /* End link to view more details about connected users */
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
 

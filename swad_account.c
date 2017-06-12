@@ -143,7 +143,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_ID;
    extern const char *Txt_Check;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Title,NULL,
                  Hlp_PROFILE_SignUp,
                  true);	// Closable
@@ -164,7 +164,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Btn_PutConfirmButton (Txt_Check);
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -214,7 +214,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 
       if (NumUsrs)
 	{
-	 /***** Start frame and write message with number of accounts found *****/
+         /***** Start box and table *****/
 	 Box_StartBoxTable (NULL,
 	                    (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					     Txt_Do_you_think_you_are_one_of_these_users,
@@ -247,7 +247,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&UsrDat);
 
-	 /***** End frame *****/
+	 /***** End table and box *****/
 	 Box_EndBoxTable ();
 	}
       else
@@ -345,8 +345,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_Email;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   /***** Form to enter some data of the new user *****/
+   /***** Start form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
+
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Create_account,NULL,
                       Hlp_PROFILE_SignUp,
                       false,	// Not closable
@@ -395,8 +397,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Password *****/
    Pwd_PutFormToGetNewPasswordOnce ();
 
-   /***** Send button and form end *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_account);
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -410,7 +414,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_PROFILE_SignUp,
@@ -421,7 +425,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    Btn_PutCreateButton (Txt_Create_account);
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -472,7 +476,7 @@ void Acc_ShowFormChangeMyAccount (void)
       Acc_PutLinkToRemoveMyAccount ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_User_account,NULL,
                       Hlp_PROFILE_Account,
 		      false,	// Not closable
@@ -518,7 +522,7 @@ void Acc_ShowFormChangeMyAccount (void)
      }
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,true);
 
-   /***** End of table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 

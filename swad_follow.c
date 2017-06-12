@@ -131,7 +131,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
                                           false,
                                           &mysql_res)))
      {
-      /***** Start frame *****/
+      /***** Start box and table *****/
       Box_StartBoxTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
                          Hlp_SOCIAL_Profiles_who_to_follow,
 			 false,	// Not closable
@@ -164,7 +164,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End frame *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else
@@ -687,7 +687,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&FollowingUsrDat);
 
-	 /***** Start listing *****/
+         /***** Start box and table *****/
 	 Box_StartBoxTable ("560px",Txt_Following,NULL,
 	                    NULL,
 			    false,	// Not closable
@@ -713,7 +713,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	       fprintf (Gbl.F.Out,"</tr>");
 	   }
 
-	 /***** End listing *****/
+         /***** End table and box *****/
 	 Box_EndBoxTable ();
 
 	 /***** Free memory used for user's data *****/
@@ -773,7 +773,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
 
-	 /***** Start listing *****/
+         /***** Start box and table *****/
 	 Box_StartBoxTable ("560px",Txt_Followers,NULL,
 	                    NULL,
 			    false,	// Not closable
@@ -799,7 +799,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	       fprintf (Gbl.F.Out,"</tr>");
 	   }
 
-	 /***** End listing *****/
+         /***** End table and box *****/
 	 Box_EndBoxTable ();
 
 	 /***** Free memory used for user's data *****/

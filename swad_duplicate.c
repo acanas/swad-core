@@ -140,7 +140,7 @@ void Dup_ListDuplicateUsrs (void)
    struct UsrData UsrDat;
    unsigned NumInformants;
 
-   /***** Start frame with list of possible duplicate users *****/
+   /***** Start box with list of possible duplicate users *****/
    Box_StartBox (NULL,Txt_Possibly_duplicate_users,NULL,
                  Hlp_USERS_Duplicates_possibly_duplicate_users,
                  false);	// Not closable
@@ -230,7 +230,7 @@ void Dup_ListDuplicateUsrs (void)
       /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -260,7 +260,7 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsrs;
    unsigned NumUsr;
 
-   /***** Start frame with list of possible duplicate users *****/
+   /***** Start box with list of possible duplicate users *****/
    Box_StartBox (NULL,Txt_Similar_users,NULL,
                  Hlp_USERS_Duplicates_similar_users,
                  false);	// Not closable
@@ -372,7 +372,7 @@ static void Dup_ListSimilarUsrs (void)
       /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

@@ -646,7 +646,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
             Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus);
    NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,
                  (Gbl.ExamAnns.HighlightExaCod > 0 ||
 		  Gbl.ExamAnns.HighlightDate[0]) ? Txt_All_announcements_of_exams :
@@ -698,7 +698,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    /***** Put link to register students *****/
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1070,7 +1070,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
          break;
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("625px",NULL,
                  TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
                                                                NULL,
@@ -1521,16 +1521,13 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-
-   /***** End frame *****/
+   /***** End table, send button and end box *****/
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Box_EndBoxWithButton ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Btn_CONFIRM_BUTTON :
-	                                                                       Btn_CREATE_BUTTON,
-	                           Txt_Publish_announcement_OF_EXAM);
+      Box_EndBoxTableWithButton ((Gbl.ExamAnns.ExaDat.ExaCod > 0) ? Btn_CONFIRM_BUTTON :
+	                                                            Btn_CREATE_BUTTON,
+	                         Txt_Publish_announcement_OF_EXAM);
    else
-      Box_EndBox ();
+      Box_EndBoxTable ();
 
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       QR_ExamAnnnouncement ();

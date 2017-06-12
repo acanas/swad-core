@@ -389,7 +389,7 @@ void Ntf_ShowMyNotifications (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_MESSAGES_Notifications,
                  false);	// Not closable
@@ -646,7 +646,7 @@ void Ntf_ShowMyNotifications (void)
       Ale_ShowAlert (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
 	                                         Txt_You_have_no_unread_notifications);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
@@ -1898,7 +1898,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_PROFILE_Preferences_notifications,
                  false);	// Not closable
@@ -1961,7 +1961,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** End form *****/
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 

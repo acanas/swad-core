@@ -106,7 +106,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Get parameters *****/
    Ind_GetParamsIndicators ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Indicators_of_courses,NULL,
                  Hlp_STATS_Indicators,
                  false);	// Not closable
@@ -201,7 +201,7 @@ void Ind_ReqIndicatorsCourses (void)
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
@@ -710,7 +710,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    unsigned NumIndicators;
    struct Ind_IndicatorsCrs Indicators;
 
-   /***** Table start *****/
+   /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"INDICATORS\">");
 
    /***** Write table heading *****/

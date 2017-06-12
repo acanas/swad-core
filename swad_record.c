@@ -184,11 +184,15 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
      {
+      /* Start box and table */
       Box_StartBoxTable (NULL,Txt_Record_fields,NULL,
                          Hlp_USERS_Students_course_record_card,
 			 false,	// Not closable
                          2);
+
       Rec_ListFieldsRecordsForEdition ();
+
+      /* End table and box */
       Box_EndBoxTable ();
      }
    else	// No fields of records found for current course in the database
@@ -359,7 +363,7 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Start form *****/
    Act_FormStart (ActNewFie);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_record_field,NULL,
                       Hlp_USERS_Students_course_record_card,
 		      false,	// Not closable
@@ -408,7 +412,7 @@ void Rec_ShowFormCreateRecordField (void)
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
@@ -1777,14 +1781,14 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	 Lay_ShowErrorAndExit ("Wrong role.");
      }
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Box_StartBoxTable (StrRecordWidth,NULL,NULL,
                       Rec_RecordHelp[TypeOfView],
 		      false,	// Not closable
                       2);
 
-   /***** Header *****/
+   /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP\">");
    Tbl_StartTableWide (0);
@@ -1890,13 +1894,17 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
         }
      }
 
-   /***** Button to save changes and end frame *****/
+   /***** End box *****/
    if (ICanEdit)
      {
+      /* End table, send button and end box */
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+
+      /* End form */
       Act_FormEnd ();
      }
    else
+      /* End table and box */
       Box_EndBoxTable ();
   }
 
@@ -2313,7 +2321,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    if (Ins.InsCod > 0)
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
@@ -2524,7 +2532,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			 "</tr>");
      }
 
-   /***** End frame *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -3993,7 +4001,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
          Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_department);
      }
 
-   /***** Start table *****/
+   /***** Start box and table *****/
    Box_StartBoxTable ("800px",IAmATeacher ? Txt_Institution_centre_and_department :
 	                                    Txt_Institution,
 	              NULL,
@@ -4226,7 +4234,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	                 "</tr>");
      }
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 

@@ -263,7 +263,7 @@ static void Tab_WriteBreadcrumbTab (void)
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.Action.Tab);
    Act_LinkFormSubmit (Txt_TABS_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
-   /***** Title and end of form *****/
+   /***** Title and end form *****/
    fprintf (Gbl.F.Out,"%s</a>",Txt_TABS_TXT[Gbl.Action.Tab]);
    Act_FormEnd ();
   }
@@ -282,7 +282,7 @@ static void Tab_WriteBreadcrumbAction (void)
    Act_FormStart (Act_Actions[Gbl.Action.Act].SuperAction);
    Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
-   /***** Title and end of form *****/
+   /***** Title and end form *****/
    fprintf (Gbl.F.Out,"%s</a>",
 	    Title);
    Act_FormEnd ();

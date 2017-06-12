@@ -269,7 +269,7 @@ void Lay_WriteStartOfPage (void)
       return;
      }
 
-   /***** Start of box that contains the whole page except the foot *****/
+   /***** Start box that contains the whole page except the foot *****/
    fprintf (Gbl.F.Out,"<div id=\"whole_page\">");
 
    /***** Header of layout *****/
@@ -326,7 +326,7 @@ void Lay_WriteStartOfPage (void)
    /* Menu */
    Mnu_WriteMenuThisTab ();
 
-   /* Start of canvas: main zone for actions output */
+   /* Start canvas: main zone for actions output */
    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
 
    /* If it is mandatory to read any information about course */
@@ -827,7 +827,7 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<header>");
 
    /***** 1st. row *****/
-   /* Start of 1st. row */
+   /* Start 1st. row */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1\" class=\"%s\">",
             ClassHeadRow1[Gbl.Prefs.Theme]);
 
@@ -889,11 +889,11 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"</div>"		// login_box
 	              "</div>");	// head_row_1_right
 
-   /* End of 1st. row */
+   /* End 1st. row */
    fprintf (Gbl.F.Out,"</div>");	// head_row_1
 
    /***** 2nd. row *****/
-   /* Start of second row */
+   /* Start second row */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2\" class=\"%s\">",
             ClassHeadRow2[Gbl.Prefs.Theme]);
 
@@ -901,7 +901,7 @@ static void Lay_WritePageTopHeading (void)
       Clock with hour:minute (server hour is shown) */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_time\">");
    Dat_ShowClientLocalTime ();
-   fprintf (Gbl.F.Out,"</div>");	// End of first column
+   fprintf (Gbl.F.Out,"</div>");	// End first column
 
    /* 2nd. row, 2nd. column: degree and course */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
@@ -915,7 +915,7 @@ static void Lay_WritePageTopHeading (void)
       Ntf_WriteNumberOfNewNtfs ();
    fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
-   /* End of 2nd. row */
+   /* End 2nd. row */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End header *****/
@@ -1412,7 +1412,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Crs.CrsCod = CrsCod;
    Crs_GetDataOfCourseByCod (&Crs);
 
-   /***** Table start *****/
+   /***** Start table *****/
    fprintf (Gbl.F.Out,"<table style=\"width:100%%; padding:12px;\">"
                       "<tr>");
 
@@ -1497,7 +1497,7 @@ void Lay_AdvertisementMobile (void)
      {
       fprintf (Gbl.F.Out,"<div style=\"margin-top:25px;\">");
 
-      /***** Table start *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,NULL,NULL,
                          NULL,
 			 false,	// Not closable
@@ -1519,7 +1519,7 @@ void Lay_AdvertisementMobile (void)
                Gbl.Prefs.IconsURL,
                Txt_Stay_connected_with_SWADroid);
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
 
       fprintf (Gbl.F.Out,"</div>");

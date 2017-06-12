@@ -174,7 +174,7 @@ void Prf_RequestUserProfile (void)
    /***** Start form *****/
    Act_FormStart (ActSeeOthPubPrf);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
                  Hlp_SOCIAL_Profiles_view_public_profile,
                  false);	// Not closable
@@ -192,7 +192,7 @@ void Prf_RequestUserProfile (void)
             Nck_MAX_BYTES_NICKNAME_FROM_FORM,
             Gbl.Usrs.Me.UsrDat.Nickname);
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
@@ -468,7 +468,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Prf_PutLinkToUpdateAction (ActCal1stClkTim,UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** End of left list *****/
+   /***** End left list *****/
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
 
@@ -591,7 +591,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</li>");
      }
 
-   /***** End of right list *****/
+   /***** End right list *****/
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
   }

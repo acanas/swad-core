@@ -589,7 +589,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    extern const char *Txt_You_should_read_the_following_information;
    Inf_InfoType_t InfoType;
 
-   /***** Start of frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Required_reading,NULL,
                  NULL,
                  false);	// Not closable
@@ -619,7 +619,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
 
-   /***** End of frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1031,7 +1031,7 @@ static void Inf_ShowPage (const char *URL)
       Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
      };
 
-   /***** Start of frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                  ICanEdit ? Inf_PutIconToEditInfo :
                             NULL,
@@ -1046,7 +1046,7 @@ static void Inf_ShowPage (const char *URL)
 		        Txt_View_in_a_new_window);
    fprintf (Gbl.F.Out,"</a>");
 
-   /***** End of frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1118,7 +1118,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /***** Form to choice between alternatives *****/
-   /* Start of table */
+   /* Start box and table */
    Box_StartBoxTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
                       HelpEdit[Gbl.CurrentCrs.Info.Type],
 		      false,	// Not closable
@@ -1171,7 +1171,7 @@ void Inf_FormsToSelSendInfo (void)
 	                 "</tr>");
      }
 
-   /* End of table */
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -1788,7 +1788,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
    if (TxtHTML[0])
      {
-      /***** Start frame *****/
+      /***** Start box *****/
       Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
@@ -1809,7 +1809,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       /***** Write text *****/
       fprintf (Gbl.F.Out,"%s",TxtHTML);
 
-      /***** End frame *****/
+      /***** End box *****/
       fprintf (Gbl.F.Out,"</div>");
       Box_EndBox ();
 
@@ -1873,7 +1873,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
    if (TxtMD[0])
      {
-      /***** Start frame *****/
+      /***** Start box *****/
       Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
@@ -1943,7 +1943,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       fclose (FileHTML);
       unlink (PathFileHTML);
 
-      /***** End frame *****/
+      /***** End box *****/
       fprintf (Gbl.F.Out,"</div>");
       Box_EndBox ();
 
@@ -2061,7 +2061,7 @@ void Inf_EditPlainTxtInfo (void)
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Start form and frame *****/
+   /***** Start form and box *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
                  HelpEdit[Gbl.CurrentCrs.Info.Type],
@@ -2084,7 +2084,7 @@ void Inf_EditPlainTxtInfo (void)
 	              "</div>",
             TxtHTML);
 
-   /***** End frame and form *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
@@ -2113,7 +2113,7 @@ void Inf_EditRichTxtInfo (void)
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Start form and frame *****/
+   /***** Start form and box *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
                  HelpEdit[Gbl.CurrentCrs.Info.Type],
@@ -2136,7 +2136,7 @@ void Inf_EditRichTxtInfo (void)
 	              "</div>",
             TxtHTML);
 
-   /***** End frame and form *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }

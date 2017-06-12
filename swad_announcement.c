@@ -119,7 +119,7 @@ void Ann_ShowAllAnnouncements (void)
             (unsigned) (1 << Rol_UNK));
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox ("550px",Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,
@@ -168,7 +168,7 @@ void Ann_ShowAllAnnouncements (void)
    if (ICanEdit)
       Ann_PutButtonToAddNewAnnouncement ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free structure that stores the query result *****/
@@ -411,7 +411,7 @@ void Ann_ShowFormAnnouncement (void)
    /***** Start form *****/
    Act_FormStart (ActRcvAnn);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
                       Hlp_MESSAGES_Announcements,
 		      false,	// Not closable
@@ -443,7 +443,7 @@ void Ann_ShowFormAnnouncement (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** Button to create announcement and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/

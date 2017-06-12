@@ -108,13 +108,15 @@ void Mai_SeeMailDomains (void)
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
 
-   /***** Table head *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                NULL,
                       Hlp_MESSAGES_Domains,
 		      false,	// Not closable
                       2);
+
+   /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
@@ -155,7 +157,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].Info,
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
-   /***** End table *****/
+   /***** End table and box *****/
    Box_EndBoxTable ();
 
    /***** Free list of mail domains *****/
@@ -450,12 +452,13 @@ static void Mai_ListMailDomainsForEdition (void)
    unsigned NumMai;
    struct Mail *Mai;
 
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
                       Hlp_MESSAGES_Domains_edit,
 		      false,	// Not closable
                       2);
 
-   /***** Table head *****/
+   /***** Write heading *****/
    Mai_PutHeadMailDomains ();
 
    /***** Write all the mail domains *****/
@@ -512,6 +515,7 @@ static void Mai_ListMailDomainsForEdition (void)
                Mai->NumUsrs);
      }
 
+   /***** End table and box *****/
    Box_EndBoxTable ();
   }
 
@@ -718,7 +722,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    /***** Start form *****/
    Act_FormStart (ActNewMai);
 
-   /***** Start of frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
                       Hlp_MESSAGES_Domains_edit,
 		      false,	// Not closable
@@ -756,10 +760,10 @@ static void Mai_PutFormToCreateMailDomain (void)
             Mai_MAX_CHARS_MAIL_INFO,Mai->Info);
 
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_email_domain);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -889,7 +893,7 @@ void Mai_ListEmails (void)
    /***** Get and order list of students in this course *****/
    Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
-   /***** Start of the frame used to list the emails *****/
+   /***** Start the box used to list the emails *****/
    Box_StartBox (NULL,Txt_Students_who_have_accepted_and_who_have_email,
 		 NULL,
 		 Hlp_MESSAGES_Email,
@@ -994,7 +998,7 @@ void Mai_ListEmails (void)
    /***** End section with user list *****/
    Lay_EndSection ();
 
-   /***** End of the frame used to list the emails *****/
+   /***** End the box used to list the emails *****/
    Box_EndBox ();
 
    /***** Free memory for students list *****/
@@ -1188,7 +1192,7 @@ void Mai_ShowFormOthEmail (void)
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Start frame *****/
+	 /***** Start box *****/
          Box_StartBox (NULL,Txt_Email,NULL,
                        NULL,
                        false);	// Not closable
@@ -1203,7 +1207,7 @@ void Mai_ShowFormOthEmail (void)
                                      (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
 	 Tbl_EndTable ();
 
-         /***** End frame *****/
+         /***** End box *****/
          Box_EndBox ();
 	}
       else
@@ -1629,7 +1633,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
    extern const char *Txt_Please_check_and_confirm_your_email_address;
    extern const char *Txt_Check;
 
-   /***** Frame with button to check email address *****/
+   /***** Box with button to check email address *****/
    Box_StartBox (NULL,Txt_Email_unconfirmed,NULL,
                  Hlp_PROFILE_Account_email,
                  true);	// Closable

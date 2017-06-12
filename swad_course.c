@@ -183,7 +183,7 @@ static void Crs_Configuration (bool PrintView)
    bool IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
-   /***** Messages and links above the frame *****/
+   /***** Messages and links above the box *****/
    if (!PrintView)
      {
       /* Link to request enrolment in the current course */
@@ -196,7 +196,7 @@ static void Crs_Configuration (bool PrintView)
 	}
      }
 
-   /***** Start frame *****/
+   /***** Start box *****/
    if (PrintView)
       Box_StartBox (NULL,NULL,NULL,
 		    NULL,
@@ -469,7 +469,7 @@ static void Crs_Configuration (bool PrintView)
    /***** End table *****/
    Tbl_EndTable ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -549,7 +549,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
-   /***** Table start *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_My_courses,NULL,
                  Hlp_PROFILE_Courses,
                  false);	// Not closable
@@ -778,7 +778,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_resCty);
 
-   /***** End frame *****/
+   /***** End box *****/
    fprintf (Gbl.F.Out,"</ul>");
    Box_EndBox ();
   }
@@ -1065,7 +1065,7 @@ void Crs_WriteSelectorMyCourses (void)
    Act_FormGoToStart (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
                                                ActSysReqSch);
 
-   /***** Start of selector of courses *****/
+   /***** Start selector of courses *****/
    fprintf (Gbl.F.Out,"<select id=\"my_courses\" name=\"crs\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
@@ -1138,7 +1138,7 @@ static void Crs_ListCourses (void)
    extern const char *Txt_Create_course;
    unsigned Year;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,
@@ -1173,7 +1173,7 @@ static void Crs_ListCourses (void)
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1338,7 +1338,7 @@ void Crs_EditCourses (void)
    /***** Get list of degrees in this centre *****/
    Deg_GetListDegsOfCurrentCtr ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Alert.Txt,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Alert.Txt,Crs_PutIconToViewCourses,
                  Hlp_DEGREE_Courses,
@@ -1351,7 +1351,7 @@ void Crs_EditCourses (void)
    if (Gbl.CurrentDeg.NumCrss)
       Crs_ListCoursesForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of courses in this degree *****/
@@ -1645,11 +1645,13 @@ static void Crs_PutFormToCreateCourse (void)
    else
       Lay_ShowErrorAndExit ("You can not edit courses.");
 
-   /***** Write heading *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_course,NULL,
                       NULL,
 		      false,	// Not closable
                       2);
+
+   /***** Write heading *****/
    Crs_PutHeadCoursesForEdition ();
 
    /***** Column to remove course, disabled here *****/
@@ -1720,7 +1722,7 @@ static void Crs_PutFormToCreateCourse (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_course);
 
    /***** End form *****/
@@ -3005,7 +3007,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    /***** List the courses (one row per course) *****/
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
-      /* Start frame and table */
+      /* Start box and table */
       Box_StartBoxTable ("100%",NULL,NULL,
                          NULL,
 			 false,	// Not closable
@@ -3056,7 +3058,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
          Crs_WriteRowCrsData (NumCrs,row,true);
         }
 
-      /* End table and frame */
+      /* End table and box */
       Box_EndBoxTable ();
      }
 
@@ -3088,7 +3090,7 @@ unsigned Crs_ListCrssFound (const char *Query)
    /***** List the courses (one row per course) *****/
    if (NumCrss)
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       /* Number of courses found */
       sprintf (Gbl.Title,"%u %s",
                NumCrss,(NumCrss == 1) ? Txt_course :
@@ -3098,7 +3100,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 			 false,	// Not closable
                          2);
 
-      /* Heading row */
+      /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"BM\"></th>"
 			 "<th class=\"LEFT_MIDDLE\">"
@@ -3123,7 +3125,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
 	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 
-      /* Write courses */
+      /***** Write courses *****/
       for (NumCrs = 1;
 	   NumCrs <= NumCrss;
 	   NumCrs++)
@@ -3135,7 +3137,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 	 Crs_WriteRowCrsData (NumCrs,row,false);
 	}
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 
@@ -3331,7 +3333,7 @@ void Crs_AskRemoveOldCrss (void)
    /***** Start form *****/
    Act_FormStart (ActRemOldCrs);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Eliminate_old_courses,NULL,
                  Hlp_SYSTEM_Hierarchy_eliminate_old_courses,
                  false);	// Not closable
@@ -3355,7 +3357,7 @@ void Crs_AskRemoveOldCrss (void)
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</label>");
 
-   /***** End frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/

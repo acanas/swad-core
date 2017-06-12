@@ -342,15 +342,15 @@ void Mnu_WriteMenuThisTab (void)
 
          Title = Act_GetSubtitleAction (NumAct);
 
-         /***** Start of element *****/
+         /***** Start element *****/
 	 fprintf (Gbl.F.Out,"<li class=\"MENU_LIST_ITEM\">");
 
-         /***** Start of container used to highlight this option *****/
+         /***** Start container used to highlight this option *****/
          fprintf (Gbl.F.Out,"<div class=\"%s\">",
                   IsTheSelectedAction ? "MENU_OPT_ON" :
                 	                "MENU_OPT_OFF");
 
-         /***** Start of form and link *****/
+         /***** Start form and link *****/
          Act_FormStart (NumAct);
          Act_LinkFormSubmit (Title,
                              IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
@@ -370,15 +370,15 @@ void Mnu_WriteMenuThisTab (void)
                                         The_ClassTxtMenuOff[Gbl.Prefs.Theme],
 		  Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 
-         /***** End of link and form *****/
+         /***** End link and form *****/
          fprintf (Gbl.F.Out,"</div>"
 	                    "</a>");
 	 Act_FormEnd ();
 
-         /***** End of container used to highlight this option *****/
+         /***** End container used to highlight this option *****/
          fprintf (Gbl.F.Out,"</div>");
 
-         /***** End of element *****/
+         /***** End element *****/
          fprintf (Gbl.F.Out,"</li>");
         }
      }

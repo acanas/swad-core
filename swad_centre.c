@@ -166,11 +166,13 @@ void Ctr_SeeCtrWithPendingDegs (void)
    /***** Get centres *****/
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres with pending degrees")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,
 			 false,	// Not closable
                          2);
+
+      /***** Wrtie heading *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -216,6 +218,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else
@@ -310,7 +313,7 @@ static void Ctr_Configuration (bool PrintView)
 	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      /***** Start frame *****/
+      /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
 		       NULL,
@@ -635,7 +638,7 @@ static void Ctr_Configuration (bool PrintView)
       /***** End table *****/
       Tbl_EndTable ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
   }
@@ -748,7 +751,7 @@ static void Ctr_ListCentres (void)
    extern const char *Txt_Create_centre;
    unsigned NumCtr;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListCentres,
                  Hlp_INSTITUTION_Centres,
@@ -781,7 +784,7 @@ static void Ctr_ListCentres (void)
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -940,7 +943,7 @@ void Ctr_EditCentres (void)
    /***** Get list of centres *****/
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
@@ -954,7 +957,7 @@ void Ctr_EditCentres (void)
    if (Gbl.Ctrs.Num)
       Ctr_ListCentresForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of centres *****/
@@ -2224,7 +2227,7 @@ void Ctr_RequestPhoto (void)
    /***** Start form to upload photo *****/
    Act_FormStart (ActRecCtrPho);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Photo,NULL,
                  NULL,
                  false);	// Not closable
@@ -2251,7 +2254,7 @@ void Ctr_RequestPhoto (void)
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** End form *****/
@@ -2420,7 +2423,7 @@ static void Ctr_PutFormToCreateCentre (void)
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_centre,NULL,
                       NULL,
 		      false,	// Not closable
@@ -2511,7 +2514,7 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** Send button and end of frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End form *****/
@@ -2894,7 +2897,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
    /***** Query database *****/
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       /* Number of centres found */
       sprintf (Gbl.Title,"%u %s",
                NumCtrs,(NumCtrs == 1) ? Txt_centre :
@@ -2903,6 +2906,8 @@ unsigned Ctr_ListCtrsFound (const char *Query)
                          NULL,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable
 
       /***** List the centres (one row per centre) *****/
@@ -2923,7 +2928,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 	 Ctr_ListOneCentreForSeeing (&Ctr,NumCtr);
 	}
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 

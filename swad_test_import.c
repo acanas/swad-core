@@ -136,7 +136,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
    extern const char *Txt_XML_file;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Import_questions,NULL,
                  Hlp_ASSESSMENT_Tests,
                  false);	// Not closable
@@ -157,7 +157,7 @@ void TsI_ShowFormImportQstsFromXML (void)
             Gbl.Form.Id);
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -509,7 +509,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    /***** Allocate and get XML tree *****/
    XML_GetTree (XMLBuffer,&RootElem);
 
-   /***** Table start *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Imported_questions,NULL,
                  Hlp_ASSESSMENT_Tests,
                  false);	// Not closable

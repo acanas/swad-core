@@ -206,7 +206,7 @@ void Plc_SeePlaces (void)
 	 Act_FormEnd ();
 	}
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
 
       /***** Free list of places *****/
@@ -248,7 +248,7 @@ void Plc_EditPlaces (void)
    /***** Get list of places *****/
    Plc_GetListPlaces ();
 
-   /***** Start frame *****/
+   /***** Start box *****/
    Box_StartBox (NULL,Txt_Places,Plc_PutIconToViewPlacesWhenEditing,
                  Hlp_INSTITUTION_Places_edit,
                  false);	// Not closable
@@ -260,7 +260,7 @@ void Plc_EditPlaces (void)
    if (Gbl.Plcs.Num)
       Plc_ListPlacesForEdition ();
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of places *****/
@@ -740,7 +740,7 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Start form *****/
    Act_FormStart (ActNewPlc);
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_place,NULL,
                       NULL,
 		      false,	// Not closable
@@ -780,10 +780,10 @@ static void Plc_PutFormToCreatePlace (void)
 		      "</td>"
 		      "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_place);
 
-   /***** End formn *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

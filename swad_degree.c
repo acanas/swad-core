@@ -169,11 +169,13 @@ void Deg_SeeDegWithPendingCrss (void)
    /***** Get degrees *****/
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees with pending courses")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -219,6 +221,7 @@ void Deg_SeeDegWithPendingCrss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
    else
@@ -298,7 +301,7 @@ static void Deg_Configuration (bool PrintView)
 
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
-      /***** Start frame *****/
+      /***** Start box *****/
       if (PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
 		       NULL,
@@ -531,7 +534,7 @@ static void Deg_Configuration (bool PrintView)
       /***** End table *****/
       Tbl_EndTable ();
 
-      /***** End frame *****/
+      /***** End box *****/
       Box_EndBox ();
      }
   }
@@ -943,13 +946,13 @@ static void Deg_PutFormToCreateDegree (void)
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
-   /***** Start frame *****/
+   /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_degree,NULL,
                       NULL,
 		      false,	// Not closable
                       2);
 
-   /***** Table head *****/
+   /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
 
    /***** Column to remove degree, disabled here *****/
@@ -1023,10 +1026,7 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-
-   /***** Send button and end of frame *****/
+   /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
@@ -1177,7 +1177,7 @@ static void Deg_ListDegrees (void)
    extern const char *Txt_Create_degree;
    unsigned NumDeg;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListDegrees,
                  Hlp_CENTRE_Degrees,
@@ -1210,7 +1210,7 @@ static void Deg_ListDegrees (void)
       Act_FormEnd ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -1356,7 +1356,7 @@ void Deg_EditDegrees (void)
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.FullName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
@@ -1382,7 +1382,7 @@ void Deg_EditDegrees (void)
          DT_EditDegreeTypes ();
      }
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of degree types *****/
@@ -2575,7 +2575,7 @@ unsigned Deg_ListDegsFound (const char *Query)
    /***** Query database *****/
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees")))
      {
-      /***** Write heading *****/
+      /***** Start box and table *****/
       /* Number of degrees found */
       sprintf (Gbl.Title,"%u %s",
                NumDegs,(NumDegs == 1) ? Txt_degree :
@@ -2584,6 +2584,8 @@ unsigned Deg_ListDegsFound (const char *Query)
                          NULL,
 			 false,	// Not closable
                          2);
+
+      /***** Write heading *****/
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees (one row per degree) *****/
@@ -2604,7 +2606,7 @@ unsigned Deg_ListDegsFound (const char *Query)
 	 Deg_ListOneDegreeForSeeing (&Deg,NumDeg);
 	}
 
-      /***** End table *****/
+      /***** End table and box *****/
       Box_EndBoxTable ();
      }
 

@@ -154,7 +154,7 @@ void Rep_ReqMyUsageReport (void)
    /***** Form to show my usage report *****/
    Act_FormStart (ActSeeMyUsgRep);
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_STATS_Report,
@@ -163,10 +163,10 @@ void Rep_ReqMyUsageReport (void)
    /***** Header *****/
    Req_TitleReport (NULL);	// NULL means do not write date
 
-   /***** Send button and end frame *****/
+   /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Generate_report);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -260,7 +260,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
-   /***** Start frame *****/
+   /***** Start box *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_STATS_Report,
@@ -286,7 +286,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s</div>",
             Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
 
-   /***** End frame *****/
+   /***** End box *****/
    Box_EndBox ();
   }
 
@@ -445,7 +445,7 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
    extern const char *Txt_Date;
    extern const char *Txt_Permalink;
 
-   /***** Start of header *****/
+   /***** Start header *****/
    fprintf (Gbl.F.Rep,"<header>");
 
    /***** Main title *****/
@@ -475,7 +475,7 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
             Txt_Permalink,
             Report->Permalink,Report->Permalink);
 
-   /***** End of header *****/
+   /***** End header *****/
    fprintf (Gbl.F.Rep,"</ul>"
 	              "</header>\n");
   }
@@ -491,7 +491,7 @@ static void Rep_WriteSectionPlatform (void)
    extern const char *Txt_TAGLINE;
    extern const char *Txt_URL;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>"
 	              "<ul>",
@@ -511,7 +511,7 @@ static void Rep_WriteSectionPlatform (void)
 	              "</li>",
             Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
@@ -530,7 +530,7 @@ static void Rep_WriteSectionUsrInfo (void)
    char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
    struct Instit Ins;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>"
 	              "<ul>",
@@ -559,7 +559,7 @@ static void Rep_WriteSectionUsrInfo (void)
             Txt_Institution,
             Ins.FullName);
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
@@ -592,7 +592,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    unsigned NumFiles;
    unsigned NumPublicFiles;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>"
 	              "<ul>",
@@ -725,7 +725,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       fprintf (Gbl.F.Rep,"?");
    fprintf (Gbl.F.Rep,"</li>");
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
@@ -738,7 +738,7 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_per_year;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Hits_per_year);
@@ -749,7 +749,7 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
                           Rol_UNK,	// Any role
                           Report);
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</section>\n");
   }
 
@@ -776,7 +776,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    unsigned long NumClicks;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Hits_per_action);
@@ -839,7 +839,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</section>\n");
   }
 
@@ -852,7 +852,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
    extern const char *Txt_Courses;
    Rol_Role_t Role;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s",
             Txt_Courses);
@@ -868,7 +868,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
       /* List my courses with this role */
       Rep_GetAndWriteMyCurrentCrss (Role,Report);
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
@@ -884,7 +884,7 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
    extern const char *Txt_Only_courses_with_more_than_X_clicks_are_shown;
    Rol_Role_t Role;
 
-   /***** Start of section *****/
+   /***** Start section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s (%s)</h3>",
 	    Txt_Courses,Txt_historical_log);
@@ -902,7 +902,7 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
       /* List my courses with this role */
       Rep_GetAndWriteMyHistoricCrss (Role,Report);
 
-   /***** End of section *****/
+   /***** End section *****/
    fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
@@ -1066,7 +1066,7 @@ static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (struct Rep_Report *Report)
 			Report,
 			false);	// Do not write number of users in course
 
-   /***** End of list *****/
+   /***** End list *****/
    fprintf (Gbl.F.Rep,"</ol>"
 		      "</li>");
   }
@@ -1123,7 +1123,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
 			      false);	// Do not write number of users in course
 	}
 
-      /* End of list */
+      /* End list */
       fprintf (Gbl.F.Rep,"</ol>"
 	                 "</li>");
      }
