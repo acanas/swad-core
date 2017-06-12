@@ -933,9 +933,11 @@ void Ctr_EditCentres (void)
    extern const char *Txt_Centres_of_INSTITUTION_X;
 
    /***** Get list of places *****/
+   Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
    Plc_GetListPlaces ();
 
    /***** Get list of centres *****/
+   Gbl.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
    /***** Start box *****/

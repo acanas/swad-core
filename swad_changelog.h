@@ -230,7 +230,6 @@
 // TODO: Link names are too short ==> add more length, for example: "A guide to building and understanding the physics of Water Rockets"
 // TODO: Fix bug: Error when a link end in a dot. Example: "A guide to building..." --> "A guide to building._..url" (two dots)
 
-// TODO: List of places in drop-down menu should be ordered by name
 // TODO: In centre configuration, place should be editable
 
 // TODO: Cuando sólo se cambian los grupos y no el rol de un profesor ya existente, no sale ningún mensaje. se haga lo que se haga en la edición debería salir un mensaje del tipo "Cambios realizados"
@@ -246,6 +245,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.244.1: Jun 12, 2017	Fix bug in edition of centres. (221817 lines)
         Version 16.244:   Jun 12, 2017	Code refactoring related with boxes. (221815 lines)
         Version 16.243:   Jun 12, 2017	Code refactoring related with boxes. (222174 lines)
         Version 16.242:   Jun 11, 2017	Code refactoring related with boxes. (222128 lines)
