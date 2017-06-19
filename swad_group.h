@@ -145,7 +145,7 @@ void Grp_ChangeMyGrps (Cns_QuietOrVerbose_t QuietOrVerbose);
 void Grp_ChangeOtherUsrGrps (void);
 bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant);
 void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
-bool Grp_CheckIfSelectionGrpsIsValid (struct ListCodGrps *LstGrps);
+bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct ListCodGrps *LstGrps);
 void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs);

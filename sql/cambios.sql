@@ -11941,4 +11941,44 @@ CALL update_log_full();
 
 
 
-SELECT COUNT(*) FROM crs_grp_usr WHERE UsrCod=1 AND GrpCod IN (SELECT crs_grp_usr.GrpCod FROM crs_grp_usr,crs_grp,crs_grp_types WHERE crs_grp_usr.UsrCod=7 AND crs_grp_usr.GrpCod=crs_grp.GrpCod AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod AND crs_grp_types.CrsCod=19);
+
+
+
+
+
+
+
+SELECT COUNT(DISTINCT GrpTypCod) FROM
+(
+(
+SELECT crs_grp_types.GrpTypCod AS GrpTypCod,COUNT(*) AS NumStudents,crs_grp.MaxStudents as MaxStudents
+FROM crs_grp_types,crs_grp,crs_usr,crs_grp_usr
+WHERE crs_grp_types.GrpTypCod=15
+AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod
+AND crs_grp.Open='Y'
+AND crs_grp_types.CrsCod=crs_usr.CrsCod
+AND crs_usr.Role=3
+AND crs_grp.GrpCod=crs_grp_usr.GrpCod
+AND crs_grp_usr.UsrCod=crs_usr.UsrCod
+GROUP BY crs_grp.GrpCod
+HAVING NumStudents<MaxStudents
+)
+UNION
+(
+SELECT crs_grp_types.GrpTypCod AS GrpTypCod,0 AS NumStudents,crs_grp.MaxStudents as MaxStudents
+FROM crs_grp_types,crs_grp
+WHERE crs_grp_types.GrpTypCod=15
+AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod
+AND crs_grp.Open='Y'
+AND crs_grp.GrpCod NOT IN
+(SELECT crs_grp_usr.GrpCod FROM crs_grp_types,crs_usr,crs_grp_usr
+WHERE crs_grp_types.GrpTypCod=15
+AND crs_grp_types.CrsCod=crs_usr.CrsCod
+AND crs_usr.Role=3
+AND crs_usr.UsrCod=crs_grp_usr.UsrCod)
+)
+) AS available_grp_types;
+
+
+
+

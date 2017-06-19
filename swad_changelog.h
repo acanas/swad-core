@@ -236,13 +236,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.245 (2017-06-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.246 (2017-06-20)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.246:   Jun 20, 2017	Fixed bugs and code refactoring in groups. (221975 lines)
         Version 16.245:   Jun 12, 2017	Place editable in centre configuration. (221876 lines)
         Version 16.244.1: Jun 12, 2017	Fix bug in edition of centres. (221817 lines)
         Version 16.244:   Jun 12, 2017	Code refactoring related with boxes. (221815 lines)
