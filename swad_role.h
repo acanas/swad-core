@@ -45,7 +45,8 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);
 Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod);
 Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod);
 Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod);
-Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod);
+void Rol_FlushCacheRoleUsrInCrs (void);
+Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod);
 void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat);
 
 Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);

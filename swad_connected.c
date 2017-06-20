@@ -287,7 +287,7 @@ void Con_GetAndShowLastClicks (void)
 
       /* Get institution code (row[5]) */
       Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
-      Ins_GetShortNameOfInstitutionByCod (&Ins);
+      Ins_GetShortNameOfInstitution (&Ins);
 
       /* Get centre code (row[6]) */
       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);

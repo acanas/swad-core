@@ -1403,53 +1403,56 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 /***************************** Get country name ******************************/
 /*****************************************************************************/
 
+void Cty_FlushCacheCountryName (void)
+  {
+   Gbl.Cache.CountryName.CtyCod = -1L;
+   Gbl.Cache.CountryName.CtyName[0] = '\0';
+  }
+
 void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   static struct
-     {
-      long CtyCod;
-      char CtyName[Cty_MAX_BYTES_NAME + 1];
-     } Cached =
-     {
-      -1L,
-      {'\0'}
-     };
 
-   /***** Check if country code is correct *****/
+   /***** 1. Fast check: Trivial case *****/
    if (CtyCod <= 0)
-      CtyName[0] = '\0';	// Empty name
-   else
      {
-      if (CtyCod != Cached.CtyCod)	// If not cached...
-	{
-	 Cached.CtyCod = CtyCod;
+      CtyName[0] = '\0';	// Empty name
+      return;
+     }
 
-	 /***** Get name of the country from database *****/
-	 sprintf (Query,"SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
-		  Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod);
-	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the name of a country")) // Country found...
-	   {
-	    /* Get row */
-	    row = mysql_fetch_row (mysql_res);
+   /***** 2. Fast check: If cached... *****/
+   if (CtyCod == Gbl.Cache.CountryName.CtyCod)
+     {
+      Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,
+		Cty_MAX_BYTES_NAME);
+      return;
+     }
 
-	    /* Get the name of the country */
-	    Str_Copy (Cached.CtyName,row[0],
-		      Cty_MAX_BYTES_NAME);
-	   }
-	 else
-	    Cached.CtyName[0] = '\0';
+   /***** 3. Slow: get country name from database *****/
+   Gbl.Cache.CountryName.CtyCod = CtyCod;
 
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
+   sprintf (Query,"SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
+	    Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get the name of a country")) // Country found...
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
 
-      Str_Copy (CtyName,Cached.CtyName,
+      /* Get the name of the country */
+      Str_Copy (Gbl.Cache.CountryName.CtyName,row[0],
 		Cty_MAX_BYTES_NAME);
      }
+   else
+      Gbl.Cache.CountryName.CtyName[0] = '\0';
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,
+	     Cty_MAX_BYTES_NAME);
   }
 
 /*****************************************************************************/
@@ -1703,6 +1706,9 @@ void Cty_RemoveCountry (void)
 	       Cty.CtyCod);
       DB_QueryDELETE (Query,"can not remove a country");
 
+      /***** Flush cache *****/
+      Cty_FlushCacheCountryName ();
+
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Country_X_removed,
 	       Cty.Name[Gbl.Prefs.Language]);
@@ -1846,6 +1852,9 @@ static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *N
    sprintf (Query,"UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
 	    FieldName,NewCtyName,CtyCod);
    DB_QueryUPDATE (Query,"can not update the name of a country");
+
+   /***** Flush cache *****/
+   Cty_FlushCacheCountryName ();
   }
 
 /*****************************************************************************/

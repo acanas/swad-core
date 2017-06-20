@@ -148,8 +148,8 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
 bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct ListCodGrps *LstGrps);
 void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
-void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs);
-void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat);
+void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
+void Grp_RemUsrFromAllGrps (long UsrCod);
 void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrSvy_t Grp_AsgOrSvy);
 
 void Grp_ReqRegisterInGrps (void);
@@ -166,7 +166,12 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
 bool Grp_CheckIfGroupExists (long GrpCod);
 bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod);
 unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
+
+void Grp_FlushCacheIBelongToGrp (void);
 bool Grp_GetIfIBelongToGrp (long GrpCod);
+void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void);
+bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat);
+
 unsigned Grp_NumGrpTypesMandatIDontBelongAsStd (void);
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GrpNames);
@@ -198,7 +203,5 @@ void Grp_PutParamWhichGrpsOnlyMyGrps (void);
 void Grp_PutParamWhichGrpsAllGrps (void);
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ());
 void Grp_GetParamWhichGrps (void);
-
-bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat);
 
 #endif

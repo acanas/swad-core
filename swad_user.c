@@ -296,7 +296,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
    UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-   UsrDat->Roles.InCurrentCrs.UsrCod = -1L;
+   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = -1L;
    UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = true;
 
@@ -520,9 +520,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
              Pwd_BYTES_ENCRYPTED_PASSWORD);
 
    /* Get roles */
-   UsrDat->Roles.InCurrentCrs.Role   = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-                                                        UsrDat->UsrCod);
-   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+                                                          Gbl.CurrentCrs.Crs.CrsCod);
+   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
@@ -801,37 +801,32 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
 /********************* Check if a user is a superuser ************************/
 /*****************************************************************************/
 
+void Usr_FlushCacheUsrIsSuperuser (void)
+  {
+   Gbl.Cache.UsrIsSuperuser.UsrCod = -1L;
+   Gbl.Cache.UsrIsSuperuser.IsSuperuser = false;
+  }
+
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[256];
-   static struct
-     {
-      long UsrCod;
-      bool IsSuperuser;
-     } Cached =
-     {
-      -1L,
-      false
-     };
 
+   /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0)
-     {
-      /***** Trivial case *****/
-      Cached.UsrCod = -1L;
-      Cached.IsSuperuser = false;
-     }
-   else if (UsrCod != Cached.UsrCod)	// If not cached...
-     {
-      /***** Get if a user is superuser from database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM admin"
-	             " WHERE UsrCod=%ld AND Scope='%s'",
-	       UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
-      Cached.UsrCod = UsrCod;
-      Cached.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
-     }
+      return false;
 
-   return Cached.IsSuperuser;
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Gbl.Cache.UsrIsSuperuser.UsrCod)
+      return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
+
+   /***** 3. Slow check: If not cached, get if a user is superuser from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM admin"
+		  " WHERE UsrCod=%ld AND Scope='%s'",
+	    UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
+   Gbl.Cache.UsrIsSuperuser.UsrCod = UsrCod;
+   Gbl.Cache.UsrIsSuperuser.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
+   return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 
 /*****************************************************************************/
@@ -1168,19 +1163,15 @@ bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
 /*************** Check if a user belongs to any of my courses ****************/
 /*****************************************************************************/
 
+void Usr_FlushCacheUsrSharesAnyOfMyCrs (void)
+  {
+   Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = -1L;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = false;
+  }
+
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
   {
    char Query[256];
-   static struct
-     {
-      long UsrCod;
-      bool UsrSharesAnyOfMyCrs;
-     } Cached =
-     {
-      -1L,
-      false
-     };	// A cache. If this function is called consecutive times
-	// with the same user, only the first time is slow
 
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -1195,8 +1186,8 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
       return true;
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
-   if (UsrDat->UsrCod == Cached.UsrCod)
-      return Cached.UsrSharesAnyOfMyCrs;
+   if (UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod)
+      return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1219,9 +1210,9 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
 	          " WHERE UsrCod=%ld"
 	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
             UsrDat->UsrCod);
-   Cached.UsrSharesAnyOfMyCrs = DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0;
-   Cached.UsrCod = UsrDat->UsrCod;
-   return Cached.UsrSharesAnyOfMyCrs;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
+   return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
   }
 
 /*****************************************************************************/
@@ -1622,36 +1613,26 @@ static void Usr_RemoveTemporaryTableMyCourses (void)
 /**************** Check if a user belongs to an institution ******************/
 /*****************************************************************************/
 
+void Usr_FlushCacheUsrBelongsToIns (void)
+  {
+   Gbl.Cache.UsrBelongsToIns.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToIns.InsCod = -1L;
+   Gbl.Cache.UsrBelongsToIns.Belongs = false;
+  }
+
 bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
   {
    char Query[512];
-   static struct
-     {
-      long UsrCod;
-      long InsCod;
-      bool Belongs;
-     } Cached =
-     {
-      -1L,
-      -1L,
-      false
-     };
 
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
        InsCod <= 0)
-     {
-      /***** Trivial case *****/
-      Cached.UsrCod = -1L;
-      Cached.InsCod = -1L;
-      Cached.Belongs = false;
-      return Cached.Belongs;
-     }
+      return false;
 
    /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Cached.UsrCod &&
-       InsCod != Cached.InsCod)
-      return Cached.Belongs;
+   if (UsrCod == Gbl.Cache.UsrBelongsToIns.UsrCod &&
+       InsCod != Gbl.Cache.UsrBelongsToIns.InsCod)
+      return Gbl.Cache.UsrBelongsToIns.Belongs;
 
    /***** 3. Slow check: Get is user belongs to institution from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
@@ -1663,45 +1644,36 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
 		  " AND degrees.CtrCod=centres.CtrCod"
 		  " AND centres.InsCod=%ld",
 	    UsrCod,InsCod);
-   Cached.UsrCod = UsrCod;
-   Cached.InsCod = InsCod;
-   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
-   return Cached.Belongs;
+   Gbl.Cache.UsrBelongsToIns.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
+   Gbl.Cache.UsrBelongsToIns.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
+   return Gbl.Cache.UsrBelongsToIns.Belongs;
   }
 
 /*****************************************************************************/
 /******************* Check if a user belongs to a centre *********************/
 /*****************************************************************************/
 
+void Usr_FlushCacheUsrBelongsToCtr (void)
+  {
+   Gbl.Cache.UsrBelongsToCtr.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToCtr.CtrCod = -1L;
+   Gbl.Cache.UsrBelongsToCtr.Belongs = false;
+  }
+
 bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
   {
    char Query[512];
-   static struct
-     {
-      long UsrCod;
-      long CtrCod;
-      bool Belongs;
-     } Cached =
-     {
-      -1L,
-      -1L,
-      false
-     };
 
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
        CtrCod <= 0)
-     {
-      Cached.UsrCod = -1L;
-      Cached.CtrCod = -1L;
-      Cached.Belongs = false;
-      return Cached.Belongs;
-     }
+      return false;
 
    /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Cached.UsrCod &&
-       CtrCod == Cached.CtrCod)
-      return Cached.Belongs;
+   if (UsrCod == Gbl.Cache.UsrBelongsToCtr.UsrCod &&
+       CtrCod == Gbl.Cache.UsrBelongsToCtr.CtrCod)
+      return Gbl.Cache.UsrBelongsToCtr.Belongs;
 
    /***** 3. Slow check: Get is user belongs to centre from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
@@ -1712,45 +1684,36 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
 		  " AND courses.DegCod=degrees.DegCod"
 		  " AND degrees.CtrCod=%ld",
 	    UsrCod,CtrCod);
-   Cached.UsrCod = UsrCod;
-   Cached.CtrCod = CtrCod;
-   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
-   return Cached.Belongs;
+   Gbl.Cache.UsrBelongsToCtr.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToCtr.CtrCod = CtrCod;
+   Gbl.Cache.UsrBelongsToCtr.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
+   return Gbl.Cache.UsrBelongsToCtr.Belongs;
   }
 
 /*****************************************************************************/
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
+void Usr_FlushCacheUsrBelongsToDeg (void)
+  {
+   Gbl.Cache.UsrBelongsToDeg.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToDeg.DegCod = -1L;
+   Gbl.Cache.UsrBelongsToDeg.Belongs = false;
+  }
+
 bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
   {
    char Query[512];
-   static struct
-     {
-      long UsrCod;
-      long DegCod;
-      bool Belongs;
-     } Cached =
-     {
-      -1L,
-      -1L,
-      false
-     };
 
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
        DegCod <= 0)
-     {
-      Cached.UsrCod = -1L;
-      Cached.DegCod = -1L;
-      Cached.Belongs = false;
-      return Cached.Belongs;
-     }
+      return false;
 
    /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Cached.UsrCod &&
-       DegCod == Cached.DegCod)
-      return Cached.Belongs;
+   if (UsrCod == Gbl.Cache.UsrBelongsToDeg.UsrCod &&
+       DegCod == Gbl.Cache.UsrBelongsToDeg.DegCod)
+      return Gbl.Cache.UsrBelongsToDeg.Belongs;
 
    /***** 3. Slow check: Get if user belongs to degree from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
@@ -1760,138 +1723,40 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
 		  " AND crs_usr.CrsCod=courses.CrsCod"
 		  " AND courses.DegCod=%ld",
 	    UsrCod,DegCod);
-   Cached.UsrCod = UsrCod;
-   Cached.DegCod = DegCod;
-   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
-   return Cached.Belongs;
-  }
-
-/*****************************************************************************/
-/***** Check if user belongs (no matter if he/she has accepted or not) *******/
-/***** to the current course                                           *******/
-/*****************************************************************************/
-
-bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
-  {
-   static struct
-     {
-      long UsrCod;
-      bool Belongs;
-     } Cached =
-     {
-      -1L,
-      false
-     };
-
-   /***** 1. Fast check: trivial cases *****/
-   if (UsrDat->UsrCod <= 0 ||
-       Gbl.CurrentCrs.Crs.CrsCod <= 0)
-     {
-      Cached.UsrCod = -1L;
-      Cached.Belongs = false;
-      return Cached.Belongs;
-     }
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrDat->UsrCod == Cached.UsrCod)
-      return Cached.Belongs;
-
-   /***** 3. Fast check: If we know role of user in the current course *****/
-   if (UsrDat->Roles.InCurrentCrs.UsrCod == UsrDat->UsrCod)
-     {
-      Cached.UsrCod = UsrDat->UsrCod;
-      Cached.Belongs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
-	               UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
-	               UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
-      return Cached.Belongs;
-     }
-
-   /***** 4. Fast / slow check: Get if user belongs to current course *****/
-   Cached.UsrCod = UsrDat->UsrCod;
-   Cached.Belongs = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						Gbl.CurrentCrs.Crs.CrsCod,
-						false);
-   return Cached.Belongs;
-  }
-
-/*****************************************************************************/
-/***** Check if user belongs (no matter if he/she has accepted or not) *******/
-/***** to the current course                                           *******/
-/*****************************************************************************/
-
-bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
-  {
-   static struct
-     {
-      long UsrCod;
-      bool Accepted;
-     } Cached =
-     {
-      -1L,
-      false
-     };
-
-   /***** 1. Fast check: trivial cases *****/
-   if (UsrDat->UsrCod <= 0 ||
-       Gbl.CurrentCrs.Crs.CrsCod <= 0)
-     {
-      Cached.UsrCod = -1L;
-      Cached.Accepted = false;
-      return Cached.Accepted;
-     }
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrDat->UsrCod == Cached.UsrCod)
-      return Cached.Accepted;
-
-   /***** 3. Fast / slow check: Get if user belongs to current course
-                                and has accepted *****/
-   Cached.UsrCod = UsrDat->UsrCod;
-   Cached.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						 Gbl.CurrentCrs.Crs.CrsCod,
-						 true);
-   return Cached.Accepted;
+   Gbl.Cache.UsrBelongsToDeg.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToDeg.DegCod = DegCod;
+   Gbl.Cache.UsrBelongsToDeg.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
+   return Gbl.Cache.UsrBelongsToDeg.Belongs;
   }
 
 /*****************************************************************************/
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
+void Usr_FlushCacheUsrBelongsToCrs (void)
+  {
+   Gbl.Cache.UsrBelongsToCrs.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToCrs.CrsCod = -1L;
+   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = false;
+   Gbl.Cache.UsrBelongsToCrs.Belongs = false;
+  }
+
 bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses)
   {
    char Query[512];
    const char *SubQuery;
-   static struct
-     {
-      long UsrCod;
-      long CrsCod;
-      bool CountOnlyAcceptedCourses;
-      bool Belongs;
-     } Cached =
-     {
-      -1L,
-      -1L,
-      false,
-      false
-     };
 
-   /***** 1. Fast check: trivial cases *****/
+   /***** 1. Fast check: Trivial cases *****/
    if (UsrCod <= 0 ||
        CrsCod <= 0)
-     {
-      Cached.UsrCod = -1L;
-      Cached.CrsCod = -1L;
-      Cached.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
-      Cached.Belongs = false;
-      return Cached.Belongs;
-     }
+      return false;
 
    /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Cached.UsrCod &&
-       CrsCod == Cached.CrsCod &&
-       CountOnlyAcceptedCourses == Cached.CountOnlyAcceptedCourses)
-      return Cached.Belongs;
+   if (UsrCod == Gbl.Cache.UsrBelongsToCrs.UsrCod &&
+       CrsCod == Gbl.Cache.UsrBelongsToCrs.CrsCod &&
+       CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses)
+      return Gbl.Cache.UsrBelongsToCrs.Belongs;
 
    /***** 3. Slow check: Get if user belongs to course from database *****/
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
@@ -1899,11 +1764,82 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
 	          " WHERE CrsCod=%ld AND UsrCod=%ld%s",
             CrsCod,UsrCod,SubQuery);
-   Cached.UsrCod = UsrCod;
-   Cached.CrsCod = CrsCod;
-   Cached.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
-   Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a course") != 0);
-   return Cached.Belongs;
+   Gbl.Cache.UsrBelongsToCrs.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToCrs.CrsCod = CrsCod;
+   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
+   Gbl.Cache.UsrBelongsToCrs.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a course") != 0);
+   return Gbl.Cache.UsrBelongsToCrs.Belongs;
+  }
+
+/*****************************************************************************/
+/***** Check if user belongs (no matter if he/she has accepted or not) *******/
+/***** to the current course                                           *******/
+/*****************************************************************************/
+
+void Usr_FlushCacheUsrBelongsToCurrentCrs (void)
+  {
+   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = false;
+  }
+
+bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Trivial cases *****/
+   if (UsrDat->UsrCod <= 0 ||
+       Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrDat->UsrCod == Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod)
+      return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
+
+   /***** 3. Fast check: If we know role of user in the current course *****/
+   if (UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod == UsrDat->UsrCod)
+     {
+      Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = UsrDat->UsrCod;
+      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
+	                                         UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
+	                                         UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
+      return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
+     }
+
+   /***** 4. Fast / slow check: Get if user belongs to current course *****/
+   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+						                          Gbl.CurrentCrs.Crs.CrsCod,
+						                          false);
+   return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
+  }
+
+/*****************************************************************************/
+/***** Check if user belongs (no matter if he/she has accepted or not) *******/
+/***** to the current course                                           *******/
+/*****************************************************************************/
+
+void Usr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
+  {
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = -1L;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = false;
+  }
+
+bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Trivial cases *****/
+   if (UsrDat->UsrCod <= 0 ||
+       Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrDat->UsrCod == Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod)
+      return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
+
+   /***** 3. Fast / slow check: Get if user belongs to current course
+                                and has accepted *****/
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+						                               Gbl.CurrentCrs.Crs.CrsCod,
+						                               true);
+   return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }
 
 /*****************************************************************************/
@@ -3111,9 +3047,9 @@ static void Usr_SetMyPrefsAndRoles (void)
       	 Hie_InitHierarchy ();
 
 	 /* Get again my role in this course */
-      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-      	                                                                 Gbl.Usrs.Me.UsrDat.UsrCod);
-      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+      	                                                                   Gbl.CurrentCrs.Crs.CrsCod);
+      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       	}
      }
 

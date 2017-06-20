@@ -80,8 +80,8 @@ static void Ins_GetParamInsOrder (void);
 
 static void Ins_PutIconToViewInstitutions (void);
 
-static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
-                                               char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
+static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
+                                                char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Instit *Ins);
@@ -1098,7 +1098,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 
    /***** Get institution full name *****/
    Ins.InsCod = InsCod;
-   Ins_GetFullNameAndCtyOfInstitutionByCod (&Ins,CtyName);
+   Ins_GetFullNameAndCtyOfInstitution (&Ins,CtyName);
 
    /***** Write institution full name *****/
    fprintf (Gbl.F.Out,"%s<br />%s",Ins.FullName,CtyName);
@@ -1194,116 +1194,127 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
+void Ins_FlushCacheShortNameOfInstitution (void)
+  {
+   Gbl.Cache.InstitutionShrtName.InsCod = -1L;
+   Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
+  }
+
+void Ins_GetShortNameOfInstitution (struct Instit *Ins)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   static struct
-     {
-      long InsCod;
-      char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
-     } Cached =
-     {
-      -1L,
-      {'\0'}
-     };
 
+   /***** 1. Fast check: Trivial case *****/
    if (Ins->InsCod <= 0)
-      Ins->ShrtName[0] = '\0';	// Empty name
-   else
      {
-      if (Ins->InsCod != Cached.InsCod)	// If not cached...
-	{
-	 /***** Get the short name of an institution from database *****/
-	 sprintf (Query,"SELECT ShortName FROM institutions WHERE InsCod=%ld",
-		  Ins->InsCod);
-	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of an institution") == 1)
-	   {
-	    /***** Get the short name of this institution *****/
-	    row = mysql_fetch_row (mysql_res);
+      Ins->ShrtName[0] = '\0';	// Empty name
+      return;
+     }
 
-	    Str_Copy (Cached.ShrtName,row[0],
-		      Hie_MAX_BYTES_SHRT_NAME);
-	   }
-	 else
-	    Cached.ShrtName[0] = '\0';
+   /***** 2. Fast check: If cached... *****/
+   if (Ins->InsCod == Gbl.Cache.InstitutionShrtName.InsCod)
+     {
+      Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
+		Hie_MAX_BYTES_SHRT_NAME);
+      return;
+     }
 
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
+   /***** 3. Slow: get short name of institution from database *****/
+   Gbl.Cache.InstitutionShrtName.InsCod = Ins->InsCod;
 
-      Str_Copy (Ins->ShrtName,Cached.ShrtName,
+   sprintf (Query,"SELECT ShortName FROM institutions WHERE InsCod=%ld",
+	    Ins->InsCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of an institution") == 1)
+     {
+      /* Get the short name of this institution */
+      row = mysql_fetch_row (mysql_res);
+
+      Str_Copy (Gbl.Cache.InstitutionShrtName.ShrtName,row[0],
 		Hie_MAX_BYTES_SHRT_NAME);
      }
+   else
+      Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
+	     Hie_MAX_BYTES_SHRT_NAME);
   }
 
 /*****************************************************************************/
 /************ Get the full name of an institution from its code **************/
 /*****************************************************************************/
 
-static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
-                                               char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
+void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
+  {
+   Gbl.Cache.InstitutionFullNameAndCty.InsCod = -1L;
+   Gbl.Cache.InstitutionFullNameAndCty.FullName[0] = '\0';
+   Gbl.Cache.InstitutionFullNameAndCty.CtyName[0] = '\0';
+  }
+
+static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
+                                                char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   static struct
-     {
-      long InsCod;
-      char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
-      char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
-     } Cached =
-     {
-      -1L,
-      {'\0'},
-      {'\0'},
-     };
 
+   /***** 1. Fast check: Trivial case *****/
    if (Ins->InsCod <= 0)
      {
       Ins->FullName[0] = '\0';	// Empty name
       CtyName[0] = '\0';	// Empty name
+      return;
+     }
+
+   /***** 2. Fast check: If cached... *****/
+   if (Ins->InsCod == Gbl.Cache.InstitutionFullNameAndCty.InsCod)
+     {
+      Str_Copy (Ins->FullName,Gbl.Cache.InstitutionFullNameAndCty.FullName,
+		Hie_MAX_BYTES_FULL_NAME);
+      Str_Copy (CtyName,Gbl.Cache.InstitutionFullNameAndCty.CtyName,
+		Hie_MAX_BYTES_FULL_NAME);
+      return;
+     }
+
+   /***** 3. Slow: get full name and country of institution from database *****/
+   Gbl.Cache.InstitutionFullNameAndCty.InsCod = Ins->InsCod;
+
+   sprintf (Query,"SELECT institutions.FullName,countries.Name_%s"
+		  " FROM institutions,countries"
+		  " WHERE institutions.InsCod=%ld"
+		  " AND institutions.CtyCod=countries.CtyCod",
+	    Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get the full name of an institution") == 1)
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the full name of this institution (row[0]) */
+      Str_Copy (Gbl.Cache.InstitutionFullNameAndCty.FullName,row[0],
+		Hie_MAX_BYTES_FULL_NAME);
+
+      /* Get the name of the country (row[1]) */
+      Str_Copy (Gbl.Cache.InstitutionFullNameAndCty.CtyName,row[1],
+		Hie_MAX_BYTES_FULL_NAME);
      }
    else
      {
-      if (Ins->InsCod != Cached.InsCod)	// If not cached...
-	{
-	 /***** Get the short name of an institution from database *****/
-	 sprintf (Query,"SELECT institutions.FullName,countries.Name_%s"
-	                " FROM institutions,countries"
-	                " WHERE institutions.InsCod=%ld"
-	                " AND institutions.CtyCod=countries.CtyCod",
-		  Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod);
-	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the full name of an institution") == 1)
-	   {
-	    /* Get row */
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get the full name of this institution (row[0]) */
-	    Str_Copy (Cached.FullName,row[0],
-		      Hie_MAX_BYTES_FULL_NAME);
-
-	    /* Get the name of the country (row[1]) */
-	    Str_Copy (Cached.CtyName,row[1],
-		      Hie_MAX_BYTES_FULL_NAME);
-	   }
-	 else
-	   {
-	    Cached.FullName[0] = '\0';
-	    Cached.CtyName[0] = '\0';
-	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
-
-      Str_Copy (Ins->FullName,Cached.FullName,
-		Hie_MAX_BYTES_FULL_NAME);
-      Str_Copy (CtyName,Cached.CtyName,
-		Hie_MAX_BYTES_FULL_NAME);
+      Gbl.Cache.InstitutionFullNameAndCty.FullName[0] = '\0';
+      Gbl.Cache.InstitutionFullNameAndCty.CtyName[0] = '\0';
      }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   Str_Copy (Ins->FullName,Gbl.Cache.InstitutionFullNameAndCty.FullName,
+	     Hie_MAX_BYTES_FULL_NAME);
+   Str_Copy (CtyName,Gbl.Cache.InstitutionFullNameAndCty.CtyName,
+	     Hie_MAX_BYTES_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1711,6 +1722,10 @@ void Ins_RemoveInstitution (void)
                Ins.InsCod);
       DB_QueryDELETE (Query,"can not remove an institution");
 
+      /***** Flush caches *****/
+      Ins_FlushCacheShortNameOfInstitution ();
+      Ins_FlushCacheFullNameAndCtyOfInstitution ();
+
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Institution_X_removed,
                Ins.FullName);
@@ -1859,6 +1874,10 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *N
    sprintf (Query,"UPDATE institutions SET %s='%s' WHERE InsCod=%ld",
 	    FieldName,NewInsName,InsCod);
    DB_QueryUPDATE (Query,"can not update the name of an institution");
+
+   /***** Flush caches *****/
+   Ins_FlushCacheShortNameOfInstitution ();
+   Ins_FlushCacheFullNameAndCtyOfInstitution ();
   }
 
 /*****************************************************************************/

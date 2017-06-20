@@ -68,10 +68,10 @@ void Rol_SetMyRoles (void)
    bool ICanBeDegAdm = false;
 
    /***** Get my role in current course if not yet filled *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
      {
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Rol_GetMyRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod);
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod);
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
      }
 
    /***** Set the user's role I am logged *****/
@@ -179,7 +179,7 @@ void Rol_SetMyRoles (void)
    if (!(Gbl.Usrs.Me.Role.Available & (1 << Gbl.Usrs.Me.Role.Logged)))        // Current type I am logged is not available for me
       /* Set the lowest role available for me */
       for (Gbl.Usrs.Me.Role.Logged = Rol_UNK;
-           Gbl.Usrs.Me.Role.Logged < Rol_NUM_ROLES;
+           Gbl.Usrs.Me.Role.Logged <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
            Gbl.Usrs.Me.Role.Logged++)
          if (Gbl.Usrs.Me.Role.Available & (1 << Gbl.Usrs.Me.Role.Logged))
             break;
@@ -326,50 +326,45 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 /********************** Get role of a user in a course ***********************/
 /*****************************************************************************/
 
-Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
+void Rol_FlushCacheRoleUsrInCrs (void)
+  {
+   Gbl.Cache.RoleUsrInCrs.UsrCod = -1L;
+   Gbl.Cache.RoleUsrInCrs.CrsCod = -1L;
+   Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
+  }
+
+Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   static struct
-     {
-      long CrsCod;
-      long UsrCod;
-      Rol_Role_t RoleInCrs;
-     } Cached =
-     {
-      -1L,
-      -1L,
-      Rol_UNK,
-     };	// A cache. If this function is called consecutive times
-	// with the same user, only the first time is slow
 
    /***** 1. Fast check: trivial cases *****/
-   if (CrsCod <= 0 ||
-       UsrCod <= 0)
+   if (UsrCod <= 0 ||
+       CrsCod <= 0)
       return Rol_UNK;
 
    /***** 2. Fast check: Is role in course already calculated *****/
-   if (CrsCod == Cached.CrsCod &&
-       UsrCod == Cached.UsrCod)
-      return Cached.RoleInCrs;
+   if (UsrCod == Gbl.Cache.RoleUsrInCrs.UsrCod &&
+       CrsCod == Gbl.Cache.RoleUsrInCrs.CrsCod )
+      return Gbl.Cache.RoleUsrInCrs.Role;
 
    /***** 3. Slow check: Get rol of a user in a course from database.
 			 The result of the query will have one row or none *****/
-   Cached.UsrCod = UsrCod;
-   Cached.CrsCod = CrsCod;
-   Cached.RoleInCrs = Rol_UNK;
+   Gbl.Cache.RoleUsrInCrs.UsrCod = UsrCod;
+   Gbl.Cache.RoleUsrInCrs.CrsCod = CrsCod;
+   Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
    sprintf (Query,"SELECT Role FROM crs_usr"
 		  " WHERE CrsCod=%ld AND UsrCod=%ld",
 	    CrsCod,UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
      {
       row = mysql_fetch_row (mysql_res);
-      Cached.RoleInCrs = Rol_ConvertUnsignedStrToRole (row[0]);
+      Gbl.Cache.RoleUsrInCrs.Role = Rol_ConvertUnsignedStrToRole (row[0]);
      }
    DB_FreeMySQLResult (&mysql_res);
 
-   return Cached.RoleInCrs;
+   return Gbl.Cache.RoleUsrInCrs.Role;
   }
 
 /*****************************************************************************/

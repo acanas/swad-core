@@ -2139,7 +2139,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
       Instead it is initialized with the preferred role. */
    UsrDat->Roles.InCurrentCrs.Role   = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
 	                                                                Rol_UNK;	// No course selected
-   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 

@@ -747,6 +747,88 @@ struct Globals
      {
       char *Str;
      } QR;
+
+   /* Cache */
+   struct
+     {
+      struct
+	{
+	 long CtyCod;
+	 char CtyName[Cty_MAX_BYTES_NAME + 1];
+	} CountryName;
+      struct
+	{
+	 long InsCod;
+	 char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+	} InstitutionShrtName;
+      struct
+	{
+	 long InsCod;
+	 char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
+	 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
+	} InstitutionFullNameAndCty;
+      struct
+	{
+	 long UsrCod;
+	 bool IsSuperuser;
+	} UsrIsSuperuser;
+      struct
+	{
+	 long UsrCod;
+	 long InsCod;
+	 bool Belongs;
+	} UsrBelongsToIns;
+      struct
+	{
+	 long UsrCod;
+	 long CtrCod;
+	 bool Belongs;
+	} UsrBelongsToCtr;
+      struct
+	{
+	 long UsrCod;
+	 long DegCod;
+	 bool Belongs;
+	} UsrBelongsToDeg;
+      struct
+	{
+	 long UsrCod;
+	 long CrsCod;
+	 bool CountOnlyAcceptedCourses;
+	 bool Belongs;
+	} UsrBelongsToCrs;
+      struct
+	{
+	 long UsrCod;
+	 bool Belongs;
+	} UsrBelongsToCurrentCrs;
+      struct
+	{
+	 long UsrCod;
+	 bool Accepted;
+	} UsrHasAcceptedInCurrentCrs;
+      struct
+	{
+	 long UsrCod;
+	 bool SharesAnyOfMyCrs;
+	} UsrSharesAnyOfMyCrs;
+      struct
+	{
+	 long GrpCod;
+	 bool IBelong;
+	} IBelongToGrp;
+      struct
+	{
+	 long UsrCod;
+	 bool Shares;
+	} UsrSharesAnyOfMyGrpsInCurrentCrs;
+      struct
+	{
+	 long UsrCod;
+	 long CrsCod;
+	 Rol_Role_t Role;
+	} RoleUsrInCrs;
+     } Cache;
   };
 
 /*****************************************************************************/

@@ -106,7 +106,9 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);
 void Ins_WriteInstitutionNameAndCty (long InsCod);
 bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
                                     Ins_GetExtraData_t GetExtraData);
-void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins);
+void Ins_FlushCacheShortNameOfInstitution (void);
+void Ins_GetShortNameOfInstitution (struct Instit *Ins);
+void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 
 void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);

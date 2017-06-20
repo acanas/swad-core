@@ -175,8 +175,8 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
   {
    extern const char *Txt_Register_students;
 
-   if (Rol_GetRoleInCrs (CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) ==  Rol_TCH) // I am a teacher in course
-      if (!Usr_GetNumUsrsInCrs (Rol_STD,CrsCod))			// No students in course
+   if (Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,CrsCod) ==  Rol_TCH) // I am a teacher in course
+      if (!Usr_GetNumUsrsInCrs (Rol_STD,CrsCod))			   // No students in course
 	{
 	 Act_FormStart (ActReqEnrSevStd);
 	 Crs_PutParamCrsCod (CrsCod);
@@ -231,7 +231,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
    Enr_NotifyAfterEnrolment (UsrDat,NewRole);
 
    UsrDat->Roles.InCurrentCrs.Role   = NewRole;
-   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
   }
@@ -280,7 +280,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 		                       'N');
    DB_QueryINSERT (Query,"can not register user in course");
    UsrDat->Roles.InCurrentCrs.Role   = NewRole;
-   UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
 
@@ -3024,7 +3024,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    extern const char *Txt_Administer_me;
    extern const char *Txt_Administer_one_user;
    const char *TitleText = Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged] ? Txt_Administer_one_user :
-                        	                                            Txt_Administer_me;
+                        	                                             Txt_Administer_me;
 
    Lay_PutContextualLink (NextAction,NULL,NULL,
                           "config64x64.gif",
@@ -3922,7 +3922,7 @@ void Enr_ModifyUsr1 (void)
 		  if (ItsMe)
 		    {
 		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
-                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
+                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
                      Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
                      Rol_SetMyRoles ();
 		    }
@@ -4134,7 +4134,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[1024];
-   bool ItsMe;
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
@@ -4142,7 +4142,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       Att_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from all the groups in course *****/
-      Grp_RemUsrFromAllGrpsInCrs (UsrDat,Crs);
+      Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user's status about reading of course information *****/
       Inf_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->CrsCod);
@@ -4170,13 +4170,44 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
                Crs->CrsCod,UsrDat->UsrCod);
       DB_QueryDELETE (Query,"can not remove a user from a course");
 
+      /***** Flush caches *****/
+      Usr_FlushCacheUsrBelongsToIns ();
+      Usr_FlushCacheUsrBelongsToCtr ();
+      Usr_FlushCacheUsrBelongsToDeg ();
+      Usr_FlushCacheUsrBelongsToCrs ();
+      Usr_FlushCacheUsrBelongsToCurrentCrs ();
+      Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+      Usr_FlushCacheUsrSharesAnyOfMyCrs ();
+      Rol_FlushCacheRoleUsrInCrs ();
+      Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+
       /***** If it's me, change my roles *****/
-      ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       if (ItsMe)
 	{
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.UsrCod = UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
-	 Gbl.Usrs.Me.UsrDat.Roles.InCrss = UsrDat->Roles.InCrss = -1;	// not yet filled/calculated
+	 /* Flush caches */
+         Grp_FlushCacheIBelongToGrp ();
+
+	 /* Now I don't belong to current course */
+	 Gbl.Usrs.Me.IBelongToCurrentCrs =
+         Gbl.Usrs.Me.UsrDat.Accepted     = false;
+
+         /* Fill the list with the courses I belong to */
+         Gbl.Usrs.Me.MyCrss.Filled = false;
+         Usr_GetMyCourses ();
+
+         /* Set my roles */
+	 Gbl.Usrs.Me.Role.FromSession               =
+	 Gbl.Usrs.Me.Role.Logged                    =
+	 Gbl.Usrs.Me.Role.LoggedBeforeCloseSession  =
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role =
+	 UsrDat->Roles.InCurrentCrs.Role            = Rol_UNK;
+
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod =
+	 UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod            = UsrDat->UsrCod;
+
+	 Gbl.Usrs.Me.UsrDat.Roles.InCrss =
+	 UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
+
 	 Rol_SetMyRoles ();
 	}
 

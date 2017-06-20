@@ -42,6 +42,7 @@
 #include "swad_icon.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
+#include "swad_role.h"
 #include "swad_theme.h"
 #include "swad_web_service.h"
 
@@ -440,6 +441,22 @@ void Gbl_InitializeGlobals (void)
    Gbl.WebService.Function = Svc_unknown;
 
    Gbl.Layout.NestedBox = 0;
+
+   /* Flush caches */
+   Cty_FlushCacheCountryName ();
+   Ins_FlushCacheShortNameOfInstitution ();
+   Ins_FlushCacheFullNameAndCtyOfInstitution ();
+   Usr_FlushCacheUsrIsSuperuser ();
+   Usr_FlushCacheUsrBelongsToIns ();
+   Usr_FlushCacheUsrBelongsToCtr ();
+   Usr_FlushCacheUsrBelongsToDeg ();
+   Usr_FlushCacheUsrBelongsToCrs ();
+   Usr_FlushCacheUsrBelongsToCurrentCrs ();
+   Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+   Usr_FlushCacheUsrSharesAnyOfMyCrs ();
+   Rol_FlushCacheRoleUsrInCrs ();
+   Grp_FlushCacheIBelongToGrp ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
   }
 
 /*****************************************************************************/

@@ -1130,7 +1130,9 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
    extern const char *Txt_THE_USER_X_has_been_removed_from_one_group;
    extern const char *Txt_THE_USER_X_has_been_removed_from_Y_groups;
    struct ListCodGrps LstGrpsHeBelongs;
-   unsigned NumGrpSel,NumGrpHeBelongs,NumGrpsHeIsRemoved = 0;
+   unsigned NumGrpSel;
+   unsigned NumGrpHeBelongs;
+   unsigned NumGrpsHeIsRemoved = 0;
 
    /***** Query in the database the group codes of any group the user belongs to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,-1L,
@@ -1173,9 +1175,10 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 /*************** Remove a user of all the groups of a course *****************/
 /*****************************************************************************/
 
-void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs)
+void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
   {
    char Query[512];
+   bool ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Remove user from all the groups of the course *****/
    sprintf (Query,"DELETE FROM crs_grp_usr"
@@ -1183,22 +1186,33 @@ void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs)
                   " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
                   " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
-            UsrDat->UsrCod,Crs->CrsCod);
+            UsrCod,CrsCod);
    DB_QueryDELETE (Query,"can not remove a user from all groups of a course");
+
+   /***** Flush caches *****/
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   if (ItsMe)
+      Grp_FlushCacheIBelongToGrp ();
   }
 
 /*****************************************************************************/
 /******* Remove a user from all the groups of all the user's courses *********/
 /*****************************************************************************/
 
-void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat)
+void Grp_RemUsrFromAllGrps (long UsrCod)
   {
    char Query[128];
+   bool ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Remove user from all groups *****/
    sprintf (Query,"DELETE FROM crs_grp_usr WHERE UsrCod=%ld",
-            UsrDat->UsrCod);
+            UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from the groups he/she belongs to");
+
+   /***** Flush caches *****/
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   if (ItsMe)
+      Grp_FlushCacheIBelongToGrp ();
   }
 
 /*****************************************************************************/
@@ -1208,12 +1222,18 @@ void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat)
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
   {
    char Query[256];
+   bool ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Remove user from group *****/
    sprintf (Query,"DELETE FROM crs_grp_usr"
 	          " WHERE GrpCod=%ld AND UsrCod=%ld",
             GrpCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from a group");
+
+   /***** Flush caches *****/
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   if (ItsMe)
+      Grp_FlushCacheIBelongToGrp ();
   }
 
 /*****************************************************************************/
@@ -3230,35 +3250,104 @@ static long Grp_GetFirstCodGrpIBelongTo (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/********************* Check if a user belongs to a group ********************/
+/************************ Check if I belong to a group ***********************/
 /*****************************************************************************/
-// Return true if the user identificado belongs al group with código GrpCod
+// Return true if I belong to group with code GrpCod
+
+void Grp_FlushCacheIBelongToGrp (void)
+  {
+   Gbl.Cache.IBelongToGrp.GrpCod = -1L;
+   Gbl.Cache.IBelongToGrp.IBelong = false;
+  }
 
 bool Grp_GetIfIBelongToGrp (long GrpCod)
   {
    char Query[256];
-   static struct
-     {
-      long GrpCod;
-      bool IBelongToGrp;
-     } Cached =
-     {
-      -1L,
-      false
-     };	// A cache. If this function is called consecutive times
-	// with the same group, only the first time is slow
 
-   /***** 1. Fast check: Is already calculated if I belong to group? *****/
-   if (GrpCod == Cached.GrpCod)
-      return Cached.IBelongToGrp;
+   /***** 1. Fast check: Trivial case *****/
+   if (GrpCod <= 0)
+      return false;
 
-   /***** 2. Slow check: Get if I belong to a group from database *****/
+   /***** 2. Fast check: Is already calculated if I belong to group? *****/
+   if (GrpCod == Gbl.Cache.IBelongToGrp.GrpCod)
+      return Gbl.Cache.IBelongToGrp.IBelong;
+
+   /***** 3. Slow check: Get if I belong to a group from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
                   " WHERE GrpCod=%ld AND UsrCod=%ld",
             GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Cached.IBelongToGrp = DB_QueryCOUNT (Query,"can not check if you belong to a group") != 0;
-   Cached.GrpCod = GrpCod;
-   return Cached.IBelongToGrp;
+   Gbl.Cache.IBelongToGrp.IBelong = DB_QueryCOUNT (Query,"can not check if you belong to a group") != 0;
+   Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
+   return Gbl.Cache.IBelongToGrp.IBelong;
+  }
+
+
+/*****************************************************************************/
+/*************** Check if a user belongs to any of my courses ****************/
+/*****************************************************************************/
+
+void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
+  {
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = -1L;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
+  }
+
+bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
+  {
+   char Query[512];
+
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: Is it a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: Is it a course selected? *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 4. Fast check: Do I belong to the current course? *****/
+   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+      return false;
+
+   /***** 5. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 6. Fast check: Is already calculated if user shares
+                         any group in the current course with me? *****/
+   if (UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod)
+      return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
+
+   /***** 7. Fast / slow check: Does he/she belong to the current course? *****/
+   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+     {
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
+      return false;
+     }
+
+   /***** 8. Slow check: Get if user shares any group in this course with me from database *****/
+   /* Check if user shares any group with me */
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
+   sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
+	          " WHERE UsrCod=%ld"
+	          " AND GrpCod IN"
+	          " (SELECT crs_grp_usr.GrpCod"
+	          " FROM crs_grp_usr,crs_grp,crs_grp_types"
+	          " WHERE crs_grp_usr.UsrCod=%ld"
+	          " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+                  " AND crs_grp_types.CrsCod=%ld)",
+            UsrDat->UsrCod,
+            Gbl.Usrs.Me.UsrDat.UsrCod,
+            Gbl.CurrentCrs.Crs.CrsCod);
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = DB_QueryCOUNT (Query,"can not check"
+					                                    " if a user shares any group"
+					                                    " in the current course with you") != 0;
+   return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
   }
 
 /*****************************************************************************/
@@ -4790,72 +4879,4 @@ void Grp_GetParamWhichGrps (void)
 
       AlreadyGot = true;
      }
-  }
-
-/*****************************************************************************/
-/*************** Check if a user belongs to any of my courses ****************/
-/*****************************************************************************/
-
-bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
-  {
-   char Query[512];
-   static struct
-     {
-      long UsrCod;
-      bool UsrSharesAnyOfMyGrpsInCurrentCrs;
-     } Cached =
-     {
-      -1L,
-      false
-     };	// A cache. If this function is called consecutive times
-	// with the same user, only the first time is slow
-
-   /***** 1. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return false;
-
-   /***** 2. Fast check: Is it a valid user code? *****/
-   if (UsrDat->UsrCod <= 0)
-      return false;
-
-   /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
-      return false;
-
-   /***** 4. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
-      return false;
-
-   /***** 5. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
-      return true;
-
-   /***** 6. Fast check: Does he/she belong to the current course? *****/
-   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return false;
-
-   /***** 7. Fast check: Is already calculated if user shares
-                         any group in the current course with me? *****/
-   if (UsrDat->UsrCod == Cached.UsrCod)
-      return Cached.UsrSharesAnyOfMyGrpsInCurrentCrs;
-
-   /***** 8. Slow check: Get if user shares any group in this course with me from database *****/
-   /* Check if user shares any group with me */
-   Cached.UsrCod = UsrDat->UsrCod;
-   sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
-	          " WHERE UsrCod=%ld"
-	          " AND GrpCod IN"
-	          " (SELECT crs_grp_usr.GrpCod"
-	          " FROM crs_grp_usr,crs_grp,crs_grp_types"
-	          " WHERE crs_grp_usr.UsrCod=%ld"
-	          " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                  " AND crs_grp_types.CrsCod=%ld)",
-            UsrDat->UsrCod,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.CurrentCrs.Crs.CrsCod);
-   Cached.UsrSharesAnyOfMyGrpsInCurrentCrs = DB_QueryCOUNT (Query,"can not check"
-								  " if a user shares any group"
-								  " in the current course with you") != 0;
-   return Cached.UsrSharesAnyOfMyGrpsInCurrentCrs;
   }

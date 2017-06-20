@@ -1002,7 +1002,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Att_RemoveUsrFromAllAttEvents (UsrDat->UsrCod);
 
    /***** Remove user from all the groups of all courses *****/
-   Grp_RemUsrFromAllGrps (UsrDat);
+   Grp_RemUsrFromAllGrps (UsrDat->UsrCod);
 
    /***** Remove user's requests for inscription *****/
    sprintf (Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",

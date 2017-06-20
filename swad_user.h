@@ -133,7 +133,7 @@ struct UsrData
      {
       struct
         {
-	 long UsrCod;	// Role was got from database for this user (used to not retrieve role if already retrieved)
+	 long GotFromDBForUsrCod;	// Role was got from database for this user (used to not retrieve role if already retrieved)
 	 Rol_Role_t Role;
         } InCurrentCrs;	// Role in current course (Rol_UNK is no course selected)
       int InCrss;	// Roles in all his/her courses
@@ -244,6 +244,7 @@ void Usr_BuildFullName (struct UsrData *UsrDat);
 void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
+void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
 bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat);
@@ -257,12 +258,15 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
 
+void Usr_FlushCacheUsrBelongsToCurrentCrs (void);
 bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
+void Usr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
 bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat);
+void Usr_FlushCacheUsrSharesAnyOfMyCrs (void);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 
@@ -278,9 +282,13 @@ void Usr_FreeMyCentres (void);
 void Usr_FreeMyDegrees (void);
 void Usr_FreeMyCourses (void);
 
+void Usr_FlushCacheUsrBelongsToIns (void);
 bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
+void Usr_FlushCacheUsrBelongsToCtr (void);
 bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
+void Usr_FlushCacheUsrBelongsToDeg (void);
 bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
+void Usr_FlushCacheUsrBelongsToCrs (void);
 bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses);
 

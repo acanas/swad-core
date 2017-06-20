@@ -594,18 +594,18 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	   {
 	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) != 1)
 	       UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
 	   }
 	 else	// Impossible
 	   {
 	    UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
 	   }
 	}
       else	// User does not belong to course
 	{
 	 UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	 UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	 UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
 	}
      }
    else
@@ -621,19 +621,19 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	   {
 	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) != 1)
 	       UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
 	   }
 	 else
 	    // MAX(Role) == NULL if user does not belong to any course
 	   {
 	    UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
 	   }
 	}
       else	// Impossible
 	{
 	 UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	 UsrDat->Roles.InCurrentCrs.UsrCod = UsrDat->UsrCod;
+	 UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
 	}
      }
 
