@@ -236,13 +236,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.247.1 (2017-06-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.247.2 (2017-06-23)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.247.2: Jun 23, 2017	Non-editing teachers can not view records of users who do not share groups with them.
+					Code refactoring related with roles. (222094 lines)
         Version 16.247.1: Jun 23, 2017	Non-editing teachers can select all groups when writing a message. (222068 lines)
         Version 16.247:   Jun 20, 2017	Fixed bug when removing a user from a course.
 					Code refactoring related with caches. (222063 lines)

@@ -48,13 +48,15 @@ typedef enum
    Rol_USR	= 2,	// Student, non-editing teacher or teacher in some courses...
    	   	   	// ...but no course selected
 			// ...or not belonging to the current course
+
    Rol_STD	= 3,	// Student in the current course
    Rol_NET	= 4,	// Non-editing teacher in the current course
-   Rol_TCH	= 5,	// Old 4	// Teacher in the current course
-   Rol_DEG_ADM	= 6,	// Old 5	// Degree administrator
-   Rol_CTR_ADM	= 7,	// Old 6	// Centre administrator
-   Rol_INS_ADM	= 8,	// Old 7	// Institution administrator
-   Rol_SYS_ADM	= 9,	// Old 8	// System administrator (superuser)
+   Rol_TCH	= 5,	// Teacher in the current course
+
+   Rol_DEG_ADM	= 6,	// Degree administrator
+   Rol_CTR_ADM	= 7,	// Centre administrator
+   Rol_INS_ADM	= 8,	// Institution administrator
+   Rol_SYS_ADM	= 9,	// System administrator (superuser)
   } Rol_Role_t;
 
 #endif

@@ -230,8 +230,8 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
 	  activate the sending of a notification *****/
    Enr_NotifyAfterEnrolment (UsrDat,NewRole);
 
-   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
-   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.Role = NewRole;
+   UsrDat->Roles.InCurrentCrs.Valid = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
   }
@@ -279,8 +279,8 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 	    Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
 		                       'N');
    DB_QueryINSERT (Query,"can not register user in course");
-   UsrDat->Roles.InCurrentCrs.Role   = NewRole;
-   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.Role = NewRole;
+   UsrDat->Roles.InCurrentCrs.Valid = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
 
@@ -3921,8 +3921,8 @@ void Enr_ModifyUsr1 (void)
 		  /***** If it's me, change my roles *****/
 		  if (ItsMe)
 		    {
-		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role   = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
-                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
+		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role;
+                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
                      Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
                      Rol_SetMyRoles ();
 		    }
@@ -4202,8 +4202,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role =
 	 UsrDat->Roles.InCurrentCrs.Role            = Rol_UNK;
 
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod =
-	 UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod            = UsrDat->UsrCod;
+	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid =
+	 UsrDat->Roles.InCurrentCrs.Valid            = true;
 
 	 Gbl.Usrs.Me.UsrDat.Roles.InCrss =
 	 UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated

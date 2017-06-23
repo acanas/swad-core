@@ -295,8 +295,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EncryptedUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = -1L;
+   UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+   UsrDat->Roles.InCurrentCrs.Valid = false;
    UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = true;
 
@@ -522,7 +522,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /* Get roles */
    UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
                                                           Gbl.CurrentCrs.Crs.CrsCod);
-   UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+   UsrDat->Roles.InCurrentCrs.Valid = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
@@ -1045,16 +1045,45 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
   {
-   if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)	// Not a student in the current course
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
       return false;
 
-   // The user is a student in the current course
+   /***** 2. Fast check: Is it a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: Is it a course selected? *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 4. Fast check: Is he/she a student? *****/
+   if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)
+      return false;
+
+   /***** 5. Fast check: Am I a system admin? *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      return true;
+
+   /***** 6. Fast check: Do I belong to the current course? *****/
+   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+      return false;
+
+   /***** 7. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 8. Fast / slow check: Does he/she belong to the current course? *****/
+   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+      return false;
+
+   /***** 9. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
       case Rol_TCH:
-      case Rol_SYS_ADM:
 	 return true;
       default:
 	 return false;
@@ -1074,23 +1103,39 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
    if (!Gbl.Usrs.Me.Logged)
       return false;
 
-   /***** 2. Fast/slow check: Is he/she a non-editing teacher or a teacher in any course? *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if ((UsrDat->Roles.InCrss & ((1 << Rol_NET) |
-	                 (1 << Rol_TCH))) == 0)
+   /***** 2. Fast check: Is it a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
       return false;
 
-   // He/she is a non-editing teacher or a teacher in any course
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+     {
+      /***** 3. Fast check: Is he/she a non-editing teacher or a teacher? *****/
+      if (UsrDat->Roles.InCurrentCrs.Role != Rol_NET &&
+	  UsrDat->Roles.InCurrentCrs.Role != Rol_TCH)
+	 return false;
 
-   /***** 3. Fast check: It's me? *****/
+      // He/she is a non-editing teacher or a teacher in this course
+     }
+   else					// No course selected
+     {
+      /***** 3. Fast/slow check: Is he/she a non-editing teacher or a teacher in any course? *****/
+      Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
+      if ((UsrDat->Roles.InCrss & ((1 << Rol_NET) |
+				   (1 << Rol_TCH))) == 0)
+	 return false;
+
+      // He/she is a non-editing teacher or a teacher in any course
+     }
+
+   /***** 4. Fast check: It's me? *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
       return true;
 
-   /***** 4. Fast check: Am I logged as system admin? *****/
+   /***** 5. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       return true;
 
-   /***** 5. Slow check: Get if user shares any course with me from database *****/
+   /***** 6. Slow check: Get if user shares any course with me from database *****/
    return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
   }
 
@@ -1112,25 +1157,28 @@ bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat)
    if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
       return false;
 
-   /***** 4. Fast check: Do I belong to the current course? *****/
+   /***** 4. Fast check: Am I a system admin? *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      return true;
+
+   /***** 5. Fast check: Do I belong to the current course? *****/
    if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
       return false;
 
-   /***** 5. Fast check: It's me? *****/
+   /***** 6. Fast check: It's me? *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
       return true;
 
-   /***** 6. Fast check: Does he/she belong to the current course? *****/
+   /***** 7. Fast check: Does he/she belong to the current course? *****/
    if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
       return false;
 
-   /***** 7. Fast / slow check depending on roles *****/
+   /***** 8. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
 	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
       case Rol_TCH:
-      case Rol_SYS_ADM:
 	 return true;
       default:
 	 return false;
@@ -1197,8 +1245,8 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
    if (!(UsrDat->Roles.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
-	                        (1 << Rol_NET) |	// or non-editing teacher
-			        (1 << Rol_TCH))))	// or teacher?
+	                         (1 << Rol_NET) |	// or non-editing teacher
+			         (1 << Rol_TCH))))	// or teacher?
       return false;
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/
@@ -1794,7 +1842,7 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
 
    /***** 3. Fast check: If we know role of user in the current course *****/
-   if (UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod == UsrDat->UsrCod)
+   if (UsrDat->Roles.InCurrentCrs.Valid)
      {
       Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD ||
@@ -3049,7 +3097,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 /* Get again my role in this course */
       	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
       	                                                                   Gbl.CurrentCrs.Crs.CrsCod);
-      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
       	}
      }
 

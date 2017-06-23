@@ -3280,11 +3280,11 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
                   " WHERE GrpCod=%ld AND UsrCod=%ld",
             GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Gbl.Cache.IBelongToGrp.IBelong = DB_QueryCOUNT (Query,"can not check if you belong to a group") != 0;
    Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
+   Gbl.Cache.IBelongToGrp.IBelong = (DB_QueryCOUNT (Query,"can not check"
+	                                                  " if you belong to a group") != 0);
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
-
 
 /*****************************************************************************/
 /*************** Check if a user belongs to any of my courses ****************/
@@ -3333,7 +3333,17 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
       return false;
      }
 
-   /***** 8. Slow check: Get if user shares any group in this course with me from database *****/
+   /***** 8. Fast check: Course has groups? *****/
+   if (!Gbl.CurrentCrs.Grps.NumGrps)
+     {
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = true;
+      return true;
+     }
+
+   // Course has groups
+
+   /***** 9. Slow check: Get if user shares any group in this course with me from database *****/
    /* Check if user shares any group with me */
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
@@ -3348,9 +3358,9 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
             UsrDat->UsrCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.CurrentCrs.Crs.CrsCod);
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = DB_QueryCOUNT (Query,"can not check"
-					                                    " if a user shares any group"
-					                                    " in the current course with you") != 0;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = (DB_QueryCOUNT (Query,"can not check"
+					                                     " if a user shares any group"
+					                                     " in the current course with you") != 0);
    return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
   }
 

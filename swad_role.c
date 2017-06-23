@@ -68,10 +68,10 @@ void Rol_SetMyRoles (void)
    bool ICanBeDegAdm = false;
 
    /***** Get my role in current course if not yet filled *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+   if (!Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid)
      {
       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod);
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.GotFromDBForUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
      }
 
    /***** Set the user's role I am logged *****/

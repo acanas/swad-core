@@ -133,7 +133,7 @@ struct UsrData
      {
       struct
         {
-	 long GotFromDBForUsrCod;	// Role was got from database for this user (used to not retrieve role if already retrieved)
+	 bool Valid;	// Role is not valid (for examples, it has not been trtriev
 	 Rol_Role_t Role;
         } InCurrentCrs;	// Role in current course (Rol_UNK is no course selected)
       int InCrss;	// Roles in all his/her courses
@@ -262,10 +262,12 @@ void Usr_FlushCacheUsrBelongsToCurrentCrs (void);
 bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
 void Usr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
 bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
+
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat);
+
 void Usr_FlushCacheUsrSharesAnyOfMyCrs (void);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);

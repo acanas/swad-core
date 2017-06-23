@@ -592,20 +592,24 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	 row = mysql_fetch_row (mysql_res);
 	 if (row[0])
 	   {
-	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) != 1)
+	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) == 1)
+	       UsrDat->Roles.InCurrentCrs.Valid = true;
+	    else
+	      {
 	       UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+	       UsrDat->Roles.InCurrentCrs.Valid = false;
+	      }
 	   }
 	 else	// Impossible
 	   {
-	    UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+	    UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+	    UsrDat->Roles.InCurrentCrs.Valid = false;
 	   }
 	}
       else	// User does not belong to course
 	{
-	 UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	 UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+	 UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+	 UsrDat->Roles.InCurrentCrs.Valid = true;
 	}
      }
    else
@@ -619,21 +623,25 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	 row = mysql_fetch_row (mysql_res);
 	 if (row[0])
 	   {
-	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) != 1)
+	    if (sscanf (row[0],"%u",&UsrDat->Roles.InCurrentCrs.Role) == 1)
+	       UsrDat->Roles.InCurrentCrs.Valid = true;
+	    else
+	      {
 	       UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+	       UsrDat->Roles.InCurrentCrs.Valid = false;
+	      }
 	   }
 	 else
 	    // MAX(Role) == NULL if user does not belong to any course
 	   {
-	    UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	    UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+	    UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+	    UsrDat->Roles.InCurrentCrs.Valid = true;
 	   }
 	}
       else	// Impossible
 	{
-	 UsrDat->Roles.InCurrentCrs.Role   = Rol_UNK;
-	 UsrDat->Roles.InCurrentCrs.GotFromDBForUsrCod = UsrDat->UsrCod;
+	 UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
+         UsrDat->Roles.InCurrentCrs.Valid = false;
 	}
      }
 
