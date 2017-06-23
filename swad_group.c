@@ -90,7 +90,7 @@ static void Grp_EditGroups (void);
 static void Grp_PutIconsEditingGroups (void);
 static void Grp_PutIconToCreateNewGroup (void);
 
-static void Grp_PutCheckboxAllGrps (void);
+static void Grp_PutCheckboxAllGrps (bool AllGroupsSelectable);
 
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
@@ -111,7 +111,8 @@ static void Grp_ShowWarningToStdsToChangeGrps (void);
 static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                                               unsigned *NumGrpsThisTypeIBelong);
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod);
-static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp);
+static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
+                                              bool AllGroupsSelectable);
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight);
 static void Grp_PutFormToCreateGroupType (void);
@@ -346,7 +347,7 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,bool AllGroupsSelectable)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -376,7 +377,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Usr_PutExtraParamsUsrList (NextAction);
 
       /***** Select all groups *****/
-      Grp_PutCheckboxAllGrps ();
+      Grp_PutCheckboxAllGrps (AllGroupsSelectable);
 
       /***** Get list of groups types and groups in this course *****/
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -387,7 +388,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
 	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-	    Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
+	    Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+	                                      AllGroupsSelectable);
       Tbl_EndTable ();
 
       /***** Free list of groups types and groups in this course *****/
@@ -415,7 +417,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 /******************* Put checkbox to select all groups ***********************/
 /*****************************************************************************/
 
-static void Grp_PutCheckboxAllGrps (void)
+static void Grp_PutCheckboxAllGrps (bool AllGroupsSelectable)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_All_groups;
@@ -424,7 +426,7 @@ static void Grp_PutCheckboxAllGrps (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 ICanSelUnselGroup = false;
+	 ICanSelUnselGroup = AllGroupsSelectable;
 	 break;
       case Rol_STD:
       case Rol_TCH:
@@ -2128,7 +2130,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 /******* Write a list of groups as checkbox form for unique selection ********/
 /*****************************************************************************/
 
-static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
+static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
+                                              bool AllGroupsSelectable)
   {
    extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
@@ -2164,7 +2167,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_NET:
-	       ICanSelUnselGroup = IBelongToThisGroup;
+	       ICanSelUnselGroup = AllGroupsSelectable ||
+	                           IBelongToThisGroup;
 	       break;
 	    case Rol_STD:
 	    case Rol_TCH:

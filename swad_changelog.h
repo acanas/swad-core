@@ -236,13 +236,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.247 (2017-06-20)"
+#define Log_PLATFORM_VERSION	"SWAD 16.247.1 (2017-06-23)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.247.1: Jun 23, 2017	Non-editing teachers can select all groups when writing a message. (222068 lines)
         Version 16.247:   Jun 20, 2017	Fixed bug when removing a user from a course.
 					Code refactoring related with caches. (222063 lines)
         Version 16.246:   Jun 20, 2017	Fixed bugs and code refactoring in groups. (221975 lines)

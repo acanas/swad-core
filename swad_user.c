@@ -7403,7 +7403,7 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
-      Grp_ShowFormToSelectSeveralGroups (ActLstStd);
+      Grp_ShowFormToSelectSeveralGroups (ActLstStd,false);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
@@ -7578,7 +7578,7 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
-      Grp_ShowFormToSelectSeveralGroups (ActLstTch);
+      Grp_ShowFormToSelectSeveralGroups (ActLstTch,false);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

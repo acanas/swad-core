@@ -480,7 +480,7 @@ void Sta_AskShowCrsHits (void)
                  Hlp_STATS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
+   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,false);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

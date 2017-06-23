@@ -892,7 +892,7 @@ void Mai_ListEmails (void)
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
+   Grp_ShowFormToSelectSeveralGroups (ActMaiStd,false);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
