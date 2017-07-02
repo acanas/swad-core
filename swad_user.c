@@ -778,6 +778,24 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
+/********************* Flush all caches related to users *********************/
+/*****************************************************************************/
+
+void Usr_FlushCachesUsr (void)
+  {
+   Usr_FlushCacheUsrBelongsToIns ();
+   Usr_FlushCacheUsrBelongsToCtr ();
+   Usr_FlushCacheUsrBelongsToDeg ();
+   Usr_FlushCacheUsrBelongsToCrs ();
+   Usr_FlushCacheUsrBelongsToCurrentCrs ();
+   Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+   Usr_FlushCacheUsrSharesAnyOfMyCrs ();
+   Rol_FlushCacheRoleUsrInCrs ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Grp_FlushCacheIBelongToGrp ();
+  }
+
+/*****************************************************************************/
 /***** Check if a user is an administrator of a degree/centre/institution ****/
 /*****************************************************************************/
 

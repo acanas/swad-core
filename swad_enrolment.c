@@ -225,15 +225,19 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
 	    (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
    DB_QueryUPDATE (Query,"can not modify user's role in course");
 
-   /***** Create notification for this user.
-	  If this user wants to receive notifications by email,
-	  activate the sending of a notification *****/
-   Enr_NotifyAfterEnrolment (UsrDat,NewRole);
+   /***** Flush caches *****/
+   Usr_FlushCachesUsr ();
 
+   /***** Set user's roles *****/
    UsrDat->Roles.InCurrentCrs.Role = NewRole;
    UsrDat->Roles.InCurrentCrs.Valid = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
+
+   /***** Create notification for this user.
+	  If this user wants to receive notifications by email,
+	  activate the sending of a notification *****/
+   Enr_NotifyAfterEnrolment (UsrDat,NewRole);
   }
 
 /*****************************************************************************/
@@ -279,6 +283,11 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 	    Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
 		                       'N');
    DB_QueryINSERT (Query,"can not register user in course");
+
+   /***** Flush caches *****/
+   Usr_FlushCachesUsr ();
+
+   /***** Set roles *****/
    UsrDat->Roles.InCurrentCrs.Role = NewRole;
    UsrDat->Roles.InCurrentCrs.Valid = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
@@ -4171,22 +4180,11 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       DB_QueryDELETE (Query,"can not remove a user from a course");
 
       /***** Flush caches *****/
-      Usr_FlushCacheUsrBelongsToIns ();
-      Usr_FlushCacheUsrBelongsToCtr ();
-      Usr_FlushCacheUsrBelongsToDeg ();
-      Usr_FlushCacheUsrBelongsToCrs ();
-      Usr_FlushCacheUsrBelongsToCurrentCrs ();
-      Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
-      Usr_FlushCacheUsrSharesAnyOfMyCrs ();
-      Rol_FlushCacheRoleUsrInCrs ();
-      Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+      Usr_FlushCachesUsr ();
 
       /***** If it's me, change my roles *****/
       if (ItsMe)
 	{
-	 /* Flush caches */
-         Grp_FlushCacheIBelongToGrp ();
-
 	 /* Now I don't belong to current course */
 	 Gbl.Usrs.Me.IBelongToCurrentCrs =
          Gbl.Usrs.Me.UsrDat.Accepted     = false;

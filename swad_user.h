@@ -243,6 +243,8 @@ void Usr_BuildFullName (struct UsrData *UsrDat);
 
 void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
+void Usr_FlushCachesUsr (void);
+
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
