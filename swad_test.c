@@ -6986,7 +6986,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
                  Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes,false);
+   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes,Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

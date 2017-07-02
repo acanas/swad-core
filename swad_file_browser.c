@@ -3124,7 +3124,7 @@ void Brw_AskEditWorksCrs (void)
                  Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs,false);
+   Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs,Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

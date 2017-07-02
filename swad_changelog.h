@@ -232,18 +232,24 @@
 
 // TODO: Cuando sólo se cambian los grupos y no el rol de un profesor ya existente, no sale ningún mensaje. se haga lo que se haga en la edición debería salir un mensaje del tipo "Cambios realizados"
 
+// TODO: Al buscar asignaturas, Estudiantes y Profesores están al revés
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!
+// BUG!!!! Al ver resultados de una encuesta: "Space allocated to string is full."
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.247.2 (2017-06-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.247.3 (2017-07-02)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.247.2: Jun 23, 2017	Non-editing teachers can not view records of users who do not share groups with them.
+        Version 16.247.3: Jul 02, 2017	Students can not view records of some users who do not share groups with them. (222132 lines)
+        Version 16.247.2: Jun 23, 2017	Non-editing teachers can not view records of some users who do not share groups with them.
 					Code refactoring related with roles. (222094 lines)
         Version 16.247.1: Jun 23, 2017	Non-editing teachers can select all groups when writing a message. (222068 lines)
         Version 16.247:   Jun 20, 2017	Fixed bug when removing a user from a course.

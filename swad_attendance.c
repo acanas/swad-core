@@ -1935,7 +1935,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,false);
+   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
@@ -2672,7 +2672,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 		 Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt,false);
+   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt,Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

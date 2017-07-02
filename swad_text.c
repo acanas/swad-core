@@ -30700,23 +30700,23 @@ const char *Txt_Register_teacher =
 
 const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE =
 #if   L==1
-	"Inscriure usuari";
+	"Inscriure usuari/a";
 #elif L==2
 	"Anmeldung Benutzer";
 #elif L==3
 	"Register user";
 #elif L==4
-	"Inscribir usuario";
+	"Inscribir usuario/a";
 #elif L==5
-	"Inscrire utilisateur";
+	"Inscrire utilisateur/se";
 #elif L==6
-	"Inscribir usuario";	// Okoteve traducción
+	"Inscribir usuario/a";	// Okoteve traducción
 #elif L==7
 	"Registrare utente";
 #elif L==8
 	"Rejestracja u&zdot;ytkownika";
 #elif L==9
-	"Registrar utilizador";
+	"Registrar utilizador/a";
 #endif
 
 const char *Txt_Register_me_in_X =	// Warning: it is very important to include %s in the following sentences
