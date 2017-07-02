@@ -3111,8 +3111,8 @@ unsigned Crs_ListCrssFound (const char *Query)
 	       Txt_Degree,
 	       Txt_Year_OF_A_DEGREE,
 	       Txt_Course,
-	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
-	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
       /***** Write courses *****/
       for (NumCrs = 1;
