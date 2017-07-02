@@ -138,7 +138,7 @@ static void Svy_RemAnswersOfAQuestion (long QstCod);
 static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
 static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res);
-static int Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns);
+static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns);
 static void Svy_FreeTextChoiceAnswers (struct SurveyQuestion *SvyQst,unsigned NumAnswers);
 static void Svy_FreeTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns);
 
@@ -391,6 +391,9 @@ void Svy_SeeOneSurvey (void)
   {
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
@@ -2871,16 +2874,16 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 /******************* Allocate memory for a choice answer *********************/
 /*****************************************************************************/
 
-static int Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns)
+static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns)
   {
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
       sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
-      return 0;
+      return false;
      }
    SvyQst->AnsChoice[NumAns].Text[0] = '\0';
-   return 1;
+   return true;
   }
 
 /*****************************************************************************/
@@ -2956,7 +2959,8 @@ void Svy_ReceiveQst (void)
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
      {
-      Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns);
+      if (!Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns))
+	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
       sprintf (AnsStr,"AnsStr%u",NumAns);
       Par_GetParToHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
      }
@@ -3364,14 +3368,18 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrsThisAnswer;
-   char *Answer;
-   size_t AnsLength;
 
+   /***** Get answers of this question *****/
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
    if (NumAnswers)
      {
+      /* Check number of answers */
+      if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
+	 Lay_ShowErrorAndExit ("Wrong number of answers.");
+
+      /* Write one row for each answer */
       Tbl_StartTable (5);
       for (NumAns = 0;
 	   NumAns < NumAnswers;
@@ -3384,13 +3392,12 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	    Lay_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
 
 	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
-	 AnsLength = strlen (row[2]);
-	 if ((Answer = malloc (AnsLength + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-	 Str_Copy (Answer,row[2],
-	           AnsLength);
+	 if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	 Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
+	           Svy_MAX_BYTES_ANSWER);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Answer,AnsLength,false);
+			   SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,false);
 
 	 /* Selectors and label with the letter of the answer */
 	 fprintf (Gbl.F.Out,"<tr>");
@@ -3425,7 +3432,8 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
 			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">%s</label>"
 	                    "</td>",
-		  (unsigned) SvyQst->QstCod,NumAns,Answer);
+		  (unsigned) SvyQst->QstCod,NumAns,
+		  SvyQst->AnsChoice[NumAns].Text);
 
 	 /* Show stats of this answer */
 	 if (Svy->Status.ICanViewResults)
@@ -3434,7 +3442,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	 fprintf (Gbl.F.Out,"</tr>");
 
 	 /* Free memory allocated for the answer */
-	 free ((void *) Answer);
+	 Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
 	}
       Tbl_EndTable ();
      }
