@@ -65,6 +65,7 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_QR.h"
+#include "swad_remote_control.h"
 #include "swad_report.h"
 #include "swad_role.h"
 #include "swad_search.h"
@@ -425,6 +426,7 @@ Assessment:
 	289. ActSeeAsg			Show assignments
 	290. ActReqTst			Request a test of self-assesment
         291. ActSeeAllSvy		List all surveys in pages
+        NEW. ActRmtCtl			Remote control
 	292. ActSeeAllExaAnn		Show the exam announcements
 
 	293. ActEdiAss			Edit the assessment system
@@ -1878,7 +1880,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
    /* ActReqTst		*/{ 103, 2,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
    /* ActSeeAllSvy	*/{ 966, 3,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActSeeAllExaAnn	*/{  85, 4,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
+   /* ActRmtCtl		*/{1649, 4,TabAss,ActRmtCtl		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RemoteControl		,"remote64x64.png"	},
+   /* ActSeeAllExaAnn	*/{  85, 5,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
 
    // Actions not in menu:
    /* ActEdiAss		*/{  69,-1,TabUnk,ActSeeAss		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
@@ -4653,6 +4656,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUpdNET,		// #1646
 	ActRemNETCrs,		// #1647
 	ActChgCtrPlcCfg,	// #1648
+	ActRmtCtl,		// #1649
 	};
 
 /*****************************************************************************/

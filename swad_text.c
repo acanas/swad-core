@@ -18876,7 +18876,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  4: ActSeeAllExaAnn
+	//  4: ActRmtCtl
+#if   L==1
+	"Comandament"
+#elif L==2
+	"Fernsteuerung"
+#elif L==3
+	"Remote"
+#elif L==4
+	"Mando"
+#elif L==5
+	"T&eacute;l&eacute;commande"
+#elif L==6
+	"Mando"	// Okoteve traducción
+#elif L==7
+	"Telecomando"
+#elif L==8
+	"Pilot"
+#elif L==9
+	"Remoto"
+#endif
+	,
+	//  5: ActSeeAllExaAnn
 #if   L==1
 	"Convocat&ograve;ries"
 #elif L==2
@@ -18897,7 +18918,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -20801,7 +20821,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  4: ActSeeAllExaAnn
+	//  4: ActRmtCtl
+#if   L==1
+	"Comandament"
+#elif L==2
+	"Fernsteuerung"
+#elif L==3
+	"Remote"
+#elif L==4
+	"Mando"
+#elif L==5
+	"T&eacute;l&eacute;commande"
+#elif L==6
+	"Mando"	// Okoteve traducción
+#elif L==7
+	"Telecomando"
+#elif L==8
+	"Pilot"
+#elif L==9
+	"Remoto"
+#endif
+	,
+	//  5: ActSeeAllExaAnn
 #if   L==1
 	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2
@@ -20822,7 +20863,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas para exames"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
