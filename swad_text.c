@@ -18876,7 +18876,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  4: ActRmtCtl
+	//  4: ActSeeAllGam
 #if   L==1
 	"Comandament"
 #elif L==2
@@ -20821,7 +20821,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  4: ActRmtCtl
+	//  4: ActSeeAllGam
 #if   L==1
 	"Comandament"
 #elif L==2
@@ -23882,6 +23882,27 @@ const char *Txt_New_FILE_OR_FOLDER =
 	"Nowe";
 #elif L==9
 	"Novo";
+#endif
+
+const char *Txt_New_game =
+#if   L==1
+	"Nou joc";
+#elif L==2
+	"Neues Spiel";
+#elif L==3
+	"New game";
+#elif L==4
+	"Nuevo juego";
+#elif L==5
+	"Nouveau jeu";
+#elif L==6
+	"Nuevo juego";	// Okoteve traducción
+#elif L==7
+	"Nuovo gioco";
+#elif L==8
+	"Nowa gra";
+#elif L==9
+	"Novo jogo";
 #endif
 
 const char *Txt_New_group =
@@ -47469,6 +47490,27 @@ const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: 
 	" (this field is filled in the records of %u students)";		// Necessita de tradução
 #endif
 
+const char *Txt_This_game_has_no_questions =
+#if   L==1
+	"Aquest joc no t&eacute; preguntes.";
+#elif L==2
+	"Dieses Spiel hat keine Fragen.";
+#elif L==3
+	"This game has no questions.";
+#elif L==4
+	"Este juego no tiene preguntas.";
+#elif L==5
+	"Ce jeu n'a pas de questions.";
+#elif L==6
+	"Este juego no tiene preguntas.";	// Okoteve traducción
+#elif L==7
+	"Questo gioco non ha domande.";
+#elif L==8
+	"Ta gra nie ma pytania.";
+#elif L==9
+	"Este jogo n&atilde;o tem perguntas.";
+#endif
+
 const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists =
 #if   L==1
 	"Aquest enlla&ccedil; romandr&agrave; actiu mentre existeixi el seu compte de l'usuari.";
@@ -50746,6 +50788,27 @@ const char *Txt_View_event =
 	"Ver evento";
 #endif
 
+const char *Txt_View_game =
+#if   L==1
+	"Veure joc";
+#elif L==2
+	"Anzeigen Spiel";
+#elif L==3
+	"View game";
+#elif L==4
+	"Ver juego";
+#elif L==5
+	"Voir jeu";
+#elif L==6
+	"Ver juego";			// Okoteve traducción
+#elif L==7
+	"Vedi gioco";
+#elif L==8
+	"Zobacz gr&eogon;";
+#elif L==9
+	"Ver jogo";
+#endif
+
 const char *Txt_View_in_a_new_window =
 #if   L==1
 	"Mostrar en una finestra nova";
@@ -50825,14 +50888,14 @@ const char *Txt_View_survey =
 #elif L==7
 	"Vedi sondaggio";
 #elif L==8
-	"View survey";			// Potrzebujesz tlumaczenie
+	"Zobacz ankiet&eogon;";
 #elif L==9
 	"Ver inqu&eacute;rito";
 #endif
 
 const char *Txt_View_survey_results =
 #if   L==1
-	"Ver resultados";	// Necessita traduccio
+	"Veure resultats";
 #elif L==2
 	"Anzeigen Ergebnisse";
 #elif L==3
@@ -50846,7 +50909,7 @@ const char *Txt_View_survey_results =
 #elif L==7
 	"Vedi risultati";
 #elif L==8
-	"View survey results";	// Potrzebujesz tlumaczenie
+	"Wy&sacute;wietl wyniki ankiety";
 #elif L==9
 	"Ver resultados";
 #endif

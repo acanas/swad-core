@@ -426,7 +426,7 @@ Assessment:
 	289. ActSeeAsg			Show assignments
 	290. ActReqTst			Request a test of self-assesment
         291. ActSeeAllSvy		List all surveys in pages
-        NEW. ActRmtCtl			Remote control
+        NEW. ActSeeAllGam			Remote control
 	292. ActSeeAllExaAnn		Show the exam announcements
 
 	293. ActEdiAss			Edit the assessment system
@@ -489,6 +489,23 @@ Assessment:
         358. ActRcvSvyQst		Receive a question of a survey
         359. ActReqRemSvyQst		Request the removal of a question of a survey
         360. ActRemSvyQst		Confirm the removal of a question of a survey
+
+        NEW. ActSeeOneGam		Show one game
+        NEW. ActAnsGam			Answer a game
+        NEW. ActFrmNewGam		Form to create a new game
+        NEW. ActEdiOneGam		Edit one game
+        NEW. ActNewGam			Create new game
+        NEW. ActChgGam			Modify data of an existing game
+        NEW. ActReqRemGam		Request the removal of a game
+        NEW. ActRemGam			Remove game
+        NEW. ActReqRstGam		Request the reset of answers of a game
+        NEW. ActRstGam			Reset answers of game
+        NEW. ActHidGam			Hide game
+        NEW. ActShoGam			Show game
+        NEW. ActEdiOneGamQst		Edit a new question for a game
+        NEW. ActRcvGamQst		Receive a question of a game
+        NEW. ActReqRemGamQst		Request the removal of a question of a game
+        NEW. ActRemGamQst		Confirm the removal of a question of a game
 
 	361. ActSeeOneExaAnn		Show one exam announcement
 	362. ActSeeDatExaAnn		Show exam announcements of a given date
@@ -1880,7 +1897,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
    /* ActReqTst		*/{ 103, 2,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
    /* ActSeeAllSvy	*/{ 966, 3,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActRmtCtl		*/{1649, 4,TabAss,ActRmtCtl		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RemoteControl		,"remote64x64.png"	},
+   /* ActSeeAllGam	*/{1649, 4,TabAss,ActSeeAllGam		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_SeeAllGames		,"remote64x64.png"	},
    /* ActSeeAllExaAnn	*/{  85, 5,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
 
    // Actions not in menu:
@@ -1948,6 +1965,23 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvSvyQst	*/{ 980,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveQst			,NULL},
    /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
    /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
+
+   /* ActSeeOneGam	*/{1650,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_SeeOneGame			,NULL},
+   /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_ReceiveGameAnswers		,NULL},
+   /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestCreatOrEditGame	,NULL},
+   /* ActEdiOneGam	*/{1653,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestCreatOrEditGame	,NULL},
+   /* ActNewGam		*/{1654,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RecFormGame		,NULL},
+   /* ActChgGam		*/{1655,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RecFormGame		,NULL},
+   /* ActReqRemGam	*/{1656,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_AskRemGame			,NULL},
+   /* ActRemGam		*/{1657,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RemoveGame			,NULL},
+   /* ActReqRstGam	*/{1658,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_AskResetGame		,NULL},
+   /* ActRstGam		*/{1659,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_ResetGame			,NULL},
+   /* ActHidGam		*/{1660,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_HideGame			,NULL},
+   /* ActShoGam		*/{1661,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_UnhideGame			,NULL},
+   /* ActEdiOneGamQst	*/{1662,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestEditQuestion	,NULL},
+   /* ActRcvGamQst	*/{1663,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_ReceiveQst			,NULL},
+   /* ActReqRemGamQst	*/{1664,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestRemoveQst		,NULL},
+   /* ActRemGamQst	*/{1665,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RemoveQst			,NULL},
 
    /* ActSeeOneExaAnn	*/{1572,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
    /* ActSeeDatExaAnn	*/{1571,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetDateToHighlight		,Exa_ListExamAnnouncementsSee	,NULL},
@@ -4656,7 +4690,23 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUpdNET,		// #1646
 	ActRemNETCrs,		// #1647
 	ActChgCtrPlcCfg,	// #1648
-	ActRmtCtl,		// #1649
+	ActSeeAllGam,		// #1649
+	ActSeeOneGam,		// #1650
+	ActAnsGam,		// #1651
+	ActFrmNewGam,		// #1652
+	ActEdiOneGam,		// #1653
+	ActNewGam,		// #1654
+	ActChgGam,		// #1655
+	ActReqRemGam,		// #1656
+	ActRemGam,		// #1657
+	ActReqRstGam,		// #1658
+	ActRstGam,		// #1659
+	ActHidGam,		// #1660
+	ActShoGam,		// #1661
+	ActEdiOneGamQst,	// #1662
+	ActRcvGamQst,		// #1663
+	ActReqRemGamQst,	// #1664
+	ActRemGamQst,		// #1665
 	};
 
 /*****************************************************************************/

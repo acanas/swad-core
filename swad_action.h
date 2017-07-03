@@ -57,9 +57,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 73 + 416 + 165 + 172 + 42 + 14 + 97)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 89 + 416 + 165 + 172 + 42 + 14 + 97)
 
-#define Act_MAX_ACTION_COD 1649
+#define Act_MAX_ACTION_COD 1665
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 12
 
@@ -435,7 +435,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeAsg		(ActChgCalCrs1stDay +  2)
 #define ActReqTst		(ActChgCalCrs1stDay +  3)
 #define ActSeeAllSvy		(ActChgCalCrs1stDay +  4)
-#define ActRmtCtl		(ActChgCalCrs1stDay +  5)
+#define ActSeeAllGam		(ActChgCalCrs1stDay +  5)
 #define ActSeeAllExaAnn		(ActChgCalCrs1stDay +  6)
 
 // Secondary actions
@@ -502,15 +502,32 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActReqRemSvyQst		(ActChgCalCrs1stDay + 63)
 #define ActRemSvyQst		(ActChgCalCrs1stDay + 64)
 
-#define ActSeeOneExaAnn		(ActChgCalCrs1stDay + 65)
-#define ActSeeDatExaAnn		(ActChgCalCrs1stDay + 66)
-#define ActEdiExaAnn		(ActChgCalCrs1stDay + 67)
-#define ActRcvExaAnn		(ActChgCalCrs1stDay + 68)
-#define ActPrnExaAnn		(ActChgCalCrs1stDay + 69)
-#define ActReqRemExaAnn		(ActChgCalCrs1stDay + 70)
-#define ActRemExaAnn		(ActChgCalCrs1stDay + 71)
-#define ActHidExaAnn		(ActChgCalCrs1stDay + 72)
-#define ActShoExaAnn		(ActChgCalCrs1stDay + 73)
+#define ActSeeOneGam		(ActChgCalCrs1stDay + 65)
+#define ActAnsGam		(ActChgCalCrs1stDay + 66)
+#define ActFrmNewGam		(ActChgCalCrs1stDay + 67)
+#define ActEdiOneGam		(ActChgCalCrs1stDay + 68)
+#define ActNewGam		(ActChgCalCrs1stDay + 69)
+#define ActChgGam		(ActChgCalCrs1stDay + 70)
+#define ActReqRemGam		(ActChgCalCrs1stDay + 71)
+#define ActRemGam		(ActChgCalCrs1stDay + 72)
+#define ActReqRstGam		(ActChgCalCrs1stDay + 73)
+#define ActRstGam		(ActChgCalCrs1stDay + 74)
+#define ActHidGam		(ActChgCalCrs1stDay + 75)
+#define ActShoGam		(ActChgCalCrs1stDay + 76)
+#define ActEdiOneGamQst		(ActChgCalCrs1stDay + 77)
+#define ActRcvGamQst		(ActChgCalCrs1stDay + 78)
+#define ActReqRemGamQst		(ActChgCalCrs1stDay + 79)
+#define ActRemGamQst		(ActChgCalCrs1stDay + 80)
+
+#define ActSeeOneExaAnn		(ActChgCalCrs1stDay + 81)
+#define ActSeeDatExaAnn		(ActChgCalCrs1stDay + 82)
+#define ActEdiExaAnn		(ActChgCalCrs1stDay + 83)
+#define ActRcvExaAnn		(ActChgCalCrs1stDay + 84)
+#define ActPrnExaAnn		(ActChgCalCrs1stDay + 85)
+#define ActReqRemExaAnn		(ActChgCalCrs1stDay + 86)
+#define ActRemExaAnn		(ActChgCalCrs1stDay + 87)
+#define ActHidExaAnn		(ActChgCalCrs1stDay + 88)
+#define ActShoExaAnn		(ActChgCalCrs1stDay + 89)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/

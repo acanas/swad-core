@@ -67,6 +67,7 @@
 #include "swad_place.h"
 #include "swad_plugin.h"
 #include "swad_record.h"
+#include "swad_remote_control.h"
 #include "swad_search.h"
 #include "swad_session.h"
 #include "swad_social.h"
@@ -709,6 +710,16 @@ struct Globals
       struct DateTime DateEnd;	// TODO: Remove in future versions
       time_t TimeUTC[2];
      } DateRange;
+   struct
+     {
+      bool LstIsRead;	// Is the list already read from database, or it needs to be read?
+      unsigned Num;	// Number of surveys
+      long *LstGamCods;	// List of game codes
+      Rmt_Order_t SelectedOrder;
+      long GamCodToEdit;	// Used as parameter in contextual links
+      long GamQstCodToEdit;	// Used as parameter in contextual links
+      unsigned CurrentPage;
+     } Games;
    struct
      {
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?

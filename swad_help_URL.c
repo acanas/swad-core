@@ -1093,6 +1093,90 @@ const char *Hlp_ASSESSMENT_Surveys_questions =
 	"ASSESSMENT.Surveys.en#questions";
 #endif
 
+const char *Hlp_ASSESSMENT_Games =
+#if   L==1
+	"ASSESSMENT.Games.es";
+#elif L==2
+	"ASSESSMENT.Games.en";
+#elif L==3
+	"ASSESSMENT.Games.en";
+#elif L==4
+	"ASSESSMENT.Games.es";
+#elif L==5
+	"ASSESSMENT.Games.en";
+#elif L==6
+	"ASSESSMENT.Games.es";
+#elif L==7
+	"ASSESSMENT.Games.en";
+#elif L==8
+	"ASSESSMENT.Games.en";
+#elif L==9
+	"ASSESSMENT.Games.en";
+#endif
+
+const char *Hlp_ASSESSMENT_Games_new_juego =
+#if   L==1
+	"ASSESSMENT.Games.es#nueva-juego";
+#elif L==2
+	"ASSESSMENT.Games.en#new-juego";
+#elif L==3
+	"ASSESSMENT.Games.en#new-juego";
+#elif L==4
+	"ASSESSMENT.Games.es#nueva-juego";
+#elif L==5
+	"ASSESSMENT.Games.en#new-juego";
+#elif L==6
+	"ASSESSMENT.Games.es#nueva-juego";
+#elif L==7
+	"ASSESSMENT.Games.en#new-juego";
+#elif L==8
+	"ASSESSMENT.Games.en#new-juego";
+#elif L==9
+	"ASSESSMENT.Games.en#new-juego";
+#endif
+
+const char *Hlp_ASSESSMENT_Games_edit_juego =
+#if   L==1
+	"ASSESSMENT.Games.es#editar-juego";
+#elif L==2
+	"ASSESSMENT.Games.en#edit-juego";
+#elif L==3
+	"ASSESSMENT.Games.en#edit-juego";
+#elif L==4
+	"ASSESSMENT.Games.es#editar-juego";
+#elif L==5
+	"ASSESSMENT.Games.en#edit-juego";
+#elif L==6
+	"ASSESSMENT.Games.es#editar-juego";
+#elif L==7
+	"ASSESSMENT.Games.en#edit-juego";
+#elif L==8
+	"ASSESSMENT.Games.en#edit-juego";
+#elif L==9
+	"ASSESSMENT.Games.en#edit-juego";
+#endif
+
+const char *Hlp_ASSESSMENT_Games_questions =
+#if   L==1
+	"ASSESSMENT.Games.es#preguntas";
+#elif L==2
+	"ASSESSMENT.Games.en#questions";
+#elif L==3
+	"ASSESSMENT.Games.en#questions";
+#elif L==4
+	"ASSESSMENT.Games.es#preguntas";
+#elif L==5
+	"ASSESSMENT.Games.en#questions";
+#elif L==6
+	"ASSESSMENT.Games.es#preguntas";
+#elif L==7
+	"ASSESSMENT.Games.en#questions";
+#elif L==8
+	"ASSESSMENT.Games.en#questions";
+#elif L==9
+	"ASSESSMENT.Games.en#questions";
+#endif
+
 const char *Hlp_ASSESSMENT_Announcements =
 #if   L==1
 	"ASSESSMENT.Announcements.es";

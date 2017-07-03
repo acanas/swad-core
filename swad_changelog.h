@@ -236,13 +236,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.248 (2017-07-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.249 (2017-07-04)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.249:   Jul 04, 2017	Listing games for remote control. Not finished. (226021 lines)
         Version 16.248:   Jul 03, 2017	New option to emulate a remote control. (222272 lines)
         Version 16.247.6: Jul 02, 2017	Fixed bug in user's enrolment. (222151 lines)
         Version 16.247.5: Jul 02, 2017	Fixed error in layout when searching for courses. (222138 lines)
