@@ -9325,7 +9325,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 	" como administrador/a de <strong>%s</strong>?";		// Necessita traduccio
 #elif L==2
 	"Do you really want to remove the following user"
-	" as an administrator of <strong>%s</strong>?";		// Need Übersetzung
+	" as an administrator of <strong>%s</strong>?";			// Need Übersetzung
 #elif L==3
 	"Do you really want to remove the following user"
 	" as an administrator of <strong>%s</strong>?";
@@ -9334,7 +9334,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 	" como administrador/a de <strong>%s</strong>?";
 #elif L==5
 	"Do you really want to remove the following user"
-	" as an administrator of <strong>%s</strong>?";		// Besoin de traduction
+	" as an administrator of <strong>%s</strong>?";			// Besoin de traduction
 #elif L==6
 	"&iquest;Realmente desea eliminar el siguiente usuario"
 	" como administrador/a de <strong>%s</strong>?";		// Okoteve traducción
@@ -9379,9 +9379,30 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	" (removing her/his works, enrolment in groups, etc.)?";		// Necessita de tradução
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"De veres voleu eliminar le joc <strong>%s</strong>?";
+#elif L==2
+	"Wollen Sie die Spiel <strong>%s</strong> wirklich entfernen?";
+#elif L==3
+	"Do you really want to remove the game <strong>%s</strong>?";
+#elif L==4
+	"&iquest;Realmente desea eliminar el juego <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous vraiment supprimer le jeu <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Realmente desea eliminar el juego <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere il gioco <strong>%s</strong>?";
+#elif L==8
+	"Czy na pewno chcesz usunac gra <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?";	// Necessita traduccio
+	"De veres voleu eliminar el grup <strong>%s</strong>?";
 #elif L==2
 	"Do you really want to remove the group <strong>%s</strong>?";		// Need Übersetzung
 #elif L==3
@@ -9402,8 +9423,8 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is ver
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
-	"Si lo hace, un/a estudiante dejar&aacute; de pertenecer a ese grupo.";	// Necessita traduccio
+	"De veres voleu eliminar el grup <strong>%s</strong>?<br />"
+	"Si ho fa, un/a estudiant deixar&agrave; de pert&agrave;nyer a aquest grup.";
 #elif L==2
 	"Do you really want to remove the group <strong>%s</strong>?<br />"
 	"Doing so will remove one student from that group.";			// Need Übersetzung
@@ -9432,8 +9453,8 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warning: it is very important to include %s and %u in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
-	"Si lo hace, %u estudiantes dejar&aacute;n de pertenecer a ese grupo.";	// Necessita traduccio
+	"De veres voleu eliminar el grup <strong>%s</strong>?<br />"
+	"Si ho fa, %u estudiants deixaran de pert&agrave;nyer a aquest grup.";
 #elif L==2
 	"Do you really want to remove the group <strong>%s</strong>?<br />"
 	"Doing so will remove %u students from that group.";			// Need Übersetzung
@@ -9483,7 +9504,7 @@ const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is 
 
 const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %lu in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar la pregunta <strong>%lu</strong>?";	// Necessita traduccio
+	"De veres voleu eliminar pregunta <strong>%lu</strong>?";
 #elif L==2
 	"Wollen Sie die Frage <strong>%lu</strong> wirklich entfernen?";
 #elif L==3
@@ -9504,7 +9525,7 @@ const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is 
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar la encuesta <strong>%s</strong>?";	// Necessita traduccio
+	"Realment voleu eliminar l'enquesta <strong>%s</strong>?";
 #elif L==2
 	"Wollen Sie die Umfrage <strong>%s</strong> wirklich entfernen?";
 #elif L==3
@@ -9606,7 +9627,7 @@ const char *Txt_Do_you_really_want_to_remove_your_photo =
 
 const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"&iquest;Realmente desea poner a cero la encuesta <strong>%s</strong>?";	// Necessita traduccio
+	"De veres voleu posar a zero l'enquesta <strong>%s</strong>?";
 #elif L==2
 	"Wollen Sie die Umfrage <strong>%s</strong> wirklich reset?";
 #elif L==3
@@ -13788,6 +13809,27 @@ const char *Txt_Game =
 	"Jogo";
 #endif
 
+const char *Txt_Game_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Joc <strong>%s</strong> eliminat.";
+#elif L==2
+	"Spiel <strong>%s</strong> entfernt.";
+#elif L==3
+	"Game <strong>%s</strong> removed.";
+#elif L==4
+	"Juego <strong>%s</strong> eliminado.";
+#elif L==5
+	"Jeu <strong>%s</strong> supprim&eacute;.";
+#elif L==6
+	"Juego <strong>%s</strong> eliminado.";	// Okoteve traducción
+#elif L==7
+	"Gioco <strong>%s</strong> rimosso.";
+#elif L==8
+	"Gra <strong>%s</strong> usuni&eogon;te.";
+#elif L==9
+	"Jogo <strong>%s</strong> removido.";
+#endif
+
 const char *Txt_GAME_You_belong_to_the_scope_of_the_game =
 #if   L==1
 	"Pertany a l'&agrave;mbit del joc";
@@ -13828,6 +13870,27 @@ const char *Txt_GAME_You_dont_belong_to_the_scope_of_the_game =
 	"Nie nale&zdot;&aogon; do zakresu gry";
 #elif L==9
 	"Voc&ecirc; n&atilde;o pertence ao &acirc;mbito do jogo";
+#endif
+
+const char *Txt_Games =
+#if   L==1
+	"Jocs";
+#elif L==2
+	"Spiele";
+#elif L==3
+	"Games";
+#elif L==4
+	"Juegos";
+#elif L==5
+	"Jeux";
+#elif L==6
+	"Juegos";	// Okoteve traducción
+#elif L==7
+	"Giochi";
+#elif L==8
+	"Gry";
+#elif L==9
+	"Jogos";
 #endif
 
 const char *Txt_General =
@@ -24901,6 +24964,27 @@ const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file =
 	" within the <em>ZIP</em> file.";		// Necessita de tradução
 #endif
 
+const char *Txt_No_games =
+#if   L==1
+	"No hi ha jocs.";
+#elif L==2
+	"Keine Spiele.";
+#elif L==3
+	"No games.";
+#elif L==4
+	"No hay juegos.";
+#elif L==5
+	"Il n'y a pas de jeux.";
+#elif L==6
+	"No hay juegos.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono giochi.";
+#elif L==8
+	"Brak gry.";
+#elif L==9
+	"N&atilde;o h&aacute; jogos.";
+#endif
+
 const char *Txt_No_groups_have_been_created_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"No se han creado grupos en la asignatura <strong>%s</strong>.";	// Necessita traduccio
@@ -28426,28 +28510,7 @@ const char *Txt_out_of_PART_OF_A_SCORE =	// Example: score is 2 out of 10
 #elif L==9
 	"out of";
 #endif
-/*	TODO: Remove if not used
-const char *Txt_Page =
-#if   L==1
-	"P&agrave;g.";
-#elif L==2
-	"Page";
-#elif L==3
-	"Page";
-#elif L==4
-	"P&aacute;g.";
-#elif L==5
-	"Page";
-#elif L==6
-	"Kuatiarogue";
-#elif L==7
-	"Pag.";
-#elif L==8
-	"Strona";
-#elif L==9
-	"P&aacute;g.";
-#endif
-*/
+
 const char *Txt_page =
 #if   L==1
 	"p&agrave;g.";
@@ -29142,6 +29205,27 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 	"Centros"
 #endif
 	};
+
+const char *Txt_Play =	// To play a game
+#if   L==1
+	"Jugar";
+#elif L==2
+	"Spielen";
+#elif L==3
+	"Play";
+#elif L==4
+	"Jugar";
+#elif L==5
+	"Jouer";
+#elif L==6
+	"Jugar";	// Okoteve traducción
+#elif L==7
+	"Giocare";
+#elif L==8
+	"Gra&cacute;";
+#elif L==9
+	"Jogar";
+#endif
 
 const char *Txt_Please_check_and_confirm_your_email_address =
 #if   L==1
@@ -31332,6 +31416,27 @@ const char *Txt_Remove_folder_X = // Warning: it is very important to include %s
 	"Remover diret&oacute;rio %s";
 #endif
 
+const char *Txt_Remove_game =
+#if   L==1
+	"Eliminar joc";
+#elif L==2
+	"Entfernen Spiel";
+#elif L==3
+	"Remove game";
+#elif L==4
+	"Eliminar juego";
+#elif L==5
+	"Supprimer jeu";
+#elif L==6
+	"Eliminar juego";	// Okoteve traducción
+#elif L==7
+	"Rimuovere gioco";
+#elif L==8
+	"Usu&nacute; gra";
+#elif L==9
+	"Remover jogo";
+#endif
+
 const char *Txt_Remove_group =
 #if   L==1
 	"Eliminar grupo";	// Necessita traduccio
@@ -31655,7 +31760,7 @@ const char *Txt_Remove_record_field =
 
 const char *Txt_Remove_survey =
 #if   L==1
-	"Eliminar encuesta";	// Necessita traduccio
+	"Eliminar enquesta";
 #elif L==2
 	"Entfernen Umfrage";
 #elif L==3
@@ -41046,7 +41151,7 @@ const char *Txt_Survey_X_is_now_visible =	// Warning: it is very important to in
 
 const char *Txt_Survey_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Encuesta <strong>%s</strong> eliminada.";	// Necessita traduccio
+	"Enquesta <strong>%s</strong> eliminada.";
 #elif L==2
 	"Umfrage <strong>%s</strong> entfernt.";
 #elif L==3
@@ -41060,7 +41165,7 @@ const char *Txt_Survey_X_removed =	// Warning: it is very important to include %
 #elif L==7
 	"Sondaggio <strong>%s</strong> rimosso.";
 #elif L==8
-	"Survey <strong>%s</strong> removed.";		// Potrzebujesz tlumaczenie
+	"Badanie <strong>%s</strong> usuni&eogon;te.";
 #elif L==9
 	"Inqu&eacute;rito <strong>%s</strong> removido.";
 #endif
@@ -50954,6 +51059,27 @@ const char *Txt_View_game =
 	"Zobacz gr&eogon;";
 #elif L==9
 	"Ver jogo";
+#endif
+
+const char *Txt_View_game_results =
+#if   L==1
+	"Veure resultats";
+#elif L==2
+	"Anzeigen Ergebnisse";
+#elif L==3
+	"View game results";
+#elif L==4
+	"Ver resultados";
+#elif L==5
+	"Voir r&eacute;sultats";
+#elif L==6
+	"Ver resultados";	// Okoteve traducción
+#elif L==7
+	"Vedi risultati";
+#elif L==8
+	"Wy&sacute;wietl wyniki ankiety";
+#elif L==9
+	"Ver resultados";
 #endif
 
 const char *Txt_View_in_a_new_window =
