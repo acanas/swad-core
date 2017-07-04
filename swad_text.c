@@ -3862,6 +3862,27 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	"voc&ecirc; deve criar sua senha.";
 #endif
 
+const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2
+	"Briefcase of <strong>%s</strong> has been removed.";		// Need Übersetzung
+#elif L==3
+	"Briefcase of <strong>%s</strong> has been removed.";
+#elif L==4
+	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";
+#elif L==5
+	"Briefcase of <strong>%s</strong> has been removed.";		// Besoin de traduction
+#elif L==6
+	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"La penna USB de <strong>%s</strong> &egrave; stata rimossa.";
+#elif L==8
+	"Briefcase of <strong>%s</strong> has been removed.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"Briefcase of <strong>%s</strong> has been removed.";		// Necessita de tradução
+#endif
+
 const char *Txt_Briefcases =
 #if   L==1
 	"Maletins";
@@ -4907,11 +4928,32 @@ const char *Txt_Close =
 	"Fechar";
 #endif
 
+const char *Txt_Closed_game =
+#if   L==1
+	"Joc tancat";
+#elif L==2
+	"Geschlossene Spiel";
+#elif L==3
+	"Closed game";
+#elif L==4
+	"Juego cerrado";
+#elif L==5
+	"Jeu ferm&eacute;";
+#elif L==6
+	"Juego cerrado";		// Okoteve traducción
+#elif L==7
+	"Gioco chiuso";
+#elif L==8
+	"Zamkniete gra";
+#elif L==9
+	"Jogo fechado";
+#endif
+
 const char *Txt_Closed_survey =
 #if   L==1
 	"Enquesta tancada";
 #elif L==2
-	"Closed survey";		// Need Übersetzung
+	"Geschlossene Umfrage";
 #elif L==3
 	"Closed survey";
 #elif L==4
@@ -4925,7 +4967,7 @@ const char *Txt_Closed_survey =
 #elif L==8
 	"Zamkniete badania";
 #elif L==9
-	"Closed survey";		// Necessita de tradução
+	"Inqu&eacute;rito fechado";
 #endif
 
 const char *Txt_Code =
@@ -13725,6 +13767,69 @@ const char *Txt_Function =
 	"Fun&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Game =
+#if   L==1
+	"Joc";
+#elif L==2
+	"Spiel";
+#elif L==3
+	"Game";
+#elif L==4
+	"Juego";
+#elif L==5
+	"Jeu";
+#elif L==6
+	"Juego";	// Okoteve traducción
+#elif L==7
+	"Gioco";
+#elif L==8
+	"Gra";
+#elif L==9
+	"Jogo";
+#endif
+
+const char *Txt_GAME_You_belong_to_the_scope_of_the_game =
+#if   L==1
+	"Pertany a l'&agrave;mbit del joc";
+#elif L==2
+	"Sie geh&ouml;ren zum Umfang des Spiels";
+#elif L==3
+	"You belong to the scope of the game";
+#elif L==4
+	"Pertenece al &aacute;mbito del juego";
+#elif L==5
+	"Vous appartenez &agrave; la port&eacute;e du jeu";
+#elif L==6
+	"Pertenece al &aacute;mbito del juego";		// Okoteve traducción
+#elif L==7
+	"Voi appartenete al campo del gioco";
+#elif L==8
+	"Nale&zdot;ysz do zakresu gry";
+#elif L==9
+	"Voc&ecirc; pertence ao &acirc;mbito do jogo";
+#endif
+
+const char *Txt_GAME_You_dont_belong_to_the_scope_of_the_game =
+#if   L==1
+	"No pertany a l'&agrave;mbit del joc";
+#elif L==2
+	"Sie geh&ouml;ren nicht zum Umfang des Spiels";
+#elif L==3
+	"You don't belong to the scope the game";
+#elif L==4
+	"No pertenece al &aacute;mbito del juego";
+#elif L==5
+	"Vous n'appartenez pas &agrave; la port&eacute;e du jeu";
+#elif L==6
+	"No pertenece al &aacute;mbito del juego";	// Okoteve traducción
+#elif L==7
+	"Voi non appartieni al campo del gioco";
+#elif L==8
+	"Nie nale&zdot;&aogon; do zakresu gry";
+#elif L==9
+	"Voc&ecirc; n&atilde;o pertence ao &acirc;mbito do jogo";
+#endif
+
 const char *Txt_General =
 #if   L==1
 	"General";
@@ -14398,9 +14503,30 @@ const char *Txt_hidden_documents =
 	"documentos ocultos";
 #endif
 
+const char *Txt_Hidden_game =
+#if   L==1
+	"Joc ocult";
+#elif L==2
+	"Ausgeblendet Spiel";
+#elif L==3
+	"Hidden game";
+#elif L==4
+	"Juego oculto";
+#elif L==5
+	"Jeu cach&eacute;";
+#elif L==6
+	"Juego oculto";	// Okoteve traducción
+#elif L==7
+	"Gioco nascosto";
+#elif L==8
+	"Ukryte gra";
+#elif L==9
+	"Jogo oculto";
+#endif
+
 const char *Txt_Hidden_survey =
 #if   L==1
-	"Encuesta oculta";	// Necessita traduccio
+	"Enquesta oculta";
 #elif L==2
 	"Ausgeblendet Umfrage";
 #elif L==3
@@ -27887,6 +28013,27 @@ const char *Txt_open_documents =
 	"documentos abertos";
 #endif
 
+const char *Txt_Open_game =
+#if   L==1
+	"Joc oberto";
+#elif L==2
+	"Ge&ouml;ffneten Spiel";
+#elif L==3
+	"Open game";
+#elif L==4
+	"Juego abierto";
+#elif L==5
+	"Jeu ouvert";
+#elif L==6
+	"Juego abierto";	// Okoteve traducción
+#elif L==7
+	"Gioco aperto";
+#elif L==8
+	"Otwarte gra";
+#elif L==9
+	"Jogo aberto";
+#endif
+
 const char *Txt_Open_survey =
 #if   L==1
 	"Enquesta oberta";
@@ -27903,7 +28050,7 @@ const char *Txt_Open_survey =
 #elif L==7
 	"Sondaggio aperto";
 #elif L==8
-	"otwarte badania";
+	"Otwarte badania";
 #elif L==9
 	"Inqu&eacute;rito aberta";
 #endif
@@ -40756,7 +40903,7 @@ const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey =
 #elif L==2
 	"Sie geh&ouml;ren nicht zum Umfang der Befragung";
 #elif L==3
-	"You don't belong to the scope of the survey)";
+	"You don't belong to the scope of the survey";
 #elif L==4
 	"No pertenece al &aacute;mbito de la encuesta";
 #elif L==5
@@ -50977,27 +51124,6 @@ const char *Txt_View_homework =
 	"Ver trabalhos";
 #endif
 
-const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2
-	"Briefcase of <strong>%s</strong> has been removed.";		// Need Übersetzung
-#elif L==3
-	"Briefcase of <strong>%s</strong> has been removed.";
-#elif L==4
-	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";
-#elif L==5
-	"Briefcase of <strong>%s</strong> has been removed.";		// Besoin de traduction
-#elif L==6
-	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"La penna USB de <strong>%s</strong> &egrave; stata rimossa.";
-#elif L==8
-	"Briefcase of <strong>%s</strong> has been removed.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"Briefcase of <strong>%s</strong> has been removed.";		// Necessita de tradução
-#endif
-
 const char *Txt_Visible_by_BR_the_student =
 #if   L==1
 	"&iquest;Visible por<br />el estudiante?";	// Necessita traduccio
@@ -51017,6 +51143,27 @@ const char *Txt_Visible_by_BR_the_student =
 	"Visible by<br />the student?";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Vis&iacute;vel pelo<br />estudante?";
+#endif
+
+const char *Txt_Visible_game =
+#if   L==1
+	"Joc visible";
+#elif L==2
+	"Sichtbare Spiel";
+#elif L==3
+	"Visible game";
+#elif L==4
+	"Juego visible";
+#elif L==5
+	"Jeu visible";
+#elif L==6
+	"Juego visible";	// Okoteve traducción
+#elif L==7
+	"Gioco visibile";
+#elif L==8
+	"Widoczny gra";
+#elif L==9
+	"Jogo vis&iacute;vel";
 #endif
 
 const char *Txt_Visible_MALE_PLURAL =
@@ -51063,7 +51210,7 @@ const char *Txt_Visible_tests =
 
 const char *Txt_Visible_survey =
 #if   L==1
-	"Encuesta visible";	// Necessita traduccio
+	"Enquesta visible";
 #elif L==2
 	"Sichtbare Umfrage";
 #elif L==3
@@ -51077,7 +51224,7 @@ const char *Txt_Visible_survey =
 #elif L==7
 	"Sondaggio visibile";
 #elif L==8
-	"Visible survey";	// Potrzebujesz tlumaczenie
+	"Widoczny badanie";
 #elif L==9
 	"Inqu&eacute;rito vis&iacute;vel";
 #endif
