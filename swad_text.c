@@ -9625,6 +9625,27 @@ const char *Txt_Do_you_really_want_to_remove_your_photo =
 	"Voc&ecirc; realmente deseja remover a sua foto?";
 #endif
 
+const char *Txt_Do_you_really_want_to_reset_the_game_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"De veres voleu posar a zero le joc <strong>%s</strong>?";
+#elif L==2
+	"Wollen Sie die Spiel <strong>%s</strong> wirklich reset?";
+#elif L==3
+	"Do you really want to reset the game <strong>%s</strong>?";
+#elif L==4
+	"&iquest;Realmente desea poner a cero el juego <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous vraiment reset le jeu <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Realmente desea poner a cero el juego <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente resettare il gioco <strong>%s</strong>?";
+#elif L==8
+	"Czy na pewno chcesz zresetowac gra <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; realmente deseja reiniciar o jogo <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"De veres voleu posar a zero l'enquesta <strong>%s</strong>?";
@@ -32203,6 +32224,27 @@ const char *Txt_Reset =
 	"Reset";
 #elif L==9
 	"Reiniciar";
+#endif
+
+const char *Txt_Reset_game =
+#if   L==1
+	"Posar joc a zero";
+#elif L==2
+	"Reset Spiel";
+#elif L==3
+	"Reset game";
+#elif L==4
+	"Poner juego a cero";
+#elif L==5
+	"Reset jeu";
+#elif L==6
+	"Poner juego a cero";	// Okoteve traducción
+#elif L==7
+	"Resettare gioco";
+#elif L==8
+	"Reset gr&eogon;";
+#elif L==9
+	"Reiniciar jogo";
 #endif
 
 const char *Txt_Reset_survey =
