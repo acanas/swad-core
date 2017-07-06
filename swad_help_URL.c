@@ -1114,25 +1114,46 @@ const char *Hlp_ASSESSMENT_Games =
 	"ASSESSMENT.Games.en";
 #endif
 
-const char *Hlp_ASSESSMENT_Games_new_juego =
+const char *Hlp_ASSESSMENT_Games_edit_game =
+#if   L==1
+	"ASSESSMENT.Games.es#editar-juego";
+#elif L==2
+	"ASSESSMENT.Games.en#edit-game";
+#elif L==3
+	"ASSESSMENT.Games.en#edit-game";
+#elif L==4
+	"ASSESSMENT.Games.es#editar-juego";
+#elif L==5
+	"ASSESSMENT.Games.en#edit-game";
+#elif L==6
+	"ASSESSMENT.Games.es#editar-juego";
+#elif L==7
+	"ASSESSMENT.Games.en#edit-game";
+#elif L==8
+	"ASSESSMENT.Games.en#edit-game";
+#elif L==9
+	"ASSESSMENT.Games.en#edit-game";
+#endif
+
+const char *Hlp_ASSESSMENT_Games_new_game =
 #if   L==1
 	"ASSESSMENT.Games.es#nueva-juego";
 #elif L==2
-	"ASSESSMENT.Games.en#new-juego";
+	"ASSESSMENT.Games.en#new-game";
 #elif L==3
-	"ASSESSMENT.Games.en#new-juego";
+	"ASSESSMENT.Games.en#new-game";
 #elif L==4
 	"ASSESSMENT.Games.es#nueva-juego";
 #elif L==5
-	"ASSESSMENT.Games.en#new-juego";
+	"ASSESSMENT.Games.en#new-game";
 #elif L==6
 	"ASSESSMENT.Games.es#nueva-juego";
 #elif L==7
-	"ASSESSMENT.Games.en#new-juego";
+	"ASSESSMENT.Games.en#new-game";
 #elif L==8
-	"ASSESSMENT.Games.en#new-juego";
+	"ASSESSMENT.Games.en#new-game";
 #elif L==9
-	"ASSESSMENT.Games.en#new-juego";
+	"ASSESSMENT.Games.en#new-game";
 #endif
 
 const char *Hlp_ASSESSMENT_Games_edit_juego =

@@ -6525,6 +6525,27 @@ const char *Txt_Create_folder =
 	"Criar diret&oacute;rio";
 #endif
 
+const char *Txt_Create_game =
+#if   L==1
+	"Crear joc";
+#elif L==2
+	"Spiel erstellen";
+#elif L==3
+	"Create game";
+#elif L==4
+	"Crear juego";
+#elif L==5
+	"Cr&eacute;er jeu";
+#elif L==6
+	"Crear juego";	// Okoteve traducción
+#elif L==7
+	"Crea gioco";
+#elif L==8
+	"Tworzenie gra";
+#elif L==9
+	"Criar jogo";
+#endif
+
 const char *Txt_Create_group =
 #if   L==1
 	"Crear grupo";		// Necessita traduccio
@@ -10148,6 +10169,27 @@ const char *Txt_Edit_event =
 	"Edytuj wydarzenie";
 #elif L==9
 	"Editar evento";
+#endif
+
+const char *Txt_Edit_game =
+#if   L==1
+	"Editar joc";
+#elif L==2
+	"Spiel bearbeiten";
+#elif L==3
+	"Edit game";
+#elif L==4
+	"Editar juego";
+#elif L==5
+	"&Eacute;diter jeu";
+#elif L==6
+	"Editar juego";	// Okoteve traducción
+#elif L==7
+	"Editare gioco";
+#elif L==8
+	"Edycja gra";
+#elif L==9
+	"Editar jogo";
 #endif
 
 const char *Txt_Edit_my_institution =
@@ -13830,6 +13872,48 @@ const char *Txt_Game =
 	"Jogo";
 #endif
 
+const char *Txt_Game_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"El joc <strong>%s</strong> ara est&agrave; oculto.";
+#elif L==2
+	"Das Spiel <strong>%s</strong> ist jetzt ausgeblendet.";
+#elif L==3
+	"Game <strong>%s</strong> is now hidden.";
+#elif L==4
+	"El juego <strong>%s</strong> ahora est&aacute; oculto.";
+#elif L==5
+	"Le jeu <strong>%s</strong> est maintenant cach&eacute;.";
+#elif L==6
+	"El juego <strong>%s</strong> ahora est&aacute; oculto.";	// Okoteve traducción
+#elif L==7
+	"Il gioco <strong>%s</strong> &egrave; ora nascosto.";
+#elif L==8
+	"Gra <strong>%s</strong> jest teraz ukryta.";
+#elif L==9
+	"O jogo <strong>%s</strong> &eacute; agora oculto.";
+#endif
+
+const char *Txt_Game_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"El joc <strong>%s</strong> ara est&agrave; visible.";
+#elif L==2
+	"Das Spiel <strong>%s</strong> ist jetzt sichtbar.";
+#elif L==3
+	"Game <strong>%s</strong> is now visible.";
+#elif L==4
+	"El juego <strong>%s</strong> ahora est&aacute; visible.";
+#elif L==5
+	"Le jeu <strong>%s</strong> est maintenant visible.";
+#elif L==6
+	"El juego <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
+#elif L==7
+	"Il gioco <strong>%s</strong> &egrave; ora visibile.";
+#elif L==8
+	"Badanie <strong>%s</strong> jest teraz widoczne.";
+#elif L==9
+	"O jogo <strong>%s</strong> &eacute; agora vis&iacute;vel.";
+#endif
+
 const char *Txt_Game_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Joc <strong>%s</strong> eliminat.";
@@ -13849,6 +13933,27 @@ const char *Txt_Game_X_removed =	// Warning: it is very important to include %s 
 	"Gra <strong>%s</strong> usuni&eogon;te.";
 #elif L==9
 	"Jogo <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Game_X_reset =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Joc <strong>%s</strong> posat a zero..";
+#elif L==2
+	"Spiel <strong>%s</strong> zur&uuml;ckgesetzt.";
+#elif L==3
+	"Game <strong>%s</strong> reset.";
+#elif L==4
+	"Juego <strong>%s</strong> puesto a cero.";
+#elif L==5
+	"Jeu <strong>%s</strong> remis &agrave; z&eacute;ro.";
+#elif L==6
+	"Juego <strong>%s</strong> puesto a cero.";	// Okoteve traducción
+#elif L==7
+	"Gioco <strong>%s</strong> resettato.";
+#elif L==8
+	"Gra <strong>%s</strong> zresetowane.";
+#elif L==9
+	"Jogo <strong>%s</strong> fixado em zero.";
 #endif
 
 const char *Txt_GAME_You_belong_to_the_scope_of_the_game =
@@ -41151,7 +41256,7 @@ const char *Txt_SURVEY_Type_of_user_not_allowed =
 
 const char *Txt_Survey_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"La encuesta <strong>%s</strong> ahora est&aacute; oculta.";	// Necessita traduccio
+	"L'enquesta <strong>%s</strong> ara est&agrave; oculta.";
 #elif L==2
 	"Die Umfrage <strong>%s</strong> ist jetzt ausgeblendet.";
 #elif L==3
@@ -41165,14 +41270,14 @@ const char *Txt_Survey_X_is_now_hidden =	// Warning: it is very important to inc
 #elif L==7
 	"Il sondaggio <strong>%s</strong> &egrave; ora nascosto.";
 #elif L==8
-	"Survey <strong>%s</strong> is now hidden.";			// Potrzebujesz tlumaczenie
+	"Badanie <strong>%s</strong> jest teraz ukryta.";
 #elif L==9
 	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora oculta.";
 #endif
 
 const char *Txt_Survey_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"La encuesta <strong>%s</strong> ahora est&aacute; visible.";	// Necessita traduccio
+	"L'enquesta <strong>%s</strong> ara est&agrave; visible.";
 #elif L==2
 	"Die Umfrage <strong>%s</strong> ist jetzt sichtbar.";
 #elif L==3
@@ -41186,7 +41291,7 @@ const char *Txt_Survey_X_is_now_visible =	// Warning: it is very important to in
 #elif L==7
 	"Il sondaggio <strong>%s</strong> &egrave; ora visibile.";
 #elif L==8
-	"Survey <strong>%s</strong> is now visible.";			// Potrzebujesz tlumaczenie
+	"Badanie <strong>%s</strong> jest teraz widoczne.";
 #elif L==9
 	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora vis&iacute;vel.";
 #endif
@@ -41214,7 +41319,7 @@ const char *Txt_Survey_X_removed =	// Warning: it is very important to include %
 
 const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Encuesta <strong>%s</strong> puesta a cero.";	// Necessita traduccio
+	"Enquesta <strong>%s</strong> posada a zero..";
 #elif L==2
 	"Umfrage <strong>%s</strong> zur&uuml;ckgesetzt.";
 #elif L==3
@@ -41228,7 +41333,7 @@ const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s 
 #elif L==7
 	"Sondaggio <strong>%s</strong> resettato.";
 #elif L==8
-	"Survey <strong>%s</strong> reset.";		// Potrzebujesz tlumaczenie
+	"Badanie <strong>%s</strong> zresetowane.";
 #elif L==9
 	"Inqu&eacute;rito <strong>%s</strong> fixado em zero.";
 #endif
@@ -43902,6 +44007,27 @@ const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_fol
 	" because there is already a folder or a file with the name <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
+const char *Txt_The_game_has_been_modified =
+#if   L==1
+	"El joc ha estat modificat.";
+#elif L==2
+	"Das Spiel wurde ge&auml;ndert.";
+#elif L==3
+	"The game has been modified.";
+#elif L==4
+	"El juego ha sido modificado.";
+#elif L==5
+	"Le jeu a &eacute;t&eacute; modifi&eacute;.";
+#elif L==6
+	"El juego ha sido modificado.";	// Okoteve traducción
+#elif L==7
+	"Il gioco &egrave; stato modificato.";
+#elif L==8
+	"Gra zosta&lstrok;o zmodyfikowane.";
+#elif L==9
+	"O jogo foi modificado.";
+#endif
+
 const char *Txt_The_group_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El grupo <strong>%s</strong> ya existe.";		// Necessita traduccio
@@ -46085,7 +46211,7 @@ const char *Txt_The_status_of_the_institution_X_has_changed =	// Warning: it is 
 
 const char *Txt_The_survey_has_been_modified =
 #if   L==1
-	"La encuesta ha sido modificada.";	// Necessita traduccio
+	"L'enquesta ha estat modificada.";
 #elif L==2
 	"Die Umfrage wurde ge&auml;ndert.";
 #elif L==3
@@ -46099,7 +46225,7 @@ const char *Txt_The_survey_has_been_modified =
 #elif L==7
 	"Il sondaggio &egrave; stato modificato.";
 #elif L==8
-	"The survey has been modified.";	// Potrzebujesz tlumaczenie
+	"Badanie zosta&lstrok;o zmodyfikowane.";
 #elif L==9
 	"O inqu&eacute;rito foi modificado.";
 #endif
