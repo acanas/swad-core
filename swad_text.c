@@ -2508,6 +2508,48 @@ const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
 	"C&oacute;d.<br />alfab&eacute;tico<br />ISO 3166-1";
 #endif
 
+const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Ja existia un joc amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2
+	"Es gibt bereits einen Spiel mit dem Namen <strong>%s</strong>.";
+#elif L==3
+	"Already existed a game with the title <strong>%s</strong>.";
+#elif L==4
+	"Ya exist&iacute;a un juego con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5
+	"Il existe d&eacute;j&agrave; un jeu du titre <strong>%s</strong>.";
+#elif L==6
+	"Ya exist&iacute;a un juego con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Esiste gi&agrave; un gioco con il titolo <strong>%s</strong>.";
+#elif L==8
+	"By&lstrok;o ju&zdot; gra z tytu&lstrok;em <strong>%s</strong>.";
+#elif L==9
+	"J&aacute; existe um jogo com o t&iacute;tulo <strong>%s</strong>.";
+#endif
+
+const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2
+	"Es gibt bereits einen Umfrage mit dem Namen <strong>%s</strong>.";
+#elif L==3
+	"Already existed a survey with the title <strong>%s</strong>.";
+#elif L==4
+	"Ya exist&iacute;a una encuesta con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5
+	"Il existe d&eacute;j&agrave; un sondage du titre <strong>%s</strong>.";
+#elif L==6
+	"Ya exist&iacute;a una encuesta con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Esiste gi&agrave; un sondaggio con il titolo <strong>%s</strong>.";
+#elif L==8
+	"By&lstrok;o ju&zdot; ankieta z tytu&lstrok;em <strong>%s</strong>.";
+#elif L==9
+	"J&aacute; existe um inqu&eacute;rito com o t&iacute;tulo <strong>%s</strong>.";
+#endif
+
 const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ja existia una activitat amb la carpeta <strong>%s</strong>.";
@@ -2569,27 +2611,6 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 	"Istniala juz wydarzenie z tytulu <strong>%s</strong>.";
 #elif L==9
 	"J&aacute; existe um evento com o t&iacute;tulo <strong>%s</strong>.";
-#endif
-
-const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
-#elif L==2
-	"Es gibt bereits einen Umfrage mit dem Namen <strong>%s</strong>.";
-#elif L==3
-	"Already existed a survey with the title <strong>%s</strong>.";
-#elif L==4
-	"Ya exist&iacute;a una encuesta con el t&iacute;tulo <strong>%s</strong>.";
-#elif L==5
-	"Il existe d&eacute;j&agrave; un sondage du titre <strong>%s</strong>.";
-#elif L==6
-	"Ya exist&iacute;a una encuesta con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"Esiste gi&agrave; un sondaggio con il titolo <strong>%s</strong>.";
-#elif L==8
-	"Already existed a survey with the title <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"J&aacute; existe um inqu&eacute;rito com o t&iacute;tulo <strong>%s</strong>.";
 #endif
 
 const char *Txt_and =
@@ -7071,6 +7092,27 @@ const char *Txt_Created_new_event_X =	// Warning: it is very important to includ
 	"Criado novo evento <strong>%s</strong>.";
 #endif
 
+const char *Txt_Created_new_game_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Creada novo joc <strong>%s</strong>.";
+#elif L==2
+	"Neuer Spiel <strong>%s</strong> erstellt.";
+#elif L==3
+	"Created new game <strong>%s</strong>.";
+#elif L==4
+	"Creado nuevo juego <strong>%s</strong>.";
+#elif L==5
+	"Cr&eacute;&eacute; nouveau jeu <strong>%s</strong>.";
+#elif L==6
+	"Creado nuevo juego <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Creato nuovo gioco <strong>%s</strong>.";
+#elif L==8
+	"Utworzono nowe gra <strong>%s</strong>.";
+#elif L==9
+	"Criado novo jogo <strong>%s</strong>.";
+#endif
+
 const char *Txt_Created_new_group_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Creado nuevo grupo <strong>%s</strong>.";	// Necessita traduccio
@@ -7220,7 +7262,7 @@ const char *Txt_Created_new_record_field_X =	// Warning: it is very important to
 
 const char *Txt_Created_new_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Creada nueva encuesta <strong>%s</strong>.";	// Necessita traduccio
+	"Creada nova enquesta <strong>%s</strong>.";
 #elif L==2
 	"Neuer Umfrage <strong>%s</strong> erstellt.";
 #elif L==3
@@ -42492,6 +42534,27 @@ const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
 	"Obrigado por relatar um possível usu&aacute;rio duplicado.";
 #endif
 
+const char *Txt_Thanks_for_playing_the_game =
+#if   L==1
+	"Gr&agrave;cies per jugar al joc.";
+#elif L==2
+	"Vielen Dank f&uuml;r das Spiel.";
+#elif L==3
+	"Thanks for playing the game.";
+#elif L==4
+	"Gracias por jugar al juego.";
+#elif L==5
+	"Merci d'avoir jou&eacute; le jeu.";
+#elif L==6
+	"Gracias por jugar al juego.";	// Okoteve traducción
+#elif L==7
+	"Grazie per il gioco.";
+#elif L==8
+	"TDzi&eogon;ki za gr&eogon;.";
+#elif L==9
+	"Obrigado por jogar o jogo.";
+#endif
+
 const char *Txt_Thanks_for_answering_the_survey =
 #if   L==1
 	"Gracias por responder la encuesta.";	// Necessita traduccio
@@ -52709,7 +52772,7 @@ const char *Txt_yet_unnamed =
 
 const char *Txt_You_already_answered_this_survey_before =
 #if   L==1
-	"Usted ya respondi&oacute; esta encuesta anteriormente.";	// Necessita traduccio
+	"Vost&egrave; ja ha respost a aquesta enquesta abans.";
 #elif L==2
 	"Sie haben bereits beantwortet dieser Umfrage vor.";
 #elif L==3
@@ -52723,9 +52786,30 @@ const char *Txt_You_already_answered_this_survey_before =
 #elif L==7
 	"Hai gi&agrave; risposto a questo sondaggio prima.";
 #elif L==8
-	"You already answered this survey before.";			// Potrzebujesz tlumaczenie
+	"Odpowiedzia&lstrok;e&sacute; ju&zdot; wcze&sacute;niej na ten ankiet&eogon;.";
 #elif L==9
 	"Voc&ecirc; j&aacute; respondeu a esso inqu&eacute;rito antes.";
+#endif
+
+const char *Txt_You_already_played_this_game_before =
+#if   L==1
+	"Vost&egrave; ja ha jugat aquest joc abans.";
+#elif L==2
+	"Du hast dieses Spiel schon vorher gespielt.";
+#elif L==3
+	"You already played this game before.";
+#elif L==4
+	"Usted ya jug&oacute; este juego anteriormente.";
+#elif L==5
+	"Vous avez d&eacute;j&agrave; jou&eacute; ce jeu avant.";
+#elif L==6
+	"Usted ya jug&oacute; este juego anteriormente.";	// Okoteve traducción
+#elif L==7
+	"Hai gi&agrave; giocato questo gioco prima.";
+#elif L==8
+	"Ju&zdot; wcze&sacute;niej gra&lstrok;e&sacute; w t&eogon; gr&eogon;.";
+#elif L==9
+	"Voc&ecirc; j&aacute; jogou este jogo antes.";
 #endif
 
 const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to include two %s in the following sentences
@@ -55225,7 +55309,7 @@ const char *Txt_You_must_specify_the_title_of_the_assignment =
 
 const char *Txt_You_must_specify_the_title_of_the_event =
 #if   L==1
-	"Debe especificar el t&iacute;tulo del evento.";	// Necessita traduccio
+	"Cal especificar el t&iacute;tol de l'esdeveniment.";
 #elif L==2
 	"Der Ereignis muss angegeben werden.";
 #elif L==3
@@ -55239,14 +55323,35 @@ const char *Txt_You_must_specify_the_title_of_the_event =
 #elif L==7
 	"&Egrave; necessario specificare il titolo del evento.";
 #elif L==8
-	"You must specify the title of the event.";		// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; tytu&lstrok; wydarzenia.";
 #elif L==9
 	"Voc&ecirc; deve especificar o t&iacute;tulo do evento.";
 #endif
 
+const char *Txt_You_must_specify_the_title_of_the_game =
+#if   L==1
+	"Cal especificar el t&iacute;tol del joc.";
+#elif L==2
+	"Die Spiel muss angegeben werden.";
+#elif L==3
+	"You must specify the title of the game.";
+#elif L==4
+	"Debe especificar el t&iacute;tulo del juego.";
+#elif L==5
+	"Vous devez sp&eacute;cifier le titre du jeu.";
+#elif L==6
+	"Debe especificar el t&iacute;tulo del juego.";	// Okoteve traducción
+#elif L==7
+	"&Egrave; necessario specificare il titolo del gioco.";
+#elif L==8
+	"Musisz poda&cacute; tytu&lstrok; gra.";
+#elif L==9
+	"Voc&ecirc; deve especificar o t&iacute;tulo do jogo.";
+#endif
+
 const char *Txt_You_must_specify_the_title_of_the_survey =
 #if   L==1
-	"Debe especificar el t&iacute;tulo de la encuesta.";	// Necessita traduccio
+	"Cal especificar el t&iacute;tol de l'enquesta.";
 #elif L==2
 	"Die Umfrage muss angegeben werden.";
 #elif L==3
@@ -55260,7 +55365,7 @@ const char *Txt_You_must_specify_the_title_of_the_survey =
 #elif L==7
 	"&Egrave; necessario specificare il titolo del sondaggio.";
 #elif L==8
-	"You must specify the title of the survey.";		// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; tytu&lstrok; badania.";
 #elif L==9
 	"Voc&ecirc; deve especificar o t&iacute;tulo do inqu&eacute;rito.";
 #endif

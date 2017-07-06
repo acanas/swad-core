@@ -236,13 +236,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.249.4 (2017-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.249.5 (2017-07-04)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.249.5: Jul 06, 2017	Listing games for remote control. Not finished. (226564 lines)
         Version 16.249.4: Jul 06, 2017	Listing games for remote control. Not finished. (226463 lines)
         Version 16.249.3: Jul 04, 2017	Listing games for remote control. Not finished. (226322 lines)
         Version 16.249.2: Jul 04, 2017	Listing games for remote control. Not finished. (226281 lines)
