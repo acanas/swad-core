@@ -567,6 +567,57 @@ CREATE TABLE IF NOT EXISTS forum_thread (
 	UNIQUE INDEX(FirstPstCod),
 	UNIQUE INDEX(LastPstCod));
 --
+-- Table surveys: stores the games
+--
+CREATE TABLE IF NOT EXISTS games (
+	GamCod INT NOT NULL AUTO_INCREMENT,
+	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
+	Cod INT NOT NULL DEFAULT -1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumNotif INT NOT NULL DEFAULT 0,
+	Roles INT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(GamCod),
+	INDEX(Scope,Cod));
+--
+-- Table gam_answers: stores the answers to the games
+--
+CREATE TABLE IF NOT EXISTS gam_answers (
+	QstCod INT NOT NULL,
+	AnsInd TINYINT NOT NULL,
+	NumUsrs INT NOT NULL DEFAULT 0,
+	Answer TEXT NOT NULL,
+	UNIQUE INDEX(QstCod,AnsInd));
+--
+-- Table gam_grp: stores the groups associated to each game
+--
+CREATE TABLE IF NOT EXISTS gam_grp (
+	GamCod INT NOT NULL,
+	GrpCod INT NOT NULL,
+	UNIQUE INDEX(GamCod,GrpCod));
+--
+-- Table gam_questions: stores the questions in the games
+--
+CREATE TABLE IF NOT EXISTS gam_questions (
+	QstCod INT NOT NULL AUTO_INCREMENT,
+	GamCod INT NOT NULL,
+	QstInd INT NOT NULL DEFAULT 0,
+	AnsType ENUM('unique_choice','multiple_choice') NOT NULL,
+	Stem TEXT NOT NULL,
+	UNIQUE INDEX(QstCod),
+	INDEX(GamCod));
+--
+-- Table gam_users: stores the users who have answer the games
+--
+CREATE TABLE IF NOT EXISTS gam_users (
+	GamCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	UNIQUE INDEX(GamCod,UsrCod));
+--
 -- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
 --
 CREATE TABLE IF NOT EXISTS hidden_params (

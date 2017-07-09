@@ -243,6 +243,14 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.250:   Jul 09, 2017	Listing games for remote control. Not finished. (226738 lines)
+					5 changes necessary in database:
+CREATE TABLE IF NOT EXISTS games (GamCod INT NOT NULL AUTO_INCREMENT,Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',Cod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',NumNotif INT NOT NULL DEFAULT 0,Roles INT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(GamCod),INDEX(Scope,Cod));
+CREATE TABLE IF NOT EXISTS gam_answers (QstCod INT NOT NULL,AnsInd TINYINT NOT NULL,NumUsrs INT NOT NULL DEFAULT 0,Answer TEXT NOT NULL,UNIQUE INDEX(QstCod,AnsInd));
+CREATE TABLE IF NOT EXISTS gam_grp (GamCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(GamCod,GrpCod));
+CREATE TABLE IF NOT EXISTS gam_questions (QstCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,AnsType ENUM('unique_choice','multiple_choice') NOT NULL,Stem TEXT NOT NULL,UNIQUE INDEX(QstCod),INDEX(GamCod));
+CREATE TABLE IF NOT EXISTS gam_users (GamCod INT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(GamCod,UsrCod));
+
         Version 16.249.5: Jul 06, 2017	Listing games for remote control. Not finished. (226564 lines)
         Version 16.249.4: Jul 06, 2017	Listing games for remote control. Not finished. (226463 lines)
         Version 16.249.3: Jul 04, 2017	Listing games for remote control. Not finished. (226322 lines)

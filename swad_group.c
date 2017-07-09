@@ -36,6 +36,7 @@
 #include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_remote_control.h"
 #include "swad_table.h"
 
 /*****************************************************************************/
@@ -1645,10 +1646,12 @@ static void Grp_WriteHeadingGroups (void)
   }
 
 /*****************************************************************************/
-/* List groups of a type to edit assignments, attendance events, or surveys **/
+/********* List groups of a type                                    **********/
+/********* to edit assignments, attendance events, surveys or games **********/
 /*****************************************************************************/
 
-void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrSvy_t Grp_AsgAttOrSvy)
+void Grp_ListGrpsToEditAsgAttSvyGam (struct GroupType *GrpTyp,long Cod,
+                                     Grp_AsgAttSvyGam_t Grp_AsgAttOrSvy)
   {
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
@@ -1693,6 +1696,9 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
                break;
             case Grp_SURVEY:
                AssociatedToGrp = Svy_CheckIfSvyIsAssociatedToGrp (Cod,Grp->GrpCod);
+               break;
+            case Grp_GAME:
+               AssociatedToGrp = Rmt_CheckIfGamIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
            }
          if (AssociatedToGrp)

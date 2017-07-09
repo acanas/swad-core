@@ -1234,6 +1234,119 @@ mysql> DESCRIBE forum_thread;
 		   "UNIQUE INDEX(FirstPstCod),"
 		   "UNIQUE INDEX(LastPstCod))");
 
+
+   /***** Table games *****/
+/*
+mysql> DESCRIBE games;
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                      | Null | Key | Default | Extra          |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| GamCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
+| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
+| Cod       | int(11)                                   | NO   |     | -1      |                |
+| DegCod    | int(11)                                   | NO   |     | -1      |                |
+| CrsCod    | int(11)                                   | NO   |     | -1      |                |
+| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
+| NumNotif  | int(11)                                   | NO   |     | 0       |                |
+| Roles     | int(11)                                   | NO   |     | 0       |                |
+| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
+| StartTime | datetime                                  | NO   |     | NULL    |                |
+| EndTime   | datetime                                  | NO   |     | NULL    |                |
+| Title     | varchar(2047)                             | NO   |     | NULL    |                |
+| Txt       | text                                      | NO   |     | NULL    |                |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+13 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS games ("
+			"GamCod INT NOT NULL AUTO_INCREMENT,"
+			"Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+			"Roles INT NOT NULL DEFAULT 0,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Svy_MAX_BYTES_SURVEY_TITLE
+			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(GamCod),"
+		   "INDEX(Scope,Cod))");
+
+   /***** Table gam_answers *****/
+/*
+mysql> DESCRIBE gam_answers;
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| QstCod  | int(11)    | NO   | PRI | NULL    |       |
+| AnsInd  | tinyint(4) | NO   | PRI | NULL    |       |
+| NumUsrs | int(11)    | NO   |     | 0       |       |
+| Answer  | text       | NO   |     | NULL    |       |
++---------+------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_answers ("
+			"QstCod INT NOT NULL,"
+			"AnsInd TINYINT NOT NULL,"
+			"NumUsrs INT NOT NULL DEFAULT 0,"
+			"Answer TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(QstCod,AnsInd))");
+
+   /***** Table gam_grp *****/
+/*
+mysql> DESCRIBE gam_grp;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| GamCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_grp ("
+			"GamCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(GamCod,GrpCod))");
+
+   /***** Table gam_questions *****/
+/*
+mysql> DESCRIBE gam_questions;
++---------+-----------------------------------------+------+-----+---------+----------------+
+| Field   | Type                                    | Null | Key | Default | Extra          |
++---------+-----------------------------------------+------+-----+---------+----------------+
+| QstCod  | int(11)                                 | NO   | PRI | NULL    | auto_increment |
+| SvyCod  | int(11)                                 | NO   | MUL | NULL    |                |
+| QstInd  | int(11)                                 | NO   |     | 0       |                |
+| AnsType | enum('unique_choice','multiple_choice') | NO   |     | NULL    |                |
+| Stem    | text                                    | NO   |     | NULL    |                |
++---------+-----------------------------------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_questions ("
+			"QstCod INT NOT NULL AUTO_INCREMENT,"
+			"GamCod INT NOT NULL,"
+			"QstInd INT NOT NULL DEFAULT 0,"
+			"AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
+			"Stem TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(QstCod),"
+		   "INDEX(GamCod))");
+
+   /***** Table gam_users *****/
+/*
+mysql> DESCRIBE gam_users;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| SvyCod | int(11) | NO   | PRI | NULL    |       |
+| UsrCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_users ("
+			"GamCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+		   "UNIQUE INDEX(GamCod,UsrCod))");
+
    /***** Table hidden_params *****/
 /*
 mysql> DESCRIBE hidden_params;
