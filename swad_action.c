@@ -504,6 +504,7 @@ Assessment:
         NEW. ActShoGam			Show game
         NEW. ActEdiOneGamQst		Edit a new question for a game
         NEW. ActGamLstTstQst		List test questions to select one or several questions
+        NEW. ActAddTstQstToGam		Add selected test questions to game
         NEW. ActRcvGamQst		Receive a question of a game
         NEW. ActReqRemGamQst		Request the removal of a question of a game
         NEW. ActRemGamQst		Confirm the removal of a question of a game
@@ -1981,6 +1982,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoGam		*/{1661,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_UnhideGame			,NULL},
    /* ActEdiOneGamQst	*/{1662,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestEditQuestion	,NULL},
    /* ActGamLstTstQst	*/{1666,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ListQuestionsToSelect	,NULL},
+   /* ActAddTstQstToGam	*/{1667,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_AddTstQuestionsToGame	,NULL},
    /* ActRcvGamQst	*/{1663,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_ReceiveQst			,NULL},
    /* ActReqRemGamQst	*/{1664,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestRemoveQst		,NULL},
    /* ActRemGamQst	*/{1665,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RemoveQst			,NULL},
@@ -4710,6 +4712,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemGamQst,	// #1664
 	ActRemGamQst,		// #1665
 	ActGamLstTstQst,	// #1666
+	ActAddTstQstToGam,	// #1667
 	};
 
 /*****************************************************************************/

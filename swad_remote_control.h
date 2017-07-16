@@ -113,6 +113,8 @@ void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod);
 void Rmt_RequestEditQuestion (void);
 void Rmt_ReceiveQst (void);
 
+void Rmt_AddTstQuestionsToGame (void);
+
 void Rmt_RequestRemoveQst (void);
 void Rmt_RemoveQst (void);
 

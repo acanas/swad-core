@@ -3141,6 +3141,15 @@ static void Rmt_PutButtonToAddNewQuestions (void)
   }
 
 /*****************************************************************************/
+/******************** Add selected test questions to game ********************/
+/*****************************************************************************/
+
+void Rmt_AddTstQuestionsToGame (void)
+  {
+   Ale_ShowAlert (Ale_WARNING,"Under development....");	// TODO: Write this function
+  }
+
+/*****************************************************************************/
 /****************** Write the heading of a game question *******************/
 /*****************************************************************************/
 

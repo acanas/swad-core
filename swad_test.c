@@ -194,7 +194,8 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
 static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
-static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,MYSQL_RES *mysql_res);
 
 static void Tst_WriteAnswersOfAQstEdit (long QstCod);
 static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle);
@@ -2598,7 +2599,7 @@ void Tst_ListQuestionsToEdit (void)
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestions (NumRows,mysql_res);
+         Tst_ListOneOrMoreQuestionsForEdition (NumRows,mysql_res);
         }
 
       /***** Free structure that stores the query result *****/
@@ -2631,7 +2632,7 @@ void Tst_ListQuestionsToSelect (void)
      {
       if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestions (NumRows,mysql_res);
+         Tst_ListOneOrMoreQuestionsForSelection (NumRows,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -2951,7 +2952,7 @@ static void Tst_ListOneQstToEdit (void)
    /***** Query database *****/
    if (Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res))
       /***** Show the question ready to edit it *****/
-      Tst_ListOneOrMoreQuestions (1,mysql_res);
+      Tst_ListOneOrMoreQuestionsForEdition (1,mysql_res);
    else
       Lay_ShowErrorAndExit ("Can not get question.");
 
@@ -2997,7 +2998,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 /****************** List for edition one or more test questions **************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
@@ -3023,12 +3024,12 @@ static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_r
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Questions,Tst_PutIconsTests,
-                 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th colspan=\"2\"></th>"
+                      "<th></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
@@ -3114,9 +3115,11 @@ static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_r
       if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      /* Write icon to remove the question */
+      /***** Icons *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
+      /* Write icon to remove the question */
       Act_FormStart (ActReqRemTstQst);
       Tst_PutParamQstCod ();
       if (NumRows == 1)
@@ -3125,10 +3128,8 @@ static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_r
       Tst_WriteParamEditQst ();
       Ico_PutIconRemove ();
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
 
       /* Write icon to edit the question */
-      fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActEdiOneTstQst);
       Tst_PutParamQstCod ();
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
@@ -3138,6 +3139,7 @@ static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_r
                Txt_Edit_question,
                Txt_Edit_question);
       Act_FormEnd ();
+
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write number of question */
@@ -3275,6 +3277,189 @@ static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_r
 
    /***** Button to add a new question *****/
    Tst_PutButtonToAddQuestion ();
+
+   /***** End box *****/
+   Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/****************** List for edition one or more test questions **************/
+/*****************************************************************************/
+
+static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,MYSQL_RES *mysql_res)
+  {
+   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Txt_Questions;
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Date;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Type;
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_Shuffle;
+   extern const char *Txt_Question;
+   extern const char *Txt_Today;
+   extern const char *Txt_Add_questions;
+   unsigned long NumRow;
+   MYSQL_ROW row;
+   unsigned UniqueId;
+   time_t TimeUTC;
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Questions,NULL,
+		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+
+   /***** Start form *****/
+   Act_FormStart (ActAddTstQstToGam);
+
+   /***** Write the heading *****/
+   Tbl_StartTableWideMargin (2);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th></th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_No_INDEX,
+            Txt_Code,
+            Txt_Date,
+            Txt_Tags,
+            Txt_Type,
+            Txt_Shuffle,
+            Txt_Question);
+
+   /***** Write rows *****/
+   for (NumRow = 0, UniqueId = 1;
+	NumRow < NumRows;
+	NumRow++, UniqueId++)
+     {
+      Gbl.RowEvenOdd = NumRow % 2;
+
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[ 0] QstCod
+      row[ 1] UNIX_TIMESTAMP(EditTime)
+      row[ 2] AnsType
+      row[ 3] Shuffle
+      row[ 4] Stem
+      row[ 5] Feedback
+      row[ 6] ImageName
+      row[ 7] ImageTitle
+      row[ 8] ImageURL
+      row[ 9] NumHits
+      row[10] NumHitsNotBlank
+      row[11] Score
+      */
+      /***** Create test question *****/
+      Tst_QstConstructor ();
+
+      /* row[0] holds the code of the question */
+      if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         Lay_ShowErrorAndExit ("Wrong code of question.");
+
+      /***** Icons *****/
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
+      /* Write checkbox to select the question */
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"QstCods\""
+	                 " value=\"%ld\" />",
+	       Gbl.Test.QstCod);
+
+      /* Write number of question */
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
+	                 "%lu&nbsp;"
+	                 "</td>",
+               Gbl.RowEvenOdd,NumRow + 1);
+
+      /* Write question code */
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
+               Gbl.RowEvenOdd,Gbl.Test.QstCod);
+
+      /* Write the date (row[1] has the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      fprintf (Gbl.F.Out,"<td id=\"tst_date_%u\""
+	                 " class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
+                         "<script type=\"text/javascript\">"
+                         "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
+                         "%u,'<br />','%s',true,false,0x7);"
+                         "</script>"
+                         "</td>",
+               UniqueId,Gbl.RowEvenOdd,
+               UniqueId,(long) TimeUTC,
+               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+      /* Write the question tags */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
+      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Write the question type (row[2]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
+	                 "%s&nbsp;"
+	                 "</td>",
+	       Gbl.RowEvenOdd,
+               Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+
+      /* Write if shuffle is enabled (row[3]) */
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
+
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
+      if (row[3][0] == 'Y')
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," disabled=\"disabled\" />");
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Write the stem (row[4]), the image (row[6], row[7], row[8]),
+         the feedback (row[5]) and the answers */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
+      Tst_WriteQstStem (row[4],"TEST_EDI");
+      Img_GetImageNameTitleAndURLFromRow (row[6],row[7],row[8],&Gbl.Test.Image);
+      Img_ShowImage (&Gbl.Test.Image,
+                     "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
+                     "TEST_IMG_EDIT_LIST_STEM");
+      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+      Tst_WriteAnswersOfAQstEdit (Gbl.Test.QstCod);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor ();
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** Button to add questions *****/
+   Btn_PutConfirmButton (Txt_Add_questions);
+
+   /***** End form *****/
+   Act_FormEnd ();
 
    /***** End box *****/
    Box_EndBox ();

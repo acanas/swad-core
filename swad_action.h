@@ -57,9 +57,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 90 + 416 + 165 + 172 + 42 + 14 + 97)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 91 + 416 + 165 + 172 + 42 + 14 + 97)
 
-#define Act_MAX_ACTION_COD 1666
+#define Act_MAX_ACTION_COD 1667
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 12
 
@@ -516,19 +516,20 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActShoGam		(ActChgCalCrs1stDay + 76)
 #define ActEdiOneGamQst		(ActChgCalCrs1stDay + 77)
 #define ActGamLstTstQst		(ActChgCalCrs1stDay + 78)
-#define ActRcvGamQst		(ActChgCalCrs1stDay + 79)
-#define ActReqRemGamQst		(ActChgCalCrs1stDay + 80)
-#define ActRemGamQst		(ActChgCalCrs1stDay + 81)
+#define ActAddTstQstToGam	(ActChgCalCrs1stDay + 79)
+#define ActRcvGamQst		(ActChgCalCrs1stDay + 80)
+#define ActReqRemGamQst		(ActChgCalCrs1stDay + 81)
+#define ActRemGamQst		(ActChgCalCrs1stDay + 82)
 
-#define ActSeeOneExaAnn		(ActChgCalCrs1stDay + 82)
-#define ActSeeDatExaAnn		(ActChgCalCrs1stDay + 83)
-#define ActEdiExaAnn		(ActChgCalCrs1stDay + 84)
-#define ActRcvExaAnn		(ActChgCalCrs1stDay + 85)
-#define ActPrnExaAnn		(ActChgCalCrs1stDay + 86)
-#define ActReqRemExaAnn		(ActChgCalCrs1stDay + 87)
-#define ActRemExaAnn		(ActChgCalCrs1stDay + 88)
-#define ActHidExaAnn		(ActChgCalCrs1stDay + 89)
-#define ActShoExaAnn		(ActChgCalCrs1stDay + 90)
+#define ActSeeOneExaAnn		(ActChgCalCrs1stDay + 83)
+#define ActSeeDatExaAnn		(ActChgCalCrs1stDay + 84)
+#define ActEdiExaAnn		(ActChgCalCrs1stDay + 85)
+#define ActRcvExaAnn		(ActChgCalCrs1stDay + 86)
+#define ActPrnExaAnn		(ActChgCalCrs1stDay + 87)
+#define ActReqRemExaAnn		(ActChgCalCrs1stDay + 88)
+#define ActRemExaAnn		(ActChgCalCrs1stDay + 89)
+#define ActHidExaAnn		(ActChgCalCrs1stDay + 90)
+#define ActShoExaAnn		(ActChgCalCrs1stDay + 91)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
