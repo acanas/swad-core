@@ -136,16 +136,20 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Tst_SetIniEndDates (void);
 void Tst_ShowFormAskEditTsts (void);
+void Tst_ShowFormAskSelectTstsForGame (long GamCod);
 void Tst_ListQuestionsToEdit (void);
+void Tst_ListQuestionsToSelect (void);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_CheckIfNumberOfAnswersIsOne (void);
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
+void Tst_PutButtonToAddQuestion (void);
 void Tst_ShowFormConfig (void);
 void Tst_EnableTag (void);
 void Tst_DisableTag (void);
 void Tst_RenameTag (void);
+
 void Tst_GetConfigFromRow (MYSQL_ROW row);
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 void Tst_ReceiveConfigTst (void);

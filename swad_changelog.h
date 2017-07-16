@@ -236,13 +236,35 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.249.5 (2017-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.251 (2017-07-16)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.251:   Jul 16, 2017	Listing games for remote control. Not finished. (226867 lines)
+					19 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1648','es','N','Cambiar lugar de centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1649','es','N','Ver juegos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1650','es','N','Ver un juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1651','es','N','Responder juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1652','es','N','Solicitar creaci&oacute;n juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1653','es','N','Solicitar edici&oacute;n juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1654','es','N','Crear juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1655','es','N','Modificar juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1656','es','N','Solicitar elim. juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1657','es','N','Eliminar juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1658','es','N','Solicitar puesta a cero juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1659','es','N','Poner a cero juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1660','es','N','Ocultar juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1661','es','N','Mostrar juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1662','es','N','Solicitar selec. tests para juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1663','es','N','Enviar pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1664','es','N','Preguntar si eliminar pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1665','es','N','Eliminar pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1666','es','N','Selec. descriptores tests para juego');
+
         Version 16.250:   Jul 09, 2017	Listing games for remote control. Not finished. (226738 lines)
 					5 changes necessary in database:
 CREATE TABLE IF NOT EXISTS games (GamCod INT NOT NULL AUTO_INCREMENT,Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',Cod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',NumNotif INT NOT NULL DEFAULT 0,Roles INT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(GamCod),INDEX(Scope,Cod));

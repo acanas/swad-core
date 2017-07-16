@@ -85,7 +85,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1354 actions in one CGI:
+1372 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -426,7 +426,7 @@ Assessment:
 	289. ActSeeAsg			Show assignments
 	290. ActReqTst			Request a test of self-assesment
         291. ActSeeAllSvy		List all surveys in pages
-        NEW. ActSeeAllGam			Remote control
+        NEW. ActSeeAllGam		Remote control
 	292. ActSeeAllExaAnn		Show the exam announcements
 
 	293. ActEdiAss			Edit the assessment system
@@ -503,6 +503,7 @@ Assessment:
         NEW. ActHidGam			Hide game
         NEW. ActShoGam			Show game
         NEW. ActEdiOneGamQst		Edit a new question for a game
+        NEW. ActGamLstTstQst		List test questions to select one or several questions
         NEW. ActRcvGamQst		Receive a question of a game
         NEW. ActReqRemGamQst		Request the removal of a question of a game
         NEW. ActRemGamQst		Confirm the removal of a question of a game
@@ -1979,6 +1980,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActHidGam		*/{1660,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_HideGame			,NULL},
    /* ActShoGam		*/{1661,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_UnhideGame			,NULL},
    /* ActEdiOneGamQst	*/{1662,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestEditQuestion	,NULL},
+   /* ActGamLstTstQst	*/{1666,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ListQuestionsToSelect	,NULL},
    /* ActRcvGamQst	*/{1663,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_ReceiveQst			,NULL},
    /* ActReqRemGamQst	*/{1664,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestRemoveQst		,NULL},
    /* ActRemGamQst	*/{1665,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RemoveQst			,NULL},
@@ -4707,6 +4709,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRcvGamQst,		// #1663
 	ActReqRemGamQst,	// #1664
 	ActRemGamQst,		// #1665
+	ActGamLstTstQst,	// #1666
 	};
 
 /*****************************************************************************/

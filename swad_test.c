@@ -130,6 +130,13 @@ typedef enum
    Tst_STATUS_ERROR			= 2,
   } Tst_Status_t;
 
+typedef enum
+  {
+   Tst_SHOW_QUESTIONS,
+   Tst_EDIT_QUESTIONS,
+   Tst_SELECT_QUESTIONS_FOR_GAME,
+  } Tst_ActionToDoWithQuestions_t;
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -166,7 +173,6 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
 static bool Tst_CheckIfICanEditTests (void);
 static void Tst_PutIconsTests (void);
-static void Tst_PutButtonToAddQuestion (void);
 static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
@@ -184,11 +190,11 @@ static Tst_Pluggable_t Tst_GetPluggableFromForm (void);
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
 static void Tst_CheckAndCorrectNumbersQst (void);
 static void Tst_ShowFormAnswerTypes (unsigned NumCols);
-static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res);
+static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
 static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
-static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_res);
 
 static void Tst_WriteAnswersOfAQstEdit (long QstCod);
 static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle);
@@ -214,7 +220,7 @@ static void Tst_WriteScoreStart (unsigned ColSpan);
 static void Tst_WriteScoreEnd (void);
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 static void Tst_GetAndWriteTagsQst (long QstCod);
-static bool Tst_GetParamsTst (void);
+static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetAndCheckParamNumTst (void);
 static void Tst_GetParamNumQst (void);
 static bool Tst_GetCreateXMLFromForm (void);
@@ -419,7 +425,7 @@ void Tst_ShowNewTest (void)
    if (Tst_CheckIfNextTstAllowed ())
      {
       /***** Check that all parameters used to generate a test are valid *****/
-      if (Tst_GetParamsTst ())					// Get parameters from form
+      if (Tst_GetParamsTst (Tst_SHOW_QUESTIONS))	// Get parameters from form
         {
          /***** Get questions *****/
          if ((NumRows = Tst_GetQuestionsForTest (&mysql_res)) == 0)	// Query database
@@ -1321,6 +1327,263 @@ void Tst_ShowFormAskEditTsts (void)
   }
 
 /*****************************************************************************/
+/************** Show form select test questions for a game *******************/
+/*****************************************************************************/
+
+void Tst_ShowFormAskSelectTstsForGame (long GamCod)
+  {
+   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Txt_No_test_questions;
+   extern const char *Txt_Select_questions;
+   extern const char *Txt_Show_questions;
+   MYSQL_RES *mysql_res;
+   unsigned long NumRows;
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Select_questions,NULL,
+                 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+
+   /***** Get tags already present in the table of questions *****/
+   if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+     {
+      Act_FormStart (ActGamLstTstQst);
+      Rmt_PutParamGameCod (GamCod);
+
+      Tbl_StartTable (2);
+
+      /***** Selection of tags *****/
+      Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
+
+      /***** Starting and ending dates in the search *****/
+      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+
+      Tbl_EndTable ();
+
+      /***** Send button *****/
+      Btn_PutConfirmButton (Txt_Show_questions);
+      Act_FormEnd ();
+     }
+   else	// No test questions
+     {
+      /***** Warning message *****/
+      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+
+      /***** Button to create a new question *****/
+      Tst_PutButtonToAddQuestion ();
+     }
+
+   /***** End box *****/
+   Box_EndBox ();
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /*
+
+
+
+   extern const char *Hlp_ASSESSMENT_Games_questions;
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Question;
+   extern const char *Txt_New_question;
+   extern const char *Txt_Stem;
+   extern const char *Txt_Type;
+   extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Rmt_NUM_ANS_TYPES];
+   extern const char *Txt_Save;
+   extern const char *Txt_Create_question;
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumAns;
+   unsigned NumAnswers = 0;
+   Rmt_AnswerType_t AnsType;
+
+   if (Gbl.Action.Act == ActEdiOneGamQst) // If no receiving the question, but editing a new or existing question
+     {
+      if ((GameQst->QstCod > 0))	// If parameter QstCod received ==> question already exists in the database
+        {
+         ***** Get the type of answer and the stem from the database *****
+         * Get the question from database *
+         sprintf (Query,"SELECT QstInd,AnsType,Stem FROM gam_questions"
+                        " WHERE QstCod=%ld AND GamCod=%ld",
+                  GameQst->QstCod,GamCod);
+         DB_QuerySELECT (Query,&mysql_res,"can not get a question");
+
+         row = mysql_fetch_row (mysql_res);
+
+         * Get question index inside game (row[0]) *
+         if (sscanf (row[0],"%u",&(GameQst->QstInd)) != 1)
+            Lay_ShowErrorAndExit ("Error: wrong question index.");
+
+         * Get the type of answer (row[1]) *
+         GameQst->AnswerType = Rmt_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+
+         * Get the stem of the question from the database (row[2]) *
+         Str_Copy (Txt,row[2],
+                   Cns_MAX_BYTES_TEXT);
+
+         * Free structure that stores the query result *
+	 DB_FreeMySQLResult (&mysql_res);
+
+         ***** Get the answers from the database *****
+         NumAnswers = Rmt_GetAnswersQst (GameQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
+         for (NumAns = 0;
+              NumAns < NumAnswers;
+              NumAns++)
+           {
+            row = mysql_fetch_row (mysql_res);
+
+            if (NumAnswers > Rmt_MAX_ANSWERS_PER_QUESTION)
+               Lay_ShowErrorAndExit ("Wrong answer.");
+            if (!Rmt_AllocateTextChoiceAnswer (GameQst,NumAns))
+               Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+
+            Str_Copy (GameQst->AnsChoice[NumAns].Text,row[2],
+                      Rmt_MAX_BYTES_ANSWER);
+           }
+         * Free structure that stores the query result *
+	 DB_FreeMySQLResult (&mysql_res);
+        }
+     }
+
+   ***** Start box *****
+   if (GameQst->QstCod > 0)	// If the question already has assigned a code
+     {
+      * Parameters for contextual icon *
+      Gbl.Games.GamCodToEdit    = GamCod;
+      Gbl.Games.GamQstCodToEdit = GameQst->QstCod;
+
+      sprintf (Gbl.Title,"%s %u",
+               Txt_Question,GameQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
+      Box_StartBox (NULL,Gbl.Title,Rmt_PutIconToRemoveOneQst,
+                    NULL,Box_NOT_CLOSABLE);
+     }
+   else
+      Box_StartBox (NULL,Txt_New_question,NULL,
+                    Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
+
+   ***** Start form *****
+   Act_FormStart (ActRcvGamQst);
+   Rmt_PutParamGameCod (GamCod);
+   if (GameQst->QstCod > 0)	// If the question already has assigned a code
+      Rmt_PutParamQstCod (GameQst->QstCod);
+
+   ***** Start table *****
+   Tbl_StartTableWide (2);
+
+   ***** Stem *****
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
+	              "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"Txt\" name=\"Txt\""
+                      " cols=\"60\" rows=\"4\">"
+	              "%s"
+                      "</textarea>"
+                      "</td>"
+                      "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Stem,
+	    Txt);
+
+   ***** Type of answer *****
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_TOP\">"
+	              "%s:"
+	              "</td>"
+	              "<td class=\"%s LEFT_TOP\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Type,
+            The_ClassForm[Gbl.Prefs.Theme]);
+   for (AnsType = (Rmt_AnswerType_t) 0;
+	AnsType < Rmt_NUM_ANS_TYPES;
+	AnsType++)
+     {
+      fprintf (Gbl.F.Out,"<label>"
+	                 "<input type=\"radio\" name=\"AnswerType\""
+	                 " value=\"%u\"",
+               (unsigned) AnsType);
+      if (AnsType == GameQst->AnswerType)
+         fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+	                 "</label><br />",
+               Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
+     }
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   ***** Answers *****
+   * Unique or multiple choice answers *
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td></td>"
+                      "<td class=\"LEFT_TOP\">");
+   Tbl_StartTable (2);
+   for (NumAns = 0;
+	NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
+	NumAns++)
+     {
+      * Label with the number of the answer *
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"RIGHT_TOP\">"
+	                 "<label for=\"AnsStr%u\" class=\"%s\">%u)</label>"
+	                 "</td>",
+               NumAns,The_ClassForm[Gbl.Prefs.Theme],NumAns + 1);
+
+      * Answer text *
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
+                         "<textarea id=\"AnsStr%u\" name=\"AnsStr%u\""
+                         " cols=\"50\" rows=\"1\">",
+               NumAns,NumAns);
+      if (GameQst->AnsChoice[NumAns].Text)
+         fprintf (Gbl.F.Out,"%s",GameQst->AnsChoice[NumAns].Text);
+      fprintf (Gbl.F.Out,"</textarea>"
+	                 "</td>"
+	                 "</tr>");
+     }
+   Tbl_EndTable ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   ***** End table *****
+   Tbl_EndTable ();
+
+   ***** Send button *****
+   if (GameQst->QstCod > 0)	// If the question already has assigned a code
+      Btn_PutConfirmButton (Txt_Save);
+   else
+      Btn_PutCreateButton (Txt_Create_question);
+
+   ***** End form *****
+   Act_FormEnd ();
+
+   ***** End box *****
+   Box_EndBox ();
+
+   ***** Free memory for answers *****
+   Rmt_FreeTextChoiceAnswers (GameQst,NumAnswers);
+
+   */
+  }
+
+/*****************************************************************************/
 /************************* Check if I can edit tests *************************/
 /*****************************************************************************/
 
@@ -1369,7 +1632,7 @@ static void Tst_PutIconsTests (void)
 /**************** Put button to create a new test question *******************/
 /*****************************************************************************/
 
-static void Tst_PutButtonToAddQuestion (void)
+void Tst_PutButtonToAddQuestion (void)
   {
    extern const char *Txt_New_question;
 
@@ -2319,9 +2582,9 @@ void Tst_ListQuestionsToEdit (void)
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst ())	// Get parameters from the form
+   if (Tst_GetParamsTst (Tst_EDIT_QUESTIONS))	// Get parameters from the form
      {
-      if ((NumRows = Tst_GetQuestionsForEdit (&mysql_res)) != 0)	// Query database
+      if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
         {
 	 /* Buttons for edition */
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -2335,7 +2598,7 @@ void Tst_ListQuestionsToEdit (void)
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsToEdit (NumRows,mysql_res);
+         Tst_ListOneOrMoreQuestions (NumRows,mysql_res);
         }
 
       /***** Free structure that stores the query result *****/
@@ -2350,12 +2613,44 @@ void Tst_ListQuestionsToEdit (void)
   }
 
 /*****************************************************************************/
+/**************** List several test questions for selection ******************/
+/*****************************************************************************/
+
+void Tst_ListQuestionsToSelect (void)
+  {
+   long GamCod;
+   MYSQL_RES *mysql_res;
+   unsigned long NumRows;
+
+   /***** Get game code *****/
+   if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Get parameters, query the database and list the questions *****/
+   if (Tst_GetParamsTst (Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+     {
+      if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
+	 /* Show the table with the questions */
+         Tst_ListOneOrMoreQuestions (NumRows,mysql_res);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+   else
+      /* Show the form again */
+      Tst_ShowFormAskSelectTstsForGame (GamCod);
+
+   /***** Free memory used by the list of tags *****/
+   Tst_FreeTagsList ();
+  }
+
+/*****************************************************************************/
 /********** Get from the database several test questions for listing *********/
 /*****************************************************************************/
 
 #define Tst_MAX_BYTES_QUERY_TEST (16 * 1024 - 1)
 
-static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
+static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    unsigned long NumRows;
@@ -2656,7 +2951,7 @@ static void Tst_ListOneQstToEdit (void)
    /***** Query database *****/
    if (Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res))
       /***** Show the question ready to edit it *****/
-      Tst_ListOneOrMoreQuestionsToEdit (1,mysql_res);
+      Tst_ListOneOrMoreQuestions (1,mysql_res);
    else
       Lay_ShowErrorAndExit ("Can not get question.");
 
@@ -2702,7 +2997,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 /****************** List for edition one or more test questions **************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Tst_ListOneOrMoreQuestions (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
@@ -4281,7 +4576,7 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
 /*****************************************************************************/
 // Return true (OK) if all parameters are found, or false (error) if any necessary parameter is not found
 
-static bool Tst_GetParamsTst (void)
+static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
   {
    extern const char *Txt_You_must_select_one_ore_more_tags;
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
@@ -4307,47 +4602,66 @@ static bool Tst_GetParamsTst (void)
      }
 
    /***** Types of answer *****/
-   /* Get parameter that indicates if all types of answer are selected */
-   Gbl.Test.AllAnsTypes = Par_GetParToBool ("AllAnsTypes");
+   switch (ActionToDoWithQuestions)
+     {
+      case Tst_SHOW_QUESTIONS:
+      case Tst_EDIT_QUESTIONS:
+	 /* Get parameter that indicates if all types of answer are selected */
+	 Gbl.Test.AllAnsTypes = Par_GetParToBool ("AllAnsTypes");
 
-   /* Get types of answer */
-   Par_GetParMultiToText ("AnswerType",Gbl.Test.ListAnsTypes,Tst_MAX_BYTES_LIST_ANSWER_TYPES);
+	 /* Get types of answer */
+	 Par_GetParMultiToText ("AnswerType",Gbl.Test.ListAnsTypes,Tst_MAX_BYTES_LIST_ANSWER_TYPES);
 
-   /* Check number of types of answer */
-   if (Tst_CountNumAnswerTypesInList () == 0)	// If no types of answer selected...
-     {						// ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
-      Error = true;
+	 /* Check number of types of answer */
+	 if (Tst_CountNumAnswerTypesInList () == 0)	// If no types of answer selected...
+	   {						// ...write warning alert
+	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
+	    Error = true;
+	   }
+	 break;
+      case Tst_SELECT_QUESTIONS_FOR_GAME:
+	 /* The unique allowed type of answer in a game is unique choice */
+	 Gbl.Test.AllAnsTypes = false;
+	 sprintf (Gbl.Test.ListAnsTypes,"%u",(unsigned) Tst_ANS_UNIQUE_CHOICE);
+	 break;
      }
 
    /***** Get other parameters, depending on action *****/
-   if (Gbl.Action.Act == ActSeeTst)
+   switch (ActionToDoWithQuestions)
      {
-      Tst_GetParamNumQst ();
-      if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
-          Gbl.Test.NumQsts > Gbl.Test.Config.Max)
-        {
-         sprintf (Gbl.Alert.Txt,Txt_The_number_of_questions_must_be_in_the_interval_X,
-                  Gbl.Test.Config.Min,Gbl.Test.Config.Max);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-         Error = true;
-        }
-     }
-   else
-     {
-      /* Get starting and ending dates */
-      Dat_GetIniEndDatesFromForm ();
+      case Tst_SHOW_QUESTIONS:
+	 Tst_GetParamNumQst ();
+	 if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
+	     Gbl.Test.NumQsts > Gbl.Test.Config.Max)
+	   {
+	    sprintf (Gbl.Alert.Txt,Txt_The_number_of_questions_must_be_in_the_interval_X,
+		     Gbl.Test.Config.Min,Gbl.Test.Config.Max);
+	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	    Error = true;
+	   }
+	 break;
+      case Tst_EDIT_QUESTIONS:
+	 /* Get starting and ending dates */
+	 Dat_GetIniEndDatesFromForm ();
 
-      /* Get ordering criteria */
-      Par_GetParMultiToText ("Order",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-         Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
-                                                                                                        0);
-      else
-         Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) 0;
+	 /* Get ordering criteria */
+	 Par_GetParMultiToText ("Order",UnsignedStr,10);
+	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+	    Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
+												       0);
+	 else
+	    Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) 0;
 
-      /* Get whether we must create the XML file or not */
-      Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();
+	 /* Get whether we must create the XML file or not */
+	 Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();
+	 break;
+      case Tst_SELECT_QUESTIONS_FOR_GAME:
+	 /* Get starting and ending dates */
+	 Dat_GetIniEndDatesFromForm ();
+
+	 /* Order question by stem */
+	 Gbl.Test.SelectedOrder = Tst_ORDER_STEM;
+	 break;
      }
 
    return !Error;
@@ -5876,7 +6190,7 @@ void Tst_RequestRemoveQst (void)
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
-      if (!Tst_GetParamsTst ())
+      if (!Tst_GetParamsTst (Tst_EDIT_QUESTIONS))
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/

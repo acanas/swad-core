@@ -17727,7 +17727,7 @@ const char *Txt_List_edit_questions =
 #elif L==8
 	"Wy&sacute;wietli&cacute; / edytowa&cacute; pytania";
 #elif L==9
-	"listar / editar quest&otilde;es";
+	"Listar / editar quest&otilde;es";
 #endif
 
 const char *Txt_List_of_detailed_clicks =
@@ -37284,6 +37284,27 @@ const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_her
 #elif L==9
 	"Selecione um ou mais arquivos de seu computador<br />"
 	"ou arrastar e soltar aqui";
+#endif
+
+const char *Txt_Select_questions =
+#if   L==1
+	"Seleccionar preguntes";
+#elif L==2
+	"W&auml;hlen Sie Fragen";
+#elif L==3
+	"Select questions";
+#elif L==4
+	"Seleccionar preguntas";
+#elif L==5
+	"Choisir questions";
+#elif L==6
+	"Seleccionar preguntas";	// Okoteve traducción
+#elif L==7
+	"Selezionare domande";
+#elif L==8
+	"Wybierz pytania";
+#elif L==9
+	"Selecionar quest&otilde;es";
 #endif
 
 const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_ =

@@ -41,6 +41,7 @@
 #include "swad_remote_control.h"
 #include "swad_role.h"
 #include "swad_table.h"
+#include "swad_test.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -111,8 +112,6 @@ static void Rmt_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
 static void Rmt_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static void Rmt_PutParamGameCod (long GamCod);
-static long Rmt_GetParamGameCod (void);
 
 static void Rmt_PutButtonToResetGame (void);
 
@@ -130,8 +129,6 @@ static void Rmt_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game);
 static bool Rmt_CheckIfICanDoThisGameBasedOnGrps (long GamCod);
 
 static unsigned Rmt_GetNumQstsGame (long GamCod);
-static void Rmt_ShowFormEditOneQst (long GamCod,struct GameQuestion *GameQst,
-                                    char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Rmt_InitQst (struct GameQuestion *GameQst);
 static void Rmt_PutParamQstCod (long QstCod);
 static long Rmt_GetParamQstCod (void);
@@ -168,8 +165,6 @@ static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 void Rmt_SeeAllGames (void)
   {
    struct GameQuestion GameQst;
-
-   Ale_ShowAlert (Ale_INFO,"Under development.");
 
    /***** Get parameters *****/
    Rmt_GetParamGameOrder ();
@@ -1461,7 +1456,7 @@ void Rmt_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /******************* Write parameter with code of game *********************/
 /*****************************************************************************/
 
-static void Rmt_PutParamGameCod (long GamCod)
+void Rmt_PutParamGameCod (long GamCod)
   {
    Par_PutHiddenParamLong ("GamCod",GamCod);
   }
@@ -1470,7 +1465,7 @@ static void Rmt_PutParamGameCod (long GamCod)
 /******************** Get parameter with code of game **********************/
 /*****************************************************************************/
 
-static long Rmt_GetParamGameCod (void)
+long Rmt_GetParamGameCod (void)
   {
    /***** Get code of game *****/
    return Par_GetParToLong ("GamCod");
@@ -1534,19 +1529,19 @@ void Rmt_RemoveGame (void)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Remove all the users in this game *****/
-   sprintf (Query,"DELETE FROM game_users WHERE GamCod=%ld",
+   sprintf (Query,"DELETE FROM gam_users WHERE GamCod=%ld",
             Game.GamCod);
    DB_QueryDELETE (Query,"can not remove users who are answered a game");
 
    /***** Remove all the answers in this game *****/
-   sprintf (Query,"DELETE FROM gam_answers USING game_questions,gam_answers"
-                  " WHERE game_questions.GamCod=%ld"
-                  " AND game_questions.QstCod=gam_answers.QstCod",
+   sprintf (Query,"DELETE FROM gam_answers USING gam_questions,gam_answers"
+                  " WHERE gam_questions.GamCod=%ld"
+                  " AND gam_questions.QstCod=gam_answers.QstCod",
             Game.GamCod);
    DB_QueryDELETE (Query,"can not remove answers of a game");
 
    /***** Remove all the questions in this game *****/
-   sprintf (Query,"DELETE FROM game_questions"
+   sprintf (Query,"DELETE FROM gam_questions"
                   " WHERE GamCod=%ld",
             Game.GamCod);
    DB_QueryDELETE (Query,"can not remove questions of a game");
@@ -1643,14 +1638,14 @@ void Rmt_ResetGame (void)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
    /***** Remove all the users in this game *****/
-   sprintf (Query,"DELETE FROM game_users WHERE GamCod=%ld",
+   sprintf (Query,"DELETE FROM gam_users WHERE GamCod=%ld",
             Game.GamCod);
    DB_QueryDELETE (Query,"can not remove users who are answered a game");
 
    /***** Reset all the answers in this game *****/
-   sprintf (Query,"UPDATE gam_answers,game_questions SET gam_answers.NumUsrs=0"
-                  " WHERE game_questions.GamCod=%ld"
-                  " AND game_questions.QstCod=gam_answers.QstCod",
+   sprintf (Query,"UPDATE gam_answers,gam_questions SET gam_answers.NumUsrs=0"
+                  " WHERE gam_questions.GamCod=%ld"
+                  " AND gam_questions.QstCod=gam_answers.QstCod",
             Game.GamCod);
    DB_QueryUPDATE (Query,"can not reset answers of a game");
 
@@ -2474,28 +2469,28 @@ void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod)
    char Query[512];
 
    /***** Remove all the users in course games *****/
-   sprintf (Query,"DELETE FROM game_users"
-	          " USING games,game_users"
+   sprintf (Query,"DELETE FROM gam_users"
+	          " USING games,gam_users"
                   " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=game_users.GamCod",
+                  " AND games.GamCod=gam_users.GamCod",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove users"
 	                 " who had answered games in a place on the hierarchy");
 
    /***** Remove all the answers in course games *****/
    sprintf (Query,"DELETE FROM gam_answers"
-	          " USING games,game_questions,gam_answers"
+	          " USING games,gam_questions,gam_answers"
                   " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=game_questions.GamCod"
-                  " AND game_questions.QstCod=gam_answers.QstCod",
+                  " AND games.GamCod=gam_questions.GamCod"
+                  " AND gam_questions.QstCod=gam_answers.QstCod",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove answers of games in a place on the hierarchy");
 
    /***** Remove all the questions in course games *****/
-   sprintf (Query,"DELETE FROM game_questions"
-	          " USING games,game_questions"
+   sprintf (Query,"DELETE FROM gam_questions"
+	          " USING games,gam_questions"
                   " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=game_questions.GamCod",
+                  " AND games.GamCod=gam_questions.GamCod",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove questions of games in a place on the hierarchy");
 
@@ -2543,7 +2538,7 @@ static unsigned Rmt_GetNumQstsGame (long GamCod)
    char Query[128];
 
    /***** Get data of questions from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM game_questions WHERE GamCod=%ld",
+   sprintf (Query,"SELECT COUNT(*) FROM gam_questions WHERE GamCod=%ld",
             GamCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of questions of a game");
   }
@@ -2556,11 +2551,9 @@ void Rmt_RequestEditQuestion (void)
   {
    long GamCod;
    struct GameQuestion GameQst;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Initialize question to zero *****/
    Rmt_InitQst (&GameQst);
-   Txt[0] = '\0';
 
    /***** Get game code *****/
    if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
@@ -2575,199 +2568,10 @@ void Rmt_RequestEditQuestion (void)
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show form to create a new question in this game *****/
-   Rmt_ShowFormEditOneQst (GamCod,&GameQst,Txt);
+   Tst_ShowFormAskSelectTstsForGame (GamCod);
 
    /***** Show current game *****/
    Rmt_ShowOneGame (GamCod,&GameQst,true);
-  }
-
-/*****************************************************************************/
-/******************* Show form to edit one game question *******************/
-/*****************************************************************************/
-
-static void Rmt_ShowFormEditOneQst (long GamCod,struct GameQuestion *GameQst,
-                                    char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   extern const char *Hlp_ASSESSMENT_Games_questions;
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Question;
-   extern const char *Txt_New_question;
-   extern const char *Txt_Stem;
-   extern const char *Txt_Type;
-   extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Rmt_NUM_ANS_TYPES];
-   extern const char *Txt_Save;
-   extern const char *Txt_Create_question;
-   char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumAns;
-   unsigned NumAnswers = 0;
-   Rmt_AnswerType_t AnsType;
-
-   if (Gbl.Action.Act == ActEdiOneGamQst) // If no receiving the question, but editing a new or existing question
-     {
-      if ((GameQst->QstCod > 0))	// If parameter QstCod received ==> question already exists in the database
-        {
-         /***** Get the type of answer and the stem from the database *****/
-         /* Get the question from database */
-         sprintf (Query,"SELECT QstInd,AnsType,Stem FROM game_questions"
-                        " WHERE QstCod=%ld AND GamCod=%ld",
-                  GameQst->QstCod,GamCod);
-         DB_QuerySELECT (Query,&mysql_res,"can not get a question");
-
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get question index inside game (row[0]) */
-         if (sscanf (row[0],"%u",&(GameQst->QstInd)) != 1)
-            Lay_ShowErrorAndExit ("Error: wrong question index.");
-
-         /* Get the type of answer (row[1]) */
-         GameQst->AnswerType = Rmt_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-
-         /* Get the stem of the question from the database (row[2]) */
-         Str_Copy (Txt,row[2],
-                   Cns_MAX_BYTES_TEXT);
-
-         /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
-
-         /***** Get the answers from the database *****/
-         NumAnswers = Rmt_GetAnswersQst (GameQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
-         for (NumAns = 0;
-              NumAns < NumAnswers;
-              NumAns++)
-           {
-            row = mysql_fetch_row (mysql_res);
-
-            if (NumAnswers > Rmt_MAX_ANSWERS_PER_QUESTION)
-               Lay_ShowErrorAndExit ("Wrong answer.");
-            if (!Rmt_AllocateTextChoiceAnswer (GameQst,NumAns))
-               Lay_ShowErrorAndExit (Gbl.Alert.Txt);
-
-            Str_Copy (GameQst->AnsChoice[NumAns].Text,row[2],
-                      Rmt_MAX_BYTES_ANSWER);
-           }
-         /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
-        }
-     }
-
-   /***** Start box *****/
-   if (GameQst->QstCod > 0)	// If the question already has assigned a code
-     {
-      /* Parameters for contextual icon */
-      Gbl.Games.GamCodToEdit    = GamCod;
-      Gbl.Games.GamQstCodToEdit = GameQst->QstCod;
-
-      sprintf (Gbl.Title,"%s %u",
-               Txt_Question,GameQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Box_StartBox (NULL,Gbl.Title,Rmt_PutIconToRemoveOneQst,
-                    NULL,Box_NOT_CLOSABLE);
-     }
-   else
-      Box_StartBox (NULL,Txt_New_question,NULL,
-                    Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
-
-   /***** Start form *****/
-   Act_FormStart (ActRcvGamQst);
-   Rmt_PutParamGameCod (GamCod);
-   if (GameQst->QstCod > 0)	// If the question already has assigned a code
-      Rmt_PutParamQstCod (GameQst->QstCod);
-
-   /***** Start table *****/
-   Tbl_StartTableWide (2);
-
-   /***** Stem *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Txt\" name=\"Txt\""
-                      " cols=\"60\" rows=\"4\">"
-	              "%s"
-                      "</textarea>"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Stem,
-	    Txt);
-
-   /***** Type of answer *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>"
-	              "<td class=\"%s LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Type,
-            The_ClassForm[Gbl.Prefs.Theme]);
-   for (AnsType = (Rmt_AnswerType_t) 0;
-	AnsType < Rmt_NUM_ANS_TYPES;
-	AnsType++)
-     {
-      fprintf (Gbl.F.Out,"<label>"
-	                 "<input type=\"radio\" name=\"AnswerType\""
-	                 " value=\"%u\"",
-               (unsigned) AnsType);
-      if (AnsType == GameQst->AnswerType)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "%s"
-	                 "</label><br />",
-               Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
-     }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** Answers *****/
-   /* Unique or multiple choice answers */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td></td>"
-                      "<td class=\"LEFT_TOP\">");
-   Tbl_StartTable (2);
-   for (NumAns = 0;
-	NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
-	NumAns++)
-     {
-      /* Label with the number of the answer */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP\">"
-	                 "<label for=\"AnsStr%u\" class=\"%s\">%u)</label>"
-	                 "</td>",
-               NumAns,The_ClassForm[Gbl.Prefs.Theme],NumAns + 1);
-
-      /* Answer text */
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-                         "<textarea id=\"AnsStr%u\" name=\"AnsStr%u\""
-                         " cols=\"50\" rows=\"1\">",
-               NumAns,NumAns);
-      if (GameQst->AnsChoice[NumAns].Text)
-         fprintf (Gbl.F.Out,"%s",GameQst->AnsChoice[NumAns].Text);
-      fprintf (Gbl.F.Out,"</textarea>"
-	                 "</td>"
-	                 "</tr>");
-     }
-   Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End table *****/
-   Tbl_EndTable ();
-
-   /***** Send button *****/
-   if (GameQst->QstCod > 0)	// If the question already has assigned a code
-      Btn_PutConfirmButton (Txt_Save);
-   else
-      Btn_PutCreateButton (Txt_Create_question);
-
-   /***** End form *****/
-   Act_FormEnd ();
-
-   /***** End box *****/
-   Box_EndBox ();
-
-   /***** Free memory for answers *****/
-   Rmt_FreeTextChoiceAnswers (GameQst,NumAnswers);
   }
 
 /*****************************************************************************/
@@ -3011,7 +2815,7 @@ void Rmt_ReceiveQst (void)
      }
 
    if (Error)
-      Rmt_ShowFormEditOneQst (GamCod,&GameQst,Txt);
+      Tst_ShowFormAskSelectTstsForGame (GamCod);
    else
      {
       /***** Form is received OK ==> insert question and answer in the database *****/
@@ -3020,7 +2824,7 @@ void Rmt_ReceiveQst (void)
          GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (GamCod);
 
          /* Insert question in the table of questions */
-         sprintf (Query,"INSERT INTO game_questions"
+         sprintf (Query,"INSERT INTO gam_questions"
                         " (GamCod,QstInd,AnsType,Stem)"
                         " VALUES"
                         " (%ld,%u,'%s','%s')",
@@ -3030,7 +2834,7 @@ void Rmt_ReceiveQst (void)
       else			// It's an existing question
         {
          /* Update question */
-         sprintf (Query,"UPDATE game_questions SET Stem='%s',AnsType='%s'"
+         sprintf (Query,"UPDATE gam_questions SET Stem='%s',AnsType='%s'"
                         " WHERE QstCod=%ld AND GamCod=%ld",
                   Txt,Rmt_StrAnswerTypesDB[GameQst.AnswerType],
                   GameQst.QstCod,GamCod);
@@ -3098,7 +2902,7 @@ static unsigned Rmt_GetQstIndFromQstCod (long QstCod)
    unsigned QstInd = 0;
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT QstInd FROM game_questions WHERE QstCod=%ld",
+   sprintf (Query,"SELECT QstInd FROM gam_questions WHERE QstCod=%ld",
             QstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get question index");
 
@@ -3130,7 +2934,7 @@ static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod)
    unsigned QstInd = 0;
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT MAX(QstInd) FROM game_questions WHERE GamCod=%ld",
+   sprintf (Query,"SELECT MAX(QstInd) FROM gam_questions WHERE GamCod=%ld",
             GamCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
 
@@ -3176,7 +2980,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
-                  " FROM game_questions WHERE GamCod=%ld ORDER BY QstInd",
+                  " FROM gam_questions WHERE GamCod=%ld ORDER BY QstInd",
             Game->GamCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
@@ -3583,14 +3387,14 @@ void Rmt_RemoveQst (void)
    Rmt_RemAnswersOfAQuestion (GameQst.QstCod);
 
    /* Remove the question itself */
-   sprintf (Query,"DELETE FROM game_questions WHERE QstCod=%ld",
+   sprintf (Query,"DELETE FROM gam_questions WHERE QstCod=%ld",
             GameQst.QstCod);
    DB_QueryDELETE (Query,"can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
    /* Change index of questions greater than this */
-   sprintf (Query,"UPDATE game_questions SET QstInd=QstInd-1"
+   sprintf (Query,"UPDATE gam_questions SET QstInd=QstInd-1"
                   " WHERE GamCod=%ld AND QstInd>%u",
             GamCod,GameQst.QstInd);
    DB_QueryUPDATE (Query,"can not update indexes of questions");
@@ -3654,7 +3458,7 @@ static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    unsigned AnsInd;
 
    /***** Get questions of this game from database *****/
-   sprintf (Query,"SELECT QstCod FROM game_questions"
+   sprintf (Query,"SELECT QstCod FROM gam_questions"
                   " WHERE GamCod=%ld ORDER BY QstCod",
             GamCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get questions of a game");
@@ -3721,7 +3525,7 @@ static void Rmt_RegisterIHaveAnsweredGame (long GamCod)
   {
    char Query[256];
 
-   sprintf (Query,"INSERT INTO game_users"
+   sprintf (Query,"INSERT INTO gam_users"
 	          " (GamCod,UsrCod)"
                   " VALUES"
                   " (%ld,%ld)",
@@ -3738,7 +3542,7 @@ static bool Rmt_CheckIfIHaveAnsweredGame (long GamCod)
    char Query[256];
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM game_users"
+   sprintf (Query,"SELECT COUNT(*) FROM gam_users"
                   " WHERE GamCod=%ld AND UsrCod=%ld",
             GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if you have answered a game") != 0);
@@ -3753,7 +3557,7 @@ static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
    char Query[128];
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM game_users WHERE GamCod=%ld",
+   sprintf (Query,"SELECT COUNT(*) FROM gam_users WHERE GamCod=%ld",
             GamCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who have answered a game");
   }
@@ -3963,74 +3767,74 @@ float Rmt_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
      {
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(game_questions.QstCod) AS NumQsts"
-                        " FROM games,game_questions"
+                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+                        " FROM games,gam_questions"
                         " WHERE games.Scope='%s'"
-                        " AND games.GamCod=game_questions.GamCod"
-                        " GROUP BY game_questions.GamCod) AS NumQstsTable",
+                        " AND games.GamCod=gam_questions.GamCod"
+                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(game_questions.QstCod) AS NumQsts"
-                        " FROM institutions,centres,degrees,courses,games,game_questions"
+                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+                        " FROM institutions,centres,degrees,courses,games,gam_questions"
                         " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=games.Cod"
                         " AND games.Scope='%s'"
-                        " AND games.GamCod=game_questions.GamCod"
-                        " GROUP BY game_questions.GamCod) AS NumQstsTable",
+                        " AND games.GamCod=gam_questions.GamCod"
+                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                   Gbl.CurrentCty.Cty.CtyCod,
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(game_questions.QstCod) AS NumQsts"
-                        " FROM centres,degrees,courses,games,game_questions"
+                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+                        " FROM centres,degrees,courses,games,gam_questions"
                         " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=games.Cod"
                         " AND games.Scope='%s'"
-                        " AND games.GamCod=game_questions.GamCod"
-                        " GROUP BY game_questions.GamCod) AS NumQstsTable",
+                        " AND games.GamCod=gam_questions.GamCod"
+                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                   Gbl.CurrentIns.Ins.InsCod,
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(game_questions.QstCod) AS NumQsts"
-                        " FROM degrees,courses,games,game_questions"
+                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+                        " FROM degrees,courses,games,gam_questions"
                         " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=games.Cod"
                         " AND games.Scope='%s'"
-                        " AND games.GamCod=game_questions.GamCod"
-                        " GROUP BY game_questions.GamCod) AS NumQstsTable",
+                        " AND games.GamCod=gam_questions.GamCod"
+                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(game_questions.QstCod) AS NumQsts"
-                        " FROM courses,games,game_questions"
+                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+                        " FROM courses,games,gam_questions"
                         " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=games.Cod"
                         " AND games.Scope='%s'"
-                        " AND games.GamCod=game_questions.GamCod"
-                        " GROUP BY game_questions.GamCod) AS NumQstsTable",
+                        " AND games.GamCod=gam_questions.GamCod"
+                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                   Gbl.CurrentDeg.Deg.DegCod,
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(game_questions.QstCod) AS NumQsts"
-                        " FROM games,game_questions"
+                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+                        " FROM games,gam_questions"
                         " WHERE games.Scope='%s' AND games.Cod=%ld"
-                        " AND games.GamCod=game_questions.GamCod"
-                        " GROUP BY game_questions.GamCod) AS NumQstsTable",
+                        " AND games.GamCod=gam_questions.GamCod"
+                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                   Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:

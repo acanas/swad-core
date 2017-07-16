@@ -96,6 +96,8 @@ void Rmt_FreeListGames (void);
 void Rmt_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                        char **ContentStr,
                        long GamCod,bool GetContent);
+void Rmt_PutParamGameCod (long GamCod);
+long Rmt_GetParamGameCod (void);
 void Rmt_AskRemGame (void);
 void Rmt_RemoveGame (void);
 void Rmt_AskResetGame (void);
