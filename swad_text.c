@@ -2823,6 +2823,27 @@ const char *Txt_Another_user_s_profile =
 	"Perfil de outro usu&aacute;rio";
 #endif
 
+const char *Txt_Add_questions =
+#if   L==1
+	"Afegir preguntes";
+#elif L==2
+	"F&uuml;gen Fragen";
+#elif L==3
+	"Add questions";
+#elif L==4
+	"A&ntilde;adir preguntas";
+#elif L==5
+	"Ajouter questions";
+#elif L==6
+	"A&ntilde;adir preguntas";	// Okoteve traducción
+#elif L==7
+	"Aggiungere domande";
+#elif L==8
+	"Dodaj pytania";
+#elif L==9
+	"Adicionar quest&otilde;es";
+#endif
+
 const char *Txt_Add_this_ID =
 #if   L==1
 	"Afegir aquest ID";
@@ -2837,9 +2858,9 @@ const char *Txt_Add_this_ID =
 #elif L==6
 	"A&ntilde;adir este ID";	// Okoteve traducción
 #elif L==7
-	"Aggiungi questa carta d'identit&agrave;";
+	"Aggiungere questa carta d'identit&agrave;";
 #elif L==8
-	"Add this ID";			// Potrzebujesz tlumaczenie
+	"Dodaj ten identyfikator";
 #elif L==9
 	"Adicionar este n&ordm; identif.";
 #endif

@@ -143,8 +143,8 @@ static void Rmt_FreeTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumA
 static unsigned Rmt_GetQstIndFromQstCod (long QstCod);
 static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod);
 static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQst);
-static void Rmt_PutIconToAddNewQuestion (void);
-static void Rmt_PutButtonToCreateNewQuestion (void);
+static void Rmt_PutIconToAddNewQuestions (void);
+static void Rmt_PutButtonToAddNewQuestions (void);
 static void Rmt_WriteQstStem (const char *Stem);
 static void Rmt_WriteAnswersOfAQst (struct Game *Game,struct GameQuestion *GameQst,bool PutFormAnswerGame);
 static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
@@ -2986,7 +2986,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
 
    /***** Start box *****/
    Gbl.Games.GamCodToEdit = Game->GamCod;
-   Box_StartBox (NULL,Txt_Questions,Game->Status.ICanEdit ? Rmt_PutIconToAddNewQuestion :
+   Box_StartBox (NULL,Txt_Questions,Game->Status.ICanEdit ? Rmt_PutIconToAddNewQuestions :
                                                             NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
@@ -3102,7 +3102,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
        (!NumQsts ||		// This game has no questions
 	Editing))		// I am editing
       /***** Put button to add a new question in this game *****/
-      Rmt_PutButtonToCreateNewQuestion ();
+      Rmt_PutButtonToAddNewQuestions ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3112,31 +3112,31 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
   }
 
 /*****************************************************************************/
-/***************** Put icon to add a new question to game ******************/
+/***************** Put icon to add a new questions to game *******************/
 /*****************************************************************************/
 
-static void Rmt_PutIconToAddNewQuestion (void)
+static void Rmt_PutIconToAddNewQuestions (void)
   {
-   extern const char *Txt_New_question;
+   extern const char *Txt_Add_questions;
 
    /***** Put form to create a new question *****/
    Lay_PutContextualLink (ActEdiOneGamQst,NULL,Rmt_PutParams,
                           "plus64x64.png",
-                          Txt_New_question,NULL,
+                          Txt_Add_questions,NULL,
 		          NULL);
   }
 
 /*****************************************************************************/
-/**************** Put button to add a new question to game *****************/
+/***************** Put button to add new questions to game *******************/
 /*****************************************************************************/
 
-static void Rmt_PutButtonToCreateNewQuestion (void)
+static void Rmt_PutButtonToAddNewQuestions (void)
   {
-   extern const char *Txt_New_question;
+   extern const char *Txt_Add_questions;
 
    Act_FormStart (ActEdiOneGamQst);
    Rmt_PutParams ();
-   Btn_PutConfirmButton (Txt_New_question);
+   Btn_PutConfirmButton (Txt_Add_questions);
    Act_FormEnd ();
   }
 
