@@ -236,13 +236,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.251.2 (2017-07-16)"
+#define Log_PLATFORM_VERSION	"SWAD 16.251.3 (2017-07-18)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.251.3: Jul 18, 2017	Listing games for remote control. Not finished. (227148 lines)
         Version 16.251.2: Jul 16, 2017	Listing games for remote control. Not finished. (227062 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1667','es','N','A&ntilde;adir tests a juego');

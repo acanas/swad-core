@@ -402,6 +402,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Test.Tags.All  = false;
    Gbl.Test.Tags.List = NULL;
 
+   /* Games for remote control */
+   Gbl.Games.ListQuestions = NULL;
+
    /* Public activity */
    Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
 

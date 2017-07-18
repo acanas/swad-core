@@ -79,6 +79,9 @@ struct GameQuestion
    char ListAnsTypes[Rmt_MAX_BYTES_LIST_ANSWER_TYPES + 1];
   };
 
+#define Rmt_MAX_SELECTED_QUESTIONS		1000
+#define Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Rmt_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -145,6 +148,11 @@ static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod);
 static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQst);
 static void Rmt_PutIconToAddNewQuestions (void);
 static void Rmt_PutButtonToAddNewQuestions (void);
+
+static void Rmt_AllocateListSelectedQuestions (void);
+static void Rmt_FreeListsSelectedQuestions (void);
+static unsigned Rmt_CountNumQuestionsInList (void);
+
 static void Rmt_WriteQstStem (const char *Stem);
 static void Rmt_WriteAnswersOfAQst (struct Game *Game,struct GameQuestion *GameQst,bool PutFormAnswerGame);
 static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
@@ -3146,7 +3154,76 @@ static void Rmt_PutButtonToAddNewQuestions (void)
 
 void Rmt_AddTstQuestionsToGame (void)
   {
-   Ale_ShowAlert (Ale_WARNING,"Under development....");	// TODO: Write this function
+   extern const char *Txt_You_must_select_one_ore_more_questions;
+
+   /***** Get selected questions *****/
+   /* Allocate space for selected question codes */
+   Rmt_AllocateListSelectedQuestions ();
+
+   /* Get question codes */
+   Par_GetParMultiToText ("QstCods",Gbl.Games.ListQuestions,
+                          Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS);
+
+   /* Check number of questions */
+   if (Rmt_CountNumQuestionsInList () == 0)	// If no questions selected...
+     {						// ...write warning alert
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
+
+      // TODO: Show form again!!!
+     }
+
+   /* Free space for selected question codes */
+   Rmt_FreeListsSelectedQuestions ();
+  }
+
+/*****************************************************************************/
+/****************** Allocate memory for list of questions ********************/
+/*****************************************************************************/
+
+static void Rmt_AllocateListSelectedQuestions (void)
+  {
+   if (!Gbl.Games.ListQuestions)
+     {
+      if ((Gbl.Games.ListQuestions = (char *) malloc (Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
+         Lay_ShowErrorAndExit ("Not enough memory to store list of questions.");
+      Gbl.Games.ListQuestions[0] = '\0';
+     }
+  }
+
+/*****************************************************************************/
+/*********** Free memory used by list of selected question codes *************/
+/*****************************************************************************/
+
+static void Rmt_FreeListsSelectedQuestions (void)
+  {
+   if (Gbl.Games.ListQuestions)
+     {
+      free ((void *) Gbl.Games.ListQuestions);
+      Gbl.Games.ListQuestions = NULL;
+     }
+  }
+
+/*****************************************************************************/
+/**** Count the number of questions in the list of selected question codes ***/
+/*****************************************************************************/
+
+static unsigned Rmt_CountNumQuestionsInList (void)
+  {
+   const char *Ptr;
+   unsigned NumQuestions = 0;
+   char LongStr[1+ 10 + 1];
+   long QstCod;
+
+   /***** Go over the list Gbl.Test.ListAnsTypes counting the number of types of answer *****/
+   Ptr = Gbl.Games.ListQuestions;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+      if (sscanf (LongStr,"%ld",&QstCod) != 1)
+         Lay_ShowErrorAndExit ("Wrong question code.");
+      NumQuestions++;
+     }
+   return NumQuestions;
   }
 
 /*****************************************************************************/

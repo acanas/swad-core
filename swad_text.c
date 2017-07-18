@@ -54665,6 +54665,27 @@ const char *Txt_You_must_select_a_T_F_answer =
 	"You must select a T/F answer.";		// Necessita de tradução
 #endif
 
+const char *Txt_You_must_select_one_ore_more_questions =
+#if   L==1
+	"Heu de seleccionar una o m&eacute;s preguntes.";
+#elif L==2
+	"Sie m&uuml;ssen eine oder mehrere Fragen ausw&auml;hlen.";
+#elif L==3
+	"You must select one or more questions.";
+#elif L==4
+	"Debe seleccionar una o m&aacute;s preguntas.";
+#elif L==5
+	"Vous devez s&eacute;lectionner une ou plusieurs questions.";
+#elif L==6
+	"Debe seleccionar una o m&aacute;s preguntas.";		// Okoteve traducción
+#elif L==7
+	"Devi selezionare una o pi&ugrave; domande.";
+#elif L==8
+	"Musisz wybra&cacute; jedno lub wi&eogon;cej pyta&nacute;.";
+#elif L==9
+	"Voc&ecirc; deve selecionar uma ou mais perguntas.";
+#endif
+
 const char *Txt_You_must_select_one_ore_more_recipients =
 #if   L==1
 	"Debe seleccionar uno o m&aacute;s destinatarios.";	// Necessita traduccio

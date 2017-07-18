@@ -719,6 +719,7 @@ struct Globals
       long GamCodToEdit;	// Used as parameter in contextual links
       long GamQstCodToEdit;	// Used as parameter in contextual links
       unsigned CurrentPage;
+      char *ListQuestions;
      } Games;
    struct
      {
