@@ -603,13 +603,11 @@ CREATE TABLE IF NOT EXISTS gam_grp (
 -- Table gam_questions: stores the questions in the games
 --
 CREATE TABLE IF NOT EXISTS gam_questions (
-	QstCod INT NOT NULL AUTO_INCREMENT,
 	GamCod INT NOT NULL,
+	QstCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
-	AnsType ENUM('unique_choice','multiple_choice') NOT NULL,
-	Stem TEXT NOT NULL,
-	UNIQUE INDEX(QstCod),
-	INDEX(GamCod));
+	INDEX(GamCod),
+	INDEX(QstCod));
 --
 -- Table gam_users: stores the users who have answer the games
 --

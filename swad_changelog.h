@@ -232,17 +232,24 @@
 
 // TODO: Cuando sólo se cambian los grupos y no el rol de un profesor ya existente, no sale ningún mensaje. se haga lo que se haga en la edición debería salir un mensaje del tipo "Cambios realizados"
 
+// TODO: "Solicitar inscripción" como superusuario: "Usted no tiene permiso para realizar esta acción"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.251.3 (2017-07-18)"
+#define Log_PLATFORM_VERSION	"SWAD 16.251.4 (2017-09-01)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+// TODO: "Error when getting answers of a question"
+        Version 16.251.4: Sep 01, 2017	Listing games for remote control. Not finished. (? lines)
+DROP TABLE IF EXISTS gam_questions;
+CREATE TABLE IF NOT EXISTS gam_questions (GamCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,INDEX(GamCod),INDEX(QstCod));
+
         Version 16.251.3: Jul 18, 2017	Listing games for remote control. Not finished. (227148 lines)
         Version 16.251.2: Jul 16, 2017	Listing games for remote control. Not finished. (227062 lines)
 					1 change necessary in database:

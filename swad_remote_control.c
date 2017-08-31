@@ -2557,14 +2557,14 @@ static unsigned Rmt_GetNumQstsGame (long GamCod)
 
 void Rmt_RequestEditQuestion (void)
   {
-   long GamCod;
+   struct Game Game;
    struct GameQuestion GameQst;
 
    /***** Initialize question to zero *****/
    Rmt_InitQst (&GameQst);
 
    /***** Get game code *****/
-   if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get the question code */
@@ -2576,10 +2576,10 @@ void Rmt_RequestEditQuestion (void)
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show form to create a new question in this game *****/
-   Tst_ShowFormAskSelectTstsForGame (GamCod);
+   Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
   }
 
 /*****************************************************************************/
@@ -2741,7 +2741,7 @@ void Rmt_ReceiveQst (void)
    extern const char *Txt_The_game_has_been_modified;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    char Query[512 + Cns_MAX_BYTES_TEXT];
-   long GamCod;
+   struct Game Game;
    struct GameQuestion GameQst;
    unsigned NumAns;
    char AnsStr[8 + 10 + 1];
@@ -2754,7 +2754,7 @@ void Rmt_ReceiveQst (void)
 
    /***** Get parameters from form *****/
    /* Get game code */
-   if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
@@ -2823,20 +2823,20 @@ void Rmt_ReceiveQst (void)
      }
 
    if (Error)
-      Tst_ShowFormAskSelectTstsForGame (GamCod);
+      Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
    else
      {
       /***** Form is received OK ==> insert question and answer in the database *****/
       if (GameQst.QstCod < 0)	// It's a new question
         {
-         GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (GamCod);
+         GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
 
          /* Insert question in the table of questions */
          sprintf (Query,"INSERT INTO gam_questions"
                         " (GamCod,QstInd,AnsType,Stem)"
                         " VALUES"
                         " (%ld,%u,'%s','%s')",
-	          GamCod,GameQst.QstInd,Rmt_StrAnswerTypesDB[GameQst.AnswerType],Txt);
+	          Game.GamCod,GameQst.QstInd,Rmt_StrAnswerTypesDB[GameQst.AnswerType],Txt);
          GameQst.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
         }
       else			// It's an existing question
@@ -2845,7 +2845,7 @@ void Rmt_ReceiveQst (void)
          sprintf (Query,"UPDATE gam_questions SET Stem='%s',AnsType='%s'"
                         " WHERE QstCod=%ld AND GamCod=%ld",
                   Txt,Rmt_StrAnswerTypesDB[GameQst.AnswerType],
-                  GameQst.QstCod,GamCod);
+                  GameQst.QstCod,Game.GamCod);
          DB_QueryUPDATE (Query,"can not update question");
         }
 
@@ -2894,7 +2894,7 @@ void Rmt_ReceiveQst (void)
    Rmt_FreeTextChoiceAnswers (&GameQst,Rmt_MAX_ANSWERS_PER_QUESTION);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
   }
 
 /*****************************************************************************/
@@ -2976,7 +2976,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
    extern const char *Txt_This_game_has_no_questions;
    extern const char *Txt_Done;
    extern const char *Txt_Edit_question;
-   char Query[256];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQsts;
@@ -2987,8 +2987,12 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
    bool PutFormAnswerGame = Game->Status.ICanAnswer && !Editing;
 
    /***** Get data of questions from database *****/
-   sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
-                  " FROM gam_questions WHERE GamCod=%ld ORDER BY QstInd",
+   sprintf (Query,"SELECT gam_questions.QstCod,gam_questions.QstInd,"
+	          "tst_questions.AnsType,tst_questions.Stem"
+                  " FROM gam_questions,tst_questions"
+                  " WHERE gam_questions.GamCod=%ld"
+                  " AND gam_questions.QstCod=tst_questions.QstCod"
+                  " ORDER BY gam_questions.QstInd",
             Game->GamCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
@@ -3155,6 +3159,15 @@ static void Rmt_PutButtonToAddNewQuestions (void)
 void Rmt_AddTstQuestionsToGame (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_questions;
+   struct Game Game;
+   const char *Ptr;
+   char LongStr[1 + 10 + 1];
+   struct GameQuestion GameQst;
+   char Query[256];
+
+   /***** Get game code *****/
+   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get selected questions *****/
    /* Allocate space for selected question codes */
@@ -3172,7 +3185,28 @@ void Rmt_AddTstQuestionsToGame (void)
       // TODO: Show form again!!!
      }
 
-   /* Free space for selected question codes */
+   /***** Insert questions in database *****/
+   Ptr = Gbl.Games.ListQuestions;
+   while (*Ptr)
+     {
+      /* Get next code */
+      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+      if (sscanf (LongStr,"%ld",&GameQst.QstCod) != 1)
+         Lay_ShowErrorAndExit ("Wrong question code.");
+
+      /* Get next index */
+      GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
+
+      /* Insert question in the table of questions */
+      sprintf (Query,"INSERT INTO gam_questions"
+		     " (GamCod,QstCod,QstInd)"
+		     " VALUES"
+		     " (%ld,%ld,%u)",
+	       Game.GamCod,GameQst.QstCod,GameQst.QstInd);
+      DB_QueryINSERT (Query,"can not create question");
+     }
+
+   /***** Free space for selected question codes *****/
    Rmt_FreeListsSelectedQuestions ();
   }
 
@@ -3211,7 +3245,7 @@ static unsigned Rmt_CountNumQuestionsInList (void)
   {
    const char *Ptr;
    unsigned NumQuestions = 0;
-   char LongStr[1+ 10 + 1];
+   char LongStr[1 + 10 + 1];
    long QstCod;
 
    /***** Go over the list Gbl.Test.ListAnsTypes counting the number of types of answer *****/
@@ -3417,12 +3451,12 @@ void Rmt_RequestRemoveQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
-   long GamCod;
+   struct Game Game;
    struct GameQuestion GameQst;
 
    /***** Get parameters from form *****/
    /* Get game code */
-   if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
@@ -3433,7 +3467,7 @@ void Rmt_RequestRemoveQst (void)
    GameQst.QstInd = Rmt_GetQstIndFromQstCod (GameQst.QstCod);
 
    /***** Show question and button to remove question *****/
-   Gbl.Games.GamCodToEdit    = GamCod;
+   Gbl.Games.GamCodToEdit    = Game.GamCod;
    Gbl.Games.GamQstCodToEdit = GameQst.QstCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (GameQst.QstInd + 1));
@@ -3442,7 +3476,7 @@ void Rmt_RequestRemoveQst (void)
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
   }
 
 /*****************************************************************************/
@@ -3453,12 +3487,12 @@ void Rmt_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
    char Query[512];
-   long GamCod;
+   struct Game Game;
    struct GameQuestion GameQst;
 
    /***** Get parameters from form *****/
    /* Get game code */
-   if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
@@ -3482,7 +3516,7 @@ void Rmt_RemoveQst (void)
    /* Change index of questions greater than this */
    sprintf (Query,"UPDATE gam_questions SET QstInd=QstInd-1"
                   " WHERE GamCod=%ld AND QstInd>%u",
-            GamCod,GameQst.QstInd);
+            Game.GamCod,GameQst.QstInd);
    DB_QueryUPDATE (Query,"can not update indexes of questions");
 
    /***** Write message *****/
@@ -3490,7 +3524,7 @@ void Rmt_RemoveQst (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
   }
 
 /*****************************************************************************/

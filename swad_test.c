@@ -194,8 +194,11 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
 static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
-static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,MYSQL_RES *mysql_res);
-static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
+                                                  MYSQL_RES *mysql_res);
+static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
+                                                    unsigned long NumRows,
+                                                    MYSQL_RES *mysql_res);
 
 static void Tst_WriteAnswersOfAQstEdit (long QstCod);
 static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle);
@@ -2632,7 +2635,7 @@ void Tst_ListQuestionsToSelect (void)
      {
       if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsForSelection (NumRows,mysql_res);
+         Tst_ListOneOrMoreQuestionsForSelection (GamCod,NumRows,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -2998,7 +3001,8 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 /****************** List for edition one or more test questions **************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
+                                                  MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
@@ -3286,7 +3290,9 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,MYSQL_RE
 /****************** List for edition one or more test questions **************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
+                                                    unsigned long NumRows,
+                                                    MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
@@ -3311,6 +3317,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,MYSQL_
 
    /***** Start form *****/
    Act_FormStart (ActAddTstQstToGam);
+   Rmt_PutParamGameCod (GamCod);
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);

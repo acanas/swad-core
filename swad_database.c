@@ -1311,25 +1311,21 @@ mysql> DESCRIBE gam_grp;
    /***** Table gam_questions *****/
 /*
 mysql> DESCRIBE gam_questions;
-+---------+-----------------------------------------+------+-----+---------+----------------+
-| Field   | Type                                    | Null | Key | Default | Extra          |
-+---------+-----------------------------------------+------+-----+---------+----------------+
-| QstCod  | int(11)                                 | NO   | PRI | NULL    | auto_increment |
-| SvyCod  | int(11)                                 | NO   | MUL | NULL    |                |
-| QstInd  | int(11)                                 | NO   |     | 0       |                |
-| AnsType | enum('unique_choice','multiple_choice') | NO   |     | NULL    |                |
-| Stem    | text                                    | NO   |     | NULL    |                |
-+---------+-----------------------------------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| GamCod | int(11) | NO   | MUL | NULL    |       |
+| QstCod | int(11) | NO   | MUL | NULL    |       |
+| QstInd | int(11) | NO   |     | 0       |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_questions ("
-			"QstCod INT NOT NULL AUTO_INCREMENT,"
 			"GamCod INT NOT NULL,"
+			"QstCod INT NOT NULL,"
 			"QstInd INT NOT NULL DEFAULT 0,"
-			"AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
-			"Stem TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(QstCod),"
-		   "INDEX(GamCod))");
+		   "INDEX(GamCod),"
+		   "INDEX(QstCod))");
 
    /***** Table gam_users *****/
 /*
