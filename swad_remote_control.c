@@ -137,10 +137,10 @@ static void Rmt_PutParamQstCod (long QstCod);
 static long Rmt_GetParamQstCod (void);
 static void Rmt_RemAnswersOfAQuestion (long QstCod);
 static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
-static bool Rmt_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
+// static bool Rmt_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
 static unsigned Rmt_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res);
 static bool Rmt_AllocateTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns);
-static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned NumAnswers);
+// static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned NumAnswers);
 static void Rmt_FreeTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns);
 
 static unsigned Rmt_GetQstIndFromQstCod (long QstCod);
@@ -157,7 +157,7 @@ static void Rmt_WriteQstStem (const char *Stem);
 static void Rmt_WriteAnswersOfAQst (struct Game *Game,struct GameQuestion *GameQst,bool PutFormAnswerGame);
 static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
-static void Rmt_PutIconToRemoveOneQst (void);
+// static void Rmt_PutIconToRemoveOneQst (void);
 static void Rmt_PutParamsRemoveOneQst (void);
 
 static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod);
@@ -1541,13 +1541,6 @@ void Rmt_RemoveGame (void)
             Game.GamCod);
    DB_QueryDELETE (Query,"can not remove users who are answered a game");
 
-   /***** Remove all the answers in this game *****/
-   sprintf (Query,"DELETE FROM gam_answers USING gam_questions,gam_answers"
-                  " WHERE gam_questions.GamCod=%ld"
-                  " AND gam_questions.QstCod=gam_answers.QstCod",
-            Game.GamCod);
-   DB_QueryDELETE (Query,"can not remove answers of a game");
-
    /***** Remove all the questions in this game *****/
    sprintf (Query,"DELETE FROM gam_questions"
                   " WHERE GamCod=%ld",
@@ -2652,36 +2645,57 @@ static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
 /*****************************************************************************/
 /*********** Check if an answer of a question exists in database *************/
 /*****************************************************************************/
-
+/*
 static bool Rmt_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
   {
    char Query[256];
 
-   /***** Get answers of a question from database *****/
+   ***** Get answers of a question from database *****
    sprintf (Query,"SELECT COUNT(*) FROM gam_answers"
                   " WHERE QstCod=%ld AND AnsInd=%u",
             QstCod,AnsInd);
    return (DB_QueryCOUNT (Query,"can not check if an answer exists") != 0);
   }
-
+*/
 /*****************************************************************************/
 /************** Get answers of a game question from database ***************/
 /*****************************************************************************/
 
 static unsigned Rmt_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
   {
-   char Query[256];
+   char Query[1024];
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
-   sprintf (Query,"SELECT AnsInd,NumUsrs,Answer FROM gam_answers"
-                  " WHERE QstCod=%ld ORDER BY AnsInd",
-            QstCod);
+   sprintf (Query,"SELECT AnsInd,NumUsrs,Answer FROM"
+                  "("
+	          "SELECT tst_answers.AnsInd AS AnsInd,"
+	          "gam_answers.NumUsrs AS NumUsrs,tst_answers.Answer AS Answer"
+	          " FROM tst_answers,gam_answers"
+                  " WHERE tst_answers.QstCod=%ld"
+                  " AND gam_answers.QstCod=%ld"
+                  " AND tst_answers.QstCod=gam_answers.QstCod"
+                  " AND tst_answers.AnsInd=gam_answers.AnsInd"
+                  " UNION "
+                  "SELECT AnsInd,0 AS NumUsrs,Answer FROM tst_answers"
+                  " WHERE QstCod=%ld"
+                  " AND NOT EXISTS"
+                  " (SELECT * FROM gam_answers"
+                  " WHERE QstCod=%ld"
+                  " AND tst_answers.QstCod=gam_answers.QstCod"
+                  " AND tst_answers.AnsInd=gam_answers.AnsInd)"
+                  ") AS answers"
+                  " ORDER BY AnsInd",
+            QstCod,QstCod,
+            QstCod,QstCod);
    NumRows = DB_QuerySELECT (Query,mysql_res,"can not get answers of a question");
 
    /***** Count number of rows of result *****/
    if (NumRows == 0)
+     {
       Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
+      Ale_ShowAlert (Ale_INFO,Query);
+     }
 
    return (unsigned) NumRows;
   }
@@ -2705,7 +2719,7 @@ static bool Rmt_AllocateTextChoiceAnswer (struct GameQuestion *GameQst,unsigned 
 /*****************************************************************************/
 /******************** Free memory of all choice answers **********************/
 /*****************************************************************************/
-
+/*
 static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned NumAnswers)
   {
    unsigned NumAns;
@@ -2715,7 +2729,7 @@ static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned Num
 	NumAns++)
       Rmt_FreeTextChoiceAnswer (GameQst,NumAns);
   }
-
+*/
 /*****************************************************************************/
 /********************** Free memory of a choice answer ***********************/
 /*****************************************************************************/
@@ -2730,9 +2744,9 @@ static void Rmt_FreeTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumA
   }
 
 /*****************************************************************************/
-/*********************** Receive a question of a game **********************/
+/************************ Receive a question of a game ***********************/
 /*****************************************************************************/
-
+/*
 void Rmt_ReceiveQst (void)
   {
    extern const char *Txt_You_must_type_the_stem_of_the_question;
@@ -2749,28 +2763,28 @@ void Rmt_ReceiveQst (void)
    bool ThereIsEndOfAnswers;
    bool Error = false;
 
-   /***** Initialize new question to zero *****/
+   ***** Initialize new question to zero *****
    Rmt_InitQst (&GameQst);
 
-   /***** Get parameters from form *****/
-   /* Get game code */
+   ***** Get parameters from form *****
+   * Get game code *
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /* Get question code */
+   * Get question code *
    GameQst.QstCod = Rmt_GetParamQstCod ();
 
-   /* Get answer type */
+   * Get answer type *
    GameQst.AnswerType = (Rmt_AnswerType_t)
 	               Par_GetParToUnsignedLong ("AnswerType",
 	                                         0,
 	                                         Rmt_NUM_ANS_TYPES - 1,
                                                  (unsigned long) Rmt_ANSWER_TYPE_DEFAULT);
 
-   /* Get question text */
+   * Get question text *
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);
 
-   /* Get the texts of the answers */
+   * Get the texts of the answers *
    for (NumAns = 0;
 	NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -2781,7 +2795,7 @@ void Rmt_ReceiveQst (void)
       Par_GetParToHTML (AnsStr,GameQst.AnsChoice[NumAns].Text,Rmt_MAX_BYTES_ANSWER);
      }
 
-   /***** Make sure that stem and answer are not empty *****/
+   ***** Make sure that stem and answer are not empty *****
    if (Txt[0])
      {
       if (GameQst.AnsChoice[0].Text[0])	// If the first answer has been filled
@@ -2826,12 +2840,12 @@ void Rmt_ReceiveQst (void)
       Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
    else
      {
-      /***** Form is received OK ==> insert question and answer in the database *****/
+      ***** Form is received OK ==> insert question and answer in the database *****
       if (GameQst.QstCod < 0)	// It's a new question
         {
          GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
 
-         /* Insert question in the table of questions */
+         * Insert question in the table of questions *
          sprintf (Query,"INSERT INTO gam_questions"
                         " (GamCod,QstInd,AnsType,Stem)"
                         " VALUES"
@@ -2841,7 +2855,7 @@ void Rmt_ReceiveQst (void)
         }
       else			// It's an existing question
         {
-         /* Update question */
+         * Update question *
          sprintf (Query,"UPDATE gam_questions SET Stem='%s',AnsType='%s'"
                         " WHERE QstCod=%ld AND GamCod=%ld",
                   Txt,Rmt_StrAnswerTypesDB[GameQst.AnswerType],
@@ -2849,7 +2863,7 @@ void Rmt_ReceiveQst (void)
          DB_QueryUPDATE (Query,"can not update question");
         }
 
-      /* Insert, update or delete answers in the answers table */
+      * Insert, update or delete answers in the answers table *
       for (NumAns = 0;
 	   NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
 	   NumAns++)
@@ -2857,7 +2871,7 @@ void Rmt_ReceiveQst (void)
            {
             if (GameQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
               {
-               /* Update answer text */
+               * Update answer text *
                sprintf (Query,"UPDATE gam_answers SET Answer='%s'"
                               " WHERE QstCod=%ld AND AnsInd=%u",
                         GameQst.AnsChoice[NumAns].Text,GameQst.QstCod,NumAns);
@@ -2865,7 +2879,7 @@ void Rmt_ReceiveQst (void)
               }
             else	// Answer is empty
               {
-               /* Delete answer from database */
+               * Delete answer from database *
                sprintf (Query,"DELETE FROM gam_answers"
                               " WHERE QstCod=%ld AND AnsInd=%u",
                         GameQst.QstCod,NumAns);
@@ -2876,7 +2890,7 @@ void Rmt_ReceiveQst (void)
            {
             if (GameQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
               {
-               /* Create answer into database */
+               * Create answer into database *
                sprintf (Query,"INSERT INTO gam_answers"
         	              " (QstCod,AnsInd,NumUsrs,Answer)"
                               " VALUES"
@@ -2886,19 +2900,19 @@ void Rmt_ReceiveQst (void)
               }
            }
 
-      /***** List the questions of this game, including the new one just inserted into the database *****/
+      ***** List the questions of this game, including the new one just inserted into the database *****
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
      }
 
-   /***** Free answers *****/
+   ***** Free answers *****
    Rmt_FreeTextChoiceAnswers (&GameQst,Rmt_MAX_ANSWERS_PER_QUESTION);
 
-   /***** Show current game *****/
+   ***** Show current game *****
    Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
   }
-
+*/
 /*****************************************************************************/
-/******************* Get next question index in a game *********************/
+/******************** Get next question index in a game **********************/
 /*****************************************************************************/
 
 static unsigned Rmt_GetQstIndFromQstCod (long QstCod)
@@ -2982,8 +2996,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
    unsigned NumQsts;
    unsigned NumQst;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
-	           Gbl.Action.Act == ActEdiOneGamQst ||
-	           Gbl.Action.Act == ActRcvGamQst);
+	           Gbl.Action.Act == ActEdiOneGamQst);
    bool PutFormAnswerGame = Game->Status.ICanAnswer && !Editing;
 
    /***** Get data of questions from database *****/
@@ -3427,12 +3440,12 @@ static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 /*****************************************************************************/
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
-
+/*
 static void Rmt_PutIconToRemoveOneQst (void)
   {
    Ico_PutContextualIconToRemove (ActReqRemGamQst,Rmt_PutParamsRemoveOneQst);
   }
-
+*/
 /*****************************************************************************/
 /****************** Put parameter to remove one question *********************/
 /*****************************************************************************/
@@ -3630,7 +3643,8 @@ static void Rmt_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
    char Query[256];
 
-   /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
+   /***** Increase number of users who have selected
+          the answer AnsInd in the question QstCod *****/
    sprintf (Query,"UPDATE gam_answers SET NumUsrs=NumUsrs+1"
                   " WHERE QstCod=%ld AND AnsInd=%u",
             QstCod,AnsInd);
@@ -3638,7 +3652,7 @@ static void Rmt_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   }
 
 /*****************************************************************************/
-/***************** Register that I have answered this game *****************/
+/******************* Register that I have answered a game ********************/
 /*****************************************************************************/
 
 static void Rmt_RegisterIHaveAnsweredGame (long GamCod)
@@ -3654,7 +3668,7 @@ static void Rmt_RegisterIHaveAnsweredGame (long GamCod)
   }
 
 /*****************************************************************************/
-/************** Register that you have answered this game ******************/
+/******************** Check if I have answered a game ************************/
 /*****************************************************************************/
 
 static bool Rmt_CheckIfIHaveAnsweredGame (long GamCod)
@@ -3669,7 +3683,7 @@ static bool Rmt_CheckIfIHaveAnsweredGame (long GamCod)
   }
 
 /*****************************************************************************/
-/*************** Register that you have answered this game *****************/
+/************** Get number of users who have answered a game *****************/
 /*****************************************************************************/
 
 static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
@@ -3683,7 +3697,7 @@ static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
   }
 
 /*****************************************************************************/
-/******************** Get number of courses with games *********************/
+/********************* Get number of courses with games **********************/
 /*****************************************************************************/
 // Returns the number of courses with games for courses
 // in this location (all the platform, current degree or current course)
@@ -3772,7 +3786,7 @@ unsigned Rmt_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/******************** Get number of games for courses **********************/
+/********************* Get number of games for courses ***********************/
 /*****************************************************************************/
 // Returns the number of games for courses
 // in this location (all the platform, current degree or current course)
@@ -3871,7 +3885,7 @@ unsigned Rmt_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
   }
 
 /*****************************************************************************/
-/************ Get average number of questions per course game **************/
+/************* Get average number of questions per course game ***************/
 /*****************************************************************************/
 
 float Rmt_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
@@ -3972,4 +3986,3 @@ float Rmt_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 
    return NumQstsPerGame;
   }
-

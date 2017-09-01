@@ -1281,15 +1281,13 @@ mysql> DESCRIBE gam_answers;
 | QstCod  | int(11)    | NO   | PRI | NULL    |       |
 | AnsInd  | tinyint(4) | NO   | PRI | NULL    |       |
 | NumUsrs | int(11)    | NO   |     | 0       |       |
-| Answer  | text       | NO   |     | NULL    |       |
 +---------+------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
+3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_answers ("
 			"QstCod INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
 			"NumUsrs INT NOT NULL DEFAULT 0,"
-			"Answer TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QstCod,AnsInd))");
 
    /***** Table gam_grp *****/

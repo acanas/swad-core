@@ -590,7 +590,6 @@ CREATE TABLE IF NOT EXISTS gam_answers (
 	QstCod INT NOT NULL,
 	AnsInd TINYINT NOT NULL,
 	NumUsrs INT NOT NULL DEFAULT 0,
-	Answer TEXT NOT NULL,
 	UNIQUE INDEX(QstCod,AnsInd));
 --
 -- Table gam_grp: stores the groups associated to each game

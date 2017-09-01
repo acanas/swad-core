@@ -238,15 +238,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.251.4 (2017-09-01)"
+#define Log_PLATFORM_VERSION	"SWAD 16.251.5 (2017-09-01)"
 #define CSS_FILE		"swad16.235.1.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-// TODO: "Error when getting answers of a question"
-        Version 16.251.4: Sep 01, 2017	Listing games for remote control. Not finished. (? lines)
+        Version 16.251.5: Sep 01, 2017	Listing games for remote control. Not finished. (227045 lines)
+					1 change necessary in database:
+ALTER TABLE gam_answers DROP COLUMN Answer;
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1663';
+
+        Version 16.251.4: Sep 01, 2017	Listing games for remote control. Not finished. (227184 lines)
+					2 changes necessary in database:
 DROP TABLE IF EXISTS gam_questions;
 CREATE TABLE IF NOT EXISTS gam_questions (GamCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,INDEX(GamCod),INDEX(QstCod));
 
