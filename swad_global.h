@@ -716,8 +716,8 @@ struct Globals
       unsigned Num;	// Number of surveys
       long *LstGamCods;	// List of game codes
       Rmt_Order_t SelectedOrder;
-      long GamCodToEdit;	// Used as parameter in contextual links
-      long GamQstCodToEdit;	// Used as parameter in contextual links
+      long CurrentGamCod;	// Used as parameter in contextual links
+      long CurrentQstCod;	// Used as parameter in contextual links
       unsigned CurrentPage;
       char *ListQuestions;
      } Games;

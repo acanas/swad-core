@@ -67,6 +67,16 @@ typedef enum
    Tst_PLUGGABLE_YES     = 2,
   } Tst_Pluggable_t;
 
+typedef enum
+  {
+   Tst_SHOW_TST_TO_ANSWER,		// Showing a test to a student
+   Tst_SHOW_TST_RESULT,			// Showing the assessment of a test
+   Tst_EDIT_TST,			// Editing test questions
+   Tst_SELECT_QUESTIONS_FOR_GAME,	// Selecting test questions for a game
+   Tst_SHOW_GAME_TO_ANSWER,		// Showing a game to a student
+   Tst_SHOW_GAME_RESULT,		// Showing the assessment of a game
+  } Tst_ActionToDoWithQuestions_t;
+
 #define Tst_NUM_TYPES_FEEDBACK		5
 typedef enum
   {
@@ -131,6 +141,10 @@ struct Tst_Stats
 void Tst_ShowFormAskTst (void);
 void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
+
+void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
+                             unsigned NumQst,long QstCod,MYSQL_ROW row,
+                             double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
@@ -139,6 +153,7 @@ void Tst_ShowFormAskEditTsts (void);
 void Tst_ShowFormAskSelectTstsForGame (long GamCod);
 void Tst_ListQuestionsToEdit (void);
 void Tst_ListQuestionsToSelect (void);
+bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
 void Tst_WriteAnsTF (char AnsTF);
