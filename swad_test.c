@@ -190,25 +190,33 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
                                                     unsigned long NumRows,
                                                     MYSQL_RES *mysql_res);
 
-static void Tst_WriteAnswersOfAQstEdit (long QstCod);
-static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle);
-static void Tst_WriteAnswersOfAQstAssessTest (unsigned NumQst,long QstCod,
-                                              double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteFormAnsTF (unsigned NumQst);
+static void Tst_WriteAnswersEdit (long QstCod);
+static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle);
+static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
+                                        double *ScoreThisQst,bool *AnswerIsNotBlank);
+static void Tst_WriteAnswersGameResult (unsigned NumQst,long QstCod);
+
+static void Tst_WriteTFAnsViewTest (unsigned NumQst);
 static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                       double *ScoreThisQst,bool *AnswerIsNotBlank);
+
 static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
+static void Tst_WriteChoiceAnsViewGame (unsigned NumQst,long QstCod);
+
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
+
 static void Tst_WriteIntAnsViewTest (unsigned NumQst);
 static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                        double *ScoreThisQst,bool *AnswerIsNotBlank);
+
 static void Tst_WriteFloatAnsViewTest (unsigned NumQst);
 static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                          double *ScoreThisQst,bool *AnswerIsNotBlank);
+
 static void Tst_WriteHeadUserCorrect (void);
 static void Tst_WriteScoreStart (unsigned ColSpan);
 static void Tst_WriteScoreEnd (void);
@@ -419,7 +427,7 @@ void Tst_ShowNewTest (void)
    if (Tst_CheckIfNextTstAllowed ())
      {
       /***** Check that all parameters used to generate a test are valid *****/
-      if (Tst_GetParamsTst (Tst_SHOW_TST_TO_ANSWER))	// Get parameters from form
+      if (Tst_GetParamsTst (Tst_SHOW_TEST_TO_ANSWER))	// Get parameters from form
         {
          /***** Get questions *****/
          if ((NumRows = Tst_GetQuestionsForTest (&mysql_res)) == 0)	// Query database
@@ -825,7 +833,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      Tst_WriteQstAndAnsTest (Tst_SHOW_TST_TO_ANSWER,
+      Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
                               NumQst,QstCod,row,
 	                      &ScoreThisQst,		// Not used here
 	                      &AnswerIsNotBlank);	// Not used here
@@ -926,7 +934,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
 	 /***** Write question and answers *****/
-	 Tst_WriteQstAndAnsTest (Tst_SHOW_TST_RESULT,
+	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                         NumQst,QstCod,row,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
@@ -1015,27 +1023,26 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 
    switch (ActionToDoWithQuestions)
      {
-      case Tst_SHOW_TST_TO_ANSWER:
-         Tst_WriteAnswersOfAQstViewTest (NumQst,QstCod,(row[3][0] == 'Y'));
+      case Tst_SHOW_TEST_TO_ANSWER:
+         Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
 	 break;
-      case Tst_SHOW_TST_RESULT:
-	 Tst_WriteAnswersOfAQstAssessTest (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
+      case Tst_SHOW_TEST_RESULT:
+	 Tst_WriteAnswersTestResult (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
 	 if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
 	 break;
-      case Tst_EDIT_TST:
+      case Tst_EDIT_TEST:
 	 break;
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 break;
       case Tst_SHOW_GAME_TO_ANSWER:
 	 // TODO: Change this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         Tst_WriteAnswersOfAQstViewTest (NumQst,QstCod,(row[3][0] == 'Y'));
+         Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
 	 break;
       case Tst_SHOW_GAME_RESULT:
-	 // TODO: Change this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	 Tst_WriteAnswersOfAQstAssessTest (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
+	 Tst_WriteAnswersGameResult (NumQst,QstCod);
 	 break;
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -2390,7 +2397,7 @@ void Tst_ListQuestionsToEdit (void)
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (Tst_EDIT_TST))	// Get parameters from the form
+   if (Tst_GetParamsTst (Tst_EDIT_TEST))	// Get parameters from the form
      {
       if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
         {
@@ -3021,7 +3028,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersOfAQstEdit (Gbl.Test.QstCod);
+      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Get number of hits
@@ -3255,7 +3262,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersOfAQstEdit (Gbl.Test.QstCod);
+      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -3320,7 +3327,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersOfAQstEdit (long QstCod)
+static void Tst_WriteAnswersEdit (long QstCod)
   {
    extern const char *Txt_TEST_Correct_answer;
    unsigned NumOpt;
@@ -3333,7 +3340,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
    size_t LengthFeedback;
    double FloatNum[2];
 
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct,Feedback
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[ 0] AnsInd
    row[ 1] Answer
@@ -3466,7 +3473,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
 /************** Write answers of a question when viewing a test **************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle)
+static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle)
   {
    /***** Write parameter with question code *****/
    Tst_WriteParamQstCod (NumQst,QstCod);
@@ -3481,7 +3488,7 @@ static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shu
          Tst_WriteFloatAnsViewTest (NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteFormAnsTF (NumQst);
+         Tst_WriteTFAnsViewTest (NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -3499,13 +3506,13 @@ static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shu
 /************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersOfAQstAssessTest (unsigned NumQst,long QstCod,
-                                              double *ScoreThisQst,bool *AnswerIsNotBlank)
+static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
+                                          double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_RES *mysql_res;
 
    /***** Get answers of a question from database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
    row[ 0] AnsInd
    row[ 1] Answer
@@ -3543,10 +3550,37 @@ static void Tst_WriteAnswersOfAQstAssessTest (unsigned NumQst,long QstCod,
   }
 
 /*****************************************************************************/
+/************** Write answers of a question when viewing a game **************/
+/*****************************************************************************/
+
+static void Tst_WriteAnswersGameResult (unsigned NumQst,long QstCod)
+  {
+   /***** Write parameter with question code *****/
+   Tst_WriteParamQstCod (NumQst,QstCod);
+
+   /***** Write answer depending on type *****/
+   switch (Gbl.Test.AnswerType)
+     {
+      case Tst_ANS_INT:
+      case Tst_ANS_FLOAT:
+      case Tst_ANS_TRUE_FALSE:
+      case Tst_ANS_TEXT:
+         Ale_ShowAlert (Ale_WARNING,"Type of answer not valid in a game.");
+         break;
+      case Tst_ANS_UNIQUE_CHOICE:
+      case Tst_ANS_MULTIPLE_CHOICE:
+         Tst_WriteChoiceAnsViewGame (NumQst,QstCod);
+         break;
+      default:
+         break;
+     }
+  }
+
+/*****************************************************************************/
 /************** Write false / true answer when viewing a test ****************/
 /*****************************************************************************/
 
-static void Tst_WriteFormAnsTF (unsigned NumQst)
+static void Tst_WriteTFAnsViewTest (unsigned NumQst)
   {
    extern const char *Txt_TF_QST[2];
 
@@ -3682,7 +3716,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    char ParamName[3 + 6 + 1];
 
    /***** Get answers of a question from database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);
    /*
    row[ 0] AnsInd
    row[ 1] Answer
@@ -3707,8 +3741,9 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
          Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
-      /***** Assign index (row[0]). Index is 0,1,2,3... if no shuffle or 1,3,0,2... (example) if shuffle *****/
-      // Index is got from databse query
+      /***** Assign index (row[0]).
+             Index is 0,1,2,3... if no shuffle
+             or 1,3,0,2... (example) if shuffle *****/
       if (sscanf (row[0],"%u",&Index) == 1)
         {
          if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
@@ -4015,6 +4050,98 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
+/******** Write single or multiple choice answer when viewing a test *********/
+/*****************************************************************************/
+
+static void Tst_WriteChoiceAnsViewGame (unsigned NumQst,long QstCod)
+  {
+   unsigned NumOpt;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned Index;
+   bool ErrorInIndex = false;
+
+   /***** Get answers of a question from database *****/
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
+   /*
+   row[ 0] AnsInd
+   row[ 1] Answer
+   row[ 2] Feedback
+   row[ 3] ImageName
+   row[ 4] ImageTitle
+   row[ 5] ImageURL
+   row[ 6] Correct
+   */
+
+   /***** Start table *****/
+   Tbl_StartTable (2);
+
+   for (NumOpt = 0;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Get next answer *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Allocate memory for text in this choice answer *****/
+      if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+
+      /***** Assign index (row[0]).
+             Index is 0,1,2,3... if no shuffle
+             or 1,3,0,2... (example) if shuffle *****/
+      if (sscanf (row[0],"%u",&Index) == 1)
+        {
+         if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
+            ErrorInIndex = true;
+        }
+      else
+         ErrorInIndex = true;
+      if (ErrorInIndex)
+         Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
+
+      /***** Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
+      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+
+      /***** Copy image *****/
+      Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
+
+      /***** Write letter of this option *****/
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"LEFT_TOP\">"
+                         "<label for=\"Ans%06u_%u\" class=\"TEST\">"
+	                 "%c)&nbsp;"
+	                 "</label>"
+	                 "</td>",
+	       NumQst,NumOpt,
+	       'a' + (char) NumOpt);
+
+      /***** Write the option text *****/
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+                         "<label for=\"Ans%06u_%u\" class=\"TEST_EXA\">"
+	                 "%s"
+	                 "</label>",
+               NumQst,NumOpt,
+               Gbl.Test.Answer.Options[NumOpt].Text);
+      Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+                     "TEST_IMG_SHOW_ANS_CONTAINER",
+                     "TEST_IMG_SHOW_ANS");
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /******************** Write text answer when viewing a test ******************/
 /*****************************************************************************/
 
@@ -4228,7 +4355,8 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                        double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
-   long IntAnswerUsr,IntAnswerCorr;
+   long IntAnswerUsr;
+   long IntAnswerCorr;
    /*
    row[ 0] AnsInd
    row[ 1] Answer
@@ -4600,8 +4728,8 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
    /***** Types of answer *****/
    switch (ActionToDoWithQuestions)
      {
-      case Tst_SHOW_TST_TO_ANSWER:
-      case Tst_EDIT_TST:
+      case Tst_SHOW_TEST_TO_ANSWER:
+      case Tst_EDIT_TEST:
 	 /* Get parameter that indicates if all types of answer are selected */
 	 Gbl.Test.AllAnsTypes = Par_GetParToBool ("AllAnsTypes");
 
@@ -4627,7 +4755,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
    /***** Get other parameters, depending on action *****/
    switch (ActionToDoWithQuestions)
      {
-      case Tst_SHOW_TST_TO_ANSWER:
+      case Tst_SHOW_TEST_TO_ANSWER:
 	 Tst_GetParamNumQst ();
 	 if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
 	     Gbl.Test.NumQsts > Gbl.Test.Config.Max)
@@ -4638,7 +4766,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 	    Error = true;
 	   }
 	 break;
-      case Tst_EDIT_TST:
+      case Tst_EDIT_TEST:
 	 /* Get starting and ending dates */
 	 Dat_GetIniEndDatesFromForm ();
 
@@ -5449,7 +5577,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get the answers from the database *****/
-   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (Gbl.Test.QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct,Feedback
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (Gbl.Test.QstCod,&mysql_res,false);
    /*
    row[ 0] AnsInd
    row[ 1] Answer
@@ -6190,7 +6318,7 @@ void Tst_RequestRemoveQst (void)
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
-      if (!Tst_GetParamsTst (Tst_EDIT_TST))
+      if (!Tst_GetParamsTst (Tst_EDIT_TEST))
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
@@ -8200,7 +8328,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 	       Lay_ShowErrorAndExit ("Wrong code of question.");
 
 	    /***** Write questions and answers *****/
-	    Tst_WriteQstAndAnsTest (Tst_SHOW_TST_RESULT,
+	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                            NumQst,QstCod,row,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
