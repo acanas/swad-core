@@ -194,7 +194,6 @@ static void Tst_WriteAnswersEdit (long QstCod);
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteAnswersGameResult (unsigned NumQst,long QstCod);
 
 static void Tst_WriteTFAnsViewTest (unsigned NumQst);
 static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
@@ -203,7 +202,7 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsViewGame (unsigned NumQst,long QstCod);
+static void Tst_WriteChoiceAnsViewGame (struct Game *Game,unsigned NumQst,long QstCod);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
@@ -833,7 +832,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
-                              NumQst,QstCod,row,
+                              NULL,NumQst,QstCod,row,
 	                      &ScoreThisQst,		// Not used here
 	                      &AnswerIsNotBlank);	// Not used here
      }
@@ -934,7 +933,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 
 	 /***** Write question and answers *****/
 	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                         NumQst,QstCod,row,
+	                         NULL,NumQst,QstCod,row,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
@@ -974,6 +973,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 /*****************************************************************************/
 
 void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
+                             struct Game *Game,
                              unsigned NumQst,long QstCod,MYSQL_ROW row,
                              double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
@@ -1041,7 +1041,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
          Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
 	 break;
       case Tst_SHOW_GAME_RESULT:
-	 Tst_WriteAnswersGameResult (NumQst,QstCod);
+	 Tst_WriteAnswersGameResult (Game,NumQst,QstCod);
 	 break;
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -3545,7 +3545,7 @@ static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
 /************** Write answers of a question when viewing a game **************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersGameResult (unsigned NumQst,long QstCod)
+void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod)
   {
    /***** Write parameter with question code *****/
    Tst_WriteParamQstCod (NumQst,QstCod);
@@ -3561,7 +3561,7 @@ static void Tst_WriteAnswersGameResult (unsigned NumQst,long QstCod)
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsViewGame (NumQst,QstCod);
+         Tst_WriteChoiceAnsViewGame (Game,NumQst,QstCod);
          break;
       default:
          break;
@@ -4045,12 +4045,12 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 /******** Write single or multiple choice answer when viewing a test *********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewGame (unsigned NumQst,long QstCod)
+static void Tst_WriteChoiceAnsViewGame (struct Game *Game,unsigned NumQst,long QstCod)
   {
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned Index;
+   unsigned AnsInd;
    bool ErrorInIndex = false;
 
    /***** Get answers of a question from database *****/
@@ -4082,9 +4082,9 @@ static void Tst_WriteChoiceAnsViewGame (unsigned NumQst,long QstCod)
       /***** Assign index (row[0]).
              Index is 0,1,2,3... if no shuffle
              or 1,3,0,2... (example) if shuffle *****/
-      if (sscanf (row[0],"%u",&Index) == 1)
+      if (sscanf (row[0],"%u",&AnsInd) == 1)
         {
-         if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
+         if (AnsInd >= Tst_MAX_OPTIONS_PER_QUESTION)
             ErrorInIndex = true;
         }
       else
@@ -4122,8 +4122,11 @@ static void Tst_WriteChoiceAnsViewGame (unsigned NumQst,long QstCod)
       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Get number of users who selected this answer and draw proportional bar */
+      Rmt_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
+      fprintf (Gbl.F.Out,"</tr>");
      }
 
    /***** End table *****/
@@ -8311,7 +8314,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                            NumQst,QstCod,row,
+	                            NULL,NumQst,QstCod,row,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }

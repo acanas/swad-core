@@ -136,11 +136,6 @@ static void Rmt_InitQst (struct GameQuestion *GameQst);
 static void Rmt_PutParamQstCod (long QstCod);
 static long Rmt_GetParamQstCod (void);
 static void Rmt_RemAnswersOfAQuestion (long QstCod);
-// static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
-// static bool Rmt_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
-// static bool Rmt_AllocateTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns);
-// static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned NumAnswers);
-// static void Rmt_FreeTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns);
 
 static unsigned Rmt_GetQstIndFromQstCod (long QstCod);
 static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod);
@@ -156,9 +151,7 @@ static void Rmt_AllocateListSelectedQuestions (void);
 static void Rmt_FreeListsSelectedQuestions (void);
 static unsigned Rmt_CountNumQuestionsInList (void);
 
-// static void Rmt_WriteQstStem (const char *Stem);
-static void Rmt_WriteAnswersOfAQst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-                                    struct Game *Game,struct GameQuestion *GameQst);
+static unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd);
 static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
 // static void Rmt_PutIconToRemoveOneQst (void);
@@ -2630,273 +2623,6 @@ static void Rmt_RemAnswersOfAQuestion (long QstCod)
   }
 
 /*****************************************************************************/
-/*********** Convert a string with the answer type to answer type ************/
-/*****************************************************************************/
-/*
-static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD)
-  {
-   Rmt_AnswerType_t AnsType;
-
-   for (AnsType = (Rmt_AnswerType_t) 0;
-	AnsType < Rmt_NUM_ANS_TYPES;
-	AnsType++)
-      if (!strcmp (StrAnsTypeBD,Rmt_StrAnswerTypesDB[AnsType]))
-         return AnsType;
-
-   return (Rmt_AnswerType_t) 0;
-  }
-*/
-/*****************************************************************************/
-/*********** Check if an answer of a question exists in database *************/
-/*****************************************************************************/
-/*
-static bool Rmt_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
-  {
-   char Query[256];
-
-   ***** Get answers of a question from database *****
-   sprintf (Query,"SELECT COUNT(*) FROM gam_answers"
-                  " WHERE QstCod=%ld AND AnsInd=%u",
-            QstCod,AnsInd);
-   return (DB_QueryCOUNT (Query,"can not check if an answer exists") != 0);
-  }
-*/
-/*****************************************************************************/
-/**** Get number of users who selected a given answer of a game question *****/
-/*****************************************************************************/
-
-unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd)
-  {
-   char Query[128];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs = 0;	// Default returned value
-
-   /***** Get answers of a question from database *****/
-   sprintf (Query,"SELECT NumUsrs FROM gam_answers"
-                  " WHERE GamCod=%ld AND QstCod=%ld AND AnsInd=%u",
-            GamCod,QstCod,AnsInd);
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of users who answered");
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are users who selected this answer
-      if (sscanf (row[0],"%u",&NumUsrs) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of users who answered.");
-
-   return NumUsrs;
-  }
-
-/*****************************************************************************/
-/******************* Allocate memory for a choice answer *********************/
-/*****************************************************************************/
-/*
-static bool Rmt_AllocateTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns)
-  {
-   Rmt_FreeTextChoiceAnswer (GameQst,NumAns);
-   if ((GameQst->AnsChoice[NumAns].Text = malloc (Rmt_MAX_BYTES_ANSWER + 1)) == NULL)
-     {
-      sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
-      return false;
-     }
-   GameQst->AnsChoice[NumAns].Text[0] = '\0';
-   return true;
-  }
-*/
-/*****************************************************************************/
-/******************** Free memory of all choice answers **********************/
-/*****************************************************************************/
-/*
-static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned NumAnswers)
-  {
-   unsigned NumAns;
-
-   for (NumAns = 0;
-	NumAns < NumAnswers;
-	NumAns++)
-      Rmt_FreeTextChoiceAnswer (GameQst,NumAns);
-  }
-*/
-/*****************************************************************************/
-/********************** Free memory of a choice answer ***********************/
-/*****************************************************************************/
-/*
-static void Rmt_FreeTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns)
-  {
-   if (GameQst->AnsChoice[NumAns].Text)
-     {
-      free ((void *) GameQst->AnsChoice[NumAns].Text);
-      GameQst->AnsChoice[NumAns].Text = NULL;
-     }
-  }
-*/
-/*****************************************************************************/
-/************************ Receive a question of a game ***********************/
-/*****************************************************************************/
-/*
-void Rmt_ReceiveQst (void)
-  {
-   extern const char *Txt_You_must_type_the_stem_of_the_question;
-   extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
-   extern const char *Txt_You_must_type_at_least_the_first_two_answers;
-   extern const char *Txt_The_game_has_been_modified;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-   char Query[512 + Cns_MAX_BYTES_TEXT];
-   struct Game Game;
-   struct GameQuestion GameQst;
-   unsigned NumAns;
-   char AnsStr[8 + 10 + 1];
-   unsigned NumLastAns;
-   bool ThereIsEndOfAnswers;
-   bool Error = false;
-
-   ***** Initialize new question to zero *****
-   Rmt_InitQst (&GameQst);
-
-   ***** Get parameters from form *****
-   * Get game code *
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
-
-   * Get question code *
-   GameQst.QstCod = Rmt_GetParamQstCod ();
-
-   * Get answer type *
-   GameQst.AnswerType = (Rmt_AnswerType_t)
-	               Par_GetParToUnsignedLong ("AnswerType",
-	                                         0,
-	                                         Rmt_NUM_ANS_TYPES - 1,
-                                                 (unsigned long) Rmt_ANSWER_TYPE_DEFAULT);
-
-   * Get question text *
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);
-
-   * Get the texts of the answers *
-   for (NumAns = 0;
-	NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
-	NumAns++)
-     {
-      if (!Rmt_AllocateTextChoiceAnswer (&GameQst,NumAns))
-	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
-      sprintf (AnsStr,"AnsStr%u",NumAns);
-      Par_GetParToHTML (AnsStr,GameQst.AnsChoice[NumAns].Text,Rmt_MAX_BYTES_ANSWER);
-     }
-
-   ***** Make sure that stem and answer are not empty *****
-   if (Txt[0])
-     {
-      if (GameQst.AnsChoice[0].Text[0])	// If the first answer has been filled
-        {
-         for (NumAns = 0, NumLastAns = 0, ThereIsEndOfAnswers = false;
-              !Error && NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
-              NumAns++)
-            if (GameQst.AnsChoice[NumAns].Text[0])
-              {
-               if (ThereIsEndOfAnswers)
-                 {
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-                  Error = true;
-                 }
-               else
-                  NumLastAns = NumAns;
-              }
-            else
-               ThereIsEndOfAnswers = true;
-         if (!Error)
-           {
-            if (NumLastAns < 1)
-              {
-               Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-               Error = true;
-              }
-           }
-        }
-      else	// If first answer is empty
-        {
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-         Error = true;
-        }
-     }
-   else
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
-      Error = true;
-     }
-
-   if (Error)
-      Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
-   else
-     {
-      ***** Form is received OK ==> insert question and answer in the database *****
-      if (GameQst.QstCod < 0)	// It's a new question
-        {
-         GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
-
-         * Insert question in the table of questions *
-         sprintf (Query,"INSERT INTO gam_questions"
-                        " (GamCod,QstInd,AnsType,Stem)"
-                        " VALUES"
-                        " (%ld,%u,'%s','%s')",
-	          Game.GamCod,GameQst.QstInd,Rmt_StrAnswerTypesDB[GameQst.AnswerType],Txt);
-         GameQst.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
-        }
-      else			// It's an existing question
-        {
-         * Update question *
-         sprintf (Query,"UPDATE gam_questions SET Stem='%s',AnsType='%s'"
-                        " WHERE QstCod=%ld AND GamCod=%ld",
-                  Txt,Rmt_StrAnswerTypesDB[GameQst.AnswerType],
-                  GameQst.QstCod,Game.GamCod);
-         DB_QueryUPDATE (Query,"can not update question");
-        }
-
-      * Insert, update or delete answers in the answers table *
-      for (NumAns = 0;
-	   NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
-	   NumAns++)
-         if (Rmt_CheckIfAnswerExists (GameQst.QstCod,NumAns))	// If this answer exists...
-           {
-            if (GameQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-              {
-               * Update answer text *
-               sprintf (Query,"UPDATE gam_answers SET Answer='%s'"
-                              " WHERE QstCod=%ld AND AnsInd=%u",
-                        GameQst.AnsChoice[NumAns].Text,GameQst.QstCod,NumAns);
-               DB_QueryUPDATE (Query,"can not update answer");
-              }
-            else	// Answer is empty
-              {
-               * Delete answer from database *
-               sprintf (Query,"DELETE FROM gam_answers"
-                              " WHERE QstCod=%ld AND AnsInd=%u",
-                        GameQst.QstCod,NumAns);
-               DB_QueryDELETE (Query,"can not delete answer");
-              }
-           }
-         else	// If this answer does not exist...
-           {
-            if (GameQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-              {
-               * Create answer into database *
-               sprintf (Query,"INSERT INTO gam_answers"
-        	              " (QstCod,AnsInd,NumUsrs,Answer)"
-                              " VALUES"
-                              " (%ld,%u,0,'%s')",
-                        GameQst.QstCod,NumAns,GameQst.AnsChoice[NumAns].Text);
-               DB_QueryINSERT (Query,"can not create answer");
-              }
-           }
-
-      ***** List the questions of this game, including the new one just inserted into the database *****
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
-     }
-
-   ***** Free answers *****
-   Rmt_FreeTextChoiceAnswers (&GameQst,Rmt_MAX_ANSWERS_PER_QUESTION);
-
-   ***** Show current game *****
-   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
-  }
-*/
-/*****************************************************************************/
 /******************** Get next question index in a game **********************/
 /*****************************************************************************/
 
@@ -3117,14 +2843,12 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Act_FormStart (ActReqRemGamQst);
       Rmt_PutParamGameCod (Game->GamCod);
       Rmt_PutParamQstCod (GameQst->QstCod);
-      // Tst_PutParamQstCod ();
       Ico_PutIconRemove ();
       Act_FormEnd ();
 
       /* Write icon to edit the question */
       Act_FormStart (ActEdiOneTstQst);
       Rmt_PutParamQstCod (GameQst->QstCod);
-      // Tst_PutParamQstCod ();
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
@@ -3169,8 +2893,8 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
-      // Tst_WriteAnswersEdit (Gbl.Test.QstCod);
-      Rmt_WriteAnswersOfAQst (Tst_SHOW_GAME_RESULT,Game,GameQst);
+      Tst_WriteAnswersGameResult (Game,GameQst->QstInd,GameQst->QstCod);
+
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -3326,183 +3050,45 @@ static unsigned Rmt_CountNumQuestionsInList (void)
   }
 
 /*****************************************************************************/
-/****************** Write the heading of a game question *******************/
+/*** Get number of users who selected this answer and draw proportional bar **/
 /*****************************************************************************/
-/*
-static void Rmt_WriteQstStem (const char *Stem)
+
+void Rmt_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd)
   {
-   char *HeadingRigorousHTML;
-   size_t Length;
-
-   * Convert the stem, that is in HTML, to rigorous HTML *
-   Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-   if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-   Str_Copy (HeadingRigorousHTML,Stem,
-             Length);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     HeadingRigorousHTML,Length,false);
-
-   * Write the stem *
-   fprintf (Gbl.F.Out,"%s",HeadingRigorousHTML);
-
-   * Free memory allocated for the stem *
-   free ((void *) HeadingRigorousHTML);
-  }
-*/
-/*****************************************************************************/
-/************** Get and write the answers of a game question ***************/
-/*****************************************************************************/
-
-static void Rmt_WriteAnswersOfAQst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-                                    struct Game *Game,struct GameQuestion *GameQst)
-  {
-   extern const char *Txt_Question_removed;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   double ScoreThisQst;
-   bool AnswerIsNotBlank;
-
-   /***** Query database *****/
-   if (Tst_GetOneQuestionByCod (GameQst->QstCod,&mysql_res))	// Question exists
-     {
-      /***** Get row of the result of the query *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[ 0] QstCod
-      row[ 1] UNIX_TIMESTAMP(EditTime)
-      row[ 2] AnsType
-      row[ 3] Shuffle
-      row[ 4] Stem
-      row[ 5] Feedback
-      row[ 6] ImageName
-      row[ 7] ImageTitle
-      row[ 8] ImageURL
-      row[ 9] NumHits
-      row[10] NumHitsNotBlank
-      row[11] Score
-      */
-
-      /***** Write question and answers *****/
-      Gbl.Games.CurrentGamCod = Game->GamCod;
-      Tst_WriteQstAndAnsTest (ActionToDoWithQuestions,
-			      GameQst->QstInd,GameQst->QstCod,row,
-			      &ScoreThisQst,&AnswerIsNotBlank);
-     }
-   else
-      /***** Question does not exists *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
-			 "%u"
-			 "</td>"
-			 "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
-			 "%s"
-			 "</td>"
-			 "</tr>",
-	       Gbl.RowEvenOdd,GameQst->QstInd + 1,
-	       Gbl.RowEvenOdd,Txt_Question_removed);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-
-
-/*
-
-
-
-
-
-
-
-
-   unsigned NumAnswers;
-   unsigned NumAns;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumUsrsThisAnswer;
 
-   ***** Get answers of this question *****
-   NumAnswers = Rmt_GetNumUsrsWhoAnswered (GameQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
+   /***** Get number of users who selected this answer *****/
+   NumUsrsThisAnswer = Rmt_GetNumUsrsWhoAnswered (Game->GamCod,QstCod,AnsInd);
 
-   ***** Write the answers *****
-   if (NumAnswers)
+   /***** Show stats of this answer *****/
+   if (Game->Status.ICanViewResults)
+      Rmt_DrawBarNumUsrs (NumUsrsThisAnswer,Game->NumUsrs);
+  }
+
+/*****************************************************************************/
+/**** Get number of users who selected a given answer of a game question *****/
+/*****************************************************************************/
+
+static unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs = 0;	// Default returned value
+
+   /***** Get answers of a question from database *****/
+   sprintf (Query,"SELECT NumUsrs FROM gam_answers"
+                  " WHERE GamCod=%ld AND QstCod=%ld AND AnsInd=%u",
+            GamCod,QstCod,AnsInd);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of users who answered"))
      {
-      * Check number of answers *
-      if (NumAnswers > Rmt_MAX_ANSWERS_PER_QUESTION)
-	 Lay_ShowErrorAndExit ("Wrong number of answers.");
-
-      * Write one row for each answer *
-      Tbl_StartTable (5);
-      for (NumAns = 0;
-	   NumAns < NumAnswers;
-	   NumAns++)
-	{
-	 row = mysql_fetch_row (mysql_res);
-
-	 * Get number of users who have marked this answer (row[1]) *
-	 if (sscanf (row[1],"%u",&NumUsrsThisAnswer) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
-
-	 * Convert the answer (row[2]), that is in HTML, to rigorous HTML *
-	 if (!Rmt_AllocateTextChoiceAnswer (GameQst,NumAns))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
-	 Str_Copy (GameQst->AnsChoice[NumAns].Text,row[2],
-	           Rmt_MAX_BYTES_ANSWER);
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   GameQst->AnsChoice[NumAns].Text,Rmt_MAX_BYTES_ANSWER,false);
-
-	 * Selectors and label with the letter of the answer *
-	 fprintf (Gbl.F.Out,"<tr>");
-
-	 if (PutFormAnswerGame)
-	   {
-	    * Write selector to choice this answer *
-	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-			       "<input type=\"");
-	    if (GameQst->AnswerType == Rmt_ANS_UNIQUE_CHOICE)
-	       fprintf (Gbl.F.Out,"radio\""
-				  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
-			(unsigned) GameQst->QstCod,NumAnswers);
-	    else // GameQst->AnswerType == Rmt_ANS_MULTIPLE_CHOICE
-	       fprintf (Gbl.F.Out,"checkbox\"");
-	    fprintf (Gbl.F.Out," id=\"Ans%010u_%010u\" name=\"Ans%010u\""
-		               " value=\"%u\" />"
-			       "</td>",
-		     (unsigned) GameQst->QstCod,NumAns,(unsigned) GameQst->QstCod,
-		     NumAns);
-	   }
-
-	 * Write the number of option *
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:50px;\">"
-			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">"
-			    "%u)"
-			    "</label>"
-			    "</td>",
-		  (unsigned) GameQst->QstCod,NumAns,NumAns + 1);
-
-	 * Write the text of the answer *
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">%s</label>"
-	                    "</td>",
-		  (unsigned) GameQst->QstCod,NumAns,
-		  GameQst->AnsChoice[NumAns].Text);
-
-	 * Show stats of this answer *
-	 if (Game->Status.ICanViewResults)
-	    Rmt_DrawBarNumUsrs (NumUsrsThisAnswer,Game->NumUsrs);
-
-	 fprintf (Gbl.F.Out,"</tr>");
-
-	 * Free memory allocated for the answer *
-	 Rmt_FreeTextChoiceAnswer (GameQst,NumAns);
-	}
-      Tbl_EndTable ();
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])	// There are users who selected this answer
+	 if (sscanf (row[0],"%u",&NumUsrs) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting number of users who answered.");
      }
 
-   ***** Free structure that stores the query result *****
-   DB_FreeMySQLResult (&mysql_res);
-*/
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -3545,9 +3131,7 @@ static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
       BarWidth);
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"%s</td>"
-	              "</tr>",
-            Gbl.Title);
+   fprintf (Gbl.F.Out,"%s</td>",Gbl.Title);
   }
 
 /*****************************************************************************/

@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_remote_control.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -143,6 +145,7 @@ void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
 
 void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
+                             struct Game *Game,
                              unsigned NumQst,long QstCod,MYSQL_ROW row,
                              double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
@@ -156,6 +159,7 @@ void Tst_ListQuestionsToSelect (void);
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
+void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_CheckIfNumberOfAnswersIsOne (void);
 

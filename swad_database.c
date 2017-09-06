@@ -1278,17 +1278,19 @@ mysql> DESCRIBE gam_answers;
 +---------+------------+------+-----+---------+-------+
 | Field   | Type       | Null | Key | Default | Extra |
 +---------+------------+------+-----+---------+-------+
+| GamCod  | int(11)    | NO   | PRI | NULL    |       |
 | QstCod  | int(11)    | NO   | PRI | NULL    |       |
 | AnsInd  | tinyint(4) | NO   | PRI | NULL    |       |
 | NumUsrs | int(11)    | NO   |     | 0       |       |
 +---------+------------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
+4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_answers ("
+			"GamCod INT NOT NULL,"
 			"QstCod INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
 			"NumUsrs INT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(QstCod,AnsInd))");
+		   "UNIQUE INDEX(GamCod,QstCod,AnsInd))");
 
    /***** Table gam_grp *****/
 /*

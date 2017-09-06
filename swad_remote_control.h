@@ -113,7 +113,7 @@ void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod);
 void Rmt_RequestEditQuestion (void);
 // void Rmt_ReceiveQst (void);
 
-unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd);
+void Rmt_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd);
 
 void Rmt_AddTstQuestionsToGame (void);
 

@@ -238,19 +238,24 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.251.9 (2017-09-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.251.10 (2017-09-06)"
 #define CSS_FILE		"swad16.251.8.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.251.10:Sep 06, 2017	Listing games for remote control. Not finished. (226913 lines)
+					2 changes necessary in database:
+DROP TABLE IF EXISTS gam_answers;
+CREATE TABLE IF NOT EXISTS gam_answers (GamCod INT NOT NULL,QstCod INT NOT NULL,AnsInd TINYINT NOT NULL,NumUsrs INT NOT NULL DEFAULT 0,UNIQUE INDEX(GamCod,QstCod,AnsInd));
+
         Version 16.251.9: Sep 06, 2017	Listing games for remote control. Not finished. (227273 lines)
         Version 16.251.8: Sep 06, 2017	Listing games for remote control. Not finished. (227211 lines)
         Version 16.251.7: Sep 04, 2017	Listing games for remote control. Not finished. (227218 lines)
         Version 16.251.6: Sep 01, 2017	Listing games for remote control. Not finished. (227111 lines)
         Version 16.251.5: Sep 01, 2017	Listing games for remote control. Not finished. (227045 lines)
-					1 change necessary in database:
+					2 changes necessary in database:
 ALTER TABLE gam_answers DROP COLUMN Answer;
 UPDATE actions SET Obsolete='Y' WHERE ActCod='1663';
 
