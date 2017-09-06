@@ -221,7 +221,6 @@ static void Tst_WriteHeadUserCorrect (void);
 static void Tst_WriteScoreStart (unsigned ColSpan);
 static void Tst_WriteScoreEnd (void);
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
-static void Tst_GetAndWriteTagsQst (long QstCod);
 static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 static unsigned Tst_GetAndCheckParamNumTst (void);
 static void Tst_GetParamNumQst (void);
@@ -2853,7 +2852,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -4650,7 +4649,7 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
 /******************** Get and write tags of a test question ******************/
 /*****************************************************************************/
 
-static void Tst_GetAndWriteTagsQst (long QstCod)
+void Tst_GetAndWriteTagsQst (long QstCod)
   {
    extern const char *Txt_no_tags;
    unsigned long NumRow,NumRows;

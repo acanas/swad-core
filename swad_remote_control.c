@@ -136,7 +136,7 @@ static void Rmt_InitQst (struct GameQuestion *GameQst);
 static void Rmt_PutParamQstCod (long QstCod);
 static long Rmt_GetParamQstCod (void);
 static void Rmt_RemAnswersOfAQuestion (long QstCod);
-static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
+// static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 // static bool Rmt_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
 // static bool Rmt_AllocateTextChoiceAnswer (struct GameQuestion *GameQst,unsigned NumAns);
 // static void Rmt_FreeTextChoiceAnswers (struct GameQuestion *GameQst,unsigned NumAnswers);
@@ -145,6 +145,10 @@ static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
 static unsigned Rmt_GetQstIndFromQstCod (long QstCod);
 static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod);
 static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQst);
+static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
+                                                  struct GameQuestion *GameQst,
+                                                  unsigned NumQsts,
+                                                  MYSQL_RES *mysql_res);
 static void Rmt_PutIconToAddNewQuestions (void);
 static void Rmt_PutButtonToAddNewQuestions (void);
 
@@ -2628,7 +2632,7 @@ static void Rmt_RemAnswersOfAQuestion (long QstCod)
 /*****************************************************************************/
 /*********** Convert a string with the answer type to answer type ************/
 /*****************************************************************************/
-
+/*
 static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD)
   {
    Rmt_AnswerType_t AnsType;
@@ -2641,7 +2645,7 @@ static Rmt_AnswerType_t Rmt_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
 
    return (Rmt_AnswerType_t) 0;
   }
-
+*/
 /*****************************************************************************/
 /*********** Check if an answer of a question exists in database *************/
 /*****************************************************************************/
@@ -2955,25 +2959,18 @@ static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod)
   }
 
 /*****************************************************************************/
-/************************ List the questions of a game *********************/
+/************************ List the questions of a game ***********************/
 /*****************************************************************************/
 
 static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQst)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
-   extern const char *Txt_No_INDEX;
-   extern const char *Txt_Type;
-   extern const char *Txt_Question;
-   extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Rmt_NUM_ANS_TYPES];
    extern const char *Txt_This_game_has_no_questions;
    extern const char *Txt_Done;
-   extern const char *Txt_Edit_question;
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumQsts;
-   unsigned NumQst;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
 	           Gbl.Action.Act == ActEdiOneGamQst);
    Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions;
@@ -2985,8 +2982,22 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
       ActionToDoWithQuestions = Tst_SHOW_GAME_RESULT;
 
    /***** Get data of questions from database *****/
-   sprintf (Query,"SELECT gam_questions.QstCod,gam_questions.QstInd,"
-	          "tst_questions.AnsType,tst_questions.Stem"
+   /*
+   row[0] QstCod
+   row[1] AnsType
+   row[2] Stem
+   row[3] Feedback
+   row[4] ImageName
+   row[5] ImageTitle
+   row[6] ImageURL
+   */
+   sprintf (Query,"SELECT tst_questions.QstCod,"
+                  "tst_questions.AnsType,"
+                  "tst_questions.Stem,"
+                  "tst_questions.Feedback,"
+                  "tst_questions.ImageName,"
+                  "tst_questions.ImageTitle,"
+                  "tst_questions.ImageURL"
                   " FROM gam_questions,tst_questions"
                   " WHERE gam_questions.GamCod=%ld"
                   " AND gam_questions.QstCod=tst_questions.QstCod"
@@ -3002,99 +3013,9 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
 
    if (NumQsts)
      {
-      if (ActionToDoWithQuestions == Tst_SHOW_GAME_TO_ANSWER)
-	{
-	 /***** Start form to send answers to game *****/
-	 Act_FormStart (ActAnsGam);
-	 Rmt_PutParamGameCod (Game->GamCod);
-	}
-
-      /***** Write the heading *****/
-      Tbl_StartTableWideMargin (2);
-      fprintf (Gbl.F.Out,"<tr>");
-      if (Game->Status.ICanEdit)
-         fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
-	                 "%s"
-	                 "</th>"
-                         "<th class=\"CENTER_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "</tr>",
-               Txt_No_INDEX,
-               Txt_Type,
-               Txt_Question);
-
-      /***** Write questions one by one *****/
-      for (NumQst = 0;
-	   NumQst < NumQsts;
-	   NumQst++)
-        {
-         Gbl.RowEvenOdd = (int) (NumQst % 2);
-
-         row = mysql_fetch_row (mysql_res);
-
-         /* row[0] holds the code of the question */
-         if (sscanf (row[0],"%ld",&(GameQst->QstCod)) != 1)
-            Lay_ShowErrorAndExit ("Wrong code of question.");
-
-         fprintf (Gbl.F.Out,"<tr>");
-
-         if (Game->Status.ICanEdit)
-           {
-            /* Write icon to remove the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
-            Act_FormStart (ActReqRemGamQst);
-            Rmt_PutParamGameCod (Game->GamCod);
-            Rmt_PutParamQstCod (GameQst->QstCod);
-            Ico_PutIconRemove ();
-            Act_FormEnd ();
-            fprintf (Gbl.F.Out,"</td>");
-
-            /* Write icon to edit the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
-            Act_FormStart (ActEdiOneGamQst);
-            Rmt_PutParamGameCod (Game->GamCod);
-            Rmt_PutParamQstCod (GameQst->QstCod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Edit_question,
-                     Txt_Edit_question);
-            Act_FormEnd ();
-            fprintf (Gbl.F.Out,"</td>");
-           }
-
-         /* Write index of question inside game (row[1]) */
-         if (sscanf (row[1],"%u",&(GameQst->QstInd)) != 1)
-            Lay_ShowErrorAndExit ("Error: wrong question index.");
-         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-                            "%u"
-                            "</td>",
-                  Gbl.RowEvenOdd,GameQst->QstInd + 1);
-
-         /* Write the question type (row[2]) */
-         GameQst->AnswerType = Rmt_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-                            "%s"
-                            "</td>",
-	          Gbl.RowEvenOdd,
-                  Txt_SURVEY_STR_ANSWER_TYPES[GameQst->AnswerType]);
-
-         /* Write the stem (row[3]) and the answers of this question */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",
-	          Gbl.RowEvenOdd);
-         // Rmt_WriteQstStem (row[3]);
-         Rmt_WriteAnswersOfAQst (ActionToDoWithQuestions,Game,GameQst);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-        }
-
-      Tbl_EndTable ();
+      /***** Show the table with the questions *****/
+      Rmt_ListOneOrMoreQuestionsForEdition (Game,GameQst,
+                                            NumQsts,mysql_res);
 
       if (ActionToDoWithQuestions == Tst_SHOW_GAME_TO_ANSWER)
 	{
@@ -3116,6 +3037,152 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** End box *****/
+   Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/********************* List game questions for edition ***********************/
+/*****************************************************************************/
+
+static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
+                                                  struct GameQuestion *GameQst,
+                                                  unsigned NumQsts,
+                                                  MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_Questions;
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_Code;
+   extern const char *Txt_Tags;
+   extern const char *Txt_Question;
+   extern const char *Txt_Edit_question;
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   unsigned NumQst;
+   MYSQL_ROW row;
+   unsigned UniqueId;
+
+   /***** Write the heading *****/
+   Tbl_StartTableWideMargin (2);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th></th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_No_INDEX,
+            Txt_Code,
+            Txt_Tags,
+            Txt_Question);
+
+   /***** Write rows *****/
+   for (NumQst = 0, UniqueId = 1;
+	NumQst < NumQsts;
+	NumQst++, UniqueId++)
+     {
+      Gbl.RowEvenOdd = NumQst % 2;
+
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] QstCod
+      row[1] AnsType
+      row[2] Stem
+      row[3] Feedback
+      row[4] ImageName
+      row[5] ImageTitle
+      row[6] ImageURL
+      */
+      /***** Create test question *****/
+      Tst_QstConstructor ();
+
+      /* row[0] holds the code of the question */
+      if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         Lay_ShowErrorAndExit ("Wrong code of question.");
+      GameQst->QstCod = Gbl.Test.QstCod;
+
+      /***** Icons *****/
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
+      /* Write icon to remove the question */
+      Act_FormStart (ActReqRemGamQst);
+      Rmt_PutParamGameCod (Game->GamCod);
+      Rmt_PutParamQstCod (GameQst->QstCod);
+      // Tst_PutParamQstCod ();
+      Ico_PutIconRemove ();
+      Act_FormEnd ();
+
+      /* Write icon to edit the question */
+      Act_FormStart (ActEdiOneTstQst);
+      Rmt_PutParamQstCod (GameQst->QstCod);
+      // Tst_PutParamQstCod ();
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICO20x20\" />",
+               Gbl.Prefs.IconsURL,
+               Txt_Edit_question,
+               Txt_Edit_question);
+      Act_FormEnd ();
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Write number of question */
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
+			 "<div class=\"TEST_NUM_QST\">%u</div>",
+	       Gbl.RowEvenOdd,
+	       NumQst + 1);
+
+      /* Write answer type (row[1]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>"
+			 "</td>",
+	       Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+
+      /* Write question code */
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
+               Gbl.RowEvenOdd,Gbl.Test.QstCod);
+
+      /* Write the question tags */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
+      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Write the stem (row[2]), the image (row[4], row[5], row[6]),
+         the feedback (row[3]) and the answers */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
+      Tst_WriteQstStem (row[2],"TEST_EDI");
+      Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],&Gbl.Test.Image);
+      Img_ShowImage (&Gbl.Test.Image,
+                     "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
+                     "TEST_IMG_EDIT_LIST_STEM");
+      Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
+      // Tst_WriteAnswersEdit (Gbl.Test.QstCod);
+      Rmt_WriteAnswersOfAQst (Tst_SHOW_GAME_RESULT,Game,GameQst);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor ();
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** Button to add a new question *****/
+   Tst_PutButtonToAddQuestion ();
 
    /***** End box *****/
    Box_EndBox ();

@@ -158,7 +158,10 @@ void Tst_WriteParamEditQst (void);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_CheckIfNumberOfAnswersIsOne (void);
+
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
+void Tst_GetAndWriteTagsQst (long QstCod);
+
 void Tst_PutButtonToAddQuestion (void);
 void Tst_ShowFormConfig (void);
 void Tst_EnableTag (void);
