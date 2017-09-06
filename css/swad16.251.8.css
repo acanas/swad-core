@@ -2283,6 +2283,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EDI	{color:#404040; font-size:12pt;}
 .TEST_EDI_LIGHT	{color:#A0A0A0; font-size:12pt;}
 
+.TEST_TAG_LIST
+	{
+	padding:0;
+	margin:0 0 0 1em;
+	}
+
 .TEST_IMG_SHOW_STEM_CONTAINER
 	{
 	box-sizing:border-box;

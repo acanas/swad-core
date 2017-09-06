@@ -2821,7 +2821,6 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    extern const char *Txt_Code;
    extern const char *Txt_Date;
    extern const char *Txt_Tags;
-   extern const char *Txt_Type;
    extern const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST];
    extern const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST];
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -2859,15 +2858,11 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
                       "</th>",
             Txt_No_INDEX,
             Txt_Code,
             Txt_Date,
             Txt_Tags,
-            Txt_Type,
             Txt_Shuffle);
 
    /* Stem and answers of question */
@@ -2958,10 +2953,16 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write number of question */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-	                 "%lu&nbsp;"
-	                 "</td>",
-               Gbl.RowEvenOdd,NumRow + 1);
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
+			 "<div class=\"TEST_NUM_QST\">%lu</div>",
+	       Gbl.RowEvenOdd,
+	       NumRow + 1);
+
+      /* Write answer type (row[2]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>"
+			 "</td>",
+	       Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
       /* Write question code */
       fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
@@ -2987,14 +2988,6 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
-
-      /* Write the question type (row[2]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-	                 "%s&nbsp;"
-	                 "</td>",
-	       Gbl.RowEvenOdd,
-               Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
       /* Write if shuffle is enabled (row[3]) */
       fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
@@ -4667,28 +4660,18 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
    if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
      {
       /***** Write the tags *****/
-      Tbl_StartTable (2);
-
+      fprintf (Gbl.F.Out,"<ul class=\"TEST_TAG_LIST DAT_SMALL\">");
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
         {
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT_SMALL LEFT_TOP\">"
-                            "&nbsp;&#8226;&nbsp;"
-                            "</td>"
-                            "<td class=\"DAT_SMALL LEFT_TOP\">"
-                            "%s"
-                            "</td>"
-                            "</tr>",
-                  row[0]);
+         fprintf (Gbl.F.Out,"<li>%s</li>",row[0]);
         }
-
-      Tbl_EndTable ();
+      fprintf (Gbl.F.Out,"</ul>");
      }
    else
-      fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">&nbsp;(%s)&nbsp;</span>",
+      fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">(%s)</span>",
                Txt_no_tags);
 
    /***** Free structure that stores the query result *****/

@@ -152,7 +152,7 @@ static void Rmt_AllocateListSelectedQuestions (void);
 static void Rmt_FreeListsSelectedQuestions (void);
 static unsigned Rmt_CountNumQuestionsInList (void);
 
-static void Rmt_WriteQstStem (const char *Stem);
+// static void Rmt_WriteQstStem (const char *Stem);
 static void Rmt_WriteAnswersOfAQst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
                                     struct Game *Game,struct GameQuestion *GameQst);
 static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
@@ -3088,7 +3088,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
          /* Write the stem (row[3]) and the answers of this question */
          fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",
 	          Gbl.RowEvenOdd);
-         Rmt_WriteQstStem (row[3]);
+         // Rmt_WriteQstStem (row[3]);
          Rmt_WriteAnswersOfAQst (ActionToDoWithQuestions,Game,GameQst);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -3261,13 +3261,13 @@ static unsigned Rmt_CountNumQuestionsInList (void)
 /*****************************************************************************/
 /****************** Write the heading of a game question *******************/
 /*****************************************************************************/
-
+/*
 static void Rmt_WriteQstStem (const char *Stem)
   {
    char *HeadingRigorousHTML;
    size_t Length;
 
-   /* Convert the stem, that is in HTML, to rigorous HTML */
+   * Convert the stem, that is in HTML, to rigorous HTML *
    Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
    if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
@@ -3276,13 +3276,13 @@ static void Rmt_WriteQstStem (const char *Stem)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      HeadingRigorousHTML,Length,false);
 
-   /* Write the stem */
+   * Write the stem *
    fprintf (Gbl.F.Out,"%s",HeadingRigorousHTML);
 
-   /* Free memory allocated for the stem */
+   * Free memory allocated for the stem *
    free ((void *) HeadingRigorousHTML);
   }
-
+*/
 /*****************************************************************************/
 /************** Get and write the answers of a game question ***************/
 /*****************************************************************************/
