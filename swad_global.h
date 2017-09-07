@@ -50,6 +50,7 @@
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
+#include "swad_game.h"
 #include "swad_holiday.h"
 #include "swad_image.h"
 #include "swad_icon.h"
@@ -67,7 +68,6 @@
 #include "swad_place.h"
 #include "swad_plugin.h"
 #include "swad_record.h"
-#include "swad_remote_control.h"
 #include "swad_search.h"
 #include "swad_session.h"
 #include "swad_social.h"
@@ -715,7 +715,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of surveys
       long *LstGamCods;	// List of game codes
-      Rmt_Order_t SelectedOrder;
+      Gam_Order_t SelectedOrder;
       long CurrentGamCod;	// Used as parameter in contextual links
       long CurrentQstCod;	// Used as parameter in contextual links
       unsigned CurrentPage;

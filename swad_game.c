@@ -1,4 +1,4 @@
-// swad_remote_control.c: remote control
+// swad_game.c: games using remote control
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -33,12 +33,12 @@
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
-#include "swad_remote_control.h"
 #include "swad_role.h"
 #include "swad_table.h"
 #include "swad_test.h"
@@ -53,21 +53,21 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Rmt_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
-#define Rmt_MAX_BYTES_ANSWER	((Rmt_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
+#define Gam_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
+#define Gam_MAX_BYTES_ANSWER	((Gam_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
-#define Rmt_MAX_BYTES_LIST_ANSWER_TYPES	(10 + (Rmt_NUM_ANS_TYPES - 1) * (1 + 10))
+#define Gam_MAX_BYTES_LIST_ANSWER_TYPES	(10 + (Gam_NUM_ANS_TYPES - 1) * (1 + 10))
 
-const char *Rmt_StrAnswerTypesDB[Rmt_NUM_ANS_TYPES] =
+const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
   {
    "unique_choice",
    "multiple_choice",
   };
 
-#define Rmt_MAX_ANSWERS_PER_QUESTION	10
+#define Gam_MAX_ANSWERS_PER_QUESTION	10
 
-#define Rmt_MAX_SELECTED_QUESTIONS		1000
-#define Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Rmt_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
+#define Gam_MAX_SELECTED_QUESTIONS		1000
+#define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -81,92 +81,92 @@ const char *Rmt_StrAnswerTypesDB[Rmt_NUM_ANS_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Rmt_ListAllGames (void);
-static bool Rmt_CheckIfICanCreateGame (void);
-static void Rmt_PutIconsListGames (void);
-static void Rmt_PutIconToCreateNewGame (void);
-static void Rmt_PutButtonToCreateNewGame (void);
-static void Rmt_PutParamsToCreateNewGame (void);
-static void Rmt_PutFormToSelectWhichGroupsToShow (void);
-static void Rmt_ParamsWhichGroupsToShow (void);
-static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete);
-static void Rmt_WriteAuthor (struct Game *Game);
-static void Rmt_WriteStatus (struct Game *Game);
-static void Rmt_GetParamGameOrder (void);
+static void Gam_ListAllGames (void);
+static bool Gam_CheckIfICanCreateGame (void);
+static void Gam_PutIconsListGames (void);
+static void Gam_PutIconToCreateNewGame (void);
+static void Gam_PutButtonToCreateNewGame (void);
+static void Gam_PutParamsToCreateNewGame (void);
+static void Gam_PutFormToSelectWhichGroupsToShow (void);
+static void Gam_ParamsWhichGroupsToShow (void);
+static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete);
+static void Gam_WriteAuthor (struct Game *Game);
+static void Gam_WriteStatus (struct Game *Game);
+static void Gam_GetParamGameOrder (void);
 
-static void Rmt_PutFormsToRemEditOneGame (long GamCod,bool Visible);
-static void Rmt_PutParams (void);
+static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible);
+static void Gam_PutParams (void);
 
-static void Rmt_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
+static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
-static void Rmt_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-static void Rmt_PutButtonToResetGame (void);
+static void Gam_PutButtonToResetGame (void);
 
-static bool Rmt_CheckIfSimilarGameExists (struct Game *Game);
-static void Rmt_SetDefaultAndAllowedScope (struct Game *Game);
-static void Rmt_ShowLstGrpsToEditGame (long GamCod);
-static void Rmt_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
+static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
+static void Gam_SetDefaultAndAllowedScope (struct Game *Game);
+static void Gam_ShowLstGrpsToEditGame (long GamCod);
+static void Gam_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
                                                        unsigned NumUsrsToBeNotifiedByEMail);
-static void Rmt_CreateGame (struct Game *Game,const char *Txt);
-static void Rmt_UpdateGame (struct Game *Game,const char *Txt);
-static bool Rmt_CheckIfGamIsAssociatedToGrps (long GamCod);
-static void Rmt_RemoveAllTheGrpsAssociatedToAndGame (long GamCod);
-static void Rmt_CreateGrps (long GamCod);
-static void Rmt_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game);
-static bool Rmt_CheckIfICanDoThisGameBasedOnGrps (long GamCod);
+static void Gam_CreateGame (struct Game *Game,const char *Txt);
+static void Gam_UpdateGame (struct Game *Game,const char *Txt);
+static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod);
+static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod);
+static void Gam_CreateGrps (long GamCod);
+static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game);
+static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod);
 
-static unsigned Rmt_GetNumQstsGame (long GamCod);
-static void Rmt_PutParamQstCod (long QstCod);
-static long Rmt_GetParamQstCod (void);
-static void Rmt_RemAnswersOfAQuestion (long QstCod);
+static unsigned Gam_GetNumQstsGame (long GamCod);
+static void Gam_PutParamQstCod (long QstCod);
+static long Gam_GetParamQstCod (void);
+static void Gam_RemAnswersOfAQuestion (long QstCod);
 
-static unsigned Rmt_GetQstIndFromQstCod (long QstCod);
-static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod);
-static void Rmt_ListGameQuestions (struct Game *Game);
-static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
+static unsigned Gam_GetQstIndFromQstCod (long QstCod);
+static unsigned Gam_GetNextQuestionIndexInGame (long GamCod);
+static void Gam_ListGameQuestions (struct Game *Game);
+static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                                                   unsigned NumQsts,
                                                   MYSQL_RES *mysql_res);
-static void Rmt_PutIconToAddNewQuestions (void);
-static void Rmt_PutButtonToAddNewQuestions (void);
+static void Gam_PutIconToAddNewQuestions (void);
+static void Gam_PutButtonToAddNewQuestions (void);
 
-static void Rmt_AllocateListSelectedQuestions (void);
-static void Rmt_FreeListsSelectedQuestions (void);
-static unsigned Rmt_CountNumQuestionsInList (void);
+static void Gam_AllocateListSelectedQuestions (void);
+static void Gam_FreeListsSelectedQuestions (void);
+static unsigned Gam_CountNumQuestionsInList (void);
 
-static unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd);
-static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
+static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd);
+static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
-// static void Rmt_PutIconToRemoveOneQst (void);
-static void Rmt_PutParamsRemoveOneQst (void);
+// static void Gam_PutIconToRemoveOneQst (void);
+static void Gam_PutParamsRemoveOneQst (void);
 
-static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod);
-static void Rmt_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
-static void Rmt_RegisterIHaveAnsweredGame (long GamCod);
-static bool Rmt_CheckIfIHaveAnsweredGame (long GamCod);
-static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
+static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
+static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
+static void Gam_RegisterIHaveAnsweredGame (long GamCod);
+static bool Gam_CheckIfIHaveAnsweredGame (long GamCod);
+static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 
 /*****************************************************************************/
-/************************** List all the games *****************************/
+/*************************** List all the games ******************************/
 /*****************************************************************************/
 
-void Rmt_SeeAllGames (void)
+void Gam_SeeAllGames (void)
   {
    /***** Get parameters *****/
-   Rmt_GetParamGameOrder ();
+   Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show all the games *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
-/*************************** Show all the games ****************************/
+/**************************** Show all the games *****************************/
 /*****************************************************************************/
 
-static void Rmt_ListAllGames (void)
+static void Gam_ListAllGames (void)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Games;
@@ -175,7 +175,7 @@ static void Rmt_ListAllGames (void)
    extern const char *Txt_Game;
    extern const char *Txt_Status;
    extern const char *Txt_No_games;
-   Rmt_Order_t Order;
+   Gam_Order_t Order;
    struct Pagination Pagination;
    unsigned NumGame;
 
@@ -184,7 +184,7 @@ static void Rmt_ListAllGames (void)
       Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
 
    /***** Get list of games *****/
-   Rmt_GetListGames ();
+   Gam_GetListGames ();
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Games.Num;
@@ -199,12 +199,12 @@ static void Rmt_ListAllGames (void)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Games,Rmt_PutIconsListGames,
+   Box_StartBox ("100%",Txt_Games,Gam_PutIconsListGames,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Rmt_PutFormToSelectWhichGroupsToShow ();
+      Gam_PutFormToSelectWhichGroupsToShow ();
 
    if (Gbl.Games.Num)
      {
@@ -212,8 +212,8 @@ static void Rmt_ListAllGames (void)
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
-      for (Order = Rmt_ORDER_BY_START_DATE;
-	   Order <= Rmt_ORDER_BY_END_DATE;
+      for (Order = Gam_ORDER_BY_START_DATE;
+	   Order <= Gam_ORDER_BY_END_DATE;
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
@@ -248,7 +248,7 @@ static void Rmt_ListAllGames (void)
       for (NumGame = Pagination.FirstItemVisible;
 	   NumGame <= Pagination.LastItemVisible;
 	   NumGame++)
-	 Rmt_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],false);
+	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],false);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -257,8 +257,8 @@ static void Rmt_ListAllGames (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
    /***** Button to create a new game *****/
-   if (Rmt_CheckIfICanCreateGame ())
-      Rmt_PutButtonToCreateNewGame ();
+   if (Gam_CheckIfICanCreateGame ())
+      Gam_PutButtonToCreateNewGame ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -270,14 +270,14 @@ static void Rmt_ListAllGames (void)
                                      &Pagination);
 
    /***** Free list of games *****/
-   Rmt_FreeListGames ();
+   Gam_FreeListGames ();
   }
 
 /*****************************************************************************/
 /******************* Check if I can create a new game **********************/
 /*****************************************************************************/
 
-static bool Rmt_CheckIfICanCreateGame (void)
+static bool Gam_CheckIfICanCreateGame (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -301,11 +301,11 @@ static bool Rmt_CheckIfICanCreateGame (void)
 /***************** Put contextual icons in list of games *******************/
 /*****************************************************************************/
 
-static void Rmt_PutIconsListGames (void)
+static void Gam_PutIconsListGames (void)
   {
    /***** Put icon to create a new game *****/
-   if (Rmt_CheckIfICanCreateGame ())
-      Rmt_PutIconToCreateNewGame ();
+   if (Gam_CheckIfICanCreateGame ())
+      Gam_PutIconToCreateNewGame ();
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_SURVEYS;
@@ -316,11 +316,11 @@ static void Rmt_PutIconsListGames (void)
 /********************** Put icon to create a new game **********************/
 /*****************************************************************************/
 
-static void Rmt_PutIconToCreateNewGame (void)
+static void Gam_PutIconToCreateNewGame (void)
   {
    extern const char *Txt_New_game;
 
-   Lay_PutContextualLink (ActFrmNewGam,NULL,Rmt_PutParamsToCreateNewGame,
+   Lay_PutContextualLink (ActFrmNewGam,NULL,Gam_PutParamsToCreateNewGame,
                           "plus64x64.png",
                           Txt_New_game,NULL,
 		          NULL);
@@ -330,12 +330,12 @@ static void Rmt_PutIconToCreateNewGame (void)
 /********************* Put button to create a new game *********************/
 /*****************************************************************************/
 
-static void Rmt_PutButtonToCreateNewGame (void)
+static void Gam_PutButtonToCreateNewGame (void)
   {
    extern const char *Txt_New_game;
 
    Act_FormStart (ActFrmNewGam);
-   Rmt_PutParamsToCreateNewGame ();
+   Gam_PutParamsToCreateNewGame ();
    Btn_PutConfirmButton (Txt_New_game);
    Act_FormEnd ();
   }
@@ -344,9 +344,9 @@ static void Rmt_PutButtonToCreateNewGame (void)
 /******************* Put parameters to create a new game *******************/
 /*****************************************************************************/
 
-static void Rmt_PutParamsToCreateNewGame (void)
+static void Gam_PutParamsToCreateNewGame (void)
   {
-   Rmt_PutHiddenParamGameOrder ();
+   Gam_PutHiddenParamGameOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
   }
@@ -355,16 +355,16 @@ static void Rmt_PutParamsToCreateNewGame (void)
 /***************** Put form to select which groups to show *******************/
 /*****************************************************************************/
 
-static void Rmt_PutFormToSelectWhichGroupsToShow (void)
+static void Gam_PutFormToSelectWhichGroupsToShow (void)
   {
    fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Rmt_ParamsWhichGroupsToShow);
+   Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
    fprintf (Gbl.F.Out,"</div>");
   }
 
-static void Rmt_ParamsWhichGroupsToShow (void)
+static void Gam_ParamsWhichGroupsToShow (void)
   {
-   Rmt_PutHiddenParamGameOrder ();
+   Gam_PutHiddenParamGameOrder ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
   }
 
@@ -372,28 +372,28 @@ static void Rmt_ParamsWhichGroupsToShow (void)
 /****************************** Show one game ******************************/
 /*****************************************************************************/
 
-void Rmt_SeeOneGame (void)
+void Gam_SeeOneGame (void)
   {
    struct Game Game;
 
    /***** Get parameters *****/
-   Rmt_GetParamGameOrder ();
+   Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Rmt_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /****************************** Show one game ******************************/
 /*****************************************************************************/
 
-static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
+static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
@@ -421,7 +421,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 
    /***** Get data of this game *****/
    Game.GamCod = GamCod;
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Start table *****/
    if (ShowOnlyThisGameComplete)
@@ -435,7 +435,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Game.Status.ICanEdit)
-      Rmt_PutFormsToRemEditOneGame (Game.GamCod,Game.Status.Visible);
+      Gam_PutFormsToRemEditOneGame (Game.GamCod,Game.Status.Visible);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
@@ -454,7 +454,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
-            UniqueId,Game.TimeUTC[Rmt_START_TIME],
+            UniqueId,Game.TimeUTC[Gam_START_TIME],
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* End date/time */
@@ -472,7 +472,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
                       "%u,'<br />','%s',false,true,0x7);"
                       "</script>"
 	              "</td>",
-            UniqueId,Game.TimeUTC[Rmt_END_TIME],
+            UniqueId,Game.TimeUTC[Gam_END_TIME],
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Game title */
@@ -483,13 +483,13 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 
    /* Put form to view game */
    Act_FormStart (ActSeeOneGam);
-   Rmt_PutParamGameCod (GamCod);
-   Rmt_PutHiddenParamGameOrder ();
+   Gam_PutParamGameCod (GamCod);
+   Gam_PutHiddenParamGameOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
    Act_LinkFormSubmit (Txt_View_game,
                        Game.Status.Visible ? "ASG_TITLE" :
-	                                    "ASG_TITLE_LIGHT",NULL);
+	                                     "ASG_TITLE_LIGHT",NULL);
    fprintf (Gbl.F.Out,"%s</a>",
             Game.Title);
    Act_FormEnd ();
@@ -509,7 +509,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    if (!ShowOnlyThisGameComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-   Rmt_WriteStatus (&Game);
+   Gam_WriteStatus (&Game);
 
    if (!ShowOnlyThisGameComplete)
      {
@@ -519,8 +519,8 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
 	 Act_FormStart (ActSeeOneGam);
-	 Rmt_PutParamGameCod (Game.GamCod);
-	 Rmt_PutHiddenParamGameOrder ();
+	 Gam_PutParamGameCod (Game.GamCod);
+	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Play);
@@ -534,8 +534,8 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
 	 Act_FormStart (ActSeeOneGam);
-	 Rmt_PutParamGameCod (Game.GamCod);
-	 Rmt_PutHiddenParamGameOrder ();
+	 Gam_PutParamGameCod (Game.GamCod);
+	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_game_results);
@@ -556,7 +556,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    fprintf (Gbl.F.Out,"\">");
 
    /* Author of the game */
-   Rmt_WriteAuthor (&Game);
+   Gam_WriteAuthor (&Game);
 
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"LEFT_TOP");
@@ -616,10 +616,10 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    /* Groups whose users can answer this game */
    if (Game.Scope == Sco_SCOPE_CRS)
       if (Gbl.CurrentCrs.Grps.NumGrps)
-         Rmt_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
+         Gam_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
 
    /* Text of the game */
-   Rmt_GetGameTxtFromDB (Game.GamCod,Txt);
+   Gam_GetGameTxtFromDB (Game.GamCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -637,7 +637,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"5\">");
-      Rmt_ListGameQuestions (&Game);
+      Gam_ListGameQuestions (&Game);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -664,7 +664,7 @@ static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 /*********************** Write the author of a game ************************/
 /*****************************************************************************/
 
-static void Rmt_WriteAuthor (struct Game *Game)
+static void Gam_WriteAuthor (struct Game *Game)
   {
    Usr_WriteAuthor1Line (Game->UsrCod,!Game->Status.Visible);
   }
@@ -673,7 +673,7 @@ static void Rmt_WriteAuthor (struct Game *Game)
 /************************ Write status of a game ***************************/
 /*****************************************************************************/
 
-static void Rmt_WriteStatus (struct Game *Game)
+static void Gam_WriteStatus (struct Game *Game)
   {
    extern const char *Txt_Hidden_game;
    extern const char *Txt_Visible_game;
@@ -753,20 +753,20 @@ static void Rmt_WriteStatus (struct Game *Game)
 /********* Get parameter with the type or order in list of games ***********/
 /*****************************************************************************/
 
-static void Rmt_GetParamGameOrder (void)
+static void Gam_GetParamGameOrder (void)
   {
-   Gbl.Games.SelectedOrder = (Rmt_Order_t)
+   Gbl.Games.SelectedOrder = (Gam_Order_t)
 	                    Par_GetParToUnsignedLong ("Order",
 	                                              0,
-	                                              Rmt_NUM_ORDERS - 1,
-	                                              (unsigned long) Rmt_ORDER_DEFAULT);
+	                                              Gam_NUM_ORDERS - 1,
+	                                              (unsigned long) Gam_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
 /***** Put a hidden parameter with the type of order in list of games ******/
 /*****************************************************************************/
 
-void Rmt_PutHiddenParamGameOrder (void)
+void Gam_PutHiddenParamGameOrder (void)
   {
    Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Games.SelectedOrder);
   }
@@ -775,39 +775,39 @@ void Rmt_PutHiddenParamGameOrder (void)
 /******************** Put a link (form) to edit one game *********************/
 /*****************************************************************************/
 
-static void Rmt_PutFormsToRemEditOneGame (long GamCod,bool Visible)
+static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible)
   {
    extern const char *Txt_Reset;
 
    Gbl.Games.CurrentGamCod = GamCod;	// Used as parameter in contextual links
 
    /***** Put form to remove game *****/
-   Ico_PutContextualIconToRemove (ActReqRemGam,Rmt_PutParams);
+   Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
 
    /***** Put form to reset game *****/
-   Lay_PutContextualLink (ActReqRstGam,NULL,Rmt_PutParams,
+   Lay_PutContextualLink (ActReqRstGam,NULL,Gam_PutParams,
                           "recycle64x64.png",
                           Txt_Reset,NULL,
 		          NULL);
 
    /***** Put form to hide/show game *****/
    if (Visible)
-      Ico_PutContextualIconToHide (ActHidGam,Rmt_PutParams);
+      Ico_PutContextualIconToHide (ActHidGam,Gam_PutParams);
    else
-      Ico_PutContextualIconToUnhide (ActShoGam,Rmt_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoGam,Gam_PutParams);
 
    /***** Put form to edit game *****/
-   Ico_PutContextualIconToEdit (ActEdiOneGam,Rmt_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
   }
 
 /*****************************************************************************/
 /********************** Params used to edit a game *************************/
 /*****************************************************************************/
 
-static void Rmt_PutParams (void)
+static void Gam_PutParams (void)
   {
    if (Gbl.Games.CurrentGamCod > 0)
-      Rmt_PutParamGameCod (Gbl.Games.CurrentGamCod);
+      Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
@@ -817,7 +817,7 @@ static void Rmt_PutParams (void)
 /*********************** Get list of all the games *************************/
 /*****************************************************************************/
 
-void Rmt_GetListGames (void)
+void Gam_GetListGames (void)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char SubQuery[Sco_NUM_SCOPES][256];
@@ -835,10 +835,10 @@ void Rmt_GetListGames (void)
 
    /***** Free list of games *****/
    if (Gbl.Games.LstIsRead)
-      Rmt_FreeListGames ();
+      Gam_FreeListGames ();
 
    /***** Set allowed and hidden scopes to get list depending on my user's role *****/
-   Rmt_SetAllowedAndHiddenScopes (&ScopesAllowed,&HiddenAllowed);
+   Gam_SetAllowedAndHiddenScopes (&ScopesAllowed,&HiddenAllowed);
 
    /***** Get list of games from database *****/
    Cods[Sco_SCOPE_SYS] = -1L;				// System
@@ -904,10 +904,10 @@ void Rmt_GetListGames (void)
      {
       switch (Gbl.Games.SelectedOrder)
 	{
-	 case Rmt_ORDER_BY_START_DATE:
+	 case Gam_ORDER_BY_START_DATE:
 	    sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
 	    break;
-	 case Rmt_ORDER_BY_END_DATE:
+	 case Gam_ORDER_BY_END_DATE:
 	    sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
 	    break;
 	}
@@ -961,7 +961,7 @@ void Rmt_GetListGames (void)
 /*** Set allowed and hidden scopes to get list depending on my user's role ***/
 /*****************************************************************************/
 
-static void Rmt_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
+static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1128,7 +1128,7 @@ static void Rmt_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 /********************* Get game data using its code ************************/
 /*****************************************************************************/
 
-void Rmt_GetDataOfGameByCod (struct Game *Game)
+void Gam_GetDataOfGameByCod (struct Game *Game)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -1184,11 +1184,11 @@ void Rmt_GetDataOfGameByCod (struct Game *Game)
 
       /* Get the title of the game (row[9]) */
       Str_Copy (Game->Title,row[9],
-                Rmt_MAX_BYTES_SURVEY_TITLE);
+                Gam_MAX_BYTES_SURVEY_TITLE);
 
       /* Get number of questions and number of users who have already answer this game */
-      Game->NumQsts = Rmt_GetNumQstsGame (Game->GamCod);
-      Game->NumUsrs = Rmt_GetNumUsrsWhoHaveAnsweredGame (Game->GamCod);
+      Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
+      Game->NumUsrs = Gam_GetNumUsrsWhoHaveAnsweredGame (Game->GamCod);
 
       /* Am I logged with a valid role to answer this game? */
       Game->Status.IAmLoggedWithAValidRoleToAnswer = (Game->Roles & (1 << Gbl.Usrs.Me.Role.Logged));
@@ -1216,12 +1216,12 @@ void Rmt_GetDataOfGameByCod (struct Game *Game)
 	    break;
 	 case Sco_SCOPE_CRS:	// Course
 	    Game->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Game->Cod) &&
-					 Rmt_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
+					 Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
 	    break;
         }
 
       /* Have I answered this game? */
-      Game->Status.IHaveAnswered = Rmt_CheckIfIHaveAnsweredGame (Game->GamCod);
+      Game->Status.IHaveAnswered = Gam_CheckIfIHaveAnsweredGame (Game->GamCod);
 
       /* Can I answer game? */
       Game->Status.ICanAnswer = (Game->NumQsts != 0) &&
@@ -1320,8 +1320,8 @@ void Rmt_GetDataOfGameByCod (struct Game *Game)
       Game->Scope                   = Sco_SCOPE_UNK;
       Game->Roles                   = 0;
       Game->UsrCod                  = -1L;
-      Game->TimeUTC[Rmt_START_TIME] =
-      Game->TimeUTC[Rmt_END_TIME  ] = (time_t) 0;
+      Game->TimeUTC[Gam_START_TIME] =
+      Game->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
       Game->Title[0]                = '\0';
       Game->NumQsts                 = 0;
       Game->NumUsrs                 = 0;
@@ -1343,7 +1343,7 @@ void Rmt_GetDataOfGameByCod (struct Game *Game)
 /**************************** Free list of games ***************************/
 /*****************************************************************************/
 
-void Rmt_FreeListGames (void)
+void Gam_FreeListGames (void)
   {
    if (Gbl.Games.LstIsRead && Gbl.Games.LstGamCods)
      {
@@ -1359,7 +1359,7 @@ void Rmt_FreeListGames (void)
 /********************** Get game text from database ************************/
 /*****************************************************************************/
 
-static void Rmt_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[128];
    MYSQL_RES *mysql_res;
@@ -1393,7 +1393,7 @@ static void Rmt_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Rmt_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+void Gam_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long GamCod,bool GetContent)
   {
@@ -1438,7 +1438,7 @@ void Rmt_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /******************* Write parameter with code of game *********************/
 /*****************************************************************************/
 
-void Rmt_PutParamGameCod (long GamCod)
+void Gam_PutParamGameCod (long GamCod)
   {
    Par_PutHiddenParamLong ("GamCod",GamCod);
   }
@@ -1447,7 +1447,7 @@ void Rmt_PutParamGameCod (long GamCod)
 /******************** Get parameter with code of game **********************/
 /*****************************************************************************/
 
-long Rmt_GetParamGameCod (void)
+long Gam_GetParamGameCod (void)
   {
    /***** Get code of game *****/
    return Par_GetParToLong ("GamCod");
@@ -1457,23 +1457,23 @@ long Rmt_GetParamGameCod (void)
 /*************** Ask for confirmation of removing of a game ****************/
 /*****************************************************************************/
 
-void Rmt_AskRemGame (void)
+void Gam_AskRemGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_game_X;
    extern const char *Txt_Remove_game;
    struct Game Game;
 
    /***** Get parameters *****/
-   Rmt_GetParamGameOrder ();
+   Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
@@ -1482,29 +1482,29 @@ void Rmt_AskRemGame (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_game_X,
             Game.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGam,NULL,NULL,Rmt_PutParams,
+                           ActRemGam,NULL,NULL,Gam_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game);
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /****************************** Remove a game ******************************/
 /*****************************************************************************/
 
-void Rmt_RemoveGame (void)
+void Gam_RemoveGame (void)
   {
    extern const char *Txt_Game_X_removed;
    char Query[512];
    struct Game Game;
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
@@ -1520,7 +1520,7 @@ void Rmt_RemoveGame (void)
    DB_QueryDELETE (Query,"can not remove questions of a game");
 
    /***** Remove all the groups of this game *****/
-   Rmt_RemoveAllTheGrpsAssociatedToAndGame (Game.GamCod);
+   Gam_RemoveAllTheGrpsAssociatedToAndGame (Game.GamCod);
 
    /***** Remove game *****/
    sprintf (Query,"DELETE FROM games WHERE GamCod=%ld",
@@ -1536,29 +1536,29 @@ void Rmt_RemoveGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /***************** Ask for confirmation of reset of a game *****************/
 /*****************************************************************************/
 
-void Rmt_AskResetGame (void)
+void Gam_AskResetGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_reset_the_game_X;
    struct Game Game;
 
    /***** Get parameters *****/
-   Rmt_GetParamGameOrder ();
+   Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
@@ -1569,22 +1569,22 @@ void Rmt_AskResetGame (void)
 
    /***** Button of confirmation of reset *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   Rmt_PutButtonToResetGame ();
+   Gam_PutButtonToResetGame ();
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /************************* Put button to reset game ************************/
 /*****************************************************************************/
 
-static void Rmt_PutButtonToResetGame (void)
+static void Gam_PutButtonToResetGame (void)
   {
    extern const char *Txt_Reset_game;
 
    Act_FormStart (ActRstGam);
-   Rmt_PutParams ();
+   Gam_PutParams ();
    Btn_PutRemoveButton (Txt_Reset_game);
    Act_FormEnd ();
   }
@@ -1593,18 +1593,18 @@ static void Rmt_PutButtonToResetGame (void)
 /******************************* Reset a game ******************************/
 /*****************************************************************************/
 
-void Rmt_ResetGame (void)
+void Gam_ResetGame (void)
   {
    extern const char *Txt_Game_X_reset;
    char Query[512];
    struct Game Game;
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
@@ -1626,25 +1626,25 @@ void Rmt_ResetGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /******************************** Hide a game ******************************/
 /*****************************************************************************/
 
-void Rmt_HideGame (void)
+void Gam_HideGame (void)
   {
    extern const char *Txt_Game_X_is_now_hidden;
    char Query[128];
    struct Game Game;
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not hide this game.");
 
@@ -1659,25 +1659,25 @@ void Rmt_HideGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /******************************** Show a game ******************************/
 /*****************************************************************************/
 
-void Rmt_UnhideGame (void)
+void Gam_UnhideGame (void)
   {
    extern const char *Txt_Game_X_is_now_visible;
    char Query[128];
    struct Game Game;
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not unhide this game.");
 
@@ -1692,17 +1692,17 @@ void Rmt_UnhideGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /******************* Check if the title of a game exists *******************/
 /*****************************************************************************/
 
-static bool Rmt_CheckIfSimilarGameExists (struct Game *Game)
+static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512 + Rmt_MAX_BYTES_SURVEY_TITLE];
+   char Query[512 + Gam_MAX_BYTES_SURVEY_TITLE];
 
    /***** Get number of games with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM games"
@@ -1717,7 +1717,7 @@ static bool Rmt_CheckIfSimilarGameExists (struct Game *Game)
 /********************* Put a form to create a new game *********************/
 /*****************************************************************************/
 
-void Rmt_RequestCreatOrEditGame (void)
+void Gam_RequestCreatOrEditGame (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
@@ -1735,18 +1735,18 @@ void Rmt_RequestCreatOrEditGame (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Rmt_GetParamGameOrder ();
+   Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get the code of the game *****/
-   ItsANewGame = ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L);
+   ItsANewGame = ((Game.GamCod = Gam_GetParamGameCod ()) == -1L);
 
    /***** Get from the database the data of the game *****/
    if (ItsANewGame)
      {
       /***** Put link (form) to create new game *****/
-      if (!Rmt_CheckIfICanCreateGame ())
+      if (!Gam_CheckIfICanCreateGame ())
          Lay_ShowErrorAndExit ("You can not create a new game here.");
 
       /* Initialize to empty game */
@@ -1754,8 +1754,8 @@ void Rmt_RequestCreatOrEditGame (void)
       Game.Scope  = Sco_SCOPE_UNK;
       Game.Roles  = (1 << Rol_STD);
       Game.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Game.TimeUTC[Rmt_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Game.TimeUTC[Rmt_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
+      Game.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Game.TimeUTC[Gam_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
       Game.Title[0] = '\0';
       Game.NumQsts = 0;
       Game.NumUsrs = 0;
@@ -1770,19 +1770,19 @@ void Rmt_RequestCreatOrEditGame (void)
    else
      {
       /* Get data of the game from database */
-      Rmt_GetDataOfGameByCod (&Game);
+      Gam_GetDataOfGameByCod (&Game);
       if (!Game.Status.ICanEdit)
          Lay_ShowErrorAndExit ("You can not update this game.");
 
       /* Get text of the game from database */
-      Rmt_GetGameTxtFromDB (Game.GamCod,Txt);
+      Gam_GetGameTxtFromDB (Game.GamCod,Txt);
      }
 
    /***** Start form *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
    Act_FormStart (ItsANewGame ? ActNewGam :
 	                        ActChgGam);
-   Rmt_PutParams ();
+   Gam_PutParams ();
 
    /***** Start box and table *****/
    if (ItsANewGame)
@@ -1800,7 +1800,7 @@ void Rmt_RequestCreatOrEditGame (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Scope);
-   Rmt_SetDefaultAndAllowedScope (&Game);
+   Gam_SetDefaultAndAllowedScope (&Game);
    Sco_GetScope ("ScopeGame");
    Sco_PutSelectorScope ("ScopeGame",false);
    fprintf (Gbl.F.Out,"</td>"
@@ -1819,7 +1819,7 @@ void Rmt_RequestCreatOrEditGame (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Title,
-            Rmt_MAX_CHARS_SURVEY_TITLE,Game.Title);
+            Gam_MAX_CHARS_SURVEY_TITLE,Game.Title);
 
    /***** Game start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Game.TimeUTC,Dat_FORM_SECONDS_ON);
@@ -1856,7 +1856,7 @@ void Rmt_RequestCreatOrEditGame (void)
 	              "</tr>");
 
    /***** Groups *****/
-   Rmt_ShowLstGrpsToEditGame (Game.GamCod);
+   Gam_ShowLstGrpsToEditGame (Game.GamCod);
 
    /***** End table, send button and end box *****/
    if (ItsANewGame)
@@ -1869,14 +1869,14 @@ void Rmt_RequestCreatOrEditGame (void)
 
    /***** Show questions of the game ready to be edited *****/
    if (!ItsANewGame)
-      Rmt_ListGameQuestions (&Game);
+      Gam_ListGameQuestions (&Game);
   }
 
 /*****************************************************************************/
 /****** Set default and allowed scopes depending on logged user's role *******/
 /*****************************************************************************/
 
-static void Rmt_SetDefaultAndAllowedScope (struct Game *Game)
+static void Gam_SetDefaultAndAllowedScope (struct Game *Game)
   {
    bool ICanEdit = false;
 
@@ -1966,7 +1966,7 @@ static void Rmt_SetDefaultAndAllowedScope (struct Game *Game)
 /******************** Show list of groups to edit a game *******************/
 /*****************************************************************************/
 
-static void Rmt_ShowLstGrpsToEditGame (long GamCod)
+static void Gam_ShowLstGrpsToEditGame (long GamCod)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Groups;
@@ -1995,7 +1995,7 @@ static void Rmt_ShowLstGrpsToEditGame (long GamCod)
                          "<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
-      if (!Rmt_CheckIfGamIsAssociatedToGrps (GamCod))
+      if (!Gam_CheckIfGamIsAssociatedToGrps (GamCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
@@ -2026,7 +2026,7 @@ static void Rmt_ShowLstGrpsToEditGame (long GamCod)
 /********************* Receive form to create a new game *******************/
 /*****************************************************************************/
 
-void Rmt_RecFormGame (void)
+void Gam_RecFormGame (void)
   {
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_game;
@@ -2038,7 +2038,7 @@ void Rmt_RecFormGame (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the game *****/
-   ItsANewGame = ((NewGame.GamCod = Rmt_GetParamGameCod ()) == -1L);
+   ItsANewGame = ((NewGame.GamCod = Gam_GetParamGameCod ()) == -1L);
 
    if (ItsANewGame)
       NewGame.Scope = Sco_SCOPE_UNK;
@@ -2046,14 +2046,14 @@ void Rmt_RecFormGame (void)
      {
       /* Get data of the old (current) game from database */
       OldGame.GamCod = NewGame.GamCod;
-      Rmt_GetDataOfGameByCod (&OldGame);
+      Gam_GetDataOfGameByCod (&OldGame);
       if (!OldGame.Status.ICanEdit)
          Lay_ShowErrorAndExit ("You can not update this game.");
       NewGame.Scope = OldGame.Scope;
      }
 
    /***** Get scope *****/
-   Rmt_SetDefaultAndAllowedScope (&NewGame);
+   Gam_SetDefaultAndAllowedScope (&NewGame);
    Sco_GetScope ("ScopeGame");
    switch (Gbl.Scope.Current)
      {
@@ -2107,16 +2107,16 @@ void Rmt_RecFormGame (void)
    NewGame.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get game title *****/
-   Par_GetParToText ("Title",NewGame.Title,Rmt_MAX_BYTES_SURVEY_TITLE);
+   Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_SURVEY_TITLE);
 
    /***** Get game text and insert links *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewGame.TimeUTC[Rmt_START_TIME] == 0)
-      NewGame.TimeUTC[Rmt_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewGame.TimeUTC[Rmt_END_TIME] == 0)
-      NewGame.TimeUTC[Rmt_END_TIME] = NewGame.TimeUTC[Rmt_START_TIME] + 24 * 60 * 60;	// +24 hours
+   if (NewGame.TimeUTC[Gam_START_TIME] == 0)
+      NewGame.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewGame.TimeUTC[Gam_END_TIME] == 0)
+      NewGame.TimeUTC[Gam_END_TIME] = NewGame.TimeUTC[Gam_START_TIME] + 24 * 60 * 60;	// +24 hours
 
    /***** Get users who can answer this game *****/
    NewGame.Roles = Rol_GetSelectedRoles ();
@@ -2125,7 +2125,7 @@ void Rmt_RecFormGame (void)
    if (NewGame.Title[0])	// If there's a game title
      {
       /* If title of game was in database... */
-      if (Rmt_CheckIfSimilarGameExists (&NewGame))
+      if (Gam_CheckIfSimilarGameExists (&NewGame))
         {
          NewGameIsCorrect = false;
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_game_with_the_title_X,
@@ -2146,30 +2146,30 @@ void Rmt_RecFormGame (void)
       Grp_GetParCodsSeveralGrps ();
 
       if (ItsANewGame)
-         Rmt_CreateGame (&NewGame,Txt);	// Add new game to database
+         Gam_CreateGame (&NewGame,Txt);	// Add new game to database
       else
-         Rmt_UpdateGame (&NewGame,Txt);
+         Gam_UpdateGame (&NewGame,Txt);
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
      }
    else
-      Rmt_RequestCreatOrEditGame ();
+      Gam_RequestCreatOrEditGame ();
 
    /***** Notify by email about the new game *****/
    if (NewGame.Scope == Sco_SCOPE_CRS)	// Notify only the games for a course, not for a degree or global
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewGame.GamCod)))
-         Rmt_UpdateNumUsrsNotifiedByEMailAboutGame (NewGame.GamCod,NumUsrsToBeNotifiedByEMail);
+         Gam_UpdateNumUsrsNotifiedByEMailAboutGame (NewGame.GamCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Show games again *****/
-   Rmt_ListAllGames ();
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
 /*********** Update number of users notified in table of games *************/
 /*****************************************************************************/
 
-static void Rmt_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
+static void Gam_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail)
   {
    char Query[256];
@@ -2185,12 +2185,12 @@ static void Rmt_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
 /*************************** Create a new game *****************************/
 /*****************************************************************************/
 
-static void Rmt_CreateGame (struct Game *Game,const char *Txt)
+static void Gam_CreateGame (struct Game *Game,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_game_X;
    char Query[1024 +
-              Rmt_MAX_BYTES_SURVEY_TITLE +
+              Gam_MAX_BYTES_SURVEY_TITLE +
               Cns_MAX_BYTES_TEXT];
 
    /***** Create a new game *****/
@@ -2203,15 +2203,15 @@ static void Rmt_CreateGame (struct Game *Game,const char *Txt)
             Sco_ScopeDB[Game->Scope],Game->Cod,
             Game->Roles,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Game->TimeUTC[Rmt_START_TIME],
-            Game->TimeUTC[Rmt_END_TIME  ],
+            Game->TimeUTC[Gam_START_TIME],
+            Game->TimeUTC[Gam_END_TIME  ],
             Game->Title,
             Txt);
    Game->GamCod = DB_QueryINSERTandReturnCode (Query,"can not create new game");
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
-      Rmt_CreateGrps (Game->GamCod);
+      Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
    sprintf (Gbl.Alert.Txt,Txt_Created_new_game_X,
@@ -2223,12 +2223,12 @@ static void Rmt_CreateGame (struct Game *Game,const char *Txt)
 /************************* Update an existing game *************************/
 /*****************************************************************************/
 
-static void Rmt_UpdateGame (struct Game *Game,const char *Txt)
+static void Gam_UpdateGame (struct Game *Game,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_game_has_been_modified;
    char Query[1024 +
-              Rmt_MAX_BYTES_SURVEY_TITLE +
+              Gam_MAX_BYTES_SURVEY_TITLE +
               Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the game *****/
@@ -2240,8 +2240,8 @@ static void Rmt_UpdateGame (struct Game *Game,const char *Txt)
                   " WHERE GamCod=%ld",
             Sco_ScopeDB[Game->Scope],Game->Cod,
             Game->Roles,
-            Game->TimeUTC[Rmt_START_TIME],
-            Game->TimeUTC[Rmt_END_TIME  ],
+            Game->TimeUTC[Gam_START_TIME],
+            Game->TimeUTC[Gam_END_TIME  ],
             Game->Title,
             Txt,
             Game->GamCod);
@@ -2249,11 +2249,11 @@ static void Rmt_UpdateGame (struct Game *Game,const char *Txt)
 
    /***** Update groups *****/
    /* Remove old groups */
-   Rmt_RemoveAllTheGrpsAssociatedToAndGame (Game->GamCod);
+   Gam_RemoveAllTheGrpsAssociatedToAndGame (Game->GamCod);
 
    /* Create new groups */
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
-      Rmt_CreateGrps (Game->GamCod);
+      Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
@@ -2263,7 +2263,7 @@ static void Rmt_UpdateGame (struct Game *Game,const char *Txt)
 /*************** Check if a game is associated to any group ****************/
 /*****************************************************************************/
 
-static bool Rmt_CheckIfGamIsAssociatedToGrps (long GamCod)
+static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
   {
    char Query[128];
 
@@ -2277,7 +2277,7 @@ static bool Rmt_CheckIfGamIsAssociatedToGrps (long GamCod)
 /**************** Check if a game is associated to a group *****************/
 /*****************************************************************************/
 
-bool Rmt_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
+bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
   {
    char Query[256];
 
@@ -2292,7 +2292,7 @@ bool Rmt_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
 /************************* Remove groups of a game *************************/
 /*****************************************************************************/
 
-static void Rmt_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
+static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
   {
    char Query[128];
 
@@ -2306,7 +2306,7 @@ static void Rmt_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
 /******************* Remove one group from all the games *******************/
 /*****************************************************************************/
 
-void Rmt_RemoveGroup (long GrpCod)
+void Gam_RemoveGroup (long GrpCod)
   {
    char Query[128];
 
@@ -2321,7 +2321,7 @@ void Rmt_RemoveGroup (long GrpCod)
 /*************** Remove groups of one type from all the games **************/
 /*****************************************************************************/
 
-void Rmt_RemoveGroupsOfType (long GrpTypCod)
+void Gam_RemoveGroupsOfType (long GrpTypCod)
   {
    char Query[256];
 
@@ -2338,7 +2338,7 @@ void Rmt_RemoveGroupsOfType (long GrpTypCod)
 /************************ Create groups of a game **************************/
 /*****************************************************************************/
 
-static void Rmt_CreateGrps (long GamCod)
+static void Gam_CreateGrps (long GamCod)
   {
    unsigned NumGrpSel;
    char Query[256];
@@ -2362,7 +2362,7 @@ static void Rmt_CreateGrps (long GamCod)
 /************ Get and write the names of the groups of a game **************/
 /*****************************************************************************/
 
-static void Rmt_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
+static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
@@ -2430,7 +2430,7 @@ static void Rmt_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
 /************ (country, institution, centre, degree or course)   *************/
 /*****************************************************************************/
 
-void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod)
+void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[512];
@@ -2481,7 +2481,7 @@ void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod)
 /************ Check if I belong to any of the groups of a game *************/
 /*****************************************************************************/
 
-static bool Rmt_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
+static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
   {
    char Query[512];
 
@@ -2500,7 +2500,7 @@ static bool Rmt_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
 /******************* Get number of questions of a game *********************/
 /*****************************************************************************/
 
-static unsigned Rmt_GetNumQstsGame (long GamCod)
+static unsigned Gam_GetNumQstsGame (long GamCod)
   {
    char Query[128];
 
@@ -2514,16 +2514,16 @@ static unsigned Rmt_GetNumQstsGame (long GamCod)
 /*********** Put a form to edit/create a question in game  *****************/
 /*****************************************************************************/
 
-void Rmt_RequestNewQuestion (void)
+void Gam_RequestNewQuestion (void)
   {
    struct Game Game;
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get other parameters *****/
-   Rmt_GetParamGameOrder ();
+   Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
@@ -2531,14 +2531,14 @@ void Rmt_RequestNewQuestion (void)
    Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /****************** Write parameter with code of question ********************/
 /*****************************************************************************/
 
-static void Rmt_PutParamQstCod (long QstCod)
+static void Gam_PutParamQstCod (long QstCod)
   {
    Par_PutHiddenParamLong ("QstCod",QstCod);
   }
@@ -2547,7 +2547,7 @@ static void Rmt_PutParamQstCod (long QstCod)
 /******************* Get parameter with code of question *********************/
 /*****************************************************************************/
 
-static long Rmt_GetParamQstCod (void)
+static long Gam_GetParamQstCod (void)
   {
    /***** Get code of question *****/
    return Par_GetParToLong ("QstCod");
@@ -2557,7 +2557,7 @@ static long Rmt_GetParamQstCod (void)
 /********************* Remove answers of a game question *******************/
 /*****************************************************************************/
 
-static void Rmt_RemAnswersOfAQuestion (long QstCod)
+static void Gam_RemAnswersOfAQuestion (long QstCod)
   {
    char Query[128];
 
@@ -2571,7 +2571,7 @@ static void Rmt_RemAnswersOfAQuestion (long QstCod)
 /******************** Get next question index in a game **********************/
 /*****************************************************************************/
 
-static unsigned Rmt_GetQstIndFromQstCod (long QstCod)
+static unsigned Gam_GetQstIndFromQstCod (long QstCod)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
@@ -2604,7 +2604,7 @@ static unsigned Rmt_GetQstIndFromQstCod (long QstCod)
 /******************* Get next question index in a game *********************/
 /*****************************************************************************/
 
-static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod)
+static unsigned Gam_GetNextQuestionIndexInGame (long GamCod)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
@@ -2633,7 +2633,7 @@ static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod)
 /************************ List the questions of a game ***********************/
 /*****************************************************************************/
 
-static void Rmt_ListGameQuestions (struct Game *Game)
+static void Gam_ListGameQuestions (struct Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
@@ -2678,14 +2678,14 @@ static void Rmt_ListGameQuestions (struct Game *Game)
 
    /***** Start box *****/
    Gbl.Games.CurrentGamCod = Game->GamCod;
-   Box_StartBox (NULL,Txt_Questions,Game->Status.ICanEdit ? Rmt_PutIconToAddNewQuestions :
+   Box_StartBox (NULL,Txt_Questions,Game->Status.ICanEdit ? Gam_PutIconToAddNewQuestions :
                                                             NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    if (NumQsts)
      {
       /***** Show the table with the questions *****/
-      Rmt_ListOneOrMoreQuestionsForEdition (Game,NumQsts,mysql_res);
+      Gam_ListOneOrMoreQuestionsForEdition (Game,NumQsts,mysql_res);
 
       if (ActionToDoWithQuestions == Tst_SHOW_GAME_TO_ANSWER)
 	{
@@ -2703,7 +2703,7 @@ static void Rmt_ListGameQuestions (struct Game *Game)
        (!NumQsts ||		// This game has no questions
 	Editing))		// I am editing
       /***** Put button to add a new question in this game *****/
-      Rmt_PutButtonToAddNewQuestions ();
+      Gam_PutButtonToAddNewQuestions ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2716,7 +2716,7 @@ static void Rmt_ListGameQuestions (struct Game *Game)
 /********************* List game questions for edition ***********************/
 /*****************************************************************************/
 
-static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
+static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                                                   unsigned NumQsts,
                                                   MYSQL_RES *mysql_res)
   {
@@ -2785,14 +2785,14 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 
       /* Write icon to remove the question */
       Act_FormStart (ActReqRemGamQst);
-      Rmt_PutParamGameCod (Game->GamCod);
-      Rmt_PutParamQstCod (QstCod);
+      Gam_PutParamGameCod (Game->GamCod);
+      Gam_PutParamQstCod (QstCod);
       Ico_PutIconRemove ();
       Act_FormEnd ();
 
       /* Write icon to edit the question */
       Act_FormStart (ActEdiOneTstQst);
-      Rmt_PutParamQstCod (QstCod);
+      Gam_PutParamQstCod (QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
@@ -2850,7 +2850,7 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
    Tbl_EndTable ();
 
    /***** Button to add a new question *****/
-   Rmt_PutButtonToAddNewQuestions ();
+   Gam_PutButtonToAddNewQuestions ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -2860,12 +2860,12 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 /***************** Put icon to add a new questions to game *******************/
 /*****************************************************************************/
 
-static void Rmt_PutIconToAddNewQuestions (void)
+static void Gam_PutIconToAddNewQuestions (void)
   {
    extern const char *Txt_Add_questions;
 
    /***** Put form to create a new question *****/
-   Lay_PutContextualLink (ActAddOneGamQst,NULL,Rmt_PutParams,
+   Lay_PutContextualLink (ActAddOneGamQst,NULL,Gam_PutParams,
                           "plus64x64.png",
                           Txt_Add_questions,NULL,
 		          NULL);
@@ -2875,12 +2875,12 @@ static void Rmt_PutIconToAddNewQuestions (void)
 /***************** Put button to add new questions to game *******************/
 /*****************************************************************************/
 
-static void Rmt_PutButtonToAddNewQuestions (void)
+static void Gam_PutButtonToAddNewQuestions (void)
   {
    extern const char *Txt_Add_questions;
 
    Act_FormStart (ActAddOneGamQst);
-   Rmt_PutParams ();
+   Gam_PutParams ();
    Btn_PutConfirmButton (Txt_Add_questions);
    Act_FormEnd ();
   }
@@ -2889,7 +2889,7 @@ static void Rmt_PutButtonToAddNewQuestions (void)
 /******************** Add selected test questions to game ********************/
 /*****************************************************************************/
 
-void Rmt_AddTstQuestionsToGame (void)
+void Gam_AddTstQuestionsToGame (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_questions;
    struct Game Game;
@@ -2900,19 +2900,19 @@ void Rmt_AddTstQuestionsToGame (void)
    char Query[256];
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get selected questions *****/
    /* Allocate space for selected question codes */
-   Rmt_AllocateListSelectedQuestions ();
+   Gam_AllocateListSelectedQuestions ();
 
    /* Get question codes */
    Par_GetParMultiToText ("QstCods",Gbl.Games.ListQuestions,
-                          Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS);
+                          Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS);
 
    /* Check number of questions */
-   if (Rmt_CountNumQuestionsInList () == 0)	// If no questions selected...
+   if (Gam_CountNumQuestionsInList () == 0)	// If no questions selected...
      {						// ...write warning alert
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
 
@@ -2929,7 +2929,7 @@ void Rmt_AddTstQuestionsToGame (void)
          Lay_ShowErrorAndExit ("Wrong question code.");
 
       /* Get next index */
-      QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
+      QstInd = Gam_GetNextQuestionIndexInGame (Game.GamCod);
 
       /* Insert question in the table of questions */
       sprintf (Query,"INSERT INTO gam_questions"
@@ -2941,20 +2941,21 @@ void Rmt_AddTstQuestionsToGame (void)
      }
 
    /***** Free space for selected question codes *****/
-   Rmt_FreeListsSelectedQuestions ();
+   Gam_FreeListsSelectedQuestions ();
 
-   /***** Show game again *****/
+   /***** Show current game *****/
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /****************** Allocate memory for list of questions ********************/
 /*****************************************************************************/
 
-static void Rmt_AllocateListSelectedQuestions (void)
+static void Gam_AllocateListSelectedQuestions (void)
   {
    if (!Gbl.Games.ListQuestions)
      {
-      if ((Gbl.Games.ListQuestions = (char *) malloc (Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
+      if ((Gbl.Games.ListQuestions = (char *) malloc (Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of questions.");
       Gbl.Games.ListQuestions[0] = '\0';
      }
@@ -2964,7 +2965,7 @@ static void Rmt_AllocateListSelectedQuestions (void)
 /*********** Free memory used by list of selected question codes *************/
 /*****************************************************************************/
 
-static void Rmt_FreeListsSelectedQuestions (void)
+static void Gam_FreeListsSelectedQuestions (void)
   {
    if (Gbl.Games.ListQuestions)
      {
@@ -2977,7 +2978,7 @@ static void Rmt_FreeListsSelectedQuestions (void)
 /**** Count the number of questions in the list of selected question codes ***/
 /*****************************************************************************/
 
-static unsigned Rmt_CountNumQuestionsInList (void)
+static unsigned Gam_CountNumQuestionsInList (void)
   {
    const char *Ptr;
    unsigned NumQuestions = 0;
@@ -3000,23 +3001,23 @@ static unsigned Rmt_CountNumQuestionsInList (void)
 /*** Get number of users who selected this answer and draw proportional bar **/
 /*****************************************************************************/
 
-void Rmt_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd)
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd)
   {
    unsigned NumUsrsThisAnswer;
 
    /***** Get number of users who selected this answer *****/
-   NumUsrsThisAnswer = Rmt_GetNumUsrsWhoAnswered (Game->GamCod,QstCod,AnsInd);
+   NumUsrsThisAnswer = Gam_GetNumUsrsWhoAnswered (Game->GamCod,QstCod,AnsInd);
 
    /***** Show stats of this answer *****/
    if (Game->Status.ICanViewResults)
-      Rmt_DrawBarNumUsrs (NumUsrsThisAnswer,Game->NumUsrs);
+      Gam_DrawBarNumUsrs (NumUsrsThisAnswer,Game->NumUsrs);
   }
 
 /*****************************************************************************/
 /**** Get number of users who selected a given answer of a game question *****/
 /*****************************************************************************/
 
-static unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd)
+static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -3042,9 +3043,9 @@ static unsigned Rmt_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsI
 /***************** Draw a bar with the percentage of answers *****************/
 /*****************************************************************************/
 
-#define Rmt_MAX_BAR_WIDTH 125
+#define Gam_MAX_BAR_WIDTH 125
 
-static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
+static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned BarWidth = 0;
@@ -3061,9 +3062,9 @@ static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
    /***** Draw bar with a with proportional to the number of clicks *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:%upx;\">",
-            Rmt_MAX_BAR_WIDTH + 125);
+            Gam_MAX_BAR_WIDTH + 125);
    if (NumUsrs && MaxUsrs)
-      BarWidth = (unsigned) ((((float) NumUsrs * (float) Rmt_MAX_BAR_WIDTH) /
+      BarWidth = (unsigned) ((((float) NumUsrs * (float) Gam_MAX_BAR_WIDTH) /
 	                       (float) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
@@ -3085,26 +3086,26 @@ static void Rmt_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 /*
-static void Rmt_PutIconToRemoveOneQst (void)
+static void Gam_PutIconToRemoveOneQst (void)
   {
-   Ico_PutContextualIconToRemove (ActReqRemGamQst,Rmt_PutParamsRemoveOneQst);
+   Ico_PutContextualIconToRemove (ActReqRemGamQst,Gam_PutParamsRemoveOneQst);
   }
 */
 /*****************************************************************************/
 /****************** Put parameter to remove one question *********************/
 /*****************************************************************************/
 
-static void Rmt_PutParamsRemoveOneQst (void)
+static void Gam_PutParamsRemoveOneQst (void)
   {
-   Rmt_PutParamGameCod (Gbl.Games.CurrentGamCod);
-   Rmt_PutParamQstCod (Gbl.Games.CurrentQstCod);
+   Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
+   Gam_PutParamQstCod (Gbl.Games.CurrentQstCod);
   }
 
 /*****************************************************************************/
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
-void Rmt_RequestRemoveQst (void)
+void Gam_RequestRemoveQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
@@ -3114,15 +3115,15 @@ void Rmt_RequestRemoveQst (void)
 
    /***** Get parameters from form *****/
    /* Get game code */
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
-   if ((QstCod = Rmt_GetParamQstCod ()) < 0)
+   if ((QstCod = Gam_GetParamQstCod ()) < 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   QstInd = Rmt_GetQstIndFromQstCod (QstCod);
+   QstInd = Gam_GetQstIndFromQstCod (QstCod);
 
    /***** Show question and button to remove question *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
@@ -3130,18 +3131,18 @@ void Rmt_RequestRemoveQst (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGamQst,NULL,NULL,Rmt_PutParamsRemoveOneQst,
+                           ActRemGamQst,NULL,NULL,Gam_PutParamsRemoveOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /****************************** Remove a question ****************************/
 /*****************************************************************************/
 
-void Rmt_RemoveQst (void)
+void Gam_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
    char Query[512];
@@ -3151,19 +3152,19 @@ void Rmt_RemoveQst (void)
 
    /***** Get parameters from form *****/
    /* Get game code */
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
-   if ((QstCod = Rmt_GetParamQstCod ()) < 0)
+   if ((QstCod = Gam_GetParamQstCod ()) < 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   QstInd = Rmt_GetQstIndFromQstCod (QstCod);
+   QstInd = Gam_GetQstIndFromQstCod (QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Rmt_RemAnswersOfAQuestion (QstCod);
+   Gam_RemAnswersOfAQuestion (QstCod);
 
    /* Remove the question itself */
    sprintf (Query,"DELETE FROM gam_questions WHERE QstCod=%ld",
@@ -3183,25 +3184,25 @@ void Rmt_RemoveQst (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /************************ Receive answers of a game ************************/
 /*****************************************************************************/
 
-void Rmt_ReceiveGameAnswers (void)
+void Gam_ReceiveGameAnswers (void)
   {
    extern const char *Txt_You_already_played_this_game_before;
    extern const char *Txt_Thanks_for_playing_the_game;
    struct Game Game;
 
    /***** Get game code *****/
-   if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
-   Rmt_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Game);
 
    /***** Check if I have no answered this game formerly *****/
    if (Game.Status.IHaveAnswered)
@@ -3209,19 +3210,19 @@ void Rmt_ReceiveGameAnswers (void)
    else
      {
       /***** Receive and store user's answers *****/
-      Rmt_ReceiveAndStoreUserAnswersToAGame (Game.GamCod);
+      Gam_ReceiveAndStoreUserAnswersToAGame (Game.GamCod);
       Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_playing_the_game);
      }
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /**************** Get and store user's answers to a game *******************/
 /*****************************************************************************/
 
-static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod)
+static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -3259,14 +3260,14 @@ static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod)
          sprintf (ParamName,"Ans%010u",(unsigned) QstCod);
          // Lay_ShowAlert (Lay_INFO,ParamName);
          Par_GetParMultiToText (ParamName,StrAnswersIndexes,
-                                Rmt_MAX_ANSWERS_PER_QUESTION * (10 + 1));
+                                Gam_MAX_ANSWERS_PER_QUESTION * (10 + 1));
          Ptr = StrAnswersIndexes;
          while (*Ptr)
            {
             Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
             if (sscanf (UnsignedStr,"%u",&AnsInd) == 1)
                // Parameter exists, so user has marked this answer, so store it in database
-               Rmt_IncreaseAnswerInDB (QstCod,AnsInd);
+               Gam_IncreaseAnswerInDB (QstCod,AnsInd);
            }
         }
      }
@@ -3277,14 +3278,14 @@ static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Register that you have answered this game *****/
-   Rmt_RegisterIHaveAnsweredGame (GamCod);
+   Gam_RegisterIHaveAnsweredGame (GamCod);
   }
 
 /*****************************************************************************/
 /************ Increase number of users who have marked one answer ************/
 /*****************************************************************************/
 
-static void Rmt_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
+static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
    char Query[256];
 
@@ -3300,7 +3301,7 @@ static void Rmt_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 /******************* Register that I have answered a game ********************/
 /*****************************************************************************/
 
-static void Rmt_RegisterIHaveAnsweredGame (long GamCod)
+static void Gam_RegisterIHaveAnsweredGame (long GamCod)
   {
    char Query[256];
 
@@ -3316,7 +3317,7 @@ static void Rmt_RegisterIHaveAnsweredGame (long GamCod)
 /******************** Check if I have answered a game ************************/
 /*****************************************************************************/
 
-static bool Rmt_CheckIfIHaveAnsweredGame (long GamCod)
+static bool Gam_CheckIfIHaveAnsweredGame (long GamCod)
   {
    char Query[256];
 
@@ -3331,7 +3332,7 @@ static bool Rmt_CheckIfIHaveAnsweredGame (long GamCod)
 /************** Get number of users who have answered a game *****************/
 /*****************************************************************************/
 
-static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
+static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
   {
    char Query[128];
 
@@ -3347,7 +3348,7 @@ static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
 // Returns the number of courses with games for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Rmt_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
+unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
@@ -3436,7 +3437,7 @@ unsigned Rmt_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
 // Returns the number of games for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Rmt_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
+unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
@@ -3533,7 +3534,7 @@ unsigned Rmt_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
 /************* Get average number of questions per course game ***************/
 /*****************************************************************************/
 
-float Rmt_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
+float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];

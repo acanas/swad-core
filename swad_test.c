@@ -1367,7 +1367,7 @@ void Tst_ShowFormAskSelectTstsForGame (long GamCod)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Act_FormStart (ActGamLstTstQst);
-      Rmt_PutParamGameCod (GamCod);
+      Gam_PutParamGameCod (GamCod);
 
       Tbl_StartTable (2);
 
@@ -2439,7 +2439,7 @@ void Tst_ListQuestionsToSelect (void)
    unsigned long NumRows;
 
    /***** Get game code *****/
-   if ((GamCod = Rmt_GetParamGameCod ()) == -1L)
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get parameters, query the database and list the questions *****/
@@ -3122,7 +3122,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
 
    /***** Start form *****/
    Act_FormStart (ActAddTstQstToGam);
-   Rmt_PutParamGameCod (GamCod);
+   Gam_PutParamGameCod (GamCod);
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
@@ -4127,7 +4127,7 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,unsigned NumQst,long Q
       fprintf (Gbl.F.Out,"</td>");
 
       /* Get number of users who selected this answer and draw proportional bar */
-      Rmt_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
+      Gam_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
       fprintf (Gbl.F.Out,"</tr>");
      }
 

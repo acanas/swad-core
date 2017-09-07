@@ -1,7 +1,7 @@
-// swad_remote_control.h: remote control
+// swad_game.h: games using remote control
 
-#ifndef _SWAD_RMT
-#define _SWAD_RMT
+#ifndef _SWAD_GAM
+#define _SWAD_GAM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,19 +27,22 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_notification.h"
+#include "swad_scope.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Rmt_MAX_CHARS_SURVEY_TITLE	(128 - 1)	// 127
-#define Rmt_MAX_BYTES_SURVEY_TITLE	((Rmt_MAX_CHARS_SURVEY_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Gam_MAX_CHARS_SURVEY_TITLE	(128 - 1)	// 127
+#define Gam_MAX_BYTES_SURVEY_TITLE	((Gam_MAX_CHARS_SURVEY_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Rmt_NUM_DATES 2
+#define Gam_NUM_DATES 2
 typedef enum
   {
-   Rmt_START_TIME = 0,
-   Rmt_END_TIME   = 1,
-  } Rmt_StartOrEndTime_t;
+   Gam_START_TIME = 0,
+   Gam_END_TIME   = 1,
+  } Gam_StartOrEndTime_t;
 
 struct Game
   {
@@ -48,8 +51,8 @@ struct Game
    long Cod;		// Country, institution, centre, degree or course code
    unsigned Roles;	// Example: if game can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
-   char Title[Rmt_MAX_BYTES_SURVEY_TITLE + 1];
-   time_t TimeUTC[Rmt_NUM_DATES];
+   char Title[Gam_MAX_BYTES_SURVEY_TITLE + 1];
+   time_t TimeUTC[Gam_NUM_DATES];
    unsigned NumQsts;	// Number of questions in the game
    unsigned NumUsrs;	// Number of distinct users who have already answered the game
    struct
@@ -65,64 +68,64 @@ struct Game
      } Status;
   };
 
-#define Rmt_NUM_ORDERS 2
+#define Gam_NUM_ORDERS 2
 typedef enum
   {
-   Rmt_ORDER_BY_START_DATE = 0,
-   Rmt_ORDER_BY_END_DATE   = 1,
-  } Rmt_Order_t;
-#define Rmt_ORDER_DEFAULT Rmt_ORDER_BY_START_DATE
+   Gam_ORDER_BY_START_DATE = 0,
+   Gam_ORDER_BY_END_DATE   = 1,
+  } Gam_Order_t;
+#define Gam_ORDER_DEFAULT Gam_ORDER_BY_START_DATE
 
-#define Rmt_NUM_ANS_TYPES	2
+#define Gam_NUM_ANS_TYPES	2
 typedef enum
   {
-   Rmt_ANS_UNIQUE_CHOICE   = 0,
-   Rmt_ANS_MULTIPLE_CHOICE = 1,
-  } Rmt_AnswerType_t;
-#define Rmt_ANSWER_TYPE_DEFAULT Rmt_ANS_UNIQUE_CHOICE
+   Gam_ANS_UNIQUE_CHOICE   = 0,
+   Gam_ANS_MULTIPLE_CHOICE = 1,
+  } Gam_AnswerType_t;
+#define Gam_ANSWER_TYPE_DEFAULT Gam_ANS_UNIQUE_CHOICE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Rmt_SeeAllGames (void);
-void Rmt_SeeOneGame (void);
-void Rmt_PutHiddenParamGameOrder (void);
-void Rmt_RequestCreatOrEditGame (void);
-void Rmt_GetListGames (void);
-void Rmt_GetDataOfGameByCod (struct Game *Gam);
-void Rmt_GetDataOfGameByFolder (struct Game *Gam);
-void Rmt_FreeListGames (void);
-void Rmt_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+void Gam_SeeAllGames (void);
+void Gam_SeeOneGame (void);
+void Gam_PutHiddenParamGameOrder (void);
+void Gam_RequestCreatOrEditGame (void);
+void Gam_GetListGames (void);
+void Gam_GetDataOfGameByCod (struct Game *Gam);
+void Gam_GetDataOfGameByFolder (struct Game *Gam);
+void Gam_FreeListGames (void);
+void Gam_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                        char **ContentStr,
                        long GamCod,bool GetContent);
-void Rmt_PutParamGameCod (long GamCod);
-long Rmt_GetParamGameCod (void);
-void Rmt_AskRemGame (void);
-void Rmt_RemoveGame (void);
-void Rmt_AskResetGame (void);
-void Rmt_ResetGame (void);
-void Rmt_HideGame (void);
-void Rmt_UnhideGame (void);
-void Rmt_RecFormGame (void);
-bool Rmt_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod);
-void Rmt_RemoveGroup (long GrpCod);
-void Rmt_RemoveGroupsOfType (long GrpTypCod);
-void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod);
+void Gam_PutParamGameCod (long GamCod);
+long Gam_GetParamGameCod (void);
+void Gam_AskRemGame (void);
+void Gam_RemoveGame (void);
+void Gam_AskResetGame (void);
+void Gam_ResetGame (void);
+void Gam_HideGame (void);
+void Gam_UnhideGame (void);
+void Gam_RecFormGame (void);
+bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod);
+void Gam_RemoveGroup (long GrpCod);
+void Gam_RemoveGroupsOfType (long GrpTypCod);
+void Gam_RemoveGames (Sco_Scope_t Scope,long Cod);
 
-void Rmt_RequestNewQuestion (void);
+void Gam_RequestNewQuestion (void);
 
-void Rmt_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd);
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd);
 
-void Rmt_AddTstQuestionsToGame (void);
+void Gam_AddTstQuestionsToGame (void);
 
-void Rmt_RequestRemoveQst (void);
-void Rmt_RemoveQst (void);
+void Gam_RequestRemoveQst (void);
+void Gam_RemoveQst (void);
 
-void Rmt_ReceiveGameAnswers (void);
+void Gam_ReceiveGameAnswers (void);
 
-unsigned Rmt_GetNumCoursesWithCrsGames (Sco_Scope_t Scope);
-unsigned Rmt_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif);
-float Rmt_GetNumQstsPerCrsGame (Sco_Scope_t Scope);
+unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope);
+unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif);
+float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope);
 
 #endif

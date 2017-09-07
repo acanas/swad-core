@@ -35,10 +35,10 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_department.o swad_duplicate.o \
        swad_enrolment.o swad_exam.o \
        swad_file.o swad_file_browser.o swad_follow.o swad_forum.o \
-       swad_global.o swad_group.o \
+       swad_game.o swad_global.o swad_group.o \
        swad_help.o swad_hierarchy.o swad_holiday.o \
-       swad_icon.o swad_ID.o swad_image.o swad_indicator.o \
-       swad_info.o swad_institution.o \
+       swad_icon.o swad_ID.o swad_image.o swad_indicator.o swad_info.o \
+       swad_institution.o \
        swad_language.o swad_layout.o swad_link.o swad_logo.o \
        swad_mail.o swad_main.o swad_mark.o swad_menu.o swad_message.o \
        swad_MFU.o \
@@ -47,10 +47,11 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_place.o swad_plugin.o swad_preference.o swad_privacy.o \
        swad_profile.o \
        swad_QR.o \
-       swad_record.o swad_remote_control.o swad_report.o swad_role.o swad_RSS.o \
+       swad_record.o swad_report.o swad_role.o swad_RSS.o \
        swad_scope.o swad_search.o swad_session.o swad_setup.o swad_social.o \
        swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
-       swad_tab.o swad_table.o swad_test.o swad_test_import.o swad_theme.o swad_timetable.o \
+       swad_tab.o swad_table.o swad_test.o swad_test_import.o swad_theme.o \
+       swad_timetable.o \
        swad_user.o \
        swad_web_service.o \
        swad_xml.o \

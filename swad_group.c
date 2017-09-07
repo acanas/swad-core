@@ -32,11 +32,11 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_remote_control.h"
 #include "swad_table.h"
 
 /*****************************************************************************/
@@ -1698,7 +1698,7 @@ void Grp_ListGrpsToEditAsgAttSvyGam (struct GroupType *GrpTyp,long Cod,
                AssociatedToGrp = Svy_CheckIfSvyIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
             case Grp_GAME:
-               AssociatedToGrp = Rmt_CheckIfGamIsAssociatedToGrp (Cod,Grp->GrpCod);
+               AssociatedToGrp = Gam_CheckIfGamIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
            }
          if (AssociatedToGrp)
