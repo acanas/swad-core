@@ -425,8 +425,8 @@ Assessment:
 	288. ActSeeAss			Show the assessment system
 	289. ActSeeAsg			Show assignments
 	290. ActReqTst			Request a test of self-assesment
-        291. ActSeeAllSvy		List all surveys in pages
         NEW. ActSeeAllGam		Remote control
+        291. ActSeeAllSvy		List all surveys in pages
 	292. ActSeeAllExaAnn		Show the exam announcements
 
 	293. ActEdiAss			Edit the assessment system
@@ -1897,8 +1897,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"infogrades64x64.gif"	},
    /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
    /* ActReqTst		*/{ 103, 2,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
-   /* ActSeeAllSvy	*/{ 966, 3,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActSeeAllGam	*/{1649, 4,TabAss,ActSeeAllGam		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_SeeAllGames		,"remote64x64.png"	},
+   /* ActSeeAllGam	*/{1649, 3,TabAss,ActSeeAllGam		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_SeeAllGames		,"remote64x64.png"	},
+   /* ActSeeAllSvy	*/{ 966, 4,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
    /* ActSeeAllExaAnn	*/{  85, 5,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
 
    // Actions not in menu:
@@ -1950,23 +1950,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeUsrTstRes	*/{1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsTestResults	,NULL},
    /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
 
-   /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
-   /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
-   /* ActFrmNewSvy	*/{ 973,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
-   /* ActEdiOneSvy	*/{ 974,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
-   /* ActNewSvy		*/{ 968,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
-   /* ActChgSvy		*/{ 975,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
-   /* ActReqRemSvy	*/{ 976,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskRemSurvey		,NULL},
-   /* ActRemSvy		*/{ 969,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveSurvey		,NULL},
-   /* ActReqRstSvy	*/{ 984,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskResetSurvey		,NULL},
-   /* ActRstSvy		*/{ 985,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ResetSurvey		,NULL},
-   /* ActHidSvy		*/{ 977,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_HideSurvey			,NULL},
-   /* ActShoSvy		*/{ 978,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_UnhideSurvey		,NULL},
-   /* ActEdiOneSvyQst	*/{ 979,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestEditQuestion	,NULL},
-   /* ActRcvSvyQst	*/{ 980,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveQst			,NULL},
-   /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
-   /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
-
    /* ActSeeOneGam	*/{1650,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_SeeOneGame			,NULL},
    /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_ReceiveGameAnswers		,NULL},
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -1984,6 +1967,23 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAddTstQstToGam	*/{1667,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_AddTstQuestionsToGame	,NULL},
    /* ActReqRemGamQst	*/{1664,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RequestRemoveQst		,NULL},
    /* ActRemGamQst	*/{1665,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RemoveQst			,NULL},
+
+   /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
+   /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
+   /* ActFrmNewSvy	*/{ 973,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
+   /* ActEdiOneSvy	*/{ 974,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
+   /* ActNewSvy		*/{ 968,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
+   /* ActChgSvy		*/{ 975,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
+   /* ActReqRemSvy	*/{ 976,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskRemSurvey		,NULL},
+   /* ActRemSvy		*/{ 969,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveSurvey		,NULL},
+   /* ActReqRstSvy	*/{ 984,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskResetSurvey		,NULL},
+   /* ActRstSvy		*/{ 985,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ResetSurvey		,NULL},
+   /* ActHidSvy		*/{ 977,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_HideSurvey			,NULL},
+   /* ActShoSvy		*/{ 978,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_UnhideSurvey		,NULL},
+   /* ActEdiOneSvyQst	*/{ 979,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestEditQuestion	,NULL},
+   /* ActRcvSvyQst	*/{ 980,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveQst			,NULL},
+   /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
+   /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
 
    /* ActSeeOneExaAnn	*/{1572,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
    /* ActSeeDatExaAnn	*/{1571,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetDateToHighlight		,Exa_ListExamAnnouncementsSee	,NULL},

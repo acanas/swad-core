@@ -19233,7 +19233,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  3: ActSeeAllSvy
+	//  3: ActSeeAllGam
+#if   L==1
+	"Jocs"
+#elif L==2
+	"Spiele"
+#elif L==3
+	"Games"
+#elif L==4
+	"Juegos"
+#elif L==5
+	"Jeux"
+#elif L==6
+	"Juegos"	// Okoteve traducción
+#elif L==7
+	"Giochi"
+#elif L==8
+	"Gry"
+#elif L==9
+	"Jogos"
+#endif
+	,
+	//  4: ActSeeAllSvy
 #if   L==1
 	"Enquestes"
 #elif L==2
@@ -19252,27 +19273,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ankiety"
 #elif L==9
 	"Inqu&eacute;ritos"
-#endif
-	,
-	//  4: ActSeeAllGam
-#if   L==1
-	"Comandament"
-#elif L==2
-	"Fernsteuerung"
-#elif L==3
-	"Remote"
-#elif L==4
-	"Mando"
-#elif L==5
-	"T&eacute;l&eacute;commande"
-#elif L==6
-	"Mando"	// Okoteve traducción
-#elif L==7
-	"Telecomando"
-#elif L==8
-	"Pilot"
-#elif L==9
-	"Remoto"
 #endif
 	,
 	//  5: ActSeeAllExaAnn
@@ -21178,7 +21178,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  3: ActSeeAllSvy
+	//  3: ActSeeAllGam
+#if   L==1
+	"Jocs (comandament a dist&agrave;ncia)"
+#elif L==2
+	"Spiele (Fernbedienung)"
+#elif L==3
+	"Games (remote control)"
+#elif L==4
+	"Juegos (mando a distancia)"
+#elif L==5
+	"Jeux (t&eacute;l&eacute;commande)"
+#elif L==6
+	"Juegos (mando a distancia)"	// Okoteve traducción
+#elif L==7
+	"Giochi (telecomando)"
+#elif L==8
+	"Gry (pilot zdalnego sterowania)"
+#elif L==9
+	"Jogos (controlo remoto)"
+#endif
+	,
+	//  4: ActSeeAllSvy
 #if   L==1
 	"Enquestes an&ograve;nimes"
 #elif L==2
@@ -21197,27 +21218,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ankiety"
 #elif L==9
 	"Inqu&eacute;ritos"
-#endif
-	,
-	//  4: ActSeeAllGam
-#if   L==1
-	"Comandament"
-#elif L==2
-	"Fernsteuerung"
-#elif L==3
-	"Remote"
-#elif L==4
-	"Mando"
-#elif L==5
-	"T&eacute;l&eacute;commande"
-#elif L==6
-	"Mando"	// Okoteve traducción
-#elif L==7
-	"Telecomando"
-#elif L==8
-	"Pilot"
-#elif L==9
-	"Remoto"
 #endif
 	,
 	//  5: ActSeeAllExaAnn
