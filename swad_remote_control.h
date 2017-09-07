@@ -110,8 +110,7 @@ void Rmt_RemoveGroup (long GrpCod);
 void Rmt_RemoveGroupsOfType (long GrpTypCod);
 void Rmt_RemoveGames (Sco_Scope_t Scope,long Cod);
 
-void Rmt_RequestEditQuestion (void);
-// void Rmt_ReceiveQst (void);
+void Rmt_RequestNewQuestion (void);
 
 void Rmt_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd);
 

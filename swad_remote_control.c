@@ -66,19 +66,6 @@ const char *Rmt_StrAnswerTypesDB[Rmt_NUM_ANS_TYPES] =
 
 #define Rmt_MAX_ANSWERS_PER_QUESTION	10
 
-struct GameQuestion
-  {
-   long QstCod;
-   unsigned QstInd;
-   Rmt_AnswerType_t AnswerType;
-   struct
-     {
-      char *Text;
-     } AnsChoice[Rmt_MAX_ANSWERS_PER_QUESTION];
-   bool AllAnsTypes;
-   char ListAnsTypes[Rmt_MAX_BYTES_LIST_ANSWER_TYPES + 1];
-  };
-
 #define Rmt_MAX_SELECTED_QUESTIONS		1000
 #define Rmt_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Rmt_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
 
@@ -94,7 +81,7 @@ struct GameQuestion
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Rmt_ListAllGames (struct GameQuestion *GameQst);
+static void Rmt_ListAllGames (void);
 static bool Rmt_CheckIfICanCreateGame (void);
 static void Rmt_PutIconsListGames (void);
 static void Rmt_PutIconToCreateNewGame (void);
@@ -102,8 +89,7 @@ static void Rmt_PutButtonToCreateNewGame (void);
 static void Rmt_PutParamsToCreateNewGame (void);
 static void Rmt_PutFormToSelectWhichGroupsToShow (void);
 static void Rmt_ParamsWhichGroupsToShow (void);
-static void Rmt_ShowOneGame (long GamCod,struct GameQuestion *GameQst,
-                               bool ShowOnlyThisGameComplete);
+static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete);
 static void Rmt_WriteAuthor (struct Game *Game);
 static void Rmt_WriteStatus (struct Game *Game);
 static void Rmt_GetParamGameOrder (void);
@@ -132,16 +118,14 @@ static void Rmt_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game);
 static bool Rmt_CheckIfICanDoThisGameBasedOnGrps (long GamCod);
 
 static unsigned Rmt_GetNumQstsGame (long GamCod);
-static void Rmt_InitQst (struct GameQuestion *GameQst);
 static void Rmt_PutParamQstCod (long QstCod);
 static long Rmt_GetParamQstCod (void);
 static void Rmt_RemAnswersOfAQuestion (long QstCod);
 
 static unsigned Rmt_GetQstIndFromQstCod (long QstCod);
 static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod);
-static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQst);
+static void Rmt_ListGameQuestions (struct Game *Game);
 static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
-                                                  struct GameQuestion *GameQst,
                                                   unsigned NumQsts,
                                                   MYSQL_RES *mysql_res);
 static void Rmt_PutIconToAddNewQuestions (void);
@@ -169,22 +153,20 @@ static unsigned Rmt_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 
 void Rmt_SeeAllGames (void)
   {
-   struct GameQuestion GameQst;
-
    /***** Get parameters *****/
    Rmt_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show all the games *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
 /*************************** Show all the games ****************************/
 /*****************************************************************************/
 
-static void Rmt_ListAllGames (struct GameQuestion *GameQst)
+static void Rmt_ListAllGames (void)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Games;
@@ -266,7 +248,7 @@ static void Rmt_ListAllGames (struct GameQuestion *GameQst)
       for (NumGame = Pagination.FirstItemVisible;
 	   NumGame <= Pagination.LastItemVisible;
 	   NumGame++)
-	 Rmt_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],GameQst,false);
+	 Rmt_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],false);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -393,10 +375,6 @@ static void Rmt_ParamsWhichGroupsToShow (void)
 void Rmt_SeeOneGame (void)
   {
    struct Game Game;
-   struct GameQuestion GameQst;
-
-   /***** Initialize question to zero *****/
-   Rmt_InitQst (&GameQst);
 
    /***** Get parameters *****/
    Rmt_GetParamGameOrder ();
@@ -408,15 +386,14 @@ void Rmt_SeeOneGame (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
 /****************************** Show one game ******************************/
 /*****************************************************************************/
 
-static void Rmt_ShowOneGame (long GamCod,struct GameQuestion *GameQst,
-                               bool ShowOnlyThisGameComplete)
+static void Rmt_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
@@ -660,7 +637,7 @@ static void Rmt_ShowOneGame (long GamCod,struct GameQuestion *GameQst,
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"5\">");
-      Rmt_ListGameQuestions (&Game,GameQst);
+      Rmt_ListGameQuestions (&Game);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -1485,7 +1462,6 @@ void Rmt_AskRemGame (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_game_X;
    extern const char *Txt_Remove_game;
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get parameters *****/
    Rmt_GetParamGameOrder ();
@@ -1510,7 +1486,7 @@ void Rmt_AskRemGame (void)
 			   Btn_REMOVE_BUTTON,Txt_Remove_game);
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -1522,7 +1498,6 @@ void Rmt_RemoveGame (void)
    extern const char *Txt_Game_X_removed;
    char Query[512];
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get game code *****/
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
@@ -1561,7 +1536,7 @@ void Rmt_RemoveGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -1572,7 +1547,6 @@ void Rmt_AskResetGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_reset_the_game_X;
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get parameters *****/
    Rmt_GetParamGameOrder ();
@@ -1598,7 +1572,7 @@ void Rmt_AskResetGame (void)
    Rmt_PutButtonToResetGame ();
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -1624,7 +1598,6 @@ void Rmt_ResetGame (void)
    extern const char *Txt_Game_X_reset;
    char Query[512];
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get game code *****/
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
@@ -1653,7 +1626,7 @@ void Rmt_ResetGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -1665,7 +1638,6 @@ void Rmt_HideGame (void)
    extern const char *Txt_Game_X_is_now_hidden;
    char Query[128];
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get game code *****/
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
@@ -1687,7 +1659,7 @@ void Rmt_HideGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -1699,7 +1671,6 @@ void Rmt_UnhideGame (void)
    extern const char *Txt_Game_X_is_now_visible;
    char Query[128];
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get game code *****/
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
@@ -1721,7 +1692,7 @@ void Rmt_UnhideGame (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -1760,7 +1731,6 @@ void Rmt_RequestCreatOrEditGame (void)
    extern const char *Txt_Create_game;
    extern const char *Txt_Save;
    struct Game Game;
-   struct GameQuestion GameQst;
    bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1899,7 +1869,7 @@ void Rmt_RequestCreatOrEditGame (void)
 
    /***** Show questions of the game ready to be edited *****/
    if (!ItsANewGame)
-      Rmt_ListGameQuestions (&Game,&GameQst);
+      Rmt_ListGameQuestions (&Game);
   }
 
 /*****************************************************************************/
@@ -2062,7 +2032,6 @@ void Rmt_RecFormGame (void)
    extern const char *Txt_You_must_specify_the_title_of_the_game;
    struct Game OldGame;
    struct Game NewGame;
-   struct GameQuestion GameQst;
    bool ItsANewGame;
    bool NewGameIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
@@ -2193,7 +2162,7 @@ void Rmt_RecFormGame (void)
          Rmt_UpdateNumUsrsNotifiedByEMailAboutGame (NewGame.GamCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Show games again *****/
-   Rmt_ListAllGames (&GameQst);
+   Rmt_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -2545,20 +2514,13 @@ static unsigned Rmt_GetNumQstsGame (long GamCod)
 /*********** Put a form to edit/create a question in game  *****************/
 /*****************************************************************************/
 
-void Rmt_RequestEditQuestion (void)
+void Rmt_RequestNewQuestion (void)
   {
    struct Game Game;
-   struct GameQuestion GameQst;
-
-   /***** Initialize question to zero *****/
-   Rmt_InitQst (&GameQst);
 
    /***** Get game code *****/
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
-
-   /* Get the question code */
-   GameQst.QstCod = Rmt_GetParamQstCod ();
 
    /***** Get other parameters *****/
    Rmt_GetParamGameOrder ();
@@ -2569,24 +2531,7 @@ void Rmt_RequestEditQuestion (void)
    Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
-  }
-
-/*****************************************************************************/
-/********************* Initialize a new question to zero *********************/
-/*****************************************************************************/
-
-static void Rmt_InitQst (struct GameQuestion *GameQst)
-  {
-   unsigned NumAns;
-
-   GameQst->QstCod = -1L;
-   GameQst->QstInd = 0;
-   GameQst->AnswerType = Rmt_ANS_UNIQUE_CHOICE;
-   for (NumAns = 0;
-	NumAns < Rmt_MAX_ANSWERS_PER_QUESTION;
-	NumAns++)
-      GameQst->AnsChoice[NumAns].Text = NULL;
+   Rmt_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
@@ -2688,7 +2633,7 @@ static unsigned Rmt_GetNextQuestionIndexInGame (long GamCod)
 /************************ List the questions of a game ***********************/
 /*****************************************************************************/
 
-static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQst)
+static void Rmt_ListGameQuestions (struct Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
@@ -2698,7 +2643,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
-	           Gbl.Action.Act == ActEdiOneGamQst);
+	           Gbl.Action.Act == ActAddOneGamQst);
    Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions;
 
    /***** How to show the questions ******/
@@ -2740,8 +2685,7 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
    if (NumQsts)
      {
       /***** Show the table with the questions *****/
-      Rmt_ListOneOrMoreQuestionsForEdition (Game,GameQst,
-                                            NumQsts,mysql_res);
+      Rmt_ListOneOrMoreQuestionsForEdition (Game,NumQsts,mysql_res);
 
       if (ActionToDoWithQuestions == Tst_SHOW_GAME_TO_ANSWER)
 	{
@@ -2773,7 +2717,6 @@ static void Rmt_ListGameQuestions (struct Game *Game,struct GameQuestion *GameQs
 /*****************************************************************************/
 
 static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
-                                                  struct GameQuestion *GameQst,
                                                   unsigned NumQsts,
                                                   MYSQL_RES *mysql_res)
   {
@@ -2787,6 +2730,7 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
    unsigned NumQst;
    MYSQL_ROW row;
    unsigned UniqueId;
+   long QstCod;
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
@@ -2831,9 +2775,9 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Tst_QstConstructor ();
 
       /* row[0] holds the code of the question */
-      if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
-      GameQst->QstCod = Gbl.Test.QstCod;
+      Gbl.Test.QstCod = QstCod;
 
       /***** Icons *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2842,13 +2786,13 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       /* Write icon to remove the question */
       Act_FormStart (ActReqRemGamQst);
       Rmt_PutParamGameCod (Game->GamCod);
-      Rmt_PutParamQstCod (GameQst->QstCod);
+      Rmt_PutParamQstCod (QstCod);
       Ico_PutIconRemove ();
       Act_FormEnd ();
 
       /* Write icon to edit the question */
       Act_FormStart (ActEdiOneTstQst);
-      Rmt_PutParamQstCod (GameQst->QstCod);
+      Rmt_PutParamQstCod (QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
@@ -2893,7 +2837,7 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersGameResult (Game,GameQst->QstInd,GameQst->QstCod);
+      Tst_WriteAnswersGameResult (Game,NumQst,QstCod);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -2906,7 +2850,7 @@ static void Rmt_ListOneOrMoreQuestionsForEdition (struct Game *Game,
    Tbl_EndTable ();
 
    /***** Button to add a new question *****/
-   Tst_PutButtonToAddQuestion ();
+   Rmt_PutButtonToAddNewQuestions ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -2921,7 +2865,7 @@ static void Rmt_PutIconToAddNewQuestions (void)
    extern const char *Txt_Add_questions;
 
    /***** Put form to create a new question *****/
-   Lay_PutContextualLink (ActEdiOneGamQst,NULL,Rmt_PutParams,
+   Lay_PutContextualLink (ActAddOneGamQst,NULL,Rmt_PutParams,
                           "plus64x64.png",
                           Txt_Add_questions,NULL,
 		          NULL);
@@ -2935,7 +2879,7 @@ static void Rmt_PutButtonToAddNewQuestions (void)
   {
    extern const char *Txt_Add_questions;
 
-   Act_FormStart (ActEdiOneGamQst);
+   Act_FormStart (ActAddOneGamQst);
    Rmt_PutParams ();
    Btn_PutConfirmButton (Txt_Add_questions);
    Act_FormEnd ();
@@ -2951,7 +2895,8 @@ void Rmt_AddTstQuestionsToGame (void)
    struct Game Game;
    const char *Ptr;
    char LongStr[1 + 10 + 1];
-   struct GameQuestion GameQst;
+   long QstCod;
+   unsigned QstInd;
    char Query[256];
 
    /***** Get game code *****/
@@ -2980,23 +2925,25 @@ void Rmt_AddTstQuestionsToGame (void)
      {
       /* Get next code */
       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
-      if (sscanf (LongStr,"%ld",&GameQst.QstCod) != 1)
+      if (sscanf (LongStr,"%ld",&QstCod) != 1)
          Lay_ShowErrorAndExit ("Wrong question code.");
 
       /* Get next index */
-      GameQst.QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
+      QstInd = Rmt_GetNextQuestionIndexInGame (Game.GamCod);
 
       /* Insert question in the table of questions */
       sprintf (Query,"INSERT INTO gam_questions"
 		     " (GamCod,QstCod,QstInd)"
 		     " VALUES"
 		     " (%ld,%ld,%u)",
-	       Game.GamCod,GameQst.QstCod,GameQst.QstInd);
+	       Game.GamCod,QstCod,QstInd);
       DB_QueryINSERT (Query,"can not create question");
      }
 
    /***** Free space for selected question codes *****/
    Rmt_FreeListsSelectedQuestions ();
+
+   /***** Show game again *****/
   }
 
 /*****************************************************************************/
@@ -3162,7 +3109,8 @@ void Rmt_RequestRemoveQst (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
    struct Game Game;
-   struct GameQuestion GameQst;
+   long QstCod;
+   unsigned QstInd;
 
    /***** Get parameters from form *****/
    /* Get game code */
@@ -3170,23 +3118,23 @@ void Rmt_RequestRemoveQst (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
-   if ((GameQst.QstCod = Rmt_GetParamQstCod ()) < 0)
+   if ((QstCod = Rmt_GetParamQstCod ()) < 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   GameQst.QstInd = Rmt_GetQstIndFromQstCod (GameQst.QstCod);
+   QstInd = Rmt_GetQstIndFromQstCod (QstCod);
 
    /***** Show question and button to remove question *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   Gbl.Games.CurrentQstCod = GameQst.QstCod;
+   Gbl.Games.CurrentQstCod = QstCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
-	    (unsigned long) (GameQst.QstInd + 1));
+	    (unsigned long) (QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGamQst,NULL,NULL,Rmt_PutParamsRemoveOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
@@ -3198,7 +3146,8 @@ void Rmt_RemoveQst (void)
    extern const char *Txt_Question_removed;
    char Query[512];
    struct Game Game;
-   struct GameQuestion GameQst;
+   long QstCod;
+   unsigned QstInd;
 
    /***** Get parameters from form *****/
    /* Get game code */
@@ -3206,19 +3155,19 @@ void Rmt_RemoveQst (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get question code */
-   if ((GameQst.QstCod = Rmt_GetParamQstCod ()) < 0)
+   if ((QstCod = Rmt_GetParamQstCod ()) < 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   GameQst.QstInd = Rmt_GetQstIndFromQstCod (GameQst.QstCod);
+   QstInd = Rmt_GetQstIndFromQstCod (QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Rmt_RemAnswersOfAQuestion (GameQst.QstCod);
+   Rmt_RemAnswersOfAQuestion (QstCod);
 
    /* Remove the question itself */
    sprintf (Query,"DELETE FROM gam_questions WHERE QstCod=%ld",
-            GameQst.QstCod);
+            QstCod);
    DB_QueryDELETE (Query,"can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
@@ -3226,7 +3175,7 @@ void Rmt_RemoveQst (void)
    /* Change index of questions greater than this */
    sprintf (Query,"UPDATE gam_questions SET QstInd=QstInd-1"
                   " WHERE GamCod=%ld AND QstInd>%u",
-            Game.GamCod,GameQst.QstInd);
+            Game.GamCod,QstInd);
    DB_QueryUPDATE (Query,"can not update indexes of questions");
 
    /***** Write message *****/
@@ -3234,7 +3183,7 @@ void Rmt_RemoveQst (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
@@ -3246,7 +3195,6 @@ void Rmt_ReceiveGameAnswers (void)
    extern const char *Txt_You_already_played_this_game_before;
    extern const char *Txt_Thanks_for_playing_the_game;
    struct Game Game;
-   struct GameQuestion GameQst;
 
    /***** Get game code *****/
    if ((Game.GamCod = Rmt_GetParamGameCod ()) == -1L)
@@ -3266,7 +3214,7 @@ void Rmt_ReceiveGameAnswers (void)
      }
 
    /***** Show current game *****/
-   Rmt_ShowOneGame (Game.GamCod,&GameQst,true);
+   Rmt_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
@@ -3282,7 +3230,7 @@ static void Rmt_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    unsigned NumQsts;
    long QstCod;
    char ParamName[3 + 10 + 6 + 1];
-   char StrAnswersIndexes[Rmt_MAX_ANSWERS_PER_QUESTION * (10 + 1)];
+   char StrAnswersIndexes[Tst_MAX_OPTIONS_PER_QUESTION * (10 + 1)];
    const char *Ptr;
    char UnsignedStr[10 + 1];
    unsigned AnsInd;

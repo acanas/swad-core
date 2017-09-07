@@ -56,7 +56,6 @@
 
 #define Tst_MAX_BYTES_ANSWER_TYPE		  32
 
-
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -166,7 +165,6 @@ void Tst_CheckIfNumberOfAnswersIsOne (void);
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
 void Tst_GetAndWriteTagsQst (long QstCod);
 
-void Tst_PutButtonToAddQuestion (void);
 void Tst_ShowFormConfig (void);
 void Tst_EnableTag (void);
 void Tst_DisableTag (void);

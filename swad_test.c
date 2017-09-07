@@ -164,6 +164,8 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
 static bool Tst_CheckIfICanEditTests (void);
 static void Tst_PutIconsTests (void);
+static void Tst_PutButtonToAddQuestion (void);
+
 static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
@@ -1446,7 +1448,7 @@ static void Tst_PutIconsTests (void)
 /**************** Put button to create a new test question *******************/
 /*****************************************************************************/
 
-void Tst_PutButtonToAddQuestion (void)
+static void Tst_PutButtonToAddQuestion (void)
   {
    extern const char *Txt_New_question;
 

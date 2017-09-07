@@ -514,7 +514,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRstGam		(ActChgCalCrs1stDay + 74)
 #define ActHidGam		(ActChgCalCrs1stDay + 75)
 #define ActShoGam		(ActChgCalCrs1stDay + 76)
-#define ActEdiOneGamQst		(ActChgCalCrs1stDay + 77)
+#define ActAddOneGamQst		(ActChgCalCrs1stDay + 77)
 #define ActGamLstTstQst		(ActChgCalCrs1stDay + 78)
 #define ActAddTstQstToGam	(ActChgCalCrs1stDay + 79)
 #define ActReqRemGamQst		(ActChgCalCrs1stDay + 80)

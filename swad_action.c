@@ -502,7 +502,7 @@ Assessment:
         NEW. ActRstGam			Reset answers of game
         NEW. ActHidGam			Hide game
         NEW. ActShoGam			Show game
-        NEW. ActEdiOneGamQst		Edit a new question for a game
+        NEW. ActAddOneGamQst		Add a new question to a game
         NEW. ActGamLstTstQst		List test questions to select one or several questions
         NEW. ActAddTstQstToGam		Add selected test questions to game
         NEW. ActReqRemGamQst		Request the removal of a question of a game
@@ -1979,7 +1979,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRstGam		*/{1659,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_ResetGame			,NULL},
    /* ActHidGam		*/{1660,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_HideGame			,NULL},
    /* ActShoGam		*/{1661,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_UnhideGame			,NULL},
-   /* ActEdiOneGamQst	*/{1662,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestEditQuestion	,NULL},
+   /* ActAddOneGamQst	*/{1662,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestNewQuestion	,NULL},
    /* ActGamLstTstQst	*/{1666,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ListQuestionsToSelect	,NULL},
    /* ActAddTstQstToGam	*/{1667,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_AddTstQuestionsToGame	,NULL},
    /* ActReqRemGamQst	*/{1664,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rmt_RequestRemoveQst		,NULL},
@@ -4705,7 +4705,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRstGam,		// #1659
 	ActHidGam,		// #1660
 	ActShoGam,		// #1661
-	ActEdiOneGamQst,	// #1662
+	ActAddOneGamQst,	// #1662
 	-1,			// #1663 (obsolete action)
 	ActReqRemGamQst,	// #1664
 	ActRemGamQst,		// #1665
