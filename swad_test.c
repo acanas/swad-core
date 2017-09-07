@@ -257,7 +257,6 @@ static void Tst_PutParamsRemoveOneQst (void);
 static void Tst_PutParamsRemoveQst (void);
 
 static long Tst_GetQstCod (void);
-static void Tst_PutParamQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
 static void Tst_InsertTagsIntoDB (void);
@@ -2826,7 +2825,6 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    extern const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST];
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Shuffle;
-   extern const char *Txt_Edit_question;
    extern const char *Txt_Today;
    Tst_QuestionsOrder_t Order;
    unsigned long NumRow;
@@ -2941,15 +2939,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Act_FormEnd ();
 
       /* Write icon to edit the question */
-      Act_FormStart (ActEdiOneTstQst);
-      Tst_PutParamQstCod ();
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Edit_question,
-               Txt_Edit_question);
-      Act_FormEnd ();
+      Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
 
       fprintf (Gbl.F.Out,"</td>");
 
@@ -6459,7 +6449,7 @@ static long Tst_GetQstCod (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-static void Tst_PutParamQstCod (void)
+void Tst_PutParamQstCod (void)
   {
    Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
   }

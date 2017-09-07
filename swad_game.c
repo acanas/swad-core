@@ -139,7 +139,7 @@ static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsI
 static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
 // static void Gam_PutIconToRemoveOneQst (void);
-static void Gam_PutParamsRemoveOneQst (void);
+static void Gam_PutParamsOneQst (void);
 
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
@@ -2725,12 +2725,14 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
    extern const char *Txt_Code;
    extern const char *Txt_Tags;
    extern const char *Txt_Question;
-   extern const char *Txt_Edit_question;
+   extern const char *Txt_Move_up_X;
+   extern const char *Txt_Move_down_X;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    unsigned NumQst;
    MYSQL_ROW row;
    unsigned UniqueId;
    long QstCod;
+   char StrNumQst[10 + 1];
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
@@ -2790,16 +2792,25 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Ico_PutIconRemove ();
       Act_FormEnd ();
 
+      /* Write icon to move up the question */
+      sprintf (StrNumQst,"%u",NumQst + 1);
+
+      sprintf (Gbl.Title,Txt_Move_up_X,StrNumQst);
+      Lay_PutContextualLink (ActEdiOneTstQst,NULL,Gam_PutParamsOneQst,
+			     "up_on16x16.gif",
+			     Gbl.Title,NULL,
+			     NULL);
+
+      /* Write icon to move down the question */
+      sprintf (Gbl.Title,Txt_Move_down_X,StrNumQst);
+      Lay_PutContextualLink (ActEdiOneTstQst,NULL,Gam_PutParamsOneQst,
+			     "down_on16x16.gif",
+			     Gbl.Title,NULL,
+			     NULL);
+
       /* Write icon to edit the question */
-      Act_FormStart (ActEdiOneTstQst);
-      Gam_PutParamQstCod (QstCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Edit_question,
-               Txt_Edit_question);
-      Act_FormEnd ();
+      Gbl.Test.QstCod = QstCod;
+      Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
 
       fprintf (Gbl.F.Out,"</td>");
 
@@ -3092,10 +3103,10 @@ static void Gam_PutIconToRemoveOneQst (void)
   }
 */
 /*****************************************************************************/
-/****************** Put parameter to remove one question *********************/
+/**************** Put parameter to move/remove one question ******************/
 /*****************************************************************************/
 
-static void Gam_PutParamsRemoveOneQst (void)
+static void Gam_PutParamsOneQst (void)
   {
    Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
    Gam_PutParamQstCod (Gbl.Games.CurrentQstCod);
@@ -3131,7 +3142,7 @@ void Gam_RequestRemoveQst (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGamQst,NULL,NULL,Gam_PutParamsRemoveOneQst,
+                           ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current game *****/

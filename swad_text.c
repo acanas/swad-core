@@ -10318,27 +10318,6 @@ const char *Txt_Edit_my_webs_networks =
 	"Editar as minhas webs / redes";
 #endif
 
-const char *Txt_Edit_question =
-#if   L==1
-	"Editar pregunta";
-#elif L==2
-	"Frage bearbeiten";
-#elif L==3
-	"Edit question";
-#elif L==4
-	"Editar pregunta";
-#elif L==5
-	"&Eacute;diter question";
-#elif L==6
-	"Editar pregunta";	// Okoteve traducción
-#elif L==7
-	"Editare domanda";
-#elif L==8
-	"Edytuj pytanie";
-#elif L==9
-	"Editar quest&atilde;o";
-#endif
-
 const char *Txt_Edit_record_fields =
 #if   L==1
 	"Editar camps de fitxes";

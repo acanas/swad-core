@@ -145,6 +145,7 @@ static void Svy_FreeTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned Num
 static unsigned Svy_GetQstIndFromQstCod (long QstCod);
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst);
+static void Svy_PutParamsToEditQuestion (void);
 static void Svy_PutIconToAddNewQuestion (void);
 static void Svy_PutButtonToCreateNewQuestion (void);
 static void Svy_WriteQstStem (const char *Stem);
@@ -3159,7 +3160,6 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_This_survey_has_no_questions;
    extern const char *Txt_Done;
-   extern const char *Txt_Edit_question;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3227,27 +3227,20 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 
          if (Svy->Status.ICanEdit)
            {
+	    fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
             /* Write icon to remove the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
             Act_FormStart (ActReqRemSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
             Ico_PutIconRemove ();
             Act_FormEnd ();
-            fprintf (Gbl.F.Out,"</td>");
 
             /* Write icon to edit the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
-            Act_FormStart (ActEdiOneSvyQst);
-            Svy_PutParamSvyCod (Svy->SvyCod);
-            Svy_PutParamQstCod (SvyQst->QstCod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Edit_question,
-                     Txt_Edit_question);
-            Act_FormEnd ();
+            Gbl.Svys.SvyCodToEdit    = Svy->SvyCod;
+            Gbl.Svys.SvyQstCodToEdit = SvyQst->QstCod;
+            Ico_PutContextualIconToEdit (ActEdiOneSvyQst,Svy_PutParamsToEditQuestion);
+
             fprintf (Gbl.F.Out,"</td>");
            }
 
@@ -3301,6 +3294,16 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 
    /***** End box *****/
    Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/******************** Put parameters to edit a question **********************/
+/*****************************************************************************/
+
+static void Svy_PutParamsToEditQuestion (void)
+  {
+   Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
+   Svy_PutParamQstCod (Gbl.Svys.SvyQstCodToEdit);
   }
 
 /*****************************************************************************/

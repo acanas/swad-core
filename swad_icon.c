@@ -358,4 +358,3 @@ void Ico_PutIconRemove (void)
 	    Txt_Remove,
 	    Txt_Remove);
   }
-

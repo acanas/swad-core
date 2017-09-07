@@ -188,6 +188,9 @@ double Tst_GetFloatAnsFromStr (char *Str);
 void Tst_RequestRemoveQst (void);
 void Tst_RemoveQst (void);
 void Tst_ChangeShuffleQst (void);
+
+void Tst_PutParamQstCod (void);
+
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (void);
 
 void Tst_FreeTagsList (void);
