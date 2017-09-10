@@ -2727,6 +2727,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
    extern const char *Txt_Question;
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Move_down_X;
+   extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    unsigned NumQst;
    MYSQL_ROW row;
@@ -2763,6 +2764,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
+      sprintf (StrNumQst,"%u",NumQst + 1);
+
       row = mysql_fetch_row (mysql_res);
       /*
       row[0] QstCod
@@ -2793,20 +2796,28 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Act_FormEnd ();
 
       /* Write icon to move up the question */
-      sprintf (StrNumQst,"%u",NumQst + 1);
-
-      sprintf (Gbl.Title,Txt_Move_up_X,StrNumQst);
-      Lay_PutContextualLink (ActEdiOneTstQst,NULL,Gam_PutParamsOneQst,
-			     "up_on16x16.gif",
-			     Gbl.Title,NULL,
-			     NULL);
+      if (NumQst)
+	{
+	 sprintf (Gbl.Title,Txt_Move_up_X,StrNumQst);
+	 Lay_PutContextualLink (ActEdiOneTstQst,NULL,Gam_PutParamsOneQst,
+				"up_on16x16.gif",
+				Gbl.Title,NULL,
+				NULL);
+	}
+      else
+         Ico_PutIconWithText ("up_off16x16.gif",Txt_Movement_not_allowed,NULL);
 
       /* Write icon to move down the question */
-      sprintf (Gbl.Title,Txt_Move_down_X,StrNumQst);
-      Lay_PutContextualLink (ActEdiOneTstQst,NULL,Gam_PutParamsOneQst,
-			     "down_on16x16.gif",
-			     Gbl.Title,NULL,
-			     NULL);
+      if (NumQst + 1 < NumQsts)
+	{
+	 sprintf (Gbl.Title,Txt_Move_down_X,StrNumQst);
+	 Lay_PutContextualLink (ActEdiOneTstQst,NULL,Gam_PutParamsOneQst,
+				"down_on16x16.gif",
+				Gbl.Title,NULL,
+				NULL);
+	}
+      else
+         Ico_PutIconWithText ("down_off16x16.gif",Txt_Movement_not_allowed,NULL);
 
       /* Write icon to edit the question */
       Gbl.Test.QstCod = QstCod;
@@ -2816,9 +2827,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 
       /* Write number of question */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
-			 "<div class=\"TEST_NUM_QST\">%u</div>",
+			 "<div class=\"TEST_NUM_QST\">%s</div>",
 	       Gbl.RowEvenOdd,
-	       NumQst + 1);
+	       StrNumQst);
 
       /* Write answer type (row[1]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);

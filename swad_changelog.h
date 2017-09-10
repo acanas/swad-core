@@ -238,13 +238,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.252 (2017-09-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.252.1 (2017-09-09)"
 #define CSS_FILE		"swad16.251.8.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.252.1: Sep 09, 2017	Icons to move up and down questions in a game. (226864 lines)
         Version 16.252:   Sep 08, 2017	Icons to move up and down questions in a game. (226852 lines)
         Version 16.251.13:Sep 07, 2017	Option Remote Control moved after Test. (226873 lines)
         Version 16.251.12:Sep 07, 2017	Module swad_game is renamed swad_game. (226872 lines)
