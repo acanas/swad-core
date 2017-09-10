@@ -68,7 +68,6 @@ void Ico_PutCalculateIcon (const char *Alt);
 void Ico_PutCalculateIconWithText (const char *Alt,const char *Text);
 
 void Ico_PutIconRemovalNotAllowed (void);
-void Ico_PutIconBRemovalNotAllowed (void);
 void Ico_PutIconRemove (void);
 
 #endif

@@ -106,11 +106,12 @@ struct
 /*****************************************************************************/
 
 static void Syl_SetSyllabusTypeFromAction (void);
-static void Syl_ShowSyllabus (void);
+static void Syl_ShowSyllabus (bool PutIconToEdit);
 static void Syl_ShowRowSyllabus (unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp);
 static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
+static void Syl_PutParamNumItem (void);
 
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 
@@ -219,10 +220,7 @@ bool Syl_CheckSyllabus (long CrsCod,Inf_InfoType_t InfoType)
 
 bool Syl_CheckAndEditSyllabus (void)
   {
-   extern const char *Hlp_COURSE_Syllabus_edit;
-   extern const char *Hlp_COURSE_Syllabus;
    extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Done;
    bool ICanEdit;
    bool PutIconToEdit;
@@ -243,23 +241,8 @@ bool Syl_CheckAndEditSyllabus (void)
 		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
       PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
 
-      /***** Start box and table *****/
-      Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
-			 PutIconToEdit ? Inf_PutIconToEditInfo :
-					 NULL,
-			 Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
-			                                Hlp_COURSE_Syllabus,
-			 Box_NOT_CLOSABLE,1);
-
       /***** Write the current syllabus *****/
-      Syl_ShowSyllabus ();
-
-      /***** If the syllabus is empty ==> show form to add a iten to the end *****/
-      if (Gbl.Syllabus.EditionIsActive && LstItemsSyllabus.NumItems == 0)
-         Syl_ShowRowSyllabus (0,1,LstItemsSyllabus.Lst[0].CodItem,"",true);
-
-      /***** End table *****/
-      Tbl_EndTable ();
+      Syl_ShowSyllabus (PutIconToEdit);
 
       if (Gbl.Syllabus.EditionIsActive)
 	{
@@ -521,16 +504,27 @@ int Syl_ReadLevelItemSyllabus (void)
 /***************** Show a syllabus of lectures or practicals *****************/
 /*****************************************************************************/
 
-static void Syl_ShowSyllabus (void)
+static void Syl_ShowSyllabus (bool PutIconToEdit)
   {
+   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Hlp_COURSE_Syllabus_edit;
+   extern const char *Hlp_COURSE_Syllabus;
    unsigned NumItem;
    int i;
    int NumButtons = Gbl.Syllabus.EditionIsActive ? 5 :
-	                                                      0;
+	                                           0;
    bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
 				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+		      PutIconToEdit ? Inf_PutIconToEditInfo :
+				      NULL,
+		      Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
+						     Hlp_COURSE_Syllabus,
+		      Box_NOT_CLOSABLE,0);
 
    /***** Set width of columns of the table *****/
    fprintf (Gbl.F.Out,"<colgroup>");
@@ -546,21 +540,29 @@ static void Syl_ShowSyllabus (void)
    fprintf (Gbl.F.Out,"<col width=\"*\" />"
                       "</colgroup>");
 
-   /***** Loop for writing all items of the syllabus *****/
-   for (NumItem = 0;
-	NumItem < LstItemsSyllabus.NumItems;
-	NumItem++)
-     {
-      Syl_ShowRowSyllabus (NumItem,
-                           LstItemsSyllabus.Lst[NumItem].Level,
-                           LstItemsSyllabus.Lst[NumItem].CodItem,
-                           LstItemsSyllabus.Lst[NumItem].Text,false);
-      if (ShowRowInsertNewItem && NumItem == Gbl.Syllabus.NumItem)
-	 // Mostrar a new row where se puede insert a new item
-	 Syl_ShowRowSyllabus (NumItem + 1,
-	                      LstItemsSyllabus.Lst[NumItem].Level,NULL,
-	                      "",true);
-     }
+   if (LstItemsSyllabus.NumItems)
+      /***** Loop writing all items of the syllabus *****/
+      for (NumItem = 0;
+	   NumItem < LstItemsSyllabus.NumItems;
+	   NumItem++)
+	{
+	 Syl_ShowRowSyllabus (NumItem,
+			      LstItemsSyllabus.Lst[NumItem].Level,
+			      LstItemsSyllabus.Lst[NumItem].CodItem,
+			      LstItemsSyllabus.Lst[NumItem].Text,false);
+	 if (ShowRowInsertNewItem && NumItem == Gbl.Syllabus.NumItem)
+	    // Mostrar a new row where se puede insert a new item
+	    Syl_ShowRowSyllabus (NumItem + 1,
+				 LstItemsSyllabus.Lst[NumItem].Level,NULL,
+				 "",true);
+	}
+   else if (Gbl.Syllabus.EditionIsActive)
+      /***** If the syllabus is empty ==>
+             show form to add a iten to the end *****/
+      Syl_ShowRowSyllabus (0,1,LstItemsSyllabus.Lst[0].CodItem,"",true);
+
+   /***** End table *****/
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -585,6 +587,8 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
    Subtree.ToGetDown.Ini = Subtree.ToGetDown.End = 0;
    Subtree.MovAllowed = false;
 
+   Gbl.Syllabus.ParamNumItem = NumItem;	// Used as parameter in forms
+
    if (!NewItem)	// If the item is new (not stored in file), it has no number
       Syl_WriteNumItem (StrItemCod,NULL,Level,CodItem);
 
@@ -607,7 +611,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   {
 	    Act_FormStart (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 		                                                      ActDelItmSylPra);
-	    Syl_PutParamNumItem (NumItem);
+	    Syl_PutParamNumItem ();
             Ico_PutIconRemove ();
             Act_FormEnd ();
 	   }
@@ -618,28 +622,19 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
-	    Act_FormStart (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
-	                                                              ActUp_IteSylPra);
-	    Syl_PutParamNumItem (NumItem);
             sprintf (Gbl.Title,
                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
                                                                  Txt_Move_up_X,
                      StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/up_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Gbl.Title,
-                     Gbl.Title);
-	    Act_FormEnd ();
+	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
+                                                                              ActUp_IteSylPra,
+                                   NULL,Syl_PutParamNumItem,
+				   "up_on16x16.gif",
+				   Gbl.Title,NULL,
+				   NULL);
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"<img src=\"%s/up_off16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Movement_not_allowed,
-                     Txt_Movement_not_allowed);
+            Ico_PutIconWithText ("up_off16x16.gif",Txt_Movement_not_allowed,NULL);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to get down item *****/
@@ -647,56 +642,35 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
-	    Act_FormStart (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
-		                                                      ActDwnIteSylPra);
-	    Syl_PutParamNumItem (NumItem);
             sprintf (Gbl.Title,
                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
                                                                  Txt_Move_down_X,
                      StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\""
-		               " src=\"%s/down_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Gbl.Title,
-                     Gbl.Title);
-	    Act_FormEnd ();
+	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
+                                                                              ActDwnIteSylPra,
+                                   NULL,Syl_PutParamNumItem,
+				   "down_on16x16.gif",
+				   Gbl.Title,NULL,
+				   NULL);
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"<img src=\"%s/down_off16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Movement_not_allowed,
-                     Txt_Movement_not_allowed);
+            Ico_PutIconWithText ("down_off16x16.gif",Txt_Movement_not_allowed,NULL);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to increase the level of an item *****/
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Level > 1)
 	   {
-	    Act_FormStart (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
-                                                                      ActRgtIteSylPra);
-	    Syl_PutParamNumItem (NumItem);
-	    sprintf (Gbl.Title,Txt_Increase_level_of_X,
-                     StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\""
-		               " src=\"%s/left_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Gbl.Title,
-                     Gbl.Title);
-	    Act_FormEnd ();
+	    sprintf (Gbl.Title,Txt_Increase_level_of_X,StrItemCod);
+	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
+                                                                              ActRgtIteSylPra,
+                                   NULL,Syl_PutParamNumItem,
+				   "left_on16x16.gif",
+				   Gbl.Title,NULL,
+				   NULL);
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"<img src=\"%s/left_off16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Movement_not_allowed,
-                     Txt_Movement_not_allowed);
+            Ico_PutIconWithText ("left_off16x16.gif",Txt_Movement_not_allowed,NULL);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to decrease level item *****/
@@ -704,27 +678,16 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 if (Level < LastLevel + 1 &&
 	     Level < Syl_MAX_LEVELS_SYLLABUS)
 	   {
-	    Act_FormStart (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
-                                                                      ActLftIteSylPra);
-	    Syl_PutParamNumItem (NumItem);
-	    sprintf (Gbl.Title,Txt_Decrease_level_of_X,
-                     StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\""
-		               " src=\"%s/right_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Gbl.Title,
-                     Gbl.Title);
-	    Act_FormEnd ();
+	    sprintf (Gbl.Title,Txt_Decrease_level_of_X,StrItemCod);
+	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
+                                                                              ActLftIteSylPra,
+                                   NULL,Syl_PutParamNumItem,
+				   "right_on16x16.gif",
+				   Gbl.Title,NULL,
+				   NULL);
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"<img src=\"%s/right_off16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Movement_not_allowed,
-                     Txt_Movement_not_allowed);
+            Ico_PutIconWithText ("right_off16x16.gif",Txt_Movement_not_allowed,NULL);
          fprintf (Gbl.F.Out,"</td>");
 
 	 LastLevel = Level;
@@ -947,9 +910,10 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 	                                                                ActInsIteSylPra) :
                             (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                        ActModIteSylPra));
-   Syl_PutParamNumItem (NumItem);
+   Gbl.Syllabus.ParamNumItem = NumItem;
+   Syl_PutParamNumItem ();
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\""
-	              " size=\"80\" maxlength=\"%u\" value=\"%s\""
+	              " size=\"60\" maxlength=\"%u\" value=\"%s\""
                       " placeholder=\"%s\"",
 	    Syl_MAX_CHARS_TEXT_ITEM,Text,
 	    Txt_Enter_a_new_item_here);
@@ -965,9 +929,9 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 /***** Write parameter with the number of an item in a syllabus form *********/
 /*****************************************************************************/
 
-void Syl_PutParamNumItem (unsigned NumItem)
+static void Syl_PutParamNumItem (void)
   {
-   Par_PutHiddenParamUnsigned ("NumI",NumItem);
+   Par_PutHiddenParamUnsigned ("NumI",Gbl.Syllabus.ParamNumItem);
   }
 
 /*****************************************************************************/

@@ -7846,7 +7846,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/exam64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO20x20B\" />",
+			       " class=\"ICO20x20\" />",
 		     Gbl.Prefs.IconsURL,
 		     Txt_View_test,
 		     Txt_View_test);

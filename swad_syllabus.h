@@ -79,7 +79,6 @@ void Syl_FreeListItemsSyllabus (void);
 
 int Syl_ReadLevelItemSyllabus (void);
 int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer);
-void Syl_PutParamNumItem (unsigned NumItem);
 
 void Syl_RemoveItemSyllabus (void);
 void Syl_UpItemSyllabus (void);

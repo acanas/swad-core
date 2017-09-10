@@ -1534,10 +1534,8 @@ a:hover						/* Default ==> underlined */
 /*********************************** Icons ***********************************/
 .ICO20x15	{width:20px; height:15px; vertical-align:middle;}
 .ICO20x20	{width:20px; height:20px; vertical-align:middle;}
-.ICO20x20B	{width:20px; height:20px; vertical-align:middle; display:block;}
 .ICO25x25	{width:25px; height:25px; vertical-align:middle;}
-.ICO25x25B	{width:25px; height:25px; vertical-align:middle; display:block;}
-.ICO40x25B	{width:40px; height:25px; vertical-align:middle;}
+.ICO40x25	{width:40px; height:25px; vertical-align:middle;}
 .ICO40x40	{width:40px; height:40px; vertical-align:middle;}
 .ICO64x64	{width:64px; height:64px; vertical-align:middle;}
 .ICO160x160	{width:160px; height:160px; vertical-align:middle;}
@@ -1553,8 +1551,8 @@ a:hover						/* Default ==> underlined */
 .CONTEXT_OPT
 	{
 	display:inline-block;
-	margin-left:6px;
-	margin-right:6px;
+	margin-left:2px;
+	margin-right:2px;
 	white-space:nowrap;
 	}
 .CONTEXT_COL
@@ -1923,7 +1921,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .ICO_HIGHLIGHT, .CHECKBOX_UNCHECKED
 	{
-	opacity:0.6;
+	opacity:0.7;
 	}
 .ICO_HIGHLIGHT:hover, .CHECKBOX_UNCHECKED:hover, .CHECKBOX_CHECKED
 	{

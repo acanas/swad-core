@@ -90,7 +90,7 @@ void Ico_PutIconsToSelectIconSet (void)
       Act_FormStart (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart64x64.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25B\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
@@ -323,24 +323,7 @@ void Ico_PutIconRemovalNotAllowed (void)
   {
    extern const char *Txt_Removal_not_allowed;
 
-   fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
-	    Gbl.Prefs.IconsURL,
-	    Txt_Removal_not_allowed,
-	    Txt_Removal_not_allowed);
-  }
-
-void Ico_PutIconBRemovalNotAllowed (void)
-  {
-   extern const char *Txt_Removal_not_allowed;
-
-   fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20B\" />",
-	    Gbl.Prefs.IconsURL,
-	    Txt_Removal_not_allowed,
-	    Txt_Removal_not_allowed);
+   Ico_PutIconWithText ("remove-off64x64.png",Txt_Removal_not_allowed,NULL);
   }
 
 /*****************************************************************************/
@@ -351,9 +334,11 @@ void Ico_PutIconRemove (void)
   {
    extern const char *Txt_Remove;
 
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
+                      "<input type=\"image\" src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
+		      " class=\"ICO20x20\" />"
+		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);

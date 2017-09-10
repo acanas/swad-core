@@ -493,7 +493,8 @@ struct Globals
    struct
      {
       char PathDir[PATH_MAX + 1];
-      unsigned NumItem;
+      unsigned NumItem;		// Item beeing edited
+      unsigned ParamNumItem;	// Used as parameter in forms
       bool EditionIsActive;
       Syl_WhichSyllabus_t WhichSyllabus;
      } Syllabus;

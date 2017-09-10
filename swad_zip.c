@@ -366,7 +366,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20B\" />"
+	              " class=\"ICO20x20\" />"
 		      "</a>",
 	 Gbl.Prefs.IconsURL,
 	 Txt_Create_ZIP_file,
