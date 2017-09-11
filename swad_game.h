@@ -122,6 +122,9 @@ void Gam_AddTstQuestionsToGame (void);
 void Gam_RequestRemoveQst (void);
 void Gam_RemoveQst (void);
 
+void Gam_MoveUpQst (void);
+void Gam_MoveDownQst (void);
+
 void Gam_ReceiveGameAnswers (void);
 
 unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope);

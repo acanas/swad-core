@@ -234,17 +234,26 @@
 
 // TODO: "Solicitar inscripción" como superusuario: "Usted no tiene permiso para realizar esta acción"
 
+// TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.252.3 (2017-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.253 (2017-09-11)"
 #define CSS_FILE		"swad16.252.2.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.253:   Sep 11, 2017	Actions to move up and down questions in a game. (227070 lines)
+					4 changes necessary in database:
+UPDATE actions SET Txt='Subir posici&oacute;n item teor&iacute;a' WHERE ActCod='221' AND Language='es';
+UPDATE actions SET Txt='Bajar posici&oacute;n item teor&iacute;a' WHERE ActCod='220' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1668','es','N','Subir posici&oacute;n pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1669','es','N','Bajar posici&oacute;n pregunta juego');
+
         Version 16.252.3: Sep 11, 2017	HTML optimization in icons. (226822 lines)
         Version 16.252.2: Sep 10, 2017	Code refactoring in edition of syllabus. (226819 lines)
         Version 16.252.1: Sep 09, 2017	Icons to move up and down questions in a game. (226864 lines)

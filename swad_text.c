@@ -46023,6 +46023,48 @@ const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is ver
 	"The properties of file %s have been saved.";		// Necessita de tradução
 #endif
 
+const char *Txt_The_question_has_been_moved_down =
+#if   L==1
+	"La pregunta ha estat moguda cap avall.";
+#elif L==2
+	"Die Frage wurde nach unten bewegt.";
+#elif L==3
+	"The question has been moved down.";
+#elif L==4
+	"La pregunta se ha movido hacia abajo.";
+#elif L==5
+	"La question a &eacute;t&eacute; d&eacute;plac&eacute;e vers le bas.";
+#elif L==6
+	"La pregunta se ha movido hacia arriba.";	// Okoteve traducción
+#elif L==7
+	"La questione &egrave; stata abbattuta.";
+#elif L==8
+	"Pytanie zosta&lstrok;o przeniesione.";
+#elif L==9
+	"A quest&atilde;o foi movida para baixo.";
+#endif
+
+const char *Txt_The_question_has_been_moved_up =
+#if   L==1
+	"La pregunta ha estat moguda cap amunt.";
+#elif L==2
+	"Die Frage wurde nach oben verschoben.";
+#elif L==3
+	"The question has been moved up.";
+#elif L==4
+	"La pregunta se ha movido hacia arriba.";
+#elif L==5
+	"La question a &eacute;t&eacute; d&eacute;plac&eacute;e vers le haut.";
+#elif L==6
+	"La pregunta se ha movido hacia arriba.";	// Okoteve traducción
+#elif L==7
+	"La questione &egrave; stata spostata.";
+#elif L==8
+	"Pytanie zosta&lstrok;o poruszone.";
+#elif L==9
+	"A quest&atilde;o foi movida para cima.";
+#endif
+
 const char *Txt_The_record_field_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El campo de ficha <strong>%s</strong> ya existe.";	// Necessita traduccio

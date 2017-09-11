@@ -874,7 +874,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 
    /***** Unlock tables after changes in my groups *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				     // ...to not retry the unlock if error in unlocking
+				// ...to not retry the unlock if error in unlocking
    DB_Query ("UNLOCK TABLES",
 	     "Can not unlock tables after changes in user's groups");
 
@@ -947,7 +947,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
      {
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				     // ...to not retry the unlock if error in unlocking
+					// ...to not retry the unlock if error in unlocking
       DB_Query ("UNLOCK TABLES",
 		"Can not unlock tables after changes in user's groups");
      }

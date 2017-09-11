@@ -507,6 +507,8 @@ Assessment:
         NEW. ActAddTstQstToGam		Add selected test questions to game
         NEW. ActReqRemGamQst		Request the removal of a question of a game
         NEW. ActRemGamQst		Confirm the removal of a question of a game
+        NEW. ActUp_GamQst,		Move up a question of a game
+        NEW. ActDwnGamQst,		Move down a question of a game
 
 	361. ActSeeOneExaAnn		Show one exam announcement
 	362. ActSeeDatExaAnn		Show exam announcements of a given date
@@ -1967,6 +1969,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAddTstQstToGam	*/{1667,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_AddTstQuestionsToGame	,NULL},
    /* ActReqRemGamQst	*/{1664,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RequestRemoveQst		,NULL},
    /* ActRemGamQst	*/{1665,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RemoveQst			,NULL},
+   /* ActUp_GamQst	*/{1668,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_MoveUpQst			,NULL},
+   /* ActDwnGamQst	*/{1669,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_MoveDownQst		,NULL},
 
    /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
    /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
@@ -4711,6 +4715,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRemGamQst,		// #1665
 	ActGamLstTstQst,	// #1666
 	ActAddTstQstToGam,	// #1667
+	ActUp_GamQst,		// #1668
+	ActDwnGamQst,		// #1669
 	};
 
 /*****************************************************************************/
