@@ -238,13 +238,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.252.2 (2017-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.252.3 (2017-09-11)"
 #define CSS_FILE		"swad16.252.2.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.252.3: Sep 11, 2017	HTML optimization in icons. (226822 lines)
         Version 16.252.2: Sep 10, 2017	Code refactoring in edition of syllabus. (226819 lines)
         Version 16.252.1: Sep 09, 2017	Icons to move up and down questions in a game. (226864 lines)
         Version 16.252:   Sep 08, 2017	Icons to move up and down questions in a game. (226852 lines)

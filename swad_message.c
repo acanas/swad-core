@@ -3264,17 +3264,12 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
    /****** Link and form end *****/
-   Act_LinkFormSubmit (FromThisCrs ? (Replied ? Txt_Reply_again :
-						Txt_Reply) :
-				     (Replied ? Txt_Go_to_course_and_reply_again :
-						Txt_Go_to_course_and_reply),
-		       The_ClassFormBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconWithText ("reply16x16.gif",
-                        Replied ? Txt_Reply_again :
-			          Txt_Reply,
-			NULL);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   Ico_PutIconLink ("reply16x16.gif",
+                    FromThisCrs ? (Replied ? Txt_Reply_again :
+				             Txt_Reply) :
+				  (Replied ? Txt_Go_to_course_and_reply_again :
+				             Txt_Go_to_course_and_reply),
+	            NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

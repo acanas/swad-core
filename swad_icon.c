@@ -250,8 +250,22 @@ void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
                       const char *LinkStyle,const char *OnSubmit)
   {
    Act_LinkFormSubmit (Title,LinkStyle,OnSubmit);
-   Ico_PutIconWithText (Icon,Title,Text);
+   if (Text)
+      Ico_PutIconWithText (Icon,Title,Text);
+   else
+      Ico_PutIcon (Icon,Title);
    fprintf (Gbl.F.Out,"</a>");
+  }
+
+/*****************************************************************************/
+/********************** Put a icon to submit a form **************************/
+/*****************************************************************************/
+
+void Ico_PutIcon (const char *Icon,const char *Alt)
+  {
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
+            Gbl.Prefs.IconsURL,Icon,Alt,Alt);
   }
 
 /*****************************************************************************/
@@ -264,8 +278,8 @@ void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
-            Gbl.Prefs.IconsURL,Icon,
-            Alt,Text ? Text : Alt);
+            Gbl.Prefs.IconsURL,Icon,Alt,Text ? Text :
+        	                               Alt);
    if (Text)
       if (Text[0])
 	 fprintf (Gbl.F.Out,"&nbsp;%s",Text);
@@ -323,7 +337,7 @@ void Ico_PutIconRemovalNotAllowed (void)
   {
    extern const char *Txt_Removal_not_allowed;
 
-   Ico_PutIconWithText ("remove-off64x64.png",Txt_Removal_not_allowed,NULL);
+   Ico_PutIcon ("remove-off64x64.png",Txt_Removal_not_allowed);
   }
 
 /*****************************************************************************/

@@ -62,6 +62,7 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ()
 
 void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
                       const char *LinkStyle,const char *OnSubmit);
+void Ico_PutIcon (const char *Icon,const char *Alt);
 void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
 
 void Ico_PutCalculateIcon (const char *Alt);

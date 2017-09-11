@@ -5509,11 +5509,9 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
                                 PathInTree,FileName,
                                 Gbl.FileBrowser.FileType,-1L);
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-                         "<input type=\"image\" src=\"%s/remove-on64x64.png\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />"
-	                 "</div>",
+	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5544,11 +5542,9 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
                                 PathInTree,FileName,
                                 Brw_IS_FOLDER,-1L);
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-                         "<input type=\"image\" src=\"%s/remove-on64x64.png\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />"
-	                 "</div>",
+	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);

@@ -2805,7 +2805,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 				NULL);
 	}
       else
-         Ico_PutIconWithText ("up_off16x16.gif",Txt_Movement_not_allowed,NULL);
+         Ico_PutIcon ("up_off16x16.gif",Txt_Movement_not_allowed);
 
       /* Write icon to move down the question */
       if (NumQst + 1 < NumQsts)
@@ -2817,7 +2817,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 				NULL);
 	}
       else
-         Ico_PutIconWithText ("down_off16x16.gif",Txt_Movement_not_allowed,NULL);
+         Ico_PutIcon ("down_off16x16.gif",Txt_Movement_not_allowed);
 
       /* Write icon to edit the question */
       Gbl.Test.QstCod = QstCod;
