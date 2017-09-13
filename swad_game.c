@@ -121,6 +121,8 @@ static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod);
 static unsigned Gam_GetNumQstsGame (long GamCod);
 static void Gam_PutParamQstCod (long QstCod);
 static long Gam_GetParamQstCod (void);
+static void Gam_PutParamQstInd (unsigned QstInd);
+static unsigned Gam_GetParamQstInd (void);
 static void Gam_RemAnswersOfAQuestion (long QstCod);
 
 static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod);
@@ -148,7 +150,7 @@ static void Gam_PutParamsOneQst (void);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
-static void Gam_PutBigButtonToStartGame (void);
+static void Gam_PutBigButtonToStartGame (long GamCod);
 
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
@@ -682,7 +684,7 @@ static void Gam_ShowOneGame (long GamCod,
 
    /***** Put big button to start playing *****/
    if (PutButtonToStart)
-      Gam_PutBigButtonToStartGame ();
+      Gam_PutBigButtonToStartGame (Game.GamCod);
 
    /***** End box *****/
    if (ShowOnlyThisGame)
@@ -779,20 +781,20 @@ static void Gam_WriteStatus (struct Game *Game)
   }
 
 /*****************************************************************************/
-/********* Get parameter with the type or order in list of games ***********/
+/********** Get parameter with the type or order in list of games ************/
 /*****************************************************************************/
 
 static void Gam_GetParamGameOrder (void)
   {
    Gbl.Games.SelectedOrder = (Gam_Order_t)
-	                    Par_GetParToUnsignedLong ("Order",
-	                                              0,
-	                                              Gam_NUM_ORDERS - 1,
-	                                              (unsigned long) Gam_ORDER_DEFAULT);
+	                     Par_GetParToUnsignedLong ("Order",
+	                                               0,
+	                                               Gam_NUM_ORDERS - 1,
+	                                               (unsigned long) Gam_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
-/***** Put a hidden parameter with the type of order in list of games ******/
+/****** Put a hidden parameter with the type of order in list of games *******/
 /*****************************************************************************/
 
 void Gam_PutHiddenParamGameOrder (void)
@@ -2517,8 +2519,31 @@ static void Gam_PutParamQstCod (long QstCod)
 
 static long Gam_GetParamQstCod (void)
   {
-   /***** Get code of question *****/
    return Par_GetParToLong ("QstCod");
+  }
+
+/*****************************************************************************/
+/****************** Write parameter with index of question *******************/
+/*****************************************************************************/
+
+static void Gam_PutParamQstInd (unsigned QstInd)
+  {
+   Par_PutHiddenParamUnsigned ("QstInd",QstInd);
+  }
+
+/*****************************************************************************/
+/******************* Get parameter with index of question ********************/
+/*****************************************************************************/
+
+static unsigned Gam_GetParamQstInd (void)
+  {
+   long LongInt;
+
+   LongInt = Par_GetParToLong ("QstInd");
+   if (LongInt < 0)
+      Lay_ShowErrorAndExit ("Wrong question index.");
+
+   return (unsigned) LongInt;
   }
 
 /*****************************************************************************/
@@ -3449,13 +3474,14 @@ void Gam_PlayGame (void)
 /********************* Put a big button to start game ************************/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToStartGame (void)
+static void Gam_PutBigButtonToStartGame (long GamCod)
   {
    extern const char *Txt_Play;
 
    /***** Start form *****/
-   Act_FormStart (ActPlyGam);
-   Gam_PutParams ();
+   Act_FormStart (ActPlyGamNxtQst);
+   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamQstInd (0);	// Start by first question in game
 
    /***** Put icon with link *****/
    Act_LinkFormSubmit (Txt_Play,NULL,NULL);
@@ -3466,6 +3492,65 @@ static void Gam_PutBigButtonToStartGame (void)
 
    /***** End form *****/
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/**************** Show next question when playing a game *********************/
+/*****************************************************************************/
+
+void Gam_PlayGameNextQuestion (void)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   struct Game Game;
+   unsigned QstInd;
+
+   /***** Get parameters *****/
+   /* Get game code */
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /* Get question index */
+   QstInd = Gam_GetParamQstInd ();
+
+   /***** Get data of question from database *****/
+   /*
+   row[0] QstCod
+   row[1] Stem
+   row[2] ImageName
+   row[3] ImageTitle
+   row[4] ImageURL
+   */
+   sprintf (Query,"SELECT tst_questions.QstCod,"
+	          "tst_questions.Stem,"
+                  "tst_questions.ImageName,"
+                  "tst_questions.ImageTitle,"
+                  "tst_questions.ImageURL"
+                  " FROM gam_questions,tst_questions"
+                  " WHERE gam_questions.GamCod=%ld"
+                  " AND gam_questions.QstInd=%u"
+                  " AND gam_questions.QstCod=tst_questions.QstCod",
+            Game.GamCod,QstInd);
+   if (!DB_QuerySELECT (Query,&mysql_res,"can not get data of a question"))
+      Ale_ShowAlert (Ale_WARNING,"Questions doesn't exist.");
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Show question *****/
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+
+   /* Write number of question */
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NUM_QST\">%u</div>",
+	    QstInd + 1);
+
+   /* Write the stem (row[1]) and the image (row[2], row[3], row[4]) */
+   Tst_WriteQstStem (row[1],"GAM_PLAY_QST_STEM");
+   Img_GetImageNameTitleAndURLFromRow (row[2],row[3],row[4],&Gbl.Test.Image);
+   Img_ShowImage (&Gbl.Test.Image,
+		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
+		  "TEST_IMG_EDIT_LIST_STEM");
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

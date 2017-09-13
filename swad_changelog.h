@@ -250,13 +250,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.254.2 (2017-09-13)"
-#define CSS_FILE		"swad16.252.2.css"
+#define Log_PLATFORM_VERSION	"SWAD 17.0 (2017-09-13)"
+#define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.0:     Sep 13, 2017	New action to display a game question. (227245 lines)
         Version 16.254.2: Sep 13, 2017	Removed notifications in games.
 					Start playing a game.
 					Changes in pagination in games. (227141 lines)

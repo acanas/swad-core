@@ -2389,6 +2389,35 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:top;
 	}
 
+/********************************** Games ************************************/
+.GAM_PLAY_CONTAINER
+	{
+	box-sizing:border-box;
+	margin:5%;
+	text-align:left;
+	vertical-align:middle;
+	}
+.GAM_PLAY_NUM_QST
+	{
+	display:inline-block;
+	width:15%;
+	float:left;
+	position:relative;
+	color:#808080;
+	font-size:48pt;
+	background:yellow;
+	}
+.GAM_PLAY_QST_STEM
+	{
+	display:inline-block;
+	width:85%;
+	float:left;
+	position:relative;
+	color:#404040;
+	font-size:24pt;
+	background:pink;
+	}
+
 /******************************* Time table **********************************/
 #timetable
 	{
