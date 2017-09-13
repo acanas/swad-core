@@ -798,26 +798,33 @@ void Gam_PutHiddenParamGameOrder (void)
 static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible)
   {
    extern const char *Txt_Reset;
+   extern const char *Txt_Play;
 
    Gbl.Games.CurrentGamCod = GamCod;	// Used as parameter in contextual links
 
-   /***** Put form to remove game *****/
+   /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
 
-   /***** Put form to reset game *****/
+   /***** Put icon to reset game *****/
    Lay_PutContextualLink (ActReqRstGam,NULL,Gam_PutParams,
                           "recycle64x64.png",
                           Txt_Reset,NULL,
 		          NULL);
 
-   /***** Put form to hide/show game *****/
+   /***** Put icon to hide/show game *****/
    if (Visible)
       Ico_PutContextualIconToHide (ActHidGam,Gam_PutParams);
    else
       Ico_PutContextualIconToUnhide (ActShoGam,Gam_PutParams);
 
-   /***** Put form to edit game *****/
+   /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
+
+   /***** Put icon to play game *****/
+   Lay_PutContextualLink (ActPlyGam,NULL,Gam_PutParams,
+                          "play64x64.png",
+                          Txt_Play,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -2898,7 +2905,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
-      /* Write icon to remove the question */
+      /* Put icon to remove the question */
       Act_FormStart (ActReqRemGamQst);
       Gam_PutParamGameCod (Game->GamCod);
       Gam_PutParamQstCod (QstCod);

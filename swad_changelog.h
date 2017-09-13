@@ -257,6 +257,10 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.254.1: Sep 12, 2017	Icon to start playing a game. (227122 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/play64x64.png /var/www/html/swad/icon/
+
         Version 16.254:   Sep 12, 2017	Action to start playing a game. (227113 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1670','es','N','Bajar posici&oacute;n pregunta juego');
