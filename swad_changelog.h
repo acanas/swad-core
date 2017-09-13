@@ -234,19 +234,33 @@
 
 // TODO: "Solicitar inscripción" como superusuario: "Usted no tiene permiso para realizar esta acción"
 
+// TODO: Poner icono con enlace a días festivos en calendario de centro, titulación y asignatura, además del actual calendario de institución
+
+// TODO: Cuando vamos a inscribir a un nuevo usuario en la asignatura,
+// debe salir por defecto estudiante en la opción Estudiantes y profesor en la opción Profesores,
+// pero si el usuario ya existe en la asignatura, debe salir siempre el rol actual
+// (para no cambiarlo sin querer si lo único que queremos hacer es cambiar la inscripción a grupos)
+
+// TODO: No se ve bien la lista de usuarios conectados (en Usuarios > Conectados). El ancho de la tabla no es correcto debido a la fecha demasiado ancha (por ej. los miércoles)
+// TODO: Fix bug: Un superusuario se apunta a grupos, cuando pulsa "Cambiar de grupos" no ocurre nada.
+
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.253 (2017-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.254.1 (2017-09-13)"
 #define CSS_FILE		"swad16.252.2.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.254:   Sep 12, 2017	Action to start playing a game. (227113 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1670','es','N','Bajar posici&oacute;n pregunta juego');
+
         Version 16.253:   Sep 11, 2017	Actions to move up and down questions in a game. (227070 lines)
 					4 changes necessary in database:
 UPDATE actions SET Txt='Subir posici&oacute;n item teor&iacute;a' WHERE ActCod='221' AND Language='es';

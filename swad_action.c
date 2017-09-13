@@ -491,6 +491,7 @@ Assessment:
         360. ActRemSvyQst		Confirm the removal of a question of a survey
 
         NEW. ActSeeOneGam		Show one game
+        NEW. ActPlyGam			Start playing a game
         NEW. ActAnsGam			Answer a game
         NEW. ActFrmNewGam		Form to create a new game
         NEW. ActEdiOneGam		Edit one game
@@ -1953,6 +1954,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
 
    /* ActSeeOneGam	*/{1650,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_SeeOneGame			,NULL},
+   /* ActPlyGam		*/{1670,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_PlayGame			,NULL},
    /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_ReceiveGameAnswers		,NULL},
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    /* ActEdiOneGam	*/{1653,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -4717,6 +4719,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActAddTstQstToGam,	// #1667
 	ActUp_GamQst,		// #1668
 	ActDwnGamQst,		// #1669
+	ActPlyGam,		// #1670
 	};
 
 /*****************************************************************************/

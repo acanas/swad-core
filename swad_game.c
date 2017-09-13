@@ -517,7 +517,21 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    fprintf (Gbl.F.Out,"\">");
    Gam_WriteStatus (&Game);
 
-   if (!ShowOnlyThisGameComplete)
+   if (ShowOnlyThisGameComplete)
+      {
+      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+
+      Act_FormStart (ActPlyGam);
+      Gam_PutParamGameCod (Game.GamCod);
+      Gam_PutHiddenParamGameOrder ();
+      Grp_PutParamWhichGrps ();
+      Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+      Btn_PutCreateButtonInline (Txt_Play);
+      Act_FormEnd ();
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   else	// Show several games
      {
       /* Possible button to answer this game */
       if (Game.Status.ICanAnswer)
@@ -2172,11 +2186,11 @@ void Gam_RecFormGame (void)
   }
 
 /*****************************************************************************/
-/*********** Update number of users notified in table of games *************/
+/************ Update number of users notified in table of games **************/
 /*****************************************************************************/
 
 static void Gam_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
-                                                         unsigned NumUsrsToBeNotifiedByEMail)
+                                                       unsigned NumUsrsToBeNotifiedByEMail)
   {
    char Query[256];
 
@@ -2188,7 +2202,7 @@ static void Gam_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
   }
 
 /*****************************************************************************/
-/*************************** Create a new game *****************************/
+/**************************** Create a new game ******************************/
 /*****************************************************************************/
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt)
@@ -3442,6 +3456,27 @@ static void Gam_ExchangeQuestions (long GamCod,
 				// ...to not retry the unlock if error in unlocking
    DB_Query ("UNLOCK TABLES",
 	     "Can not unlock tables after moving game questions");
+  }
+
+/*****************************************************************************/
+/************************* Start playing a game ******************************/
+/*****************************************************************************/
+
+void Gam_PlayGame (void)
+  {
+   struct Game Game;
+
+   /***** Get parameters *****/
+   Gam_GetParamGameOrder ();
+   Grp_GetParamWhichGrps ();
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+
+   /***** Get game code *****/
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Show game *****/
+   Gam_ShowOneGame (Game.GamCod,true);
   }
 
 /*****************************************************************************/
