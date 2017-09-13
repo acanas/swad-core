@@ -36,7 +36,6 @@
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
-#include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
@@ -89,7 +88,10 @@ static void Gam_PutButtonToCreateNewGame (void);
 static void Gam_PutParamsToCreateNewGame (void);
 static void Gam_PutFormToSelectWhichGroupsToShow (void);
 static void Gam_ParamsWhichGroupsToShow (void);
-static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete);
+static void Gam_ShowOneGame (long GamCod,
+                             bool ShowOnlyThisGame,
+                             bool ListGameQuestions,
+                             bool PutButtonToStart);
 static void Gam_WriteAuthor (struct Game *Game);
 static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
@@ -107,8 +109,7 @@ static void Gam_PutButtonToResetGame (void);
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
 static void Gam_SetDefaultAndAllowedScope (struct Game *Game);
 static void Gam_ShowLstGrpsToEditGame (long GamCod);
-static void Gam_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
-                                                       unsigned NumUsrsToBeNotifiedByEMail);
+
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Game *Game,const char *Txt);
 static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod);
@@ -147,6 +148,8 @@ static void Gam_PutParamsOneQst (void);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
+static void Gam_PutBigButtonToStartGame (void);
+
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
 static void Gam_RegisterIHaveAnsweredGame (long GamCod);
@@ -162,7 +165,7 @@ void Gam_SeeAllGames (void)
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Show all the games *****/
    Gam_ListAllGames ();
@@ -200,7 +203,7 @@ static void Gam_ListAllGames (void)
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,
                                      0,
                                      &Pagination);
 
@@ -227,7 +230,7 @@ static void Gam_ListAllGames (void)
 	 /* Form to change order */
 	 Act_FormStart (ActSeeAllGam);
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
@@ -254,7 +257,10 @@ static void Gam_ListAllGames (void)
       for (NumGame = Pagination.FirstItemVisible;
 	   NumGame <= Pagination.LastItemVisible;
 	   NumGame++)
-	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],false);
+	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],
+	                  false,
+	                  false,
+	                  false);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -271,7 +277,7 @@ static void Gam_ListAllGames (void)
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,
                                      0,
                                      &Pagination);
 
@@ -354,7 +360,7 @@ static void Gam_PutParamsToCreateNewGame (void)
   {
    Gam_PutHiddenParamGameOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -371,7 +377,7 @@ static void Gam_PutFormToSelectWhichGroupsToShow (void)
 static void Gam_ParamsWhichGroupsToShow (void)
   {
    Gam_PutHiddenParamGameOrder ();
-   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -385,21 +391,27 @@ void Gam_SeeOneGame (void)
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
-/****************************** Show one game ******************************/
+/******************************* Show one game *******************************/
 /*****************************************************************************/
 
-static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
+static void Gam_ShowOneGame (long GamCod,
+                             bool ShowOnlyThisGame,
+                             bool ListGameQuestions,
+                             bool PutButtonToStart)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
@@ -421,7 +433,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Start box *****/
-   if (ShowOnlyThisGameComplete)
+   if (ShowOnlyThisGame)
       Box_StartBox (NULL,Txt_Game,NULL,
                     Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
@@ -430,14 +442,14 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    Gam_GetDataOfGameByCod (&Game);
 
    /***** Start table *****/
-   if (ShowOnlyThisGameComplete)
+   if (ShowOnlyThisGame)
       Tbl_StartTableWide (2);
 
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td rowspan=\"2\" class=\"CONTEXT_COL");
-   if (!ShowOnlyThisGameComplete)
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Game.Status.ICanEdit)
@@ -449,10 +461,10 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    fprintf (Gbl.F.Out,"<td id=\"gam_date_start_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Game.Status.Visible ? (Game.Status.Open ? "DATE_GREEN" :
-        	                                    "DATE_RED") :
-                                 (Game.Status.Open ? "DATE_GREEN_LIGHT" :
-                                                    "DATE_RED_LIGHT"));
-   if (!ShowOnlyThisGameComplete)
+        	                                      "DATE_RED") :
+                                  (Game.Status.Open ? "DATE_GREEN_LIGHT" :
+                                                      "DATE_RED_LIGHT"));
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
@@ -470,7 +482,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
         	                                      "DATE_RED") :
                                   (Game.Status.Open ? "DATE_GREEN_LIGHT" :
                                                       "DATE_RED_LIGHT"));
-   if (!ShowOnlyThisGameComplete)
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
@@ -483,7 +495,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 
    /* Game title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
-   if (!ShowOnlyThisGameComplete)
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
@@ -492,7 +504,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    Gam_PutParamGameCod (GamCod);
    Gam_PutHiddenParamGameOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
    Act_LinkFormSubmit (Txt_View_game,
                        Game.Status.Visible ? "ASG_TITLE" :
 	                                     "ASG_TITLE_LIGHT",NULL);
@@ -504,7 +516,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
 	              "</td>",
             Game.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT",
+        	                  "ASG_GRP_LIGHT",
             Txt_No_of_questions,
             Game.NumQsts,
             Txt_No_of_users,
@@ -512,12 +524,12 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 
    /* Status of the game */
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
-   if (!ShowOnlyThisGameComplete)
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    Gam_WriteStatus (&Game);
 
-   if (ShowOnlyThisGameComplete)
+   if (ShowOnlyThisGame)
       {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
@@ -525,7 +537,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
       Gam_PutParamGameCod (Game.GamCod);
       Gam_PutHiddenParamGameOrder ();
       Grp_PutParamWhichGrps ();
-      Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
       Btn_PutCreateButtonInline (Txt_Play);
       Act_FormEnd ();
 
@@ -542,7 +554,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Play);
 	 Act_FormEnd ();
 
@@ -557,7 +569,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_game_results);
 	 Act_FormEnd ();
 
@@ -571,7 +583,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    /***** Write second row of data of this game *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP");
-   if (!ShowOnlyThisGameComplete)
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
@@ -580,14 +592,14 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"LEFT_TOP");
-   if (!ShowOnlyThisGameComplete)
+   if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
    /* Scope of the game */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
             Game.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT",
+        	                  "ASG_GRP_LIGHT",
             Txt_Scope);
    switch (Game.Scope)
      {
@@ -624,7 +636,7 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
    /* Users' roles who can answer the game */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s:<br />",
             Game.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT",
+        	                  "ASG_GRP_LIGHT",
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
@@ -649,11 +661,11 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
                       "</td>"
                       "</tr>",
             Game.Status.Visible ? "DAT" :
-        	                 "DAT_LIGHT",
+        	                  "DAT_LIGHT",
             Txt);
 
    /***** Write questions of this game *****/
-   if (ShowOnlyThisGameComplete)
+   if (ListGameQuestions)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"5\">");
@@ -662,22 +674,19 @@ static void Gam_ShowOneGame (long GamCod,bool ShowOnlyThisGameComplete)
 			 "</tr>");
      }
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-
-   /***** Mark possible notification as seen *****/
-   if (Game.Scope == Sco_SCOPE_CRS)	// Only course games are notified
-      Ntf_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
-	                   GamCod,Game.Cod,
-	                   Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   if (ShowOnlyThisGameComplete)
-     {
-      /***** End table *****/
+   /***** End table *****/
+   if (ShowOnlyThisGame)
       Tbl_EndTable ();
+   else
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
-      /***** End box *****/
+   /***** Put big button to start playing *****/
+   if (PutButtonToStart)
+      Gam_PutBigButtonToStartGame ();
+
+   /***** End box *****/
+   if (ShowOnlyThisGame)
       Box_EndBox ();
-     }
   }
 
 /*****************************************************************************/
@@ -837,7 +846,7 @@ static void Gam_PutParams (void)
       Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Games.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -1416,52 +1425,6 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   }
 
 /*****************************************************************************/
-/******************** Get summary and content of a game  *******************/
-/*****************************************************************************/
-// This function may be called inside a web service, so don't report error
-
-void Gam_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                         char **ContentStr,
-                         long GamCod,bool GetContent)
-  {
-   char Query[128];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   size_t Length;
-
-   SummaryStr[0] = '\0';	// Return nothing on error
-
-   /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM games WHERE GamCod=%ld",
-            GamCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get row *****/
-            row = mysql_fetch_row (mysql_res);
-
-            /***** Get summary *****/
-            Str_Copy (SummaryStr,row[0],
-                      Ntf_MAX_BYTES_SUMMARY);
-
-            /***** Get content *****/
-            if (GetContent)
-              {
-               Length = strlen (row[1]);
-               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-                  Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               Str_Copy (*ContentStr,row[1],
-                         Length);
-              }
-           }
-         mysql_free_result (mysql_res);
-        }
-  }
-
-/*****************************************************************************/
 /******************* Write parameter with code of game *********************/
 /*****************************************************************************/
 
@@ -1493,7 +1456,7 @@ void Gam_AskRemGame (void)
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
@@ -1554,9 +1517,6 @@ void Gam_RemoveGame (void)
             Game.GamCod);
    DB_QueryDELETE (Query,"can not remove game");
 
-   /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Game.GamCod);
-
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Game_X_removed,
             Game.Title);
@@ -1578,7 +1538,7 @@ void Gam_AskResetGame (void)
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
@@ -1764,7 +1724,7 @@ void Gam_RequestCreatOrEditGame (void)
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get the code of the game *****/
    ItsANewGame = ((Game.GamCod = Gam_GetParamGameCod ()) == -1L);
@@ -2061,7 +2021,6 @@ void Gam_RecFormGame (void)
    struct Game NewGame;
    bool ItsANewGame;
    bool NewGameIsCorrect = true;
-   unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the game *****/
@@ -2183,29 +2142,8 @@ void Gam_RecFormGame (void)
    else
       Gam_RequestCreatOrEditGame ();
 
-   /***** Notify by email about the new game *****/
-   if (NewGame.Scope == Sco_SCOPE_CRS)	// Notify only the games for a course, not for a degree or global
-      if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewGame.GamCod)))
-         Gam_UpdateNumUsrsNotifiedByEMailAboutGame (NewGame.GamCod,NumUsrsToBeNotifiedByEMail);
-
    /***** Show games again *****/
    Gam_ListAllGames ();
-  }
-
-/*****************************************************************************/
-/************ Update number of users notified in table of games **************/
-/*****************************************************************************/
-
-static void Gam_UpdateNumUsrsNotifiedByEMailAboutGame (long GamCod,
-                                                       unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   char Query[256];
-
-   /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE games SET NumNotif=NumNotif+%u"
-                  " WHERE GamCod=%ld",
-            NumUsrsToBeNotifiedByEMail,GamCod);
-   DB_QueryUPDATE (Query,"can not update the number of notifications of a game");
   }
 
 /*****************************************************************************/
@@ -2552,13 +2490,16 @@ void Gam_RequestNewQuestion (void)
    /***** Get other parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Show form to create a new question in this game *****/
    Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3083,7 +3024,10 @@ void Gam_AddTstQuestionsToGame (void)
    Gam_FreeListsSelectedQuestions ();
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3274,7 +3218,10 @@ void Gam_RequestRemoveQst (void)
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3323,7 +3270,10 @@ void Gam_RemoveQst (void)
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3365,7 +3315,10 @@ void Gam_MoveUpQst (void)
      }
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3411,7 +3364,10 @@ void Gam_MoveDownQst (void)
 	}
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3476,14 +3432,40 @@ void Gam_PlayGame (void)
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    false,
+                    true);	// Put button to start
+  }
+
+/*****************************************************************************/
+/********************* Put a big button to start game ************************/
+/*****************************************************************************/
+
+static void Gam_PutBigButtonToStartGame (void)
+  {
+   extern const char *Txt_Play;
+
+   /***** Start form *****/
+   Act_FormStart (ActPlyGam);
+   Gam_PutParams ();
+
+   /***** Put icon with link *****/
+   Act_LinkFormSubmit (Txt_Play,NULL,NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/play64x64.png\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
+            Gbl.Prefs.IconsURL,Txt_Play,Txt_Play);
+   fprintf (Gbl.F.Out,"</a>");
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3514,7 +3496,10 @@ void Gam_ReceiveGameAnswers (void)
      }
 
    /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,true);
+   Gam_ShowOneGame (Game.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+                    false);
   }
 
 /*****************************************************************************/
@@ -3736,7 +3721,7 @@ unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
 // Returns the number of games for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
+unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
@@ -3748,13 +3733,13 @@ unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM games"
                         " WHERE Scope='%s'",
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(*),SUM(games.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM institutions,centres,degrees,courses,games"
                         " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
@@ -3766,7 +3751,7 @@ unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(*),SUM(games.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM centres,degrees,courses,games"
                         " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
@@ -3777,7 +3762,7 @@ unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(*),SUM(games.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM degrees,courses,games"
                         " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
@@ -3787,7 +3772,7 @@ unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(*),SUM(games.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM courses,games"
                         " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=games.Cod"
@@ -3796,7 +3781,7 @@ unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
                   Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM games"
                         " WHERE games.Scope='%s'"
                         " AND CrsCod=%ld",
@@ -3813,15 +3798,6 @@ unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif)
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumGames) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of games.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of games.");
-     }
-   else
-      *NumNotif = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

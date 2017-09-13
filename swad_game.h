@@ -27,7 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_notification.h"
 #include "swad_scope.h"
 
 /*****************************************************************************/
@@ -96,9 +95,7 @@ void Gam_GetListGames (void);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
 void Gam_GetDataOfGameByFolder (struct Game *Gam);
 void Gam_FreeListGames (void);
-void Gam_GetNotifGame (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                       char **ContentStr,
-                       long GamCod,bool GetContent);
+
 void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
 void Gam_AskRemGame (void);
@@ -130,7 +127,7 @@ void Gam_PlayGame (void);
 void Gam_ReceiveGameAnswers (void);
 
 unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope);
-unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope,unsigned *NumNotif);
+unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope);
 float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope);
 
 #endif
