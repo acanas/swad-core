@@ -695,10 +695,6 @@ a:hover						/* Default ==> underlined */
 		text-transform:uppercase;
 		}
 	}
-.TAB_OFF a:hover, .TAB_ON a:hover
-	{
-	text-decoration:none;
-	}
 
 .TAB_ON_WHITE	{background-color:rgba(247, 246, 245, 0.99);}
 .TAB_ON_GREY	{background-color:rgba(247, 246, 245, 0.99);}
@@ -2397,6 +2393,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
+.GAM_PLAY_CONTAINER a
+	{
+	text-decoration:none;
+	}
 .GAM_PLAY_NUM_QST
 	{
 	display:inline-block;
@@ -2405,7 +2405,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	position:relative;
 	color:#808080;
 	font-size:48pt;
-	background:yellow;
+	font-weight:bold;
 	}
 .GAM_PLAY_QST_STEM
 	{
@@ -2415,7 +2415,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	position:relative;
 	color:#404040;
 	font-size:24pt;
-	background:pink;
+	}
+.GAM_PLAY_CONTINUE
+	{
+	color:#404040;
+	font-size:24pt;
 	}
 
 /******************************* Time table **********************************/

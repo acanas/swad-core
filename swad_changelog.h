@@ -257,6 +257,10 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.0.1:   Sep 13, 2017	Icon to show question answers when playing a game. (227283 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/step-forward64x64.png /var/www/html/swad/icon/
+
         Version 17.0:     Sep 13, 2017	New action to display a game question. (227245 lines)
         Version 16.254.2: Sep 13, 2017	Removed notifications in games.
 					Start playing a game.

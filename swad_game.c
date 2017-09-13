@@ -151,6 +151,8 @@ static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
 static void Gam_PutBigButtonToStartGame (long GamCod);
+static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
+                                        long GamCod,unsigned QstInd);
 
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
@@ -3550,6 +3552,43 @@ void Gam_PlayGameNextQuestion (void)
 		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_IMG_EDIT_LIST_STEM");
 
+   /***** Put button to show answers *****/
+   Gam_PutBigButtonToContinue (ActPlyGamNxtQst,Game.GamCod,QstInd);
+
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*********************** Put a big button to continue ************************/
+/*****************************************************************************/
+
+static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
+                                        long GamCod,unsigned QstInd)
+  {
+   extern const char *Txt_Continue;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">");
+
+   /***** Start form *****/
+   Act_FormStart (NextAction);
+   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamQstInd (QstInd);
+
+   /***** Put icon with link *****/
+   Act_LinkFormSubmit (Txt_Continue,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/step-forward64x64.png\" alt=\"%s\" title=\"%s\""
+	              " class=\"ICO64x64\" />"
+	              "<br />"
+	              "%s",
+            Gbl.Prefs.IconsURL,Txt_Continue,Txt_Continue,
+            Txt_Continue);
+   fprintf (Gbl.F.Out,"</a>");
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
