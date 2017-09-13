@@ -250,13 +250,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.0 (2017-09-13)"
+#define Log_PLATFORM_VERSION	"SWAD 17.0.2 (2017-09-14)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.0.2:   Sep 14, 2017	Action to show next question when playing a game. (227293 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1671','es','N','Mostrar primera pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1672','es','N','Mostrar siguiente pregunta juego');
+
         Version 17.0.1:   Sep 13, 2017	Icon to show question answers when playing a game. (227283 lines)
 Copy the following icon to icon public directory:
 sudo cp icon/step-forward64x64.png /var/www/html/swad/icon/

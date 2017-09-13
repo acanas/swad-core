@@ -258,7 +258,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
-      else if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
+      else if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
         {
          sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
                   Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);

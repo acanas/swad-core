@@ -49,17 +49,18 @@ typedef enum
 
 typedef enum
   {
-   Act_THIS_WINDOW,	// The current tab in the browser
-   Act_BLNK_WINDOW,	// A new blank tab in the browser
+   Act_BRW_1ST_TAB,	// The main (original, first) tab in the browser
+   Act_BRW_NEW_TAB,	// A new (second) blank tab in the browser
+   Act_BRW_2ND_TAB,	// The second tab in the browser
    Act_UPLOAD_FILE,	// Upload a file. Do not write HTML content. Write Status code instead for Dropzone.js
-   Act_DOWNLD_FILE,	// Download a file in a new window. Do not write HTML content.
-  } Act_BrowserWindow_t;
+   Act_DOWNLD_FILE,	// Download a file in a new tab. Do not write HTML content.
+  } Act_BrowserTab_t;
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 94 + 416 + 165 + 172 + 42 + 14 + 97)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 95 + 416 + 165 + 172 + 42 + 14 + 97)
 
-#define Act_MAX_ACTION_COD 1671
+#define Act_MAX_ACTION_COD 1672
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 12
 
@@ -487,52 +488,53 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define ActSeeOneGam		(ActChgCalCrs1stDay + 49)
 #define ActPlyGam		(ActChgCalCrs1stDay + 50)
-#define ActPlyGamNxtQst		(ActChgCalCrs1stDay + 51)
-#define ActAnsGam		(ActChgCalCrs1stDay + 52)
-#define ActFrmNewGam		(ActChgCalCrs1stDay + 53)
-#define ActEdiOneGam		(ActChgCalCrs1stDay + 54)
-#define ActNewGam		(ActChgCalCrs1stDay + 55)
-#define ActChgGam		(ActChgCalCrs1stDay + 56)
-#define ActReqRemGam		(ActChgCalCrs1stDay + 57)
-#define ActRemGam		(ActChgCalCrs1stDay + 58)
-#define ActReqRstGam		(ActChgCalCrs1stDay + 59)
-#define ActRstGam		(ActChgCalCrs1stDay + 60)
-#define ActHidGam		(ActChgCalCrs1stDay + 61)
-#define ActShoGam		(ActChgCalCrs1stDay + 62)
-#define ActAddOneGamQst		(ActChgCalCrs1stDay + 63)
-#define ActGamLstTstQst		(ActChgCalCrs1stDay + 64)
-#define ActAddTstQstToGam	(ActChgCalCrs1stDay + 65)
-#define ActReqRemGamQst		(ActChgCalCrs1stDay + 66)
-#define ActRemGamQst		(ActChgCalCrs1stDay + 67)
-#define ActUp_GamQst		(ActChgCalCrs1stDay + 68)
-#define ActDwnGamQst		(ActChgCalCrs1stDay + 69)
+#define ActPlyGam1stQst		(ActChgCalCrs1stDay + 51)
+#define ActPlyGamNxtQst		(ActChgCalCrs1stDay + 52)
+#define ActAnsGam		(ActChgCalCrs1stDay + 53)
+#define ActFrmNewGam		(ActChgCalCrs1stDay + 54)
+#define ActEdiOneGam		(ActChgCalCrs1stDay + 55)
+#define ActNewGam		(ActChgCalCrs1stDay + 56)
+#define ActChgGam		(ActChgCalCrs1stDay + 57)
+#define ActReqRemGam		(ActChgCalCrs1stDay + 58)
+#define ActRemGam		(ActChgCalCrs1stDay + 59)
+#define ActReqRstGam		(ActChgCalCrs1stDay + 60)
+#define ActRstGam		(ActChgCalCrs1stDay + 61)
+#define ActHidGam		(ActChgCalCrs1stDay + 62)
+#define ActShoGam		(ActChgCalCrs1stDay + 63)
+#define ActAddOneGamQst		(ActChgCalCrs1stDay + 64)
+#define ActGamLstTstQst		(ActChgCalCrs1stDay + 65)
+#define ActAddTstQstToGam	(ActChgCalCrs1stDay + 66)
+#define ActReqRemGamQst		(ActChgCalCrs1stDay + 67)
+#define ActRemGamQst		(ActChgCalCrs1stDay + 68)
+#define ActUp_GamQst		(ActChgCalCrs1stDay + 69)
+#define ActDwnGamQst		(ActChgCalCrs1stDay + 70)
 
-#define ActSeeOneSvy		(ActChgCalCrs1stDay + 70)
-#define ActAnsSvy		(ActChgCalCrs1stDay + 71)
-#define ActFrmNewSvy		(ActChgCalCrs1stDay + 72)
-#define ActEdiOneSvy		(ActChgCalCrs1stDay + 73)
-#define ActNewSvy		(ActChgCalCrs1stDay + 74)
-#define ActChgSvy		(ActChgCalCrs1stDay + 75)
-#define ActReqRemSvy		(ActChgCalCrs1stDay + 76)
-#define ActRemSvy		(ActChgCalCrs1stDay + 77)
-#define ActReqRstSvy		(ActChgCalCrs1stDay + 78)
-#define ActRstSvy		(ActChgCalCrs1stDay + 79)
-#define ActHidSvy		(ActChgCalCrs1stDay + 80)
-#define ActShoSvy		(ActChgCalCrs1stDay + 81)
-#define ActEdiOneSvyQst		(ActChgCalCrs1stDay + 82)
-#define ActRcvSvyQst		(ActChgCalCrs1stDay + 83)
-#define ActReqRemSvyQst		(ActChgCalCrs1stDay + 84)
-#define ActRemSvyQst		(ActChgCalCrs1stDay + 85)
+#define ActSeeOneSvy		(ActChgCalCrs1stDay + 71)
+#define ActAnsSvy		(ActChgCalCrs1stDay + 72)
+#define ActFrmNewSvy		(ActChgCalCrs1stDay + 73)
+#define ActEdiOneSvy		(ActChgCalCrs1stDay + 74)
+#define ActNewSvy		(ActChgCalCrs1stDay + 75)
+#define ActChgSvy		(ActChgCalCrs1stDay + 76)
+#define ActReqRemSvy		(ActChgCalCrs1stDay + 77)
+#define ActRemSvy		(ActChgCalCrs1stDay + 78)
+#define ActReqRstSvy		(ActChgCalCrs1stDay + 79)
+#define ActRstSvy		(ActChgCalCrs1stDay + 80)
+#define ActHidSvy		(ActChgCalCrs1stDay + 81)
+#define ActShoSvy		(ActChgCalCrs1stDay + 82)
+#define ActEdiOneSvyQst		(ActChgCalCrs1stDay + 83)
+#define ActRcvSvyQst		(ActChgCalCrs1stDay + 84)
+#define ActReqRemSvyQst		(ActChgCalCrs1stDay + 85)
+#define ActRemSvyQst		(ActChgCalCrs1stDay + 86)
 
-#define ActSeeOneExaAnn		(ActChgCalCrs1stDay + 86)
-#define ActSeeDatExaAnn		(ActChgCalCrs1stDay + 87)
-#define ActEdiExaAnn		(ActChgCalCrs1stDay + 88)
-#define ActRcvExaAnn		(ActChgCalCrs1stDay + 89)
-#define ActPrnExaAnn		(ActChgCalCrs1stDay + 90)
-#define ActReqRemExaAnn		(ActChgCalCrs1stDay + 91)
-#define ActRemExaAnn		(ActChgCalCrs1stDay + 92)
-#define ActHidExaAnn		(ActChgCalCrs1stDay + 93)
-#define ActShoExaAnn		(ActChgCalCrs1stDay + 94)
+#define ActSeeOneExaAnn		(ActChgCalCrs1stDay + 87)
+#define ActSeeDatExaAnn		(ActChgCalCrs1stDay + 88)
+#define ActEdiExaAnn		(ActChgCalCrs1stDay + 89)
+#define ActRcvExaAnn		(ActChgCalCrs1stDay + 90)
+#define ActPrnExaAnn		(ActChgCalCrs1stDay + 91)
+#define ActReqRemExaAnn		(ActChgCalCrs1stDay + 92)
+#define ActRemExaAnn		(ActChgCalCrs1stDay + 93)
+#define ActHidExaAnn		(ActChgCalCrs1stDay + 94)
+#define ActShoExaAnn		(ActChgCalCrs1stDay + 95)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
@@ -1567,7 +1569,7 @@ struct Act_Actions
    unsigned PermissionCty;
    unsigned PermissionSys;
    Act_Content_t ContentType;
-   Act_BrowserWindow_t BrowserWindow;
+   Act_BrowserTab_t BrowserWindow;
    void (*FunctionPriori)();
    void (*FunctionPosteriori)();
    const char *Icon;

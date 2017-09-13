@@ -3481,7 +3481,7 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
    extern const char *Txt_Play;
 
    /***** Start form *****/
-   Act_FormStart (ActPlyGamNxtQst);
+   Act_FormStart (ActPlyGam1stQst);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -3568,7 +3568,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    extern const char *Txt_Continue;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
    Act_FormStart (NextAction);

@@ -473,7 +473,7 @@ void Gbl_Cleanup (void)
 
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
-       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
+       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_FreeMyCourses ();
    Usr_FreeMyDegrees ();
