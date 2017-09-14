@@ -125,11 +125,11 @@ static void Gam_PutParamQstInd (unsigned QstInd);
 static unsigned Gam_GetParamQstInd (void);
 static void Gam_RemAnswersOfAQuestion (long QstCod);
 
-static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod);
+static int Gam_GetQstIndFromQstCod (long GamCod,long QstCod);	// TODO: Remove this function because a question code can be repeated
 static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 static int Gam_GetMaxQuestionIndexInGame (long GamCod);
-static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
-static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
+static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
+static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                                                   unsigned NumQsts,
@@ -151,6 +151,8 @@ static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
 static void Gam_PutBigButtonToStartGame (long GamCod);
+
+static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers);
 static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
                                         long GamCod,unsigned QstInd);
 
@@ -2565,28 +2567,30 @@ static void Gam_RemAnswersOfAQuestion (long QstCod)
 /*****************************************************************************/
 /******************** Get next question index in a game **********************/
 /*****************************************************************************/
+// TODO: Remove this function because a question code can be repeated
 
-static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
+static int Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned QstInd = 0;
+   int QstInd = -1;
 
    /***** Get number of games with a field value from database *****/
    sprintf (Query,"SELECT QstInd FROM gam_questions"
 	          " WHERE GamCod=%ld AND QstCod=%ld",
             GamCod,QstCod);
    if (!DB_QuerySELECT (Query,&mysql_res,"can not get question index"))
-      {
+     {
       Ale_ShowAlert (Ale_INFO,Query);
       Lay_ShowErrorAndExit ("Error when getting question index.");
-      }
+     }
 
    /***** Get question index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&QstInd) != 1)
-      Lay_ShowErrorAndExit ("Error when getting question index.");
+   if (row[0])
+      if (sscanf (row[0],"%d",&QstInd) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting question index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2654,13 +2658,15 @@ static int Gam_GetMaxQuestionIndexInGame (long GamCod)
 /*****************************************************************************/
 /*********** Get previous question index to a given index in a game **********/
 /*****************************************************************************/
+// Question index can be 0, 1, 2,...
+// Return -1 if no previous question
 
-static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
+static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned PrevQstInd;
+   int PrevQstInd = -1;
 
    /***** Get previous question index in a game from database *****/
    // Although indexes are always continuous...
@@ -2673,8 +2679,9 @@ static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 
    /***** Get previous question index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&PrevQstInd) != 1)
-      Lay_ShowErrorAndExit ("Error when getting previous question index.");
+   if (row[0])
+      if (sscanf (row[0],"%d",&PrevQstInd) != 1)
+         Lay_ShowErrorAndExit ("Error when getting previous question index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2685,13 +2692,15 @@ static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 /*****************************************************************************/
 /************* Get next question index to a given index in a game ************/
 /*****************************************************************************/
+// Question index can be 0, 1, 2,...
+// Return -1 if no next question
 
-static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
+static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextQstInd;
+   int NextQstInd = -1;
 
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
@@ -2704,8 +2713,9 @@ static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
 
    /***** Get next question index (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NextQstInd) != 1)
-      Lay_ShowErrorAndExit ("Error when getting next question index.");
+   if (row[0])
+      if (sscanf (row[0],"%d",&NextQstInd) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting next question index.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3233,7 +3243,7 @@ void Gam_RequestRemoveQst (void)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   QstInd = Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);
+   QstInd = (unsigned) Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);	// TODO: Remove this function because a question code can be repeated
 
    /***** Show question and button to remove question *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
@@ -3273,7 +3283,7 @@ void Gam_RemoveQst (void)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   QstInd = Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);
+   QstInd = (unsigned) Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);	// TODO: Remove this function because a question code can be repeated
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
@@ -3312,8 +3322,8 @@ void Gam_MoveUpQst (void)
    extern const char *Txt_The_question_has_been_moved_up;
    struct Game Game;
    long QstCod;
-   unsigned QstIndTop;
-   unsigned QstIndBottom;
+   int QstIndTop;
+   int QstIndBottom;
 
    /***** Get parameters from form *****/
    /* Get game code */
@@ -3325,17 +3335,19 @@ void Gam_MoveUpQst (void)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   QstIndBottom = Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);
+   QstIndBottom = Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);	// TODO: Remove this function because a question code can be repeated
 
    /***** Move up question *****/
    if (QstIndBottom > 0)
      {
       /* Indexes of questions to be exchanged */
       QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
+      if (QstIndTop < 0)
+         Lay_ShowErrorAndExit ("Wrong index of question.");
 
       /* Exchange questions */
       Gam_ExchangeQuestions (Game.GamCod,
-			     QstIndTop,QstIndBottom);
+			     (unsigned) QstIndTop,(unsigned) QstIndBottom);
 
       /* Success alert */
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
@@ -3357,8 +3369,8 @@ void Gam_MoveDownQst (void)
    extern const char *Txt_The_question_has_been_moved_down;
    struct Game Game;
    long QstCod;
-   unsigned QstIndTop;
-   unsigned QstIndBottom;
+   int QstIndTop;
+   int QstIndBottom;
    int MaxQstInd;	// -1 if no questions
 
    /***** Get parameters from form *****/
@@ -3371,20 +3383,23 @@ void Gam_MoveDownQst (void)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get question index */
-   QstIndTop = Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);
+   QstIndTop = Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);	// TODO: Remove this function because a question code can be repeated
 
    /* Get maximum question index */
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);
 
    /***** Move down question *****/
    if (MaxQstInd > 0)
-      if (QstIndTop < (unsigned) MaxQstInd)
+      if (QstIndTop < MaxQstInd)
 	{
 	 /* Indexes of questions to be exchanged */
          QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
+	 if (QstIndBottom < 0)
+	    Lay_ShowErrorAndExit ("Wrong index of question.");
 
 	 /* Exchange questions */
-	 Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
+	 Gam_ExchangeQuestions (Game.GamCod,
+	                        (unsigned) QstIndTop,(unsigned) QstIndBottom);
 
          /* Success alert */
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
@@ -3502,11 +3517,30 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
 
 void Gam_PlayGameNextQuestion (void)
   {
+   Gam_PlayGameShowQuestionAndAnswers (false);	// Don't show answers
+  }
+
+/*****************************************************************************/
+/************ Show question and its answers when playing a game **************/
+/*****************************************************************************/
+
+void Gam_PlayGameShowAnswers (void)
+  {
+   Gam_PlayGameShowQuestionAndAnswers (true);	// Show answers
+  }
+
+/*****************************************************************************/
+/************ Show question and its answers when playing a game **************/
+/*****************************************************************************/
+
+static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
+  {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Game Game;
    unsigned QstInd;
+   int NxtQstInd;
 
    /***** Get parameters *****/
    /* Get game code */
@@ -3539,6 +3573,7 @@ void Gam_PlayGameNextQuestion (void)
    row = mysql_fetch_row (mysql_res);
 
    /***** Show question *****/
+   /* Start container for number and question */
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
 
    /* Write number of question */
@@ -3546,16 +3581,31 @@ void Gam_PlayGameNextQuestion (void)
 	    QstInd + 1);
 
    /* Write the stem (row[1]) and the image (row[2], row[3], row[4]) */
-   Tst_WriteQstStem (row[1],"GAM_PLAY_QST_STEM");
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
+   Tst_WriteQstStem (row[1],"GAM_PLAY_QST");
    Img_GetImageNameTitleAndURLFromRow (row[2],row[3],row[4],&Gbl.Test.Image);
    Img_ShowImage (&Gbl.Test.Image,
 		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_IMG_EDIT_LIST_STEM");
-
-   /***** Put button to show answers *****/
-   Gam_PutBigButtonToContinue (ActPlyGamNxtQst,Game.GamCod,QstInd);
-
+   if (ShowAnswers)
+      fprintf (Gbl.F.Out,"answers");
    fprintf (Gbl.F.Out,"</div>");
+
+   /* End container for number and question */
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Put button to continue *****/
+   if (ShowAnswers)
+     {
+      /* Get index of the next question */
+      NxtQstInd = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstInd);
+      if (NxtQstInd > 0)
+	 /* Put button to show next question */
+	 Gam_PutBigButtonToContinue (ActPlyGamNxtQst,Game.GamCod,(unsigned) NxtQstInd);
+     }
+   else
+      /* Put button to show answers */
+      Gam_PutBigButtonToContinue (ActPlyGamAns,Game.GamCod,QstInd);
   }
 
 /*****************************************************************************/
@@ -3577,8 +3627,8 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 
    /***** Put icon with link *****/
    Act_LinkFormSubmit (Txt_Continue,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/step-forward64x64.png\" alt=\"%s\" title=\"%s\""
-	              " class=\"ICO64x64\" />"
+   fprintf (Gbl.F.Out,"<img src=\"%s/step-forward64x64.png\""
+	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
 	              "%s",
             Gbl.Prefs.IconsURL,Txt_Continue,Txt_Continue,

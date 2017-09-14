@@ -494,6 +494,7 @@ Assessment:
         NEW. ActPlyGam			Start playing a game
         NEW. ActPlyGam1stQst		Show first question when playing a game
         NEW. ActPlyGamNxtQst		Show next question when playing a game
+        NEW. ActPlyGamAns		Show answers of current question when playing a game
         NEW. ActAnsGam			Answer a game
         NEW. ActFrmNewGam		Form to create a new game
         NEW. ActEdiOneGam		Edit one game
@@ -1959,6 +1960,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPlyGam		*/{1670,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayGame			,NULL},
    /* ActPlyGam1stQst	*/{1671,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_PlayGameNextQuestion	,NULL},
    /* ActPlyGamNxtQst	*/{1672,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_PlayGameNextQuestion	,NULL},
+   /* ActPlyGamAns	*/{1673,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_PlayGameShowAnswers	,NULL},
    /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveGameAnswers		,NULL},
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    /* ActEdiOneGam	*/{1653,-1,TabUnk,ActSeeAllGam		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -4726,6 +4728,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPlyGam,		// #1670
 	ActPlyGam1stQst,	// #1671
 	ActPlyGamNxtQst,	// #1672
+	ActPlyGamAns,		// #1673
 	};
 
 /*****************************************************************************/

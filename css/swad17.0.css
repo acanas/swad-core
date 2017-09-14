@@ -2389,6 +2389,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .GAM_PLAY_CONTAINER
 	{
 	box-sizing:border-box;
+	display:table;
 	margin:5%;
 	}
 .GAM_PLAY_NUM_QST
@@ -2401,17 +2402,20 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:48pt;
 	font-weight:bold;
 	}
-.GAM_PLAY_QST_STEM
+.GAM_PLAY_QST_CONTAINER
 	{
 	width:85%;
 	float:left;
 	/* position:relative; */
-	padding-bottom:24pt;
+	}
+.GAM_PLAY_QST
+	{
 	color:#404040;
 	font-size:24pt;
 	}
 .GAM_PLAY_CONTINUE_CONTAINER
 	{
+	clear:all;
 	text-align:center;
 	}
 .GAM_PLAY_CONTINUE_CONTAINER a

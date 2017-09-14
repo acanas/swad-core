@@ -126,6 +126,7 @@ void Gam_PlayGame (void);
 
 void Gam_ReceiveGameAnswers (void);
 void Gam_PlayGameNextQuestion (void);
+void Gam_PlayGameShowAnswers (void);
 
 unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope);
 unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope);
