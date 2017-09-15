@@ -2954,7 +2954,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersGameResult (Game,NumQst,QstCod);
+      Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
+                                  "TEST_EDI",true);	// Show result
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -3535,12 +3536,13 @@ void Gam_PlayGameShowAnswers (void)
 
 static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
   {
-   char Query[256];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Game Game;
    unsigned QstInd;
    int NxtQstInd;
+   long QstCod;
 
    /***** Get parameters *****/
    /* Get game code */
@@ -3552,14 +3554,17 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    /***** Get data of question from database *****/
    /*
-   row[0] QstCod
-   row[1] Stem
-   row[2] ImageName
-   row[3] ImageTitle
-   row[4] ImageURL
+   row[0] AnsType
+   row[1] QstCod
+   row[2] Stem
+   row[3] ImageName
+   row[4] ImageTitle
+   row[5] ImageURL
    */
-   sprintf (Query,"SELECT tst_questions.QstCod,"
-	          "tst_questions.Stem,"
+   sprintf (Query,"SELECT "
+                  "tst_questions.QstCod,"
+                  "tst_questions.AnsType,"
+                  "tst_questions.Stem,"
                   "tst_questions.ImageName,"
                   "tst_questions.ImageTitle,"
                   "tst_questions.ImageURL"
@@ -3580,15 +3585,28 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NUM_QST\">%u</div>",
 	    QstInd + 1);
 
-   /* Write the stem (row[1]) and the image (row[2], row[3], row[4]) */
+   /* Write the stem (row[2]) and the image (row[3], row[4], row[5]) */
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
-   Tst_WriteQstStem (row[1],"GAM_PLAY_QST");
-   Img_GetImageNameTitleAndURLFromRow (row[2],row[3],row[4],&Gbl.Test.Image);
+   Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
+   Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Image);
    Img_ShowImage (&Gbl.Test.Image,
 		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_IMG_EDIT_LIST_STEM");
+
+   /* Write answers? */
    if (ShowAnswers)
-      fprintf (Gbl.F.Out,"answers");
+     {
+      /* Get question code (row[0]) */
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	 Lay_ShowErrorAndExit ("Error: wrong question code.");
+
+      /* Get answer type (row[1]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+
+      /* Write answers */
+      Tst_WriteAnswersGameResult (&Game,QstInd,QstCod,
+                                  "GAM_PLAY_QST",false);	// Don't show result
+     }
    fprintf (Gbl.F.Out,"</div>");
 
    /* End container for number and question */

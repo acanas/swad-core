@@ -158,7 +158,8 @@ void Tst_ListQuestionsToSelect (void);
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
-void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod);
+void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod,
+                                 const char *Class,bool ShowResult);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_CheckIfNumberOfAnswersIsOne (void);
 

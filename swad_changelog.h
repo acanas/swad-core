@@ -232,6 +232,8 @@
 
 // TODO: Cuando sólo se cambian los grupos y no el rol de un profesor ya existente, no sale ningún mensaje. se haga lo que se haga en la edición debería salir un mensaje del tipo "Cambios realizados"
 
+// TODO: Debería haber un modo "ver" en las actividades, como en los documentos, para que el profesor tenga la visión del estudiante.
+
 // TODO: "Solicitar inscripción" como superusuario: "Usted no tiene permiso para realizar esta acción"
 
 // TODO: Poner icono con enlace a días festivos en calendario de centro, titulación y asignatura, además del actual calendario de institución
@@ -250,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.0.3 (2017-09-14)"
+#define Log_PLATFORM_VERSION	"SWAD 17.0.4 (2017-09-15)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.0.4:   Sep 14, 2017	Show current question with answers when playing a game. (227379 lines)
         Version 17.0.3:   Sep 14, 2017	Action to show current question with answers when playing a game. (227350 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1673','es','N','Mostrar respuestas de pregunta juego');

@@ -2258,9 +2258,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TAG_SEL	{box-sizing:border-box; width:346px;}
 .TAG_TXT	{box-sizing:border-box; width:346px;}
 .STEM		{box-sizing:border-box; width:700px;}
-.ANS		{color:#404040; font-size:13pt; font-weight:bold;}
-.ANS_OK		{color:#008000; font-size:13pt; font-weight:bold;}
-.ANS_BAD	{color:red;     font-size:13pt; font-weight:bold;}
+.ANS		{color:#404040; font-size:12pt;}
+.ANS_OK		{color:#008000; font-size:12pt; font-weight:bold;}
+.ANS_BAD	{color:red;     font-size:12pt; font-weight:bold;}
 .ANS_STR	{box-sizing:border-box; width:600px;}
 .TEST_SUBTITLE
 	{
@@ -2271,7 +2271,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:middle;
 	}
 .TEST_NUM_QST	{color:#808080; font-size:20pt; font-weight:bold;}
-.TEST		{color:#404040; font-size:12pt;}
 .TEST_EXA	{color:#404040; font-size:12pt;}
 .TEST_EXA_LIGHT	{color:#A0A0A0; font-size:12pt;}
 .TEST_EDI	{color:#404040; font-size:12pt;}

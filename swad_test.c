@@ -204,7 +204,10 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsViewGame (struct Game *Game,unsigned NumQst,long QstCod);
+static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
+                                        unsigned NumQst,long QstCod,
+                                        const char *Class,
+                                        bool ShowResult);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
@@ -1038,11 +1041,12 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 break;
       case Tst_SHOW_GAME_TO_ANSWER:
-	 // TODO: Change this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
+	 Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
+	                             "GAM_PLAY_QST",false);	// Don't show result
 	 break;
       case Tst_SHOW_GAME_RESULT:
-	 Tst_WriteAnswersGameResult (Game,NumQst,QstCod);
+	 Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
+	                             "GAM_PLAY_QST",true);	// Show result
 	 break;
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -3537,10 +3541,11 @@ static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
 /************** Write answers of a question when viewing a game **************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod)
+void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod,
+                                 const char *Class,bool ShowResult)
   {
    /***** Write parameter with question code *****/
-   Tst_WriteParamQstCod (NumQst,QstCod);
+   // Tst_WriteParamQstCod (NumQst,QstCod);
 
    /***** Write answer depending on type *****/
    switch (Gbl.Test.AnswerType)
@@ -3553,7 +3558,8 @@ void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod)
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsViewGame (Game,NumQst,QstCod);
+         Tst_WriteChoiceAnsViewGame (Game,NumQst,QstCod,
+                                     Class,ShowResult);
          break;
       default:
          break;
@@ -3765,7 +3771,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
                NumQst,NumOpt,
                NumQst,Index);
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"TEST\">"
+                         "<label for=\"Ans%06u_%u\" class=\"ANS\">"
 	                 "%c)&nbsp;"
 	                 "</label>"
 	                 "</td>",
@@ -3774,7 +3780,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"TEST_EXA\">"
+                         "<label for=\"Ans%06u_%u\" class=\"ANS\">"
 	                 "%s"
 	                 "</label>",
                NumQst,NumOpt,
@@ -3940,14 +3946,14 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out,"</td>");
 
       /* Answer letter (a, b, c,...) */
-      fprintf (Gbl.F.Out,"<td class=\"TEST LEFT_TOP\">"
+      fprintf (Gbl.F.Out,"<td class=\"ANS LEFT_TOP\">"
 	                 "%c)&nbsp;"
 	                 "</td>",
                'a' + (char) NumOpt);
 
       /* Answer text and feedback */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-	                 "<div class=\"TEST_EXA\">"
+	                 "<div class=\"ANS\">"
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,
@@ -4037,7 +4043,10 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 /******** Write single or multiple choice answer when viewing a test *********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewGame (struct Game *Game,unsigned NumQst,long QstCod)
+static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
+                                        unsigned NumQst,long QstCod,
+                                        const char *Class,
+                                        bool ShowResult)
   {
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
@@ -4097,27 +4106,31 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,unsigned NumQst,long Q
       /***** Write letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"TEST\">"
+                         "<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%c)&nbsp;"
 	                 "</label>"
 	                 "</td>",
-	       NumQst,NumOpt,
+	       NumQst,NumOpt,Class,
 	       'a' + (char) NumOpt);
 
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"TEST_EXA\">"
+                         "<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%s"
 	                 "</label>",
-               NumQst,NumOpt,
+               NumQst,NumOpt,Class,
                Gbl.Test.Answer.Options[NumOpt].Text);
       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Get number of users who selected this answer and draw proportional bar */
-      Gam_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
+      /***** Show result (number of users who answered? *****/
+      if (ShowResult)
+	 /* Get number of users who selected this answer
+	    and draw proportional bar */
+	 Gam_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
+
       fprintf (Gbl.F.Out,"</tr>");
      }
 
@@ -4259,7 +4272,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 	   NumOpt++)
         {
          /* Answer letter (a, b, c,...) */
-         fprintf (Gbl.F.Out,"<td class=\"TEST LEFT_TOP\">"
+         fprintf (Gbl.F.Out,"<td class=\"ANS LEFT_TOP\">"
                             "%c)&nbsp;"
                             "</td>",
                   'a' + (char) NumOpt);
