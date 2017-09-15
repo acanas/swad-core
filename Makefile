@@ -45,7 +45,7 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_network.o swad_nickname.o swad_notice.o swad_notification.o \
        swad_pagination.o swad_parameter.o swad_password.o swad_photo.o \
        swad_place.o swad_plugin.o swad_preference.o swad_privacy.o \
-       swad_profile.o \
+       swad_profile.o swad_project.o \
        swad_QR.o \
        swad_record.o swad_report.o swad_role.o swad_RSS.o \
        swad_scope.o swad_search.o swad_session.o swad_setup.o swad_social.o \

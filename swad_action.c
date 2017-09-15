@@ -1766,7 +1766,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    /* ActCrsReqSch	*/{1180, 0,TabCrs,ActCrsReqSch		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqCrsSearch		,"search64x64.gif"	},
    /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"info64x64.gif"	},
-   /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"guide64x64.gif"	},
+   /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"guide64x64.png"	},
    /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"presentation64x64.gif"},
    /* ActSeeBib		*/{  32, 4,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"books64x64.gif"	},
    /* ActSeeFAQ		*/{  54, 5,TabCrs,ActSeeFAQ		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"faq64x64.gif"		},

@@ -37,19 +37,20 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Pag_NUM_WHAT_PAGINATE 10
+#define Pag_NUM_WHAT_PAGINATE 11
 typedef enum
   {
-   Pag_ASSIGNMENTS		= 0,
-   Pag_GAMES			= 1,
-   Pag_SURVEYS			= 2,
-   Pag_ATT_EVENTS		= 3,
-   Pag_THREADS_FORUM		= 4,
-   Pag_POSTS_FORUM		= 5,
-   Pag_MESSAGES_RECEIVED	= 6,
-   Pag_MESSAGES_SENT		= 7,
-   Pag_MY_AGENDA		= 8,
-   Pag_ANOTHER_AGENDA		= 9,
+   Pag_ASSIGNMENTS		=  0,
+   Pag_PROJECTS			=  1,
+   Pag_GAMES			=  2,
+   Pag_SURVEYS			=  3,
+   Pag_ATT_EVENTS		=  4,
+   Pag_THREADS_FORUM		=  5,
+   Pag_POSTS_FORUM		=  6,
+   Pag_MESSAGES_RECEIVED	=  7,
+   Pag_MESSAGES_SENT		=  8,
+   Pag_MY_AGENDA		=  9,
+   Pag_ANOTHER_AGENDA		= 10,
   } Pag_WhatPaginate_t;
 
 struct Pagination	// Used for threads and messages pagination
