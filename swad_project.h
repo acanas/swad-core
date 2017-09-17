@@ -55,6 +55,7 @@ struct Project
    bool Open;
    char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];
    Prj_Preassigned_t Preassigned;
+   char URL[Cns_MAX_BYTES_WWW + 1];
    bool IBelongToCrsOrGrps;	// I can do this assignment
 				// (it is associated to no groups
 				// or, if associated to groups,

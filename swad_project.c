@@ -971,6 +971,7 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *Txt_No;
    extern const char *Txt_Yes;
    extern const char *Txt_Description;
+   extern const char *Txt_URL;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    struct Project Prj;
@@ -995,6 +996,7 @@ void Prj_RequestCreatOrEditPrj (void)
       Prj.Open = true;
       Prj.Title[0] = '\0';
       Prj.Preassigned = Prj_NOT_PREASSIGNED;
+      Prj.URL[0] = '\0';
       Prj.IBelongToCrsOrGrps = false;
      }
    else
@@ -1082,6 +1084,20 @@ void Prj_RequestCreatOrEditPrj (void)
    fprintf (Gbl.F.Out,"</textarea>"
                       "</td>"
                       "</tr>");
+
+   /***** URL for additional info *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+                      "<input type=\"url\" id=\"URL\" name=\"URL\""
+		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
+                      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    Txt_URL,
+	    Cns_MAX_CHARS_WWW,Prj.URL);
 
    /***** Groups *****/
    Prj_ShowLstGrpsToEditProject (Prj.PrjCod);

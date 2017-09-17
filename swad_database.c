@@ -2016,8 +2016,9 @@ mysql> DESCRIBE projects;
 | Title       | varchar(2047) | NO   |     | NULL    |                |
 | Preassigned | enum('N','Y') | NO   |     | N       |                |
 | Txt         | text          | NO   |     | NULL    |                |
+| URL         | varchar(255)  | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-9 rows in set (0,00 sec)
+10 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
@@ -2029,6 +2030,7 @@ mysql> DESCRIBE projects;
 			"Title VARCHAR(2047) NOT NULL,"				// Prj_MAX_CHARS_PROJECT_TITLE
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Txt TEXT NOT NULL,"					// Cns_MAX_BYTES_TEXT
+			"URL VARCHAR(255) NOT NULL,"				// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PrjCod),"
 		   "INDEX(CrsCod,Hidden))");
 

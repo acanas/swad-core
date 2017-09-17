@@ -252,13 +252,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.2.3 (2017-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 17.2.4 (2017-09-18)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.2.4:   Sep 18, 2017	New field URL in projects. (229929 lines)
+					1 change necessary in database:
+ALTER TABLE projects ADD COLUMN URL VARCHAR(255) NOT NULL AFTER Txt;
+
         Version 17.2.3:   Sep 17, 2017	New option for projects. Not finished. (229906 lines)
 					3 changes necessary in database:
 ALTER TABLE projects DROP COLUMN NumNotif;
@@ -266,6 +270,7 @@ ALTER TABLE projects DROP COLUMN Folder;
 ALTER TABLE projects ADD COLUMN Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Title;
 Copy the following icons to icon public directory:
 sudo cp icon/usr64x64.png /var/www/html/swad/icon/
+sudo cp icon/usr_off64x64.png /var/www/html/swad/icon/
 
         Version 17.2.2:   Sep 17, 2017	New option for projects. Not finished. (229964 lines)
         Version 17.2.1:   Sep 17, 2017	New option for projects. Not finished. (229884 lines)
