@@ -7025,7 +7025,6 @@ static void Sta_GetAndShowGamesStats (void)
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
    extern const char *Txt_Average_number_BR_of_games_BR_per_course;
    unsigned NumGames;
-   unsigned NumNotif;
    unsigned NumCoursesWithGames = 0;
    float NumGamesPerCourse = 0.0;
 

@@ -679,7 +679,7 @@ static void Agd_PutIconsOtherPublicAgenda (void)
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
                              Usr_PutParamOtherUsrCodEncrypted,
-			     "usr64x64.gif",
+			     "usr64x64.png",
 			     Txt_Another_user_s_profile,NULL,
 			     NULL);
 

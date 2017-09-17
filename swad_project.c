@@ -74,7 +74,6 @@ static void Prj_PutFormToSelectWhichGroupsToShow (void);
 static void Prj_ParamsWhichGroupsToShow (void);
 static void Prj_ShowOneProject (long PrjCod,bool PrintView);
 static void Prj_WritePrjAuthor (struct Project *Prj);
-static void Prj_WriteProjectFolder (struct Project *Prj,bool PrintView);
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
@@ -191,8 +190,7 @@ static void Prj_PutHeadForSeeing (bool PrintView)
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Project;
-   extern const char *Txt_Upload_files_QUESTION;
-   extern const char *Txt_Folder;
+   extern const char *Txt_Preassigned_QUESTION;
    Dat_StartEndTime_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -230,13 +228,9 @@ static void Prj_PutHeadForSeeing (bool PrintView)
 		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>"
 		      "</tr>",
 	    Txt_Project,
-	    Txt_Upload_files_QUESTION,
-	    Txt_Folder);
+	    Txt_Preassigned_QUESTION);
   }
 
 /*****************************************************************************/
@@ -331,11 +325,11 @@ void Prj_PrintOneProject (void)
 
    /***** Table head *****/
    Tbl_StartTableWideMargin (2);
-   Prj_PutHeadForSeeing (true);		// Print view
+   Prj_PutHeadForSeeing (true);	// Print view
 
    /***** Write project *****/
    Prj_ShowOneProject (PrjCod,
-                          true);	// Print view
+                       true);	// Print view
 
    /***** End table *****/
    Tbl_EndTable ();
@@ -348,7 +342,7 @@ void Prj_PrintOneProject (void)
 static void Prj_ShowOneProject (long PrjCod,bool PrintView)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_ASSIGNMENT_TYPES[Prj_NUM_TYPES_SEND_WORK];
+   extern const char *Txt_PREASSIGNED_TYPES[Prj_NUM_TYPES_PREASSIGNED];
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    static unsigned UniqueId = 0;
@@ -421,34 +415,25 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
             Prj.Title);
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Send work? */
+   /* Preassigned? */
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",
-            (Prj.SendWork == Prj_SEND_WORK) ? "DAT_N" :
-        	                              "DAT");
+            (Prj.Preassigned == Prj_PREASSIGNED) ? "DAT_N" :
+        	                                   "DAT");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-                      "<img src=\"%s/%s16x16.gif\""
+                      "<img src=\"%s/%s64x64.png\""
                       " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
                       "<br />%s"
-                      "</td>",
+                      "</td>"
+                      "</tr>",
             Gbl.Prefs.IconsURL,
-            (Prj.SendWork == Prj_SEND_WORK) ? "file_on" :
-        	                              "file_off",
-            Txt_ASSIGNMENT_TYPES[Prj.SendWork],
-            Txt_ASSIGNMENT_TYPES[Prj.SendWork],
-            (Prj.SendWork == Prj_SEND_WORK) ? Txt_Yes :
-        	                              Txt_No);
-
-   /* Project folder */
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-   if (Prj.SendWork == Prj_SEND_WORK)
-      Prj_WriteProjectFolder (&Prj,PrintView);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+            (Prj.Preassigned == Prj_PREASSIGNED) ? "usr" :
+        	                                   "usr_off",
+            Txt_PREASSIGNED_TYPES[Prj.Preassigned],
+            Txt_PREASSIGNED_TYPES[Prj.Preassigned],
+            (Prj.Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+        	                                   Txt_No);
 
    /***** Write second row of data of this project *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -467,7 +452,7 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -494,51 +479,6 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
 static void Prj_WritePrjAuthor (struct Project *Prj)
   {
    Usr_WriteAuthor1Line (Prj->UsrCod,Prj->Hidden);
-  }
-
-/*****************************************************************************/
-/*********************** Write the folder of a project ***********************/
-/*****************************************************************************/
-
-static void Prj_WriteProjectFolder (struct Project *Prj,bool PrintView)
-  {
-   extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
-   extern const char *Txt_Folder;
-   bool ICanSendFiles = !Prj->Hidden &&				// It's visible (not hidden)
-                        Prj->Open &&				// It's open (inside dates)
-                        Prj->IBelongToCrsOrGrps &&		// I belong to course or groups
-                        Gbl.Usrs.Me.Role.Logged == Rol_STD;	// I am a student
-
-   /***** Folder icon *****/
-   if (!PrintView &&	// Not print view
-       ICanSendFiles)	// I can send files to this project folder
-     {
-      /* Form to create a new file or folder */
-      Act_FormStart (ActFrmCreAsgUsr);	// TODO: Remove this feature
-      Brw_PutParamsFileBrowser (ActUnk,
-				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-				Prj->Folder,
-				Brw_IS_FOLDER,-1L);
-      sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,
-	       Prj->Folder);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-			 " src=\"%s/folder-open-plus16x16.gif\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
-	       Gbl.Prefs.IconsURL,
-	       Gbl.Title,
-	       Gbl.Title);
-      Act_FormEnd ();
-     }
-   else				// I can't send files to this project folder
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
-	       Gbl.Prefs.IconsURL,
-	       ICanSendFiles ? "folder-open16x16.gif" :
-		               "folder-closed16x16.gif",
-	       Txt_Folder,Txt_Folder);
-
-   /***** Folder name *****/
-   fprintf (Gbl.F.Out,"%s",Prj->Folder);
   }
 
 /*****************************************************************************/
@@ -710,41 +650,10 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 		     "UNIX_TIMESTAMP(StartTime),"
 		     "UNIX_TIMESTAMP(EndTime),"
 		     "NOW() BETWEEN StartTime AND EndTime,"
-		     "Title,Folder"
+		     "Title,Preassigned"
 		     " FROM projects"
 		     " WHERE PrjCod=%ld AND CrsCod=%ld",
 	       Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-
-      /***** Get data of project *****/
-      Prj_GetDataOfProject (Prj,Query);
-     }
-   else
-     {
-      /***** Clear all project data *****/
-      Prj->PrjCod = -1L;
-      Prj_ResetProject (Prj);
-     }
-  }
-
-/*****************************************************************************/
-/***************** Get project data using its folder name ********************/
-/*****************************************************************************/
-
-void Prj_GetDataOfProjectByFolder (struct Project *Prj)
-  {
-   char Query[1024 + Brw_MAX_BYTES_FOLDER];
-
-   if (Prj->Folder[0])
-     {
-      /***** Query database *****/
-      sprintf (Query,"SELECT PrjCod,Hidden,UsrCod,"
-		     "UNIX_TIMESTAMP(StartTime),"
-		     "UNIX_TIMESTAMP(EndTime),"
-		     "NOW() BETWEEN StartTime AND EndTime,"
-		     "Title,Folder"
-		     " FROM projects"
-		     " WHERE CrsCod=%ld AND Folder='%s'",
-	       Gbl.CurrentCrs.Crs.CrsCod,Prj->Folder);
 
       /***** Get data of project *****/
       Prj_GetDataOfProject (Prj,Query);
@@ -795,12 +704,11 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
 
       /* Get the title of the project (row[6]) */
       Str_Copy (Prj->Title,row[6],
-                Prj_MAX_BYTES_ASSIGNMENT_TITLE);
+                Prj_MAX_BYTES_PROJECT_TITLE);
 
       /* Get the folder for the project files (row[7]) */
-      Str_Copy (Prj->Folder,row[7],
-                Brw_MAX_BYTES_FOLDER);
-      Prj->SendWork = (Prj->Folder[0] != '\0');
+      Prj->Preassigned = (row[7][0] == 'Y') ? Prj_PREASSIGNED :
+	                                      Prj_NOT_PREASSIGNED;
 
       /* Can I do this project? */
       Prj->IBelongToCrsOrGrps = Prj_CheckIfIBelongToCrsOrGrpsThisProject (Prj->PrjCod);
@@ -825,8 +733,7 @@ static void Prj_ResetProject (struct Project *Prj)
    Prj->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Prj->Open = false;
    Prj->Title[0] = '\0';
-   Prj->SendWork = false;
-   Prj->Folder[0] = '\0';
+   Prj->Preassigned = Prj_NOT_PREASSIGNED;
    Prj->IBelongToCrsOrGrps = false;
   }
 
@@ -951,10 +858,6 @@ void Prj_RemoveProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
 
-   /***** Remove all the folders associated to this project *****/
-   if (Prj.Folder[0])
-      Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Prj.Folder);
-
    /***** Remove all the groups of this project *****/
    Prj_RemoveAllTheGrpsAssociatedToAProject (Prj.PrjCod);
 
@@ -1043,7 +946,7 @@ void Prj_ShowProject (void)
 
 static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod)
   {
-   char Query[256 + Prj_MAX_BYTES_ASSIGNMENT_TITLE];
+   char Query[256 + Prj_MAX_BYTES_PROJECT_TITLE];
 
    /***** Get number of projects with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM projects"
@@ -1064,8 +967,9 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Title;
-   extern const char *Txt_Upload_files_QUESTION;
-   extern const char *Txt_Folder;
+   extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_No;
+   extern const char *Txt_Yes;
    extern const char *Txt_Description;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
@@ -1090,8 +994,7 @@ void Prj_RequestCreatOrEditPrj (void)
       Prj.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Prj.Open = true;
       Prj.Title[0] = '\0';
-      Prj.SendWork = false;
-      Prj.Folder[0] = '\0';
+      Prj.Preassigned = Prj_NOT_PREASSIGNED;
       Prj.IBelongToCrsOrGrps = false;
      }
    else
@@ -1136,27 +1039,34 @@ void Prj_RequestCreatOrEditPrj (void)
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
-            Prj_MAX_CHARS_ASSIGNMENT_TITLE,Prj.Title);
+            Prj_MAX_CHARS_PROJECT_TITLE,Prj.Title);
 
    /***** Project start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Prj.TimeUTC,Dat_FORM_SECONDS_ON);
 
-   /***** Send work? *****/
+   /***** Preassigned? *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-	              "<label class=\"DAT\">%s:"
-                      "<input type=\"text\" name=\"Folder\""
-                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
-                      "</label>"
-                      "</td>"
-                      "</tr>",
+                      "<select name=\"Preassigned\">",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Upload_files_QUESTION,
-            Txt_Folder,
-            Brw_MAX_CHARS_FOLDER,Prj.Folder);
+            Txt_Preassigned_QUESTION);
+
+   fprintf (Gbl.F.Out,"<option value=\"N\"");
+   if (Prj.Preassigned == Prj_NOT_PREASSIGNED)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
+
+   fprintf (Gbl.F.Out,"<option value=\"Y\"");
+   if (Prj.Preassigned == Prj_PREASSIGNED)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
+
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+                      "</tr>");
 
    /***** Project text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1256,11 +1166,9 @@ static void Prj_ShowLstGrpsToEditProject (long PrjCod)
 void Prj_RecFormProject (void)
   {
    extern const char *Txt_Already_existed_a_project_with_the_title_X;
-   extern const char *Txt_Already_existed_a_project_with_the_folder_X;
    extern const char *Txt_You_must_specify_the_title_of_the_project;
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
-   extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Project OldPrj;	// Current assigment data in database
    struct Project NewPrj;	// Project data received from form
    bool ItsANewProject;
@@ -1289,12 +1197,11 @@ void Prj_RecFormProject (void)
    NewPrj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get project title *****/
-   Par_GetParToText ("Title",NewPrj.Title,Prj_MAX_BYTES_ASSIGNMENT_TITLE);
+   Par_GetParToText ("Title",NewPrj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
 
    /***** Get folder name where to send works of the project *****/
-   Par_GetParToText ("Folder",NewPrj.Folder,Brw_MAX_BYTES_FOLDER);
-   NewPrj.SendWork = (NewPrj.Folder[0]) ? Prj_SEND_WORK :
-	                                  Prj_DO_NOT_SEND_WORK;
+   NewPrj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
+	                                                     Prj_NOT_PREASSIGNED;
 
    /***** Get project text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -1315,38 +1222,6 @@ void Prj_RecFormProject (void)
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_title_X,
                   NewPrj.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-        }
-      else	// Title is correct
-        {
-         if (NewPrj.SendWork == Prj_SEND_WORK)
-           {
-            if (Str_ConvertFilFolLnkNameToValid (NewPrj.Folder))	// If folder name is valid...
-              {
-               if (Prj_CheckIfSimilarProjectsExists ("Folder",NewPrj.Folder,NewPrj.PrjCod))	// If folder of project was in database...
-                 {
-                  NewProjectIsCorrect = false;
-                  sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_folder_X,
-                           NewPrj.Folder);
-                  Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-                 }
-              }
-            else	// Folder name not valid
-              {
-               NewProjectIsCorrect = false;
-               Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-              }
-           }
-         else	// NewPrj.SendWork == Prj_DO_NOT_SEND_WORK
-           {
-            if (OldPrj.SendWork == Prj_SEND_WORK)
-              {
-               if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldPrj.Folder))
-                 {
-                  NewProjectIsCorrect = false;
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
-                 }
-              }
-           }
         }
      }
    else	// If there is not a project title
@@ -1369,19 +1244,13 @@ void Prj_RecFormProject (void)
 	 sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,NewPrj.Title);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
-      else
-        {
-         if (OldPrj.Folder[0] && NewPrj.Folder[0])
-            if (strcmp (OldPrj.Folder,NewPrj.Folder))	// Folder name has changed
-               NewProjectIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldPrj.Folder,NewPrj.Folder);
-         if (NewProjectIsCorrect)
-           {
-            Prj_UpdateProject (&NewPrj,Txt);
+      else if (NewProjectIsCorrect)
+	{
+	 Prj_UpdateProject (&NewPrj,Txt);
 
-	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
-           }
-        }
+	 /***** Write success message *****/
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
+	}
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
@@ -1401,21 +1270,22 @@ void Prj_RecFormProject (void)
 static void Prj_CreateProject (struct Project *Prj,const char *Txt)
   {
    char Query[1024 +
-              Prj_MAX_BYTES_ASSIGNMENT_TITLE +
+              Prj_MAX_BYTES_PROJECT_TITLE +
               Cns_MAX_BYTES_TEXT];
 
    /***** Create a new project *****/
    sprintf (Query,"INSERT INTO projects"
-	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
+	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Preassigned,Txt)"
                   " VALUES"
                   " (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-                  "'%s','%s','%s')",
+                  "'%s','%c','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
             Prj->Title,
-            Prj->Folder,
+            Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+        	                                  'N',
             Txt);
    Prj->PrjCod = DB_QueryINSERTandReturnCode (Query,"can not create new project");
 
@@ -1431,19 +1301,20 @@ static void Prj_CreateProject (struct Project *Prj,const char *Txt)
 static void Prj_UpdateProject (struct Project *Prj,const char *Txt)
   {
    char Query[1024 +
-              Prj_MAX_BYTES_ASSIGNMENT_TITLE +
+              Prj_MAX_BYTES_PROJECT_TITLE +
               Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the project *****/
    sprintf (Query,"UPDATE projects SET "
 	          "StartTime=FROM_UNIXTIME(%ld),"
 	          "EndTime=FROM_UNIXTIME(%ld),"
-                  "Title='%s',Folder='%s',Txt='%s'"
+                  "Title='%s',Preassigned='%c',Txt='%s'"
                   " WHERE PrjCod=%ld AND CrsCod=%ld",
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
             Prj->Title,
-            Prj->Folder,
+            Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+        	                                  'N',
             Txt,
             Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not update project");

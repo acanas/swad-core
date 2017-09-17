@@ -2570,7 +2570,7 @@ static void Rec_PutIconsCommands (void)
          /***** Button to view user's profile *****/
          Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
 			        Rec_PutParamUsrCodEncrypted,
-				"usr64x64.gif",
+				"usr64x64.png",
 				ItsMe ? Txt_My_public_profile :
 			                Txt_Another_user_s_profile,NULL,
 				NULL);

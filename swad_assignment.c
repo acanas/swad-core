@@ -831,7 +831,7 @@ static void Asg_ResetAssignment (struct Assignment *Asg)
    Asg->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Asg->Open = false;
    Asg->Title[0] = '\0';
-   Asg->SendWork = false;
+   Asg->SendWork = Asg_DO_NOT_SEND_WORK;
    Asg->Folder[0] = '\0';
    Asg->IBelongToCrsOrGrps = false;
   }
@@ -1145,7 +1145,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Asg.Open = true;
       Asg.Title[0] = '\0';
-      Asg.SendWork = false;
+      Asg.SendWork = Asg_DO_NOT_SEND_WORK;
       Asg.Folder[0] = '\0';
       Asg.IBelongToCrsOrGrps = false;
      }

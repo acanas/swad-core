@@ -941,7 +941,7 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
   {
    /***** Inactive icon to follow/unfollow *****/
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIDDEN\">"
-		      "<img src=\"%s/usr64x64.gif\""
+		      "<img src=\"%s/usr64x64.png\""
 		      " alt=\"\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",

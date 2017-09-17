@@ -36,15 +36,15 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Prj_MAX_CHARS_ASSIGNMENT_TITLE	(128 - 1)	// 127
-#define Prj_MAX_BYTES_ASSIGNMENT_TITLE	((Prj_MAX_CHARS_ASSIGNMENT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Prj_MAX_CHARS_PROJECT_TITLE	(128 - 1)	// 127
+#define Prj_MAX_BYTES_PROJECT_TITLE	((Prj_MAX_CHARS_PROJECT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Prj_NUM_TYPES_SEND_WORK 2
+#define Prj_NUM_TYPES_PREASSIGNED 2
 typedef enum
   {
-   Prj_DO_NOT_SEND_WORK = 0,
-   Prj_SEND_WORK        = 1,
-  } Prj_SendWork_t;
+   Prj_NOT_PREASSIGNED = 0,
+   Prj_PREASSIGNED     = 1,
+  } Prj_Preassigned_t;
 
 struct Project
   {
@@ -53,9 +53,8 @@ struct Project
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
-   char Title[Prj_MAX_BYTES_ASSIGNMENT_TITLE + 1];
-   Prj_SendWork_t SendWork;
-   char Folder[Brw_MAX_BYTES_FOLDER + 1];
+   char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];
+   Prj_Preassigned_t Preassigned;
    bool IBelongToCrsOrGrps;	// I can do this assignment
 				// (it is associated to no groups
 				// or, if associated to groups,
@@ -75,7 +74,6 @@ void Prj_PutHiddenParamPrjOrder (void);
 void Prj_RequestCreatOrEditPrj (void);
 void Prj_GetListProjects (void);
 void Prj_GetDataOfProjectByCod (struct Project *Prj);
-void Prj_GetDataOfProjectByFolder (struct Project *Prj);
 void Prj_FreeListProjects (void);
 
 long Prj_GetParamPrjCod (void);
