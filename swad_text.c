@@ -3858,7 +3858,7 @@ const char *Txt_Banner =
 
 const char *Txt_Banner_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Banner <strong>%s</strong> eliminado.";	// Necessita traduccio
+	"Banner <strong>%s</strong> eliminat.";
 #elif L==2
 	"Werbebanner <strong>%s</strong> entfernt.";
 #elif L==3
@@ -3874,7 +3874,7 @@ const char *Txt_Banner_X_removed =	// Warning: it is very important to include %
 #elif L==8
 	"Banner <strong>%s</strong> usuniety.";
 #elif L==9
-	"Banner <strong>%s</strong> removed.";		// Necessita de tradução
+	"Banner <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Banners =
@@ -30636,6 +30636,90 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Prywatne, dost&eogon;pne dla okre&sacute;lonych u&zdot;ytkownik&oacute;w zidentyfikowanych";
 #elif L==9
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
+#endif
+
+const char *Txt_Project =
+#if   L==1
+	"Projecte";
+#elif L==2
+	"Projekt";
+#elif L==3
+	"Project";
+#elif L==4
+	"Proyecto";
+#elif L==5
+	"Projet";
+#elif L==6
+	"Proyecto";	// Okoteve traducción
+#elif L==7
+	"Progetto";
+#elif L==8
+	"Projekt";
+#elif L==9
+	"Projeto";
+#endif
+
+const char *Txt_Project_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"El projecte <strong>%s</strong> ara est&agrave; ocult.";
+#elif L==2
+	"Die Projekt <strong>%s</strong> ist jetzt ausgeblendet.";
+#elif L==3
+	"Project <strong>%s</strong> is now hidden.";
+#elif L==4
+	"El proyecto <strong>%s</strong> ahora est&aacute; oculto.";
+#elif L==5
+	"Le project <strong>%s</strong> est maintenant cach&eacute;.";
+#elif L==6
+	"El proyecto <strong>%s</strong> ahora est&aacute; oculto.";	// Okoteve traducción
+#elif L==7
+	"Il progetto <strong>%s</strong> &egrave; ora nascosto.";
+#elif L==8
+	"Projekt <strong>%s</strong> jest ukryte.";
+#elif L==9
+	"O projeto <strong>%s</strong> &eacute; agora oculto.";
+#endif
+
+const char *Txt_Project_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"El projecte <strong>%s</strong> ara est&agrave; visible.";
+#elif L==2
+	"Die Projekt <strong>%s</strong> ist jetzt sichtbar.";
+#elif L==3
+	"Project <strong>%s</strong> is now visible.";
+#elif L==4
+	"El proyecto <strong>%s</strong> ahora est&aacute; visible.";
+#elif L==5
+	"Le project <strong>%s</strong> est maintenant visible.";
+#elif L==6
+	"El proyecto <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
+#elif L==7
+	"Il progetto <strong>%s</strong> &egrave; ora nascosto.";
+#elif L==8
+	"Projekt <strong>%s</strong> jest teraz widoczne.";
+#elif L==9
+	"O projeto <strong>%s</strong> &eacute; agora vis&iacute;vel.";
+#endif
+
+const char *Txt_Project_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Projecte <strong>%s</strong> eliminat.";
+#elif L==2
+	"Projekt <strong>%s</strong> entfernt.";
+#elif L==3
+	"Project <strong>%s</strong> removed.";
+#elif L==4
+	"Proyecto <strong>%s</strong> eliminado.";
+#elif L==5
+	"Projet <strong>%s</strong> supprim&eacute;.";
+#elif L==6
+	"Proyecto <strong>%s</strong> eliminado.";	// Okoteve traducción
+#elif L==7
+	"Progetto <strong>%s</strong> rimosso.";
+#elif L==8
+	"Projekt <strong>%s</strong> usuniety.";
+#elif L==9
+	"Projeto <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Projects =

@@ -259,6 +259,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.2.2:   Sep 17, 2017	New option for projects. Not finished. (? lines)
         Version 17.2.1:   Sep 17, 2017	New option for projects. Not finished. (229884 lines)
         Version 17.2:     Sep 17, 2017	New option for projects. Not finished. (229575 lines)
 					12 changes necessary in database:

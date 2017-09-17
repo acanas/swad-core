@@ -74,7 +74,7 @@ static void Prj_PutFormToSelectWhichGroupsToShow (void);
 static void Prj_ParamsWhichGroupsToShow (void);
 static void Prj_ShowOneProject (long PrjCod,bool PrintView);
 static void Prj_WritePrjAuthor (struct Project *Prj);
-static void Prj_WriteAssignmentFolder (struct Project *Prj,bool PrintView);
+static void Prj_WriteProjectFolder (struct Project *Prj,bool PrintView);
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
@@ -190,7 +190,7 @@ static void Prj_PutHeadForSeeing (bool PrintView)
   {
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Assignment;
+   extern const char *Txt_Project;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
@@ -234,7 +234,7 @@ static void Prj_PutHeadForSeeing (bool PrintView)
 		      "%s"
 		      "</th>"
 		      "</tr>",
-	    Txt_Assignment,
+	    Txt_Project,
 	    Txt_Upload_files_QUESTION,
 	    Txt_Folder);
   }
@@ -446,7 +446,7 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Prj.SendWork == Prj_SEND_WORK)
-      Prj_WriteAssignmentFolder (&Prj,PrintView);
+      Prj_WriteProjectFolder (&Prj,PrintView);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -500,7 +500,7 @@ static void Prj_WritePrjAuthor (struct Project *Prj)
 /*********************** Write the folder of a project ***********************/
 /*****************************************************************************/
 
-static void Prj_WriteAssignmentFolder (struct Project *Prj,bool PrintView)
+static void Prj_WriteProjectFolder (struct Project *Prj,bool PrintView)
   {
    extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
    extern const char *Txt_Folder;
@@ -940,7 +940,7 @@ void Prj_ReqRemProject (void)
 
 void Prj_RemoveProject (void)
   {
-   extern const char *Txt_Assignment_X_removed;
+   extern const char *Txt_Project_X_removed;
    char Query[512];
    struct Project Prj;
 
@@ -965,7 +965,7 @@ void Prj_RemoveProject (void)
    DB_QueryDELETE (Query,"can not remove project");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Assignment_X_removed,
+   sprintf (Gbl.Alert.Txt,Txt_Project_X_removed,
             Prj.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
@@ -979,7 +979,7 @@ void Prj_RemoveProject (void)
 
 void Prj_HideProject (void)
   {
-   extern const char *Txt_Assignment_X_is_now_hidden;
+   extern const char *Txt_Project_X_is_now_hidden;
    char Query[512];
    struct Project Prj;
 
@@ -997,7 +997,7 @@ void Prj_HideProject (void)
    DB_QueryUPDATE (Query,"can not hide project");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Assignment_X_is_now_hidden,
+   sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_hidden,
             Prj.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
@@ -1011,7 +1011,7 @@ void Prj_HideProject (void)
 
 void Prj_ShowProject (void)
   {
-   extern const char *Txt_Assignment_X_is_now_visible;
+   extern const char *Txt_Project_X_is_now_visible;
    char Query[512];
    struct Project Prj;
 
@@ -1029,7 +1029,7 @@ void Prj_ShowProject (void)
    DB_QueryUPDATE (Query,"can not show project");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Assignment_X_is_now_visible,
+   sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_visible,
             Prj.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
@@ -1070,7 +1070,7 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    struct Project Prj;
-   bool ItsANewAssignment;
+   bool ItsANewProject;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
@@ -1079,10 +1079,10 @@ void Prj_RequestCreatOrEditPrj (void)
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get the code of the project *****/
-   ItsANewAssignment = ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L);
+   ItsANewProject = ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L);
 
    /***** Get from the database the data of the project *****/
-   if (ItsANewAssignment)
+   if (ItsANewProject)
      {
       /* Initialize to empty project */
       Prj.PrjCod = -1L;
@@ -1104,7 +1104,7 @@ void Prj_RequestCreatOrEditPrj (void)
      }
 
    /***** Start form *****/
-   if (ItsANewAssignment)
+   if (ItsANewProject)
      {
       Act_FormStart (ActNewPrj);
       Gbl.Prjs.PrjCodToEdit = -1L;
@@ -1117,7 +1117,7 @@ void Prj_RequestCreatOrEditPrj (void)
    Prj_PutParams ();
 
    /***** Start box and table *****/
-   if (ItsANewAssignment)
+   if (ItsANewProject)
       Box_StartBoxTable (NULL,Txt_New_project,NULL,
 			 Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE,2);
    else
@@ -1167,7 +1167,7 @@ void Prj_RequestCreatOrEditPrj (void)
                       "<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
-   if (!ItsANewAssignment)
+   if (!ItsANewProject)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
                       "</td>"
@@ -1177,7 +1177,7 @@ void Prj_RequestCreatOrEditPrj (void)
    Prj_ShowLstGrpsToEditProject (Prj.PrjCod);
 
    /***** End table, send button and end box *****/
-   if (ItsANewAssignment)
+   if (ItsANewProject)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_project);
    else
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
@@ -1263,15 +1263,15 @@ void Prj_RecFormProject (void)
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
    struct Project OldPrj;	// Current assigment data in database
    struct Project NewPrj;	// Project data received from form
-   bool ItsANewAssignment;
-   bool NewAssignmentIsCorrect = true;
+   bool ItsANewProject;
+   bool NewProjectIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the project *****/
    NewPrj.PrjCod = Prj_GetParamPrjCod ();
-   ItsANewAssignment = (NewPrj.PrjCod < 0);
+   ItsANewProject = (NewPrj.PrjCod < 0);
 
-   if (ItsANewAssignment)
+   if (ItsANewProject)
      {
       /***** Reset old (current, not existing) project data *****/
       OldPrj.PrjCod = -1L;
@@ -1311,7 +1311,7 @@ void Prj_RecFormProject (void)
       /* If title of project was in database... */
       if (Prj_CheckIfSimilarProjectsExists ("Title",NewPrj.Title,NewPrj.PrjCod))
         {
-         NewAssignmentIsCorrect = false;
+         NewProjectIsCorrect = false;
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_title_X,
                   NewPrj.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1324,7 +1324,7 @@ void Prj_RecFormProject (void)
               {
                if (Prj_CheckIfSimilarProjectsExists ("Folder",NewPrj.Folder,NewPrj.PrjCod))	// If folder of project was in database...
                  {
-                  NewAssignmentIsCorrect = false;
+                  NewProjectIsCorrect = false;
                   sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_folder_X,
                            NewPrj.Folder);
                   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1332,7 +1332,7 @@ void Prj_RecFormProject (void)
               }
             else	// Folder name not valid
               {
-               NewAssignmentIsCorrect = false;
+               NewProjectIsCorrect = false;
                Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
               }
            }
@@ -1342,7 +1342,7 @@ void Prj_RecFormProject (void)
               {
                if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldPrj.Folder))
                  {
-                  NewAssignmentIsCorrect = false;
+                  NewProjectIsCorrect = false;
                   Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
                  }
               }
@@ -1351,17 +1351,17 @@ void Prj_RecFormProject (void)
      }
    else	// If there is not a project title
      {
-      NewAssignmentIsCorrect = false;
+      NewProjectIsCorrect = false;
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
      }
 
    /***** Create a new project or update an existing one *****/
-   if (NewAssignmentIsCorrect)
+   if (NewProjectIsCorrect)
      {
       /* Get groups for this projects */
       Grp_GetParCodsSeveralGrps ();
 
-      if (ItsANewAssignment)
+      if (ItsANewProject)
 	{
          Prj_CreateProject (&NewPrj,Txt);	// Add new project to database
 
@@ -1373,8 +1373,8 @@ void Prj_RecFormProject (void)
         {
          if (OldPrj.Folder[0] && NewPrj.Folder[0])
             if (strcmp (OldPrj.Folder,NewPrj.Folder))	// Folder name has changed
-               NewAssignmentIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldPrj.Folder,NewPrj.Folder);
-         if (NewAssignmentIsCorrect)
+               NewProjectIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldPrj.Folder,NewPrj.Folder);
+         if (NewProjectIsCorrect)
            {
             Prj_UpdateProject (&NewPrj,Txt);
 
@@ -1777,8 +1777,7 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
 /*****************************************************************************/
 /************************** Get number of projects ***************************/
 /*****************************************************************************/
-// Returns the number of projects
-// in this location (all the platform, current degree or current course)
+// Returns the number of projects in this location
 
 unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
   {
