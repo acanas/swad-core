@@ -128,8 +128,8 @@ void Gam_ReceiveGameAnswers (void);
 void Gam_PlayGameNextQuestion (void);
 void Gam_PlayGameShowAnswers (void);
 
-unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope);
-unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope);
+unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope);
+unsigned Gam_GetNumGames (Sco_Scope_t Scope);
 float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope);
 
 #endif

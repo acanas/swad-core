@@ -260,7 +260,7 @@ static void Prj_PutIconsListProjects (void)
       Prj_PutIconToCreateNewPrj ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_ASSIGNMENTS;
+   Gbl.Stat.FigureType = Sta_PROJECTS;
    Sta_PutIconToShowFigure ();
   }
 

@@ -104,7 +104,7 @@ typedef enum
   } Sta_ClicksGroupedBy_t;
 #define Sta_CLICKS_GROUPED_BY_DEFAULT Sta_CLICKS_CRS_PER_USR
 
-#define Sta_NUM_FIGURES 25
+#define Sta_NUM_FIGURES 27
 typedef enum
   {
    Sta_USERS,			// Number of users
@@ -115,14 +115,16 @@ typedef enum
    Sta_FOLDERS_AND_FILES,	// Number of folders and files
    Sta_OER,			// Number of OERs (Open Educational Resources)
    Sta_ASSIGNMENTS,		// Number of assignments
+   Sta_PROJECTS,		// Number of projects
    Sta_TESTS,			// Number of test questions
+   Sta_GAMES,			// Number of games
+   Sta_SURVEYS,			// Number of surveys
    Sta_SOCIAL_ACTIVITY,		// Number of social notes
    Sta_FOLLOW,			// Number of following and followers
    Sta_FORUMS,			// Number of forums, threads and posts
    Sta_NOTIFY_EVENTS,		// Number of users per notify event
    Sta_NOTICES,			// Number of notices
    Sta_MESSAGES,		// Number of users' (sent and received) messages
-   Sta_SURVEYS,			// Number of surveys
    Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_LANGUAGES,		// Number of users per language
    Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week

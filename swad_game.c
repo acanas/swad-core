@@ -326,7 +326,7 @@ static void Gam_PutIconsListGames (void)
       Gam_PutIconToCreateNewGame ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_SURVEYS;
+   Gbl.Stat.FigureType = Sta_GAMES;
    Sta_PutIconToShowFigure ();
   }
 
@@ -3821,10 +3821,9 @@ static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
 /*****************************************************************************/
 /********************* Get number of courses with games **********************/
 /*****************************************************************************/
-// Returns the number of courses with games for courses
-// in this location (all the platform, current degree or current course)
+// Returns the number of courses with games in this location
 
-unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
+unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
@@ -3908,12 +3907,11 @@ unsigned Gam_GetNumCoursesWithCrsGames (Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/********************* Get number of games for courses ***********************/
+/**************************** Get number of games ****************************/
 /*****************************************************************************/
-// Returns the number of games for courses
-// in this location (all the platform, current degree or current course)
+// Returns the number of games in this location
 
-unsigned Gam_GetNumCrsGames (Sco_Scope_t Scope)
+unsigned Gam_GetNumGames (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];

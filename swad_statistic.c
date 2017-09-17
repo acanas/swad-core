@@ -41,6 +41,7 @@
 #include "swad_file_browser.h"
 #include "swad_follow.h"
 #include "swad_forum.h"
+#include "swad_game.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -49,6 +50,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_project.h"
 #include "swad_social.h"
 #include "swad_statistic.h"
 #include "swad_tab.h"
@@ -220,7 +222,9 @@ static void Sta_GetAndShowOERsStats (void);
 static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,unsigned long NumFiles[2]);
 
 static void Sta_GetAndShowAssignmentsStats (void);
+static void Sta_GetAndShowProjectsStats (void);
 static void Sta_GetAndShowTestsStats (void);
+static void Sta_GetAndShowGamesStats (void);
 
 static void Sta_GetAndShowSocialActivityStats (void);
 static void Sta_GetAndShowFollowStats (void);
@@ -4030,14 +4034,16 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowFileBrowsersStats,		// Sta_FOLDERS_AND_FILES
       Sta_GetAndShowOERsStats,			// Sta_OER
       Sta_GetAndShowAssignmentsStats,		// Sta_ASSIGNMENTS
+      Sta_GetAndShowProjectsStats,		// Sta_PROJECTS
       Sta_GetAndShowTestsStats,			// Sta_TESTS
+      Sta_GetAndShowGamesStats,			// Sta_GAMES
+      Sta_GetAndShowSurveysStats,		// Sta_SURVEYS
       Sta_GetAndShowSocialActivityStats,	// Sta_SOCIAL_ACTIVITY
       Sta_GetAndShowFollowStats,		// Sta_FOLLOW
       Sta_GetAndShowForumStats,			// Sta_FORUMS
       Sta_GetAndShowNumUsrsPerNotifyEvent,	// Sta_NOTIFY_EVENTS
       Sta_GetAndShowNoticesStats,		// Sta_NOTICES
       Sta_GetAndShowMsgsStats,			// Sta_MESSAGES
-      Sta_GetAndShowSurveysStats,		// Sta_SURVEYS
       Net_ShowWebAndSocialNetworksStats,	// Sta_SOCIAL_NETWORKS
       Sta_GetAndShowNumUsrsPerLanguage,		// Sta_LANGUAGES
       Sta_GetAndShowNumUsrsPerFirstDayOfWeek,	// Sta_FIRST_DAY_OF_WEEK
@@ -6727,8 +6733,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
    unsigned NumCoursesWithAssignments = 0;
    float NumAssignmentsPerCourse = 0.0;
 
-   /***** Get the number of assignments from this location
-          (all the platform, current degree or current course) *****/
+   /***** Get the number of assignments from this location *****/
    if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
       if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
          NumAssignmentsPerCourse = (float) NumAssignments / (float) NumCoursesWithAssignments;
@@ -6776,6 +6781,66 @@ static void Sta_GetAndShowAssignmentsStats (void)
             NumCoursesWithAssignments,
             NumAssignmentsPerCourse,
             NumNotif);
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
+  }
+
+/*****************************************************************************/
+/************************* Show stats about projects *************************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowProjectsStats (void)
+  {
+   extern const char *Hlp_STATS_Figures_projects;
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_projects;
+   extern const char *Txt_Number_of_BR_courses_with_BR_projects;
+   extern const char *Txt_Average_number_BR_of_projects_BR_per_course;
+   unsigned NumProjects;
+   unsigned NumCoursesWithProjects = 0;
+   float NumProjectsPerCourse = 0.0;
+
+   /***** Get the number of projects from this location *****/
+   if ((NumProjects = Prj_GetNumProjects (Gbl.Scope.Current)))
+      if ((NumCoursesWithProjects = Prj_GetNumCoursesWithProjects (Gbl.Scope.Current)) != 0)
+         NumProjectsPerCourse = (float) NumProjects / (float) NumCoursesWithProjects;
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_PROJECTS],NULL,
+                      Hlp_STATS_Figures_projects,Box_NOT_CLOSABLE,2);
+
+   /***** Write table heading *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Number_of_BR_projects,
+            Txt_Number_of_BR_courses_with_BR_projects,
+            Txt_Average_number_BR_of_projects_BR_per_course);
+
+   /***** Write number of projects *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%.2f"
+                      "</td>"
+                      "</tr>",
+            NumProjects,
+            NumCoursesWithProjects,
+            NumProjectsPerCourse);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -6851,8 +6916,7 @@ static void Sta_GetAndShowTestsStats (void)
 	AnsType < Tst_NUM_ANS_TYPES;
 	AnsType++)
      {
-      /***** Get the stats about test questions from this location
-             (all the platform, current degree or current course) *****/
+      /***** Get the stats about test questions from this location *****/
       Tst_GetTestStats (AnsType,&Stats);
 
       /***** Write number of assignments *****/
@@ -6899,8 +6963,7 @@ static void Sta_GetAndShowTestsStats (void)
                Stats.AvgScorePerQuestion);
      }
 
-   /***** Get the stats about test questions from this location
-          (all the platform, current degree or current course) *****/
+   /***** Get the stats about test questions from this location *****/
    Tst_GetTestStats (Tst_ANS_ALL,&Stats);
 
    /***** Write number of assignments *****/
@@ -6945,6 +7008,67 @@ static void Sta_GetAndShowTestsStats (void)
             Stats.AvgHitsPerCourse,
             Stats.AvgHitsPerQuestion,
             Stats.AvgScorePerQuestion);
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
+  }
+
+/*****************************************************************************/
+/*************************** Show stats about games **************************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowGamesStats (void)
+  {
+   extern const char *Hlp_STATS_Figures_games;
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_games;
+   extern const char *Txt_Number_of_BR_courses_with_BR_games;
+   extern const char *Txt_Average_number_BR_of_games_BR_per_course;
+   unsigned NumGames;
+   unsigned NumNotif;
+   unsigned NumCoursesWithGames = 0;
+   float NumGamesPerCourse = 0.0;
+
+   /***** Get the number of games from this location *****/
+   if ((NumGames = Gam_GetNumGames (Gbl.Scope.Current)))
+      if ((NumCoursesWithGames = Gam_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
+         NumGamesPerCourse = (float) NumGames / (float) NumCoursesWithGames;
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_GAMES],NULL,
+                      Hlp_STATS_Figures_games,Box_NOT_CLOSABLE,2);
+
+   /***** Write table heading *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Number_of_BR_games,
+            Txt_Number_of_BR_courses_with_BR_games,
+            Txt_Average_number_BR_of_games_BR_per_course);
+
+   /***** Write number of games *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%.2f"
+                      "</td>"
+                      "</tr>",
+            NumGames,
+            NumCoursesWithGames,
+            NumGamesPerCourse);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -8210,8 +8334,7 @@ static void Sta_GetAndShowNoticesStats (void)
    unsigned NumNotif;
    unsigned NumTotalNotifications = 0;
 
-   /***** Get the number of notices active and obsolete
-          from this location (all the platform, current degree or current course) *****/
+   /***** Get the number of notices active and obsolete *****/
    for (NoticeStatus = (Not_Status_t) 0;
 	NoticeStatus < Not_NUM_STATUS;
 	NoticeStatus++)
@@ -8299,7 +8422,7 @@ static void Sta_GetAndShowMsgsStats (void)
    unsigned NumMsgsReceivedNotDeleted,NumMsgsReceivedAndDeleted;
    unsigned NumMsgsReceivedAndNotified;
 
-   /***** Get the number of unique messages sent from this location (all the platform, current degree or current course) *****/
+   /***** Get the number of unique messages sent from this location *****/
    NumMsgsSentNotDeleted      = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_ALL     );
    NumMsgsSentDeleted         = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_DELETED );
 
@@ -8403,8 +8526,7 @@ static void Sta_GetAndShowSurveysStats (void)
    float NumSurveysPerCourse = 0.0;
    float NumQstsPerSurvey = 0.0;
 
-   /***** Get the number of surveys and the average number of questions per survey from this location
-          (all the platform, current degree or current course) *****/
+   /***** Get the number of surveys and the average number of questions per survey from this location *****/
    if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
      {
       if ((NumCoursesWithSurveys = Svy_GetNumCoursesWithCrsSurveys (Gbl.Scope.Current)) != 0)

@@ -3540,6 +3540,48 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 	"N&ordm; medio<br />de atividades<br />por disciplina";
 #endif
 
+const char *Txt_Average_number_BR_of_games_BR_per_course =
+#if   L==1
+	"Nombre mitj&acute;<br />de jocs<br />per assignatura";
+#elif L==2
+	"Durchschnittliche Anzahl<br />von Spiele<br />pro Kurs";
+#elif L==3
+	"Average number<br />of games<br />per course";
+#elif L==4
+	"N&ordm; medio<br />de juegos<br />por asignatura";
+#elif L==5
+	"Nombre moyen<br />de jeux<br />par mati&egrave;re";
+#elif L==6
+	"N&ordm; medio<br />de juegos<br />por asignatura";	// Okoteve traducción
+#elif L==7
+	"Numero medio<br />di giochi<br />per corso";
+#elif L==8
+	"&Sacute;rednia liczba<br />gry<br />na kurs";
+#elif L==9
+	"N&ordm; medio<br />de jogos<br />por disciplina";
+#endif
+
+const char *Txt_Average_number_BR_of_projects_BR_per_course =
+#if   L==1
+	"Nombre mitj&acute;<br />de projectes<br />per assignatura";
+#elif L==2
+	"Durchschnittliche Anzahl<br />von Projekte<br />pro Kurs";
+#elif L==3
+	"Average number<br />of projects<br />per course";
+#elif L==4
+	"N&ordm; medio<br />de proyectos<br />por asignatura";
+#elif L==5
+	"Nombre moyen<br />de projets<br />par mati&egrave;re";
+#elif L==6
+	"N&ordm; medio<br />de proyectos<br />por asignatura";	// Okoteve traducción
+#elif L==7
+	"Numero medio<br />di progetti<br />per corso";
+#elif L==8
+	"&Sacute;rednia liczba<br />projekty<br />na kurs";
+#elif L==9
+	"N&ordm; medio<br />de projetos<br />por disciplina";
+#endif
+
 const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 #if   L==1
 	"Nombre mitj&acute;<br />de preguntes<br />per enquesta";
@@ -27990,6 +28032,48 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 	"N&ordm; de<br />disciplinas<br />com quest&otilde;es<br />de test<br />export&aacute;veis";
 #endif
 
+const char *Txt_Number_of_BR_courses_with_BR_games =
+#if   L==1
+	"Nombre<br />d'assignatures<br />amb jocs";
+#elif L==2
+	"Anzahl der<br />Kursen<br />mit Spiele";
+#elif L==3
+	"Number of<br />courses with<br />games";
+#elif L==4
+	"N&ordm; de<br />asignaturas<br />con juegos";
+#elif L==5
+	"Nombre de<br />mati&egrave;res<br />avec jeux";
+#elif L==6
+	"N&ordm; de<br />asignaturas<br />con juegos";	// Okoteve traducción
+#elif L==7
+	"Numero di<br />corsi con<br />giochi";
+#elif L==8
+	"Liczba<br />kurs&oacute;w z<br />gry";
+#elif L==9
+	"N&ordm; de<br />disciplinas<br />com jogos";
+#endif
+
+const char *Txt_Number_of_BR_courses_with_BR_projects =
+#if   L==1
+	"Nombre<br />d'assignatures<br />amb projectes";
+#elif L==2
+	"Anzahl der<br />Kursen<br />mit Projekte";
+#elif L==3
+	"Number of<br />courses with<br />projects";
+#elif L==4
+	"N&ordm; de<br />asignaturas<br />con proyectos";
+#elif L==5
+	"Nombre de<br />mati&egrave;res<br />avec projets";
+#elif L==6
+	"N&ordm; de<br />asignaturas<br />con proyectos";	// Okoteve traducción
+#elif L==7
+	"Numero di<br />corsi con<br />progetti";
+#elif L==8
+	"Liczba<br />kurs&oacute;w z<br />projekty";
+#elif L==9
+	"N&ordm; de<br />disciplinas<br />com projetos";
+#endif
+
 const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #if   L==1
 	"Nombre<br />d'assignatures<br />amb preguntes<br />de test";
@@ -28034,7 +28118,7 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 
 const char *Txt_Number_of_BR_events =
 #if   L==1
-	"N&ordm; de<br />eventos";	// Necessita traduccio
+	"N&ordm; d'<br />esdeveniments.";
 #elif L==2
 	"Anzahl der<br />Ereignisse";
 #elif L==3
@@ -28074,6 +28158,27 @@ const char *Txt_Number_of_BR_emails =
 	"N&uacute;mero de<br />emails";
 #endif
 
+const char *Txt_Number_of_BR_games =
+#if   L==1
+	"Nombre<br />de jocs.";
+#elif L==2
+	"Anzahl der<br />Spiele";
+#elif L==3
+	"Number of<br />games";
+#elif L==4
+	"N&ordm; de<br />juegos";
+#elif L==5
+	"Nombre<br />de jeux";
+#elif L==6
+	"N&ordm; de<br />juegos";	// Okoteve traducción
+#elif L==7
+	"Numero di<br />giochi";
+#elif L==8
+	"Liczba<br />gier.";
+#elif L==9
+	"N&uacute;mero de<br />jogos";
+#endif
+
 const char *Txt_Number_of_BR_notifications =
 #if   L==1
 	"Nombre de<br />notificacions";
@@ -28093,6 +28198,27 @@ const char *Txt_Number_of_BR_notifications =
 	"Liczba<br />zgloszen";
 #elif L==9
 	"N&uacute;mero de<br />notifica&ccedil;&otilde;es";
+#endif
+
+const char *Txt_Number_of_BR_projects =
+#if   L==1
+	"Nombre<br />de projectes.";
+#elif L==2
+	"Anzahl der<br />Projekte";
+#elif L==3
+	"Number of<br />projects";
+#elif L==4
+	"N&ordm; de<br />proyectos";
+#elif L==5
+	"Nombre<br />de projets";
+#elif L==6
+	"N&ordm; de<br />proyectos";	// Okoteve traducción
+#elif L==7
+	"Numero di<br />progetti";
+#elif L==8
+	"Liczba<br />projekt&oacute;w.";
+#elif L==9
+	"N&uacute;mero de<br />projetos";
 #endif
 
 const char *Txt_Number_of_students =
@@ -40637,9 +40763,29 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #elif L==7
 	 "Attivit&agrave;"
 #elif L==8
-	 "Assignments"	// Potrzebujesz tlumaczenie
+	 "Zadania"
 #elif L==9
 	 "Atividades"
+#endif
+	 ,
+#if   L==1				// Sta_PROJECTS
+	"Projectes"
+#elif L==2
+	"Projekte"
+#elif L==3
+	"Projects"
+#elif L==4
+	"Proyectos"
+#elif L==5
+	"Projets"
+#elif L==6
+	"Proyectos"	// Okoteve traducción
+#elif L==7
+	"Progetti"
+#elif L==8
+	"Projekty"
+#elif L==9
+	"Projetos"
 #endif
 	 ,
 #if   L==1				// Sta_TESTS
@@ -40657,9 +40803,49 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #elif L==7
 	 "Test"
 #elif L==8
-	 "Tests"		// Potrzebujesz tlumaczenie
+	 "Testy"
 #elif L==9
 	 "Testes"
+#endif
+	 ,
+#if   L==1				// Sta_GAMES
+	"Jocs"
+#elif L==2
+	"Spiele"
+#elif L==3
+	"Games"
+#elif L==4
+	"Juegos"
+#elif L==5
+	"Jeux"
+#elif L==6
+	"Juegos"	// Okoteve traducción
+#elif L==7
+	"Giochi"
+#elif L==8
+	"Gry"
+#elif L==9
+	"Jogos"
+#endif
+	 ,
+#if   L==1				// Sta_SURVEYS
+	 "Enquestes"
+#elif L==2
+	 "Umfragen"
+#elif L==3
+	 "Surveys"
+#elif L==4
+	 "Encuestas"
+#elif L==5
+	 "Sondages"
+#elif L==6
+	 "Encuestas"	// Okoteve traducción
+#elif L==7
+	 "Sondaggi"
+#elif L==8
+	 "Badania"
+#elif L==9
+	 "Inqu&eacute;ritos"
 #endif
 	 ,
 #if   L==1				// Sta_SOCIAL_ACTIVITY
@@ -40780,26 +40966,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Wiadomo&sacute;ci"
 #elif L==9
 	 "Mensagens"
-#endif
-	 ,
-#if   L==1				// Sta_SURVEYS
-	 "Enquestes"
-#elif L==2
-	 "Umfragen"
-#elif L==3
-	 "Surveys"
-#elif L==4
-	 "Encuestas"
-#elif L==5
-	 "Sondages"
-#elif L==6
-	 "Encuestas"	// Okoteve traducción
-#elif L==7
-	 "Sondaggi"
-#elif L==8
-	 "Badania"
-#elif L==9
-	 "Inqu&eacute;ritos"
 #endif
 	 ,
 #if   L==1				// Sta_SOCIAL_NETWORKS

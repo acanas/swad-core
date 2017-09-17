@@ -2532,6 +2532,27 @@ const char *Hlp_STATS_Figures_assignments =
 	"STATS.Figures.en#assignments";
 #endif
 
+const char *Hlp_STATS_Figures_projects =
+#if   L==1
+	"STATS.Figures.es#proyectos";
+#elif L==2
+	"STATS.Figures.en#projects";
+#elif L==3
+	"STATS.Figures.en#projects";
+#elif L==4
+	"STATS.Figures.es#proyectos";
+#elif L==5
+	"STATS.Figures.en#projects";
+#elif L==6
+	"STATS.Figures.es#proyectos";
+#elif L==7
+	"STATS.Figures.en#projects";
+#elif L==8
+	"STATS.Figures.en#projects";
+#elif L==9
+	"STATS.Figures.en#projects";
+#endif
+
 const char *Hlp_STATS_Figures_tests =
 #if   L==1
 	"STATS.Figures.es#tests";
@@ -2551,6 +2572,48 @@ const char *Hlp_STATS_Figures_tests =
 	"STATS.Figures.en#tests";
 #elif L==9
 	"STATS.Figures.en#tests";
+#endif
+
+const char *Hlp_STATS_Figures_games =
+#if   L==1
+	"STATS.Figures.es#juegos";
+#elif L==2
+	"STATS.Figures.en#games";
+#elif L==3
+	"STATS.Figures.en#games";
+#elif L==4
+	"STATS.Figures.es#juegos";
+#elif L==5
+	"STATS.Figures.en#games";
+#elif L==6
+	"STATS.Figures.es#juegos";
+#elif L==7
+	"STATS.Figures.en#games";
+#elif L==8
+	"STATS.Figures.en#games";
+#elif L==9
+	"STATS.Figures.en#games";
+#endif
+
+const char *Hlp_STATS_Figures_surveys =
+#if   L==1
+	"STATS.Figures.es#encuestas";
+#elif L==2
+	"STATS.Figures.en#surveys";
+#elif L==3
+	"STATS.Figures.en#surveys";
+#elif L==4
+	"STATS.Figures.es#encuestas";
+#elif L==5
+	"STATS.Figures.en#surveys";
+#elif L==6
+	"STATS.Figures.es#encuestas";
+#elif L==7
+	"STATS.Figures.en#surveys";
+#elif L==8
+	"STATS.Figures.en#surveys";
+#elif L==9
+	"STATS.Figures.en#surveys";
 #endif
 
 const char *Hlp_STATS_Figures_timeline =
@@ -2677,27 +2740,6 @@ const char *Hlp_STATS_Figures_messages =
 	"STATS.Figures.en#messages";
 #elif L==9
 	"STATS.Figures.en#messages";
-#endif
-
-const char *Hlp_STATS_Figures_surveys =
-#if   L==1
-	"STATS.Figures.es#encuestas";
-#elif L==2
-	"STATS.Figures.en#surveys";
-#elif L==3
-	"STATS.Figures.en#surveys";
-#elif L==4
-	"STATS.Figures.es#encuestas";
-#elif L==5
-	"STATS.Figures.en#surveys";
-#elif L==6
-	"STATS.Figures.es#encuestas";
-#elif L==7
-	"STATS.Figures.en#surveys";
-#elif L==8
-	"STATS.Figures.en#surveys";
-#elif L==9
-	"STATS.Figures.en#surveys";
 #endif
 
 const char *Hlp_STATS_Figures_webs_social_networks =
