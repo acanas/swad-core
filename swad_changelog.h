@@ -252,14 +252,29 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.1 (2017-09-15)"
+#define Log_PLATFORM_VERSION	"SWAD 17.2 (2017-09-17)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.1:     Sep 14, 2017	New module swad_project. Not finished. (229123 lines)
+        Version 17.2:     Sep 17, 2017	New option for projects. Not finished. (229575 lines)
+					12 changes necessary in database:
+CREATE TABLE IF NOT EXISTS projects (PrjCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',NumNotif INT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Folder VARBINARY(255) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(PrjCod),INDEX(CrsCod,Hidden));
+CREATE TABLE IF NOT EXISTS prj_grp (PrjCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(PrjCod,GrpCod));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1674','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1675','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1676','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1677','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1678','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1679','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1680','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1681','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1682','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1683','es','N','Mostrar respuestas de pregunta juego');
+
+        Version 17.1:     Sep 15, 2017	New module swad_project. Not finished. (229123 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/iconset/awesome/action64x64/guide64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/
 sudo cp icon/iconset/awesome/action64x64/project64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/

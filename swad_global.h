@@ -571,6 +571,15 @@ struct Globals
      } Asgs;
    struct
      {
+      bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+      unsigned Num;		// Number of projects
+      long *LstPrjCods;		// List of project codes
+      Dat_StartEndTime_t SelectedOrder;
+      long PrjCodToEdit;	// Used as parameter in contextual links
+      unsigned CurrentPage;
+     } Prjs;
+   struct
+     {
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of attendance events
       struct AttendanceEvent *Lst;	// List of attendance events

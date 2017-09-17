@@ -967,6 +967,70 @@ const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 	"ASSESSMENT.Assignments.en#edit-assignment";
 #endif
 
+
+const char *Hlp_ASSESSMENT_Projects =
+#if   L==1
+	"ASSESSMENT.Projects.es";
+#elif L==2
+	"ASSESSMENT.Projects.en";
+#elif L==3
+	"ASSESSMENT.Projects.en";
+#elif L==4
+	"ASSESSMENT.Projects.es";
+#elif L==5
+	"ASSESSMENT.Projects.en";
+#elif L==6
+	"ASSESSMENT.Projects.es";
+#elif L==7
+	"ASSESSMENT.Projects.en";
+#elif L==8
+	"ASSESSMENT.Projects.en";
+#elif L==9
+	"ASSESSMENT.Projects.en";
+#endif
+
+const char *Hlp_ASSESSMENT_Projects_new_project =
+#if   L==1
+	"ASSESSMENT.Projects.es#nuevo-proyecto";
+#elif L==2
+	"ASSESSMENT.Projects.en#new-project";
+#elif L==3
+	"ASSESSMENT.Projects.en#new-project";
+#elif L==4
+	"ASSESSMENT.Projects.es#nuevo-proyecto";
+#elif L==5
+	"ASSESSMENT.Projects.en#new-project";
+#elif L==6
+	"ASSESSMENT.Projects.es#nuevo-proyecto";
+#elif L==7
+	"ASSESSMENT.Projects.en#new-project";
+#elif L==8
+	"ASSESSMENT.Projects.en#new-project";
+#elif L==9
+	"ASSESSMENT.Projects.en#new-project";
+#endif
+
+const char *Hlp_ASSESSMENT_Projects_edit_project =
+#if   L==1
+	"ASSESSMENT.Projects.es#editar-proyecto";
+#elif L==2
+	"ASSESSMENT.Projects.en#edit-project";
+#elif L==3
+	"ASSESSMENT.Projects.en#edit-project";
+#elif L==4
+	"ASSESSMENT.Projects.es#editar-proyecto";
+#elif L==5
+	"ASSESSMENT.Projects.en#edit-project";
+#elif L==6
+	"ASSESSMENT.Projects.es#editar-proyecto";
+#elif L==7
+	"ASSESSMENT.Projects.en#edit-project";
+#elif L==8
+	"ASSESSMENT.Projects.en#edit-project";
+#elif L==9
+	"ASSESSMENT.Projects.en#edit-project";
+#endif
+
 const char *Hlp_ASSESSMENT_Tests =
 #if   L==1
 	"ASSESSMENT.Tests.es";

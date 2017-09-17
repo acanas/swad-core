@@ -32,6 +32,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_project.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -48,6 +49,7 @@ extern const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
 static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
   {
    "NumPagAsg",		// Pag_ASSIGNMENTS
+   "NumPagPrj",		// Pag_PROJECTS
    "NumPagGam",		// Pag_GAMES
    "NumPagSvy",		// Pag_SURVEYS
    "NumPagAtt",		// Pag_ATT_EVENTS
@@ -160,6 +162,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_PROJECTS:
+               Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Prj_PutHiddenParamPrjOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -261,6 +269,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_PROJECTS:
+               Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Prj_PutHiddenParamPrjOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -346,6 +360,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                Asg_PutHiddenParamAsgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
+            case Pag_PROJECTS:
+               Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+               Prj_PutHiddenParamPrjOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_GAMES:
@@ -446,6 +466,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
+	       case Pag_PROJECTS:
+		  Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		  Prj_PutHiddenParamPrjOrder ();
+		  Grp_PutParamWhichGrps ();
+		  break;
                case Pag_GAMES:
                   Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
@@ -532,6 +558,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
+	    case Pag_PROJECTS:
+	       Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
+	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+	       Prj_PutHiddenParamPrjOrder ();
+	       Grp_PutParamWhichGrps ();
+	       break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
@@ -617,6 +649,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
+	    case Pag_PROJECTS:
+	       Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
+	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+	       Prj_PutHiddenParamPrjOrder ();
+	       Grp_PutParamWhichGrps ();
+	       break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);

@@ -1985,6 +1985,55 @@ mysql> DESCRIBE plugins;
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
+   /***** Table prj_grp *****/
+/*
+mysql> DESCRIBE prj_grp;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| PrjCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_grp ("
+			"PrjCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(PrjCod,GrpCod))");
+
+   /***** Table projects *****/
+/*
+mysql> DESCRIBE projects;
++-----------+----------------+------+-----+---------+----------------+
+| Field     | Type           | Null | Key | Default | Extra          |
++-----------+----------------+------+-----+---------+----------------+
+| PrjCod    | int(11)        | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int(11)        | NO   | MUL | -1      |                |
+| Hidden    | enum('N','Y')  | NO   |     | N       |                |
+| NumNotif  | int(11)        | NO   |     | 0       |                |
+| UsrCod    | int(11)        | NO   |     | NULL    |                |
+| StartTime | datetime       | NO   |     | NULL    |                |
+| EndTime   | datetime       | NO   |     | NULL    |                |
+| Title     | varchar(2047)  | NO   |     | NULL    |                |
+| Folder    | varbinary(255) | NO   |     | NULL    |                |
+| Txt       | text           | NO   |     | NULL    |                |
++-----------+----------------+------+-----+---------+----------------+
+10 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
+			"PrjCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"		// Prj_MAX_BYTES_ASSIGNMENT_TITLE
+			"Folder VARBINARY(255) NOT NULL,"	// Brw_MAX_BYTES_FOLDER
+			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(PrjCod),"
+		   "INDEX(CrsCod,Hidden))");
+
    /***** Table sessions *****/
 /*
 mysql> DESCRIBE sessions;

@@ -2529,6 +2529,48 @@ const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very
 	"J&aacute; existe um jogo com o t&iacute;tulo <strong>%s</strong>.";
 #endif
 
+const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Ja existia un projecte amb la carpeta <strong>%s</strong>.";
+#elif L==2
+	"Es gibt bereits einen Projekt im Verzeichnis <strong>%s</strong>.";
+#elif L==3
+	"There is already a project with folder <strong>%s</strong>.";
+#elif L==4
+	"Ya exist&iacute;a un proyecto con la carpeta <strong>%s</strong>.";
+#elif L==5
+	"Il existe d&eacute;j&agrave; un projet avec le r&eacute;pertoire <strong>%s</strong>.";
+#elif L==6
+	"Ya exist&iacute;a un proyecto con la carpeta <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Esiste gi&agrave; un progetto con la cartella <strong>%s</strong>.";
+#elif L==8
+	"Istnia&lstrok; projekt z folderem <strong>%s</strong>.";
+#elif L==9
+	"J&aacute; existe um projeto com o diret&oacute;rio <strong>%s</strong>.";
+#endif
+
+const char *Txt_Already_existed_a_project_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Ja existia un projecte amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2
+	"Es gibt bereits einen Projekt mit dem Namen <strong>%s</strong>.";
+#elif L==3
+	"Already existed a project with the title <strong>%s</strong>.";
+#elif L==4
+	"Ya exist&iacute;a un proyecto con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5
+	"Il existe d&eacute;j&agrave; un projet du titre <strong>%s</strong>.";
+#elif L==6
+	"Ya exist&iacute;a un proyecto con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Esiste gi&agrave; un progetto con il titolo <strong>%s</strong>.";
+#elif L==8
+	"By&lstrok; ju&zdot; projekt o tytule <strong>%s</strong>.";
+#elif L==9
+	"J&aacute; existe um projeto com o t&iacute;tulo <strong>%s</strong>.";
+#endif
+
 const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
@@ -6777,6 +6819,27 @@ const char *Txt_Create_plugin =
 	"Criar plugin";
 #endif
 
+const char *Txt_Create_project =
+#if   L==1
+	"Crear projecte";
+#elif L==2
+	"Projekt eingeben";
+#elif L==3
+	"Create project";
+#elif L==4
+	"Crear proyecto";
+#elif L==5
+	"Cr&eacute;er projet";
+#elif L==6
+	"Crear proyecto";	// Okoteve traducción
+#elif L==7
+	"Crea progetto";
+#elif L==8
+	"Tworzenie projekt";
+#elif L==9
+	"Criar projeto";
+#endif
+
 const char *Txt_Create_question =
 #if   L==1
 	"Crear pregunta";
@@ -6926,7 +6989,7 @@ const char *Txt_Created_new_announcement_of_exam =
 
 const char *Txt_Created_new_assignment_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Creada nueva actividad <strong>%s</strong>.";	// Necessita traduccio
+	"Creada nova activitat <strong>%s</strong>.";
 #elif L==2
 	"Neue Aufgabe <strong>%s</strong> erstellt.";
 #elif L==3
@@ -6947,7 +7010,7 @@ const char *Txt_Created_new_assignment_X =	// Warning: it is very important to i
 
 const char *Txt_Created_new_banner_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Creado nuevo banner <strong>%s</strong>.";	// Necessita traduccio
+	"Creat nou banner <strong>%s</strong>.";
 #elif L==2
 	"Neuer Werbebanner <strong>%s</strong> erstellt.";
 #elif L==3
@@ -6968,7 +7031,7 @@ const char *Txt_Created_new_banner_X =	// Warning: it is very important to inclu
 
 const char *Txt_Created_new_centre_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Creado nuevo centro <strong>%s</strong>.";	// Necessita traduccio
+	"Creat nou centre <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
 	"Neues Lehrinstitut <strong>%s</strong> eingegeben.";
 #elif L==3
@@ -7258,6 +7321,27 @@ const char *Txt_Created_new_plugin_X =	// Warning: it is very important to inclu
 	"Utworzono nowy plugin <strong>%s</strong>.";
 #elif L==9
 	"Criado novo plugin <strong>%s</strong>.";
+#endif
+
+const char *Txt_Created_new_project_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Creat nou projecte <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2
+	"Neues Projekt <strong>%s</strong> eingegeben.";
+#elif L==3
+	"Created new project <strong>%s</strong>.";
+#elif L==4
+	"Creado nuevo proyecto <strong>%s</strong>.";
+#elif L==5
+	"Cr&eacute;&eacute; nouveau projet <strong>%s</strong>.";
+#elif L==6
+	"Creado nuevo proyecto <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Creato nuovo progetto <strong>%s</strong>.";
+#elif L==8
+	"Utworzono nowe projekt <strong>%s</strong>.";
+#elif L==9
+	"Criado novo projeto <strong>%s</strong>.";
 #endif
 
 const char *Txt_Created_new_record_field_X =	// Warning: it is very important to include %s in the following sentences
@@ -9165,7 +9249,7 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 
 const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar la actividad <strong>%s</strong>?";	// Necessita traduccio
+	"&iquest;De veres voleu eliminar l'activitat <strong>%s</strong>?";
 #elif L==2
 	"Wollen Sie die Aufgabe <strong>%s</strong> wirklich entfernen?";
 #elif L==3
@@ -9584,6 +9668,27 @@ const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is 
 	"Czy na pewno chcesz usun&aogon;&cacute; zdj&eogon;cie <strong>%s</strong>?";
 #elif L==9
 	"Voc&ecirc; realmente deseja remover la foto de <strong>%s</strong>?";
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"&iquest;De veres voleu eliminar el projecte <strong>%s</strong>?";
+#elif L==2
+	"Wollen Sie die Projekt <strong>%s</strong> wirklich entfernen?";
+#elif L==3
+	"Do you really want to remove the project <strong>%s</strong>?";
+#elif L==4
+	"&iquest;Realmente desea eliminar el proyecto <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous vraiment supprimer le projet <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Realmente desea eliminar el proyecto <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere il progetto <strong>%s</strong>?";
+#elif L==8
+	"Czy na pewno chcesz usunac projekt <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover o projeto <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %lu in the following sentences
@@ -10318,6 +10423,48 @@ const char *Txt_Edit_my_webs_networks =
 	"Editar as minhas webs / redes";
 #endif
 
+const char *Txt_Edit_plain_text =
+#if   L==1
+	"Editar text sense format";
+#elif L==2
+	"Plain Text bearbeiten";
+#elif L==3
+	"Edit plain text";
+#elif L==4
+	"Editar texto sin formato";
+#elif L==5
+	"&Eacute;diter texte simple";
+#elif L==6
+	"Editar texto sin formato";	// Okoteve traducción
+#elif L==7
+	"Editare testo normale";
+#elif L==8
+	"Edycja tekstu zwyk&lstrok;y";
+#elif L==9
+	"Editar texto simples";
+#endif
+
+const char *Txt_Edit_project =
+#if   L==1
+	"Editar projecte";
+#elif L==2
+	"Projekt bearbeiten";
+#elif L==3
+	"Edit project";
+#elif L==4
+	"Editar proyecto";
+#elif L==5
+	"&Eacute;diter projet";
+#elif L==6
+	"Editar proyecto";	// Okoteve traducción
+#elif L==7
+	"Editare progetto";
+#elif L==8
+	"Edycja projekt";
+#elif L==9
+	"Editar projeto";
+#endif
+
 const char *Txt_Edit_record_fields =
 #if   L==1
 	"Editar camps de fitxes";
@@ -10358,27 +10505,6 @@ const char *Txt_Edit_survey =
 	"Edycja ankiety";
 #elif L==9
 	"Editar inqu&eacute;rito";
-#endif
-
-const char *Txt_Edit_plain_text =
-#if   L==1
-	"Editar text sense format";
-#elif L==2
-	"Plain Text bearbeiten";
-#elif L==3
-	"Edit plain text";
-#elif L==4
-	"Editar texto sin formato";
-#elif L==5
-	"&Eacute;diter texte simple";
-#elif L==6
-	"Editar texto sin formato";	// Okoteve traducción
-#elif L==7
-	"Editare testo normale";
-#elif L==8
-	"Edycja tekstu zwyk&lstrok;y";
-#elif L==9
-	"Editar texto simples";
 #endif
 
 const char *Txt_Edit_rich_text =
@@ -19191,7 +19317,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Atividades"
 #endif
 	,
-	//  2: ActReqTst
+	//  2: ActSeePrj
+#if   L==1
+	"Projectes"
+#elif L==2
+	"Projekte"
+#elif L==3
+	"Projects"
+#elif L==4
+	"Proyectos"
+#elif L==5
+	"Projets"
+#elif L==6
+	"Proyectos"	// Okoteve traducción
+#elif L==7
+	"Progetti"
+#elif L==8
+	"Projekty"
+#elif L==9
+	"Projetos"
+#endif
+	,
+	//  3: ActReqTst
 #if   L==1
 	"Tests"
 #elif L==2
@@ -19212,7 +19359,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  3: ActSeeAllGam
+	//  4: ActSeeAllGam
 #if   L==1
 	"Jocs"
 #elif L==2
@@ -19233,7 +19380,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Jogos"
 #endif
 	,
-	//  4: ActSeeAllSvy
+	//  5: ActSeeAllSvy
 #if   L==1
 	"Enquestes"
 #elif L==2
@@ -19254,7 +19401,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  5: ActSeeAllExaAnn
+	//  6: ActSeeAllExaAnn
 #if   L==1
 	"Convocat&ograve;ries"
 #elif L==2
@@ -19275,7 +19422,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -21136,7 +21282,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Atividades"
 #endif
 	,
-	//  2: ActReqTst
+	//  2: ActSeePrj
+#if   L==1
+	"Projectes"
+#elif L==2
+	"Projekte"
+#elif L==3
+	"Projects (final degree projects&hellip;)"
+#elif L==4
+	"Proyectos (proyectos fin de carrera, trabajos fin de grado&hellip;)"
+#elif L==5
+	"Projets"
+#elif L==6
+	"Proyectos (proyectos fin de carrera, trabajos fin de grado&hellip;)"	// Okoteve traducción
+#elif L==7
+	"Progetti"
+#elif L==8
+	"Projekty"
+#elif L==9
+	"Projetos"
+#endif
+	,
+	//  3: ActReqTst
 #if   L==1
 	"Tests sobre els continguts d'aquesta assignatura"
 #elif L==2
@@ -21157,7 +21324,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  3: ActSeeAllGam
+	//  4: ActSeeAllGam
 #if   L==1
 	"Jocs (comandament a dist&agrave;ncia)"
 #elif L==2
@@ -21178,7 +21345,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Jogos (controlo remoto)"
 #endif
 	,
-	//  4: ActSeeAllSvy
+	//  5: ActSeeAllSvy
 #if   L==1
 	"Enquestes an&ograve;nimes"
 #elif L==2
@@ -21199,7 +21366,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	//  5: ActSeeAllExaAnn
+	//  6: ActSeeAllExaAnn
 #if   L==1
 	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2
@@ -21220,7 +21387,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas para exames"
 #endif
 	,
-	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -24514,6 +24680,27 @@ const char *Txt_New_post =
 	"Novo post";
 #endif
 
+const char *Txt_New_project =
+#if   L==1
+	"Nou projecte";
+#elif L==2
+	"Neues Projekt";
+#elif L==3
+	"New project";
+#elif L==4
+	"Nuevo proyecto";
+#elif L==5
+	"Nouveau projet";
+#elif L==6
+	"Nuevo proyecto";	// Okoteve traducción
+#elif L==7
+	"Nuovo progetto";
+#elif L==8
+	"Nowy projekt";
+#elif L==9
+	"Novo projeto";
+#endif
+
 const char *Txt_New_question =
 #if   L==1
 	"Nova pregunta";
@@ -25790,6 +25977,27 @@ const char *Txt_No_of_users =
 	"Liczba uzytkownik&oacute;w";
 #elif L==9
 	"N&ordm; de utilizadores";
+#endif
+
+const char *Txt_No_projects =
+#if   L==1
+	"No hi ha projectes.";
+#elif L==2
+	"Keine Projekte.";
+#elif L==3
+	"No projects.";
+#elif L==4
+	"No hay proyectos.";
+#elif L==5
+	"Il n'y a pas de projets.";
+#elif L==6
+	"No hay proyectos.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono progetti.";
+#elif L==8
+	"Brak projekty.";
+#elif L==9
+	"N&atilde;o h&aacute; projetos.";
 #endif
 
 const char *Txt_No_questions_found_matching_your_search_criteria =
@@ -29822,6 +30030,70 @@ const char *Txt_Possibly_duplicate_users =
 	"Usu&aacute;rios possivelmente duplicados";
 #endif
 
+
+const char *Txt_Post =	// Publish (verb)
+#if   L==1
+	"Publicar";
+#elif L==2
+	"Ver&ouml;ffentlichen";
+#elif L==3
+	"Post";
+#elif L==4
+	"Publicar";
+#elif L==5
+	"Publier";
+#elif L==6
+	"Publicar";	// Okoteve traducción
+#elif L==7
+	"Pubblicare";
+#elif L==8
+	"Publikowa&cacute;";
+#elif L==9
+	"Publicar";
+#endif
+
+const char *Txt_post =
+#if   L==1
+	"comentari";
+#elif L==2
+	"Post";
+#elif L==3
+	"post";
+#elif L==4
+	"comentario";
+#elif L==5
+	"post";
+#elif L==6
+	"marandu";
+#elif L==7
+	"post";
+#elif L==8
+	"post";
+#elif L==9
+	"post";
+#endif
+
+const char *Txt_posts =
+#if   L==1
+	"comentaris";
+#elif L==2
+	"Nachrichten";
+#elif L==3
+	"posts";
+#elif L==4
+	"comentarios";
+#elif L==5
+	"posts";
+#elif L==6
+	"marandu";
+#elif L==7
+	"post";
+#elif L==8
+	"posty";
+#elif L==9
+	"posts";
+#endif
+
 const char *Txt_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Comentario %u permitido.";	// Necessita traduccio
@@ -30240,67 +30512,25 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #endif
 
-const char *Txt_Post =	// Publish (verb)
+const char *Txt_Projects =
 #if   L==1
-	"Publicar";
+	"Projectes";
 #elif L==2
-	"Ver&ouml;ffentlichen";
+	"Projekte";
 #elif L==3
-	"Post";
+	"Projects";
 #elif L==4
-	"Publicar";
+	"Proyectos";
 #elif L==5
-	"Publier";
+	"Projets";
 #elif L==6
-	"Publicar";	// Okoteve traducción
+	"Proyectos";	// Okoteve traducción
 #elif L==7
-	"Pubblicare";
+	"Progetti";
 #elif L==8
-	"Publikowa&cacute;";
+	"Projekty";
 #elif L==9
-	"Publicar";
-#endif
-
-const char *Txt_post =
-#if   L==1
-	"comentari";
-#elif L==2
-	"Post";
-#elif L==3
-	"post";
-#elif L==4
-	"comentario";
-#elif L==5
-	"post";
-#elif L==6
-	"marandu";
-#elif L==7
-	"post";
-#elif L==8
-	"post";
-#elif L==9
-	"post";
-#endif
-
-const char *Txt_posts =
-#if   L==1
-	"comentaris";
-#elif L==2
-	"Nachrichten";
-#elif L==3
-	"posts";
-#elif L==4
-	"comentarios";
-#elif L==5
-	"posts";
-#elif L==6
-	"marandu";
-#elif L==7
-	"post";
-#elif L==8
-	"posty";
-#elif L==9
-	"posts";
+	"Projetos";
 #endif
 
 const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences
@@ -31882,6 +32112,27 @@ const char *Txt_Remove_photo =
 	"Usu&nacute; zdjecie";
 #elif L==9
 	"Remover foto";
+#endif
+
+const char *Txt_Remove_project =
+#if   L==1
+	"Eliminar projecte";
+#elif L==2
+	"Entfernen Projekt";
+#elif L==3
+	"Remove project";
+#elif L==4
+	"Eliminar proyecto";
+#elif L==5
+	"Supprimer projet";
+#elif L==6
+	"Eliminar proyecto";	// Okoteve traducción
+#elif L==7
+	"Rimuovere progetto";
+#elif L==8
+	"Usu&nacute; projekt";
+#elif L==9
+	"Remover projeto";
 #endif
 
 const char *Txt_Remove_question =
@@ -42764,7 +43015,7 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuf
 
 const char *Txt_The_assignment_has_been_modified =
 #if   L==1
-	"La actividad ha sido modificada.";	// Necessita traduccio
+	"L'activitat ha estat modificada.";
 #elif L==2
 	"Die Aufgabe wurde ge&auml;ndert.";
 #elif L==3
@@ -42778,7 +43029,7 @@ const char *Txt_The_assignment_has_been_modified =
 #elif L==7
 	"L'attivit&agrave; &egrave; stata modificata.";
 #elif L==8
-	"The assignment has been modified.";	// Potrzebujesz tlumaczenie
+	"Dzia&lstrok;anie zosta&lstrok;o zmodyfikowane.";
 #elif L==9
 	"A atividade foi modificada.";
 #endif
@@ -46000,6 +46251,27 @@ const char *Txt_The_plugin_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"The plugin <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"The plugin <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Necessita de tradução
+#endif
+
+const char *Txt_The_project_has_been_modified =
+#if   L==1
+	"L'activitat ha estat modificada.";
+#elif L==2
+	"Die Projekt wurde ge&auml;ndert.";
+#elif L==3
+	"The project has been modified.";
+#elif L==4
+	"Le projet ha sido modificado.";
+#elif L==5
+	"Le projet a &eacute;t&eacute; modifi&eacute;.";
+#elif L==6
+	"El proyecto ha sido modificado.";	// Okoteve traducción
+#elif L==7
+	"Il progetto &egrave; stato modificato.";
+#elif L==8
+	"Projekt zosta&lstrok; zmodyfikowany.";
+#elif L==9
+	"O projeto foi modificado.";
 #endif
 
 const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is very important to include %s in the following sentences
@@ -55431,6 +55703,27 @@ const char *Txt_You_must_specify_the_title_of_the_game =
 	"Musisz poda&cacute; tytu&lstrok; gra.";
 #elif L==9
 	"Voc&ecirc; deve especificar o t&iacute;tulo do jogo.";
+#endif
+
+const char *Txt_You_must_specify_the_title_of_the_project =
+#if   L==1
+	"Cal especificar el t&iacute;tol del projecte.";
+#elif L==2
+	"Der Projekt muss angegeben werden.";
+#elif L==3
+	"You must specify the title of the project.";
+#elif L==4
+	"Debe especificar el t&iacute;tulo del proyecto.";
+#elif L==5
+	"Vous devez sp&eacute;cifier le titre du projet.";
+#elif L==6
+	"Debe especificar el t&iacute;tulo del proyecto.";	// Okoteve traducción
+#elif L==7
+	"&Egrave; necessario specificare il titolo del progetto.";
+#elif L==8
+	"Musisz poda&cacute; tytu&lstrok; projektu.";
+#elif L==9
+	"Voc&ecirc; deve especificar o t&iacute;tulo do projeto.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_survey =

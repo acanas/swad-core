@@ -78,10 +78,6 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj);
 void Prj_GetDataOfProjectByFolder (struct Project *Prj);
 void Prj_FreeListProjects (void);
 
-void Prj_GetNotifProject (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,
-                          long PrjCod,bool GetContent);
-
 long Prj_GetParamPrjCod (void);
 void Prj_ReqRemProject (void);
 void Prj_RemoveProject (void);
@@ -95,6 +91,6 @@ void Prj_RemoveCrsProjects (long CrsCod);
 unsigned Prj_GetNumProjectsInCrs(long CrsCod);
 
 unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope);
-unsigned Prj_GetNumProjects (Sco_Scope_t Scope,unsigned *NumNotif);
+unsigned Prj_GetNumProjects (Sco_Scope_t Scope);
 
 #endif

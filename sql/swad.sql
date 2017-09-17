@@ -930,6 +930,29 @@ CREATE TABLE IF NOT EXISTS plugins (
 	IP CHAR(15) NOT NULL,
 	UNIQUE INDEX(PlgCod));
 --
+-- Table Prj_grp: stores the groups associated to projects
+--
+CREATE TABLE IF NOT EXISTS prj_grp (
+	PrjCod INT NOT NULL,
+	GrpCod INT NOT NULL,
+	UNIQUE INDEX(PrjCod,GrpCod));
+--
+-- Table projects: stores the projects proposed by the teachers to their students
+--
+CREATE TABLE IF NOT EXISTS projects (
+	PrjCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumNotif INT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Folder VARBINARY(255) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(PrjCod),
+	INDEX(CrsCod,Hidden));
+--
 -- Table sessions: stores the information of open sessions
 --
 CREATE TABLE IF NOT EXISTS sessions (

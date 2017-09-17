@@ -124,10 +124,11 @@ typedef enum
 typedef enum
   {
    Grp_ASSIGNMENT,
+   Grp_PROJECT,
    Grp_ATT_EVENT,
    Grp_SURVEY,
    Grp_GAME,
-  } Grp_AsgAttSvyGam_t;
+  } Grp_AsgPrjAttSvyGam_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
@@ -152,8 +153,8 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
-void Grp_ListGrpsToEditAsgAttSvyGam (struct GroupType *GrpTyp,long Cod,
-                                     Grp_AsgAttSvyGam_t Grp_AsgOrSvy);
+void Grp_ListGrpsToEditAsgPrjAttSvyGam (struct GroupType *GrpTyp,long Cod,
+                                        Grp_AsgPrjAttSvyGam_t Grp_AsgOrSvy);
 
 void Grp_ReqRegisterInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);

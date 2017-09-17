@@ -42,6 +42,7 @@
 #include "swad_icon.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
+#include "swad_project.h"
 #include "swad_role.h"
 #include "swad_theme.h"
 #include "swad_web_service.h"
@@ -347,6 +348,11 @@ void Gbl_InitializeGlobals (void)
    Gbl.Asgs.Num = 0;
    Gbl.Asgs.LstAsgCods = NULL;
    Gbl.Asgs.SelectedOrder = Asg_ORDER_DEFAULT;
+
+   Gbl.Prjs.LstIsRead = false;	// List is not read
+   Gbl.Prjs.Num = 0;
+   Gbl.Prjs.LstPrjCods = NULL;
+   Gbl.Prjs.SelectedOrder = Prj_ORDER_DEFAULT;
 
    Gbl.AttEvents.LstIsRead = false;	// List is not read
    Gbl.AttEvents.Num = 0;

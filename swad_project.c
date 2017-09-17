@@ -73,11 +73,11 @@ static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_PutFormToSelectWhichGroupsToShow (void);
 static void Prj_ParamsWhichGroupsToShow (void);
 static void Prj_ShowOneProject (long PrjCod,bool PrintView);
-static void Prj_WriteAsgAuthor (struct Project *Prj);
+static void Prj_WritePrjAuthor (struct Project *Prj);
 static void Prj_WriteAssignmentFolder (struct Project *Prj,bool PrintView);
-static void Prj_GetParamAsgOrder (void);
+static void Prj_GetParamPrjOrder (void);
 
-static void Prj_PutFormsToRemEditOneAsg (long PrjCod,bool Hidden);
+static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
 static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
@@ -85,7 +85,6 @@ static void Prj_GetProjectTxtFromDB (long PrjCod,char Txt[Cns_MAX_BYTES_TEXT + 1
 static void Prj_PutParamPrjCod (long PrjCod);
 static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod);
 static void Prj_ShowLstGrpsToEditProject (long PrjCod);
-static void Prj_UpdateNumUsrsNotifiedByEMailAboutProject (long PrjCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Prj_CreateProject (struct Project *Prj,const char *Txt);
 static void Prj_UpdateProject (struct Project *Prj,const char *Txt);
 static bool Prj_CheckIfPrjIsAssociatedToGrps (long PrjCod);
@@ -95,40 +94,40 @@ static void Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (struct Project *Prj);
 static bool Prj_CheckIfIBelongToCrsOrGrpsThisProject (long PrjCod);
 
 /*****************************************************************************/
-/************************ List all the projects ***************************/
+/************************** List all the projects ****************************/
 /*****************************************************************************/
 
 void Prj_SeeProjects (void)
   {
    /***** Get parameters *****/
-   Prj_GetParamAsgOrder ();
+   Prj_GetParamPrjOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Show all the projects *****/
    Prj_ShowAllProjects ();
   }
 
 /*****************************************************************************/
-/************************ Show all the projects ***************************/
+/************************** Show all the projects ****************************/
 /*****************************************************************************/
 
 static void Prj_ShowAllProjects (void)
   {
-   extern const char *Hlp_ASSESSMENT_Assignments;
-   extern const char *Txt_Assignments;
-   extern const char *Txt_No_assignments;
+   extern const char *Hlp_ASSESSMENT_Projects;
+   extern const char *Txt_Projects;
+   extern const char *Txt_No_projects;
    struct Pagination Pagination;
-   unsigned NumAsg;
+   unsigned NumPrj;
 
    /***** Get list of projects *****/
    Prj_GetListProjects ();
 
    /***** Compute variables related to pagination *****/
-   Pagination.NumItems = Gbl.Asgs.Num;
-   Pagination.CurrentPage = (int) Gbl.Asgs.CurrentPage;
+   Pagination.NumItems = Gbl.Prjs.Num;
+   Pagination.CurrentPage = (int) Gbl.Prjs.CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Gbl.Asgs.CurrentPage = (unsigned) Pagination.CurrentPage;
+   Gbl.Prjs.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -137,31 +136,31 @@ static void Prj_ShowAllProjects (void)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Assignments,Prj_PutIconsListProjects,
-                 Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
+   Box_StartBox ("100%",Txt_Projects,Prj_PutIconsListProjects,
+                 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Prj_PutFormToSelectWhichGroupsToShow ();
 
-   if (Gbl.Asgs.Num)
+   if (Gbl.Prjs.Num)
      {
       /***** Table head *****/
       Tbl_StartTableWideMargin (2);
       Prj_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the projects *****/
-      for (NumAsg = Pagination.FirstItemVisible;
-	   NumAsg <= Pagination.LastItemVisible;
-	   NumAsg++)
-	 Prj_ShowOneProject (Gbl.Asgs.LstAsgCods[NumAsg - 1],
+      for (NumPrj = Pagination.FirstItemVisible;
+	   NumPrj <= Pagination.LastItemVisible;
+	   NumPrj++)
+	 Prj_ShowOneProject (Gbl.Prjs.LstPrjCods[NumPrj - 1],
 	                        false);	// Not print view
 
       /***** End table *****/
       Tbl_EndTable ();
      }
    else	// No projects created
-      Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
    /***** Button to create a new project *****/
    if (Prj_CheckIfICanCreateProjects ())
@@ -184,7 +183,7 @@ static void Prj_ShowAllProjects (void)
   }
 
 /*****************************************************************************/
-/***************** Write header with fields of a project *****************/
+/******************* Write header with fields of a project *******************/
 /*****************************************************************************/
 
 static void Prj_PutHeadForSeeing (bool PrintView)
@@ -206,18 +205,18 @@ static void Prj_PutHeadForSeeing (bool PrintView)
 
       if (!PrintView)
 	{
-	 Act_FormStart (ActSeeAsg);
+	 Act_FormStart (ActSeePrj);
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Asgs.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Asgs.SelectedOrder)
+	 if (Order == Gbl.Prjs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
       fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
       if (!PrintView)
 	{
-	 if (Order == Gbl.Asgs.SelectedOrder)
+	 if (Order == Gbl.Prjs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -241,7 +240,7 @@ static void Prj_PutHeadForSeeing (bool PrintView)
   }
 
 /*****************************************************************************/
-/******************** Check if I can create projects **********************/
+/********************** Check if I can create projects ***********************/
 /*****************************************************************************/
 
 static bool Prj_CheckIfICanCreateProjects (void)
@@ -251,7 +250,7 @@ static bool Prj_CheckIfICanCreateProjects (void)
   }
 
 /*****************************************************************************/
-/*************** Put contextual icons in list of projects *****************/
+/***************** Put contextual icons in list of projects ******************/
 /*****************************************************************************/
 
 static void Prj_PutIconsListProjects (void)
@@ -266,33 +265,33 @@ static void Prj_PutIconsListProjects (void)
   }
 
 /*****************************************************************************/
-/******************* Put icon to create a new project *********************/
+/********************* Put icon to create a new project **********************/
 /*****************************************************************************/
 
 static void Prj_PutIconToCreateNewPrj (void)
   {
-   extern const char *Txt_New_assignment;
+   extern const char *Txt_New_project;
 
    /***** Put form to create a new project *****/
-   Gbl.Asgs.AsgCodToEdit = -1L;
-   Lay_PutContextualLink (ActFrmNewAsg,NULL,Prj_PutParams,
+   Gbl.Prjs.PrjCodToEdit = -1L;
+   Lay_PutContextualLink (ActFrmNewPrj,NULL,Prj_PutParams,
                           "plus64x64.png",
-                          Txt_New_assignment,NULL,
+                          Txt_New_project,NULL,
                           NULL);
   }
 
 /*****************************************************************************/
-/****************** Put button to create a new project ********************/
+/******************** Put button to create a new project *********************/
 /*****************************************************************************/
 
 static void Prj_PutButtonToCreateNewPrj (void)
   {
-   extern const char *Txt_New_assignment;
+   extern const char *Txt_New_project;
 
-   Gbl.Asgs.AsgCodToEdit = -1L;
-   Act_FormStart (ActFrmNewAsg);
+   Gbl.Prjs.PrjCodToEdit = -1L;
+   Act_FormStart (ActFrmNewPrj);
    Prj_PutParams ();
-   Btn_PutConfirmButton (Txt_New_assignment);
+   Btn_PutConfirmButton (Txt_New_project);
    Act_FormEnd ();
   }
 
@@ -303,18 +302,18 @@ static void Prj_PutButtonToCreateNewPrj (void)
 static void Prj_PutFormToSelectWhichGroupsToShow (void)
   {
    fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeeAsg,Prj_ParamsWhichGroupsToShow);
+   Grp_ShowFormToSelWhichGrps (ActSeePrj,Prj_ParamsWhichGroupsToShow);
    fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Prj_ParamsWhichGroupsToShow (void)
   {
    Prj_PutHiddenParamPrjOrder ();
-   Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Asgs.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
   }
 
 /*****************************************************************************/
-/******************** Show print view of one project **********************/
+/********************** Show print view of one project ***********************/
 /*****************************************************************************/
 
 void Prj_PrintOneProject (void)
@@ -343,10 +342,10 @@ void Prj_PrintOneProject (void)
   }
 
 /*****************************************************************************/
-/*************************** Show one project *****************************/
+/***************************** Show one project ******************************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProject (long AsgºCod,bool PrintView)
+static void Prj_ShowOneProject (long PrjCod,bool PrintView)
   {
    extern const char *Txt_Today;
    extern const char *Txt_ASSIGNMENT_TYPES[Prj_NUM_TYPES_SEND_WORK];
@@ -357,7 +356,7 @@ static void Prj_ShowOneProject (long AsgºCod,bool PrintView)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this project *****/
-   Prj.PrjCod = AsgºCod;
+   Prj.PrjCod = PrjCod;
    Prj_GetDataOfProjectByCod (&Prj);
 
    /***** Write first row of data of this project *****/
@@ -369,7 +368,7 @@ static void Prj_ShowOneProject (long AsgºCod,bool PrintView)
    else
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
-      Prj_PutFormsToRemEditOneAsg (Prj.PrjCod,Prj.Hidden);
+      Prj_PutFormsToRemEditOnePrj (Prj.PrjCod,Prj.Hidden);
      }
    fprintf (Gbl.F.Out,"</td>");
 
@@ -459,7 +458,7 @@ static void Prj_ShowOneProject (long AsgºCod,bool PrintView)
    fprintf (Gbl.F.Out,"\">");
 
    /* Author of the project */
-   Prj_WriteAsgAuthor (&Prj);
+   Prj_WritePrjAuthor (&Prj);
 
    fprintf (Gbl.F.Out,"</td>");
 
@@ -486,24 +485,19 @@ static void Prj_ShowOneProject (long AsgºCod,bool PrintView)
             Txt);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-
-   /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	               AsgºCod,Gbl.CurrentCrs.Crs.CrsCod,
-	               Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
-/********************* Write the author of a project *********************/
+/*********************** Write the author of a project ***********************/
 /*****************************************************************************/
 
-static void Prj_WriteAsgAuthor (struct Project *Prj)
+static void Prj_WritePrjAuthor (struct Project *Prj)
   {
    Usr_WriteAuthor1Line (Prj->UsrCod,Prj->Hidden);
   }
 
 /*****************************************************************************/
-/********************* Write the folder of a project *********************/
+/*********************** Write the folder of a project ***********************/
 /*****************************************************************************/
 
 static void Prj_WriteAssignmentFolder (struct Project *Prj,bool PrintView)
@@ -520,7 +514,7 @@ static void Prj_WriteAssignmentFolder (struct Project *Prj,bool PrintView)
        ICanSendFiles)	// I can send files to this project folder
      {
       /* Form to create a new file or folder */
-      Act_FormStart (ActFrmCreAsgUsr);
+      Act_FormStart (ActFrmCreAsgUsr);	// TODO: Remove this feature
       Brw_PutParamsFileBrowser (ActUnk,
 				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Prj->Folder,
@@ -548,12 +542,12 @@ static void Prj_WriteAssignmentFolder (struct Project *Prj,bool PrintView)
   }
 
 /*****************************************************************************/
-/******* Get parameter with the type or order in list of projects *********/
+/********* Get parameter with the type or order in list of projects **********/
 /*****************************************************************************/
 
-static void Prj_GetParamAsgOrder (void)
+static void Prj_GetParamPrjOrder (void)
   {
-   Gbl.Asgs.SelectedOrder = (Dat_StartEndTime_t)
+   Gbl.Prjs.SelectedOrder = (Dat_StartEndTime_t)
 	                    Par_GetParToUnsignedLong ("Order",
                                                       0,
                                                       Dat_NUM_START_END_TIME - 1,
@@ -561,42 +555,42 @@ static void Prj_GetParamAsgOrder (void)
   }
 
 /*****************************************************************************/
-/*** Put a hidden parameter with the type of order in list of projects ****/
+/***** Put a hidden parameter with the type of order in list of projects *****/
 /*****************************************************************************/
 
 void Prj_PutHiddenParamPrjOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Asgs.SelectedOrder);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Prjs.SelectedOrder);
   }
 
 /*****************************************************************************/
-/***************** Put a link (form) to edit one project ******************/
+/****************** Put a link (form) to edit one project ********************/
 /*****************************************************************************/
 
-static void Prj_PutFormsToRemEditOneAsg (long PrjCod,bool Hidden)
+static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden)
   {
-   Gbl.Asgs.AsgCodToEdit = PrjCod;	// Used as parameter in contextual links
+   Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used as parameter in contextual links
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove project *****/
-	 Ico_PutContextualIconToRemove (ActReqRemAsg,Prj_PutParams);
+	 Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutParams);
 
 	 /***** Put form to hide/show project *****/
 	 if (Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoAsg,Prj_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoPrj,Prj_PutParams);
 	 else
-	    Ico_PutContextualIconToHide (ActHidAsg,Prj_PutParams);
+	    Ico_PutContextualIconToHide (ActHidPrj,Prj_PutParams);
 
 	 /***** Put form to edit project *****/
-	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Prj_PutParams);
+	 Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutParams);
 	 // no break
       case Rol_STD:
       case Rol_NET:
 	 /***** Put form to print project *****/
-	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Prj_PutParams);
+	 Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutParams);
 	 break;
       default:
          break;
@@ -604,20 +598,20 @@ static void Prj_PutFormsToRemEditOneAsg (long PrjCod,bool Hidden)
   }
 
 /*****************************************************************************/
-/******************** Params used to edit a project **********************/
+/********************** Params used to edit a project ************************/
 /*****************************************************************************/
 
 static void Prj_PutParams (void)
   {
-   if (Gbl.Asgs.AsgCodToEdit > 0)
-      Prj_PutParamPrjCod (Gbl.Asgs.AsgCodToEdit);
+   if (Gbl.Prjs.PrjCodToEdit > 0)
+      Prj_PutParamPrjCod (Gbl.Prjs.PrjCodToEdit);
    Prj_PutHiddenParamPrjOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Asgs.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
   }
 
 /*****************************************************************************/
-/************************ List all the projects ***************************/
+/************************** List all the projects ****************************/
 /*****************************************************************************/
 
 void Prj_GetListProjects (void)
@@ -628,9 +622,9 @@ void Prj_GetListProjects (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   unsigned NumAsg;
+   unsigned NumPrj;
 
-   if (Gbl.Asgs.LstIsRead)
+   if (Gbl.Prjs.LstIsRead)
       Prj_FreeListProjects ();
 
    /***** Get list of projects from database *****/
@@ -644,7 +638,7 @@ void Prj_GetListProjects (void)
          sprintf (HiddenSubQuery," AND Hidden='N'");
          break;
      }
-   switch (Gbl.Asgs.SelectedOrder)
+   switch (Gbl.Prjs.SelectedOrder)
      {
       case Dat_START_TIME:
          sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
@@ -657,9 +651,9 @@ void Prj_GetListProjects (void)
       sprintf (Query,"SELECT PrjCod"
                      " FROM projects"
                      " WHERE CrsCod=%ld%s"
-                     " AND (PrjCod NOT IN (SELECT PrjCod FROM asg_grp) OR"
-                     " PrjCod IN (SELECT asg_grp.PrjCod FROM asg_grp,crs_grp_usr"
-                     " WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
+                     " AND (PrjCod NOT IN (SELECT PrjCod FROM prj_grp) OR"
+                     " PrjCod IN (SELECT prj_grp.PrjCod FROM prj_grp,crs_grp_usr"
+                     " WHERE crs_grp_usr.UsrCod=%ld AND prj_grp.GrpCod=crs_grp_usr.GrpCod))"
                      " ORDER BY %s",
                Gbl.CurrentCrs.Crs.CrsCod,
                HiddenSubQuery,
@@ -673,36 +667,36 @@ void Prj_GetListProjects (void)
                Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get projects");
 
-   if (NumRows) // Assignments found...
+   if (NumRows) // Projects found...
      {
-      Gbl.Asgs.Num = (unsigned) NumRows;
+      Gbl.Prjs.Num = (unsigned) NumRows;
 
       /***** Create list of projects *****/
-      if ((Gbl.Asgs.LstAsgCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Gbl.Prjs.LstPrjCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
           Lay_ShowErrorAndExit ("Not enough memory to store list of projects.");
 
       /***** Get the projects codes *****/
-      for (NumAsg = 0;
-	   NumAsg < Gbl.Asgs.Num;
-	   NumAsg++)
+      for (NumPrj = 0;
+	   NumPrj < Gbl.Prjs.Num;
+	   NumPrj++)
         {
          /* Get next project code */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Asgs.LstAsgCods[NumAsg] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.Prjs.LstPrjCods[NumPrj] = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong project code.");
         }
      }
    else
-      Gbl.Asgs.Num = 0;
+      Gbl.Prjs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.Asgs.LstIsRead = true;
+   Gbl.Prjs.LstIsRead = true;
   }
 
 /*****************************************************************************/
-/******************* Get project data using its code **********************/
+/********************* Get project data using its code ***********************/
 /*****************************************************************************/
 
 void Prj_GetDataOfProjectByCod (struct Project *Prj)
@@ -733,7 +727,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
   }
 
 /*****************************************************************************/
-/*************** Get project data using its folder name *******************/
+/***************** Get project data using its folder name ********************/
 /*****************************************************************************/
 
 void Prj_GetDataOfProjectByFolder (struct Project *Prj)
@@ -764,7 +758,7 @@ void Prj_GetDataOfProjectByFolder (struct Project *Prj)
   }
 
 /*****************************************************************************/
-/************************* Get project data *******************************/
+/**************************** Get project data *******************************/
 /*****************************************************************************/
 
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
@@ -817,7 +811,7 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
   }
 
 /*****************************************************************************/
-/************************* Clear all project data **************************/
+/************************** Clear all project data ***************************/
 /*****************************************************************************/
 
 static void Prj_ResetProject (struct Project *Prj)
@@ -837,23 +831,23 @@ static void Prj_ResetProject (struct Project *Prj)
   }
 
 /*****************************************************************************/
-/************************* Free list of projects **************************/
+/*************************** Free list of projects ***************************/
 /*****************************************************************************/
 
 void Prj_FreeListProjects (void)
   {
-   if (Gbl.Asgs.LstIsRead && Gbl.Asgs.LstAsgCods)
+   if (Gbl.Prjs.LstIsRead && Gbl.Prjs.LstPrjCods)
      {
       /***** Free memory used by the list of projects *****/
-      free ((void *) Gbl.Asgs.LstAsgCods);
-      Gbl.Asgs.LstAsgCods = NULL;
-      Gbl.Asgs.Num = 0;
-      Gbl.Asgs.LstIsRead = false;
+      free ((void *) Gbl.Prjs.LstPrjCods);
+      Gbl.Prjs.LstPrjCods = NULL;
+      Gbl.Prjs.Num = 0;
+      Gbl.Prjs.LstIsRead = false;
      }
   }
 
 /*****************************************************************************/
-/******************** Get project text from database **********************/
+/********************** Get project text from database ***********************/
 /*****************************************************************************/
 
 static void Prj_GetProjectTxtFromDB (long PrjCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
@@ -888,53 +882,7 @@ static void Prj_GetProjectTxtFromDB (long PrjCod,char Txt[Cns_MAX_BYTES_TEXT + 1
   }
 
 /*****************************************************************************/
-/***************** Get summary and content of a project  *****************/
-/*****************************************************************************/
-// This function may be called inside a web service
-
-void Prj_GetNotifProject (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                             char **ContentStr,
-                             long PrjCod,bool GetContent)
-  {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   size_t Length;
-
-   SummaryStr[0] = '\0';	// Return nothing on error
-
-   /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM projects WHERE PrjCod=%ld",
-            PrjCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get row *****/
-            row = mysql_fetch_row (mysql_res);
-
-            /***** Get summary *****/
-            Str_Copy (SummaryStr,row[0],
-                      Ntf_MAX_BYTES_SUMMARY);
-
-            /***** Get content *****/
-            if (GetContent)
-              {
-               Length = strlen (row[1]);
-               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
-                  Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               Str_Copy (*ContentStr,row[1],
-                         Length);
-              }
-           }
-         mysql_free_result (mysql_res);
-        }
-  }
-
-/*****************************************************************************/
-/***************** Write parameter with code of project *******************/
+/******************* Write parameter with code of project ********************/
 /*****************************************************************************/
 
 static void Prj_PutParamPrjCod (long PrjCod)
@@ -943,7 +891,7 @@ static void Prj_PutParamPrjCod (long PrjCod)
   }
 
 /*****************************************************************************/
-/****************** Get parameter with code of project ********************/
+/******************** Get parameter with code of project *********************/
 /*****************************************************************************/
 
 long Prj_GetParamPrjCod (void)
@@ -953,19 +901,19 @@ long Prj_GetParamPrjCod (void)
   }
 
 /*****************************************************************************/
-/************* Ask for confirmation of removing a project ****************/
+/*************** Ask for confirmation of removing a project ******************/
 /*****************************************************************************/
 
 void Prj_ReqRemProject (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
-   extern const char *Txt_Remove_assignment;
+   extern const char *Txt_Do_you_really_want_to_remove_the_project_X;
+   extern const char *Txt_Remove_project;
    struct Project Prj;
 
    /***** Get parameters *****/
-   Prj_GetParamAsgOrder ();
+   Prj_GetParamPrjOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get project code *****/
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
@@ -975,19 +923,19 @@ void Prj_ReqRemProject (void)
    Prj_GetDataOfProjectByCod (&Prj);
 
    /***** Show question and button to remove the project *****/
-   Gbl.Asgs.AsgCodToEdit = Prj.PrjCod;
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
+   Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_project_X,
             Prj.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemAsg,NULL,NULL,Prj_PutParams,
-                           Btn_REMOVE_BUTTON,Txt_Remove_assignment);
+                           ActRemPrj,NULL,NULL,Prj_PutParams,
+                           Btn_REMOVE_BUTTON,Txt_Remove_project);
 
    /***** Show projects again *****/
    Prj_SeeProjects ();
   }
 
 /*****************************************************************************/
-/*************************** Remove a project ****************************/
+/***************************** Remove a project ******************************/
 /*****************************************************************************/
 
 void Prj_RemoveProject (void)
@@ -1016,9 +964,6 @@ void Prj_RemoveProject (void)
             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryDELETE (Query,"can not remove project");
 
-   /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Prj.PrjCod);
-
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Assignment_X_removed,
             Prj.Title);
@@ -1029,7 +974,7 @@ void Prj_RemoveProject (void)
   }
 
 /*****************************************************************************/
-/**************************** Hide a project *****************************/
+/****************************** Hide a project *******************************/
 /*****************************************************************************/
 
 void Prj_HideProject (void)
@@ -1061,7 +1006,7 @@ void Prj_HideProject (void)
   }
 
 /*****************************************************************************/
-/**************************** Show a project *****************************/
+/****************************** Show a project *******************************/
 /*****************************************************************************/
 
 void Prj_ShowProject (void)
@@ -1093,7 +1038,7 @@ void Prj_ShowProject (void)
   }
 
 /*****************************************************************************/
-/******** Check if the title or the folder of a project exists ***********/
+/********** Check if the title or the folder of a project exists *************/
 /*****************************************************************************/
 
 static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod)
@@ -1108,30 +1053,30 @@ static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Valu
   }
 
 /*****************************************************************************/
-/****************** Put a form to create a new project ********************/
+/******************** Put a form to create a new project *********************/
 /*****************************************************************************/
 
 void Prj_RequestCreatOrEditPrj (void)
   {
-   extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
-   extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
+   extern const char *Hlp_ASSESSMENT_Projects_new_project;
+   extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_New_assignment;
-   extern const char *Txt_Edit_assignment;
+   extern const char *Txt_New_project;
+   extern const char *Txt_Edit_project;
    extern const char *Txt_Title;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
    extern const char *Txt_Description;
-   extern const char *Txt_Create_assignment;
+   extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    struct Project Prj;
    bool ItsANewAssignment;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Prj_GetParamAsgOrder ();
+   Prj_GetParamPrjOrder ();
    Grp_GetParamWhichGrps ();
-   Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get the code of the project *****/
    ItsANewAssignment = ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L);
@@ -1161,23 +1106,23 @@ void Prj_RequestCreatOrEditPrj (void)
    /***** Start form *****/
    if (ItsANewAssignment)
      {
-      Act_FormStart (ActNewAsg);
-      Gbl.Asgs.AsgCodToEdit = -1L;
+      Act_FormStart (ActNewPrj);
+      Gbl.Prjs.PrjCodToEdit = -1L;
      }
    else
      {
-      Act_FormStart (ActChgAsg);
-      Gbl.Asgs.AsgCodToEdit = Prj.PrjCod;
+      Act_FormStart (ActChgPrj);
+      Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
      }
    Prj_PutParams ();
 
    /***** Start box and table *****/
    if (ItsANewAssignment)
-      Box_StartBoxTable (NULL,Txt_New_assignment,NULL,
-			 Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
+      Box_StartBoxTable (NULL,Txt_New_project,NULL,
+			 Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,Txt_Edit_assignment,NULL,
-			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
+      Box_StartBoxTable (NULL,Txt_Edit_project,NULL,
+			 Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE,2);
 
    /***** Project title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1233,7 +1178,7 @@ void Prj_RequestCreatOrEditPrj (void)
 
    /***** End table, send button and end box *****/
    if (ItsANewAssignment)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_assignment);
+      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_project);
    else
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
@@ -1245,7 +1190,7 @@ void Prj_RequestCreatOrEditPrj (void)
   }
 
 /*****************************************************************************/
-/**************** Show list of groups to edit and project *****************/
+/****************** Show list of groups to edit and project ******************/
 /*****************************************************************************/
 
 static void Prj_ShowLstGrpsToEditProject (long PrjCod)
@@ -1291,7 +1236,8 @@ static void Prj_ShowLstGrpsToEditProject (long PrjCod)
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],PrjCod,Grp_ASSIGNMENT);
+            Grp_ListGrpsToEditAsgPrjAttSvyGam (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+                                               PrjCod,Grp_PROJECT);
 
       /***** End table and box *****/
       Box_EndBoxTable ();
@@ -1304,84 +1250,83 @@ static void Prj_ShowLstGrpsToEditProject (long PrjCod)
   }
 
 /*****************************************************************************/
-/****************** Receive form to create a new project ******************/
+/******************** Receive form to create a new project *******************/
 /*****************************************************************************/
 
 void Prj_RecFormProject (void)
   {
-   extern const char *Txt_Already_existed_an_assignment_with_the_title_X;
-   extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_assignment;
-   extern const char *Txt_Created_new_assignment_X;
-   extern const char *Txt_The_assignment_has_been_modified;
+   extern const char *Txt_Already_existed_a_project_with_the_title_X;
+   extern const char *Txt_Already_existed_a_project_with_the_folder_X;
+   extern const char *Txt_You_must_specify_the_title_of_the_project;
+   extern const char *Txt_Created_new_project_X;
+   extern const char *Txt_The_project_has_been_modified;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
-   struct Project OldAsg;	// Current assigment data in database
-   struct Project NewAsg;	// Project data received from form
+   struct Project OldPrj;	// Current assigment data in database
+   struct Project NewPrj;	// Project data received from form
    bool ItsANewAssignment;
    bool NewAssignmentIsCorrect = true;
-   unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the project *****/
-   NewAsg.PrjCod = Prj_GetParamPrjCod ();
-   ItsANewAssignment = (NewAsg.PrjCod < 0);
+   NewPrj.PrjCod = Prj_GetParamPrjCod ();
+   ItsANewAssignment = (NewPrj.PrjCod < 0);
 
    if (ItsANewAssignment)
      {
       /***** Reset old (current, not existing) project data *****/
-      OldAsg.PrjCod = -1L;
-      Prj_ResetProject (&OldAsg);
+      OldPrj.PrjCod = -1L;
+      Prj_ResetProject (&OldPrj);
      }
    else
      {
       /***** Get data of the old (current) project from database *****/
-      OldAsg.PrjCod = NewAsg.PrjCod;
-      Prj_GetDataOfProjectByCod (&OldAsg);
+      OldPrj.PrjCod = NewPrj.PrjCod;
+      Prj_GetDataOfProjectByCod (&OldPrj);
      }
 
    /***** Get start/end date-times *****/
-   NewAsg.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAsg.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewPrj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewPrj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get project title *****/
-   Par_GetParToText ("Title",NewAsg.Title,Prj_MAX_BYTES_ASSIGNMENT_TITLE);
+   Par_GetParToText ("Title",NewPrj.Title,Prj_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /***** Get folder name where to send works of the project *****/
-   Par_GetParToText ("Folder",NewAsg.Folder,Brw_MAX_BYTES_FOLDER);
-   NewAsg.SendWork = (NewAsg.Folder[0]) ? Prj_SEND_WORK :
+   Par_GetParToText ("Folder",NewPrj.Folder,Brw_MAX_BYTES_FOLDER);
+   NewPrj.SendWork = (NewPrj.Folder[0]) ? Prj_SEND_WORK :
 	                                  Prj_DO_NOT_SEND_WORK;
 
    /***** Get project text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAsg.TimeUTC[Dat_START_TIME] == 0)
-      NewAsg.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewAsg.TimeUTC[Dat_END_TIME] == 0)
-      NewAsg.TimeUTC[Dat_END_TIME] = NewAsg.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+   if (NewPrj.TimeUTC[Dat_START_TIME] == 0)
+      NewPrj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewPrj.TimeUTC[Dat_END_TIME] == 0)
+      NewPrj.TimeUTC[Dat_END_TIME] = NewPrj.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
-   if (NewAsg.Title[0])	// If there's a project title
+   if (NewPrj.Title[0])	// If there's a project title
      {
       /* If title of project was in database... */
-      if (Prj_CheckIfSimilarProjectsExists ("Title",NewAsg.Title,NewAsg.PrjCod))
+      if (Prj_CheckIfSimilarProjectsExists ("Title",NewPrj.Title,NewPrj.PrjCod))
         {
          NewAssignmentIsCorrect = false;
-         sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_assignment_with_the_title_X,
-                  NewAsg.Title);
+         sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_title_X,
+                  NewPrj.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else	// Title is correct
         {
-         if (NewAsg.SendWork == Prj_SEND_WORK)
+         if (NewPrj.SendWork == Prj_SEND_WORK)
            {
-            if (Str_ConvertFilFolLnkNameToValid (NewAsg.Folder))	// If folder name is valid...
+            if (Str_ConvertFilFolLnkNameToValid (NewPrj.Folder))	// If folder name is valid...
               {
-               if (Prj_CheckIfSimilarProjectsExists ("Folder",NewAsg.Folder,NewAsg.PrjCod))	// If folder of project was in database...
+               if (Prj_CheckIfSimilarProjectsExists ("Folder",NewPrj.Folder,NewPrj.PrjCod))	// If folder of project was in database...
                  {
                   NewAssignmentIsCorrect = false;
-                  sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_assignment_with_the_folder_X,
-                           NewAsg.Folder);
+                  sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_folder_X,
+                           NewPrj.Folder);
                   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
                  }
               }
@@ -1391,11 +1336,11 @@ void Prj_RecFormProject (void)
                Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
               }
            }
-         else	// NewAsg.SendWork == Prj_DO_NOT_SEND_WORK
+         else	// NewPrj.SendWork == Prj_DO_NOT_SEND_WORK
            {
-            if (OldAsg.SendWork == Prj_SEND_WORK)
+            if (OldPrj.SendWork == Prj_SEND_WORK)
               {
-               if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
+               if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldPrj.Folder))
                  {
                   NewAssignmentIsCorrect = false;
                   Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
@@ -1407,7 +1352,7 @@ void Prj_RecFormProject (void)
    else	// If there is not a project title
      {
       NewAssignmentIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
      }
 
    /***** Create a new project or update an existing one *****/
@@ -1418,32 +1363,28 @@ void Prj_RecFormProject (void)
 
       if (ItsANewAssignment)
 	{
-         Prj_CreateProject (&NewAsg,Txt);	// Add new project to database
+         Prj_CreateProject (&NewPrj,Txt);	// Add new project to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Alert.Txt,Txt_Created_new_assignment_X,NewAsg.Title);
+	 sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,NewPrj.Title);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
         {
-         if (OldAsg.Folder[0] && NewAsg.Folder[0])
-            if (strcmp (OldAsg.Folder,NewAsg.Folder))	// Folder name has changed
-               NewAssignmentIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,NewAsg.Folder);
+         if (OldPrj.Folder[0] && NewPrj.Folder[0])
+            if (strcmp (OldPrj.Folder,NewPrj.Folder))	// Folder name has changed
+               NewAssignmentIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldPrj.Folder,NewPrj.Folder);
          if (NewAssignmentIsCorrect)
            {
-            Prj_UpdateProject (&NewAsg,Txt);
+            Prj_UpdateProject (&NewPrj,Txt);
 
 	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
            }
         }
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
-
-      /***** Notify by email about the new project *****/
-      if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewAsg.PrjCod)))
-	 Prj_UpdateNumUsrsNotifiedByEMailAboutProject (NewAsg.PrjCod,NumUsrsToBeNotifiedByEMail);
 
       /***** Show projects again *****/
       Prj_SeeProjects ();
@@ -1454,22 +1395,7 @@ void Prj_RecFormProject (void)
   }
 
 /*****************************************************************************/
-/******** Update number of users notified in table of projects ************/
-/*****************************************************************************/
-
-static void Prj_UpdateNumUsrsNotifiedByEMailAboutProject (long PrjCod,unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   char Query[512];
-
-   /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE projects SET NumNotif=NumNotif+%u"
-                  " WHERE PrjCod=%ld",
-            NumUsrsToBeNotifiedByEMail,PrjCod);
-   DB_QueryUPDATE (Query,"can not update the number of notifications of a project");
-  }
-
-/*****************************************************************************/
-/************************ Create a new project ****************************/
+/************************** Create a new project *****************************/
 /*****************************************************************************/
 
 static void Prj_CreateProject (struct Project *Prj,const char *Txt)
@@ -1499,7 +1425,7 @@ static void Prj_CreateProject (struct Project *Prj,const char *Txt)
   }
 
 /*****************************************************************************/
-/********************* Update an existing project *************************/
+/*********************** Update an existing project **************************/
 /*****************************************************************************/
 
 static void Prj_UpdateProject (struct Project *Prj,const char *Txt)
@@ -1532,7 +1458,7 @@ static void Prj_UpdateProject (struct Project *Prj,const char *Txt)
   }
 
 /*****************************************************************************/
-/*********** Check if a project is associated to any group ***************/
+/************* Check if a project is associated to any group *****************/
 /*****************************************************************************/
 
 static bool Prj_CheckIfPrjIsAssociatedToGrps (long PrjCod)
@@ -1540,13 +1466,13 @@ static bool Prj_CheckIfPrjIsAssociatedToGrps (long PrjCod)
    char Query[256];
 
    /***** Get if a project is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM asg_grp WHERE PrjCod=%ld",
+   sprintf (Query,"SELECT COUNT(*) FROM prj_grp WHERE PrjCod=%ld",
             PrjCod);
    return (DB_QueryCOUNT (Query,"can not check if a project is associated to groups") != 0);
   }
 
 /*****************************************************************************/
-/************ Check if a project is associated to a group ****************/
+/************** Check if a project is associated to a group ******************/
 /*****************************************************************************/
 
 bool Prj_CheckIfPrjIsAssociatedToGrp (long PrjCod,long GrpCod)
@@ -1554,14 +1480,14 @@ bool Prj_CheckIfPrjIsAssociatedToGrp (long PrjCod,long GrpCod)
    char Query[256];
 
    /***** Get if a project is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM asg_grp"
+   sprintf (Query,"SELECT COUNT(*) FROM prj_grp"
 	          " WHERE PrjCod=%ld AND GrpCod=%ld",
             PrjCod,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if a project is associated to a group") != 0);
   }
 
 /*****************************************************************************/
-/********************* Remove groups of a project ************************/
+/*********************** Remove groups of a project **************************/
 /*****************************************************************************/
 
 static void Prj_RemoveAllTheGrpsAssociatedToAProject (long PrjCod)
@@ -1569,12 +1495,12 @@ static void Prj_RemoveAllTheGrpsAssociatedToAProject (long PrjCod)
    char Query[256];
 
    /***** Remove groups of the project *****/
-   sprintf (Query,"DELETE FROM asg_grp WHERE PrjCod=%ld",PrjCod);
+   sprintf (Query,"DELETE FROM prj_grp WHERE PrjCod=%ld",PrjCod);
    DB_QueryDELETE (Query,"can not remove the groups associated to a project");
   }
 
 /*****************************************************************************/
-/**************** Remove one group from all the projects ******************/
+/****************** Remove one group from all the projects *******************/
 /*****************************************************************************/
 
 void Prj_RemoveGroup (long GrpCod)
@@ -1582,12 +1508,12 @@ void Prj_RemoveGroup (long GrpCod)
    char Query[256];
 
    /***** Remove group from all the projects *****/
-   sprintf (Query,"DELETE FROM asg_grp WHERE GrpCod=%ld",GrpCod);
+   sprintf (Query,"DELETE FROM prj_grp WHERE GrpCod=%ld",GrpCod);
    DB_QueryDELETE (Query,"can not remove group from the associations between projects and groups");
   }
 
 /*****************************************************************************/
-/*********** Remove groups of one type from all the projects **************/
+/************* Remove groups of one type from all the projects ***************/
 /*****************************************************************************/
 
 void Prj_RemoveGroupsOfType (long GrpTypCod)
@@ -1595,15 +1521,15 @@ void Prj_RemoveGroupsOfType (long GrpTypCod)
    char Query[256];
 
    /***** Remove group from all the projects *****/
-   sprintf (Query,"DELETE FROM asg_grp USING crs_grp,asg_grp"
+   sprintf (Query,"DELETE FROM prj_grp USING crs_grp,prj_grp"
                   " WHERE crs_grp.GrpTypCod=%ld"
-                  " AND crs_grp.GrpCod=asg_grp.GrpCod",
+                  " AND crs_grp.GrpCod=prj_grp.GrpCod",
             GrpTypCod);
    DB_QueryDELETE (Query,"can not remove groups of a type from the associations between projects and groups");
   }
 
 /*****************************************************************************/
-/********************* Create groups of a project ************************/
+/*********************** Create groups of a project **************************/
 /*****************************************************************************/
 
 static void Prj_CreateGrps (long PrjCod)
@@ -1617,7 +1543,7 @@ static void Prj_CreateGrps (long PrjCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO asg_grp"
+      sprintf (Query,"INSERT INTO prj_grp"
 	             " (PrjCod,GrpCod)"
 	             " VALUES"
 	             " (%ld,%ld)",
@@ -1627,7 +1553,7 @@ static void Prj_CreateGrps (long PrjCod)
   }
 
 /*****************************************************************************/
-/********* Get and write the names of the groups of a project ************/
+/*********** Get and write the names of the groups of a project **************/
 /*****************************************************************************/
 
 static void Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (struct Project *Prj)
@@ -1644,9 +1570,9 @@ static void Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (struct Project *Prj)
 
    /***** Get groups associated to a project from database *****/
    sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-	          " FROM asg_grp,crs_grp,crs_grp_types"
-                  " WHERE asg_grp.PrjCod=%ld"
-                  " AND asg_grp.GrpCod=crs_grp.GrpCod"
+	          " FROM prj_grp,crs_grp,crs_grp_types"
+                  " WHERE prj_grp.PrjCod=%ld"
+                  " AND prj_grp.GrpCod=crs_grp.GrpCod"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             Prj->PrjCod);
@@ -1694,7 +1620,7 @@ static void Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (struct Project *Prj)
   }
 
 /*****************************************************************************/
-/****************** Remove all the projects of a course *******************/
+/******************** Remove all the projects of a course ********************/
 /*****************************************************************************/
 
 void Prj_RemoveCrsProjects (long CrsCod)
@@ -1702,9 +1628,9 @@ void Prj_RemoveCrsProjects (long CrsCod)
    char Query[512];
 
    /***** Remove groups *****/
-   sprintf (Query,"DELETE FROM asg_grp USING projects,asg_grp"
+   sprintf (Query,"DELETE FROM prj_grp USING projects,prj_grp"
                   " WHERE projects.CrsCod=%ld"
-                  " AND projects.PrjCod=asg_grp.PrjCod",
+                  " AND projects.PrjCod=prj_grp.PrjCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove all the groups associated to projects of a course");
 
@@ -1714,7 +1640,7 @@ void Prj_RemoveCrsProjects (long CrsCod)
   }
 
 /*****************************************************************************/
-/********* Check if I belong to any of the groups of a project ***********/
+/*********** Check if I belong to any of the groups of a project *************/
 /*****************************************************************************/
 
 static bool Prj_CheckIfIBelongToCrsOrGrpsThisProject (long PrjCod)
@@ -1732,12 +1658,12 @@ static bool Prj_CheckIfIBelongToCrsOrGrpsThisProject (long PrjCod)
 			" WHERE PrjCod=%ld"
 			" AND "
 			"("
-			"PrjCod NOT IN (SELECT PrjCod FROM asg_grp)"	// Project is for the whole course
+			"PrjCod NOT IN (SELECT PrjCod FROM prj_grp)"	// Project is for the whole course
 			" OR "
 			"PrjCod IN"					// Project is for specific groups
-			" (SELECT asg_grp.PrjCod FROM asg_grp,crs_grp_usr"
+			" (SELECT prj_grp.PrjCod FROM prj_grp,crs_grp_usr"
 			" WHERE crs_grp_usr.UsrCod=%ld"
-			" AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+			" AND prj_grp.GrpCod=crs_grp_usr.GrpCod)"
 			")",
 		  PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 	 return (DB_QueryCOUNT (Query,"can not check if I can do a project") != 0);
@@ -1753,7 +1679,7 @@ static bool Prj_CheckIfIBelongToCrsOrGrpsThisProject (long PrjCod)
   }
 
 /*****************************************************************************/
-/****************** Get number of projects in a course ********************/
+/******************** Get number of projects in a course *********************/
 /*****************************************************************************/
 
 unsigned Prj_GetNumProjectsInCrs (long CrsCod)
@@ -1767,7 +1693,7 @@ unsigned Prj_GetNumProjectsInCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/****************** Get number of courses with projects *******************/
+/******************** Get number of courses with projects ********************/
 /*****************************************************************************/
 // Returns the number of courses with projects
 // in this location (all the platform, current degree or current course)
@@ -1849,28 +1775,28 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/************************ Get number of projects **************************/
+/************************** Get number of projects ***************************/
 /*****************************************************************************/
 // Returns the number of projects
 // in this location (all the platform, current degree or current course)
 
-unsigned Prj_GetNumProjects (Sco_Scope_t Scope,unsigned *NumNotif)
+unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumAssignments;
+   unsigned NumProjects;
 
    /***** Get number of projects from database *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM projects"
                         " WHERE CrsCod>0");
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(*),SUM(projects.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM institutions,centres,degrees,courses,projects"
                         " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
@@ -1880,7 +1806,7 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope,unsigned *NumNotif)
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(*),SUM(projects.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM centres,degrees,courses,projects"
                         " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
@@ -1889,7 +1815,7 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope,unsigned *NumNotif)
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(*),SUM(projects.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM degrees,courses,projects"
                         " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1897,14 +1823,14 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope,unsigned *NumNotif)
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(*),SUM(projects.NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM courses,projects"
                         " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=projects.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM projects"
                         " WHERE CrsCod=%ld",
                   Gbl.CurrentCrs.Crs.CrsCod);
@@ -1917,20 +1843,11 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope,unsigned *NumNotif)
 
    /***** Get number of projects *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumAssignments) != 1)
+   if (sscanf (row[0],"%u",&NumProjects) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of projects.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of projects.");
-     }
-   else
-      *NumNotif = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumAssignments;
+   return NumProjects;
   }

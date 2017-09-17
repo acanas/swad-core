@@ -65,6 +65,7 @@
 #include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
+#include "swad_project.h"
 #include "swad_QR.h"
 #include "swad_report.h"
 #include "swad_role.h"
@@ -424,6 +425,7 @@ Course:
 Assessment:
 	288. ActSeeAss			Show the assessment system
 	289. ActSeeAsg			Show assignments
+	NEW. ActSeePrj			Show projects
 	290. ActReqTst			Request a test of self-assesment
         NEW. ActSeeAllGam		Remote control
         291. ActSeeAllSvy		List all surveys in pages
@@ -440,6 +442,7 @@ Assessment:
 	301. ActRchTxtEdiAss		Editor of rich text of assessment
 	302. ActRcvPlaTxtAss		Receive and change the plain text of the assessment system
 	303. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
+
 	304. ActFrmNewAsg		Form to create a new assignment
 	305. ActEdiOneAsg		Edit one assignment
 	306. ActPrnOneAsg		Print one assignment
@@ -449,6 +452,16 @@ Assessment:
 	310. ActRemAsg			Remove assignment
 	311. ActHidAsg			Hide assignment
 	312. ActShoAsg			Show assignment
+
+	NEW. ActFrmNewPrj		Form to create a new project
+	NEW. ActEdiOnePrj		Edit one project
+	NEW. ActPrnOnePrj		Print one project
+	NEW. ActNewPrj			Create new project
+	NEW. ActChgPrj			Modify data of an existing project
+	NEW. ActReqRemPrj		Request the removal of an project
+	NEW. ActRemPrj			Remove project
+	NEW. ActHidPrj			Hide project
+	NEW. ActShoPrj			Show project
 
 	313. ActSeeTst			Show the seft-assessment test
 	314. ActAssTst			Assess a self-assessment test
@@ -1902,10 +1915,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"infogrades64x64.gif"	},
    /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
-   /* ActReqTst		*/{ 103, 2,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
-   /* ActSeeAllGam	*/{1649, 3,TabAss,ActSeeAllGam		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeAllGames		,"remote64x64.png"	},
-   /* ActSeeAllSvy	*/{ 966, 4,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActSeeAllExaAnn	*/{  85, 5,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
+   /* ActSeePrj		*/{1674, 2,TabAss,ActSeePrj		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeProjects		,"project64x64.png"	},
+   /* ActReqTst		*/{ 103, 3,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
+   /* ActSeeAllGam	*/{1649, 4,TabAss,ActSeeAllGam		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeAllGames		,"remote64x64.png"	},
+   /* ActSeeAllSvy	*/{ 966, 5,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
+   /* ActSeeAllExaAnn	*/{  85, 6,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
 
    // Actions not in menu:
    /* ActEdiAss		*/{  69,-1,TabUnk,ActSeeAss		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
@@ -1929,6 +1943,16 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemAsg		*/{ 806,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RemoveAssignment		,NULL},
    /* ActHidAsg		*/{ 964,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_HideAssignment		,NULL},
    /* ActShoAsg		*/{ 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ShowAssignment		,NULL},
+
+   /* ActFrmNewPrj	*/{1675,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatOrEditPrj	,NULL},
+   /* ActEdiOnePrj	*/{1676,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatOrEditPrj	,NULL},
+   /* ActPrnOnePrj	*/{1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
+   /* ActNewPrj		*/{1678,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
+   /* ActChgPrj		*/{1679,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
+   /* ActReqRemPrj	*/{1680,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemProject		,NULL},
+   /* ActRemPrj		*/{1681,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
+   /* ActHidPrj		*/{1682,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
+   /* ActShoPrj		*/{1683,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowProject		,NULL},
 
    /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowNewTest		,NULL},
    /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_AssessTest			,NULL},
@@ -4729,6 +4753,16 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPlyGam1stQst,	// #1671
 	ActPlyGamNxtQst,	// #1672
 	ActPlyGamAns,		// #1673
+	ActSeePrj,		// #1674
+	ActFrmNewPrj,		// #1675
+	ActEdiOnePrj,		// #1676
+	ActPrnOnePrj,		// #1677
+	ActNewPrj,		// #1678
+	ActChgPrj,		// #1679
+	ActReqRemPrj,		// #1680
+	ActRemPrj,		// #1681
+	ActHidPrj,		// #1682
+	ActShoPrj,		// #1683
 	};
 
 /*****************************************************************************/
