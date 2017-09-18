@@ -72,7 +72,7 @@ static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_PutFormToSelectWhichGroupsToShow (void);
 static void Prj_ParamsWhichGroupsToShow (void);
-static void Prj_ShowOneProject (long PrjCod,bool PrintView);
+static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
 static void Prj_WritePrjAuthor (struct Project *Prj);
 static void Prj_GetParamPrjOrder (void);
 
@@ -80,12 +80,15 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
 static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
-static void Prj_GetProjectTxtFromDB (long PrjCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Prj_PutParamPrjCod (long PrjCod);
 static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod);
+
+static void Prj_AllocMemProject (struct Project *Prj);
+static void Prj_FreeMemProject (struct Project *Prj);
+
 static void Prj_ShowLstGrpsToEditProject (long PrjCod);
-static void Prj_CreateProject (struct Project *Prj,const char *Txt);
-static void Prj_UpdateProject (struct Project *Prj,const char *Txt);
+static void Prj_CreateProject (struct Project *Prj);
+static void Prj_UpdateProject (struct Project *Prj);
 static bool Prj_CheckIfPrjIsAssociatedToGrps (long PrjCod);
 static void Prj_RemoveAllTheGrpsAssociatedToAProject (long PrjCod);
 static void Prj_CreateGrps (long PrjCod);
@@ -118,6 +121,7 @@ static void Prj_ShowAllProjects (void)
    extern const char *Txt_No_projects;
    struct Pagination Pagination;
    unsigned NumPrj;
+   struct Project Prj;
 
    /***** Get list of projects *****/
    Prj_GetListProjects ();
@@ -144,6 +148,9 @@ static void Prj_ShowAllProjects (void)
 
    if (Gbl.Prjs.Num)
      {
+      /***** Allocate memory for the project *****/
+      Prj_AllocMemProject (&Prj);
+
       /***** Table head *****/
       Tbl_StartTableWideMargin (2);
       Prj_PutHeadForSeeing (false);	// Not print view
@@ -152,11 +159,17 @@ static void Prj_ShowAllProjects (void)
       for (NumPrj = Pagination.FirstItemVisible;
 	   NumPrj <= Pagination.LastItemVisible;
 	   NumPrj++)
-	 Prj_ShowOneProject (Gbl.Prjs.LstPrjCods[NumPrj - 1],
+	{
+	 Prj.PrjCod = Gbl.Prjs.LstPrjCods[NumPrj - 1];
+	 Prj_ShowOneProject (&Prj,
 	                     false);	// Not print view
+	}
 
       /***** End table *****/
       Tbl_EndTable ();
+
+      /***** Free memory of the project *****/
+      Prj_FreeMemProject (&Prj);
      }
    else	// No projects created
       Ale_ShowAlert (Ale_INFO,Txt_No_projects);
@@ -312,10 +325,13 @@ static void Prj_ParamsWhichGroupsToShow (void)
 
 void Prj_PrintOneProject (void)
   {
-   long PrjCod;
+   struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
 
    /***** Get the code of the project *****/
-   PrjCod = Prj_GetParamPrjCod ();
+   Prj.PrjCod = Prj_GetParamPrjCod ();
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
@@ -328,30 +344,30 @@ void Prj_PrintOneProject (void)
    Prj_PutHeadForSeeing (true);	// Print view
 
    /***** Write project *****/
-   Prj_ShowOneProject (PrjCod,
+   Prj_ShowOneProject (&Prj,
                        true);	// Print view
 
    /***** End table *****/
    Tbl_EndTable ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
   }
 
 /*****************************************************************************/
 /***************************** Show one project ******************************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProject (long PrjCod,bool PrintView)
+static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
   {
    extern const char *Txt_Today;
    extern const char *Txt_PREASSIGNED_TYPES[Prj_NUM_TYPES_PREASSIGNED];
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    static unsigned UniqueId = 0;
-   struct Project Prj;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this project *****/
-   Prj.PrjCod = PrjCod;
-   Prj_GetDataOfProjectByCod (&Prj);
+   Prj_GetDataOfProjectByCod (Prj);
 
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
@@ -362,7 +378,7 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
    else
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
-      Prj_PutFormsToRemEditOnePrj (Prj.PrjCod,Prj.Hidden);
+      Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden);
      }
    fprintf (Gbl.F.Out,"</td>");
 
@@ -370,10 +386,10 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
-            Prj.Hidden ? (Prj.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Prj.Open ? "DATE_GREEN" :
-                                     "DATE_RED"));
+            Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
+        	                       "DATE_RED_LIGHT") :
+                          (Prj->Open ? "DATE_GREEN" :
+                                       "DATE_RED"));
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
@@ -382,17 +398,17 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
-            UniqueId,Prj.TimeUTC[Dat_START_TIME],
+            UniqueId,Prj->TimeUTC[Dat_START_TIME],
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* End date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
-            Prj.Hidden ? (Prj.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Prj.Open ? "DATE_GREEN" :
-                                     "DATE_RED"));
+            Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
+        	                       "DATE_RED_LIGHT") :
+                          (Prj->Open ? "DATE_GREEN" :
+                                       "DATE_RED"));
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
@@ -401,7 +417,7 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
                       "%u,'<br />','%s',false,true,0x7);"
                       "</script>"
 	              "</td>",
-            UniqueId,Prj.TimeUTC[Dat_END_TIME],
+            UniqueId,Prj->TimeUTC[Dat_END_TIME],
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Project title */
@@ -410,15 +426,15 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<div class=\"%s\">%s</div>",
-            Prj.Hidden ? "ASG_TITLE_LIGHT" :
-        	         "ASG_TITLE",
-            Prj.Title);
+            Prj->Hidden ? "ASG_TITLE_LIGHT" :
+        	          "ASG_TITLE",
+            Prj->Title);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Preassigned? */
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",
-            (Prj.Preassigned == Prj_PREASSIGNED) ? "DAT_N" :
-        	                                   "DAT");
+            (Prj->Preassigned == Prj_PREASSIGNED) ? "DAT_N" :
+        	                                    "DAT");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
@@ -428,12 +444,12 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
-            (Prj.Preassigned == Prj_PREASSIGNED) ? "usr" :
-        	                                   "usr_off",
-            Txt_PREASSIGNED_TYPES[Prj.Preassigned],
-            Txt_PREASSIGNED_TYPES[Prj.Preassigned],
-            (Prj.Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
-        	                                   Txt_No);
+            (Prj->Preassigned == Prj_PREASSIGNED) ? "usr" :
+        	                                    "usr_off",
+            Txt_PREASSIGNED_TYPES[Prj->Preassigned],
+            Txt_PREASSIGNED_TYPES[Prj->Preassigned],
+            (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+        	                                    Txt_No);
 
    /***** Write second row of data of this project *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -443,31 +459,30 @@ static void Prj_ShowOneProject (long PrjCod,bool PrintView)
    fprintf (Gbl.F.Out,"\">");
 
    /* Author of the project */
-   Prj_WritePrjAuthor (&Prj);
+   Prj_WritePrjAuthor (Prj);
 
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Text of the project */
-   Prj_GetProjectTxtFromDB (Prj.PrjCod,Txt);
+   /* Description of the project */
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+                     Prj->Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+   Str_InsertLinks (Prj->Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (&Prj);
+      Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (Prj);
 
    fprintf (Gbl.F.Out,"<p class=\"%s\">"
                       "%s"
                       "</p>"
                       "</td>"
                       "</tr>",
-            Prj.Hidden ? "DAT_LIGHT" :
-        	         "DAT",
-            Txt);
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            Prj->Description);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -646,14 +661,28 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
    if (Prj->PrjCod > 0)
      {
       /***** Build query *****/
-      sprintf (Query,"SELECT PrjCod,Hidden,UsrCod,"
+      sprintf (Query,"SELECT PrjCod,Hidden,Preassigned,UsrCod,"
 		     "UNIX_TIMESTAMP(StartTime),"
 		     "UNIX_TIMESTAMP(EndTime),"
 		     "NOW() BETWEEN StartTime AND EndTime,"
-		     "Title,Preassigned,URL"
+		     "Title,Description,Knowledge,Materials,URL"
 		     " FROM projects"
 		     " WHERE PrjCod=%ld AND CrsCod=%ld",
 	       Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      /*
+      row[ 0]: PrjCod
+      row[ 1]: Hidden
+      row[ 2]: Preassigned
+      row[ 3]: UsrCod
+      row[ 4]: UNIX_TIMESTAMP(StartTime)
+      row[ 5]: UNIX_TIMESTAMP(EndTime)
+      row[ 6]: NOW() BETWEEN StartTime AND EndTime
+      row[ 7]: Title
+      row[ 8]: Description
+      row[ 9]: Knowledge
+      row[10]: Materials
+      row[11]: URL
+      */
 
       /***** Get data of project *****/
       Prj_GetDataOfProject (Prj,Query);
@@ -683,6 +712,20 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
+      /*
+      row[ 0]: PrjCod
+      row[ 1]: Hidden
+      row[ 2]: Preassigned
+      row[ 3]: UsrCod
+      row[ 4]: UNIX_TIMESTAMP(StartTime)
+      row[ 5]: UNIX_TIMESTAMP(EndTime)
+      row[ 6]: NOW() BETWEEN StartTime AND EndTime
+      row[ 7]: Title
+      row[ 8]: Description
+      row[ 9]: Knowledge
+      row[10]: Materials
+      row[11]: URL
+      */
 
       /* Get code of the project (row[0]) */
       Prj->PrjCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -690,28 +733,40 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       /* Get whether the project is hidden or not (row[1]) */
       Prj->Hidden = (row[1][0] == 'Y');
 
-      /* Get author of the project (row[2]) */
-      Prj->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get start date (row[3] holds the start UTC time) */
-      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-
-      /* Get end date   (row[4] holds the end   UTC time) */
-      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
-
-      /* Get whether the project is open or closed (row(5)) */
-      Prj->Open = (row[5][0] == '1');
-
-      /* Get the title of the project (row[6]) */
-      Str_Copy (Prj->Title,row[6],
-                Prj_MAX_BYTES_PROJECT_TITLE);
-
-      /* Get the folder for the project files (row[7]) */
-      Prj->Preassigned = (row[7][0] == 'Y') ? Prj_PREASSIGNED :
+      /* Get the folder for the project files (row[2]) */
+      Prj->Preassigned = (row[2][0] == 'Y') ? Prj_PREASSIGNED :
 	                                      Prj_NOT_PREASSIGNED;
 
-      /* Get the title of the project (row[8]) */
-      Str_Copy (Prj->URL,row[8],
+      /* Get author of the project (row[3]) */
+      Prj->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+      /* Get start date (row[4] holds the start UTC time) */
+      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+
+      /* Get end date   (row[5] holds the end   UTC time) */
+      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+
+      /* Get whether the project is open or closed (row(6)) */
+      Prj->Open = (row[6][0] == '1');
+
+      /* Get the title of the project (row[7]) */
+      Str_Copy (Prj->Title,row[7],
+                Prj_MAX_BYTES_PROJECT_TITLE);
+
+      /* Get the description of the project (row[8]) */
+      Str_Copy (Prj->Title,row[8],
+                Cns_MAX_BYTES_TEXT);
+
+      /* Get the required knowledge for the project (row[9]) */
+      Str_Copy (Prj->Title,row[9],
+                Cns_MAX_BYTES_TEXT);
+
+      /* Get the required materials for the project (row[10]) */
+      Str_Copy (Prj->Title,row[10],
+                Cns_MAX_BYTES_TEXT);
+
+      /* Get the URL of the project (row[11]) */
+      Str_Copy (Prj->URL,row[11],
                 Cns_MAX_BYTES_WWW);
 
       /* Can I do this project? */
@@ -730,14 +785,17 @@ static void Prj_ResetProject (struct Project *Prj)
   {
    if (Prj->PrjCod <= 0)	// If > 0 ==> keep value
       Prj->PrjCod = -1L;
-   Prj->PrjCod = -1L;
    Prj->Hidden = false;
+   Prj->Preassigned = Prj_NOT_PREASSIGNED;
    Prj->UsrCod = -1L;
    Prj->TimeUTC[Dat_START_TIME] =
    Prj->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Prj->Open = false;
    Prj->Title[0] = '\0';
-   Prj->Preassigned = Prj_NOT_PREASSIGNED;
+   Prj->Description[0] = '\0';
+   Prj->Knowledge[0] = '\0';
+   Prj->Materials[0] = '\0';
+   Prj->URL[0] = '\0';
    Prj->IBelongToCrsOrGrps = false;
   }
 
@@ -755,41 +813,6 @@ void Prj_FreeListProjects (void)
       Gbl.Prjs.Num = 0;
       Gbl.Prjs.LstIsRead = false;
      }
-  }
-
-/*****************************************************************************/
-/********************** Get project text from database ***********************/
-/*****************************************************************************/
-
-static void Prj_GetProjectTxtFromDB (long PrjCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
-   /***** Get text of project from database *****/
-   sprintf (Query,"SELECT Txt FROM projects"
-	          " WHERE PrjCod=%ld AND CrsCod=%ld",
-            PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get project text");
-
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
-     {
-      /* Get info text */
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],
-                Cns_MAX_BYTES_TEXT);
-     }
-   else
-      Txt[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting project text.");
   }
 
 /*****************************************************************************/
@@ -975,12 +998,16 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *Txt_No;
    extern const char *Txt_Yes;
    extern const char *Txt_Description;
+   extern const char *Txt_Required_knowledge;
+   extern const char *Txt_Required_materials;
    extern const char *Txt_URL;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    struct Project Prj;
    bool ItsANewProject;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
@@ -994,23 +1021,14 @@ void Prj_RequestCreatOrEditPrj (void)
    if (ItsANewProject)
      {
       /* Initialize to empty project */
-      Prj.PrjCod = -1L;
+      Prj_ResetProject (&Prj);
       Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
       Prj.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Prj.Open = true;
-      Prj.Title[0] = '\0';
-      Prj.Preassigned = Prj_NOT_PREASSIGNED;
-      Prj.URL[0] = '\0';
-      Prj.IBelongToCrsOrGrps = false;
      }
    else
-     {
       /* Get data of the project from database */
       Prj_GetDataOfProjectByCod (&Prj);
-
-      /* Get text of the project from database */
-      Prj_GetProjectTxtFromDB (Prj.PrjCod,Txt);
-     }
 
    /***** Start form *****/
    if (ItsANewProject)
@@ -1074,17 +1092,47 @@ void Prj_RequestCreatOrEditPrj (void)
 	              "</td>"
                       "</tr>");
 
-   /***** Project text *****/
+   /***** Description of the project *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
+	              "<label for=\"Description\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Txt\" name=\"Txt\""
+                      "<textarea id=\"Description\" name=\"Description\""
                       " cols=\"60\" rows=\"10\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewProject)
-      fprintf (Gbl.F.Out,"%s",Txt);
+      fprintf (Gbl.F.Out,"%s",Prj.Description);
+   fprintf (Gbl.F.Out,"</textarea>"
+                      "</td>"
+                      "</tr>");
+
+   /***** Required knowledge to carry out the project *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Knowledge\" class=\"%s\">%s:</label>"
+	              "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"Knowledge\" name=\"Knowledge\""
+                      " cols=\"60\" rows=\"5\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Required_knowledge);
+   if (!ItsANewProject)
+      fprintf (Gbl.F.Out,"%s",Prj.Knowledge);
+   fprintf (Gbl.F.Out,"</textarea>"
+                      "</td>"
+                      "</tr>");
+
+   /***** Required materials to carry out the project *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Materials\" class=\"%s\">%s:</label>"
+	              "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"Materials\" name=\"Materials\""
+                      " cols=\"60\" rows=\"5\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Required_materials);
+   if (!ItsANewProject)
+      fprintf (Gbl.F.Out,"%s",Prj.Materials);
    fprintf (Gbl.F.Out,"</textarea>"
                       "</td>"
                       "</tr>");
@@ -1115,8 +1163,50 @@ void Prj_RequestCreatOrEditPrj (void)
    /***** End form *****/
    Act_FormEnd ();
 
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
    /***** Show current projects, if any *****/
    Prj_ShowAllProjects ();
+  }
+
+/*****************************************************************************/
+/*** Allocate memory for those parameters of a project with a lot of text ****/
+/*****************************************************************************/
+
+static void Prj_AllocMemProject (struct Project *Prj)
+  {
+   if ((Prj->Description = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store project.");
+
+   if ((Prj->Knowledge   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store project.");
+
+   if ((Prj->Materials   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store project.");
+  }
+
+/*****************************************************************************/
+/****** Free memory of those parameters of a project with a lot of text ******/
+/*****************************************************************************/
+
+static void Prj_FreeMemProject (struct Project *Prj)
+  {
+   if (Prj->Description)
+     {
+      free ((void *) Prj->Description);
+      Prj->Description = NULL;
+     }
+   if (Prj->Knowledge)
+     {
+      free ((void *) Prj->Knowledge);
+      Prj->Knowledge = NULL;
+     }
+   if (Prj->Materials)
+     {
+      free ((void *) Prj->Materials);
+      Prj->Materials = NULL;
+     }
   }
 
 /*****************************************************************************/
@@ -1193,7 +1283,10 @@ void Prj_RecFormProject (void)
    struct Project NewPrj;	// Project data received from form
    bool ItsANewProject;
    bool NewProjectIsCorrect = true;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&OldPrj);
+   Prj_AllocMemProject (&NewPrj);
 
    /***** Get parameters from form *****/
    /* Get the code of the project */
@@ -1220,12 +1313,14 @@ void Prj_RecFormProject (void)
    /* Get project title */
    Par_GetParToText ("Title",NewPrj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
 
-   /* Get folder name where to send works of the project */
+   /* Get whether the project is preassigned */
    NewPrj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
 	                                                     Prj_NOT_PREASSIGNED;
 
-   /* Get project text */
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   /* Get project description, required knowledge and required materials */
+   Par_GetParToHTML ("Description",NewPrj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Knowledge"  ,NewPrj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Materials"  ,NewPrj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /* Get degree WWW */
    Par_GetParToText ("URL",NewPrj.URL,Cns_MAX_BYTES_WWW);
@@ -1262,7 +1357,7 @@ void Prj_RecFormProject (void)
 
       if (ItsANewProject)
 	{
-         Prj_CreateProject (&NewPrj,Txt);	// Add new project to database
+         Prj_CreateProject (&NewPrj);	// Add new project to database
 
 	 /***** Write success message *****/
 	 sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,NewPrj.Title);
@@ -1270,7 +1365,7 @@ void Prj_RecFormProject (void)
 	}
       else if (NewProjectIsCorrect)
 	{
-	 Prj_UpdateProject (&NewPrj,Txt);
+	 Prj_UpdateProject (&NewPrj);
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
@@ -1285,33 +1380,42 @@ void Prj_RecFormProject (void)
    else
       // TODO: The form should be filled with partial data, now is always empty
       Prj_RequestCreatOrEditPrj ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&NewPrj);
+   Prj_FreeMemProject (&OldPrj);
   }
 
 /*****************************************************************************/
 /************************** Create a new project *****************************/
 /*****************************************************************************/
 
-static void Prj_CreateProject (struct Project *Prj,const char *Txt)
+static void Prj_CreateProject (struct Project *Prj)
   {
    char Query[1024 +
               Prj_MAX_BYTES_PROJECT_TITLE +
-              Cns_MAX_BYTES_TEXT +
+              Cns_MAX_BYTES_TEXT*3 +
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new project *****/
    sprintf (Query,"INSERT INTO projects"
-	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Preassigned,Txt,URL)"
+	          " (CrsCod,Hidden,Preassigned,UsrCod,StartTime,EndTime,"
+	          "Title,Description,Knowledge,Materials,URL)"
                   " VALUES"
-                  " (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-                  "'%s','%c','%s','%s')",
+                  " (%ld,'%c','%c',%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+                  "'%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
+            Prj->Hidden ? 'Y' :
+        	          'N',
+            Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+        	                                  'N',
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
             Prj->Title,
-            Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-        	                                  'N',
-            Txt,
+            Prj->Description,
+            Prj->Knowledge,
+            Prj->Materials,
             Prj->URL);
    Prj->PrjCod = DB_QueryINSERTandReturnCode (Query,"can not create new project");
 
@@ -1324,25 +1428,31 @@ static void Prj_CreateProject (struct Project *Prj,const char *Txt)
 /*********************** Update an existing project **************************/
 /*****************************************************************************/
 
-static void Prj_UpdateProject (struct Project *Prj,const char *Txt)
+static void Prj_UpdateProject (struct Project *Prj)
   {
    char Query[1024 +
               Prj_MAX_BYTES_PROJECT_TITLE +
-              Cns_MAX_BYTES_TEXT +
+              Cns_MAX_BYTES_TEXT*3 +
               Cns_MAX_BYTES_WWW];
 
    /***** Update the data of the project *****/
    sprintf (Query,"UPDATE projects SET "
+	          "Hidden='%c',Preassigned='%c'"
 	          "StartTime=FROM_UNIXTIME(%ld),"
 	          "EndTime=FROM_UNIXTIME(%ld),"
-                  "Title='%s',Preassigned='%c',Txt='%s',URL='%s'"
+                  "Title='%s',"
+                  "Description='%s',Knowledge='%s',Materials='%s',URL='%s'"
                   " WHERE PrjCod=%ld AND CrsCod=%ld",
+            Prj->Hidden ? 'Y' :
+        	          'N',
+            Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+        	                                  'N',
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
             Prj->Title,
-            Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-        	                                  'N',
-            Txt,
+            Prj->Description,
+            Prj->Knowledge,
+            Prj->Materials,
             Prj->URL,
             Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not update project");

@@ -32857,6 +32857,48 @@ const char *Txt_Requester =
 	"Requerente";
 #endif
 
+const char *Txt_Required_knowledge =
+#if   L==1
+	"Coneixements necessaris";
+#elif L==2
+	"Notwendiges Wissen";
+#elif L==3
+	"Required knowledge";
+#elif L==4
+	"Conocimientos necesarios";
+#elif L==5
+	"Connaissances n&eacute;cessaires";
+#elif L==6
+	"Conocimientos necesarios";	// Okoteve traducción
+#elif L==7
+	"Nozioni necessarie";
+#elif L==8
+	"Niezb&eogon;dna wiedza";
+#elif L==9
+	"Conhecimento necess&aacute;rio";
+#endif
+
+const char *Txt_Required_materials =
+#if   L==1
+	"Materials necessaris";
+#elif L==2
+	"Ben&ouml;tigte Materialien";
+#elif L==3
+	"Required materials";
+#elif L==4
+	"Materiales necesarios";
+#elif L==5
+	"Mat&eacute;riel n&eacute;cessaire";
+#elif L==6
+	"Materiales necesarios";	// Okoteve traducción
+#elif L==7
+	"Materiali necessari";
+#elif L==8
+	"Potrzebne materia&lstrok;y";
+#elif L==9
+	"Materiais necess&aacute;rios";
+#endif
+
 const char *Txt_Required_reading =
 #if   L==1
 	"Lectura obligat&ograve;ria";

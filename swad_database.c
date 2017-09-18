@@ -2010,27 +2010,31 @@ mysql> DESCRIBE projects;
 | PrjCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod      | int(11)       | NO   | MUL | -1      |                |
 | Hidden      | enum('N','Y') | NO   |     | N       |                |
+| Preassigned | enum('N','Y') | NO   |     | N       |                |
 | UsrCod      | int(11)       | NO   |     | NULL    |                |
 | StartTime   | datetime      | NO   |     | NULL    |                |
 | EndTime     | datetime      | NO   |     | NULL    |                |
 | Title       | varchar(2047) | NO   |     | NULL    |                |
-| Preassigned | enum('N','Y') | NO   |     | N       |                |
-| Txt         | text          | NO   |     | NULL    |                |
+| Description | text          | NO   |     | NULL    |                |
+| Knowledge   | text          | NO   |     | NULL    |                |
+| Materials   | text          | NO   |     | NULL    |                |
 | URL         | varchar(255)  | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-10 rows in set (0,00 sec)
+12 rows in set (0,01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"				// Prj_MAX_CHARS_PROJECT_TITLE
-			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Txt TEXT NOT NULL,"					// Cns_MAX_BYTES_TEXT
-			"URL VARCHAR(255) NOT NULL,"				// Cns_MAX_BYTES_WWW
+			"Title VARCHAR(2047) NOT NULL,"	// Prj_MAX_BYTES_PROJECT_TITLE
+			"Description TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+			"Knowledge TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+			"Materials TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PrjCod),"
 		   "INDEX(CrsCod,Hidden))");
 

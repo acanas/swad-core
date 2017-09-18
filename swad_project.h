@@ -36,8 +36,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Prj_MAX_CHARS_PROJECT_TITLE	(128 - 1)	// 127
-#define Prj_MAX_BYTES_PROJECT_TITLE	((Prj_MAX_CHARS_PROJECT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Prj_MAX_CHARS_PROJECT_TITLE		(128 - 1)	// 127
+#define Prj_MAX_BYTES_PROJECT_TITLE		((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Prj_NUM_TYPES_PREASSIGNED 2
 typedef enum
@@ -50,11 +50,14 @@ struct Project
   {
    long PrjCod;
    bool Hidden;
+   Prj_Preassigned_t Preassigned;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];
-   Prj_Preassigned_t Preassigned;
+   char *Description;
+   char *Knowledge;
+   char *Materials;
    char URL[Cns_MAX_BYTES_WWW + 1];
    bool IBelongToCrsOrGrps;	// I can do this assignment
 				// (it is associated to no groups

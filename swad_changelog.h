@@ -252,13 +252,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.2.5 (2017-09-18)"
+#define Log_PLATFORM_VERSION	"SWAD 17.3 (2017-09-19)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.3:     Sep 19, 2017	Changes in fields of database table used for projects. (230089 lines)
+					2 changes necessary in database:
+DROP TABLE IF EXISTS projects;
+CREATE TABLE IF NOT EXISTS projects (PrjCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Description TEXT NOT NULL,Knowledge TEXT NOT NULL,Materials TEXT NOT NULL,URL VARCHAR(255) NOT NULL,UNIQUE INDEX(PrjCod),INDEX(CrsCod,Hidden));
+
         Version 17.2.5:   Sep 18, 2017	Get URL from form in projects. (229940 lines)
         Version 17.2.4:   Sep 18, 2017	New field URL in projects. (229929 lines)
 					1 change necessary in database:
