@@ -153,7 +153,7 @@ static void Prj_ShowAllProjects (void)
 	   NumPrj <= Pagination.LastItemVisible;
 	   NumPrj++)
 	 Prj_ShowOneProject (Gbl.Prjs.LstPrjCods[NumPrj - 1],
-	                        false);	// Not print view
+	                     false);	// Not print view
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -650,7 +650,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 		     "UNIX_TIMESTAMP(StartTime),"
 		     "UNIX_TIMESTAMP(EndTime),"
 		     "NOW() BETWEEN StartTime AND EndTime,"
-		     "Title,Preassigned"
+		     "Title,Preassigned,URL"
 		     " FROM projects"
 		     " WHERE PrjCod=%ld AND CrsCod=%ld",
 	       Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
@@ -709,6 +709,10 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       /* Get the folder for the project files (row[7]) */
       Prj->Preassigned = (row[7][0] == 'Y') ? Prj_PREASSIGNED :
 	                                      Prj_NOT_PREASSIGNED;
+
+      /* Get the title of the project (row[8]) */
+      Str_Copy (Prj->URL,row[8],
+                Cns_MAX_BYTES_WWW);
 
       /* Can I do this project? */
       Prj->IBelongToCrsOrGrps = Prj_CheckIfIBelongToCrsOrGrpsThisProject (Prj->PrjCod);
@@ -1191,36 +1195,40 @@ void Prj_RecFormProject (void)
    bool NewProjectIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get the code of the project *****/
+   /***** Get parameters from form *****/
+   /* Get the code of the project */
    NewPrj.PrjCod = Prj_GetParamPrjCod ();
    ItsANewProject = (NewPrj.PrjCod < 0);
 
    if (ItsANewProject)
      {
-      /***** Reset old (current, not existing) project data *****/
+      /* Reset old (current, not existing) project data */
       OldPrj.PrjCod = -1L;
       Prj_ResetProject (&OldPrj);
      }
    else
      {
-      /***** Get data of the old (current) project from database *****/
+      /* Get data of the old (current) project from database */
       OldPrj.PrjCod = NewPrj.PrjCod;
       Prj_GetDataOfProjectByCod (&OldPrj);
      }
 
-   /***** Get start/end date-times *****/
+   /* Get start/end date-times */
    NewPrj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
    NewPrj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
-   /***** Get project title *****/
+   /* Get project title */
    Par_GetParToText ("Title",NewPrj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
 
-   /***** Get folder name where to send works of the project *****/
+   /* Get folder name where to send works of the project */
    NewPrj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
 	                                                     Prj_NOT_PREASSIGNED;
 
-   /***** Get project text *****/
+   /* Get project text */
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+   /* Get degree WWW */
+   Par_GetParToText ("URL",NewPrj.URL,Cns_MAX_BYTES_WWW);
 
    /***** Adjust dates *****/
    if (NewPrj.TimeUTC[Dat_START_TIME] == 0)
@@ -1287,14 +1295,15 @@ static void Prj_CreateProject (struct Project *Prj,const char *Txt)
   {
    char Query[1024 +
               Prj_MAX_BYTES_PROJECT_TITLE +
-              Cns_MAX_BYTES_TEXT];
+              Cns_MAX_BYTES_TEXT +
+              Cns_MAX_BYTES_WWW];
 
    /***** Create a new project *****/
    sprintf (Query,"INSERT INTO projects"
-	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Preassigned,Txt)"
+	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Preassigned,Txt,URL)"
                   " VALUES"
                   " (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-                  "'%s','%c','%s')",
+                  "'%s','%c','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Prj->TimeUTC[Dat_START_TIME],
@@ -1302,7 +1311,8 @@ static void Prj_CreateProject (struct Project *Prj,const char *Txt)
             Prj->Title,
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
         	                                  'N',
-            Txt);
+            Txt,
+            Prj->URL);
    Prj->PrjCod = DB_QueryINSERTandReturnCode (Query,"can not create new project");
 
    /***** Create groups *****/
@@ -1318,13 +1328,14 @@ static void Prj_UpdateProject (struct Project *Prj,const char *Txt)
   {
    char Query[1024 +
               Prj_MAX_BYTES_PROJECT_TITLE +
-              Cns_MAX_BYTES_TEXT];
+              Cns_MAX_BYTES_TEXT +
+              Cns_MAX_BYTES_WWW];
 
    /***** Update the data of the project *****/
    sprintf (Query,"UPDATE projects SET "
 	          "StartTime=FROM_UNIXTIME(%ld),"
 	          "EndTime=FROM_UNIXTIME(%ld),"
-                  "Title='%s',Preassigned='%c',Txt='%s'"
+                  "Title='%s',Preassigned='%c',Txt='%s',URL='%s'"
                   " WHERE PrjCod=%ld AND CrsCod=%ld",
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
@@ -1332,6 +1343,7 @@ static void Prj_UpdateProject (struct Project *Prj,const char *Txt)
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
         	                                  'N',
             Txt,
+            Prj->URL,
             Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not update project");
 

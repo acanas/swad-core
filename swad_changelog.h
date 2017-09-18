@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.2.4 (2017-09-18)"
+#define Log_PLATFORM_VERSION	"SWAD 17.2.5 (2017-09-18)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.2.5:   Sep 18, 2017	Get URL from form in projects. (229940 lines)
         Version 17.2.4:   Sep 18, 2017	New field URL in projects. (229929 lines)
 					1 change necessary in database:
 ALTER TABLE projects ADD COLUMN URL VARCHAR(255) NOT NULL AFTER Txt;
