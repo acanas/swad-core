@@ -50216,6 +50216,27 @@ const char *Txt_TF_QST[2] =
 #endif
 	};
 
+const char *Txt_Tutors =
+#if   L==1
+	"Tutors";
+#elif L==2
+	"Tutoren";
+#elif L==3
+	"Tutors";
+#elif L==4
+	"Tutores";
+#elif L==5
+	"Tuteurs";
+#elif L==6
+	"Tutores";	// Okoteve traducción
+#elif L==7
+	"Tutori";
+#elif L==8
+	"Opiekunowie";
+#elif L==9
+	"Tutores";
+#endif
+
 const char *Txt_Type =
 #if   L==1
 	"Tipus";

@@ -70,6 +70,7 @@ static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
+static void Prj_WriteUsrs (long PrjCod);
 static void Prj_WritePrjAuthor (struct Project *Prj);
 static void Prj_GetParamPrjOrder (void);
 
@@ -335,6 +336,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
+   extern const char *Txt_Tutors;
    static unsigned UniqueId = 0;
 
    /***** Get data of this project *****/
@@ -343,7 +345,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"5\" class=\"CONTEXT_COL");
+	              "<td rowspan=\"6\" class=\"CONTEXT_COL");
    if (PrintView)
       fprintf (Gbl.F.Out,"\">");
    else
@@ -512,7 +514,134 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
         	          "DAT",
             Prj->Materials);
 
+   /* Project tutors  */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s:"
+	              "</td>"
+                      "<td colspan=\"2\" class=\"LEFT_TOP",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
+            Txt_Tutors);
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT");
+   Prj_WriteUsrs (Prj->PrjCod);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/******************** Write list of recipients of a message ******************/
+/*****************************************************************************/
+
+static void Prj_WriteUsrs (long PrjCod)
+  {
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char Query[2048];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsr;
+   unsigned NumUsrs;
+   unsigned NumUsrsKnown;
+   unsigned NumUsrsUnknown;
+   unsigned NumUsrsToShow;
+   struct UsrData UsrDat;
+   bool UsrValid;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX + 1];
+
+   /***** Get number of users of a project from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM prj_usr WHERE PrjCod=%ld",
+            PrjCod);
+   NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get number of recipients");
+
+   /***** Get users of a project from database *****/
+   sprintf (Query,"SELECT prj_usr.UsrCod,"
+	          "usr_data.Surname1 AS S1,"
+	          "usr_data.Surname2 AS S2,"
+	          "usr_data.FirstName AS FN"
+                  " FROM prj_usr,usr_data"
+                  " WHERE prj_usr.PrjCod=%ld"
+                  " AND prj_usr.UsrCod=usr_data.UsrCod"
+                  " ORDER BY S1,S2,FN",
+            PrjCod);
+   NumUsrsKnown = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users of a project");
+
+   /***** Check number of users *****/
+   if (NumUsrs)
+     {
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table>");
+
+      /***** How many users will be shown? *****/
+      NumUsrsToShow = NumUsrsKnown;
+
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Write known users *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrsToShow;
+	   NumUsr++)
+        {
+         /* Get user's code */
+         row = mysql_fetch_row (mysql_res);
+         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+         /* Get user's data */
+	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+
+         /* Put user's photo */
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+         ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+                                 false);
+         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	               NULL,
+                           "PHOTO21x28",Pho_ZOOM,false);
+
+         /* Write user's name */
+         fprintf (Gbl.F.Out,"</td>"
+                            "<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
+         if (UsrValid)
+            fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+         else
+            fprintf (Gbl.F.Out,"[%s]",
+                     Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+        }
+
+      /***** If any users are unknown *****/
+      if ((NumUsrsUnknown = NumUsrs - NumUsrsKnown))
+         /***** Start form to show all the users *****/
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">"
+                            "[%u %s]"
+                            "</td>"
+                            "</tr>",
+                  NumUsrsUnknown,
+                  (NumUsrsUnknown == 1) ?
+                  Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN] :
+                  Txt_ROLES_PLURAL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
