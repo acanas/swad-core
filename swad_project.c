@@ -33,7 +33,6 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
-#include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -70,8 +69,6 @@ static bool Prj_CheckIfICanCreateProjects (void);
 static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
-static void Prj_PutFormToSelectWhichGroupsToShow (void);
-static void Prj_ParamsWhichGroupsToShow (void);
 static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
 static void Prj_WritePrjAuthor (struct Project *Prj);
 static void Prj_GetParamPrjOrder (void);
@@ -86,14 +83,8 @@ static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Valu
 static void Prj_AllocMemProject (struct Project *Prj);
 static void Prj_FreeMemProject (struct Project *Prj);
 
-static void Prj_ShowLstGrpsToEditProject (long PrjCod);
 static void Prj_CreateProject (struct Project *Prj);
 static void Prj_UpdateProject (struct Project *Prj);
-static bool Prj_CheckIfPrjIsAssociatedToGrps (long PrjCod);
-static void Prj_RemoveAllTheGrpsAssociatedToAProject (long PrjCod);
-static void Prj_CreateGrps (long PrjCod);
-static void Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (struct Project *Prj);
-static bool Prj_CheckIfIBelongToCrsOrGrpsThisProject (long PrjCod);
 
 /*****************************************************************************/
 /************************** List all the projects ****************************/
@@ -103,7 +94,6 @@ void Prj_SeeProjects (void)
   {
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
-   Grp_GetParamWhichGrps ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Show all the projects *****/
@@ -141,10 +131,6 @@ static void Prj_ShowAllProjects (void)
    /***** Start box *****/
    Box_StartBox ("100%",Txt_Projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
-
-   /***** Select whether show only my groups or all groups *****/
-   if (Gbl.CurrentCrs.Grps.NumGrps)
-      Prj_PutFormToSelectWhichGroupsToShow ();
 
    if (Gbl.Prjs.Num)
      {
@@ -217,7 +203,6 @@ static void Prj_PutHeadForSeeing (bool PrintView)
       if (!PrintView)
 	{
 	 Act_FormStart (ActSeePrj);
-	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
@@ -300,23 +285,6 @@ static void Prj_PutButtonToCreateNewPrj (void)
    Prj_PutParams ();
    Btn_PutConfirmButton (Txt_New_project);
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
-/*****************************************************************************/
-
-static void Prj_PutFormToSelectWhichGroupsToShow (void)
-  {
-   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeePrj,Prj_ParamsWhichGroupsToShow);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-static void Prj_ParamsWhichGroupsToShow (void)
-  {
-   Prj_PutHiddenParamPrjOrder ();
-   Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -465,18 +433,6 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    Prj_WritePrjAuthor (Prj);
 
    fprintf (Gbl.F.Out,"</td>");
-
-   /* Groups of the project */
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-
-   if (Gbl.CurrentCrs.Grps.NumGrps)
-      Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (Prj);
-
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
 
    /* Description of the project */
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -645,7 +601,6 @@ static void Prj_PutParams (void)
    if (Gbl.Prjs.PrjCodToEdit > 0)
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCodToEdit);
    Prj_PutHiddenParamPrjOrder ();
-   Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
   }
 
@@ -686,24 +641,11 @@ void Prj_GetListProjects (void)
          sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
          break;
      }
-   if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-      sprintf (Query,"SELECT PrjCod"
-                     " FROM projects"
-                     " WHERE CrsCod=%ld%s"
-                     " AND (PrjCod NOT IN (SELECT PrjCod FROM prj_grp) OR"
-                     " PrjCod IN (SELECT prj_grp.PrjCod FROM prj_grp,crs_grp_usr"
-                     " WHERE crs_grp_usr.UsrCod=%ld AND prj_grp.GrpCod=crs_grp_usr.GrpCod))"
-                     " ORDER BY %s",
-               Gbl.CurrentCrs.Crs.CrsCod,
-               HiddenSubQuery,
-               Gbl.Usrs.Me.UsrDat.UsrCod,
-               OrderBySubQuery);
-   else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-      sprintf (Query,"SELECT PrjCod"
-                     " FROM projects"
-                     " WHERE CrsCod=%ld%s"
-                     " ORDER BY %s",
-               Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
+   sprintf (Query,"SELECT PrjCod"
+		  " FROM projects"
+		  " WHERE CrsCod=%ld%s"
+		  " ORDER BY %s",
+	    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get projects");
 
    if (NumRows) // Projects found...
@@ -852,9 +794,6 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       /* Get the URL of the project (row[11]) */
       Str_Copy (Prj->URL,row[11],
                 Cns_MAX_BYTES_WWW);
-
-      /* Can I do this project? */
-      Prj->IBelongToCrsOrGrps = Prj_CheckIfIBelongToCrsOrGrpsThisProject (Prj->PrjCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -880,7 +819,6 @@ static void Prj_ResetProject (struct Project *Prj)
    Prj->Knowledge[0] = '\0';
    Prj->Materials[0] = '\0';
    Prj->URL[0] = '\0';
-   Prj->IBelongToCrsOrGrps = false;
   }
 
 /*****************************************************************************/
@@ -930,7 +868,6 @@ void Prj_ReqRemProject (void)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
-   Grp_GetParamWhichGrps ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get project code *****/
@@ -968,9 +905,6 @@ void Prj_RemoveProject (void)
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
-
-   /***** Remove all the groups of this project *****/
-   Prj_RemoveAllTheGrpsAssociatedToAProject (Prj.PrjCod);
 
    /***** Remove project *****/
    sprintf (Query,"DELETE FROM projects"
@@ -1107,7 +1041,6 @@ void Prj_RequestCreatOrEditPrj (void)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
-   Grp_GetParamWhichGrps ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get the code of the project *****/
@@ -1247,9 +1180,6 @@ void Prj_RequestCreatOrEditPrj (void)
 	              "</td>"
                       "</tr>");
 
-   /***** Groups *****/
-   Prj_ShowLstGrpsToEditProject (Prj.PrjCod);
-
    /***** End table, send button and end box *****/
    if (ItsANewProject)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_project);
@@ -1303,66 +1233,6 @@ static void Prj_FreeMemProject (struct Project *Prj)
       free ((void *) Prj->Materials);
       Prj->Materials = NULL;
      }
-  }
-
-/*****************************************************************************/
-/****************** Show list of groups to edit and project ******************/
-/*****************************************************************************/
-
-static void Prj_ShowLstGrpsToEditProject (long PrjCod)
-  {
-   extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
-   unsigned NumGrpTyp;
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   if (Gbl.CurrentCrs.Grps.GrpTypes.Num)
-     {
-      /***** Start box and table *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],
-               Txt_Groups);
-      Box_StartBoxTable ("100%",NULL,NULL,
-                         Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
-
-      /***** First row: checkbox to select the whole course *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
-                         "<label>"
-                         "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
-      if (!Prj_CheckIfPrjIsAssociatedToGrps (PrjCod))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s"
-                         "</label>"
-	                 "</td>"
-	                 "</tr>",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
-
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-         if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgPrjAttSvyGam (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               PrjCod,Grp_PROJECT);
-
-      /***** End table and box *****/
-      Box_EndBoxTable ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/
@@ -1440,9 +1310,6 @@ void Prj_RecFormProject (void)
    /***** Create a new project or update an existing one *****/
    if (NewProjectIsCorrect)
      {
-      /* Get groups for this projects */
-      Grp_GetParCodsSeveralGrps ();
-
       if (ItsANewProject)
 	{
          Prj_CreateProject (&Prj);	// Add new project to database
@@ -1458,9 +1325,6 @@ void Prj_RecFormProject (void)
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
 	}
-
-      /* Free memory for list of selected groups */
-      Grp_FreeListCodSelectedGrps ();
 
       /***** Show projects again *****/
       Prj_SeeProjects ();
@@ -1505,10 +1369,6 @@ static void Prj_CreateProject (struct Project *Prj)
             Prj->Materials,
             Prj->URL);
    Prj->PrjCod = DB_QueryINSERTandReturnCode (Query,"can not create new project");
-
-   /***** Create groups *****/
-   if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
-      Prj_CreateGrps (Prj->PrjCod);
   }
 
 /*****************************************************************************/
@@ -1543,176 +1403,6 @@ static void Prj_UpdateProject (struct Project *Prj)
             Prj->URL,
             Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not update project");
-
-   /***** Update groups *****/
-   /* Remove old groups */
-   Prj_RemoveAllTheGrpsAssociatedToAProject (Prj->PrjCod);
-
-   /* Create new groups */
-   if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
-      Prj_CreateGrps (Prj->PrjCod);
-  }
-
-/*****************************************************************************/
-/************* Check if a project is associated to any group *****************/
-/*****************************************************************************/
-
-static bool Prj_CheckIfPrjIsAssociatedToGrps (long PrjCod)
-  {
-   char Query[256];
-
-   /***** Get if a project is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM prj_grp WHERE PrjCod=%ld",
-            PrjCod);
-   return (DB_QueryCOUNT (Query,"can not check if a project is associated to groups") != 0);
-  }
-
-/*****************************************************************************/
-/************** Check if a project is associated to a group ******************/
-/*****************************************************************************/
-
-bool Prj_CheckIfPrjIsAssociatedToGrp (long PrjCod,long GrpCod)
-  {
-   char Query[256];
-
-   /***** Get if a project is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM prj_grp"
-	          " WHERE PrjCod=%ld AND GrpCod=%ld",
-            PrjCod,GrpCod);
-   return (DB_QueryCOUNT (Query,"can not check if a project is associated to a group") != 0);
-  }
-
-/*****************************************************************************/
-/*********************** Remove groups of a project **************************/
-/*****************************************************************************/
-
-static void Prj_RemoveAllTheGrpsAssociatedToAProject (long PrjCod)
-  {
-   char Query[256];
-
-   /***** Remove groups of the project *****/
-   sprintf (Query,"DELETE FROM prj_grp WHERE PrjCod=%ld",PrjCod);
-   DB_QueryDELETE (Query,"can not remove the groups associated to a project");
-  }
-
-/*****************************************************************************/
-/****************** Remove one group from all the projects *******************/
-/*****************************************************************************/
-
-void Prj_RemoveGroup (long GrpCod)
-  {
-   char Query[256];
-
-   /***** Remove group from all the projects *****/
-   sprintf (Query,"DELETE FROM prj_grp WHERE GrpCod=%ld",GrpCod);
-   DB_QueryDELETE (Query,"can not remove group from the associations between projects and groups");
-  }
-
-/*****************************************************************************/
-/************* Remove groups of one type from all the projects ***************/
-/*****************************************************************************/
-
-void Prj_RemoveGroupsOfType (long GrpTypCod)
-  {
-   char Query[256];
-
-   /***** Remove group from all the projects *****/
-   sprintf (Query,"DELETE FROM prj_grp USING crs_grp,prj_grp"
-                  " WHERE crs_grp.GrpTypCod=%ld"
-                  " AND crs_grp.GrpCod=prj_grp.GrpCod",
-            GrpTypCod);
-   DB_QueryDELETE (Query,"can not remove groups of a type from the associations between projects and groups");
-  }
-
-/*****************************************************************************/
-/*********************** Create groups of a project **************************/
-/*****************************************************************************/
-
-static void Prj_CreateGrps (long PrjCod)
-  {
-   unsigned NumGrpSel;
-   char Query[256];
-
-   /***** Create groups of the project *****/
-   for (NumGrpSel = 0;
-	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
-	NumGrpSel++)
-     {
-      /* Create group */
-      sprintf (Query,"INSERT INTO prj_grp"
-	             " (PrjCod,GrpCod)"
-	             " VALUES"
-	             " (%ld,%ld)",
-               PrjCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT (Query,"can not associate a group to a project");
-     }
-  }
-
-/*****************************************************************************/
-/*********** Get and write the names of the groups of a project **************/
-/*****************************************************************************/
-
-static void Prj_GetAndWriteNamesOfGrpsAssociatedToPrj (struct Project *Prj)
-  {
-   extern const char *Txt_Group;
-   extern const char *Txt_Groups;
-   extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
-
-   /***** Get groups associated to a project from database *****/
-   sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-	          " FROM prj_grp,crs_grp,crs_grp_types"
-                  " WHERE prj_grp.PrjCod=%ld"
-                  " AND prj_grp.GrpCod=crs_grp.GrpCod"
-                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-            Prj->PrjCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get groups of a project");
-
-   /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
-            Prj->Hidden ? "ASG_GRP_LIGHT" :
-        	          "ASG_GRP",
-            (NumRows == 1) ? Txt_Group  :
-                             Txt_Groups);
-
-   /***** Write groups *****/
-   if (NumRows) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Write group type name and group name */
-         fprintf (Gbl.F.Out,"%s %s",row[0],row[1]);
-
-         if (NumRows >= 2)
-           {
-            if (NumRow == NumRows-2)
-               fprintf (Gbl.F.Out," %s ",Txt_and);
-            if (NumRows >= 3)
-              if (NumRow < NumRows-2)
-                  fprintf (Gbl.F.Out,", ");
-           }
-        }
-     }
-   else
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
-
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -1723,55 +1413,9 @@ void Prj_RemoveCrsProjects (long CrsCod)
   {
    char Query[512];
 
-   /***** Remove groups *****/
-   sprintf (Query,"DELETE FROM prj_grp USING projects,prj_grp"
-                  " WHERE projects.CrsCod=%ld"
-                  " AND projects.PrjCod=prj_grp.PrjCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the groups associated to projects of a course");
-
    /***** Remove projects *****/
    sprintf (Query,"DELETE FROM projects WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove all the projects of a course");
-  }
-
-/*****************************************************************************/
-/*********** Check if I belong to any of the groups of a project *************/
-/*****************************************************************************/
-
-static bool Prj_CheckIfIBelongToCrsOrGrpsThisProject (long PrjCod)
-  {
-   char Query[512];
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-      case Rol_NET:
-      case Rol_TCH:
-	 // Students and teachers can do projects depending on groups
-	 /***** Get if I can do a project from database *****/
-	 sprintf (Query,"SELECT COUNT(*) FROM projects"
-			" WHERE PrjCod=%ld"
-			" AND "
-			"("
-			"PrjCod NOT IN (SELECT PrjCod FROM prj_grp)"	// Project is for the whole course
-			" OR "
-			"PrjCod IN"					// Project is for specific groups
-			" (SELECT prj_grp.PrjCod FROM prj_grp,crs_grp_usr"
-			" WHERE crs_grp_usr.UsrCod=%ld"
-			" AND prj_grp.GrpCod=crs_grp_usr.GrpCod)"
-			")",
-		  PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-	 return (DB_QueryCOUNT (Query,"can not check if I can do a project") != 0);
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 // Admins can view projects
-         return true;
-      default:
-         return false;
-     }
   }
 
 /*****************************************************************************/

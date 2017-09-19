@@ -59,10 +59,6 @@ struct Project
    char *Knowledge;
    char *Materials;
    char URL[Cns_MAX_BYTES_WWW + 1];
-   bool IBelongToCrsOrGrps;	// I can do this assignment
-				// (it is associated to no groups
-				// or, if associated to groups,
-				// I belong to any of the groups)
   };
 
 #define Prj_ORDER_DEFAULT Dat_START_TIME
@@ -86,9 +82,6 @@ void Prj_RemoveProject (void);
 void Prj_HideProject (void);
 void Prj_ShowProject (void);
 void Prj_RecFormProject (void);
-bool Prj_CheckIfPrjIsAssociatedToGrp (long PrjCod,long GrpCod);
-void Prj_RemoveGroup (long GrpCod);
-void Prj_RemoveGroupsOfType (long GrpTypCod);
 void Prj_RemoveCrsProjects (long CrsCod);
 unsigned Prj_GetNumProjectsInCrs(long CrsCod);
 
