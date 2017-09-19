@@ -30789,23 +30789,23 @@ const char *Txt_Project_X_removed =	// Warning: it is very important to include 
 
 const char *Txt_Projects =
 #if   L==1
-	"Projectes";
+	"Projectes (treballs fi de grau, projectes final de carrera, tesi&hellip;)";
 #elif L==2
-	"Projekte";
+	"Projekte (Abschlussarbeiten, Diplomarbeiten&hellip;)";
 #elif L==3
-	"Projects";
+	"Projects (end-of-degree projects, thesis&hellip;)";
 #elif L==4
-	"Proyectos";
+	"Proyectos (trabajos fin de grado, proyectos fin de carrera, tesis&hellip;)";
 #elif L==5
-	"Projets";
+	"Projets (projets de fin de cours, th&egrave;se&hellip;)";
 #elif L==6
-	"Proyectos";	// Okoteve traducción
+	"Proyectos (trabajos fin de grado, proyectos fin de carrera, tesis&hellip;)";	// Okoteve traducción
 #elif L==7
-	"Progetti";
+	"Progetti (progetti di fine corso, tesi&hellip;)";
 #elif L==8
-	"Projekty";
+	"Projekty (projekty ko&nacute;cowe, praca dyplomowa&hellip;)";
 #elif L==9
-	"Projetos";
+	"Projetos (projetos de fim de grau, tese&hellip;)";
 #endif
 
 const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences

@@ -494,7 +494,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
             Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT_N",
+        	          "DAT",
             Txt_Description);
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -524,7 +524,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
             Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT_N",
+        	          "DAT",
             Txt_Required_knowledge);
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -554,7 +554,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
             Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT_N",
+        	          "DAT",
             Txt_Required_materials);
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
