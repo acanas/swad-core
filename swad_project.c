@@ -1090,13 +1090,13 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Title;
-   extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_No;
    extern const char *Txt_Yes;
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_URL;
+   extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    struct Project Prj;
@@ -1164,30 +1164,6 @@ void Prj_RequestCreatOrEditPrj (void)
    /***** Project start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Prj.TimeUTC,Dat_FORM_SECONDS_ON);
 
-   /***** Preassigned? *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Preassigned\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Preassigned_QUESTION);
-
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (Prj.Preassigned == Prj_NOT_PREASSIGNED)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
-
-   fprintf (Gbl.F.Out,"<option value=\"Y\"");
-   if (Prj.Preassigned == Prj_PREASSIGNED)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
-
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-                      "</tr>");
-
    /***** Description of the project *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
@@ -1246,6 +1222,30 @@ void Prj_RequestCreatOrEditPrj (void)
 	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_URL,
 	    Cns_MAX_CHARS_WWW,Prj.URL);
+
+  /***** Preassigned? *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<select name=\"Preassigned\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Preassigned_QUESTION);
+
+   fprintf (Gbl.F.Out,"<option value=\"N\"");
+   if (Prj.Preassigned == Prj_NOT_PREASSIGNED)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
+
+   fprintf (Gbl.F.Out,"<option value=\"Y\"");
+   if (Prj.Preassigned == Prj_PREASSIGNED)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
+
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+                      "</tr>");
 
    /***** Groups *****/
    Prj_ShowLstGrpsToEditProject (Prj.PrjCod);
@@ -1401,10 +1401,6 @@ void Prj_RecFormProject (void)
    /* Get project title */
    Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
 
-   /* Get whether the project is preassigned */
-   Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
-	                                                  Prj_NOT_PREASSIGNED;
-
    /* Get project description, required knowledge and required materials */
    Par_GetParToHTML ("Description",Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
    Par_GetParToHTML ("Knowledge"  ,Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -1412,6 +1408,10 @@ void Prj_RecFormProject (void)
 
    /* Get degree WWW */
    Par_GetParToText ("URL",Prj.URL,Cns_MAX_BYTES_WWW);
+
+   /* Get whether the project is preassigned */
+   Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
+	                                                  Prj_NOT_PREASSIGNED;
 
    /***** Adjust dates *****/
    if (Prj.TimeUTC[Dat_START_TIME] == 0)
