@@ -1987,19 +1987,21 @@ mysql> DESCRIBE plugins;
 
    /***** Table prj_grp *****/
 /*
-mysql> DESCRIBE prj_grp;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| PrjCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
+mysql> DESCRIBE prj_usr;
++---------------+------------+------+-----+---------+-------+
+| Field         | Type       | Null | Key | Default | Extra |
++---------------+------------+------+-----+---------+-------+
+| PrjCod        | int(11)    | NO   | PRI | NULL    |       |
+| RoleInProject | tinyint(4) | NO   | PRI | 0       |       |
+| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
++---------------+------------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_grp ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_usr ("
 			"PrjCod INT NOT NULL,"
-			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(PrjCod,GrpCod))");
+			"RoleInProject TINYINT NOT NULL DEFAULT 0,"
+			"UsrCod INT NOT NULL,"
+			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod))");
 
    /***** Table projects *****/
 /*

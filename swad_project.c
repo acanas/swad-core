@@ -48,12 +48,21 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Private constants *****************************/
+/************************* Public constants and types ************************/
 /*****************************************************************************/
+// Related with user's roles in a project
+/*
+   Don't change these numbers! They are used in database
+*/
 
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
+#define Prj_NUM_ROLES_IN_PROJECT 4
+typedef enum
+  {
+   Prj_ROLE_UNK	= 0,	// Unknown
+   Prj_ROLE_STD	= 1,	// Student
+   Prj_ROLE_TUT	= 2,	// Tutor
+   Prj_ROLE_REV	= 3,	// Reviewer
+  } Prj_RoleInProject_t;
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
@@ -70,7 +79,7 @@ static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
-static void Prj_WriteUsrs (long PrjCod);
+static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
 static void Prj_WritePrjAuthor (struct Project *Prj);
 static void Prj_GetParamPrjOrder (void);
 
@@ -514,7 +523,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
         	          "DAT",
             Prj->Materials);
 
-   /* Project tutors  */
+   /* Project tutors */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
    if (!PrintView)
@@ -531,7 +540,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    fprintf (Gbl.F.Out," %s\">",
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT");
-   Prj_WriteUsrs (Prj->PrjCod);
+   Prj_WriteUsrs (Prj->PrjCod,Prj_ROLE_TUT);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -539,10 +548,10 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
   }
 
 /*****************************************************************************/
-/******************** Write list of recipients of a message ******************/
+/*************** Write list of users with a role in a project ****************/
 /*****************************************************************************/
 
-static void Prj_WriteUsrs (long PrjCod)
+static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -559,22 +568,24 @@ static void Prj_WriteUsrs (long PrjCod)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
 
-   /***** Get number of users of a project from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM prj_usr WHERE PrjCod=%ld",
-            PrjCod);
-   NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get number of recipients");
+   /***** Get number of users in project from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
+	          " WHERE PrjCod=%ld AND RoleInProject=%u",
+            PrjCod,(unsigned) RoleInProject);
+   NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get users in project");
 
-   /***** Get users of a project from database *****/
+   /***** Get users in project from database *****/
    sprintf (Query,"SELECT prj_usr.UsrCod,"
 	          "usr_data.Surname1 AS S1,"
 	          "usr_data.Surname2 AS S2,"
 	          "usr_data.FirstName AS FN"
                   " FROM prj_usr,usr_data"
-                  " WHERE prj_usr.PrjCod=%ld"
+                  " WHERE prj_usr.PrjCod=%ld AND RoleInProject=%u"
                   " AND prj_usr.UsrCod=usr_data.UsrCod"
                   " ORDER BY S1,S2,FN",
-            PrjCod);
-   NumUsrsKnown = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users of a project");
+            PrjCod,(unsigned) RoleInProject);
+   NumUsrsKnown = (unsigned) DB_QuerySELECT (Query,&mysql_res,
+                                             "can not get users in project");
 
    /***** Check number of users *****/
    if (NumUsrs)

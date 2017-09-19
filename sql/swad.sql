@@ -930,12 +930,13 @@ CREATE TABLE IF NOT EXISTS plugins (
 	IP CHAR(15) NOT NULL,
 	UNIQUE INDEX(PlgCod));
 --
--- Table Prj_grp: stores the groups associated to projects
+-- Table prj_usr: stores the users inside projects
 --
-CREATE TABLE IF NOT EXISTS prj_grp (
+CREATE TABLE IF NOT EXISTS prj_usr (
 	PrjCod INT NOT NULL,
-	GrpCod INT NOT NULL,
-	UNIQUE INDEX(PrjCod,GrpCod));
+	RoleInProject TINYINT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
 --
 -- Table projects: stores the projects proposed by the teachers to their students
 --
