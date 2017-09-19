@@ -80,7 +80,6 @@ static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
 static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
-static void Prj_WritePrjAuthor (struct Project *Prj);
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
@@ -354,7 +353,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"6\" class=\"CONTEXT_COL");
+	              "<td rowspan=\"5\" class=\"CONTEXT_COL");
    if (PrintView)
       fprintf (Gbl.F.Out,"\">");
    else
@@ -434,17 +433,6 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
         	                                    Txt_No);
 
    /***** Write second row of data of this project *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-
-   /* Author of the project */
-   Prj_WritePrjAuthor (Prj);
-
-   fprintf (Gbl.F.Out,"</td>");
-
    /* Description of the project */
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Prj->Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
@@ -656,15 +644,6 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
   }
 
 /*****************************************************************************/
-/*********************** Write the author of a project ***********************/
-/*****************************************************************************/
-
-static void Prj_WritePrjAuthor (struct Project *Prj)
-  {
-   Usr_WriteAuthor1Line (Prj->UsrCod,Prj->Hidden);
-  }
-
-/*****************************************************************************/
 /********* Get parameter with the type or order in list of projects **********/
 /*****************************************************************************/
 
@@ -815,7 +794,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
    if (Prj->PrjCod > 0)
      {
       /***** Build query *****/
-      sprintf (Query,"SELECT PrjCod,Hidden,Preassigned,UsrCod,"
+      sprintf (Query,"SELECT PrjCod,Hidden,Preassigned,"
 		     "UNIX_TIMESTAMP(StartTime),"
 		     "UNIX_TIMESTAMP(EndTime),"
 		     "NOW() BETWEEN StartTime AND EndTime,"
@@ -827,15 +806,14 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
       row[ 0]: PrjCod
       row[ 1]: Hidden
       row[ 2]: Preassigned
-      row[ 3]: UsrCod
-      row[ 4]: UNIX_TIMESTAMP(StartTime)
-      row[ 5]: UNIX_TIMESTAMP(EndTime)
-      row[ 6]: NOW() BETWEEN StartTime AND EndTime
-      row[ 7]: Title
-      row[ 8]: Description
-      row[ 9]: Knowledge
-      row[10]: Materials
-      row[11]: URL
+      row[ 3]: UNIX_TIMESTAMP(StartTime)
+      row[ 4]: UNIX_TIMESTAMP(EndTime)
+      row[ 5]: NOW() BETWEEN StartTime AND EndTime
+      row[ 6]: Title
+      row[ 7]: Description
+      row[ 8]: Knowledge
+      row[ 9]: Materials
+      row[10]: URL
       */
 
       /***** Get data of project *****/
@@ -870,15 +848,14 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       row[ 0]: PrjCod
       row[ 1]: Hidden
       row[ 2]: Preassigned
-      row[ 3]: UsrCod
-      row[ 4]: UNIX_TIMESTAMP(StartTime)
-      row[ 5]: UNIX_TIMESTAMP(EndTime)
-      row[ 6]: NOW() BETWEEN StartTime AND EndTime
-      row[ 7]: Title
-      row[ 8]: Description
-      row[ 9]: Knowledge
-      row[10]: Materials
-      row[11]: URL
+      row[ 3]: UNIX_TIMESTAMP(StartTime)
+      row[ 4]: UNIX_TIMESTAMP(EndTime)
+      row[ 5]: NOW() BETWEEN StartTime AND EndTime
+      row[ 6]: Title
+      row[ 7]: Description
+      row[ 8]: Knowledge
+      row[ 9]: Materials
+      row[10]: URL
       */
 
       /* Get code of the project (row[0]) */
@@ -891,36 +868,33 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       Prj->Preassigned = (row[2][0] == 'Y') ? Prj_PREASSIGNED :
 	                                      Prj_NOT_PREASSIGNED;
 
-      /* Get author of the project (row[3]) */
-      Prj->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+      /* Get start date (row[3] holds the start UTC time) */
+      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
-      /* Get start date (row[4] holds the start UTC time) */
-      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+      /* Get end date   (row[4] holds the end   UTC time) */
+      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get end date   (row[5] holds the end   UTC time) */
-      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+      /* Get whether the project is open or closed (row[5]) */
+      Prj->Open = (row[5][0] == '1');
 
-      /* Get whether the project is open or closed (row(6)) */
-      Prj->Open = (row[6][0] == '1');
-
-      /* Get the title of the project (row[7]) */
-      Str_Copy (Prj->Title,row[7],
+      /* Get the title of the project (row[6]) */
+      Str_Copy (Prj->Title,row[6],
                 Prj_MAX_BYTES_PROJECT_TITLE);
 
-      /* Get the description of the project (row[8]) */
-      Str_Copy (Prj->Description,row[8],
+      /* Get the description of the project (row[7]) */
+      Str_Copy (Prj->Description,row[7],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required knowledge for the project (row[9]) */
-      Str_Copy (Prj->Knowledge,row[9],
+      /* Get the required knowledge for the project (row[8]) */
+      Str_Copy (Prj->Knowledge,row[8],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required materials for the project (row[10]) */
-      Str_Copy (Prj->Materials,row[10],
+      /* Get the required materials for the project (row[9]) */
+      Str_Copy (Prj->Materials,row[9],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the URL of the project (row[11]) */
-      Str_Copy (Prj->URL,row[11],
+      /* Get the URL of the project (row[10]) */
+      Str_Copy (Prj->URL,row[10],
                 Cns_MAX_BYTES_WWW);
      }
 
@@ -938,7 +912,6 @@ static void Prj_ResetProject (struct Project *Prj)
       Prj->PrjCod = -1L;
    Prj->Hidden = false;
    Prj->Preassigned = Prj_NOT_PREASSIGNED;
-   Prj->UsrCod = -1L;
    Prj->TimeUTC[Dat_START_TIME] =
    Prj->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Prj->Open = false;
@@ -1478,17 +1451,16 @@ static void Prj_CreateProject (struct Project *Prj)
 
    /***** Create a new project *****/
    sprintf (Query,"INSERT INTO projects"
-	          " (CrsCod,Hidden,Preassigned,UsrCod,StartTime,EndTime,"
+	          " (CrsCod,Hidden,Preassigned,StartTime,EndTime,"
 	          "Title,Description,Knowledge,Materials,URL)"
                   " VALUES"
-                  " (%ld,'%c','%c',%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+                  " (%ld,'%c','%c',FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Prj->Hidden ? 'Y' :
         	          'N',
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
         	                                  'N',
-            Gbl.Usrs.Me.UsrDat.UsrCod,
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
             Prj->Title,
@@ -1497,6 +1469,16 @@ static void Prj_CreateProject (struct Project *Prj)
             Prj->Materials,
             Prj->URL);
    Prj->PrjCod = DB_QueryINSERTandReturnCode (Query,"can not create new project");
+
+   /***** Insert creator as first tutor *****/
+   sprintf (Query,"INSERT INTO prj_usr"
+	          " (PrjCod,RoleInProject,UsrCod)"
+                  " VALUES"
+                  " (%ld,%u,%ld)",
+            Prj->PrjCod,
+            (unsigned) Prj_ROLE_TUT,
+            Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT (Query,"can not add tutor");
   }
 
 /*****************************************************************************/

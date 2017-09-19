@@ -252,14 +252,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.3.8 (2017-09-19)"
+#define Log_PLATFORM_VERSION	"SWAD 17.3.9 (2017-09-19)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.3.8:   Sep 19, 2017	Table for users in projects. (230000 lines)
+        Version 17.3.9:   Sep 19, 2017	Tutor code moved from table projects to table prj_grp. (229987 lines)
+					1 change necessary in database:
+ALTER TABLE projects DROP COLUMN UsrCod;
+
+        Version 17.3.8:   Sep 19, 2017	Table for users in projects. (230001 lines)
+					2 changes necessary in database:
 DROP TABLE IF EXISTS prj_grp;
 CREATE TABLE IF NOT EXISTS prj_usr (PrjCod INT NOT NULL,RoleInProject TINYINT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
 

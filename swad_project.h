@@ -51,7 +51,6 @@ struct Project
    long PrjCod;
    bool Hidden;
    Prj_Preassigned_t Preassigned;
-   long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];

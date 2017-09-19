@@ -2013,7 +2013,6 @@ mysql> DESCRIBE projects;
 | CrsCod      | int(11)       | NO   | MUL | -1      |                |
 | Hidden      | enum('N','Y') | NO   |     | N       |                |
 | Preassigned | enum('N','Y') | NO   |     | N       |                |
-| UsrCod      | int(11)       | NO   |     | NULL    |                |
 | StartTime   | datetime      | NO   |     | NULL    |                |
 | EndTime     | datetime      | NO   |     | NULL    |                |
 | Title       | varchar(2047) | NO   |     | NULL    |                |
@@ -2022,14 +2021,13 @@ mysql> DESCRIBE projects;
 | Materials   | text          | NO   |     | NULL    |                |
 | URL         | varchar(255)  | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-12 rows in set (0,01 sec)
+11 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// Prj_MAX_BYTES_PROJECT_TITLE
