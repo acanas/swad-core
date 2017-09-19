@@ -754,15 +754,15 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
                 Prj_MAX_BYTES_PROJECT_TITLE);
 
       /* Get the description of the project (row[8]) */
-      Str_Copy (Prj->Title,row[8],
+      Str_Copy (Prj->Description,row[8],
                 Cns_MAX_BYTES_TEXT);
 
       /* Get the required knowledge for the project (row[9]) */
-      Str_Copy (Prj->Title,row[9],
+      Str_Copy (Prj->Knowledge,row[9],
                 Cns_MAX_BYTES_TEXT);
 
       /* Get the required materials for the project (row[10]) */
-      Str_Copy (Prj->Title,row[10],
+      Str_Copy (Prj->Materials,row[10],
                 Cns_MAX_BYTES_TEXT);
 
       /* Get the URL of the project (row[11]) */
@@ -913,6 +913,9 @@ void Prj_HideProject (void)
    char Query[512];
    struct Project Prj;
 
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
    /***** Get project code *****/
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
@@ -931,6 +934,9 @@ void Prj_HideProject (void)
             Prj.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
    /***** Show projects again *****/
    Prj_SeeProjects ();
   }
@@ -944,6 +950,9 @@ void Prj_ShowProject (void)
    extern const char *Txt_Project_X_is_now_visible;
    char Query[512];
    struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
 
    /***** Get project code *****/
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
@@ -962,6 +971,9 @@ void Prj_ShowProject (void)
    sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_visible,
             Prj.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
    Prj_SeeProjects ();
@@ -1279,67 +1291,59 @@ void Prj_RecFormProject (void)
    extern const char *Txt_You_must_specify_the_title_of_the_project;
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
-   struct Project OldPrj;	// Current assigment data in database
-   struct Project NewPrj;	// Project data received from form
+   struct Project Prj;	// Project data received from form
    bool ItsANewProject;
    bool NewProjectIsCorrect = true;
 
    /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&OldPrj);
-   Prj_AllocMemProject (&NewPrj);
+   Prj_AllocMemProject (&Prj);
 
    /***** Get parameters from form *****/
    /* Get the code of the project */
-   NewPrj.PrjCod = Prj_GetParamPrjCod ();
-   ItsANewProject = (NewPrj.PrjCod < 0);
+   Prj.PrjCod = Prj_GetParamPrjCod ();
+   ItsANewProject = (Prj.PrjCod < 0);
 
    if (ItsANewProject)
-     {
-      /* Reset old (current, not existing) project data */
-      OldPrj.PrjCod = -1L;
-      Prj_ResetProject (&OldPrj);
-     }
+      /* Reset project data */
+      Prj_ResetProject (&Prj);
    else
-     {
-      /* Get data of the old (current) project from database */
-      OldPrj.PrjCod = NewPrj.PrjCod;
-      Prj_GetDataOfProjectByCod (&OldPrj);
-     }
+      /* Get data of the project from database */
+      Prj_GetDataOfProjectByCod (&Prj);
 
    /* Get start/end date-times */
-   NewPrj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewPrj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   Prj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   Prj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /* Get project title */
-   Par_GetParToText ("Title",NewPrj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
+   Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
 
    /* Get whether the project is preassigned */
-   NewPrj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
-	                                                     Prj_NOT_PREASSIGNED;
+   Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
+	                                                  Prj_NOT_PREASSIGNED;
 
    /* Get project description, required knowledge and required materials */
-   Par_GetParToHTML ("Description",NewPrj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-   Par_GetParToHTML ("Knowledge"  ,NewPrj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-   Par_GetParToHTML ("Materials"  ,NewPrj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Description",Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Knowledge"  ,Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Materials"  ,Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /* Get degree WWW */
-   Par_GetParToText ("URL",NewPrj.URL,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("URL",Prj.URL,Cns_MAX_BYTES_WWW);
 
    /***** Adjust dates *****/
-   if (NewPrj.TimeUTC[Dat_START_TIME] == 0)
-      NewPrj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewPrj.TimeUTC[Dat_END_TIME] == 0)
-      NewPrj.TimeUTC[Dat_END_TIME] = NewPrj.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+   if (Prj.TimeUTC[Dat_START_TIME] == 0)
+      Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (Prj.TimeUTC[Dat_END_TIME] == 0)
+      Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
-   if (NewPrj.Title[0])	// If there's a project title
+   if (Prj.Title[0])	// If there's a project title
      {
       /* If title of project was in database... */
-      if (Prj_CheckIfSimilarProjectsExists ("Title",NewPrj.Title,NewPrj.PrjCod))
+      if (Prj_CheckIfSimilarProjectsExists ("Title",Prj.Title,Prj.PrjCod))
         {
          NewProjectIsCorrect = false;
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_title_X,
-                  NewPrj.Title);
+                  Prj.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
      }
@@ -1357,15 +1361,15 @@ void Prj_RecFormProject (void)
 
       if (ItsANewProject)
 	{
-         Prj_CreateProject (&NewPrj);	// Add new project to database
+         Prj_CreateProject (&Prj);	// Add new project to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,NewPrj.Title);
+	 sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,Prj.Title);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else if (NewProjectIsCorrect)
 	{
-	 Prj_UpdateProject (&NewPrj);
+	 Prj_UpdateProject (&Prj);
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
@@ -1382,8 +1386,7 @@ void Prj_RecFormProject (void)
       Prj_RequestCreatOrEditPrj ();
 
    /***** Free memory of the project *****/
-   Prj_FreeMemProject (&NewPrj);
-   Prj_FreeMemProject (&OldPrj);
+   Prj_FreeMemProject (&Prj);
   }
 
 /*****************************************************************************/
@@ -1437,7 +1440,7 @@ static void Prj_UpdateProject (struct Project *Prj)
 
    /***** Update the data of the project *****/
    sprintf (Query,"UPDATE projects SET "
-	          "Hidden='%c',Preassigned='%c'"
+	          "Hidden='%c',Preassigned='%c',"
 	          "StartTime=FROM_UNIXTIME(%ld),"
 	          "EndTime=FROM_UNIXTIME(%ld),"
                   "Title='%s',"

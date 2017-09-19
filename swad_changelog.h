@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.3 (2017-09-19)"
+#define Log_PLATFORM_VERSION	"SWAD 17.3.1 (2017-09-19)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.3.1:   Sep 19, 2017	Fix bugs in projects. (230089 lines)
         Version 17.3:     Sep 19, 2017	Changes in fields of database table used for projects. (230089 lines)
 					2 changes necessary in database:
 DROP TABLE IF EXISTS projects;
