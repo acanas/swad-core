@@ -138,7 +138,7 @@ static void Prj_ShowAllProjects (void)
       Prj_AllocMemProject (&Prj);
 
       /***** Table head *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMargin (5);
       Prj_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the projects *****/
@@ -443,21 +443,17 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-	              "<p class=\"%s\">"
+   fprintf (Gbl.F.Out," %s\">"
                       "%s:"
-                      "</p>"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
             Txt_Description);
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<p class=\"%s\">"
+   fprintf (Gbl.F.Out," %s\">"
                       "%s"
-                      "</p>"
                       "</td>"
                       "</tr>",
             Prj->Hidden ? "DAT_LIGHT" :
@@ -473,21 +469,17 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-	              "<p class=\"%s\">"
+   fprintf (Gbl.F.Out," %s\">"
                       "%s:"
-                      "</p>"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
             Txt_Required_knowledge);
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<p class=\"%s\">"
+   fprintf (Gbl.F.Out," %s\">"
                       "%s"
-                      "</p>"
                       "</td>"
                       "</tr>",
             Prj->Hidden ? "DAT_LIGHT" :
@@ -503,21 +495,17 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-	              "<p class=\"%s\">"
+   fprintf (Gbl.F.Out," %s\">"
                       "%s:"
-                      "</p>"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
             Txt_Required_materials);
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<p class=\"%s\">"
+   fprintf (Gbl.F.Out," %s\">"
                       "%s"
-                      "</p>"
                       "</td>"
                       "</tr>",
             Prj->Hidden ? "DAT_LIGHT" :
