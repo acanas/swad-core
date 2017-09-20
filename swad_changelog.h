@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.3.9 (2017-09-19)"
+#define Log_PLATFORM_VERSION	"SWAD 17.3.10 (2017-09-19)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.3.10:  Sep 19, 2017	New row in listing of projects for students. (230009 lines)
         Version 17.3.9:   Sep 19, 2017	Tutor code moved from table projects to table prj_grp. (229987 lines)
 					1 change necessary in database:
 ALTER TABLE projects DROP COLUMN UsrCod;

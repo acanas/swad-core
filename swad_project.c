@@ -345,6 +345,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_Tutors;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static unsigned UniqueId = 0;
 
    /***** Get data of this project *****/
@@ -353,7 +354,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"5\" class=\"CONTEXT_COL");
+	              "<td rowspan=\"6\" class=\"CONTEXT_COL");
    if (PrintView)
       fprintf (Gbl.F.Out,"\">");
    else
@@ -529,6 +530,27 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT");
    Prj_WriteUsrs (Prj->PrjCod,Prj_ROLE_TUT);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+
+   /* Project students */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s:"
+	              "</td>"
+                      "<td colspan=\"2\" class=\"LEFT_TOP",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
+            Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT");
+   Prj_WriteUsrs (Prj->PrjCod,Prj_ROLE_STD);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
