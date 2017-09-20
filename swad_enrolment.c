@@ -346,10 +346,10 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
   }
 
 /*****************************************************************************/
-/****** Write a form to request another user's ID, @nickname or email *******/
+/****** Write a form to request another user's ID, @nickname or email ********/
 /*****************************************************************************/
 
-void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
+void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
@@ -357,6 +357,8 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
    /***** Form to request user's ID, @nickname or email address *****/
    Act_FormStart (NextAction);
+   if (FuncParams)
+      FuncParams ();
    fprintf (Gbl.F.Out,"<label class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
@@ -3152,7 +3154,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
          Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   Enr_WriteFormToReqAnotherUsrID (NextAction);
+   Enr_WriteFormToReqAnotherUsrID (NextAction,NULL);
 
    /***** End box *****/
    Box_EndBox ();

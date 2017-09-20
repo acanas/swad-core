@@ -85,7 +85,7 @@ static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
                                        const char *Label,Prj_RoleInProject_t RoleInProject);
 static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
-static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
+static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
 
 static void Prj_GetParamPrjOrder (void);
 
@@ -549,7 +549,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
    bool UsrValid;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
       ActReqAddStdPrj,	// Prj_ROLE_STD, Student
@@ -673,15 +673,11 @@ void Prj_ReqAddRev (void)
    Prj_ReqAnotherUsrID (Prj_ROLE_REV);
   }
 
-/*****************************************************************************/
-/****** Write a form to request another user's ID, @nickname or email ********/
-/*****************************************************************************/
-
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Hlp_ASSESSMENT_Projects_add_user;
    extern const char *Txt_Add_user;
-   Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
       ActAddStdPrj,	// Prj_ROLE_STD, Student
@@ -689,12 +685,16 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
       ActAddRevPrj,	// Prj_ROLE_REV, Reviewer
      };
 
+   /***** Get project code *****/
+   if ((Gbl.Prjs.PrjCodToEdit = Prj_GetParamPrjCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Add_user,NULL,
                  Hlp_ASSESSMENT_Projects_add_user,Box_NOT_CLOSABLE);
 
    /***** Write form to request another user's ID *****/
-   Enr_WriteFormToReqAnotherUsrID (ActionAddUsr[RoleInProject]);
+   Enr_WriteFormToReqAnotherUsrID (ActionAddUsr[RoleInProject],Prj_PutParams);
 
    /***** End box *****/
    Box_EndBox ();
@@ -721,7 +721,8 @@ void Prj_AddRev (void)
 
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
   {
-   Ale_ShowAlert (Ale_WARNING,"Not yet implemented.");
+   if (RoleInProject != Prj_ROLE_UNK)	// TODO: Remove
+      Ale_ShowAlert (Ale_WARNING,"Not yet implemented.");
   }
 
 /*****************************************************************************/

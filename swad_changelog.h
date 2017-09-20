@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.4 (2017-09-20)"
+#define Log_PLATFORM_VERSION	"SWAD 17.4.1 (2017-09-20)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.4.1:   Sep 20, 2017	Changes adding users to a project. Not finished. (230141 lines)
         Version 17.4:     Sep 20, 2017	Actions to add users to a project. (230137 lines)
 					6 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1684','es','N','Solicitar ID a&ntilde;adir estudiante a proyecto');
