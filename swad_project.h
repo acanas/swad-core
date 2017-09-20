@@ -78,7 +78,10 @@ void Prj_AddTut (void);
 void Prj_AddRev (void);
 
 void Prj_PutHiddenParamPrjOrder (void);
-void Prj_RequestCreatOrEditPrj (void);
+
+void Prj_RequestCreatePrj (void);
+void Prj_RequestEditPrj (void);
+
 void Prj_GetListProjects (void);
 void Prj_GetDataOfProjectByCod (struct Project *Prj);
 void Prj_FreeListProjects (void);

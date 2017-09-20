@@ -106,6 +106,7 @@ static void Prj_ResetProject (struct Project *Prj);
 static void Prj_PutParamPrjCod (long PrjCod);
 static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod);
 
+static void Prj_RequestCreatOrEditPrj (long PrjCod);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField);
 
@@ -716,6 +717,9 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
 
    /***** End box *****/
    Box_EndBox ();
+
+   /***** Put a form to create/edit project *****/
+   Prj_RequestCreatOrEditPrj (Gbl.Prjs.PrjCodToEdit);
   }
 
 /*****************************************************************************/
@@ -1218,10 +1222,28 @@ static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Valu
   }
 
 /*****************************************************************************/
-/******************** Put a form to create a new project *********************/
+/********************* Put a form to create/edit project *********************/
 /*****************************************************************************/
 
-void Prj_RequestCreatOrEditPrj (void)
+void Prj_RequestCreatePrj (void)
+  {
+   /***** Form to create project *****/
+   Prj_RequestCreatOrEditPrj (-1L);	// It's a new, non existing, project
+  }
+
+void Prj_RequestEditPrj (void)
+  {
+   long PrjCod;
+
+   /***** Get project code *****/
+   if ((PrjCod = Prj_GetParamPrjCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
+   /***** Form to edit project *****/
+   Prj_RequestCreatOrEditPrj (PrjCod);
+  }
+
+static void Prj_RequestCreatOrEditPrj (long PrjCod)
   {
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
@@ -1253,7 +1275,7 @@ void Prj_RequestCreatOrEditPrj (void)
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get the code of the project *****/
-   ItsANewProject = ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L);
+   ItsANewProject = ((Prj.PrjCod = PrjCod) == -1L);
 
    /***** Get from the database the data of the project *****/
    if (ItsANewProject)
@@ -1543,7 +1565,7 @@ void Prj_RecFormProject (void)
      }
    else
       // TODO: The form should be filled with partial data, now is always empty
-      Prj_RequestCreatOrEditPrj ();
+      Prj_RequestCreatOrEditPrj (Prj.PrjCod);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
