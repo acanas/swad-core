@@ -743,12 +743,63 @@ void Prj_AddRev (void)
 
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
   {
+   extern const char *Txt_THE_USER_X_has_been_enroled_in_the_project;
+   extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   long PrjCod;
+   struct ListUsrCods ListUsrCods;
+   unsigned NumUsr;
+   char Query[512];
+
    /***** Get project code *****/
-   if ((Gbl.Prjs.PrjCodToEdit = Prj_GetParamPrjCod ()) == -1L)
+   if ((PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
-   if (RoleInProject != Prj_ROLE_UNK)	// TODO: Remove
-      Ale_ShowAlert (Ale_WARNING,"Not yet implemented.");
+   /***** Use user's ID to identify the user(s) to be enroled /removed *****/
+   Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (&ListUsrCods);
+
+   if (ListUsrCods.NumUsrs)	// User(s) found with the ID
+     {
+      /***** For each user found... *****/
+      for (NumUsr = 0;
+	   NumUsr < ListUsrCods.NumUsrs;
+	   NumUsr++)
+	{
+	 /* Get user's data */
+         Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods.Lst[NumUsr];
+         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+	 /* Check if this user belongs to the current course */
+	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    /***** Add user to project *****/
+	    sprintf (Query,"REPLACE INTO prj_usr"
+			   " (PrjCod,RoleInProject,UsrCod)"
+			   " VALUES"
+			   " (%ld,%u,%ld)",
+		     PrjCod,(unsigned) RoleInProject,Gbl.Usrs.Other.UsrDat.UsrCod);
+	    DB_QueryREPLACE (Query,"can not add user to project");
+
+	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_in_the_project,
+		     Gbl.Usrs.Other.UsrDat.FullName);
+	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	   }
+	 else        // User does not belong to the current course
+	   {
+	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
+		     Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
+	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	   }
+	}
+
+      /***** Free list of users' codes *****/
+      Usr_FreeListUsrCods (&ListUsrCods);
+     }
+   else	// No users found
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+   /***** Put form to edit project again *****/
+   Prj_RequestCreatOrEditPrj (PrjCod);
   }
 
 /*****************************************************************************/

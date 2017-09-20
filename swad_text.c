@@ -47504,6 +47504,27 @@ const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_cou
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
+const char *Txt_THE_USER_X_has_been_enroled_in_the_project =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"<strong>%s</strong> ha estat afegit/da al projecte.";
+#elif L==2
+	"<strong>%s</strong> hat sich im Projekt eingeschrieben.";
+#elif L==3
+	"<strong>%s</strong> has been enroled in the project.";
+#elif L==4
+	"<strong>%s</strong> ha sido a&ntilde;adido/a al proyecto.";
+#elif L==5
+	"<strong>%s</strong> a &eacute;t&eacute; inscrit dans le projet.";
+#elif L==6
+	"<strong>%s</strong> ha sido a&ntilde;adido/a al proyecto.";	// Okoteve traducción
+#elif L==7
+	"<strong>%s</strong> &egrave; stato registrato/a nel progetto.";
+#elif L==8
+	"<strong>%s</strong> zosta&lstrok; zapisany do projektu.";
+#elif L==9
+	"<strong>%s</strong> foi matriculado/a no projeto.";
+#endif
+
 const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ha sido inscrito/a"
@@ -47539,7 +47560,7 @@ const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y =	// Warning: it is 
 	"<strong>%s</strong> ha estat afegit/da"
 	" a l'assignatura <strong>%s</strong>.";
 #elif L==2
-	"<strong>%s</strong> hat sich im"
+	"<strong>%s</strong> hat sich"
 	" im Kurs <strong>%s</strong> eingeschrieben.";
 #elif L==3
 	"<strong>%s</strong> has been enroled"
@@ -48573,45 +48594,6 @@ const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is ver
 #elif L==9
 	"There is no user"
 	" with ID, nick or email <strong>%s</strong>.";			// Necessita de tradução
-#endif
-
-const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1
-	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2
-	"There is no user"
-	" with ID, nick or email <strong>%s</strong>"
-	" in the course <strong>%s</strong>.";		// Übersetzung notwendig
-#elif L==3
-	"There is no user"
-	" with ID, nick or email <strong>%s</strong>"
-	" in the course <strong>%s</strong>.";
-#elif L==4
-	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>.";
-#elif L==5
-	"There is no user"
-	" with ID, nick or email <strong>%s</strong>"
-	" in the course <strong>%s</strong>.";		// Besoin de traduction
-#elif L==6
-	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"Non c'&egrave; alcun utente"
-	" con ID, nome utente o email <strong>%s</strong>"
-	" nel corso <strong>%s</strong>.";
-#elif L==8
-	"There is no user"
-	" with ID, nick or email <strong>%s</strong>"
-	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There is no user"
-	" with ID, nick or email <strong>%s</strong>"
-	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_is_no_user_with_nickname_X =	// Warning: it is very important to include %s in the following sentences
