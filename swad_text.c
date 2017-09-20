@@ -2908,6 +2908,27 @@ const char *Txt_Add_this_ID =
 	"Adicionar este n&ordm; identif.";
 #endif
 
+const char *Txt_Add_user =
+#if   L==1
+	"Afegir usuari";
+#elif L==2
+	"F&uuml;gen Benutzer";
+#elif L==3
+	"Add user";
+#elif L==4
+	"A&ntilde;adir usuario";
+#elif L==5
+	"Ajouter utilisateur";
+#elif L==6
+	"A&ntilde;adir usuario";	// Okoteve traducción
+#elif L==7
+	"Aggiungere utente";
+#elif L==8
+	"Dodaj u&zdot;ytkownika";
+#elif L==9
+	"Adicionar usu&aacute;rio";
+#endif
+
 const char *Txt_Announcement_created =
 #if   L==1
 	"Anunci creat.";
@@ -9003,13 +9024,13 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
 #if   L==1
 	"&iquest;Realmente desea eliminar completamente su cuenta de usuario/a?";	// Necessita traduccio
 #elif L==2
-	"Do you really want to completely eliminate your user account?";	// Need Übersetzung
+	"Do you really want to completely eliminate your user account?";		// Need Übersetzung
 #elif L==3
 	"Do you really want to completely eliminate your user account?";
 #elif L==4
 	"&iquest;Realmente desea eliminar completamente su cuenta de usuario/a?";
 #elif L==5
-	"Do you really want to completely eliminate your user account?";	// Besoin de traduction
+	"Do you really want to completely eliminate your user account?";		// Besoin de traduction
 #elif L==6
 	"&iquest;Realmente desea eliminar completamente su cuenta de usuario/a?";	// Okoteve traducción
 #elif L==7
@@ -9017,7 +9038,7 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
 #elif L==8
 	"Czy na pewno chcesz, aby calkowicie wyeliminowac konta uzytkownika?";
 #elif L==9
-	"Do you really want to completely eliminate your user account?";	// Necessita de tradução
+	"Do you really want to completely eliminate your user account?";		// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y =	// Warning: it is very important to include two %s in the following sentences

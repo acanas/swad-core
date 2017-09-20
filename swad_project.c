@@ -84,6 +84,8 @@ static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
 static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
                                        const char *Label,Prj_RoleInProject_t RoleInProject);
 static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
+static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
+
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
@@ -533,6 +535,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Add_user;
    char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -545,6 +548,13 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
    bool UsrValid;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
+   Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+     {
+      ActUnk,		// Prj_ROLE_UNK, Unknown
+      ActReqMdfOneStd,	// Prj_ROLE_STD, Student
+      ActReqMdfOneTch,	// Prj_ROLE_TUT, Tutor
+      ActReqMdfOneOth,	// Prj_ROLE_REV, Reviewer
+     };
 
    /***** Get number of users in project from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
@@ -565,12 +575,12 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
    NumUsrsKnown = (unsigned) DB_QuerySELECT (Query,&mysql_res,
                                              "can not get users in project");
 
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table>");
+
    /***** Check number of users *****/
    if (NumUsrs)
      {
-      /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table>");
-
       /***** How many users will be shown? *****/
       NumUsrsToShow = NumUsrsKnown;
 
@@ -624,13 +634,50 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
-
-      /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
      }
+
+   /***** Row to add a new user *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"3\" class=\"LEFT_MIDDLE\">");
+   Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,NULL,
+			  "plus64x64.png",
+			  Txt_Add_user,Txt_Add_user,
+			  NULL);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****** Write a form to request another user's ID, @nickname or email ********/
+/*****************************************************************************/
+
+static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects_add_user;
+   extern const char *Txt_Add_user;
+   Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+     {
+      ActUnk,		// Prj_ROLE_UNK, Unknown
+      ActReqMdfOneStd,	// Prj_ROLE_STD, Student
+      ActReqMdfOneTch,	// Prj_ROLE_TUT, Tutor
+      ActReqMdfOneOth,	// Prj_ROLE_REV, Reviewer
+     };
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Add_user,NULL,
+                 Hlp_ASSESSMENT_Projects_add_user,Box_NOT_CLOSABLE);
+
+   /***** Write form to request another user's ID *****/
+   Enr_WriteFormToReqAnotherUsrID (ActionAddUsr[RoleInProject]);
+
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

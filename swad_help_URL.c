@@ -1031,6 +1031,27 @@ const char *Hlp_ASSESSMENT_Projects_edit_project =
 	"ASSESSMENT.Projects.en#edit-project";
 #endif
 
+const char *Hlp_ASSESSMENT_Projects_add_user =
+#if   L==1
+	"ASSESSMENT.Projects.es#add-user";	// TODO: Link in Spanish
+#elif L==2
+	"ASSESSMENT.Projects.en#add-user";
+#elif L==3
+	"ASSESSMENT.Projects.en#add-user";
+#elif L==4
+	"ASSESSMENT.Projects.es#add-user";	// TODO: Link in Spanish
+#elif L==5
+	"ASSESSMENT.Projects.en#add-user";
+#elif L==6
+	"ASSESSMENT.Projects.es#add-user";	// TODO: Link in Spanish
+#elif L==7
+	"ASSESSMENT.Projects.en#add-user";
+#elif L==8
+	"ASSESSMENT.Projects.en#add-user";
+#elif L==9
+	"ASSESSMENT.Projects.en#add-user";
+#endif
+
 const char *Hlp_ASSESSMENT_Tests =
 #if   L==1
 	"ASSESSMENT.Tests.es";
