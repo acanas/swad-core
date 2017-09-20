@@ -81,6 +81,8 @@ static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
 static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
                                       const char *Label,char *TxtField);
+static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
+                                       const char *Label,Prj_RoleInProject_t RoleInProject);
 static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
 static void Prj_GetParamPrjOrder (void);
 
@@ -449,52 +451,18 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
                              Txt_Required_materials,Prj->Materials);
 
    /* Project tutors */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
-            Txt_Tutors);
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT");
-   Prj_WriteUsrs (Prj->PrjCod,Prj_ROLE_TUT);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   Prj_ShowOneProjectUsrsRow (Prj,PrintView,
+                              Txt_Tutors,Prj_ROLE_TUT);
 
    /* Project students */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
-            Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT");
-   Prj_WriteUsrs (Prj->PrjCod,Prj_ROLE_STD);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   Prj_ShowOneProjectUsrsRow (Prj,PrintView,
+                              Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Prj_ROLE_STD);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
-/*********************** Show test info about a project **********************/
+/************************ Show text row about a project **********************/
 /*****************************************************************************/
 
 static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
@@ -526,6 +494,35 @@ static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT",
             TxtField);
+  }
+
+/*****************************************************************************/
+/************************* Show users row in a project ***********************/
+/*****************************************************************************/
+
+static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
+                                       const char *Label,Prj_RoleInProject_t RoleInProject)
+  {
+   /***** Row with label and listing of users *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s:"
+	              "</td>"
+                      "<td colspan=\"2\" class=\"LEFT_TOP",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
+            Label);
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT");
+   Prj_WriteUsrs (Prj->PrjCod,RoleInProject);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
   }
 
 /*****************************************************************************/
