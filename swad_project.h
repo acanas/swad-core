@@ -69,6 +69,14 @@ struct Project
 void Prj_SeeProjects (void);
 void Prj_PrintOneProject (void);
 
+void Prj_ReqAddStd (void);
+void Prj_ReqAddTut (void);
+void Prj_ReqAddRev (void);
+
+void Prj_AddStd (void);
+void Prj_AddTut (void);
+void Prj_AddRev (void);
+
 void Prj_PutHiddenParamPrjOrder (void);
 void Prj_RequestCreatOrEditPrj (void);
 void Prj_GetListProjects (void);

@@ -85,6 +85,7 @@ static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
                                        const char *Label,Prj_RoleInProject_t RoleInProject);
 static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
+static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 
 static void Prj_GetParamPrjOrder (void);
 
@@ -551,9 +552,9 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
    Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
-      ActReqMdfOneStd,	// Prj_ROLE_STD, Student
-      ActReqMdfOneTch,	// Prj_ROLE_TUT, Tutor
-      ActReqMdfOneOth,	// Prj_ROLE_REV, Reviewer
+      ActReqAddStdPrj,	// Prj_ROLE_STD, Student
+      ActReqAddTutPrj,	// Prj_ROLE_TUT, Tutor
+      ActReqAddRevPrj,	// Prj_ROLE_REV, Reviewer
      };
 
    /***** Get number of users in project from database *****/
@@ -654,6 +655,25 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
   }
 
 /*****************************************************************************/
+/*** Request another user's ID, @nickname or email to add user to project ****/
+/*****************************************************************************/
+
+void Prj_ReqAddStd (void)
+  {
+   Prj_ReqAnotherUsrID (Prj_ROLE_STD);
+  }
+
+void Prj_ReqAddTut (void)
+  {
+   Prj_ReqAnotherUsrID (Prj_ROLE_TUT);
+  }
+
+void Prj_ReqAddRev (void)
+  {
+   Prj_ReqAnotherUsrID (Prj_ROLE_REV);
+  }
+
+/*****************************************************************************/
 /****** Write a form to request another user's ID, @nickname or email ********/
 /*****************************************************************************/
 
@@ -664,9 +684,9 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
    Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
-      ActReqMdfOneStd,	// Prj_ROLE_STD, Student
-      ActReqMdfOneTch,	// Prj_ROLE_TUT, Tutor
-      ActReqMdfOneOth,	// Prj_ROLE_REV, Reviewer
+      ActAddStdPrj,	// Prj_ROLE_STD, Student
+      ActAddTutPrj,	// Prj_ROLE_TUT, Tutor
+      ActAddRevPrj,	// Prj_ROLE_REV, Reviewer
      };
 
    /***** Start box *****/
@@ -678,6 +698,30 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
 
    /***** End box *****/
    Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/**************************** Add user to project ****************************/
+/*****************************************************************************/
+
+void Prj_AddStd (void)
+  {
+   Prj_AddUsrToProject (Prj_ROLE_STD);
+  }
+
+void Prj_AddTut (void)
+  {
+   Prj_AddUsrToProject (Prj_ROLE_TUT);
+  }
+
+void Prj_AddRev (void)
+  {
+   Prj_AddUsrToProject (Prj_ROLE_REV);
+  }
+
+static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
+  {
+   Ale_ShowAlert (Ale_WARNING,"Not yet implemented.");
   }
 
 /*****************************************************************************/
