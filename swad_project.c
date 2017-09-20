@@ -64,6 +64,13 @@ typedef enum
    Prj_ROLE_REV	= 3,	// Reviewer
   } Prj_RoleInProject_t;
 
+typedef enum
+  {
+   Prj_LIST_PROJECTS,
+   Prj_PRINT_ONE_PROJECT,
+   Prj_EDIT_ONE_PROJECT,
+  } Prj_ProjectView_t;
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -78,12 +85,15 @@ static bool Prj_CheckIfICanCreateProjects (void);
 static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
-static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
-static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
+static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectView);
+static void Prj_ShowOneProjectTxtRow (struct Project *Prj,
+                                      Prj_ProjectView_t ProjectView,
                                       const char *Label,char *TxtField);
-static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
+static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,
+                                       Prj_ProjectView_t ProjectView,
                                        const char *Label,Prj_RoleInProject_t RoleInProject);
-static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
+static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
+                           Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
 
@@ -95,6 +105,9 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
 static void Prj_PutParamPrjCod (long PrjCod);
 static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod);
+
+static void Prj_EditOneProjectTxtArea (const char *Id,
+                                       const char *Label,char *TxtField);
 
 static void Prj_AllocMemProject (struct Project *Prj);
 static void Prj_FreeMemProject (struct Project *Prj);
@@ -163,8 +176,7 @@ static void Prj_ShowAllProjects (void)
 	   NumPrj++)
 	{
 	 Prj.PrjCod = Gbl.Prjs.LstPrjCods[NumPrj - 1];
-	 Prj_ShowOneProject (&Prj,
-	                     false);	// Not print view
+	 Prj_ShowOneProject (&Prj,Prj_LIST_PROJECTS);
 	}
 
       /***** End table *****/
@@ -328,8 +340,7 @@ void Prj_PrintOneProject (void)
    Prj_PutHeadForSeeing (true);	// Print view
 
    /***** Write project *****/
-   Prj_ShowOneProject (&Prj,
-                       true);	// Print view
+   Prj_ShowOneProject (&Prj,Prj_PRINT_ONE_PROJECT);
 
    /***** End table *****/
    Tbl_EndTable ();
@@ -342,7 +353,7 @@ void Prj_PrintOneProject (void)
 /***************************** Show one project ******************************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
+static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Today;
    extern const char *Txt_PREASSIGNED_TYPES[Prj_NUM_TYPES_PREASSIGNED];
@@ -362,13 +373,13 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td rowspan=\"6\" class=\"CONTEXT_COL");
-   if (PrintView)
-      fprintf (Gbl.F.Out,"\">");
-   else
+   if (ProjectView == Prj_LIST_PROJECTS)
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
       Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden);
      }
+   else
+      fprintf (Gbl.F.Out,"\">");
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
@@ -379,7 +390,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
         	                       "DATE_RED_LIGHT") :
                           (Prj->Open ? "DATE_GREEN" :
                                        "DATE_RED"));
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
@@ -398,7 +409,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
         	                       "DATE_RED_LIGHT") :
                           (Prj->Open ? "DATE_GREEN" :
                                        "DATE_RED"));
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
@@ -411,7 +422,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 
    /* Project title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<div class=\"%s\">%s</div>",
@@ -424,7 +435,7 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",
             (Prj->Preassigned == Prj_PREASSIGNED) ? "DAT_N" :
         	                                    "DAT");
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<img src=\"%s/%s64x64.png\""
@@ -442,23 +453,23 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
-   Prj_ShowOneProjectTxtRow (Prj,PrintView,
+   Prj_ShowOneProjectTxtRow (Prj,ProjectView,
                              Txt_Description,Prj->Description);
 
    /* Required knowledge to carry out the project */
-   Prj_ShowOneProjectTxtRow (Prj,PrintView,
+   Prj_ShowOneProjectTxtRow (Prj,ProjectView,
                              Txt_Required_knowledge,Prj->Knowledge);
 
    /* Required materials to carry out the project */
-   Prj_ShowOneProjectTxtRow (Prj,PrintView,
+   Prj_ShowOneProjectTxtRow (Prj,ProjectView,
                              Txt_Required_materials,Prj->Materials);
 
    /* Project tutors */
-   Prj_ShowOneProjectUsrsRow (Prj,PrintView,
+   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
                               Txt_Tutors,Prj_ROLE_TUT);
 
    /* Project students */
-   Prj_ShowOneProjectUsrsRow (Prj,PrintView,
+   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
                               Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Prj_ROLE_STD);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -468,7 +479,8 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
 /************************ Show text row about a project **********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
+static void Prj_ShowOneProjectTxtRow (struct Project *Prj,
+                                      Prj_ProjectView_t ProjectView,
                                       const char *Label,char *TxtField)
   {
    /***** Change format *****/
@@ -479,7 +491,7 @@ static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
    /***** Row with label and text *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
                       "%s:"
@@ -488,7 +500,7 @@ static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
             Prj->Hidden ? "ASG_LABEL_LIGHT" :
         	          "ASG_LABEL",
             Label);
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
                       "%s"
@@ -503,13 +515,14 @@ static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
 /************************* Show users row in a project ***********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
+static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,
+                                       Prj_ProjectView_t ProjectView,
                                        const char *Label,Prj_RoleInProject_t RoleInProject)
   {
    /***** Row with label and listing of users *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
                       "%s:"
@@ -518,12 +531,12 @@ static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
             Prj->Hidden ? "ASG_LABEL_LIGHT" :
         	          "ASG_LABEL",
             Label);
-   if (!PrintView)
+   if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">",
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT");
-   Prj_WriteUsrs (Prj->PrjCod,RoleInProject);
+   Prj_WriteUsrs (Prj->PrjCod,ProjectView,RoleInProject);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }
@@ -532,7 +545,8 @@ static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,bool PrintView,
 /*************** Write list of users with a role in a project ****************/
 /*****************************************************************************/
 
-static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
+static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
+                           Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -638,14 +652,18 @@ static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject)
      }
 
    /***** Row to add a new user *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\" class=\"LEFT_MIDDLE\">");
-   Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,NULL,
-			  "plus64x64.png",
-			  Txt_Add_user,Txt_Add_user,
-			  NULL);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   if (ProjectView == Prj_EDIT_ONE_PROJECT)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"3\" class=\"LEFT_MIDDLE\">");
+      Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used to pass project code as a parameter
+      Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
+			     "plus64x64.png",
+			     Txt_Add_user,Txt_Add_user,
+			     NULL);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
@@ -721,6 +739,10 @@ void Prj_AddRev (void)
 
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
   {
+   /***** Get project code *****/
+   if ((Gbl.Prjs.PrjCodToEdit = Prj_GetParamPrjCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
    if (RoleInProject != Prj_ROLE_UNK)	// TODO: Remove
       Ale_ShowAlert (Ale_WARNING,"Not yet implemented.");
   }
@@ -1206,6 +1228,7 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
+   extern const char *Txt_Project_data;
    extern const char *Txt_Title;
    extern const char *Txt_No;
    extern const char *Txt_Yes;
@@ -1216,6 +1239,9 @@ void Prj_RequestCreatOrEditPrj (void)
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
+   extern const char *Txt_Project_members;
+   extern const char *Txt_Tutors;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct Project Prj;
    bool ItsANewProject;
 
@@ -1242,28 +1268,29 @@ void Prj_RequestCreatOrEditPrj (void)
       /* Get data of the project from database */
       Prj_GetDataOfProjectByCod (&Prj);
 
-   /***** Start form *****/
+   /***** Start box and form *****/
    if (ItsANewProject)
      {
+      Box_StartBox (NULL,Txt_New_project,NULL,
+                    Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE);
       Act_FormStart (ActNewPrj);
       Gbl.Prjs.PrjCodToEdit = -1L;
      }
    else
      {
+      Box_StartBox (NULL,Txt_Edit_project,NULL,
+                    Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
       Act_FormStart (ActChgPrj);
       Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
      }
    Prj_PutParams ();
 
-   /***** Start box and table *****/
-   if (ItsANewProject)
-      Box_StartBoxTable (NULL,Txt_New_project,NULL,
-			 Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE,2);
-   else
-      Box_StartBoxTable (NULL,Txt_Edit_project,NULL,
-			 Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE,2);
+   /***** 1. Project data *****/
+   /* Start box and table */
+   Box_StartBoxTable (NULL,Txt_Project_data,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Project title *****/
+   /* Project title */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Title\" class=\"%s\">%s:</label>"
@@ -1277,55 +1304,19 @@ void Prj_RequestCreatOrEditPrj (void)
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
             Prj_MAX_CHARS_PROJECT_TITLE,Prj.Title);
 
-   /***** Project start and end dates *****/
+   /* Project start and end dates */
    Dat_PutFormStartEndClientLocalDateTimes (Prj.TimeUTC,Dat_FORM_SECONDS_ON);
 
-   /***** Description of the project *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Description\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Description\" name=\"Description\""
-                      " cols=\"60\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
-   if (!ItsANewProject)
-      fprintf (Gbl.F.Out,"%s",Prj.Description);
-   fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
+   /* Description of the project */
+   Prj_EditOneProjectTxtArea ("Description",Txt_Description,Prj.Description);
 
-   /***** Required knowledge to carry out the project *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Knowledge\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Knowledge\" name=\"Knowledge\""
-                      " cols=\"60\" rows=\"5\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Required_knowledge);
-   if (!ItsANewProject)
-      fprintf (Gbl.F.Out,"%s",Prj.Knowledge);
-   fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
+   /* Required knowledge to carry out the project */
+   Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,Prj.Knowledge);
 
-   /***** Required materials to carry out the project *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Materials\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Materials\" name=\"Materials\""
-                      " cols=\"60\" rows=\"5\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Required_materials);
-   if (!ItsANewProject)
-      fprintf (Gbl.F.Out,"%s",Prj.Materials);
-   fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
+   /* Required materials to carry out the project */
+   Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,Prj.Materials);
 
-   /***** URL for additional info *****/
+   /* URL for additional info */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
@@ -1339,7 +1330,7 @@ void Prj_RequestCreatOrEditPrj (void)
 	    Txt_URL,
 	    Cns_MAX_CHARS_WWW,Prj.URL);
 
-  /***** Preassigned? *****/
+   /* Preassigned? */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
@@ -1363,20 +1354,58 @@ void Prj_RequestCreatOrEditPrj (void)
 	              "</td>"
                       "</tr>");
 
-   /***** End table, send button and end box *****/
+   /* End table, send button and end box */
    if (ItsANewProject)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_project);
    else
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
-   /***** End form *****/
+   /* End form */
    Act_FormEnd ();
+
+   /***** Project members *****/
+   Box_StartBoxTable (NULL,Txt_Project_members,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
+   Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
+                              Txt_Tutors,
+                              Prj_ROLE_TUT);	// Tutors
+   Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
+                              Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+                              Prj_ROLE_STD);	// Students
+   Box_EndBoxTable ();
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
 
    /***** Show current projects, if any *****/
    Prj_ShowAllProjects ();
+  }
+
+/*****************************************************************************/
+/************************ Show text row about a project **********************/
+/*****************************************************************************/
+
+static void Prj_EditOneProjectTxtArea (const char *Id,
+                                       const char *Label,char *TxtField)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"%s\" class=\"%s\">%s:</label>"
+	              "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"5\">"
+                      "%s"
+                      "</textarea>"
+                      "</td>"
+                      "</tr>",
+            Id,The_ClassForm[Gbl.Prefs.Theme],Label,
+            Id,Id,
+            TxtField);
   }
 
 /*****************************************************************************/
