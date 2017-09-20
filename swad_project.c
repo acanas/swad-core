@@ -79,6 +79,8 @@ static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_ShowOneProject (struct Project *Prj,bool PrintView);
+static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
+                                      const char *Label,char *TxtField);
 static void Prj_WriteUsrs (long PrjCod,Prj_RoleInProject_t RoleInProject);
 static void Prj_GetParamPrjOrder (void);
 
@@ -433,84 +435,18 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
 
-   /***** Write second row of data of this project *****/
+   /***** Write rows of data of this project *****/
    /* Description of the project */
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Prj->Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Prj->Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
-            Txt_Description);
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s"
-                      "</td>"
-                      "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
-            Prj->Description);
+   Prj_ShowOneProjectTxtRow (Prj,PrintView,
+                             Txt_Description,Prj->Description);
 
    /* Required knowledge to carry out the project */
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Prj->Knowledge,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Prj->Knowledge,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
-            Txt_Required_knowledge);
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s"
-                      "</td>"
-                      "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
-            Prj->Knowledge);
+   Prj_ShowOneProjectTxtRow (Prj,PrintView,
+                             Txt_Required_knowledge,Prj->Knowledge);
 
    /* Required materials to carry out the project */
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Prj->Materials,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Prj->Materials,Cns_MAX_BYTES_TEXT,60);	// Insert links
-
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
-            Txt_Required_materials);
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s"
-                      "</td>"
-                      "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
-            Prj->Materials);
+   Prj_ShowOneProjectTxtRow (Prj,PrintView,
+                             Txt_Required_materials,Prj->Materials);
 
    /* Project tutors */
    fprintf (Gbl.F.Out,"<tr>"
@@ -555,6 +491,41 @@ static void Prj_ShowOneProject (struct Project *Prj,bool PrintView)
                       "</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/*********************** Show test info about a project **********************/
+/*****************************************************************************/
+
+static void Prj_ShowOneProjectTxtRow (struct Project *Prj,bool PrintView,
+                                      const char *Label,char *TxtField)
+  {
+   /***** Change format *****/
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                     TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+   Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
+
+   /***** Row with label and text *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s:"
+	              "</td>"
+                      "<td colspan=\"2\" class=\"LEFT_TOP",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
+            Label);
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s"
+                      "</td>"
+                      "</tr>",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            TxtField);
   }
 
 /*****************************************************************************/
