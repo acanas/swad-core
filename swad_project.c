@@ -466,10 +466,6 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    Prj_ShowOneProjectTxtRow (Prj,ProjectView,
                              Txt_Required_materials,Prj->Materials);
 
-   /* Project tutors */
-   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
-                              Txt_Tutors,Prj_ROLE_TUT);
-
    /* Preassigned? */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"RIGHT_TOP");
@@ -499,6 +495,10 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
             Txt_PREASSIGNED_TYPES[Prj->Preassigned],
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
+
+   /* Project tutors */
+   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
+                              Txt_Tutors,Prj_ROLE_TUT);
 
    /* Project students */
    Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
@@ -552,22 +552,35 @@ static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,
                                        const char *Label,Prj_RoleInProject_t RoleInProject)
   {
    /***** Row with label and listing of users *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
-            Label);
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT");
+   fprintf (Gbl.F.Out,"<tr>");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP COLOR%u %s\">%s:</td>"
+                            "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
+	          Gbl.RowEvenOdd,
+                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	                "ASG_LABEL",
+                  Label,
+	          Gbl.RowEvenOdd,
+        	  Prj->Hidden ? "DAT_LIGHT" :
+        	                "DAT");
+         break;
+      case Prj_PRINT_ONE_PROJECT:
+         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP %s\">%s:</td>"
+                            "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
+                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	                "ASG_LABEL",
+                  Label,
+        	  Prj->Hidden ? "DAT_LIGHT" :
+        	                "DAT");
+         break;
+      case Prj_EDIT_ONE_PROJECT:
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
+                            "<td colspan=\"2\" class=\"LEFT_TOP DAT\">",
+                  Label);
+         break;
+     }
    Prj_WriteUsrs (Prj->PrjCod,ProjectView,RoleInProject);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");

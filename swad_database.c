@@ -2011,6 +2011,7 @@ mysql> DESCRIBE projects;
 +-------------+---------------+------+-----+---------+----------------+
 | PrjCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod      | int(11)       | NO   | MUL | -1      |                |
+| DptCod      | int(11)       | NO   |     | -1      |                |
 | Hidden      | enum('N','Y') | NO   |     | N       |                |
 | Preassigned | enum('N','Y') | NO   |     | N       |                |
 | StartTime   | datetime      | NO   |     | NULL    |                |
@@ -2021,11 +2022,12 @@ mysql> DESCRIBE projects;
 | Materials   | text          | NO   |     | NULL    |                |
 | URL         | varchar(255)  | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-11 rows in set (0,00 sec)
+12 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
+			"DptCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"StartTime DATETIME NOT NULL,"
@@ -2036,7 +2038,8 @@ mysql> DESCRIBE projects;
 			"Materials TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PrjCod),"
-		   "INDEX(CrsCod,Hidden))");
+		   "INDEX(CrsCod,Hidden),"
+		   "INDEX(CrsCod,DptCod))");
 
    /***** Table sessions *****/
 /*

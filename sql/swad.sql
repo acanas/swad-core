@@ -943,6 +943,7 @@ CREATE TABLE IF NOT EXISTS prj_usr (
 CREATE TABLE IF NOT EXISTS projects (
 	PrjCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
+	DptCod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',
 	StartTime DATETIME NOT NULL,
@@ -953,7 +954,8 @@ CREATE TABLE IF NOT EXISTS projects (
 	Materials TEXT NOT NULL,
 	URL VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(PrjCod),
-	INDEX(CrsCod,Hidden));
+	INDEX(CrsCod,Hidden),
+	INDEX(CrsCod,DptCod));
 --
 -- Table sessions: stores the information of open sessions
 --
