@@ -604,6 +604,7 @@ static void Prj_ShowOneProjectUsrsRow (const struct Project *Prj,
 static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
                            Prj_RoleInProject_t RoleInProject)
   {
+   extern const char *Txt_Remove;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Add_user;
@@ -669,6 +670,20 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
 
          /* Get user's data */
 	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+
+	 /* Start row for this user */
+	 fprintf (Gbl.F.Out,"<tr>");
+
+	 /* Icon to remove user */
+         if (ProjectView == Prj_EDIT_ONE_PROJECT)
+           {
+	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	    Lay_PutContextualLink (ActUnk,NULL,NULL,
+				   "remove-on64x64.png",
+				   Txt_Remove,NULL,
+				   NULL);
+	    fprintf (Gbl.F.Out,"</td>");
+           }
 
          /* Put user's photo */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
