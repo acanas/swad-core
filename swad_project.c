@@ -218,7 +218,7 @@ static void Prj_PutHeadForSeeing (bool PrintView)
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Project;
-   extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_Department;
    Dat_StartEndTime_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -257,7 +257,7 @@ static void Prj_PutHeadForSeeing (bool PrintView)
 		      "</th>"
 		      "</tr>",
 	    Txt_Project,
-	    Txt_Preassigned_QUESTION);
+	    Txt_Department);
   }
 
 /*****************************************************************************/
@@ -364,6 +364,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_Tutors;
+   extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static unsigned UniqueId = 0;
 
@@ -373,7 +374,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"6\" class=\"CONTEXT_COL");
+	              "<td rowspan=\"7\" class=\"CONTEXT_COL");
    if (ProjectView == Prj_LIST_PROJECTS)
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
@@ -469,9 +470,39 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
                               Txt_Tutors,Prj_ROLE_TUT);
 
+   /* Preassigned? */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+   if (ProjectView == Prj_LIST_PROJECTS)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s:"
+	              "</td>"
+                      "<td colspan=\"2\" class=\"LEFT_TOP",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
+            Txt_Preassigned_QUESTION);
+   if (ProjectView == Prj_LIST_PROJECTS)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+	              "<img src=\"%s/%s64x64.png\""
+                      " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+                      "<br />%s"
+                      "</td>"
+                      "</tr>",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            Gbl.Prefs.IconsURL,
+            (Prj->Preassigned == Prj_PREASSIGNED) ? "usr" :
+        	                                    "usr_off",
+            Txt_PREASSIGNED_TYPES[Prj->Preassigned],
+            Txt_PREASSIGNED_TYPES[Prj->Preassigned],
+            (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+        	                                    Txt_No);
+
    /* Project students */
    Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
-                              Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Prj_ROLE_STD);
+			      Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Prj_ROLE_STD);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
