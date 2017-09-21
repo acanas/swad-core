@@ -1117,7 +1117,7 @@ long Prj_GetParamPrjCod (void)
   }
 
 /*****************************************************************************/
-/*************** Ask for confirmation of removing a project ******************/
+/**************** Ask for confirmation of removing a project *****************/
 /*****************************************************************************/
 
 void Prj_ReqRemProject (void)
@@ -1126,11 +1126,12 @@ void Prj_ReqRemProject (void)
    extern const char *Txt_Remove_project;
    struct Project Prj;
 
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-
-   /***** Get project code *****/
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -1145,6 +1146,9 @@ void Prj_ReqRemProject (void)
                            ActRemPrj,NULL,NULL,Prj_PutParams,
                            Btn_REMOVE_BUTTON,Txt_Remove_project);
 
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
    /***** Show projects again *****/
    Prj_SeeProjects ();
   }
@@ -1156,15 +1160,27 @@ void Prj_ReqRemProject (void)
 void Prj_RemoveProject (void)
   {
    extern const char *Txt_Project_X_removed;
-   char Query[512];
+   char Query[256];
    struct Project Prj;
 
-   /***** Get project code *****/
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
+
+   /***** Remove users in project *****/
+   sprintf (Query,"DELETE FROM prj_usr USING projects,prj_usr"
+                  " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
+                  " AND projects.PrjCod=prj_usr.PrjCod",
+            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryDELETE (Query,"can not remove project");
 
    /***** Remove project *****/
    sprintf (Query,"DELETE FROM projects"
@@ -1176,6 +1192,9 @@ void Prj_RemoveProject (void)
    sprintf (Gbl.Alert.Txt,Txt_Project_X_removed,
             Prj.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
    Prj_SeeProjects ();
