@@ -54,6 +54,7 @@ struct Project
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];
+   long DptCod;
    char *Description;
    char *Knowledge;
    char *Materials;

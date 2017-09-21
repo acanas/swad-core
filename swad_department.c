@@ -1130,7 +1130,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*********************** Put selector for department *************************/
 /*****************************************************************************/
 
-void Dpt_WriteSelectorDepartment (long InsCod,bool SubmitFormOnChange)
+void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,bool SubmitFormOnChange)
   {
    extern const char *Txt_Any_department;
    unsigned NumDpt;
@@ -1148,7 +1148,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,bool SubmitFormOnChange)
    fprintf (Gbl.F.Out,"\">");
 
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Stat.DptCod == -1L)
+   if (DptCod == -1L)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Any_department);
 
@@ -1157,7 +1157,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,bool SubmitFormOnChange)
 	NumDpt++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.Dpts.Lst[NumDpt].DptCod);
-      if (Gbl.Dpts.Lst[NumDpt].DptCod == Gbl.Stat.DptCod)
+      if (Gbl.Dpts.Lst[NumDpt].DptCod == DptCod)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Dpts.Lst[NumDpt].FullName);
      }

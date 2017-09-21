@@ -30473,49 +30473,6 @@ const char *Txt_Preassigned_QUESTION =
 	"Pr&eacute;-atribu&iacute;do?";
 #endif
 
-const char *Txt_PREASSIGNED_TYPES[Prj_NUM_TYPES_PREASSIGNED] =
-	{
-#if   L==1
-	"No preassignat"
-#elif L==2
-	"Nicht vorzugeordnet"
-#elif L==3
-	"Not preassigned"
-#elif L==4
-	"No preasignado"
-#elif L==5
-	"Non pr&eacute;assign&eacute;"
-#elif L==6
-	"No preasignado"	// Okoteve traducción
-#elif L==7
-	"Non preassegnato"
-#elif L==8
-	"Nieprzypisane"
-#elif L==9
-	"N&atilde;o pr&eacute;-atribu&iacute;do"
-#endif
-	,
-#if   L==1
-	"Preassignat"
-#elif L==2
-	"Vorzugeordnet"
-#elif L==3
-	"Preassigned"
-#elif L==4
-	"Preasignado"
-#elif L==5
-	"Pr&eacute;assign&eacute;"
-#elif L==6
-	"Preasignado"	// Okoteve traducción
-#elif L==7
-	"Preassegnato"
-#elif L==8
-	"Zadany"
-#elif L==9
-	"Pr&eacute;-atribu&iacute;do"
-#endif
-	};
-
 const char *Txt_Preferences =
 #if   L==1
 	"Prefer&egrave;ncies";

@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.5.7 (2017-09-21)"
+#define Log_PLATFORM_VERSION	"SWAD 17.5.8 (2017-09-22)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.5.8:   Sep 22, 2017	Name of department in listing of projects. (230336 lines)
         Version 17.5.7:   Sep 21, 2017	Selector for department in edition of a project. (230363 lines)
         Version 17.5.6:   Sep 21, 2017	Added evaluators to projects. (230347 lines)
         Version 17.5.5:   Sep 21, 2017	Changes in listing and edition of projects. (230318 lines)
