@@ -98,6 +98,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
                            Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
+static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 
 static void Prj_GetParamPrjOrder (void);
 
@@ -620,6 +621,13 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
    bool UsrValid;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
+   static Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
+     {
+      ActUnk,		// Prj_ROLE_UNK, Unknown
+      ActReqRemStdPrj,	// Prj_ROLE_STD, Student
+      ActReqRemTutPrj,	// Prj_ROLE_TUT, Tutor
+      ActReqRemEvaPrj,	// Prj_ROLE_EVA, Evaluator
+     };
    static Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
@@ -678,7 +686,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
          if (ProjectView == Prj_EDIT_ONE_PROJECT)
            {
 	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	    Lay_PutContextualLink (ActUnk,NULL,NULL,
+	    Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
 				   "remove-on64x64.png",
 				   Txt_Remove,NULL,
 				   NULL);
@@ -870,6 +878,55 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (PrjCod);
+  }
+
+/*****************************************************************************/
+/************ Request confirmation to remove user from project ***************/
+/*****************************************************************************/
+
+void Prj_ReqRemStd (void)
+  {
+   Prj_ReqAnotherUsrID (Prj_ROLE_STD);
+  }
+
+void Prj_ReqRemTut (void)
+  {
+   Prj_ReqAnotherUsrID (Prj_ROLE_TUT);
+  }
+
+void Prj_ReqRemEva (void)
+  {
+   Prj_ReqAnotherUsrID (Prj_ROLE_EVA);
+  }
+
+static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
+  {
+   static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
+     {
+      ActUnk,		// Prj_ROLE_UNK, Unknown
+      ActRemStdPrj,	// Prj_ROLE_STD, Student
+      ActRemTutPrj,	// Prj_ROLE_TUT, Tutor
+      ActRemEvaPrj,	// Prj_ROLE_EVA, Evaluator
+     };
+  }
+
+/*****************************************************************************/
+/************************ Remove user from project ***************************/
+/*****************************************************************************/
+
+void Prj_RemStd (void)
+  {
+   Prj_AddUsrToProject (Prj_ROLE_STD);
+  }
+
+void Prj_RemTut (void)
+  {
+   Prj_AddUsrToProject (Prj_ROLE_TUT);
+  }
+
+void Prj_RemEva (void)
+  {
+   Prj_AddUsrToProject (Prj_ROLE_EVA);
   }
 
 /*****************************************************************************/

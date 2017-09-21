@@ -78,6 +78,14 @@ void Prj_AddStd (void);
 void Prj_AddTut (void);
 void Prj_AddEva (void);
 
+void Prj_ReqRemStd (void);
+void Prj_ReqRemTut (void);
+void Prj_ReqRemEva (void);
+
+void Prj_RemStd (void);
+void Prj_RemTut (void);
+void Prj_RemEva (void);
+
 void Prj_PutHiddenParamPrjOrder (void);
 
 void Prj_RequestCreatePrj (void);

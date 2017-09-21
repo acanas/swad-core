@@ -464,10 +464,16 @@ Assessment:
 	NEW. ActShoPrj			Show project
 	NEW. ActReqAddStdPrj		Request adding a student to a project
 	NEW. ActReqAddTutPrj		Request adding a tutor to a project
-	NEW. ActReqAddEvaPrj		Request adding a reviewer to a project
+	NEW. ActReqAddEvaPrj		Request adding an evaluator to a project
 	NEW. ActAddStdPrj		Add a student to a project
 	NEW. ActAddTutPrj		Add a tutor to a project
-	NEW. ActAddEvaPrj		Add a reviewer to a project
+	NEW. ActAddEvaPrj		Add an evaluator to a project
+	NEW. ActReqRemStdPrj		Request removing a student from a project
+	NEW. ActReqRemTutPrj		Request removing a tutor from a project
+	NEW. ActReqRemEvaPrj		Request removing an evaluator from a project
+	NEW. ActRemStdPrj		Remove a student from a project
+	NEW. ActRemTutPrj		Remove a tutor from a project
+	NEW. ActRemEvaPrj		Remove an emulator from a project
 
 	313. ActSeeTst			Show the seft-assessment test
 	314. ActAssTst			Assess a self-assessment test
@@ -1965,6 +1971,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAddStdPrj	*/{1687,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_AddStd			,NULL},
    /* ActAddTutPrj	*/{1688,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_AddTut			,NULL},
    /* ActAddEvaPrj	*/{1689,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_AddEva			,NULL},
+   /* ActReqRemStdPrj	*/{1690,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemStd			,NULL},
+   /* ActReqRemTutPrj	*/{1691,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemTut			,NULL},
+   /* ActReqRemEvaPrj	*/{1692,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemEva			,NULL},
+   /* ActRemStdPrj	*/{1693,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
+   /* ActRemTutPrj	*/{1694,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
+   /* ActRemEvaPrj	*/{1695,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEva			,NULL},
 
    /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowNewTest		,NULL},
    /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_AssessTest			,NULL},
@@ -4781,6 +4793,12 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActAddStdPrj,		// #1687
 	ActAddTutPrj,		// #1688
 	ActAddEvaPrj,		// #1689
+	ActReqRemStdPrj,	// #1690
+	ActReqRemTutPrj,	// #1691
+	ActReqRemEvaPrj,	// #1692
+	ActRemStdPrj,		// #1693
+	ActRemTutPrj,		// #1694
+	ActRemEvaPrj,		// #1695
 	};
 
 /*****************************************************************************/
