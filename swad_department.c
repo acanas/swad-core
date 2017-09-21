@@ -1130,7 +1130,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*********************** Put selector for department *************************/
 /*****************************************************************************/
 
-void Dpt_WriteSelectorDepartment (long InsCod)
+void Dpt_WriteSelectorDepartment (long InsCod,bool SubmitFormOnChange)
   {
    extern const char *Txt_Any_department;
    unsigned NumDpt;
@@ -1141,9 +1141,11 @@ void Dpt_WriteSelectorDepartment (long InsCod)
 
    /* List departments */
    fprintf (Gbl.F.Out,"<select id=\"DptCod\" name=\"DptCod\""
-	              " style=\"width:375px;\""
-	              " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.Form.Id);
+	              " style=\"width:375px;\"");
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+               Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"\">");
 
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Stat.DptCod == -1L)

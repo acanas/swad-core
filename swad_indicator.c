@@ -147,7 +147,8 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
-   Dpt_WriteSelectorDepartment (-1L);
+   Dpt_WriteSelectorDepartment (-1L,	// All institutions
+                                true);	// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

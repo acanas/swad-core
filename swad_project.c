@@ -1371,13 +1371,14 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    extern const char *Txt_Edit_project;
    extern const char *Txt_Project_data;
    extern const char *Txt_Title;
-   extern const char *Txt_No;
-   extern const char *Txt_Yes;
+   extern const char *Txt_Department;
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_URL;
    extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_No;
+   extern const char *Txt_Yes;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    extern const char *Txt_Project_members;
@@ -1448,6 +1449,18 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
 
    /* Project start and end dates */
    Dat_PutFormStartEndClientLocalDateTimes (Prj.TimeUTC,Dat_FORM_SECONDS_ON);
+
+   /* Department */
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label for=\"DptCod\" class=\"%s\">%s:</label>"
+                      "</td>"
+                      "<td class=\"LEFT_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
+   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,
+                                false);	// Don't submit on change
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /* Description of the project */
    Prj_EditOneProjectTxtArea ("Description",Txt_Description,Prj.Description);

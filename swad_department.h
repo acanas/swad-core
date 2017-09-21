@@ -71,6 +71,6 @@ void Dpt_RecFormNewDpt (void);
 unsigned Dpt_GetTotalNumberOfDepartments (void);
 unsigned Dpt_GetNumDptsInIns (long InsCod);
 
-void Dpt_WriteSelectorDepartment (long InsCod);
+void Dpt_WriteSelectorDepartment (long InsCod,bool SubmitFormOnChange);
 
 #endif
