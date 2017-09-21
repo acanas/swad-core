@@ -474,10 +474,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActShoPrj		(ActChgCalCrs1stDay +  36)
 #define ActReqAddStdPrj		(ActChgCalCrs1stDay +  37)
 #define ActReqAddTutPrj		(ActChgCalCrs1stDay +  38)
-#define ActReqAddRevPrj		(ActChgCalCrs1stDay +  39)
+#define ActReqAddEvaPrj		(ActChgCalCrs1stDay +  39)
 #define ActAddStdPrj		(ActChgCalCrs1stDay +  40)
 #define ActAddTutPrj		(ActChgCalCrs1stDay +  41)
-#define ActAddRevPrj		(ActChgCalCrs1stDay +  42)
+#define ActAddEvaPrj		(ActChgCalCrs1stDay +  42)
 
 #define ActSeeTst		(ActChgCalCrs1stDay +  43)
 #define ActAssTst		(ActChgCalCrs1stDay +  44)

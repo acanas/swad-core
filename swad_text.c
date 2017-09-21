@@ -11485,6 +11485,27 @@ const char *Txt_Error_receiving_or_processing_image =
 	"Erro no recebimento ou processamento de imagem.";
 #endif
 
+const char *Txt_Evaluators =
+#if   L==1
+	"Avaluadors";
+#elif L==2
+	"Auswerter";
+#elif L==3
+	"Evaluators";
+#elif L==4
+	"Evaluadores";
+#elif L==5
+	"&Eacute;valuateurs";
+#elif L==6
+	"Evaluadores";	// Okoteve traducción
+#elif L==7
+	"Valutatori";
+#elif L==8
+	"Oceniaj&aogon;cy";
+#elif L==9
+	"Avaliadores";
+#endif
+
 const char *Txt_Event =
 #if   L==1
 	"Esdeveniment";

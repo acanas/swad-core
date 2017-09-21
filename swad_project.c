@@ -61,7 +61,7 @@ typedef enum
    Prj_ROLE_UNK	= 0,	// Unknown
    Prj_ROLE_STD	= 1,	// Student
    Prj_ROLE_TUT	= 2,	// Tutor
-   Prj_ROLE_REV	= 3,	// Reviewer
+   Prj_ROLE_EVA	= 3,	// Evaluator
   } Prj_RoleInProject_t;
 
 typedef enum
@@ -363,9 +363,10 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
-   extern const char *Txt_Tutors;
    extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_Tutors;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Evaluators;
    static unsigned UniqueId = 0;
 
    /***** Get data of this project *****/
@@ -374,7 +375,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"7\" class=\"CONTEXT_COL");
+	              "<td rowspan=\"8\" class=\"CONTEXT_COL");
    if (ProjectView == Prj_LIST_PROJECTS)
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
@@ -504,6 +505,10 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
 			      Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Prj_ROLE_STD);
 
+   /* Project evaluators */
+   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
+			      Txt_Evaluators,Prj_ROLE_EVA);
+
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
@@ -613,7 +618,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
       ActUnk,		// Prj_ROLE_UNK, Unknown
       ActReqAddStdPrj,	// Prj_ROLE_STD, Student
       ActReqAddTutPrj,	// Prj_ROLE_TUT, Tutor
-      ActReqAddRevPrj,	// Prj_ROLE_REV, Reviewer
+      ActReqAddEvaPrj,	// Prj_ROLE_EVA, Evaluator
      };
 
    /***** Get number of users in project from database *****/
@@ -731,9 +736,9 @@ void Prj_ReqAddTut (void)
    Prj_ReqAnotherUsrID (Prj_ROLE_TUT);
   }
 
-void Prj_ReqAddRev (void)
+void Prj_ReqAddEva (void)
   {
-   Prj_ReqAnotherUsrID (Prj_ROLE_REV);
+   Prj_ReqAnotherUsrID (Prj_ROLE_EVA);
   }
 
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
@@ -745,7 +750,7 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
       ActUnk,		// Prj_ROLE_UNK, Unknown
       ActAddStdPrj,	// Prj_ROLE_STD, Student
       ActAddTutPrj,	// Prj_ROLE_TUT, Tutor
-      ActAddRevPrj,	// Prj_ROLE_REV, Reviewer
+      ActAddEvaPrj,	// Prj_ROLE_EVA, Evaluator
      };
 
    /***** Get project code *****/
@@ -780,9 +785,9 @@ void Prj_AddTut (void)
    Prj_AddUsrToProject (Prj_ROLE_TUT);
   }
 
-void Prj_AddRev (void)
+void Prj_AddEva (void)
   {
-   Prj_AddUsrToProject (Prj_ROLE_REV);
+   Prj_AddUsrToProject (Prj_ROLE_EVA);
   }
 
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
@@ -1378,6 +1383,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    extern const char *Txt_Project_members;
    extern const char *Txt_Tutors;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Evaluators;
    struct Project Prj;
    bool ItsANewProject;
 
@@ -1510,6 +1516,9 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
       Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
 				 Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
 				 Prj_ROLE_STD);	// Students
+      Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
+				 Txt_Evaluators,
+				 Prj_ROLE_EVA);	// Evaluators
       Box_EndBoxTable ();
      }
 

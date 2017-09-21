@@ -71,11 +71,11 @@ void Prj_PrintOneProject (void);
 
 void Prj_ReqAddStd (void);
 void Prj_ReqAddTut (void);
-void Prj_ReqAddRev (void);
+void Prj_ReqAddEva (void);
 
 void Prj_AddStd (void);
 void Prj_AddTut (void);
-void Prj_AddRev (void);
+void Prj_AddEva (void);
 
 void Prj_PutHiddenParamPrjOrder (void);
 
