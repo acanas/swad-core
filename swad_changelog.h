@@ -252,14 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.5.1 (2017-09-21)"
+#define Log_PLATFORM_VERSION	"SWAD 17.5.2 (2017-09-21)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.5.2:   Sep 21, 2017	Do not display users when creating a new project. (? lines)
+        Version 17.5.2:   Sep 21, 2017	Do not display users when creating a new project. (230270 lines)
         Version 17.5.1:   Sep 21, 2017	Fixed bug when removing a project. (230267 lines)
         Version 17.5:     Sep 21, 2017	Users can be added to a project. (230250 lines)
         Version 17.4.3:   Sep 21, 2017	Changes in listing and edition of projects. (230222 lines)

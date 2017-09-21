@@ -1456,15 +1456,18 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    Act_FormEnd ();
 
    /***** Project members *****/
-   Box_StartBoxTable (NULL,Txt_Project_members,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
-   Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
-                              Txt_Tutors,
-                              Prj_ROLE_TUT);	// Tutors
-   Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
-                              Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-                              Prj_ROLE_STD);	// Students
-   Box_EndBoxTable ();
+   if (!ItsANewProject)	// Existing project
+     {
+      Box_StartBoxTable (NULL,Txt_Project_members,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
+      Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
+				 Txt_Tutors,
+				 Prj_ROLE_TUT);	// Tutors
+      Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
+				 Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+				 Prj_ROLE_STD);	// Students
+      Box_EndBoxTable ();
+     }
 
    /***** End box *****/
    Box_EndBox ();
