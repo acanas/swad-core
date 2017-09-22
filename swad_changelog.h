@@ -252,14 +252,25 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.5.10 (2017-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 17.6 (2017-09-22)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.5.10:  Sep 22, 2017	Actions to remove user from project. Not finished. (? lines)
+        Version 17.6:     Sep 22, 2017	Actions to remove user from project. (230559 lines)
+					6 changes necessary in database:
+UPDATE actions SET Txt='Solicitar ID a&ntilde;adir evaluador a proyecto' WHERE ActCod='1686' AND Language='es';
+UPDATE actions SET Txt='A&ntilde;adir evaluador a proyecto' WHERE ActCod='1689' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1690','es','N','Solicitar ID eliminar estudiante de proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1691','es','N','Solicitar ID eliminar tutor de proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1692','es','N','Solicitar ID eliminar evaluador de proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1693','es','N','Eliminar estudiante de proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1694','es','N','Eliminar tutor de proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1695','es','N','Eliminar evaluador de proyecto');
+
+        Version 17.5.10:  Sep 22, 2017	Actions to remove user from project. Not finished. (230429 lines)
         Version 17.5.9:   Sep 22, 2017	Icon to remove user from project. (230350 lines)
         Version 17.5.8:   Sep 22, 2017	Name of department in listing of projects. (230336 lines)
         Version 17.5.7:   Sep 21, 2017	Selector for department in edition of a project. (230363 lines)

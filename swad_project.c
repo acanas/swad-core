@@ -99,6 +99,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
+static bool Prj_CheckIfICanRemUsrFromPrj (void);
 
 static void Prj_GetParamPrjOrder (void);
 
@@ -617,7 +618,6 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
    unsigned NumUsrsKnown;
    unsigned NumUsrsUnknown;
    unsigned NumUsrsToShow;
-   struct UsrData UsrDat;
    bool UsrValid;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
@@ -664,9 +664,6 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
       /***** How many users will be shown? *****/
       NumUsrsToShow = NumUsrsKnown;
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
       /***** Write known users *****/
       for (NumUsr = 0;
 	   NumUsr < NumUsrsToShow;
@@ -674,10 +671,10 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
         {
          /* Get user's code */
          row = mysql_fetch_row (mysql_res);
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get user's data */
-	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
 	 /* Start row for this user */
 	 fprintf (Gbl.F.Out,"<tr>");
@@ -695,17 +692,17 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
 
          /* Put user's photo */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-         ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+         ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL) :
                                  false);
-         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	               NULL,
+         Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+                        	                              NULL,
                            "PHOTO21x28",Pho_ZOOM,false);
 
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
                             "<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
          if (UsrValid)
-            fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+            fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
          else
             fprintf (Gbl.F.Out,"[%s]",
                      Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
@@ -725,9 +722,6 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
                   (NumUsrsUnknown == 1) ?
                   Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN] :
                   Txt_ROLES_PLURAL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
      }
 
    /***** Row to add a new user *****/
@@ -886,21 +880,26 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 
 void Prj_ReqRemStd (void)
   {
-   Prj_ReqAnotherUsrID (Prj_ROLE_STD);
+   Prj_ReqRemUsrFromPrj (Prj_ROLE_STD);
   }
 
 void Prj_ReqRemTut (void)
   {
-   Prj_ReqAnotherUsrID (Prj_ROLE_TUT);
+   Prj_ReqRemUsrFromPrj (Prj_ROLE_TUT);
   }
 
 void Prj_ReqRemEva (void)
   {
-   Prj_ReqAnotherUsrID (Prj_ROLE_EVA);
+   Prj_ReqRemUsrFromPrj (Prj_ROLE_EVA);
   }
 
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
   {
+   extern const char *Txt_Do_you_really_want_to_be_removed_from_the_project_X;
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_project_X;
+   extern const char *Txt_Remove_me_from_this_project;
+   extern const char *Txt_Remove_user_from_this_project;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
@@ -908,6 +907,50 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
       ActRemTutPrj,	// Prj_ROLE_TUT, Tutor
       ActRemEvaPrj,	// Prj_ROLE_EVA, Evaluator
      };
+   bool ItsMe;
+
+   /***** Get user to be removed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Prj_CheckIfICanRemUsrFromPrj ())
+	{
+	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+
+	 /***** Show question and button to remove user as administrator *****/
+	 /* Start alert */
+	 sprintf (Gbl.Alert.Txt,
+		  ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_project_X :
+			  Txt_Do_you_really_want_to_remove_the_following_user_from_the_project_X,
+		  Gbl.CurrentCrs.Crs.FullName);
+	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+
+	 /* Show user's record */
+	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+	 /* Show form to request confirmation */
+	 Act_FormStart (ActionRemUsr[RoleInProject]);
+	 Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_project :
+				      Txt_Remove_user_from_this_project);
+	 Act_FormEnd ();
+
+	 /* End alert */
+	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+	}
+      else
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/*********** Check if I can remove another user in current course ************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfICanRemUsrFromPrj (void)
+  {
+   return true;	// TODO: Rewrite this function
   }
 
 /*****************************************************************************/
@@ -995,6 +1038,8 @@ static void Prj_PutParams (void)
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCodToEdit);
    Prj_PutHiddenParamPrjOrder ();
    Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Usr_PutParamOtherUsrCodEncrypted ();
   }
 
 /*****************************************************************************/

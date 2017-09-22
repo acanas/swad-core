@@ -8999,6 +8999,27 @@ const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning:
 	" (removing your works, enrolment in groups, etc.)?";			// Necessita de tradução
 #endif
 
+const char *Txt_Do_you_really_want_to_be_removed_from_the_project_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"&iquest;De veres voleu ser eliminat del projecte <strong>%s</strong>?";
+#elif L==2
+        "M&ouml;chten Sie wirklich aus dem Projekt <strong>%s</strong> entfernt werden?";
+#elif L==3
+	"Do you really want to be removed from the project <strong>%s</strong>";
+#elif L==4
+	"&iquest;Realmente desea ser eliminado del proyecto <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous vraiment &ecirc;tre retir&eacute; du projet <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Realmente desea ser eliminado del proyecto <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere dal progetto <strong>%s</strong>?";
+#elif L==8
+	"Czy naprawd&eogon; chcesz zosta&cacute; usuni&eogon;ty z projektu <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; realmente quer ser removido do projeto <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
 #if   L==1
 	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";	// Necessita traduccio
@@ -9578,16 +9599,16 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 	" jako administratora <strong>%s</strong>?";
 #elif L==9
 	"Do you really want to remove the following user"
-	" as an administrator of <strong>%s</strong>?";		// Necessita de tradução
+	" as an administrator of <strong>%s</strong>?";			// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
-	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";	// Necessita traduccio
+	"&iquest;De veres voleu eliminar el seg&uuml;ent usuari de l'assignatura <strong>%s</strong>"
+	" (eliminant els seus treballs, adscripci&oacute; a grups, etc.)?";
 #elif L==2
-	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrolment in groups, etc.)?";		// Need Übersetzung
+        "M&ouml;chten Sie den folgenden Benutzer wirklich aus dem Kurs <strong>%s</strong> entfernen"
+	" (Beseitigung ihrer Werke, Einschreibung in Gruppen usw.)?";
 #elif L==3
 	"Do you really want to remove the following user from the course <strong>%s</strong>"
 	" (removing her/his works, enrolment in groups, etc.)?";
@@ -9595,8 +9616,8 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";
 #elif L==5
-	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrolment in groups, etc.)?";		// Besoin de traduction
+	"Voulez-vous vraiment supprimer l'utilisateur suivant de la mati&egrave;re <strong>%s</strong>"
+	" (&eacute;liminant ses travaux, inscription en groupes, etc.)?";
 #elif L==6
 	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";	// Okoteve traducción
@@ -9604,11 +9625,32 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	"Vuoi realmente rimuovere il seguente utente dal corso <strong>%s</strong>"
 	" (rimuovendo i suoi lavori, registrazione in gruppi, etc.)?";
 #elif L==8
-	"Do you really want to remove the following user z kursu <strong>%s</strong>"
-	" (removing her/his works, enrolment in groups, etc.)?";
+	"Czy na pewno chcesz usun&aogon;&cacute; nast&eogon;puj&aogon;cy u&zdot;ytkownik z kursu <strong>%s</strong>"
+	" (usuni&eogon;cie jego utwor&oacute;w, zapisanie si&eogon; w grupach itp.)?";
 #elif L==9
-	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrolment in groups, etc.)?";		// Necessita de tradução
+	"Voc&ecirc; deseja realmente remover o seguinte usu&aacute;rio da disciplina <strong>%s</strong>"
+	" (removendo seus trabalhos, inscri&ccedil;&atilde;o em grupos, etc.)?";
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_project_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"&iquest;De veres voleu eliminar el seg&uuml;ent usuari del projecte <strong>%s</strong>?";
+#elif L==2
+        "M&ouml;chten Sie den folgenden Benutzer wirklich aus dem Projekt <strong>%s</strong> entfernen?";
+#elif L==3
+	"Do you really want to remove the following user from the project <strong>%s</strong>";
+#elif L==4
+	"&iquest;Realmente desea eliminar el siguiente usuario del proyecto <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous vraiment supprimer l'utilisateur suivant du projet <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Realmente desea eliminar el siguiente usuario del proyecto <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere il seguente utente dal progetto <strong>%s</strong>?";
+#elif L==8
+	"Czy na pewno chcesz usun&aogon;&cacute; nast&eogon;puj&aogon;cy u&zdot;ytkownik z projekt <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; deseja realmente remover o seguinte usu&aacute;rio do projeto <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -32367,6 +32409,27 @@ const char *Txt_Remove_me_from_this_course =
 	"Tirar me desta disciplina";
 #endif
 
+const char *Txt_Remove_me_from_this_project =
+#if   L==1
+	"Eliminarme d'aquest projecte";
+#elif L==2
+	"Entfernen Sie diesen Projekt";
+#elif L==3
+	"Remove me from this project";
+#elif L==4
+	"Eliminarme de este proyecto";
+#elif L==5
+	"Enlever-moi de ce projet";
+#elif L==6
+	"Eliminarme de este proyecto";	// Okoteve traducción
+#elif L==7
+	"Rimuovimi da questo progetto";
+#elif L==8
+	"Usu&ntilde; z projekt";
+#elif L==9
+	"Tirar me deste projeto";
+#endif
+
 const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Eliminarme de l'assignatura <strong>%s</strong>";
@@ -32617,6 +32680,27 @@ const char *Txt_Remove_user_from_this_course =
 	"Usu&ntilde; u&zdot;ytkownika z kursu";
 #elif L==9
 	"Tirar utilizador desta disciplina";
+#endif
+
+const char *Txt_Remove_user_from_this_project =
+#if   L==1
+	"Eliminar usuari d'aquest projecte";
+#elif L==2
+	"Entfernen Benutzer Sie diesen Projekt";
+#elif L==3
+	"Remove user from this project";
+#elif L==4
+	"Eliminar usuario de este proyecto";
+#elif L==5
+	"Enlever utilisateur de ce projet";
+#elif L==6
+	"Eliminar usuario de este proyecto";	// Okoteve traducción
+#elif L==7
+	"Rimuovi utente da questo progetto";
+#elif L==8
+	"Usu&ntilde; u&zdot;ytkownika z projekt";
+#elif L==9
+	"Tirar utilizador deste projeto";
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator =
@@ -46653,7 +46737,7 @@ const char *Txt_The_plugin_X_has_been_renamed_as_Y =	// Warning: it is very impo
 
 const char *Txt_The_project_has_been_modified =
 #if   L==1
-	"L'activitat ha estat modificada.";
+	"El projecte ha estat modificada.";
 #elif L==2
 	"Die Projekt wurde ge&auml;ndert.";
 #elif L==3
