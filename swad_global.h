@@ -67,6 +67,7 @@
 #include "swad_photo.h"
 #include "swad_place.h"
 #include "swad_plugin.h"
+#include "swad_project.h"
 #include "swad_record.h"
 #include "swad_search.h"
 #include "swad_session.h"
@@ -574,7 +575,7 @@ struct Globals
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
       unsigned Num;		// Number of projects
       long *LstPrjCods;		// List of project codes
-      Dat_StartEndTime_t SelectedOrder;
+      Prj_Order_t SelectedOrder;
       long PrjCodToEdit;	// Used as parameter in contextual links
       unsigned CurrentPage;
      } Prjs;

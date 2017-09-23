@@ -30720,27 +30720,6 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #endif
 
-const char *Txt_Project =
-#if   L==1
-	"Projecte";
-#elif L==2
-	"Projekt";
-#elif L==3
-	"Project";
-#elif L==4
-	"Proyecto";
-#elif L==5
-	"Projet";
-#elif L==6
-	"Proyecto";	// Okoteve traducción
-#elif L==7
-	"Progetto";
-#elif L==8
-	"Projekt";
-#elif L==9
-	"Projeto";
-#endif
-
 const char *Txt_Project_data =
 #if   L==1
 	"Dades del projecte";
@@ -30824,6 +30803,180 @@ const char *Txt_Project_members =
 #elif L==9
 	"Membros do projeto";
 #endif
+
+const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
+   {
+	 // Prj_ORDER_START_TIME
+#if   L==1
+	 "Inici"
+#elif L==2
+	 "Start"
+#elif L==3
+	 "Start"
+#elif L==4
+	 "Inicio"
+#elif L==5
+	 "D&eacute;but"
+#elif L==6
+	 "&Ntilde;epyr&utilde;"
+#elif L==7
+	 "Inizio"
+#elif L==8
+	 "Pocz&aogon;tek"
+#elif L==9
+	 "In&iacute;cio"
+#endif
+	 ,
+	 // Prj_ORDER_END_TIME
+#if   L==1
+	 "Final"
+#elif L==2
+	 "Ende"
+#elif L==3
+	 "End"
+#elif L==4
+	 "Final"
+#elif L==5
+	 "Fin"
+#elif L==6
+	 "Paha"
+#elif L==7
+	 "Fine"
+#elif L==8
+	 "Koniec"
+#elif L==9
+	 "Fim"
+#endif
+	 ,
+	 // Prj_ORDER_TITLE
+#if   L==1
+	"Projecte"
+#elif L==2
+	"Projekt"
+#elif L==3
+	"Project"
+#elif L==4
+	"Proyecto"
+#elif L==5
+	"Projet"
+#elif L==6
+	"Proyecto"	// Okoteve traducción
+#elif L==7
+	"Progetto"
+#elif L==8
+	"Projekt"
+#elif L==9
+	"Projeto"
+#endif
+	 ,
+	 // Prj_ORDER_DEPARTMENT
+#if   L==1
+	"Departament"
+#elif L==2
+	"Abteilung"
+#elif L==3
+	"Department"
+#elif L==4
+	"Departamento"
+#elif L==5
+	"D&eacute;partement"
+#elif L==6
+	"Peh&#7869;"
+#elif L==7
+	"Dipartimento"
+#elif L==8
+	"Wydzia&lstrok;"
+#elif L==9
+	"Departamento"
+#endif
+	};
+
+const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
+   {
+	 // Prj_ORDER_START_TIME
+#if   L==1
+	 "Ordenar per data de comen&ccedil;ament"
+#elif L==2
+	 "Sortieren nach Startdatum"
+#elif L==3
+	 "Sort by start date"
+#elif L==4
+	 "Ordenar por fecha de comienzo"
+#elif L==5
+	 "Trier par date de d&eacute;but"
+#elif L==6
+	 "Ordenar por fecha de comienzo"	// Okoteve traducción
+#elif L==7
+	 "Ordina per data di inizio"
+#elif L==8
+	 "Sortuj wedlug daty rozpoczecia"
+#elif L==9
+	 "Classificar por data de in&iacute;cio"
+#endif
+	 ,
+	 // Prj_ORDER_END_TIME
+#if   L==1
+	 "Ordenar per data de finalitzaci&oacute;"
+#elif L==2
+	 "Sortieren nach Enddatum"
+#elif L==3
+	 "Sort by end date"
+#elif L==4
+	 "Ordenar por fecha de finalizaci&oacute;n"
+#elif L==5
+	 "Trier par date de fin"
+#elif L==6
+	 "Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
+#elif L==7
+	 "Ordina per data di fine"
+#elif L==8
+	 "Sortuj wedlug daty zakonczenia"
+#elif L==9
+	 "Classificar por data de t&eacute;rmino"
+#endif
+	 ,
+	 // Prj_ORDER_TITLE
+#if   L==1
+	 "Ordenar per t&iacute;tol"
+#elif L==2
+	 "Sortieren nach Titel"
+#elif L==3
+	 "Sort by title"
+#elif L==4
+	 "Ordenar por t&iacute;tulo"
+#elif L==5
+	 "Trier par date de d&eacute;but"
+#elif L==6
+	 "Ordenar por t&iacute;tulo"	// Okoteve traducción
+#elif L==7
+	 "Ordina per titolo"
+#elif L==8
+	 "Sortuj wedlug tytu&lstrok;"
+#elif L==9
+	 "Classificar por t&iacute;tulo"
+#endif
+	 ,
+	 // Prj_ORDER_DEPARTMENT
+#if   L==1
+	 "Ordenar per departament"
+#elif L==2
+	 "Sortieren nach Abteilung"
+#elif L==3
+	 "Sort by department"
+#elif L==4
+	 "Ordenar por departamento"
+#elif L==5
+	 "Trier par d&eacute;partement"
+#elif L==6
+	 "Ordenar por departamento"	// Okoteve traducción
+#elif L==7
+	 "Ordina per dipartimento"
+#elif L==8
+	 "Sortuj wedlug wydzia&lstrok;"
+#elif L==9
+	 "Classificar por departamento"
+#endif
+	};
 
 const char *Txt_Project_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1

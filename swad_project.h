@@ -72,7 +72,15 @@ struct Project
    char URL[Cns_MAX_BYTES_WWW + 1];
   };
 
-#define Prj_ORDER_DEFAULT Dat_START_TIME
+#define Prj_NUM_ORDERS 4
+typedef enum
+  {
+   Prj_ORDER_START_TIME = 0,
+   Prj_ORDER_END_TIME   = 1,
+   Prj_ORDER_TITLE      = 2,
+   Prj_ORDER_DEPARTMENT = 3,
+  } Prj_Order_t;
+#define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
