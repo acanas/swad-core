@@ -50,19 +50,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /************************* Public constants and types ************************/
 /*****************************************************************************/
-// Related with user's roles in a project
-/*
-   Don't change these numbers! They are used in database
-*/
-
-#define Prj_NUM_ROLES_IN_PROJECT 4
-typedef enum
-  {
-   Prj_ROLE_UNK	= 0,	// Unknown
-   Prj_ROLE_STD	= 1,	// Student
-   Prj_ROLE_TUT	= 2,	// Tutor
-   Prj_ROLE_EVA	= 3,	// Evaluator
-  } Prj_RoleInProject_t;
 
 typedef enum
   {
@@ -99,6 +86,7 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
+static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 static bool Prj_CheckIfICanRemUsrFromPrj (void);
 
 static void Prj_GetParamPrjOrder (void);
@@ -367,9 +355,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_Preassigned_QUESTION;
-   extern const char *Txt_Tutors;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Evaluators;
+   extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
+   Prj_RoleInProject_t RoleInProject;
    static unsigned UniqueId = 0;
 
    /***** Get data of this project *****/
@@ -476,17 +463,12 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
 
-   /* Project tutors */
-   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
-                              Txt_Tutors,Prj_ROLE_TUT);
-
-   /* Project students */
-   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
-			      Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Prj_ROLE_STD);
-
-   /* Project evaluators */
-   Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
-			      Txt_Evaluators,Prj_ROLE_EVA);
+   /* Project members */
+   for (RoleInProject = Prj_ROLE_STD;
+	RoleInProject <= Prj_ROLE_EVA;
+	RoleInProject++)
+      Prj_ShowOneProjectUsrsRow (Prj,ProjectView,
+				 Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],RoleInProject);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -609,7 +591,8 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
    extern const char *Txt_Remove;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Add_user;
+   extern const char *Txt_Add_USER;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -730,9 +713,10 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\" class=\"LEFT_MIDDLE\">");
       Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used to pass project code as a parameter
+      sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
       Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
 			     "plus64x64.png",
-			     Txt_Add_user,Txt_Add_user,
+			     Gbl.Title,Gbl.Title,
 			     NULL);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
@@ -767,7 +751,8 @@ void Prj_ReqAddEva (void)
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Hlp_ASSESSMENT_Projects_add_user;
-   extern const char *Txt_Add_user;
+   extern const char *Txt_Add_USER;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    static Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
@@ -781,7 +766,8 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Add_user,NULL,
+   sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
+   Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ASSESSMENT_Projects_add_user,Box_NOT_CLOSABLE);
 
    /***** Write form to request another user's ID *****/
@@ -815,7 +801,8 @@ void Prj_AddEva (void)
 
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
   {
-   extern const char *Txt_THE_USER_X_has_been_enroled_in_the_project;
+   extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    long PrjCod;
@@ -852,8 +839,9 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 		     PrjCod,(unsigned) RoleInProject,Gbl.Usrs.Other.UsrDat.UsrCod);
 	    DB_QueryREPLACE (Query,"can not add user to project");
 
-	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_in_the_project,
-		     Gbl.Usrs.Other.UsrDat.FullName);
+	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
+		     Gbl.Usrs.Other.UsrDat.FullName,
+		     Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
 	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	   }
 	 else        // User does not belong to the current course
@@ -895,8 +883,9 @@ void Prj_ReqRemEva (void)
 
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
   {
-   extern const char *Txt_Do_you_really_want_to_be_removed_from_the_project_X;
-   extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_project_X;
+   extern const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y;
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove_me_from_this_project;
    extern const char *Txt_Remove_user_from_this_project;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
@@ -907,7 +896,20 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
       ActRemTutPrj,	// Prj_ROLE_TUT, Tutor
       ActRemEvaPrj,	// Prj_ROLE_EVA, Evaluator
      };
+   struct Project Prj;
    bool ItsMe;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
+   /***** Get data of the project from database *****/
+   Prj_GetDataOfProjectByCod (&Prj);
 
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -919,9 +921,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 /***** Show question and button to remove user as administrator *****/
 	 /* Start alert */
 	 sprintf (Gbl.Alert.Txt,
-		  ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_project_X :
-			  Txt_Do_you_really_want_to_remove_the_following_user_from_the_project_X,
-		  Gbl.CurrentCrs.Crs.FullName);
+		  ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
+			  Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
+		  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
+		  Prj.Title);
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
 	 /* Show user's record */
@@ -929,7 +932,8 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
 	 /* Show form to request confirmation */
 	 Act_FormStart (ActionRemUsr[RoleInProject]);
-	 Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
+	 Prj_PutParams ();
 	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_project :
 				      Txt_Remove_user_from_this_project);
 	 Act_FormEnd ();
@@ -942,6 +946,84 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
+   /***** Put form to edit project again *****/
+   Prj_RequestCreatOrEditPrj (Prj.PrjCod);
+  }
+
+/*****************************************************************************/
+/************************ Remove user from project ***************************/
+/*****************************************************************************/
+
+void Prj_RemStd (void)
+  {
+   Prj_RemUsrFromPrj (Prj_ROLE_STD);
+  }
+
+void Prj_RemTut (void)
+  {
+   Prj_RemUsrFromPrj (Prj_ROLE_TUT);
+  }
+
+void Prj_RemEva (void)
+  {
+   Prj_RemUsrFromPrj (Prj_ROLE_EVA);
+  }
+
+static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
+  {
+   extern const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char Query[256];
+   struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
+   /***** Get data of the project from database *****/
+   Prj_GetDataOfProjectByCod (&Prj);
+
+   /***** Get user to be removed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Prj_CheckIfICanRemUsrFromPrj ())
+	{
+	 /***** Remove user from the table of project-users *****/
+	 sprintf (Query,"DELETE FROM prj_usr"
+	                " WHERE PrjCod=%ld AND RoleInProject=%u AND UsrCod=%ld",
+		  Prj.PrjCod,
+		  (unsigned) RoleInProject,
+		  Gbl.Usrs.Other.UsrDat.UsrCod);
+	 DB_QueryDELETE (Query,"can not remove a user from a project");
+
+	 /***** Show success alert *****/
+	 sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
+		  Gbl.Usrs.Other.UsrDat.FullName,
+		  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
+		  Prj.Title);
+         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	}
+      else
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
+   /***** Put form to edit project again *****/
+   Prj_RequestCreatOrEditPrj (Prj.PrjCod);
   }
 
 /*****************************************************************************/
@@ -951,25 +1033,6 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 static bool Prj_CheckIfICanRemUsrFromPrj (void)
   {
    return true;	// TODO: Rewrite this function
-  }
-
-/*****************************************************************************/
-/************************ Remove user from project ***************************/
-/*****************************************************************************/
-
-void Prj_RemStd (void)
-  {
-   Prj_AddUsrToProject (Prj_ROLE_STD);
-  }
-
-void Prj_RemTut (void)
-  {
-   Prj_AddUsrToProject (Prj_ROLE_TUT);
-  }
-
-void Prj_RemEva (void)
-  {
-   Prj_AddUsrToProject (Prj_ROLE_EVA);
   }
 
 /*****************************************************************************/
@@ -1511,11 +1574,10 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    extern const char *Txt_Project_members;
-   extern const char *Txt_Tutors;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Evaluators;
+   extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    struct Project Prj;
    bool ItsANewProject;
+   Prj_RoleInProject_t RoleInProject;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -1653,15 +1715,11 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
      {
       Box_StartBoxTable (NULL,Txt_Project_members,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
-				 Txt_Tutors,
-				 Prj_ROLE_TUT);	// Tutors
-      Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
-				 Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-				 Prj_ROLE_STD);	// Students
-      Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
-				 Txt_Evaluators,
-				 Prj_ROLE_EVA);	// Evaluators
+      for (RoleInProject = Prj_ROLE_STD;
+	   RoleInProject <= Prj_ROLE_EVA;
+	   RoleInProject++)
+	 Prj_ShowOneProjectUsrsRow (&Prj,Prj_EDIT_ONE_PROJECT,
+				    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],RoleInProject);
       Box_EndBoxTable ();
      }
 

@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.6 (2017-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 17.7 (2017-09-23)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.7:     Sep 23, 2017	Remove user from project. (230798 lines)
         Version 17.6:     Sep 22, 2017	Actions to remove user from project. (230559 lines)
 					6 changes necessary in database:
 UPDATE actions SET Txt='Solicitar ID a&ntilde;adir evaluador a proyecto' WHERE ActCod='1686' AND Language='es';

@@ -2908,25 +2908,25 @@ const char *Txt_Add_this_ID =
 	"Adicionar este n&ordm; identif.";
 #endif
 
-const char *Txt_Add_user =
+const char *Txt_Add_USER =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Afegir usuari";
+	"Afegir %s";
 #elif L==2
-	"F&uuml;gen Benutzer";
+	"F&uuml;gen %s";
 #elif L==3
-	"Add user";
+	"Add %s";
 #elif L==4
-	"A&ntilde;adir usuario";
+	"A&ntilde;adir %s";
 #elif L==5
-	"Ajouter utilisateur";
+	"Ajouter %s";
 #elif L==6
-	"A&ntilde;adir usuario";	// Okoteve traducción
+	"A&ntilde;adir %s";	// Okoteve traducción
 #elif L==7
-	"Aggiungere utente";
+	"Aggiungere %s";
 #elif L==8
-	"Dodaj u&zdot;ytkownika";
+	"Dodaj %s";
 #elif L==9
-	"Adicionar usu&aacute;rio";
+	"Adicionar %s";
 #endif
 
 const char *Txt_Announcement_created =
@@ -8999,25 +8999,34 @@ const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning:
 	" (removing your works, enrolment in groups, etc.)?";			// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_be_removed_from_the_project_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"&iquest;De veres voleu ser eliminat del projecte <strong>%s</strong>?";
+	"&iquest;De veres voleu ser eliminat"
+	" como a %s del projecte <strong>%s</strong>?";
 #elif L==2
-        "M&ouml;chten Sie wirklich aus dem Projekt <strong>%s</strong> entfernt werden?";
+        "M&ouml;chten Sie wirklich"
+        " als %s aus dem Projekt <strong>%s</strong> entfernt werden?";
 #elif L==3
-	"Do you really want to be removed from the project <strong>%s</strong>";
+	"Do you really want to be removed"
+	" as a %s from the project <strong>%s</strong>";
 #elif L==4
-	"&iquest;Realmente desea ser eliminado del proyecto <strong>%s</strong>?";
+	"&iquest;Realmente desea ser eliminado"
+	" como %s del proyecto <strong>%s</strong>?";
 #elif L==5
-	"Voulez-vous vraiment &ecirc;tre retir&eacute; du projet <strong>%s</strong>?";
+	"Voulez-vous vraiment &ecirc;tre retir&eacute;"
+	" en tant que %sdu projet <strong>%s</strong>?";
 #elif L==6
-	"&iquest;Realmente desea ser eliminado del proyecto <strong>%s</strong>?";	// Okoteve traducción
+	"&iquest;Realmente desea ser eliminado"
+	" como %s del proyecto <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7
-	"Vuoi realmente rimuovere dal progetto <strong>%s</strong>?";
+	"Vuoi realmente rimuovere"
+	" come %s dal progetto <strong>%s</strong>?";
 #elif L==8
-	"Czy naprawd&eogon; chcesz zosta&cacute; usuni&eogon;ty z projektu <strong>%s</strong>?";
+	"Czy naprawd&eogon; chcesz zosta&cacute; usuni&eogon;ty"
+	" jako %s z projektu <strong>%s</strong>?";
 #elif L==9
-	"Voc&ecirc; realmente quer ser removido do projeto <strong>%s</strong>?";
+	"Voc&ecirc; realmente quer ser removido"
+	" como %s do projeto <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
@@ -9632,25 +9641,34 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	" (removendo seus trabalhos, inscri&ccedil;&atilde;o em grupos, etc.)?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_project_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"&iquest;De veres voleu eliminar el seg&uuml;ent usuari del projecte <strong>%s</strong>?";
+	"&iquest;De veres voleu eliminar el seg&uuml;ent usuari"
+	" com a %s del projecte <strong>%s</strong>?";
 #elif L==2
-        "M&ouml;chten Sie den folgenden Benutzer wirklich aus dem Projekt <strong>%s</strong> entfernen?";
+        "M&ouml;chten Sie den folgenden Benutzer wirklich"
+        " als %s aus dem Projekt <strong>%s</strong> entfernen?";
 #elif L==3
-	"Do you really want to remove the following user from the project <strong>%s</strong>";
+	"Do you really want to remove the following user"
+	" as a %s from the project <strong>%s</strong>";
 #elif L==4
-	"&iquest;Realmente desea eliminar el siguiente usuario del proyecto <strong>%s</strong>?";
+	"&iquest;Realmente desea eliminar el siguiente usuario"
+	" como %s del proyecto <strong>%s</strong>?";
 #elif L==5
-	"Voulez-vous vraiment supprimer l'utilisateur suivant du projet <strong>%s</strong>?";
+	"Voulez-vous vraiment supprimer l'utilisateur suivant"
+	" en tant que %s du projet <strong>%s</strong>?";
 #elif L==6
-	"&iquest;Realmente desea eliminar el siguiente usuario del proyecto <strong>%s</strong>?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar el siguiente usuario"
+	" como %s del proyecto <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7
-	"Vuoi realmente rimuovere il seguente utente dal progetto <strong>%s</strong>?";
+	"Vuoi realmente rimuovere il seguente utente"
+	" como %s dal progetto <strong>%s</strong>?";
 #elif L==8
-	"Czy na pewno chcesz usun&aogon;&cacute; nast&eogon;puj&aogon;cy u&zdot;ytkownik z projekt <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; nast&eogon;puj&aogon;cy u&zdot;ytkownik"
+	" jako %s z projektu <strong>%s</strong>?";
 #elif L==9
-	"Voc&ecirc; deseja realmente remover o seguinte usu&aacute;rio do projeto <strong>%s</strong>?";
+	"Voc&ecirc; deseja realmente remover o seguinte usu&aacute;rio"
+	" como %s do projeto <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -11525,27 +11543,6 @@ const char *Txt_Error_receiving_or_processing_image =
 	"B&lstrok;&aogon;d odbioru lub przetwarzania obrazu.";
 #elif L==9
 	"Erro no recebimento ou processamento de imagem.";
-#endif
-
-const char *Txt_Evaluators =
-#if   L==1
-	"Avaluadors";
-#elif L==2
-	"Auswerter";
-#elif L==3
-	"Evaluators";
-#elif L==4
-	"Evaluadores";
-#elif L==5
-	"&Eacute;valuateurs";
-#elif L==6
-	"Evaluadores";	// Okoteve traducción
-#elif L==7
-	"Valutatori";
-#elif L==8
-	"Oceniaj&aogon;cy";
-#elif L==9
-	"Avaliadores";
 #endif
 
 const char *Txt_Event =
@@ -30870,6 +30867,172 @@ const char *Txt_Project_X_removed =	// Warning: it is very important to include 
 	"Projeto <strong>%s</strong> removido.";
 #endif
 
+const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
+	{
+#if   L==1	// Prj_ROLE_UNK
+	"desconegut/da"
+#elif L==2
+	"Unbekannter/e"
+#elif L==3
+	"unknown"
+#elif L==4
+	"desconocido/a"
+#elif L==5
+	"inconnu/e"
+#elif L==6
+	"desconocido/a"	// Okoteve traducción
+#elif L==7
+	"sconosciuto/a"
+#elif L==8
+	"nieznany"
+#elif L==9
+	"desconhecido/a"
+#endif
+	,
+#if   L==1	// Prj_ROLE_STD
+	"estudiant"
+#elif L==2
+	"Student"
+#elif L==3
+	"student"
+#elif L==4
+	"estudiante"
+#elif L==5
+	"&eacute;tudiant/e"
+#elif L==6
+	"temimbo'e"
+#elif L==7
+	"studente"
+#elif L==8
+	"student"
+#elif L==9
+	"estudante"
+#endif
+	,
+#if   L==1	// Prj_ROLE_TUT
+	"tutor"
+#elif L==2
+	"Tutor"
+#elif L==3
+	"tutor"
+#elif L==4
+	"tutor"
+#elif L==5
+	"tuteur"
+#elif L==6
+	"tutor"	// Okoteve traducción
+#elif L==7
+	"precettore"
+#elif L==8
+	"nauczyciel"
+#elif L==9
+	"tutor"
+#endif
+	,
+#if   L==1	// Prj_ROLE_EVA
+	"avaluador"
+#elif L==2
+	"Auswerter"
+#elif L==3
+	"evaluator"
+#elif L==4
+	"evaluador"
+#elif L==5
+	"&eacute;valuateur"
+#elif L==6
+	"evaluador"	// Okoteve traducción
+#elif L==7
+	"valutatore"
+#elif L==8
+	"ewaluator"
+#elif L==9
+	"avaliador"
+#endif
+	};
+
+const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
+	{
+#if   L==1	// Prj_ROLE_UNK
+	"Desconeguts"
+#elif L==2
+	"Unbekannte"
+#elif L==3
+	"Unknown"
+#elif L==4
+	"Desconocidos"
+#elif L==5
+	"Inconnus"
+#elif L==6
+	"Desconocidos"	// Okoteve traducción
+#elif L==7
+	"Sconosciuti"
+#elif L==8
+	"Nieznany"
+#elif L==9
+	"Desconhecidos"
+#endif
+	,
+#if   L==1	// Prj_ROLE_STD
+	"Estudiants"
+#elif L==2
+	"Studenten"
+#elif L==3
+	"Students"
+#elif L==4
+	"Estudiantes"
+#elif L==5
+	"&Eacute;tudiants"
+#elif L==6
+	"Temimbo'e"
+#elif L==7
+	"Studenti"
+#elif L==8
+	"Studenci"
+#elif L==9
+	"Estudantes"
+#endif
+	,
+#if   L==1	// Prj_ROLE_TUT
+	"Tutors"
+#elif L==2
+	"Tutoren"
+#elif L==3
+	"Tutors"
+#elif L==4
+	"Tutores"
+#elif L==5
+	"Tuteurs"
+#elif L==6
+	"Tutores"	// Okoteve traducción
+#elif L==7
+	"Precettori"
+#elif L==8
+	"Nauczyciele"
+#elif L==9
+	"Tutores"
+#endif
+	,
+#if   L==1	// Prj_ROLE_EVA
+	"Avaluadors"
+#elif L==2
+	"Auswerter"
+#elif L==3
+	"Evaluators"
+#elif L==4
+	"Evaluadores"
+#elif L==5
+	"&Eacute;valuateurs"
+#elif L==6
+	"Evaluadores"	// Okoteve traducción
+#elif L==7
+	"Valutatori"
+#elif L==8
+	"Ewaluator&oacute;w"
+#elif L==9
+	"Avaliadores"
+#endif
+	};
+
 const char *Txt_Projects =
 #if   L==1
 	"Projectes (treballs fi de grau, projectes final de carrera, tesi&hellip;)";
@@ -47566,25 +47729,34 @@ const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_cou
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_has_been_enroled_in_the_project =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"<strong>%s</strong> ha estat afegit/da al projecte.";
+	"<strong>%s</strong> ha estat afegit/da"
+	" com a %s al projecte.";
 #elif L==2
-	"<strong>%s</strong> hat sich im Projekt eingeschrieben.";
+	"<strong>%s</strong> hat sich"
+	" als %s im Projekt eingeschrieben.";
 #elif L==3
-	"<strong>%s</strong> has been enroled in the project.";
+	"<strong>%s</strong> has been enroled"
+	" as a %s in the project.";
 #elif L==4
-	"<strong>%s</strong> ha sido a&ntilde;adido/a al proyecto.";
+	"<strong>%s</strong> ha sido a&ntilde;adido/a"
+	" como %s al proyecto.";
 #elif L==5
-	"<strong>%s</strong> a &eacute;t&eacute; inscrit dans le projet.";
+	"<strong>%s</strong> a &eacute;t&eacute; inscrit"
+	" en tant que %s dans le projet.";
 #elif L==6
-	"<strong>%s</strong> ha sido a&ntilde;adido/a al proyecto.";	// Okoteve traducción
+	"<strong>%s</strong> ha sido a&ntilde;adido/a"
+	" como %s al proyecto.";	// Okoteve traducción
 #elif L==7
-	"<strong>%s</strong> &egrave; stato registrato/a nel progetto.";
+	"<strong>%s</strong> &egrave; stato registrato/a"
+	" como %s nel progetto.";
 #elif L==8
-	"<strong>%s</strong> zosta&lstrok; zapisany do projektu.";
+	"<strong>%s</strong> zosta&lstrok; zapisany"
+	" jako %s do projektu.";
 #elif L==9
-	"<strong>%s</strong> foi matriculado/a no projeto.";
+	"<strong>%s</strong> foi matriculado/a"
+	" como %s no projeto.";
 #endif
 
 const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -47698,6 +47870,36 @@ const char *Txt_THE_USER_X_has_been_removed_as_administrator =	// Warning: it is
 	"<strong>%s</strong> has been removed as administrator.";	// Necessita de tradução
 #endif
 
+const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1
+	"<strong>%s</strong> ha sido eliminado/a como administrador/a"
+	" de <strong>%s</strong>.";		// Necessita traduccio
+#elif L==2
+	"<strong>%s</strong> has been removed as administrator"
+	" of <strong>%s</strong>.";		// Übersetzung notwendig
+#elif L==3
+	"<strong>%s</strong> has been removed as administrator"
+	" of <strong>%s</strong>.";
+#elif L==4
+	"<strong>%s</strong> ha sido eliminado/a como administrador/a"
+	" de <strong>%s</strong>.";
+#elif L==5
+	"<strong>%s</strong> has been removed as administrator"
+	" of <strong>%s</strong>.";		// Besoin de traduction
+#elif L==6
+	"<strong>%s</strong> ha sido eliminado/a como administrador/a"
+	" de <strong>%s</strong>.";		// Okoteve traducción
+#elif L==7
+	"<strong>%s</strong> &egrave; stato rimosso come amministratore"
+	" de <strong>%s</strong>.";
+#elif L==8
+	"<strong>%s</strong> has been removed as administrator"
+	" of <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"<strong>%s</strong> has been removed as administrator"
+	" of <strong>%s</strong>.";		// Necessita de tradução
+#endif
+
 const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ha sido eliminado/a de todas sus asignaturas.";	// Necessita traduccio
@@ -47717,6 +47919,36 @@ const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses =	// Warnin
 	"<strong>%s</strong> has been removed from all her/his courses.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"<strong>%s</strong> has been removed from all her/his courses.";	// Necessita de tradução
+#endif
+
+const char *Txt_THE_USER_X_has_not_been_removed_from_any_group =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"<strong>%s</strong> no ha sido eliminado/a"
+	" de ning&uacute;n grupo.";	// Necessita traduccio
+#elif L==2
+	"<strong>%s</strong> has not been removed"
+	" from any group.";		// Übersetzung notwendig
+#elif L==3
+	"<strong>%s</strong> has not been removed"
+	" from any group.";
+#elif L==4
+	"<strong>%s</strong> no ha sido eliminado/a"
+	" de ning&uacute;n grupo.";
+#elif L==5
+	"<strong>%s</strong> has not been removed"
+	" from any group.";		// Besoin de traduction
+#elif L==6
+	"<strong>%s</strong> no ha sido eliminado/a"
+	" de ning&uacute;n grupo.";	// Okoteve traducción
+#elif L==7
+	"<strong>%s</strong> non &egrave; stato rimosso"
+	" da alcun gruppo.";
+#elif L==8
+	"<strong>%s</strong> has not been removed"
+	" from any group.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"<strong>%s</strong> has not been removed"
+	" from any group.";		// Necessita de tradução
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_Y_groups =	// Warning: it is very important to include %s and %u in the following sentences
@@ -47763,11 +47995,11 @@ const char *Txt_THE_USER_X_has_been_removed_from_one_group =	// Warning: it is v
 
 const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"<strong>%s</strong> ha sido eliminado/a"
-	" de la asignatura <strong>%s</strong>.";	// Necessita traduccio
+	"<strong>%s</strong> ha estat eliminat"
+	" de l'assignatura <strong>%s</strong>.";
 #elif L==2
-	"<strong>%s</strong> has been removed"
-	" from the course <strong>%s</strong>.";	// Übersetzung notwendig
+	"<strong>%s</strong> wurde aus"
+	" dem Kurs <strong>%s</strong> entfernt.";
 #elif L==3
 	"<strong>%s</strong> has been removed"
 	" from the course <strong>%s</strong>.";
@@ -47775,8 +48007,8 @@ const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y =	// Warning: it i
 	"<strong>%s</strong> ha sido eliminado/a"
 	" de la asignatura <strong>%s</strong>.";
 #elif L==5
-	"<strong>%s</strong> has been removed"
-	" from the course <strong>%s</strong>.";	// Besoin de traduction
+	"<strong>%s</strong> a &eacute;t&eacute; retir&eacute;"
+	" de la mati&egrave;re <strong>%s</strong>.";
 #elif L==6
 	"<strong>%s</strong> ha sido eliminado/a"
 	" de la asignatura <strong>%s</strong>.";	// Okoteve traducción
@@ -47784,41 +48016,11 @@ const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y =	// Warning: it i
 	"<strong>%s</strong> &egrave; stato rimosso"
 	" dal corso <strong>%s</strong>.";
 #elif L==8
-	"<strong>%s</strong> has been removed"
-	" from the course <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+	"<strong>%s</strong> zosta&lstrok; usuni&eogon;ty"
+	" z trasy <strong>%s</strong>.";
 #elif L==9
-	"<strong>%s</strong> has been removed"
-	" from the course <strong>%s</strong>.";	// Necessita de tradução
-#endif
-
-const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1
-	"<strong>%s</strong> ha sido eliminado/a como administrador/a"
-	" de <strong>%s</strong>.";		// Necessita traduccio
-#elif L==2
-	"<strong>%s</strong> has been removed as administrator"
-	" of <strong>%s</strong>.";		// Übersetzung notwendig
-#elif L==3
-	"<strong>%s</strong> has been removed as administrator"
-	" of <strong>%s</strong>.";
-#elif L==4
-	"<strong>%s</strong> ha sido eliminado/a como administrador/a"
-	" de <strong>%s</strong>.";
-#elif L==5
-	"<strong>%s</strong> has been removed as administrator"
-	" of <strong>%s</strong>.";		// Besoin de traduction
-#elif L==6
-	"<strong>%s</strong> ha sido eliminado/a como administrador/a"
-	" de <strong>%s</strong>.";		// Okoteve traducción
-#elif L==7
-	"<strong>%s</strong> &egrave; stato rimosso come amministratore"
-	" de <strong>%s</strong>.";
-#elif L==8
-	"<strong>%s</strong> has been removed as administrator"
-	" of <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"<strong>%s</strong> has been removed as administrator"
-	" of <strong>%s</strong>.";		// Necessita de tradução
+	"<strong>%s</strong> foi removido"
+	" da disciplina <strong>%s</strong>.";
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged =	// Warning: it is very important to include two %s in the following sentences
@@ -47851,34 +48053,34 @@ const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it
 	" from the group of type %s to which it belonged.";	// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_has_not_been_removed_from_any_group =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z =	// Warning: it is very important to include three %s in the following sentences
 #if   L==1
-	"<strong>%s</strong> no ha sido eliminado/a"
-	" de ning&uacute;n grupo.";	// Necessita traduccio
+	"<strong>%s</strong> ha estat eliminat"
+	" como a %s del projecte <strong>%s</strong>.";
 #elif L==2
-	"<strong>%s</strong> has not been removed"
-	" from any group.";		// Übersetzung notwendig
+	"<strong>%s</strong> wurde"
+	" als %s aus dem Projekt <strong>%s</strong> entfernt.";
 #elif L==3
-	"<strong>%s</strong> has not been removed"
-	" from any group.";
+	"<strong>%s</strong> has been removed"
+	" as a %s from the project <strong>%s</strong>.";
 #elif L==4
-	"<strong>%s</strong> no ha sido eliminado/a"
-	" de ning&uacute;n grupo.";
+	"<strong>%s</strong> ha sido eliminado/a"
+	" como %s del proyecto <strong>%s</strong>.";
 #elif L==5
-	"<strong>%s</strong> has not been removed"
-	" from any group.";		// Besoin de traduction
+	"<strong>%s</strong> a &eacute;t&eacute; retir&eacute;"
+	" en tant que %s du projet <strong>%s</strong>.";
 #elif L==6
-	"<strong>%s</strong> no ha sido eliminado/a"
-	" de ning&uacute;n grupo.";	// Okoteve traducción
+	"<strong>%s</strong> ha sido eliminado/a"
+	" como %s del proyecto <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
-	"<strong>%s</strong> non &egrave; stato rimosso"
-	" da alcun gruppo.";
+	"<strong>%s</strong> &egrave; stato rimosso"
+	" come %s dal progetto <strong>%s</strong>.";
 #elif L==8
-	"<strong>%s</strong> has not been removed"
-	" from any group.";		// Potrzebujesz tlumaczenie
+	"<strong>%s</strong> zosta&lstrok; wyeliminowany"
+	" jako %s z projektu <strong>%s</strong>.";
 #elif L==9
-	"<strong>%s</strong> has not been removed"
-	" from any group.";		// Necessita de tradução
+	"<strong>%s</strong> foi removido"
+	" como %s do projeto <strong>%s</strong>.";
 #endif
 
 const char *Txt_THE_USER_X_is_already_an_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -50322,27 +50524,6 @@ const char *Txt_TF_QST[2] =
 	 "F"
 #endif
 	};
-
-const char *Txt_Tutors =
-#if   L==1
-	"Tutors";
-#elif L==2
-	"Tutoren";
-#elif L==3
-	"Tutors";
-#elif L==4
-	"Tutores";
-#elif L==5
-	"Tuteurs";
-#elif L==6
-	"Tutores";	// Okoteve traducción
-#elif L==7
-	"Tutori";
-#elif L==8
-	"Opiekunowie";
-#elif L==9
-	"Tutores";
-#endif
 
 const char *Txt_Type =
 #if   L==1

@@ -46,6 +46,17 @@ typedef enum
    Prj_PREASSIGNED     = 1,
   } Prj_Preassigned_t;
 
+// Related with user's roles in a project
+// Don't change these numbers! They are used in database
+#define Prj_NUM_ROLES_IN_PROJECT 4
+typedef enum
+  {
+   Prj_ROLE_UNK	= 0,	// Unknown
+   Prj_ROLE_STD	= 1,	// Student
+   Prj_ROLE_TUT	= 2,	// Tutor
+   Prj_ROLE_EVA	= 3,	// Evaluator
+  } Prj_RoleInProject_t;
+
 struct Project
   {
    long PrjCod;
