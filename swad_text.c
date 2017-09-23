@@ -2551,27 +2551,6 @@ const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is 
 	"J&aacute; existe um projeto com o diret&oacute;rio <strong>%s</strong>.";
 #endif
 
-const char *Txt_Already_existed_a_project_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Ja existia un projecte amb el t&iacute;tol <strong>%s</strong>.";
-#elif L==2
-	"Es gibt bereits einen Projekt mit dem Namen <strong>%s</strong>.";
-#elif L==3
-	"Already existed a project with the title <strong>%s</strong>.";
-#elif L==4
-	"Ya exist&iacute;a un proyecto con el t&iacute;tulo <strong>%s</strong>.";
-#elif L==5
-	"Il existe d&eacute;j&agrave; un projet du titre <strong>%s</strong>.";
-#elif L==6
-	"Ya exist&iacute;a un proyecto con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"Esiste gi&agrave; un progetto con il titolo <strong>%s</strong>.";
-#elif L==8
-	"By&lstrok; ju&zdot; projekt o tytule <strong>%s</strong>.";
-#elif L==9
-	"J&aacute; existe um projeto com o t&iacute;tulo <strong>%s</strong>.";
-#endif
-
 const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ja existia una enquesta amb el t&iacute;tol <strong>%s</strong>.";
@@ -21408,23 +21387,23 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeePrj
 #if   L==1
-	"Projectes"
+	"Projectes (treballs fi de grau, projectes final de carrera, tesi&hellip;)"
 #elif L==2
-	"Projekte"
+	"Projekte (Abschlussarbeiten, Diplomarbeiten&hellip;)"
 #elif L==3
-	"Projects (final degree projects&hellip;)"
+	"Projects (end-of-degree projects, thesis&hellip;)"
 #elif L==4
-	"Proyectos (proyectos fin de carrera, trabajos fin de grado&hellip;)"
+	"Proyectos (trabajos fin de grado/m&aacute;ster, proyectos fin de carrera, tesis&hellip;)"
 #elif L==5
-	"Projets"
+	"Projets (projets de fin de cours, th&egrave;se&hellip;)"
 #elif L==6
-	"Proyectos (proyectos fin de carrera, trabajos fin de grado&hellip;)"	// Okoteve traducción
+	"Proyectos (trabajos fin de grado/m&aacute;ster, proyectos fin de carrera, tesis&hellip;)"	// Okoteve traducción
 #elif L==7
-	"Progetti"
+	"Progetti (progetti di fine corso, tesi&hellip;)"
 #elif L==8
-	"Projekty"
+	"Projekty (projekty ko&nacute;cowe, praca dyplomowa&hellip;)"
 #elif L==9
-	"Projetos"
+	"Projetos (projetos de fim de grau, tese&hellip;)"
 #endif
 	,
 	//  3: ActReqTst
@@ -31041,11 +31020,11 @@ const char *Txt_Projects =
 #elif L==3
 	"Projects (end-of-degree projects, thesis&hellip;)";
 #elif L==4
-	"Proyectos (trabajos fin de grado, proyectos fin de carrera, tesis&hellip;)";
+	"Proyectos (trabajos fin de grado/m&aacute;ster, proyectos fin de carrera, tesis&hellip;)";
 #elif L==5
 	"Projets (projets de fin de cours, th&egrave;se&hellip;)";
 #elif L==6
-	"Proyectos (trabajos fin de grado, proyectos fin de carrera, tesis&hellip;)";	// Okoteve traducción
+	"Proyectos (trabajos fin de grado/m&aacute;ster, proyectos fin de carrera, tesis&hellip;)";	// Okoteve traducción
 #elif L==7
 	"Progetti (progetti di fine corso, tesi&hellip;)";
 #elif L==8

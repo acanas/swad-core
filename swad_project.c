@@ -96,11 +96,11 @@ static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
 static void Prj_PutParamPrjCod (long PrjCod);
-static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod);
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod);
 static void Prj_EditOneProjectTxtArea (const char *Id,
-                                       const char *Label,char *TxtField);
+                                       const char *Label,char *TxtField,
+                                       unsigned NumRows);
 
 static void Prj_AllocMemProject (struct Project *Prj);
 static void Prj_FreeMemProject (struct Project *Prj);
@@ -487,14 +487,18 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    Dpt_GetDataOfDepartmentByCod (&Dpt);
 
    /***** Show department *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT_N");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Dpt.WWW[0])
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			 " class=\"DAT_N\">",
-	       Dpt.WWW);
+			 " class=\"%s\">",
+	       Dpt.WWW,
+               Prj->Hidden ? "DAT_LIGHT" :
+        	             "DAT_N");
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (Dpt.WWW[0])
       fprintf (Gbl.F.Out,"</a>");
@@ -1518,21 +1522,6 @@ void Prj_ShowProject (void)
   }
 
 /*****************************************************************************/
-/********** Check if the title or the folder of a project exists *************/
-/*****************************************************************************/
-
-static bool Prj_CheckIfSimilarProjectsExists (const char *Field,const char *Value,long PrjCod)
-  {
-   char Query[256 + Prj_MAX_BYTES_PROJECT_TITLE];
-
-   /***** Get number of projects with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM projects"
-	          " WHERE CrsCod=%ld AND %s='%s' AND PrjCod<>%ld",
-            Gbl.CurrentCrs.Crs.CrsCod,Field,Value,PrjCod);
-   return (DB_QueryCOUNT (Query,"can not get similar projects") != 0);
-  }
-
-/*****************************************************************************/
 /********************* Put a form to create/edit project *********************/
 /*****************************************************************************/
 
@@ -1655,13 +1644,16 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
 	              "</tr>");
 
    /* Description of the project */
-   Prj_EditOneProjectTxtArea ("Description",Txt_Description,Prj.Description);
+   Prj_EditOneProjectTxtArea ("Description",Txt_Description,
+                              Prj.Description,12);
 
    /* Required knowledge to carry out the project */
-   Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,Prj.Knowledge);
+   Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
+                              Prj.Knowledge,4);
 
    /* Required materials to carry out the project */
-   Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,Prj.Materials);
+   Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
+                              Prj.Materials,4);
 
    /* URL for additional info */
    fprintf (Gbl.F.Out,"<tr>"
@@ -1738,7 +1730,8 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
 /*****************************************************************************/
 
 static void Prj_EditOneProjectTxtArea (const char *Id,
-                                       const char *Label,char *TxtField)
+                                       const char *Label,char *TxtField,
+                                       unsigned NumRows)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
 
@@ -1747,13 +1740,14 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 	              "<label for=\"%s\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"5\">"
+                      "<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\">"
                       "%s"
                       "</textarea>"
                       "</td>"
                       "</tr>",
             Id,The_ClassForm[Gbl.Prefs.Theme],Label,
             Id,Id,
+            NumRows,
             TxtField);
   }
 
@@ -1802,7 +1796,6 @@ static void Prj_FreeMemProject (struct Project *Prj)
 
 void Prj_RecFormProject (void)
   {
-   extern const char *Txt_Already_existed_a_project_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_project;
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
@@ -1854,18 +1847,7 @@ void Prj_RecFormProject (void)
       Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
-   if (Prj.Title[0])	// If there's a project title
-     {
-      /* If title of project was in database... */
-      if (Prj_CheckIfSimilarProjectsExists ("Title",Prj.Title,Prj.PrjCod))
-        {
-         NewProjectIsCorrect = false;
-         sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_project_with_the_title_X,
-                  Prj.Title);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-        }
-     }
-   else	// If there is not a project title
+   if (!Prj.Title[0])	// If there is not a project title
      {
       NewProjectIsCorrect = false;
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
