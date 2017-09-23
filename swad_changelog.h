@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.8 (2017-09-23)"
+#define Log_PLATFORM_VERSION	"SWAD 17.8.1 (2017-09-23)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.8.1:   Sep 23, 2017	Icon to show all projects in a table. (230980 lines)
         Version 17.8:     Sep 23, 2017	Projects can be ordered by start, end, title and department. (230963 lines)
         Version 17.7.1:   Sep 23, 2017	Changes in listing of projects. (230764 lines)
         Version 17.7:     Sep 23, 2017	Remove user from project. (230798 lines)

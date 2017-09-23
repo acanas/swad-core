@@ -39051,25 +39051,25 @@ const char *Txt_Show_FOLDER_FILE_OR_LINK_X =	// Warning: it is very important to
 	"Mostrar %s";
 #endif
 
-const char *Txt_Show_all_data =
+const char *Txt_Show_all_data_in_a_table =
 #if   L==1
-	"Mostrar totes les dades";
+	"Mostrar totes les dades en una taula";
 #elif L==2
-	"Alle Daten";
+	"Alle Daten in einer Tabelle anzeigen";
 #elif L==3
-	"Show all data";
+	"Show all data in a table";
 #elif L==4
-	"Mostrar todos los datos";
+	"Mostrar todos los datos en una tabla";
 #elif L==5
-	"Voir toutes les donn&eacute;es";
+	"Voir toutes les donn&eacute;es dans une table";
 #elif L==6
-	"Mostrar todos los datos";	// Okoteve traducción
+	"Mostrar todos los datos en una tabla";	// Okoteve traducción
 #elif L==7
-	"Visualizza tutti i dati";
+	"Visualizza tutti i dati in una tabella";
 #elif L==8
-	"Show all data";		// Potrzebujesz tlumaczenie
+	"Poka&zdot; wszystkie dane w tabeli";
 #elif L==9
-	"Mostrar todos os dados";
+	"Mostrar todos os dados em uma tabela";
 #endif
 
 const char *Txt_Show_all_files =

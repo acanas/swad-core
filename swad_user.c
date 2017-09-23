@@ -7835,31 +7835,31 @@ static void Usr_PutIconToPrintTchs (void)
 
 static void Usr_PutIconToShowGstsAllData (void)
   {
-   extern const char *Txt_Show_all_data;
+   extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
 			  "table64x64.gif",
-			  Txt_Show_all_data,NULL,
+			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
   {
-   extern const char *Txt_Show_all_data;
+   extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
 			  "table64x64.gif",
-			  Txt_Show_all_data,NULL,
+			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
   {
-   extern const char *Txt_Show_all_data;
+   extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
 			  "table64x64.gif",
-			  Txt_Show_all_data,NULL,
+			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }
 

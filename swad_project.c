@@ -72,6 +72,7 @@ static bool Prj_CheckIfICanCreateProjects (void);
 static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
+static void Prj_PutIconToShowAllData (void);
 static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectView);
 static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
                                           Prj_ProjectView_t ProjectView);
@@ -261,6 +262,9 @@ static void Prj_PutIconsListProjects (void)
    if (Prj_CheckIfICanCreateProjects ())
       Prj_PutIconToCreateNewPrj ();
 
+   /***** Put icon to show all data in a table *****/
+   Prj_PutIconToShowAllData ();
+
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_PROJECTS;
    Sta_PutIconToShowFigure ();
@@ -295,6 +299,20 @@ static void Prj_PutButtonToCreateNewPrj (void)
    Prj_PutParams ();
    Btn_PutConfirmButton (Txt_New_project);
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/******************** Put button to create a new project *********************/
+/*****************************************************************************/
+
+static void Prj_PutIconToShowAllData (void)
+  {
+   extern const char *Txt_Show_all_data_in_a_table;
+
+   Lay_PutContextualLink (ActSeePrj,NULL,Prj_PutParams,
+			  "table64x64.gif",
+			  Txt_Show_all_data_in_a_table,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -470,26 +488,29 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
                                           Prj_ProjectView_t ProjectView)
   {
    struct Department Dpt;
+   bool PutLink;
 
    /***** Get data of department *****/
    Dpt.DptCod = Prj->DptCod;
    Dpt_GetDataOfDepartmentByCod (&Dpt);
 
    /***** Show department *****/
+   PutLink = (ProjectView == Prj_LIST_PROJECTS && Dpt.WWW[0]);
+
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT_N");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-   if (Dpt.WWW[0])
+   if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"%s\">",
 	       Dpt.WWW,
                Prj->Hidden ? "DAT_LIGHT" :
         	             "DAT_N");
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
-   if (Dpt.WWW[0])
+   if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
