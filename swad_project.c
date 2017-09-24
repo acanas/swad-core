@@ -88,8 +88,12 @@ static void Prj_ShowOneProjectUsrs (const struct Project *Prj,
                                     const char *Label,Prj_RoleInProject_t RoleInProject);
 static void Prj_ShowTableAllProjectsUsrs (const struct Project *Prj,
                                           Prj_RoleInProject_t RoleInProject);
-static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
-                           Prj_RoleInProject_t RoleInProject);
+static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
+                                         Prj_RoleInProject_t RoleInProject);
+static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
+                                               Prj_RoleInProject_t RoleInProject);
+static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
+                                  MYSQL_RES **mysql_res);
 
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
@@ -153,7 +157,7 @@ void Prj_ShowTableAllProjects (void)
 
       /***** Write all the projects *****/
       for (NumPrj = 0;
-	   NumPrj <= Gbl.Prjs.Num;
+	   NumPrj < Gbl.Prjs.Num;
 	   NumPrj++)
 	{
 	 Prj.PrjCod = Gbl.Prjs.LstPrjCods[NumPrj];
@@ -773,7 +777,7 @@ static void Prj_ShowOneProjectUsrs (const struct Project *Prj,
                   Label);
          break;
      }
-   Prj_WriteUsrs (Prj->PrjCod,ProjectView,RoleInProject);
+   Prj_ShowOneProjectWriteUsrs (Prj->PrjCod,ProjectView,RoleInProject);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }
@@ -786,7 +790,7 @@ static void Prj_ShowTableAllProjectsUsrs (const struct Project *Prj,
 	    Gbl.RowEvenOdd,
 	    Prj->Hidden ? "DAT_LIGHT" :
 			  "DAT");
-   Prj_WriteUsrs (Prj->PrjCod,Prj_LIST_PROJECTS,RoleInProject);
+   Prj_ShowTableAllProjectsWriteUsrs (Prj->PrjCod,RoleInProject);
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -794,22 +798,17 @@ static void Prj_ShowTableAllProjectsUsrs (const struct Project *Prj,
 /*************** Write list of users with a role in a project ****************/
 /*****************************************************************************/
 
-static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
-                           Prj_RoleInProject_t RoleInProject)
+static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
+                                         Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_Remove;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Add_USER;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned NumUsrs;
-   unsigned NumUsrsKnown;
-   unsigned NumUsrsUnknown;
-   unsigned NumUsrsToShow;
    bool UsrValid;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
@@ -828,92 +827,56 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
       ActReqAddEvaPrj,	// Prj_ROLE_EVA, Evaluator
      };
 
-   /***** Get number of users in project from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
-	          " WHERE PrjCod=%ld AND RoleInProject=%u",
-            PrjCod,(unsigned) RoleInProject);
-   NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get users in project");
-
    /***** Get users in project from database *****/
-   sprintf (Query,"SELECT prj_usr.UsrCod,"
-	          "usr_data.Surname1 AS S1,"
-	          "usr_data.Surname2 AS S2,"
-	          "usr_data.FirstName AS FN"
-                  " FROM prj_usr,usr_data"
-                  " WHERE prj_usr.PrjCod=%ld AND RoleInProject=%u"
-                  " AND prj_usr.UsrCod=usr_data.UsrCod"
-                  " ORDER BY S1,S2,FN",
-            PrjCod,(unsigned) RoleInProject);
-   NumUsrsKnown = (unsigned) DB_QuerySELECT (Query,&mysql_res,
-                                             "can not get users in project");
+   NumUsrs = Prj_GetUsrsInPrj (PrjCod,RoleInProject,&mysql_res);
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table>");
 
-   /***** Check number of users *****/
-   if (NumUsrs)
+   /***** Write users *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrs;
+	NumUsr++)
      {
-      /***** How many users will be shown? *****/
-      NumUsrsToShow = NumUsrsKnown;
+      /* Get user's code */
+      row = mysql_fetch_row (mysql_res);
+      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /***** Write known users *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrsToShow;
-	   NumUsr++)
-        {
-         /* Get user's code */
-         row = mysql_fetch_row (mysql_res);
-         Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      /* Get user's data */
+      UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-         /* Get user's data */
-	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+      /* Start row for this user */
+      fprintf (Gbl.F.Out,"<tr>");
 
-	 /* Start row for this user */
-	 fprintf (Gbl.F.Out,"<tr>");
+      /* Icon to remove user */
+      if (ProjectView == Prj_EDIT_ONE_PROJECT)
+	{
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	 Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
+				"remove-on64x64.png",
+				Txt_Remove,NULL,
+				NULL);
+	 fprintf (Gbl.F.Out,"</td>");
+	}
 
-	 /* Icon to remove user */
-         if (ProjectView == Prj_EDIT_ONE_PROJECT)
-           {
-	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	    Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
-				   "remove-on64x64.png",
-				   Txt_Remove,NULL,
-				   NULL);
-	    fprintf (Gbl.F.Out,"</td>");
-           }
+      /* Put user's photo */
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+      ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL) :
+			      false);
+      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+							   NULL,
+			"PHOTO21x28",Pho_ZOOM,false);
 
-         /* Put user's photo */
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-         ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL) :
-                                 false);
-         Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-                        	                              NULL,
-                           "PHOTO21x28",Pho_ZOOM,false);
-
-         /* Write user's name */
-         fprintf (Gbl.F.Out,"</td>"
-                            "<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
-         if (UsrValid)
-            fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
-         else
-            fprintf (Gbl.F.Out,"[%s]",
-                     Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-        }
-
-      /***** If any users are unknown *****/
-      if ((NumUsrsUnknown = NumUsrs - NumUsrsKnown))
-         /***** Start form to show all the users *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">"
-                            "[%u %s]"
-                            "</td>"
-                            "</tr>",
-                  NumUsrsUnknown,
-                  (NumUsrsUnknown == 1) ?
-                  Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN] :
-                  Txt_ROLES_PLURAL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+      /* Write user's name */
+      fprintf (Gbl.F.Out,"</td>"
+			 "<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
+      if (UsrValid)
+	 fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
+      else
+	 fprintf (Gbl.F.Out,"[%s]",
+		  Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
 
    /***** Row to add a new user *****/
@@ -936,6 +899,70 @@ static void Prj_WriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
+                                               Prj_RoleInProject_t RoleInProject)
+  {
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsr;
+   unsigned NumUsrs;
+   bool UsrValid;
+
+   /***** Get users in project from database *****/
+   NumUsrs = Prj_GetUsrsInPrj (PrjCod,RoleInProject,&mysql_res);
+
+   /***** Write users *****/
+   for (NumUsr = 0;
+	NumUsr < NumUsrs;
+	NumUsr++)
+     {
+      /* Get user's code */
+      row = mysql_fetch_row (mysql_res);
+      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get user's data */
+      UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+      /* Separator */
+      if (NumUsr)
+         fprintf (Gbl.F.Out,",<br />");
+
+      /* Write user's name */
+      if (UsrValid)
+	 fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
+      else
+	 fprintf (Gbl.F.Out,"[%s]",
+		  Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************** Get number of users in a project ***********************/
+/*****************************************************************************/
+
+static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
+                                  MYSQL_RES **mysql_res)
+  {
+   char Query[1024];
+
+   /***** Get users in project from database *****/
+   sprintf (Query,"SELECT prj_usr.UsrCod,"
+	          "usr_data.Surname1 AS S1,"
+	          "usr_data.Surname2 AS S2,"
+	          "usr_data.FirstName AS FN"
+                  " FROM prj_usr,usr_data"
+                  " WHERE prj_usr.PrjCod=%ld AND RoleInProject=%u"
+                  " AND prj_usr.UsrCod=usr_data.UsrCod"
+                  " ORDER BY S1,S2,FN",
+            PrjCod,(unsigned) RoleInProject);
+   return (unsigned) DB_QuerySELECT (Query,mysql_res,
+                                     "can not get users in project");
   }
 
 /*****************************************************************************/
