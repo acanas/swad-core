@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_ID.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -839,14 +840,12 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
                                          Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_Remove;
-   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Add_USER;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned NumUsrs;
-   bool UsrValid;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    static Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
@@ -880,40 +879,45 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get user's data */
-      UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
-
-      /* Start row for this user */
-      fprintf (Gbl.F.Out,"<tr>");
-
-      /* Icon to remove user */
-      if (ProjectView == Prj_EDIT_ONE_PROJECT)
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	{
+	 /* Start row for this user */
+	 fprintf (Gbl.F.Out,"<tr>");
+
+	 /* Icon to remove user */
+	 if (ProjectView == Prj_EDIT_ONE_PROJECT)
+	   {
+	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	    Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
+				   "remove-on64x64.png",
+				   Txt_Remove,NULL,
+				   NULL);
+	    fprintf (Gbl.F.Out,"</td>");
+	   }
+
+	 /* Put user's photo */
 	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	 Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
-				"remove-on64x64.png",
-				Txt_Remove,NULL,
-				NULL);
+	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	 Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+							      NULL,
+			   "PHOTO21x28",Pho_ZOOM,false);
 	 fprintf (Gbl.F.Out,"</td>");
+
+	 /* Write user's IDs */
+	 if (RoleInProject == Prj_ROLE_STD)
+	   {
+	    fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
+	    ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+	    fprintf (Gbl.F.Out,"</td>");
+	   }
+
+	 /* Write user's name */
+	 fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">%s</td>",
+	          Gbl.Usrs.Other.UsrDat.FullName);
+
+	 /* End row for this user */
+	 fprintf (Gbl.F.Out,"</tr>");
 	}
-
-      /* Put user's photo */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-      ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL) :
-			      false);
-      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-							   NULL,
-			"PHOTO21x28",Pho_ZOOM,false);
-
-      /* Write user's name */
-      fprintf (Gbl.F.Out,"</td>"
-			 "<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
-      if (UsrValid)
-	 fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
-      else
-	 fprintf (Gbl.F.Out,"[%s]",
-		  Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
      }
 
    /***** Row to add a new user *****/
@@ -941,12 +945,10 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
 static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
                                                Prj_RoleInProject_t RoleInProject)
   {
-   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned NumUsrs;
-   bool UsrValid;
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_GetUsrsInPrj (PrjCod,RoleInProject,&mysql_res);
@@ -965,16 +967,24 @@ static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get user's data */
-	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    /* Start row for this user */
+	    fprintf (Gbl.F.Out,"<li>");
 
-	 /* Write user's name */
-         fprintf (Gbl.F.Out,"<li>");
-	 if (UsrValid)
+	    /* Write user's IDs */
+	    if (RoleInProject == Prj_ROLE_STD)
+	      {
+	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+	       fprintf (Gbl.F.Out,"<br />");
+	      }
+
+	    /* Write user's name */
 	    fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
-	 else
-	    fprintf (Gbl.F.Out,"[%s]",
-		     Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely a user who has been removed
-         fprintf (Gbl.F.Out,"</li>");
+
+	    /* End row for this user */
+	    fprintf (Gbl.F.Out,"</li>");
+	   }
 	}
 
       fprintf (Gbl.F.Out,"</ul>");
