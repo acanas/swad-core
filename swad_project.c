@@ -49,7 +49,7 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/************************* Public constants and types ************************/
+/************************* Private constants and types ***********************/
 /*****************************************************************************/
 
 typedef enum
@@ -58,6 +58,8 @@ typedef enum
    Prj_PRINT_ONE_PROJECT,
    Prj_EDIT_ONE_PROJECT,
   } Prj_ProjectView_t;
+
+#define Prj_INTERVAL_DEFAULT ((time_t) 365 * (time_t) 24 * (time_t) 60 * (time_t) 60)	// 1 year
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
@@ -85,6 +87,9 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                                         const char *Label,char *TxtField);
 static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
                                               char *TxtField);
+static void Prj_ShowOneProjectURL (const struct Project *Prj,
+                                   Prj_ProjectView_t ProjectView);
+static void Prj_ShowTableAllProjectsURL (const struct Project *Prj);
 static void Prj_ShowOneProjectUsrs (const struct Project *Prj,
                                     Prj_ProjectView_t ProjectView,
                                     Prj_RoleInProject_t RoleInProject);
@@ -106,6 +111,10 @@ static bool Prj_CheckIfICanRemUsrFromPrj (void);
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
+
+static bool Prj_CheckIfICanEditProject (long PrjCod);
+static bool Prj_GetIfIAmTutorInProject (long PrjCod);
+
 static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
@@ -145,6 +154,9 @@ void Prj_ShowTableAllProjects (void)
    extern const char *Txt_No_projects;
    unsigned NumPrj;
    struct Project Prj;
+
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
 
    /***** Get list of projects *****/
    Prj_GetListProjects ();
@@ -302,6 +314,7 @@ static void Prj_ShowTableAllProjectsHead (void)
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
+   extern const char *Txt_URL;
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    Prj_Order_t Order;
@@ -321,6 +334,8 @@ static void Prj_ShowTableAllProjectsHead (void)
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
             Txt_Required_materials);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
+            Txt_URL);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
             Txt_Preassigned_QUESTION);
 
    for (RoleInProject = Prj_ROLE_STD;
@@ -338,8 +353,21 @@ static void Prj_ShowTableAllProjectsHead (void)
 
 static bool Prj_CheckIfICanCreateProjects (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   static const bool ICanCreateProjects[Rol_NUM_ROLES] =
+     {
+      false,	// Rol_UNK
+      false,	// Rol_GST
+      false,	// Rol_USR
+      false,	// Rol_STD
+      true,	// Rol_NET
+      true,	// Rol_TCH
+      true,	// Rol_DEG_ADM
+      true,	// Rol_CTR_ADM
+      true,	// Rol_INS_ADM
+      true,	// Rol_SYS_ADM
+     };
+
+   return ICanCreateProjects[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -461,7 +489,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"8\" class=\"CONTEXT_COL");
+	              "<td rowspan=\"9\" class=\"CONTEXT_COL");
    if (ProjectView == Prj_LIST_PROJECTS)
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
@@ -535,6 +563,9 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /* Required materials to carry out the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,
                                Txt_Required_materials,Prj->Materials);
+
+   /* Link to view more info about the project */
+   Prj_ShowOneProjectURL (Prj,ProjectView);
 
    /* Preassigned? */
    fprintf (Gbl.F.Out,"<tr>"
@@ -645,6 +676,9 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /* Required materials to carry out the project */
    Prj_ShowTableAllProjectsTxtField (Prj,Prj->Materials);
+
+   /* Link to view more info about the project */
+   Prj_ShowTableAllProjectsURL (Prj);
 
    /* Preassigned? */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
@@ -774,6 +808,60 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT",
             TxtField);
+  }
+
+/*****************************************************************************/
+/********************** Show URL associated to project ***********************/
+/*****************************************************************************/
+
+static void Prj_ShowOneProjectURL (const struct Project *Prj,
+                                   Prj_ProjectView_t ProjectView)
+  {
+   extern const char *Txt_URL;
+   bool PutLink;
+
+   /***** Write row with label and text *****/
+   PutLink = (ProjectView == Prj_LIST_PROJECTS && Prj->URL[0]);
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"2\" class=\"RIGHT_TOP");
+   if (ProjectView == Prj_LIST_PROJECTS)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+		      "%s:"
+		      "</td>"
+		      "<td colspan=\"2\" class=\"LEFT_TOP",
+	    Prj->Hidden ? "ASG_LABEL_LIGHT" :
+			  "ASG_LABEL",
+	    Txt_URL);
+   if (ProjectView == Prj_LIST_PROJECTS)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">",
+	    Prj->Hidden ? "DAT_LIGHT" :
+			  "DAT");
+   if (PutLink)
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			 " class=\"%s\">",
+	       Prj->URL,
+	       Prj->Hidden ? "DAT_LIGHT" :
+			     "DAT");
+   fprintf (Gbl.F.Out,"%s",Prj->URL);
+   if (PutLink)
+      fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
+  {
+   /***** Show URL *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
+                      "%s"
+                      "</td>",
+            Gbl.RowEvenOdd,
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            Prj->URL);
   }
 
 /*****************************************************************************/
@@ -1354,30 +1442,55 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden)
   {
    Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used as parameter in contextual links
 
+   if (Prj_CheckIfICanEditProject (PrjCod))
+     {
+      /***** Put form to remove project *****/
+      Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutParams);
+
+      /***** Put form to hide/show project *****/
+      if (Hidden)
+	 Ico_PutContextualIconToUnhide (ActShoPrj,Prj_PutParams);
+      else
+	 Ico_PutContextualIconToHide (ActHidPrj,Prj_PutParams);
+
+      /***** Put form to edit project *****/
+      Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutParams);
+     }
+
+   /***** Put form to print project *****/
+   Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutParams);
+  }
+
+/*****************************************************************************/
+/************************ Can I edit a given project? ************************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfICanEditProject (long PrjCod)
+  {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
+      case Rol_NET:
+	 return Prj_GetIfIAmTutorInProject (PrjCod);
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Put form to remove project *****/
-	 Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutParams);
-
-	 /***** Put form to hide/show project *****/
-	 if (Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoPrj,Prj_PutParams);
-	 else
-	    Ico_PutContextualIconToHide (ActHidPrj,Prj_PutParams);
-
-	 /***** Put form to edit project *****/
-	 Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutParams);
-	 // no break
-      case Rol_STD:
-      case Rol_NET:
-	 /***** Put form to print project *****/
-	 Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutParams);
-	 break;
+	 return true;
       default:
-         break;
+	 return false;
      }
+  }
+
+/*****************************************************************************/
+/*********************** Am I tutor in a given project? **********************/
+/*****************************************************************************/
+
+static bool Prj_GetIfIAmTutorInProject (long PrjCod)
+  {
+   char Query[256];
+
+   sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
+		  " WHERE PrjCod=%ld AND RoleInProject=%u AND UsrCod=%ld",
+	    PrjCod,Prj_ROLE_TUT,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (bool) (DB_QueryCOUNT (Query,"can not get number of projects in course") != 0);
   }
 
 /*****************************************************************************/
@@ -1420,6 +1533,7 @@ void Prj_GetListProjects (void)
 	 /* Hidden subquery */
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
+	    case Rol_NET:
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       HiddenSubQuery[0] = '\0';
@@ -1921,7 +2035,8 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
       /* Initialize to empty project */
       Prj_ResetProject (&Prj);
       Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Prj.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Prj.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC +
+	                            Prj_INTERVAL_DEFAULT;
       Prj.Open = true;
      }
    else
@@ -2180,7 +2295,8 @@ void Prj_RecFormProject (void)
    if (Prj.TimeUTC[Dat_START_TIME] == 0)
       Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (Prj.TimeUTC[Dat_END_TIME] == 0)
-      Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+      Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] +
+	                          Prj_INTERVAL_DEFAULT;
 
    /***** Check if title is correct *****/
    if (!Prj.Title[0])	// If there is not a project title

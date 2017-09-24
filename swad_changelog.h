@@ -252,13 +252,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.9.4 (2017-09-24)"
+#define Log_PLATFORM_VERSION	"SWAD 17.10 (2017-09-24)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.10:    Sep 24, 2017	Changes in permissions to view/edit projects.
+					Show project URL in listings of projects. (231319 lines)
         Version 17.9.4:   Sep 24, 2017	Changes in listing of projects. (231216 lines)
         Version 17.9.3:   Sep 24, 2017	Write students' IDs in listing of projects. (231214 lines)
         Version 17.9.2:   Sep 24, 2017	Header in listing of all projects in a table. (231206 lines)
