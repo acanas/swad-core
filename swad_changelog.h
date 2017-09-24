@@ -252,13 +252,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.8.1 (2017-09-23)"
+#define Log_PLATFORM_VERSION	"SWAD 17.9 (2017-09-24)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.9:     Sep 24, 2017	Action to show all projects in a table. (231151 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1696','es','N','Ver tabla proyectos');
+
         Version 17.8.1:   Sep 23, 2017	Icon to show all projects in a table. (230980 lines)
         Version 17.8:     Sep 23, 2017	Projects can be ordered by start, end, title and department. (230963 lines)
         Version 17.7.1:   Sep 23, 2017	Changes in listing of projects. (230764 lines)
@@ -346,16 +350,16 @@ sudo cp icon/usr_off64x64.png /var/www/html/swad/icon/
 					12 changes necessary in database:
 CREATE TABLE IF NOT EXISTS projects (PrjCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',NumNotif INT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Folder VARBINARY(255) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(PrjCod),INDEX(CrsCod,Hidden));
 CREATE TABLE IF NOT EXISTS prj_grp (PrjCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(PrjCod,GrpCod));
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1674','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1675','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1676','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1677','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1678','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1679','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1680','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1681','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1682','es','N','Mostrar respuestas de pregunta juego');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1683','es','N','Mostrar respuestas de pregunta juego');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1674','es','N','Ver proyectos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1675','es','N','Solicitar creaci&oacute;n proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1676','es','N','Solicitar edici&oacute;n proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1677','es','N','Imprimir proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1678','es','N','Crear proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1679','es','N','Modificar proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1680','es','N','Solicitar elim. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1681','es','N','Eliminar proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1682','es','N','Ocultar proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1683','es','N','Mostrar actividad');
 
         Version 17.1:     Sep 15, 2017	New module swad_project. Not finished. (229123 lines)
 Copy the following icons to icon public directory:

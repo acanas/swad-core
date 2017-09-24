@@ -465,12 +465,11 @@ static void Lay_WriteScripts (void)
    /***** Script for MathJax *****/
    Lay_WriteScriptMathJax ();
 
-   /***** Scripts used only in main window *****/
-   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
-     {
-      Lay_WriteScriptInit ();
-      Lay_WriteScriptParamsAJAX ();
-     }
+   /***** Write script with init function executed after loading page *****/
+   Lay_WriteScriptInit ();
+
+   /***** Write script to set parameters needed by AJAX *****/
+   Lay_WriteScriptParamsAJAX ();
 
    /***** Prepare script to draw months *****/
    if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||		// Left column visible

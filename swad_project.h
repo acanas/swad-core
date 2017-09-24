@@ -87,6 +87,7 @@ typedef enum
 /*****************************************************************************/
 
 void Prj_SeeProjects (void);
+void Prj_ShowTableAllProjects (void);
 void Prj_PrintOneProject (void);
 
 void Prj_ReqAddStd (void);
