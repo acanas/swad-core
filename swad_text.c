@@ -31167,17 +31167,17 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 
 const char *Txt_Projects =
 #if   L==1
-	"Projectes (treballs fi de grau, projectes final de carrera, tesi&hellip;)";
+	"Projectes (treballs fi de grau/m&agrave;ster, tesi&hellip;)";
 #elif L==2
 	"Projekte (Abschlussarbeiten, Diplomarbeiten&hellip;)";
 #elif L==3
 	"Projects (end-of-degree projects, thesis&hellip;)";
 #elif L==4
-	"Proyectos (trabajos fin de grado/m&aacute;ster, proyectos fin de carrera, tesis&hellip;)";
+	"Proyectos (trabajos fin de grado/m&aacute;ster, tesis&hellip;)";
 #elif L==5
 	"Projets (projets de fin de cours, th&egrave;se&hellip;)";
 #elif L==6
-	"Proyectos (trabajos fin de grado/m&aacute;ster, proyectos fin de carrera, tesis&hellip;)";	// Okoteve traducción
+	"Proyectos (trabajos fin de grado/m&aacute;ster, tesis&hellip;)";	// Okoteve traducción
 #elif L==7
 	"Progetti (progetti di fine corso, tesi&hellip;)";
 #elif L==8

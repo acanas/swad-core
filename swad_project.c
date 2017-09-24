@@ -733,7 +733,8 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
    /***** Change format *****/
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
+   if (ProjectView == Prj_LIST_PROJECTS)
+      Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
 
    /***** Write row with label and text *****/
    fprintf (Gbl.F.Out,"<tr>"
