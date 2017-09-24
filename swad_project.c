@@ -106,7 +106,6 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
-static bool Prj_CheckIfICanRemUsrFromPrj (void);
 
 static void Prj_GetParamPrjOrder (void);
 
@@ -1180,7 +1179,6 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    long PrjCod;
    struct ListUsrCods ListUsrCods;
@@ -1205,28 +1203,19 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
          Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods.Lst[NumUsr];
          Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	 /* Check if this user belongs to the current course */
-	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
-	   {
-	    /***** Add user to project *****/
-	    sprintf (Query,"REPLACE INTO prj_usr"
-			   " (PrjCod,RoleInProject,UsrCod)"
-			   " VALUES"
-			   " (%ld,%u,%ld)",
-		     PrjCod,(unsigned) RoleInProject,Gbl.Usrs.Other.UsrDat.UsrCod);
-	    DB_QueryREPLACE (Query,"can not add user to project");
+	 /* Add user to project */
+	 sprintf (Query,"REPLACE INTO prj_usr"
+			" (PrjCod,RoleInProject,UsrCod)"
+			" VALUES"
+			" (%ld,%u,%ld)",
+		  PrjCod,(unsigned) RoleInProject,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 DB_QueryREPLACE (Query,"can not add user to project");
 
-	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
-		     Gbl.Usrs.Other.UsrDat.FullName,
-		     Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
-	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
-	   }
-	 else        // User does not belong to the current course
-	   {
-	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
-		     Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
-	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-	   }
+	 /* Show success alert */
+	 sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
+		  Gbl.Usrs.Other.UsrDat.FullName,
+		  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
+	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
 
       /***** Free list of users' codes *****/
@@ -1291,7 +1280,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Prj_CheckIfICanRemUsrFromPrj ())
+      if (Prj_CheckIfICanEditProject (Prj.PrjCod))
 	{
 	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -1373,7 +1362,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Prj_CheckIfICanRemUsrFromPrj ())
+      if (Prj_CheckIfICanEditProject (Prj.PrjCod))
 	{
 	 /***** Remove user from the table of project-users *****/
 	 sprintf (Query,"DELETE FROM prj_usr"
@@ -1401,15 +1390,6 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (Prj.PrjCod);
-  }
-
-/*****************************************************************************/
-/*********** Check if I can remove another user in current course ************/
-/*****************************************************************************/
-
-static bool Prj_CheckIfICanRemUsrFromPrj (void)
-  {
-   return true;	// TODO: Rewrite this function
   }
 
 /*****************************************************************************/
@@ -1835,13 +1815,18 @@ void Prj_ReqRemProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   /***** Show question and button to remove the project *****/
-   Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_project_X,
-            Prj.Title);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemPrj,NULL,NULL,Prj_PutParams,
-                           Btn_REMOVE_BUTTON,Txt_Remove_project);
+   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+     {
+      /***** Show question and button to remove the project *****/
+      Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
+      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_project_X,
+	       Prj.Title);
+      Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
+			      ActRemPrj,NULL,NULL,Prj_PutParams,
+			      Btn_REMOVE_BUTTON,Txt_Remove_project);
+     }
+   else
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -1872,23 +1857,28 @@ void Prj_RemoveProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
 
-   /***** Remove users in project *****/
-   sprintf (Query,"DELETE FROM prj_usr USING projects,prj_usr"
-                  " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
-                  " AND projects.PrjCod=prj_usr.PrjCod",
-            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE (Query,"can not remove project");
+   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+     {
+      /***** Remove users in project *****/
+      sprintf (Query,"DELETE FROM prj_usr USING projects,prj_usr"
+		     " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
+		     " AND projects.PrjCod=prj_usr.PrjCod",
+	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryDELETE (Query,"can not remove project");
 
-   /***** Remove project *****/
-   sprintf (Query,"DELETE FROM projects"
-                  " WHERE PrjCod=%ld AND CrsCod=%ld",
-            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE (Query,"can not remove project");
+      /***** Remove project *****/
+      sprintf (Query,"DELETE FROM projects"
+		     " WHERE PrjCod=%ld AND CrsCod=%ld",
+	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryDELETE (Query,"can not remove project");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Project_X_removed,
-            Prj.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      /***** Write message to show the change made *****/
+      sprintf (Gbl.Alert.Txt,Txt_Project_X_removed,
+	       Prj.Title);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+     }
+   else
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -1917,16 +1907,21 @@ void Prj_HideProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   /***** Hide project *****/
-   sprintf (Query,"UPDATE projects SET Hidden='Y'"
-                  " WHERE PrjCod=%ld AND CrsCod=%ld",
-            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not hide project");
+   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+     {
+      /***** Hide project *****/
+      sprintf (Query,"UPDATE projects SET Hidden='Y'"
+		     " WHERE PrjCod=%ld AND CrsCod=%ld",
+	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE (Query,"can not hide project");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_hidden,
-            Prj.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      /***** Write message to show the change made *****/
+      sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_hidden,
+	       Prj.Title);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+     }
+   else
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -1955,16 +1950,21 @@ void Prj_ShowProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   /***** Hide project *****/
-   sprintf (Query,"UPDATE projects SET Hidden='N'"
-                  " WHERE PrjCod=%ld AND CrsCod=%ld",
-            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not show project");
+   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+     {
+      /***** Show project *****/
+      sprintf (Query,"UPDATE projects SET Hidden='N'"
+		     " WHERE PrjCod=%ld AND CrsCod=%ld",
+	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE (Query,"can not show project");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_visible,
-            Prj.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      /***** Write message to show the change made *****/
+      sprintf (Gbl.Alert.Txt,Txt_Project_X_is_now_visible,
+	       Prj.Title);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+     }
+   else
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2252,6 +2252,7 @@ void Prj_RecFormProject (void)
    extern const char *Txt_The_project_has_been_modified;
    struct Project Prj;	// Project data received from form
    bool ItsANewProject;
+   bool ICanEditProject;
    bool NewProjectIsCorrect = true;
 
    /***** Allocate memory for the project *****/
@@ -2263,73 +2264,86 @@ void Prj_RecFormProject (void)
    ItsANewProject = (Prj.PrjCod < 0);
 
    if (ItsANewProject)
+     {
       /* Reset project data */
       Prj_ResetProject (&Prj);
+
+      ICanEditProject = true;
+     }
    else
+     {
       /* Get data of the project from database */
       Prj_GetDataOfProjectByCod (&Prj);
 
-   /* Get start/end date-times */
-   Prj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   Prj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
-
-   /* Get project title */
-   Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
-
-   /* Get department */
-   Prj.DptCod = Par_GetParToLong ("DptCod");
-
-   /* Get project description, required knowledge and required materials */
-   Par_GetParToHTML ("Description",Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-   Par_GetParToHTML ("Knowledge"  ,Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-   Par_GetParToHTML ("Materials"  ,Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /* Get degree WWW */
-   Par_GetParToText ("URL",Prj.URL,Cns_MAX_BYTES_WWW);
-
-   /* Get whether the project is preassigned */
-   Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
-	                                                  Prj_NOT_PREASSIGNED;
-
-   /***** Adjust dates *****/
-   if (Prj.TimeUTC[Dat_START_TIME] == 0)
-      Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (Prj.TimeUTC[Dat_END_TIME] == 0)
-      Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] +
-	                          Prj_INTERVAL_DEFAULT;
-
-   /***** Check if title is correct *****/
-   if (!Prj.Title[0])	// If there is not a project title
-     {
-      NewProjectIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
+      ICanEditProject = Prj_CheckIfICanEditProject (Prj.PrjCod);
      }
 
-   /***** Create a new project or update an existing one *****/
-   if (NewProjectIsCorrect)
+   if (ICanEditProject)
      {
-      if (ItsANewProject)
+      /* Get start/end date-times */
+      Prj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+      Prj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+
+      /* Get project title */
+      Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
+
+      /* Get department */
+      Prj.DptCod = Par_GetParToLong ("DptCod");
+
+      /* Get project description, required knowledge and required materials */
+      Par_GetParToHTML ("Description",Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+      Par_GetParToHTML ("Knowledge"  ,Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+      Par_GetParToHTML ("Materials"  ,Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+      /* Get degree WWW */
+      Par_GetParToText ("URL",Prj.URL,Cns_MAX_BYTES_WWW);
+
+      /* Get whether the project is preassigned */
+      Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
+							     Prj_NOT_PREASSIGNED;
+
+      /***** Adjust dates *****/
+      if (Prj.TimeUTC[Dat_START_TIME] == 0)
+	 Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+      if (Prj.TimeUTC[Dat_END_TIME] == 0)
+	 Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] +
+				     Prj_INTERVAL_DEFAULT;
+
+      /***** Check if title is correct *****/
+      if (!Prj.Title[0])	// If there is not a project title
 	{
-         Prj_CreateProject (&Prj);	// Add new project to database
-
-	 /***** Write success message *****/
-	 sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,Prj.Title);
-	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	 NewProjectIsCorrect = false;
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
 	}
-      else if (NewProjectIsCorrect)
+
+      /***** Create a new project or update an existing one *****/
+      if (NewProjectIsCorrect)
 	{
-	 Prj_UpdateProject (&Prj);
+	 if (ItsANewProject)
+	   {
+	    Prj_CreateProject (&Prj);	// Add new project to database
 
-	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
+	    /***** Write success message *****/
+	    sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,Prj.Title);
+	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	   }
+	 else if (NewProjectIsCorrect)
+	   {
+	    Prj_UpdateProject (&Prj);
+
+	    /***** Write success message *****/
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
+	   }
+
+	 /***** Show projects again *****/
+	 Prj_SeeProjects ();
 	}
-
-      /***** Show projects again *****/
-      Prj_SeeProjects ();
+      else
+	 // TODO: The form should be filled with partial data, now is always empty
+	 Prj_RequestCreatOrEditPrj (Prj.PrjCod);
      }
    else
-      // TODO: The form should be filled with partial data, now is always empty
-      Prj_RequestCreatOrEditPrj (Prj.PrjCod);
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

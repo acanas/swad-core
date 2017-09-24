@@ -252,16 +252,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.10.1 (2017-09-24)"
+#define Log_PLATFORM_VERSION	"SWAD 17.10.3 (2017-09-25)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.10.3:  Sep 24, 2017	TODO: Add users to projects even if they don't belong to course. (? lines)
-        Version 17.10.2:  Sep 24, 2017	TODO: Check permission when editing projects.
-					TODO: Check permission when removing a user from a project. (? lines)
+        Version 17.10.3:  Sep 25, 2017	Check permission when editing projects.
+					Check permission when removing a user from a project. (231359 lines)
+        Version 17.10.2:  Sep 24, 2017	Add users to projects even if they don't belong to course. (231335 lines)
         Version 17.10.1:  Sep 24, 2017	Remove user in project when removing the user.
 					Remove projects (and users in them) in a course when removing the course. (231345 lines)
         Version 17.10:    Sep 24, 2017	Changes in permissions to view/edit projects.
