@@ -120,6 +120,7 @@ static void Prj_ResetProject (struct Project *Prj);
 static void Prj_PutParamPrjCod (long PrjCod);
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod);
+static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows);
@@ -1997,27 +1998,8 @@ void Prj_RequestEditPrj (void)
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod)
   {
-   extern const char *Hlp_ASSESSMENT_Projects_new_project;
-   extern const char *Hlp_ASSESSMENT_Projects_edit_project;
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_New_project;
-   extern const char *Txt_Edit_project;
-   extern const char *Txt_Project_data;
-   extern const char *Txt_Title;
-   extern const char *Txt_Department;
-   extern const char *Txt_Description;
-   extern const char *Txt_Required_knowledge;
-   extern const char *Txt_Required_materials;
-   extern const char *Txt_URL;
-   extern const char *Txt_Preassigned_QUESTION;
-   extern const char *Txt_No;
-   extern const char *Txt_Yes;
-   extern const char *Txt_Create_project;
-   extern const char *Txt_Save;
-   extern const char *Txt_Project_members;
    struct Project Prj;
    bool ItsANewProject;
-   Prj_RoleInProject_t RoleInProject;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -2043,6 +2025,38 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
       /* Get data of the project from database */
       Prj_GetDataOfProjectByCod (&Prj);
 
+   /***** Put form to edit project *****/
+   Prj_PutFormProject (&Prj,ItsANewProject);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
+   /***** Show current projects, if any *****/
+   Prj_ShowProjectsInCurrentPage ();
+  }
+
+static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects_new_project;
+   extern const char *Hlp_ASSESSMENT_Projects_edit_project;
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_New_project;
+   extern const char *Txt_Edit_project;
+   extern const char *Txt_Project_data;
+   extern const char *Txt_Title;
+   extern const char *Txt_Department;
+   extern const char *Txt_Description;
+   extern const char *Txt_Required_knowledge;
+   extern const char *Txt_Required_materials;
+   extern const char *Txt_URL;
+   extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_No;
+   extern const char *Txt_Yes;
+   extern const char *Txt_Create_project;
+   extern const char *Txt_Save;
+   extern const char *Txt_Project_members;
+   Prj_RoleInProject_t RoleInProject;
+
    /***** Start box and form *****/
    if (ItsANewProject)
      {
@@ -2056,7 +2070,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
       Box_StartBox (NULL,Txt_Edit_project,NULL,
                     Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
       Act_FormStart (ActChgPrj);
-      Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
+      Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;
      }
    Prj_PutParams ();
 
@@ -2077,10 +2091,10 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
-            Prj_MAX_CHARS_PROJECT_TITLE,Prj.Title);
+            Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
 
    /* Project start and end dates */
-   Dat_PutFormStartEndClientLocalDateTimes (Prj.TimeUTC,Dat_FORM_SECONDS_ON);
+   Dat_PutFormStartEndClientLocalDateTimes (Prj->TimeUTC,Dat_FORM_SECONDS_ON);
 
    /* Department */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2090,22 +2104,22 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,
-                                Prj.DptCod,	// Selected department
+                                Prj->DptCod,	// Selected department
                                 false);			// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /* Description of the project */
    Prj_EditOneProjectTxtArea ("Description",Txt_Description,
-                              Prj.Description,12);
+                              Prj->Description,12);
 
    /* Required knowledge to carry out the project */
    Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
-                              Prj.Knowledge,4);
+                              Prj->Knowledge,4);
 
    /* Required materials to carry out the project */
    Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
-                              Prj.Materials,4);
+                              Prj->Materials,4);
 
    /* URL for additional info */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2119,7 +2133,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
 		      "</tr>",
 	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_URL,
-	    Cns_MAX_CHARS_WWW,Prj.URL);
+	    Cns_MAX_CHARS_WWW,Prj->URL);
 
    /* Preassigned? */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2132,12 +2146,12 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
             Txt_Preassigned_QUESTION);
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (Prj.Preassigned == Prj_NOT_PREASSIGNED)
+   if (Prj->Preassigned == Prj_NOT_PREASSIGNED)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
-   if (Prj.Preassigned == Prj_PREASSIGNED)
+   if (Prj->Preassigned == Prj_PREASSIGNED)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
 
@@ -2162,18 +2176,12 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
       for (RoleInProject = Prj_ROLE_STD;
 	   RoleInProject <= Prj_ROLE_EVA;
 	   RoleInProject++)
-	 Prj_ShowOneProjectUsrs (&Prj,Prj_EDIT_ONE_PROJECT,RoleInProject);
+	 Prj_ShowOneProjectUsrs (Prj,Prj_EDIT_ONE_PROJECT,RoleInProject);
       Box_EndBoxTable ();
      }
 
    /***** End box *****/
    Box_EndBox ();
-
-   /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Prj);
-
-   /***** Show current projects, if any *****/
-   Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
@@ -2334,13 +2342,12 @@ void Prj_RecFormProject (void)
 	    /***** Write success message *****/
 	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
 	   }
-
-	 /***** Show projects again *****/
-	 Prj_SeeProjects ();
 	}
       else
-	 // TODO: The form should be filled with partial data, now is always empty
-	 Prj_RequestCreatOrEditPrj (Prj.PrjCod);
+         Prj_PutFormProject (&Prj,ItsANewProject);
+
+      /***** Show projects again *****/
+      Prj_SeeProjects ();
      }
    else
       Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
