@@ -998,6 +998,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove the fields of course record in all courses *****/
    Rec_RemoveFieldsCrsRecordAll (UsrDat->UsrCod);
 
+   /***** Remove user from all his/her projects *****/
+   Prj_RemoveUsrFromProjects (UsrDat->UsrCod);
+
    /***** Remove user from all the attendance events *****/
    Att_RemoveUsrFromAllAttEvents (UsrDat->UsrCod);
 

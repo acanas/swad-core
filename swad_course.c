@@ -2194,6 +2194,9 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove assignments of the course *****/
       Asg_RemoveCrsAssignments (CrsCod);
 
+      /***** Remove projects of the course *****/
+      Prj_RemoveCrsProjects (CrsCod);
+
       /***** Remove attendance events of the course *****/
       Att_RemoveCrsAttEvents (CrsCod);
 

@@ -956,7 +956,7 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
    NumUsrs = Prj_GetUsrsInPrj (PrjCod,RoleInProject,&mysql_res);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable (2);
 
    /***** Write users *****/
    for (NumUsr = 0;
@@ -1025,7 +1025,7 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2415,16 +2415,36 @@ static void Prj_UpdateProject (struct Project *Prj)
   }
 
 /*****************************************************************************/
-/******************** Remove all the projects of a course ********************/
+/******************** Remove all the projects in a course ********************/
 /*****************************************************************************/
 
 void Prj_RemoveCrsProjects (long CrsCod)
   {
-   char Query[512];
+   char Query[256];
+
+   /***** Remove users in projects of the course *****/
+   sprintf (Query,"DELETE FROM prj_usr USING projects,prj_usr"
+                  " WHERE projects.CrsCod=%ld"
+                  " AND projects.PrjCod=prj_usr.PrjCod",
+            CrsCod);
+   DB_QueryDELETE (Query,"can not remove all the projects of a course");
 
    /***** Remove projects *****/
    sprintf (Query,"DELETE FROM projects WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove all the projects of a course");
+  }
+
+/*****************************************************************************/
+/******************* Remove user from all his/her projects *******************/
+/*****************************************************************************/
+
+void Prj_RemoveUsrFromProjects (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Remove user from projects *****/
+   sprintf (Query,"DELETE FROM prj_usr WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE (Query,"can not remove user from projects");
   }
 
 /*****************************************************************************/
