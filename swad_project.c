@@ -2469,20 +2469,6 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
   }
 
 /*****************************************************************************/
-/******************** Get number of projects in a course *********************/
-/*****************************************************************************/
-
-unsigned Prj_GetNumProjectsInCrs (long CrsCod)
-  {
-   char Query[256];
-
-   /***** Get number of projects in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM projects WHERE CrsCod=%ld",
-            CrsCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of projects in course");
-  }
-
-/*****************************************************************************/
 /******************** Get number of courses with projects ********************/
 /*****************************************************************************/
 // Returns the number of courses with projects
