@@ -2375,7 +2375,7 @@ static void Prj_CreateProject (struct Project *Prj)
                   " (%ld,%ld,'%c','%c',FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
-            Prj->PrjCod,
+            Prj->DptCod,
             Prj->Hidden ? 'Y' :
         	          'N',
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
