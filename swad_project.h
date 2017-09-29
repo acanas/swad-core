@@ -82,6 +82,14 @@ typedef enum
   } Prj_Order_t;
 #define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
 
+#define Prj_NUM_WHICH_PROJECTS 2
+typedef enum
+  {
+   Prj_ONLY_MY_PROJECTS,
+   Prj_ALL_PROJECTS,
+  } Prj_WhichProjects_t;
+#define Prj_WHICH_PROJECTS_DEFAULT Prj_ONLY_MY_PROJECTS
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

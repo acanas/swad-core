@@ -462,6 +462,10 @@ struct Globals
       char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
       struct
         {
+         Prj_WhichProjects_t WhichPrjs;	// Show my projects or all projects
+        } Prjs;
+      struct
+        {
          unsigned NumGrps;
          struct GroupTypes GrpTypes;
          struct GroupType GrpTyp;

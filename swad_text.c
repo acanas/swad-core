@@ -31165,6 +31165,49 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	};
 
+const char *Txt_PROJECT_WHICH_PROJECTS[2] =
+   {
+#if   L==1
+	"Nom&eacute;s els meus grups"
+#elif L==2
+	"Nur meine Gruppen"
+#elif L==3
+	"Only my groups"
+#elif L==4
+	"Solo mis grupos"
+#elif L==5
+	"Uniquement mes groupes"
+#elif L==6
+	"Solo mis grupos"	// Okoteve traducción
+#elif L==7
+	"Solo i miei gruppi"
+#elif L==8
+	"Tylko moje grupy"
+#elif L==9
+	"Apenas os meus grupos"
+#endif
+	,
+#if   L==1
+	"Tots els grups"
+#elif L==2
+	"Alle Gruppen"
+#elif L==3
+	"All groups"
+#elif L==4
+	"Todos los grupos"
+#elif L==5
+	"Tous les groupes"
+#elif L==6
+	"Todos los grupos"	// Okoteve traducción
+#elif L==7
+	"Tutti i gruppi"
+#elif L==8
+	"Wszystkie grupy"
+#elif L==9
+	"Todos os grupos"
+#endif
+	};
+
 const char *Txt_Projects =
 #if   L==1
 	"Projectes (treballs fi de grau/m&agrave;ster, tesi&hellip;)";

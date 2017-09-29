@@ -70,6 +70,8 @@ typedef enum
 /*****************************************************************************/
 
 static void Prj_ShowProjectsInCurrentPage (void);
+static void Prj_PutFormToSelectWhichProjecsToShow (void);
+static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) ());
 static void Prj_ShowProjectsHead (bool PrintView);
 static void Prj_ShowTableAllProjectsHead (void);
 static bool Prj_CheckIfICanCreateProjects (void);
@@ -221,6 +223,9 @@ static void Prj_ShowProjectsInCurrentPage (void)
    Box_StartBox ("100%",Txt_Projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
+   /***** Select whether show only my projects or all projects *****/
+   Prj_PutFormToSelectWhichProjecsToShow ();
+
    if (Gbl.Prjs.Num)
      {
       /***** Allocate memory for the project *****/
@@ -266,6 +271,52 @@ static void Prj_ShowProjectsInCurrentPage (void)
 
    /***** Free list of projects *****/
    Prj_FreeListProjects ();
+  }
+
+/*****************************************************************************/
+/***************** Put form to select which groups to show *******************/
+/*****************************************************************************/
+
+static void Prj_PutFormToSelectWhichProjecsToShow (void)
+  {
+   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
+   Prj_ShowFormToSelWhichPrjs (ActSeePrj,Prj_PutParams);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*** Show form to choice whether to show only my projects or all projects ****/
+/*****************************************************************************/
+
+static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) ())
+  {
+   extern const char *Txt_PROJECT_WHICH_PROJECTS[2];
+   Prj_WhichProjects_t WhichPrjs;
+
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   for (WhichPrjs = Prj_ONLY_MY_PROJECTS;
+	WhichPrjs <= Prj_ALL_PROJECTS;
+	WhichPrjs++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       WhichPrjs == Gbl.CurrentCrs.Prjs.WhichPrjs ? "PREF_ON" :
+							    "PREF_OFF");
+      Act_FormStart (Action);
+      Par_PutHiddenParamUnsigned ("WhichPrjs",(unsigned) WhichPrjs);
+      if (FuncParams)	// Extra parameters depending on the action
+	 FuncParams ();
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       WhichPrjs == Prj_ONLY_MY_PROJECTS ? "myhierarchy64x64.png" :
+		                                   "hierarchy64x64.png",
+	       Txt_PROJECT_WHICH_PROJECTS[WhichPrjs],
+	       Txt_PROJECT_WHICH_PROJECTS[WhichPrjs]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

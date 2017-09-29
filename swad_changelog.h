@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.10.6 (2017-09-25)"
+#define Log_PLATFORM_VERSION	"SWAD 17.10.7 (2017-09-29)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.10.7:  Sep 29, 2017	Icons to select which projects to show: only my projects or all projects. (231456 lines)
         Version 17.10.6:  Sep 25, 2017	Fixed bug when receiving projects. (231357 lines)
         Version 17.10.5:  Sep 25, 2017	Removed unused code in projects. (231354 lines)
         Version 17.10.4:  Sep 25, 2017	Changes in form behaviour when editing a project. (231365 lines)
@@ -517,7 +518,7 @@ CREATE TABLE IF NOT EXISTS gam_users (GamCod INT NOT NULL,UsrCod INT NOT NULL,UN
         Version 16.235.1: Jun 04, 2017	Limited length of connected users at right column. (221027 lines)
         Version 16.235:   Jun 04, 2017	Fixed bug in notifications about enrolment as a non-editing teacher.
 					Fixed bugs and code refactoring related to users enrolment. (221018 lines)
-					1 change necessary in database:
+					2 changes necessary in database:
 UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x100) << 12)) & 0x7FFFFFFF;
 UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x100) << 12)) & 0x7FFFFFFF;
 
