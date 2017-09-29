@@ -4802,7 +4802,7 @@ void Grp_PutParamAllGroups (void)
   }
 
 /*****************************************************************************/
-/****** Parameter to show only my groups or all groups or in timetable *******/
+/************* Parameter to show only my groups or all groups ****************/
 /*****************************************************************************/
 
 void Grp_PutParamWhichGrps (void)
@@ -4868,7 +4868,7 @@ void Grp_GetParamWhichGrps (void)
 
    if (!AlreadyGot)
      {
-      /***** Get which grous (my groups or all groups) *****/
+      /***** Get which groups (my groups or all groups) *****/
       /* Set default */
       switch (Gbl.Action.Act)
 	{

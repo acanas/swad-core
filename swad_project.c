@@ -70,8 +70,12 @@ typedef enum
 /*****************************************************************************/
 
 static void Prj_ShowProjectsInCurrentPage (void);
+
 static void Prj_PutFormToSelectWhichProjecsToShow (void);
 static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) ());
+static void Prj_PutParamWhichPrjs (void);
+static void Prj_GetParamWhichPrjs (void);
+
 static void Prj_ShowProjectsHead (bool PrintView);
 static void Prj_ShowTableAllProjectsHead (void);
 static bool Prj_CheckIfICanCreateProjects (void);
@@ -141,6 +145,7 @@ void Prj_SeeProjects (void)
   {
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Show all the projects *****/
@@ -159,6 +164,7 @@ void Prj_ShowTableAllProjects (void)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
 
    /***** Get list of projects *****/
    Prj_GetListProjects ();
@@ -320,6 +326,38 @@ static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) (
   }
 
 /*****************************************************************************/
+/************* Parameter to show only my projects or all projects ************/
+/*****************************************************************************/
+
+static void Prj_PutParamWhichPrjs (void)
+  {
+   Prj_GetParamWhichPrjs ();
+
+   Par_PutHiddenParamUnsigned ("WhichPrjs",(unsigned) Gbl.CurrentCrs.Prjs.WhichPrjs);
+  }
+
+/*****************************************************************************/
+/*********** Get whether to show only my projects or all projects ************/
+/*****************************************************************************/
+
+static void Prj_GetParamWhichPrjs (void)
+  {
+   static bool AlreadyGot = false;
+
+   if (!AlreadyGot)
+     {
+      /***** Get which projects (my projects or all projects) *****/
+      Gbl.CurrentCrs.Prjs.WhichPrjs = (Prj_WhichProjects_t)
+	                              Par_GetParToUnsignedLong ("WhichPrjs",
+	                                                        0,
+	                                                        Prj_NUM_WHICH_PROJECTS - 1,
+	                                                        (unsigned long) Prj_WHICH_PROJECTS_DEFAULT);
+
+      AlreadyGot = true;
+     }
+  }
+
+/*****************************************************************************/
 /******************* Write header with fields of a project *******************/
 /*****************************************************************************/
 
@@ -340,6 +378,7 @@ static void Prj_ShowProjectsHead (bool PrintView)
       if (!PrintView)
 	{
 	 Act_FormStart (ActSeePrj);
+	 Prj_PutParamWhichPrjs ();
 	 Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
@@ -1322,6 +1361,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
@@ -1404,6 +1444,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
@@ -1534,6 +1575,7 @@ static void Prj_PutParams (void)
    if (Gbl.Prjs.PrjCodToEdit > 0)
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCodToEdit);
    Prj_PutHiddenParamPrjOrder ();
+   Prj_PutParamWhichPrjs ();
    Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
@@ -1579,31 +1621,57 @@ void Prj_GetListProjects (void)
 	 switch (Gbl.Prjs.SelectedOrder)
 	   {
 	    case Prj_ORDER_START_TIME:
-	       sprintf (OrderBySubQuery,"StartTime DESC,"
-		                        "EndTime DESC,"
-		                        "Title");
+	       if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+		  sprintf (OrderBySubQuery,"projects.StartTime DESC,"
+					   "projects.EndTime DESC,"
+					   "projects.Title");
+	       else
+		  sprintf (OrderBySubQuery,"StartTime DESC,"
+					   "EndTime DESC,"
+					   "Title");
 	       break;
 	    case Prj_ORDER_END_TIME:
-	       sprintf (OrderBySubQuery,"EndTime DESC,"
-		                        "StartTime DESC,"
-		                        "Title");
+	       if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+		  sprintf (OrderBySubQuery,"projects.EndTime DESC,"
+					   "projects.StartTime DESC,"
+					   "projects.Title");
+	       else
+		  sprintf (OrderBySubQuery,"EndTime DESC,"
+					   "StartTime DESC,"
+					   "Title");
 	       break;
 	    case Prj_ORDER_TITLE:
-	       sprintf (OrderBySubQuery,"Title,"
-		                        "StartTime DESC,"
-		                        "EndTime DESC");
+	       if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+		  sprintf (OrderBySubQuery,"projects.Title,"
+					   "projects.StartTime DESC,"
+					   "projects.EndTime DESC");
+	       else
+		  sprintf (OrderBySubQuery,"Title,"
+					   "StartTime DESC,"
+					   "EndTime DESC");
 	       break;
             case Prj_ORDER_DEPARTMENT:	// Not applicable
 	       break;
 	   }
 
 	 /* Query */
-	 sprintf (Query,"SELECT PrjCod"
-	                " FROM projects"
-	                " WHERE CrsCod=%ld%s"
-	                " ORDER BY %s",
-	          Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-	          OrderBySubQuery);
+	 if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+	    sprintf (Query,"SELECT projects.PrjCod"
+			   " FROM projects,prj_usr"
+			   " WHERE projects.CrsCod=%ld%s"
+			   " AND projects.PrjCod=prj_usr.PrjCod"
+			   " AND prj_usr.UsrCod=%ld"
+			   " ORDER BY %s",
+		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     OrderBySubQuery);
+	 else	// Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ALL_PROJECTS
+	    sprintf (Query,"SELECT PrjCod"
+			   " FROM projects"
+			   " WHERE CrsCod=%ld%s"
+			   " ORDER BY %s",
+		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+		     OrderBySubQuery);
          break;
       case Prj_ORDER_DEPARTMENT:
 	 /* Hidden subquery */
@@ -1625,13 +1693,25 @@ void Prj_GetListProjects (void)
                                   "projects.Title");
 
 	 /* Query */
-	 sprintf (Query,"SELECT projects.PrjCod"
-                        " FROM projects LEFT JOIN departments"
-                        " ON projects.DptCod=departments.DptCod"
-                        " WHERE projects.CrsCod=%ld%s"
-                        " ORDER BY %s",
-	          Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-	          OrderBySubQuery);
+	 if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+	    sprintf (Query,"SELECT projects.PrjCod"
+			   " FROM prj_usr,projects LEFT JOIN departments"
+			   " ON projects.DptCod=departments.DptCod"
+			   " WHERE projects.CrsCod=%ld%s"
+			   " AND projects.PrjCod=prj_usr.PrjCod"
+			   " AND prj_usr.UsrCod=%ld"
+			   " ORDER BY %s",
+		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     OrderBySubQuery);
+	 else	// Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ALL_PROJECTS
+	    sprintf (Query,"SELECT projects.PrjCod"
+			   " FROM projects LEFT JOIN departments"
+			   " ON projects.DptCod=departments.DptCod"
+			   " WHERE projects.CrsCod=%ld%s"
+			   " ORDER BY %s",
+		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+		     OrderBySubQuery);
          break;
      }
 
@@ -1860,6 +1940,7 @@ void Prj_ReqRemProject (void)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
@@ -1902,6 +1983,7 @@ void Prj_RemoveProject (void)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
@@ -2057,6 +2139,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
 
    /***** Get parameters *****/
    Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
 
    /***** Get the code of the project *****/

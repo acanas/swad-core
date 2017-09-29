@@ -31168,43 +31168,43 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 const char *Txt_PROJECT_WHICH_PROJECTS[2] =
    {
 #if   L==1
-	"Nom&eacute;s els meus grups"
+	"Nom&eacute;s els meus projectes"
 #elif L==2
-	"Nur meine Gruppen"
+	"Nur meine Projekte"
 #elif L==3
-	"Only my groups"
+	"Only my projects"
 #elif L==4
-	"Solo mis grupos"
+	"Solo mis proyectos"
 #elif L==5
-	"Uniquement mes groupes"
+	"Uniquement mes projets"
 #elif L==6
-	"Solo mis grupos"	// Okoteve traducción
+	"Solo mis proyectos"	// Okoteve traducción
 #elif L==7
-	"Solo i miei gruppi"
+	"Solo i miei progetti"
 #elif L==8
-	"Tylko moje grupy"
+	"Tylko moje projekty"
 #elif L==9
-	"Apenas os meus grupos"
+	"Apenas os meus projetos"
 #endif
 	,
 #if   L==1
-	"Tots els grups"
+	"Tots els projectes"
 #elif L==2
-	"Alle Gruppen"
+	"Alle Projekte"
 #elif L==3
-	"All groups"
+	"All projects"
 #elif L==4
-	"Todos los grupos"
+	"Todos los proyectos"
 #elif L==5
-	"Tous les groupes"
+	"Tous les projets"
 #elif L==6
-	"Todos los grupos"	// Okoteve traducción
+	"Todos los proyectos"	// Okoteve traducción
 #elif L==7
-	"Tutti i gruppi"
+	"Tutti i progetti"
 #elif L==8
-	"Wszystkie grupy"
+	"Wszystkie projekty"
 #elif L==9
-	"Todos os grupos"
+	"Todos os projetos"
 #endif
 	};
 
