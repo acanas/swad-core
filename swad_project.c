@@ -1599,63 +1599,51 @@ void Prj_GetListProjects (void)
       Prj_FreeListProjects ();
 
    /***** Get list of projects from database *****/
+   /* Hidden subquery */
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 HiddenSubQuery[0] = '\0';
+	 break;
+      default:
+	 sprintf (HiddenSubQuery," AND projects.Hidden='N'");
+	 break;
+     }
+
+   /* Order subquery */
    switch (Gbl.Prjs.SelectedOrder)
      {
       case Prj_ORDER_START_TIME:
+	 sprintf (OrderBySubQuery,"projects.StartTime DESC,"
+				  "projects.EndTime DESC,"
+				  "projects.Title");
+	 break;
       case Prj_ORDER_END_TIME:
+	 sprintf (OrderBySubQuery,"projects.EndTime DESC,"
+				  "projects.StartTime DESC,"
+				  "projects.Title");
+	 break;
       case Prj_ORDER_TITLE:
-	 /* Hidden subquery */
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       HiddenSubQuery[0] = '\0';
-	       break;
-	    default:
-	       sprintf (HiddenSubQuery," AND Hidden='N'");
-	       break;
-	   }
+	 sprintf (OrderBySubQuery,"projects.Title,"
+				  "projects.StartTime DESC,"
+				  "projects.EndTime DESC");
+	 break;
+      case Prj_ORDER_DEPARTMENT:
+	 sprintf (OrderBySubQuery,"departments.FullName,"
+				  "projects.StartTime DESC,"
+				  "projects.EndTime DESC,"
+				  "projects.Title");
+	 break;
+     }
 
-	 /* Order subquery */
-	 switch (Gbl.Prjs.SelectedOrder)
-	   {
-	    case Prj_ORDER_START_TIME:
-	       if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
-		  sprintf (OrderBySubQuery,"projects.StartTime DESC,"
-					   "projects.EndTime DESC,"
-					   "projects.Title");
-	       else
-		  sprintf (OrderBySubQuery,"StartTime DESC,"
-					   "EndTime DESC,"
-					   "Title");
-	       break;
-	    case Prj_ORDER_END_TIME:
-	       if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
-		  sprintf (OrderBySubQuery,"projects.EndTime DESC,"
-					   "projects.StartTime DESC,"
-					   "projects.Title");
-	       else
-		  sprintf (OrderBySubQuery,"EndTime DESC,"
-					   "StartTime DESC,"
-					   "Title");
-	       break;
-	    case Prj_ORDER_TITLE:
-	       if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
-		  sprintf (OrderBySubQuery,"projects.Title,"
-					   "projects.StartTime DESC,"
-					   "projects.EndTime DESC");
-	       else
-		  sprintf (OrderBySubQuery,"Title,"
-					   "StartTime DESC,"
-					   "EndTime DESC");
-	       break;
-            case Prj_ORDER_DEPARTMENT:	// Not applicable
-	       break;
-	   }
-
-	 /* Query */
-	 if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+   /* Query */
+   if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+      switch (Gbl.Prjs.SelectedOrder)
+	{
+	 case Prj_ORDER_START_TIME:
+	 case Prj_ORDER_END_TIME:
+	 case Prj_ORDER_TITLE:
 	    sprintf (Query,"SELECT projects.PrjCod"
 			   " FROM projects,prj_usr"
 			   " WHERE projects.CrsCod=%ld%s"
@@ -1665,35 +1653,8 @@ void Prj_GetListProjects (void)
 		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
 		     OrderBySubQuery);
-	 else	// Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ALL_PROJECTS
-	    sprintf (Query,"SELECT PrjCod"
-			   " FROM projects"
-			   " WHERE CrsCod=%ld%s"
-			   " ORDER BY %s",
-		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-		     OrderBySubQuery);
-         break;
-      case Prj_ORDER_DEPARTMENT:
-	 /* Hidden subquery */
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       HiddenSubQuery[0] = '\0';
-	       break;
-	    default:
-	       sprintf (HiddenSubQuery," AND projects.Hidden='N'");
-	       break;
-	   }
-
-	 /* Order subquery */
-         sprintf (OrderBySubQuery,"departments.FullName,"
-                                  "projects.StartTime DESC,"
-                                  "projects.EndTime DESC,"
-                                  "projects.Title");
-
-	 /* Query */
-	 if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
+	    break;
+	 case Prj_ORDER_DEPARTMENT:
 	    sprintf (Query,"SELECT projects.PrjCod"
 			   " FROM prj_usr,projects LEFT JOIN departments"
 			   " ON projects.DptCod=departments.DptCod"
@@ -1704,7 +1665,22 @@ void Prj_GetListProjects (void)
 		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
 		     OrderBySubQuery);
-	 else	// Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ALL_PROJECTS
+	    break;
+	}
+   else	// Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ALL_PROJECTS
+      switch (Gbl.Prjs.SelectedOrder)
+	{
+	 case Prj_ORDER_START_TIME:
+	 case Prj_ORDER_END_TIME:
+	 case Prj_ORDER_TITLE:
+	    sprintf (Query,"SELECT projects.PrjCod"
+			   " FROM projects"
+			   " WHERE projects.CrsCod=%ld%s"
+			   " ORDER BY %s",
+		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+		     OrderBySubQuery);
+	    break;
+	 case Prj_ORDER_DEPARTMENT:
 	    sprintf (Query,"SELECT projects.PrjCod"
 			   " FROM projects LEFT JOIN departments"
 			   " ON projects.DptCod=departments.DptCod"
@@ -1712,8 +1688,8 @@ void Prj_GetListProjects (void)
 			   " ORDER BY %s",
 		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
 		     OrderBySubQuery);
-         break;
-     }
+	    break;
+	}
 
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get projects");
 

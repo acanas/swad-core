@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.11 (2017-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 17.11.1 (2017-09-29)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.11.1:  Sep 29, 2017	Code refactoring in projects. (231510 lines)
         Version 17.11:    Sep 29, 2017	Select which projects to show: only my projects or all projects. (231531 lines)
         Version 17.10.7:  Sep 29, 2017	Icons to select which projects to show: only my projects or all projects. (231456 lines)
         Version 17.10.6:  Sep 25, 2017	Fixed bug when receiving projects. (231357 lines)
