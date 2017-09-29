@@ -2184,7 +2184,19 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
      }
    Prj_PutParams ();
 
-   /***** 1. Project data *****/
+   /***** 1. Project members *****/
+   if (!ItsANewProject)	// Existing project
+     {
+      Box_StartBoxTable (NULL,Txt_Project_members,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
+      for (RoleInProject = Prj_ROLE_STD;
+	   RoleInProject <= Prj_ROLE_EVA;
+	   RoleInProject++)
+	 Prj_ShowOneProjectUsrs (Prj,Prj_EDIT_ONE_PROJECT,RoleInProject);
+      Box_EndBoxTable ();
+     }
+
+   /***** 2. Project data *****/
    /* Start box and table */
    Box_StartBoxTable (NULL,Txt_Project_data,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
@@ -2277,18 +2289,6 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /* End form */
    Act_FormEnd ();
-
-   /***** Project members *****/
-   if (!ItsANewProject)	// Existing project
-     {
-      Box_StartBoxTable (NULL,Txt_Project_members,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      for (RoleInProject = Prj_ROLE_STD;
-	   RoleInProject <= Prj_ROLE_EVA;
-	   RoleInProject++)
-	 Prj_ShowOneProjectUsrs (Prj,Prj_EDIT_ONE_PROJECT,RoleInProject);
-      Box_EndBoxTable ();
-     }
 
    /***** End box *****/
    Box_EndBox ();
