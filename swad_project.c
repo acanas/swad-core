@@ -61,6 +61,14 @@ typedef enum
 
 #define Prj_INTERVAL_DEFAULT ((time_t) 365 * (time_t) 24 * (time_t) 60 * (time_t) 60)	// 1 year
 
+const Prj_RoleInProject_t Prj_RolesToShow[] =
+  {
+   Prj_ROLE_TUT,	// Tutor
+   Prj_ROLE_STD,	// Student
+   Prj_ROLE_EVA,	// Evaluator
+  };
+const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) / sizeof (Prj_RolesToShow[0]);
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -96,15 +104,14 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
 static void Prj_ShowOneProjectURL (const struct Project *Prj,
                                    Prj_ProjectView_t ProjectView);
 static void Prj_ShowTableAllProjectsURL (const struct Project *Prj);
-static void Prj_ShowOneProjectUsrs (const struct Project *Prj,
-                                    Prj_ProjectView_t ProjectView,
-                                    Prj_RoleInProject_t RoleInProject);
-static void Prj_ShowTableAllProjectsUsrs (const struct Project *Prj,
-                                          Prj_RoleInProject_t RoleInProject);
-static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
-                                         Prj_RoleInProject_t RoleInProject);
-static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
-                                               Prj_RoleInProject_t RoleInProject);
+static void Prj_ShowOneProjectMembers (struct Project *Prj,
+                                       Prj_ProjectView_t ProjectView);
+static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
+                                                Prj_ProjectView_t ProjectView,
+                                                Prj_RoleInProject_t RoleInProject);
+static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
+                                                      Prj_RoleInProject_t RoleInProject);
+
 static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
                                   MYSQL_RES **mysql_res);
 
@@ -408,7 +415,7 @@ static void Prj_ShowTableAllProjectsHead (void)
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    Prj_Order_t Order;
-   Prj_RoleInProject_t RoleInProject;
+   unsigned NumRoleToShow;
 
    fprintf (Gbl.F.Out,"<tr>");
    for (Order = (Prj_Order_t) 0;
@@ -428,11 +435,11 @@ static void Prj_ShowTableAllProjectsHead (void)
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
             Txt_Preassigned_QUESTION);
 
-   for (RoleInProject = Prj_ROLE_STD;
-	RoleInProject <= Prj_ROLE_EVA;
-	RoleInProject++)
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-	       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	       Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
 
    fprintf (Gbl.F.Out,"</tr>");
   }
@@ -570,7 +577,6 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_Preassigned_QUESTION;
-   Prj_RoleInProject_t RoleInProject;
    static unsigned UniqueId = 0;
 
    /***** Get data of this project *****/
@@ -579,7 +585,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"9\" class=\"CONTEXT_COL");
+	              "<td class=\"CONTEXT_COL");
    if (ProjectView == Prj_LIST_PROJECTS)
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
@@ -591,7 +597,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
 
    /* Start date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_BOTTOM",
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -610,7 +616,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_BOTTOM",
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -621,7 +627,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x7);"
+                      "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
             UniqueId,Prj->TimeUTC[Dat_END_TIME],
@@ -659,7 +665,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
 
    /* Preassigned? */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+	              "<td colspan=\"3\" class=\"RIGHT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
@@ -681,10 +687,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
         	                                    Txt_No);
 
    /* Project members */
-   for (RoleInProject = Prj_ROLE_STD;
-	RoleInProject <= Prj_ROLE_EVA;
-	RoleInProject++)
-      Prj_ShowOneProjectUsrs (Prj,ProjectView,RoleInProject);
+   Prj_ShowOneProjectMembers (Prj,ProjectView);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -702,7 +705,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_Preassigned_QUESTION;
-   Prj_RoleInProject_t RoleInProject;
+   unsigned NumRoleToShow;
    static unsigned UniqueId = 0;
 
    /***** Get data of this project *****/
@@ -733,7 +736,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"LEFT_TOP COLOR%u %s\">"
 	              "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x7);"
+                      "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -781,10 +784,10 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
         	                                    Txt_No);
 
    /* Project members */
-   for (RoleInProject = Prj_ROLE_STD;
-	RoleInProject <= Prj_ROLE_EVA;
-	RoleInProject++)
-      Prj_ShowTableAllProjectsUsrs (Prj,RoleInProject);
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
+      Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -862,7 +865,7 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 
    /***** Write row with label and text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"RIGHT_TOP");
+	              "<td colspan=\"3\" class=\"RIGHT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
@@ -914,7 +917,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    PutLink = (ProjectView == Prj_LIST_PROJECTS && Prj->URL[0]);
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"RIGHT_TOP");
+		      "<td colspan=\"3\" class=\"RIGHT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
@@ -955,69 +958,30 @@ static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
   }
 
 /*****************************************************************************/
+/************** Show projects members when showing one project ***************/
+/*****************************************************************************/
+
+static void Prj_ShowOneProjectMembers (struct Project *Prj,
+                                       Prj_ProjectView_t ProjectView)
+  {
+   unsigned NumRoleToShow;
+
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
+      Prj_ShowOneProjectMembersWithARole (Prj,ProjectView,
+                                          Prj_RolesToShow[NumRoleToShow]);
+  }
+
+/*****************************************************************************/
 /************************* Show users row in a project ***********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectUsrs (const struct Project *Prj,
-                                    Prj_ProjectView_t ProjectView,
-                                    Prj_RoleInProject_t RoleInProject)
+static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
+                                                Prj_ProjectView_t ProjectView,
+                                                Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
-
-   /***** Row with label and listing of users *****/
-   fprintf (Gbl.F.Out,"<tr>");
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP COLOR%u %s\">%s:</td>"
-                            "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
-	          Gbl.RowEvenOdd,
-                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	                "ASG_LABEL",
-                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
-	          Gbl.RowEvenOdd,
-        	  Prj->Hidden ? "DAT_LIGHT" :
-        	                "DAT");
-         break;
-      case Prj_PRINT_ONE_PROJECT:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP %s\">%s:</td>"
-                            "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
-                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	                "ASG_LABEL",
-                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
-        	  Prj->Hidden ? "DAT_LIGHT" :
-        	                "DAT");
-         break;
-      case Prj_EDIT_ONE_PROJECT:
-         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
-                            "<td colspan=\"2\" class=\"LEFT_TOP DAT\">",
-                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-         break;
-     }
-   Prj_ShowOneProjectWriteUsrs (Prj->PrjCod,ProjectView,RoleInProject);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-  }
-
-static void Prj_ShowTableAllProjectsUsrs (const struct Project *Prj,
-                                          Prj_RoleInProject_t RoleInProject)
-  {
-   /***** Listing of users *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">",
-	    Gbl.RowEvenOdd,
-	    Prj->Hidden ? "DAT_LIGHT" :
-			  "DAT");
-   Prj_ShowTableAllProjectsWriteUsrs (Prj->PrjCod,RoleInProject);
-   fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/*************** Write list of users with a role in a project ****************/
-/*****************************************************************************/
-
-static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectView,
-                                         Prj_RoleInProject_t RoleInProject)
-  {
    extern const char *Txt_Remove;
    extern const char *Txt_Add_USER;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
@@ -1043,9 +1007,40 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
      };
 
    /***** Get users in project from database *****/
-   NumUsrs = Prj_GetUsrsInPrj (PrjCod,RoleInProject,&mysql_res);
+   NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
 
-   /***** Start table *****/
+   /***** Start row with label and listing of users *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+         fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u %s\">%s:</td>"
+                            "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
+	          Gbl.RowEvenOdd,
+                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	                "ASG_LABEL",
+                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+	          Gbl.RowEvenOdd,
+        	  Prj->Hidden ? "DAT_LIGHT" :
+        	                "DAT");
+         break;
+      case Prj_PRINT_ONE_PROJECT:
+         fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">%s:</td>"
+                            "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
+                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	                "ASG_LABEL",
+                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+        	  Prj->Hidden ? "DAT_LIGHT" :
+        	                "DAT");
+         break;
+      case Prj_EDIT_ONE_PROJECT:
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
+                            "<td colspan=\"2\" class=\"LEFT_TOP DAT\">",
+                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+         break;
+     }
+
+   /***** Start table with all members with this role *****/
    Tbl_StartTable (2);
 
    /***** Write users *****/
@@ -1104,7 +1099,7 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-      Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used to pass project code as a parameter
+      Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;	// Used to pass project code as a parameter
       sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
       Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
 			     "plus64x64.png",
@@ -1119,15 +1114,19 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
                          "</tr>");
      }
 
-   /***** End table *****/
+   /***** End table with all members with this role *****/
    Tbl_EndTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** End row with label and listing of users *****/
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
   }
 
-static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
-                                               Prj_RoleInProject_t RoleInProject)
+static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
+                                                      Prj_RoleInProject_t RoleInProject)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1135,13 +1134,19 @@ static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
    unsigned NumUsrs;
 
    /***** Get users in project from database *****/
-   NumUsrs = Prj_GetUsrsInPrj (PrjCod,RoleInProject,&mysql_res);
+   NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
+
+   /***** Start column with list of all members with this role *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">",
+	    Gbl.RowEvenOdd,
+	    Prj->Hidden ? "DAT_LIGHT" :
+			  "DAT");
 
    if (NumUsrs)
      {
+      /***** Write users *****/
       fprintf (Gbl.F.Out,"<ul>");
 
-      /***** Write users *****/
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;
 	   NumUsr++)
@@ -1176,6 +1181,9 @@ static void Prj_ShowTableAllProjectsWriteUsrs (long PrjCod,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** End column with list of all members with this role *****/
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -2170,7 +2178,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
    extern const char *Txt_Members;
-   Prj_RoleInProject_t RoleInProject;
+   unsigned NumRoleToShow;
 
    /***** Start box and form *****/
    if (ItsANewProject)
@@ -2197,10 +2205,11 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
      {
       Box_StartBoxTable (NULL,Txt_Members,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      for (RoleInProject = Prj_ROLE_STD;
-	   RoleInProject <= Prj_ROLE_EVA;
-	   RoleInProject++)
-	 Prj_ShowOneProjectUsrs (Prj,Prj_EDIT_ONE_PROJECT,RoleInProject);
+      for (NumRoleToShow = 0;
+	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	   NumRoleToShow++)
+	 Prj_ShowOneProjectMembersWithARole (Prj,Prj_EDIT_ONE_PROJECT,
+	                                     Prj_RolesToShow[NumRoleToShow]);
       Box_EndBoxTable ();
      }
 

@@ -1824,7 +1824,10 @@ void Svy_RequestCreatOrEditSvy (void)
       Box_StartBoxTable (NULL,Txt_New_survey,NULL,
                          Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,Txt_Edit_survey,NULL,
+      Box_StartBoxTable (NULL,
+                         Svy.Title[0] ? Svy.Title :
+                	                Txt_Edit_survey,
+                         NULL,
                          Hlp_ASSESSMENT_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
 
    /***** Scope of the survey *****/

@@ -252,17 +252,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.11.4 (2017-09-30)"
+#define Log_PLATFORM_VERSION	"SWAD 17.11.5 (2017-10-01)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.11.4:  Sep 29, 2017	Changes in edition of a project. (231521 lines)
-        Version 17.11.3:  Sep 29, 2017	Changes in layout of projects. (231517 lines)
-        Version 17.11.2:  Sep 29, 2017	Changes in layout of projects. (231511 lines)
-        Version 17.11.1:  Sep 29, 2017	Code refactoring in projects. (231510 lines)
+        Version 17.11.5:  Oct 01, 2017	Changes in order of roles in projects.
+					Changes in edition of assignments, surveys and attendance events. (231536 lines)
+        Version 17.11.4:  Sep 30, 2017	Changes in edition of a project. (231521 lines)
+        Version 17.11.3:  Sep 30, 2017	Changes in layout of projects. (231517 lines)
+        Version 17.11.2:  Sep 30, 2017	Changes in layout of projects. (231511 lines)
+        Version 17.11.1:  Sep 30, 2017	Code refactoring in projects. (231510 lines)
         Version 17.11:    Sep 29, 2017	Select which projects to show: only my projects or all projects. (231531 lines)
         Version 17.10.7:  Sep 29, 2017	Icons to select which projects to show: only my projects or all projects. (231456 lines)
         Version 17.10.6:  Sep 25, 2017	Fixed bug when receiving projects. (231357 lines)

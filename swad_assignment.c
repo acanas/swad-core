@@ -1176,8 +1176,12 @@ void Asg_RequestCreatOrEditAsg (void)
       Box_StartBoxTable (NULL,Txt_New_assignment,NULL,
 			 Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,Txt_Edit_assignment,NULL,
+      Box_StartBoxTable (NULL,
+                         Asg.Title[0] ? Asg.Title :
+                	                Txt_Edit_assignment,
+                         NULL,
 			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
+
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"

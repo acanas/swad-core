@@ -1091,7 +1091,10 @@ void Att_RequestCreatOrEditAttEvent (void)
       Box_StartBoxTable (NULL,Txt_New_event,NULL,
 			 Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,Txt_Edit_event,NULL,
+      Box_StartBoxTable (NULL,
+                         Att.Title[0] ? Att.Title :
+                	                Txt_Edit_event,
+                	 NULL,
 			 Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
 
    /***** Attendance event title *****/
