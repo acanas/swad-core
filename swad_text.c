@@ -7618,6 +7618,27 @@ const char *Txt_Current_password =
 	"Senha atual";
 #endif
 
+const char *Txt_Data =	// Project data
+#if   L==1
+	"Dades";
+#elif L==2
+	"Daten";
+#elif L==3
+	"Data";
+#elif L==4
+	"Datos";
+#elif L==5
+	"Donn&eacute;es";
+#elif L==6
+	"Datos";	// Okoteve traducción
+#elif L==7
+	"Dati";
+#elif L==8
+	"Dane";
+#elif L==9
+	"Dados";
+#endif
+
 const char *Txt_DATA_PROTECTION_CLAUSE =
 #if   L==1
 	"Pol&iacute;tica de protecci&oacute;n de datos";	// Necessita traduccio
@@ -18523,6 +18544,27 @@ const char *Txt_maximum =
 	"maksimum";
 #elif L==9
 	"m&aacute;ximo";
+#endif
+
+const char *Txt_Members =	// Project members
+#if   L==1
+	"Membres";
+#elif L==2
+	"Mitarbeiter";
+#elif L==3
+	"Members";
+#elif L==4
+	"Miembros";
+#elif L==5
+	"Membres";
+#elif L==6
+	"Miembros";	// Okoteve traducción
+#elif L==7
+	"Membri";
+#elif L==8
+	"Cz&lstrok;onkowie";
+#elif L==9
+	"Membros";
 #endif
 
 const char *Txt_Menu =
@@ -30720,27 +30762,6 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #endif
 
-const char *Txt_Project_data =
-#if   L==1
-	"Dades del projecte";
-#elif L==2
-	"Projektdaten";
-#elif L==3
-	"Project data";
-#elif L==4
-	"Datos del proyecto";
-#elif L==5
-	"Donn&eacute;es du projet";
-#elif L==6
-	"Datos del proyecto";	// Okoteve traducción
-#elif L==7
-	"Dati del progetto";
-#elif L==8
-	"Dane projektu";
-#elif L==9
-	"Dados do projeto";
-#endif
-
 const char *Txt_Project_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El projecte <strong>%s</strong> ara est&agrave; ocult.";
@@ -30781,27 +30802,6 @@ const char *Txt_Project_X_is_now_visible =	// Warning: it is very important to i
 	"Projekt <strong>%s</strong> jest teraz widoczne.";
 #elif L==9
 	"O projeto <strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-
-const char *Txt_Project_members =
-#if   L==1
-	"Membres del projecte";
-#elif L==2
-	"Projektmitarbeiter";
-#elif L==3
-	"Project members";
-#elif L==4
-	"Miembros del proyecto";
-#elif L==5
-	"Membres du projet";
-#elif L==6
-	"Miembros del proyecto";	// Okoteve traducción
-#elif L==7
-	"Membri del progetto";
-#elif L==8
-	"Cz&lstrok;onkowie projektu";
-#elif L==9
-	"Membros do projeto";
 #endif
 
 const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
@@ -30850,23 +30850,23 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 	 ,
 	 // Prj_ORDER_TITLE
 #if   L==1
-	"Projecte"
+	"T&iacute;tol"
 #elif L==2
-	"Projekt"
+	"Titel"
 #elif L==3
-	"Project"
+	"Title"
 #elif L==4
-	"Proyecto"
+	"T&iacute;tulo"
 #elif L==5
-	"Projet"
+	"Titre"
 #elif L==6
-	"Proyecto"	// Okoteve traducción
+	"Moak&atilde;ha"
 #elif L==7
-	"Progetto"
+	"Titolo"
 #elif L==8
-	"Projekt"
+	"Tytu&lstrok;"
 #elif L==9
-	"Projeto"
+	"T&iacute;tulo"
 #endif
 	 ,
 	 // Prj_ORDER_DEPARTMENT

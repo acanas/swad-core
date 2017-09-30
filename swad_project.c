@@ -1103,15 +1103,20 @@ static void Prj_ShowOneProjectWriteUsrs (long PrjCod,Prj_ProjectView_t ProjectVi
    if (ProjectView == Prj_EDIT_ONE_PROJECT)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"LEFT_MIDDLE\">");
+			 "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
       Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used to pass project code as a parameter
       sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
       Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
 			     "plus64x64.png",
-			     Gbl.Title,Gbl.Title,
+			     Gbl.Title,NULL,
 			     NULL);
       fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+	                 "<td style=\"width:30px;\">"	// Column for photo
+	                 "</td>");
+      if (RoleInProject == Prj_ROLE_STD)
+	 fprintf (Gbl.F.Out,"<td></td>");		// Column for user's IDs
+      fprintf (Gbl.F.Out,"<td></td>"			// Column for name
+                         "</tr>");
      }
 
    /***** End table *****/
@@ -2152,7 +2157,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
-   extern const char *Txt_Project_data;
+   extern const char *Txt_Data;
    extern const char *Txt_Title;
    extern const char *Txt_Department;
    extern const char *Txt_Description;
@@ -2164,7 +2169,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Yes;
    extern const char *Txt_Create_project;
    extern const char *Txt_Save;
-   extern const char *Txt_Project_members;
+   extern const char *Txt_Members;
    Prj_RoleInProject_t RoleInProject;
 
    /***** Start box and form *****/
@@ -2177,7 +2182,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
      }
    else
      {
-      Box_StartBox (NULL,Txt_Edit_project,NULL,
+      Box_StartBox (NULL,
+                    Prj->Title[0] ? Prj->Title :
+                	            Txt_Edit_project,
+                    NULL,
                     Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
       Act_FormStart (ActChgPrj);
       Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;
@@ -2187,7 +2195,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /***** 1. Project members *****/
    if (!ItsANewProject)	// Existing project
      {
-      Box_StartBoxTable (NULL,Txt_Project_members,NULL,
+      Box_StartBoxTable (NULL,Txt_Members,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       for (RoleInProject = Prj_ROLE_STD;
 	   RoleInProject <= Prj_ROLE_EVA;
@@ -2198,7 +2206,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /***** 2. Project data *****/
    /* Start box and table */
-   Box_StartBoxTable (NULL,Txt_Project_data,NULL,
+   Box_StartBoxTable (NULL,Txt_Data,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
    /* Project title */
@@ -2227,7 +2235,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,
                                 Prj->DptCod,	// Selected department
-                                false);			// Don't submit on change
+                                false);		// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
