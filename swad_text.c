@@ -18212,7 +18212,7 @@ const char *Txt_Log_out =
 #endif
 
 const char *Txt_logged[Usr_NUM_SEXS] =
-   {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
 	 "identificado/a"	// Necessita traduccio
 #elif L==2
@@ -31042,43 +31042,43 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	,
 #if   L==1	// Prj_ROLE_TUT
-	"Tutor"
+	"Tutor/a"
 #elif L==2
 	"Tutor"
 #elif L==3
 	"Tutor"
 #elif L==4
-	"Tutor"
+	"Tutor/a"
 #elif L==5
 	"Tuteur"
 #elif L==6
-	"Tutor"	// Okoteve traducción
+	"Tutor/a"	// Okoteve traducción
 #elif L==7
 	"Precettore"
 #elif L==8
 	"Nauczyciel"
 #elif L==9
-	"Tutor"
+	"Tutor/a"
 #endif
 	,
 #if   L==1	// Prj_ROLE_EVA
-	"Avaluador"
+	"Avaluador/a"
 #elif L==2
 	"Auswerter"
 #elif L==3
 	"Evaluator"
 #elif L==4
-	"Evaluador"
+	"Evaluador/a"
 #elif L==5
-	"&Eacute;valuateur"
+	"&Eacute;valuateur/trice"
 #elif L==6
-	"Evaluador"	// Okoteve traducción
+	"Evaluador/a"	// Okoteve traducción
 #elif L==7
 	"Valutatore"
 #elif L==8
 	"Ewaluator"
 #elif L==9
-	"Avaliador"
+	"Avaliador/a"
 #endif
 	};
 
@@ -33836,7 +33836,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 	};
 
 const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-   {
+{
 	{
 #if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"Desconegut/da"
@@ -34646,10 +34646,11 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9
 	"Superutilizador/a"
 #endif
-	 } };
+	 }
+};
 
 const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-   {
+{
 	{
 #if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"desconocido/a"		// Necessita traduccio
@@ -35460,10 +35461,10 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizador/a"
 #endif
 	 }
-   };
+};
 
 const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-   {
+{
 	{
 #if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"Desconeguts"
@@ -36481,7 +36482,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 
 
 const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
-   {
+{
 	{
 #if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"desconocidos"	// Necessita traduccio
@@ -38698,7 +38699,7 @@ const char *Txt_Sex =
 #endif
 
 const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
-   {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
 	 "Desconocidos"	// Necessita traduccio
 #elif L==2
@@ -38781,7 +38782,7 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 	};
 
 const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
-   {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
 	 "desconocidos"	// Necessita traduccio
 #elif L==2
@@ -38864,7 +38865,7 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 	};
 
 const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
-   {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
 	 "Desconocido"	// Necessita traduccio
 #elif L==2
@@ -52993,7 +52994,7 @@ const char *Txt_Week =
 #endif
 
 const char *Txt_Welcome[Usr_NUM_SEXS] =
-   {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
 	 "Benvingut/da."
 #elif L==2
