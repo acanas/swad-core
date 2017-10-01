@@ -909,11 +909,13 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
       Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
 
    /***** Write row with label and text *****/
-   fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-	              "<td colspan=\"3\" class=\"RIGHT_TOP",
-	    id,UniqueId);
    if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
+			 "<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u",
+	       id,UniqueId,Gbl.RowEvenOdd);
+   else
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"3\" class=\"RIGHT_TOP");
    fprintf (Gbl.F.Out," %s\">"
                       "%s:"
 	              "</td>"
@@ -963,11 +965,13 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    /***** Write row with label and text *****/
    PutLink = (ProjectView == Prj_LIST_PROJECTS && Prj->URL[0]);
 
-   fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-		      "<td colspan=\"3\" class=\"RIGHT_TOP",
-	    id,UniqueId);
    if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
+			 "<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u",
+	       id,UniqueId,Gbl.RowEvenOdd);
+   else
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"3\" class=\"RIGHT_TOP");
    fprintf (Gbl.F.Out," %s\">"
 		      "%s:"
 		      "</td>"
