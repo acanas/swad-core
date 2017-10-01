@@ -1782,7 +1782,10 @@ void Gam_RequestCreatOrEditGame (void)
       Box_StartBoxTable (NULL,Txt_New_game,NULL,
                          Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
    else
-      Box_StartBoxTable (NULL,Txt_Edit_game,NULL,
+      Box_StartBoxTable (NULL,
+                         Game.Title[0] ? Game.Title :
+                	                 Txt_Edit_game,
+                         NULL,
                          Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
    /***** Scope of the game *****/

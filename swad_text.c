@@ -30999,6 +30999,89 @@ const char *Txt_Project_X_removed =	// Warning: it is very important to include 
 	"Projeto <strong>%s</strong> removido.";
 #endif
 
+const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
+	{
+#if   L==1	// Prj_ROLE_UNK
+	"Desconegut/da"
+#elif L==2
+	"Unbekannter/e"
+#elif L==3
+	"Unknown"
+#elif L==4
+	"Desconocido/a"
+#elif L==5
+	"Inconnu/e"
+#elif L==6
+	"Desconocido/a"	// Okoteve traducción
+#elif L==7
+	"Sconosciuto/a"
+#elif L==8
+	"Nieznany"
+#elif L==9
+	"Desconhecido/a"
+#endif
+	,
+#if   L==1	// Prj_ROLE_STD
+	"Estudiant"
+#elif L==2
+	"Student"
+#elif L==3
+	"Student"
+#elif L==4
+	"Estudiante"
+#elif L==5
+	"&Eacute;tudiant/e"
+#elif L==6
+	"Temimbo'e"
+#elif L==7
+	"Studente"
+#elif L==8
+	"Student"
+#elif L==9
+	"Estudante"
+#endif
+	,
+#if   L==1	// Prj_ROLE_TUT
+	"Tutor"
+#elif L==2
+	"Tutor"
+#elif L==3
+	"Tutor"
+#elif L==4
+	"Tutor"
+#elif L==5
+	"Tuteur"
+#elif L==6
+	"Tutor"	// Okoteve traducción
+#elif L==7
+	"Precettore"
+#elif L==8
+	"Nauczyciel"
+#elif L==9
+	"Tutor"
+#endif
+	,
+#if   L==1	// Prj_ROLE_EVA
+	"Avaluador"
+#elif L==2
+	"Auswerter"
+#elif L==3
+	"Evaluator"
+#elif L==4
+	"Evaluador"
+#elif L==5
+	"&Eacute;valuateur"
+#elif L==6
+	"Evaluador"	// Okoteve traducción
+#elif L==7
+	"Valutatore"
+#elif L==8
+	"Ewaluator"
+#elif L==9
+	"Avaliador"
+#endif
+	};
+
 const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 	{
 #if   L==1	// Prj_ROLE_UNK

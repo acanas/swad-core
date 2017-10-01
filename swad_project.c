@@ -647,6 +647,9 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /* Department */
    Prj_ShowOneProjectDepartment (Prj,ProjectView);
 
+   /***** Project members *****/
+   Prj_ShowOneProjectMembers (Prj,ProjectView);
+
    /***** Write rows of data of this project *****/
    /* Description of the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,
@@ -685,9 +688,6 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
         	          "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
-
-   /* Project members */
-   Prj_ShowOneProjectMembers (Prj,ProjectView);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -981,24 +981,26 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
                                                 Prj_ProjectView_t ProjectView,
                                                 Prj_RoleInProject_t RoleInProject)
   {
+   extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove;
    extern const char *Txt_Add_USER;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   bool WriteRow;
    unsigned NumUsr;
    unsigned NumUsrs;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   static Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
       ActReqRemStdPrj,	// Prj_ROLE_STD, Student
       ActReqRemTutPrj,	// Prj_ROLE_TUT, Tutor
       ActReqRemEvaPrj,	// Prj_ROLE_EVA, Evaluator
      };
-   static Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static const Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
       ActReqAddStdPrj,	// Prj_ROLE_STD, Student
@@ -1008,121 +1010,129 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
+   WriteRow = (NumUsrs != 0 ||
+	       ProjectView == Prj_EDIT_ONE_PROJECT);
 
-   /***** Start row with label and listing of users *****/
-   fprintf (Gbl.F.Out,"<tr>");
-   switch (ProjectView)
+   if (WriteRow)
      {
-      case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u %s\">%s:</td>"
-                            "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
-	          Gbl.RowEvenOdd,
-                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	                "ASG_LABEL",
-                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
-	          Gbl.RowEvenOdd,
-        	  Prj->Hidden ? "DAT_LIGHT" :
-        	                "DAT");
-         break;
-      case Prj_PRINT_ONE_PROJECT:
-         fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">%s:</td>"
-                            "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
-                  Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	                "ASG_LABEL",
-                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
-        	  Prj->Hidden ? "DAT_LIGHT" :
-        	                "DAT");
-         break;
-      case Prj_EDIT_ONE_PROJECT:
-         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
-                            "<td colspan=\"2\" class=\"LEFT_TOP DAT\">",
-                  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-         break;
-     }
+      /***** Start row with label and listing of users *****/
+      fprintf (Gbl.F.Out,"<tr>");
 
-   /***** Start table with all members with this role *****/
-   Tbl_StartTable (2);
-
-   /***** Write users *****/
-   for (NumUsr = 0;
-	NumUsr < NumUsrs;
-	NumUsr++)
-     {
-      /* Get user's code */
-      row = mysql_fetch_row (mysql_res);
-      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get user's data */
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+      switch (ProjectView)
 	{
-	 /* Start row for this user */
-	 fprintf (Gbl.F.Out,"<tr>");
-
-	 /* Icon to remove user */
-	 if (ProjectView == Prj_EDIT_ONE_PROJECT)
-	   {
-	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	    Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
-				   "remove-on64x64.png",
-				   Txt_Remove,NULL,
-				   NULL);
-	    fprintf (Gbl.F.Out,"</td>");
-	   }
-
-	 /* Put user's photo */
-	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-	 Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-							      NULL,
-			   "PHOTO21x28",Pho_ZOOM,false);
-	 fprintf (Gbl.F.Out,"</td>");
-
-	 /* Write user's IDs */
-	 if (RoleInProject == Prj_ROLE_STD)
-	   {
-	    fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
-	    ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-	    fprintf (Gbl.F.Out,"</td>");
-	   }
-
-	 /* Write user's name */
-	 fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">%s</td>",
-	          Gbl.Usrs.Other.UsrDat.FullName);
-
-	 /* End row for this user */
-	 fprintf (Gbl.F.Out,"</tr>");
+	 case Prj_LIST_PROJECTS:
+	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u %s\">%s:</td>"
+			       "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
+		     Gbl.RowEvenOdd,
+		     Prj->Hidden ? "ASG_LABEL_LIGHT" :
+				   "ASG_LABEL",
+		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+		     Gbl.RowEvenOdd,
+		     Prj->Hidden ? "DAT_LIGHT" :
+				   "DAT");
+	    break;
+	 case Prj_PRINT_ONE_PROJECT:
+	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">%s:</td>"
+			       "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
+		     Prj->Hidden ? "ASG_LABEL_LIGHT" :
+				   "ASG_LABEL",
+		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+		     Prj->Hidden ? "DAT_LIGHT" :
+				   "DAT");
+	    break;
+	 case Prj_EDIT_ONE_PROJECT:
+	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
+			       "<td colspan=\"2\" class=\"LEFT_TOP DAT\">",
+		     Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    break;
 	}
-     }
 
-   /***** Row to add a new user *****/
-   if (ProjectView == Prj_EDIT_ONE_PROJECT)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-      Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;	// Used to pass project code as a parameter
-      sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
-      Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
-			     "plus64x64.png",
-			     Gbl.Title,NULL,
-			     NULL);
+      /***** Start table with all members with this role *****/
+      Tbl_StartTable (2);
+
+      /***** Write users *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 /* Get user's code */
+	 row = mysql_fetch_row (mysql_res);
+	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get user's data */
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    /* Start row for this user */
+	    fprintf (Gbl.F.Out,"<tr>");
+
+	    /* Icon to remove user */
+	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
+	      {
+	       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	       Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
+				      "remove-on64x64.png",
+				      Txt_Remove,NULL,
+				      NULL);
+	       fprintf (Gbl.F.Out,"</td>");
+	      }
+
+	    /* Put user's photo */
+	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+								 NULL,
+			      "PHOTO21x28",Pho_ZOOM,false);
+	    fprintf (Gbl.F.Out,"</td>");
+
+	    /* Write user's IDs */
+	    if (RoleInProject == Prj_ROLE_STD)
+	      {
+	       fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
+	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+	       fprintf (Gbl.F.Out,"</td>");
+	      }
+
+	    /* Write user's name */
+	    fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">%s</td>",
+		     Gbl.Usrs.Other.UsrDat.FullName);
+
+	    /* End row for this user */
+	    fprintf (Gbl.F.Out,"</tr>");
+	   }
+	}
+
+      /***** Row to add a new user *****/
+      if (ProjectView == Prj_EDIT_ONE_PROJECT)
+	{
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	 Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;	// Used to pass project code as a parameter
+	 sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
+	 Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
+				"plus64x64.png",
+				Gbl.Title,NULL,
+				NULL);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "<td style=\"width:30px;\">"	// Column for photo
+			    "</td>");
+	 if (RoleInProject == Prj_ROLE_STD)
+	    fprintf (Gbl.F.Out,"<td></td>");		// Column for user's IDs
+	 fprintf (Gbl.F.Out,"<td></td>"			// Column for name
+			    "</tr>");
+	}
+
+      /***** End table with all members with this role *****/
+      Tbl_EndTable ();
+
+      /***** End row with label and listing of users *****/
       fprintf (Gbl.F.Out,"</td>"
-	                 "<td style=\"width:30px;\">"	// Column for photo
-	                 "</td>");
-      if (RoleInProject == Prj_ROLE_STD)
-	 fprintf (Gbl.F.Out,"<td></td>");		// Column for user's IDs
-      fprintf (Gbl.F.Out,"<td></td>"			// Column for name
-                         "</tr>");
+			 "</tr>");
      }
-
-   /***** End table with all members with this role *****/
-   Tbl_EndTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** End row with label and listing of users *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
   }
 
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
@@ -2180,25 +2190,22 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Members;
    unsigned NumRoleToShow;
 
-   /***** Start box and form *****/
+   /***** Start project box *****/
    if (ItsANewProject)
      {
+      Gbl.Prjs.PrjCodToEdit = -1L;
       Box_StartBox (NULL,Txt_New_project,NULL,
                     Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE);
-      Act_FormStart (ActNewPrj);
-      Gbl.Prjs.PrjCodToEdit = -1L;
      }
    else
      {
+      Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;
       Box_StartBox (NULL,
                     Prj->Title[0] ? Prj->Title :
                 	            Txt_Edit_project,
                     NULL,
                     Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
-      Act_FormStart (ActChgPrj);
-      Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;
      }
-   Prj_PutParams ();
 
    /***** 1. Project members *****/
    if (!ItsANewProject)	// Existing project
@@ -2214,6 +2221,11 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
      }
 
    /***** 2. Project data *****/
+   /* Start data form */
+   Act_FormStart (ItsANewProject ? ActNewPrj :
+	                           ActChgPrj);
+   Prj_PutParams ();
+
    /* Start box and table */
    Box_StartBoxTable (NULL,Txt_Data,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
@@ -2304,10 +2316,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    else
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
-   /* End form */
+   /* End data form */
    Act_FormEnd ();
 
-   /***** End box *****/
+   /***** End project box *****/
    Box_EndBox ();
   }
 
