@@ -2006,23 +2006,24 @@ mysql> DESCRIBE prj_usr;
    /***** Table projects *****/
 /*
 mysql> DESCRIBE projects;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| PrjCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod      | int(11)       | NO   | MUL | -1      |                |
-| DptCod      | int(11)       | NO   |     | -1      |                |
-| Hidden      | enum('N','Y') | NO   |     | N       |                |
-| Preassigned | enum('N','Y') | NO   |     | N       |                |
-| StartTime   | datetime      | NO   |     | NULL    |                |
-| EndTime     | datetime      | NO   |     | NULL    |                |
-| Title       | varchar(2047) | NO   |     | NULL    |                |
-| Description | text          | NO   |     | NULL    |                |
-| Knowledge   | text          | NO   |     | NULL    |                |
-| Materials   | text          | NO   |     | NULL    |                |
-| URL         | varchar(255)  | NO   |     | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-12 rows in set (0,00 sec)
++-------------+--------------------------+------+-----+---------+----------------+
+| Field       | Type                     | Null | Key | Default | Extra          |
++-------------+--------------------------+------+-----+---------+----------------+
+| PrjCod      | int(11)                  | NO   | PRI | NULL    | auto_increment |
+| CrsCod      | int(11)                  | NO   | MUL | -1      |                |
+| DptCod      | int(11)                  | NO   |     | -1      |                |
+| Hidden      | enum('N','Y')            | NO   |     | N       |                |
+| Preassigned | enum('N','Y')            | NO   |     | N       |                |
+| Status      | enum('new','reproposed') | NO   |     | new     |                |
+| StartTime   | datetime                 | NO   |     | NULL    |                |
+| EndTime     | datetime                 | NO   |     | NULL    |                |
+| Title       | varchar(2047)            | NO   |     | NULL    |                |
+| Description | text                     | NO   |     | NULL    |                |
+| Knowledge   | text                     | NO   |     | NULL    |                |
+| Materials   | text                     | NO   |     | NULL    |                |
+| URL         | varchar(255)             | NO   |     | NULL    |                |
++-------------+--------------------------+------+-----+---------+----------------+
+13 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
@@ -2030,6 +2031,7 @@ mysql> DESCRIBE projects;
 			"DptCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Status ENUM('new','reproposed') NOT NULL DEFAULT 'new',"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// Prj_MAX_BYTES_PROJECT_TITLE

@@ -252,13 +252,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.12.1 (2017-10-01)"
+#define Log_PLATFORM_VERSION	"SWAD 17.13 (2017-10-02)"
 #define CSS_FILE		"swad17.0.css"
-#define JS_FILE			"swad17.12.js"
+#define JS_FILE			"swad17.13.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.13:    Oct 02, 2017	New field status in projects.
+					Fixed bug in hidden projects. (231867 lines)
+					1 change necessary in database:
+ALTER TABLE projects ADD COLUMN Status ENUM('new','reproposed') NOT NULL DEFAULT 'new' AFTER Preassigned;
+
         Version 17.12.1:  Oct 01, 2017	Fixed bug when printing a project. (231717 lines)
         Version 17.12:    Oct 01, 2017	Changes in layout of projects. (231712 lines)
 Copy the following icons to icon public directory:

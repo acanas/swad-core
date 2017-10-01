@@ -31125,43 +31125,43 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	,
 #if   L==1	// Prj_ROLE_TUT
-	"tutor"
+	"tutor/a"
 #elif L==2
 	"Tutor"
 #elif L==3
 	"tutor"
 #elif L==4
-	"tutor"
+	"tutor/a"
 #elif L==5
 	"tuteur"
 #elif L==6
-	"tutor"	// Okoteve traducción
+	"tutor/a"	// Okoteve traducción
 #elif L==7
 	"precettore"
 #elif L==8
 	"nauczyciel"
 #elif L==9
-	"tutor"
+	"tutor/a"
 #endif
 	,
 #if   L==1	// Prj_ROLE_EVA
-	"avaluador"
+	"avaluador/a"
 #elif L==2
 	"Auswerter"
 #elif L==3
 	"evaluator"
 #elif L==4
-	"evaluador"
+	"evaluador/a"
 #elif L==5
 	"&eacute;valuateur"
 #elif L==6
-	"evaluador"	// Okoteve traducción
+	"evaluador/a"	// Okoteve traducción
 #elif L==7
 	"valutatore"
 #elif L==8
 	"ewaluator"
 #elif L==9
-	"avaliador"
+	"avaliador/a"
 #endif
 	};
 
@@ -31245,6 +31245,49 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Ewaluator&oacute;w"
 #elif L==9
 	"Avaliadores"
+#endif
+	};
+
+const char *Txt_PROJECT_STATUS[Prj_NUM_STATUS] =
+   {
+#if   L==1	// Prj_STATUS_NEW
+	"Projecte nou, proposat per primera vegada"
+#elif L==2
+	"Neues Projekt, das zum ersten Mal vorgeschlagen wurde"
+#elif L==3
+	"New project, proposed for the first time"
+#elif L==4
+	"Proyecto nuevo, propuesto por primera vez"
+#elif L==5
+	"Nouveau projet, propos&eacute; pour la premi&egrave;re fois"
+#elif L==6
+	"Proyecto nuevo, propuesto por primera vez"		// Okoteve traducción
+#elif L==7
+	"Nuovo progetto, proposto per la prima volta"
+#elif L==8
+	"Nowy projekt, zaproponowany po raz pierwszy"
+#elif L==9
+	"Novo projeto, proposto pela primeira vez"
+#endif
+	,
+#if   L==1	// Prj_STATUS_REPROPOSED
+	"Projecte ja proposat en convocat&ograve;ries anteriors"
+#elif L==2
+	"Projekt bereits in fr&uuml;heren Anrufen vorgeschlagen"
+#elif L==3
+	"Project already proposed in previous calls"
+#elif L==4
+	"Proyecto ya propuesto en convocatorias anteriores"
+#elif L==5
+	"Projet d&eacute;j&agrave; propos&eacute; dans les appels pr&eacute;c&eacute;dents"
+#elif L==6
+	"Proyecto ya propuesto en convocatorias anteriores"	// Okoteve traducción
+#elif L==7
+	"Progetto gi&agrave; proposto nelle chiamate precedenti"
+#elif L==8
+	"Projekt ju&zdot; zaproponowa&lstrok; w poprzednich rozmowach"
+#elif L==9
+	"Projeto j&aacute; proposto em chamadas anteriores"
 #endif
 	};
 
