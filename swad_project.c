@@ -1964,7 +1964,7 @@ void Prj_ReqRemProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_SeeProjects ();
+   Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
@@ -2017,7 +2017,7 @@ void Prj_RemoveProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_SeeProjects ();
+   Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
@@ -2060,7 +2060,7 @@ void Prj_HideProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_SeeProjects ();
+   Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
@@ -2103,7 +2103,7 @@ void Prj_ShowProject (void)
    Prj_FreeMemProject (&Prj);
 
    /***** Show projects again *****/
-   Prj_SeeProjects ();
+   Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
@@ -2164,7 +2164,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
 
-   /***** Show current projects, if any *****/
+   /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
   }
 
@@ -2405,7 +2405,11 @@ void Prj_RecFormProject (void)
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
 
-   /***** Get parameters from form *****/
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+
    /* Get the code of the project */
    Prj.PrjCod = Prj_GetParamPrjCod ();
    ItsANewProject = (Prj.PrjCod < 0);
@@ -2485,8 +2489,8 @@ void Prj_RecFormProject (void)
       else
          Prj_PutFormProject (&Prj,ItsANewProject);
 
-      /***** Show projects again *****/
-      Prj_SeeProjects ();
+      /***** Show again form to edit project *****/
+      Prj_RequestCreatOrEditPrj (Prj.PrjCod);
      }
    else
       Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");

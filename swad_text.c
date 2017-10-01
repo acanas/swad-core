@@ -7368,7 +7368,7 @@ const char *Txt_Created_new_plugin_X =	// Warning: it is very important to inclu
 
 const char *Txt_Created_new_project_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Creat nou projecte <strong>%s</strong>.";	// Necessita traduccio
+	"Creat nou projecte <strong>%s</strong>.";
 #elif L==2
 	"Neues Projekt <strong>%s</strong> eingegeben.";
 #elif L==3
