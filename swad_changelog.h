@@ -252,13 +252,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.11.8 (2017-10-01)"
+#define Log_PLATFORM_VERSION	"SWAD 17.12 (2017-10-01)"
 #define CSS_FILE		"swad17.0.css"
-#define JS_FILE			"swad16.206.3.js"
+#define JS_FILE			"swad17.12.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.12:    Oct 01, 2017	Changes in layout of projects. (231712 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/more64x64.png /var/www/html/swad/icon/
+sudo cp icon/less64x64.png /var/www/html/swad/icon/
+
         Version 17.11.8:  Oct 01, 2017	Changes in edition of projects. (231638 lines)
         Version 17.11.7:  Oct 01, 2017	Changes in layout of projects. (231634 lines)
         Version 17.11.6:  Oct 01, 2017	Fixed bug in edition of projects. (231632 lines)

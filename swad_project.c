@@ -92,17 +92,21 @@ static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_PutIconToShowAllData (void);
 static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectView);
+static void Prj_PutIconToToggleProject (unsigned UniqueId,
+                                        const char *Icon,const char *Text);
 static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj);
 static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
                                           Prj_ProjectView_t ProjectView);
 static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj);
 static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                                         Prj_ProjectView_t ProjectView,
+                                        const char *id,unsigned UniqueId,
                                         const char *Label,char *TxtField);
 static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
                                               char *TxtField);
 static void Prj_ShowOneProjectURL (const struct Project *Prj,
-                                   Prj_ProjectView_t ProjectView);
+                                   Prj_ProjectView_t ProjectView,
+                                   const char *id,unsigned UniqueId);
 static void Prj_ShowTableAllProjectsURL (const struct Project *Prj);
 static void Prj_ShowOneProjectMembers (struct Project *Prj,
                                        Prj_ProjectView_t ProjectView);
@@ -418,11 +422,21 @@ static void Prj_ShowTableAllProjectsHead (void)
    unsigned NumRoleToShow;
 
    fprintf (Gbl.F.Out,"<tr>");
+
    for (Order = (Prj_Order_t) 0;
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
                Txt_PROJECT_ORDER[Order]);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
+            Txt_Preassigned_QUESTION);
+
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
+	       Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
 
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
             Txt_Description);
@@ -432,14 +446,6 @@ static void Prj_ShowTableAllProjectsHead (void)
             Txt_Required_materials);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
             Txt_URL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-            Txt_Preassigned_QUESTION);
-
-   for (NumRoleToShow = 0;
-	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	NumRoleToShow++)
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-	       Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
 
    fprintf (Gbl.F.Out,"</tr>");
   }
@@ -573,6 +579,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Today;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
+   extern const char *Txt_See_more;
+   extern const char *Txt_See_less;
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
@@ -650,23 +658,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /***** Project members *****/
    Prj_ShowOneProjectMembers (Prj,ProjectView);
 
-   /***** Write rows of data of this project *****/
-   /* Description of the project */
-   Prj_ShowOneProjectTxtField (Prj,ProjectView,
-                               Txt_Description,Prj->Description);
-
-   /* Required knowledge to carry out the project */
-   Prj_ShowOneProjectTxtField (Prj,ProjectView,
-                               Txt_Required_knowledge,Prj->Knowledge);
-
-   /* Required materials to carry out the project */
-   Prj_ShowOneProjectTxtField (Prj,ProjectView,
-                               Txt_Required_materials,Prj->Materials);
-
-   /* Link to view more info about the project */
-   Prj_ShowOneProjectURL (Prj,ProjectView);
-
-   /* Preassigned? */
+   /***** Preassigned? *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"3\" class=\"RIGHT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
@@ -689,7 +681,59 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
 
+   /***** Link to show hidden info *****/
+   if (ProjectView == Prj_LIST_PROJECTS)
+     {
+      fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
+			 "<td colspan=\"5\" class=\"CENTER_MIDDLE COLOR%u\">",
+	       UniqueId,Gbl.RowEvenOdd);
+      Prj_PutIconToToggleProject (UniqueId,"more64x64.png",Txt_See_more);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
+      fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
+			 "<td colspan=\"5\" class=\"CENTER_MIDDLE COLOR%u\">",
+	       UniqueId,Gbl.RowEvenOdd);
+      Prj_PutIconToToggleProject (UniqueId,"less64x64.png",Txt_See_less);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
+
+   /***** Write rows of data of this project *****/
+   /* Description of the project */
+   Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_dsc_",UniqueId,
+                               Txt_Description,Prj->Description);
+
+   /* Required knowledge to carry out the project */
+   Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_knw_",UniqueId,
+                               Txt_Required_knowledge,Prj->Knowledge);
+
+   /* Required materials to carry out the project */
+   Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_mtr_",UniqueId,
+                               Txt_Required_materials,Prj->Materials);
+
+   /* Link to view more info about the project */
+   Prj_ShowOneProjectURL (Prj,ProjectView,"prj_url_",UniqueId);
+
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/********** Put an icon to toggle on/off some fields of a project ************/
+/*****************************************************************************/
+
+static void Prj_PutIconToToggleProject (unsigned UniqueId,
+                                        const char *Icon,const char *Text)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   /***** Link to toggle on/off some fields of project *****/
+   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
+                      " onclick=\"toggleProject('%u');return false;\" />",
+            Text,The_ClassForm[Gbl.Prefs.Theme],
+            UniqueId);
+   Ico_PutIconWithText (Icon,Text,Text);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
@@ -757,8 +801,24 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
         	          "DAT_N",
             Prj->Title);
 
-   /* Department */
+   /***** Department *****/
    Prj_ShowTableAllProjectsDepartment (Prj);
+
+   /***** Preassigned? *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
+                      "%s"
+                      "</td>",
+            Gbl.RowEvenOdd,
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+        	                                    Txt_No);
+
+   /***** Project members *****/
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
+      Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -772,22 +832,6 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /* Link to view more info about the project */
    Prj_ShowTableAllProjectsURL (Prj);
-
-   /* Preassigned? */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
-            Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
-            (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
-        	                                    Txt_No);
-
-   /* Project members */
-   for (NumRoleToShow = 0;
-	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	NumRoleToShow++)
-      Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -855,6 +899,7 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
 
 static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                                         Prj_ProjectView_t ProjectView,
+                                        const char *id,unsigned UniqueId,
                                         const char *Label,char *TxtField)
   {
    /***** Change format *****/
@@ -864,8 +909,9 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
       Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
 
    /***** Write row with label and text *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"3\" class=\"RIGHT_TOP");
+   fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
+	              "<td colspan=\"3\" class=\"RIGHT_TOP",
+	    id,UniqueId);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
@@ -908,7 +954,8 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
 /*****************************************************************************/
 
 static void Prj_ShowOneProjectURL (const struct Project *Prj,
-                                   Prj_ProjectView_t ProjectView)
+                                   Prj_ProjectView_t ProjectView,
+                                   const char *id,unsigned UniqueId)
   {
    extern const char *Txt_URL;
    bool PutLink;
@@ -916,8 +963,9 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    /***** Write row with label and text *****/
    PutLink = (ProjectView == Prj_LIST_PROJECTS && Prj->URL[0]);
 
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\" class=\"RIGHT_TOP");
+   fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
+		      "<td colspan=\"3\" class=\"RIGHT_TOP",
+	    id,UniqueId);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
@@ -2178,11 +2226,11 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Data;
    extern const char *Txt_Title;
    extern const char *Txt_Department;
+   extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    extern const char *Txt_URL;
-   extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_No;
    extern const char *Txt_Yes;
    extern const char *Txt_Create_project;
@@ -2260,6 +2308,30 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
+   /* Preassigned? */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<select name=\"Preassigned\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Preassigned_QUESTION);
+
+   fprintf (Gbl.F.Out,"<option value=\"N\"");
+   if (Prj->Preassigned == Prj_NOT_PREASSIGNED)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
+
+   fprintf (Gbl.F.Out,"<option value=\"Y\"");
+   if (Prj->Preassigned == Prj_PREASSIGNED)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
+
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+                      "</tr>");
+
    /* Description of the project */
    Prj_EditOneProjectTxtArea ("Description",Txt_Description,
                               Prj->Description,12);
@@ -2285,30 +2357,6 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_URL,
 	    Cns_MAX_CHARS_WWW,Prj->URL);
-
-   /* Preassigned? */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Preassigned\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Preassigned_QUESTION);
-
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (Prj->Preassigned == Prj_NOT_PREASSIGNED)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
-
-   fprintf (Gbl.F.Out,"<option value=\"Y\"");
-   if (Prj->Preassigned == Prj_PREASSIGNED)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
-
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-                      "</tr>");
 
    /* End table, send button and end box */
    if (ItsANewProject)
@@ -2441,6 +2489,10 @@ void Prj_RecFormProject (void)
       /* Get department */
       Prj.DptCod = Par_GetParToLong ("DptCod");
 
+      /* Get whether the project is preassigned */
+      Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
+							     Prj_NOT_PREASSIGNED;
+
       /* Get project description, required knowledge and required materials */
       Par_GetParToHTML ("Description",Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
       Par_GetParToHTML ("Knowledge"  ,Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -2448,10 +2500,6 @@ void Prj_RecFormProject (void)
 
       /* Get degree WWW */
       Par_GetParToText ("URL",Prj.URL,Cns_MAX_BYTES_WWW);
-
-      /* Get whether the project is preassigned */
-      Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
-							     Prj_NOT_PREASSIGNED;
 
       /***** Adjust dates *****/
       if (Prj.TimeUTC[Dat_START_TIME] == 0)

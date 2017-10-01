@@ -38056,6 +38056,27 @@ const char *Txt_See_full_notice =
 	"Veja aviso completo";
 #endif
 
+const char *Txt_See_less =
+#if   L==1
+	 "Veure menys";
+#elif L==2
+	 "Zeige weniger";
+#elif L==3
+	 "See less";
+#elif L==4
+	 "Ver menos";
+#elif L==5
+	 "Voir moins";
+#elif L==6
+	 "Ver menos";	// Okoteve traducción
+#elif L==7
+	 "Vedere meno";
+#elif L==8
+	 "Zobacz mniej";
+#elif L==9
+	 "Veja menos";
+#endif
+
 const char *Txt_See_message =
 #if   L==1
 	"Veure missatge";
@@ -38102,7 +38123,7 @@ const char *Txt_See_more =
 #if   L==1
 	 "Veure m&eacute;s";
 #elif L==2
-	 "Weitere";
+	 "Zeige mehr";
 #elif L==3
 	 "See more";
 #elif L==4

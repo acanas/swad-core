@@ -682,6 +682,16 @@ function expandTextarea (textareaElem,idButton,rows) {
 	document.getElementById(idButton).style.display = '';
 }
 
+//Change display of a project
+function toggleProject (prjID) {
+	toggleDisplay('prj_exp_' + prjID);
+	toggleDisplay('prj_con_' + prjID);
+	toggleDisplay('prj_dsc_' + prjID);
+	toggleDisplay('prj_knw_' + prjID);
+	toggleDisplay('prj_mtr_' + prjID);
+	toggleDisplay('prj_url_' + prjID);
+}
+
 // Change display of a test answer
 function toggleAnswer (option) {
 	toggleDisplay('ans_' + option);
