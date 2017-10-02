@@ -31248,46 +31248,66 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	};
 
-const char *Txt_PROJECT_STATUS[Prj_NUM_STATUS] =
+const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
    {
-#if   L==1	// Prj_STATUS_NEW
-	"Projecte nou, proposat per primera vegada"
+#if   L==1	// Prj_PROPOSAL_NEW
+	"Projecte nou"
 #elif L==2
-	"Neues Projekt, das zum ersten Mal vorgeschlagen wurde"
+	"Neues Projekt"
 #elif L==3
-	"New project, proposed for the first time"
+	"New project"
 #elif L==4
-	"Proyecto nuevo, propuesto por primera vez"
+	"Proyecto nuevo"
 #elif L==5
-	"Nouveau projet, propos&eacute; pour la premi&egrave;re fois"
+	"Projet nouveau"
 #elif L==6
-	"Proyecto nuevo, propuesto por primera vez"		// Okoteve traducción
+	"Proyecto nuevo"		// Okoteve traducción
 #elif L==7
-	"Nuovo progetto, proposto per la prima volta"
+	"Progetto nuovo"
 #elif L==8
-	"Nowy projekt, zaproponowany po raz pierwszy"
+	"Nowy projekt"
 #elif L==9
-	"Novo projeto, proposto pela primeira vez"
+	"Projeto novo"
 #endif
 	,
-#if   L==1	// Prj_STATUS_REPROPOSED
-	"Projecte ja proposat en convocat&ograve;ries anteriors"
+#if   L==1	// Prj_PROPOSAL_MODIFIED
+	"Projecte ja proposat en convocat&ograve;ries anteriors, amb modificacions"
 #elif L==2
-	"Projekt bereits in fr&uuml;heren Anrufen vorgeschlagen"
+	"Projekt in fr&uuml;heren Anrufen vorgeschlagen, mit &Auml;nderungen"
 #elif L==3
-	"Project already proposed in previous calls"
+	"Project proposed in previous calls, with modifications"
 #elif L==4
-	"Proyecto ya propuesto en convocatorias anteriores"
+	"Proyecto propuesto en convocatorias anteriores, con modificaciones"
 #elif L==5
-	"Projet d&eacute;j&agrave; propos&eacute; dans les appels pr&eacute;c&eacute;dents"
+	"Projet propos&eacute; dans les appels pr&eacute;c&eacute;dents, avec modifications"
 #elif L==6
-	"Proyecto ya propuesto en convocatorias anteriores"	// Okoteve traducción
+	"Proyecto propuesto en convocatorias anteriores, con modificaciones"	// Okoteve traducción
 #elif L==7
-	"Progetto gi&agrave; proposto nelle chiamate precedenti"
+	"Progetto proposto nelle chiamate precedenti, con modifiche"
 #elif L==8
-	"Projekt ju&zdot; zaproponowa&lstrok; w poprzednich rozmowach"
+	"Proponowany projekt we wcze&sacute;niejszych rozmowach z modyfikacjami"
 #elif L==9
-	"Projeto j&aacute; proposto em chamadas anteriores"
+	"Projeto proposto em chamadas anteriores, com modifica&ccedil;&otilde;es"
+#endif
+	,
+#if   L==1	// Prj_PROPOSAL_UNMODIFIED
+	"Projecte ja proposat en convocat&ograve;ries anteriors, sense modificacions"
+#elif L==2
+	"Projekt in fr&uuml;heren Anrufen vorgeschlagen, ohne &Auml;nderungen"
+#elif L==3
+	"Project proposed in previous calls, without modifications"
+#elif L==4
+	"Proyecto propuesto en convocatorias anteriores, sin modificaciones"
+#elif L==5
+	"Projet propos&eacute; dans les appels pr&eacute;c&eacute;dents, sans modifications"
+#elif L==6
+	"Proyecto propuesto en convocatorias anteriores, sin modificaciones"	// Okoteve traducción
+#elif L==7
+	"Progetto proposto nelle chiamate precedenti, senza modifiche"
+#elif L==8
+	"Proponowany projekt we wcze&sacute;niejszych rozmowach bez modyfikacji"
+#elif L==9
+	"Projeto proposto em chamadas anteriores, sem modifica&ccedil;&otilde;es"
 #endif
 	};
 
@@ -31353,6 +31373,27 @@ const char *Txt_Projects =
 	"Projekty (projekty ko&nacute;cowe, praca dyplomowa&hellip;)";
 #elif L==9
 	"Projetos (projetos de fim de grau, tese&hellip;)";
+#endif
+
+const char *Txt_Proposal =
+#if   L==1
+	"Proposta";
+#elif L==2
+	"Vorschlag";
+#elif L==3
+	"Proposal";
+#elif L==4
+	"Propuesta";
+#elif L==5
+	"Proposition";
+#elif L==6
+	"Propuesta";	// Okoteve traducción
+#elif L==7
+	"Proposta";
+#elif L==8
+	"Wniosek";
+#elif L==9
+	"Proposta";
 #endif
 
 const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences

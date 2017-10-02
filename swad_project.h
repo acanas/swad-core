@@ -47,13 +47,14 @@ typedef enum
   } Prj_Preassigned_t;
 #define Prj_PREASSIGNED_DEFAULT Prj_NOT_PREASSIGNED
 
-#define Prj_NUM_STATUS 2
+#define Prj_NUM_PROPOSAL_TYPES 3
 typedef enum
   {
-   Prj_STATUS_NEW,
-   Prj_STATUS_REPROPOSED,
-  } Prj_Status_t;
-#define Prj_STATUS_DEFAULT Prj_STATUS_NEW
+   Prj_PROPOSAL_NEW,
+   Prj_PROPOSAL_MODIFIED,
+   Prj_PROPOSAL_UNMODIFIED,
+  } Prj_Proposal_t;
+#define Prj_PROPOSAL_DEFAULT Prj_PROPOSAL_NEW
 
 // Related with user's roles in a project
 // Don't change these numbers! They are used in database
@@ -72,7 +73,7 @@ struct Project
    bool Hidden;
    Prj_Preassigned_t Preassigned;
    unsigned NumStds;
-   Prj_Status_t Status;
+   Prj_Proposal_t Proposal;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];

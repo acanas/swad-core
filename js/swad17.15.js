@@ -686,7 +686,7 @@ function expandTextarea (textareaElem,idButton,rows) {
 function toggleProject (prjID) {
 	toggleDisplay('prj_exp_' + prjID);
 	toggleDisplay('prj_con_' + prjID);
-	toggleDisplay('prj_sta_' + prjID);
+	toggleDisplay('prj_pro_' + prjID);
 	toggleDisplay('prj_dsc_' + prjID);
 	toggleDisplay('prj_knw_' + prjID);
 	toggleDisplay('prj_mtr_' + prjID);

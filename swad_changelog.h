@@ -252,13 +252,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.14 (2017-10-02)"
+#define Log_PLATFORM_VERSION	"SWAD 17.15 (2017-10-02)"
 #define CSS_FILE		"swad17.0.css"
-#define JS_FILE			"swad17.13.js"
+#define JS_FILE			"swad17.15.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.15:    Oct 02, 2017	Status in projects changed for proposal. (231985 lines)
+					4 changes necessary in database:
+ALTER TABLE projects ADD COLUMN Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new' AFTER Status;
+UPDATE projects SET Proposal='new' WHERE Status='new';
+UPDATE projects SET Proposal='unmodified' WHERE Status='reproposed';
+ALTER TABLE projects DROP COLUMN Status;
+
         Version 17.14:    Oct 02, 2017	New field number of students in projects. (231937 lines)
 					1 change necessary in database:
 ALTER TABLE projects ADD COLUMN NumStds INT NOT NULL DEFAULT 1 AFTER Preassigned;
