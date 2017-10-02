@@ -1001,6 +1001,26 @@ Files:
 	822. ActChgNumRowHeaGrp		Change the number of rows of cabecera of a file of marks in group
 	823. ActChgNumRowFooGrp		Change the number of rows of pie of a file of marks in group
 
+       1293. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1294. ActRemFilBrf		Remove a file of the briefcase
+       1295. ActRemFolBrf		Remove a folder empty of the briefcase
+       1296. ActCopBrf			Set source of copy in the briefcase
+       1297. ActPasBrf			Paste a folder or file in the briefcase
+       1298. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1299. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1300. ActCreFolBrf		Create a new folder in the briefcase
+       1301. ActCreLnkBrf		Create a new link in the briefcase
+       1302. ActRenFolBrf		Rename a folder of the briefcase
+       1303. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1304. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1305. ActExpBrf			Expand a folder in briefcase
+       1306. ActConBrf			Contract a folder in briefcase
+       1307. ActZIPBrf			Compress a folder in briefcase
+       1308. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1309. ActChgDatBrf		Change metadata of a file in the briefcase
+       1310. ActDowBrf			Download a file in the briefcase
+       1311. ActReqRemOldBrf		Ask for removing old files in the briefcase
+       1312. ActRemOldBrf		Remove old files in the briefcase
 Users:
 	824. ActReqSelGrp		Request the selection of groups of students
 	825. ActLstStd			Show class photo or list of students
@@ -1444,7 +1464,7 @@ Profile:
        1226. ActSndNewPwd		Send a new password via email
        1227. ActLogOut			Close session
 
-       1228. ActLogIn		Authentify user internally (directly from the platform)
+       1228. ActLogIn			Authentify user internally (directly from the platform)
        1229. ActLogInNew		Authentify user internally (directly from the platform, only if user has not password)
        1230. ActLogInLan		Change language to my language just after authentication
        1231. ActAnnSee			Mark announcement as seen
@@ -1518,27 +1538,6 @@ Profile:
        1290. ActEdiTut			Edit the timetable of tutorías
        1291. ActChgTut			Modify the timetable of tutorías
        1292. ActChgMyTT1stDay		Change first day of week and show timetable of the course
-
-       1293. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1294. ActRemFilBrf		Remove a file of the briefcase
-       1295. ActRemFolBrf		Remove a folder empty of the briefcase
-       1296. ActCopBrf			Set source of copy in the briefcase
-       1297. ActPasBrf			Paste a folder or file in the briefcase
-       1298. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1299. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1300. ActCreFolBrf		Create a new folder in the briefcase
-       1301. ActCreLnkBrf		Create a new link in the briefcase
-       1302. ActRenFolBrf		Rename a folder of the briefcase
-       1303. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1304. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1305. ActExpBrf			Expand a folder in briefcase
-       1306. ActConBrf			Contract a folder in briefcase
-       1307. ActZIPBrf			Compress a folder in briefcase
-       1308. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1309. ActChgDatBrf		Change metadata of a file in the briefcase
-       1310. ActDowBrf			Download a file in the briefcase
-       1311. ActReqRemOldBrf		Ask for removing old files in the briefcase
-       1312. ActRemOldBrf		Remove old files in the briefcase
 */
 
 /*
@@ -2071,6 +2070,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAdmAsgWrkUsr	*/{ 792, 9,TabFil,ActAdmAsgWrkUsr	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"editfolderuser64x64.gif"},
    /* ActReqAsgWrkCrs	*/{ 899,10,TabFil,ActReqAsgWrkCrs	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskEditWorksCrs		,"folderusers64x64.gif"	},
    /* ActSeeAdmMrk	*/{  17,11,TabFil,ActSeeAdmMrk		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"grades64x64.gif"	},
+   /* ActAdmBrf		*/{  23,12,TabFil,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
 
    // Actions not in menu:
    /* ActChgToSeeDocIns	*/{1308,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -2514,6 +2514,27 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDowAdmMrkGrp   */{1122,-1,TabUnk,ActSeeAdmMrk		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
    /* ActChgNumRowHeaGrp*/{ 510,-1,TabUnk,ActSeeAdmMrk		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mrk_ChangeNumRowsHeader	,NULL},
    /* ActChgNumRowFooGrp*/{ 511,-1,TabUnk,ActSeeAdmMrk		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mrk_ChangeNumRowsFooter	,NULL},
+
+   /* ActReqRemFilBrf	*/{ 286,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilBrf	*/{ 155,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolBrf	*/{ 196,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopBrf		*/{ 311,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasBrf		*/{ 315,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreBrf	*/{ 276,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreBrf	*/{ 597,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolBrf	*/{ 170,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkBrf	*/{1230,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolBrf	*/{ 197,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilBrfDZ	*/{1224,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilBrfCla	*/{ 153,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpBrf		*/{ 410,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConBrf		*/{ 411,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPBrf		*/{1136,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatBrf	*/{1047,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatBrf	*/{1048,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowBrf         */{1123,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemOldBrf   */{1488,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemoveOldFiles		,NULL},
+   /* ActRemOldBrf      */{1489,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemoveOldFilesBriefcase	,NULL},
 
    // TabUsr ******************************************************************
    // Actions in menu:
@@ -2993,7 +3014,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
    /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowFormMySharedRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
-   /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
 
    // Actions not in menu:
    /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
@@ -3080,27 +3100,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActEdiTut		*/{  65,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_EditMyTutTimeTable		,NULL},
    /* ActChgTut		*/{  48,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_EditMyTutTimeTable		,NULL},
    /* ActChgMyTT1stDay	*/{1487,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C7,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
-
-   /* ActReqRemFilBrf	*/{ 286,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilBrf	*/{ 155,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolBrf	*/{ 196,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
-   /* ActCopBrf		*/{ 311,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasBrf		*/{ 315,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreBrf	*/{ 276,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreBrf	*/{ 597,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolBrf	*/{ 170,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkBrf	*/{1230,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolBrf	*/{ 197,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilBrfDZ	*/{1224,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
-   /* ActRcvFilBrfCla	*/{ 153,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpBrf		*/{ 410,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ExpandFileTree		,NULL},
-   /* ActConBrf		*/{ 411,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ContractFileTree		,NULL},
-   /* ActZIPBrf		*/{1136,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatBrf	*/{1047,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatBrf	*/{1048,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
-   /* ActDowBrf         */{1123,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
-   /* ActReqRemOldBrf   */{1488,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemoveOldFiles		,NULL},
-   /* ActRemOldBrf      */{1489,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemoveOldFilesBriefcase	,NULL},
   };
 
 Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse unique action codes!

@@ -18822,6 +18822,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabCty *****************************************************
@@ -18917,6 +18918,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabIns *****************************************************
@@ -19032,6 +19034,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabCtr *****************************************************
@@ -19127,6 +19130,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabDeg *****************************************************
@@ -19222,6 +19226,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabCrs *****************************************************
@@ -19417,6 +19422,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabAss *****************************************************
@@ -19572,6 +19578,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabFil *****************************************************
@@ -19785,7 +19792,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Trabalhos"
 #endif
 	,
-	//  10: ActReqAsgWrkCrs
+	// 10: ActReqAsgWrkCrs
 #if   L==1
 	"Treballs"
 #elif L==2
@@ -19806,7 +19813,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Trabalhos"
 #endif
 	,
-	//  11: ActSeeMrk
+	// 11: ActSeeMrk
 #if   L==1
 	"Qualificacions"
 #elif L==2
@@ -19825,6 +19832,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Marks"
 #elif L==9
 	"Notas"
+#endif
+	,
+	// 12: ActAdmBrf
+#if   L==1
+	"Malet&iacute;"
+#elif L==2
+	"Aktentasche"
+#elif L==3
+	"Briefcase"
+#elif L==4
+	"Malet&iacute;n"
+#elif L==5
+	"Portedocuments"
+#elif L==6
+	"Malet&iacute;n"	// Okoteve traducción
+#elif L==7
+	"Cartella"
+#elif L==8
+	"Teczka"
+#elif L==9
+	"Pasta"
 #endif
 	},
 	{
@@ -20001,6 +20029,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabSoc *****************************************************
@@ -20096,6 +20125,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabMsg *****************************************************
@@ -20251,6 +20281,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabSta **********************************************************************
@@ -20386,6 +20417,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabPrf *****************************************************
@@ -20557,30 +20589,11 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Prefer&ecirc;ncias"
 #endif
 	,
-	//  8: ActAdmBrf
-#if   L==1
-	"Malet&iacute;"
-#elif L==2
-	"Aktentasche"
-#elif L==3
-	"Briefcase"
-#elif L==4
-	"Malet&iacute;n"
-#elif L==5
-	"Portedocuments"
-#elif L==6
-	"Malet&iacute;n"	// Okoteve traducción
-#elif L==7
-	"Cartella"
-#elif L==8
-	"Teczka"
-#elif L==9
-	"Pasta"
-#endif
-	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	}
 };
 
@@ -20600,6 +20613,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabSys *****************************************************
@@ -20775,6 +20789,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabCty *****************************************************
@@ -20870,6 +20885,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabIns *****************************************************
@@ -20985,6 +21001,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabCtr *****************************************************
@@ -21083,6 +21100,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabDeg *****************************************************
@@ -21181,6 +21199,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabCrs *****************************************************
@@ -21379,6 +21398,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabAss *****************************************************
@@ -21537,6 +21557,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabFil *****************************************************
@@ -21816,6 +21837,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Consulta individualizada de notas"
 	" (somente cada aluno v&ecirc; suas notas)"
 #endif
+	,
+	// 12: ActAdmBrf
+#if   L==1
+	"La meva zona privada d'emmagatzematge de fitxers"
+#elif L==2
+	"Aktentasche"
+#elif L==3
+	"Virtual pendrive"
+#elif L==4
+	"Mi zona privada de almacenamiento de archivos"
+#elif L==5
+	"Portedocuments"
+#elif L==6
+	"Mi zona privada de almacenamiento de archivos"	// Okoteve traducción
+#elif L==7
+	"Penna USB"
+#elif L==8
+	"Pendrive wirtualne"
+#elif L==9
+	"Pasta"
+#endif
 	},
 	{
 	// TabUsr *****************************************************
@@ -21995,6 +22037,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabSoc *****************************************************
@@ -22093,6 +22136,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabMsg *****************************************************
@@ -22257,6 +22301,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabSta *****************************************************
@@ -22398,6 +22443,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabPrf *****************************************************
@@ -22569,30 +22615,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Prefer&ecirc;ncias"
 #endif
 	,
-	//  8: ActAdmBrf
-#if   L==1
-	"La meva zona privada d'emmagatzematge de fitxers"
-#elif L==2
-	"Aktentasche"
-#elif L==3
-	"Virtual pendrive"
-#elif L==4
-	"Mi zona privada de almacenamiento de archivos"
-#elif L==5
-	"Portedocuments"
-#elif L==6
-	"Mi zona privada de almacenamiento de archivos"	// Okoteve traducción
-#elif L==7
-	"Penna USB"
-#elif L==8
-	"Pendrive wirtualne"
-#elif L==9
-	"Pasta"
-#endif
-	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	}
 };
 

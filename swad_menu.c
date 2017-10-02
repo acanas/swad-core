@@ -83,6 +83,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabSys *******************
 		{
@@ -98,6 +99,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabCty *******************
 		{
@@ -113,6 +115,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabIns *******************
 		{
@@ -128,6 +131,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabCtr *******************
 		{
@@ -143,6 +147,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabDeg *******************
 		{
@@ -158,6 +163,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabCrs *******************
 		{
@@ -173,6 +179,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabAss *******************
 		{
@@ -188,6 +195,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabFil *******************
 		{
@@ -203,6 +211,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActAdmAsgWrkUsr,	//  9
 		ActReqAsgWrkCrs,	// 10
 		ActSeeAdmMrk,		// 11
+		ActAdmBrf,		// 12
 		},
 		// TabUsr *******************
 		{
@@ -218,6 +227,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabSoc *******************
 		{
@@ -233,6 +243,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabMsg *******************
 		{
@@ -248,6 +259,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabSta *******************
 		{
@@ -263,6 +275,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 		// TabPrf *******************
 		{
@@ -274,10 +287,11 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActFrmMyAcc,		//  5
 		ActReqEdiRecCom,	//  6
 		ActEdiPrf,		//  7
-		ActAdmBrf,		//  8
+		0,			//  8
 		0,			//  9
 		0,			// 10
 		0,			// 11
+		0,			// 12
 		},
 	};
 
