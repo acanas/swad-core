@@ -71,6 +71,7 @@ struct Project
    long PrjCod;
    bool Hidden;
    Prj_Preassigned_t Preassigned;
+   unsigned NumStds;
    Prj_Status_t Status;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;

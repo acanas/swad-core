@@ -2014,6 +2014,7 @@ mysql> DESCRIBE projects;
 | DptCod      | int(11)                  | NO   |     | -1      |                |
 | Hidden      | enum('N','Y')            | NO   |     | N       |                |
 | Preassigned | enum('N','Y')            | NO   |     | N       |                |
+| NumStds     | int(11)                  | NO   |     | 1       |                |
 | Status      | enum('new','reproposed') | NO   |     | new     |                |
 | StartTime   | datetime                 | NO   |     | NULL    |                |
 | EndTime     | datetime                 | NO   |     | NULL    |                |
@@ -2023,7 +2024,7 @@ mysql> DESCRIBE projects;
 | Materials   | text                     | NO   |     | NULL    |                |
 | URL         | varchar(255)             | NO   |     | NULL    |                |
 +-------------+--------------------------+------+-----+---------+----------------+
-13 rows in set (0,00 sec)
+14 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
@@ -2031,6 +2032,7 @@ mysql> DESCRIBE projects;
 			"DptCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"NumStds INT NOT NULL DEFAULT 1,"
 			"Status ENUM('new','reproposed') NOT NULL DEFAULT 'new',"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"

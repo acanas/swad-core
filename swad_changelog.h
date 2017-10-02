@@ -252,13 +252,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.13 (2017-10-02)"
+#define Log_PLATFORM_VERSION	"SWAD 17.14 (2017-10-02)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.13.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.14:    Oct 02, 2017	New field number of students in projects. (231937 lines)
+					1 change necessary in database:
+ALTER TABLE projects ADD COLUMN NumStds INT NOT NULL DEFAULT 1 AFTER Preassigned;
+
         Version 17.13:    Oct 02, 2017	New field status in projects.
 					Fixed bug in hidden projects. (231867 lines)
 					1 change necessary in database:

@@ -946,6 +946,7 @@ CREATE TABLE IF NOT EXISTS projects (
 	DptCod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumStds INT NOT NULL DEFAULT 1,
 	Status ENUM('new','reproposed') NOT NULL DEFAULT 'new',
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,

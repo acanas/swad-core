@@ -419,8 +419,9 @@ static void Prj_ShowTableAllProjectsHead (void)
   {
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
    extern const char *Txt_Preassigned_QUESTION;
-   extern const char *Txt_Status;
+   extern const char *Txt_Number_of_students;
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
+   extern const char *Txt_Status;
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
@@ -436,11 +437,10 @@ static void Prj_ShowTableAllProjectsHead (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
                Txt_PROJECT_ORDER[Order]);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-            Txt_Preassigned_QUESTION);
-
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-            Txt_Status);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>"
+	              "<th class=\"LEFT_TOP DAT_N\">%s</th>",
+            Txt_Preassigned_QUESTION,
+            Txt_Number_of_students);
 
    for (NumRoleToShow = 0;
 	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
@@ -448,13 +448,15 @@ static void Prj_ShowTableAllProjectsHead (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
 	       Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-            Txt_Description);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-            Txt_Required_knowledge);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
-            Txt_Required_materials);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>",
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">%s</th>"
+                      "<th class=\"LEFT_TOP DAT_N\">%s</th>"
+                      "<th class=\"LEFT_TOP DAT_N\">%s</th>"
+                      "<th class=\"LEFT_TOP DAT_N\">%s</th>"
+                      "<th class=\"LEFT_TOP DAT_N\">%s</th>",
+            Txt_Status,
+            Txt_Description,
+            Txt_Required_knowledge,
+            Txt_Required_materials,
             Txt_URL);
 
    fprintf (Gbl.F.Out,"</tr>");
@@ -590,6 +592,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
+   extern const char *Txt_Number_of_students;
    extern const char *Txt_See_more;
    extern const char *Txt_See_less;
    extern const char *Txt_Status;
@@ -667,9 +670,6 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /* Department */
    Prj_ShowOneProjectDepartment (Prj,ProjectView);
 
-   /***** Project members *****/
-   Prj_ShowOneProjectMembers (Prj,ProjectView);
-
    /***** Preassigned? *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"3\" class=\"RIGHT_TOP");
@@ -692,6 +692,31 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
         	          "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
+
+   /***** Number of students *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"3\" class=\"RIGHT_TOP");
+   if (ProjectView == Prj_LIST_PROJECTS)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%s:"
+	              "</td>"
+                      "<td colspan=\"2\" class=\"LEFT_TOP",
+            Prj->Hidden ? "ASG_LABEL_LIGHT" :
+        	          "ASG_LABEL",
+            Txt_Number_of_students);
+   if (ProjectView == Prj_LIST_PROJECTS)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out," %s\">"
+                      "%u"
+                      "</td>"
+                      "</tr>",
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            Prj->NumStds);
+
+   /***** Project members *****/
+   Prj_ShowOneProjectMembers (Prj,ProjectView);
 
    /***** Link to show hidden info *****/
    if (ProjectView == Prj_LIST_PROJECTS)
@@ -782,10 +807,6 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    extern const char *Txt_Today;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
-   extern const char *Txt_Description;
-   extern const char *Txt_Required_knowledge;
-   extern const char *Txt_Required_materials;
-   extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_STATUS];
    unsigned NumRoleToShow;
    static unsigned UniqueId = 0;
@@ -852,6 +873,21 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
 
+   /***** Number of students *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
+                      "%u"
+                      "</td>",
+            Gbl.RowEvenOdd,
+            Prj->Hidden ? "DAT_LIGHT" :
+        	          "DAT",
+            Prj->NumStds);
+
+   /***** Project members *****/
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
+      Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
+
    /***** Status *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
                       "%s"
@@ -860,12 +896,6 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
             Prj->Hidden ? "DAT_LIGHT" :
         	          "DAT",
             Txt_PROJECT_STATUS[Prj->Status]);
-
-   /***** Project members *****/
-   for (NumRoleToShow = 0;
-	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	NumRoleToShow++)
-      Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -1855,7 +1885,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
    if (Prj->PrjCod > 0)
      {
       /***** Build query *****/
-      sprintf (Query,"SELECT PrjCod,DptCod,Hidden,Preassigned,Status,"
+      sprintf (Query,"SELECT PrjCod,DptCod,Hidden,Preassigned,NumStds,Status,"
 		     "UNIX_TIMESTAMP(StartTime),"
 		     "UNIX_TIMESTAMP(EndTime),"
 		     "NOW() BETWEEN StartTime AND EndTime,"
@@ -1868,15 +1898,16 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
       row[ 1]: DptCod
       row[ 2]: Hidden
       row[ 3]: Preassigned
-      row[ 4]: Status
-      row[ 5]: UNIX_TIMESTAMP(StartTime)
-      row[ 6]: UNIX_TIMESTAMP(EndTime)
-      row[ 7]: NOW() BETWEEN StartTime AND EndTime
-      row[ 8]: Title
-      row[ 9]: Description
-      row[10]: Knowledge
-      row[11]: Materials
-      row[12]: URL
+      row[ 4]: NumStds
+      row[ 5]: Status
+      row[ 6]: UNIX_TIMESTAMP(StartTime)
+      row[ 7]: UNIX_TIMESTAMP(EndTime)
+      row[ 8]: NOW() BETWEEN StartTime AND EndTime
+      row[ 9]: Title
+      row[10]: Description
+      row[11]: Knowledge
+      row[12]: Materials
+      row[13]: URL
       */
 
       /***** Get data of project *****/
@@ -1898,6 +1929,7 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   long NumLong;
    Prj_Status_t Status;
 
    /***** Clear all project data *****/
@@ -1913,15 +1945,16 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       row[ 1]: DptCod
       row[ 2]: Hidden
       row[ 3]: Preassigned
-      row[ 4]: Status
-      row[ 5]: UNIX_TIMESTAMP(StartTime)
-      row[ 6]: UNIX_TIMESTAMP(EndTime)
-      row[ 7]: NOW() BETWEEN StartTime AND EndTime
-      row[ 8]: Title
-      row[ 9]: Description
-      row[10]: Knowledge
-      row[11]: Materials
-      row[12]: URL
+      row[ 4]: NumStds
+      row[ 5]: Status
+      row[ 6]: UNIX_TIMESTAMP(StartTime)
+      row[ 7]: UNIX_TIMESTAMP(EndTime)
+      row[ 8]: NOW() BETWEEN StartTime AND EndTime
+      row[ 9]: Title
+      row[10]: Description
+      row[11]: Knowledge
+      row[12]: Materials
+      row[13]: URL
       */
 
       /* Get code of the project (row[0]) */
@@ -1937,44 +1970,51 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       Prj->Preassigned = (row[3][0] == 'Y') ? Prj_PREASSIGNED :
 	                                      Prj_NOT_PREASSIGNED;
 
-      /* Get project status (row[4]) */
+      /* Get if project is preassigned or not (row[4]) */
+      NumLong = Str_ConvertStrCodToLongCod (row[4]);
+      if (NumLong >= 0)
+         Prj->NumStds = (unsigned) NumLong;
+      else
+	 Prj->NumStds = 1;
+
+      /* Get project status (row[5]) */
       Prj->Status = Prj_STATUS_DEFAULT;
       for (Status  = (Prj_Status_t) 0;
 	   Status <= (Prj_Status_t) (Prj_NUM_STATUS - 1);
 	   Status++)
-	 if (!strcmp (Prj_Status_DB[Status],row[4]))
+	 if (!strcmp (Prj_Status_DB[Status],row[5]))
 	   {
 	    Prj->Status = Status;
 	    break;
 	   }
 
-      /* Get start date (row[5] holds the start UTC time) */
-      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
+      /* Get start date (row[6] holds the start UTC time) */
+      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
 
-      /* Get end date   (row[6] holds the end   UTC time) */
-      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[6]);
+      /* Get end date   (row[7] holds the end   UTC time) */
+      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[7]);
 
-      /* Get whether the project is open or closed (row[7]) */
-      Prj->Open = (row[7][0] == '1');
+      /* Get whether the project is open or closed (row[8]) */
+      Prj->Open = (row[8][0] == '1');
 
-      /* Get the title of the project (row[8]) */
-      Str_Copy (Prj->Title,row[8],
+      /* Get the title of the project (row[9]) */
+      Str_Copy (Prj->Title,row[9],
                 Prj_MAX_BYTES_PROJECT_TITLE);
 
-      /* Get the description of the project (row[9]) */
-      Str_Copy (Prj->Description,row[9],
+      /* Get the description of the project (row[10]) */
+      Str_Copy (Prj->Description,row[10],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required knowledge for the project (row[10]) */
-      Str_Copy (Prj->Knowledge,row[10],
+      /* Get the required knowledge for the project (row[11]) */
+      Str_Copy (Prj->Knowledge,row[11],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required materials for the project (row[11]) */
-      Str_Copy (Prj->Materials,row[11],
+      /* Get the required materials for the project (row[12]) */
+      Str_Copy (Prj->Materials,row[12],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the URL of the project (row[12]) */
-      Str_Copy (Prj->URL,row[12],
+      /* Get the URL of the project (row[13]) */
+      Str_Copy (Prj->URL,row[13],
                 Cns_MAX_BYTES_WWW);
      }
 
@@ -1992,6 +2032,7 @@ static void Prj_ResetProject (struct Project *Prj)
       Prj->PrjCod = -1L;
    Prj->Hidden = false;
    Prj->Preassigned = Prj_PREASSIGNED_DEFAULT;
+   Prj->NumStds     = 1;
    Prj->Status      = Prj_STATUS_DEFAULT;
    Prj->TimeUTC[Dat_START_TIME] =
    Prj->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
@@ -2294,6 +2335,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Title;
    extern const char *Txt_Department;
    extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_Number_of_students;
    extern const char *Txt_Status;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_STATUS];
    extern const char *Txt_Description;
@@ -2401,6 +2443,20 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
                       "</tr>");
+
+   /* Number of students */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"number\" name=\"NumStds\""
+                      " min=\"0\" value=\"%u\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Number_of_students,
+            Prj->NumStds);
 
    /* Status */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2586,6 +2642,13 @@ void Prj_RecFormProject (void)
       Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
 							     Prj_NOT_PREASSIGNED;
 
+      /* Get number of students */
+      Prj.NumStds = (unsigned)
+	            Par_GetParToUnsignedLong ("NumStds",
+	                                      0,
+	                                      UINT_MAX,
+	                                      1);
+
       /* Get status */
       Prj.Status = (Prj_Status_t)
 	           Par_GetParToUnsignedLong ("Status",
@@ -2653,17 +2716,19 @@ void Prj_RecFormProject (void)
 
 static void Prj_CreateProject (struct Project *Prj)
   {
-   char Query[1024 +
+   char Query[2048 +
               Prj_MAX_BYTES_PROJECT_TITLE +
               Cns_MAX_BYTES_TEXT*3 +
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new project *****/
    sprintf (Query,"INSERT INTO projects"
-	          " (CrsCod,DptCod,Hidden,Preassigned,Status,StartTime,EndTime,"
+	          " (CrsCod,DptCod,Hidden,Preassigned,NumStds,Status,"
+	          "StartTime,EndTime,"
 	          "Title,Description,Knowledge,Materials,URL)"
                   " VALUES"
-                  " (%ld,%ld,'%c','%c','%s',FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+                  " (%ld,%ld,'%c','%c',%u,'%s',"
+                  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Prj->DptCod,
@@ -2671,6 +2736,7 @@ static void Prj_CreateProject (struct Project *Prj)
         	          'N',
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
         	                                  'N',
+            Prj->NumStds,
             Prj_Status_DB[Prj->Status],
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
@@ -2705,7 +2771,7 @@ static void Prj_UpdateProject (struct Project *Prj)
 
    /***** Update the data of the project *****/
    sprintf (Query,"UPDATE projects SET "
-	          "DptCod=%ld,Hidden='%c',Preassigned='%c',Status='%s',"
+	          "DptCod=%ld,Hidden='%c',Preassigned='%c',NumStds=%u,Status='%s',"
 	          "StartTime=FROM_UNIXTIME(%ld),"
 	          "EndTime=FROM_UNIXTIME(%ld),"
                   "Title='%s',"
@@ -2716,6 +2782,7 @@ static void Prj_UpdateProject (struct Project *Prj)
         	          'N',
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
         	                                  'N',
+            Prj->NumStds,
             Prj_Status_DB[Prj->Status],
             Prj->TimeUTC[Dat_START_TIME],
             Prj->TimeUTC[Dat_END_TIME  ],
