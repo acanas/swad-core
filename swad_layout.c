@@ -710,6 +710,15 @@ static void Lay_WriteScriptParamsAJAX (void)
    fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
             Act_Actions[ActRefLstClk].ActCod);
 
+   /***** Parameters related with expanding/contracting folders in file browsers *****/
+   if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
+      /* In all the actions related to file browsers ==>
+	 put parameters used by AJAX */
+      fprintf (Gbl.F.Out,"var RefreshParamExpand = \"act=%ld\";\n"
+			 "var RefreshParamContract = \"act=%ld\";\n",
+	       Act_Actions[Brw_GetActionExpand ()  ].ActCod,
+	       Act_Actions[Brw_GetActionContract ()].ActCod);
+
    /***** Parameters related with social timeline refreshing *****/
    switch (Gbl.Action.Act)
      {

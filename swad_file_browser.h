@@ -139,6 +139,7 @@ struct FileMetadata
 /*****************************************************************************/
 
 #define Brw_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
+#define Brw_MAX_ROW_ID	((1 + Brw_MAX_DIR_LEVELS) * (10 + 1))
 
 #define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// 127: maximum size in bytes of "image/jpeg", "text/html", etc.
 
@@ -260,5 +261,8 @@ unsigned Brw_ListDocsFound (const char *Query,
 
 void Brw_AskRemoveOldFiles (void);
 void Brw_RemoveOldFilesBriefcase (void);
+
+Act_Action_t Brw_GetActionExpand (void);
+Act_Action_t Brw_GetActionContract (void);
 
 #endif

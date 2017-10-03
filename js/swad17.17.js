@@ -1257,7 +1257,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 }
 
 /*****************************************************************************/
-/* Compute day of the week from a given date (monday as first day of a week) */
+/** Compute day of the week from a given date (first day of a week: monday) **/
 /*****************************************************************************/
 // Return 0 for monday, 1 for tuesday,... 6 for sunday
 
@@ -1289,13 +1289,13 @@ function CopyMessageToHiddenFields () {
 
 	if (Subject)
 		for (i = 0; i < Subjects.length; i++)
-		    if (Subjects[i].type == "hidden")
-		    	Subjects[i].value = Subject.value;
+			if (Subjects[i].type == "hidden")
+				Subjects[i].value = Subject.value;
 
 	if (Content)
 		for (i = 0; i < Contents.length; i++)
-		    if (Contents[i].type == "hidden")
-		    	Contents[i].value = Content.value;
+			if (Contents[i].type == "hidden")
+				Contents[i].value = Content.value;
 }
 
 /*****************************************************************************/
@@ -1305,4 +1305,86 @@ function CopyMessageToHiddenFields () {
 function AnimateIcon (NumForm) {
 	document.getElementById('update_'+NumForm).style.display='none';	// Icon to be hidden on click
 	document.getElementById('updating_'+NumForm).style.display='';		// Icon to be shown on click
+}
+
+/*****************************************************************************/
+/************************ Expand / contract a folder *************************/
+/*****************************************************************************/
+/*
+Example of rows:
+	idParent	= 'file_browser_1_1_2_1'
+Children ids:
+	idRow		= 'file_browser_1_1_2_1_1'
+	idRow		= 'file_browser_1_1_2_1_2'
+	idRow		= 'file_browser_1_1_2_1_2_1'
+*/
+function ExpandFolder (idParent) {
+	var parent = document.getElementById(idParent);
+	var iconToExpand = document.getElementById('expand_' + idParent);
+	var iconToContract = document.getElementById('contract_' + idParent);
+
+	if (parent.dataset.folder == 'contracted') {
+		ExpandChildren (idParent);
+		parent.dataset.folder = 'expanded';
+		iconToExpand.style.display = 'none';
+		iconToContract.style.display = '';
+	}
+}
+
+function ExpandChildren (idParent) {
+	var parent = document.getElementById(idParent);
+	var rows = document.getElementsByTagName('tr');
+	var lengthIdParent = idParent.length;
+	var i;
+	var row;
+	var idRow;
+	var filename;
+
+	for (i = 0; i < rows.length; i++) {
+		row = rows[i];
+		if (row != parent) {
+			idRow = row.id;
+			if (idRow.indexOf(idParent) == 0) {				// row.id starts by idParent, so it's a child
+				/* Get filename */
+				filename = idRow.substring(lengthIdParent + 1);
+
+				if (filename.indexOf("_") < 0) {			// this child hangs directly from parent
+					/* Unhide row */
+					row.style.display = '';					// unhide
+
+					/* Expand children */
+					if (row.dataset.folder == 'expanded')	// this child is an expanded folder
+						ExpandChildren (idRow);				// recursive call
+				}
+			}
+		}
+	}
+}
+
+function ContractFolder (idParent) {
+	var parent = document.getElementById(idParent);
+	var iconToExpand = document.getElementById('expand_' + idParent);
+	var iconToContract = document.getElementById('contract_' + idParent);
+
+	if (parent.dataset.folder == 'expanded') {
+		ContractChildren (idParent);
+		parent.dataset.folder = 'contracted';
+		iconToContract.style.display = 'none';
+		iconToExpand.style.display = '';
+	}
+}
+
+function ContractChildren (idParent) {
+	var parent = document.getElementById(idParent);
+	var rows = document.getElementsByTagName('tr');
+	var i;
+	var row;
+
+	for (i = 0; i < rows.length; i++) {
+		row = rows[i];
+		if (row != parent)
+			if (row.id.indexOf(idParent) == 0)		// row.id starts by idParent, so it's a child
+				/* Unhide row */
+				row.style.display = 'none';			// hide
+	}
 }
