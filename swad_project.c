@@ -88,7 +88,6 @@ static void Prj_ShowProjectsInCurrentPage (void);
 
 static void Prj_PutFormToSelectWhichProjecsToShow (void);
 static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) ());
-static void Prj_PutParamWhichPrjs (void);
 static void Prj_GetParamWhichPrjs (void);
 
 static void Prj_ShowProjectsHead (bool PrintView);
@@ -347,7 +346,7 @@ static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) (
 /************* Parameter to show only my projects or all projects ************/
 /*****************************************************************************/
 
-static void Prj_PutParamWhichPrjs (void)
+void Prj_PutParamWhichPrjs (void)
   {
    Prj_GetParamWhichPrjs ();
 

@@ -1236,11 +1236,12 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                break;
             case Brw_ADMI_TEACH_GRP:	// Notify all teachers in group except me
                sprintf (Query,"SELECT crs_grp_usr.UsrCod"
-        	              " FROM crs_grp_usr,crs_grp,crs_usr"
+        	              " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
                               " WHERE crs_grp_usr.GrpCod=%ld"
                               " AND crs_grp_usr.UsrCod<>%ld"
                               " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-                              " AND crs_grp.CrsCod=crs_usr.CrsCod"
+                              " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+                              " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
                               " AND crs_usr.Role=%u",	// Notify teachers only
                         Gbl.CurrentCrs.Grps.GrpCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod,

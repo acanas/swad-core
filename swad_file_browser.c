@@ -65,10 +65,10 @@ extern struct Globals Gbl;
 
 typedef enum
   {
-   Brw_EXPAND_TREE_NOTHING,
-   Brw_EXPAND_TREE_PLUS,
-   Brw_EXPAND_TREE_MINUS,
-  } Brw_ExpandTree_t;
+   Brw_ICON_TREE_NOTHING,	// No icon to expand/contract a subtree
+   Brw_ICON_TREE_EXPAND,	// Icon to expand a contracted subtree
+   Brw_ICON_TREE_CONTRACT,	// Icon to contract a expanded subtree
+  } Brw_IconTree_t;
 
 struct Brw_NumObjects
   {
@@ -1489,9 +1489,12 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
 static void Brw_ResetFileBrowserSize (void);
 static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path);
 static void Brw_ListDir (unsigned Level,
+                         bool TreeContracted,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1]);
-static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
+static bool Brw_WriteRowFileBrowser (unsigned Level,
+                                     bool TreeContracted,
+                                     Brw_IconTree_t IconThisRow,
                                      const char PathInTree[PATH_MAX + 1],
                                      const char *FileName);
 static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
@@ -1507,14 +1510,15 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
 static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
                                 const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconPasteOff (void);
-static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_t ExpandTree,
+static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_IconTree_t IconThisRow,
                                                   const char PathInTree[PATH_MAX + 1],
-                                                  const char *FileName,const char *FileNameToShow);
+                                                  const char *FileName,
+                                                  const char *FileNameToShow);
 static void Brw_IndentDependingOnLevel (unsigned Level);
 static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel);
-static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
+static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
@@ -3697,8 +3701,15 @@ static void Brw_ShowFileBrowser (void)
    fprintf (Gbl.F.Out,"<table class=\"BROWSER_TABLE\">");
    Brw_SetFullPathInTree (Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],".");
    Gbl.FileBrowser.FileType = Brw_IS_FOLDER;
-   if (Brw_WriteRowFileBrowser (0,Brw_EXPAND_TREE_NOTHING,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],"."))
-      Brw_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+   if (Brw_WriteRowFileBrowser (0,
+                                false,	// Tree not contracted
+                                Brw_ICON_TREE_NOTHING,
+                                Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
+                                "."))
+      Brw_ListDir (1,
+                   false,	// Tree not contracted
+                   Gbl.FileBrowser.Priv.PathRootFolder,
+                   Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Show and store number of documents found *****/
@@ -5076,6 +5087,7 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 /*****************************************************************************/
 
 static void Brw_ListDir (unsigned Level,
+                         bool TreeContracted,
                          const char Path[PATH_MAX + 1],
                          const char PathInTree[PATH_MAX + 1])
   {
@@ -5088,7 +5100,7 @@ static void Brw_ListDir (unsigned Level,
    char PathFileRel[PATH_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
-   Brw_ExpandTree_t ExpandTree = Brw_EXPAND_TREE_NOTHING;	// Initialized to avoid warning
+   Brw_IconTree_t IconSubtree = Brw_ICON_TREE_NOTHING;	// Initialized to avoid warning
 
    /***** Scan directory *****/
    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
@@ -5112,18 +5124,18 @@ static void Brw_ListDir (unsigned Level,
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	      {
 	       if (Gbl.FileBrowser.FullTree)
-		  ExpandTree = Brw_EXPAND_TREE_NOTHING;
+		  IconSubtree = Brw_ICON_TREE_NOTHING;
 	       else
 		 {
 		  /***** Check if this subdirectory has files or folders in it *****/
 		  if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error
 		    {
 		     if (NumFilesInSubdir <= 2)
-			ExpandTree = Brw_EXPAND_TREE_NOTHING;
+			IconSubtree = Brw_ICON_TREE_NOTHING;
 		     else
 			/***** Check if the tree starting at this subdirectory must be expanded *****/
-			ExpandTree = Brw_GetIfExpandedTree (Gbl.FileBrowser.Priv.FullPathInTree) ? Brw_EXPAND_TREE_MINUS :
-												   Brw_EXPAND_TREE_PLUS;
+			IconSubtree = Brw_GetIfExpandedTree (Gbl.FileBrowser.Priv.FullPathInTree) ? Brw_ICON_TREE_CONTRACT :
+												    Brw_ICON_TREE_EXPAND;
 		     for (NumFileInSubdir = 0;
 			  NumFileInSubdir < NumFilesInSubdir;
 			  NumFileInSubdir++)
@@ -5136,18 +5148,26 @@ static void Brw_ListDir (unsigned Level,
 
 	       /***** Write a row for the subdirectory *****/
 	       Gbl.FileBrowser.FileType = Brw_IS_FOLDER;
-	       if (Brw_WriteRowFileBrowser (Level,ExpandTree,PathInTree,FileList[NumFile]->d_name))
-		  if (ExpandTree == Brw_EXPAND_TREE_MINUS ||
-		      ExpandTree == Brw_EXPAND_TREE_NOTHING)
-		     if (Level < Brw_MAX_DIR_LEVELS)
-			/* List subtree starting at this this directory */
-			Brw_ListDir (Level + 1,PathFileRel,PathFileInExplTree);
+	       if (Brw_WriteRowFileBrowser (Level,
+	                                    TreeContracted,
+	                                    IconSubtree,
+	                                    PathInTree,
+	                                    FileList[NumFile]->d_name))
+		  if (Level < Brw_MAX_DIR_LEVELS)
+		     /* List subtree starting at this this directory */
+		     Brw_ListDir (Level + 1,
+		                  TreeContracted || IconSubtree == Brw_ICON_TREE_EXPAND,
+				  PathFileRel,PathFileInExplTree);
 	      }
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	      {
 	       Gbl.FileBrowser.FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
 					                                                 Brw_IS_FILE;
-	       Brw_WriteRowFileBrowser (Level,Brw_EXPAND_TREE_NOTHING,PathInTree,FileList[NumFile]->d_name);
+	       Brw_WriteRowFileBrowser (Level,
+	                                TreeContracted,
+	                                Brw_ICON_TREE_NOTHING,
+	                                PathInTree,
+	                                FileList[NumFile]->d_name);
 	      }
 	   }
 	 free ((void *) FileList[NumFile]);
@@ -5165,7 +5185,9 @@ static void Brw_ListDir (unsigned Level,
 // If it is not the first row, it is shown or not depending on whether it is hidden or not
 // If the row is visible, return true. If it is hidden, return false
 
-static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
+static bool Brw_WriteRowFileBrowser (unsigned Level,
+                                     bool TreeContracted,
+                                     Brw_IconTree_t IconThisRow,
                                      const char PathInTree[PATH_MAX + 1],
                                      const char *FileName)
   {
@@ -5278,7 +5300,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
                                           FileName,FileNameToShow);
 
    /***** Start this row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<tr");
+   if (TreeContracted)	// This row is inside a contracted subtree
+      fprintf (Gbl.F.Out," style=\"display:none;\"");
+   fprintf (Gbl.F.Out,">");
 
    /****** If current action allows file administration... ******/
    Gbl.FileBrowser.ICanEditFileOrFolder = false;
@@ -5309,8 +5334,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
 
    /* Indent depending on level */
    if (Level)
-      Brw_IndentAndWriteIconExpandContract (Level,ExpandTree,
-                                            PathInTree,FileName,FileNameToShow);
+      Brw_IndentAndWriteIconExpandContract (Level,IconThisRow,
+                                            PathInTree,
+                                            FileName,
+                                            FileNameToShow);
 
    /* Put icon to show/hide file or folder */
    if (AdminDocsZone || AdminMarks)
@@ -5324,7 +5351,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
    /***** File or folder icon *****/
    if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
       /* Icon with folder */
-      Brw_PutIconFolder (Level,ExpandTree,
+      Brw_PutIconFolder (Level,IconThisRow,
                          PathInTree,FileName,FileNameToShow);
    else	// File or link
      {
@@ -5633,9 +5660,10 @@ static void Brw_PutIconPasteOff (void)
 /*************** Indent and write icon to expand/contract folder *************/
 /*****************************************************************************/
 
-static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_t ExpandTree,
+static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_IconTree_t IconThisRow,
                                                   const char PathInTree[PATH_MAX + 1],
-                                                  const char *FileName,const char *FileNameToShow)
+                                                  const char *FileName,
+                                                  const char *FileNameToShow)
   {
    extern const char *Txt_Expand;
    extern const char *Txt_Contract;
@@ -5647,15 +5675,15 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
    Brw_IndentDependingOnLevel (Level);
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
-   switch (ExpandTree)
+   switch (IconThisRow)
      {
-      case Brw_EXPAND_TREE_NOTHING:
+      case Brw_ICON_TREE_NOTHING:
          fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
                             " alt=\"\" title=\"\""
                             " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL);
          break;
-      case Brw_EXPAND_TREE_PLUS:
+      case Brw_ICON_TREE_EXPAND:
          /***** Form to expand folder *****/
 	 sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
          Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],FileBrowserId);
@@ -5672,7 +5700,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          Act_FormEnd ();
          Lay_EndSection ();
          break;
-      case Brw_EXPAND_TREE_MINUS:
+      case Brw_ICON_TREE_CONTRACT:
          /***** Form to contract folder *****/
 	 sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
          Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],FileBrowserId);
@@ -5789,7 +5817,7 @@ static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel)
 /** Write link e icon to upload or paste files, or to create folder or link **/
 /*****************************************************************************/
 
-static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
+static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
@@ -5814,7 +5842,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
                Gbl.Prefs.IconsURL,
-               (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
+               (IconSubtree == Brw_ICON_TREE_EXPAND) ? "closed" :
         	                                      "open",
                Gbl.Title,
                Gbl.Title);
@@ -5825,7 +5853,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
                Gbl.Prefs.IconsURL,
-               (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
+               (IconSubtree == Brw_ICON_TREE_EXPAND) ? "closed" :
         	                                      "open",
                Txt_Folder,
                Txt_Folder);

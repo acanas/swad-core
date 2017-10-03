@@ -248,17 +248,22 @@
 
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
 
+// TODO: Copy icon/link64x64.gif to public directory in swad.ugr.es and openswad.org
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.16 (2017-10-02)"
+#define Log_PLATFORM_VERSION	"SWAD 17.16.2 (2017-10-03)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.15.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.16.2:  Oct 03, 2017	Fixed bug in pagination of projects. (232061 lines)
+        Version 17.16.1:  Oct 03, 2017	Changing expansion of file subtrees. Not finished.
+					Fixed bug in notifications about new private files. (232060 lines)
         Version 17.16:    Oct 02, 2017	Briefcase moved from profile tab to files tab. (232028 lines)
         Version 17.15:    Oct 02, 2017	Status in projects changed for proposal. (231985 lines)
 					4 changes necessary in database:
