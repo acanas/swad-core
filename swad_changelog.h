@@ -254,13 +254,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.16.2 (2017-10-03)"
+#define Log_PLATFORM_VERSION	"SWAD 17.16.3 (2017-10-03)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.15.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.16.3:  Oct 03, 2017	Changing expansion of file subtrees. Not finished. (232113 lines)
         Version 17.16.2:  Oct 03, 2017	Fixed bug in pagination of projects. (232061 lines)
         Version 17.16.1:  Oct 03, 2017	Changing expansion of file subtrees. Not finished.
 					Fixed bug in notifications about new private files. (232060 lines)

@@ -5302,7 +5302,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
    /***** Start this row *****/
    fprintf (Gbl.F.Out,"<tr");
    if (TreeContracted)	// This row is inside a contracted subtree
-      fprintf (Gbl.F.Out," style=\"display:none;\"");
+      fprintf (Gbl.F.Out," class=\"NOT_SHOWN\"");
    fprintf (Gbl.F.Out,">");
 
    /****** If current action allows file administration... ******/
@@ -5673,6 +5673,60 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_IconTree_t 
 	              "<table>"
 	              "<tr>");
    Brw_IndentDependingOnLevel (Level);
+
+   /***** New icon to expand/contract *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+     {
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\" style=\"background-color:palegreen;\">",Gbl.RowEvenOdd);
+
+      switch (IconThisRow)
+	{
+	 case Brw_ICON_TREE_NOTHING:
+	    fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
+			       " alt=\"\" title=\"\""
+			       " class=\"ICO20x20\" />",
+		     Gbl.Prefs.IconsURL);
+	    break;
+	 case Brw_ICON_TREE_EXPAND:
+	    /***** Form to expand folder *****/
+	    sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
+	    Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],FileBrowserId);
+	    Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
+				      PathInTree,FileName,
+				      Brw_IS_FOLDER,-1L);
+	    sprintf (Gbl.Title,"%s %s",Txt_Expand,FileNameToShow);
+	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICO20x20\" />",
+		     Gbl.Prefs.IconsURL,
+		     Gbl.Title,
+		     Gbl.Title);
+	    Act_FormEnd ();
+	    Lay_EndSection ();
+	    break;
+	 case Brw_ICON_TREE_CONTRACT:
+	    /***** Form to contract folder *****/
+	    sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
+	    Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],FileBrowserId);
+	    Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type],
+				      PathInTree,FileName,
+				      Brw_IS_FOLDER,-1L);
+	    sprintf (Gbl.Title,"%s %s",Txt_Contract,FileNameToShow);
+	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICO20x20\" />",
+		     Gbl.Prefs.IconsURL,
+		     Gbl.Title,
+		     Gbl.Title);
+	    Act_FormEnd ();
+	    Lay_EndSection ();
+	    break;
+	}
+
+      fprintf (Gbl.F.Out,"</td>");
+     }
+
+   /***** Old icon to expand/contract *****/
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    switch (IconThisRow)
@@ -5718,6 +5772,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_IconTree_t 
          Lay_EndSection ();
          break;
      }
+
+   fprintf (Gbl.F.Out,"</td>");
 
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>"
@@ -5843,7 +5899,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
 	                 " class=\"ICO20x20\" />",
                Gbl.Prefs.IconsURL,
                (IconSubtree == Brw_ICON_TREE_EXPAND) ? "closed" :
-        	                                      "open",
+        	                                       "open",
                Gbl.Title,
                Gbl.Title);
       Act_FormEnd ();
@@ -5854,7 +5910,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
 	                 " class=\"ICO20x20\" />",
                Gbl.Prefs.IconsURL,
                (IconSubtree == Brw_ICON_TREE_EXPAND) ? "closed" :
-        	                                      "open",
+        	                                       "open",
                Txt_Folder,
                Txt_Folder);
 
