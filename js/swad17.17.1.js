@@ -1319,15 +1319,19 @@ Children ids:
 	idRow		= 'file_browser_1_1_2_1_2_1'
 */
 function ExpandFolder (idParent) {
-	var parent = document.getElementById(idParent);
-	var iconToExpand = document.getElementById('expand_' + idParent);
-	var iconToContract = document.getElementById('contract_' + idParent);
+	var parent				= document.getElementById(idParent);
+	var iconToExpand		= document.getElementById('expand_'			+ idParent);
+	var iconToContract		= document.getElementById('contract_'		+ idParent);
+	var iconFolderClosed	= document.getElementById('folder_closed_'	+ idParent);
+	var iconFolderOpen		= document.getElementById('folder_open_'	+ idParent);
 
 	if (parent.dataset.folder == 'contracted') {
 		ExpandChildren (idParent);
 		parent.dataset.folder = 'expanded';
-		iconToExpand.style.display = 'none';
-		iconToContract.style.display = '';
+		iconToExpand.style.display		= 'none';
+		iconToContract.style.display	= '';
+		iconFolderClosed.style.display	= 'none';
+		iconFolderOpen.style.display	= '';
 	}
 }
 
@@ -1363,14 +1367,18 @@ function ExpandChildren (idParent) {
 
 function ContractFolder (idParent) {
 	var parent = document.getElementById(idParent);
-	var iconToExpand = document.getElementById('expand_' + idParent);
-	var iconToContract = document.getElementById('contract_' + idParent);
+	var iconToExpand		= document.getElementById('expand_'			+ idParent);
+	var iconToContract		= document.getElementById('contract_'		+ idParent);
+	var iconFolderClosed	= document.getElementById('folder_closed_'	+ idParent);
+	var iconFolderOpen		= document.getElementById('folder_open_'	+ idParent);
 
 	if (parent.dataset.folder == 'expanded') {
 		ContractChildren (idParent);
 		parent.dataset.folder = 'contracted';
-		iconToContract.style.display = 'none';
-		iconToExpand.style.display = '';
+		iconToContract.style.display	= 'none';
+		iconToExpand.style.display		= '';
+		iconFolderOpen.style.display	= 'none';
+		iconFolderClosed.style.display	= '';
 	}
 }
 

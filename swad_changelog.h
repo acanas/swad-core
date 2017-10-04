@@ -254,13 +254,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.17 (2017-10-04)"
+#define Log_PLATFORM_VERSION	"SWAD 17.17.2 (2017-10-04)"
 #define CSS_FILE		"swad17.0.css"
-#define JS_FILE			"swad17.17.js"
+#define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.17.2:  Oct 04, 2017	Changes related with output with status 204 No Content. (232332 lines)
+        Version 17.17.1:  Oct 04, 2017	Changed folder icon when expanding / contracting a folder. (232330 lines)
         Version 17.17:    Oct 04, 2017	Changing expansion of file subtrees. (232273 lines)
         Version 17.16.3:  Oct 03, 2017	Changing expansion of file subtrees. Not finished. (232113 lines)
         Version 17.16.2:  Oct 03, 2017	Fixed bug in pagination of projects. (232061 lines)

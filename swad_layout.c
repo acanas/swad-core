@@ -250,7 +250,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"</head>\n");
 
    /***** HTML body *****/
-   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
+   if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
       fprintf (Gbl.F.Out,"<body onload=\"init();\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
@@ -358,6 +358,29 @@ void Lay_WriteStartOfPage (void)
    Usr_InformAboutNumClicksBeforePhoto ();
   }
 
+
+/*****************************************************************************/
+/*********************** Write status 204 No Content *************************/
+/*****************************************************************************/
+
+void Lay_WriteHTTPStatus204NoContent (void)
+  {
+   /***** The HTTP response is a code status *****/
+   /* Don't write HTML at all */
+   Gbl.Layout.HTMLStartWritten =
+   Gbl.Layout.DivsEndWritten   =
+   Gbl.Layout.HTMLEndWritten   = true;
+
+   /* Start HTTP response */
+   fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
+
+   /* Return HTTP status code 204 No Content:
+      The server has successfully fulfilled the request
+      and there is no additional content to send
+      in the response payload body. */
+   fprintf (stdout,"Status: 204\r\n\r\n");
+  }
+
 /*****************************************************************************/
 /************************ Write the end of the page **************************/
 /*****************************************************************************/
@@ -374,7 +397,7 @@ static void Lay_WriteEndOfPage (void)
 			 "</div>");	// main_zone_central_container
 
       /***** Write page footer *****/
-      if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
+      if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
          Lay_WriteFootFromHTMLFile ();
 
       /***** End of main zone and page *****/
@@ -1240,7 +1263,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
 	    // Here Gbl.F.Out is stdout
-	    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
+	    if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
 	       Lay_WriteAboutZone ();
 
 	    fprintf (Gbl.F.Out,"</body>\n"

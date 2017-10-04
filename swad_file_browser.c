@@ -1402,7 +1402,7 @@ const char *Brw_MIMETypesAllowed[] =
    "image/x-rgb",			// RGB image rgb
    "image/x-xbitmap",			// X Bitmap xbm
    "image/x-xpixmap",			// X Pixmap xpm
-   "image/x-xwindowdump",		// X BrowserWindow System dump xwd
+   "image/x-xwindowdump",		// X Window System dump xwd
    "message/rfc822",			// Files .mht and .mhtml
    "mime/pdf",				// Adobe Acrobat pdf
    "multipart/x-gzip",			// GNU ZIP archive gzip
@@ -1510,7 +1510,8 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
 static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
                                 const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconPasteOff (void);
-static void Brw_IndentAndWriteIconExpandContract (unsigned Level,const char *RowId,
+static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
+                                                  const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow,
                                                   const char PathInTree[PATH_MAX + 1],
                                                   const char *FileName,
@@ -1530,8 +1531,18 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel);
-static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
-                               const char *PathInTree,const char *FileName,const char *FileNameToShow);
+static void Brw_PutIconFolder (unsigned Level,
+                               const char *FileBrowserId,const char *RowId,
+                               Brw_IconTree_t IconSubtree,
+                               const char *PathInTree,
+                               const char *FileName,
+                               const char *FileNameToShow);
+static void Brw_PutIconToCreateIntoFolder (const char *FileBrowserId,const char *RowId,
+                                           const char *OpenOrClosed,
+					   bool Hidden,
+					   const char PathInTree[PATH_MAX + 1],
+					   const char *FileName,
+					   const char *FileNameToShow);
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                                                    struct FileMetadata *FileMetadata,
@@ -5214,6 +5225,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool IsRecent = false;
    struct FileMetadata FileMetadata;
    char FileNameToShow[NAME_MAX + 1];
+   char FileBrowserId[32];
    bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_INS ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_CTR ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_DEG ||
@@ -5236,7 +5248,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool AdminMarks      = Gbl.FileBrowser.Type == Brw_ADMI_MARKS_CRS ||
                           Gbl.FileBrowser.Type == Brw_ADMI_MARKS_GRP;
 
+   /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
+   sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
 
    /***** Is this row hidden or visible? *****/
    if (SeeDocsZone || AdminDocsZone ||
@@ -5363,11 +5377,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /* Indent depending on level */
    if (Level)
-      Brw_IndentAndWriteIconExpandContract (Level,RowId,
-                                            IconThisRow,
-                                            PathInTree,
-                                            FileName,
-                                            FileNameToShow);
+      Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow,
+                                            PathInTree,FileName,FileNameToShow);
 
    /* Put icon to show/hide file or folder */
    if (AdminDocsZone || AdminMarks)
@@ -5381,7 +5392,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /***** File or folder icon *****/
    if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
       /* Icon with folder */
-      Brw_PutIconFolder (Level,IconThisRow,
+      Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow,
                          PathInTree,FileName,FileNameToShow);
    else	// File or link
      {
@@ -5690,14 +5701,13 @@ static void Brw_PutIconPasteOff (void)
 /*************** Indent and write icon to expand/contract folder *************/
 /*****************************************************************************/
 
-static void Brw_IndentAndWriteIconExpandContract (unsigned Level,const char *RowId,
+static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
+                                                  const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow,
                                                   const char PathInTree[PATH_MAX + 1],
                                                   const char *FileName,
                                                   const char *FileNameToShow)
   {
-   char FileBrowserId[32];
-
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
 	              "<tr>");
@@ -5714,8 +5724,6 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,const char *Row
 		  Gbl.Prefs.IconsURL);
 	 break;
       case Brw_ICON_TREE_EXPAND:
-	 sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
-
 	 /***** Visible icon to expand folder *****/
          Brw_PutIconToExpandFolder (FileBrowserId,RowId,
                                     false,	// Visible
@@ -5727,8 +5735,6 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,const char *Row
                                       PathInTree,FileName,FileNameToShow);
 	 break;
       case Brw_ICON_TREE_CONTRACT:
-	 sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
-
 	 /***** Hidden icon to expand folder *****/
          Brw_PutIconToExpandFolder (FileBrowserId,RowId,
                                     true,	// Hidden
@@ -5923,10 +5929,13 @@ static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel)
 /** Write link e icon to upload or paste files, or to create folder or link **/
 /*****************************************************************************/
 
-static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
-                               const char *PathInTree,const char *FileName,const char *FileNameToShow)
+static void Brw_PutIconFolder (unsigned Level,
+                               const char *FileBrowserId,const char *RowId,
+                               Brw_IconTree_t IconSubtree,
+                               const char *PathInTree,
+                               const char *FileName,
+                               const char *FileNameToShow)
   {
-   extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
    extern const char *Txt_Folder;
    bool ICanCreate;
 
@@ -5934,25 +5943,33 @@ static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Level * 20);
 
-   /***** Put icon *****/
+   /***** Put icon to create a new file or folder *****/
    if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
      {
-      /***** Form to create a new file or folder *****/
-      Act_FormStart (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
-      Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type],
-                                PathInTree,FileName,
-                                Brw_IS_FOLDER,-1L);
-      sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/folder-%s-plus16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
-               Gbl.Prefs.IconsURL,
-               (IconSubtree == Brw_ICON_TREE_EXPAND) ? "closed" :
-        	                                       "open",
-               Gbl.Title,
-               Gbl.Title);
-      Act_FormEnd ();
+      if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	{
+	 /***** Visible icon with folder closed *****/
+	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"closed",
+					false,	// Visible
+					PathInTree,FileName,FileNameToShow);
+
+	 /***** Hidden icon with folder open *****/
+	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"open",
+					true,	// Hidden
+					PathInTree,FileName,FileNameToShow);
+	}
+      else
+	{
+	 /***** Hidden icon with folder closed *****/
+	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"closed",
+					true,	// Hidden
+					PathInTree,FileName,FileNameToShow);
+
+	 /***** Visible icon with folder open *****/
+	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"open",
+					false,	// Visible
+					PathInTree,FileName,FileNameToShow);
+	}
      }
    else	// I can't create a new file or folder
       fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
@@ -5966,6 +5983,45 @@ static void Brw_PutIconFolder (unsigned Level,Brw_IconTree_t IconSubtree,
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/************************ Put icon to expand a folder ************************/
+/*****************************************************************************/
+
+static void Brw_PutIconToCreateIntoFolder (const char *FileBrowserId,const char *RowId,
+                                           const char *OpenOrClosed,
+					   bool Hidden,
+					   const char PathInTree[PATH_MAX + 1],
+					   const char *FileName,
+					   const char *FileNameToShow)
+  {
+   extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
+	    OpenOrClosed,FileBrowserId,RowId);
+   if (Hidden)
+      fprintf (Gbl.F.Out," style=\"display:none;\"");
+   fprintf (Gbl.F.Out,">");
+
+   /***** Form and icon *****/
+   Act_FormStart (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
+   Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type],
+			     PathInTree,FileName,
+			     Brw_IS_FOLDER,-1L);
+   sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
+   fprintf (Gbl.F.Out,"<input type=\"image\""
+		      " src=\"%s/folder-%s-plus16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20\" />",
+	    Gbl.Prefs.IconsURL,OpenOrClosed,
+	    Gbl.Title,
+	    Gbl.Title);
+   Act_FormEnd ();
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -6589,6 +6645,7 @@ void Brw_RemSubtreeInFileBrowser (void)
 /*****************************************************************************/
 /********************* Expand a folder in a file browser *********************/
 /*****************************************************************************/
+// A priori function. Changes database. No HTML output.
 
 void Brw_ExpandFileTree (void)
   {
@@ -6597,29 +6654,12 @@ void Brw_ExpandFileTree (void)
 
    /***** Add path to table of expanded folders *****/
    Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
-
-   /***** The HTTP response is a code status *****/
-   /* Don't write HTML at all */
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = true;
-
-   /* Start HTTP response */
-   fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
-
-   /* Return HTTP status code 204 No Content:
-      The server has successfully fulfilled the request
-      and there is no additional content to send
-      in the response payload body. */
-   fprintf (stdout,"Status: 204\r\n\r\n");
-
-   /***** Show again file browser *****/
-   // Brw_ShowAgainFileBrowserOrWorks ();
   }
 
 /*****************************************************************************/
 /******************* Contract a folder in a file browser *********************/
 /*****************************************************************************/
+// A priori function. Changes database. No HTML output.
 
 void Brw_ContractFileTree (void)
   {
@@ -6628,24 +6668,6 @@ void Brw_ContractFileTree (void)
 
    /***** Remove path where the user has clicked from table of expanded folders *****/
    Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
-
-   /***** The HTTP response is a code status *****/
-   /* Don't write HTML at all */
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = true;
-
-   /* Start HTTP response */
-   fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
-
-   /* Return HTTP status code 204 No Content:
-      The server has successfully fulfilled the request
-      and there is no additional content to send
-      in the response payload body. */
-   fprintf (stdout,"Status: 204\r\n\r\n");
-
-   /***** Show again file browser *****/
-   // Brw_ShowAgainFileBrowserOrWorks ();
   }
 
 /*****************************************************************************/

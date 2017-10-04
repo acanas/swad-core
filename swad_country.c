@@ -1221,7 +1221,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    bool PutForm = ClassLink &&
 	          !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB;	// Only in main browser tab
+                  Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    /***** Get country name *****/
    Cty_GetCountryName (CtyCod,CtyName);

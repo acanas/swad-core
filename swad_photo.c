@@ -1176,9 +1176,9 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
-                                 Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB;	// Only in main browser tab
+                                 Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
    bool PutZoomCode = Zoom == Pho_ZOOM &&						// Make zoom
-                      Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB;	// Only in main browser tab
+                      Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
    char IdCaption[Act_MAX_BYTES_ID];
 
    /***** Start form to go to public profile *****/

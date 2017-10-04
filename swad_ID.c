@@ -372,7 +372,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
    ICanConfirmUsrID = ICanSeeUsrID &&
 	              (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&			// Not me
 	              !Gbl.Form.Inside &&						// Not inside another form
-                      Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB;	// Only in main browser tab
+                      Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;

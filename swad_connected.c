@@ -270,7 +270,7 @@ void Con_GetAndShowLastClicks (void)
       ActCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Use a special color for this row depending on the action */
-      ClassRow = (Act_Actions[Act_GetActionFromActCod (ActCod)].BrowserWindow == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
+      ClassRow = (Act_Actions[Act_GetActionFromActCod (ActCod)].BrowserTab == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
 	         (ActCod == Act_Actions[ActLogIn   ].ActCod ||
 	          ActCod == Act_Actions[ActLogInNew].ActCod) ? "DAT_SMALL_GREEN" :
                  (ActCod == Act_Actions[ActLogOut  ].ActCod) ? "DAT_SMALL_RED" :

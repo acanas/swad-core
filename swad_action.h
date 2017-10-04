@@ -54,6 +54,7 @@ typedef enum
    Act_BRW_2ND_TAB,	// The second tab in the browser
    Act_UPLOAD_FILE,	// Upload a file. Do not write HTML content. Write Status code instead for Dropzone.js
    Act_DOWNLD_FILE,	// Download a file in a new tab. Do not write HTML content.
+   Act_204_NO_CONT,	// Do not write HTML content. HTTP will return Status 204 No Content
   } Act_BrowserTab_t;
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
@@ -1593,7 +1594,7 @@ struct Act_Actions
    unsigned PermissionCty;
    unsigned PermissionSys;
    Act_Content_t ContentType;
-   Act_BrowserTab_t BrowserWindow;
+   Act_BrowserTab_t BrowserTab;
    void (*FunctionPriori)();
    void (*FunctionPosteriori)();
    const char *Icon;

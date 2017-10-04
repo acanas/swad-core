@@ -50,6 +50,8 @@
 
 void Lay_WriteStartOfPage (void);
 
+void Lay_WriteHTTPStatus204NoContent (void);
+
 void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                             void (*FuncParams) (),
                             const char *Icon,

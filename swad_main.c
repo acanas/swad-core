@@ -121,7 +121,7 @@ int main (void)
 	 Con_RemoveOldConnected ();
 
 	 /***** Get number of sessions *****/
-	 if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB)
+	 if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
 	    Ses_GetNumSessions ();
 
 	 /***** Check user and get user's data *****/
@@ -138,6 +138,10 @@ int main (void)
       /***** Execute a function depending on the action *****/
       if (Act_Actions[Gbl.Action.Act].FunctionPriori != NULL)
 	 Act_Actions[Gbl.Action.Act].FunctionPriori ();
+
+      if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_204_NO_CONT)
+	 /***** Write HTTP Status 204 No Content *****/
+	 Lay_WriteHTTPStatus204NoContent ();
 
       /***** Start writing HTML output *****/
       Lay_WriteStartOfPage ();

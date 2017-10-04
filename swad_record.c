@@ -2306,7 +2306,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs.Role];
 
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB;	// Only in main browser tab
+                  Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    Ins.InsCod = UsrDat->InsCod;
    if (Ins.InsCod > 0)
@@ -2551,7 +2551,7 @@ static void Rec_PutIconsCommands (void)
    Act_Action_t NextAction;
 
    if (!Gbl.Form.Inside &&						// Only if not inside another form
-       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_BRW_1ST_TAB &&	// Only in main browser tab
+       Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB &&	// Only in main browser tab
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
       ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
