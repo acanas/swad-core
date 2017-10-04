@@ -1531,18 +1531,21 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static bool Brw_CheckIfAnyUpperLevelIsHidden (unsigned CurrentLevel);
+
 static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree,
                                const char *PathInTree,
                                const char *FileName,
                                const char *FileNameToShow);
-static void Brw_PutIconToCreateIntoFolder (const char *FileBrowserId,const char *RowId,
-                                           const char *OpenOrClosed,
-					   bool Hidden,
-					   const char PathInTree[PATH_MAX + 1],
-					   const char *FileName,
-					   const char *FileNameToShow);
+static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
+			                  bool Open,bool Hidden);
+static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
+				       bool Open,bool Hidden,
+				       const char PathInTree[PATH_MAX + 1],
+				       const char *FileName,
+				       const char *FileNameToShow);
+
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                                                    struct FileMetadata *FileMetadata,
@@ -5936,7 +5939,6 @@ static void Brw_PutIconFolder (unsigned Level,
                                const char *FileName,
                                const char *FileNameToShow)
   {
-   extern const char *Txt_Folder;
    bool ICanCreate;
 
    /***** Start cell *****/
@@ -5949,58 +5951,113 @@ static void Brw_PutIconFolder (unsigned Level,
       if (IconSubtree == Brw_ICON_TREE_EXPAND)
 	{
 	 /***** Visible icon with folder closed *****/
-	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"closed",
-					false,	// Visible
-					PathInTree,FileName,FileNameToShow);
+	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				    false,	// Closed
+				    false,	// Visible
+				    PathInTree,FileName,FileNameToShow);
 
 	 /***** Hidden icon with folder open *****/
-	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"open",
-					true,	// Hidden
-					PathInTree,FileName,FileNameToShow);
+	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				    true,	// Open
+				    true,	// Hidden
+				    PathInTree,FileName,FileNameToShow);
 	}
       else
 	{
 	 /***** Hidden icon with folder closed *****/
-	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"closed",
-					true,	// Hidden
-					PathInTree,FileName,FileNameToShow);
+	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				    false,	// Closed
+				    true,	// Hidden
+				    PathInTree,FileName,FileNameToShow);
 
 	 /***** Visible icon with folder open *****/
-	 Brw_PutIconToCreateIntoFolder (FileBrowserId,RowId,"open",
-					false,	// Visible
-					PathInTree,FileName,FileNameToShow);
+	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				    true,	// Open
+				    false,	// Visible
+				    PathInTree,FileName,FileNameToShow);
 	}
      }
    else	// I can't create a new file or folder
-      fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
-               Gbl.Prefs.IconsURL,
-               (IconSubtree == Brw_ICON_TREE_EXPAND) ? "closed" :
-        	                                       "open",
-               Txt_Folder,
-               Txt_Folder);
+     {
+      if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	{
+	 /***** Visible icon with folder closed *****/
+	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+			               false,	// Closed
+			               false);	// Visible
+
+	 /***** Hidden icon with folder open *****/
+	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+			               true,	// Open
+			               true);	// Hidden
+	}
+      else
+	{
+	 /***** Hidden icon with folder closed *****/
+	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+			               false,	// Closed
+			               true);	// Hidden
+
+	 /***** Visible icon with folder open *****/
+	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+			               true,	// Open
+			               false);	// Visible
+	}
+     }
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
-/************************ Put icon to expand a folder ************************/
+/******** Put icon to expand a folder without form to create inside **********/
 /*****************************************************************************/
 
-static void Brw_PutIconToCreateIntoFolder (const char *FileBrowserId,const char *RowId,
-                                           const char *OpenOrClosed,
-					   bool Hidden,
-					   const char PathInTree[PATH_MAX + 1],
-					   const char *FileName,
-					   const char *FileNameToShow)
+static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
+			                  bool Open,bool Hidden)
+  {
+   extern const char *Txt_Folder;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
+	    Open ? "open" :
+		   "closed",
+	    FileBrowserId,RowId);
+   if (Hidden)
+      fprintf (Gbl.F.Out," style=\"display:none;\"");
+   fprintf (Gbl.F.Out,">");
+
+   /***** Form and icon *****/
+   fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICO20x20\" />",
+		  Gbl.Prefs.IconsURL,
+		  Open ? "open" :
+			 "closed",
+		  Txt_Folder,
+		  Txt_Folder);
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********** Put icon to expand a folder with form to create inside ***********/
+/*****************************************************************************/
+
+static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
+				       bool Open,bool Hidden,
+				       const char PathInTree[PATH_MAX + 1],
+				       const char *FileName,
+				       const char *FileNameToShow)
   {
    extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
-	    OpenOrClosed,FileBrowserId,RowId);
+	    Open ? "open" :
+		   "closed",
+	    FileBrowserId,RowId);
    if (Hidden)
       fprintf (Gbl.F.Out," style=\"display:none;\"");
    fprintf (Gbl.F.Out,">");
@@ -6015,7 +6072,9 @@ static void Brw_PutIconToCreateIntoFolder (const char *FileBrowserId,const char 
 		      " src=\"%s/folder-%s-plus16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
-	    Gbl.Prefs.IconsURL,OpenOrClosed,
+	    Gbl.Prefs.IconsURL,
+	    Open ? "open" :
+		   "closed",
 	    Gbl.Title,
 	    Gbl.Title);
    Act_FormEnd ();
