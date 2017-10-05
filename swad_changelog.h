@@ -254,13 +254,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.17.3 (2017-10-04)"
+#define Log_PLATFORM_VERSION	"SWAD 17.17.4 (2017-10-05)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.17.4:  Oct 05, 2017	Department is filled automatically with user's department when creating a new project. (232385 lines)
         Version 17.17.3:  Oct 04, 2017	Fixed problems with icons when expanding / contracting a folder. (232383 lines)
         Version 17.17.2:  Oct 04, 2017	Changes related with output with status 204 No Content. (232332 lines)
         Version 17.17.1:  Oct 04, 2017	Changed folder icon when expanding / contracting a folder. (232330 lines)

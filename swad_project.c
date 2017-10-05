@@ -2309,6 +2309,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
       Prj.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC +
 	                            Prj_INTERVAL_DEFAULT;
       Prj.Open = true;
+      Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
      }
    else
       /* Get data of the project from database */
@@ -2718,7 +2719,7 @@ static void Prj_CreateProject (struct Project *Prj)
   {
    char Query[2048 +
               Prj_MAX_BYTES_PROJECT_TITLE +
-              Cns_MAX_BYTES_TEXT*3 +
+              Cns_MAX_BYTES_TEXT * 3 +
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new project *****/
