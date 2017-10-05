@@ -456,6 +456,7 @@ Assessment:
 	316. ActSeeTblAllPrj		Show all projects in a table
 	317. ActFrmNewPrj		Form to create a new project
 	318. ActEdiOnePrj		Edit one project
+	NEW. ActFilBrwOnePrj		View / edit project file browser
 	319. ActPrnOnePrj		Print one project
 	320. ActNewPrj			Create new project
 	321. ActChgPrj			Modify data of an existing project
@@ -1959,6 +1960,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeTblAllPrj	*/{1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableAllProjects	,NULL},
    /* ActFrmNewPrj	*/{1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatePrj		,NULL},
    /* ActEdiOnePrj	*/{1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestEditPrj		,NULL},
+   /* ActFilBrwOnePrj	*/{1697,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_FileBrowserPrj		,NULL},
    /* ActPrnOnePrj	*/{1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
    /* ActNewPrj		*/{1678,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
    /* ActChgPrj		*/{1679,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
@@ -4801,6 +4803,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRemTutPrj,		// #1694
 	ActRemEvaPrj,		// #1695
 	ActSeeTblAllPrj,	// #1696
+	ActFilBrwOnePrj,	// #1697
 	};
 
 /*****************************************************************************/

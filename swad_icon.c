@@ -202,6 +202,16 @@ void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
                           NULL);
   }
 
+void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Files;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+			  "folder64x64.gif",
+			  Txt_Files,NULL,
+                          NULL);
+  }
+
 void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_View;

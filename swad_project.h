@@ -109,6 +109,9 @@ typedef enum
 void Prj_SeeProjects (void);
 void Prj_ShowTableAllProjects (void);
 void Prj_PutParamWhichPrjs (void);
+
+void Prj_FileBrowserPrj (void);
+
 void Prj_PrintOneProject (void);
 
 void Prj_ReqAddStd (void);

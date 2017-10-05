@@ -55,6 +55,7 @@ extern struct Globals Gbl;
 typedef enum
   {
    Prj_LIST_PROJECTS,
+   Prj_FILE_BROWSER_PROJECT,
    Prj_PRINT_ONE_PROJECT,
    Prj_EDIT_ONE_PROJECT,
   } Prj_ProjectView_t;
@@ -263,7 +264,11 @@ static void Prj_ShowProjectsInCurrentPage (void)
 	   NumPrj <= Pagination.LastItemVisible;
 	   NumPrj++)
 	{
+         /* Get project data */
 	 Prj.PrjCod = Gbl.Prjs.LstPrjCods[NumPrj - 1];
+         Prj_GetDataOfProjectByCod (&Prj);
+
+         /* Show project */
 	 Prj_ShowOneProject (&Prj,Prj_LIST_PROJECTS);
 	}
 
@@ -549,6 +554,43 @@ static void Prj_PutIconToShowAllData (void)
   }
 
 /*****************************************************************************/
+/***************** View / edit file browser of one project *******************/
+/*****************************************************************************/
+
+void Prj_FileBrowserPrj (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects;
+   struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get project data *****/
+   Prj.PrjCod = Prj_GetParamPrjCod ();
+   Prj_GetDataOfProjectByCod (&Prj);
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Prj.Title,NULL,
+		      Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE,2);
+   Prj_ShowProjectsHead (true);	// Print view
+
+   /***** Write project *****/
+   Prj_ShowOneProject (&Prj,Prj_FILE_BROWSER_PROJECT);
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** Project file browser *****/
+   Ale_ShowAlert (Ale_INFO,"Archivos del proyecto");
+
+   /***** End box *****/
+   Box_EndBoxTable ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+  }
+
+/*****************************************************************************/
 /********************** Show print view of one project ***********************/
 /*****************************************************************************/
 
@@ -559,8 +601,9 @@ void Prj_PrintOneProject (void)
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
 
-   /***** Get the code of the project *****/
+   /***** Get project data *****/
    Prj.PrjCod = Prj_GetParamPrjCod ();
+   Prj_GetDataOfProjectByCod (&Prj);
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
@@ -601,9 +644,6 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    static unsigned UniqueId = 0;
-
-   /***** Get data of this project *****/
-   Prj_GetDataOfProjectByCod (Prj);
 
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
@@ -719,31 +759,49 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    Prj_ShowOneProjectMembers (Prj,ProjectView);
 
    /***** Link to show hidden info *****/
-   if (ProjectView == Prj_LIST_PROJECTS)
+   switch (ProjectView)
      {
-      fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
-			 "<td colspan=\"5\" class=\"CENTER_MIDDLE COLOR%u\">",
-	       UniqueId,Gbl.RowEvenOdd);
-      Prj_PutIconToToggleProject (UniqueId,"more64x64.png",Txt_See_more);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      case Prj_LIST_PROJECTS:
+      case Prj_FILE_BROWSER_PROJECT:
+	 fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
+			    "<td colspan=\"5\" class=\"CENTER_MIDDLE",
+		  UniqueId);
+	 if (ProjectView == Prj_LIST_PROJECTS)
+	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"\">");
+	 Prj_PutIconToToggleProject (UniqueId,"more64x64.png",Txt_See_more);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
-      fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
-			 "<td colspan=\"5\" class=\"CENTER_MIDDLE COLOR%u\">",
-	       UniqueId,Gbl.RowEvenOdd);
-      Prj_PutIconToToggleProject (UniqueId,"less64x64.png",Txt_See_less);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
+			    "<td colspan=\"5\" class=\"CENTER_MIDDLE",
+		  UniqueId);
+	 if (ProjectView == Prj_LIST_PROJECTS)
+	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"\">");
+	 Prj_PutIconToToggleProject (UniqueId,"less64x64.png",Txt_See_less);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+	 break;
+      default:
+	 break;
      }
 
    /***** Proposal *****/
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out,"<tr id=\"prj_pro_%u\" style=\"display:none;\">"
-			 "<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u",
-	       UniqueId,Gbl.RowEvenOdd);
-   else
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"RIGHT_TOP");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+      case Prj_FILE_BROWSER_PROJECT:
+	 fprintf (Gbl.F.Out,"<tr id=\"prj_pro_%u\" style=\"display:none;\">"
+			    "<td colspan=\"3\" class=\"RIGHT_TOP",
+		  UniqueId);
+	 if (ProjectView == Prj_LIST_PROJECTS)
+	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	 break;
+      default:
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td colspan=\"3\" class=\"RIGHT_TOP");
+     }
    fprintf (Gbl.F.Out," %s\">"
                       "%s:"
 	              "</td>"
@@ -986,13 +1044,21 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
       Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
 
    /***** Write row with label and text *****/
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			 "<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u",
-	       id,UniqueId,Gbl.RowEvenOdd);
-   else
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"RIGHT_TOP");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+      case Prj_FILE_BROWSER_PROJECT:
+	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
+			    "<td colspan=\"3\" class=\"RIGHT_TOP",
+		  id,UniqueId);
+	 if (ProjectView == Prj_LIST_PROJECTS)
+	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	 break;
+      default:
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td colspan=\"3\" class=\"RIGHT_TOP");
+	 break;
+     }
    fprintf (Gbl.F.Out," %s\">"
                       "%s:"
 	              "</td>"
@@ -1042,13 +1108,21 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    /***** Write row with label and text *****/
    PutLink = (ProjectView == Prj_LIST_PROJECTS && Prj->URL[0]);
 
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			 "<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u",
-	       id,UniqueId,Gbl.RowEvenOdd);
-   else
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"RIGHT_TOP");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+      case Prj_FILE_BROWSER_PROJECT:
+	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
+			    "<td colspan=\"3\" class=\"RIGHT_TOP",
+	          id,UniqueId);
+	 if (ProjectView == Prj_LIST_PROJECTS)
+	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	 break;
+      default:
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td colspan=\"3\" class=\"RIGHT_TOP");
+	 break;
+     }
    fprintf (Gbl.F.Out," %s\">"
 		      "%s:"
 		      "</td>"
@@ -1150,24 +1224,20 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP COLOR%u %s\">%s:</td>"
-			       "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
-		     Gbl.RowEvenOdd,
-		     Prj->Hidden ? "ASG_LABEL_LIGHT" :
-				   "ASG_LABEL",
-		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
-		     Gbl.RowEvenOdd,
-		     Prj->Hidden ? "DAT_LIGHT" :
-				   "DAT");
-	    break;
+	 case Prj_FILE_BROWSER_PROJECT:
 	 case Prj_PRINT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">%s:</td>"
-			       "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
+	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
+	    if (ProjectView == Prj_LIST_PROJECTS)
+	       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	    fprintf (Gbl.F.Out," %s\">%s:</td>"
+			       "<td colspan=\"2\" class=\"LEFT_TOP",
 		     Prj->Hidden ? "ASG_LABEL_LIGHT" :
 				   "ASG_LABEL",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    if (ProjectView == Prj_LIST_PROJECTS)
+	       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	    fprintf (Gbl.F.Out," %s\">",
 		     Prj->Hidden ? "DAT_LIGHT" :
 				   "DAT");
 	    break;
@@ -1680,6 +1750,10 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden)
 
       /***** Put form to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutParams);
+
+      /***** Put form to view project file browser *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+         Ico_PutContextualIconToViewFiles (ActFilBrwOnePrj,Prj_PutParams);
      }
 
    /***** Put form to print project *****/
