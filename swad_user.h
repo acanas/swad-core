@@ -267,7 +267,9 @@ bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
-bool Usr_CheckIfICanViewWrkTstAtt (const struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat);
 
 void Usr_FlushCacheUsrSharesAnyOfMyCrs (void);

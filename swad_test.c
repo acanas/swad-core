@@ -7578,7 +7578,7 @@ void Tst_ShowUsrsTestResults (void)
       /***** Header of the table with the list of users *****/
       Tst_ShowHeaderTestResults ();
 
-      /***** List the assignments and works of the selected users *****/
+      /***** List the test exams of the selected users *****/
       Ptr = Gbl.Usrs.Select[Rol_UNK];
       while (*Ptr)
 	{
@@ -7586,7 +7586,7 @@ void Tst_ShowUsrsTestResults (void)
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))               // Get of the database the data of the user
-	    if (Usr_CheckIfICanViewWrkTstAtt (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
 	       /***** Show test results *****/
 	       Tst_ShowTestResults (&Gbl.Usrs.Other.UsrDat);
 	}
@@ -8149,7 +8149,7 @@ void Tst_ShowOneTestResult (void)
       /* Get data of the user who made the test */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Lay_ShowErrorAndExit ("User does not exists.");
-      if (!Usr_CheckIfICanViewWrkTstAtt (&Gbl.Usrs.Other.UsrDat))
+      if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
 	 Lay_ShowErrorAndExit ("You can not view this test result.");
 
       /* User */

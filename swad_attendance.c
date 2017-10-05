@@ -3235,7 +3235,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
      {
       UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get from the database the data of the student
-	 if (Usr_CheckIfICanViewWrkTstAtt (&UsrDat))
+	 if (Usr_CheckIfICanViewAtt (&UsrDat))
 	   {
 	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 	    Att_WriteRowStdSeveralAttEvents (NumStd,&UsrDat);
@@ -3448,7 +3448,7 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
      {
       UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
-	 if (Usr_CheckIfICanViewWrkTstAtt (&UsrDat))
+	 if (Usr_CheckIfICanViewAtt (&UsrDat))
 	   {
 	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 	    Att_ListAttEventsForAStd (NumStd,&UsrDat);

@@ -2634,49 +2634,53 @@ static void Rec_PutIconsCommands (void)
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// A course is selected
 	{
-	 if (Usr_CheckIfICanViewWrkTstAtt (Gbl.Record.UsrDat))
-	   {
-	    /***** Button to view user's assignments and works *****/
-	    if (ItsMe)	// I am a student
-	       Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
-				      "folder64x64.gif",
-				      Txt_View_homework,NULL,
-				      NULL);
-	    else		// I am a teacher or superuser
-	       Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
-				      "folder64x64.gif",
-				      Txt_View_homework,NULL,
-				      NULL);
-
-	    /***** Button to view user's test exams *****/
-	    if (ItsMe)
-	       Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
-				      "exam64x64.png",
-				      Txt_View_test_results,NULL,
-				      NULL);
-	    else
-	       Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
-				      "exam64x64.png",
-				      Txt_View_test_results,NULL,
-				      NULL);
-
-	    /***** Button to view user's attendance *****/
-	    if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)
+         if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
+           {
+	    /***** Button to view student's test exams *****/
+	    if (Usr_CheckIfICanViewTst (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
-		  // As student, I can see my attendance
+		  Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
+					 "exam64x64.png",
+					 Txt_View_test_results,NULL,
+					 NULL);
+	       else
+		  Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
+					 "exam64x64.png",
+					 Txt_View_test_results,NULL,
+					 NULL);
+	      }
+
+	    /***** Button to view student's assignments and works *****/
+	    if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
+	      {
+	       if (ItsMe)
+		  Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
+					 "folder64x64.gif",
+					 Txt_View_homework,NULL,
+					 NULL);
+	       else							// I am not a student in current course
+		  Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
+					 "folder64x64.gif",
+					 Txt_View_homework,NULL,
+					 NULL);
+	      }
+
+	    /***** Button to view student's attendance *****/
+	    if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
+	      {
+	       if (ItsMe)
 		  Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
 					 "rollcall64x64.png",
 					 Txt_View_attendance,NULL,
 					 NULL);
 	       else
-		  // I can see attendance of the student
 		  Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
 					 "rollcall64x64.png",
 					 Txt_View_attendance,NULL,
 					 NULL);
 	      }
-	   }
+           }
 
 	 /***** Button to print QR code *****/
 	 Lay_PutContextualLink (ActPrnUsrQR,NULL,Rec_PutParamUsrCodEncrypted,
