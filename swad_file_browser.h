@@ -186,8 +186,6 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
 void Brw_RemoveUsrFilesFromDB (long UsrCod);
 
 void Brw_PutHiddenParamFullTreeIfSelected (void);
-bool Brw_GetIfGroupFileBrowser (void);
-bool Brw_GetIfCrsAssigWorksFileBrowser (void);
 
 void Brw_CreateDirDownloadTmp (void);
 void Brw_AskEditWorksCrs (void);

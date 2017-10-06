@@ -1513,11 +1513,11 @@ static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParamsFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
 
-bool Brw_GetIfGroupFileBrowser (void);
-bool Brw_GetIfCrsAssigWorksFileBrowser (void);
-
-static bool Brw_GetIfUsrAssigWorksFileBrowser (void);
+static bool Brw_GetIfGroupFileBrowser (void);
+static bool Brw_GetIfProjectFileBrowser (void);
 static bool Brw_GetIfBriefcaseFileBrowser (void);
+static bool Brw_GetIfUsrAssigWorksFileBrowser (void);
+static bool Brw_GetIfCrsAssigWorksFileBrowser (void);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
@@ -2298,7 +2298,11 @@ void Brw_GetParAndInitFileBrowser (void)
    Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 	                  Gbl.FileBrowser.FilFolLnkName);
 
-   if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   /***** Get other parameters *****/
+   if (Brw_GetIfProjectFileBrowser ())
+      /* Get project code */
+      Gbl.CurrentCrs.Prjs.PrjCod = Prj_GetParamPrjCod ();
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users */
       Usr_GetListsSelectedUsrsCods ();
@@ -2527,11 +2531,13 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
                                const char *PathInTree,const char *FileFolderName,
                                Brw_FileType_t FileType,long FilCod)
   {
-   if (Brw_GetIfGroupFileBrowser ())
+   if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
       /***** Group code *****/
       Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else
-      if (NextAction != ActUnk)
+   else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
+      /***** Project code *****/
+      Prj_PutParamPrjCod (Gbl.CurrentCrs.Prjs.PrjCod);
+   else if (NextAction != ActUnk)
      {
       if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	{
@@ -2658,13 +2664,19 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_DOCUM_INS:
       case Brw_ADMI_DOCUM_INS:
       case Brw_ADMI_SHARE_INS:
+	 /* Create a directory for institutions */
 	 sprintf (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS);
 	 Fil_CreateDirIfNotExists (Path);
+
+	 /* Create a directory for all institutions which codes end in
+	    institution-code mod 100 */
 	 sprintf (Path,"%s/%s/%02u",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
 		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
+
+	 /* Create path to the current institution */
 	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
 		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
@@ -2673,13 +2685,19 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_DOCUM_CTR:
       case Brw_ADMI_DOCUM_CTR:
       case Brw_ADMI_SHARE_CTR:
+	 /* Create a directory for centres */
 	 sprintf (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR);
 	 Fil_CreateDirIfNotExists (Path);
+
+	 /* Create a directory for all centres which codes end in
+	    centre-code mod 100 */
 	 sprintf (Path,"%s/%s/%02u",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
+
+	 /* Create path to the current centre */
 	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
@@ -2688,13 +2706,19 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_DOCUM_DEG:
       case Brw_ADMI_DOCUM_DEG:
       case Brw_ADMI_SHARE_DEG:
+	 /* Create a directory for degrees */
 	 sprintf (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG);
 	 Fil_CreateDirIfNotExists (Path);
+
+	 /* Create a directory for all degrees which codes end in
+	    degree-code mod 100 */
 	 sprintf (Path,"%s/%s/%02u",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
 		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
+
+         /* Create path to the current degree */
 	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
 		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100),
@@ -2706,6 +2730,7 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_SHARE_CRS:
       case Brw_SHOW_MARKS_CRS:
       case Brw_ADMI_MARKS_CRS:
+         /* Create path to the current course */
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
                    Gbl.CurrentCrs.PathPriv,
                    PATH_MAX);
@@ -2716,24 +2741,31 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_SHARE_GRP:
       case Brw_SHOW_MARKS_GRP:
       case Brw_ADMI_MARKS_GRP:
+	 /* Create a directory for groups inside the current course */
          sprintf (Path,"%s/%s",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
+         /* Create path to this group */
          sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%ld",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP,
                   Gbl.CurrentCrs.Grps.GrpCod);
 	 break;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_WORKS_USR:
+	 /* Create a directory for me inside the current course */
          sprintf (Path,"%s/%s",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
+
+	 /* Create a directory for all users whose codes end in
+	    my-user-code mod 100 */
          sprintf (Path,"%s/%s/%02u",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
+         /* Create path to me */
          sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%ld",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
@@ -2743,14 +2775,19 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_WORKS_CRS:
          if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
            {
+	    /* Create a directory for this user inside the current course */
             sprintf (Path,"%s/%s",
         	     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
+
+	    /* Create a directory for all users whose codes end in
+	       user-code mod 100 */
 	    sprintf (Path,"%s/%s/%02u",
 		     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
 		     (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
+            /* Create path to user */
             sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%ld",
         	     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
                      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
@@ -2758,13 +2795,23 @@ static void Brw_SetPathFileBrowser (void)
            }
          break;
       case Brw_ADMI_DOCUM_PRJ:
+	 /* Create a directory for projects inside the current course */
          sprintf (Path,"%s/%s",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ);
          Fil_CreateDirIfNotExists (Path);
 
-         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%ld",
+	 /* Create a directory for all projects which codes end in
+	    project-code mod 100 */
+	 sprintf (Path,"%s/%s/%02u",
+		  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
+                  (unsigned) (Gbl.CurrentCrs.Prjs.PrjCod % 100));
+	 Fil_CreateDirIfNotExists (Path);
+
+         /* Create path to the current project */
+         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%ld",
                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
-                  Gbl.CurrentCrs.Grps.GrpCod);
+                  (unsigned) (Gbl.CurrentCrs.Prjs.PrjCod % 100),
+                  Gbl.CurrentCrs.Prjs.PrjCod);
 	 break;
       case Brw_ADMI_BRIEF_USR:
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
@@ -4879,7 +4926,7 @@ static bool Brw_GetFullTreeFromForm (void)
 /********* Get if the current file browser is a group file browser ***********/
 /*****************************************************************************/
 
-bool Brw_GetIfGroupFileBrowser (void)
+static bool Brw_GetIfGroupFileBrowser (void)
   {
    switch (Gbl.FileBrowser.Type)
      {
@@ -4893,6 +4940,15 @@ bool Brw_GetIfGroupFileBrowser (void)
       default:
 	 return false;
      }
+  }
+
+/*****************************************************************************/
+/******** Get if the current file browser is a project file browser **********/
+/*****************************************************************************/
+
+static bool Brw_GetIfProjectFileBrowser (void)
+  {
+   return (Gbl.FileBrowser.Type == Brw_ADMI_DOCUM_PRJ);
   }
 
 /*****************************************************************************/
@@ -4924,7 +4980,7 @@ static bool Brw_GetIfUsrAssigWorksFileBrowser (void)
 /****** Get if the current file browser is course assignments or works *******/
 /*****************************************************************************/
 
-bool Brw_GetIfCrsAssigWorksFileBrowser (void)
+static bool Brw_GetIfCrsAssigWorksFileBrowser (void)
   {
    switch (Gbl.FileBrowser.Type)
      {

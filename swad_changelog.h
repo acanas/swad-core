@@ -254,13 +254,34 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.19 (2017-10-06)"
+#define Log_PLATFORM_VERSION	"SWAD 17.20 (2017-10-06)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.20:    Oct 06, 2017  New file browser for project documents. Not finished. (232915 lines)
+					18 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1698','es','N','Subir archivo a docs. proyecto (ant.)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1699','es','N','Eliminar archivo docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1700','es','N','Crear carpeta en docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1701','es','N','Eliminar carpeta docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1702','es','N','Renombrar carpeta en docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1703','es','N','Eliminar árbol docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1704','es','N','Solicitar elim. arch. docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1705','es','N','Copiar de docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1706','es','N','Pegar en docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1707','es','N','Expandir carpeta docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1708','es','N','Contraer carpeta docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1709','es','N','Solic. nuevo arch/carp docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1710','es','N','Ver datos arch. docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1711','es','N','Cambiar datos arch. docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1712','es','N','Descargar arch. docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1713','es','N','Crear ZIP carpeta docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1714','es','N','Subir archivo a docs. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1715','es','N','Crear enlace en docs. proyecto');
+
         Version 17.19:    Oct 06, 2017  New file browser for project documents. Not finished. (232781 lines)
         Version 17.18:    Oct 06, 2017  New view in projects for project file browser. (232547 lines)
 					1 change necessary in database:

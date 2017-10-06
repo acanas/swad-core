@@ -456,7 +456,6 @@ Assessment:
 	316. ActSeeTblAllPrj		Show all projects in a table
 	317. ActFrmNewPrj		Form to create a new project
 	318. ActEdiOnePrj		Edit one project
-	NEW. ActFilBrwOnePrj		View / edit project file browser
 	319. ActPrnOnePrj		Print one project
 	320. ActNewPrj			Create new project
 	321. ActChgPrj			Modify data of an existing project
@@ -476,6 +475,26 @@ Assessment:
 	335. ActRemStdPrj		Remove a student from a project
 	336. ActRemTutPrj		Remove a tutor from a project
 	337. ActRemEvaPrj		Remove an emulator from a project
+
+	NEW. ActAdmDocPrj		Admin. project documents
+        NEW. ActReqRemFilBrf		Request removal of a file from project documents
+        NEW. ActRemFilBrf		Remove a file from project documents
+        NEW. ActRemFolBrf		Remove an empty folder from project documents
+        NEW. ActCopBrf			Set source of copy in project documents
+        NEW. ActPasBrf			Paste a folder or file into project documents
+        NEW. ActRemTreBrf		Remove a non empty folder from project documents
+        NEW. ActFrmCreBrf		Form to create a folder or file in project documents
+        NEW. ActCreFolBrf		Create a new folder in project documents
+        NEW. ActCreLnkBrf		Create a new link in project documents
+        NEW. ActRenFolBrf		Rename a folder in project documents
+        NEW. ActRcvFilBrfDZ		Receive a file in project documents using Dropzone.js
+        NEW. ActRcvFilBrfCla		Receive a file in project documents using the classic way
+        NEW. ActExpBrf			Expand a folder in project documents
+        NEW. ActConBrf			Contract a folder in project documents
+        NEW. ActZIPBrf			Compress a folder in project documents
+        NEW. ActReqDatBrf		Ask for metadata of a file in project documents
+        NEW. ActChgDatBrf		Change metadata of a file in project documents
+        NEW. ActDowBrf			Download a file from project documents
 
 	338. ActSeeTst			Show the seft-assessment test
 	339. ActAssTst			Assess a self-assessment test
@@ -563,6 +582,7 @@ Files:
         417. ActAdmAsgWrkUsr		One user sends works of the course
         418. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
 	419. ActSeeAdmMrk		Marks zone (see or admin)
+       1244. ActAdmBrf			Show the briefcase of private archives
 
 	420. ActChgToSeeDocIns		Change to see institution documents
 
@@ -1459,7 +1479,6 @@ Profile:
        1241. ActFrmMyAcc		Show form to the creation or change of user's account
        1242. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
        1243. ActEdiPrf			Show forms to edit preferences
-       1244. ActAdmBrf			Show the briefcase of private archives
 
        1245. ActReqSndNewPwd		Show form to send a new password via email
        1246. ActSndNewPwd		Send a new password via email
@@ -1960,7 +1979,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeTblAllPrj	*/{1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableAllProjects	,NULL},
    /* ActFrmNewPrj	*/{1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatePrj		,NULL},
    /* ActEdiOnePrj	*/{1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestEditPrj		,NULL},
-   /* ActFilBrwOnePrj	*/{1697,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_FileBrowserPrj		,NULL},
    /* ActPrnOnePrj	*/{1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
    /* ActNewPrj		*/{1678,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
    /* ActChgPrj		*/{1679,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RecFormProject		,NULL},
@@ -1980,6 +1998,26 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemStdPrj	*/{1693,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
    /* ActRemTutPrj	*/{1694,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
    /* ActRemEvaPrj	*/{1695,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEva			,NULL},
+
+   /* ActAdmDocPrj	*/{1697,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_FileBrowserPrj		,NULL},
+   /* ActReqRemFilDocPrj*/{1698,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocPrj	*/{1699,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocPrj	*/{1700,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocPrj	*/{1701,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocPrj	*/{1702,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocPrj	*/{1703,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocPrj	*/{1704,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocPrj	*/{1705,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocPrj	*/{1706,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocPrj	*/{1707,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocPrjDZ	*/{1708,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilDocPrjCla*/{1709,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpDocPrj	*/{1710,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
+   /* ActConDocPrj	*/{1711,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
+   /* ActZIPDocPrj	*/{1712,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatDocPrj	*/{1713,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatDocPrj	*/{1714,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowDocPrj	*/{1715,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowNewTest		,NULL},
    /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_AssessTest			,NULL},
@@ -4803,7 +4841,25 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRemTutPrj,		// #1694
 	ActRemEvaPrj,		// #1695
 	ActSeeTblAllPrj,	// #1696
-	ActFilBrwOnePrj,	// #1697
+	ActAdmDocPrj,		// #1697
+	ActReqRemFilDocPrj,	// #1698
+	ActRemFilDocPrj,	// #1699
+	ActRemFolDocPrj,	// #1700
+	ActCopDocPrj,		// #1701
+	ActPasDocPrj,		// #1702
+	ActRemTreDocPrj,	// #1703
+	ActFrmCreDocPrj,	// #1704
+	ActCreFolDocPrj,	// #1705
+	ActCreLnkDocPrj,	// #1706
+	ActRenFolDocPrj,	// #1707
+	ActRcvFilDocPrjDZ,	// #1708
+	ActRcvFilDocPrjCla,	// #1709
+	ActExpDocPrj,		// #1710
+	ActConDocPrj,		// #1711
+	ActZIPDocPrj,		// #1712
+	ActReqDatDocPrj,	// #1713
+	ActChgDatDocPrj,	// #1714
+	ActDowDocPrj,		// #1715
 	};
 
 /*****************************************************************************/

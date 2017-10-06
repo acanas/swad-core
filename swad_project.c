@@ -141,7 +141,6 @@ static bool Prj_GetIfIAmTutorInProject (long PrjCod);
 static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
-static void Prj_PutParamPrjCod (long PrjCod);
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod);
 static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject);
@@ -568,7 +567,6 @@ void Prj_FileBrowserPrj (void)
    /***** Get project data *****/
    Prj.PrjCod = Prj_GetParamPrjCod ();
    Prj_GetDataOfProjectByCod (&Prj);
-   Gbl.CurrentCrs.Prjs.PrjCod = Prj.PrjCod;	// Used in file browser
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Prj.Title,NULL,
@@ -578,17 +576,15 @@ void Prj_FileBrowserPrj (void)
    /***** Write project *****/
    Prj_ShowOneProject (&Prj,Prj_FILE_BROWSER_PROJECT);
 
-   /***** End table *****/
-   Tbl_EndTable ();
-
-   /***** Project file browser *****/
-   Ale_ShowAlert (Ale_INFO,"Archivos del proyecto");
-
    /***** End box *****/
    Box_EndBoxTable ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
+
+   /***** Project file browser *****/
+   Gbl.CurrentCrs.Prjs.PrjCod = Prj.PrjCod;	// Used in file browser
+   Brw_ShowFileBrowserOrWorks ();
   }
 
 /*****************************************************************************/
@@ -1754,7 +1750,7 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden)
 
       /***** Put form to view project file browser *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-         Ico_PutContextualIconToViewFiles (ActFilBrwOnePrj,Prj_PutParams);
+         Ico_PutContextualIconToViewFiles (ActAdmDocPrj,Prj_PutParams);
      }
 
    /***** Put form to print project *****/
@@ -2146,7 +2142,7 @@ void Prj_FreeListProjects (void)
 /******************* Write parameter with code of project ********************/
 /*****************************************************************************/
 
-static void Prj_PutParamPrjCod (long PrjCod)
+void Prj_PutParamPrjCod (long PrjCod)
   {
    Par_PutHiddenParamLong ("PrjCod",PrjCod);
   }
