@@ -248,19 +248,20 @@
 
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
 
-// TODO: Copy icon/link64x64.gif to public directory in swad.ugr.es and openswad.org
+// TODO: Mover PROFILE.Briefcase a FILES.Briefcase en la ayuda de GitHub (aquí ya está cambiado)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.18 (2017-10-06)"
+#define Log_PLATFORM_VERSION	"SWAD 17.19 (2017-10-06)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.19:    Oct 06, 2017  New file browser for project documents. Not finished. (232781 lines)
         Version 17.18:    Oct 06, 2017  New view in projects for project file browser. (232547 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1697','es','N','Editar archivos proyecto');

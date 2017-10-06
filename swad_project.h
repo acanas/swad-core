@@ -70,6 +70,7 @@ typedef enum
 struct Project
   {
    long PrjCod;
+   long CrsCod;
    bool Hidden;
    Prj_Preassigned_t Preassigned;
    unsigned NumStds;

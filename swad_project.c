@@ -568,6 +568,7 @@ void Prj_FileBrowserPrj (void)
    /***** Get project data *****/
    Prj.PrjCod = Prj_GetParamPrjCod ();
    Prj_GetDataOfProjectByCod (&Prj);
+   Gbl.CurrentCrs.Prjs.PrjCod = Prj.PrjCod;	// Used in file browser
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Prj.Title,NULL,
@@ -1959,7 +1960,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
    if (Prj->PrjCod > 0)
      {
       /***** Build query *****/
-      sprintf (Query,"SELECT PrjCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
+      sprintf (Query,"SELECT PrjCod,CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
 		     "UNIX_TIMESTAMP(StartTime),"
 		     "UNIX_TIMESTAMP(EndTime),"
 		     "NOW() BETWEEN StartTime AND EndTime,"
@@ -1969,19 +1970,20 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 	       Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
       /*
       row[ 0]: PrjCod
-      row[ 1]: DptCod
-      row[ 2]: Hidden
-      row[ 3]: Preassigned
-      row[ 4]: NumStds
-      row[ 5]: Proposal
-      row[ 6]: UNIX_TIMESTAMP(StartTime)
-      row[ 7]: UNIX_TIMESTAMP(EndTime)
-      row[ 8]: NOW() BETWEEN StartTime AND EndTime
-      row[ 9]: Title
-      row[10]: Description
-      row[11]: Knowledge
-      row[12]: Materials
-      row[13]: URL
+      row[ 1]: CrsCod
+      row[ 2]: DptCod
+      row[ 3]: Hidden
+      row[ 4]: Preassigned
+      row[ 5]: NumStds
+      row[ 6]: Proposal
+      row[ 7]: UNIX_TIMESTAMP(StartTime)
+      row[ 8]: UNIX_TIMESTAMP(EndTime)
+      row[ 9]: NOW() BETWEEN StartTime AND EndTime
+      row[10]: Title
+      row[11]: Description
+      row[12]: Knowledge
+      row[13]: Materials
+      row[14]: URL
       */
 
       /***** Get data of project *****/
@@ -2016,79 +2018,83 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       row = mysql_fetch_row (mysql_res);
       /*
       row[ 0]: PrjCod
-      row[ 1]: DptCod
-      row[ 2]: Hidden
-      row[ 3]: Preassigned
-      row[ 4]: NumStds
-      row[ 5]: Proposal
-      row[ 6]: UNIX_TIMESTAMP(StartTime)
-      row[ 7]: UNIX_TIMESTAMP(EndTime)
-      row[ 8]: NOW() BETWEEN StartTime AND EndTime
-      row[ 9]: Title
-      row[10]: Description
-      row[11]: Knowledge
-      row[12]: Materials
-      row[13]: URL
+      row[ 1]: CrsCod
+      row[ 2]: DptCod
+      row[ 3]: Hidden
+      row[ 4]: Preassigned
+      row[ 5]: NumStds
+      row[ 6]: Proposal
+      row[ 7]: UNIX_TIMESTAMP(StartTime)
+      row[ 8]: UNIX_TIMESTAMP(EndTime)
+      row[ 9]: NOW() BETWEEN StartTime AND EndTime
+      row[10]: Title
+      row[11]: Description
+      row[12]: Knowledge
+      row[13]: Materials
+      row[14]: URL
       */
 
       /* Get code of the project (row[0]) */
       Prj->PrjCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get code of the department (row[1]) */
-      Prj->DptCod = Str_ConvertStrCodToLongCod (row[1]);
+      /* Get code of the course (row[1]) */
+      Prj->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get whether the project is hidden or not (row[2]) */
-      Prj->Hidden = (row[2][0] == 'Y');
+      /* Get code of the department (row[2]) */
+      Prj->DptCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get if project is preassigned or not (row[3]) */
-      Prj->Preassigned = (row[3][0] == 'Y') ? Prj_PREASSIGNED :
-	                                      Prj_NOT_PREASSIGNED;
+      /* Get whether the project is hidden or not (row[3]) */
+      Prj->Hidden = (row[3][0] == 'Y');
 
       /* Get if project is preassigned or not (row[4]) */
-      NumLong = Str_ConvertStrCodToLongCod (row[4]);
+      Prj->Preassigned = (row[4][0] == 'Y') ? Prj_PREASSIGNED :
+	                                      Prj_NOT_PREASSIGNED;
+
+      /* Get if project is preassigned or not (row[5]) */
+      NumLong = Str_ConvertStrCodToLongCod (row[5]);
       if (NumLong >= 0)
          Prj->NumStds = (unsigned) NumLong;
       else
 	 Prj->NumStds = 1;
 
-      /* Get project status (row[5]) */
+      /* Get project status (row[6]) */
       Prj->Proposal = Prj_PROPOSAL_DEFAULT;
       for (Proposal  = (Prj_Proposal_t) 0;
 	   Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	   Proposal++)
-	 if (!strcmp (Prj_Proposal_DB[Proposal],row[5]))
+	 if (!strcmp (Prj_Proposal_DB[Proposal],row[6]))
 	   {
 	    Prj->Proposal = Proposal;
 	    break;
 	   }
 
-      /* Get start date (row[6] holds the start UTC time) */
-      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
+      /* Get start date (row[7] holds the start UTC time) */
+      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[7]);
 
-      /* Get end date   (row[7] holds the end   UTC time) */
-      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[7]);
+      /* Get end date   (row[8] holds the end   UTC time) */
+      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[8]);
 
-      /* Get whether the project is open or closed (row[8]) */
-      Prj->Open = (row[8][0] == '1');
+      /* Get whether the project is open or closed (row[9]) */
+      Prj->Open = (row[9][0] == '1');
 
-      /* Get the title of the project (row[9]) */
-      Str_Copy (Prj->Title,row[9],
+      /* Get the title of the project (row[10]) */
+      Str_Copy (Prj->Title,row[10],
                 Prj_MAX_BYTES_PROJECT_TITLE);
 
-      /* Get the description of the project (row[10]) */
-      Str_Copy (Prj->Description,row[10],
+      /* Get the description of the project (row[11]) */
+      Str_Copy (Prj->Description,row[11],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required knowledge for the project (row[11]) */
-      Str_Copy (Prj->Knowledge,row[11],
+      /* Get the required knowledge for the project (row[12]) */
+      Str_Copy (Prj->Knowledge,row[12],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required materials for the project (row[12]) */
-      Str_Copy (Prj->Materials,row[12],
+      /* Get the required materials for the project (row[13]) */
+      Str_Copy (Prj->Materials,row[13],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the URL of the project (row[13]) */
-      Str_Copy (Prj->URL,row[13],
+      /* Get the URL of the project (row[14]) */
+      Str_Copy (Prj->URL,row[14],
                 Cns_MAX_BYTES_WWW);
      }
 
@@ -2104,10 +2110,11 @@ static void Prj_ResetProject (struct Project *Prj)
   {
    if (Prj->PrjCod <= 0)	// If > 0 ==> keep value
       Prj->PrjCod = -1L;
+   Prj->CrsCod = -1L;
    Prj->Hidden = false;
    Prj->Preassigned = Prj_PREASSIGNED_DEFAULT;
    Prj->NumStds     = 1;
-   Prj->Proposal      = Prj_PROPOSAL_DEFAULT;
+   Prj->Proposal    = Prj_PROPOSAL_DEFAULT;
    Prj->TimeUTC[Dat_START_TIME] =
    Prj->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Prj->Open = false;
@@ -2116,7 +2123,7 @@ static void Prj_ResetProject (struct Project *Prj)
    Prj->Description[0] = '\0';
    Prj->Knowledge[0]   = '\0';
    Prj->Materials[0]   = '\0';
-   Prj->URL[0] = '\0';
+   Prj->URL[0]         = '\0';
   }
 
 /*****************************************************************************/

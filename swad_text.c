@@ -1723,6 +1723,27 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_inst
 	"acess&iacute;vel para leitura e escrita pelos administradores da institui&ccedil;&atilde;o";
 #endif
 
+const char *Txt_accessible_for_reading_and_writing_by_project_members =
+#if   L==1
+	"accessible per a lectura i escriptura per membres del projecte";
+#elif L==2
+	"zug&auml;nglich zum Lesen und Schreiben von Projektmitgliedern";
+#elif L==3
+	"accessible for reading and writing by project members";
+#elif L==4
+	"accesible para lectura y escritura por miembros del proyecto";
+#elif L==5
+	"accessible pour la lecture et l'écriture par les membres du projet";
+#elif L==6
+	"accesible para lectura y escritura por miembros del proyecto";	// Okoteve traducción
+#elif L==7
+	"accessibile per la lettura e la scrittura da parte dei membri del progetto";
+#elif L==8
+	"dost&eogon;pne do czytania i pisania przez cz&lstrok;onk&oacute;w projektu";
+#elif L==9
+	"acess&iacute;vel para leitura e escrita por membros do projeto";
+#endif
+
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre =
 #if   L==1
 	"accessible per a lectura i escriptura per estudiants i professors del centre";
@@ -30789,6 +30810,69 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #endif
 
+const char *Txt_project =
+#if   L==1
+	"projecte";
+#elif L==2
+	"Projekt";
+#elif L==3
+	"project";
+#elif L==4
+	"proyecto";
+#elif L==5
+	"project";
+#elif L==6
+	"proyecto";	// Okoteve traducción
+#elif L==7
+	"progetto";
+#elif L==8
+	"projektowe";
+#elif L==9
+	"projeto";
+#endif
+
+const char *Txt_Project_documents =
+#if   L==1
+	"Documents del projecte";
+#elif L==2
+	"Projektdokumente";
+#elif L==3
+	"Project documents";
+#elif L==4
+	"Documentos del proyecto";
+#elif L==5
+	"Documents du project";
+#elif L==6
+	"Documentos del proyecto";	// Okoteve traducción
+#elif L==7
+	"Documenti di progetto";
+#elif L==8
+	"Dokumenty projektowe";
+#elif L==9
+	"Documentos do projeto";
+#endif
+
+const char *Txt_project_documents =
+#if   L==1
+	"documents del projecte";
+#elif L==2
+	"Projektdokumente";
+#elif L==3
+	"project documents";
+#elif L==4
+	"documentos del proyecto";
+#elif L==5
+	"documents du project";
+#elif L==6
+	"documentos del proyecto";	// Okoteve traducción
+#elif L==7
+	"documenti di progetto";
+#elif L==8
+	"dokumenty projektowe";
+#elif L==9
+	"documentos do projeto";
+#endif
+
 const char *Txt_Project_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El projecte <strong>%s</strong> ara est&agrave; ocult.";
@@ -37975,6 +38059,27 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"prywatne"
 #elif L==9
 	"privados"
+#endif
+	 ,
+	 // Brw_ADMI_DOCUM_PRJ
+#if   L==1
+	"projecte"
+#elif L==2
+	"Projekt"
+#elif L==3
+	"project"
+#elif L==4
+	"proyecto"
+#elif L==5
+	"projet"
+#elif L==6
+	"proyecto"	// Okoteve traducción
+#elif L==7
+	"progetto"
+#elif L==8
+	"projekt"
+#elif L==9
+	"projeto"
 #endif
 	};
 

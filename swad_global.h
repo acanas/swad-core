@@ -463,6 +463,7 @@ struct Globals
       struct
         {
          Prj_WhichProjects_t WhichPrjs;	// Show my projects or all projects
+         long PrjCod;
         } Prjs;
       struct
         {

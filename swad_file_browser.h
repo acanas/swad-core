@@ -39,7 +39,7 @@
 #define Brw_MAX_CHARS_FOLDER	30		// 30
 #define Brw_MAX_BYTES_FOLDER	NAME_MAX	// 255
 
-#define Brw_NUM_TYPES_FILE_BROWSER 27
+#define Brw_NUM_TYPES_FILE_BROWSER 28
 // The following types are stored in several database tables as numeric fields,
 // so don't change numbers!
 typedef enum
@@ -71,6 +71,7 @@ typedef enum
    Brw_ADMI_SHARE_INS = 24,
    Brw_ADMI_TEACH_CRS = 25,
    Brw_ADMI_TEACH_GRP = 26,
+   Brw_ADMI_DOCUM_PRJ = 27,
   } Brw_FileBrowser_t;
 
 // The following types are stored in files and clipboard tables as numeric fields, so don't change numbers!
@@ -153,6 +154,7 @@ struct FileMetadata
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED		"comun"			// TODO: It should be "sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"		// TODO: It should be "asg"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS		"trabajos"		// TODO: It should be "wrk"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECTS		"prj"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS		"calificaciones"	// TODO: It should be "mrk"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF		"maletin"		// TODO: It should be "brf"
 

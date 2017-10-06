@@ -83,6 +83,7 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActZIPShaIns,	// Brw_ADMI_SHARE_INS
    ActZIPTchCrs,	// Brw_ADMI_TEACH_CRS
    ActZIPTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActZIPDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 
 /*****************************************************************************/

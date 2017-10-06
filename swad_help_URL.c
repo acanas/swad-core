@@ -1474,6 +1474,27 @@ const char *Hlp_FILES_Marks =
 	"FILES.Marks.en";
 #endif
 
+const char *Hlp_FILES_Briefcase =
+#if   L==1
+	"FILES.Briefcase.es";
+#elif L==2
+	"FILES.Briefcase.en";
+#elif L==3
+	"FILES.Briefcase.en";
+#elif L==4
+	"FILES.Briefcase.es";
+#elif L==5
+	"FILES.Briefcase.en";
+#elif L==6
+	"FILES.Briefcase.es";
+#elif L==7
+	"FILES.Briefcase.en";
+#elif L==8
+	"FILES.Briefcase.en";
+#elif L==9
+	"FILES.Briefcase.en";
+#endif
+
 /***** USERS tab *****/
 
 const char *Hlp_USERS_Groups =
@@ -3645,25 +3666,4 @@ const char *Hlp_PROFILE_Preferences_notifications =
 	"PROFILE.Preferences.en#notifications";
 #elif L==9
 	"PROFILE.Preferences.en#notifications";
-#endif
-
-const char *Hlp_PROFILE_Briefcase =
-#if   L==1
-	"PROFILE.Briefcase.es";
-#elif L==2
-	"PROFILE.Briefcase.en";
-#elif L==3
-	"PROFILE.Briefcase.en";
-#elif L==4
-	"PROFILE.Briefcase.es";
-#elif L==5
-	"PROFILE.Briefcase.en";
-#elif L==6
-	"PROFILE.Briefcase.es";
-#elif L==7
-	"PROFILE.Briefcase.en";
-#elif L==8
-	"PROFILE.Briefcase.en";
-#elif L==9
-	"PROFILE.Briefcase.en";
 #endif

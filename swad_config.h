@@ -336,8 +336,14 @@
 /* Folders for courses, inside public and private swad directories */
 #define Cfg_FOLDER_CRS 				"crs"			// If not exists, it should be created during installation inside swad private and public directory!
 
+/* Folders for groups, inside public and private swad directories */
+#define Cfg_FOLDER_GRP 				"grp"			// Created automatically the first time it is accessed
+
 /* Folder for users, inside private swad directory */
 #define Cfg_FOLDER_USR 				"usr"			// Created automatically the first time it is accessed
+
+/* Folders for projects, inside public and private swad directories */
+#define Cfg_FOLDER_PRJ 				"prj"			// Created automatically the first time it is accessed
 
 /* Folder for temporary HTML output of this CGI, inside private swad directory */
 #define Cfg_FOLDER_OUT 				"out"			// Created automatically the first time it is accessed

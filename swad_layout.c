@@ -221,9 +221,10 @@ void Lay_WriteStartOfPage (void)
       case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
       case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR
       case ActFrmCreWrkCrs:	// Brw_ADMI_WORKS_CRS
+      case ActFrmCreDocPrj:	// Brw_ADMI_DOCUM_PRJ
       case ActFrmCreMrkCrs:	// Brw_ADMI_MARKS_CRS
       case ActFrmCreMrkGrp:	// Brw_ADMI_MARKS_GRP
-      case ActFrmCreBrf:		// Brw_ADMI_BRIEF_USR
+      case ActFrmCreBrf:	// Brw_ADMI_BRIEF_USR
 	 fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
 			    " href=\"%s/dropzone/css/dropzone.css\""
 			    " type=\"text/css\" />\n",
@@ -594,6 +595,7 @@ static void Lay_WriteScripts (void)
       case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
       case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR
       case ActFrmCreWrkCrs:	// Brw_ADMI_WORKS_CRS
+      case ActFrmCreDocPrj:	// Brw_ADMI_DOCUM_PRJ
       case ActFrmCreMrkCrs:	// Brw_ADMI_MARKS_CRS
       case ActFrmCreMrkGrp:	// Brw_ADMI_MARKS_GRP
       case ActFrmCreBrf:	// Brw_ADMI_BRIEF_USR

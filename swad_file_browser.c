@@ -130,6 +130,7 @@ const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
    Brw_ADMI_TEACH_CRS,	// Brw_ADMI_TEACH_CRS = 25
    Brw_ADMI_TEACH_GRP,	// Brw_ADMI_TEACH_GRP = 26
+   Brw_ADMI_DOCUM_PRJ,	// Brw_ADMI_DOCUM_PRJ = 27
   };
 // Browsers viewable shown in search for documents
 const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -161,6 +162,7 @@ const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] 
    Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
    Brw_ADMI_TEACH_CRS,	// Brw_ADMI_TEACH_CRS = 25
    Brw_ADMI_TEACH_GRP,	// Brw_ADMI_TEACH_GRP = 26
+   Brw_ADMI_DOCUM_PRJ,	// Brw_ADMI_DOCUM_PRJ = 27
   };
 // Browsers types for database "clipboard" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -192,6 +194,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE
    Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
    Brw_ADMI_TEACH_CRS,	// Brw_ADMI_TEACH_CRS = 25
    Brw_ADMI_TEACH_GRP,	// Brw_ADMI_TEACH_GRP = 26
+   Brw_ADMI_DOCUM_PRJ,	// Brw_ADMI_DOCUM_PRJ = 27
   };
 // Browsers types for database "expanded_folders" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -223,6 +226,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYP
    Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
    Brw_ADMI_TEACH_CRS,	// Brw_ADMI_TEACH_CRS = 25
    Brw_ADMI_TEACH_GRP,	// Brw_ADMI_TEACH_GRP = 26
+   Brw_ADMI_DOCUM_PRJ,	// Brw_ADMI_DOCUM_PRJ = 27
   };
 // Browsers types for database "file_browser_last" table
 // Assignments and works are stored as one in file_browser_last...
@@ -256,6 +260,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TY
    Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
    Brw_ADMI_TEACH_CRS,	// Brw_ADMI_TEACH_CRS = 25
    Brw_ADMI_TEACH_GRP,	// Brw_ADMI_TEACH_GRP = 26
+   Brw_ADMI_DOCUM_PRJ,	// Brw_ADMI_DOCUM_PRJ = 27
   };
 
 // Internal names of root folders
@@ -288,6 +293,7 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,	// Brw_ADMI_SHARE_INS
    Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,	// Brw_ADMI_TEACH_CRS
    Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,	// Brw_ADMI_TEACH_GRP
+   Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECTS,	// Brw_ADMI_DOCUM_PRJ
   };
 
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -319,6 +325,7 @@ static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
    true,	// Brw_ADMI_SHARE_INS
    true,	// Brw_ADMI_TEACH_CRS
    true,	// Brw_ADMI_TEACH_GRP
+   true,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -349,6 +356,7 @@ static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActAdmShaIns,	// Brw_ADMI_SHARE_INS
    ActAdmTchCrs,	// Brw_ADMI_TEACH_CRS
    ActAdmTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActAdmDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 
 static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -380,6 +388,7 @@ static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_ADMI_SHARE_INS
    ActUnk,		// Brw_ADMI_TEACH_CRS
    ActUnk,		// Brw_ADMI_TEACH_GRP
+   ActUnk,		// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -410,6 +419,7 @@ static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_ADMI_SHARE_INS
    ActUnk,		// Brw_ADMI_TEACH_CRS
    ActUnk,		// Brw_ADMI_TEACH_GRP
+   ActUnk,		// Brw_ADMI_DOCUM_PRJ
   };
 
 static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -441,6 +451,7 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_ADMI_SHARE_INS
    ActChgToAdmTch,	// Brw_ADMI_TEACH_CRS
    ActChgToAdmTch,	// Brw_ADMI_TEACH_GRP
+   ActUnk,		// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -471,6 +482,7 @@ static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_ADMI_SHARE_INS
    ActUnk,		// Brw_ADMI_TEACH_CRS
    ActUnk,		// Brw_ADMI_TEACH_GRP
+   ActUnk,		// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -501,6 +513,7 @@ static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_ADMI_SHARE_INS
    ActUnk,		// Brw_ADMI_TEACH_CRS
    ActUnk,		// Brw_ADMI_TEACH_GRP
+   ActUnk,		// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -531,6 +544,7 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqDatShaIns,	// Brw_ADMI_SHARE_INS
    ActReqDatTchCrs,	// Brw_ADMI_TEACH_CRS
    ActReqDatTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActReqDatDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -561,6 +575,7 @@ static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActDowShaIns,	// Brw_ADMI_SHARE_INS
    ActDowTchCrs,	// Brw_ADMI_TEACH_CRS
    ActDowTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActDowDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -591,6 +606,7 @@ static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqRemFilShaIns,	// Brw_ADMI_SHARE_INS
    ActReqRemFilTchCrs,	// Brw_ADMI_TEACH_CRS
    ActReqRemFilTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActReqRemFilDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -621,6 +637,7 @@ static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFilShaIns,	// Brw_ADMI_SHARE_INS
    ActRemFilTchCrs,	// Brw_ADMI_TEACH_CRS
    ActRemFilTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActRemFilDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -651,6 +668,7 @@ static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFolShaIns,	// Brw_ADMI_SHARE_INS
    ActRemFolTchCrs,	// Brw_ADMI_TEACH_CRS
    ActRemFolTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActRemFolDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -681,6 +699,7 @@ static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER
    ActRemTreShaIns,	// Brw_ADMI_SHARE_INS
    ActRemTreTchCrs,	// Brw_ADMI_TEACH_CRS
    ActRemTreTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActRemTreDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -711,6 +730,7 @@ static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCopShaIns,	// Brw_ADMI_SHARE_INS
    ActCopTchCrs,	// Brw_ADMI_TEACH_CRS
    ActCopTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActCopDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -741,6 +761,7 @@ static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActPasShaIns,	// Brw_ADMI_SHARE_INS
    ActPasTchCrs,	// Brw_ADMI_TEACH_CRS
    ActPasTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActPasDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -771,6 +792,7 @@ static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActFrmCreShaIns,	// Brw_ADMI_SHARE_INS
    ActFrmCreTchCrs,	// Brw_ADMI_TEACH_CRS
    ActFrmCreTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActFrmCreDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -801,6 +823,7 @@ static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreFolShaIns,	// Brw_ADMI_SHARE_INS
    ActCreFolTchCrs,	// Brw_ADMI_TEACH_CRS
    ActCreFolTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActCreFolDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -831,6 +854,7 @@ static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreLnkShaIns,	// Brw_ADMI_SHARE_INS
    ActCreLnkTchCrs,	// Brw_ADMI_TEACH_CRS
    ActCreLnkTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActCreLnkDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -861,6 +885,7 @@ static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRenFolShaIns,	// Brw_ADMI_SHARE_INS
    ActRenFolTchCrs,	// Brw_ADMI_TEACH_CRS
    ActRenFolTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActRenFolDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -891,6 +916,7 @@ static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] 
    ActRcvFilShaInsDZ,	// Brw_ADMI_SHARE_INS
    ActRcvFilTchCrsDZ,	// Brw_ADMI_TEACH_CRS
    ActRcvFilTchGrpDZ,	// Brw_ADMI_TEACH_GRP
+   ActRcvFilDocPrjDZ,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -921,6 +947,7 @@ static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilShaInsCla,	// Brw_ADMI_SHARE_INS
    ActRcvFilTchCrsCla,	// Brw_ADMI_TEACH_CRS
    ActRcvFilTchGrpCla,	// Brw_ADMI_TEACH_GRP
+   ActRcvFilDocPrjCla,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -951,6 +978,7 @@ static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROW
    ActAdmShaIns,	// Brw_ADMI_SHARE_INS
    ActAdmTchCrs,	// Brw_ADMI_TEACH_CRS
    ActAdmTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActAdmDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -981,6 +1009,7 @@ static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpShaIns,	// Brw_ADMI_SHARE_INS
    ActExpTchCrs,	// Brw_ADMI_TEACH_CRS
    ActExpTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActExpDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -1011,6 +1040,7 @@ static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConShaIns,	// Brw_ADMI_SHARE_INS
    ActConTchCrs,	// Brw_ADMI_TEACH_CRS
    ActConTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActConDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -1041,6 +1071,7 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgDatShaIns,	// Brw_ADMI_SHARE_INS
    ActChgDatTchCrs,	// Brw_ADMI_TEACH_CRS
    ActChgDatTchGrp,	// Brw_ADMI_TEACH_GRP
+   ActChgDatDocPrj,	// Brw_ADMI_DOCUM_PRJ
   };
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
@@ -1102,6 +1133,10 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
 #define Brw_MAX_QUOTA_WORKS_PER_STD	( 2ULL*Brw_GiB)
 #define Brw_MAX_FILES_WORKS_PER_STD	500
 #define Brw_MAX_FOLDS_WORKS_PER_STD	50
+
+#define Brw_MAX_QUOTA_PRJ		( 2ULL*Brw_GiB)
+#define Brw_MAX_FILES_PRJ		500
+#define Brw_MAX_FOLDS_PRJ		50
 
 #define Brw_MAX_QUOTA_MARKS_CRS		( 1ULL*Brw_GiB)
 #define Brw_MAX_FILES_MARKS_CRS		500
@@ -2113,6 +2148,29 @@ void Brw_GetParAndInitFileBrowser (void)
          Gbl.FileBrowser.Type = Brw_ADMI_WORKS_CRS;
          break;
 
+      /***** Documents in project *****/
+      case ActAdmDocPrj:
+      case ActReqRemFilDocPrj:
+      case ActRemFilDocPrj:
+      case ActRemFolDocPrj:
+      case ActCopDocPrj:
+      case ActPasDocPrj:
+      case ActRemTreDocPrj:
+      case ActFrmCreDocPrj:
+      case ActCreFolDocPrj:
+      case ActCreLnkDocPrj:
+      case ActRenFolDocPrj:
+      case ActRcvFilDocPrjDZ:
+      case ActRcvFilDocPrjCla:
+      case ActExpDocPrj:
+      case ActConDocPrj:
+      case ActZIPDocPrj:
+      case ActReqDatDocPrj:
+      case ActChgDatDocPrj:
+      case ActDowDocPrj:
+         Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_PRJ;
+         break;
+
       /***** Marks *****/
       case ActSeeAdmMrk:	// Access to a marks zone from menu
          /* Set file browser type acording to last group accessed */
@@ -2658,26 +2716,26 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_SHARE_GRP:
       case Brw_SHOW_MARKS_GRP:
       case Brw_ADMI_MARKS_GRP:
-         sprintf (Path,"%s/grp",
-                  Gbl.CurrentCrs.PathPriv);
+         sprintf (Path,"%s/%s",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
-         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/grp/%ld",
-                  Gbl.CurrentCrs.PathPriv,
+         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%ld",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP,
                   Gbl.CurrentCrs.Grps.GrpCod);
 	 break;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_WORKS_USR:
-         sprintf (Path,"%s/usr",
-                  Gbl.CurrentCrs.PathPriv);
+         sprintf (Path,"%s/%s",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
-         sprintf (Path,"%s/usr/%02u",
-                  Gbl.CurrentCrs.PathPriv,
+         sprintf (Path,"%s/%s/%02u",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
-         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/usr/%02u/%ld",
-                  Gbl.CurrentCrs.PathPriv,
+         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%ld",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
                   Gbl.Usrs.Me.UsrDat.UsrCod);
 	 break;
@@ -2685,20 +2743,29 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_WORKS_CRS:
          if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
            {
-            sprintf (Path,"%s/usr",
-        	     Gbl.CurrentCrs.PathPriv);
+            sprintf (Path,"%s/%s",
+        	     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
-	    sprintf (Path,"%s/usr/%02u",
-		     Gbl.CurrentCrs.PathPriv,
+	    sprintf (Path,"%s/%s/%02u",
+		     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
 		     (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
-            sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/usr/%02u/%ld",
-        	     Gbl.CurrentCrs.PathPriv,
+            sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%ld",
+        	     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
                      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
         	     Gbl.Usrs.Other.UsrDat.UsrCod);
            }
          break;
+      case Brw_ADMI_DOCUM_PRJ:
+         sprintf (Path,"%s/%s",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ);
+         Fil_CreateDirIfNotExists (Path);
+
+         sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%ld",
+                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
+                  Gbl.CurrentCrs.Grps.GrpCod);
+	 break;
       case Brw_ADMI_BRIEF_USR:
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
                    Gbl.Usrs.Me.PathDir,
@@ -3072,18 +3139,6 @@ static void Brw_SetMaxQuota (void)
          Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_GRP;
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_GRP;
 	 break;
-      case Brw_SHOW_MARKS_CRS:
-      case Brw_ADMI_MARKS_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_MARKS_CRS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_MARKS_CRS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_MARKS_CRS;
-	 break;
-      case Brw_SHOW_MARKS_GRP:
-      case Brw_ADMI_MARKS_GRP:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_MARKS_GRP;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_MARKS_GRP;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_MARKS_GRP;
-	 break;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_ASSIG_CRS:
 	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_ASSIG_PER_STD;
@@ -3095,6 +3150,23 @@ static void Brw_SetMaxQuota (void)
 	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_WORKS_PER_STD;
          Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_WORKS_PER_STD;
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_WORKS_PER_STD;
+	 break;
+      case Brw_ADMI_DOCUM_PRJ:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_PRJ;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_PRJ;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_PRJ;
+	 break;
+      case Brw_SHOW_MARKS_CRS:
+      case Brw_ADMI_MARKS_CRS:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_MARKS_CRS;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_MARKS_CRS;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_MARKS_CRS;
+	 break;
+      case Brw_SHOW_MARKS_GRP:
+      case Brw_ADMI_MARKS_GRP:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_MARKS_GRP;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_MARKS_GRP;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_MARKS_GRP;
 	 break;
       case Brw_ADMI_BRIEF_USR:
 	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_BRIEF[Gbl.Usrs.Me.Role.Max];
@@ -3570,7 +3642,8 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Hlp_FILES_Homework_for_students;
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Hlp_FILES_Marks;
-   extern const char *Hlp_PROFILE_Briefcase;
+   extern const char *Hlp_FILES_Briefcase;
+   extern const char *Hlp_ASSESSMENT_Projects;
 
    extern const char *Txt_Documents_area;
    extern const char *Txt_Documents_management_area;
@@ -3581,6 +3654,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Assignments_area;
    extern const char *Txt_Works_area;
    extern const char *Txt_Temporary_private_storage_area;
+   extern const char *Txt_Project_documents;
 
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
@@ -3617,35 +3691,37 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_INS] = Txt_Shared_files_area;			// Brw_ADMI_SHARE_INS
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_CRS] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_CRS
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_GRP] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_GRP
+   Brw_TitleOfFileBrowser[Brw_ADMI_DOCUM_PRJ] = Txt_Project_documents;			// Brw_ADMI_DOCUM_PRJ
 
    /***** Set help link of file browser *****/
    Brw_HelpOfFileBrowser[Brw_UNKNOWN       ] = NULL;				// Brw_UNKNOWN
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_CRS] = Hlp_FILES_Documents;		// Brw_SHOW_DOCUM_CRS
-   Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_CRS] = Hlp_FILES_Marks;		// Brw_SHOW_MARKS_CRS
+   Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_CRS] = Hlp_FILES_Marks;			// Brw_SHOW_MARKS_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_CRS] = Hlp_FILES_Documents;		// Brw_ADMI_DOCUM_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_CRS] = Hlp_FILES_Shared;		// Brw_ADMI_SHARE_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_GRP] = Hlp_FILES_Shared;		// Brw_ADMI_SHARE_GRP
    Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_USR] = Hlp_FILES_Homework_for_students;	// Brw_ADMI_WORKS_USR
    Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_CRS] = Hlp_FILES_Homework_for_teachers;	// Brw_ADMI_WORKS_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_CRS] = Hlp_FILES_Marks;		// Brw_ADMI_MARKS_CRS
-   Brw_HelpOfFileBrowser[Brw_ADMI_BRIEF_USR] = Hlp_PROFILE_Briefcase;		// Brw_ADMI_BRIEF_USR
+   Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_CRS] = Hlp_FILES_Marks;			// Brw_ADMI_MARKS_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_BRIEF_USR] = Hlp_FILES_Briefcase;		// Brw_ADMI_BRIEF_USR
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_GRP] = Hlp_FILES_Documents;		// Brw_SHOW_DOCUM_GRP
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_GRP] = Hlp_FILES_Documents;		// Brw_ADMI_DOCUM_GRP
-   Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_GRP] = Hlp_FILES_Marks;		// Brw_SHOW_MARKS_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_GRP] = Hlp_FILES_Marks;		// Brw_ADMI_MARKS_GRP
+   Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_GRP] = Hlp_FILES_Marks;			// Brw_SHOW_MARKS_GRP
+   Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_GRP] = Hlp_FILES_Marks;			// Brw_ADMI_MARKS_GRP
    Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_USR] = Hlp_FILES_Homework_for_students;	// Brw_ADMI_ASSIG_USR
    Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_CRS] = Hlp_FILES_Homework_for_teachers;	// Brw_ADMI_ASSIG_CRS
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_DEG] = Hlp_FILES_Documents;		// Brw_SHOW_DOCUM_DEG
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_DEG] = Hlp_FILES_Documents;		// Brw_ADMI_DOCUM_DEG
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_CTR] = Hlp_FILES_Documents;		// Brw_SHOW_DOCUM_CTR
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_CTR] = Hlp_FILES_Documents;		// Brw_ADMI_DOCUM_CTR
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_INS] = Hlp_FILES_Documents;	// Brw_SHOW_DOCUM_INS
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_INS] = Hlp_FILES_Documents;	// Brw_ADMI_DOCUM_INS
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_INS] = Hlp_FILES_Documents;		// Brw_SHOW_DOCUM_INS
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_INS] = Hlp_FILES_Documents;		// Brw_ADMI_DOCUM_INS
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_DEG] = Hlp_FILES_Shared;		// Brw_ADMI_SHARE_DEG
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_CTR] = Hlp_FILES_Shared;		// Brw_ADMI_SHARE_CTR
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_INS] = Hlp_FILES_Shared;		// Brw_ADMI_SHARE_INS
    Brw_HelpOfFileBrowser[Brw_ADMI_TEACH_CRS] = Hlp_FILES_Private;		// Brw_ADMI_TEACH_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_TEACH_GRP] = Hlp_FILES_Private;		// Brw_ADMI_TEACH_GRP
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_PRJ] = Hlp_ASSESSMENT_Projects;		// Brw_ADMI_DOCUM_PRJ
 
    /***** Set contextual icon in box *****/
    Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;
@@ -3964,6 +4040,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    extern const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course;
    extern const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course;
    extern const char *Txt_the_marks_of_a_student_chosen_at_random_;
+   extern const char *Txt_accessible_for_reading_and_writing_by_project_members;
    extern const char *Txt_nobody_else_can_access_this_content;
    char Subtitle[1024];
 
@@ -4085,6 +4162,10 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
       case Brw_ADMI_WORKS_CRS:
          sprintf (Subtitle,"%s",
                   Gbl.Usrs.Other.UsrDat.FullName);
+	 break;
+      case Brw_ADMI_DOCUM_PRJ:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_for_reading_and_writing_by_project_members);
 	 break;
       case Brw_ADMI_BRIEF_USR:
          sprintf (Subtitle,"%s<br />(%s)",
@@ -4942,6 +5023,9 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       case Brw_SHOW_MARKS_GRP:
       case Brw_ADMI_MARKS_GRP:
 	 Cod = Gbl.CurrentCrs.Grps.GrpCod;
+         break;
+      case Brw_ADMI_DOCUM_PRJ:
+	 Cod = Gbl.CurrentCrs.Prjs.PrjCod;
          break;
       case Brw_ADMI_BRIEF_USR:
 	 Cod = -1L;
@@ -6763,6 +6847,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_shared_files_area;
    extern const char *Txt_assignments_area;
    extern const char *Txt_works_area;
+   extern const char *Txt_project_documents;
    extern const char *Txt_marks_management_area;
    extern const char *Txt_temporary_private_storage_area;
    extern const char *Txt_institution;
@@ -6770,6 +6855,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_degree;
    extern const char *Txt_course;
    extern const char *Txt_group;
+   extern const char *Txt_project;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_file_folder;
    extern const char *Txt_file;
@@ -6781,6 +6867,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
+   struct Project Prj;
    struct UsrData UsrDat;
    char TxtClipboardZone[1024];
    char FileNameToShow[NAME_MAX + 1];
@@ -6926,6 +7013,16 @@ static void Brw_WriteCurrentClipboard (void)
                   Txt_course,Crs.ShrtName,
                   Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
+         break;
+      case Brw_ADMI_DOCUM_PRJ:
+         Prj.PrjCod = Gbl.FileBrowser.Clipboard.Cod;
+         Prj_GetDataOfProjectByCod (&Prj);
+	 Crs.CrsCod = Prj.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Crs);
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+                  Txt_project_documents,
+                  Txt_course,Crs.ShrtName,
+                  Txt_project,Prj.Title);
          break;
       case Brw_ADMI_MARKS_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -7097,6 +7194,10 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Grps.GrpCod)
                return true;		// I am in the group of the clipboard
             break;
+	 case Brw_ADMI_DOCUM_PRJ:
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Prjs.PrjCod)
+               return true;		// I am in the project of the clipboard
+	    break;
 	 case Brw_ADMI_BRIEF_USR:
 	    return true;
 	 default:
@@ -7648,6 +7749,12 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
                   (unsigned) FileBrowser,
                   Gbl.CurrentCrs.Crs.CrsCod,WorksUsrCod);
          break;
+      case Brw_ADMI_DOCUM_PRJ:
+         sprintf (Query,"DELETE FROM clipboard"
+                        " WHERE FileBrowser=%u AND Cod=%ld",
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentCrs.Prjs.PrjCod);
+	 break;
       case Brw_ADMI_BRIEF_USR:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE UsrCod=%ld AND FileBrowser=%u",
@@ -7733,6 +7840,7 @@ static void Brw_PasteClipboard (void)
    struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
+   struct Project Prj;
    char PathOrg[PATH_MAX + 1];
    struct Brw_NumObjects Pasted;
    long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
@@ -7804,9 +7912,9 @@ static void Brw_PasteClipboard (void)
 	    Grp_GetDataOfGroupByCod (&GrpDat);
             Crs.CrsCod = GrpDat.CrsCod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/grp/%ld/%s",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
-			Gbl.FileBrowser.Clipboard.Cod,
+	       sprintf (PathOrg,"%s/%s/%ld/%s/%ld/%s",
+                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_GRP,
+			GrpDat.GrpCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The course of copy source does not exist.");
@@ -7815,26 +7923,31 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_WORKS_USR:
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/usr/%02u/%ld/%s",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+	       sprintf (PathOrg,"%s/%s/%ld/%s/%02u/%ld/%s",
+                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
 			(unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
 			Gbl.Usrs.Me.UsrDat.UsrCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The course of copy source does not exist.");
             break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
-            if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/usr/%02u/%ld/%s",
-			Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
-			(unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
-			Gbl.FileBrowser.Clipboard.WorksUsrCod,
-			Gbl.FileBrowser.Clipboard.Path);
+         case Brw_ADMI_DOCUM_PRJ:
+            Prj.PrjCod = Gbl.FileBrowser.Clipboard.Cod;
+            Prj_GetDataOfProjectByCod (&Prj);
+            if (Prj.PrjCod > 0)
+              {
+	       Crs.CrsCod = Prj.CrsCod;
+	       if (Crs_GetDataOfCourseByCod (&Crs))
+		  sprintf (PathOrg,"%s/%s/%ld/%s/%02u/%ld/%s",
+			   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_PRJ,
+			   (unsigned) (Prj.PrjCod % 100),
+			   Prj.PrjCod,
+			   Gbl.FileBrowser.Clipboard.Path);
+	       else
+		  Lay_ShowErrorAndExit ("The course of copy source does not exist.");
+              }
             else
-               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
-            break;
+	       Lay_ShowErrorAndExit ("The course of copy source does not exist.");
             break;
          case Brw_ADMI_BRIEF_USR:
             sprintf (PathOrg,"%s/%s",
@@ -10083,6 +10196,7 @@ void Brw_ChgFileMetadata (void)
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_USR:
          case Brw_ADMI_WORKS_CRS:
+         case Brw_ADMI_DOCUM_PRJ:
          case Brw_ADMI_BRIEF_USR:
             PublicFileAfterEdition = false;	// Files in these zones can not be public
             License = Brw_GetParLicense ();
@@ -11659,6 +11773,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Shared_files_area;
    extern const char *Txt_Assignments_area;
    extern const char *Txt_Works_area;
+   extern const char *Txt_Project_documents;
    extern const char *Txt_Marks_area;
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Go_to_X;
@@ -11812,6 +11927,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    break;
 	 case Brw_ADMI_WORKS_USR:
 	    Title = Txt_Works_area;
+	    break;
+	 case Brw_ADMI_DOCUM_PRJ:
+	    Title = Txt_Project_documents;
 	    break;
 	 case Brw_ADMI_MARKS_CRS:
 	 case Brw_ADMI_MARKS_GRP:
