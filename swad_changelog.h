@@ -250,17 +250,20 @@
 
 // TODO: Mover PROFILE.Briefcase a FILES.Briefcase en la ayuda de GitHub (aquí ya está cambiado)
 
+// TODO: Los profesores no editores no deberían recibir notificaciones de solicitudes de inscripción.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.20 (2017-10-06)"
+#define Log_PLATFORM_VERSION	"SWAD 17.20.1 (2017-10-07)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.20.1:  Oct 07, 2017  Fixed bug in file browser clipboard. (? lines)
         Version 17.20:    Oct 06, 2017  New file browser for project documents. Not finished. (232915 lines)
 					18 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1698','es','N','Subir archivo a docs. proyecto (ant.)');

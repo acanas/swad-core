@@ -136,8 +136,12 @@ void Prj_PutHiddenParamPrjOrder (void);
 void Prj_RequestCreatePrj (void);
 void Prj_RequestEditPrj (void);
 
+void Prj_AllocMemProject (struct Project *Prj);
+void Prj_FreeMemProject (struct Project *Prj);
+
 void Prj_GetListProjects (void);
 void Prj_GetDataOfProjectByCod (struct Project *Prj);
+long Prj_GetCourseOfProject (long PrjCod);
 void Prj_FreeListProjects (void);
 
 void Prj_PutParamPrjCod (long PrjCod);

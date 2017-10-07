@@ -7071,6 +7071,7 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_ADMI_DOCUM_PRJ:
+	 Prj_AllocMemProject (&Prj);
          Prj.PrjCod = Gbl.FileBrowser.Clipboard.Cod;
          Prj_GetDataOfProjectByCod (&Prj);
 	 Crs.CrsCod = Prj.CrsCod;
@@ -7079,6 +7080,7 @@ static void Brw_WriteCurrentClipboard (void)
                   Txt_project_documents,
                   Txt_course,Crs.ShrtName,
                   Txt_project,Prj.Title);
+         Prj_FreeMemProject (&Prj);
          break;
       case Brw_ADMI_MARKS_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -7896,7 +7898,7 @@ static void Brw_PasteClipboard (void)
    struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
-   struct Project Prj;
+   long PrjCod;
    char PathOrg[PATH_MAX + 1];
    struct Brw_NumObjects Pasted;
    long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
@@ -7922,7 +7924,7 @@ static void Brw_PasteClipboard (void)
 		        (unsigned) Ins.InsCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
-               Lay_ShowErrorAndExit ("The institution of copy source does not exist.");
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_CTR:
          case Brw_ADMI_SHARE_CTR:
@@ -7934,7 +7936,7 @@ static void Brw_PasteClipboard (void)
 		        (unsigned) Ctr.CtrCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
-               Lay_ShowErrorAndExit ("The centre of copy source does not exist.");
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_DEG:
          case Brw_ADMI_SHARE_DEG:
@@ -7946,7 +7948,7 @@ static void Brw_PasteClipboard (void)
 		        (unsigned) Deg.DegCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
-               Lay_ShowErrorAndExit ("The degree of copy source does not exist.");
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_TEACH_CRS:
@@ -7958,7 +7960,7 @@ static void Brw_PasteClipboard (void)
                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
-               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_GRP:
          case Brw_ADMI_TEACH_GRP:
@@ -7973,7 +7975,7 @@ static void Brw_PasteClipboard (void)
 			GrpDat.GrpCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
-               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_ASSIG_USR:
          case Brw_ADMI_WORKS_USR:
@@ -7985,25 +7987,19 @@ static void Brw_PasteClipboard (void)
 			Gbl.Usrs.Me.UsrDat.UsrCod,
 			Gbl.FileBrowser.Clipboard.Path);
             else
-               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_PRJ:
-            Prj.PrjCod = Gbl.FileBrowser.Clipboard.Cod;
-            Prj_GetDataOfProjectByCod (&Prj);
-            if (Prj.PrjCod > 0)
-              {
-	       Crs.CrsCod = Prj.CrsCod;
-	       if (Crs_GetDataOfCourseByCod (&Crs))
-		  sprintf (PathOrg,"%s/%s/%ld/%s/%02u/%ld/%s",
-			   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_PRJ,
-			   (unsigned) (Prj.PrjCod % 100),
-			   Prj.PrjCod,
-			   Gbl.FileBrowser.Clipboard.Path);
-	       else
-		  Lay_ShowErrorAndExit ("The course of copy source does not exist.");
-              }
-            else
-	       Lay_ShowErrorAndExit ("The course of copy source does not exist.");
+            PrjCod = Gbl.FileBrowser.Clipboard.Cod;
+	    Crs.CrsCod = Prj_GetCourseOfProject (PrjCod);
+	    if (Crs_GetDataOfCourseByCod (&Crs))
+	       sprintf (PathOrg,"%s/%s/%ld/%s/%02u/%ld/%s",
+			Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_PRJ,
+			(unsigned) (PrjCod % 100),
+			PrjCod,
+			Gbl.FileBrowser.Clipboard.Path);
+	    else
+	       Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_BRIEF_USR:
             sprintf (PathOrg,"%s/%s",

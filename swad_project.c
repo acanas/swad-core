@@ -148,9 +148,6 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows);
 
-static void Prj_AllocMemProject (struct Project *Prj);
-static void Prj_FreeMemProject (struct Project *Prj);
-
 static void Prj_CreateProject (struct Project *Prj);
 static void Prj_UpdateProject (struct Project *Prj);
 
@@ -1786,7 +1783,7 @@ static bool Prj_GetIfIAmTutorInProject (long PrjCod)
    sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
 		  " WHERE PrjCod=%ld AND RoleInProject=%u AND UsrCod=%ld",
 	    PrjCod,Prj_ROLE_TUT,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (bool) (DB_QueryCOUNT (Query,"can not get number of projects in course") != 0);
+   return (bool) (DB_QueryCOUNT (Query,"can not check if I am a tutor in a project") != 0);
   }
 
 /*****************************************************************************/
@@ -1943,6 +1940,37 @@ void Prj_GetListProjects (void)
    DB_FreeMySQLResult (&mysql_res);
 
    Gbl.Prjs.LstIsRead = true;
+  }
+
+/*****************************************************************************/
+/****************** Check if a project exists in a course ********************/
+/*****************************************************************************/
+
+long Prj_GetCourseOfProject (long PrjCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long CrsCod = -1L;
+
+   if (PrjCod > 0)
+     {
+      /***** Get course code from database *****/
+      sprintf (Query,"SELECT CrsCod FROM projects WHERE PrjCod=%ld",PrjCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get project course")) // Project found...
+	{
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get code of the course (row[0]) */
+	 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return CrsCod;
   }
 
 /*****************************************************************************/
@@ -2628,7 +2656,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 /*** Allocate memory for those parameters of a project with a lot of text ****/
 /*****************************************************************************/
 
-static void Prj_AllocMemProject (struct Project *Prj)
+void Prj_AllocMemProject (struct Project *Prj)
   {
    if ((Prj->Description = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store project.");
@@ -2644,7 +2672,7 @@ static void Prj_AllocMemProject (struct Project *Prj)
 /****** Free memory of those parameters of a project with a lot of text ******/
 /*****************************************************************************/
 
-static void Prj_FreeMemProject (struct Project *Prj)
+void Prj_FreeMemProject (struct Project *Prj)
   {
    if (Prj->Description)
      {
