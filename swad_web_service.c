@@ -4341,26 +4341,26 @@ int swad__getDirectoryTree (struct soap *soap,
 	 switch (treeCode)
 	   {
 	    case 1:	// Documents
-	       Gbl.FileBrowser.Type = Brw_SHOW_DOCUM_GRP;
+	       Gbl.FileBrowser.Type = Brw_SHOW_DOC_GRP;
 	       break;
 	    case 2:	// Shared files
-	       Gbl.FileBrowser.Type = Brw_ADMI_SHARE_GRP;
+	       Gbl.FileBrowser.Type = Brw_ADMI_SHR_GRP;
 	       break;
 	    case 3:	// Marks
-	       Gbl.FileBrowser.Type = Brw_SHOW_MARKS_GRP;
+	       Gbl.FileBrowser.Type = Brw_SHOW_MRK_GRP;
 	       break;
 	   }
       else	// groupCode <= 0
 	 switch (treeCode)
 	   {
 	    case 1:	// Documents
-	       Gbl.FileBrowser.Type = Brw_SHOW_DOCUM_CRS;
+	       Gbl.FileBrowser.Type = Brw_SHOW_DOC_CRS;
 	       break;
 	    case 2:	// Shared files
-	       Gbl.FileBrowser.Type = Brw_ADMI_SHARE_CRS;
+	       Gbl.FileBrowser.Type = Brw_ADMI_SHR_CRS;
 	       break;
 	    case 3:	// Marks
-	       Gbl.FileBrowser.Type = Brw_SHOW_MARKS_CRS;
+	       Gbl.FileBrowser.Type = Brw_SHOW_MRK_CRS;
 	       break;
 	   }
      }
@@ -4493,8 +4493,8 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Is this row hidden or visible? *****/
-   if (Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_CRS ||
-       Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_GRP)
+   if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
+       Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
       if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
                                                     Gbl.FileBrowser.Priv.FullPathInTree))
 	 return false;
@@ -4648,13 +4648,13 @@ int swad__getFile (struct soap *soap,
    /***** Check if file is in a valid zone *****/
    switch ((Gbl.FileBrowser.Type = FileMetadata.FileBrowser))
      {
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_SHARE_CRS:
-      case Brw_ADMI_SHARE_GRP:
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_SHR_CRS:
+      case Brw_ADMI_SHR_GRP:
          break;
-      case Brw_ADMI_MARKS_CRS:
-      case Brw_ADMI_MARKS_GRP:
+      case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_MRK_GRP:
 	 // Downloading a file of marks is only allowed for teachers
 	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
 	    return soap_receiver_fault (Gbl.soap,
@@ -4747,8 +4747,8 @@ int swad__getMarks (struct soap *soap,
 
    if (FileMetadata.FileType != Brw_IS_FILE ||
        FileMetadata.IsHidden ||
-       (FileMetadata.FileBrowser != Brw_ADMI_MARKS_CRS &&
-	FileMetadata.FileBrowser != Brw_ADMI_MARKS_GRP))
+       (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
+	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad file code",
 	                          "You can not get marks from this file");

@@ -37515,7 +37515,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
    {
 	 // Brw_UNKNOWN
 	 "",
-	 // Brw_SHOW_DOCUM_CRS
+	 // Brw_SHOW_DOC_CRS
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37536,7 +37536,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_SHOW_MARKS_CRS
+	 // Brw_SHOW_MRK_CRS
 #if   L==1
 	 "qualificacions"
 #elif L==2
@@ -37557,7 +37557,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_ADMI_DOCUM_CRS
+	 // Brw_ADMI_DOC_CRS
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37578,7 +37578,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_ADMI_SHARE_CRS
+	 // Brw_ADMI_SHR_CRS
 #if   L==1
 	 "compartits"
 #elif L==2
@@ -37599,7 +37599,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_ADMI_SHARE_GRP
+	 // Brw_ADMI_SHR_GRP
 #if   L==1
 	 "compartits"
 #elif L==2
@@ -37620,7 +37620,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_ADMI_WORKS_USR
+	 // Brw_ADMI_WRK_USR
 #if   L==1
 	 "treballs"
 #elif L==2
@@ -37641,7 +37641,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "trabalhos"
 #endif
 	 ,
-	 // Brw_ADMI_WORKS_CRS
+	 // Brw_ADMI_WRK_CRS
 #if   L==1
 	 "treballs"
 #elif L==2
@@ -37662,7 +37662,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "trabalhos"
 #endif
 	 ,
-	 // Brw_ADMI_MARKS_CRS
+	 // Brw_ADMI_MRK_CRS
 #if   L==1
 	 "qualificacions"
 #elif L==2
@@ -37683,7 +37683,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_ADMI_BRIEF_USR
+	 // Brw_ADMI_BRF_USR
 #if   L==1
 	 "maleti"
 #elif L==2
@@ -37704,7 +37704,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "pasta"
 #endif
 	 ,
-	 // Brw_SHOW_DOCUM_GRP
+	 // Brw_SHOW_DOC_GRP
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37725,7 +37725,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_ADMI_DOCUM_GRP
+	 // Brw_ADMI_DOC_GRP
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37746,7 +37746,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_SHOW_MARKS_GRP
+	 // Brw_SHOW_MRK_GRP
 #if   L==1
 	 "qualificacions"	// Necessita traduccio
 #elif L==2
@@ -37767,7 +37767,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_ADMI_MARKS_GRP
+	 // Brw_ADMI_MRK_GRP
 #if   L==1
 	 "qualificacions"
 #elif L==2
@@ -37788,7 +37788,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_ADMI_ASSIG_USR
+	 // Brw_ADMI_ASG_USR
 #if   L==1
 	 "activitats"
 #elif L==2
@@ -37809,7 +37809,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "atividades"
 #endif
 	 ,
-	 // Brw_ADMI_ASSIG_CRS
+	 // Brw_ADMI_ASG_CRS
 #if   L==1
 	 "activitats"
 #elif L==2
@@ -37830,7 +37830,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "atividades"
 #endif
 	 ,
-	 // Brw_SHOW_DOCUM_DEG
+	 // Brw_SHOW_DOC_DEG
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37851,7 +37851,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_ADMI_DOCUM_DEG
+	 // Brw_ADMI_DOC_DEG
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37872,7 +37872,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_SHOW_DOCUM_CTR
+	 // Brw_SHOW_DOC_CTR
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37893,7 +37893,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_ADMI_DOCUM_CTR
+	 // Brw_ADMI_DOC_CTR
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37914,7 +37914,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_SHOW_DOCUM_INS
+	 // Brw_SHOW_DOC_INS
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37935,7 +37935,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_ADMI_DOCUM_INS
+	 // Brw_ADMI_DOC_INS
 #if   L==1
 	 "documents"
 #elif L==2
@@ -37956,7 +37956,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_ADMI_SHARE_DEG
+	 // Brw_ADMI_SHR_DEG
 #if   L==1
 	 "compartits"
 #elif L==2
@@ -37977,7 +37977,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_ADMI_SHARE_CTR
+	 // Brw_ADMI_SHR_CTR
 #if   L==1
 	 "compartits"
 #elif L==2
@@ -37998,7 +37998,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_ADMI_SHARE_INS
+	 // Brw_ADMI_SHR_INS
 #if   L==1
 	 "compartits"
 #elif L==2
@@ -38019,7 +38019,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_ADMI_TEACH_CRS
+	 // Brw_ADMI_TCH_CRS
 #if   L==1
 	"privats"
 #elif L==2
@@ -38040,7 +38040,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"privados"
 #endif
 	 ,
-	 // Brw_ADMI_TEACH_GRP
+	 // Brw_ADMI_TCH_GRP
 #if   L==1
 	"privats"
 #elif L==2
@@ -38061,7 +38061,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	"privados"
 #endif
 	 ,
-	 // Brw_ADMI_DOCUM_PRJ
+	 // Brw_ADMI_DOC_PRJ
 #if   L==1
 	"projecte"
 #elif L==2
@@ -40988,7 +40988,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 
 const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
 	 {
-#if   L==1	// Brw_ADMI_DOCUM_CRS
+#if   L==1	// Brw_ADMI_DOC_CRS
 	 "Documents&nbsp;(ass.)"
 #elif L==2
 	 "Dokumente&nbsp;(Ver.)"
@@ -41008,7 +41008,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Documentos&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_DOCUM_GRP
+#if   L==1	// Brw_ADMI_DOC_GRP
 	"Documents&nbsp;(grp.)"
 #elif L==2
 	"Dokumente&nbsp;(Grp.)"
@@ -41028,7 +41028,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Documentos&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_TEACH_CRS
+#if   L==1	// Brw_ADMI_TCH_CRS
 	"Privats&nbsp;(ass.)"
 #elif L==2
 	"Private&nbsp;(Ver.)"
@@ -41048,7 +41048,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Privadoss&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_TEACH_GRP
+#if   L==1	// Brw_ADMI_TCH_GRP
 	"Privats&nbsp;(grp.)"
 #elif L==2
 	"Private&nbsp;(Grp.)"
@@ -41068,7 +41068,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Privadoss&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_SHARE_CRS
+#if   L==1	// Brw_ADMI_SHR_CRS
 	"Compartits&nbsp;(asg.)"
 #elif L==2
 	"Freigegebene&nbsp;(Ver.)"
@@ -41088,7 +41088,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Compartilhados&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_SHARE_GRP
+#if   L==1	// Brw_ADMI_SHR_GRP
 	"Compartits&nbsp;(grp.)"
 #elif L==2
 	"Freigegebene&nbsp;(Grp.)"
@@ -41108,7 +41108,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Compartilhados&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_MARKS_CRS
+#if   L==1	// Brw_ADMI_MRK_CRS
 	"Qualificacions&nbsp;(ass.)"
 #elif L==2
 	"Bewertungen&nbsp;(Ver.)"
@@ -41128,7 +41128,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Notas&nbsp;(crs.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_MARKS_GRP
+#if   L==1	// Brw_ADMI_MRK_GRP
 	"Qualificacions&nbsp;(grp.)"
 #elif L==2
 	"Bewertungen&nbsp;(Grp.)"
@@ -41148,7 +41148,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Notas&nbsp;(grp.)"
 #endif
 	,
-#if   L==1	// Brw_ADMI_ASSIG_USR
+#if   L==1	// Brw_ADMI_ASG_USR
 	"Activitats"
 #elif L==2
 	"Aufgaben"
@@ -41168,7 +41168,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Atividades"
 #endif
 	,
-#if   L==1	// Brw_ADMI_WORKS_USR
+#if   L==1	// Brw_ADMI_WRK_USR
 	"Treballs"
 #elif L==2
 	"Hausarbeiten"

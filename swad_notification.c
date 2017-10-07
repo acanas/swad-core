@@ -1049,14 +1049,14 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 
    switch (FileBrowser)
      {
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_CRS:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_CRS:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_CRS:
-      case Brw_ADMI_MARKS_GRP:
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_TCH_CRS:
+      case Brw_ADMI_TCH_GRP:
+      case Brw_ADMI_SHR_CRS:
+      case Brw_ADMI_SHR_GRP:
+      case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_MRK_GRP:
          /***** Get file code *****/
 	 FilCod = Brw_GetFilCodByPath (Path,false);	// Any file, public or not
 	 if (FilCod > 0)
@@ -1064,20 +1064,20 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 	    /***** Set notification as removed *****/
 	    switch (FileBrowser)
 	      {
-	       case Brw_ADMI_DOCUM_CRS:
-	       case Brw_ADMI_DOCUM_GRP:
+	       case Brw_ADMI_DOC_CRS:
+	       case Brw_ADMI_DOC_GRP:
 		  NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
 		  break;
-	       case Brw_ADMI_TEACH_CRS:
-	       case Brw_ADMI_TEACH_GRP:
+	       case Brw_ADMI_TCH_CRS:
+	       case Brw_ADMI_TCH_GRP:
 		  NotifyEvent = Ntf_EVENT_TEACHERS_FILE;
 		  break;
-	       case Brw_ADMI_SHARE_CRS:
-	       case Brw_ADMI_SHARE_GRP:
+	       case Brw_ADMI_SHR_CRS:
+	       case Brw_ADMI_SHR_GRP:
 		  NotifyEvent = Ntf_EVENT_SHARED_FILE;
 		  break;
-	       case Brw_ADMI_MARKS_CRS:
-	       case Brw_ADMI_MARKS_GRP:
+	       case Brw_ADMI_MRK_CRS:
+	       case Brw_ADMI_MRK_GRP:
 		  NotifyEvent = Ntf_EVENT_MARKS_FILE;
 		  break;
 	       default:
@@ -1105,31 +1105,31 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 
    switch (FileBrowser)
      {
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_CRS:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_CRS:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_CRS:
-      case Brw_ADMI_MARKS_GRP:
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_TCH_CRS:
+      case Brw_ADMI_TCH_GRP:
+      case Brw_ADMI_SHR_CRS:
+      case Brw_ADMI_SHR_GRP:
+      case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_MRK_GRP:
          /***** Set notification as removed *****/
 	 switch (FileBrowser)
 	   {
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_DOCUM_GRP:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_DOC_GRP:
 	       NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
 	       break;
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_TEACH_GRP:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_TCH_GRP:
 	       NotifyEvent = Ntf_EVENT_TEACHERS_FILE;
 	       break;
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_SHARE_GRP:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_SHR_GRP:
 	       NotifyEvent = Ntf_EVENT_SHARED_FILE;
 	       break;
-	    case Brw_ADMI_MARKS_CRS:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_MRK_CRS:
+	    case Brw_ADMI_MRK_GRP:
 	       NotifyEvent = Ntf_EVENT_MARKS_FILE;
 	       break;
 	    default:
@@ -1169,10 +1169,10 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
             (unsigned) Ntf_EVENT_TEACHERS_FILE,
             (unsigned) Ntf_EVENT_SHARED_FILE,
             (unsigned) Ntf_EVENT_MARKS_FILE,
-            (unsigned) Brw_ADMI_DOCUM_GRP,
-            (unsigned) Brw_ADMI_TEACH_GRP,
-            (unsigned) Brw_ADMI_SHARE_GRP,
-            (unsigned) Brw_ADMI_MARKS_GRP,
+            (unsigned) Brw_ADMI_DOC_GRP,
+            (unsigned) Brw_ADMI_TCH_GRP,
+            (unsigned) Brw_ADMI_SHR_GRP,
+            (unsigned) Brw_ADMI_MRK_GRP,
             GrpCod);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
   }
@@ -1207,16 +1207,16 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_MARKS_FILE:
          switch (Gbl.FileBrowser.Type)
            {
-            case Brw_ADMI_DOCUM_CRS:
-            case Brw_ADMI_SHARE_CRS:
-            case Brw_ADMI_MARKS_CRS:	// Notify all users in course except me
+            case Brw_ADMI_DOC_CRS:
+            case Brw_ADMI_SHR_CRS:
+            case Brw_ADMI_MRK_CRS:	// Notify all users in course except me
                sprintf (Query,"SELECT UsrCod FROM crs_usr"
                               " WHERE CrsCod=%ld"
                               " AND UsrCod<>%ld",
                         Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
-            case Brw_ADMI_TEACH_CRS:	// Notify all teachers in course except me
+            case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
                sprintf (Query,"SELECT UsrCod FROM crs_usr"
                               " WHERE CrsCod=%ld"
                               " AND UsrCod<>%ld"
@@ -1225,16 +1225,16 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TCH);
                break;
-            case Brw_ADMI_DOCUM_GRP:
-            case Brw_ADMI_SHARE_GRP:
-            case Brw_ADMI_MARKS_GRP:	// Notify all users in group except me
+            case Brw_ADMI_DOC_GRP:
+            case Brw_ADMI_SHR_GRP:
+            case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
                sprintf (Query,"SELECT UsrCod FROM crs_grp_usr"
                               " WHERE crs_grp_usr.GrpCod=%ld"
                               " AND crs_grp_usr.UsrCod<>%ld",
                         Gbl.CurrentCrs.Grps.GrpCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
-            case Brw_ADMI_TEACH_GRP:	// Notify all teachers in group except me
+            case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
                sprintf (Query,"SELECT crs_grp_usr.UsrCod"
         	              " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
                               " WHERE crs_grp_usr.GrpCod=%ld"

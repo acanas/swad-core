@@ -205,26 +205,26 @@ void Lay_WriteStartOfPage (void)
    // images/spritemap.png
    switch (Gbl.Action.Act)
      {
-      case ActFrmCreDocIns:	// Brw_ADMI_DOCUM_INS
-      case ActFrmCreShaIns:	// Brw_ADMI_SHARE_INS
-      case ActFrmCreDocCtr:	// Brw_ADMI_DOCUM_CTR
-      case ActFrmCreShaCtr:	// Brw_ADMI_SHARE_CTR
-      case ActFrmCreDocDeg:	// Brw_ADMI_DOCUM_DEG
-      case ActFrmCreShaDeg:	// Brw_ADMI_SHARE_DEG
-      case ActFrmCreDocCrs:	// Brw_ADMI_DOCUM_CRS
-      case ActFrmCreDocGrp:	// Brw_ADMI_DOCUM_GRP
-      case ActFrmCreTchCrs:	// Brw_ADMI_TEACH_CRS
-      case ActFrmCreTchGrp:	// Brw_ADMI_TEACH_GRP
-      case ActFrmCreShaCrs:	// Brw_ADMI_SHARE_CRS
-      case ActFrmCreShaGrp:	// Brw_ADMI_SHARE_GRP
-      case ActFrmCreAsgUsr:	// Brw_ADMI_ASSIG_USR
-      case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
-      case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR
-      case ActFrmCreWrkCrs:	// Brw_ADMI_WORKS_CRS
-      case ActFrmCreDocPrj:	// Brw_ADMI_DOCUM_PRJ
-      case ActFrmCreMrkCrs:	// Brw_ADMI_MARKS_CRS
-      case ActFrmCreMrkGrp:	// Brw_ADMI_MARKS_GRP
-      case ActFrmCreBrf:	// Brw_ADMI_BRIEF_USR
+      case ActFrmCreDocIns:	// Brw_ADMI_DOC_INS
+      case ActFrmCreShaIns:	// Brw_ADMI_SHR_INS
+      case ActFrmCreDocCtr:	// Brw_ADMI_DOC_CTR
+      case ActFrmCreShaCtr:	// Brw_ADMI_SHR_CTR
+      case ActFrmCreDocDeg:	// Brw_ADMI_DOC_DEG
+      case ActFrmCreShaDeg:	// Brw_ADMI_SHR_DEG
+      case ActFrmCreDocCrs:	// Brw_ADMI_DOC_CRS
+      case ActFrmCreDocGrp:	// Brw_ADMI_DOC_GRP
+      case ActFrmCreTchCrs:	// Brw_ADMI_TCH_CRS
+      case ActFrmCreTchGrp:	// Brw_ADMI_TCH_GRP
+      case ActFrmCreShaCrs:	// Brw_ADMI_SHR_CRS
+      case ActFrmCreShaGrp:	// Brw_ADMI_SHR_GRP
+      case ActFrmCreAsgUsr:	// Brw_ADMI_ASG_USR
+      case ActFrmCreAsgCrs:	// Brw_ADMI_ASG_CRS
+      case ActFrmCreWrkUsr:	// Brw_ADMI_WRK_USR
+      case ActFrmCreWrkCrs:	// Brw_ADMI_WRK_CRS
+      case ActFrmCreDocPrj:	// Brw_ADMI_DOC_PRJ
+      case ActFrmCreMrkCrs:	// Brw_ADMI_MRK_CRS
+      case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
+      case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
 	 fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
 			    " href=\"%s/dropzone/css/dropzone.css\""
 			    " type=\"text/css\" />\n",
@@ -579,26 +579,26 @@ static void Lay_WriteScripts (void)
       // css/dropzone.css
       // images/spritemap@2x.png
       // images/spritemap.png
-      case ActFrmCreDocIns:	// Brw_ADMI_DOCUM_INS
-      case ActFrmCreShaIns:	// Brw_ADMI_SHARE_INS
-      case ActFrmCreDocCtr:	// Brw_ADMI_DOCUM_CTR
-      case ActFrmCreShaCtr:	// Brw_ADMI_SHARE_CTR
-      case ActFrmCreDocDeg:	// Brw_ADMI_DOCUM_DEG
-      case ActFrmCreShaDeg:	// Brw_ADMI_SHARE_DEG
-      case ActFrmCreDocCrs:	// Brw_ADMI_DOCUM_CRS
-      case ActFrmCreDocGrp:	// Brw_ADMI_DOCUM_GRP
-      case ActFrmCreTchCrs:	// Brw_ADMI_TEACH_CRS
-      case ActFrmCreTchGrp:	// Brw_ADMI_TEACH_GRP
-      case ActFrmCreShaCrs:	// Brw_ADMI_SHARE_CRS
-      case ActFrmCreShaGrp:	// Brw_ADMI_SHARE_GRP
-      case ActFrmCreAsgUsr:	// Brw_ADMI_ASSIG_USR
-      case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
-      case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR
-      case ActFrmCreWrkCrs:	// Brw_ADMI_WORKS_CRS
-      case ActFrmCreDocPrj:	// Brw_ADMI_DOCUM_PRJ
-      case ActFrmCreMrkCrs:	// Brw_ADMI_MARKS_CRS
-      case ActFrmCreMrkGrp:	// Brw_ADMI_MARKS_GRP
-      case ActFrmCreBrf:	// Brw_ADMI_BRIEF_USR
+      case ActFrmCreDocIns:	// Brw_ADMI_DOC_INS
+      case ActFrmCreShaIns:	// Brw_ADMI_SHR_INS
+      case ActFrmCreDocCtr:	// Brw_ADMI_DOC_CTR
+      case ActFrmCreShaCtr:	// Brw_ADMI_SHR_CTR
+      case ActFrmCreDocDeg:	// Brw_ADMI_DOC_DEG
+      case ActFrmCreShaDeg:	// Brw_ADMI_SHR_DEG
+      case ActFrmCreDocCrs:	// Brw_ADMI_DOC_CRS
+      case ActFrmCreDocGrp:	// Brw_ADMI_DOC_GRP
+      case ActFrmCreTchCrs:	// Brw_ADMI_TCH_CRS
+      case ActFrmCreTchGrp:	// Brw_ADMI_TCH_GRP
+      case ActFrmCreShaCrs:	// Brw_ADMI_SHR_CRS
+      case ActFrmCreShaGrp:	// Brw_ADMI_SHR_GRP
+      case ActFrmCreAsgUsr:	// Brw_ADMI_ASG_USR
+      case ActFrmCreAsgCrs:	// Brw_ADMI_ASG_CRS
+      case ActFrmCreWrkUsr:	// Brw_ADMI_WRK_USR
+      case ActFrmCreWrkCrs:	// Brw_ADMI_WRK_CRS
+      case ActFrmCreDocPrj:	// Brw_ADMI_DOC_PRJ
+      case ActFrmCreMrkCrs:	// Brw_ADMI_MRK_CRS
+      case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
+      case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
 	 // Use charset="windows-1252" to force error messages in windows-1252 (default is UTF-8)
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
 			    " src=\"%s/dropzone/dropzone.js\""

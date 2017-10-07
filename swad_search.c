@@ -935,20 +935,20 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			" WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_INS,
-		  (unsigned) Brw_ADMI_SHARE_INS,
+		  (unsigned) Brw_ADMI_DOC_INS,
+		  (unsigned) Brw_ADMI_SHR_INS,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_CTR,
-		  (unsigned) Brw_ADMI_SHARE_CTR,
+		  (unsigned) Brw_ADMI_DOC_CTR,
+		  (unsigned) Brw_ADMI_SHR_CTR,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_DEG,
-		  (unsigned) Brw_ADMI_SHARE_DEG,
+		  (unsigned) Brw_ADMI_DOC_DEG,
+		  (unsigned) Brw_ADMI_SHR_DEG,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
+		  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
@@ -994,10 +994,10 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			" AND crs_usr.CrsCod=files.Cod"
 			" AND files.FileBrowser IN (%u,%u,%u,%u)",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_TEACH_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
-		  (unsigned) Brw_ADMI_MARKS_CRS);
+		  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_TCH_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
+		  (unsigned) Brw_ADMI_MRK_CRS);
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
 
@@ -1009,10 +1009,10 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			" AND crs_grp_usr.GrpCod=files.Cod"
 			" AND files.FileBrowser IN (%u,%u,%u,%u)",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Brw_ADMI_DOCUM_GRP,
-		  (unsigned) Brw_ADMI_TEACH_GRP,
-		  (unsigned) Brw_ADMI_SHARE_GRP,
-		  (unsigned) Brw_ADMI_MARKS_GRP);
+		  (unsigned) Brw_ADMI_DOC_GRP,
+		  (unsigned) Brw_ADMI_TCH_GRP,
+		  (unsigned) Brw_ADMI_SHR_GRP,
+		  (unsigned) Brw_ADMI_MRK_GRP);
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 if (mysql_query (&Gbl.mysql,Query))
@@ -1060,16 +1060,16 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                " WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_TEACH_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
-		  (unsigned) Brw_ADMI_MARKS_CRS,
+		  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_TCH_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
+		  (unsigned) Brw_ADMI_MRK_CRS,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_GRP,
-		  (unsigned) Brw_ADMI_TEACH_GRP,
-		  (unsigned) Brw_ADMI_SHARE_GRP,
-		  (unsigned) Brw_ADMI_MARKS_GRP,
+		  (unsigned) Brw_ADMI_DOC_GRP,
+		  (unsigned) Brw_ADMI_TCH_GRP,
+		  (unsigned) Brw_ADMI_SHR_GRP,
+		  (unsigned) Brw_ADMI_MRK_GRP,
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
@@ -1205,31 +1205,31 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			" WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_INS,
-		  (unsigned) Brw_ADMI_SHARE_INS,
+		  (unsigned) Brw_ADMI_DOC_INS,
+		  (unsigned) Brw_ADMI_SHR_INS,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_CTR,
-		  (unsigned) Brw_ADMI_SHARE_CTR,
+		  (unsigned) Brw_ADMI_DOC_CTR,
+		  (unsigned) Brw_ADMI_SHR_CTR,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_DEG,
-		  (unsigned) Brw_ADMI_SHARE_DEG,
+		  (unsigned) Brw_ADMI_DOC_DEG,
+		  (unsigned) Brw_ADMI_SHR_DEG,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_TEACH_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
-		  (unsigned) Brw_ADMI_MARKS_CRS,
+		  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_TCH_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
+		  (unsigned) Brw_ADMI_MRK_CRS,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOCUM_GRP,
-		  (unsigned) Brw_ADMI_TEACH_GRP,
-		  (unsigned) Brw_ADMI_SHARE_GRP,
-		  (unsigned) Brw_ADMI_MARKS_GRP,
+		  (unsigned) Brw_ADMI_DOC_GRP,
+		  (unsigned) Brw_ADMI_TCH_GRP,
+		  (unsigned) Brw_ADMI_SHR_GRP,
+		  (unsigned) Brw_ADMI_MRK_GRP,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_BRIEF_USR);
+		  (unsigned) Brw_ADMI_BRF_USR);
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)

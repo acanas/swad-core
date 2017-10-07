@@ -1997,14 +1997,14 @@ void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path)
 
    switch (FileBrowser)
      {
-      case Brw_ADMI_DOCUM_INS:
-      case Brw_ADMI_SHARE_INS:
-      case Brw_ADMI_DOCUM_CTR:
-      case Brw_ADMI_SHARE_CTR:
-      case Brw_ADMI_DOCUM_DEG:
-      case Brw_ADMI_SHARE_DEG:
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_SHARE_CRS:
+      case Brw_ADMI_DOC_INS:
+      case Brw_ADMI_SHR_INS:
+      case Brw_ADMI_DOC_CTR:
+      case Brw_ADMI_SHR_CTR:
+      case Brw_ADMI_DOC_DEG:
+      case Brw_ADMI_SHR_DEG:
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_SHR_CRS:
          /***** Get file code *****/
 	 FilCod = Brw_GetFilCodByPath (Path,true);	// Only if file is public
 	 if (FilCod > 0)
@@ -2012,28 +2012,28 @@ void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path)
 	    /***** Mark possible social note as unavailable *****/
 	    switch (FileBrowser)
 	      {
-	       case Brw_ADMI_DOCUM_INS:
+	       case Brw_ADMI_DOC_INS:
 		  NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
 		  break;
-	       case Brw_ADMI_SHARE_INS:
+	       case Brw_ADMI_SHR_INS:
 		  NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
 		  break;
-	       case Brw_ADMI_DOCUM_CTR:
+	       case Brw_ADMI_DOC_CTR:
 		  NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
 		  break;
-	       case Brw_ADMI_SHARE_CTR:
+	       case Brw_ADMI_SHR_CTR:
 		  NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
 		  break;
-	       case Brw_ADMI_DOCUM_DEG:
+	       case Brw_ADMI_DOC_DEG:
 		  NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
 		  break;
-	       case Brw_ADMI_SHARE_DEG:
+	       case Brw_ADMI_SHR_DEG:
 		  NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
 		  break;
-	       case Brw_ADMI_DOCUM_CRS:
+	       case Brw_ADMI_DOC_CRS:
 		  NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
 		  break;
-	       case Brw_ADMI_SHARE_CRS:
+	       case Brw_ADMI_SHR_CRS:
 		  NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
 		  break;
 	       default:
@@ -2061,39 +2061,39 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
 
    switch (FileBrowser)
      {
-      case Brw_ADMI_DOCUM_INS:
-      case Brw_ADMI_SHARE_INS:
-      case Brw_ADMI_DOCUM_CTR:
-      case Brw_ADMI_SHARE_CTR:
-      case Brw_ADMI_DOCUM_DEG:
-      case Brw_ADMI_SHARE_DEG:
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_SHARE_CRS:
+      case Brw_ADMI_DOC_INS:
+      case Brw_ADMI_SHR_INS:
+      case Brw_ADMI_DOC_CTR:
+      case Brw_ADMI_SHR_CTR:
+      case Brw_ADMI_DOC_DEG:
+      case Brw_ADMI_SHR_DEG:
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_SHR_CRS:
 	 /***** Mark possible social note as unavailable *****/
 	 switch (FileBrowser)
 	   {
-	    case Brw_ADMI_DOCUM_INS:
+	    case Brw_ADMI_DOC_INS:
 	       NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
 	       break;
-	    case Brw_ADMI_SHARE_INS:
+	    case Brw_ADMI_SHR_INS:
 	       NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
 	       break;
-	    case Brw_ADMI_DOCUM_CTR:
+	    case Brw_ADMI_DOC_CTR:
 	       NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
 	       break;
-	    case Brw_ADMI_SHARE_CTR:
+	    case Brw_ADMI_SHR_CTR:
 	       NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
 	       break;
-	    case Brw_ADMI_DOCUM_DEG:
+	    case Brw_ADMI_DOC_DEG:
 	       NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
 	       break;
-	    case Brw_ADMI_SHARE_DEG:
+	    case Brw_ADMI_SHR_DEG:
 	       NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
+	    case Brw_ADMI_DOC_CRS:
 	       NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
 	       break;
-	    case Brw_ADMI_SHARE_CRS:
+	    case Brw_ADMI_SHR_CRS:
 	       NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
 	       break;
 	    default:

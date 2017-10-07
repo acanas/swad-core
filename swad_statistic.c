@@ -5459,16 +5459,16 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    extern const char *Txt_Briefcases;
    static const Brw_FileBrowser_t StatCrsFileZones[Sta_NUM_STAT_CRS_FILE_ZONES] =
      {
-      Brw_ADMI_DOCUM_CRS,
-      Brw_ADMI_DOCUM_GRP,
-      Brw_ADMI_TEACH_CRS,
-      Brw_ADMI_TEACH_GRP,
-      Brw_ADMI_SHARE_CRS,
-      Brw_ADMI_SHARE_GRP,
-      Brw_ADMI_MARKS_CRS,
-      Brw_ADMI_MARKS_GRP,
-      Brw_ADMI_ASSIG_USR,
-      Brw_ADMI_WORKS_USR,
+      Brw_ADMI_DOC_CRS,
+      Brw_ADMI_DOC_GRP,
+      Brw_ADMI_TCH_CRS,
+      Brw_ADMI_TCH_GRP,
+      Brw_ADMI_SHR_CRS,
+      Brw_ADMI_SHR_GRP,
+      Brw_ADMI_MRK_CRS,
+      Brw_ADMI_MRK_GRP,
+      Brw_ADMI_ASG_USR,
+      Brw_ADMI_WRK_USR,
       Brw_UNKNOWN,
      };
    unsigned NumStat;
@@ -5490,7 +5490,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    Sta_WriteStatsExpTreesTableHead ();
 
    /***** Write size of briefcases *****/
-   Sta_WriteRowStatsFileBrowsers (Brw_ADMI_BRIEF_USR,Txt_Briefcases);
+   Sta_WriteRowStatsFileBrowsers (Brw_ADMI_BRF_USR,Txt_Briefcases);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5769,21 +5769,21 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			(unsigned) Brw_ADMI_DOCUM_CRS,
-			(unsigned) Brw_ADMI_TEACH_CRS,
-			(unsigned) Brw_ADMI_SHARE_CRS,
-			(unsigned) Brw_ADMI_ASSIG_USR,
-			(unsigned) Brw_ADMI_WORKS_USR,
-			(unsigned) Brw_ADMI_MARKS_CRS,
-			(unsigned) Brw_ADMI_DOCUM_GRP,
-			(unsigned) Brw_ADMI_TEACH_GRP,
-			(unsigned) Brw_ADMI_SHARE_GRP,
-			(unsigned) Brw_ADMI_MARKS_GRP);
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_TCH_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) Brw_ADMI_ASG_USR,
+			(unsigned) Brw_ADMI_WRK_USR,
+			(unsigned) Brw_ADMI_MRK_CRS,
+			(unsigned) Brw_ADMI_DOC_GRP,
+			(unsigned) Brw_ADMI_TCH_GRP,
+			(unsigned) Brw_ADMI_SHR_GRP,
+			(unsigned) Brw_ADMI_MRK_GRP);
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_MARKS_CRS:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT Cod),"
 		              "-1,"
 		              "-1,"
@@ -5795,10 +5795,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_DOCUM_GRP:
-	    case Brw_ADMI_TEACH_GRP:
-	    case Brw_ADMI_SHARE_GRP:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
@@ -5812,8 +5812,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	                      " AND file_browser_size.FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_ASSIG_USR:
-	    case Brw_ADMI_WORKS_USR:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
@@ -5825,7 +5825,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_BRIEF_USR:
+	    case Brw_ADMI_BRF_USR:
 	       sprintf (Query,"SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
@@ -5887,22 +5887,22 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentCty.Cty.CtyCod,
-			(unsigned) Brw_ADMI_DOCUM_CRS,
-			(unsigned) Brw_ADMI_TEACH_CRS,
-			(unsigned) Brw_ADMI_SHARE_CRS,
-			(unsigned) Brw_ADMI_ASSIG_USR,
-			(unsigned) Brw_ADMI_WORKS_USR,
-			(unsigned) Brw_ADMI_MARKS_CRS,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_TCH_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) Brw_ADMI_ASG_USR,
+			(unsigned) Brw_ADMI_WRK_USR,
+			(unsigned) Brw_ADMI_MRK_CRS,
 			Gbl.CurrentCty.Cty.CtyCod,
-			(unsigned) Brw_ADMI_DOCUM_GRP,
-			(unsigned) Brw_ADMI_TEACH_GRP,
-			(unsigned) Brw_ADMI_SHARE_GRP,
-			(unsigned) Brw_ADMI_MARKS_GRP);
+			(unsigned) Brw_ADMI_DOC_GRP,
+			(unsigned) Brw_ADMI_TCH_GRP,
+			(unsigned) Brw_ADMI_SHR_GRP,
+			(unsigned) Brw_ADMI_MRK_GRP);
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_MARKS_CRS:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
@@ -5919,10 +5919,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " and file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_DOCUM_GRP:
-	    case Brw_ADMI_TEACH_GRP:
-	    case Brw_ADMI_SHARE_GRP:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
@@ -5941,8 +5941,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_ASSIG_USR:
-	    case Brw_ADMI_WORKS_USR:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -5959,7 +5959,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	                      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_BRIEF_USR:
+	    case Brw_ADMI_BRF_USR:
 	       sprintf (Query,"SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6025,22 +6025,22 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentIns.Ins.InsCod,
-			(unsigned) Brw_ADMI_DOCUM_CRS,
-			(unsigned) Brw_ADMI_TEACH_CRS,
-			(unsigned) Brw_ADMI_SHARE_CRS,
-			(unsigned) Brw_ADMI_ASSIG_USR,
-			(unsigned) Brw_ADMI_WORKS_USR,
-			(unsigned) Brw_ADMI_MARKS_CRS,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_TCH_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) Brw_ADMI_ASG_USR,
+			(unsigned) Brw_ADMI_WRK_USR,
+			(unsigned) Brw_ADMI_MRK_CRS,
 			Gbl.CurrentIns.Ins.InsCod,
-			(unsigned) Brw_ADMI_DOCUM_GRP,
-			(unsigned) Brw_ADMI_TEACH_GRP,
-			(unsigned) Brw_ADMI_SHARE_GRP,
-			(unsigned) Brw_ADMI_MARKS_GRP);
+			(unsigned) Brw_ADMI_DOC_GRP,
+			(unsigned) Brw_ADMI_TCH_GRP,
+			(unsigned) Brw_ADMI_SHR_GRP,
+			(unsigned) Brw_ADMI_MRK_GRP);
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_MARKS_CRS:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
@@ -6056,10 +6056,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " and file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_DOCUM_GRP:
-	    case Brw_ADMI_TEACH_GRP:
-	    case Brw_ADMI_SHARE_GRP:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
@@ -6077,8 +6077,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_ASSIG_USR:
-	    case Brw_ADMI_WORKS_USR:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6094,7 +6094,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	                      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_BRIEF_USR:
+	    case Brw_ADMI_BRF_USR:
 	       sprintf (Query,"SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6157,22 +6157,22 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentCtr.Ctr.CtrCod,
-			(unsigned) Brw_ADMI_DOCUM_CRS,
-			(unsigned) Brw_ADMI_TEACH_CRS,
-			(unsigned) Brw_ADMI_SHARE_CRS,
-			(unsigned) Brw_ADMI_ASSIG_USR,
-			(unsigned) Brw_ADMI_WORKS_USR,
-			(unsigned) Brw_ADMI_MARKS_CRS,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_TCH_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) Brw_ADMI_ASG_USR,
+			(unsigned) Brw_ADMI_WRK_USR,
+			(unsigned) Brw_ADMI_MRK_CRS,
 			Gbl.CurrentCtr.Ctr.CtrCod,
-			(unsigned) Brw_ADMI_DOCUM_GRP,
-			(unsigned) Brw_ADMI_TEACH_GRP,
-			(unsigned) Brw_ADMI_SHARE_GRP,
-			(unsigned) Brw_ADMI_MARKS_GRP);
+			(unsigned) Brw_ADMI_DOC_GRP,
+			(unsigned) Brw_ADMI_TCH_GRP,
+			(unsigned) Brw_ADMI_SHR_GRP,
+			(unsigned) Brw_ADMI_MRK_GRP);
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_MARKS_CRS:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
@@ -6187,10 +6187,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
-	    case Brw_ADMI_DOCUM_GRP:
-	    case Brw_ADMI_TEACH_GRP:
-	    case Brw_ADMI_SHARE_GRP:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
@@ -6207,8 +6207,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
-	    case Brw_ADMI_ASSIG_USR:
-	    case Brw_ADMI_WORKS_USR:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6223,7 +6223,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_BRIEF_USR:
+	    case Brw_ADMI_BRF_USR:
 	       sprintf (Query,"SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6283,22 +6283,22 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentDeg.Deg.DegCod,
-			(unsigned) Brw_ADMI_DOCUM_CRS,
-			(unsigned) Brw_ADMI_TEACH_CRS,
-			(unsigned) Brw_ADMI_SHARE_CRS,
-			(unsigned) Brw_ADMI_ASSIG_USR,
-			(unsigned) Brw_ADMI_WORKS_USR,
-			(unsigned) Brw_ADMI_MARKS_CRS,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_TCH_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) Brw_ADMI_ASG_USR,
+			(unsigned) Brw_ADMI_WRK_USR,
+			(unsigned) Brw_ADMI_MRK_CRS,
 			Gbl.CurrentDeg.Deg.DegCod,
-			(unsigned) Brw_ADMI_DOCUM_GRP,
-			(unsigned) Brw_ADMI_TEACH_GRP,
-			(unsigned) Brw_ADMI_SHARE_GRP,
-			(unsigned) Brw_ADMI_MARKS_GRP);
+			(unsigned) Brw_ADMI_DOC_GRP,
+			(unsigned) Brw_ADMI_TCH_GRP,
+			(unsigned) Brw_ADMI_SHR_GRP,
+			(unsigned) Brw_ADMI_MRK_GRP);
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_MARKS_CRS:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
@@ -6312,10 +6312,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_DOCUM_GRP:
-	    case Brw_ADMI_TEACH_GRP:
-	    case Brw_ADMI_SHARE_GRP:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
@@ -6331,8 +6331,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_ASSIG_USR:
-	    case Brw_ADMI_WORKS_USR:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6346,7 +6346,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_BRIEF_USR:
+	    case Brw_ADMI_BRF_USR:
 	       sprintf (Query,"SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6403,22 +6403,22 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Brw_ADMI_DOCUM_CRS,
-			(unsigned) Brw_ADMI_TEACH_CRS,
-			(unsigned) Brw_ADMI_SHARE_CRS,
-			(unsigned) Brw_ADMI_ASSIG_USR,
-			(unsigned) Brw_ADMI_WORKS_USR,
-			(unsigned) Brw_ADMI_MARKS_CRS,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_TCH_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) Brw_ADMI_ASG_USR,
+			(unsigned) Brw_ADMI_WRK_USR,
+			(unsigned) Brw_ADMI_MRK_CRS,
 			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Brw_ADMI_DOCUM_GRP,
-			(unsigned) Brw_ADMI_TEACH_GRP,
-			(unsigned) Brw_ADMI_SHARE_GRP,
-			(unsigned) Brw_ADMI_MARKS_GRP);
+			(unsigned) Brw_ADMI_DOC_GRP,
+			(unsigned) Brw_ADMI_TCH_GRP,
+			(unsigned) Brw_ADMI_SHR_GRP,
+			(unsigned) Brw_ADMI_MRK_GRP);
 	       break;
-	    case Brw_ADMI_DOCUM_CRS:
-	    case Brw_ADMI_TEACH_CRS:
-	    case Brw_ADMI_SHARE_CRS:
-	    case Brw_ADMI_MARKS_CRS:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
 	       sprintf (Query,"SELECT 1,"
 		              "-1,"
 		              "-1,"
@@ -6430,10 +6430,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE Cod=%ld AND FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_DOCUM_GRP:
-	    case Brw_ADMI_TEACH_GRP:
-	    case Brw_ADMI_SHARE_GRP:
-	    case Brw_ADMI_MARKS_GRP:
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
@@ -6448,8 +6448,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_ASSIG_USR:
-	    case Brw_ADMI_WORKS_USR:
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
 	       sprintf (Query,"SELECT 1,"
 		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
@@ -6461,7 +6461,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE Cod=%ld AND FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
-	    case Brw_ADMI_BRIEF_USR:
+	    case Brw_ADMI_BRF_USR:
 	       sprintf (Query,"SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
@@ -6629,8 +6629,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentCty.Cty.CtyCod,
-                  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
+                  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_INS:
@@ -6644,8 +6644,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
+                  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_CTR:
@@ -6658,8 +6658,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
+                  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_DEG:
@@ -6671,8 +6671,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
+                  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_CRS:
@@ -6683,8 +6683,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND License=%u"
                         " GROUP BY Public",
                   Gbl.CurrentCrs.Crs.CrsCod,
-                  (unsigned) Brw_ADMI_DOCUM_CRS,
-		  (unsigned) Brw_ADMI_SHARE_CRS,
+                  (unsigned) Brw_ADMI_DOC_CRS,
+		  (unsigned) Brw_ADMI_SHR_CRS,
                   (unsigned) License);
          break;
       default:

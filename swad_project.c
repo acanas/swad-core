@@ -2289,6 +2289,7 @@ void Prj_RemoveProject (void)
    extern const char *Txt_Project_X_removed;
    char Query[256];
    struct Project Prj;
+   char PathRelPrj[PATH_MAX + 1];
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -2317,6 +2318,12 @@ void Prj_RemoveProject (void)
 		     " WHERE PrjCod=%ld AND CrsCod=%ld",
 	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryDELETE (Query,"can not remove project");
+
+      /***** Remove directory of the project *****/
+      sprintf (PathRelPrj,"%s/%s/%ld/%s/%02u/%ld",
+	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Prj.CrsCod,Cfg_FOLDER_PRJ,
+	       (unsigned) (Prj.PrjCod % 100),Prj.PrjCod);
+      Fil_RemoveTree (PathRelPrj);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Project_X_removed,

@@ -1515,10 +1515,10 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 		  " AND file_browser_size.FileBrowser=%u"
 		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOCUM_CRS],
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
 	    CrsCod,
 	    CrsCod,
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOCUM_GRP]);
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
@@ -1557,10 +1557,10 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 		  " AND file_browser_size.FileBrowser=%u"
 		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHARE_CRS],
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
 	    CrsCod,
 	    CrsCod,
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHARE_GRP]);
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
@@ -1592,7 +1592,7 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
    sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
 		  " WHERE FileBrowser=%u AND Cod=%ld",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASSIG_USR],
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
 	    CrsCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
 
@@ -1625,7 +1625,7 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
    sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
 		  " WHERE FileBrowser=%u AND Cod=%ld",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WORKS_USR],
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
 	    CrsCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
 
