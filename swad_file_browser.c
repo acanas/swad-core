@@ -2340,6 +2340,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolAsgUsr:	case ActRenFolAsgUsr:
       case ActCreFolWrkUsr:	case ActRenFolWrkUsr:
 
+      case ActCreFolDocPrj:	case ActRenFolDocPrj:
+
       case ActCreFolBrf:	case ActRenFolBrf:
 	 /* Get the name of the new folder */
 	 Par_GetParToText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
@@ -2357,6 +2359,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreLnkWrkCrs:
       case ActCreLnkAsgUsr:
       case ActCreLnkWrkUsr:
+      case ActCreLnkDocPrj:
       case ActCreLnkBrf:
 	 /* Get the name of the new link */
 	 Par_GetParToText ("NewLinkName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
@@ -3343,6 +3346,42 @@ static void Brw_ShowFileBrowserNormal (void)
   }
 
 /*****************************************************************************/
+/************* Show file browser with the documents of a project *************/
+/*****************************************************************************/
+
+static void Brw_ShowFileBrowserProject (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects;
+   struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get project data *****/
+   Prj.PrjCod = Prj_GetParamPrjCod ();
+   Prj_GetDataOfProjectByCod (&Prj);
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Prj.Title,NULL,
+		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
+
+   /***** Show the project *****/
+   Prj_ShowOneUniqueProject (&Prj);
+
+   /***** Write top before showing file browser *****/
+   Brw_WriteTopBeforeShowingFileBrowser ();
+
+   /***** Show the file browser *****/
+   Brw_ShowFileBrowser ();
+
+   /***** End box *****/
+   Box_EndBox ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+  }
+
+/*****************************************************************************/
 /*** Show file browsers with works files of several users of current course **/
 /*****************************************************************************/
 
@@ -3650,6 +3689,8 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
       Brw_ShowFileBrowsersAsgWrkUsr ();
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Brw_ShowFileBrowsersAsgWrkCrs ();
+   else if (Brw_GetIfProjectFileBrowser ())
+      Brw_ShowFileBrowserProject ();
    else
       Brw_ShowFileBrowserNormal ();
 
@@ -7339,6 +7380,8 @@ static long Brw_GetCodForClipboard (void)
       case Brw_ADMI_SHARE_GRP:
       case Brw_ADMI_MARKS_GRP:
 	 return Gbl.CurrentCrs.Grps.GrpCod;
+      case Brw_ADMI_DOCUM_PRJ:
+	 return Gbl.CurrentCrs.Prjs.PrjCod;
       default:
          return -1L;
      }

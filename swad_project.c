@@ -553,35 +553,19 @@ static void Prj_PutIconToShowAllData (void)
 /***************** View / edit file browser of one project *******************/
 /*****************************************************************************/
 
-void Prj_FileBrowserPrj (void)
+void Prj_ShowOneUniqueProject (struct Project *Prj)
   {
-   extern const char *Hlp_ASSESSMENT_Projects;
-   struct Project Prj;
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
 
-   /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Prj);
-
-   /***** Get project data *****/
-   Prj.PrjCod = Prj_GetParamPrjCod ();
-   Prj_GetDataOfProjectByCod (&Prj);
-
-   /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Prj.Title,NULL,
-		      Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE,2);
+   /***** Write project head *****/
    Prj_ShowProjectsHead (true);	// Print view
 
-   /***** Write project *****/
-   Prj_ShowOneProject (&Prj,Prj_FILE_BROWSER_PROJECT);
+   /***** Show project *****/
+   Prj_ShowOneProject (Prj,Prj_FILE_BROWSER_PROJECT);
 
-   /***** End box *****/
-   Box_EndBoxTable ();
-
-   /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Prj);
-
-   /***** Project file browser *****/
-   Gbl.CurrentCrs.Prjs.PrjCod = Prj.PrjCod;	// Used in file browser
-   Brw_ShowFileBrowserOrWorks ();
+   /***** End table *****/
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

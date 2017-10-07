@@ -111,7 +111,7 @@ void Prj_SeeProjects (void);
 void Prj_ShowTableAllProjects (void);
 void Prj_PutParamWhichPrjs (void);
 
-void Prj_FileBrowserPrj (void);
+void Prj_ShowOneUniqueProject (struct Project *Prj);
 
 void Prj_PrintOneProject (void);
 
