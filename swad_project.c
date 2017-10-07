@@ -627,13 +627,19 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CONTEXT_COL");
-   if (ProjectView == Prj_LIST_PROJECTS)
+   switch (ProjectView)
      {
-      fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
-      Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden);
+      case Prj_LIST_PROJECTS:
+	 fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+	 // no break
+      case Prj_FILE_BROWSER_PROJECT:
+         fprintf (Gbl.F.Out,"\">");
+         Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden);
+         break;
+      default:
+         fprintf (Gbl.F.Out,"\">");
+	 break;
      }
-   else
-      fprintf (Gbl.F.Out,"\">");
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
@@ -1563,7 +1569,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    Prj_GetParamPrjOrder ();
    Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
@@ -1646,7 +1652,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    Prj_GetParamPrjOrder ();
    Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
@@ -2186,7 +2192,7 @@ void Prj_ReqRemProject (void)
    Prj_GetParamPrjOrder ();
    Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
@@ -2229,7 +2235,7 @@ void Prj_RemoveProject (void)
    Prj_GetParamPrjOrder ();
    Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
@@ -2278,8 +2284,11 @@ void Prj_HideProject (void)
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
 
-   /***** Get project code *****/
-   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
@@ -2321,8 +2330,11 @@ void Prj_ShowProject (void)
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
 
-   /***** Get project code *****/
-   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) == -1L)
+   /***** Get parameters *****/
+   Prj_GetParamPrjOrder ();
+   Prj_GetParamWhichPrjs ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Get data of the project from database *****/
@@ -2385,9 +2397,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    Prj_GetParamPrjOrder ();
    Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-
-   /***** Get the code of the project *****/
-   ItsANewProject = ((Prj.PrjCod = PrjCod) == -1L);
+   ItsANewProject = ((Prj.PrjCod = PrjCod) < 0);
 
    /***** Get from the database the data of the project *****/
    if (ItsANewProject)
@@ -2696,10 +2706,7 @@ void Prj_RecFormProject (void)
    Prj_GetParamPrjOrder ();
    Prj_GetParamWhichPrjs ();
    Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
-
-   /* Get the code of the project */
-   Prj.PrjCod = Prj_GetParamPrjCod ();
-   ItsANewProject = (Prj.PrjCod < 0);
+   ItsANewProject = ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0);
 
    if (ItsANewProject)
      {
