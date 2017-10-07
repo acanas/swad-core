@@ -4733,6 +4733,64 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
   }
 
 /*****************************************************************************/
+/*********** Remove files related to a project from the database *************/
+/*****************************************************************************/
+
+void Brw_RemovePrjFilesFromDB (long PrjCod)
+  {
+   char Query[512];
+
+   /***** Remove from database the entries that store the file views *****/
+   sprintf (Query,"DELETE FROM file_view USING file_view,files"
+		  " WHERE files.FileBrowser IN (%u)"
+		  " AND files.Cod=%ld"
+		  " AND files.FilCod=file_view.FilCod",
+	    (unsigned) Brw_ADMI_DOC_PRJ,
+	    PrjCod);
+   DB_QueryDELETE (Query,"can not remove file views to files of a project");
+
+   /***** Remove from database expanded folders *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+		  " WHERE FileBrowser IN (%u)"
+		  " AND Cod=%ld",
+	    (unsigned) Brw_ADMI_DOC_PRJ,
+	    PrjCod);
+   DB_QueryDELETE (Query,"can not remove expanded folders of a project");
+
+   /***** Remove from database the entries that store clipboards *****/
+   sprintf (Query,"DELETE FROM clipboard"
+		  " WHERE FileBrowser IN (%u)"
+		  " AND Cod=%ld",
+	    (unsigned) Brw_ADMI_DOC_PRJ,
+	    PrjCod);
+   DB_QueryDELETE (Query,"can not remove clipboards related to files of a project");
+
+   /***** Remove from database the entries that store the last time users visited file zones *****/
+   sprintf (Query,"DELETE FROM file_browser_last"
+		  " WHERE FileBrowser IN (%u)"
+		  " AND Cod=%ld",
+	    (unsigned) Brw_ADMI_DOC_PRJ,
+	    PrjCod);
+   DB_QueryDELETE (Query,"can not remove file last visits to files of a project");
+
+   /***** Remove from database the entries that store the sizes of the file zones *****/
+   sprintf (Query,"DELETE FROM file_browser_size"
+		  " WHERE FileBrowser IN (%u)"
+		  " AND Cod=%ld",
+	    (unsigned) Brw_ADMI_DOC_PRJ,
+	    PrjCod);
+   DB_QueryDELETE (Query,"can not remove sizes of file zones of a project");
+
+   /***** Remove from database the entries that store the data files *****/
+   sprintf (Query,"DELETE FROM files"
+		  " WHERE FileBrowser IN (%u)"
+		  " AND Cod=%ld",
+	    (unsigned) Brw_ADMI_DOC_PRJ,
+	    PrjCod);
+   DB_QueryDELETE (Query,"can not remove files of a project");
+  }
+
+/*****************************************************************************/
 /* Remove some info about files related to a course and a user from database */
 /*****************************************************************************/
 

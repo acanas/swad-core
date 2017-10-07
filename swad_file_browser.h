@@ -182,6 +182,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod);
 void Brw_RemoveDegFilesFromDB (long DegCod);
 void Brw_RemoveCrsFilesFromDB (long CrsCod);
 void Brw_RemoveGrpFilesFromDB (long GrpCod);
+void Brw_RemovePrjFilesFromDB (long PrjCod);
 void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod);
 void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
 void Brw_RemoveUsrFilesFromDB (long UsrCod);

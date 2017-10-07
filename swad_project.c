@@ -2319,6 +2319,9 @@ void Prj_RemoveProject (void)
 	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryDELETE (Query,"can not remove project");
 
+      /***** Remove information related to files in project *****/
+      Brw_RemovePrjFilesFromDB (Prj.PrjCod);
+
       /***** Remove directory of the project *****/
       sprintf (PathRelPrj,"%s/%s/%ld/%s/%02u/%ld",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Prj.CrsCod,Cfg_FOLDER_PRJ,
