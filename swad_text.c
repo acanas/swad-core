@@ -37531,7 +37531,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37573,7 +37573,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37720,7 +37720,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37741,7 +37741,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37846,7 +37846,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37867,7 +37867,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37888,7 +37888,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37909,7 +37909,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37930,7 +37930,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -37951,7 +37951,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7
 	 "documenti"
 #elif L==8
-	 "documents"		// Potrzebujesz tlumaczenie
+	 "dokumenty"
 #elif L==9
 	 "documentos"
 #endif
@@ -38063,23 +38063,23 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 ,
 	 // Brw_ADMI_DOC_PRJ
 #if   L==1
-	"projecte"
+	 "documents"
 #elif L==2
-	"Projekt"
+	 "Dokumente"
 #elif L==3
-	"project"
+	 "documents"
 #elif L==4
-	"proyecto"
+	 "documentos"
 #elif L==5
-	"projet"
+	 "documents"
 #elif L==6
-	"proyecto"	// Okoteve traducción
+	 "kuatia"
 #elif L==7
-	"progetto"
+	 "documenti"
 #elif L==8
-	"projekt"
+	 "dokumenty"
 #elif L==9
-	"projeto"
+	 "documentos"
 #endif
 	};
 
