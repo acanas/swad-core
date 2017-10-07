@@ -256,13 +256,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.20.3 (2017-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 17.20.4 (2017-10-07)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.20.4:  Oct 07, 2017  Changes in layout of project. (232972 lines)
         Version 17.20.3:  Oct 07, 2017  Changes in layout of project.
 					Fixed bug when hiding/shown a project. (232971 lines)
         Version 17.20.2:  Oct 07, 2017  Fixed bugs and changes in layout of project file browser. (232960 lines)

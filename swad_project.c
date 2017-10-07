@@ -626,7 +626,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CONTEXT_COL");
+	              "<td rowspan=\"3\" class=\"CONTEXT_COL");
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -696,7 +696,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
 
    /***** Preassigned? *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"3\" class=\"RIGHT_TOP");
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
@@ -719,7 +719,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
 
    /***** Number of students *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"3\" class=\"RIGHT_TOP");
+	              "<td colspan=\"2\" class=\"RIGHT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
