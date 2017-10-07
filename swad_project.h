@@ -133,6 +133,8 @@ void Prj_RemEva (void);
 
 void Prj_PutHiddenParamPrjOrder (void);
 
+bool Prj_CheckIfICanAdminDocsProject (long PrjCod);
+
 void Prj_RequestCreatePrj (void);
 void Prj_RequestEditPrj (void);
 

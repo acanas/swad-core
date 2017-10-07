@@ -133,9 +133,11 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 
 static void Prj_GetParamPrjOrder (void);
 
-static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden);
+static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
+                                         bool ICanAdminDocsProject);
 
 static bool Prj_CheckIfICanEditProject (long PrjCod);
+static bool Prj_GetIfIAmMemberOfProject (long PrjCod);
 static bool Prj_GetIfIAmTutorInProject (long PrjCod);
 
 static void Prj_PutParams (void);
@@ -610,6 +612,7 @@ void Prj_PrintOneProject (void)
 static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Today;
+   extern const char *Txt_Project_documents;
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
@@ -622,6 +625,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    static unsigned UniqueId = 0;
+   bool ICanAdminDocsProject = Prj_CheckIfICanAdminDocsProject (Prj->PrjCod);
 
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
@@ -634,7 +638,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
 	 // no break
       case Prj_FILE_BROWSER_PROJECT:
          fprintf (Gbl.F.Out,"\">");
-         Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden);
+         Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden,
+                                      ICanAdminDocsProject);
          break;
       default:
          fprintf (Gbl.F.Out,"\">");
@@ -684,11 +689,23 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<div class=\"%s\">%s</div>",
-            Prj->Hidden ? "ASG_TITLE_LIGHT" :
-        	          "ASG_TITLE",
-            Prj->Title);
+   fprintf (Gbl.F.Out,"\">");
+   if (ICanAdminDocsProject)
+     {
+      Act_FormStart (ActAdmDocPrj);
+      Prj_PutParams ();
+      Act_LinkFormSubmit (Txt_Project_documents,
+                          Prj->Hidden ? "ASG_TITLE_LIGHT" :
+        	                        "ASG_TITLE",
+        	          NULL);
+      fprintf (Gbl.F.Out,"%s</a>",Prj->Title);
+      Act_FormEnd ();
+     }
+   else
+      fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+               Prj->Hidden ? "ASG_TITLE_LIGHT" :
+        	             "ASG_TITLE",
+	       Prj->Title);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Department */
@@ -1717,7 +1734,8 @@ void Prj_PutHiddenParamPrjOrder (void)
 /****************** Put a link (form) to edit one project ********************/
 /*****************************************************************************/
 
-static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden)
+static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
+                                         bool ICanAdminDocsProject)
   {
    Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used as parameter in contextual links
 
@@ -1734,14 +1752,33 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden)
 
       /***** Put form to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutParams);
-
-      /***** Put form to view project file browser *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-         Ico_PutContextualIconToViewFiles (ActAdmDocPrj,Prj_PutParams);
      }
+
+   /***** Put form to admin project documents *****/
+   if (ICanAdminDocsProject)
+      Ico_PutContextualIconToViewFiles (ActAdmDocPrj,Prj_PutParams);
 
    /***** Put form to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutParams);
+  }
+
+/*****************************************************************************/
+/***************** Can I admin documents of a given project? *****************/
+/*****************************************************************************/
+
+bool Prj_CheckIfICanAdminDocsProject (long PrjCod)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+      case Rol_TCH:
+	 return Prj_GetIfIAmMemberOfProject (PrjCod);
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
@@ -1760,6 +1797,20 @@ static bool Prj_CheckIfICanEditProject (long PrjCod)
       default:
 	 return false;
      }
+  }
+
+/*****************************************************************************/
+/*********************** Am I member of a given project? *********************/
+/*****************************************************************************/
+
+static bool Prj_GetIfIAmMemberOfProject (long PrjCod)
+  {
+   char Query[256];
+
+   sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
+		  " WHERE PrjCod=%ld AND UsrCod=%ld",
+	    PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (bool) (DB_QueryCOUNT (Query,"can not check if I am a member of a project") != 0);
   }
 
 /*****************************************************************************/

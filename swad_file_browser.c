@@ -3368,11 +3368,14 @@ static void Brw_ShowFileBrowserProject (void)
    /***** Show the project *****/
    Prj_ShowOneUniqueProject (&Prj);
 
-   /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser ();
-
-   /***** Show the file browser *****/
-   Brw_ShowFileBrowser ();
+   /***** Show project documents *****/
+   if (Prj_CheckIfICanAdminDocsProject (Prj.PrjCod))
+     {
+      Brw_WriteTopBeforeShowingFileBrowser ();
+      Brw_ShowFileBrowser ();
+     }
+   else
+      Ale_ShowAlert (Ale_WARNING,"You have no access to project documents.");
 
    /***** End box *****/
    Box_EndBox ();
