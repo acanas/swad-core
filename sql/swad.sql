@@ -948,8 +948,8 @@ CREATE TABLE IF NOT EXISTS projects (
 	Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',
 	NumStds INT NOT NULL DEFAULT 1,
 	Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new',
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
+	CreatTime DATETIME NOT NULL,
+	ModifTime DATETIME NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
 	Description TEXT NOT NULL,
 	Knowledge TEXT NOT NULL,
@@ -957,7 +957,9 @@ CREATE TABLE IF NOT EXISTS projects (
 	URL VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(PrjCod),
 	INDEX(CrsCod,Hidden),
-	INDEX(CrsCod,DptCod));
+	INDEX(CrsCod,CreatTime),
+	INDEX(CrsCod,ModifTime),
+	INDEX(CrsCod,DptCod);
 --
 -- Table sessions: stores the information of open sessions
 --

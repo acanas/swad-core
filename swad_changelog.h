@@ -256,13 +256,27 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.20.7 (2017-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 17.21 (2017-10-07)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.21:    Oct 07, 2017  Start and end dates in projects are replaced by time of creation and time of modification. (233106 lines)
+					8 changes necessary in database:
+ALTER TABLE projects ADD COLUMN CreatTime DATETIME AFTER EndTime;
+ALTER TABLE projects ADD COLUMN ModifTime DATETIME AFTER CreatTime;
+UPDATE projects SET CreatTime=StartTime;
+UPDATE projects SET ModifTime=CreatTime;
+ALTER TABLE projects CHANGE COLUMN CreatTime CreatTime DATETIME NOT NULL;
+ALTER TABLE projects CHANGE COLUMN ModifTime ModifTime DATETIME NOT NULL;
+ALTER TABLE projects ADD INDEX(CrsCod,CreatTime);
+ALTER TABLE projects ADD INDEX(CrsCod,ModifTime);
+					2 more changes necessary in database:
+ALTER TABLE projects DROP COLUMN StartTime;
+ALTER TABLE projects DROP COLUMN EndTime;
+
         Version 17.20.7:  Oct 07, 2017  Only publishers can remove subtrees in project documents. (233105 lines)
         Version 17.20.6:  Oct 07, 2017  Fixed bug in project documents. (233027 lines)
         Version 17.20.5:  Oct 07, 2017  Title of project is now a link to show the project and its documents. (233024 lines)

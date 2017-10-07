@@ -2016,8 +2016,8 @@ mysql> DESCRIBE projects;
 | Preassigned | enum('N','Y')                       | NO   |     | N       |                |
 | NumStds     | int(11)                             | NO   |     | 1       |                |
 | Proposal    | enum('new','modified','unmodified') | NO   |     | new     |                |
-| StartTime   | datetime                            | NO   |     | NULL    |                |
-| EndTime     | datetime                            | NO   |     | NULL    |                |
+| CreatTime   | datetime                            | NO   |     | NULL    |                |
+| ModifTime   | datetime                            | NO   |     | NULL    |                |
 | Title       | varchar(2047)                       | NO   |     | NULL    |                |
 | Description | text                                | NO   |     | NULL    |                |
 | Knowledge   | text                                | NO   |     | NULL    |                |
@@ -2034,8 +2034,8 @@ mysql> DESCRIBE projects;
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NumStds INT NOT NULL DEFAULT 1,"
 			"Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new',"
-			"StartTime DATETIME NOT NULL,"
-			"EndTime DATETIME NOT NULL,"
+			"CreatTime DATETIME NOT NULL,"
+			"ModifTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// Prj_MAX_BYTES_PROJECT_TITLE
 			"Description TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Knowledge TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
@@ -2043,6 +2043,8 @@ mysql> DESCRIBE projects;
 			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PrjCod),"
 		   "INDEX(CrsCod,Hidden),"
+		   "INDEX(CrsCod,CreatTime),"
+		   "INDEX(CrsCod,ModifTime),"
 		   "INDEX(CrsCod,DptCod))");
 
    /***** Table sessions *****/

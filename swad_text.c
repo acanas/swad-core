@@ -30919,44 +30919,44 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
    {
 	 // Prj_ORDER_START_TIME
 #if   L==1
-	 "Inici"
+	"Data de creaci&oacute;"
 #elif L==2
-	 "Start"
+	"Datum der Erstellung"
 #elif L==3
-	 "Start"
+	"Date of creation"
 #elif L==4
-	 "Inicio"
+	"Fecha de creaci&oacute;n"
 #elif L==5
-	 "D&eacute;but"
+	"Date de cr&eacute;ation"
 #elif L==6
-	 "&Ntilde;epyr&utilde;"
+	"Fecha de creaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	 "Inizio"
+	"Data di creazione"
 #elif L==8
-	 "Pocz&aogon;tek"
+	"Data utworzenia"
 #elif L==9
-	 "In&iacute;cio"
+	"Data da cria&ccedil;&atilde;o"
 #endif
 	 ,
 	 // Prj_ORDER_END_TIME
 #if   L==1
-	 "Final"
+	"&Uacute;ltima edici&oacute;"
 #elif L==2
-	 "Ende"
+	"Letzte Ausgabe"
 #elif L==3
-	 "End"
+	"Last edition"
 #elif L==4
-	 "Final"
+	"&Uacute;ltima edici&oacute;n"
 #elif L==5
-	 "Fin"
+	"Derni&egrave;re &eacute;dition"
 #elif L==6
-	 "Paha"
+	"&Uacute;ltima edici&oacute;n"	// Okoteve traducción
 #elif L==7
-	 "Fine"
+	"Ultima edizione"
 #elif L==8
-	 "Koniec"
+	"Ostatnie wydanie"
 #elif L==9
-	 "Fim"
+	"&Uacute;ltima edi&ccedil;&atilde;o"
 #endif
 	 ,
 	 // Prj_ORDER_TITLE
@@ -31006,44 +31006,44 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
    {
 	 // Prj_ORDER_START_TIME
 #if   L==1
-	 "Ordenar per data de comen&ccedil;ament"
+	 "Ordenar per data de creaci&oacute;"
 #elif L==2
-	 "Sortieren nach Startdatum"
+	 "Sortieren nach Erstellungsdatum"
 #elif L==3
-	 "Sort by start date"
+	 "Sort by date of creation"
 #elif L==4
-	 "Ordenar por fecha de comienzo"
+	 "Ordenar por fecha de creaci&oacute;n"
 #elif L==5
-	 "Trier par date de d&eacute;but"
+	 "Trier par date de cr&eacute;ation"
 #elif L==6
-	 "Ordenar por fecha de comienzo"	// Okoteve traducción
+	 "Ordenar por fecha de creaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	 "Ordina per data di inizio"
+	 "Ordina per data di creazione"
 #elif L==8
-	 "Sortuj wedlug daty rozpoczecia"
+	 "Sortuj wed&lstrok;ug daty utworzenia"
 #elif L==9
-	 "Classificar por data de in&iacute;cio"
+	 "Classificar por data de cria&ccedil;&atilde;o"
 #endif
 	 ,
 	 // Prj_ORDER_END_TIME
 #if   L==1
-	 "Ordenar per data de finalitzaci&oacute;"
+	 "Ordenar per data de l'&uacute;ltima edici&oacute;"
 #elif L==2
-	 "Sortieren nach Enddatum"
+	 "Sortieren nach letzten Ausgabe"
 #elif L==3
-	 "Sort by end date"
+	 "Sort by date of last edition"
 #elif L==4
-	 "Ordenar por fecha de finalizaci&oacute;n"
+	 "Ordenar por fecha de &uacute;ltima edici&oacute;n"
 #elif L==5
-	 "Trier par date de fin"
+	 "Trier par date de derni&egrave;re &eacute;dition"
 #elif L==6
-	 "Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
+	 "Ordenar por fecha de &uacute;ltima edici&oacute;n"	// Okoteve traducción
 #elif L==7
-	 "Ordina per data di fine"
+	 "Ordina per data dell'ultima edizione"
 #elif L==8
-	 "Sortuj wedlug daty zakonczenia"
+	 "Sortuj wed&lstrok;ug daty ostatniej edycji"
 #elif L==9
-	 "Classificar por data de t&eacute;rmino"
+	 "Classificar por data da &uacute;ltima edi&ccedil;&atilde;o"
 #endif
 	 ,
 	 // Prj_ORDER_TITLE

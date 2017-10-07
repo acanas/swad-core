@@ -75,8 +75,8 @@ struct Project
    Prj_Preassigned_t Preassigned;
    unsigned NumStds;
    Prj_Proposal_t Proposal;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Open;
+   time_t CreatTime;
+   time_t ModifTime;
    char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];
    long DptCod;
    char *Description;

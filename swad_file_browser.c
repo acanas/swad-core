@@ -3929,18 +3929,25 @@ static void Brw_PutIconsFileBrowser (void)
 	 break;
       case Brw_ICON_VIEW:
 	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
-	                    Brw_PutHiddenParamFullTreeIfSelected);
+	                              Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
       case Brw_ICON_EDIT:
          Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
-                            Brw_PutHiddenParamFullTreeIfSelected);
+                                      Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
      }
 
    /***** Put icon to show a figure *****/
-   if (Gbl.FileBrowser.Type != Brw_ADMI_WORKS_CRS &&
-       Gbl.FileBrowser.Type != Brw_ADMI_ASSIG_CRS)
-     Brw_PutIconShowFigure ();
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_WORKS_CRS:
+      case Brw_ADMI_ASSIG_CRS:
+      case Brw_ADMI_DOCUM_PRJ:
+	 break;
+      default:
+         Brw_PutIconShowFigure ();
+         break;
+     }
   }
 
 static void Brw_PutIconShowFigure (void)

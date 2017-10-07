@@ -60,8 +60,6 @@ typedef enum
    Prj_EDIT_ONE_PROJECT,
   } Prj_ProjectView_t;
 
-#define Prj_INTERVAL_DEFAULT ((time_t) 365 * (time_t) 24 * (time_t) 60 * (time_t) 60)	// 1 year
-
 const Prj_RoleInProject_t Prj_RolesToShow[] =
   {
    Prj_ROLE_TUT,	// Tutor
@@ -647,42 +645,38 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Start date/time */
+   /* Creation date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"prj_creat_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
-            Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
-        	                       "DATE_RED_LIGHT") :
-                          (Prj->Open ? "DATE_GREEN" :
-                                       "DATE_RED"));
+            Prj->Hidden ? "DATE_BLUE_LIGHT" :
+                          "DATE_BLUE");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,"
+                      "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
-            UniqueId,Prj->TimeUTC[Dat_START_TIME],
+            UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
-   /* End date/time */
+   /* Modification date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"prj_modif_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
-            Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
-        	                       "DATE_RED_LIGHT") :
-                          (Prj->Open ? "DATE_GREEN" :
-                                       "DATE_RED"));
+            Prj->Hidden ? "DATE_BLUE_LIGHT" :
+                          "DATE_BLUE");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
+                      "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
-            UniqueId,Prj->TimeUTC[Dat_END_TIME],
+            UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Project title */
@@ -878,36 +872,32 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Start date/time *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"LEFT_TOP COLOR%u %s\">"
+   fprintf (Gbl.F.Out,"<td id=\"prj_creat_%u\" class=\"LEFT_TOP COLOR%u %s\">"
 	              "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,"
+                      "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
             Gbl.RowEvenOdd,
-            Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
-        	                       "DATE_RED_LIGHT") :
-                          (Prj->Open ? "DATE_GREEN" :
-                                       "DATE_RED"),
-            UniqueId,Prj->TimeUTC[Dat_START_TIME],
+            Prj->Hidden ? "DATE_BLUE_LIGHT" :
+                          "DATE_BLUE",
+            UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** End date/time *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"LEFT_TOP COLOR%u %s\">"
+   fprintf (Gbl.F.Out,"<td id=\"prj_modif_%u\" class=\"LEFT_TOP COLOR%u %s\">"
 	              "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
+                      "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
             Gbl.RowEvenOdd,
-            Prj->Hidden ? (Prj->Open ? "DATE_GREEN_LIGHT" :
-        	                       "DATE_RED_LIGHT") :
-                          (Prj->Open ? "DATE_GREEN" :
-                                       "DATE_RED"),
-            UniqueId,Prj->TimeUTC[Dat_END_TIME],
+            Prj->Hidden ? "DATE_BLUE_LIGHT" :
+                          "DATE_BLUE",
+            UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** Project title *****/
@@ -1905,24 +1895,24 @@ void Prj_GetListProjects (void)
    switch (Gbl.Prjs.SelectedOrder)
      {
       case Prj_ORDER_START_TIME:
-	 sprintf (OrderBySubQuery,"projects.StartTime DESC,"
-				  "projects.EndTime DESC,"
+	 sprintf (OrderBySubQuery,"projects.CreatTime DESC,"
+				  "projects.ModifTime DESC,"
 				  "projects.Title");
 	 break;
       case Prj_ORDER_END_TIME:
-	 sprintf (OrderBySubQuery,"projects.EndTime DESC,"
-				  "projects.StartTime DESC,"
+	 sprintf (OrderBySubQuery,"projects.ModifTime DESC,"
+				  "projects.CreatTime DESC,"
 				  "projects.Title");
 	 break;
       case Prj_ORDER_TITLE:
 	 sprintf (OrderBySubQuery,"projects.Title,"
-				  "projects.StartTime DESC,"
-				  "projects.EndTime DESC");
+				  "projects.CreatTime DESC,"
+				  "projects.ModifTime DESC");
 	 break;
       case Prj_ORDER_DEPARTMENT:
 	 sprintf (OrderBySubQuery,"departments.FullName,"
-				  "projects.StartTime DESC,"
-				  "projects.EndTime DESC,"
+				  "projects.CreatTime DESC,"
+				  "projects.ModifTime DESC,"
 				  "projects.Title");
 	 break;
      }
@@ -2054,9 +2044,8 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
      {
       /***** Build query *****/
       sprintf (Query,"SELECT PrjCod,CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
-		     "UNIX_TIMESTAMP(StartTime),"
-		     "UNIX_TIMESTAMP(EndTime),"
-		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "UNIX_TIMESTAMP(CreatTime),"
+		     "UNIX_TIMESTAMP(ModifTime),"
 		     "Title,Description,Knowledge,Materials,URL"
 		     " FROM projects"
 		     " WHERE PrjCod=%ld AND CrsCod=%ld",
@@ -2069,14 +2058,13 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
       row[ 4]: Preassigned
       row[ 5]: NumStds
       row[ 6]: Proposal
-      row[ 7]: UNIX_TIMESTAMP(StartTime)
-      row[ 8]: UNIX_TIMESTAMP(EndTime)
-      row[ 9]: NOW() BETWEEN StartTime AND EndTime
-      row[10]: Title
-      row[11]: Description
-      row[12]: Knowledge
-      row[13]: Materials
-      row[14]: URL
+      row[ 7]: UNIX_TIMESTAMP(CreatTime)
+      row[ 8]: UNIX_TIMESTAMP(ModifTime)
+      row[ 9]: Title
+      row[10]: Description
+      row[11]: Knowledge
+      row[12]: Materials
+      row[13]: URL
       */
 
       /***** Get data of project *****/
@@ -2117,14 +2105,13 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       row[ 4]: Preassigned
       row[ 5]: NumStds
       row[ 6]: Proposal
-      row[ 7]: UNIX_TIMESTAMP(StartTime)
-      row[ 8]: UNIX_TIMESTAMP(EndTime)
-      row[ 9]: NOW() BETWEEN StartTime AND EndTime
-      row[10]: Title
-      row[11]: Description
-      row[12]: Knowledge
-      row[13]: Materials
-      row[14]: URL
+      row[ 7]: UNIX_TIMESTAMP(CreatTime)
+      row[ 8]: UNIX_TIMESTAMP(ModifTime)
+      row[ 9]: Title
+      row[10]: Description
+      row[11]: Knowledge
+      row[12]: Materials
+      row[13]: URL
       */
 
       /* Get code of the project (row[0]) */
@@ -2161,33 +2148,30 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
 	    break;
 	   }
 
-      /* Get start date (row[7] holds the start UTC time) */
-      Prj->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[7]);
+      /* Get creation date/time (row[7] holds the creation UTC time) */
+      Prj->CreatTime = Dat_GetUNIXTimeFromStr (row[7]);
 
-      /* Get end date   (row[8] holds the end   UTC time) */
-      Prj->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[8]);
+      /* Get modification date/time (row[8] holds the modification UTC time) */
+      Prj->ModifTime = Dat_GetUNIXTimeFromStr (row[8]);
 
-      /* Get whether the project is open or closed (row[9]) */
-      Prj->Open = (row[9][0] == '1');
-
-      /* Get the title of the project (row[10]) */
-      Str_Copy (Prj->Title,row[10],
+      /* Get the title of the project (row[9]) */
+      Str_Copy (Prj->Title,row[9],
                 Prj_MAX_BYTES_PROJECT_TITLE);
 
-      /* Get the description of the project (row[11]) */
-      Str_Copy (Prj->Description,row[11],
+      /* Get the description of the project (row[10]) */
+      Str_Copy (Prj->Description,row[10],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required knowledge for the project (row[12]) */
-      Str_Copy (Prj->Knowledge,row[12],
+      /* Get the required knowledge for the project (row[11]) */
+      Str_Copy (Prj->Knowledge,row[11],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the required materials for the project (row[13]) */
-      Str_Copy (Prj->Materials,row[13],
+      /* Get the required materials for the project (row[12]) */
+      Str_Copy (Prj->Materials,row[12],
                 Cns_MAX_BYTES_TEXT);
 
-      /* Get the URL of the project (row[14]) */
-      Str_Copy (Prj->URL,row[14],
+      /* Get the URL of the project (row[13]) */
+      Str_Copy (Prj->URL,row[13],
                 Cns_MAX_BYTES_WWW);
      }
 
@@ -2208,9 +2192,8 @@ static void Prj_ResetProject (struct Project *Prj)
    Prj->Preassigned = Prj_PREASSIGNED_DEFAULT;
    Prj->NumStds     = 1;
    Prj->Proposal    = Prj_PROPOSAL_DEFAULT;
-   Prj->TimeUTC[Dat_START_TIME] =
-   Prj->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Prj->Open = false;
+   Prj->CreatTime =
+   Prj->ModifTime = (time_t) 0;
    Prj->Title[0] = '\0';
    Prj->DptCod = -1L;	// Unknown department
    Prj->Description[0] = '\0';
@@ -2483,10 +2466,8 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
      {
       /* Initialize to empty project */
       Prj_ResetProject (&Prj);
-      Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Prj.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC +
-	                            Prj_INTERVAL_DEFAULT;
-      Prj.Open = true;
+      Prj.CreatTime = Gbl.StartExecutionTimeUTC;
+      Prj.ModifTime = Gbl.StartExecutionTimeUTC;
       Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
      }
    else
@@ -2582,9 +2563,6 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
-
-   /* Project start and end dates */
-   Dat_PutFormStartEndClientLocalDateTimes (Prj->TimeUTC,Dat_FORM_SECONDS_ON);
 
    /* Department */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2804,10 +2782,6 @@ void Prj_RecFormProject (void)
 
    if (ICanEditProject)
      {
-      /* Get start/end date-times */
-      Prj.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-      Prj.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
-
       /* Get project title */
       Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
 
@@ -2840,13 +2814,6 @@ void Prj_RecFormProject (void)
       /* Get degree WWW */
       Par_GetParToText ("URL",Prj.URL,Cns_MAX_BYTES_WWW);
 
-      /***** Adjust dates *****/
-      if (Prj.TimeUTC[Dat_START_TIME] == 0)
-	 Prj.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      if (Prj.TimeUTC[Dat_END_TIME] == 0)
-	 Prj.TimeUTC[Dat_END_TIME] = Prj.TimeUTC[Dat_START_TIME] +
-				     Prj_INTERVAL_DEFAULT;
-
       /***** Check if title is correct *****/
       if (!Prj.Title[0])	// If there is not a project title
 	{
@@ -2859,17 +2826,19 @@ void Prj_RecFormProject (void)
 	{
 	 if (ItsANewProject)
 	   {
+	    /* Create project */
 	    Prj_CreateProject (&Prj);	// Add new project to database
 
-	    /***** Write success message *****/
+	    /* Write success message */
 	    sprintf (Gbl.Alert.Txt,Txt_Created_new_project_X,Prj.Title);
 	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	   }
 	 else if (NewProjectIsCorrect)
 	   {
+	    /* Update project */
 	    Prj_UpdateProject (&Prj);
 
-	    /***** Write success message *****/
+	    /* Write success message */
 	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
 	   }
 	}
@@ -2897,10 +2866,14 @@ static void Prj_CreateProject (struct Project *Prj)
               Cns_MAX_BYTES_TEXT * 3 +
               Cns_MAX_BYTES_WWW];
 
+   /***** Set dates to now *****/
+   Prj->CreatTime =
+   Prj->ModifTime = Gbl.StartExecutionTimeUTC;
+
    /***** Create a new project *****/
    sprintf (Query,"INSERT INTO projects"
 	          " (CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
-	          "StartTime,EndTime,"
+	          "CreatTime,ModifTime,"
 	          "Title,Description,Knowledge,Materials,URL)"
                   " VALUES"
                   " (%ld,%ld,'%c','%c',%u,'%s',"
@@ -2914,8 +2887,8 @@ static void Prj_CreateProject (struct Project *Prj)
         	                                  'N',
             Prj->NumStds,
             Prj_Proposal_DB[Prj->Proposal],
-            Prj->TimeUTC[Dat_START_TIME],
-            Prj->TimeUTC[Dat_END_TIME  ],
+            Prj->CreatTime,
+            Prj->ModifTime,
             Prj->Title,
             Prj->Description,
             Prj->Knowledge,
@@ -2945,11 +2918,13 @@ static void Prj_UpdateProject (struct Project *Prj)
               Cns_MAX_BYTES_TEXT*3 +
               Cns_MAX_BYTES_WWW];
 
+   /***** Adjust date of last edition to now *****/
+   Prj->ModifTime = Gbl.StartExecutionTimeUTC;
+
    /***** Update the data of the project *****/
    sprintf (Query,"UPDATE projects SET "
 	          "DptCod=%ld,Hidden='%c',Preassigned='%c',NumStds=%u,Proposal='%s',"
-	          "StartTime=FROM_UNIXTIME(%ld),"
-	          "EndTime=FROM_UNIXTIME(%ld),"
+	          "ModifTime=FROM_UNIXTIME(%ld),"
                   "Title='%s',"
                   "Description='%s',Knowledge='%s',Materials='%s',URL='%s'"
                   " WHERE PrjCod=%ld AND CrsCod=%ld",
@@ -2960,8 +2935,7 @@ static void Prj_UpdateProject (struct Project *Prj)
         	                                  'N',
             Prj->NumStds,
             Prj_Proposal_DB[Prj->Proposal],
-            Prj->TimeUTC[Dat_START_TIME],
-            Prj->TimeUTC[Dat_END_TIME  ],
+            Prj->ModifTime,
             Prj->Title,
             Prj->Description,
             Prj->Knowledge,
