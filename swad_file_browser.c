@@ -1675,6 +1675,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
+static bool Brw_CheckIfICanModifyProjectFileOrFolder (void);
 static long Brw_GetPublisherOfSubtree (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
@@ -5515,9 +5516,11 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       Gbl.FileBrowser.Asg.AsgCod = -1L;
 
    /***** Get the name of the file to show *****/
-   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Level,
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+                                          Level,
                                           Gbl.FileBrowser.FileType,
-                                          FileName,FileNameToShow);
+                                          FileName,
+                                          FileNameToShow);
 
    /***** Start this row *****/
    fprintf (Gbl.F.Out,"<tr id=\"file_browser_%u_%s\"",
@@ -6679,9 +6682,11 @@ void Brw_AskRemFileFromTree (void)
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
       /***** Show question and button to remove file/link *****/
-      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Level,
-                             Gbl.FileBrowser.FileType,
-                             Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.FileType,
+                                             Gbl.FileBrowser.Level,
+                                             Gbl.FileBrowser.FileType,
+                                             Gbl.FileBrowser.FilFolLnkName,
+                                             FileNameToShow);
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                FileNameToShow);
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
@@ -7158,9 +7163,10 @@ static void Brw_WriteCurrentClipboard (void)
      {
       // Not the root folder
       Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Clipboard.FileBrowser,
-                             Gbl.FileBrowser.Clipboard.Level,
-                             Gbl.FileBrowser.Clipboard.FileType,
-                             Gbl.FileBrowser.Clipboard.FileName,FileNameToShow);
+                                             Gbl.FileBrowser.Clipboard.Level,
+                                             Gbl.FileBrowser.Clipboard.FileType,
+                                             Gbl.FileBrowser.Clipboard.FileName,
+                                             FileNameToShow);
 
       sprintf (Gbl.Alert.Txt,"%s: %s, %s <strong>%s</strong>.",
                Txt_Copy_source,TxtClipboardZone,
@@ -8384,9 +8390,11 @@ void Brw_ShowFormFileBrowser (void)
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
       /***** Name of the folder to be shown ****/
-      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
-                             Gbl.FileBrowser.FileType,
-                             Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+                                             Gbl.FileBrowser.Level,
+                                             Gbl.FileBrowser.FileType,
+                                             Gbl.FileBrowser.FilFolLnkName,
+                                             FileNameToShow);
 
       /***** 1. Form to create a new folder *****/
       Brw_PutFormToCreateAFolder (FileNameToShow);
@@ -8727,9 +8735,11 @@ void Brw_RecFolderFileBrowser (void)
                                 PathCompleteInTreeIncludingFolder,false,Brw_LICENSE_DEFAULT);
 
 	       /* The folder has been created sucessfully */
-               Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
-                                      Brw_IS_FOLDER,
-                                      Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+               Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+                                                      Gbl.FileBrowser.Level,
+                                                      Brw_IS_FOLDER,
+                                                      Gbl.FileBrowser.FilFolLnkName,
+                                                      FileNameToShow);
 	       sprintf (Gbl.Alert.Txt,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
 		        Gbl.FileBrowser.NewFilFolLnkName,FileNameToShow);
                Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -9029,9 +9039,11 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                            /* Show message of confirmation */
                            if (UploadType == Brw_CLASSIC_UPLOAD)
                              {
-			      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
-			                             Brw_IS_FOLDER,
-			                             Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+			      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+			                                             Gbl.FileBrowser.Level,
+			                                             Brw_IS_FOLDER,
+			                                             Gbl.FileBrowser.FilFolLnkName,
+			                                             FileNameToShow);
 			      sprintf (Gbl.Alert.Txt,Txt_The_file_X_has_been_placed_inside_the_folder_Y,
 			               Gbl.FileBrowser.NewFilFolLnkName,
 			               FileNameToShow);
@@ -9205,9 +9217,11 @@ void Brw_RecLinkFileBrowser (void)
 					       PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
 		     /* Show message of confirmation */
-		     Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
-		                            Brw_IS_FOLDER,
-					    Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+		     Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+		                                            Gbl.FileBrowser.Level,
+		                                            Brw_IS_FOLDER,
+					                    Gbl.FileBrowser.FilFolLnkName,
+					                    FileNameToShow);
 		     sprintf (Gbl.Alert.Txt,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
 			      FileName,FileNameToShow);
 		     Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -9356,9 +9370,11 @@ void Brw_SetDocumentAsVisible (void)
    Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Write message of confirmation *****/
-   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
-                          Gbl.FileBrowser.FileType,
-                          Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+                                          Gbl.FileBrowser.Level,
+                                          Gbl.FileBrowser.FileType,
+                                          Gbl.FileBrowser.FilFolLnkName,
+                                          FileNameToShow);
    sprintf (Gbl.Alert.Txt,Txt_FILE_FOLDER_OR_LINK_X_is_now_visible,
             FileNameToShow);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -9389,9 +9405,11 @@ void Brw_SetDocumentAsHidden (void)
    Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Write confirmation message *****/
-   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
-                          Gbl.FileBrowser.FileType,
-                          Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+                                          Gbl.FileBrowser.Level,
+                                          Gbl.FileBrowser.FileType,
+                                          Gbl.FileBrowser.FilFolLnkName,
+                                          FileNameToShow);
    sprintf (Gbl.Alert.Txt,Txt_FILE_FOLDER_OR_LINK_X_is_now_hidden,FileNameToShow);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
@@ -11423,6 +11441,9 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 	       break;
 	   }
 	 return false;
+      case Brw_ADMI_DOCUM_PRJ:
+         // Check if I am the publisher of the file/folder
+         return Brw_CheckIfICanModifyProjectFileOrFolder ();
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
      }
@@ -11543,6 +11564,42 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+  }
+
+
+/*****************************************************************************/
+/********** Check if I have permission to modify a file or folder ************/
+/********** in the current project documents zone                 ************/
+/*****************************************************************************/
+// Returns true if I can remove or rename Gbl.FileBrowser.Priv.FullPathInTree, and false if I have not permission
+// I can remove or rename a file if I am the publisher
+// I can remove or rename a folder if I am the unique publisher of all the files and folders in the subtree starting there
+
+static bool Brw_CheckIfICanModifyProjectFileOrFolder (void)
+  {
+   Prj_RoleInProject_t MyRoleInProject;
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:	// If I am a student or a non-editing teacher...
+      case Rol_NET:	// ...I can modify the file/folder if I am the publisher
+      case Rol_TCH:
+	 MyRoleInProject = Prj_GetMyRoleInProject (Gbl.CurrentCrs.Prjs.PrjCod);
+	 switch (MyRoleInProject)
+	   {
+	    case Prj_ROLE_UNK:	// I am not a member
+	       return false;
+	    case Prj_ROLE_STD:
+	    case Prj_ROLE_TUT:
+	    case Prj_ROLE_EVA:
+               return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
+	   }
+	 return false;
       case Rol_SYS_ADM:
          return true;
       default:

@@ -256,13 +256,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.20.6 (2017-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 17.20.7 (2017-10-07)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.20.7:  Oct 07, 2017  Only publishers can remove subtrees in project documents. (233105 lines)
         Version 17.20.6:  Oct 07, 2017  Fixed bug in project documents. (233027 lines)
         Version 17.20.5:  Oct 07, 2017  Title of project is now a link to show the project and its documents. (233024 lines)
         Version 17.20.4:  Oct 07, 2017  Changes in layout of project. (232972 lines)

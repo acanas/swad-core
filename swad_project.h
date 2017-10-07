@@ -115,6 +115,8 @@ void Prj_ShowOneUniqueProject (struct Project *Prj);
 
 void Prj_PrintOneProject (void);
 
+Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod);
+
 void Prj_ReqAddStd (void);
 void Prj_ReqAddTut (void);
 void Prj_ReqAddEva (void);

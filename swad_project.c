@@ -1420,6 +1420,34 @@ static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
   }
 
 /*****************************************************************************/
+/************************** Get my role in a project *************************/
+/*****************************************************************************/
+
+Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+   Prj_RoleInProject_t RoleInProject = Prj_ROLE_UNK;
+
+   /***** Get my role in project from database *****/
+   sprintf (Query,"SELECT RoleInProject FROM prj_usr WHERE PrjCod=%ld",PrjCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get my role in project"))
+     {
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < Prj_NUM_ROLES_IN_PROJECT)
+	    RoleInProject = (Prj_RoleInProject_t) UnsignedNum;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return RoleInProject;
+  }
+
+/*****************************************************************************/
 /*** Request another user's ID, @nickname or email to add user to project ****/
 /*****************************************************************************/
 
