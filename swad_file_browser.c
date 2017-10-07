@@ -4941,6 +4941,8 @@ static void Brw_PutParamsFullTree (void)
   {
    if (Brw_GetIfGroupFileBrowser ())
       Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
+      Prj_PutParamPrjCod (Gbl.CurrentCrs.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                                  Gbl.Usrs.Select[Rol_UNK]);
