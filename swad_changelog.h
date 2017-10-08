@@ -256,13 +256,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.22 (2017-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 17.22.1 (2017-10-08)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.22.1:  Oct 08, 2017  Changed commentars on actions. (233756 lines)
         Version 17.22:    Oct 08, 2017  New file browser for project assessment. (233755 lines)
 					19 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1716','es','N','Editar eval. proyecto');
