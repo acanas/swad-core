@@ -4554,7 +4554,19 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
 void Brw_RemoveCrsFilesFromDB (long CrsCod)
   {
+   char SubqueryGrp[256];
+   char SubqueryPrj[128];
    char Query[1024];
+
+   /***** Build subquery for groups *****/
+   sprintf (SubqueryGrp,"(SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+		        " WHERE crs_grp_types.CrsCod=%ld"
+		        " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+            CrsCod);
+
+   /***** Build subquery for projects *****/
+   sprintf (SubqueryPrj,"(SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+            CrsCod);
 
    /***** Remove format of files of marks *****/
    sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
@@ -4583,26 +4595,22 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
 		  " WHERE files.FileBrowser IN (%u,%u,%u,%u)"
-		  " AND files.Cod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)"
+		  " AND files.Cod IN %s"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOC_GRP,
 	    (unsigned) Brw_ADMI_TCH_GRP,
 	    (unsigned) Brw_ADMI_SHR_GRP,
 	    (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
+	    SubqueryGrp);
    DB_QueryDELETE (Query,"can not remove file views to files of a course");
 
    /* Remove from project file zones */
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
 		  " WHERE files.FileBrowser IN (%u)"
-		  " AND files.Cod IN"
-		  " (SELECT PrjCod FROM projects WHERE CrsCod=%ld)"
+		  " AND files.Cod IN %s"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    CrsCod);
+	    SubqueryPrj);
    DB_QueryDELETE (Query,"can not remove file views to files of a course");
 
    /***** Remove from database expanded folders *****/
@@ -4624,24 +4632,20 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_GRP,
 	    (unsigned) Brw_ADMI_TCH_GRP,
 	    (unsigned) Brw_ADMI_SHR_GRP,
 	    (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
+	    SubqueryGrp);
    DB_QueryDELETE (Query,"can not remove expanded folders of a course");
 
    /* Remove from project file zones */
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser IN (%u)"
-		  " AND Cod IN"
-		  " (SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    CrsCod);
+	    SubqueryPrj);
    DB_QueryDELETE (Query,"can not remove expanded folders of a course");
 
    /***** Remove from database the entries that store clipboards *****/
@@ -4663,24 +4667,20 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    sprintf (Query,"DELETE FROM clipboard"
 		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_GRP,
 	    (unsigned) Brw_ADMI_TCH_GRP,
 	    (unsigned) Brw_ADMI_SHR_GRP,
 	    (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
+	    SubqueryGrp);
    DB_QueryDELETE (Query,"can not remove clipboards related to files of a course");
 
    /* Remove from project file zones */
    sprintf (Query,"DELETE FROM clipboard"
 		  " WHERE FileBrowser IN (%u)"
-		  " AND Cod IN"
-		  " (SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    CrsCod);
+	    SubqueryPrj);
    DB_QueryDELETE (Query,"can not remove clipboards related to files of a course");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
@@ -4701,24 +4701,20 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    sprintf (Query,"DELETE FROM file_browser_last"
 		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_GRP,
 	    (unsigned) Brw_ADMI_TCH_GRP,
 	    (unsigned) Brw_ADMI_SHR_GRP,
 	    (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
+	    SubqueryGrp);
    DB_QueryDELETE (Query,"can not remove file last visits to files of a course");
 
    /* Remove from project file zones */
    sprintf (Query,"DELETE FROM file_browser_last"
 		  " WHERE FileBrowser IN (%u)"
-		  " AND Cod IN"
-		  " (SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    CrsCod);
+	    SubqueryPrj);
    DB_QueryDELETE (Query,"can not remove file last visits to files of a course");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
@@ -4738,24 +4734,20 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    sprintf (Query,"DELETE FROM file_browser_size"
 		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_GRP,
 	    (unsigned) Brw_ADMI_TCH_GRP,
 	    (unsigned) Brw_ADMI_SHR_GRP,
 	    (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
+	    SubqueryGrp);
    DB_QueryDELETE (Query,"can not remove sizes of file zones of a course");
 
    /* Remove from project file zones */
    sprintf (Query,"DELETE FROM file_browser_size"
 		  " WHERE FileBrowser IN (%u)"
-		  " AND Cod IN"
-		  " (SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    CrsCod);
+	    SubqueryPrj);
    DB_QueryDELETE (Query,"can not remove sizes of file zones of a course");
 
    /***** Remove from database the entries that store the data files *****/
@@ -4775,24 +4767,20 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    /* Remove from group file zones */
    sprintf (Query,"DELETE FROM files"
 		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_GRP,
 	    (unsigned) Brw_ADMI_TCH_GRP,
 	    (unsigned) Brw_ADMI_SHR_GRP,
 	    (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
+	    SubqueryGrp);
    DB_QueryDELETE (Query,"can not remove files of a course");
 
    /* Remove from project file zones */
    sprintf (Query,"DELETE FROM files"
 		  " WHERE FileBrowser IN (%u)"
-		  " AND Cod IN"
-		  " (SELECT PrjCod FROM projects WHERE CrsCod=%ld)",
+		  " AND Cod IN %s",
 	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    CrsCod);
+	    SubqueryPrj);
    DB_QueryDELETE (Query,"can not remove files of a course");
   }
 
