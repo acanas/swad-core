@@ -11980,5 +11980,8 @@ AND crs_usr.UsrCod=crs_grp_usr.UsrCod)
 ) AS available_grp_types;
 
 
+SELECT crs_grp.GrpCod FROM crs_grp,crs_grp_types WHERE crs_grp_types.CrsCod=21 AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod;
 
+
+DELETE FROM file_view USING file_view,files WHERE files.FileBrowser IN (11,26,5,13) AND files.Cod IN (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp WHERE crs_grp_types.CrsCod=21 AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod) AND files.FilCod=file_view.FilCod;
 

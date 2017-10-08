@@ -256,14 +256,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.21.3 (2017-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 17.21.4 (2017-10-08)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 17.21.3:  Oct 08, 2017  Remove project files when removing project. (233169 lines)
+        Version 17.21.4:  Oct 08, 2017  Fixed bug: remove group files from database when removing course.
+					Removed project files from database when removing course.
+					Fixed bug in project documents. (233330 lines)
+        Version 17.21.3:  Oct 08, 2017  Remove project files from database when removing project. (233169 lines)
         Version 17.21.2:  Oct 08, 2017  Renamed root folder for project documents. (233115 lines)
         Version 17.21.1:  Oct 08, 2017  Remove project directories when removing project. (233114 lines)
         Version 17.21:    Oct 07, 2017  Start and end dates in projects are replaced by time of creation and time of modification. (233106 lines)

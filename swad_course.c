@@ -2191,6 +2191,12 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       sprintf (Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod);
       DB_QueryDELETE (Query,"can not remove fields of cards in a course");
 
+      /***** Remove information related to files in course,
+             including groups and projects,
+             so this function must be called
+             before removing groups and projects *****/
+      Brw_RemoveCrsFilesFromDB (CrsCod);
+
       /***** Remove assignments of the course *****/
       Asg_RemoveCrsAssignments (CrsCod);
 
@@ -2257,9 +2263,6 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       sprintf (Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
 	       CrsCod);
       DB_QueryDELETE (Query,"can not remove users from a course");
-
-      /***** Remove information related to files in course *****/
-      Brw_RemoveCrsFilesFromDB (CrsCod);
 
       /***** Remove directories of the course *****/
       sprintf (PathRelCrs,"%s/%s/%ld",
