@@ -115,6 +115,7 @@ void Prj_ShowOneUniqueProject (struct Project *Prj);
 
 void Prj_PrintOneProject (void);
 
+void Prj_FlushCacheMyRoleInProject (void);
 Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod);
 
 void Prj_ReqAddStd (void);
@@ -135,7 +136,7 @@ void Prj_RemEva (void);
 
 void Prj_PutHiddenParamPrjOrder (void);
 
-bool Prj_CheckIfICanAdminDocsProject (long PrjCod);
+bool Prj_CheckIfICanViewProjectFiles (Prj_RoleInProject_t MyRoleInProject);
 
 void Prj_RequestCreatePrj (void);
 void Prj_RequestEditPrj (void);

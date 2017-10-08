@@ -124,6 +124,8 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
                                   MYSQL_RES **mysql_res);
 
+static Prj_RoleInProject_t Prj_ConvertUnsignedStrToRoleInProject (const char *UnsignedStr);
+
 static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject);
 static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject);
 static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
@@ -132,11 +134,9 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
-                                         bool ICanAdminDocsProject);
+                                         bool ICanViewProjectFiles);
 
 static bool Prj_CheckIfICanEditProject (long PrjCod);
-static bool Prj_GetIfIAmMemberOfProject (long PrjCod);
-static bool Prj_GetIfIAmTutorInProject (long PrjCod);
 
 static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
@@ -607,7 +607,7 @@ void Prj_PrintOneProject (void)
 static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_Project_documents;
+   extern const char *Txt_Project_files;
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
@@ -620,7 +620,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    static unsigned UniqueId = 0;
-   bool ICanAdminDocsProject = Prj_CheckIfICanAdminDocsProject (Prj->PrjCod);
+   bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj_GetMyRoleInProject (Prj->PrjCod));
 
    /***** Write first row of data of this project *****/
    /* Forms to remove/edit this project */
@@ -634,7 +634,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
       case Prj_FILE_BROWSER_PROJECT:
          fprintf (Gbl.F.Out,"\">");
          Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden,
-                                      ICanAdminDocsProject);
+                                      ICanViewProjectFiles);
          break;
       default:
          fprintf (Gbl.F.Out,"\">");
@@ -681,11 +681,11 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-   if (ICanAdminDocsProject)
+   if (ICanViewProjectFiles)
      {
       Act_FormStart (ActAdmDocPrj);
       Prj_PutParams ();
-      Act_LinkFormSubmit (Txt_Project_documents,
+      Act_LinkFormSubmit (Txt_Project_files,
                           Prj->Hidden ? "ASG_TITLE_LIGHT" :
         	                        "ASG_TITLE",
         	          NULL);
@@ -1410,28 +1410,57 @@ static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
 /************************** Get my role in a project *************************/
 /*****************************************************************************/
 
+void Prj_FlushCacheMyRoleInProject (void)
+  {
+   Gbl.Cache.MyRoleInProject.PrjCod = -1L;
+   Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ROLE_UNK;
+  }
+
 Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod)
   {
-   char Query[128];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned UnsignedNum;
-   Prj_RoleInProject_t RoleInProject = Prj_ROLE_UNK;
 
-   /***** Get my role in project from database *****/
-   sprintf (Query,"SELECT RoleInProject FROM prj_usr WHERE PrjCod=%ld",PrjCod);
+   /***** 1. Fast check: trivial cases *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||
+       PrjCod <= 0)
+      return Prj_ROLE_UNK;
+
+   /***** 2. Fast check: Is my role in project already calculated *****/
+   if (PrjCod == Gbl.Cache.MyRoleInProject.PrjCod)
+      return Gbl.Cache.MyRoleInProject.RoleInProject;
+
+   /***** 3. Slow check: Get my role in project from database.
+			 The result of the query will have one row or none *****/
+   Gbl.Cache.MyRoleInProject.PrjCod = PrjCod;
+   Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ROLE_UNK;
+   sprintf (Query,"SELECT RoleInProject FROM prj_usr"
+	          " WHERE PrjCod=%ld AND UsrCod=%ld",
+	    PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get my role in project"))
      {
       row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Prj_NUM_ROLES_IN_PROJECT)
-	    RoleInProject = (Prj_RoleInProject_t) UnsignedNum;
+      Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ConvertUnsignedStrToRoleInProject (row[0]);
      }
-
-   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return RoleInProject;
+   return Gbl.Cache.MyRoleInProject.RoleInProject;
+  }
+
+/*****************************************************************************/
+/********************** Get role from unsigned string ************************/
+/*****************************************************************************/
+
+static Prj_RoleInProject_t Prj_ConvertUnsignedStrToRoleInProject (const char *UnsignedStr)
+  {
+   unsigned UnsignedNum;
+
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Prj_NUM_ROLES_IN_PROJECT)
+         return (Prj_RoleInProject_t) UnsignedNum;
+
+   return Prj_ROLE_UNK;
   }
 
 /*****************************************************************************/
@@ -1539,6 +1568,10 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 			" (%ld,%u,%ld)",
 		  PrjCod,(unsigned) RoleInProject,Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not add user to project");
+
+	 /***** Flush cache *****/
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	    Prj_FlushCacheMyRoleInProject ();
 
 	 /* Show success alert */
 	 sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
@@ -1703,6 +1736,10 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 		  Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryDELETE (Query,"can not remove a user from a project");
 
+	 /***** Flush cache *****/
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	    Prj_FlushCacheMyRoleInProject ();
+
 	 /***** Show success alert *****/
 	 sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
 		  Gbl.Usrs.Other.UsrDat.FullName,
@@ -1750,7 +1787,7 @@ void Prj_PutHiddenParamPrjOrder (void)
 /*****************************************************************************/
 
 static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
-                                         bool ICanAdminDocsProject)
+                                         bool ICanViewProjectFiles)
   {
    Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used as parameter in contextual links
 
@@ -1770,7 +1807,7 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
      }
 
    /***** Put form to admin project documents *****/
-   if (ICanAdminDocsProject)
+   if (ICanViewProjectFiles)
       Ico_PutContextualIconToViewFiles (ActAdmDocPrj,Prj_PutParams);
 
    /***** Put form to print project *****/
@@ -1778,17 +1815,26 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
   }
 
 /*****************************************************************************/
-/***************** Can I admin documents of a given project? *****************/
+/******************** Can I view files of a given project? *******************/
 /*****************************************************************************/
 
-bool Prj_CheckIfICanAdminDocsProject (long PrjCod)
+bool Prj_CheckIfICanViewProjectFiles (Prj_RoleInProject_t MyRoleInProject)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 return Prj_GetIfIAmMemberOfProject (PrjCod);
+	 switch (MyRoleInProject)
+	   {
+	    case Prj_ROLE_UNK:	// I am not a member
+	       return false;
+	    case Prj_ROLE_STD:
+	    case Prj_ROLE_TUT:
+	    case Prj_ROLE_EVA:
+               return true;
+	   }
+	 return false;
       case Rol_SYS_ADM:
 	 return true;
       default:
@@ -1805,41 +1851,13 @@ static bool Prj_CheckIfICanEditProject (long PrjCod)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Prj_GetIfIAmTutorInProject (PrjCod);
+	 return (Prj_GetMyRoleInProject (PrjCod) == Prj_ROLE_TUT);
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
       default:
 	 return false;
      }
-  }
-
-/*****************************************************************************/
-/*********************** Am I member of a given project? *********************/
-/*****************************************************************************/
-
-static bool Prj_GetIfIAmMemberOfProject (long PrjCod)
-  {
-   char Query[256];
-
-   sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
-		  " WHERE PrjCod=%ld AND UsrCod=%ld",
-	    PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (bool) (DB_QueryCOUNT (Query,"can not check if I am a member of a project") != 0);
-  }
-
-/*****************************************************************************/
-/*********************** Am I tutor in a given project? **********************/
-/*****************************************************************************/
-
-static bool Prj_GetIfIAmTutorInProject (long PrjCod)
-  {
-   char Query[256];
-
-   sprintf (Query,"SELECT COUNT(*) FROM prj_usr"
-		  " WHERE PrjCod=%ld AND RoleInProject=%u AND UsrCod=%ld",
-	    PrjCod,Prj_ROLE_TUT,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (bool) (DB_QueryCOUNT (Query,"can not check if I am a tutor in a project") != 0);
   }
 
 /*****************************************************************************/
@@ -2309,6 +2327,9 @@ void Prj_RemoveProject (void)
 		     " AND projects.PrjCod=prj_usr.PrjCod",
 	       Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryDELETE (Query,"can not remove project");
+
+      /***** Flush cache *****/
+      Prj_FlushCacheMyRoleInProject ();
 
       /***** Remove project *****/
       sprintf (Query,"DELETE FROM projects"
@@ -2912,6 +2933,9 @@ static void Prj_CreateProject (struct Project *Prj)
             (unsigned) Prj_ROLE_TUT,
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not add tutor");
+
+   /***** Flush cache *****/
+   Prj_FlushCacheMyRoleInProject ();
   }
 
 /*****************************************************************************/
@@ -2967,6 +2991,9 @@ void Prj_RemoveCrsProjects (long CrsCod)
             CrsCod);
    DB_QueryDELETE (Query,"can not remove all the projects of a course");
 
+   /***** Flush cache *****/
+   Prj_FlushCacheMyRoleInProject ();
+
    /***** Remove projects *****/
    sprintf (Query,"DELETE FROM projects WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove all the projects of a course");
@@ -2983,6 +3010,10 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
    /***** Remove user from projects *****/
    sprintf (Query,"DELETE FROM prj_usr WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove user from projects");
+
+   /***** Flush cache *****/
+   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      Prj_FlushCacheMyRoleInProject ();
   }
 
 /*****************************************************************************/

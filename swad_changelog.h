@@ -256,13 +256,35 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.21.6 (2017-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 17.22 (2017-10-08)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.22:    Oct 08, 2017  New file browser for project assessment. (233755 lines)
+					19 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1716','es','N','Editar eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1717','es','N','Subir archivo a eval. proyecto (ant.)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1718','es','N','Eliminar archivo eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1719','es','N','Crear carpeta en eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1720','es','N','Eliminar carpeta eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1721','es','N','Renombrar carpeta en eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1722','es','N','Eliminar &aacute;rbol eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1723','es','N','Solicitar elim. arch. eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1724','es','N','Copiar de eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1725','es','N','Pegar en eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1726','es','N','Expandir carpeta eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1727','es','N','Contraer carpeta eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1728','es','N','Solic. nuevo arch/carp eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1729','es','N','Ver datos arch. eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1730','es','N','Cambiar datos arch. eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1731','es','N','Descargar arch. eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1732','es','N','Crear ZIP carpeta eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1733','es','N','Subir archivo a eval. proyecto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1734','es','N','Crear enlace en eval. proyecto');
+
         Version 17.21.6:  Oct 08, 2017  Changes related with project file browsers. (233315 lines)
         Version 17.21.5:  Oct 08, 2017  Code refactoring in removal of files from database when removing course. (233317 lines)
         Version 17.21.4:  Oct 08, 2017  Fixed bug: remove group files from database when removing course.

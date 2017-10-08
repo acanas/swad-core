@@ -222,6 +222,7 @@ void Lay_WriteStartOfPage (void)
       case ActFrmCreWrkUsr:	// Brw_ADMI_WRK_USR
       case ActFrmCreWrkCrs:	// Brw_ADMI_WRK_CRS
       case ActFrmCreDocPrj:	// Brw_ADMI_DOC_PRJ
+      case ActFrmCreAssPrj:	// Brw_ADMI_ASS_PRJ
       case ActFrmCreMrkCrs:	// Brw_ADMI_MRK_CRS
       case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
       case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
@@ -596,6 +597,7 @@ static void Lay_WriteScripts (void)
       case ActFrmCreWrkUsr:	// Brw_ADMI_WRK_USR
       case ActFrmCreWrkCrs:	// Brw_ADMI_WRK_CRS
       case ActFrmCreDocPrj:	// Brw_ADMI_DOC_PRJ
+      case ActFrmCreAssPrj:	// Brw_ADMI_ASS_PRJ
       case ActFrmCreMrkCrs:	// Brw_ADMI_MRK_CRS
       case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
       case ActFrmCreBrf:	// Brw_ADMI_BRF_USR

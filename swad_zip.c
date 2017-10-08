@@ -84,6 +84,7 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActZIPTchCrs,	// Brw_ADMI_TCH_CRS
    ActZIPTchGrp,	// Brw_ADMI_TCH_GRP
    ActZIPDocPrj,	// Brw_ADMI_DOC_PRJ
+   ActZIPAssPrj,	// Brw_ADMI_ASS_PRJ
   };
 
 /*****************************************************************************/

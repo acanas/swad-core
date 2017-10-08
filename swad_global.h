@@ -856,6 +856,11 @@ struct Globals
 	 long CrsCod;
 	 Rol_Role_t Role;
 	} RoleUsrInCrs;
+      struct
+	{
+	 long PrjCod;
+	 Prj_RoleInProject_t RoleInProject;
+	} MyRoleInProject;
      } Cache;
   };
 

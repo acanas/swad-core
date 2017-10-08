@@ -1733,7 +1733,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_members =
 #elif L==4
 	"accesible para lectura y escritura por miembros del proyecto";
 #elif L==5
-	"accessible pour la lecture et l'écriture par les membres du projet";
+	"accessible pour la lecture et l'&eacute;criture par les membres du projet";
 #elif L==6
 	"accesible para lectura y escritura por miembros del proyecto";	// Okoteve traducción
 #elif L==7
@@ -1742,6 +1742,27 @@ const char *Txt_accessible_for_reading_and_writing_by_project_members =
 	"dost&eogon;pne do czytania i pisania przez cz&lstrok;onk&oacute;w projektu";
 #elif L==9
 	"acess&iacute;vel para leitura e escrita por membros do projeto";
+#endif
+
+const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators =
+#if   L==1
+	"accessible per a lectura i escriptura per tutors i avaluadors del projecte";
+#elif L==2
+	"zug&auml;nglich zum Lesen und Schreiben f&uuml;r Tutoren und Auswerter der Projekt";
+#elif L==3
+	"accessible for reading and writing by project tutors and evaluators";
+#elif L==4
+	"accesible para lectura y escritura por tutores y evaluadores del proyecto";
+#elif L==5
+	"accessible pour la lecture et l'&eacute;criture par tuteurs et &eacute;valuateurs du projet";
+#elif L==6
+	"accesible para lectura y escritura por tutores y evaluadores del proyecto";	// Okoteve traducción
+#elif L==7
+	"accessibile per la lettura e la scrittura da parte dei precettori e dei valutatori del progetto";
+#elif L==8
+	"dost&eogon;pne do czytania i pisania przez nauczyciele i ewaluator&oacute;w projektu";
+#elif L==9
+	"acess&iacute;vel para leitura e escrita por tutores e avaliadores do projeto";
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre =
@@ -30831,6 +30852,48 @@ const char *Txt_project =
 	"projeto";
 #endif
 
+const char *Txt_Project_assessment =
+#if   L==1
+	"Avaluaci&oacute; del projecte";
+#elif L==2
+	"Projektbewertung";
+#elif L==3
+	"Project assessment";
+#elif L==4
+	"Evaluaci&oacute;n del proyecto";
+#elif L==5
+	"&Eacute;valuation du project";
+#elif L==6
+	"Evaluaci&oacute;n del proyecto";	// Okoteve traducción
+#elif L==7
+	"Valutazione di progetto";
+#elif L==8
+	"Ocena projektowe";
+#elif L==9
+	"Avalia&ccedil;&atilde;o do projeto";
+#endif
+
+const char *Txt_project_assessment =
+#if   L==1
+	"avaluaci&oacute; del projecte";
+#elif L==2
+	"Projektbewertung";
+#elif L==3
+	"project assessment";
+#elif L==4
+	"evaluaci&oacute;n del proyecto";
+#elif L==5
+	"&eacute;valuation du project";
+#elif L==6
+	"evaluaci&oacute;n del proyecto";	// Okoteve traducción
+#elif L==7
+	"valutazione di progetto";
+#elif L==8
+	"ocena projektowe";
+#elif L==9
+	"avalia&ccedil;&atilde;o do projeto";
+#endif
+
 const char *Txt_Project_documents =
 #if   L==1
 	"Documents del projecte";
@@ -30871,6 +30934,27 @@ const char *Txt_project_documents =
 	"dokumenty projektowe";
 #elif L==9
 	"documentos do projeto";
+#endif
+
+const char *Txt_Project_files =
+#if   L==1
+	"Fitxers del projecte";
+#elif L==2
+	"Projektdateien";
+#elif L==3
+	"Project files";
+#elif L==4
+	"Archivos del proyecto";
+#elif L==5
+	"Fichiers du project";
+#elif L==6
+	"Archivos del proyecto";	// Okoteve traducción
+#elif L==7
+	"File di progetto";
+#elif L==8
+	"Pliki projektowe";
+#elif L==9
+	"Arquivos do projeto";
 #endif
 
 const char *Txt_Project_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
@@ -38080,6 +38164,27 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "dokumenty"
 #elif L==9
 	 "documentos"
+#endif
+	 ,
+	 // Brw_ADMI_ASS_PRJ
+#if   L==1
+	 "avaluacio"
+#elif L==2
+	 "Bewertung"
+#elif L==3
+	 "assessment"
+#elif L==4
+	 "evaluacion"
+#elif L==5
+	 "evaluation"
+#elif L==6
+	 "mbohepy"
+#elif L==7
+	 "valutazione"
+#elif L==8
+	 "ocena"
+#elif L==9
+	 "avaliacao"
 #endif
 	};
 

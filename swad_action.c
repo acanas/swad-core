@@ -477,24 +477,44 @@ Assessment:
 	337. ActRemEvaPrj		Remove an emulator from a project
 
 	NEW. ActAdmDocPrj		Admin. project documents
-        NEW. ActReqRemFilBrf		Request removal of a file from project documents
-        NEW. ActRemFilBrf		Remove a file from project documents
-        NEW. ActRemFolBrf		Remove an empty folder from project documents
-        NEW. ActCopBrf			Set source of copy in project documents
-        NEW. ActPasBrf			Paste a folder or file into project documents
-        NEW. ActRemTreBrf		Remove a non empty folder from project documents
-        NEW. ActFrmCreBrf		Form to create a folder or file in project documents
-        NEW. ActCreFolBrf		Create a new folder in project documents
-        NEW. ActCreLnkBrf		Create a new link in project documents
-        NEW. ActRenFolBrf		Rename a folder in project documents
-        NEW. ActRcvFilBrfDZ		Receive a file in project documents using Dropzone.js
-        NEW. ActRcvFilBrfCla		Receive a file in project documents using the classic way
-        NEW. ActExpBrf			Expand a folder in project documents
-        NEW. ActConBrf			Contract a folder in project documents
-        NEW. ActZIPBrf			Compress a folder in project documents
-        NEW. ActReqDatBrf		Ask for metadata of a file in project documents
-        NEW. ActChgDatBrf		Change metadata of a file in project documents
-        NEW. ActDowBrf			Download a file from project documents
+        NEW. ActReqRemFilDocPrj		Request removal of a file from project documents
+        NEW. ActRemFilDocPrj		Remove a file from project documents
+        NEW. ActRemFolDocPrj		Remove an empty folder from project documents
+        NEW. ActCopDocPrj		Set source of copy in project documents
+        NEW. ActPasDocPrj		Paste a folder or file into project documents
+        NEW. ActRemTreDocPrj		Remove a non empty folder from project documents
+        NEW. ActFrmCreDocPrj		Form to create a folder or file in project documents
+        NEW. ActCreFolDocPrj		Create a new folder in project documents
+        NEW. ActCreLnkDocPrj		Create a new link in project documents
+        NEW. ActRenFolDocPrj		Rename a folder in project documents
+        NEW. ActRcvFilDocPrjDZ		Receive a file in project documents using Dropzone.js
+        NEW. ActRcvFilDocPrjCla		Receive a file in project documents using the classic way
+        NEW. ActExpDocPrj		Expand a folder in project documents
+        NEW. ActConDocPrj		Contract a folder in project documents
+        NEW. ActZIPDocPrj		Compress a folder in project documents
+        NEW. ActReqDatDocPrj		Ask for metadata of a file in project documents
+        NEW. ActChgDatDocPrj		Change metadata of a file in project documents
+        NEW. ActDowDocPrj		Download a file from project documents
+
+	NEW. ActAdmAssPrj		Admin. project assessment
+        NEW. ActReqRemFilAssPrj		Request removal of a file from project assessment
+        NEW. ActRemFilAssPrj		Remove a file from project assessment
+        NEW. ActRemFolAssPrj		Remove an empty folder from project assessment
+        NEW. ActCopAssPrj		Set source of copy in project assessment
+        NEW. ActPasAssPrj		Paste a folder or file into project assessment
+        NEW. ActRemTreAssPrj		Remove a non empty folder from project assessment
+        NEW. ActFrmCreAssPrj		Form to create a folder or file in project assessment
+        NEW. ActCreFolAssPrj		Create a new folder in project assessment
+        NEW. ActCreLnkAssPrj		Create a new link in project assessment
+        NEW. ActRenFolAssPrj		Rename a folder in project assessment
+        NEW. ActRcvFilAssPrjDZ		Receive a file in project assessment using Dropzone.js
+        NEW. ActRcvFilAssPrjCla		Receive a file in project assessment using the classic way
+        NEW. ActExpAssPrj		Expand a folder in project assessment
+        NEW. ActConAssPrj		Contract a folder in project assessment
+        NEW. ActZIPAssPrj		Compress a folder in project assessment
+        NEW. ActReqDatAssPrj		Ask for metadata of a file in project assessment
+        NEW. ActChgDatAssPrj		Change metadata of a file in project assessment
+        NEW. ActDowAssPrj		Download a file from project assessment
 
 	338. ActSeeTst			Show the seft-assessment test
 	339. ActAssTst			Assess a self-assessment test
@@ -2018,6 +2038,26 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqDatDocPrj	*/{1713,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    /* ActChgDatDocPrj	*/{1714,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
    /* ActDowDocPrj	*/{1715,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
+   /* ActAdmAssPrj	*/{1716,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilAssPrj*/{1717,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilAssPrj	*/{1718,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolAssPrj	*/{1719,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopAssPrj	*/{1720,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasAssPrj	*/{1721,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreAssPrj	*/{1722,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreAssPrj	*/{1723,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolAssPrj	*/{1724,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkAssPrj	*/{1725,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolAssPrj	*/{1726,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilAssPrjDZ	*/{1727,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilAssPrjCla*/{1728,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAssPrj	*/{1729,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
+   /* ActConAssPrj	*/{1730,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
+   /* ActZIPAssPrj	*/{1731,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatAssPrj	*/{1732,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAssPrj	*/{1733,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAssPrj	*/{1734,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowNewTest		,NULL},
    /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_AssessTest			,NULL},
@@ -4860,6 +4900,25 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqDatDocPrj,	// #1713
 	ActChgDatDocPrj,	// #1714
 	ActDowDocPrj,		// #1715
+	ActAdmAssPrj,		// #1716
+	ActReqRemFilAssPrj,	// #1717
+	ActRemFilAssPrj,	// #1718
+	ActRemFolAssPrj,	// #1719
+	ActCopAssPrj,		// #1720
+	ActPasAssPrj,		// #1721
+	ActRemTreAssPrj,	// #1722
+	ActFrmCreAssPrj,	// #1723
+	ActCreFolAssPrj,	// #1724
+	ActCreLnkAssPrj,	// #1725
+	ActRenFolAssPrj,	// #1726
+	ActRcvFilAssPrjDZ,	// #1727
+	ActRcvFilAssPrjCla,	// #1728
+	ActExpAssPrj,		// #1729
+	ActConAssPrj,		// #1730
+	ActZIPAssPrj,		// #1731
+	ActReqDatAssPrj,	// #1732
+	ActChgDatAssPrj,	// #1733
+	ActDowAssPrj,		// #1734
 	};
 
 /*****************************************************************************/
