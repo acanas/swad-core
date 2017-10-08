@@ -156,7 +156,7 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName);
 
 /*****************************************************************************/
-/************ Put button to register students *************/
+/** Check if current course has students and show warning no students found **/
 /*****************************************************************************/
 
 void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
@@ -168,7 +168,7 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
   }
 
 /*****************************************************************************/
-/************ Put button to register students *************/
+/****************** Put inline button to register students *******************/
 /*****************************************************************************/
 
 void Enr_PutButtonInlineToRegisterStds (long CrsCod)
@@ -2955,9 +2955,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
      }
    else	// There are no requests
       Ale_ShowAlert (Ale_INFO,Txt_No_enrolment_requests);
-
-   /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End box *****/
    Box_EndBox ();

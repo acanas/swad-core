@@ -281,9 +281,6 @@ static void Prj_ShowProjectsInCurrentPage (void)
    if (Prj_CheckIfICanCreateProjects ())
       Prj_PutButtonToCreateNewPrj ();
 
-   /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
-
    /***** End box *****/
    Box_EndBox ();
 

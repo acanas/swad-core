@@ -1134,9 +1134,9 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
 #define Brw_MAX_FILES_WORKS_PER_STD	500
 #define Brw_MAX_FOLDS_WORKS_PER_STD	50
 
-#define Brw_MAX_QUOTA_PRJ		( 2ULL*Brw_GiB)
-#define Brw_MAX_FILES_PRJ		500
-#define Brw_MAX_FOLDS_PRJ		50
+#define Brw_MAX_QUOTA_DOC_PRJ		( 1ULL*Brw_GiB)
+#define Brw_MAX_FILES_DOC_PRJ		500
+#define Brw_MAX_FOLDS_DOC_PRJ		50
 
 #define Brw_MAX_QUOTA_MARKS_CRS		( 1ULL*Brw_GiB)
 #define Brw_MAX_FILES_MARKS_CRS		500
@@ -3203,9 +3203,9 @@ static void Brw_SetMaxQuota (void)
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_WORKS_PER_STD;
 	 break;
       case Brw_ADMI_DOC_PRJ:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_PRJ;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_PRJ;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_PRJ;
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOC_PRJ;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOC_PRJ;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOC_PRJ;
 	 break;
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
@@ -3369,10 +3369,19 @@ static void Brw_ShowFileBrowserProject (void)
    /***** Show the project *****/
    Prj_ShowOneUniqueProject (&Prj);
 
-   /***** Show project documents *****/
+   /***** Show project file browsers *****/
    if (Prj_CheckIfICanAdminDocsProject (Prj.PrjCod))
      {
       Brw_WriteTopBeforeShowingFileBrowser ();
+
+      /***** Show the tree with the project documents *****/
+      Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+      Brw_InitializeFileBrowser ();
+      Brw_ShowFileBrowser ();
+
+      /***** Show the tree with the project assessment *****/
+      Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+      Brw_InitializeFileBrowser ();
       Brw_ShowFileBrowser ();
      }
    else

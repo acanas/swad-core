@@ -167,9 +167,6 @@ static void Asg_ShowAllAssignments (void)
    if (Asg_CheckIfICanCreateAssignments ())
       Asg_PutButtonToCreateNewAsg ();
 
-   /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
-
    /***** End box *****/
    Box_EndBox ();
 

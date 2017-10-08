@@ -694,9 +694,6 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    if (ICanEdit)
       Exa_PutButtonToCreateNewExamAnnouncement ();
 
-   /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
-
    /***** End box *****/
    Box_EndBox ();
   }

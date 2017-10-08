@@ -256,13 +256,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.21.5 (2017-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 17.21.6 (2017-10-08)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.21.6:  Oct 08, 2017  Changes related with project file browsers. (233315 lines)
         Version 17.21.5:  Oct 08, 2017  Code refactoring in removal of files from database when removing course. (233317 lines)
         Version 17.21.4:  Oct 08, 2017  Fixed bug: remove group files from database when removing course.
 					Removed project files from database when removing course.
