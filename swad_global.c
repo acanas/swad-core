@@ -349,10 +349,17 @@ void Gbl_InitializeGlobals (void)
    Gbl.Asgs.LstAsgCods = NULL;
    Gbl.Asgs.SelectedOrder = Asg_ORDER_DEFAULT;
 
+   /* Projects */
    Gbl.Prjs.LstIsRead = false;	// List is not read
    Gbl.Prjs.Num = 0;
    Gbl.Prjs.LstPrjCods = NULL;
+   Gbl.Prjs.My_All = Prj_WHOSE_PROJECTS_DEFAULT;
+   Gbl.Prjs.PreNon = Prj_PREASSIGNED_DEFAULT |
+	             Prj_NONPREASSIG_DEFAULT;
+   Gbl.Prjs.HidVis = Prj_HIDDEN_DEFAULT |
+	             Prj_VISIBL_DEFAULT;
    Gbl.Prjs.SelectedOrder = Prj_ORDER_DEFAULT;
+   Gbl.Prjs.PrjCod = -1L;
 
    Gbl.AttEvents.LstIsRead = false;	// List is not read
    Gbl.AttEvents.Num = 0;

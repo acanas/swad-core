@@ -248,21 +248,22 @@
 
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
 
-// TODO: Mover PROFILE.Briefcase a FILES.Briefcase en la ayuda de GitHub (aquí ya está cambiado)
-
 // TODO: Los profesores no editores no deberían recibir notificaciones de solicitudes de inscripción.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.22.1 (2017-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 17.23 (2017-10-10)"
 #define CSS_FILE		"swad17.0.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.23:    Oct 10, 2017  New filter to select preassigned/non-preassigned projects.
+					New filter to select hidden/visible projects.
+					Code refactoring in parameters of projects. (234140 lines)
         Version 17.22.1:  Oct 08, 2017  Changed commentars on actions. (233756 lines)
         Version 17.22:    Oct 08, 2017  New file browser for project assessment. (233755 lines)
 					19 changes necessary in database:

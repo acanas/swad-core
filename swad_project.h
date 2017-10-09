@@ -39,14 +39,6 @@
 #define Prj_MAX_CHARS_PROJECT_TITLE		(128 - 1)	// 127
 #define Prj_MAX_BYTES_PROJECT_TITLE		((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Prj_NUM_TYPES_PREASSIGNED 2
-typedef enum
-  {
-   Prj_NOT_PREASSIGNED = 0,
-   Prj_PREASSIGNED     = 1,
-  } Prj_Preassigned_t;
-#define Prj_PREASSIGNED_DEFAULT Prj_NOT_PREASSIGNED
-
 #define Prj_NUM_PROPOSAL_TYPES 3
 typedef enum
   {
@@ -67,12 +59,50 @@ typedef enum
    Prj_ROLE_EVA	= 3,	// Evaluator
   } Prj_RoleInProject_t;
 
+#define Prj_NUM_ORDERS 4
+typedef enum
+  {
+   Prj_ORDER_START_TIME = 0,
+   Prj_ORDER_END_TIME   = 1,
+   Prj_ORDER_TITLE      = 2,
+   Prj_ORDER_DEPARTMENT = 3,
+  } Prj_Order_t;
+#define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
+
+#define Prj_NUM_WHOSE_PROJECTS 2
+typedef enum
+  {
+   Prj_MY__PROJECTS,
+   Prj_ALL_PROJECTS,
+  } Prj_WhoseProjects_t;
+#define Prj_WHOSE_PROJECTS_DEFAULT	Prj_MY__PROJECTS
+
+#define Prj_NUM_PREASSIGNED_NONPREASSIG 2
+typedef enum
+  {
+   Prj_PREASSIGNED = 0,
+   Prj_NONPREASSIG = 1,
+  } Prj_PreassignedNonpreassig_t;
+#define Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT Prj_NONPREASSIG
+#define Prj_PREASSIGNED_DEFAULT	(1 << Prj_PREASSIGNED)	// on
+#define Prj_NONPREASSIG_DEFAULT	(1 << Prj_NONPREASSIG)	// on
+
+#define Prj_NUM_HIDDEN_VISIBL 2
+typedef enum
+  {
+   Prj_HIDDEN = 0,
+   Prj_VISIBL = 1,
+  } Prj_HiddenVisibl_t;
+#define Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT Prj_VISIBL
+#define Prj_HIDDEN_DEFAULT	(1 << Prj_HIDDEN)	// on
+#define Prj_VISIBL_DEFAULT	(1 << Prj_VISIBL)	// on
+
 struct Project
   {
    long PrjCod;
    long CrsCod;
-   bool Hidden;
-   Prj_Preassigned_t Preassigned;
+   Prj_HiddenVisibl_t Hidden;
+   Prj_PreassignedNonpreassig_t Preassigned;
    unsigned NumStds;
    Prj_Proposal_t Proposal;
    time_t CreatTime;
@@ -85,31 +115,19 @@ struct Project
    char URL[Cns_MAX_BYTES_WWW + 1];
   };
 
-#define Prj_NUM_ORDERS 4
-typedef enum
-  {
-   Prj_ORDER_START_TIME = 0,
-   Prj_ORDER_END_TIME   = 1,
-   Prj_ORDER_TITLE      = 2,
-   Prj_ORDER_DEPARTMENT = 3,
-  } Prj_Order_t;
-#define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
-
-#define Prj_NUM_WHICH_PROJECTS 2
-typedef enum
-  {
-   Prj_ONLY_MY_PROJECTS,
-   Prj_ALL_PROJECTS,
-  } Prj_WhichProjects_t;
-#define Prj_WHICH_PROJECTS_DEFAULT Prj_ONLY_MY_PROJECTS
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Prj_SeeProjects (void);
 void Prj_ShowTableAllProjects (void);
-void Prj_PutParamWhichPrjs (void);
+
+void Prj_PutParams (Prj_WhoseProjects_t My_All,
+                    unsigned PreNon,
+                    unsigned HidVis,
+                    Prj_Order_t Order,
+                    unsigned NumPage,
+                    long PrjCod);
 
 void Prj_ShowOneUniqueProject (struct Project *Prj);
 

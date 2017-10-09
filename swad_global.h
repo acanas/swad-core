@@ -462,11 +462,6 @@ struct Globals
       char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
       struct
         {
-         Prj_WhichProjects_t WhichPrjs;	// Show my projects or all projects
-         long PrjCod;
-        } Prjs;
-      struct
-        {
          unsigned NumGrps;
          struct GroupTypes GrpTypes;
          struct GroupType GrpTyp;
@@ -581,8 +576,11 @@ struct Globals
       unsigned Num;		// Number of projects
       long *LstPrjCods;		// List of project codes
       Prj_Order_t SelectedOrder;
-      long PrjCodToEdit;	// Used as parameter in contextual links
+      Prj_WhoseProjects_t My_All;	// Show my / all projects
+      unsigned PreNon;			// Show preassigned / non preassigned projects
+      unsigned HidVis;			// Show hidden / visible projects
       unsigned CurrentPage;
+      long PrjCod;		// Current project
      } Prjs;
    struct
      {

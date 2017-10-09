@@ -30585,7 +30585,7 @@ const char *Txt_Preassigned_QUESTION =
 #if   L==1
 	"Preassignat?";
 #elif L==2
-	"Vorzugeordnet?";
+	"Vorbelegt?";
 #elif L==3
 	"Preassigned?";
 #elif L==4
@@ -31444,7 +31444,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	};
 
 const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
-   {
+	{
 #if   L==1	// Prj_PROPOSAL_NEW
 	"Projecte nou"
 #elif L==2
@@ -31506,8 +31506,9 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 #endif
 	};
 
-const char *Txt_PROJECT_WHICH_PROJECTS[2] =
-   {
+const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS] =
+	{
+	 // Prj_MY__PROJECTS
 #if   L==1
 	"Nom&eacute;s els meus projectes"
 #elif L==2
@@ -31528,6 +31529,7 @@ const char *Txt_PROJECT_WHICH_PROJECTS[2] =
 	"Apenas os meus projetos"
 #endif
 	,
+	// Prj_ALL_PROJECTS
 #if   L==1
 	"Tots els projectes"
 #elif L==2
@@ -31546,6 +31548,141 @@ const char *Txt_PROJECT_WHICH_PROJECTS[2] =
 	"Wszystkie projekty"
 #elif L==9
 	"Todos os projetos"
+#endif
+	};
+
+const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+	{
+	 // Prj_PREASSIGNED
+#if   L==1
+	"Projectes preassignats"
+#elif L==2
+	"Vorbelegt Projekte"
+#elif L==3
+	"Preassigned projects"
+#elif L==4
+	"Proyectos preasignados"
+#elif L==5
+	"Projets pr&eacute;assign&eacute;s"
+#elif L==6
+	"Proyectos preasignados"	// Okoteve traducción
+#elif L==7
+	"Progetti preassegnati"
+#elif L==8
+	"Zadany projekty"
+#elif L==9
+	"Projetos pr&eacute;-atribu&iacute;dos"
+#endif
+	,
+	// Prj_NONPREASSIG
+#if   L==1
+	"Projectes no preassignats"
+#elif L==2
+	"Nicht vorbelegt Projekte"
+#elif L==3
+	"Non-preassigned projects"
+#elif L==4
+	"Proyectos no preasignados"
+#elif L==5
+	"Projets non pr&eacute;assign&eacute;s"
+#elif L==6
+	"Proyectos no preasignados"	// Okoteve traducción
+#elif L==7
+	"Progetti non-preassegnati"
+#elif L==8
+	"Nieprzypisane projekty"
+#elif L==9
+	"Projetos n&atilde;o pr&eacute;-atribu&iacute;dos"
+#endif
+	};
+
+const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+	{
+	 // Prj_PREASSIGNED
+#if   L==1
+	"Projecte preassignat"
+#elif L==2
+	"Vorbelegt Projekt"
+#elif L==3
+	"Preassigned project"
+#elif L==4
+	"Proyecto preasignado"
+#elif L==5
+	"Projet pr&eacute;assign&eacute;"
+#elif L==6
+	"Proyecto preasignado"	// Okoteve traducción
+#elif L==7
+	"Progetto preassegnato"
+#elif L==8
+	"Zadany projekt"
+#elif L==9
+	"Projeto pr&eacute;-atribu&iacute;do"
+#endif
+	,
+	// Prj_NONPREASSIG
+#if   L==1
+	"Projecte no preassignat"
+#elif L==2
+	"Nicht vorbelegt Projekt"
+#elif L==3
+	"Non-preassigned project"
+#elif L==4
+	"Proyecto no preasignado"
+#elif L==5
+	"Projet non pr&eacute;assign&eacute;"
+#elif L==6
+	"Proyecto no preasignado"	// Okoteve traducción
+#elif L==7
+	"Progetto non-preassegnato"
+#elif L==8
+	"Nieprzypisane projekt"
+#elif L==9
+	"Projeto n&atilde;o pr&eacute;-atribu&iacute;do"
+#endif
+	};
+
+const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
+	{
+	// Prj_HIDDEN
+#if   L==1
+	"Projectes ocults"
+#elif L==2
+	"Unsichtbare Projekte"
+#elif L==3
+	"Hidden projects"
+#elif L==4
+	"Proyectos ocultos"
+#elif L==5
+	"Projets cach&eacute;s"
+#elif L==6
+	"Proyectos ocultos"	// Okoteve traducción
+#elif L==7
+	"Progetti nascosti"
+#elif L==8
+	"Ukryte projekty"
+#elif L==9
+	"Projetos ocultos"
+#endif
+	,
+	// Prj_VISIBL
+#if   L==1
+	"Projectes visibles"
+#elif L==2
+	"Sichtbar Projekte"
+#elif L==3
+	"Visible projects"
+#elif L==4
+	"Proyectos visibles"
+#elif L==5
+	"Projets visibles"
+#elif L==6
+	"Proyectos visibles"	// Okoteve traducción
+#elif L==7
+	"Progetti visibili"
+#elif L==8
+	"Widoczne projekty"
+#elif L==9
+	"Projetos vis&iacute;veis"
 #endif
 	};
 

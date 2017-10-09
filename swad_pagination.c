@@ -164,9 +164,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
             case Pag_PROJECTS:
                Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Prj_PutHiddenParamPrjOrder ();
-               Prj_PutParamWhichPrjs ();
+               Prj_PutParams (Gbl.Prjs.My_All,
+                              Gbl.Prjs.PreNon,
+                              Gbl.Prjs.HidVis,
+                              Gbl.Prjs.SelectedOrder,
+                              1,
+                              -1L);
                break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
@@ -271,9 +274,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
             case Pag_PROJECTS:
                Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Prj_PutHiddenParamPrjOrder ();
-               Prj_PutParamWhichPrjs ();
+               Prj_PutParams (Gbl.Prjs.My_All,
+                              Gbl.Prjs.PreNon,
+                              Gbl.Prjs.HidVis,
+                              Gbl.Prjs.SelectedOrder,
+                              1,
+                              -1L);
                break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
@@ -364,9 +370,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
             case Pag_PROJECTS:
                Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Prj_PutHiddenParamPrjOrder ();
-               Prj_PutParamWhichPrjs ();
+               Prj_PutParams (Gbl.Prjs.My_All,
+                              Gbl.Prjs.PreNon,
+                              Gbl.Prjs.HidVis,
+                              Gbl.Prjs.SelectedOrder,
+                              Pagination->LeftPage,
+                              -1L);
                break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
@@ -468,9 +477,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   break;
 	       case Pag_PROJECTS:
 		  Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		  Prj_PutHiddenParamPrjOrder ();
-		  Prj_PutParamWhichPrjs ();
+		  Prj_PutParams (Gbl.Prjs.My_All,
+                                 Gbl.Prjs.PreNon,
+                                 Gbl.Prjs.HidVis,
+                                 Gbl.Prjs.SelectedOrder,
+                                 NumPage,
+                                 -1L);
 		  break;
                case Pag_GAMES:
                   Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
@@ -560,9 +572,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
 	    case Pag_PROJECTS:
 	       Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-	       Prj_PutHiddenParamPrjOrder ();
-	       Prj_PutParamWhichPrjs ();
+	       Prj_PutParams (Gbl.Prjs.My_All,
+			      Gbl.Prjs.PreNon,
+			      Gbl.Prjs.HidVis,
+                              Gbl.Prjs.SelectedOrder,
+			      Pagination->RightPage,
+			      -1L);
 	       break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);
@@ -651,9 +666,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
 	    case Pag_PROJECTS:
 	       Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-	       Prj_PutHiddenParamPrjOrder ();
-	       Prj_PutParamWhichPrjs ();
+	       Prj_PutParams (Gbl.Prjs.My_All,
+			      Gbl.Prjs.PreNon,
+			      Gbl.Prjs.HidVis,
+                              Gbl.Prjs.SelectedOrder,
+			      Pagination->NumPags,
+			      -1L);
 	       break;
             case Pag_GAMES:
                Act_FormStartAnchor (ActSeeAllGam,Pagination->Anchor);

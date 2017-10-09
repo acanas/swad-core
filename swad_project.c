@@ -52,6 +52,10 @@ extern struct Globals Gbl;
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
+static const char *ParamMy_AllName = "My_All";
+static const char *ParamPreNonName = "PreNon";
+static const char *ParamHidVisName = "HidVis";
+
 typedef enum
   {
    Prj_LIST_PROJECTS,
@@ -60,19 +64,25 @@ typedef enum
    Prj_EDIT_ONE_PROJECT,
   } Prj_ProjectView_t;
 
-const Prj_RoleInProject_t Prj_RolesToShow[] =
+static const Prj_RoleInProject_t Prj_RolesToShow[] =
   {
    Prj_ROLE_TUT,	// Tutor
    Prj_ROLE_STD,	// Student
    Prj_ROLE_EVA,	// Evaluator
   };
-const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) / sizeof (Prj_RolesToShow[0]);
+static const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) / sizeof (Prj_RolesToShow[0]);
 
-const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
+static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
   {
    "new",		// Prj_PROPOSAL_NEW
    "modified",		// Prj_PROPOSAL_MODIFIED
    "unmodified",	// Prj_PROPOSAL_UNMODIFIED
+  };
+
+static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+  {
+   "lock-on64x64.png",	// Prj_PREASSIGNED
+   "unlock-on64x64.png",	// Prj_NONPREASSIG
   };
 
 /*****************************************************************************/
@@ -85,9 +95,18 @@ const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
 
 static void Prj_ShowProjectsInCurrentPage (void);
 
-static void Prj_PutFormToSelectWhichProjecsToShow (void);
-static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) ());
-static void Prj_GetParamWhichPrjs (void);
+static void Prj_ShowFormToSelMy_AllPrjs (void);
+static void Prj_ShowFormToSelPreassignedOrNotProjects (void);
+static void Prj_ShowFormToSelHiddenVisiblProjects (void);
+
+static void Prj_PutCurrentParams (void);
+static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All);
+static void Prj_PutHiddenParamPreNon (unsigned PreNon);
+static void Prj_PutHiddenParamHidVis (unsigned HidVis);
+static void Prj_GetHiddenParamMy_All (void);
+static void Prj_GetHiddenParamPreNon (void);
+static void Prj_GetHiddenParamHidVis (void);
+static void Prj_GetParams (void);
 
 static void Prj_ShowProjectsHead (bool PrintView);
 static void Prj_ShowTableAllProjectsHead (void);
@@ -133,12 +152,11 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 
 static void Prj_GetParamPrjOrder (void);
 
-static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
+static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
                                          bool ICanViewProjectFiles);
 
 static bool Prj_CheckIfICanEditProject (long PrjCod);
 
-static void Prj_PutParams (void);
 static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
 static void Prj_ResetProject (struct Project *Prj);
 
@@ -158,9 +176,7 @@ static void Prj_UpdateProject (struct Project *Prj);
 void Prj_SeeProjects (void)
   {
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
 
    /***** Show all the projects *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -177,8 +193,7 @@ void Prj_ShowTableAllProjects (void)
    struct Project Prj;
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
+   Prj_GetParams ();
 
    /***** Get list of projects *****/
    Prj_GetListProjects ();
@@ -243,8 +258,19 @@ static void Prj_ShowProjectsInCurrentPage (void)
    Box_StartBox ("100%",Txt_Projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my projects or all projects *****/
-   Prj_PutFormToSelectWhichProjecsToShow ();
+   /***** Put forms to choice which projects to show *****/
+   Prj_ShowFormToSelMy_AllPrjs ();
+   Prj_ShowFormToSelPreassignedOrNotProjects ();
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         Prj_ShowFormToSelHiddenVisiblProjects ();
+	 break;
+      default:	// Students will see only visible projects
+         break;
+     }
 
    if (Gbl.Prjs.Num)
      {
@@ -295,45 +321,40 @@ static void Prj_ShowProjectsInCurrentPage (void)
   }
 
 /*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
-/*****************************************************************************/
-
-static void Prj_PutFormToSelectWhichProjecsToShow (void)
-  {
-   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Prj_ShowFormToSelWhichPrjs (ActSeePrj,Prj_PutParams);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
 /*** Show form to choice whether to show only my projects or all projects ****/
 /*****************************************************************************/
 
-static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) ())
+static void Prj_ShowFormToSelMy_AllPrjs (void)
   {
-   extern const char *Txt_PROJECT_WHICH_PROJECTS[2];
-   Prj_WhichProjects_t WhichPrjs;
+   extern const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS];
+   Prj_WhoseProjects_t My_All;
+   static const char *WhoseProjectsImage[Prj_NUM_WHOSE_PROJECTS] =
+     {
+      "myhierarchy64x64.png",	// Prj_MY__PROJECTS
+      "hierarchy64x64.png",	// Prj_ALL_PROJECTS
+     };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
-   for (WhichPrjs = Prj_ONLY_MY_PROJECTS;
-	WhichPrjs <= Prj_ALL_PROJECTS;
-	WhichPrjs++)
+   for (My_All =  (Prj_WhoseProjects_t) 0;
+	My_All <= (Prj_WhoseProjects_t) (Prj_NUM_WHOSE_PROJECTS - 1);
+	My_All++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       WhichPrjs == Gbl.CurrentCrs.Prjs.WhichPrjs ? "PREF_ON" :
-							    "PREF_OFF");
-      Act_FormStart (Action);
-      Par_PutHiddenParamUnsigned ("WhichPrjs",(unsigned) WhichPrjs);
-      if (FuncParams)	// Extra parameters depending on the action
-	 FuncParams ();
+	       (Gbl.Prjs.My_All == My_All) ? "PREF_ON" :
+					     "PREF_OFF");
+      Act_FormStart (ActSeePrj);
+      Prj_PutParams (My_All,
+                     Gbl.Prjs.PreNon,
+                     Gbl.Prjs.HidVis,
+                     Gbl.Prjs.SelectedOrder,
+                     Gbl.Prjs.CurrentPage,
+                     -1L);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,
-	       WhichPrjs == Prj_ONLY_MY_PROJECTS ? "myhierarchy64x64.png" :
-		                                   "hierarchy64x64.png",
-	       Txt_PROJECT_WHICH_PROJECTS[WhichPrjs],
-	       Txt_PROJECT_WHICH_PROJECTS[WhichPrjs]);
+	       Gbl.Prefs.IconsURL,WhoseProjectsImage[My_All],
+	       Txt_PROJECT_MY_ALL_PROJECTS[My_All],
+	       Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -341,35 +362,210 @@ static void Prj_ShowFormToSelWhichPrjs (Act_Action_t Action,void (*FuncParams) (
   }
 
 /*****************************************************************************/
-/************* Parameter to show only my projects or all projects ************/
+/******** Show form to select preassigned / non-preassigned projects *********/
 /*****************************************************************************/
 
-void Prj_PutParamWhichPrjs (void)
+static void Prj_ShowFormToSelPreassignedOrNotProjects (void)
   {
-   Prj_GetParamWhichPrjs ();
+   extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_PREASSIGNED_NONPREASSIG];
+   Prj_PreassignedNonpreassig_t PreNon;
 
-   Par_PutHiddenParamUnsigned ("WhichPrjs",(unsigned) Gbl.CurrentCrs.Prjs.WhichPrjs);
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   for (PreNon =  (Prj_PreassignedNonpreassig_t) 0;
+	PreNon <= (Prj_PreassignedNonpreassig_t) (Prj_NUM_PREASSIGNED_NONPREASSIG - 1);
+	PreNon++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Gbl.Prjs.PreNon & (1 << PreNon)) ? "PREF_ON" :
+						   "PREF_OFF");
+      Act_FormStart (ActSeePrj);
+      Prj_PutParams (Gbl.Prjs.My_All,
+                     Gbl.Prjs.PreNon ^ (1 << PreNon),	// Toggle
+                     Gbl.Prjs.HidVis,
+                     Gbl.Prjs.SelectedOrder,
+                     Gbl.Prjs.CurrentPage,
+                     -1L);
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,PreassignedNonpreassigImage[PreNon],
+	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon],
+	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
-/*********** Get whether to show only my projects or all projects ************/
+/************* Show form to select hidden / visible projects *****************/
 /*****************************************************************************/
 
-static void Prj_GetParamWhichPrjs (void)
+static void Prj_ShowFormToSelHiddenVisiblProjects (void)
   {
-   static bool AlreadyGot = false;
-
-   if (!AlreadyGot)
+   extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
+   Prj_HiddenVisibl_t HidVis;
+   static const char *HiddenVisiblImage[Prj_NUM_HIDDEN_VISIBL] =
      {
-      /***** Get which projects (my projects or all projects) *****/
-      Gbl.CurrentCrs.Prjs.WhichPrjs = (Prj_WhichProjects_t)
-	                              Par_GetParToUnsignedLong ("WhichPrjs",
-	                                                        0,
-	                                                        Prj_NUM_WHICH_PROJECTS - 1,
-	                                                        (unsigned long) Prj_WHICH_PROJECTS_DEFAULT);
+      "eye-slash-on64x64.png",	// Prj_HIDDEN
+      "eye-on64x64.png",	// Prj_VISIBL
+     };
 
-      AlreadyGot = true;
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   for (HidVis =  (Prj_HiddenVisibl_t) 0;
+	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
+	HidVis++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Gbl.Prjs.HidVis & (1 << HidVis)) ? "PREF_ON" :
+						   "PREF_OFF");
+      Act_FormStart (ActSeePrj);
+      Prj_PutParams (Gbl.Prjs.My_All,
+                     Gbl.Prjs.PreNon,
+                     Gbl.Prjs.HidVis ^ (1 << HidVis),	// Toggle
+                     Gbl.Prjs.SelectedOrder,
+                     Gbl.Prjs.CurrentPage,
+                     -1L);
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       HiddenVisiblImage[HidVis],
+	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis],
+	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************** Put parameters used in projects **********************/
+/*****************************************************************************/
+
+static void Prj_PutCurrentParams (void)
+  {
+   Prj_PutParams (Gbl.Prjs.My_All,
+                  Gbl.Prjs.PreNon,
+                  Gbl.Prjs.HidVis,
+                  Gbl.Prjs.SelectedOrder,
+		  Gbl.Prjs.CurrentPage,
+                  Gbl.Prjs.PrjCod);
+  }
+
+/* The following function is called
+   when one or more parameters must be passed explicitely.
+   Each parameter is passed only if its value is distinct to default. */
+
+void Prj_PutParams (Prj_WhoseProjects_t My_All,
+                    unsigned PreNon,
+                    unsigned HidVis,
+                    Prj_Order_t Order,
+                    unsigned NumPage,
+                    long PrjCod)
+  {
+   if (My_All != Prj_WHOSE_PROJECTS_DEFAULT)
+      Prj_PutHiddenParamMy_All (My_All);
+
+   if (PreNon != ((unsigned) Prj_PREASSIGNED_DEFAULT |
+	          (unsigned) Prj_NONPREASSIG_DEFAULT))
+      Prj_PutHiddenParamPreNon (PreNon);
+
+   if (HidVis != ((unsigned) Prj_HIDDEN_DEFAULT |
+	          (unsigned) Prj_VISIBL_DEFAULT))
+      Prj_PutHiddenParamHidVis (HidVis);
+
+   if (Order != Prj_ORDER_DEFAULT)
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+
+   if (NumPage > 1)
+      Pag_PutHiddenParamPagNum (Pag_PROJECTS,NumPage);
+
+   if (PrjCod > 0)
+      Prj_PutParamPrjCod (PrjCod);
+
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Usr_PutParamOtherUsrCodEncrypted ();
+  }
+
+/*****************************************************************************/
+/*********************** Put hidden params for projects **********************/
+/*****************************************************************************/
+
+static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All)
+  {
+   Par_PutHiddenParamUnsigned (ParamMy_AllName,(unsigned) My_All);
+  }
+
+static void Prj_PutHiddenParamPreNon (unsigned PreNon)
+  {
+   Par_PutHiddenParamUnsigned (ParamPreNonName,PreNon);
+  }
+
+static void Prj_PutHiddenParamHidVis (unsigned HidVis)
+  {
+   Par_PutHiddenParamUnsigned (ParamHidVisName,HidVis);
+  }
+
+/*****************************************************************************/
+/*********************** Get hidden params for projects **********************/
+/*****************************************************************************/
+
+static void Prj_GetHiddenParamMy_All (void)
+  {
+   Gbl.Prjs.My_All = (Prj_WhoseProjects_t) Par_GetParToUnsignedLong (ParamMy_AllName,
+                                                                     0,
+                                                                     Prj_NUM_WHOSE_PROJECTS - 1,
+                                                                     Prj_WHOSE_PROJECTS_DEFAULT);
+  }
+
+static void Prj_GetHiddenParamPreNon (void)
+  {
+   Gbl.Prjs.PreNon = (unsigned) Par_GetParToUnsignedLong (ParamPreNonName,
+                                                          0,
+                                                          (1 << Prj_PREASSIGNED) |
+                                                          (1 << Prj_NONPREASSIG),
+                                                          (unsigned) Prj_PREASSIGNED_DEFAULT |
+                                                          (unsigned) Prj_NONPREASSIG_DEFAULT);
+  }
+
+static void Prj_GetHiddenParamHidVis (void)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:	// Students can view only visible projects
+	 Gbl.Prjs.HidVis = (1 << Prj_VISIBL);	// Only visible projects
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 Gbl.Prjs.HidVis = (unsigned) Par_GetParToUnsignedLong (ParamHidVisName,
+								0,
+								(1 << Prj_HIDDEN) |
+								(1 << Prj_VISIBL),
+								(unsigned) Prj_HIDDEN_DEFAULT |
+								(unsigned) Prj_VISIBL_DEFAULT);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
+         break;
+     }
+  }
+
+/*****************************************************************************/
+/***************** Get generic parameters to list projects *******************/
+/*****************************************************************************/
+
+static void Prj_GetParams (void)
+  {
+   /***** Get which projects to show *****/
+   Prj_GetHiddenParamMy_All ();
+   Prj_GetHiddenParamPreNon ();
+   Prj_GetHiddenParamHidVis ();
+
+   /***** Get order and page *****/
+   Prj_GetParamPrjOrder ();
+   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
   }
 
 /*****************************************************************************/
@@ -393,9 +589,12 @@ static void Prj_ShowProjectsHead (bool PrintView)
       if (!PrintView)
 	{
 	 Act_FormStart (ActSeePrj);
-	 Prj_PutParamWhichPrjs ();
-	 Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Prj_PutParams (Gbl.Prjs.My_All,
+			Gbl.Prjs.PreNon,
+			Gbl.Prjs.HidVis,
+                        Order,
+                        Gbl.Prjs.CurrentPage,
+                        -1L);
 	 Act_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Prjs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -510,8 +709,8 @@ static void Prj_PutIconToCreateNewPrj (void)
    extern const char *Txt_New_project;
 
    /***** Put form to create a new project *****/
-   Gbl.Prjs.PrjCodToEdit = -1L;
-   Lay_PutContextualLink (ActFrmNewPrj,NULL,Prj_PutParams,
+   Gbl.Prjs.PrjCod = -1L;
+   Lay_PutContextualLink (ActFrmNewPrj,NULL,Prj_PutCurrentParams,
                           "plus64x64.png",
                           Txt_New_project,NULL,
                           NULL);
@@ -525,9 +724,9 @@ static void Prj_PutButtonToCreateNewPrj (void)
   {
    extern const char *Txt_New_project;
 
-   Gbl.Prjs.PrjCodToEdit = -1L;
+   Gbl.Prjs.PrjCod = -1L;
    Act_FormStart (ActFrmNewPrj);
-   Prj_PutParams ();
+   Prj_PutCurrentParams ();
    Btn_PutConfirmButton (Txt_New_project);
    Act_FormEnd ();
   }
@@ -540,7 +739,7 @@ static void Prj_PutIconToShowAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLink (ActSeeTblAllPrj,NULL,Prj_PutParams,
+   Lay_PutContextualLink (ActSeeTblAllPrj,NULL,Prj_PutCurrentParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
@@ -611,6 +810,7 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
+   extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_PREASSIGNED_NONPREASSIG];
    extern const char *Txt_Number_of_students;
    extern const char *Txt_See_more;
    extern const char *Txt_See_less;
@@ -646,8 +846,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"prj_creat_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
-            Prj->Hidden ? "DATE_BLUE_LIGHT" :
-                          "DATE_BLUE");
+            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+                                        "DATE_BLUE");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
@@ -663,8 +863,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"prj_modif_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
-            Prj->Hidden ? "DATE_BLUE_LIGHT" :
-                          "DATE_BLUE");
+            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+                                        "DATE_BLUE");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
@@ -684,18 +884,18 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
    if (ICanViewProjectFiles)
      {
       Act_FormStart (ActAdmDocPrj);
-      Prj_PutParams ();
+      Prj_PutCurrentParams ();
       Act_LinkFormSubmit (Txt_Project_files,
-                          Prj->Hidden ? "ASG_TITLE_LIGHT" :
-        	                        "ASG_TITLE",
+                          Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+        	                                      "ASG_TITLE",
         	          NULL);
       fprintf (Gbl.F.Out,"%s</a>",Prj->Title);
       Act_FormEnd ();
      }
    else
       fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
-               Prj->Hidden ? "ASG_TITLE_LIGHT" :
-        	             "ASG_TITLE",
+               Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+        	                           "ASG_TITLE",
 	       Prj->Title);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -711,19 +911,24 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
                       "%s:"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
+            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+        	                        "ASG_LABEL",
             Txt_Preassigned_QUESTION);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
-                      "%s"
-                      "</td>"
-                      "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+                      "%s&nbsp;",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
+	    Gbl.Prefs.IconsURL,PreassignedNonpreassigImage[Prj->Preassigned],
+	    Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned],
+	    Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
 
    /***** Number of students *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -734,8 +939,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
                       "%s:"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
+            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+        	                        "ASG_LABEL",
             Txt_Number_of_students);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -743,8 +948,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
                       "%u"
                       "</td>"
                       "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             Prj->NumStds);
 
    /***** Project members *****/
@@ -798,8 +1003,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
                       "%s:"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
+            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+        	                        "ASG_LABEL",
             Txt_Proposal);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -807,8 +1012,8 @@ static void Prj_ShowOneProject (struct Project *Prj,Prj_ProjectView_t ProjectVie
                       "%s"
                       "</td>"
                       "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             Txt_PROJECT_STATUS[Prj->Proposal]);
 
    /***** Write rows of data of this project *****/
@@ -877,8 +1082,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 	              "</td>",
 	    UniqueId,
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DATE_BLUE_LIGHT" :
-                          "DATE_BLUE",
+            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+                                        "DATE_BLUE",
             UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
@@ -892,8 +1097,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 	              "</td>",
 	    UniqueId,
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DATE_BLUE_LIGHT" :
-                          "DATE_BLUE",
+            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+                                        "DATE_BLUE",
             UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
@@ -902,8 +1107,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
                       "%s"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT_N",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT_N",
             Prj->Title);
 
    /***** Department *****/
@@ -914,8 +1119,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
                       "%s"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
 
@@ -924,8 +1129,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
                       "%u"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             Prj->NumStds);
 
    /***** Project members *****/
@@ -939,8 +1144,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
                       "%s"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             Txt_PROJECT_STATUS[Prj->Proposal]);
 
    /***** Write rows of data of this project *****/
@@ -983,14 +1188,14 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT_N");
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT_N");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"%s\">",
 	       Dpt.WWW,
-               Prj->Hidden ? "DAT_LIGHT" :
-        	             "DAT_N");
+               Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                           "DAT_N");
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
@@ -1011,8 +1216,8 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
                       "%s"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             Dpt.FullName);
   }
 
@@ -1051,8 +1256,8 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                       "%s:"
 	              "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP",
-            Prj->Hidden ? "ASG_LABEL_LIGHT" :
-        	          "ASG_LABEL",
+            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+        	                        "ASG_LABEL",
             Label);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -1060,8 +1265,8 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                       "%s"
                       "</td>"
                       "</tr>",
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             TxtField);
   }
 
@@ -1077,8 +1282,8 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
                       "%s"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             TxtField);
   }
 
@@ -1115,20 +1320,20 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 		      "%s:"
 		      "</td>"
 		      "<td colspan=\"2\" class=\"LEFT_TOP",
-	    Prj->Hidden ? "ASG_LABEL_LIGHT" :
-			  "ASG_LABEL",
+	    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+			                "ASG_LABEL",
 	    Txt_URL);
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">",
-	    Prj->Hidden ? "DAT_LIGHT" :
-			  "DAT");
+	    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+			                "DAT");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"%s\">",
 	       Prj->URL,
-	       Prj->Hidden ? "DAT_LIGHT" :
-			     "DAT");
+	       Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+			                   "DAT");
    fprintf (Gbl.F.Out,"%s",Prj->URL);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
@@ -1143,8 +1348,8 @@ static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
                       "%s"
                       "</td>",
             Gbl.RowEvenOdd,
-            Prj->Hidden ? "DAT_LIGHT" :
-        	          "DAT",
+            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+        	                        "DAT",
             Prj->URL);
   }
 
@@ -1219,15 +1424,15 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
 	    fprintf (Gbl.F.Out," %s\">%s:</td>"
 			       "<td colspan=\"2\" class=\"LEFT_TOP",
-		     Prj->Hidden ? "ASG_LABEL_LIGHT" :
-				   "ASG_LABEL",
+		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+				                 "ASG_LABEL",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    if (ProjectView == Prj_LIST_PROJECTS)
 	       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
 	    fprintf (Gbl.F.Out," %s\">",
-		     Prj->Hidden ? "DAT_LIGHT" :
-				   "DAT");
+		     Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+				                 "DAT");
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
 	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
@@ -1258,7 +1463,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
 	      {
 	       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	       Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutParams,
+	       Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutCurrentParams,
 				      "remove-on64x64.png",
 				      Txt_Remove,NULL,
 				      NULL);
@@ -1295,9 +1500,9 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	 Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;	// Used to pass project code as a parameter
+	 Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	 sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
-	 Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutParams,
+	 Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutCurrentParams,
 				"plus64x64.png",
 				Gbl.Title,NULL,
 				NULL);
@@ -1336,8 +1541,8 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    /***** Start column with list of all members with this role *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">",
 	    Gbl.RowEvenOdd,
-	    Prj->Hidden ? "DAT_LIGHT" :
-			  "DAT");
+	    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+			                "DAT");
 
    if (NumUsrs)
      {
@@ -1496,7 +1701,7 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
      };
 
    /***** Get project code *****/
-   if ((Gbl.Prjs.PrjCodToEdit = Prj_GetParamPrjCod ()) == -1L)
+   if ((Gbl.Prjs.PrjCod = Prj_GetParamPrjCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Start box *****/
@@ -1505,13 +1710,13 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
                  Hlp_ASSESSMENT_Projects_add_user,Box_NOT_CLOSABLE);
 
    /***** Write form to request another user's ID *****/
-   Enr_WriteFormToReqAnotherUsrID (ActionAddUsr[RoleInProject],Prj_PutParams);
+   Enr_WriteFormToReqAnotherUsrID (ActionAddUsr[RoleInProject],Prj_PutCurrentParams);
 
    /***** End box *****/
    Box_EndBox ();
 
    /***** Put a form to create/edit project *****/
-   Prj_RequestCreatOrEditPrj (Gbl.Prjs.PrjCodToEdit);
+   Prj_RequestCreatOrEditPrj (Gbl.Prjs.PrjCod);
   }
 
 /*****************************************************************************/
@@ -1631,9 +1836,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -1661,8 +1864,8 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
 	 /* Show form to request confirmation */
 	 Act_FormStart (ActionRemUsr[RoleInProject]);
-	 Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
-	 Prj_PutParams ();
+	 Gbl.Prjs.PrjCod = Prj.PrjCod;
+	 Prj_PutCurrentParams ();
 	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_project :
 				      Txt_Remove_user_from_this_project);
 	 Act_FormEnd ();
@@ -1714,9 +1917,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -1786,32 +1987,37 @@ void Prj_PutHiddenParamPrjOrder (void)
 /****************** Put a link (form) to edit one project ********************/
 /*****************************************************************************/
 
-static void Prj_PutFormsToRemEditOnePrj (long PrjCod,bool Hidden,
+static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
                                          bool ICanViewProjectFiles)
   {
-   Gbl.Prjs.PrjCodToEdit = PrjCod;	// Used as parameter in contextual links
+   Gbl.Prjs.PrjCod = PrjCod;	// Used as parameter in contextual links
 
    if (Prj_CheckIfICanEditProject (PrjCod))
      {
       /***** Put form to remove project *****/
-      Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutParams);
+      Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutCurrentParams);
 
       /***** Put form to hide/show project *****/
-      if (Hidden)
-	 Ico_PutContextualIconToUnhide (ActShoPrj,Prj_PutParams);
-      else
-	 Ico_PutContextualIconToHide (ActHidPrj,Prj_PutParams);
+      switch (Hidden)
+        {
+	 case Prj_HIDDEN:
+	    Ico_PutContextualIconToUnhide (ActShoPrj,Prj_PutCurrentParams);
+	    break;
+	 case Prj_VISIBL:
+	    Ico_PutContextualIconToHide (ActHidPrj,Prj_PutCurrentParams);
+	    break;
+        }
 
       /***** Put form to edit project *****/
-      Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutParams);
+      Ico_PutContextualIconToEdit (ActEdiOnePrj,Prj_PutCurrentParams);
      }
 
    /***** Put form to admin project documents *****/
    if (ICanViewProjectFiles)
-      Ico_PutContextualIconToViewFiles (ActAdmDocPrj,Prj_PutParams);
+      Ico_PutContextualIconToViewFiles (ActAdmDocPrj,Prj_PutCurrentParams);
 
    /***** Put form to print project *****/
-   Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutParams);
+   Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentParams);
   }
 
 /*****************************************************************************/
@@ -1861,29 +2067,17 @@ static bool Prj_CheckIfICanEditProject (long PrjCod)
   }
 
 /*****************************************************************************/
-/********************** Params used to edit a project ************************/
-/*****************************************************************************/
-
-static void Prj_PutParams (void)
-  {
-   if (Gbl.Prjs.PrjCodToEdit > 0)
-      Prj_PutParamPrjCod (Gbl.Prjs.PrjCodToEdit);
-   Prj_PutHiddenParamPrjOrder ();
-   Prj_PutParamWhichPrjs ();
-   Pag_PutHiddenParamPagNum (Pag_PROJECTS,Gbl.Prjs.CurrentPage);
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted ();
-  }
-
-/*****************************************************************************/
 /************************** List all the projects ****************************/
 /*****************************************************************************/
 
+#define Prj_MAX_BYTES_SUBQUERY 128
+
 void Prj_GetListProjects (void)
   {
-   char HiddenSubQuery[256];
-   char OrderBySubQuery[256];
-   char Query[2048];
+   char PreNonSubQuery[Prj_MAX_BYTES_SUBQUERY];
+   char HidVisSubQuery[Prj_MAX_BYTES_SUBQUERY];
+   char OrderBySubQuery[Prj_MAX_BYTES_SUBQUERY];
+   char Query[512 * Prj_MAX_BYTES_SUBQUERY * 3];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1893,125 +2087,172 @@ void Prj_GetListProjects (void)
       Prj_FreeListProjects ();
 
    /***** Get list of projects from database *****/
-   /* Hidden subquery */
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 HiddenSubQuery[0] = '\0';
-	 break;
-      default:
-	 sprintf (HiddenSubQuery," AND projects.Hidden='N'");
-	 break;
-     }
-
-   /* Order subquery */
-   switch (Gbl.Prjs.SelectedOrder)
-     {
-      case Prj_ORDER_START_TIME:
-	 sprintf (OrderBySubQuery,"projects.CreatTime DESC,"
-				  "projects.ModifTime DESC,"
-				  "projects.Title");
-	 break;
-      case Prj_ORDER_END_TIME:
-	 sprintf (OrderBySubQuery,"projects.ModifTime DESC,"
-				  "projects.CreatTime DESC,"
-				  "projects.Title");
-	 break;
-      case Prj_ORDER_TITLE:
-	 sprintf (OrderBySubQuery,"projects.Title,"
-				  "projects.CreatTime DESC,"
-				  "projects.ModifTime DESC");
-	 break;
-      case Prj_ORDER_DEPARTMENT:
-	 sprintf (OrderBySubQuery,"departments.FullName,"
-				  "projects.CreatTime DESC,"
-				  "projects.ModifTime DESC,"
-				  "projects.Title");
-	 break;
-     }
-
-   /* Query */
-   if (Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ONLY_MY_PROJECTS)
-      switch (Gbl.Prjs.SelectedOrder)
-	{
-	 case Prj_ORDER_START_TIME:
-	 case Prj_ORDER_END_TIME:
-	 case Prj_ORDER_TITLE:
-	    sprintf (Query,"SELECT projects.PrjCod"
-			   " FROM projects,prj_usr"
-			   " WHERE projects.CrsCod=%ld%s"
-			   " AND projects.PrjCod=prj_usr.PrjCod"
-			   " AND prj_usr.UsrCod=%ld"
-			   " ORDER BY %s",
-		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-		     Gbl.Usrs.Me.UsrDat.UsrCod,
-		     OrderBySubQuery);
-	    break;
-	 case Prj_ORDER_DEPARTMENT:
-	    sprintf (Query,"SELECT projects.PrjCod"
-			   " FROM prj_usr,projects LEFT JOIN departments"
-			   " ON projects.DptCod=departments.DptCod"
-			   " WHERE projects.CrsCod=%ld%s"
-			   " AND projects.PrjCod=prj_usr.PrjCod"
-			   " AND prj_usr.UsrCod=%ld"
-			   " ORDER BY %s",
-		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-		     Gbl.Usrs.Me.UsrDat.UsrCod,
-		     OrderBySubQuery);
-	    break;
-	}
-   else	// Gbl.CurrentCrs.Prjs.WhichPrjs == Prj_ALL_PROJECTS
-      switch (Gbl.Prjs.SelectedOrder)
-	{
-	 case Prj_ORDER_START_TIME:
-	 case Prj_ORDER_END_TIME:
-	 case Prj_ORDER_TITLE:
-	    sprintf (Query,"SELECT projects.PrjCod"
-			   " FROM projects"
-			   " WHERE projects.CrsCod=%ld%s"
-			   " ORDER BY %s",
-		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-		     OrderBySubQuery);
-	    break;
-	 case Prj_ORDER_DEPARTMENT:
-	    sprintf (Query,"SELECT projects.PrjCod"
-			   " FROM projects LEFT JOIN departments"
-			   " ON projects.DptCod=departments.DptCod"
-			   " WHERE projects.CrsCod=%ld%s"
-			   " ORDER BY %s",
-		     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-		     OrderBySubQuery);
-	    break;
-	}
-
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get projects");
-
-   if (NumRows) // Projects found...
-     {
-      Gbl.Prjs.Num = (unsigned) NumRows;
-
-      /***** Create list of projects *****/
-      if ((Gbl.Prjs.LstPrjCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store list of projects.");
-
-      /***** Get the projects codes *****/
-      for (NumPrj = 0;
-	   NumPrj < Gbl.Prjs.Num;
-	   NumPrj++)
-        {
-         /* Get next project code */
-         row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Prjs.LstPrjCods[NumPrj] = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong project code.");
-        }
-     }
+   if (Gbl.Prjs.PreNon == 0 ||	// All selectors are off
+       Gbl.Prjs.HidVis == 0)	// All selectors are off
+      Gbl.Prjs.Num = 0;		// Nothing to get from database
    else
-      Gbl.Prjs.Num = 0;
+     {
+      /* Preassigned subquery */
+      switch (Gbl.Prjs.PreNon)
+	{
+	 case (1 << Prj_PREASSIGNED):
+	    Str_Copy (PreNonSubQuery," AND projects.Preassigned='Y'",
+		      Prj_MAX_BYTES_SUBQUERY);	// Preassigned projects
+	    break;
+	 case (1 << Prj_NONPREASSIG):
+	    Str_Copy (PreNonSubQuery," AND projects.Preassigned='N'",
+		      Prj_MAX_BYTES_SUBQUERY);	// Non-preassigned projects
+	    break;
+	 default:
+	    HidVisSubQuery[0] = '\0';		// All projects
+	    break;
+	}
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /* Hidden subquery */
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:	// Students can view only visible projects
+	    Str_Copy (HidVisSubQuery," AND projects.Hidden='N'",
+		      Prj_MAX_BYTES_SUBQUERY);		// Visible projects
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    switch (Gbl.Prjs.HidVis)
+	      {
+	       case (1 << Prj_HIDDEN):
+		  Str_Copy (HidVisSubQuery," AND projects.Hidden='Y'",
+			    Prj_MAX_BYTES_SUBQUERY);	// Hidden projects
+		  break;
+	       case (1 << Prj_VISIBL):
+		  Str_Copy (HidVisSubQuery," AND projects.Hidden='N'",
+			    Prj_MAX_BYTES_SUBQUERY);	// Visible projects
+		  break;
+	       default:
+		  HidVisSubQuery[0] = '\0';		// All projects
+		  break;
+	      }
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong role.");
+	    break;
+	}
+
+      /* Order subquery */
+      switch (Gbl.Prjs.SelectedOrder)
+	{
+	 case Prj_ORDER_START_TIME:
+	    sprintf (OrderBySubQuery,"projects.CreatTime DESC,"
+				     "projects.ModifTime DESC,"
+				     "projects.Title");
+	    break;
+	 case Prj_ORDER_END_TIME:
+	    sprintf (OrderBySubQuery,"projects.ModifTime DESC,"
+				     "projects.CreatTime DESC,"
+				     "projects.Title");
+	    break;
+	 case Prj_ORDER_TITLE:
+	    sprintf (OrderBySubQuery,"projects.Title,"
+				     "projects.CreatTime DESC,"
+				     "projects.ModifTime DESC");
+	    break;
+	 case Prj_ORDER_DEPARTMENT:
+	    sprintf (OrderBySubQuery,"departments.FullName,"
+				     "projects.CreatTime DESC,"
+				     "projects.ModifTime DESC,"
+				     "projects.Title");
+	    break;
+	}
+
+      /* Query */
+      if (Gbl.Prjs.My_All == Prj_MY__PROJECTS)
+	 switch (Gbl.Prjs.SelectedOrder)
+	   {
+	    case Prj_ORDER_START_TIME:
+	    case Prj_ORDER_END_TIME:
+	    case Prj_ORDER_TITLE:
+	       sprintf (Query,"SELECT projects.PrjCod"
+			      " FROM projects,prj_usr"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s"
+			      " AND projects.PrjCod=prj_usr.PrjCod"
+			      " AND prj_usr.UsrCod=%ld"
+			      " ORDER BY %s",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			PreNonSubQuery,HidVisSubQuery,
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			OrderBySubQuery);
+	       break;
+	    case Prj_ORDER_DEPARTMENT:
+	       sprintf (Query,"SELECT projects.PrjCod"
+			      " FROM prj_usr,projects LEFT JOIN departments"
+			      " ON projects.DptCod=departments.DptCod"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s"
+			      " AND projects.PrjCod=prj_usr.PrjCod"
+			      " AND prj_usr.UsrCod=%ld"
+			      " ORDER BY %s",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			PreNonSubQuery,HidVisSubQuery,
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			OrderBySubQuery);
+	       break;
+	   }
+      else	// Gbl.Prjs.My_All == Prj_ALL_PROJECTS
+	 switch (Gbl.Prjs.SelectedOrder)
+	   {
+	    case Prj_ORDER_START_TIME:
+	    case Prj_ORDER_END_TIME:
+	    case Prj_ORDER_TITLE:
+	       sprintf (Query,"SELECT projects.PrjCod"
+			      " FROM projects"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s"
+			      " ORDER BY %s",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			PreNonSubQuery,HidVisSubQuery,
+			OrderBySubQuery);
+	       break;
+	    case Prj_ORDER_DEPARTMENT:
+	       sprintf (Query,"SELECT projects.PrjCod"
+			      " FROM projects LEFT JOIN departments"
+			      " ON projects.DptCod=departments.DptCod"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s"
+			      " ORDER BY %s",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			PreNonSubQuery,HidVisSubQuery,
+			OrderBySubQuery);
+	       break;
+	   }
+
+      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get projects");
+
+      if (NumRows) // Projects found...
+	{
+	 Gbl.Prjs.Num = (unsigned) NumRows;
+
+	 /***** Create list of projects *****/
+	 if ((Gbl.Prjs.LstPrjCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+	     Lay_ShowErrorAndExit ("Not enough memory to store list of projects.");
+
+	 /***** Get the projects codes *****/
+	 for (NumPrj = 0;
+	      NumPrj < Gbl.Prjs.Num;
+	      NumPrj++)
+	   {
+	    /* Get next project code */
+	    row = mysql_fetch_row (mysql_res);
+	    if ((Gbl.Prjs.LstPrjCods[NumPrj] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	       Lay_ShowErrorAndExit ("Error: wrong project code.");
+	   }
+	}
+      else
+	 Gbl.Prjs.Num = 0;
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    Gbl.Prjs.LstIsRead = true;
   }
@@ -2139,11 +2380,12 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
       Prj->DptCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the project is hidden or not (row[3]) */
-      Prj->Hidden = (row[3][0] == 'Y');
+      Prj->Hidden = (row[3][0] == 'Y') ? Prj_HIDDEN :
+	                                 Prj_VISIBL;
 
       /* Get if project is preassigned or not (row[4]) */
       Prj->Preassigned = (row[4][0] == 'Y') ? Prj_PREASSIGNED :
-	                                      Prj_NOT_PREASSIGNED;
+	                                      Prj_NONPREASSIG;
 
       /* Get if project is preassigned or not (row[5]) */
       NumLong = Str_ConvertStrCodToLongCod (row[5]);
@@ -2203,8 +2445,8 @@ static void Prj_ResetProject (struct Project *Prj)
    if (Prj->PrjCod <= 0)	// If > 0 ==> keep value
       Prj->PrjCod = -1L;
    Prj->CrsCod = -1L;
-   Prj->Hidden = false;
-   Prj->Preassigned = Prj_PREASSIGNED_DEFAULT;
+   Prj->Hidden      = Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;
+   Prj->Preassigned = Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT;
    Prj->NumStds     = 1;
    Prj->Proposal    = Prj_PROPOSAL_DEFAULT;
    Prj->CreatTime =
@@ -2266,9 +2508,7 @@ void Prj_ReqRemProject (void)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -2278,11 +2518,11 @@ void Prj_ReqRemProject (void)
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
       /***** Show question and button to remove the project *****/
-      Gbl.Prjs.PrjCodToEdit = Prj.PrjCod;
+      Gbl.Prjs.PrjCod = Prj.PrjCod;
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_project_X,
 	       Prj.Title);
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-			      ActRemPrj,NULL,NULL,Prj_PutParams,
+			      ActRemPrj,NULL,NULL,Prj_PutCurrentParams,
 			      Btn_REMOVE_BUTTON,Txt_Remove_project);
      }
    else
@@ -2310,9 +2550,7 @@ void Prj_RemoveProject (void)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -2375,9 +2613,7 @@ void Prj_HideProject (void)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -2421,9 +2657,7 @@ void Prj_ShowProject (void)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
@@ -2484,9 +2718,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    ItsANewProject = ((Prj.PrjCod = PrjCod) < 0);
 
    /***** Get from the database the data of the project *****/
@@ -2541,13 +2773,13 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /***** Start project box *****/
    if (ItsANewProject)
      {
-      Gbl.Prjs.PrjCodToEdit = -1L;
+      Gbl.Prjs.PrjCod = -1L;
       Box_StartBox (NULL,Txt_New_project,NULL,
                     Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE);
      }
    else
      {
-      Gbl.Prjs.PrjCodToEdit = Prj->PrjCod;
+      Gbl.Prjs.PrjCod = Prj->PrjCod;
       Box_StartBox (NULL,
                     Prj->Title[0] ? Prj->Title :
                 	            Txt_Edit_project,
@@ -2572,7 +2804,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Start data form */
    Act_FormStart (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
-   Prj_PutParams ();
+   Prj_PutCurrentParams ();
 
    /* Start box and table */
    Box_StartBoxTable (NULL,Txt_Data,NULL,
@@ -2615,15 +2847,15 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Preassigned_QUESTION);
 
-   fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (Prj->Preassigned == Prj_NOT_PREASSIGNED)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
-
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
    if (Prj->Preassigned == Prj_PREASSIGNED)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
+
+   fprintf (Gbl.F.Out,"<option value=\"N\"");
+   if (Prj->Preassigned == Prj_NONPREASSIG)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
@@ -2788,9 +3020,7 @@ void Prj_RecFormProject (void)
    Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetParamPrjOrder ();
-   Prj_GetParamWhichPrjs ();
-   Gbl.Prjs.CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Prj_GetParams ();
    ItsANewProject = ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0);
 
    if (ItsANewProject)
@@ -2818,7 +3048,7 @@ void Prj_RecFormProject (void)
 
       /* Get whether the project is preassigned */
       Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
-							     Prj_NOT_PREASSIGNED;
+							     Prj_NONPREASSIG;
 
       /* Get number of students */
       Prj.NumStds = (unsigned)
@@ -2909,10 +3139,10 @@ static void Prj_CreateProject (struct Project *Prj)
                   "'%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Prj->DptCod,
-            Prj->Hidden ? 'Y' :
-        	          'N',
+            Prj->Hidden == Prj_HIDDEN ? 'Y' :
+        	                        'N',
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-        	                                  'N',
+        	                                           'N',
             Prj->NumStds,
             Prj_Proposal_DB[Prj->Proposal],
             Prj->CreatTime,
@@ -2960,10 +3190,10 @@ static void Prj_UpdateProject (struct Project *Prj)
                   "Description='%s',Knowledge='%s',Materials='%s',URL='%s'"
                   " WHERE PrjCod=%ld AND CrsCod=%ld",
             Prj->DptCod,
-            Prj->Hidden ? 'Y' :
-        	          'N',
+            Prj->Hidden == Prj_HIDDEN ? 'Y' :
+        	                        'N',
             Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-        	                                  'N',
+        	                                           'N',
             Prj->NumStds,
             Prj_Proposal_DB[Prj->Proposal],
             Prj->ModifTime,
