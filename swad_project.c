@@ -257,12 +257,6 @@ static void Prj_ShowProjectsInCurrentPage (void)
    Pag_CalculatePagination (&Pagination);
    Gbl.Prjs.CurrentPage = (unsigned) Pagination.CurrentPage;
 
-   /***** Write links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
-                                     0,
-                                     &Pagination);
-
    /***** Start box *****/
    Box_StartBox ("100%",Txt_Projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
@@ -284,6 +278,12 @@ static void Prj_ShowProjectsInCurrentPage (void)
 
    if (Gbl.Prjs.Num)
      {
+      /***** Write links to pages *****/
+      if (Pagination.MoreThanOnePage)
+	 Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
+					0,
+					&Pagination);
+
       /***** Allocate memory for the project *****/
       Prj_AllocMemProject (&Prj);
 
@@ -309,6 +309,12 @@ static void Prj_ShowProjectsInCurrentPage (void)
 
       /***** Free memory of the project *****/
       Prj_FreeMemProject (&Prj);
+
+      /***** Write again links to pages *****/
+      if (Pagination.MoreThanOnePage)
+	 Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
+					0,
+					&Pagination);
      }
    else	// No projects created
       Ale_ShowAlert (Ale_INFO,Txt_No_projects);
@@ -319,12 +325,6 @@ static void Prj_ShowProjectsInCurrentPage (void)
 
    /***** End box *****/
    Box_EndBox ();
-
-   /***** Write again links to pages *****/
-   if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_PROJECTS,
-                                     0,
-                                     &Pagination);
 
    /***** Free list of projects *****/
    Prj_FreeListProjects ();
