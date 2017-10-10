@@ -337,6 +337,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
 static void Prj_ShowFormToFilterByMy_All (void)
   {
    extern const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS];
+   struct Prj_Filter Filter;
    Prj_WhoseProjects_t My_All;
    static const char *WhoseProjectsImage[Prj_NUM_WHOSE_PROJECTS] =
      {
@@ -353,10 +354,11 @@ static void Prj_ShowFormToFilterByMy_All (void)
 	       (Gbl.Prjs.Filter.My_All == My_All) ? "PREF_ON" :
 					            "PREF_OFF");
       Act_FormStart (ActSeePrj);
-      Prj_PutParams (My_All,
-                     Gbl.Prjs.Filter.PreNon,
-                     Gbl.Prjs.Filter.HidVis,
-                     Gbl.Prjs.Filter.DptCod,
+      Filter.My_All = My_All;
+      Filter.PreNon = Gbl.Prjs.Filter.PreNon;
+      Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
+      Prj_PutParams (&Filter,
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
@@ -379,6 +381,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
 static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
   {
    extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_PREASSIGNED_NONPREASSIG];
+   struct Prj_Filter Filter;
    Prj_PreassignedNonpreassig_t PreNon;
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -390,10 +393,11 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
 	       (Gbl.Prjs.Filter.PreNon & (1 << PreNon)) ? "PREF_ON" :
 						          "PREF_OFF");
       Act_FormStart (ActSeePrj);
-      Prj_PutParams (Gbl.Prjs.Filter.My_All,
-                     Gbl.Prjs.Filter.PreNon ^ (1 << PreNon),	// Toggle
-                     Gbl.Prjs.Filter.HidVis,
-                     Gbl.Prjs.Filter.DptCod,
+      Filter.My_All = Gbl.Prjs.Filter.My_All;
+      Filter.PreNon = Gbl.Prjs.Filter.PreNon ^ (1 << PreNon);	// Toggle
+      Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
+      Prj_PutParams (&Filter,
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
@@ -416,6 +420,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
 static void Prj_ShowFormToFilterByHidden (void)
   {
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
+   struct Prj_Filter Filter;
    Prj_HiddenVisibl_t HidVis;
    static const char *HiddenVisiblImage[Prj_NUM_HIDDEN_VISIBL] =
      {
@@ -432,10 +437,11 @@ static void Prj_ShowFormToFilterByHidden (void)
 	       (Gbl.Prjs.Filter.HidVis & (1 << HidVis)) ? "PREF_ON" :
 						          "PREF_OFF");
       Act_FormStart (ActSeePrj);
-      Prj_PutParams (Gbl.Prjs.Filter.My_All,
-                     Gbl.Prjs.Filter.PreNon,
-                     Gbl.Prjs.Filter.HidVis ^ (1 << HidVis),	// Toggle
-                     Gbl.Prjs.Filter.DptCod,
+      Filter.My_All = Gbl.Prjs.Filter.My_All;
+      Filter.PreNon = Gbl.Prjs.Filter.PreNon;
+      Filter.HidVis = Gbl.Prjs.Filter.HidVis ^ (1 << HidVis);	// Toggle
+      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
+      Prj_PutParams (&Filter,
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
@@ -459,14 +465,16 @@ static void Prj_ShowFormToFilterByHidden (void)
 static void Prj_ShowFormToFilterByDpt (void)
   {
    extern const char *Txt_Any_department;
+   struct Prj_Filter Filter;
 
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div>");
    Act_FormStart (ActSeePrj);
-   Prj_PutParams (Gbl.Prjs.Filter.My_All,
-		  Gbl.Prjs.Filter.PreNon,
-		  Gbl.Prjs.Filter.HidVis,
-                  Prj_FILTER_DPT_DEFAULT,	// Do not put department parameter here
+   Filter.My_All = Gbl.Prjs.Filter.My_All;
+   Filter.PreNon = Gbl.Prjs.Filter.PreNon;
+   Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+   Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
+   Prj_PutParams (&Filter,
 		  Gbl.Prjs.SelectedOrder,
 		  Gbl.Prjs.CurrentPage,
 		  -1L);
@@ -490,10 +498,7 @@ static void Prj_ShowFormToFilterByDpt (void)
 
 static void Prj_PutCurrentParams (void)
   {
-   Prj_PutParams (Gbl.Prjs.Filter.My_All,
-                  Gbl.Prjs.Filter.PreNon,
-                  Gbl.Prjs.Filter.HidVis,
-                  Gbl.Prjs.Filter.DptCod,
+   Prj_PutParams (&Gbl.Prjs.Filter,
                   Gbl.Prjs.SelectedOrder,
 		  Gbl.Prjs.CurrentPage,
                   Gbl.Prjs.PrjCod);
@@ -503,28 +508,25 @@ static void Prj_PutCurrentParams (void)
    when one or more parameters must be passed explicitely.
    Each parameter is passed only if its value is distinct to default. */
 
-void Prj_PutParams (Prj_WhoseProjects_t My_All,
-                    unsigned PreNon,
-                    unsigned HidVis,
-                    long DptCod,
+void Prj_PutParams (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
                     unsigned NumPage,
                     long PrjCod)
   {
    /***** Put filter parameters (which projects to show) *****/
-   if (My_All != Prj_FILTER_WHOSE_PROJECTS_DEFAULT)
-      Prj_PutHiddenParamMy_All (My_All);
+   if (Filter->My_All != Prj_FILTER_WHOSE_PROJECTS_DEFAULT)
+      Prj_PutHiddenParamMy_All (Filter->My_All);
 
-   if (PreNon != ((unsigned) Prj_FILTER_PREASSIGNED_DEFAULT |
-	          (unsigned) Prj_FILTER_NONPREASSIG_DEFAULT))
-      Prj_PutHiddenParamPreNon (PreNon);
+   if (Filter->PreNon != ((unsigned) Prj_FILTER_PREASSIGNED_DEFAULT |
+	                  (unsigned) Prj_FILTER_NONPREASSIG_DEFAULT))
+      Prj_PutHiddenParamPreNon (Filter->PreNon);
 
-   if (HidVis != ((unsigned) Prj_FILTER_HIDDEN_DEFAULT |
-	          (unsigned) Prj_FILTER_VISIBL_DEFAULT))
-      Prj_PutHiddenParamHidVis (HidVis);
+   if (Filter->HidVis != ((unsigned) Prj_FILTER_HIDDEN_DEFAULT |
+	                  (unsigned) Prj_FILTER_VISIBL_DEFAULT))
+      Prj_PutHiddenParamHidVis (Filter->HidVis);
 
-   if (DptCod != Prj_FILTER_DPT_DEFAULT)
-      Prj_PutHiddenParamDptCod (DptCod);
+   if (Filter->DptCod != Prj_FILTER_DPT_DEFAULT)
+      Prj_PutHiddenParamDptCod (Filter->DptCod);
 
    /***** Put order field *****/
    if (Order != Prj_ORDER_DEFAULT)
@@ -655,10 +657,7 @@ static void Prj_ShowProjectsHead (bool PrintView)
       if (!PrintView)
 	{
 	 Act_FormStart (ActSeePrj);
-	 Prj_PutParams (Gbl.Prjs.Filter.My_All,
-			Gbl.Prjs.Filter.PreNon,
-			Gbl.Prjs.Filter.HidVis,
-                        Gbl.Prjs.Filter.DptCod,
+	 Prj_PutParams (&Gbl.Prjs.Filter,
                         Order,
                         Gbl.Prjs.CurrentPage,
                         -1L);

@@ -71,6 +71,15 @@ typedef enum
 /* Project department */
 #define Prj_FILTER_DPT_DEFAULT -1L	// Any department
 
+/* Struct with all filters */
+struct Prj_Filter
+  {
+   Prj_WhoseProjects_t My_All;	// Show my / all projects
+   unsigned PreNon;		// Show preassigned / non preassigned projects
+   unsigned HidVis;		// Show hidden / visible projects
+   long DptCod;			// Show projects of this department
+  };
+
 /***** Order listing of projects by... *****/
 #define Prj_NUM_ORDERS 4
 typedef enum
@@ -133,10 +142,7 @@ struct Project
 void Prj_SeeProjects (void);
 void Prj_ShowTableAllProjects (void);
 
-void Prj_PutParams (Prj_WhoseProjects_t My_All,
-                    unsigned PreNon,
-                    unsigned HidVis,
-                    long DptCod,
+void Prj_PutParams (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
                     unsigned NumPage,
                     long PrjCod);
