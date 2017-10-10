@@ -340,12 +340,12 @@ static void Prj_ShowFormToSelMy_AllPrjs (void)
 	My_All++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.My_All == My_All) ? "PREF_ON" :
-					     "PREF_OFF");
+	       (Gbl.Prjs.Filter.My_All == My_All) ? "PREF_ON" :
+					            "PREF_OFF");
       Act_FormStart (ActSeePrj);
       Prj_PutParams (My_All,
-                     Gbl.Prjs.PreNon,
-                     Gbl.Prjs.HidVis,
+                     Gbl.Prjs.Filter.PreNon,
+                     Gbl.Prjs.Filter.HidVis,
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
@@ -376,12 +376,12 @@ static void Prj_ShowFormToSelPreassignedOrNotProjects (void)
 	PreNon++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.PreNon & (1 << PreNon)) ? "PREF_ON" :
-						   "PREF_OFF");
+	       (Gbl.Prjs.Filter.PreNon & (1 << PreNon)) ? "PREF_ON" :
+						          "PREF_OFF");
       Act_FormStart (ActSeePrj);
-      Prj_PutParams (Gbl.Prjs.My_All,
-                     Gbl.Prjs.PreNon ^ (1 << PreNon),	// Toggle
-                     Gbl.Prjs.HidVis,
+      Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                     Gbl.Prjs.Filter.PreNon ^ (1 << PreNon),	// Toggle
+                     Gbl.Prjs.Filter.HidVis,
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
@@ -417,12 +417,12 @@ static void Prj_ShowFormToSelHiddenVisiblProjects (void)
 	HidVis++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.HidVis & (1 << HidVis)) ? "PREF_ON" :
-						   "PREF_OFF");
+	       (Gbl.Prjs.Filter.HidVis & (1 << HidVis)) ? "PREF_ON" :
+						          "PREF_OFF");
       Act_FormStart (ActSeePrj);
-      Prj_PutParams (Gbl.Prjs.My_All,
-                     Gbl.Prjs.PreNon,
-                     Gbl.Prjs.HidVis ^ (1 << HidVis),	// Toggle
+      Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                     Gbl.Prjs.Filter.PreNon,
+                     Gbl.Prjs.Filter.HidVis ^ (1 << HidVis),	// Toggle
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
@@ -445,9 +445,9 @@ static void Prj_ShowFormToSelHiddenVisiblProjects (void)
 
 static void Prj_PutCurrentParams (void)
   {
-   Prj_PutParams (Gbl.Prjs.My_All,
-                  Gbl.Prjs.PreNon,
-                  Gbl.Prjs.HidVis,
+   Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                  Gbl.Prjs.Filter.PreNon,
+                  Gbl.Prjs.Filter.HidVis,
                   Gbl.Prjs.SelectedOrder,
 		  Gbl.Prjs.CurrentPage,
                   Gbl.Prjs.PrjCod);
@@ -513,20 +513,20 @@ static void Prj_PutHiddenParamHidVis (unsigned HidVis)
 
 static void Prj_GetHiddenParamMy_All (void)
   {
-   Gbl.Prjs.My_All = (Prj_WhoseProjects_t) Par_GetParToUnsignedLong (ParamMy_AllName,
-                                                                     0,
-                                                                     Prj_NUM_WHOSE_PROJECTS - 1,
-                                                                     Prj_WHOSE_PROJECTS_DEFAULT);
+   Gbl.Prjs.Filter.My_All = (Prj_WhoseProjects_t) Par_GetParToUnsignedLong (ParamMy_AllName,
+                                                                            0,
+                                                                            Prj_NUM_WHOSE_PROJECTS - 1,
+                                                                            Prj_WHOSE_PROJECTS_DEFAULT);
   }
 
 static void Prj_GetHiddenParamPreNon (void)
   {
-   Gbl.Prjs.PreNon = (unsigned) Par_GetParToUnsignedLong (ParamPreNonName,
-                                                          0,
-                                                          (1 << Prj_PREASSIGNED) |
-                                                          (1 << Prj_NONPREASSIG),
-                                                          (unsigned) Prj_PREASSIGNED_DEFAULT |
-                                                          (unsigned) Prj_NONPREASSIG_DEFAULT);
+   Gbl.Prjs.Filter.PreNon = (unsigned) Par_GetParToUnsignedLong (ParamPreNonName,
+                                                                 0,
+                                                                 (1 << Prj_PREASSIGNED) |
+                                                                 (1 << Prj_NONPREASSIG),
+                                                                 (unsigned) Prj_PREASSIGNED_DEFAULT |
+                                                                 (unsigned) Prj_NONPREASSIG_DEFAULT);
   }
 
 static void Prj_GetHiddenParamHidVis (void)
@@ -534,17 +534,17 @@ static void Prj_GetHiddenParamHidVis (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// Students can view only visible projects
-	 Gbl.Prjs.HidVis = (1 << Prj_VISIBL);	// Only visible projects
+	 Gbl.Prjs.Filter.HidVis = (1 << Prj_VISIBL);	// Only visible projects
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 Gbl.Prjs.HidVis = (unsigned) Par_GetParToUnsignedLong (ParamHidVisName,
-								0,
-								(1 << Prj_HIDDEN) |
-								(1 << Prj_VISIBL),
-								(unsigned) Prj_HIDDEN_DEFAULT |
-								(unsigned) Prj_VISIBL_DEFAULT);
+	 Gbl.Prjs.Filter.HidVis = (unsigned) Par_GetParToUnsignedLong (ParamHidVisName,
+								       0,
+								       (1 << Prj_HIDDEN) |
+								       (1 << Prj_VISIBL),
+								       (unsigned) Prj_HIDDEN_DEFAULT |
+								       (unsigned) Prj_VISIBL_DEFAULT);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong role.");
@@ -589,9 +589,9 @@ static void Prj_ShowProjectsHead (bool PrintView)
       if (!PrintView)
 	{
 	 Act_FormStart (ActSeePrj);
-	 Prj_PutParams (Gbl.Prjs.My_All,
-			Gbl.Prjs.PreNon,
-			Gbl.Prjs.HidVis,
+	 Prj_PutParams (Gbl.Prjs.Filter.My_All,
+			Gbl.Prjs.Filter.PreNon,
+			Gbl.Prjs.Filter.HidVis,
                         Order,
                         Gbl.Prjs.CurrentPage,
                         -1L);
@@ -2087,13 +2087,13 @@ void Prj_GetListProjects (void)
       Prj_FreeListProjects ();
 
    /***** Get list of projects from database *****/
-   if (Gbl.Prjs.PreNon == 0 ||	// All selectors are off
-       Gbl.Prjs.HidVis == 0)	// All selectors are off
+   if (Gbl.Prjs.Filter.PreNon == 0 ||	// All selectors are off
+       Gbl.Prjs.Filter.HidVis == 0)	// All selectors are off
       Gbl.Prjs.Num = 0;		// Nothing to get from database
    else
      {
       /* Preassigned subquery */
-      switch (Gbl.Prjs.PreNon)
+      switch (Gbl.Prjs.Filter.PreNon)
 	{
 	 case (1 << Prj_PREASSIGNED):
 	    Str_Copy (PreNonSubQuery," AND projects.Preassigned='Y'",
@@ -2118,7 +2118,7 @@ void Prj_GetListProjects (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    switch (Gbl.Prjs.HidVis)
+	    switch (Gbl.Prjs.Filter.HidVis)
 	      {
 	       case (1 << Prj_HIDDEN):
 		  Str_Copy (HidVisSubQuery," AND projects.Hidden='Y'",
@@ -2165,7 +2165,7 @@ void Prj_GetListProjects (void)
 	}
 
       /* Query */
-      if (Gbl.Prjs.My_All == Prj_MY__PROJECTS)
+      if (Gbl.Prjs.Filter.My_All == Prj_MY__PROJECTS)
 	 switch (Gbl.Prjs.SelectedOrder)
 	   {
 	    case Prj_ORDER_START_TIME:

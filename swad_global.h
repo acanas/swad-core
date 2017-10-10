@@ -572,13 +572,16 @@ struct Globals
      } Asgs;
    struct
      {
+      struct
+        {
+         Prj_WhoseProjects_t My_All;	// Show my / all projects
+         unsigned PreNon;			// Show preassigned / non preassigned projects
+         unsigned HidVis;			// Show hidden / visible projects
+        } Filter;
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
       unsigned Num;		// Number of projects
       long *LstPrjCods;		// List of project codes
       Prj_Order_t SelectedOrder;
-      Prj_WhoseProjects_t My_All;	// Show my / all projects
-      unsigned PreNon;			// Show preassigned / non preassigned projects
-      unsigned HidVis;			// Show hidden / visible projects
       unsigned CurrentPage;
       long PrjCod;		// Current project
      } Prjs;

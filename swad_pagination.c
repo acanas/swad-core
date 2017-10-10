@@ -164,9 +164,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
             case Pag_PROJECTS:
                Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-               Prj_PutParams (Gbl.Prjs.My_All,
-                              Gbl.Prjs.PreNon,
-                              Gbl.Prjs.HidVis,
+               Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                              Gbl.Prjs.Filter.PreNon,
+                              Gbl.Prjs.Filter.HidVis,
                               Gbl.Prjs.SelectedOrder,
                               1,
                               -1L);
@@ -274,9 +274,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
             case Pag_PROJECTS:
                Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-               Prj_PutParams (Gbl.Prjs.My_All,
-                              Gbl.Prjs.PreNon,
-                              Gbl.Prjs.HidVis,
+               Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                              Gbl.Prjs.Filter.PreNon,
+                              Gbl.Prjs.Filter.HidVis,
                               Gbl.Prjs.SelectedOrder,
                               1,
                               -1L);
@@ -370,9 +370,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
             case Pag_PROJECTS:
                Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-               Prj_PutParams (Gbl.Prjs.My_All,
-                              Gbl.Prjs.PreNon,
-                              Gbl.Prjs.HidVis,
+               Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                              Gbl.Prjs.Filter.PreNon,
+                              Gbl.Prjs.Filter.HidVis,
                               Gbl.Prjs.SelectedOrder,
                               Pagination->LeftPage,
                               -1L);
@@ -477,9 +477,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   break;
 	       case Pag_PROJECTS:
 		  Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-		  Prj_PutParams (Gbl.Prjs.My_All,
-                                 Gbl.Prjs.PreNon,
-                                 Gbl.Prjs.HidVis,
+		  Prj_PutParams (Gbl.Prjs.Filter.My_All,
+                                 Gbl.Prjs.Filter.PreNon,
+                                 Gbl.Prjs.Filter.HidVis,
                                  Gbl.Prjs.SelectedOrder,
                                  NumPage,
                                  -1L);
@@ -572,9 +572,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
 	    case Pag_PROJECTS:
 	       Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-	       Prj_PutParams (Gbl.Prjs.My_All,
-			      Gbl.Prjs.PreNon,
-			      Gbl.Prjs.HidVis,
+	       Prj_PutParams (Gbl.Prjs.Filter.My_All,
+			      Gbl.Prjs.Filter.PreNon,
+			      Gbl.Prjs.Filter.HidVis,
                               Gbl.Prjs.SelectedOrder,
 			      Pagination->RightPage,
 			      -1L);
@@ -666,9 +666,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
 	    case Pag_PROJECTS:
 	       Act_FormStartAnchor (ActSeePrj,Pagination->Anchor);
-	       Prj_PutParams (Gbl.Prjs.My_All,
-			      Gbl.Prjs.PreNon,
-			      Gbl.Prjs.HidVis,
+	       Prj_PutParams (Gbl.Prjs.Filter.My_All,
+			      Gbl.Prjs.Filter.PreNon,
+			      Gbl.Prjs.Filter.HidVis,
                               Gbl.Prjs.SelectedOrder,
 			      Pagination->NumPags,
 			      -1L);
