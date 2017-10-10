@@ -144,9 +144,10 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"DptCod\" class=\"%s\">%s:</label>"
+                      "<label for=\"%s\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
+            Dpt_PARAM_DPT_COD_NAME,
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department
@@ -199,7 +200,7 @@ void Ind_ReqIndicatorsCourses (void)
       Act_FormStart (ActSeeAllStaCrs);
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
       Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
-      Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
+      Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
       if (Gbl.Stat.StrIndicatorsSelected[0])
          Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
       Btn_PutConfirmButton (Txt_Show_more_details);
@@ -540,7 +541,7 @@ static void Ind_PutParamsConfirmIWantToSeeBigList (void)
   {
    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
    Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
-   Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
+   Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
    if (Gbl.Stat.StrIndicatorsSelected[0])
       Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
    Par_PutHiddenParamChar ("ShowBigList",'Y');

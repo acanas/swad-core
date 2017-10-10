@@ -350,11 +350,12 @@ void Gbl_InitializeGlobals (void)
    Gbl.Asgs.SelectedOrder = Asg_ORDER_DEFAULT;
 
    /* Projects */
-   Gbl.Prjs.Filter.My_All = Prj_WHOSE_PROJECTS_DEFAULT;
-   Gbl.Prjs.Filter.PreNon = Prj_PREASSIGNED_DEFAULT |
-	                    Prj_NONPREASSIG_DEFAULT;
-   Gbl.Prjs.Filter.HidVis = Prj_HIDDEN_DEFAULT |
-	                    Prj_VISIBL_DEFAULT;
+   Gbl.Prjs.Filter.My_All = Prj_FILTER_WHOSE_PROJECTS_DEFAULT;
+   Gbl.Prjs.Filter.PreNon = Prj_FILTER_PREASSIGNED_DEFAULT |
+	                    Prj_FILTER_NONPREASSIG_DEFAULT;
+   Gbl.Prjs.Filter.HidVis = Prj_FILTER_HIDDEN_DEFAULT |
+	                    Prj_FILTER_VISIBL_DEFAULT;
+   Gbl.Prjs.Filter.DptCod = Prj_FILTER_DPT_DEFAULT;
    Gbl.Prjs.LstIsRead = false;	// List is not read
    Gbl.Prjs.Num = 0;
    Gbl.Prjs.LstPrjCods = NULL;

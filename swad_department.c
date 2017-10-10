@@ -582,7 +582,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
 static void Dpt_PutParamDptCod (long DptCod)
   {
-   Par_PutHiddenParamLong ("DptCod",DptCod);
+   Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,DptCod);
   }
 
 /*****************************************************************************/
@@ -594,7 +594,7 @@ long Dpt_GetAndCheckParamDptCod (long MinCodAllowed)
    long DptCod;
 
    /***** Get and check parameter with code of department *****/
-   if ((DptCod = Par_GetParToLong ("DptCod")) < MinCodAllowed)
+   if ((DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME)) < MinCodAllowed)
       Lay_ShowErrorAndExit ("Code of department is missing or invalid.");
 
    return DptCod;
@@ -1125,8 +1125,9 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /***** Selector to select department *****/
    /* Start selector */
-   fprintf (Gbl.F.Out,"<select id=\"DptCod\" name=\"DptCod\""
+   fprintf (Gbl.F.Out,"<select id=\"%s\" name=\"%s\""
 	              " style=\"width:%upx;\"",
+	    Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,
 	    SelectorWidth);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",

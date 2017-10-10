@@ -36,29 +36,42 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Prj_MAX_CHARS_PROJECT_TITLE		(128 - 1)	// 127
-#define Prj_MAX_BYTES_PROJECT_TITLE		((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Prj_NUM_PROPOSAL_TYPES 3
+/***** Filters to list departments *****/
+/* My projects / all projects */
+#define Prj_NUM_WHOSE_PROJECTS 2
 typedef enum
   {
-   Prj_PROPOSAL_NEW,
-   Prj_PROPOSAL_MODIFIED,
-   Prj_PROPOSAL_UNMODIFIED,
-  } Prj_Proposal_t;
-#define Prj_PROPOSAL_DEFAULT Prj_PROPOSAL_NEW
+   Prj_MY__PROJECTS,
+   Prj_ALL_PROJECTS,
+  } Prj_WhoseProjects_t;
+#define Prj_FILTER_WHOSE_PROJECTS_DEFAULT	Prj_MY__PROJECTS
 
-// Related with user's roles in a project
-// Don't change these numbers! They are used in database
-#define Prj_NUM_ROLES_IN_PROJECT 4
+/* Preassigned projects / non-preassigned projects */
+#define Prj_NUM_PREASSIGNED_NONPREASSIG 2
 typedef enum
   {
-   Prj_ROLE_UNK	= 0,	// Unknown
-   Prj_ROLE_STD	= 1,	// Student
-   Prj_ROLE_TUT	= 2,	// Tutor
-   Prj_ROLE_EVA	= 3,	// Evaluator
-  } Prj_RoleInProject_t;
+   Prj_PREASSIGNED = 0,
+   Prj_NONPREASSIG = 1,
+  } Prj_PreassignedNonpreassig_t;
+#define Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT Prj_NONPREASSIG
+#define Prj_FILTER_PREASSIGNED_DEFAULT	(1 << Prj_PREASSIGNED)	// on
+#define Prj_FILTER_NONPREASSIG_DEFAULT	(1 << Prj_NONPREASSIG)	// on
 
+/* Hidden projects / visible projects */
+#define Prj_NUM_HIDDEN_VISIBL 2
+typedef enum
+  {
+   Prj_HIDDEN = 0,
+   Prj_VISIBL = 1,
+  } Prj_HiddenVisibl_t;
+#define Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT Prj_VISIBL
+#define Prj_FILTER_HIDDEN_DEFAULT	(1 << Prj_HIDDEN)	// on
+#define Prj_FILTER_VISIBL_DEFAULT	(1 << Prj_VISIBL)	// on
+
+/* Project department */
+#define Prj_FILTER_DPT_DEFAULT -1L	// Any department
+
+/***** Order listing of projects by... *****/
 #define Prj_NUM_ORDERS 4
 typedef enum
   {
@@ -69,34 +82,32 @@ typedef enum
   } Prj_Order_t;
 #define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
 
-#define Prj_NUM_WHOSE_PROJECTS 2
+/***** Project title *****/
+#define Prj_MAX_CHARS_PROJECT_TITLE	(128 - 1)	// 127
+#define Prj_MAX_BYTES_PROJECT_TITLE	((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+/***** Type of proposal ******/
+#define Prj_NUM_PROPOSAL_TYPES 3
 typedef enum
   {
-   Prj_MY__PROJECTS,
-   Prj_ALL_PROJECTS,
-  } Prj_WhoseProjects_t;
-#define Prj_WHOSE_PROJECTS_DEFAULT	Prj_MY__PROJECTS
+   Prj_PROPOSAL_NEW,
+   Prj_PROPOSAL_MODIFIED,
+   Prj_PROPOSAL_UNMODIFIED,
+  } Prj_Proposal_t;
+#define Prj_PROPOSAL_DEFAULT Prj_PROPOSAL_NEW
 
-#define Prj_NUM_PREASSIGNED_NONPREASSIG 2
+/***** User roles in a project *****/
+// Don't change these numbers! They are used in database
+#define Prj_NUM_ROLES_IN_PROJECT 4
 typedef enum
   {
-   Prj_PREASSIGNED = 0,
-   Prj_NONPREASSIG = 1,
-  } Prj_PreassignedNonpreassig_t;
-#define Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT Prj_NONPREASSIG
-#define Prj_PREASSIGNED_DEFAULT	(1 << Prj_PREASSIGNED)	// on
-#define Prj_NONPREASSIG_DEFAULT	(1 << Prj_NONPREASSIG)	// on
+   Prj_ROLE_UNK	= 0,	// Unknown
+   Prj_ROLE_STD	= 1,	// Student
+   Prj_ROLE_TUT	= 2,	// Tutor
+   Prj_ROLE_EVA	= 3,	// Evaluator
+  } Prj_RoleInProject_t;
 
-#define Prj_NUM_HIDDEN_VISIBL 2
-typedef enum
-  {
-   Prj_HIDDEN = 0,
-   Prj_VISIBL = 1,
-  } Prj_HiddenVisibl_t;
-#define Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT Prj_VISIBL
-#define Prj_HIDDEN_DEFAULT	(1 << Prj_HIDDEN)	// on
-#define Prj_VISIBL_DEFAULT	(1 << Prj_VISIBL)	// on
-
+/***** Struct to store a project *****/
 struct Project
   {
    long PrjCod;
@@ -125,6 +136,7 @@ void Prj_ShowTableAllProjects (void);
 void Prj_PutParams (Prj_WhoseProjects_t My_All,
                     unsigned PreNon,
                     unsigned HidVis,
+                    long DptCod,
                     Prj_Order_t Order,
                     unsigned NumPage,
                     long PrjCod);

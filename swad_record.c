@@ -4135,10 +4135,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"RIGHT_MIDDLE\">"
-                         "<label for=\"DptCod\" class=\"%s\">%s:</label>"
+                         "<label for=\"%s\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-	       ClassForm,Txt_Department,
+	       Dpt_PARAM_DPT_COD_NAME,ClassForm,Txt_Department,
 	       COL2_WIDTH);
       Act_FormGoToStart (ActChgMyDpt);
       Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
