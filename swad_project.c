@@ -1133,14 +1133,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
-			    "<td colspan=\"4\" class=\"CENTER_MIDDLE\">",
+			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
 		  UniqueId);
 	 Prj_PutIconToToggleProject (UniqueId,"more64x64.png",Txt_See_more);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
-			    "<td colspan=\"4\" class=\"CENTER_MIDDLE\">",
+			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
 		  UniqueId);
 	 Prj_PutIconToToggleProject (UniqueId,"less64x64.png",Txt_See_less);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -1161,7 +1161,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_pro_%u\" style=\"display:none;\">"
-			    "<td colspan=\"2\" class=\"RIGHT_TOP",
+			    "<td colspan=\"3\" class=\"RIGHT_TOP",
 		  UniqueId);
 	 break;
       default:
@@ -1424,7 +1424,7 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			    "<td colspan=\"2\" class=\"RIGHT_TOP",
+			    "<td colspan=\"3\" class=\"RIGHT_TOP",
 		  id,UniqueId);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
@@ -1493,7 +1493,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			    "<td colspan=\"2\" class=\"RIGHT_TOP",
+			    "<td colspan=\"3\" class=\"RIGHT_TOP",
 	          id,UniqueId);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
@@ -1598,39 +1598,60 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       /***** Start row with label and listing of users *****/
       fprintf (Gbl.F.Out,"<tr>");
 
+      /* Column for label */
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
 	    fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u %s\">"
 		               "%s:"
-		               "</td>"
-			       "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
+		               "</td>",
 	             Gbl.RowEvenOdd,
 		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
 				                 "ASG_LABEL",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    break;
+	 case Prj_FILE_BROWSER_PROJECT:
+	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">"
+		               "%s:"
+		               "</td>",
+		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+				                 "ASG_LABEL",
+		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    break;
+	 case Prj_PRINT_ONE_PROJECT:
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP %s\">"
+		               "%s:"
+		               "</td>",
+		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+				                 "ASG_LABEL",
+		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    break;
+	 case Prj_EDIT_ONE_PROJECT:
+	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>",
+		     Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    break;
+	}
+
+      /* Start column with list of users */
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
 	             Gbl.RowEvenOdd,
 		     Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
 				                 "DAT");
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	 case Prj_PRINT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP %s\">"
-		               "%s:"
-		               "</td>"
-			       "<td colspan=\"2\" class=\"LEFT_TOP %s\">",
-		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-				                 "ASG_LABEL",
-		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject],
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP %s\">",
 		     Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
 				                 "DAT");
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>"
-			       "<td colspan=\"2\" class=\"LEFT_TOP DAT\">",
-		     Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP DAT\">");
 	    break;
 	}
 
