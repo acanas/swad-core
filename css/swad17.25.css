@@ -2256,6 +2256,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 .STATUS_RED		{color:red;     font-size:12pt;}
 .STATUS_RED_LIGHT	{color:#F98A8A; font-size:12pt;}
 
+/********************** Number of question, project, etc. ********************/
+.BIG_INDEX	{color:#808080; font-size:20pt; font-weight:bold;}
+
 /********************************** Tests ************************************/
 .TAG_SEL	{box-sizing:border-box; width:346px;}
 .TAG_TXT	{box-sizing:border-box; width:346px;}
@@ -2272,7 +2275,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	vertical-align:middle;
 	}
-.TEST_NUM_QST	{color:#808080; font-size:20pt; font-weight:bold;}
 .TEST_EXA	{color:#404040; font-size:12pt;}
 .TEST_EXA_LIGHT	{color:#A0A0A0; font-size:12pt;}
 .TEST_EDI	{color:#404040; font-size:12pt;}

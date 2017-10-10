@@ -957,7 +957,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
+	                    "<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">"
 	                    "%u"
 	                    "</td>"
 	                    "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
@@ -1004,7 +1004,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    /***** Write number of question *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP COLOR%u\">"
-	              "<div class=\"TEST_NUM_QST\">%u</div>",
+	              "<div class=\"BIG_INDEX\">%u</div>",
             Gbl.RowEvenOdd,
             NumQst + 1);
 
@@ -2949,7 +2949,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write number of question */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
-			 "<div class=\"TEST_NUM_QST\">%lu</div>",
+			 "<div class=\"BIG_INDEX\">%lu</div>",
 	       Gbl.RowEvenOdd,
 	       NumRow + 1);
 
@@ -8302,7 +8302,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 	 if (ThisQuestionHasBeenEdited)
 	    /***** Question has been edited *****/
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
+			       "<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">"
 			       "%u"
 			       "</td>"
 			       "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
@@ -8327,7 +8327,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
+	                    "<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">"
 	                    "%u"
 	                    "</td>"
 	                    "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"

@@ -2925,7 +2925,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 
       /* Write number of question */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
-			 "<div class=\"TEST_NUM_QST\">%s</div>",
+			 "<div class=\"BIG_INDEX\">%s</div>",
 	       Gbl.RowEvenOdd,
 	       StrNumQst);
 
