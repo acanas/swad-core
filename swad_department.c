@@ -253,8 +253,8 @@ void Dpt_EditDepartments (void)
 /*****************************************************************************/
 /************************** Get list of departments **************************/
 /*****************************************************************************/
-// If InsCod <= 0 ==> get all the departments
 // If InsCod  > 0 ==> get departments of an institution
+// If InsCod <= 0 ==> an empty list is returned
 
 void Dpt_GetListDepartments (long InsCod)
   {
@@ -262,21 +262,24 @@ void Dpt_GetListDepartments (long InsCod)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    unsigned NumDpt;
    struct Department *Dpt;
 
-   /***** Get departments from database *****/
-   switch (Gbl.Dpts.SelectedOrder)
+   /***** Free list of departments *****/
+   Dpt_FreeListDepartments ();	// List is initialized to empty
+
+   if (InsCod > 0)	// Institution specified
      {
-      case Dpt_ORDER_BY_DEPARTMENT:
-         sprintf (OrderBySubQuery,"FullName");
-         break;
-      case Dpt_ORDER_BY_NUM_TCHS:
-         sprintf (OrderBySubQuery,"NumTchs DESC,FullName");
-         break;
-     }
-   if (InsCod > 0)	// Only the departments of an institution
+      /***** Get departments from database *****/
+      switch (Gbl.Dpts.SelectedOrder)
+	{
+	 case Dpt_ORDER_BY_DEPARTMENT:
+	    sprintf (OrderBySubQuery,"FullName");
+	    break;
+	 case Dpt_ORDER_BY_NUM_TCHS:
+	    sprintf (OrderBySubQuery,"NumTchs DESC,FullName");
+	    break;
+	}
       sprintf (Query,"(SELECT departments.DptCod,departments.InsCod,"
 		     "departments.ShortName,departments.FullName,departments.WWW,"
 		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
@@ -296,76 +299,54 @@ void Dpt_GetListDepartments (long InsCod)
 	       InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 	       InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 	       OrderBySubQuery);
-   else			// All the departments
-      sprintf (Query,"(SELECT departments.DptCod,departments.InsCod,"
-		     "departments.ShortName,departments.FullName,departments.WWW,"
-		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-		     " FROM departments,usr_data,crs_usr"
-		     " WHERE departments.DptCod=usr_data.DptCod"
-		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role IN (%u,%u)"
-		     " GROUP BY departments.DptCod)"
-		     " UNION "
-		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
-		     " FROM departments"
-		     " WHERE DptCod NOT IN"
-		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
-		     " ORDER BY %s",
-	       (unsigned) Rol_NET,(unsigned) Rol_TCH,
-	       (unsigned) Rol_NET,(unsigned) Rol_TCH,
-	       OrderBySubQuery);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get departments");
+      Gbl.Dpts.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get departments");
 
-   if (NumRows) // Departments found...
-     {
-      // NumRows should be equal to Deg->NumCourses
-      Gbl.Dpts.Num = (unsigned) NumRows;
+      if (Gbl.Dpts.Num) // Departments found...
+	{
+	 /***** Create list with courses in degree *****/
+	 if ((Gbl.Dpts.Lst = (struct Department *) calloc ((size_t) Gbl.Dpts.Num,
+	                                                   sizeof (struct Department))) == NULL)
+	     Lay_ShowErrorAndExit ("Not enough memory to store departments.");
 
-      /***** Create list with courses in degree *****/
-      if ((Gbl.Dpts.Lst = (struct Department *) calloc (NumRows,sizeof (struct Department))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store departments.");
+	 /***** Get the departments *****/
+	 for (NumDpt = 0;
+	      NumDpt < Gbl.Dpts.Num;
+	      NumDpt++)
+	   {
+	    Dpt = &(Gbl.Dpts.Lst[NumDpt]);
 
-      /***** Get the departments *****/
-      for (NumDpt = 0;
-	   NumDpt < Gbl.Dpts.Num;
-	   NumDpt++)
-        {
-         Dpt = &(Gbl.Dpts.Lst[NumDpt]);
+	    /* Get next department */
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Get next department */
-         row = mysql_fetch_row (mysql_res);
+	    /* Get department code (row[0]) */
+	    if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	       Lay_ShowErrorAndExit ("Wrong code of department.");
 
-         /* Get department code (row[0]) */
-         if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of department.");
+	    /* Get institution code (row[1]) */
+	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	       Lay_ShowErrorAndExit ("Wrong code of institution.");
 
-         /* Get institution code (row[1]) */
-         if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-            Lay_ShowErrorAndExit ("Wrong code of institution.");
+	    /* Get the short name of the department (row[2]) */
+	    Str_Copy (Dpt->ShrtName,row[2],
+		      Hie_MAX_BYTES_SHRT_NAME);
 
-         /* Get the short name of the department (row[2]) */
-         Str_Copy (Dpt->ShrtName,row[2],
-                   Hie_MAX_BYTES_SHRT_NAME);
+	    /* Get the full name of the department (row[3]) */
+	    Str_Copy (Dpt->FullName,row[3],
+		      Hie_MAX_BYTES_FULL_NAME);
 
-         /* Get the full name of the department (row[3]) */
-         Str_Copy (Dpt->FullName,row[3],
-                   Hie_MAX_BYTES_FULL_NAME);
+	    /* Get the URL of the department (row[4]) */
+	    Str_Copy (Dpt->WWW,row[4],
+		      Cns_MAX_BYTES_WWW);
 
-         /* Get the URL of the department (row[4]) */
-         Str_Copy (Dpt->WWW,row[4],
-                   Cns_MAX_BYTES_WWW);
+	    /* Get number of non-editing teachers and teachers in this department (row[5]) */
+	    if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
+	       Dpt->NumTchs = 0;
+	   }
+	}
 
-         /* Get number of non-editing teachers and teachers in this department (row[5]) */
-         if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
-            Dpt->NumTchs = 0;
-        }
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
-   else
-      Gbl.Dpts.Num = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -451,12 +432,11 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
 void Dpt_FreeListDepartments (void)
   {
    if (Gbl.Dpts.Lst)
-     {
-      /***** Free memory used by the list of courses in degree *****/
+      /***** Free memory used by the list of departments *****/
       free ((void *) Gbl.Dpts.Lst);
-      Gbl.Dpts.Lst = NULL;
-      Gbl.Dpts.Num = 0;
-     }
+
+   Gbl.Dpts.Lst = NULL;
+   Gbl.Dpts.Num = 0;
   }
 
 /*****************************************************************************/
@@ -1130,28 +1110,56 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*********************** Put selector for department *************************/
 /*****************************************************************************/
 
-void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,bool SubmitFormOnChange)
+void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
+                                  unsigned SelectorWidth,	// In pixels
+                                  long FirstOption,
+                                  const char *TextWhenNoDptSelected,
+                                  bool SubmitFormOnChange)
   {
-   extern const char *Txt_Any_department;
+   extern const char *Txt_Another_department;
    unsigned NumDpt;
+   bool NoDptSelectable;
 
-   /***** Form to select department *****/
-   /* Get list of departments */
+   /***** Get list of departments *****/
    Dpt_GetListDepartments (InsCod);
 
-   /* List departments */
+   /***** Selector to select department *****/
+   /* Start selector */
    fprintf (Gbl.F.Out,"<select id=\"DptCod\" name=\"DptCod\""
-	              " style=\"width:375px;\"");
+	              " style=\"width:%upx;\"",
+	    SelectorWidth);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
 
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (DptCod == -1L)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Any_department);
+   if (FirstOption <= 0)
+     {
+      /* Option when no department selected */
+      if (FirstOption < 0)
+	{
+	 NoDptSelectable = false;
+	 if (TextWhenNoDptSelected)
+	    if (TextWhenNoDptSelected[0])
+	       NoDptSelectable = true;
 
+	 fprintf (Gbl.F.Out,"<option value=\"-1\"");
+	 if (DptCod < 0)
+	    fprintf (Gbl.F.Out," selected=\"selected\"");
+	 if (!NoDptSelectable)
+	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
+	 fprintf (Gbl.F.Out,">%s</option>",TextWhenNoDptSelected);
+	}
+
+      /* Another department selected (different to all departments listed) */
+      fprintf (Gbl.F.Out,"<option value=\"0\"");
+      if (DptCod == 0)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",
+	       Txt_Another_department);
+     }
+
+   /* List all departments */
    for (NumDpt = 0;
 	NumDpt < Gbl.Dpts.Num;
 	NumDpt++)
@@ -1162,8 +1170,9 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,bool SubmitFormOnChang
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Dpts.Lst[NumDpt].FullName);
      }
 
+   /* End selector */
    fprintf (Gbl.F.Out,"</select>");
 
-   /* Free list of departments */
+   /***** Free list of departments *****/
    Dpt_FreeListDepartments ();
   }

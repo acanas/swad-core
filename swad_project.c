@@ -2754,6 +2754,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Data;
    extern const char *Txt_Title;
    extern const char *Txt_Department;
+   extern const char *Txt_Another_department;
    extern const char *Txt_Preassigned_QUESTION;
    extern const char *Txt_Number_of_students;
    extern const char *Txt_Proposal;
@@ -2831,9 +2832,12 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
-   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,
-                                Prj->DptCod,	// Selected department
-                                false);		// Don't submit on change
+   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current institution
+                                Prj->DptCod,			// Selected department
+                                375,				// Width in pixels
+                                0,				// First option
+                                Txt_Another_department,		// Text when no department selected
+                                false);				// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

@@ -71,6 +71,10 @@ void Dpt_RecFormNewDpt (void);
 unsigned Dpt_GetTotalNumberOfDepartments (void);
 unsigned Dpt_GetNumDptsInIns (long InsCod);
 
-void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,bool SubmitFormOnChange);
+void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
+                                  unsigned SelectorWidth,	// In pixels
+                                  long FirstOptionSelectable,
+                                  const char *TextWhenNoDptSelected,
+                                  bool SubmitFormOnChange);
 
 #endif

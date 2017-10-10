@@ -94,6 +94,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
    extern const char *Txt_Department;
+   extern const char *Txt_Any_department;
    extern const char *Txt_No_of_indicators;
    extern const char *Txt_Indicators_of_courses;
    extern const char *Txt_Show_more_details;
@@ -147,9 +148,12 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
-   Dpt_WriteSelectorDepartment (-1L,			// All institutions
-                                Gbl.Stat.DptCod,	// Selected department
-                                true);			// Submit on change
+   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
+                                Gbl.Stat.DptCod,		// Selected department
+                                375,				// Width in pixels
+                                -1L,				// First option
+                                Txt_Any_department,		// Text when no department selected
+                                true);				// Submit on change
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -326,7 +330,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         if (Gbl.Stat.DptCod > 0)
+         if (Gbl.Stat.DptCod >= 0)	// 0 means another department
            {
             if (Gbl.Stat.DegTypCod > 0)
                sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -370,7 +374,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
            }
          break;
       case Sco_SCOPE_CTY:
-         if (Gbl.Stat.DptCod > 0)
+         if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
                            " WHERE institutions.CtyCod=%ld"
@@ -396,7 +400,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                      Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         if (Gbl.Stat.DptCod > 0)
+         if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod=%ld"
@@ -420,7 +424,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                      Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (Gbl.Stat.DptCod > 0)
+         if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod=%ld"
@@ -442,7 +446,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                      Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (Gbl.Stat.DptCod > 0)
+         if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.DegCod=%ld"
@@ -464,7 +468,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                      Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (Gbl.Stat.DptCod > 0)
+         if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE courses.CrsCod=%ld"

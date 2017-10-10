@@ -3964,14 +3964,12 @@ void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *Txt_Centre;
    extern const char *Txt_Another_centre;
    extern const char *Txt_Department;
-   extern const char *Txt_Another_department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
    const char *ClassForm = The_ClassForm[Gbl.Prefs.Theme];
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;
-   unsigned NumDpt;
    bool IAmATeacher;
 
    /***** Get my roles if not yet got *****/
@@ -4142,39 +4140,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Department,
 	       COL2_WIDTH);
-
-      /* Get list of departments in this institution */
-      Dpt_FreeListDepartments ();
-      if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
-	 Dpt_GetListDepartments (Gbl.Usrs.Me.UsrDat.InsCod);
-
-      /* Start form to select department */
       Act_FormGoToStart (ActChgMyDpt);
-      fprintf (Gbl.F.Out,"<select id=\"DptCod\" name=\"DptCod\""
-	                 " style=\"width:500px;\""
-			 " onchange=\"document.getElementById('%s').submit();\">"
-			 "<option value=\"-1\"",
-	       Gbl.Form.Id);
-      if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
-			 "<option value=\"0\"");
-      if (Gbl.Usrs.Me.UsrDat.Tch.DptCod == 0)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",
-	       Txt_Another_department);
-      for (NumDpt = 0;
-	   NumDpt < Gbl.Dpts.Num;
-	   NumDpt++)
-	{
-	 fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-		  Gbl.Dpts.Lst[NumDpt].DptCod);
-	 if (Gbl.Dpts.Lst[NumDpt].DptCod == Gbl.Usrs.Me.UsrDat.Tch.DptCod)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",
-		  Gbl.Dpts.Lst[NumDpt].FullName);
-	}
-      fprintf (Gbl.F.Out,"</select>");
+      Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
+				   Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
+				   500,					// Width in pixels
+				   -1L,					// First option
+				   "",					// Text when no department selected
+				   true);				// Submit on change
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
