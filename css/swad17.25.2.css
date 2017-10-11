@@ -2259,6 +2259,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 /********************** Number of question, project, etc. ********************/
 .BIG_INDEX	{color:#808080; font-size:20pt; font-weight:bold;}
 
+/******************************** Projects ***********************************/
+.PRJ_LST_USR
+	{
+	margin:0;
+	padding-left:1em;
+	}
+
 /********************************** Tests ************************************/
 .TAG_SEL	{box-sizing:border-box; width:346px;}
 .TAG_TXT	{box-sizing:border-box; width:346px;}

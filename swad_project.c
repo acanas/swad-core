@@ -1692,14 +1692,6 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 			      "PHOTO21x28",Pho_ZOOM,false);
 	    fprintf (Gbl.F.Out,"</td>");
 
-	    /* Write user's IDs */
-	    if (RoleInProject == Prj_ROLE_STD)
-	      {
-	       fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
-	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-	       fprintf (Gbl.F.Out,"</td>");
-	      }
-
 	    /* Write user's name */
 	    fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">%s</td>",
 		     Gbl.Usrs.Other.UsrDat.FullName);
@@ -1765,7 +1757,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    if (NumUsrs)
      {
       /***** Write users *****/
-      fprintf (Gbl.F.Out,"<ul>");
+      fprintf (Gbl.F.Out,"<ul class=\"PRJ_LST_USR\">");
 
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;
@@ -1777,23 +1769,8 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 
 	 /* Get user's data */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
-	   {
-	    /* Start row for this user */
-	    fprintf (Gbl.F.Out,"<li>");
-
-	    /* Write user's IDs */
-	    if (RoleInProject == Prj_ROLE_STD)
-	      {
-	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-	       fprintf (Gbl.F.Out,"<br />");
-	      }
-
 	    /* Write user's name */
-	    fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
-
-	    /* End row for this user */
-	    fprintf (Gbl.F.Out,"</li>");
-	   }
+	    fprintf (Gbl.F.Out,"<li>%s</li>",Gbl.Usrs.Other.UsrDat.FullName);
 	}
 
       fprintf (Gbl.F.Out,"</ul>");
@@ -2323,7 +2300,7 @@ void Prj_GetListProjects (void)
 		      Prj_MAX_BYTES_SUBQUERY);	// Non-preassigned projects
 	    break;
 	 default:
-	    HidVisSubQuery[0] = '\0';		// All projects
+	    PreNonSubQuery[0] = '\0';		// All projects
 	    break;
 	}
 

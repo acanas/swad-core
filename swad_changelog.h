@@ -248,19 +248,19 @@
 
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
 
-// TODO: Los profesores no editores no deberían recibir notificaciones de solicitudes de inscripción.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.25.1 (2017-10-10)"
-#define CSS_FILE		"swad17.25.css"
+#define Log_PLATFORM_VERSION	"SWAD 17.25.2 (2017-10-11)"
+#define CSS_FILE		"swad17.25.2.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.25.2:  Oct 11, 2017  Students' IDs removed from listing of projects. Suggested by Pedro Villar Castro.
+					Fixed bug in listing of projects. (234345 lines)
         Version 17.25.1:  Oct 10, 2017  Fixed problem in layout of projects. (234357 lines)
         Version 17.25:    Oct 10, 2017  New column with the number of the project in listing of projects. (234336 lines)
         Version 17.24.2:  Oct 10, 2017  Code refactoring in projects filter. (234209 lines)
