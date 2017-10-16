@@ -252,13 +252,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.25.2 (2017-10-11)"
+#define Log_PLATFORM_VERSION	"SWAD 17.25.3 (2017-10-16)"
 #define CSS_FILE		"swad17.25.2.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.25.3:  Oct 16, 2017  Surnames before names in listing of projects. Suggested by Pedro Villar Castro. (234351 lines)
         Version 17.25.2:  Oct 11, 2017  Students' IDs removed from listing of projects. Suggested by Pedro Villar Castro.
 					Fixed bug in listing of projects. (234345 lines)
         Version 17.25.1:  Oct 10, 2017  Fixed problem in layout of projects. (234357 lines)

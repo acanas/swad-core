@@ -1769,8 +1769,13 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 
 	 /* Get user's data */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
-	    /* Write user's name */
-	    fprintf (Gbl.F.Out,"<li>%s</li>",Gbl.Usrs.Other.UsrDat.FullName);
+	   {
+	    /* Write user's name in "Surname1 Surname2, FirstName" format */
+            fprintf (Gbl.F.Out,"<li>%s",Gbl.Usrs.Other.UsrDat.Surname1);
+	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+               fprintf (Gbl.F.Out," %s",Gbl.Usrs.Other.UsrDat.Surname2);
+            fprintf (Gbl.F.Out,", %s</li>",Gbl.Usrs.Other.UsrDat.FirstName);
+	   }
 	}
 
       fprintf (Gbl.F.Out,"</ul>");
