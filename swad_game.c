@@ -661,9 +661,7 @@ static void Gam_ShowOneGame (long GamCod,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<p class=\"%s\">"
-                      "%s"
-                      "</p>"
+   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
                       "</td>"
                       "</tr>",
             Game.Status.Visible ? "DAT" :

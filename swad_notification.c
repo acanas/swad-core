@@ -803,7 +803,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
    /***** Parameter to go to another course/degree/centre/institution *****/
    if (Gbl.Form.Inside)
      {
-      if (CrsCod > 0)				// Course specified
+      if (CrsCod > 0)					// Course specified
 	{
 	 if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	    Crs_PutParamCrsCod (CrsCod);		// Go to another course

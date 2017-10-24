@@ -820,7 +820,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">"
-	              "<p class=\"%s\">%s</p>"
+	              "<div class=\"PAR %s\">%s</div>"
                       "</td>"
                       "</tr>",
             Gbl.RowEvenOdd,

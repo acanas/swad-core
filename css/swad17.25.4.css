@@ -2051,6 +2051,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LST_EDIT_REC_HID	{width:250px; color:#89BE87; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_ROWS		{width:30px;  color:#404040; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
+/************** Paragraph (margin on top and bottom of a div) ****************/
+.PAR
+	{
+	margin-top:1em;
+	margin-bottom:1em;
+	}
+
 /*****************************************************************************/
 
 .T1			{color:#404040; font-size:15pt;}
