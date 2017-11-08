@@ -248,17 +248,45 @@
 
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
 
+// TODO: Sugerencia del profesor Cristóbal Lozano por correo del 3/11/2017:
+// He detectado este año que, al mostrar la lista de los alumnos (p.ej., en varias columnas) en una hoja A4,
+// en muchos casos no aparece el nombre/apellido completo del alumno si éste excede un nº determinado de caracteres.
+// Por ejemplo, tengo una alumna llamada 'María Maldonado', pero sólo me aparece 'Maldon...'.
+// Al tener varios alumnos extranjeros, cuando no me aparece el apellido completo, me es complicado averiguarlo.
+// Me gusta tener una lista con sus fotos para ir haciendo anotaciones manuales.
+// ¿Sería posible permitir que apareciesen más caracteres en sus nombres debajo de la foto?
+
+// TODO: A superuser can not see records of teachers? Why?
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.25.4 (2017-10-24)"
+#define Log_PLATFORM_VERSION	"SWAD 17.26 (2017-11-08)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.26:    Nov 08, 2017  Tables converted to MyISAM.
+					? changes necessary in database:
+UPDATE crs_usr SET LastAccTst=FROM_UNIXTIME(0) WHERE LastAccTst=0;
+DROP TABLE IF EXISTS deg_admin;
+DROP TABLE IF EXISTS imported_groups;
+DROP TABLE IF EXISTS imported_sessions;
+DROP TABLE IF EXISTS imported_students;
+DROP TABLE IF EXISTS log;
+DROP TABLE IF EXISTS log_new;
+DROP TABLE IF EXISTS new_institutions;
+DROP TABLE IF EXISTS notif_backup;
+DROP TABLE IF EXISTS sta_notif_backup;
+DROP TABLE IF EXISTS timetable_crs_backup;
+DROP TABLE IF EXISTS timetable_tut_backup;
+DROP TABLE IF EXISTS usr_data_backup;
+UPDATE usr_figures SET FirstClickTime=FROM_UNIXTIME(0) WHERE FirstClickTime=0;
+UPDATE usr_last SET LastAccNotif=FROM_UNIXTIME(0) WHERE LastAccNotif=0;
+
         Version 17.25.4:  Oct 24, 2017  Fixed bug in assignments, games, surveys and agenda. (234352 lines)
         Version 17.25.3:  Oct 16, 2017  Surnames before names in listing of projects. Suggested by Pedro Villar Castro. (234351 lines)
         Version 17.25.2:  Oct 11, 2017  Students' IDs removed from listing of projects. Suggested by Pedro Villar Castro.

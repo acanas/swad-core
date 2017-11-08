@@ -11985,3 +11985,609 @@ SELECT crs_grp.GrpCod FROM crs_grp,crs_grp_types WHERE crs_grp_types.CrsCod=21 A
 
 DELETE FROM file_view USING file_view,files WHERE files.FileBrowser IN (11,26,5,13) AND files.Cod IN (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp WHERE crs_grp_types.CrsCod=21 AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod) AND files.FilCod=file_view.FilCod;
 
+
+
+----- swad-core 17.26 (2017-11-08) -----
+
+
+mysql> SHOW TABLES;
++----------------------+
+| Tables_in_swad       |
++----------------------+
+| IP_prefs             |
+| actions              |
+| actions_MFU          |
+| admin                |
+| agendas              |
+| ann_seen             |
+| announcements        |
+| asg_grp              |
+| assignments          |
+| att_events           |
+| att_grp              |
+| att_usr              |
+| banners              |
+| birthdays_today      |
+| centres              |
+| chat                 |
+| clicks_without_photo |
+| clipboard            |
+| connected            |
+| countries            |
+| courses              |
+| crs_grp              |
+| crs_grp_types        |
+| crs_grp_usr          |
+| crs_info_read        |
+| crs_info_src         |
+| crs_info_txt         |
+| crs_last             |
+| crs_record_fields    |
+| crs_records          |
+| crs_usr              |
+| crs_usr_requests     |
+| debug                |
+| deg_admin            |
+| deg_types            |
+| degrees              |
+| departments          |
+| exam_announcements   |
+| expanded_folders     |
+| file_browser_last    |
+| file_browser_size    |
+| file_view            |
+| files                |
+| forum_disabled_post  |
+| forum_post           |
+| forum_thr_clip       |
+| forum_thr_read       |
+| forum_thread         |
+| gam_answers          |
+| gam_grp              |
+| gam_questions        |
+| gam_users            |
+| games                |
+| hidden_params        |
+| holidays             |
+| institutions         |
+| links                |
+| log                  |
+| log_banners          |
+| log_comments         |
+| log_full             |
+| log_new              |
+| log_recent           |
+| log_search           |
+| log_ws               |
+| mail_domains         |
+| marks_properties     |
+| msg_banned           |
+| msg_content          |
+| msg_content_deleted  |
+| msg_rcv              |
+| msg_rcv_deleted      |
+| msg_snt              |
+| msg_snt_deleted      |
+| notices              |
+| notices_deleted      |
+| notif                |
+| pending_emails       |
+| pending_passwd       |
+| places               |
+| plugins              |
+| prj_usr              |
+| projects             |
+| sessions             |
+| social_comments      |
+| social_comments_fav  |
+| social_notes         |
+| social_notes_fav     |
+| social_posts         |
+| social_pubs          |
+| social_timelines     |
+| sta_degrees          |
+| sta_notif            |
+| surveys              |
+| svy_answers          |
+| svy_grp              |
+| svy_questions        |
+| svy_users            |
+| timetable_crs        |
+| timetable_crs_backup |
+| timetable_tut        |
+| timetable_tut_backup |
+| tst_answers          |
+| tst_config           |
+| tst_exam_questions   |
+| tst_exams            |
+| tst_question_tags    |
+| tst_questions        |
+| tst_status           |
+| tst_tags             |
+| usr_IDs              |
+| usr_banned           |
+| usr_data             |
+| usr_duplicated       |
+| usr_emails           |
+| usr_figures          |
+| usr_follow           |
+| usr_last             |
+| usr_nicknames        |
+| usr_report           |
+| usr_webs             |
+| ws_keys              |
++----------------------+
+122 rows in set (0,00 sec)
+
+SHOW TABLE STATUS WHERE Name = 'IP_prefs';
+ALTER TABLE IP_prefs ENGINE=MyISAM;
+OPTIMIZE TABLE IP_prefs;
+
+SHOW TABLE STATUS WHERE Name = 'actions';
+ALTER TABLE actions ENGINE=MyISAM;
+OPTIMIZE TABLE actions;
+
+SHOW TABLE STATUS WHERE Name = 'actions_MFU';
+ALTER TABLE actions_MFU ENGINE=MyISAM;
+OPTIMIZE TABLE actions_MFU;
+
+SHOW TABLE STATUS WHERE Name = 'admin';
+ALTER TABLE admin ENGINE=MyISAM;
+OPTIMIZE TABLE admin;
+
+SHOW TABLE STATUS WHERE Name = 'agendas';
+ALTER TABLE agendas ENGINE=MyISAM;
+OPTIMIZE TABLE agendas;
+
+SHOW TABLE STATUS WHERE Name = 'ann_seen';
+ALTER TABLE ann_seen ENGINE=MyISAM;
+OPTIMIZE TABLE ann_seen;
+
+SHOW TABLE STATUS WHERE Name = 'announcements';
+ALTER TABLE announcements ENGINE=MyISAM;
+OPTIMIZE TABLE announcements;
+
+SHOW TABLE STATUS WHERE Name = 'asg_grp';
+ALTER TABLE asg_grp ENGINE=MyISAM;
+OPTIMIZE TABLE asg_grp;
+
+SHOW TABLE STATUS WHERE Name = 'assignments';
+ALTER TABLE assignments ENGINE=MyISAM;
+OPTIMIZE TABLE assignments;
+
+SHOW TABLE STATUS WHERE Name = 'att_events';
+ALTER TABLE att_events ENGINE=MyISAM;
+OPTIMIZE TABLE att_events;
+
+SHOW TABLE STATUS WHERE Name = 'att_grp';
+ALTER TABLE att_grp ENGINE=MyISAM;
+OPTIMIZE TABLE att_grp;
+
+SHOW TABLE STATUS WHERE Name = 'att_usr';
+ALTER TABLE att_usr ENGINE=MyISAM;
+OPTIMIZE TABLE att_usr;
+
+SHOW TABLE STATUS WHERE Name = 'banners';
+ALTER TABLE banners ENGINE=MyISAM;
+OPTIMIZE TABLE banners;
+
+SHOW TABLE STATUS WHERE Name = 'birthdays_today';
+ALTER TABLE birthdays_today ENGINE=MyISAM;
+OPTIMIZE TABLE birthdays_today;
+
+SHOW TABLE STATUS WHERE Name = 'centres';
+ALTER TABLE centres ENGINE=MyISAM;
+OPTIMIZE TABLE centres;
+
+SHOW TABLE STATUS WHERE Name = 'chat';
+ALTER TABLE chat ENGINE=MyISAM;
+OPTIMIZE TABLE chat;
+
+SHOW TABLE STATUS WHERE Name = 'clicks_without_photo';
+ALTER TABLE clicks_without_photo ENGINE=MyISAM;
+OPTIMIZE TABLE clicks_without_photo;
+
+SHOW TABLE STATUS WHERE Name = 'clipboard';
+ALTER TABLE clipboard ENGINE=MyISAM;
+OPTIMIZE TABLE clipboard;
+
+SHOW TABLE STATUS WHERE Name = 'connected';
+ALTER TABLE connected ENGINE=MyISAM;
+OPTIMIZE TABLE connected;
+
+SHOW TABLE STATUS WHERE Name = 'countries';
+ALTER TABLE countries ENGINE=MyISAM;
+OPTIMIZE TABLE countries;
+
+SHOW TABLE STATUS WHERE Name = 'courses';
+ALTER TABLE courses ENGINE=MyISAM;
+OPTIMIZE TABLE courses;
+
+SHOW TABLE STATUS WHERE Name = 'crs_grp';
+ALTER TABLE crs_grp ENGINE=MyISAM;
+OPTIMIZE TABLE crs_grp;
+
+SHOW TABLE STATUS WHERE Name = 'crs_grp_types';
+ALTER TABLE crs_grp_types ENGINE=MyISAM;
+OPTIMIZE TABLE crs_grp_types;
+
+SHOW TABLE STATUS WHERE Name = 'crs_grp_usr';
+ALTER TABLE crs_grp_usr ENGINE=MyISAM;
+OPTIMIZE TABLE crs_grp_usr;
+
+SHOW TABLE STATUS WHERE Name = 'crs_info_read';
+ALTER TABLE crs_info_read ENGINE=MyISAM;
+OPTIMIZE TABLE crs_info_read;
+
+SHOW TABLE STATUS WHERE Name = 'crs_info_src';
+ALTER TABLE crs_info_src ENGINE=MyISAM;
+OPTIMIZE TABLE crs_info_src;
+
+SHOW TABLE STATUS WHERE Name = 'crs_info_txt';
+ALTER TABLE crs_info_txt ENGINE=MyISAM;
+OPTIMIZE TABLE crs_info_txt;
+
+SHOW TABLE STATUS WHERE Name = 'crs_last';
+ALTER TABLE crs_last ENGINE=MyISAM;
+OPTIMIZE TABLE crs_last;
+
+SHOW TABLE STATUS WHERE Name = 'crs_record_fields';
+ALTER TABLE crs_record_fields ENGINE=MyISAM;
+OPTIMIZE TABLE crs_record_fields;
+
+SHOW TABLE STATUS WHERE Name = 'crs_records';
+ALTER TABLE crs_records ENGINE=MyISAM;
+OPTIMIZE TABLE crs_records;
+
+UPDATE crs_usr SET LastAccTst=FROM_UNIXTIME(0) WHERE LastAccTst=0;
+SHOW TABLE STATUS WHERE Name = 'crs_usr';
+ALTER TABLE crs_usr ENGINE=MyISAM;
+OPTIMIZE TABLE crs_usr;
+
+SHOW TABLE STATUS WHERE Name = 'crs_usr_requests';
+ALTER TABLE crs_usr_requests ENGINE=MyISAM;
+OPTIMIZE TABLE crs_usr_requests;
+
+SHOW TABLE STATUS WHERE Name = 'debug';
+ALTER TABLE debug ENGINE=MyISAM;
+OPTIMIZE TABLE debug;
+
+SHOW TABLE STATUS WHERE Name = 'deg_types';
+ALTER TABLE deg_types ENGINE=MyISAM;
+OPTIMIZE TABLE deg_types;
+
+SHOW TABLE STATUS WHERE Name = 'degrees';
+ALTER TABLE degrees ENGINE=MyISAM;
+OPTIMIZE TABLE degrees;
+
+SHOW TABLE STATUS WHERE Name = 'departments';
+ALTER TABLE departments ENGINE=MyISAM;
+OPTIMIZE TABLE departments;
+
+SHOW TABLE STATUS WHERE Name = 'exam_announcements';
+ALTER TABLE exam_announcements ENGINE=MyISAM;
+OPTIMIZE TABLE exam_announcements;
+
+SHOW TABLE STATUS WHERE Name = 'expanded_folders';
+ALTER TABLE expanded_folders ENGINE=MyISAM;
+OPTIMIZE TABLE expanded_folders;
+
+SHOW TABLE STATUS WHERE Name = 'file_browser_last';
+ALTER TABLE file_browser_last ENGINE=MyISAM;
+OPTIMIZE TABLE file_browser_last;
+
+SHOW TABLE STATUS WHERE Name = 'file_browser_size';
+ALTER TABLE file_browser_size ENGINE=MyISAM;
+OPTIMIZE TABLE file_browser_size;
+
+SHOW TABLE STATUS WHERE Name = 'file_view';
+ALTER TABLE file_view ENGINE=MyISAM;
+OPTIMIZE TABLE file_view;
+
+SHOW TABLE STATUS WHERE Name = 'files';
+ALTER TABLE files ENGINE=MyISAM;
+OPTIMIZE TABLE files;
+
+SHOW TABLE STATUS WHERE Name = 'forum_disabled_post';
+ALTER TABLE forum_disabled_post ENGINE=MyISAM;
+OPTIMIZE TABLE forum_disabled_post;
+
+SHOW TABLE STATUS WHERE Name = 'forum_post';
+ALTER TABLE forum_post ENGINE=MyISAM;
+OPTIMIZE TABLE forum_post;
+
+SHOW TABLE STATUS WHERE Name = 'forum_thr_clip';
+ALTER TABLE forum_thr_clip ENGINE=MyISAM;
+OPTIMIZE TABLE forum_thr_clip;
+
+SHOW TABLE STATUS WHERE Name = 'forum_thr_read';
+ALTER TABLE forum_thr_read ENGINE=MyISAM;
+OPTIMIZE TABLE forum_thr_read;
+
+SHOW TABLE STATUS WHERE Name = 'forum_thread';
+ALTER TABLE forum_thread ENGINE=MyISAM;
+OPTIMIZE TABLE forum_thread;
+
+SHOW TABLE STATUS WHERE Name = 'gam_answers';
+ALTER TABLE gam_answers ENGINE=MyISAM;
+OPTIMIZE TABLE gam_answers;
+
+SHOW TABLE STATUS WHERE Name = 'gam_grp';
+ALTER TABLE gam_grp ENGINE=MyISAM;
+OPTIMIZE TABLE gam_grp;
+
+SHOW TABLE STATUS WHERE Name = 'gam_questions';
+ALTER TABLE gam_questions ENGINE=MyISAM;
+OPTIMIZE TABLE gam_questions;
+
+SHOW TABLE STATUS WHERE Name = 'gam_users';
+ALTER TABLE gam_users ENGINE=MyISAM;
+OPTIMIZE TABLE gam_users;
+
+SHOW TABLE STATUS WHERE Name = 'games';
+ALTER TABLE games ENGINE=MyISAM;
+OPTIMIZE TABLE games;
+
+SHOW TABLE STATUS WHERE Name = 'hidden_params';
+ALTER TABLE hidden_params ENGINE=MyISAM;
+OPTIMIZE TABLE hidden_params;
+
+SHOW TABLE STATUS WHERE Name = 'holidays';
+ALTER TABLE holidays ENGINE=MyISAM;
+OPTIMIZE TABLE holidays;
+
+SHOW TABLE STATUS WHERE Name = 'institutions';
+ALTER TABLE institutions ENGINE=MyISAM;
+OPTIMIZE TABLE institutions;
+
+SHOW TABLE STATUS WHERE Name = 'links';
+ALTER TABLE links ENGINE=MyISAM;
+OPTIMIZE TABLE links;
+
+SHOW TABLE STATUS WHERE Name = 'links';
+ALTER TABLE links ENGINE=MyISAM;
+OPTIMIZE TABLE links;
+
+SHOW TABLE STATUS WHERE Name = 'log_banners';
+ALTER TABLE log_banners ENGINE=MyISAM;
+OPTIMIZE TABLE log_banners;
+
+SHOW TABLE STATUS WHERE Name = 'log_comments';
+ALTER TABLE log_comments ENGINE=MyISAM;
+OPTIMIZE TABLE log_comments;
+
+SHOW TABLE STATUS WHERE Name = 'log_full';
+ALTER TABLE log_full ENGINE=MyISAM;	# WARNING: This can be very slow
+OPTIMIZE TABLE log_full; 		# WARNING: This can be very slow
+
+SHOW TABLE STATUS WHERE Name = 'log_recent';
+ALTER TABLE log_recent ENGINE=MyISAM;	# WARNING: This can be very slow
+OPTIMIZE TABLE log_recent; 		# WARNING: This can be very slow
+
+SHOW TABLE STATUS WHERE Name = 'log_search';
+ALTER TABLE log_search ENGINE=MyISAM;
+OPTIMIZE TABLE log_search;
+
+SHOW TABLE STATUS WHERE Name = 'log_ws';
+ALTER TABLE log_ws ENGINE=MyISAM;
+OPTIMIZE TABLE log_ws;
+
+SHOW TABLE STATUS WHERE Name = 'mail_domains';
+ALTER TABLE mail_domains ENGINE=MyISAM;
+OPTIMIZE TABLE mail_domains;
+
+SHOW TABLE STATUS WHERE Name = 'marks_properties';
+ALTER TABLE marks_properties ENGINE=MyISAM;
+OPTIMIZE TABLE marks_properties;
+
+SHOW TABLE STATUS WHERE Name = 'msg_banned';
+ALTER TABLE msg_banned ENGINE=MyISAM;
+OPTIMIZE TABLE msg_banned;
+
+SHOW TABLE STATUS WHERE Name = 'msg_content';
+ALTER TABLE msg_content ENGINE=MyISAM;
+OPTIMIZE TABLE msg_content;
+
+SHOW TABLE STATUS WHERE Name = 'msg_content_deleted';
+ALTER TABLE msg_content_deleted ENGINE=MyISAM;
+OPTIMIZE TABLE msg_content_deleted;
+
+SHOW TABLE STATUS WHERE Name = 'msg_rcv';
+ALTER TABLE msg_rcv ENGINE=MyISAM;
+OPTIMIZE TABLE msg_rcv;
+
+SHOW TABLE STATUS WHERE Name = 'msg_rcv_deleted';
+ALTER TABLE msg_rcv_deleted ENGINE=MyISAM;
+OPTIMIZE TABLE msg_rcv_deleted;
+
+SHOW TABLE STATUS WHERE Name = 'msg_snt';
+ALTER TABLE msg_snt ENGINE=MyISAM;
+OPTIMIZE TABLE msg_snt;
+
+SHOW TABLE STATUS WHERE Name = 'msg_snt_deleted';
+ALTER TABLE msg_snt_deleted ENGINE=MyISAM;
+OPTIMIZE TABLE msg_snt_deleted;
+
+SHOW TABLE STATUS WHERE Name = 'notices';
+ALTER TABLE notices ENGINE=MyISAM;
+OPTIMIZE TABLE notices;
+
+SHOW TABLE STATUS WHERE Name = 'notices_deleted';
+ALTER TABLE notices_deleted ENGINE=MyISAM;
+OPTIMIZE TABLE notices_deleted;
+
+SHOW TABLE STATUS WHERE Name = 'notif';
+ALTER TABLE notif ENGINE=MyISAM;
+OPTIMIZE TABLE notif;
+
+SHOW TABLE STATUS WHERE Name = 'pending_emails';
+ALTER TABLE pending_emails ENGINE=MyISAM;
+OPTIMIZE TABLE pending_emails;
+
+SHOW TABLE STATUS WHERE Name = 'pending_passwd';
+ALTER TABLE pending_passwd ENGINE=MyISAM;
+OPTIMIZE TABLE pending_passwd;
+
+SHOW TABLE STATUS WHERE Name = 'places';
+ALTER TABLE places ENGINE=MyISAM;
+OPTIMIZE TABLE places;
+
+SHOW TABLE STATUS WHERE Name = 'plugins';
+ALTER TABLE plugins ENGINE=MyISAM;
+OPTIMIZE TABLE plugins;
+
+SHOW TABLE STATUS WHERE Name = 'prj_usr';
+ALTER TABLE prj_usr ENGINE=MyISAM;
+OPTIMIZE TABLE prj_usr;
+
+SHOW TABLE STATUS WHERE Name = 'projects';
+ALTER TABLE projects ENGINE=MyISAM;
+OPTIMIZE TABLE projects;
+
+SHOW TABLE STATUS WHERE Name = 'sessions';
+ALTER TABLE sessions ENGINE=MyISAM;
+OPTIMIZE TABLE sessions;
+
+SHOW TABLE STATUS WHERE Name = 'social_comments';
+ALTER TABLE social_comments ENGINE=MyISAM;
+OPTIMIZE TABLE social_comments;
+
+SHOW TABLE STATUS WHERE Name = 'social_comments_fav';
+ALTER TABLE social_comments_fav ENGINE=MyISAM;
+OPTIMIZE TABLE social_comments_fav;
+
+SHOW TABLE STATUS WHERE Name = 'social_notes';
+ALTER TABLE social_notes ENGINE=MyISAM;
+OPTIMIZE TABLE social_notes;
+
+SHOW TABLE STATUS WHERE Name = 'social_notes_fav';
+ALTER TABLE social_notes_fav ENGINE=MyISAM;
+OPTIMIZE TABLE social_notes_fav;
+
+SHOW TABLE STATUS WHERE Name = 'social_posts';
+ALTER TABLE social_posts ENGINE=MyISAM;
+OPTIMIZE TABLE social_posts;
+
+SHOW TABLE STATUS WHERE Name = 'social_pubs';
+ALTER TABLE social_pubs ENGINE=MyISAM;
+OPTIMIZE TABLE social_pubs;
+
+SHOW TABLE STATUS WHERE Name = 'social_timelines';
+ALTER TABLE social_timelines ENGINE=MyISAM;
+OPTIMIZE TABLE social_timelines;
+
+SHOW TABLE STATUS WHERE Name = 'sta_degrees';
+ALTER TABLE sta_degrees ENGINE=MyISAM;
+OPTIMIZE TABLE sta_degrees;
+
+SHOW TABLE STATUS WHERE Name = 'sta_notif';
+ALTER TABLE sta_notif ENGINE=MyISAM;
+OPTIMIZE TABLE sta_notif;
+
+SHOW TABLE STATUS WHERE Name = 'surveys';
+ALTER TABLE surveys ENGINE=MyISAM;
+OPTIMIZE TABLE surveys;
+
+SHOW TABLE STATUS WHERE Name = 'svy_answers';
+ALTER TABLE svy_answers ENGINE=MyISAM;
+OPTIMIZE TABLE svy_answers;
+
+SHOW TABLE STATUS WHERE Name = 'svy_grp';
+ALTER TABLE svy_grp ENGINE=MyISAM;
+OPTIMIZE TABLE svy_grp;
+
+SHOW TABLE STATUS WHERE Name = 'svy_questions';
+ALTER TABLE svy_questions ENGINE=MyISAM;
+OPTIMIZE TABLE svy_questions;
+
+SHOW TABLE STATUS WHERE Name = 'svy_users';
+ALTER TABLE svy_users ENGINE=MyISAM;
+OPTIMIZE TABLE svy_users;
+
+SHOW TABLE STATUS WHERE Name = 'timetable_crs';
+ALTER TABLE timetable_crs ENGINE=MyISAM;
+OPTIMIZE TABLE timetable_crs;
+
+SHOW TABLE STATUS WHERE Name = 'timetable_tut';
+ALTER TABLE timetable_tut ENGINE=MyISAM;
+OPTIMIZE TABLE timetable_tut;
+
+SHOW TABLE STATUS WHERE Name = 'tst_answers';
+ALTER TABLE tst_answers ENGINE=MyISAM;
+OPTIMIZE TABLE tst_answers;
+
+SHOW TABLE STATUS WHERE Name = 'tst_config';
+ALTER TABLE tst_config ENGINE=MyISAM;
+OPTIMIZE TABLE tst_config;
+
+SHOW TABLE STATUS WHERE Name = 'tst_exam_questions';
+ALTER TABLE tst_exam_questions ENGINE=MyISAM;
+OPTIMIZE TABLE tst_exam_questions;
+
+SHOW TABLE STATUS WHERE Name = 'tst_exams';
+ALTER TABLE tst_exams ENGINE=MyISAM;
+OPTIMIZE TABLE tst_exams;
+
+SHOW TABLE STATUS WHERE Name = 'tst_question_tags';
+ALTER TABLE tst_question_tags ENGINE=MyISAM;
+OPTIMIZE TABLE tst_question_tags;
+
+SHOW TABLE STATUS WHERE Name = 'tst_questions';
+ALTER TABLE tst_questions ENGINE=MyISAM;
+OPTIMIZE TABLE tst_questions;
+
+SHOW TABLE STATUS WHERE Name = 'tst_status';
+ALTER TABLE tst_status ENGINE=MyISAM;
+OPTIMIZE TABLE tst_status;
+
+SHOW TABLE STATUS WHERE Name = 'tst_tags';
+ALTER TABLE tst_tags ENGINE=MyISAM;
+OPTIMIZE TABLE tst_tags;
+
+SHOW TABLE STATUS WHERE Name = 'usr_IDs';
+ALTER TABLE usr_IDs ENGINE=MyISAM;
+OPTIMIZE TABLE usr_IDs;
+
+SHOW TABLE STATUS WHERE Name = 'usr_banned';
+ALTER TABLE usr_banned ENGINE=MyISAM;
+OPTIMIZE TABLE usr_banned;
+
+SHOW TABLE STATUS WHERE Name = 'usr_data';
+ALTER TABLE usr_data ENGINE=MyISAM;
+OPTIMIZE TABLE usr_data;
+
+SHOW TABLE STATUS WHERE Name = 'usr_duplicated';
+ALTER TABLE usr_duplicated ENGINE=MyISAM;
+OPTIMIZE TABLE usr_duplicated;
+
+SHOW TABLE STATUS WHERE Name = 'usr_emails';
+ALTER TABLE usr_emails ENGINE=MyISAM;
+OPTIMIZE TABLE usr_emails;
+
+SHOW TABLE STATUS WHERE Name = 'usr_figures';
+ALTER TABLE usr_figures ENGINE=MyISAM;
+OPTIMIZE TABLE usr_figures;
+
+SHOW TABLE STATUS WHERE Name = 'usr_follow';
+ALTER TABLE usr_follow ENGINE=MyISAM;
+OPTIMIZE TABLE usr_follow;
+
+SHOW TABLE STATUS WHERE Name = 'usr_last';
+ALTER TABLE usr_last ENGINE=MyISAM;
+OPTIMIZE TABLE usr_last;
+
+SHOW TABLE STATUS WHERE Name = 'usr_nicknames';
+ALTER TABLE usr_nicknames ENGINE=MyISAM;
+OPTIMIZE TABLE usr_nicknames;
+
+SHOW TABLE STATUS WHERE Name = 'usr_report';
+ALTER TABLE usr_report ENGINE=MyISAM;
+OPTIMIZE TABLE usr_report;
+
+SHOW TABLE STATUS WHERE Name = 'usr_webs';
+ALTER TABLE usr_webs ENGINE=MyISAM;
+OPTIMIZE TABLE usr_webs;
+
+SHOW TABLE STATUS WHERE Name = 'ws_keys';
+ALTER TABLE ws_keys ENGINE=MyISAM;
+OPTIMIZE TABLE ws_keys;
