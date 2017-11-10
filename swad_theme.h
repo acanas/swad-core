@@ -45,7 +45,7 @@ typedef enum
    The_THEME_YELLOW  = 3,
    The_THEME_UNKNOWN = 4,
    } The_Theme_t;
-#define The_THEME_DEFAULT The_THEME_GREY
+#define The_THEME_DEFAULT The_THEME_WHITE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

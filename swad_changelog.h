@@ -258,19 +258,23 @@
 
 // TODO: A superuser can not see records of teachers? Why?
 
+// TODO: After "Do not show it again" nothing is displayed.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.26 (2017-11-08)"
+#define Log_PLATFORM_VERSION	"SWAD 17.26.1 (2017-11-10)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.26.1:  Nov 10, 2017  Default theme is white. (234380 lines)
         Version 17.26:    Nov 08, 2017  Tables converted to MyISAM.
-					? changes necessary in database:
+					Cleaning database. (234379 lines)
+					15 changes necessary in database:
 UPDATE crs_usr SET LastAccTst=FROM_UNIXTIME(0) WHERE LastAccTst=0;
 DROP TABLE IF EXISTS deg_admin;
 DROP TABLE IF EXISTS imported_groups;
