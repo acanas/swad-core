@@ -193,10 +193,14 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    unsigned long NumRows;
 
    /***** Get number of rows of header and footer from database *****/
+   /* There should be a single file in database.
+      If, due to an error, there is more than one file,
+      get the number of rows of the more recent file. */
    sprintf (Query,"SELECT marks_properties.%s,marks_properties.%s"
 	          " FROM files,marks_properties"
                   " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-                  " AND files.FilCod=marks_properties.FilCod",
+                  " AND files.FilCod=marks_properties.FilCod"
+                  " ORDER BY files.FilCod DESC LIMIT 1",	// On duplicate entries, get the more recent
             Mrk_HeadOrFootStr[Brw_HEADER],
             Mrk_HeadOrFootStr[Brw_FOOTER],
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
@@ -218,11 +222,9 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
       if (sscanf (row[1],"%u",&(Marks->Footer)) != 1)
          Lay_ShowErrorAndExit ("Wrong number of footer rows.");
      }
-   else if (NumRows == 0)	// Unknown numbers of header and footer rows
+   else	// Unknown numbers of header and footer rows
       Marks->Header =
       Marks->Footer = 0;
-   else	// Number of entries in database > 1
-      Lay_ShowErrorAndExit ("Error when getting the number of rows in header and footer.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
