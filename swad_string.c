@@ -699,8 +699,10 @@ bool Str_URLLooksValid (const char *URL)
 
 void Str_ConvertToTitleType (char *Str)
   {
-   char Ch,*Ptr,*Ptr2;
-   int LengthStr;
+   char Ch;
+   char *Ptr;
+   char *Ptr2;
+   unsigned LengthStr;
    bool FirstLetter = true;
 
    for (Ptr = Str;
@@ -710,15 +712,16 @@ void Str_ConvertToTitleType (char *Str)
       Ch = *Ptr;
       if (isspace ((int) Ch) ||
 	  Ch == '\xA0' ||	// Unicode translation for &nbsp;
-	  Ch == '-' ||
-	  Ch == '(' ||
-	  Ch == ')' ||
-	  Ch == ',' ||
-	  Ch == ';' ||
-	  Ch == '.' ||
-	  Ch == ':' ||
-	  Ch == 'ª' ||
-	  Ch == 'º')
+	  Ch ==    '-' ||
+	  Ch ==    '(' ||
+	  Ch ==    ')' ||
+	  Ch ==    ',' ||
+       // Ch ==    ';' ||	// Do not start a new word on ';'.
+				// Example: akto&#287;an should be converted to Akto&#287;an
+	  Ch ==    '.' ||
+	  Ch ==    ':' ||
+	  Ch ==    'ª' ||
+	  Ch ==    'º')
 	 FirstLetter = true;
       else
 	{

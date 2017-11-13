@@ -264,13 +264,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.26.2 (2017-11-12)"
+#define Log_PLATFORM_VERSION	"SWAD 17.26.3 (2017-11-13)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 17.26.3:  Nov 13, 2017  Fixed bug converting string to Title (for example in surnames). (234387 lines)
         Version 17.26.2:  Nov 12, 2017  Fixed bug in marks, reported by Francisco Ocaña Lara. (234383 lines)
         Version 17.26.1:  Nov 10, 2017  Default theme is white. (234380 lines)
         Version 17.26:    Nov 08, 2017  Tables converted to MyISAM.
