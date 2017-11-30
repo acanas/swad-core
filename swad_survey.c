@@ -3197,7 +3197,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
       if (Svy->Status.ICanEdit)
-         fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
+         fprintf (Gbl.F.Out,"<th></th>");
       fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
 	                 "%s"
 	                 "</th>"

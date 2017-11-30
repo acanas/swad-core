@@ -260,17 +260,33 @@
 
 // TODO: After "Do not show it again" nothing is displayed.
 
+// TODO: Non-editing teachers should can control assistance of students in their groups
+
+// TODO: Enviar correo a todos los profesores de una asignatura, sugerido por Pedro Villar Castro
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.26.3 (2017-11-13)"
+#define Log_PLATFORM_VERSION	"SWAD 17.26.6 (2017-11-30)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
+/* Printing:
+En local:
+enscript -1 --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_bn_1_columna.ps
+enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_color_1_columna.ps
+enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_bn_2_columnas.ps
+enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_color_2_columnas.ps
+En OpenSWAD:
+ps2pdf fuente.ps destino.pdf
+*/
 /*
+        Version 17.26.6:  Nov 30, 2017  Fixed bug in surveys. (234400 lines)
+        Version 17.26.5:  Nov 26, 2017  Maximum number of columns in class photo changed from 50 to 100. (234391 lines)
+        Version 17.26.4:  Nov 13, 2017  Session expires in 8 hours. (234388 lines)
         Version 17.26.3:  Nov 13, 2017  Fixed bug converting string to Title (for example in surnames). (234387 lines)
         Version 17.26.2:  Nov 12, 2017  Fixed bug in marks, reported by Francisco Ocaña Lara. (234383 lines)
         Version 17.26.1:  Nov 10, 2017  Default theme is white. (234380 lines)
