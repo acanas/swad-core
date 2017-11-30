@@ -268,7 +268,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.26.6 (2017-11-30)"
+#define Log_PLATFORM_VERSION	"SWAD 17.26.7 (2017-11-30)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
@@ -281,9 +281,10 @@ enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26
 enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_bn_2_columnas.ps
 enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_color_2_columnas.ps
 En OpenSWAD:
-ps2pdf fuente.ps destino.pdf
+ps2pdf source.ps destination.pdf
 */
 /*
+        Version 17.26.7:  Nov 30, 2017  Fixed bug in surveys. (234438 lines)
         Version 17.26.6:  Nov 30, 2017  Fixed bug in surveys. (234400 lines)
         Version 17.26.5:  Nov 26, 2017  Maximum number of columns in class photo changed from 50 to 100. (234391 lines)
         Version 17.26.4:  Nov 13, 2017  Session expires in 8 hours. (234388 lines)

@@ -64,7 +64,7 @@ const char *Svy_StrAnswerTypesDB[Svy_NUM_ANS_TYPES] =
 
 #define Svy_MAX_ANSWERS_PER_QUESTION	10
 
-struct SurveyQuestion
+struct SurveyQuestion	// Must be initialized to 0 before using it
   {
    long QstCod;
    unsigned QstInd;
@@ -144,12 +144,15 @@ static void Svy_FreeTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned Num
 
 static unsigned Svy_GetQstIndFromQstCod (long QstCod);
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
-static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst);
+static void Svy_ListSvyQuestions (struct Survey *Svy,
+                                  struct SurveyQuestion *SvyQst);
 static void Svy_PutParamsToEditQuestion (void);
 static void Svy_PutIconToAddNewQuestion (void);
 static void Svy_PutButtonToCreateNewQuestion (void);
 static void Svy_WriteQstStem (const char *Stem);
-static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey);
+static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
+                                    struct SurveyQuestion *SvyQst,
+                                    bool PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
 static void Svy_PutIconToRemoveOneQst (void);
@@ -168,6 +171,9 @@ static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
 void Svy_SeeAllSurveys (void)
   {
    struct SurveyQuestion SvyQst;
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
@@ -1483,6 +1489,9 @@ void Svy_AskRemSurvey (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
+
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
@@ -1519,6 +1528,9 @@ void Svy_RemoveSurvey (void)
    char Query[512];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
@@ -1577,6 +1589,9 @@ void Svy_AskResetSurvey (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
+
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
@@ -1629,6 +1644,9 @@ void Svy_ResetSurvey (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
+
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of survey is missing.");
@@ -1670,6 +1688,9 @@ void Svy_HideSurvey (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
+
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of survey is missing.");
@@ -1703,6 +1724,9 @@ void Svy_UnhideSurvey (void)
    char Query[128];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
@@ -1766,6 +1790,9 @@ void Svy_RequestCreatOrEditSvy (void)
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
@@ -2073,6 +2100,9 @@ void Svy_RecFormSurvey (void)
    bool NewSurveyIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get the code of the survey *****/
    ItsANewSurvey = ((NewSvy.SvyCod = Svy_GetParamSvyCod ()) == -1L);
@@ -2559,6 +2589,8 @@ void Svy_RequestEditQuestion (void)
 
    /***** Initialize question to zero *****/
    Svy_InitQst (&SvyQst);
+
+   /***** Initialize text to empty string *****/
    Txt[0] = '\0';
 
    /***** Get survey code *****/
@@ -2877,7 +2909,8 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 /******************* Allocate memory for a choice answer *********************/
 /*****************************************************************************/
 
-static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns)
+static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,
+                                          unsigned NumAns)
   {
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
@@ -2936,7 +2969,7 @@ void Svy_ReceiveQst (void)
    bool ThereIsEndOfAnswers;
    bool Error = false;
 
-   /***** Initialize new question to zero *****/
+   /***** Initialize question to zero *****/
    Svy_InitQst (&SvyQst);
 
    /***** Get parameters from form *****/
@@ -3152,7 +3185,8 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 /************************ List the questions of a survey *********************/
 /*****************************************************************************/
 
-static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
+static void Svy_ListSvyQuestions (struct Survey *Svy,
+                                  struct SurveyQuestion *SvyQst)
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
    extern const char *Txt_Questions;
@@ -3174,7 +3208,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
-                  " FROM svy_questions WHERE SvyCod=%ld ORDER BY QstInd",
+                  " FROM svy_questions"
+                  " WHERE SvyCod=%ld ORDER BY QstInd",
             Svy->SvyCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
@@ -3366,7 +3401,9 @@ static void Svy_WriteQstStem (const char *Stem)
 /************** Get and write the answers of a survey question ***************/
 /*****************************************************************************/
 
-static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey)
+static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
+                                    struct SurveyQuestion *SvyQst,
+                                    bool PutFormAnswerSurvey)
   {
    unsigned NumAnswers;
    unsigned NumAns;
@@ -3531,6 +3568,9 @@ void Svy_RequestRemoveQst (void)
    long SvyCod;
    struct SurveyQuestion SvyQst;
 
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
+
    /***** Get parameters from form *****/
    /* Get survey code */
    if ((SvyCod = Svy_GetParamSvyCod ()) == -1L)
@@ -3566,6 +3606,9 @@ void Svy_RemoveQst (void)
    char Query[512];
    long SvyCod;
    struct SurveyQuestion SvyQst;
+
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
 
    /***** Get parameters from form *****/
    /* Get survey code */
@@ -3615,6 +3658,9 @@ void Svy_ReceiveSurveyAnswers (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
+   /***** Initialize question to zero *****/
+   Svy_InitQst (&SvyQst);
+
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of survey is missing.");
@@ -3660,8 +3706,10 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
             SvyCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get questions of a survey");
 
-   if ((NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get surveys"))) // The survey has questions
+   if ((NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,
+                                             "can not get surveys")))
      {
+      // This survey has questions
       /***** Get questions *****/
       for (NumQst = 0;
 	   NumQst < NumQsts;
@@ -3684,12 +3732,13 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
            {
             Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
             if (sscanf (UnsignedStr,"%u",&AnsInd) == 1)
-               // Parameter exists, so user has marked this answer, so store it in database
+               // Parameter exists ==> user has checked this answer
+               // 		   ==> store it in database
                Svy_IncreaseAnswerInDB (QstCod,AnsInd);
            }
         }
      }
-   else		// The survey has no questions and answers
+   else		// This survey has no questions
       Lay_ShowErrorAndExit ("Error: this survey has no questions.");
 
    /***** Free structure that stores the query result *****/
@@ -3711,7 +3760,7 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
    sprintf (Query,"UPDATE svy_answers SET NumUsrs=NumUsrs+1"
                   " WHERE QstCod=%ld AND AnsInd=%u",
             QstCod,AnsInd);
-   DB_QueryINSERT (Query,"can not register your answer to the survey");
+   DB_QueryUPDATE (Query,"can not register your answer to the survey");
   }
 
 /*****************************************************************************/
