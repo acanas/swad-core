@@ -264,6 +264,31 @@
 
 // TODO: Enviar correo a todos los profesores de una asignatura, sugerido por Pedro Villar Castro
 
+// TODO: Sugerencias de Pilar Ossorio Castellanos:
+/*
+Hola Antonio, estoy redactando preguntas en los test tipo: "rellenar hueco con la respuesta exacta". Se puede hacer seleccionando la modalidad "texto". El problema es cuando hay varios huecos en una frase, ya que no consigo que en los tests se respete el orden de mis preguntas, sino que salen aleatoriamente. ¿Hay alguna manera de fijar el orden de las preguntas? porque en ese caso ya no tendría problema con utilizar varios huecos en la misma frase, ya que cada pregunta sería una continuación de la primera. No se si me explico.
+Otra cosa ¿Cómo hago para bloquear la entrada de los alumnos que han terminado un curso sin cancelar sus fichas y todo lo que se ha realizado. SImplemente quiero que no entren ya a ese curso.  (pero no eliminar los datos del curso ni los alumnos que han participado)
+*/
+/*
+En realidad no son cursos online sino la modalidad "plataforma" que se combina la parte online con tutorías virtuales (que tenemos que hacer externamente porque creo que no tenéis una herramienta tipo videoconferencia, webinar o skype) o con sesiones presenciales. Piden siempre un 75% de asistencia en la parte online, esto es: si un curso presencial tiene 10 h, por teleformación el alumno debe estar 7,5 usando la plataforma.
+En swad he visto algo más importante que el tiempo conectado, que son los clics, y eso es lo que de verdad demuestra que el alumno está participando y no solo tiene el programa abierto.
+Si sería útil poder tener los resultados de todos en bloque, porque sino tengo que entrar uno por uno y no puedo comparar, que es otra cosa que me gusta comprobar.
+Por cierto, los test realizados por los alumnos solo se visualizan para los profesores si el alumno ha señalado la opción "dejar ver al profesor", ¿verdad?  porque no me sale ninguno.
+
+----- Mensaje original -----
+Hola, Pilar:
+Con control de asistencia en horas y minutos supongo que te refieres a asistencia online. La herramienta de control de asistencia actual sirve para pasar lista en clase presencial. Para controlar lo que ha hecho cada alumno lo que podrías usar los las estadísticas de acceso, que están en Estadísticas > Accesos > Accesos asignatura. Luego puedes seleccionar los usuarios y ver diversas estadísticas, como el listado detallado de cada estudiante, o unas gráficas de acceso por fechas. Si quieres el detalle de cada alumno, efectivamente debes ir sacando un informe de uno por uno.
+Esto no está programado de otra forma porque eres la primera persona que lo solicita. Ten en cuenta que la herramienta se usa principalmente para apoyo a la docencia presencial. De todas formas, apunto en la lista de sugerencia por hacer, la posibilidad de sacar un informe de accesos individualizado para cada alumno, pero sin tener que ir uno por uno.
+
+
+----- Mensaje original -----
+Hola Antonio, ya hemos terminado un curso y me piden un control de la asistencia por parte de cada alumno en horas y minutos. ¿Sabes si los puedo visualizar todos sin tener que ir entrando uno por uno?
+Gracias
+*/
+// TODO: Check actions table. All actions must be present in table.
+
+// TODO: Poner icono superior izquierdo de "Lugares" también en la caja de información de la institución
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -276,10 +301,10 @@
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /* Printing:
 En local:
-enscript -1 --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_bn_1_columna.ps
-enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_color_1_columna.ps
-enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_bn_2_columnas.ps
-enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.5_color_2_columnas.ps
+enscript -1 --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_1_columna.ps
+enscript -1 --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_1_columna.ps
+enscript -2 --landscape --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_bn_2_columnas.ps
+enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - * > swad17.26.7_color_2_columnas.ps
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */

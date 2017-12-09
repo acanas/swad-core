@@ -3675,7 +3675,7 @@ void Svy_ReceiveSurveyAnswers (void)
      {
       /***** Receive and store user's answers *****/
       Svy_ReceiveAndStoreUserAnswersToASurvey (Svy.SvyCod);
-      Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_answering_the_survey);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Thanks_for_answering_the_survey);
      }
 
    /***** Show current survey *****/
