@@ -289,11 +289,15 @@ Gracias
 
 // TODO: Poner icono superior izquierdo de "Lugares" también en la caja de información de la institución
 
+// TODO: FIX BUG: se detiene la copia-pega desde trabajos de Torres Barrilado en "Trabajos Fin de Grado del Dpto. ATC". El error es "Can not get information about a file or folder." No debería abortarse en esta situación.
+
+// TODO: Urgente: Un profesor no puede eliminar archivos de estudiantes de la zona de actividades, ni subir nuevos, mientras está abierta la actividad, pero sí cuando está cerrada. ¿Qué sentido tiene?
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.26.7 (2017-11-30)"
+#define Log_PLATFORM_VERSION	"SWAD 17.27 (2017-12-19)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
@@ -309,6 +313,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 17.27:    Dec 19, 2017  Statistics tab is renamed as Analytics. (234464 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/iconset/awesome/action64x64/ana64x64.gif /var/www/html/swad/icon/iconset/awesome/action64x64/
+sudo cp icon/iconset/nuvola/action64x64/ana64x64.gif /var/www/html/swad/icon/iconset/nuvola/action64x64/
+
         Version 17.26.7:  Nov 30, 2017  Fixed bug in surveys. (234438 lines)
         Version 17.26.6:  Nov 30, 2017  Fixed bug in surveys. (234400 lines)
         Version 17.26.5:  Nov 26, 2017  Maximum number of columns in class photo changed from 50 to 100. (234391 lines)

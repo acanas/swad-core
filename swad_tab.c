@@ -53,7 +53,7 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
    /* TabUsr */	"usr64x64.gif",
    /* TabSoc */ "soc64x64.png",
    /* TabMsg */	"msg64x64.gif",
-   /* TabSta */	"sta64x64.gif",
+   /* TabAna */	"ana64x64.gif",
    /* TabPrf */	"prf64x64.gif",
   };
 

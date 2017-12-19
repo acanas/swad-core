@@ -1671,7 +1671,7 @@ void Pho_PrintPhotoDegree (void)
 
 void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *Hlp_STATS_Degrees;
+   extern const char *Hlp_ANALYTICS_Degrees;
    extern const char *Txt_Degrees;
 
    /***** Get photo size from form *****/
@@ -1693,7 +1693,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 	 /***** Start box *****/
 	 Box_StartBox (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
-		       Hlp_STATS_Degrees,Box_NOT_CLOSABLE);
+		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 	 Tbl_StartTableCenter (2);
 
 	 /***** Put a selector for the type of average *****/

@@ -431,7 +431,7 @@ void Sta_RemoveOldEntriesRecentLog (void)
 
 void Sta_AskShowCrsHits (void)
   {
-   extern const char *Hlp_STATS_Visits_visits_to_course;
+   extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
@@ -481,7 +481,7 @@ void Sta_AskShowCrsHits (void)
    sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
 	    Gbl.CurrentCrs.Crs.ShrtName);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                 Hlp_STATS_Visits_visits_to_course,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,Grp_ONLY_MY_GROUPS);
@@ -635,7 +635,7 @@ void Sta_AskShowCrsHits (void)
 
 void Sta_AskShowGblHits (void)
   {
-   extern const char *Hlp_STATS_Visits_global_visits;
+   extern const char *Hlp_ANALYTICS_Visits_global_visits;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Visits_to_course;
    extern const char *Txt_Statistics_of_all_visits;
@@ -678,7 +678,7 @@ void Sta_AskShowGblHits (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Statistics_of_all_visits,NULL,
-                      Hlp_STATS_Visits_global_visits,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
    /***** Start and end dates for the search *****/
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccGbl);
@@ -3904,7 +3904,7 @@ void Sta_WriteParamsDatesSeeAccesses (void)
 
 void Sta_ReqShowFigures (void)
   {
-   extern const char *Hlp_STATS_Figures;
+   extern const char *Hlp_ANALYTICS_Figures;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Figures;
    extern const char *Txt_Scope;
@@ -3918,7 +3918,7 @@ void Sta_ReqShowFigures (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Figures,NULL,
-                 Hlp_STATS_Figures,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -4075,7 +4075,7 @@ void Sta_ShowFigures (void)
 
 static void Sta_GetAndShowUsersStats (void)
   {
-   extern const char *Hlp_STATS_Figures_users;
+   extern const char *Hlp_ANALYTICS_Figures_users;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
@@ -4084,7 +4084,7 @@ static void Sta_GetAndShowUsersStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS],NULL,
-                      Hlp_STATS_Figures_users,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4206,7 +4206,7 @@ static void Sta_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
 
 static void Sta_GetAndShowUsersRanking (void)
   {
-   extern const char *Hlp_STATS_Figures_ranking;
+   extern const char *Hlp_ANALYTICS_Figures_ranking;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
@@ -4217,7 +4217,7 @@ static void Sta_GetAndShowUsersRanking (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS_RANKING],NULL,
-                      Hlp_STATS_Figures_ranking,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4280,12 +4280,12 @@ static void Sta_GetAndShowUsersRanking (void)
 
 static void Sta_GetAndShowHierarchyStats (void)
   {
-   extern const char *Hlp_STATS_Figures_hierarchy;
+   extern const char *Hlp_ANALYTICS_Figures_hierarchy;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY],NULL,
-                      Hlp_STATS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
    Sta_WriteHeadDegsCrssInSWAD ();
    Sta_GetAndShowNumCtysInSWAD ();
@@ -4971,12 +4971,12 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 
 static void Sta_GetAndShowInstitutionsStats (void)
   {
-   extern const char *Hlp_STATS_Figures_institutions;
+   extern const char *Hlp_ANALYTICS_Figures_institutions;
    extern const char *Txt_Institutions;
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Institutions,NULL,
-                 Hlp_STATS_Figures_institutions,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
    /***** Form to select type of list used to display degree photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
@@ -5453,7 +5453,7 @@ static void Sta_GetAndShowDegreeTypesStats (void)
 
 static void Sta_GetAndShowFileBrowsersStats (void)
   {
-   extern const char *Hlp_STATS_Figures_folders_and_files;
+   extern const char *Hlp_ANALYTICS_Figures_folders_and_files;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_STAT_COURSE_FILE_ZONES[];
    extern const char *Txt_Briefcases;
@@ -5475,7 +5475,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLDERS_AND_FILES],NULL,
-                      Hlp_STATS_Figures_folders_and_files,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    Sta_WriteStatsExpTreesTableHead ();
@@ -6540,7 +6540,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 
 static void Sta_GetAndShowOERsStats (void)
   {
-   extern const char *Hlp_STATS_Figures_open_educational_resources_oer;
+   extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_License;
    extern const char *Txt_No_of_private_files;
@@ -6551,7 +6551,7 @@ static void Sta_GetAndShowOERsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_OER],NULL,
-                      Hlp_STATS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6722,7 +6722,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 
 static void Sta_GetAndShowAssignmentsStats (void)
   {
-   extern const char *Hlp_STATS_Figures_assignments;
+   extern const char *Hlp_ANALYTICS_Figures_assignments;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
@@ -6740,7 +6740,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ASSIGNMENTS],NULL,
-                      Hlp_STATS_Figures_assignments,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6792,7 +6792,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
 static void Sta_GetAndShowProjectsStats (void)
   {
-   extern const char *Hlp_STATS_Figures_projects;
+   extern const char *Hlp_ANALYTICS_Figures_projects;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_projects;
    extern const char *Txt_Number_of_BR_courses_with_BR_projects;
@@ -6808,7 +6808,7 @@ static void Sta_GetAndShowProjectsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_PROJECTS],NULL,
-                      Hlp_STATS_Figures_projects,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6852,7 +6852,7 @@ static void Sta_GetAndShowProjectsStats (void)
 
 static void Sta_GetAndShowTestsStats (void)
   {
-   extern const char *Hlp_STATS_Figures_tests;
+   extern const char *Hlp_ANALYTICS_Figures_tests;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
@@ -6870,7 +6870,7 @@ static void Sta_GetAndShowTestsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_TESTS],NULL,
-                      Hlp_STATS_Figures_tests,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7019,7 +7019,7 @@ static void Sta_GetAndShowTestsStats (void)
 
 static void Sta_GetAndShowGamesStats (void)
   {
-   extern const char *Hlp_STATS_Figures_games;
+   extern const char *Hlp_ANALYTICS_Figures_games;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_games;
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
@@ -7035,7 +7035,7 @@ static void Sta_GetAndShowGamesStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_GAMES],NULL,
-                      Hlp_STATS_Figures_games,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7079,7 +7079,7 @@ static void Sta_GetAndShowGamesStats (void)
 
 static void Sta_GetAndShowSocialActivityStats (void)
   {
-   extern const char *Hlp_STATS_Figures_timeline;
+   extern const char *Hlp_ANALYTICS_Figures_timeline;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_No_of_social_posts;
@@ -7098,7 +7098,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY],NULL,
-                      Hlp_STATS_Figures_timeline,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7363,7 +7363,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 
 static void Sta_GetAndShowFollowStats (void)
   {
-   extern const char *Hlp_STATS_Figures_followed_followers;
+   extern const char *Hlp_ANALYTICS_Figures_followed_followers;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
@@ -7386,7 +7386,7 @@ static void Sta_GetAndShowFollowStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLLOW],NULL,
-                      Hlp_STATS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7626,7 +7626,7 @@ static void Sta_GetAndShowFollowStats (void)
 
 static void Sta_GetAndShowForumStats (void)
   {
-   extern const char *Hlp_STATS_Figures_forums;
+   extern const char *Hlp_ANALYTICS_Figures_forums;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Scope;
    extern const char *Txt_Forums;
@@ -7647,7 +7647,7 @@ static void Sta_GetAndShowForumStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FORUMS],NULL,
-                      Hlp_STATS_Figures_forums,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7981,7 +7981,7 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
 static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
   {
-   extern const char *Hlp_STATS_Figures_notifications;
+   extern const char *Hlp_ANALYTICS_Figures_notifications;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
@@ -8004,7 +8004,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS],NULL,
-                      Hlp_STATS_Figures_notifications,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8319,7 +8319,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
 static void Sta_GetAndShowNoticesStats (void)
   {
-   extern const char *Hlp_STATS_Figures_notices;
+   extern const char *Hlp_ANALYTICS_Figures_notices;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
@@ -8348,7 +8348,7 @@ static void Sta_GetAndShowNoticesStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_NOTICES],NULL,
-                      Hlp_STATS_Figures_notices,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8408,7 +8408,7 @@ static void Sta_GetAndShowNoticesStats (void)
 
 static void Sta_GetAndShowMsgsStats (void)
   {
-   extern const char *Hlp_STATS_Figures_messages;
+   extern const char *Hlp_ANALYTICS_Figures_messages;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -8431,7 +8431,7 @@ static void Sta_GetAndShowMsgsStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES],NULL,
-                      Hlp_STATS_Figures_messages,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8512,7 +8512,7 @@ static void Sta_GetAndShowMsgsStats (void)
 
 static void Sta_GetAndShowSurveysStats (void)
   {
-   extern const char *Hlp_STATS_Figures_surveys;
+   extern const char *Hlp_ANALYTICS_Figures_surveys;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_surveys;
    extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
@@ -8535,7 +8535,7 @@ static void Sta_GetAndShowSurveysStats (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SURVEYS],NULL,
-                      Hlp_STATS_Figures_surveys,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8595,14 +8595,14 @@ static void Sta_GetAndShowSurveysStats (void)
 
 static void Sta_GetAndShowNumUsrsPerPrivacy (void)
   {
-   extern const char *Hlp_STATS_Figures_privacy;
+   extern const char *Hlp_ANALYTICS_Figures_privacy;
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY],NULL,
-                      Hlp_STATS_Figures_privacy,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Privacy for photo *****/
    Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,"PhotoVisibility");
@@ -8756,7 +8756,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
 
 static void Sta_GetAndShowNumUsrsPerLanguage (void)
   {
-   extern const char *Hlp_STATS_Figures_language;
+   extern const char *Hlp_ANALYTICS_Figures_language;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Language;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
@@ -8770,7 +8770,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_LANGUAGES],NULL,
-                      Hlp_STATS_Figures_language,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8897,7 +8897,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
   {
    extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
-   extern const char *Hlp_STATS_Figures_calendar;
+   extern const char *Hlp_ANALYTICS_Figures_calendar;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Calendar;
    extern const char *Txt_First_day_of_the_week;
@@ -8911,7 +8911,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK],NULL,
-                      Hlp_STATS_Figures_calendar,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9039,7 +9039,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
 static void Sta_GetAndShowNumUsrsPerDateFormat (void)
   {
-   extern const char *Hlp_STATS_Figures_dates;
+   extern const char *Hlp_ANALYTICS_Figures_dates;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Format;
    extern const char *Txt_No_of_users;
@@ -9051,7 +9051,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_DATE_FORMAT],NULL,
-                      Hlp_STATS_Figures_dates,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9175,7 +9175,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 
 static void Sta_GetAndShowNumUsrsPerIconSet (void)
   {
-   extern const char *Hlp_STATS_Figures_icons;
+   extern const char *Hlp_ANALYTICS_Figures_icons;
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Ico_IconSetNames[Ico_NUM_ICON_SETS];
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
@@ -9189,7 +9189,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ICON_SETS],NULL,
-                      Hlp_STATS_Figures_icons,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9318,7 +9318,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
 static void Sta_GetAndShowNumUsrsPerMenu (void)
   {
-   extern const char *Hlp_STATS_Figures_menu;
+   extern const char *Hlp_ANALYTICS_Figures_menu;
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Menu;
@@ -9332,7 +9332,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MENUS],NULL,
-                      Hlp_STATS_Figures_menu,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9458,7 +9458,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 
 static void Sta_GetAndShowNumUsrsPerTheme (void)
   {
-   extern const char *Hlp_STATS_Figures_theme;
+   extern const char *Hlp_ANALYTICS_Figures_theme;
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *The_ThemeNames[The_NUM_THEMES];
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
@@ -9472,7 +9472,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_THEMES],NULL,
-                      Hlp_STATS_Figures_theme,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9598,7 +9598,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
 static void Sta_GetAndShowNumUsrsPerSideColumns (void)
   {
-   extern const char *Hlp_STATS_Figures_columns;
+   extern const char *Hlp_ANALYTICS_Figures_columns;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Columns;
    extern const char *Txt_No_of_users;
@@ -9611,7 +9611,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SIDE_COLUMNS],NULL,
-                      Hlp_STATS_Figures_columns,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"

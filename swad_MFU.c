@@ -211,7 +211,7 @@ void MFU_ShowMyMFUActions (void)
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Hlp_STATS_Frequent;
+   extern const char *Hlp_ANALYTICS_Frequent;
    extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -225,7 +225,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_My_frequent_actions,NULL,
-                 Hlp_STATS_Frequent,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Frequent,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions_big\">");
 
    /***** Write list of frequently used actions *****/

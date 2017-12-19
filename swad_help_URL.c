@@ -2383,720 +2383,720 @@ const char *Hlp_MESSAGES_Email =
 	"MESSAGES.Email.en";
 #endif
 
-/***** STATS tab *****/
+/***** ANALYTICS tab *****/
 
-const char *Hlp_STATS_Figures =
+const char *Hlp_ANALYTICS_Figures =
 #if   L==1
-	"STATS.Figures.es";
+	"ANALYTICS.Figures.es";
 #elif L==2
-	"STATS.Figures.en";
+	"ANALYTICS.Figures.en";
 #elif L==3
-	"STATS.Figures.en";
+	"ANALYTICS.Figures.en";
 #elif L==4
-	"STATS.Figures.es";
+	"ANALYTICS.Figures.es";
 #elif L==5
-	"STATS.Figures.en";
+	"ANALYTICS.Figures.en";
 #elif L==6
-	"STATS.Figures.es";
+	"ANALYTICS.Figures.es";
 #elif L==7
-	"STATS.Figures.en";
+	"ANALYTICS.Figures.en";
 #elif L==8
-	"STATS.Figures.en";
+	"ANALYTICS.Figures.en";
 #elif L==9
-	"STATS.Figures.en";
+	"ANALYTICS.Figures.en";
 #endif
 
-const char *Hlp_STATS_Figures_users =
+const char *Hlp_ANALYTICS_Figures_users =
 #if   L==1
-	"STATS.Figures.es#usuarios";
+	"ANALYTICS.Figures.es#usuarios";
 #elif L==2
-	"STATS.Figures.en#users";
+	"ANALYTICS.Figures.en#users";
 #elif L==3
-	"STATS.Figures.en#users";
+	"ANALYTICS.Figures.en#users";
 #elif L==4
-	"STATS.Figures.es#usuarios";
+	"ANALYTICS.Figures.es#usuarios";
 #elif L==5
-	"STATS.Figures.en#users";
+	"ANALYTICS.Figures.en#users";
 #elif L==6
-	"STATS.Figures.es#usuarios";
+	"ANALYTICS.Figures.es#usuarios";
 #elif L==7
-	"STATS.Figures.en#users";
+	"ANALYTICS.Figures.en#users";
 #elif L==8
-	"STATS.Figures.en#users";
+	"ANALYTICS.Figures.en#users";
 #elif L==9
-	"STATS.Figures.en#users";
+	"ANALYTICS.Figures.en#users";
 #endif
 
-const char *Hlp_STATS_Figures_ranking =
+const char *Hlp_ANALYTICS_Figures_ranking =
 #if   L==1
-	"STATS.Figures.es#ranking";
+	"ANALYTICS.Figures.es#ranking";
 #elif L==2
-	"STATS.Figures.en#ranking";
+	"ANALYTICS.Figures.en#ranking";
 #elif L==3
-	"STATS.Figures.en#ranking";
+	"ANALYTICS.Figures.en#ranking";
 #elif L==4
-	"STATS.Figures.es#ranking";
+	"ANALYTICS.Figures.es#ranking";
 #elif L==5
-	"STATS.Figures.en#ranking";
+	"ANALYTICS.Figures.en#ranking";
 #elif L==6
-	"STATS.Figures.es#ranking";
+	"ANALYTICS.Figures.es#ranking";
 #elif L==7
-	"STATS.Figures.en#ranking";
+	"ANALYTICS.Figures.en#ranking";
 #elif L==8
-	"STATS.Figures.en#ranking";
+	"ANALYTICS.Figures.en#ranking";
 #elif L==9
-	"STATS.Figures.en#ranking";
+	"ANALYTICS.Figures.en#ranking";
 #endif
 
-const char *Hlp_STATS_Figures_hierarchy =
+const char *Hlp_ANALYTICS_Figures_hierarchy =
 #if   L==1
-	"STATS.Figures.es#jerarqu%C3%ADa";
+	"ANALYTICS.Figures.es#jerarqu%C3%ADa";
 #elif L==2
-	"STATS.Figures.en#hierarchy";
+	"ANALYTICS.Figures.en#hierarchy";
 #elif L==3
-	"STATS.Figures.en#hierarchy";
+	"ANALYTICS.Figures.en#hierarchy";
 #elif L==4
-	"STATS.Figures.es#jerarqu%C3%ADa";
+	"ANALYTICS.Figures.es#jerarqu%C3%ADa";
 #elif L==5
-	"STATS.Figures.en#hierarchy";
+	"ANALYTICS.Figures.en#hierarchy";
 #elif L==6
-	"STATS.Figures.es#jerarqu%C3%ADa";
+	"ANALYTICS.Figures.es#jerarqu%C3%ADa";
 #elif L==7
-	"STATS.Figures.en#hierarchy";
+	"ANALYTICS.Figures.en#hierarchy";
 #elif L==8
-	"STATS.Figures.en#hierarchy";
+	"ANALYTICS.Figures.en#hierarchy";
 #elif L==9
-	"STATS.Figures.en#hierarchy";
+	"ANALYTICS.Figures.en#hierarchy";
 #endif
 
-const char *Hlp_STATS_Figures_institutions =
+const char *Hlp_ANALYTICS_Figures_institutions =
 #if   L==1
-	"STATS.Figures.es#instituciones";
+	"ANALYTICS.Figures.es#instituciones";
 #elif L==2
-	"STATS.Figures.en#institutions";
+	"ANALYTICS.Figures.en#institutions";
 #elif L==3
-	"STATS.Figures.en#institutions";
+	"ANALYTICS.Figures.en#institutions";
 #elif L==4
-	"STATS.Figures.es#instituciones";
+	"ANALYTICS.Figures.es#instituciones";
 #elif L==5
-	"STATS.Figures.en#institutions";
+	"ANALYTICS.Figures.en#institutions";
 #elif L==6
-	"STATS.Figures.es#instituciones";
+	"ANALYTICS.Figures.es#instituciones";
 #elif L==7
-	"STATS.Figures.en#institutions";
+	"ANALYTICS.Figures.en#institutions";
 #elif L==8
-	"STATS.Figures.en#institutions";
+	"ANALYTICS.Figures.en#institutions";
 #elif L==9
-	"STATS.Figures.en#institutions";
+	"ANALYTICS.Figures.en#institutions";
 #endif
 
-const char *Hlp_STATS_Figures_types_of_degree =
+const char *Hlp_ANALYTICS_Figures_types_of_degree =
 #if   L==1
-	"STATS.Figures.es#tipos-de-titulaci%C3%B3n";
+	"ANALYTICS.Figures.es#tipos-de-titulaci%C3%B3n";
 #elif L==2
-	"STATS.Figures.en#types-of-degree";
+	"ANALYTICS.Figures.en#types-of-degree";
 #elif L==3
-	"STATS.Figures.en#types-of-degree";
+	"ANALYTICS.Figures.en#types-of-degree";
 #elif L==4
-	"STATS.Figures.es#tipos-de-titulaci%C3%B3n";
+	"ANALYTICS.Figures.es#tipos-de-titulaci%C3%B3n";
 #elif L==5
-	"STATS.Figures.en#types-of-degree";
+	"ANALYTICS.Figures.en#types-of-degree";
 #elif L==6
-	"STATS.Figures.es#tipos-de-titulaci%C3%B3n";
+	"ANALYTICS.Figures.es#tipos-de-titulaci%C3%B3n";
 #elif L==7
-	"STATS.Figures.en#types-of-degree";
+	"ANALYTICS.Figures.en#types-of-degree";
 #elif L==8
-	"STATS.Figures.en#types-of-degree";
+	"ANALYTICS.Figures.en#types-of-degree";
 #elif L==9
-	"STATS.Figures.en#types-of-degree";
+	"ANALYTICS.Figures.en#types-of-degree";
 #endif
 
-const char *Hlp_STATS_Figures_folders_and_files =
+const char *Hlp_ANALYTICS_Figures_folders_and_files =
 #if   L==1
-	"STATS.Figures.es#carpetas-y-archivos";
+	"ANALYTICS.Figures.es#carpetas-y-archivos";
 #elif L==2
-	"STATS.Figures.en#folders-and-files";
+	"ANALYTICS.Figures.en#folders-and-files";
 #elif L==3
-	"STATS.Figures.en#folders-and-files";
+	"ANALYTICS.Figures.en#folders-and-files";
 #elif L==4
-	"STATS.Figures.es#carpetas-y-archivos";
+	"ANALYTICS.Figures.es#carpetas-y-archivos";
 #elif L==5
-	"STATS.Figures.en#folders-and-files";
+	"ANALYTICS.Figures.en#folders-and-files";
 #elif L==6
-	"STATS.Figures.es#carpetas-y-archivos";
+	"ANALYTICS.Figures.es#carpetas-y-archivos";
 #elif L==7
-	"STATS.Figures.en#folders-and-files";
+	"ANALYTICS.Figures.en#folders-and-files";
 #elif L==8
-	"STATS.Figures.en#folders-and-files";
+	"ANALYTICS.Figures.en#folders-and-files";
 #elif L==9
-	"STATS.Figures.en#folders-and-files";
+	"ANALYTICS.Figures.en#folders-and-files";
 #endif
 
-const char *Hlp_STATS_Figures_open_educational_resources_oer =
+const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer =
 #if   L==1
-	"STATS.Figures.es#recursos-educativos-abiertos-oer";
+	"ANALYTICS.Figures.es#recursos-educativos-abiertos-oer";
 #elif L==2
-	"STATS.Figures.en#open-educational-resources-oer";
+	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #elif L==3
-	"STATS.Figures.en#open-educational-resources-oer";
+	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #elif L==4
-	"STATS.Figures.es#recursos-educativos-abiertos-oer";
+	"ANALYTICS.Figures.es#recursos-educativos-abiertos-oer";
 #elif L==5
-	"STATS.Figures.en#open-educational-resources-oer";
+	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #elif L==6
-	"STATS.Figures.es#recursos-educativos-abiertos-oer";
+	"ANALYTICS.Figures.es#recursos-educativos-abiertos-oer";
 #elif L==7
-	"STATS.Figures.en#open-educational-resources-oer";
+	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #elif L==8
-	"STATS.Figures.en#open-educational-resources-oer";
+	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #elif L==9
-	"STATS.Figures.en#open-educational-resources-oer";
+	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #endif
 
-const char *Hlp_STATS_Figures_assignments =
+const char *Hlp_ANALYTICS_Figures_assignments =
 #if   L==1
-	"STATS.Figures.es#actividades";
+	"ANALYTICS.Figures.es#actividades";
 #elif L==2
-	"STATS.Figures.en#assignments";
+	"ANALYTICS.Figures.en#assignments";
 #elif L==3
-	"STATS.Figures.en#assignments";
+	"ANALYTICS.Figures.en#assignments";
 #elif L==4
-	"STATS.Figures.es#actividades";
+	"ANALYTICS.Figures.es#actividades";
 #elif L==5
-	"STATS.Figures.en#assignments";
+	"ANALYTICS.Figures.en#assignments";
 #elif L==6
-	"STATS.Figures.es#actividades";
+	"ANALYTICS.Figures.es#actividades";
 #elif L==7
-	"STATS.Figures.en#assignments";
+	"ANALYTICS.Figures.en#assignments";
 #elif L==8
-	"STATS.Figures.en#assignments";
+	"ANALYTICS.Figures.en#assignments";
 #elif L==9
-	"STATS.Figures.en#assignments";
+	"ANALYTICS.Figures.en#assignments";
 #endif
 
-const char *Hlp_STATS_Figures_projects =
+const char *Hlp_ANALYTICS_Figures_projects =
 #if   L==1
-	"STATS.Figures.es#proyectos";
+	"ANALYTICS.Figures.es#proyectos";
 #elif L==2
-	"STATS.Figures.en#projects";
+	"ANALYTICS.Figures.en#projects";
 #elif L==3
-	"STATS.Figures.en#projects";
+	"ANALYTICS.Figures.en#projects";
 #elif L==4
-	"STATS.Figures.es#proyectos";
+	"ANALYTICS.Figures.es#proyectos";
 #elif L==5
-	"STATS.Figures.en#projects";
+	"ANALYTICS.Figures.en#projects";
 #elif L==6
-	"STATS.Figures.es#proyectos";
+	"ANALYTICS.Figures.es#proyectos";
 #elif L==7
-	"STATS.Figures.en#projects";
+	"ANALYTICS.Figures.en#projects";
 #elif L==8
-	"STATS.Figures.en#projects";
+	"ANALYTICS.Figures.en#projects";
 #elif L==9
-	"STATS.Figures.en#projects";
+	"ANALYTICS.Figures.en#projects";
 #endif
 
-const char *Hlp_STATS_Figures_tests =
+const char *Hlp_ANALYTICS_Figures_tests =
 #if   L==1
-	"STATS.Figures.es#tests";
+	"ANALYTICS.Figures.es#tests";
 #elif L==2
-	"STATS.Figures.en#tests";
+	"ANALYTICS.Figures.en#tests";
 #elif L==3
-	"STATS.Figures.en#tests";
+	"ANALYTICS.Figures.en#tests";
 #elif L==4
-	"STATS.Figures.es#tests";
+	"ANALYTICS.Figures.es#tests";
 #elif L==5
-	"STATS.Figures.en#tests";
+	"ANALYTICS.Figures.en#tests";
 #elif L==6
-	"STATS.Figures.es#tests";
+	"ANALYTICS.Figures.es#tests";
 #elif L==7
-	"STATS.Figures.en#tests";
+	"ANALYTICS.Figures.en#tests";
 #elif L==8
-	"STATS.Figures.en#tests";
+	"ANALYTICS.Figures.en#tests";
 #elif L==9
-	"STATS.Figures.en#tests";
+	"ANALYTICS.Figures.en#tests";
 #endif
 
-const char *Hlp_STATS_Figures_games =
+const char *Hlp_ANALYTICS_Figures_games =
 #if   L==1
-	"STATS.Figures.es#juegos";
+	"ANALYTICS.Figures.es#juegos";
 #elif L==2
-	"STATS.Figures.en#games";
+	"ANALYTICS.Figures.en#games";
 #elif L==3
-	"STATS.Figures.en#games";
+	"ANALYTICS.Figures.en#games";
 #elif L==4
-	"STATS.Figures.es#juegos";
+	"ANALYTICS.Figures.es#juegos";
 #elif L==5
-	"STATS.Figures.en#games";
+	"ANALYTICS.Figures.en#games";
 #elif L==6
-	"STATS.Figures.es#juegos";
+	"ANALYTICS.Figures.es#juegos";
 #elif L==7
-	"STATS.Figures.en#games";
+	"ANALYTICS.Figures.en#games";
 #elif L==8
-	"STATS.Figures.en#games";
+	"ANALYTICS.Figures.en#games";
 #elif L==9
-	"STATS.Figures.en#games";
+	"ANALYTICS.Figures.en#games";
 #endif
 
-const char *Hlp_STATS_Figures_surveys =
+const char *Hlp_ANALYTICS_Figures_surveys =
 #if   L==1
-	"STATS.Figures.es#encuestas";
+	"ANALYTICS.Figures.es#encuestas";
 #elif L==2
-	"STATS.Figures.en#surveys";
+	"ANALYTICS.Figures.en#surveys";
 #elif L==3
-	"STATS.Figures.en#surveys";
+	"ANALYTICS.Figures.en#surveys";
 #elif L==4
-	"STATS.Figures.es#encuestas";
+	"ANALYTICS.Figures.es#encuestas";
 #elif L==5
-	"STATS.Figures.en#surveys";
+	"ANALYTICS.Figures.en#surveys";
 #elif L==6
-	"STATS.Figures.es#encuestas";
+	"ANALYTICS.Figures.es#encuestas";
 #elif L==7
-	"STATS.Figures.en#surveys";
+	"ANALYTICS.Figures.en#surveys";
 #elif L==8
-	"STATS.Figures.en#surveys";
+	"ANALYTICS.Figures.en#surveys";
 #elif L==9
-	"STATS.Figures.en#surveys";
+	"ANALYTICS.Figures.en#surveys";
 #endif
 
-const char *Hlp_STATS_Figures_timeline =
+const char *Hlp_ANALYTICS_Figures_timeline =
 #if   L==1
-	"STATS.Figures.es#timeline";
+	"ANALYTICS.Figures.es#timeline";
 #elif L==2
-	"STATS.Figures.en#timeline";
+	"ANALYTICS.Figures.en#timeline";
 #elif L==3
-	"STATS.Figures.en#timeline";
+	"ANALYTICS.Figures.en#timeline";
 #elif L==4
-	"STATS.Figures.es#timeline";
+	"ANALYTICS.Figures.es#timeline";
 #elif L==5
-	"STATS.Figures.en#timeline";
+	"ANALYTICS.Figures.en#timeline";
 #elif L==6
-	"STATS.Figures.es#timeline";
+	"ANALYTICS.Figures.es#timeline";
 #elif L==7
-	"STATS.Figures.en#timeline";
+	"ANALYTICS.Figures.en#timeline";
 #elif L==8
-	"STATS.Figures.en#timeline";
+	"ANALYTICS.Figures.en#timeline";
 #elif L==9
-	"STATS.Figures.en#timeline";
+	"ANALYTICS.Figures.en#timeline";
 #endif
 
-const char *Hlp_STATS_Figures_followed_followers =
+const char *Hlp_ANALYTICS_Figures_followed_followers =
 #if   L==1
-	"STATS.Figures.es#seguidos--seguidores";
+	"ANALYTICS.Figures.es#seguidos--seguidores";
 #elif L==2
-	"STATS.Figures.en#followed--followers";
+	"ANALYTICS.Figures.en#followed--followers";
 #elif L==3
-	"STATS.Figures.en#followed--followers";
+	"ANALYTICS.Figures.en#followed--followers";
 #elif L==4
-	"STATS.Figures.es#seguidos--seguidores";
+	"ANALYTICS.Figures.es#seguidos--seguidores";
 #elif L==5
-	"STATS.Figures.en#followed--followers";
+	"ANALYTICS.Figures.en#followed--followers";
 #elif L==6
-	"STATS.Figures.es#seguidos--seguidores";
+	"ANALYTICS.Figures.es#seguidos--seguidores";
 #elif L==7
-	"STATS.Figures.en#followed--followers";
+	"ANALYTICS.Figures.en#followed--followers";
 #elif L==8
-	"STATS.Figures.en#followed--followers";
+	"ANALYTICS.Figures.en#followed--followers";
 #elif L==9
-	"STATS.Figures.en#followed--followers";
+	"ANALYTICS.Figures.en#followed--followers";
 #endif
 
-const char *Hlp_STATS_Figures_forums =
+const char *Hlp_ANALYTICS_Figures_forums =
 #if   L==1
-	"STATS.Figures.es#foros";
+	"ANALYTICS.Figures.es#foros";
 #elif L==2
-	"STATS.Figures.en#forums";
+	"ANALYTICS.Figures.en#forums";
 #elif L==3
-	"STATS.Figures.en#forums";
+	"ANALYTICS.Figures.en#forums";
 #elif L==4
-	"STATS.Figures.es#foros";
+	"ANALYTICS.Figures.es#foros";
 #elif L==5
-	"STATS.Figures.en#forums";
+	"ANALYTICS.Figures.en#forums";
 #elif L==6
-	"STATS.Figures.es#foros";
+	"ANALYTICS.Figures.es#foros";
 #elif L==7
-	"STATS.Figures.en#forums";
+	"ANALYTICS.Figures.en#forums";
 #elif L==8
-	"STATS.Figures.en#forums";
+	"ANALYTICS.Figures.en#forums";
 #elif L==9
-	"STATS.Figures.en#forums";
+	"ANALYTICS.Figures.en#forums";
 #endif
 
-const char *Hlp_STATS_Figures_notifications =
+const char *Hlp_ANALYTICS_Figures_notifications =
 #if   L==1
-	"STATS.Figures.es#notificaciones";
+	"ANALYTICS.Figures.es#notificaciones";
 #elif L==2
-	"STATS.Figures.en#notifications";
+	"ANALYTICS.Figures.en#notifications";
 #elif L==3
-	"STATS.Figures.en#notifications";
+	"ANALYTICS.Figures.en#notifications";
 #elif L==4
-	"STATS.Figures.es#notificaciones";
+	"ANALYTICS.Figures.es#notificaciones";
 #elif L==5
-	"STATS.Figures.en#notifications";
+	"ANALYTICS.Figures.en#notifications";
 #elif L==6
-	"STATS.Figures.es#notificaciones";
+	"ANALYTICS.Figures.es#notificaciones";
 #elif L==7
-	"STATS.Figures.en#notifications";
+	"ANALYTICS.Figures.en#notifications";
 #elif L==8
-	"STATS.Figures.en#notifications";
+	"ANALYTICS.Figures.en#notifications";
 #elif L==9
-	"STATS.Figures.en#notifications";
+	"ANALYTICS.Figures.en#notifications";
 #endif
 
-const char *Hlp_STATS_Figures_notices =
+const char *Hlp_ANALYTICS_Figures_notices =
 #if   L==1
-	"STATS.Figures.es#avisos";
+	"ANALYTICS.Figures.es#avisos";
 #elif L==2
-	"STATS.Figures.en#notices";
+	"ANALYTICS.Figures.en#notices";
 #elif L==3
-	"STATS.Figures.en#notices";
+	"ANALYTICS.Figures.en#notices";
 #elif L==4
-	"STATS.Figures.es#avisos";
+	"ANALYTICS.Figures.es#avisos";
 #elif L==5
-	"STATS.Figures.en#notices";
+	"ANALYTICS.Figures.en#notices";
 #elif L==6
-	"STATS.Figures.es#avisos";
+	"ANALYTICS.Figures.es#avisos";
 #elif L==7
-	"STATS.Figures.en#notices";
+	"ANALYTICS.Figures.en#notices";
 #elif L==8
-	"STATS.Figures.en#notices";
+	"ANALYTICS.Figures.en#notices";
 #elif L==9
-	"STATS.Figures.en#notices";
+	"ANALYTICS.Figures.en#notices";
 #endif
 
-const char *Hlp_STATS_Figures_messages =
+const char *Hlp_ANALYTICS_Figures_messages =
 #if   L==1
-	"STATS.Figures.es#mensajes";
+	"ANALYTICS.Figures.es#mensajes";
 #elif L==2
-	"STATS.Figures.en#messages";
+	"ANALYTICS.Figures.en#messages";
 #elif L==3
-	"STATS.Figures.en#messages";
+	"ANALYTICS.Figures.en#messages";
 #elif L==4
-	"STATS.Figures.es#mensajes";
+	"ANALYTICS.Figures.es#mensajes";
 #elif L==5
-	"STATS.Figures.en#messages";
+	"ANALYTICS.Figures.en#messages";
 #elif L==6
-	"STATS.Figures.es#mensajes";
+	"ANALYTICS.Figures.es#mensajes";
 #elif L==7
-	"STATS.Figures.en#messages";
+	"ANALYTICS.Figures.en#messages";
 #elif L==8
-	"STATS.Figures.en#messages";
+	"ANALYTICS.Figures.en#messages";
 #elif L==9
-	"STATS.Figures.en#messages";
+	"ANALYTICS.Figures.en#messages";
 #endif
 
-const char *Hlp_STATS_Figures_webs_social_networks =
+const char *Hlp_ANALYTICS_Figures_webs_social_networks =
 #if   L==1
-	"STATS.Figures.es#webs--redes-sociales";
+	"ANALYTICS.Figures.es#webs--redes-sociales";
 #elif L==2
-	"STATS.Figures.en#webs--social-networks";
+	"ANALYTICS.Figures.en#webs--social-networks";
 #elif L==3
-	"STATS.Figures.en#webs--social-networks";
+	"ANALYTICS.Figures.en#webs--social-networks";
 #elif L==4
-	"STATS.Figures.es#webs--redes-sociales";
+	"ANALYTICS.Figures.es#webs--redes-sociales";
 #elif L==5
-	"STATS.Figures.en#webs--social-networks";
+	"ANALYTICS.Figures.en#webs--social-networks";
 #elif L==6
-	"STATS.Figures.es#webs--redes-sociales";
+	"ANALYTICS.Figures.es#webs--redes-sociales";
 #elif L==7
-	"STATS.Figures.en#webs--social-networks";
+	"ANALYTICS.Figures.en#webs--social-networks";
 #elif L==8
-	"STATS.Figures.en#webs--social-networks";
+	"ANALYTICS.Figures.en#webs--social-networks";
 #elif L==9
-	"STATS.Figures.en#webs--social-networks";
+	"ANALYTICS.Figures.en#webs--social-networks";
 #endif
 
-const char *Hlp_STATS_Figures_language =
+const char *Hlp_ANALYTICS_Figures_language =
 #if   L==1
-	"STATS.Figures.es#idioma";
+	"ANALYTICS.Figures.es#idioma";
 #elif L==2
-	"STATS.Figures.en#language";
+	"ANALYTICS.Figures.en#language";
 #elif L==3
-	"STATS.Figures.en#language";
+	"ANALYTICS.Figures.en#language";
 #elif L==4
-	"STATS.Figures.es#idioma";
+	"ANALYTICS.Figures.es#idioma";
 #elif L==5
-	"STATS.Figures.en#language";
+	"ANALYTICS.Figures.en#language";
 #elif L==6
-	"STATS.Figures.es#idioma";
+	"ANALYTICS.Figures.es#idioma";
 #elif L==7
-	"STATS.Figures.en#language";
+	"ANALYTICS.Figures.en#language";
 #elif L==8
-	"STATS.Figures.en#language";
+	"ANALYTICS.Figures.en#language";
 #elif L==9
-	"STATS.Figures.en#language";
+	"ANALYTICS.Figures.en#language";
 #endif
 
-const char *Hlp_STATS_Figures_calendar =
+const char *Hlp_ANALYTICS_Figures_calendar =
 #if   L==1
-	"STATS.Figures.es#calendario";
+	"ANALYTICS.Figures.es#calendario";
 #elif L==2
-	"STATS.Figures.en#calendar";
+	"ANALYTICS.Figures.en#calendar";
 #elif L==3
-	"STATS.Figures.en#calendar";
+	"ANALYTICS.Figures.en#calendar";
 #elif L==4
-	"STATS.Figures.es#calendario";
+	"ANALYTICS.Figures.es#calendario";
 #elif L==5
-	"STATS.Figures.en#calendar";
+	"ANALYTICS.Figures.en#calendar";
 #elif L==6
-	"STATS.Figures.es#calendario";
+	"ANALYTICS.Figures.es#calendario";
 #elif L==7
-	"STATS.Figures.en#calendar";
+	"ANALYTICS.Figures.en#calendar";
 #elif L==8
-	"STATS.Figures.en#calendar";
+	"ANALYTICS.Figures.en#calendar";
 #elif L==9
-	"STATS.Figures.en#calendar";
+	"ANALYTICS.Figures.en#calendar";
 #endif
 
-const char *Hlp_STATS_Figures_dates =
+const char *Hlp_ANALYTICS_Figures_dates =
 #if   L==1
-	"STATS.Figures.es#fechas";
+	"ANALYTICS.Figures.es#fechas";
 #elif L==2
-	"STATS.Figures.en#dates";
+	"ANALYTICS.Figures.en#dates";
 #elif L==3
-	"STATS.Figures.en#dates";
+	"ANALYTICS.Figures.en#dates";
 #elif L==4
-	"STATS.Figures.es#fechas";
+	"ANALYTICS.Figures.es#fechas";
 #elif L==5
-	"STATS.Figures.en#dates";
+	"ANALYTICS.Figures.en#dates";
 #elif L==6
-	"STATS.Figures.es#fechas";
+	"ANALYTICS.Figures.es#fechas";
 #elif L==7
-	"STATS.Figures.en#dates";
+	"ANALYTICS.Figures.en#dates";
 #elif L==8
-	"STATS.Figures.en#dates";
+	"ANALYTICS.Figures.en#dates";
 #elif L==9
-	"STATS.Figures.en#dates";
+	"ANALYTICS.Figures.en#dates";
 #endif
 
-const char *Hlp_STATS_Figures_icons =
+const char *Hlp_ANALYTICS_Figures_icons =
 #if   L==1
-	"STATS.Figures.es#iconos";
+	"ANALYTICS.Figures.es#iconos";
 #elif L==2
-	"STATS.Figures.en#icons";
+	"ANALYTICS.Figures.en#icons";
 #elif L==3
-	"STATS.Figures.en#icons";
+	"ANALYTICS.Figures.en#icons";
 #elif L==4
-	"STATS.Figures.es#iconos";
+	"ANALYTICS.Figures.es#iconos";
 #elif L==5
-	"STATS.Figures.en#icons";
+	"ANALYTICS.Figures.en#icons";
 #elif L==6
-	"STATS.Figures.es#iconos";
+	"ANALYTICS.Figures.es#iconos";
 #elif L==7
-	"STATS.Figures.en#icons";
+	"ANALYTICS.Figures.en#icons";
 #elif L==8
-	"STATS.Figures.en#icons";
+	"ANALYTICS.Figures.en#icons";
 #elif L==9
-	"STATS.Figures.en#icons";
+	"ANALYTICS.Figures.en#icons";
 #endif
 
-const char *Hlp_STATS_Figures_menu =
+const char *Hlp_ANALYTICS_Figures_menu =
 #if   L==1
-	"STATS.Figures.es#men%C3%BA";
+	"ANALYTICS.Figures.es#men%C3%BA";
 #elif L==2
-	"STATS.Figures.en#menu";
+	"ANALYTICS.Figures.en#menu";
 #elif L==3
-	"STATS.Figures.en#menu";
+	"ANALYTICS.Figures.en#menu";
 #elif L==4
-	"STATS.Figures.es#men%C3%BA";
+	"ANALYTICS.Figures.es#men%C3%BA";
 #elif L==5
-	"STATS.Figures.en#menu";
+	"ANALYTICS.Figures.en#menu";
 #elif L==6
-	"STATS.Figures.es#men%C3%BA";
+	"ANALYTICS.Figures.es#men%C3%BA";
 #elif L==7
-	"STATS.Figures.en#menu";
+	"ANALYTICS.Figures.en#menu";
 #elif L==8
-	"STATS.Figures.en#menu";
+	"ANALYTICS.Figures.en#menu";
 #elif L==9
-	"STATS.Figures.en#menu";
+	"ANALYTICS.Figures.en#menu";
 #endif
 
-const char *Hlp_STATS_Figures_theme =
+const char *Hlp_ANALYTICS_Figures_theme =
 #if   L==1
-	"STATS.Figures.es#tema";
+	"ANALYTICS.Figures.es#tema";
 #elif L==2
-	"STATS.Figures.en#theme";
+	"ANALYTICS.Figures.en#theme";
 #elif L==3
-	"STATS.Figures.en#theme";
+	"ANALYTICS.Figures.en#theme";
 #elif L==4
-	"STATS.Figures.es#tema";
+	"ANALYTICS.Figures.es#tema";
 #elif L==5
-	"STATS.Figures.en#theme";
+	"ANALYTICS.Figures.en#theme";
 #elif L==6
-	"STATS.Figures.es#tema";
+	"ANALYTICS.Figures.es#tema";
 #elif L==7
-	"STATS.Figures.en#theme";
+	"ANALYTICS.Figures.en#theme";
 #elif L==8
-	"STATS.Figures.en#theme";
+	"ANALYTICS.Figures.en#theme";
 #elif L==9
-	"STATS.Figures.en#theme";
+	"ANALYTICS.Figures.en#theme";
 #endif
 
-const char *Hlp_STATS_Figures_columns =
+const char *Hlp_ANALYTICS_Figures_columns =
 #if   L==1
-	"STATS.Figures.es#columnas";
+	"ANALYTICS.Figures.es#columnas";
 #elif L==2
-	"STATS.Figures.en#columns";
+	"ANALYTICS.Figures.en#columns";
 #elif L==3
-	"STATS.Figures.en#columns";
+	"ANALYTICS.Figures.en#columns";
 #elif L==4
-	"STATS.Figures.es#columnas";
+	"ANALYTICS.Figures.es#columnas";
 #elif L==5
-	"STATS.Figures.en#columns";
+	"ANALYTICS.Figures.en#columns";
 #elif L==6
-	"STATS.Figures.es#columnas";
+	"ANALYTICS.Figures.es#columnas";
 #elif L==7
-	"STATS.Figures.en#columns";
+	"ANALYTICS.Figures.en#columns";
 #elif L==8
-	"STATS.Figures.en#columns";
+	"ANALYTICS.Figures.en#columns";
 #elif L==9
-	"STATS.Figures.en#columns";
+	"ANALYTICS.Figures.en#columns";
 #endif
 
-const char *Hlp_STATS_Figures_privacy =
+const char *Hlp_ANALYTICS_Figures_privacy =
 #if   L==1
-	"STATS.Figures.es#privacidad";
+	"ANALYTICS.Figures.es#privacidad";
 #elif L==2
-	"STATS.Figures.en#privacy";
+	"ANALYTICS.Figures.en#privacy";
 #elif L==3
-	"STATS.Figures.en#privacy";
+	"ANALYTICS.Figures.en#privacy";
 #elif L==4
-	"STATS.Figures.es#privacidad";
+	"ANALYTICS.Figures.es#privacidad";
 #elif L==5
-	"STATS.Figures.en#privacy";
+	"ANALYTICS.Figures.en#privacy";
 #elif L==6
-	"STATS.Figures.es#privacidad";
+	"ANALYTICS.Figures.es#privacidad";
 #elif L==7
-	"STATS.Figures.en#privacy";
+	"ANALYTICS.Figures.en#privacy";
 #elif L==8
-	"STATS.Figures.en#privacy";
+	"ANALYTICS.Figures.en#privacy";
 #elif L==9
-	"STATS.Figures.en#privacy";
+	"ANALYTICS.Figures.en#privacy";
 #endif
 
-const char *Hlp_STATS_Degrees =
+const char *Hlp_ANALYTICS_Degrees =
 #if   L==1
-	"STATS.Degrees.es";
+	"ANALYTICS.Degrees.es";
 #elif L==2
-	"STATS.Degrees.en";
+	"ANALYTICS.Degrees.en";
 #elif L==3
-	"STATS.Degrees.en";
+	"ANALYTICS.Degrees.en";
 #elif L==4
-	"STATS.Degrees.es";
+	"ANALYTICS.Degrees.es";
 #elif L==5
-	"STATS.Degrees.en";
+	"ANALYTICS.Degrees.en";
 #elif L==6
-	"STATS.Degrees.es";
+	"ANALYTICS.Degrees.es";
 #elif L==7
-	"STATS.Degrees.en";
+	"ANALYTICS.Degrees.en";
 #elif L==8
-	"STATS.Degrees.en";
+	"ANALYTICS.Degrees.en";
 #elif L==9
-	"STATS.Degrees.en";
+	"ANALYTICS.Degrees.en";
 #endif
 
-const char *Hlp_STATS_Indicators =
+const char *Hlp_ANALYTICS_Indicators =
 #if   L==1
-	"STATS.Indicators.es";
+	"ANALYTICS.Indicators.es";
 #elif L==2
-	"STATS.Indicators.en";
+	"ANALYTICS.Indicators.en";
 #elif L==3
-	"STATS.Indicators.en";
+	"ANALYTICS.Indicators.en";
 #elif L==4
-	"STATS.Indicators.es";
+	"ANALYTICS.Indicators.es";
 #elif L==5
-	"STATS.Indicators.en";
+	"ANALYTICS.Indicators.en";
 #elif L==6
-	"STATS.Indicators.es";
+	"ANALYTICS.Indicators.es";
 #elif L==7
-	"STATS.Indicators.en";
+	"ANALYTICS.Indicators.en";
 #elif L==8
-	"STATS.Indicators.en";
+	"ANALYTICS.Indicators.en";
 #elif L==9
-	"STATS.Indicators.en";
+	"ANALYTICS.Indicators.en";
 #endif
 
-const char *Hlp_STATS_Visits_global_visits =
+const char *Hlp_ANALYTICS_Visits_global_visits =
 #if   L==1
-	"STATS.Visits.es#accesos-globales";
+	"ANALYTICS.Visits.es#accesos-globales";
 #elif L==2
-	"STATS.Visits.en#global-visits";
+	"ANALYTICS.Visits.en#global-visits";
 #elif L==3
-	"STATS.Visits.en#global-visits";
+	"ANALYTICS.Visits.en#global-visits";
 #elif L==4
-	"STATS.Visits.es#accesos-globales";
+	"ANALYTICS.Visits.es#accesos-globales";
 #elif L==5
-	"STATS.Visits.en#global-visits";
+	"ANALYTICS.Visits.en#global-visits";
 #elif L==6
-	"STATS.Visits.es#accesos-globales";
+	"ANALYTICS.Visits.es#accesos-globales";
 #elif L==7
-	"STATS.Visits.en#global-visits";
+	"ANALYTICS.Visits.en#global-visits";
 #elif L==8
-	"STATS.Visits.en#global-visits";
+	"ANALYTICS.Visits.en#global-visits";
 #elif L==9
-	"STATS.Visits.en#global-visits";
+	"ANALYTICS.Visits.en#global-visits";
 #endif
 
-const char *Hlp_STATS_Visits_visits_to_course =
+const char *Hlp_ANALYTICS_Visits_visits_to_course =
 #if   L==1
-	"STATS.Visits.es#accesos-a-la-asignatura";
+	"ANALYTICS.Visits.es#accesos-a-la-asignatura";
 #elif L==2
-	"STATS.Visits.en#visits-to-course";
+	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==3
-	"STATS.Visits.en#visits-to-course";
+	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==4
-	"STATS.Visits.es#accesos-a-la-asignatura";
+	"ANALYTICS.Visits.es#accesos-a-la-asignatura";
 #elif L==5
-	"STATS.Visits.en#visits-to-course";
+	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==6
-	"STATS.Visits.es#accesos-a-la-asignatura";
+	"ANALYTICS.Visits.es#accesos-a-la-asignatura";
 #elif L==7
-	"STATS.Visits.en#visits-to-course";
+	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==8
-	"STATS.Visits.en#visits-to-course";
+	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==9
-	"STATS.Visits.en#visits-to-course";
+	"ANALYTICS.Visits.en#visits-to-course";
 #endif
 
-const char *Hlp_STATS_Report =
+const char *Hlp_ANALYTICS_Report =
 #if   L==1
-	"STATS.Report.es";
+	"ANALYTICS.Report.es";
 #elif L==2
-	"STATS.Report.en";
+	"ANALYTICS.Report.en";
 #elif L==3
-	"STATS.Report.en";
+	"ANALYTICS.Report.en";
 #elif L==4
-	"STATS.Report.es";
+	"ANALYTICS.Report.es";
 #elif L==5
-	"STATS.Report.en";
+	"ANALYTICS.Report.en";
 #elif L==6
-	"STATS.Report.es";
+	"ANALYTICS.Report.es";
 #elif L==7
-	"STATS.Report.en";
+	"ANALYTICS.Report.en";
 #elif L==8
-	"STATS.Report.en";
+	"ANALYTICS.Report.en";
 #elif L==9
-	"STATS.Report.en";
+	"ANALYTICS.Report.en";
 #endif
 
-const char *Hlp_STATS_Frequent =
+const char *Hlp_ANALYTICS_Frequent =
 #if   L==1
-	"STATS.Frequent.es";
+	"ANALYTICS.Frequent.es";
 #elif L==2
-	"STATS.Frequent.en";
+	"ANALYTICS.Frequent.en";
 #elif L==3
-	"STATS.Frequent.en";
+	"ANALYTICS.Frequent.en";
 #elif L==4
-	"STATS.Frequent.es";
+	"ANALYTICS.Frequent.es";
 #elif L==5
-	"STATS.Frequent.en";
+	"ANALYTICS.Frequent.en";
 #elif L==6
-	"STATS.Frequent.es";
+	"ANALYTICS.Frequent.es";
 #elif L==7
-	"STATS.Frequent.en";
+	"ANALYTICS.Frequent.en";
 #elif L==8
-	"STATS.Frequent.en";
+	"ANALYTICS.Frequent.en";
 #elif L==9
-	"STATS.Frequent.en";
+	"ANALYTICS.Frequent.en";
 #endif
 
 /***** PROFILE tab *****/

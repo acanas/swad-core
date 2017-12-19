@@ -200,7 +200,7 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTRE_DegreeTypes;
-   extern const char *Hlp_STATS_Figures_types_of_degree;
+   extern const char *Hlp_ANALYTICS_Figures_types_of_degree;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_No_types_of_degree;
    extern const char *Txt_Create_another_type_of_degree;
@@ -215,7 +215,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
 	 break;
       case ActSeeUseGbl:
 	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
-		       Hlp_STATS_Figures_types_of_degree,Box_NOT_CLOSABLE);
+		       Hlp_ANALYTICS_Figures_types_of_degree,Box_NOT_CLOSABLE);
 	 break;
       default:	// Bad call
 	 return;

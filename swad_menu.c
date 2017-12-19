@@ -261,7 +261,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			// 11
 		0,			// 12
 		},
-		// TabSta *******************
+		// TabAna *******************
 		{
 		ActReqUseGbl,		//  0
 		ActSeePhoDeg,		//  1

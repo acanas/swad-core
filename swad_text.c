@@ -20326,7 +20326,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabSta **********************************************************************
+	// TabAna **********************************************************************
 	//  0: ActReqUseGbl
 #if   L==1
 	"Xifres"
@@ -22346,7 +22346,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabSta *****************************************************
+	// TabAna *****************************************************
 	//  0: ActReqUseGbl
 #if   L==1
 	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
@@ -43273,156 +43273,156 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
    {
-	 // TabUnk
-	 NULL,
-	 // TabSys
+	// TabUnk
+	NULL,
+	// TabSys
 #if   L==1
-	 "Plataforma"
+	"Plataforma"
 #elif L==2
-	 "Plattform"
+	"Plattform"
 #elif L==3
-	 "System"
+	"System"
 #elif L==4
-	 "Plataforma"
+	"Plataforma"
 #elif L==5
-	 "Plate-forme"
+	"Plate-forme"
 #elif L==6
-	 "Ypykatu"
+	"Ypykatu"
 #elif L==7
-	 "Piattaforma"
+	"Piattaforma"
 #elif L==8
-	 "System"
+	"System"
 #elif L==9
-	 "Sistema"
+	"Sistema"
 #endif
-	 ,
-	 // TabCty
+	,
+	// TabCty
 #if   L==1
-	 "Pa&iacute;s"
+	"Pa&iacute;s"
 #elif L==2
-	 "Land"
+	"Land"
 #elif L==3
-	 "Country"
+	"Country"
 #elif L==4
-	 "Pa&iacute;s"
+	"Pa&iacute;s"
 #elif L==5
-	 "Pays"
+	"Pays"
 #elif L==6
-	 "Tet&atilde;"
+	"Tet&atilde;"
 #elif L==7
-	 "Paese"
+	"Paese"
 #elif L==8
-	 "Kraj"
+	"Kraj"
 #elif L==9
-	 "Pa&iacute;s"
+	"Pa&iacute;s"
 #endif
-	 ,
-	 // TabIns
+	,
+	// TabIns
 #if   L==1
-	 "Instituci&oacute;"
+	"Instituci&oacute;"
 #elif L==2
-	 "Hochschule"
+	"Hochschule"
 #elif L==3
-	 "Institution"
+	"Institution"
 #elif L==4
-	 "Instituci&oacute;n"
+	"Instituci&oacute;n"
 #elif L==5
-	 "&Eacute;tablissement"
+	"&Eacute;tablissement"
 #elif L==6
-	 "Mbo'ehao"
+	"Mbo'ehao"
 #elif L==7
-	 "Istituzione"
+	"Istituzione"
 #elif L==8
-	 "Instytucji"
+	"Instytucji"
 #elif L==9
-	 "Institu&ccedil;&atilde;o"
+	"Institu&ccedil;&atilde;o"
 #endif
-	 ,
-	 // TabCtr
+	,
+	// TabCtr
 #if   L==1
-	 "Centre"
+	"Centre"
 #elif L==2
-	 "Lehrinstitut"
+	"Lehrinstitut"
 #elif L==3
-	 "Centre"
+	"Centre"
 #elif L==4
-	 "Centro"
+	"Centro"
 #elif L==5
-	 "Centre"
+	"Centre"
 #elif L==6
-	 "Mbo'ehao"
+	"Mbo'ehao"
 #elif L==7
-	 "Centro"
+	"Centro"
 #elif L==8
-	 "Centrum"
+	"Centrum"
 #elif L==9
-	 "Centro"
+	"Centro"
 #endif
-	 ,
-	 // TabDeg
+	,
+	// TabDeg
 #if   L==1
-	 "Titulaci&oacute;"
+	"Titulaci&oacute;"
 #elif L==2
-	 "Studiengang"
+	"Studiengang"
 #elif L==3
-	 "Degree"
+	"Degree"
 #elif L==4
-	 "Titulaci&oacute;n"
+	"Titulaci&oacute;n"
 #elif L==5
-	 "&Eacute;tude"
+	"&Eacute;tude"
 #elif L==6
-	 "Arandur&atilde;"
+	"Arandur&atilde;"
 #elif L==7
-	 "Laurea"
+	"Laurea"
 #elif L==8
-	 "Stopien"
+	"Stopien"
 #elif L==9
-	 "Titula&ccedil;&atilde;o"
+	"Titula&ccedil;&atilde;o"
 #endif
-	 ,
-	 // TabCrs
+	,
+	// TabCrs
 #if   L==1
-	 "Assignatura"
+	"Assignatura"
 #elif L==2
-	 "Kurs"
+	"Kurs"
 #elif L==3
-	 "Course"
+	"Course"
 #elif L==4
-	 "Asignatura"
+	"Asignatura"
 #elif L==5
-	 "Mati&egrave;re"
+	"Mati&egrave;re"
 #elif L==6
-	 "Mbo'esyry"
+	"Mbo'esyry"
 #elif L==7
-	 "Corso"
+	"Corso"
 #elif L==8
-	 "Kurs"
+	"Kurs"
 #elif L==9
-	 "Disciplina"
+	"Disciplina"
 #endif
-	 ,
-	 // TabAss
+	,
+	// TabAss
 #if   L==1
-	 "Avaluaci&oacute;"
+	"Avaluaci&oacute;"
 #elif L==2
-	 "Bewertung"
+	"Bewertung"
 #elif L==3
-	 "Assessment"
+	"Assessment"
 #elif L==4
-	 "Evaluaci&oacute;n"
+	"Evaluaci&oacute;n"
 #elif L==5
-	 "&Eacute;valuation"
+	"&Eacute;valuation"
 #elif L==6
-	 "Mbohepy"
+	"Mbohepy"
 #elif L==7
-	 "Valutazione"
+	"Valutazione"
 #elif L==8
-	 "Ocena"
+	"Ocena"
 #elif L==9
-	 "Avalia&ccedil;&atilde;o"
+	"Avalia&ccedil;&atilde;o"
 #endif
-	 ,
-	 // TabFil
+	,
+	// TabFil
 #if   L==1
 	"Fitxers"
 #elif L==2
@@ -43442,131 +43442,131 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==9
 	"Arquivos"
 #endif
-	 ,
-	 // TabUsr
+	,
+	// TabUsr
 #if   L==1
-	 "Usuaris"
+	"Usuaris"
 #elif L==2
-	 "Benutzer"
+	"Benutzer"
 #elif L==3
-	 "Users"
+	"Users"
 #elif L==4
-	 "Usuarios"
+	"Usuarios"
 #elif L==5
-	 "Utilisateurs"
+	"Utilisateurs"
 #elif L==6
-	 "Puruh&aacute;ra"
+	"Puruh&aacute;ra"
 #elif L==7
-	 "Utenti"
+	"Utenti"
 #elif L==8
-	 "U&zdot;ytkownicy"
+	"U&zdot;ytkownicy"
 #elif L==9
-	 "Utilizadores"
+	"Utilizadores"
 #endif
-	 ,
-	 // TabSoc
+	,
+	// TabSoc
 #if   L==1
-	 "Social"
+	"Social"
 #elif L==2
-	 "Soziales"
+	"Soziales"
 #elif L==3
-	 "Social"
+	"Social"
 #elif L==4
-	 "Social"
+	"Social"
 #elif L==5
-	 "Social"
+	"Social"
 #elif L==6
-	 "Social"	// Okoteve traducción
+	"Social"	// Okoteve traducción
 #elif L==7
-	 "Social"
+	"Social"
 #elif L==8
-	 "Spo&lstrok;eczna"
+	"Spo&lstrok;eczna"
 #elif L==9
-	 "Social"
+	"Social"
 #endif
-	 ,
-	 // TabMsg
+	,
+	// TabMsg
 #if   L==1
-	 "Missatges"
+	"Missatges"
 #elif L==2
-	 "Nachrichten"
+	"Nachrichten"
 #elif L==3
-	 "Messages"
+	"Messages"
 #elif L==4
-	 "Mensajes"
+	"Mensajes"
 #elif L==5
-	 "Messages"
+	"Messages"
 #elif L==6
-	 "Marandu"
+	"Marandu"
 #elif L==7
-	 "Messaggi"
+	"Messaggi"
 #elif L==8
-	 "Wiadomo&sacute;ci"
+	"Wiadomo&sacute;ci"
 #elif L==9
-	 "Mensagens"
+	"Mensagens"
 #endif
-	 ,
-	 // TabSta
-#if   L==1
-	 "Estad&iacute;stiques"
-#elif L==2
-	 "Statistik"
-#elif L==3
-	 "Statistics"
-#elif L==4
-	 "Estad&iacute;sticas"
-#elif L==5
-	 "Statistiques"
-#elif L==6
-	 "Papy'aporeko"
-#elif L==7
-	 "Statistiche"
-#elif L==8
-	 "Statystyki"
-#elif L==9
-	 "Estat&iacute;sticas"
-#endif
+	,
+	// TabAna
 /*
 #if   L==1
-	 "Anal&iacute;tiques"
+	"Estad&iacute;stiques"
 #elif L==2
-	 "Analytik"
+	"Statistik"
 #elif L==3
-	 "Analytics"
+	"Statistics"
 #elif L==4
-	 "Anal&iacute;ticas"
+	"Estad&iacute;sticas"
 #elif L==5
-	 "Analytiques"
+	"Statistiques"
 #elif L==6
-	 "&Ntilde;ehesa'&yuml;ijo"
+	"Papy'aporeko"
 #elif L==7
-	 "Analitiche"
+	"Statistiche"
 #elif L==8
-	 "Analizy"
+	"Statystyki"
 #elif L==9
-	 "An&aacute;lises"
+	"Estat&iacute;sticas"
 #endif
 */
-	 ,
-	 // TabPrf
 #if   L==1
-	 "Perfil"
+	"An&agrave;lisi"
 #elif L==2
-	 "Profil"
+	"Analytik"
 #elif L==3
-	 "Profile"
+	"Analytics"
 #elif L==4
-	 "Perfil"
+	"An&aacute;lisis"
 #elif L==5
-	 "Profil"
+	"Analytiques"
 #elif L==6
-	 "Che"
+	"&Ntilde;ehesa'&yuml;ijo"
 #elif L==7
-	 "Profilo"
+	"Analitiche"
 #elif L==8
-	 "Profil"
+	"Analizy"
 #elif L==9
-	 "Perfil"
+	"An&aacute;lises"
+#endif
+	,
+	// TabPrf
+#if   L==1
+	"Perfil"
+#elif L==2
+	"Profil"
+#elif L==3
+	"Profile"
+#elif L==4
+	"Perfil"
+#elif L==5
+	"Profil"
+#elif L==6
+	"Che"
+#elif L==7
+	"Profilo"
+#elif L==8
+	"Profil"
+#elif L==9
+	"Perfil"
 #endif
 	};
 

@@ -147,7 +147,7 @@ static void Rep_RemoveUsrReportsFromDB (long UsrCod);
 
 void Rep_ReqMyUsageReport (void)
   {
-   extern const char *Hlp_STATS_Report;
+   extern const char *Hlp_ANALYTICS_Report;
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Generate_report;
 
@@ -157,7 +157,7 @@ void Rep_ReqMyUsageReport (void)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                 Hlp_STATS_Report,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
    /***** Header *****/
    Req_TitleReport (NULL);	// NULL means do not write date
@@ -254,7 +254,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 
 static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
   {
-   extern const char *Hlp_STATS_Report;
+   extern const char *Hlp_ANALYTICS_Report;
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
@@ -262,7 +262,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
-                 Hlp_STATS_Report,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
    /***** Header *****/
    Req_TitleReport (&Report->CurrentTimeUTC);
