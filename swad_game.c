@@ -96,7 +96,9 @@ static void Gam_WriteAuthor (struct Game *Game);
 static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
 
-static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible);
+static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
+                                          bool ShowOnlyThisGame);
+static void Gam_PutParamsToPlayGame1stQst (void);
 static void Gam_PutParams (void);
 
 static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
@@ -459,7 +461,8 @@ static void Gam_ShowOneGame (long GamCod,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Game.Status.ICanEdit)
-      Gam_PutFormsToRemEditOneGame (Game.GamCod,Game.Status.Visible);
+      Gam_PutFormsToRemEditOneGame (Game.GamCod,Game.Status.Visible,
+                                    ShowOnlyThisGame);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
@@ -536,7 +539,7 @@ static void Gam_ShowOneGame (long GamCod,
    Gam_WriteStatus (&Game);
 
    if (ShowOnlyThisGame)
-      {
+     {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
       Act_FormStart (ActPlyGam);
@@ -808,7 +811,8 @@ void Gam_PutHiddenParamGameOrder (void)
 /******************** Put a link (form) to edit one game *********************/
 /*****************************************************************************/
 
-static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible)
+static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
+                                          bool ShowOnlyThisGame)
   {
    extern const char *Txt_Reset;
    extern const char *Txt_Play;
@@ -833,21 +837,39 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible)
    /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
 
-   /***** Put icon to play game *****/
-   Lay_PutContextualLink (ActPlyGam,NULL,Gam_PutParams,
-                          "play64x64.png",
-                          Txt_Play,NULL,
-		          NULL);
+   if (ShowOnlyThisGame)
+      /***** Put icon to show first question *****/
+      Lay_PutContextualLink (ActPlyGam1stQst,NULL,Gam_PutParamsToPlayGame1stQst,
+			     "play64x64.png",
+			     Txt_Play,NULL,
+			     NULL);
+   else
+      /***** Put icon to play game *****/
+      Lay_PutContextualLink (ActPlyGam,NULL,Gam_PutParams,
+			     "play64x64.png",
+			     Txt_Play,NULL,
+			     NULL);
   }
 
 /*****************************************************************************/
-/********************** Params used to edit a game *************************/
+/************* Params used to play the first question of a game **************/
+/*****************************************************************************/
+
+static void Gam_PutParamsToPlayGame1stQst (void)
+  {
+   Gam_PutParams ();
+   Gam_PutParamQstInd (0);	// Start by first question in game
+  }
+
+/*****************************************************************************/
+/******************** Params used to edit/play a game ************************/
 /*****************************************************************************/
 
 static void Gam_PutParams (void)
   {
    if (Gbl.Games.CurrentGamCod > 0)
       Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
+
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);

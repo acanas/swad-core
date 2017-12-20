@@ -297,7 +297,7 @@ Gracias
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.27 (2017-12-19)"
+#define Log_PLATFORM_VERSION	"SWAD 17.27.1 (2017-12-20)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
@@ -313,6 +313,7 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 17.27.1:  Dec 20, 2017  Changes in icon to play game. (234484 lines)
         Version 17.27:    Dec 19, 2017  Statistics tab is renamed as Analytics. (234464 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/iconset/awesome/action64x64/ana64x64.gif /var/www/html/swad/icon/iconset/awesome/action64x64/
