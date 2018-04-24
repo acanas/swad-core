@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -757,7 +757,6 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
 
 static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -769,7 +768,6 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    unsigned long NumRow;
    long ActCod;
    Act_Action_t Action;
-   Act_Action_t SuperAction;
    Tab_Tab_t Tab;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    unsigned long NumClicks;
@@ -816,8 +814,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	 Action = Act_FromActCodToAction[ActCod];
 	 if (Action >= 0)
 	   {
-	    SuperAction = Act_Actions[Action].SuperAction;
-	    Tab = Act_Actions[SuperAction].Tab;
+	    Tab = Act_GetTab (Act_GetSuperAction (Action));
 	    if (Txt_TABS_TXT[Tab])
 	       fprintf (Gbl.F.Rep,"%s &gt; ",Txt_TABS_TXT[Tab]);
 	   }

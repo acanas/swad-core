@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -69,8 +69,9 @@ extern struct Globals Gbl;
 
 int main (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+   void (*FunctionPriori) (void);
+   void (*FunctionPosteriori) (void);
 
    /*
     "touch swad.lock" in CGI directory if you want to disable SWAD
@@ -121,7 +122,7 @@ int main (void)
 	 Con_RemoveOldConnected ();
 
 	 /***** Get number of sessions *****/
-	 if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
+	 if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
 	    Ses_GetNumSessions ();
 
 	 /***** Check user and get user's data *****/
@@ -136,10 +137,11 @@ int main (void)
       MFU_UpdateMFUActions ();
 
       /***** Execute a function depending on the action *****/
-      if (Act_Actions[Gbl.Action.Act].FunctionPriori != NULL)
-	 Act_Actions[Gbl.Action.Act].FunctionPriori ();
+      FunctionPriori = Act_GetFunctionPriori (Gbl.Action.Act);
+      if (FunctionPriori != NULL)
+	  FunctionPriori ();
 
-      if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_204_NO_CONT)
+      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_204_NO_CONT)
 	 /***** Write HTTP Status 204 No Content *****/
 	 Lay_WriteHTTPStatus204NoContent ();
 
@@ -147,8 +149,9 @@ int main (void)
       Lay_WriteStartOfPage ();
 
       /***** Make a processing or other depending on the action *****/
-      if (Act_Actions[Gbl.Action.Act].FunctionPosteriori != NULL)
-	 Act_Actions[Gbl.Action.Act].FunctionPosteriori ();
+      FunctionPosteriori = Act_GetFunctionPosteriori (Gbl.Action.Act);
+      if (FunctionPosteriori != NULL)
+	  FunctionPosteriori ();
      }
 
    /***** Cleanup and exit *****/

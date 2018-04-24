@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -107,7 +107,6 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 
 void Lay_WriteStartOfPage (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
@@ -252,7 +251,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"</head>\n");
 
    /***** HTML body *****/
-   if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
+   if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
       fprintf (Gbl.F.Out,"<body onload=\"init();\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
@@ -337,7 +336,7 @@ void Lay_WriteStartOfPage (void)
 
    /* Write title of the current action */
    if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
-      Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu >= 0)
+      Act_GetIndexInMenu (Gbl.Action.Act) >= 0)
       Lay_WriteTitleAction ();
 
    Gbl.Layout.WritingHTMLStart = false;
@@ -389,8 +388,6 @@ void Lay_WriteHTTPStatus204NoContent (void)
 
 static void Lay_WriteEndOfPage (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-
    if (!Gbl.Layout.DivsEndWritten)
      {
       /***** End of central part of main zone *****/
@@ -399,7 +396,7 @@ static void Lay_WriteEndOfPage (void)
 			 "</div>");	// main_zone_central_container
 
       /***** Write page footer *****/
-      if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
+      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
          Lay_WriteFootFromHTMLFile ();
 
       /***** End of main zone and page *****/
@@ -443,27 +440,25 @@ static void Lay_WritePageTitle (void)
 
 static void Lay_WriteRedirToMyLangOnLogIn (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	    Act_Actions[ActLogInLan].ActCod,
+	    Act_GetActCod (ActLogInLan),
 	    Gbl.Session.Id);
   }
 
 static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	    Act_Actions[ActLogInUsrAgdLan].ActCod,
+	    Act_GetActCod (ActLogInUsrAgdLan),
 	    Gbl.Session.Id,
 	    Gbl.Usrs.Other.UsrDat.Nickname);
   }
@@ -474,7 +469,6 @@ static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
 
 static void Lay_WriteScripts (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_DAYS_CAPS[7];
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
@@ -724,18 +718,16 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptParamsAJAX (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-
    /***** Start script *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
    /***** Parameter to refresh connected users *****/
    fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
-            Act_Actions[ActRefCon].ActCod);
+            Act_GetActCod (ActRefCon));
 
    /***** Parameter to refresh clicks in realtime *****/
    fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
-            Act_Actions[ActRefLstClk].ActCod);
+            Act_GetActCod (ActRefLstClk));
 
    /***** Parameters related with expanding/contracting folders in file browsers *****/
    if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
@@ -743,8 +735,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 put parameters used by AJAX */
       fprintf (Gbl.F.Out,"var RefreshParamExpand = \"act=%ld\";\n"
 			 "var RefreshParamContract = \"act=%ld\";\n",
-	       Act_Actions[Brw_GetActionExpand ()  ].ActCod,
-	       Act_Actions[Brw_GetActionContract ()].ActCod);
+	       Act_GetActCod (Brw_GetActionExpand ()  ),
+	       Act_GetActCod (Brw_GetActionContract ()));
 
    /***** Parameters related with social timeline refreshing *****/
    switch (Gbl.Action.Act)
@@ -768,8 +760,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 			    "var RefreshParamUsr = \"\";\n"	// No user specified
 			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
-		  Act_Actions[ActRefNewSocPubGbl].ActCod,
-		  Act_Actions[ActRefOldSocPubGbl].ActCod,
+		  Act_GetActCod (ActRefNewSocPubGbl),
+		  Act_GetActCod (ActRefOldSocPubGbl),
 		  (unsigned) Gbl.Social.WhichUsrs);
 	 break;
       case ActSeeOthPubPrf:
@@ -794,7 +786,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 				       Gbl.Usrs.Other.UsrDat.Nickname);
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 			    "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
-		  Act_Actions[ActRefOldSocPubUsr].ActCod,
+		  Act_GetActCod (ActRefOldSocPubUsr),
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       default:
@@ -975,22 +967,20 @@ static void Lay_WriteBreadcrumb (void)
 
 static void Lay_WriteTitleAction (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
    extern const char *The_ClassSubtitleAction[The_NUM_THEMES];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
-   Act_Action_t SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
 	              " style=\"background-image:url('%s/%s/%s');\">",
 	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-	    Act_Actions[SuperAction].Icon);
+	    Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s &gt; %s</div>",
 	    The_ClassTitleAction[Gbl.Prefs.Theme],
-	    Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
+	    Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
 	    Act_GetTitleAction (Gbl.Action.Act));
 
    /***** Subtitle *****/
@@ -1209,8 +1199,6 @@ void Lay_EndSection (void)
 
 void Lay_ShowErrorAndExit (const char *Txt)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-
    /***** Unlock tables if locked *****/
    if (Gbl.DB.LockedTables)
      {
@@ -1267,7 +1255,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
 	    // Here Gbl.F.Out is stdout
-	    if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
+	    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
 	       Lay_WriteAboutZone ();
 
 	    fprintf (Gbl.F.Out,"</body>\n"

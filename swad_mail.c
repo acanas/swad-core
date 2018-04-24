@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -364,21 +364,18 @@ static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MA
 
 void Mai_WriteWarningEmailNotifications (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_Domains;
-   Act_Action_t SuperActionMyAccount   = Act_Actions[ActFrmMyAcc].SuperAction;
-   Act_Action_t SuperActionMailDomains = Act_Actions[ActSeeMai  ].SuperAction;
-   Tab_Tab_t TabMyAccount   = Act_Actions[SuperActionMyAccount  ].Tab;
-   Tab_Tab_t TabMailDomains = Act_Actions[SuperActionMailDomains].Tab;
+   Tab_Tab_t TabMyAccount   = Act_GetTab (ActFrmMyAcc  );
+   Tab_Tab_t TabMailDomains = Act_GetTab (ActSeeMai);
 
    sprintf (Gbl.Alert.Txt,Txt_You_can_only_receive_email_notifications_if_,
-	    Txt_TABS_TXT[TabMyAccount  ],
-	    Txt_MENU_TITLE[TabMyAccount  ][Act_Actions[SuperActionMyAccount  ].IndexInMenu],
-            Txt_TABS_TXT[TabMailDomains],
-	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu],
+	    Txt_TABS_TXT  [TabMyAccount  ],
+	    Txt_MENU_TITLE[TabMyAccount  ][Act_GetIndexInMenu (ActFrmMyAcc)],
+            Txt_TABS_TXT  [TabMailDomains],
+	    Txt_MENU_TITLE[TabMailDomains][Act_GetIndexInMenu (ActSeeMai  )],
 	    Txt_Domains);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
   }
@@ -1641,7 +1638,6 @@ void Mai_PutButtonToCheckEmailAddress (void)
 
 bool Mai_SendMailMsgToConfirmEmail (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML;
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
@@ -1662,7 +1658,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    fprintf (Gbl.Msg.FileMail,
 	    Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML,
 	    Cfg_URL_SWAD_CGI,Gbl.Usrs.Me.UsrDat.Email,
-            Cfg_URL_SWAD_CGI,Act_Actions[ActCnfMai].ActCod,Gbl.UniqueNameEncrypted,
+            Cfg_URL_SWAD_CGI,Act_GetActCod (ActCnfMai),Gbl.UniqueNameEncrypted,
             Cfg_URL_SWAD_CGI);
 
    /* Footer note */

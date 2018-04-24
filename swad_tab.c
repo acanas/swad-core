@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -204,9 +204,9 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 
 void Tab_DrawBreadcrumb (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
+   signed int IndexInMenu;
 
    fprintf (Gbl.F.Out,"<div id=\"breadcrumb_container\" class=\"%s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
@@ -214,15 +214,15 @@ void Tab_DrawBreadcrumb (void)
    /***** Home *****/
    Tab_WriteBreadcrumbHome ();
 
-   if (Gbl.Action.Act == ActMnu ||
-       Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu >= 0)
+   IndexInMenu = Act_GetIndexInMenu (Gbl.Action.Act);
+   if (Gbl.Action.Act == ActMnu || IndexInMenu >= 0)
      {
       /***** Tab *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
                The_ClassTxtTabOn[Gbl.Prefs.Theme]);
       Tab_WriteBreadcrumbTab ();
 
-      if (Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu >= 0)
+      if (IndexInMenu >= 0)
         {
          /***** Menu *****/
          fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
@@ -275,12 +275,11 @@ static void Tab_WriteBreadcrumbTab (void)
 
 static void Tab_WriteBreadcrumbAction (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
    const char *Title = Act_GetTitleAction (Gbl.Action.Act);
 
    /***** Start form *****/
-   Act_FormStart (Act_Actions[Gbl.Action.Act].SuperAction);
+   Act_FormStart (Act_GetSuperAction (Gbl.Action.Act));
    Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end form *****/
@@ -295,11 +294,7 @@ static void Tab_WriteBreadcrumbAction (void)
 
 void Tab_SetCurrentTab (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   Act_Action_t SuperAction;
-
-   SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
-   Gbl.Action.Tab = Act_Actions[SuperAction].Tab;
+   Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 
    /***** Change action and tab if country, institution, centre or degree
           are incompatible with the current tab *****/
@@ -346,8 +341,7 @@ void Tab_SetCurrentTab (void)
          break;
      }
 
-   SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
-   Gbl.Action.Tab = Act_Actions[SuperAction].Tab;
+   Gbl.Action.Tab = Act_GetTab (Act_GetSuperAction (Gbl.Action.Act));
 
    Tab_DisableIncompatibleTabs ();
   }

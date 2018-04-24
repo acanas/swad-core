@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1173,12 +1173,12 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
                        bool FormUnique)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    bool PhotoExists;
-   bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
-                                 Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
-   bool PutZoomCode = Zoom == Pho_ZOOM &&						// Make zoom
-                      Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
+   bool BrowserTabIs1stTab = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;
+   bool PutLinkToPublicProfile = !Gbl.Form.Inside &&	// Only if not inside another form
+                                 BrowserTabIs1stTab;	// Only in main browser tab
+   bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
+                      BrowserTabIs1stTab;		// Only in main browser tab
    char IdCaption[Act_MAX_BYTES_ID];
 
    /***** Start form to go to public profile *****/

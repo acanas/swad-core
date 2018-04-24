@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -279,10 +279,10 @@ void Sta_GetRemoteAddr (void)
 
 void Sta_LogAccess (const char *Comments)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[Sta_MAX_BYTES_QUERY_LOG +
               Sch_MAX_BYTES_STRING_TO_FIND + 1];
    long LogCod;
+   long ActCod = Act_GetActCod (Gbl.Action.Act);
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
                                                             Gbl.Usrs.Me.Role.Logged;
 
@@ -294,7 +294,7 @@ void Sta_LogAccess (const char *Comments)
                   " VALUES "
                   "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
                   "%u,NOW(),%ld,%ld,'%s')",
-            Act_Actions[Gbl.Action.Act].ActCod,
+            ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentCtr.Ctr.CtrCod,
@@ -321,7 +321,7 @@ void Sta_LogAccess (const char *Comments)
                   " VALUES "
                   "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
                   "%u,NOW(),%ld,%ld,'%s')",
-            LogCod,Act_Actions[Gbl.Action.Act].ActCod,
+            LogCod,ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentCtr.Ctr.CtrCod,
@@ -801,12 +801,10 @@ static void Sta_WriteSelectorCountType (void)
 
 static void Sta_WriteSelectorAction (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Act_Action_t Action;
-   Act_Action_t SuperAction;
    Tab_Tab_t Tab;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
@@ -828,12 +826,11 @@ static void Sta_WriteSelectorAction (void)
       fprintf (Gbl.F.Out,">");
       if (Action)
          fprintf (Gbl.F.Out,"%u: ",(unsigned) Action);
-      SuperAction = Act_Actions[Action].SuperAction;
-      Tab = Act_Actions[SuperAction].Tab;
+      Tab = Act_GetTab (Act_GetSuperAction (Action));
       if (Txt_TABS_TXT[Tab])
          fprintf (Gbl.F.Out,"%s &gt; ",Txt_TABS_TXT[Tab]);
       fprintf (Gbl.F.Out,"%s",
-               Act_GetActionTextFromDB (Act_Actions[Action].ActCod,ActTxt));
+               Act_GetActionTextFromDB (Act_GetActCod (Action),ActTxt));
      }
 
    fprintf (Gbl.F.Out,"</select>"
@@ -876,7 +873,6 @@ void Sta_SeeCrsAccesses (void)
 
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
@@ -1365,7 +1361,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    if (Gbl.Stat.NumAction != ActAll)
      {
       sprintf (QueryAux," AND %s.ActCod=%ld",
-               LogTable,Act_Actions[Gbl.Stat.NumAction].ActCod);
+               LogTable,Act_GetActCod (Gbl.Stat.NumAction));
       Str_Concat (Query,QueryAux,
                   Sta_MAX_BYTES_QUERY_ACCESS);
      }

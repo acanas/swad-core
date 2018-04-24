@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -96,11 +96,11 @@ struct Tst_Config
    unsigned Def;	// Default number of questions
    unsigned Max;	// Maximum number of questions
    unsigned long MinTimeNxtTstPerQst;
-   Tst_Feedback_t FeedbackType;
+   Tst_Feedback_t Feedback;
   };
 
 #define Tst_NUM_ANS_TYPES	6
-#define Tst_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Tst_NUM_ANS_TYPES-1) * (1 + 10))
+#define Tst_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Tst_NUM_ANS_TYPES - 1) * (1 + 10))
 typedef enum
   {
    Tst_ANS_INT             = 0,

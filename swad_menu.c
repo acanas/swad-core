@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -329,7 +329,6 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassTxtMenuOn[The_NUM_THEMES];
    extern const char *The_ClassTxtMenuOff[The_NUM_THEMES];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
@@ -352,7 +351,7 @@ void Mnu_WriteMenuThisTab (void)
          break;
       if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
         {
-         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.Action.Act].SuperAction);
+         IsTheSelectedAction = (NumAct == Act_GetSuperAction (Gbl.Action.Act));
 
          Title = Act_GetSubtitleAction (NumAct);
 
@@ -374,7 +373,7 @@ void Mnu_WriteMenuThisTab (void)
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICO\""
 			    " style=\"background-image:url('%s/%s/%s');\">",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-                  Act_Actions[NumAct].Icon);
+                  Act_GetIcon (NumAct));
 
          /***** Text *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">"

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -348,7 +348,6 @@ bool Ses_GetSessionData (void)
 void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
                               const char *ParamName,const char *ParamValue)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char *Query;
    size_t LengthParamName;
    size_t LengthParamValue;
@@ -381,7 +380,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
 			   " VALUES"
 			   " ('%s',%ld,'%s','%s')",
 		     Gbl.Session.Id,
-		     Act_Actions[NextAction].ActCod,
+		     Act_GetActCod (NextAction),
 		     ParamName,
 		     LengthParamValue ? ParamValue :
 					"");
@@ -433,13 +432,12 @@ void Ses_RemoveHiddenParFromExpiredSessions (void)
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
                                                const char *ParamName)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[512 + Ses_BYTES_SESSION_ID];
 
    /***** Get a hidden parameter from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM hidden_params"
                   " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
-            Gbl.Session.Id,Act_Actions[NextAction].ActCod,ParamName);
+            Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
    return (DB_QueryCOUNT (Query,"can not check if a hidden parameter is already in database") != 0);
   }
 
@@ -452,7 +450,6 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
                                  const char *ParamName,char *ParamValue,
                                  size_t MaxBytes)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[512 + Ses_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -467,7 +464,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
       /***** Get a hidden parameter from database *****/
       sprintf (Query,"SELECT ParamValue FROM hidden_params"
                      " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
-               Gbl.Session.Id,Act_Actions[NextAction].ActCod,ParamName);
+               Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get a hidden parameter");
 
       /***** Check if the parameter is found in database *****/

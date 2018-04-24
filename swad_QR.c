@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -147,7 +147,6 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
 
 void QR_ExamAnnnouncement (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Link_to_announcement_of_exam;
 
    /***** Show QR code with direct link to the exam announcement *****/
@@ -157,7 +156,7 @@ void QR_ExamAnnnouncement (void)
                       " style=\"width:250px; height:250px;\" />"
                       "</div>",
             300,300,
-            Cfg_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeAllExaAnn].ActCod,
+            Cfg_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_GetActCod (ActSeeAllExaAnn),
             Txt_Link_to_announcement_of_exam,
             Txt_Link_to_announcement_of_exam);
   }

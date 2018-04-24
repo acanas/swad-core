@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -49,6 +49,7 @@ typedef enum
 
 typedef enum
   {
+   Act_BRW_UNK_TAB,	// Unknown tab
    Act_BRW_1ST_TAB,	// The main (original, first) tab in the browser
    Act_BRW_NEW_TAB,	// A new (second) blank tab in the browser
    Act_BRW_2ND_TAB,	// The second tab in the browser
@@ -1635,8 +1636,8 @@ struct Act_Actions
    unsigned PermissionSys;
    Act_Content_t ContentType;
    Act_BrowserTab_t BrowserTab;
-   void (*FunctionPriori)();
-   void (*FunctionPosteriori)();
+   void (*FunctionPriori) ();
+   void (*FunctionPosteriori) ();
    const char *Icon;
   };
 
@@ -1645,8 +1646,17 @@ struct Act_Actions
 /*****************************************************************************/
 
 Act_Action_t Act_GetActionFromActCod (long ActCod);
-
+long Act_GetActCod (Act_Action_t Action);
+signed int Act_GetIndexInMenu (Act_Action_t Action);
+Tab_Tab_t Act_GetTab (Act_Action_t Action);
+Act_Action_t Act_GetSuperAction (Act_Action_t Action);
 bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action);
+Act_Content_t Act_GetContentType (Act_Action_t Action);
+Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action);
+void (*Act_GetFunctionPriori (Act_Action_t Action)) (void);
+void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void);
+const char *Act_GetIcon (Act_Action_t Action);
+
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetSubtitleAction (Act_Action_t Action);
 char *Act_GetActionTextFromDB (long ActCod,

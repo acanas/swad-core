@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -284,6 +284,9 @@ Esto no está programado de otra forma porque eres la primera persona que lo soli
 ----- Mensaje original -----
 Hola Antonio, ya hemos terminado un curso y me piden un control de la asistencia por parte de cada alumno en horas y minutos. ¿Sabes si los puedo visualizar todos sin tener que ir entrando uno por uno?
 Gracias
+
+---
+Una pregunta: hay un calendario que me vendría muy bien poder colorear o remarcar las fechas que dura cada asignatura, ya que son módulos que se van autoevaluando a lo largo del curso,  ¿es posible?  porque he visto que el calendario no es editable,
 */
 // TODO: Check actions table. All actions must be present in table.
 
@@ -292,6 +295,33 @@ Gracias
 // TODO: FIX BUG: se detiene la copia-pega desde trabajos de Torres Barrilado en "Trabajos Fin de Grado del Dpto. ATC". El error es "Can not get information about a file or folder." No debería abortarse en esta situación.
 
 // TODO: Urgente: Un profesor no puede eliminar archivos de estudiantes de la zona de actividades, ni subir nuevos, mientras está abierta la actividad, pero sí cuando está cerrada. ¿Qué sentido tiene?
+
+// TODO: Suggested by Pablo Merino Ávila: statistics on test exams grouped by tags
+
+// TODO: Suggested by Jesús García Miranda: copiar un fichero syllabus.xml de una asignatura a otra (bajar el fichero y poder importarlo desde otra).
+// ---
+
+// TODO: Sugerencia de David Cabrera Hidalgo: en la descarga de archivos, pulsando el botón del centro del ratón equivale a "abrir en pestaña nueva". Si se usara el método GET se podrían ir abriendo enlaces en otras pestañas para visitarlos posteriormente.
+/*
+Pilar Ossorio Castellanos en OpenSWAD
+Pues tendría que hacer cambios en el programa. Lo anoto como urgente...
+¡Gracias!
+Antonio
+
+----- Mensaje original -----
+Hola Antonio, he ampliado el evento y nos deja comentar. El problema es que el profesor que es tutor del evento es no-editor, y no puede comentar el evento como yo, que si lo soy pero no he participado en el evento.¿cómo podríamos hacer para que ese profesor pudiera comentar, siendo el tutor, pero no siendo editor?
+*/
+
+// TODO: En el maletín cualquiera debería poder hacer un zip de una carpeta, no solo el superusuario
+
+// TODO: Al buscar un profesor deberían salir también las asignaturas en las que es profesor no editor
+// TODO: En el pefil público de un usuario deberían contabilizarse como profesor las asignaturas en las que sea profesor no editor
+
+
+// TODO: Eliminar todas las preguntas de test de un golpe
+// TODO: URGENTE: Cuando se cree un descriptor nuevo TIENE QUE ESTAR INHABILITADO porque si no los alumnos pueden ver el examen (Miguel Damas)
+
+// TODO: URGENTE: No se puede eliminar ni ocultar el enlace "Preparacion terreno_ hoyos._." de la asignatura PLANTACIÓN Y SIEMBRA (código 2165) de OpenSWAD.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -313,6 +343,9 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 17.29:    Apr 24, 2018  Code refactoring and bug fixing related to actions. (234579 lines)
+        Version 17.28:    Jan 09, 2018  Added average of all test exams. (? lines)
+        Version 17.27.2:  Dec 20, 2017  Changes displaying a game question. (234507 lines)
         Version 17.27.1:  Dec 20, 2017  Changes in icon to play game. (234484 lines)
         Version 17.27:    Dec 19, 2017  Statistics tab is renamed as Analytics. (234464 lines)
 Copy the following icons to icon public directory:

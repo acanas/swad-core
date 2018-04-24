@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -3573,7 +3573,7 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->defQuestions = (int) Gbl.Test.Config.Def;
    getTestConfigOut->maxQuestions = (int) Gbl.Test.Config.Max;
    Str_Copy (getTestConfigOut->feedback,
-             Tst_FeedbackXML[Gbl.Test.Config.FeedbackType],
+             Tst_FeedbackXML[Gbl.Test.Config.Feedback],
              Tst_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
@@ -3608,7 +3608,7 @@ static int Svc_GetTstConfig (long CrsCod)
      {
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
       Gbl.Test.Config.Min = Gbl.Test.Config.Def = Gbl.Test.Config.Max = 0;
-      Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_DEFAULT;
+      Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/

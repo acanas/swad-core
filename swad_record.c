@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1689,7 +1689,6 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
@@ -1764,7 +1763,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    ICanEdit = true;
 	    Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
 	    Par_PutHiddenParamLong ("OriginalActCod",
-				    Act_Actions[ActSeeRecSevStd].ActCod);	// Original action, used to know where we came from
+				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 	       Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select[Rol_UNK]);
@@ -2182,7 +2181,6 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct UsrData *UsrDat,const char *Anchor)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_USERS_SignUp;
    extern const char *Hlp_PROFILE_Record;
    extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
@@ -2306,7 +2304,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs.Role];
 
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
+                  Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    Ins.InsCod = UsrDat->InsCod;
    if (Ins.InsCod > 0)
@@ -2531,7 +2529,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 static void Rec_PutIconsCommands (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -2550,9 +2547,9 @@ static void Rec_PutIconsCommands (void)
    bool ICanViewUsrProfile;
    Act_Action_t NextAction;
 
-   if (!Gbl.Form.Inside &&						// Only if not inside another form
-       Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB &&	// Only in main browser tab
-       Gbl.Usrs.Me.Logged)						// Only if I am logged
+   if (!Gbl.Form.Inside &&					// Only if not inside another form
+       Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
+       Gbl.Usrs.Me.Logged)					// Only if I am logged
      {
       ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
 				                 Gbl.Record.UsrDat);

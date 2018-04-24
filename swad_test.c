@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -284,9 +284,14 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score);
 static void Tst_ShowHeaderTestResults (void);
 static void Tst_ShowTestResults (struct UsrData *UsrDat);
-static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults);
+static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams);
 static void Tst_PutParamTstCod (long TstCod);
 static long Tst_GetParamTstCod (void);
+static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
+                                           unsigned NumExams,
+                                           unsigned NumTotalQsts,
+                                           unsigned NumTotalQstsNotBlank,
+                                           double TotalScoreOfAllTests);
 static void Tst_ShowTestResult (time_t TstTimeUTC);
 static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
                                            unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score);
@@ -565,7 +570,7 @@ void Tst_AssessTest (void)
 	 Tbl_EndTable ();
 
 	 /***** Write total mark of test *****/
-	 if (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING)
+	 if (Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
 	    Tst_ShowTstTotalMark (TotalScore);
 
 	 /***** End box *****/
@@ -1033,7 +1038,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 	 Tst_WriteAnswersTestResult (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
-	 if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
 	 break;
       case Tst_EDIT_TEST:
@@ -1923,7 +1928,7 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK];
    extern const char *Txt_Save;
    Tst_Pluggable_t Pluggable;
-   Tst_Feedback_t FeedbTyp;
+   Tst_Feedback_t Feedback;
 
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
@@ -2005,19 +2010,19 @@ static void Tst_ShowFormConfigTst (void)
 	              "</td>"
 	              "<td class=\"LEFT_BOTTOM\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback_to_students);
-   for (FeedbTyp = (Tst_Feedback_t) 0;
-	FeedbTyp < Tst_NUM_TYPES_FEEDBACK;
-	FeedbTyp++)
+   for (Feedback = (Tst_Feedback_t) 0;
+	Feedback < Tst_NUM_TYPES_FEEDBACK;
+	Feedback++)
      {
       fprintf (Gbl.F.Out,"<label class=\"DAT\">"
 	                 "<input type=\"radio\" name=\"Feedback\" value=\"%u\"",
-	       (unsigned) FeedbTyp);
-      if (FeedbTyp == Gbl.Test.Config.FeedbackType)
+	       (unsigned) Feedback);
+      if (Feedback == Gbl.Test.Config.Feedback)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "%s"
 	                 "</label><br />",
-               Txt_TST_STR_FEEDBACK[FeedbTyp]);
+               Txt_TST_STR_FEEDBACK[Feedback]);
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -2073,7 +2078,7 @@ static void Tst_GetConfigTstFromDB (void)
             Gbl.CurrentCrs.Crs.CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get configuration of test");
 
-   Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_DEFAULT;
+   Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
    Gbl.Test.Config.MinTimeNxtTstPerQst = 0UL;
    if (NumRows == 0)
      {
@@ -2102,7 +2107,7 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
    int IntNum;
    long LongNum;
    Tst_Pluggable_t Pluggable;
-   Tst_Feedback_t FeedbTyp;
+   Tst_Feedback_t Feedback;
 
    /***** Get whether test are visible via plugins or not *****/
    Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2143,12 +2148,12 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
 	                                                     (unsigned long) LongNum;
 
    /***** Get feedback type (row[5]) *****/
-   for (FeedbTyp = (Tst_Feedback_t) 0;
-	FeedbTyp < Tst_NUM_TYPES_FEEDBACK;
-	FeedbTyp++)
-      if (!strcmp (row[5],Tst_FeedbackDB[FeedbTyp]))
+   for (Feedback = (Tst_Feedback_t) 0;
+	Feedback < Tst_NUM_TYPES_FEEDBACK;
+	Feedback++)
+      if (!strcmp (row[5],Tst_FeedbackDB[Feedback]))
         {
-         Gbl.Test.Config.FeedbackType = FeedbTyp;
+         Gbl.Test.Config.Feedback = Feedback;
          break;
         }
   }
@@ -2244,7 +2249,7 @@ void Tst_ReceiveConfigTst (void)
                                                                    0);
 
    /***** Get type of feedback from form *****/
-   Gbl.Test.Config.FeedbackType = Tst_GetFeedbackTypeFromForm ();
+   Gbl.Test.Config.Feedback = Tst_GetFeedbackTypeFromForm ();
 
    /***** Update database *****/
    sprintf (Query,"REPLACE INTO tst_config"
@@ -2255,7 +2260,7 @@ void Tst_ReceiveConfigTst (void)
             Tst_PluggableDB[Gbl.Test.Config.Pluggable],
             Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
             Gbl.Test.Config.MinTimeNxtTstPerQst,
-            Tst_FeedbackDB[Gbl.Test.Config.FeedbackType]);
+            Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
    DB_QueryREPLACE (Query,"can not save configuration of tests");
 
    /***** Show confirmation message *****/
@@ -3656,8 +3661,8 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s CENTER_MIDDLE\">",
-            (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-             Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
+            (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+             Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
             (AnsTF == row[1][0] ? "ANS_OK" :
         	                  "ANS_BAD") :
             "ANS");
@@ -3666,8 +3671,8 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the correct answer *****/
    fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_MIDDLE\">");
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       Tst_WriteAnsTF (row[1][0]);
    else
       fprintf (Gbl.F.Out,"?");
@@ -3675,9 +3680,9 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 	              "</tr>");
 
    /***** Write the mark *****/
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (2);
       if (AnsTF == '\0')		// If user has omitted the answer
@@ -3852,7 +3857,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /***** Copy answer feedback (row[2]) and convert it,
              that is in HTML, to rigorous HTML ******/
-      if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -3919,8 +3924,8 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
-                  (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-                   Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
+                  (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+                   Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct ? "ok_green" :
                 	                                               "ok_red") :
                    "ok_on",
@@ -3930,8 +3935,8 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /* Draw icon that indicates whether the answer is correct */
       fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_TOP\">");
-      if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-          Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+          Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
             fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
@@ -3960,7 +3965,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</div>");
-      if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
 	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
@@ -4003,7 +4008,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
            {
             if (NumOptCorrInQst < NumOptTotInQst)	// If there are correct options and wrong options (typical case)
                *ScoreThisQst = (double) NumAnsGood / (double) NumOptCorrInQst -
-                               (double) NumAnsBad / (double) (NumOptTotInQst-NumOptCorrInQst);
+                               (double) NumAnsBad / (double) (NumOptTotInQst - NumOptCorrInQst);
             else					// Si todas the opciones son correctas (caso raro)
                *ScoreThisQst = (double) NumAnsGood / (double) NumOptCorrInQst;
            }
@@ -4020,9 +4025,9 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       *ScoreThisQst = 0.0;
 
    /* Write the score */
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (4);
       if (*ScoreThisQst == 0.0)
@@ -4123,15 +4128,20 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
 
       /***** Show result (number of users who answered? *****/
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"LEFT_TOP\">");
       if (ShowResult)
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
 	 Gam_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
-
-      fprintf (Gbl.F.Out,"</tr>");
+      else
+         fprintf (Gbl.F.Out,"&nbsp;");
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
      }
 
    /***** End table *****/
@@ -4194,7 +4204,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
-      if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (row[2])
 	    if (row[2][0])
 	      {
@@ -4248,8 +4258,8 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
         }
       fprintf (Gbl.F.Out,"%s CENTER_TOP\">"
 	                 "&nbsp;%s&nbsp;",
-               (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-                Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
+               (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+                Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                 (Correct ? "ANS_OK" :
                            "ANS_BAD") :
                 "ANS",
@@ -4261,8 +4271,8 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answers *****/
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">");
       Tbl_StartTable (2);
@@ -4283,7 +4293,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                             "%s"
                             "</div>",
                   Gbl.Test.Answer.Options[NumOpt].Text);
-	 if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		  fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
@@ -4318,9 +4328,9 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Write the mark *****/
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (4);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4388,8 +4398,8 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
          fprintf (Gbl.F.Out,"%s CENTER_MIDDLE\">"
                             "&nbsp;%ld&nbsp;",
-                  (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-                   Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
+                  (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+                   Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
                 	                            "ANS_BAD") :
                    "ANS",
@@ -4407,8 +4417,8 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the correct answer *****/
    fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_MIDDLE\">");
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"&nbsp;%ld&nbsp;",IntAnswerCorr);
    else
       fprintf (Gbl.F.Out,"?");
@@ -4431,9 +4441,9 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Write the score *****/
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -4514,8 +4524,8 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       FloatAnsUsr = Tst_GetFloatAnsFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
          fprintf (Gbl.F.Out,"%s CENTER_MIDDLE\">&nbsp;%lg&nbsp;",
-                  (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-                   Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
+                  (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+                   Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    ((FloatAnsUsr >= FloatAnsCorr[0] &&
                      FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
                 	                               "ANS_BAD") :
@@ -4530,8 +4540,8 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the correct answer *****/
    fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_MIDDLE\">");
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"&nbsp;[%lg; %lg]&nbsp;",FloatAnsCorr[0],FloatAnsCorr[1]);
    else
       fprintf (Gbl.F.Out,"?");
@@ -4555,9 +4565,9 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Write mark *****/
-   if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
@@ -7688,12 +7698,11 @@ void Tst_ShowMyTestResults (void)
 static void Tst_ShowTestResults (struct UsrData *UsrDat)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_Visible_tests;
    extern const char *Txt_View_test;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumTestResults;
+   unsigned NumExams;
    unsigned NumTest;
    static unsigned UniqueId = 0;
    long TstCod;
@@ -7703,11 +7712,10 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    unsigned NumTotalQstsNotBlank = 0;
    double ScoreInThisTest;
    double TotalScoreOfAllTests = 0.0;
-   unsigned NumTestResultsVisibleByTchs = 0;
+   unsigned NumExamsVisibleByTchs = 0;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    bool ICanViewTest;
    bool ICanViewScore;
-   bool ICanViewTotalScore;
    time_t TimeUTC;
    char *ClassDat;
 
@@ -7724,17 +7732,17 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
             UsrDat->UsrCod,
             (long) Gbl.DateRange.TimeUTC[0],
             (long) Gbl.DateRange.TimeUTC[1]);
-   NumTestResults = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test exams of a user");
+   NumExams = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test exams of a user");
 
    /***** Show user's data *****/
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_ShowDataUsr (UsrDat,NumTestResults);
+   Tst_ShowDataUsr (UsrDat,NumExams);
 
    /***** Get and print test results *****/
-   if (NumTestResults)
+   if (NumExams)
      {
       for (NumTest = 0;
-           NumTest < NumTestResults;
+           NumTest < NumExams;
            NumTest++)
         {
          row = mysql_fetch_row (mysql_res);
@@ -7753,7 +7761,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
 	       ICanViewScore = ItsMe &&
-		               Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
+		               Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
@@ -7869,83 +7877,13 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
                             "</tr>");
 
 	 if (Gbl.Test.AllowTeachers)
-            NumTestResultsVisibleByTchs++;
+            NumExamsVisibleByTchs++;
         }
 
       /***** Write totals for this user *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    ICanViewTotalScore = ItsMe &&
-	                         Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_DEG_ADM:
-	 case Rol_CTR_ADM:
-	 case Rol_INS_ADM:
-	    ICanViewTotalScore = ItsMe ||
-	                         NumTestResultsVisibleByTchs;
-	    break;
-	 case Rol_SYS_ADM:
-	    ICanViewTotalScore = true;
-	    break;
-	 default:
-	    ICanViewTotalScore = false;
-	    break;
-	}
-
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
-			 "%s: %u"
-			 "</td>",
-	       Gbl.RowEvenOdd,
-	       Txt_Visible_tests,NumTestResultsVisibleByTchs);
-
-      /* Write total number of questions */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      if (NumTestResultsVisibleByTchs)
-         fprintf (Gbl.F.Out,"%u",NumTotalQsts);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Write total number of questions not blank */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      if (NumTestResultsVisibleByTchs)
-         fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Write total score */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      if (ICanViewTotalScore)
-         fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllTests);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Write average score per question */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      if (ICanViewTotalScore)
-         fprintf (Gbl.F.Out,"%.2lf",
-                  NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
-                	         0.0);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Write score over Tst_SCORE_MAX */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      if (ICanViewTotalScore)
-         fprintf (Gbl.F.Out,"%.2lf",
-                  NumTotalQsts ? TotalScoreOfAllTests * Tst_SCORE_MAX /
-                	         (double) NumTotalQsts :
-                	         0.0);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Last cell */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP COLOR%u\"></td>"
-			 "</tr>",
-	       Gbl.RowEvenOdd);
+      Tst_ShowTestResultsSummaryRow (ItsMe,NumExamsVisibleByTchs,
+                                     NumTotalQsts,NumTotalQstsNotBlank,
+                                     TotalScoreOfAllTests);
      }
    else
       fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
@@ -7974,7 +7912,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 /******************** Show a row with the data of a user *********************/
 /*****************************************************************************/
 
-static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
+static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
   {
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
@@ -7982,8 +7920,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
 
    /***** Show user's photo and name *****/
    fprintf (Gbl.F.Out,"<td ");
-   if (NumTestResults)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
+   if (NumExams)
+      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -7994,8 +7932,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
 
    /***** Start form to go to user's record card *****/
    fprintf (Gbl.F.Out,"<td ");
-   if (NumTestResults)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
+   if (NumExams)
+      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -8051,6 +7989,99 @@ static long Tst_GetParamTstCod (void)
   }
 
 /*****************************************************************************/
+/**************** Show row with summary of user's test results ***************/
+/*****************************************************************************/
+
+static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
+                                           unsigned NumExams,
+                                           unsigned NumTotalQsts,
+                                           unsigned NumTotalQstsNotBlank,
+                                           double TotalScoreOfAllTests)
+  {
+   extern const char *Txt_Visible_tests;
+   bool ICanViewTotalScore;
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 ICanViewTotalScore = ItsMe &&
+			      Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+	 ICanViewTotalScore = ItsMe ||
+			      NumExams;
+	 break;
+      case Rol_SYS_ADM:
+	 ICanViewTotalScore = true;
+	 break;
+      default:
+	 ICanViewTotalScore = false;
+	 break;
+     }
+
+   /***** Start row *****/
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /***** Row title *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
+		      "%s: %u"
+		      "</td>",
+	    Gbl.RowEvenOdd,
+	    Txt_Visible_tests,NumExams);
+
+   /***** Write total number of questions *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   if (NumExams)
+      fprintf (Gbl.F.Out,"%u",NumTotalQsts);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Write total number of questions not blank *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   if (NumExams)
+      fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Write total score *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   if (ICanViewTotalScore)
+      fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllTests);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Write average score per question *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   if (ICanViewTotalScore)
+      fprintf (Gbl.F.Out,"%.2lf",
+	       NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
+			      0.0);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Write score over Tst_SCORE_MAX *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   if (ICanViewTotalScore)
+      fprintf (Gbl.F.Out,"%.2lf",
+	       NumTotalQsts ? TotalScoreOfAllTests * Tst_SCORE_MAX /
+			      (double) NumTotalQsts :
+			      0.0);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Last cell *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP COLOR%u\"></td>",
+	    Gbl.RowEvenOdd);
+
+   /***** End row *****/
+   fprintf (Gbl.F.Out,"</tr>");
+  }
+
+/*****************************************************************************/
 /******************* Show one test result of another user ********************/
 /*****************************************************************************/
 
@@ -8082,7 +8113,7 @@ void Tst_ShowOneTestResult (void)
 
    /***** Get test result data *****/
    Tst_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
-   Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
+   Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
 
    /***** Check if I can view this test result *****/
    ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -8093,7 +8124,7 @@ void Tst_ShowOneTestResult (void)
 	 if (ItsMe)
 	   {
 	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
+	    ICanViewScore = Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
 	   }
 	 else
 	    ICanViewScore = false;

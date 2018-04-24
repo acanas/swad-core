@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -363,7 +363,6 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 
 void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    unsigned NumID;
    bool ICanSeeUsrID;
    bool ICanConfirmUsrID;
@@ -372,7 +371,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
    ICanConfirmUsrID = ICanSeeUsrID &&
 	              (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&			// Not me
 	              !Gbl.Form.Inside &&						// Not inside another form
-                      Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
+                      Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
@@ -448,7 +447,6 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
    Act_Action_t NextAction;
@@ -471,7 +469,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    if (Gbl.Action.Original != ActUnk)
      {
       Par_PutHiddenParamLong ("OriginalActCod",
-                              Act_Actions[Gbl.Action.Original].ActCod);	// Original action, used to know where we came from
+                              Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
       switch (Gbl.Action.Original)
 	{
 	 case ActSeeRecSevGst:

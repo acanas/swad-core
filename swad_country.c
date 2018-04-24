@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1216,12 +1216,11 @@ void Cty_WriteSelectorOfCountry (void)
 
 void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char CtyName[Cty_MAX_BYTES_NAME + 1];
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    bool PutForm = ClassLink &&
 	          !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB;	// Only in main browser tab
+                  Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    /***** Get country name *****/
    Cty_GetCountryName (CtyCod,CtyName);
@@ -1231,7 +1230,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       /***** Write country name with link to country information *****/
       Act_FormStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (CtyCod);
-      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
+      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 		          ClassLink,NULL);
       fprintf (Gbl.F.Out,"%s</a>",CtyName);
       Act_FormEnd ();

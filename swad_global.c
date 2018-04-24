@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -483,12 +483,11 @@ void Gbl_InitializeGlobals (void)
 
 void Gbl_Cleanup (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    Rol_Role_t Role;
 
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
-       Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
+       Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_FreeMyCourses ();
    Usr_FreeMyDegrees ();

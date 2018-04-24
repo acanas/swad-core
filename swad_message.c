@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -3278,7 +3278,6 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
 
 static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3314,7 +3313,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    if (UsrDat->UsrCod > 0)
      {
       fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
-      if (Act_Actions[Gbl.Action.Act].SuperAction == ActSeeRcvMsg)
+      if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 	{
          if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
             // Sender is banned

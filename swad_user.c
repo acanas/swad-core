@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -248,7 +248,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 void Usr_InformAboutNumClicksBeforePhoto (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_must_send_your_photo_because_;
    extern const char *Txt_You_can_only_perform_X_further_actions_;
    extern const char *Txt_Upload_photo;
@@ -258,7 +257,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
-      else if (Act_Actions[Gbl.Action.Act].BrowserTab == Act_BRW_1ST_TAB)
+      else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
         {
          sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
                   Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);

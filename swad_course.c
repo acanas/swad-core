@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -510,7 +510,6 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_PROFILE_Courses;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormDark[The_NUM_THEMES];
@@ -596,7 +595,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Act_FormStart (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
-      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
+      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 			  Highlight ? ClassHighlight :
         	                      ClassNormal,NULL);
       /* Country map */
@@ -637,7 +636,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
          Act_FormStart (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
-	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
+	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
@@ -670,7 +669,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
             Act_FormStart (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
-	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
+	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
@@ -703,7 +702,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
                Act_FormStart (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
-	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
+	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);

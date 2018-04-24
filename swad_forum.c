@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -2059,7 +2059,6 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                    unsigned Level,
                                    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
@@ -2127,7 +2126,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                 Forum->Location,
                                 -1L,
                                 -1L);
-   Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[For_ActionsSeeFor[Forum->Type]].ActCod,ActTxt),
+   Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (For_ActionsSeeFor[Forum->Type]),ActTxt),
                        Style,NULL);
    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
    switch (Forum->Type)

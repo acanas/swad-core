@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -98,7 +98,6 @@ void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -123,7 +122,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
       ActCod = Str_ConvertStrCodToLongCod (row[0]);
       if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
          if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
-            if (Act_Actions[Action].IndexInMenu >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
+            if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
                if (Act_CheckIfIHavePermissionToExecuteAction (Action))
                   ListMFUActions->Actions[ListMFUActions->NumActions++] = Action;
      }
@@ -139,7 +138,6 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -147,7 +145,6 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
    unsigned NumAct;
    long ActCod;
    Act_Action_t Action;
-   Act_Action_t SuperAction;
    Act_Action_t MoreRecentActionInCurrentTab = ActUnk;
 
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
@@ -170,15 +167,12 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
          ActCod = Str_ConvertStrCodToLongCod (row[0]);
          if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
             if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
-              {
-               SuperAction = Act_Actions[Action].SuperAction;
-               if (Act_Actions[SuperAction].Tab == Gbl.Action.Tab)
+               if (Act_GetTab (Act_GetSuperAction (Action)) == Gbl.Action.Tab)
                   if (Act_CheckIfIHavePermissionToExecuteAction (Action))
                     {
                      MoreRecentActionInCurrentTab = Action;
                      break;
                     }
-              }
         }
 
       /***** Free structure that stores the query result *****/
@@ -210,14 +204,12 @@ void MFU_ShowMyMFUActions (void)
 
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_ANALYTICS_Frequent;
    extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
-   Act_Action_t SuperAction;
    const char *Title;
    char TabStr[MFU_MAX_BYTES_TAB + 1];
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
@@ -239,8 +231,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
 	 /* Action string */
-	 SuperAction = Act_Actions[Action].SuperAction;
-	 Str_Copy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
+	 Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
 	           MFU_MAX_BYTES_TAB);
 	 Str_Copy (MenuStr,Title,
 	           MFU_MAX_BYTES_MENU);
@@ -252,7 +243,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Act_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" />",
 		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-		  Act_Actions[Action].Icon,
+		  Act_GetIcon (Action),
 		  MenuStr);
          fprintf (Gbl.F.Out," %s</a>",TabMenuStr);
          Act_FormEnd ();
@@ -271,13 +262,11 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
-   Act_Action_t SuperAction;
    const char *Title;
    char TabStr[MFU_MAX_BYTES_TAB + 1];
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
@@ -303,8 +292,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
 	 /* Action string */
-	 SuperAction = Act_Actions[Action].SuperAction;
-	 Str_Copy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
+	 Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
 	           MFU_MAX_BYTES_TAB);
 	 Str_Copy (MenuStr,Title,
 	           MFU_MAX_BYTES_MENU);
@@ -316,7 +304,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Act_LinkFormSubmit (TabMenuStr,NULL,NULL);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" />",
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-                  Act_Actions[Action].Icon,
+                  Act_GetIcon (Action),
                   MenuStr);
 	 fprintf (Gbl.F.Out," %s</a>",MenuStr);
          Act_FormEnd ();
@@ -340,27 +328,30 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_UpdateMFUActions (void)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    float Score;
+   long ActCod;
+   Act_Action_t SuperAction;
 
    /***** In some cases, don't register action *****/
    if (!Gbl.Usrs.Me.Logged)
       return;
-   if (Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu < 0)
+   if (Act_GetIndexInMenu (Gbl.Action.Act) < 0)
       return;
-   if (Act_Actions[Gbl.Action.Act].SuperAction == ActMFUAct)
+   SuperAction = Act_GetSuperAction (Gbl.Action.Act);
+   if (SuperAction == ActMFUAct)
       return;
+
+   ActCod = Act_GetActCod (SuperAction);
 
    Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 
    /***** Get current score *****/
    sprintf (Query,"SELECT Score FROM actions_MFU"
                   " WHERE UsrCod=%ld AND ActCod=%ld",
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod);
+            Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get score for current action"))
      {
       row = mysql_fetch_row (mysql_res);
@@ -381,17 +372,14 @@ void MFU_UpdateMFUActions (void)
                   " (UsrCod,ActCod,Score,LastClick)"
                   " VALUES"
                   " (%ld,%ld,'%f',NOW())",
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-            Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod,
-            Score);
+	    Gbl.Usrs.Me.UsrDat.UsrCod,ActCod,Score);
    DB_QueryREPLACE (Query,"can not update most frequently used actions");
 
    /***** Update score for other actions *****/
    sprintf (Query,"UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"
                   " WHERE UsrCod=%ld AND ActCod<>%ld",
             MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod);
+            Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
    DB_QueryUPDATE (Query,"can not update most frequently used actions");
 
    Str_SetDecimalPointToLocal ();	// Return to local system

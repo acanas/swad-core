@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -713,8 +713,8 @@ void Par_GetMainParameters (void)
 
    /***** Get action to perform *****/
    ActCod = Par_GetParToLong ("act");
-   if (ActCod < 0)
-      ActCod = Par_GetParToLong ("ActCod");
+   // if (ActCod < 0)
+   //   ActCod = Par_GetParToLong ("ActCod");	// Obsolete, old parameter now replaced by "act"
    if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
       Gbl.Action.Act = Act_FromActCodToAction[ActCod];
 

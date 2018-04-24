@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -4941,6 +4941,48 @@ Act_Action_t Act_GetActionFromActCod (long ActCod)
   }
 
 /*****************************************************************************/
+/****************** Get permanent action code from action ********************/
+/*****************************************************************************/
+
+long Act_GetActCod (Act_Action_t Action)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return -1L;
+
+   return Act_Actions[Action].ActCod;
+  }
+
+/*****************************************************************************/
+/***************** Get index in menu associated to an action ******************/
+/*****************************************************************************/
+
+signed int Act_GetIndexInMenu (Act_Action_t Action)
+  {
+   return Act_Actions[Act_GetSuperAction (Action)].IndexInMenu;
+  }
+
+/*****************************************************************************/
+/********************* Get tab associated to an action ***********************/
+/*****************************************************************************/
+
+Tab_Tab_t Act_GetTab (Act_Action_t Action)
+  {
+   return Act_Actions[Act_GetSuperAction (Action)].Tab;
+  }
+
+/*****************************************************************************/
+/***************** Get superaction associated to an action *******************/
+/*****************************************************************************/
+
+Act_Action_t Act_GetSuperAction (Act_Action_t Action)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return ActUnk;
+
+   return Act_Actions[Action].SuperAction;
+  }
+
+/*****************************************************************************/
 /************* Check if I have permission to execute an action ***************/
 /*****************************************************************************/
 
@@ -4969,19 +5011,77 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
   }
 
 /*****************************************************************************/
+/***************** Get content type associated to an action ******************/
+/*****************************************************************************/
+
+Act_Content_t Act_GetContentType (Act_Action_t Action)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return Act_CONT_NORM;
+
+   return Act_Actions[Action].ContentType;
+  }
+
+/*****************************************************************************/
+/****************** Get browser tab associated to an action ******************/
+/*****************************************************************************/
+
+Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return Act_BRW_UNK_TAB;
+
+   return Act_Actions[Action].BrowserTab;
+  }
+
+/*****************************************************************************/
+/********* Get pointer to function a priori associated to an action **********/
+/*****************************************************************************/
+
+void (*Act_GetFunctionPriori (Act_Action_t Action)) (void)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return NULL;
+
+   return Act_Actions[Action].FunctionPriori;
+  }
+
+/*****************************************************************************/
+/******* Get pointer to function a posteriori associated to an action ********/
+/*****************************************************************************/
+
+void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return NULL;
+
+   return Act_Actions[Action].FunctionPosteriori;
+  }
+
+/*****************************************************************************/
+/********************** Get icon associated to an action *********************/
+/*****************************************************************************/
+
+const char *Act_GetIcon (Act_Action_t Action)
+  {
+   if (Action < 0 || Action >= Act_NUM_ACTIONS)
+      return NULL;
+
+   return Act_Actions[Action].Icon;
+  }
+
+/*****************************************************************************/
 /******************* Get the title associated to an action *******************/
 /*****************************************************************************/
 
 const char *Act_GetTitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   Act_Action_t SuperAction;
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
 
-   SuperAction = Act_Actions[Action].SuperAction;
-   return Txt_MENU_TITLE[Act_Actions[SuperAction].Tab][Act_Actions[SuperAction].IndexInMenu];
+   return Txt_MENU_TITLE[Act_GetTab (Action)][Act_GetIndexInMenu (Action)];
   }
 
 /*****************************************************************************/
@@ -4991,13 +5091,11 @@ const char *Act_GetTitleAction (Act_Action_t Action)
 const char *Act_GetSubtitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   Act_Action_t SuperAction;
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
 
-   SuperAction = Act_Actions[Action].SuperAction;
-   return Txt_MENU_SUBTITLE[Act_Actions[SuperAction].Tab][Act_Actions[SuperAction].IndexInMenu];
+   return Txt_MENU_SUBTITLE[Act_GetTab (Action)][Act_GetIndexInMenu (Action)];
   }
 
 /*****************************************************************************/
@@ -5104,7 +5202,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
       if (OnSubmit)
          if (OnSubmit[0])
             fprintf (Gbl.F.Out," onsubmit=\"%s;\"",OnSubmit);
-      switch (Act_Actions[NextAction].BrowserTab)
+      switch (Act_GetBrowserTab (NextAction))
 	{
 	 case Act_BRW_NEW_TAB:
 	 case Act_DOWNLD_FILE:
@@ -5113,7 +5211,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
 	 default:
 	    break;
 	}
-      if (Act_Actions[NextAction].ContentType == Act_CONT_DATA)
+      if (Act_GetContentType (NextAction) == Act_CONT_DATA)
 	 fprintf (Gbl.F.Out," enctype=\"multipart/form-data\"");
       fprintf (Gbl.F.Out," accept-charset=\"windows-1252\">");
 
@@ -5140,7 +5238,7 @@ void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
    if (NextAction != ActUnk)
       sprintf (ParamAction,"<input type=\"hidden\" name=\"act\""
 	                   " value=\"%ld\" />",
-	       Act_Actions[NextAction].ActCod);
+	       Act_GetActCod (NextAction));
 
    if (Gbl.Session.Id[0])
       sprintf (ParamSession,"<input type=\"hidden\" name=\"ses\""
@@ -5302,7 +5400,7 @@ void Act_AdjustCurrentAction (void)
    bool IAmATeacher;
 
    /***** Don't adjust anything when current action is not a menu option *****/
-   if (Gbl.Action.Act != Act_Actions[Gbl.Action.Act].SuperAction)	// It is not a menu option
+   if (Gbl.Action.Act != Act_GetSuperAction (Gbl.Action.Act))	// It is not a menu option
       return;
 
    /***** Don't adjust anything when refreshing users or on a web service *****/

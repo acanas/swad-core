@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -682,7 +682,6 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Institutional_BR_code;
@@ -715,6 +714,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    unsigned NumStds;
    unsigned NumIndicators;
    struct Ind_IndicatorsCrs Indicators;
+   long ActCod;
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"INDICATORS\">");
@@ -1003,6 +1003,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 	 /* The number of indicators may have changed */
 	 if (Gbl.Stat.IndicatorsSelected[Indicators.NumIndicators])
 	   {
+            ActCod = Act_GetActCod (ActReqStaCrs);
+
 	    /* Write a row for this course */
 	    switch (IndicatorsLayout)
 	      {
@@ -1077,8 +1079,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 							   "DAT_SMALL_RED"),
 			   Gbl.RowEvenOdd,
 			   row[3],
-			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-					  Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,ActCod,
+					  Cfg_URL_SWAD_CGI,CrsCod,ActCod,
 
 			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
 			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
@@ -1243,8 +1245,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 							   "DAT_SMALL_RED"),
 			   Gbl.RowEvenOdd,
 			   row[3],
-			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-					  Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,ActCod,
+					  Cfg_URL_SWAD_CGI,CrsCod,ActCod,
 
 			   NumTchs != 0 ? "DAT_SMALL_GREEN" :
 					  "DAT_SMALL_RED",

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2017 Antonio Cañas Vargas
+    Copyright (C) 1999-2018 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -3608,8 +3608,9 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NUM_QST\">%u</div>",
 	    QstInd + 1);
 
-   /* Write the stem (row[2]) and the image (row[3], row[4], row[5]) */
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
+
+   /* Write the stem (row[2]) and the image (row[3], row[4], row[5]) */
    Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
    Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Image);
    Img_ShowImage (&Gbl.Test.Image,
@@ -3630,12 +3631,13 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
       Tst_WriteAnswersGameResult (&Game,QstInd,QstCod,
                                   "GAM_PLAY_QST",false);	// Don't show result
      }
-   fprintf (Gbl.F.Out,"</div>");
+   else
+      fprintf (Gbl.F.Out,"&nbsp;");
 
-   /* End container for number and question */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Put button to continue *****/
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NXT_CONTAINER\">");
    if (ShowAnswers)
      {
       /* Get index of the next question */
@@ -3647,6 +3649,10 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    else
       /* Put button to show answers */
       Gam_PutBigButtonToContinue (ActPlyGamAns,Game.GamCod,QstInd);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End container for question *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
