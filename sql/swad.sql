@@ -959,7 +959,7 @@ CREATE TABLE IF NOT EXISTS projects (
 	INDEX(CrsCod,Hidden),
 	INDEX(CrsCod,CreatTime),
 	INDEX(CrsCod,ModifTime),
-	INDEX(CrsCod,DptCod);
+	INDEX(CrsCod,DptCod));
 --
 -- Table sessions: stores the information of open sessions
 --
