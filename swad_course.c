@@ -1244,8 +1244,10 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    TxtClassNormal = "DAT";
 	    TxtClassStrong = "DAT_N";
 	   }
-	 BgColor = (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
-								Gbl.ColorRows[Gbl.RowEvenOdd];
+
+	 /* Check if this course is one of my courses */
+	 BgColor = (Usr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
+				                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	 /* Put green tip if course has users */
 	 fprintf (Gbl.F.Out,"<tr>"

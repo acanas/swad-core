@@ -359,6 +359,7 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 18.0.1:   Oct 04, 2018  My courses are highlighted in listing of courses of current degree. (234738 lines)
         Version 18.0:     Oct 04, 2018  New version of fotomaton, programmed by Daniel Calandria and Jesús Mesa.
          				Changes in code to avoid new warnings with GCC 7.3. (234736 lines)
         Version 17.29:    Apr 24, 2018  Code refactoring and bug fixing related to actions. (234579 lines)

@@ -1278,7 +1278,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 	    break;
 	 case Sco_SCOPE_CRS:	// Course
 	    Game->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Game->Cod) &&
-					 Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
+					  Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
 	    break;
         }
 
@@ -1287,11 +1287,11 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
       /* Can I answer game? */
       Game->Status.ICanAnswer = (Game->NumQsts != 0) &&
-                                Game->Status.Visible &&
-                                Game->Status.Open &&
-                                Game->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                Game->Status.IBelongToScope &&
-                               !Game->Status.IHaveAnswered;
+                                 Game->Status.Visible &&
+                                 Game->Status.Open &&
+                                 Game->Status.IAmLoggedWithAValidRoleToAnswer &&
+                                 Game->Status.IBelongToScope &&
+                                !Game->Status.IHaveAnswered;
 
       /* Can I view results of the game?
          Can I edit game? */
