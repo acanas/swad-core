@@ -32,7 +32,7 @@
 	<tr>
 	<td align="center" class="SWAD">
 	        <a href="http://openswad.org/" class="SWAD"><img src="/logo/swad224x64.png" alt="SWAD" width="224" height="64" />
-	        <br />shared workspace at a distance</a>
+	        <br />social workspace at a distance</a>
 	</td>
 	</tr>
 
@@ -40,7 +40,7 @@
 	<td align="center">
 		<h1>swad-core changelog</h1>
 		<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2017
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2018
 	</td>
 	</tr>
 
@@ -58,14 +58,1081 @@
 
 	<tr>
 	<td align="center">
-		Last update: Jun 1, 2017
+		Last update: Apr 24, 2018
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
-		<dt>Version 16.232.3: Jun 01, 2017</dt>
+		<dt>Version 17.29:    Apr 24, 2018</dt>
+							<dd>
+							Code refactoring and bug fixing related to actions. (234579 lines)
+							</dd>
+		<dt>Version 17.28:    Jan 09, 2018</dt>
+							<dd>
+							Added average of all test exams. (? lines)
+							</dd>
+		<dt>Version 17.27.2:  Dec 20, 2017</dt>
+							<dd>
+							Changes displaying a game question. (234507 lines)
+							</dd>
+		<dt>Version 17.27.1:  Dec 20, 2017</dt>
+							<dd>
+							Changes in icon to play game. (234484 lines)
+							</dd>
+		<dt>Version 17.27:    Dec 19, 2017</dt>
+							<dd>
+							Statistics tab is renamed as Analytics. (234464 lines)<br />
+							<small><code>
+Copy the following icons to icon public directory:<br />
+sudo cp icon/iconset/awesome/action64x64/ana64x64.gif /var/www/html/swad/icon/iconset/awesome/action64x64/<br />
+sudo cp icon/iconset/nuvola/action64x64/ana64x64.gif /var/www/html/swad/icon/iconset/nuvola/action64x64/
+							</code></small>
+							</dd>
+		<dt>Version 17.26.7:  Nov 30, 2017</dt>
+							<dd>
+							Fixed bug in surveys. (234438 lines)
+							</dd>
+		<dt>Version 17.26.6:  Nov 30, 2017</dt>
+							<dd>
+							Fixed bug in surveys. (234400 lines)
+							</dd>
+		<dt>Version 17.26.5:  Nov 26, 2017</dt>
+							<dd>
+							Maximum number of columns in class photo changed from 50 to 100. (234391 lines)
+							</dd>
+		<dt>Version 17.26.4:  Nov 13, 2017</dt>
+							<dd>
+							Session expires in 8 hours. (234388 lines)
+							</dd>
+		<dt>Version 17.26.3:  Nov 13, 2017</dt>
+							<dd>
+							Fixed bug converting string to Title (for example in surnames). (234387 lines)
+							</dd>
+		<dt>Version 17.26.2:  Nov 12, 2017</dt>
+							<dd>
+							Fixed bug in marks, reported by Francisco Oca&ntilde;a Lara. (234383 lines)
+							</dd>
+		<dt>Version 17.26.1:  Nov 10, 2017</dt>
+							<dd>
+							Default theme is white. (234380 lines)
+							</dd>
+		<dt>Version 17.26:    Nov 08, 2017</dt>
+							<dd>
+							Tables converted to MyISAM.<br />
+							Cleaning database. (234379 lines)<br />
+							15 changes necessary in database:<br />
+							<small><code>
+UPDATE crs_usr SET LastAccTst=FROM_UNIXTIME(0) WHERE LastAccTst=0;<br />
+DROP TABLE IF EXISTS deg_admin;<br />
+DROP TABLE IF EXISTS imported_groups;<br />
+DROP TABLE IF EXISTS imported_sessions;<br />
+DROP TABLE IF EXISTS imported_students;<br />
+DROP TABLE IF EXISTS log;<br />
+DROP TABLE IF EXISTS log_new;<br />
+DROP TABLE IF EXISTS new_institutions;<br />
+DROP TABLE IF EXISTS notif_backup;<br />
+DROP TABLE IF EXISTS sta_notif_backup;<br />
+DROP TABLE IF EXISTS timetable_crs_backup;<br />
+DROP TABLE IF EXISTS timetable_tut_backup;<br />
+DROP TABLE IF EXISTS usr_data_backup;<br />
+UPDATE usr_figures SET FirstClickTime=FROM_UNIXTIME(0) WHERE FirstClickTime=0;<br />
+UPDATE usr_last SET LastAccNotif=FROM_UNIXTIME(0) WHERE LastAccNotif=0;
+							</code></small>
+							</dd>
+		<dt>Version 17.25.4:  Oct 24, 2017</dt>
+							<dd>
+							Fixed bug in assignments, games, surveys and agenda. (234352 lines)
+							</dd>
+		<dt>Version 17.25.3:  Oct 16, 2017</dt>
+							<dd>
+							Surnames before names in listing of projects. Suggested by Pedro Villar Castro. (234351 lines)
+							</dd>
+		<dt>Version 17.25.2:  Oct 11, 2017</dt>
+							<dd>
+							Students' IDs removed from listing of projects. Suggested by Pedro Villar Castro.<br />
+							Fixed bug in listing of projects. (234345 lines)
+							</dd>
+		<dt>Version 17.25.1:  Oct 10, 2017</dt>
+							<dd>
+							Fixed problem in layout of projects. (234357 lines)
+							</dd>
+		<dt>Version 17.25:    Oct 10, 2017</dt>
+							<dd>
+							New column with the number of the project in listing of projects. (234336 lines)
+							</dd>
+		<dt>Version 17.24.2:  Oct 10, 2017</dt>
+							<dd>
+							Code refactoring in projects filter. (234209 lines)
+							</dd>
+		<dt>Version 17.24.1:  Oct 10, 2017</dt>
+							<dd>
+							Changes in pagination of projects. (234228 lines)
+							</dd>
+		<dt>Version 17.24:    Oct 10, 2017</dt>
+							<dd>
+							Filter projects by department. (234227 lines)
+							</dd>
+		<dt>Version 17.23.2:  Oct 10, 2017</dt>
+							<dd>
+							Code refactoring in filter of projects. (234137 lines)
+							</dd>
+		<dt>Version 17.23.1:  Oct 10, 2017</dt>
+							<dd>
+							Changes in selectors of departments. (234133 lines)
+							</dd>
+		<dt>Version 17.23:    Oct 10, 2017</dt>
+							<dd>
+							New filter to select preassigned/non-preassigned projects.<br />
+							New filter to select hidden/visible projects.<br />
+							Code refactoring in parameters of projects. (234140 lines)
+
+		<dt>Version 17.22.1:  Oct 08, 2017</dt>
+							<dd>
+							Changed commentars on actions. (233756 lines)
+							</dd>
+		<dt>Version 17.22:    Oct 08, 2017</dt>
+							<dd>
+							New file browser for project assessment. (233755 lines)<br />
+							19 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1716','es','N','Editar eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1717','es','N','Subir archivo a eval. proyecto (ant.)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1718','es','N','Eliminar archivo eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1719','es','N','Crear carpeta en eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1720','es','N','Eliminar carpeta eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1721','es','N','Renombrar carpeta en eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1722','es','N','Eliminar &aacute;rbol eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1723','es','N','Solicitar elim. arch. eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1724','es','N','Copiar de eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1725','es','N','Pegar en eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1726','es','N','Expandir carpeta eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1727','es','N','Contraer carpeta eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1728','es','N','Solic. nuevo arch/carp eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1729','es','N','Ver datos arch. eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1730','es','N','Cambiar datos arch. eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1731','es','N','Descargar arch. eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1732','es','N','Crear ZIP carpeta eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1733','es','N','Subir archivo a eval. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1734','es','N','Crear enlace en eval. proyecto');
+							</code></small>
+							</dd>
+		<dt>Version 17.21.6:  Oct 08, 2017</dt>
+							<dd>
+							Changes related with project file browsers. (233315 lines)
+							</dd>
+		<dt>Version 17.21.5:  Oct 08, 2017</dt>
+							<dd>
+							Code refactoring in removal of files from database when removing course. (233317 lines)
+							</dd>
+		<dt>Version 17.21.4:  Oct 08, 2017</dt>
+							<dd>
+							Fixed bug: remove group files from database when removing course.<br />
+							Removed project files from database when removing course.<br />
+							Fixed bug in project documents. (233330 lines)
+							</dd>
+		<dt>Version 17.21.3:  Oct 08, 2017</dt>
+							<dd>
+							Remove project files from database when removing project. (233169 lines)
+							</dd>
+		<dt>Version 17.21.2:  Oct 08, 2017</dt>
+							<dd>
+							Renamed root folder for project documents. (233115 lines)
+							</dd>
+		<dt>Version 17.21.1:  Oct 08, 2017</dt>
+							<dd>
+							Remove project directories when removing project. (233114 lines)
+							</dd>
+		<dt>Version 17.21:    Oct 07, 2017</dt>
+							<dd>
+							Start and end dates in projects are replaced by time of creation and time of modification. (233106 lines)<br />
+							8 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE projects ADD COLUMN CreatTime DATETIME AFTER EndTime;<br />
+ALTER TABLE projects ADD COLUMN ModifTime DATETIME AFTER CreatTime;<br />
+UPDATE projects SET CreatTime=StartTime;<br />
+UPDATE projects SET ModifTime=CreatTime;<br />
+ALTER TABLE projects CHANGE COLUMN CreatTime CreatTime DATETIME NOT NULL;<br />
+ALTER TABLE projects CHANGE COLUMN ModifTime ModifTime DATETIME NOT NULL;<br />
+ALTER TABLE projects ADD INDEX(CrsCod,CreatTime);<br />
+ALTER TABLE projects ADD INDEX(CrsCod,ModifTime);<br />
+							</code></small>
+							2 more changes necessary in database:<br />
+							<small><code>
+ALTER TABLE projects DROP COLUMN StartTime;<br />
+ALTER TABLE projects DROP COLUMN EndTime;
+							</code></small>
+							</dd>
+		<dt>Version 17.20.7:  Oct 07, 2017</dt>
+							<dd>
+							Only publishers can remove subtrees in project documents. (233105 lines)
+							</dd>
+		<dt>Version 17.20.6:  Oct 07, 2017</dt>
+							<dd>
+							Fixed bug in project documents. (233027 lines)
+							</dd>
+		<dt>Version 17.20.5:  Oct 07, 2017</dt>
+							<dd>
+							Title of project is now a link to show the project and its documents. (233024 lines)
+							</dd>
+		<dt>Version 17.20.4:  Oct 07, 2017</dt>
+							<dd>
+							Changes in layout of project. (232972 lines)
+							</dd>
+		<dt>Version 17.20.3:  Oct 07, 2017</dt>
+							<dd>
+							Changes in layout of project.<br />
+							Fixed bug when hiding/shown a project. (232971 lines)
+							</dd>
+		<dt>Version 17.20.2:  Oct 07, 2017</dt>
+							<dd>
+							Fixed bugs and changes in layout of project file browser. (232960 lines)
+							</dd>
+		<dt>Version 17.20.1:  Oct 07, 2017</dt>
+							<dd>
+							Fixed bug in file browser clipboard. (232938 lines)
+							</dd>
+		<dt>Version 17.20:    Oct 06, 2017</dt>
+							<dd>
+							New file browser for project documents. Not finished. (232915 lines)<br />
+							18 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1698','es','N','Subir archivo a docs. proyecto (ant.)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1699','es','N','Eliminar archivo docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1700','es','N','Crear carpeta en docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1701','es','N','Eliminar carpeta docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1702','es','N','Renombrar carpeta en docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1703','es','N','Eliminar &aacute;rbol docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1704','es','N','Solicitar elim. arch. docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1705','es','N','Copiar de docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1706','es','N','Pegar en docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1707','es','N','Expandir carpeta docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1708','es','N','Contraer carpeta docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1709','es','N','Solic. nuevo arch/carp docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1710','es','N','Ver datos arch. docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1711','es','N','Cambiar datos arch. docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1712','es','N','Descargar arch. docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1713','es','N','Crear ZIP carpeta docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1714','es','N','Subir archivo a docs. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1715','es','N','Crear enlace en docs. proyecto');
+							</code></small>
+							</dd>
+		<dt>Version 17.19:    Oct 06, 2017</dt>
+							<dd>
+							New file browser for project documents. Not finished. (232781 lines)
+							</dd>
+		<dt>Version 17.18:    Oct 06, 2017</dt>
+							<dd>
+							New view in projects for project file browser. (232547 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1697','es','N','Editar archivos proyecto');
+							</code></small>
+							</dd>
+		<dt>Version 17.17.5:  Oct 05, 2017</dt>
+							<dd>
+							Fixed bug in contextual icons in records. (232467 lines)
+							</dd>
+		<dt>Version 17.17.4:  Oct 05, 2017</dt>
+							<dd>
+							Department is filled automatically with user's department when creating a new project. (232385 lines)
+							</dd>
+		<dt>Version 17.17.3:  Oct 04, 2017</dt>
+							<dd>
+							Fixed problems with icons when expanding / contracting a folder. (232383 lines)
+							</dd>
+		<dt>Version 17.17.2:  Oct 04, 2017</dt>
+							<dd>
+							Changes related with output with status 204 No Content. (232332 lines)
+							</dd>
+		<dt>Version 17.17.1:  Oct 04, 2017</dt>
+							<dd>
+							Changed folder icon when expanding / contracting a folder. (232330 lines)
+							</dd>
+		<dt>Version 17.17:    Oct 04, 2017</dt>
+							<dd>
+							Changing expansion of file subtrees. (232273 lines)
+							</dd>
+		<dt>Version 17.16.3:  Oct 03, 2017</dt>
+							<dd>
+							Changing expansion of file subtrees. Not finished. (232113 lines)
+							</dd>
+		<dt>Version 17.16.2:  Oct 03, 2017</dt>
+							<dd>
+							Fixed bug in pagination of projects. (232061 lines)
+							</dd>
+		<dt>Version 17.16.1:  Oct 03, 2017</dt>
+							<dd>
+							Changing expansion of file subtrees. Not finished.<br />
+							Fixed bug in notifications about new private files. (232060 lines)
+							</dd>
+		<dt>Version 17.16:    Oct 02, 2017</dt>
+							<dd>
+							Briefcase moved from profile tab to files tab. (232028 lines)
+							</dd>
+		<dt>Version 17.15:    Oct 02, 2017</dt>
+							<dd>
+							Status in projects changed for proposal. (231985 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE projects ADD COLUMN Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new' AFTER Status;<br />
+UPDATE projects SET Proposal='new' WHERE Status='new';<br />
+UPDATE projects SET Proposal='unmodified' WHERE Status='reproposed';<br />
+ALTER TABLE projects DROP COLUMN Status;
+							</code></small>
+							</dd>
+		<dt>Version 17.14:    Oct 02, 2017</dt>
+							<dd>
+							New field number of students in projects. (231937 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE projects ADD COLUMN NumStds INT NOT NULL DEFAULT 1 AFTER Preassigned;
+							</code></small>
+							</dd>
+		<dt>Version 17.13:    Oct 02, 2017</dt>
+							<dd>
+							New field status in projects.<br />
+							Fixed bug in hidden projects. (231867 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE projects ADD COLUMN Status ENUM('new','reproposed') NOT NULL DEFAULT 'new' AFTER Preassigned;
+							</code></small>
+							</dd>
+		<dt>Version 17.12.1:  Oct 01, 2017</dt>
+							<dd>
+							Fixed bug when printing a project. (231717 lines)
+							</dd>
+		<dt>Version 17.12:    Oct 01, 2017</dt>
+							<dd>
+							Changes in layout of projects. (231712 lines)<br />
+							<small><code>
+Copy the following icons to icon public directory:<br />
+sudo cp icon/more64x64.png /var/www/html/swad/icon/<br />
+sudo cp icon/less64x64.png /var/www/html/swad/icon/
+							</code></small>
+							</dd>
+		<dt>Version 17.11.8:  Oct 01, 2017</dt>
+							<dd>
+							Changes in edition of projects. (231638 lines)
+							</dd>
+		<dt>Version 17.11.7:  Oct 01, 2017</dt>
+							<dd>
+							Changes in layout of projects. (231634 lines)
+							</dd>
+		<dt>Version 17.11.6:  Oct 01, 2017</dt>
+							<dd>
+							Fixed bug in edition of projects. (231632 lines)
+							</dd>
+		<dt>Version 17.11.5:  Oct 01, 2017</dt>
+							<dd>
+							Changes in order of roles in projects.<br />
+							Changes in edition of assignments, games, surveys and attendance events. (231536 lines)
+							</dd>
+		<dt>Version 17.11.4:  Sep 30, 2017</dt>
+							<dd>
+							Changes in edition of a project. (231521 lines)
+							</dd>
+		<dt>Version 17.11.3:  Sep 30, 2017</dt>
+							<dd>
+							Changes in layout of projects. (231517 lines)
+							</dd>
+		<dt>Version 17.11.2:  Sep 30, 2017</dt>
+							<dd>
+							Changes in layout of projects. (231511 lines)
+							</dd>
+		<dt>Version 17.11.1:  Sep 30, 2017</dt>
+							<dd>
+							Code refactoring in projects. (231510 lines)
+							</dd>
+		<dt>Version 17.11:    Sep 29, 2017</dt>
+							<dd>
+							Select which projects to show: only my projects or all projects. (231531 lines)
+							</dd>
+		<dt>Version 17.10.7:  Sep 29, 2017</dt>
+							<dd>
+							Icons to select which projects to show: only my projects or all projects. (231456 lines)
+							</dd>
+		<dt>Version 17.10.6:  Sep 25, 2017</dt>
+							<dd>
+							Fixed bug when receiving projects. (231357 lines)
+							</dd>
+		<dt>Version 17.10.5:  Sep 25, 2017</dt>
+							<dd>
+							Removed unused code in projects. (231354 lines)
+							</dd>
+		<dt>Version 17.10.4:  Sep 25, 2017</dt>
+							<dd>
+							Changes in form behaviour when editing a project. (231365 lines)
+							</dd>
+		<dt>Version 17.10.3:  Sep 25, 2017</dt>
+							<dd>
+							Check permission when editing projects.<br />
+							Check permission when removing a user from a project. (231359 lines)
+							</dd>
+		<dt>Version 17.10.2:  Sep 24, 2017</dt>
+							<dd>
+							Add users to projects even if they don't belong to course. (231335 lines)
+							</dd>
+		<dt>Version 17.10.1:  Sep 24, 2017</dt>
+							<dd>
+							Remove user in project when removing the user.<br />
+							Remove projects (and users in them) in a course when removing the course. (231345 lines)
+							</dd>
+		<dt>Version 17.10:    Sep 24, 2017</dt>
+							<dd>
+							Changes in permissions to view/edit projects.<br />
+							Show project URL in listings of projects. (231319 lines)
+							</dd>
+		<dt>Version 17.9.4:   Sep 24, 2017</dt>
+							<dd>
+							Changes in listing of projects. (231216 lines)
+							</dd>
+		<dt>Version 17.9.3:   Sep 24, 2017</dt>
+							<dd>
+							Write students' IDs in listing of projects. (231214 lines)
+							</dd>
+		<dt>Version 17.9.2:   Sep 24, 2017</dt>
+							<dd>
+							Header in listing of all projects in a table. (231206 lines)
+							</dd>
+		<dt>Version 17.9.1:   Sep 24, 2017</dt>
+							<dd>
+							Changes in listing of all projects in a table. (231172 lines)
+							</dd>
+		<dt>Version 17.9:     Sep 24, 2017</dt>
+							<dd>
+							Action to show all projects in a table. (231151 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1696','es','N','Ver tabla proyectos');
+							</code></small>
+							</dd>
+		<dt>Version 17.8.1:   Sep 23, 2017</dt>
+							<dd>
+							Icon to show all projects in a table. (230980 lines)
+							</dd>
+		<dt>Version 17.8:     Sep 23, 2017</dt>
+							<dd>
+							Projects can be ordered by start, end, title and department. (230963 lines)
+							</dd>
+		<dt> Version 17.7.1:   Sep 23, 2017</dt>
+							<dd>
+							Changes in listing of projects. (230764 lines)
+							</dd>
+		<dt>Version 17.7:     Sep 23, 2017</dt>
+							<dd>
+							Remove user from project. (230798 lines)
+							</dd>
+		<dt>Version 17.6:     Sep 22, 2017</dt>
+							<dd>
+							Actions to remove user from project. (230559 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Solicitar ID a&ntilde;adir evaluador a proyecto' WHERE ActCod='1686' AND Language='es';<br />
+UPDATE actions SET Txt='A&ntilde;adir evaluador a proyecto' WHERE ActCod='1689' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1690','es','N','Solicitar ID eliminar estudiante de proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1691','es','N','Solicitar ID eliminar tutor de proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1692','es','N','Solicitar ID eliminar evaluador de proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1693','es','N','Eliminar estudiante de proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1694','es','N','Eliminar tutor de proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1695','es','N','Eliminar evaluador de proyecto');
+							</code></small>
+							</dd>
+		<dt>Version 17.5.10:  Sep 22, 2017</dt>
+							<dd>
+							Actions to remove user from project. Not finished. (230429 lines)
+							</dd>
+		<dt>Version 17.5.9:   Sep 22, 2017</dt>
+							<dd>
+							Icon to remove user from project. (230350 lines)
+							</dd>
+		<dt>Version 17.5.8:   Sep 22, 2017</dt>
+							<dd>
+							Name of department in listing of projects. (230336 lines)
+							</dd>
+		<dt>Version 17.5.7:   Sep 21, 2017</dt>
+							<dd>
+							Selector for department in edition of a project. (230363 lines)
+							</dd>
+		<dt>Version 17.5.6:   Sep 21, 2017</dt>
+							<dd>
+							Added evaluators to projects. (230347 lines)
+							</dd>
+		<dt>Version 17.5.5:   Sep 21, 2017</dt>
+							<dd>
+							Changes in listing and edition of projects. (230318 lines)
+							</dd>
+		<dt>Version 17.5.4:   Sep 21, 2017</dt>
+							<dd>
+							Added field in projects for department. (230304 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE projects ADD COLUMN DptCod INT NOT NULL DEFAULT -1 NOT NULL AFTER CrsCod;<br />
+ALTER TABLE projects ADD INDEX(CrsCod,DptCod);
+							</code></small>
+							</dd>
+		<dt>Version 17.5.3:   Sep 21, 2017</dt>
+							<dd>
+							Changes in listing of projects. (230301 lines)
+							</dd>
+		<dt>Version 17.5.2:   Sep 21, 2017</dt>
+							<dd>
+							Do not display users when creating a new project. (230270 lines)
+							</dd>
+		<dt>Version 17.5.1:   Sep 21, 2017</dt>
+							<dd>
+							Fixed bug when removing a project. (230267 lines)
+							</dd>
+		<dt>Version 17.5:     Sep 21, 2017</dt>
+							<dd>
+							Users can be added to a project. (230250 lines)
+							</dd>
+		<dt>Version 17.4.3:   Sep 21, 2017</dt>
+							<dd>
+							Changes in listing and edition of projects. (230222 lines)
+							</dd>
+		<dt>Version 17.4.2:   Sep 20, 2017</dt>
+							<dd>
+							Changes in listing and edition of projects. (230203 lines)
+							</dd>
+		<dt>Version 17.4.1:   Sep 20, 2017</dt>
+							<dd>
+							Changes adding users to a project. Not finished. (230141 lines)
+							</dd>
+		<dt>Version 17.4:     Sep 20, 2017</dt>
+							<dd>
+							Actions to add users to a project. (230137 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1684','es','N','Solicitar ID a&ntilde;adir estudiante a proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1685','es','N','Solicitar ID a&ntilde;adir tutor a proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1686','es','N','Solicitar ID a&ntilde;adir revisor a proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1687','es','N','A&ntilde;adir estudiante a proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1688','es','N','A&ntilde;adir tutor a proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1689','es','N','A&ntilde;adir revisor a proyecto');
+							</code></small>
+							</dd>
+		<dt>Version 17.3.13:  Sep 20, 2017</dt>
+							<dd>
+							Links to add users to a project. Not finished. (230058 lines)
+							</dd>
+		<dt>Version 17.3.12:  Sep 20, 2017</dt>
+							<dd>
+							Code refactoring in listing of projects. (229977 lines)
+							</dd>
+		<dt>Version 17.3.11:  Sep 20, 2017</dt>
+							<dd>
+							Code refactoring in listing of projects. (229981 lines)
+							</dd>
+		<dt>Version 17.3.10:  Sep 19, 2017</dt>
+							<dd>
+							New row in listing of projects for students. (230009 lines)
+							</dd>
+		<dt>Version 17.3.9:   Sep 19, 2017</dt>
+							<dd>
+							Tutor code moved from table projects to table prj_grp. (229987 lines)<br />
+							1 change necessary in database:
+							<small><code>
+ALTER TABLE projects DROP COLUMN UsrCod;
+							</code></small>
+							</dd>
+		<dt>Version 17.3.8:   Sep 19, 2017</dt>
+							<dd>
+							Table for users in projects. (230001 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP TABLE IF EXISTS prj_grp;
+CREATE TABLE IF NOT EXISTS prj_usr (PrjCod INT NOT NULL,RoleInProject TINYINT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,UNIQUE INDEX(PrjCod,RoleInProject,UsrCod));
+							</code></small>
+							</dd>
+		<dt>Version 17.3.7:   Sep 19, 2017</dt>
+							<dd>
+							New row in listing of projects for tutors. Not finished. (229983 lines)
+							</dd>
+		<dt>Version 17.3.6:   Sep 19, 2017</dt>
+							<dd>
+							Changes in listing of projects. (229849 lines)
+							</dd>
+		<dt>Version 17.3.5:   Sep 19, 2017</dt>
+							<dd>
+							Removed groups in projects. (229858 lines)
+							</dd>
+		<dt>Version 17.3.4:   Sep 19, 2017</dt>
+							<dd>
+							Changes in edition of projects. (230170 lines)
+							</dd>
+		<dt>Version 17.3.3:   Sep 19, 2017</dt>
+							<dd>
+							Changes in listing of projects. (230169 lines)
+							</dd>
+		<dt>Version 17.3.2:   Sep 19, 2017</dt>
+							<dd>
+							Changes in listing of projects. (230168 lines)
+							</dd>
+		<dt>Version 17.3.1:   Sep 19, 2017</dt>
+							<dd>
+							Fix bugs in projects. (230089 lines)
+							</dd>
+		<dt>Version 17.3:     Sep 19, 2017</dt>
+							<dd>
+							Changes in fields of database table used for projects. (230089 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP TABLE IF EXISTS projects;
+CREATE TABLE IF NOT EXISTS projects (PrjCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Description TEXT NOT NULL,Knowledge TEXT NOT NULL,Materials TEXT NOT NULL,URL VARCHAR(255) NOT NULL,UNIQUE INDEX(PrjCod),INDEX(CrsCod,Hidden));
+							</code></small>
+							</dd>
+		<dt>Version 17.2.5:   Sep 18, 2017</dt>
+							<dd>
+							Get URL from form in projects. (229940 lines)
+							</dd>
+		<dt>Version 17.2.4:   Sep 18, 2017</dt>
+							<dd>
+							New field URL in projects. (229929 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE projects ADD COLUMN URL VARCHAR(255) NOT NULL AFTER Txt;
+							</code></small>
+							</dd>
+		<dt>Version 17.2.3:   Sep 17, 2017</dt>
+							<dd>
+							New option for projects. Not finished. (229906 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE projects DROP COLUMN NumNotif;<br />
+ALTER TABLE projects DROP COLUMN Folder;<br />
+ALTER TABLE projects ADD COLUMN Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Title;<br />
+							</code></small>
+							<br />
+							<small><code>
+Copy the following icons to icon public directory:<br />
+sudo cp icon/usr64x64.png /var/www/html/swad/icon/<br />
+sudo cp icon/usr_off64x64.png /var/www/html/swad/icon/
+							</code></small>
+							</dd>
+		<dt>Version 17.2.2:   Sep 17, 2017</dt>
+							<dd>
+							New option for projects. Not finished. (229964 lines)
+							</dd>
+		<dt>Version 17.2.1:   Sep 17, 2017</dt>
+							<dd>
+							New option for projects. Not finished. (229884 lines)
+							</dd>
+		<dt>Version 17.2:     Sep 17, 2017</dt>
+							<dd>
+							New option for projects. Not finished. (229575 lines)<br />
+							12 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS projects (PrjCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',NumNotif INT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Folder VARBINARY(255) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(PrjCod),INDEX(CrsCod,Hidden));<br />
+CREATE TABLE IF NOT EXISTS prj_grp (PrjCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(PrjCod,GrpCod));<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1674','es','N','Ver proyectos');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1675','es','N','Solicitar creaci&oacute;n proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1676','es','N','Solicitar edici&oacute;n proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1677','es','N','Imprimir proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1678','es','N','Crear proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1679','es','N','Modificar proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1680','es','N','Solicitar elim. proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1681','es','N','Eliminar proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1682','es','N','Ocultar proyecto');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1683','es','N','Mostrar actividad');
+							</code></small>
+							</dd>
+		<dt>Version 17.1:     Sep 15, 2017</dt>
+							<dd>
+							New module swad_project. Not finished. (229123 lines)<br />
+							<small><code>
+Copy the following icons to icon public directory:<br />
+sudo cp icon/iconset/awesome/action64x64/guide64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/<br />
+sudo cp icon/iconset/awesome/action64x64/project64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/<br />
+sudo cp icon/iconset/awesome/action64x64/remote64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/<br />
+sudo cp icon/iconset/nuvola/action64x64/guide64x64.png /var/www/html/swad/icon/iconset/nuvola/action64x64/<br />
+sudo cp icon/iconset/nuvola/action64x64/project64x64.png /var/www/html/swad/icon/iconset/nuvola/action64x64/<br />
+sudo cp icon/iconset/nuvola/action64x64/remote64x64.png /var/www/html/swad/icon/iconset/nuvola/action64x64/
+							</code></small>
+							</dd>
+		<dt>Version 17.0.4:   Sep 14, 2017</dt>
+							<dd>
+							Show current question with answers when playing a game. (227379 lines)
+							</dd>
+		<dt>Version 17.0.3:   Sep 14, 2017</dt>
+							<dd>
+							Action to show current question with answers when playing a game. (227350 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1673','es','N','Mostrar respuestas de pregunta juego');
+							</code></small>
+							</dd>
+		<dt>Version 17.0.2:   Sep 14, 2017</dt>
+							<dd>
+							Action to show next question when playing a game. (227293 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1671','es','N','Mostrar primera pregunta juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1672','es','N','Mostrar siguiente pregunta juego');
+							</code></small>
+							</dd>
+		<dt>Version 17.0.1:   Sep 13, 2017</dt>
+							<dd>
+							Icon to show question answers when playing a game. (227283 lines)<br />
+							<small><code>
+Copy the following icon to icon public directory:<br />
+sudo cp icon/step-forward64x64.png /var/www/html/swad/icon/
+							</code></small>
+							</dd>
+		<dt>Version 17.0:     Sep 13, 2017</dt>
+							<dd>
+							New action to display a game question. (227245 lines)
+							</dd>
+		<dt>Version 16.254.2: Sep 13, 2017</dt>
+							<dd>
+							Removed notifications in games.<br />
+							Start playing a game.<br />
+							Changes in pagination in games. (227141 lines)
+							</dd>
+		<dt>Version 16.254.1: Sep 13, 2017</dt>
+							<dd>
+							Icon to start playing a game. (227122 lines)<br />
+							<small><code>
+Copy the following icon to icon public directory:<br />
+sudo cp icon/play64x64.png /var/www/html/swad/icon/
+							</code></small>
+							</dd>
+		<dt>Version 16.254:   Sep 12, 2017</dt>
+							<dd>
+							Action to start playing a game. (227113 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1670','es','N','Bajar posici&oacute;n pregunta juego');
+							</code></small>
+							</dd>
+		<dt>Version 16.253:   Sep 11, 2017</dt>
+							<dd>
+							Actions to move up and down questions in a game. (227070 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Subir posici&oacute;n item teor&iacute;a' WHERE ActCod='221' AND Language='es';<br />
+UPDATE actions SET Txt='Bajar posici&oacute;n item teor&iacute;a' WHERE ActCod='220' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1668','es','N','Subir posici&oacute;n pregunta juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1669','es','N','Bajar posici&oacute;n pregunta juego');
+							</code></small>
+							</dd>
+		<dt>Version 16.252.3: Sep 11, 2017</dt>
+							<dd>
+							HTML optimization in icons. (226822 lines)
+							</dd>
+		<dt>Version 16.252.2: Sep 10, 2017</dt>
+							<dd>
+							Code refactoring in edition of syllabus. (226819 lines)
+							</dd>
+		<dt>Version 16.252.1: Sep 09, 2017</dt>
+							<dd>
+							Icons to move up and down questions in a game. (226864 lines)
+							</dd>
+		<dt>Version 16.252:   Sep 08, 2017</dt>
+							<dd>
+							Icons to move up and down questions in a game. (226852 lines)
+							</dd>
+		<dt>Version 16.251.13:Sep 07, 2017</dt>
+							<dd>
+							Option Remote Control moved after Test. (226873 lines)
+							</dd>
+		<dt>Version 16.251.12:Sep 07, 2017</dt>
+							<dd>
+							Module swad_game is renamed swad_game. (226872 lines)
+							</dd>
+		<dt>Version 16.251.11:Sep 07, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226868 lines)
+							</dd>
+		<dt>Version 16.251.10:Sep 06, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226913 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP TABLE IF EXISTS gam_answers;<br />
+CREATE TABLE IF NOT EXISTS gam_answers (GamCod INT NOT NULL,QstCod INT NOT NULL,AnsInd TINYINT NOT NULL,NumUsrs INT NOT NULL DEFAULT 0,UNIQUE INDEX(GamCod,QstCod,AnsInd));
+							</code></small>
+							</dd>
+		<dt>Version 16.251.9: Sep 06, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227273 lines)
+							</dd>
+		<dt>Version 16.251.8: Sep 06, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227211 lines)
+							</dd>
+		<dt>Version 16.251.7: Sep 04, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227218 lines)
+							</dd>
+		<dt>Version 16.251.6: Sep 01, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227111 lines)
+							</dd>
+		<dt>Version 16.251.5: Sep 01, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227045 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE gam_answers DROP COLUMN Answer;<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1663';
+							</code></small>
+							</dd>
+		<dt>Version 16.251.4: Sep 01, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227184 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP TABLE IF EXISTS gam_questions;<br />
+CREATE TABLE IF NOT EXISTS gam_questions (GamCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,INDEX(GamCod),INDEX(QstCod));
+							</code></small>
+							</dd>
+		<dt>Version 16.251.3: Jul 18, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227148 lines)
+							</dd>
+		<dt>Version 16.251.2: Jul 16, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (227062 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1667','es','N','A&ntilde;adir tests a juego');
+							</code></small>
+							</dd>
+		<dt>Version 16.251.1: Jul 16, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226888 lines)
+							</dd>
+		<dt>Version 16.251:   Jul 16, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226867 lines)<br />
+							19 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1648','es','N','Cambiar lugar de centro');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1649','es','N','Ver juegos');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1650','es','N','Ver un juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1651','es','N','Responder juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1652','es','N','Solicitar creaci&oacute;n juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1653','es','N','Solicitar edici&oacute;n juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1654','es','N','Crear juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1655','es','N','Modificar juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1656','es','N','Solicitar elim. juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1657','es','N','Eliminar juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1658','es','N','Solicitar puesta a cero juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1659','es','N','Poner a cero juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1660','es','N','Ocultar juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1661','es','N','Mostrar juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1662','es','N','Solicitar selec. tests para juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1663','es','N','Enviar pregunta juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1664','es','N','Preguntar si eliminar pregunta juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1665','es','N','Eliminar pregunta juego');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1666','es','N','Selec. descriptores tests para juego');
+							</code></small>
+							</dd>
+		<dt>Version 16.250:   Jul 09, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226738 lines)<br />
+							5 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS games (GamCod INT NOT NULL AUTO_INCREMENT,Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',Cod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',NumNotif INT NOT NULL DEFAULT 0,Roles INT NOT NULL DEFAULT 0,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(GamCod),INDEX(Scope,Cod));<br />
+CREATE TABLE IF NOT EXISTS gam_answers (QstCod INT NOT NULL,AnsInd TINYINT NOT NULL,NumUsrs INT NOT NULL DEFAULT 0,Answer TEXT NOT NULL,UNIQUE INDEX(QstCod,AnsInd));<br />
+CREATE TABLE IF NOT EXISTS gam_grp (GamCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(GamCod,GrpCod));<br />
+CREATE TABLE IF NOT EXISTS gam_questions (QstCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,AnsType ENUM('unique_choice','multiple_choice') NOT NULL,Stem TEXT NOT NULL,UNIQUE INDEX(QstCod),INDEX(GamCod));<br />
+CREATE TABLE IF NOT EXISTS gam_users (GamCod INT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(GamCod,UsrCod));
+							</code></small>
+							</dd>
+		<dt>Version 16.249.5: Jul 06, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226564 lines)
+							</dd>
+		<dt> Version 16.249.4: Jul 06, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226463 lines)
+							</dd>
+		<dt>Version 16.249.3: Jul 04, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226322 lines)
+							</dd>
+		<dt>Version 16.249.2: Jul 04, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226281 lines)
+							</dd>
+		<dt>Version 16.249.1: Jul 04, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226162 lines)
+							</dd>
+		<dt>Version 16.249:   Jul 04, 2017</dt>
+							<dd>
+							Listing games for remote control. Not finished. (226021 lines)
+							</dd>
+		<dt>Version 16.248:   Jul 03, 2017</dt>
+							<dd>
+							New option to emulate a remote control. (222272 lines)
+							</dd>
+		<dt>Version 16.247.6: Jul 02, 2017</dt>
+							<dd>
+							Fixed bug in user's enrolment. (222151 lines)
+							</dd>
+		<dt>Version 16.247.5: Jul 02, 2017</dt>
+							<dd>
+							Fixed error in layout when searching for courses. (222138 lines)
+							</dd>
+		<dt>Version 16.247.4: Jul 02, 2017</dt>
+							<dd>
+							Fixed bug in surveys. (222138 lines)
+							</dd>
+		<dt>Version 16.247.3: Jul 02, 2017</dt>
+							<dd>
+							Students can not view records of some users who do not share groups with them. (222132 lines)
+							</dd>
+		<dt>Version 16.247.2: Jun 23, 2017</dt>
+							<dd>
+							Non-editing teachers can not view records of some users who do not share groups with them.<br />
+							Code refactoring related with roles. (222094 lines)
+							</dd>
+		<dt>Version 16.247.1: Jun 23, 2017</dt>
+							<dd>
+							Non-editing teachers can select all groups when writing a message. (222068 lines)
+							</dd>
+		<dt>Version 16.247:   Jun 20, 2017</dt>
+							<dd>
+							Fixed bug when removing a user from a course.<br />
+							Code refactoring related with caches. (222063 lines)
+							</dd>
+		<dt>Version 16.246:   Jun 20, 2017</dt>
+							<dd>
+							Fixed bugs and code refactoring in groups. (221975 lines)
+							</dd>
+		<dt>Version 16.245:   Jun 12, 2017</dt>
+							<dd>
+							Place editable in centre configuration. (221876 lines)
+							</dd>
+		<dt>Version 16.244.1: Jun 12, 2017</dt>
+							<dd>
+							Fix bug in edition of centres. (221817 lines)
+							</dd>
+		<dt>Version 16.244:   Jun 12, 2017</dt>
+							<dd>
+							Code refactoring related with boxes. (221815 lines)
+							</dd>
+		<dt>Version 16.243:   Jun 12, 2017</dt>
+							<dd>
+							Code refactoring related with boxes. (222174 lines)
+							</dd>
+		<dt>Version 16.242:   Jun 11, 2017</dt>
+							<dd>
+							Code refactoring related with boxes. (222128 lines)
+							</dd>
+		<dt>Version 16.241.2: Jun 11, 2017</dt>
+							<dd>
+							Changes in alignment of dates in statistics. (222131 lines)
+							</dd>
+		<dt>Version 16.241.1: Jun 11, 2017</dt>
+							<dd>
+							Fix bug confirming another user's ID. (222132 lines)
+							</dd>
+		<dt>Version 16.241:   Jun 11, 2017</dt>
+							<dd>
+							New module swad_table to draw tables. (222132 lines)
+							</dd>
+		<dt>Version 16.240.1: Jun 11, 2017</dt>
+							<dd>
+							Some functions moved from swad_layout to swad_icon. (222024 lines)
+							</dd>
+		<dt>Version 16.240:   Jun 11, 2017</dt>
+							<dd>
+							New module swad_button to draw buttons. (222023 lines)
+							</dd>
+		<dt>Version 16.239:   Jun 10, 2017</dt>
+							<dd>
+							New module swad_box to draw boxes. (221970 lines)
+							</dd>
+		<dt>Version 16.238:   Jun 10, 2017</dt>
+							<dd>
+							Icon to close frames. (221803 lines)
+							</dd>
+		<dt>Version 16.237:   Jun 09, 2017</dt>
+							<dd>
+							Code refactoring related to users belonging to a course.<br />
+							Changes in permissions to access students by non-editing teachers. (221303 lines)
+							</dd>
+		<dt>Version 16.236:   Jun 08, 2017</dt>
+							<dd>
+							Changes in permissions related to record card contextual commands.<br />
+							Code refactoring related to roles. (221306 lines)
+							</dd>
+		<dt>Version 16.235.3: Jun 04, 2017</dt>
+							<dd>
+							Non-editing teachers can not select/unselect groups to which they don't belong. (221107 lines)
+							</dd>
+		<dt>Version 16.235.2: Jun 04, 2017</dt>
+							<dd>
+							Non-editing teachers can access and edit works of students. (221032 lines)
+							</dd>
+		<dt>Version 16.235.1: Jun 04, 2017</dt>
+							<dd>
+							Limited length of connected users at right column. (221027 lines)
+							</dd>
+		<dt>Version 16.235:   Jun 04, 2017</dt>
+							<dd>
+							Fixed bug in notifications about enrolment as a non-editing teacher.<br />
+							Fixed bugs and code refactoring related to users enrolment. (221018 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x100) << 12)) & 0x7FFFFFFF;<br />
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x100) << 12)) & 0x7FFFFFFF;
+							</code></small>
+							</dd>
+		<dt>Version 16.234:   Jun 04, 2017</dt>
+							<dd>
+							Removed some verbose messages when removing a user.<br />
+							Modification / removing of a user is performed in an a priori function. (220995 lines)
+							</dd>
+		<dt>Version 16.233:   Jun 04, 2017</dt>
+							<dd>
+							Code refactoring related with roles. (221175 lines)
+							</dd>
+		<dt>Version 16.232.8: Jun 03, 2017</dt>
+							<dd>
+							Fix bug (an URL like https://openswad.org/es?a gived Internal Server Error). (221147 lines)
+							</dd>
+		<dt>Version 16.232.7: Jun 03, 2017</dt>
+							<dd>
+							Changed contextual links in institutional links and banners. (221148 lines)<br />
+							<small><code>
+Copy the following icon to icon public directory:<br />
+sudo cp icon/link64x64.gif /var/www/html/swad/icon/
+							</code></small>
+							</dd>
+		<dt>Version 16.232.6: Jun 03, 2017</dt>
+							<dd>
+							Changed layout of edition of banners. (221123 lines)
+							</dd>
+		<dt>Version 16.232.5: Jun 03, 2017</dt>
+							<dd>
+							Changed layout of edition of institutional links. (221108 lines)
+							</dd>
+		<dt>Version 16.232.4: Jun 01, 2017</dt>
+							<dd>
+							Changed alert when session expired. (221092 lines)
+							</dd>
+		<dt>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		    Version 16.232.3: Jun 01, 2017</dt>
 							<dd>
 							Fixed bug in permission of deletion of forum threads. (221091 lines)
 							</dd>

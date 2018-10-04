@@ -3008,6 +3008,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  case Rol_NET:	// Non-editing teacher in current course
 		  case Rol_TCH:	// Teacher in current course
 		     DefaultRoleInForm = UsrDat->Roles.InCurrentCrs.Role;
+		     break;
 		  default:	// User does not belong to current course
 		     /* If there is a request of this user, default role is the requested role */
 		     DefaultRoleInForm = Rol_GetRequestedRole (UsrDat->UsrCod);

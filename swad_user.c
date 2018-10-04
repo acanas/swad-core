@@ -3157,6 +3157,9 @@ static void Usr_SetMyPrefsAndRoles (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   char Path[PATH_MAX + 1 +
+             NAME_MAX + 1 +
+             NAME_MAX + 1];
 
    // In this point I am logged
 
@@ -3171,14 +3174,18 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
    Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
-   sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
+   sprintf (Path,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,
 	    The_ThemeId[Gbl.Prefs.Theme]);
+   Str_Copy (Gbl.Prefs.PathTheme,Path,
+             PATH_MAX);
 
    Gbl.Prefs.IconSet = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
-   sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s",
+   sprintf (Path,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
 	    Ico_IconSetId[Gbl.Prefs.IconSet]);
+   Str_Copy (Gbl.Prefs.PathIconSet,Path,
+             PATH_MAX);
 
    /***** Construct the path to my directory *****/
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);

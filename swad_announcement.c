@@ -107,7 +107,7 @@ void Ann_ShowAllAnnouncements (void)
 		     " FROM announcements"
                      " WHERE (Roles&%u)<>0 "
 		     " ORDER BY AnnCod DESC",
-            (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
+               (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
      }
    else // No user logged
       /* Select only active announcements for unknown users */
@@ -115,8 +115,8 @@ void Ann_ShowAllAnnouncements (void)
 		     " FROM announcements"
                      " WHERE Status=%u AND (Roles&%u)<>0 "
 		     " ORDER BY AnnCod DESC",
-            (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-            (unsigned) (1 << Rol_UNK));
+               (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+               (unsigned) (1 << Rol_UNK));
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
 
    /***** Start box *****/

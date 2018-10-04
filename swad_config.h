@@ -432,7 +432,7 @@
 
 /* Command to make image processing / face detection, programmed by Daniel J. Calandria-Hernández */
 // %s must be substituted by temporary file with the image received:
-#define Cfg_COMMAND_FACE_DETECTION			"./fotomaton options %s 540"
+#define Cfg_COMMAND_FACE_DETECTION			"./fotomaton cascade.xml %s 540"
 
 /* Commands to compute the average photo of a degree */
 #define Cfg_COMMAND_DEGREE_PHOTO_MEDIAN			"./foto_mediana"

@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS IP_prefs (
 	INDEX(UsrCod),
 	INDEX(LastChange));
 --
--- Table actions: Stores the text that describes each of the actions.
+-- Table actions: stores the text that describes each of the actions.
 -- Each action has a numeric code associated to it that persists over time.
 --
 CREATE TABLE IF NOT EXISTS actions (
@@ -37,6 +37,15 @@ CREATE TABLE IF NOT EXISTS actions_MFU (
 	LastClick DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,ActCod));
 --
+-- Table ann_seen: stores users who have seen global announcements
+--
+CREATE TABLE IF NOT EXISTS admin (
+	UsrCod INT NOT NULL,
+	Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,
+	Cod INT NOT NULL,
+	UNIQUE INDEX(UsrCod,Scope,Cod),
+	INDEX(Scope,Cod));
+--
 -- Table agendas: stores users' agendas
 --
 CREATE TABLE IF NOT EXISTS agendas (
@@ -50,15 +59,6 @@ CREATE TABLE IF NOT EXISTS agendas (
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(AgdCod),
 	INDEX(UsrCod,Public));
---
--- Table ann_seen: stores users who have seen global announcements
---
-CREATE TABLE IF NOT EXISTS admin (
-	UsrCod INT NOT NULL,
-	Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,
-	Cod INT NOT NULL,
-	UNIQUE INDEX(UsrCod,Scope,Cod),
-	INDEX(Scope,Cod));
 --
 -- Table ann_seen: stores users who have seen global announcements
 --
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS centres (
 	INDEX(PlcCod),
 	INDEX(Status));
 --
--- Table chat: stored number of users in each chat room (this table is not used now)
+-- Table chat: stores number of users in each chat room (this table is not used now)
 --
 CREATE TABLE IF NOT EXISTS chat (
 	RoomCode VARCHAR(16) NOT NULL,
@@ -567,23 +567,6 @@ CREATE TABLE IF NOT EXISTS forum_thread (
 	UNIQUE INDEX(FirstPstCod),
 	UNIQUE INDEX(LastPstCod));
 --
--- Table surveys: stores the games
---
-CREATE TABLE IF NOT EXISTS games (
-	GamCod INT NOT NULL AUTO_INCREMENT,
-	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
-	Cod INT NOT NULL DEFAULT -1,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	NumNotif INT NOT NULL DEFAULT 0,
-	Roles INT NOT NULL DEFAULT 0,
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
-	Txt TEXT NOT NULL,
-	UNIQUE INDEX(GamCod),
-	INDEX(Scope,Cod));
---
 -- Table gam_answers: stores the answers to the games
 --
 CREATE TABLE IF NOT EXISTS gam_answers (
@@ -615,6 +598,23 @@ CREATE TABLE IF NOT EXISTS gam_users (
 	GamCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,UsrCod));
+--
+-- Table games: stores the games
+--
+CREATE TABLE IF NOT EXISTS games (
+	GamCod INT NOT NULL AUTO_INCREMENT,
+	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
+	Cod INT NOT NULL DEFAULT -1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumNotif INT NOT NULL DEFAULT 0,
+	Roles INT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(GamCod),
+	INDEX(Scope,Cod));
 --
 -- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
 --

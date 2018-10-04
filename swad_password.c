@@ -401,7 +401,10 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
   {
    extern const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML;
    extern const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   char Command[2048]; // Command to execute for sending an email
+   char Command[2048 +
+		Cfg_MAX_BYTES_SMTP_PASSWORD +
+		Cns_MAX_BYTES_EMAIL_ADDRESS +
+		PATH_MAX]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/

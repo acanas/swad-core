@@ -5844,7 +5844,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
       case Tst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
          Gbl.Test.Shuffle = Par_GetParToBool ("Shuffle");
-         // No break
+	 /* falls through */
+	 /* no break */
       case Tst_ANS_TEXT:
          /* Get the texts of the answers */
          for (NumOpt = 0;

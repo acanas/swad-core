@@ -1641,7 +1641,10 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML;
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
-   char Command[2048]; // Command to execute for sending an email
+   char Command[2048 +
+		Cfg_MAX_BYTES_SMTP_PASSWORD +
+		Cns_MAX_BYTES_EMAIL_ADDRESS +
+		PATH_MAX]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/

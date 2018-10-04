@@ -608,7 +608,8 @@ void Mrk_ShowMyMarks (void)
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    char PathMarksPriv[PATH_MAX + 1];
-   char PathPrivate[PATH_MAX + 1];
+   char PathPrivate[PATH_MAX + 1 +
+		    PATH_MAX + 1];
    struct UsrData *UsrDat;
    bool UsrIsOK = true;
 
@@ -618,7 +619,9 @@ void Mrk_ShowMyMarks (void)
    /***** Get the path of the file of marks *****/
    Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 	                  Gbl.FileBrowser.FilFolLnkName);
-   sprintf (PathPrivate,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
+   sprintf (PathPrivate,"%s/%s",
+            Gbl.FileBrowser.Priv.PathAboveRootFolder,
+            Gbl.FileBrowser.Priv.FullPathInTree);
 
    /***** Get number of rows of header or footer *****/
    Mrk_GetNumRowsHeaderAndFooter (&Marks);

@@ -137,12 +137,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
    sprintf (Gbl.Prefs.IconsURL,"%s/%s",
             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
-   sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
-	    Gbl.Prefs.IconsURL,
-	    Cfg_ICON_FOLDER_THEMES,
+   sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s/%s",
+            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
+            Cfg_ICON_FOLDER_THEMES,
 	    The_ThemeId[Gbl.Prefs.Theme]);
-   sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s",
-	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
+   sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s/%s",
+	    Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
+	    Cfg_ICON_FOLDER_ICON_SETS,
 	    Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    Gbl.Session.NumSessions = 0;

@@ -2278,9 +2278,9 @@ void Inf_ReceivePagInfo (void)
    char SourceFileName[PATH_MAX + 1];
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1];
-   char PathRelFileZIP[PATH_MAX + 1];
+   char PathRelFileZIP[PATH_MAX + 1 + NAME_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char StrUnzip[100 + PATH_MAX * 2 + 1];
+   char StrUnzip[128 + PATH_MAX * 2 + 1];
    bool WrongType = false;
    bool FileIsOK = false;
 

@@ -714,7 +714,9 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
-   char Query[2048];
+   char *QueryUsrData;
+   size_t CommentsLength;
+   char QueryUsrIDs[256 + ID_MAX_BYTES_USR_ID];
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
 
@@ -731,20 +733,39 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    /***** Insert new user in database *****/
    /* Insert user's data */
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
-   sprintf (Query,"INSERT INTO usr_data"
-	          " (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-		  "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
-		  "PhotoVisibility,ProfileVisibility,"
-		  "CtyCod,"
-		  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
-		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
-		  " VALUES"
-		  " ('%s','%s','%s','%s','%s','%s',"
-		  "'%s','%s','%s',%u,%u,"
-		  "'%s','%s',"
-		  "%ld,"
-		  "'%s','%s','%s','%s','%s',%s,'%s',"
-		  "%u,%u,-1,0)",
+   CommentsLength = strlen (UsrDat->Comments);
+   if ((QueryUsrData = malloc (2048 +
+			       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +	// EncryptedUsrCod
+			       Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
+			       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +	// Surname1, Surname2, FirstName
+			       Usr_MAX_BYTES_ADDRESS +			// LocalAddress
+			       Usr_MAX_BYTES_PHONE +			// LocalPhone
+			       Usr_MAX_BYTES_ADDRESS +			// FamilyAddress
+			       Usr_MAX_BYTES_PHONE +			// FamilyPhone
+			       Usr_MAX_BYTES_ADDRESS +			// OriginPlace
+			       Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
+		               CommentsLength)) == NULL)		// Comments
+      Lay_ShowErrorAndExit ("Not enough memory to store query.");
+   sprintf (QueryUsrData,"INSERT INTO usr_data"
+	                 " (EncryptedUsrCod,Password,"
+	                 "Surname1,Surname2,FirstName,Sex,"
+		         "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
+		         "PhotoVisibility,ProfileVisibility,"
+		         "CtyCod,"
+		         "LocalAddress,LocalPhone,"
+		         "FamilyAddress,FamilyPhone,"
+		         "OriginPlace,Birthday,Comments,"
+		         "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
+		         " VALUES"
+		         " ('%s','%s',"
+		         "'%s','%s','%s','%s',"
+		         "'%s','%s','%s',%u,%u,"
+		         "'%s','%s',"
+		         "%ld,"
+		         "'%s','%s',"
+		         "'%s','%s','%s',"
+		         "%s,'%s',"
+		         "%u,%u,-1,0)",
 	    UsrDat->EncryptedUsrCod,
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
@@ -758,14 +779,15 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
             Pri_VisibilityDB[UsrDat->ProfileVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress ,UsrDat->LocalPhone,
-	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,
-	    UsrDat->OriginPlace,
+	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
 	    BirthdayStrDB,
-	    UsrDat->Comments ? UsrDat->Comments :
-		               "",
+	    CommentsLength ? UsrDat->Comments :
+		             "",
             (unsigned) Mnu_MENU_DEFAULT,
             (unsigned) Cfg_DEFAULT_COLUMNS);
-   UsrDat->UsrCod = DB_QueryINSERTandReturnCode (Query,"can not create user");
+   UsrDat->UsrCod = DB_QueryINSERTandReturnCode (QueryUsrData,
+		                                 "can not create user");
+   free ((void *) QueryUsrData);
 
    /* Insert user's IDs as confirmed */
    for (NumID = 0;
@@ -773,7 +795,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      sprintf (Query,"INSERT INTO usr_IDs"
+      sprintf (QueryUsrIDs,"INSERT INTO usr_IDs"
 	             " (UsrCod,UsrID,CreatTime,Confirmed)"
 		     " VALUES"
 		     " (%ld,'%s',NOW(),'%c')",
@@ -781,7 +803,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	       UsrDat->IDs.List[NumID].ID,
 	       UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
 		                                   'N');
-      DB_QueryINSERT (Query,"can not store user's ID when creating user");
+      DB_QueryINSERT (QueryUsrIDs,"can not store user's ID when creating user");
      }
 
    /***** Create directory for the user, if not exists *****/

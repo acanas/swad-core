@@ -653,6 +653,9 @@ void Par_GetMainParameters (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    long ActCod;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char Path[PATH_MAX + 1 +
+             NAME_MAX + 1 +
+             NAME_MAX + 2];
    char LongStr[1 + 10 + 1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
@@ -771,7 +774,8 @@ void Par_GetMainParameters (void)
       case ActFrmLogInUsrAgd:
       case ActLogInUsrAgd:	// This action is necessary here when log in fails
          Pwd_GetParamUsrPwdLogin ();
-         // no break;
+	 /* falls through */
+	 /* no break */
       case ActReqSndNewPwd:
       case ActSndNewPwd:
          Usr_GetParamUsrIdLogin ();
@@ -788,13 +792,17 @@ void Par_GetMainParameters (void)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 
       /***** Set path of theme *****/
-      sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
+      sprintf (Path,"%s/%s/%s",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
+      Str_Copy (Gbl.Prefs.PathTheme,Path,
+                PATH_MAX);
 
       /***** Set path of icon set *****/
-      sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s",
+      sprintf (Path,"%s/%s/%s",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[Gbl.Prefs.IconSet]);
+      Str_Copy (Gbl.Prefs.PathIconSet,Path,
+                PATH_MAX);
      }
 
    /***** Get country if exists (from menu) *****/

@@ -2381,7 +2381,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    unsigned PhotoHeight;
    char PathRelAvgPhoto[PATH_MAX + 1];
    char PhotoURL[PATH_MAX + 1];
-   char PhotoCaption[512];
+   char PhotoCaption[1024 + Hie_MAX_BYTES_SHRT_NAME];
    bool ShowDegPhoto;
    char IdCaption[Act_MAX_BYTES_ID];
 

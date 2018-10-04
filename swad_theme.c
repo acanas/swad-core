@@ -284,12 +284,19 @@ static void The_PutIconsTheme (void)
 
 void The_ChangeTheme (void)
   {
+   char Path[PATH_MAX + 1 +
+             NAME_MAX + 1 +
+             NAME_MAX + 1];
    char Query[512];
 
    /***** Get param theme *****/
    Gbl.Prefs.Theme = The_GetParamTheme ();
-   sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
-            Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
+   sprintf (Path,"%s/%s/%s",
+            Gbl.Prefs.IconsURL,
+            Cfg_ICON_FOLDER_THEMES,
+            The_ThemeId[Gbl.Prefs.Theme]);
+   Str_Copy (Gbl.Prefs.PathTheme,Path,
+             PATH_MAX);
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)

@@ -3808,7 +3808,7 @@ static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long 
 
 static void Grp_CreateGroupType (void)
   {
-   char Query[1024];
+   char Query[1024 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Create a new group type *****/
    sprintf (Query,"INSERT INTO crs_grp_types"

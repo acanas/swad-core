@@ -121,8 +121,8 @@ struct Globals
 						Act_CONT_DATA (if CONTENT_TYPE==multipart/form-data) */
    struct
      {
-      char StrWithoutCRLF[Par_MAX_BYTES_BOUNDARY_WITH_CR_LF + 1];
-      char StrWithCRLF   [Par_MAX_BYTES_BOUNDARY_WITH_CR_LF + 1];
+      char StrWithoutCRLF[Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF + 1];
+      char StrWithCRLF   [Par_MAX_BYTES_BOUNDARY_WITH_CR_LF    + 1];
       size_t LengthWithoutCRLF;
       size_t LengthWithCRLF;
      } Boundary;

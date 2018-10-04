@@ -157,8 +157,10 @@ void ZIP_CreateZIPAsgWrk (void)
    extern const char *Txt_works_ZIP_FILE_NAME;
    struct UsrData UsrDat;
    const char *Ptr;
-   char StrZip[100 + PATH_MAX * 2 + 1];
-   char Path[PATH_MAX + 1];
+   char StrZip[128 + PATH_MAX];
+   char Path[PATH_MAX + 1 +
+             NAME_MAX + 1 +
+	     NAME_MAX + 1];
    int Result;
    char FileNameZIP[NAME_MAX + 1];
    char PathFileZIP[PATH_MAX + 1];
@@ -286,7 +288,7 @@ static void ZIP_CreateTmpDirForCompression (void)
 static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
   {
    char FullNameAndUsrID[NAME_MAX + 1];
-   char PathFolderUsrInsideCrs[PATH_MAX + 1];
+   char PathFolderUsrInsideCrs[128 + PATH_MAX + NAME_MAX];
    char LinkTmpUsr[PATH_MAX + 1];
    char Link[PATH_MAX + 1];
    unsigned NumTry;
@@ -403,9 +405,12 @@ static void ZIP_CompressFolderIntoZIP (void)
    extern const char *Txt_The_folder_is_empty;
    extern const char *Txt_The_contents_of_the_folder_are_too_big;
    unsigned long long UncompressedSize;
-   char StrZip[100 + PATH_MAX * 2 + 1];
-   char Path[PATH_MAX + 1];
-   char PathCompression[PATH_MAX + 1];
+   char StrZip[128 + PATH_MAX];
+   char Path[PATH_MAX + 1 +
+             PATH_MAX + 1];
+   char PathCompression[PATH_MAX + 1 +
+                        NAME_MAX + 1 +
+                        NAME_MAX + 1];
    int Result;
    char FileNameZIP[NAME_MAX + 1];
    char PathFileZIP[PATH_MAX + 1];

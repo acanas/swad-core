@@ -587,7 +587,8 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
 	 /***** Put form to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
-	 // no break
+	 /* falls through */
+	 /* no break */
       case Rol_STD:
       case Rol_NET:
 	 /***** Put form to print assignment *****/

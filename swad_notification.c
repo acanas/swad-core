@@ -1597,7 +1597,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    long Cod;
    struct Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char Command[2048]; // Command to execute for sending an email
+   char Command[2048 +
+		Cfg_MAX_BYTES_SMTP_PASSWORD +
+		Cns_MAX_BYTES_EMAIL_ADDRESS +
+		PATH_MAX]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Return 0 notifications and 0 mails when error *****/

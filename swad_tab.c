@@ -358,16 +358,20 @@ void Tab_DisableIncompatibleTabs (void)
      {
       case TabSys:
 	 Gbl.CurrentCty.Cty.CtyCod = -1L;
-	 // no break
+	 /* falls through */
+	 /* no break */
       case TabCty:
 	 Gbl.CurrentIns.Ins.InsCod = -1L;
-	 // no break
+	 /* falls through */
+	 /* no break */
       case TabIns:
 	 Gbl.CurrentCtr.Ctr.CtrCod = -1L;
-	 // no break
+	 /* falls through */
+	 /* no break */
       case TabCtr:
 	 Gbl.CurrentDeg.Deg.DegCod = -1L;
-	 // no break
+	 /* falls through */
+	 /* no break */
       case TabDeg:
 	 Gbl.CurrentCrs.Crs.CrsCod = -1L;
 	 break;

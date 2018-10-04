@@ -1003,7 +1003,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 				  row[5],
 				  Grp_MAX_BYTES_GROUP_NAME);
 			TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod = GrpCod;
-			// no break;
+			/* falls through */
+			/* no break */
 		     case TT_TUTORING_TIMETABLE:
 			Str_Copy (TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].Place,
 				  row[3],

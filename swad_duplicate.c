@@ -253,7 +253,7 @@ static void Dup_ListSimilarUsrs (void)
    extern const char *Hlp_USERS_Duplicates_similar_users;
    extern const char *Txt_Similar_users;
    struct UsrData UsrDat;
-   char Query[512];
+   char Query[512 + Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;

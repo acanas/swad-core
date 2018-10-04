@@ -1404,7 +1404,11 @@ void Syl_ModifyItemSyllabus (void)
 
 void Syl_BuildPathFileSyllabus (char *PathFile)
   {
-   sprintf (PathFile,"%s/%s",Gbl.Syllabus.PathDir,Cfg_SYLLABUS_FILENAME);
+   char Path[PATH_MAX + 1 + NAME_MAX + 1];
+
+   sprintf (Path,"%s/%s",Gbl.Syllabus.PathDir,Cfg_SYLLABUS_FILENAME);
+   Str_Copy (PathFile,Path,
+	     PATH_MAX);
   }
 
 /*****************************************************************************/

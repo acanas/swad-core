@@ -317,20 +317,36 @@ Hola Antonio, he ampliado el evento y nos deja comentar. El problema es que el p
 // TODO: Al buscar un profesor deberían salir también las asignaturas en las que es profesor no editor
 // TODO: En el pefil público de un usuario deberían contabilizarse como profesor las asignaturas en las que sea profesor no editor
 
+/* TODO:
+
+@CarlosEObertoM En respuesta a @acanasvargas
+
+Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más versátil las hojas de calificaciones que en pocos pasos se pudiera configurar para dar promedios, parciales y definitivas. Perdone la solicitud. Soy usuario agradecido de OpenSwad.
+*/
 
 // TODO: Eliminar todas las preguntas de test de un golpe
 // TODO: URGENTE: Cuando se cree un descriptor nuevo TIENE QUE ESTAR INHABILITADO porque si no los alumnos pueden ver el examen (Miguel Damas)
 
 // TODO: URGENTE: No se puede eliminar ni ocultar el enlace "Preparacion terreno_ hoyos._." de la asignatura PLANTACIÓN Y SIEMBRA (código 2165) de OpenSWAD.
 
+
+// TODO: Que la opción por defecto en "Permitir que los profesores vean este examen" la configuren los profesores en cada asignatura"
+// TODO: URGENTE: Bego del Pino, una columna en resultados de test que indique los descriptores de ese examen
+
+// TODO: Pedro Villar Castro:
+// Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 17.27.1 (2017-12-20)"
+#define Log_PLATFORM_VERSION	"SWAD 18.0 (2018-10-04)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
+// Size of photos:
+// find -iname '*.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
+// find -iname '*original.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /* Printing:
@@ -343,6 +359,8 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 18.0:     Oct 04, 2018  New version of fotomaton, programmed by Daniel Calandria and Jesús Mesa.
+         				Changes in code to avoid new warnings with GCC 7.3. (234736 lines)
         Version 17.29:    Apr 24, 2018  Code refactoring and bug fixing related to actions. (234579 lines)
         Version 17.28:    Jan 09, 2018  Added average of all test exams. (? lines)
         Version 17.27.2:  Dec 20, 2017  Changes displaying a game question. (234507 lines)
