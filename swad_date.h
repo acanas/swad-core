@@ -162,13 +162,19 @@ void Dat_GetIniEndDatesFromForm (void);
 
 void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm);
 
-void Dat_GetDateBefore (struct Date *Date,struct Date *PrecedingDate);
-void Dat_GetDateAfter (struct Date *Date,struct Date *SubsequentDate);
-void Dat_GetWeekBefore (struct Date *Date,struct Date *PrecedingDate);
-void Dat_GetMonthBefore (struct Date *Date,struct Date *PrecedingDate);
-unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,struct Date *DateEnd);
-unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,struct Date *DateEnd);
-unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,struct Date *DateEnd);
+void Dat_GetDateAfter   (struct Date *Date,struct Date *SubsequentDate);
+void Dat_GetDateBefore  (struct Date *Date,struct Date *PrecedingDate );
+void Dat_GetWeekBefore  (struct Date *Date,struct Date *PrecedingDate );
+void Dat_GetMonthBefore (struct Date *Date,struct Date *PrecedingDate );
+void Dat_GetYearBefore  (struct Date *Date,struct Date *PrecedingDate );
+unsigned Dat_GetNumDaysBetweenDates   (struct Date *DateIni,
+                                       struct Date *DateEnd);
+unsigned Dat_GetNumWeeksBetweenDates  (struct Date *DateIni,
+                                       struct Date *DateEnd);
+unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,
+                                       struct Date *DateEnd);
+unsigned Dat_GetNumYearsBetweenDates  (struct Date *DateIni,
+                                       struct Date *DateEnd);
 unsigned Dat_GetNumDaysInYear (unsigned Year);
 unsigned Dat_GetNumDaysFebruary (unsigned Year);
 bool Dat_GetIfLeapYear (unsigned Year);

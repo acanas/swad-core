@@ -74,23 +74,25 @@ const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
    2,	// Sta_CLICKS_CRS_DETAILED_LIST
 
    1,	// Sta_CLICKS_CRS_PER_USR
-   1,	// Sta_CLICKS_CRS_PER_DAYS
-   0,	// Sta_CLICKS_CRS_PER_DAYS_AND_HOUR
-   1,	// Sta_CLICKS_CRS_PER_WEEKS
-   1,	// Sta_CLICKS_CRS_PER_MONTHS
+   1,	// Sta_CLICKS_CRS_PER_DAY
+   0,	// Sta_CLICKS_CRS_PER_DAY_AND_HOUR
+   1,	// Sta_CLICKS_CRS_PER_WEEK
+   1,	// Sta_CLICKS_CRS_PER_MONTH
+   1,	// Sta_CLICKS_CRS_PER_YEAR
    1,	// Sta_CLICKS_CRS_PER_HOUR
    0,	// Sta_CLICKS_CRS_PER_MINUTE
    1,	// Sta_CLICKS_CRS_PER_ACTION
 
-   1,	// Sta_CLICKS_GBL_PER_DAYS
-   0,	// Sta_CLICKS_GBL_PER_DAYS_AND_HOUR
-   1,	// Sta_CLICKS_GBL_PER_WEEKS
-   1,	// Sta_CLICKS_GBL_PER_MONTHS
+   1,	// Sta_CLICKS_GBL_PER_DAY
+   0,	// Sta_CLICKS_GBL_PER_DAY_AND_HOUR
+   1,	// Sta_CLICKS_GBL_PER_WEEK
+   1,	// Sta_CLICKS_GBL_PER_MONTH
+   1,	// Sta_CLICKS_GBL_PER_YEAR
    1,	// Sta_CLICKS_GBL_PER_HOUR
    0,	// Sta_CLICKS_GBL_PER_MINUTE
    1,	// Sta_CLICKS_GBL_PER_ACTION
    1,	// Sta_CLICKS_GBL_PER_PLUGIN
-   1,	// Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION
+   1,	// Sta_CLICKS_GBL_PER_API_FUNCTION
    1,	// Sta_CLICKS_GBL_PER_BANNER
    1,	// Sta_CLICKS_GBL_PER_COUNTRY
    1,	// Sta_CLICKS_GBL_PER_INSTITUTION
@@ -140,17 +142,19 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
 static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
 static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res);
-static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES *mysql_res);
 static Sta_ColorType_t Sta_GetStatColorType (void);
 static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax);
 static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float HitsNum[24],float HitsMax);
 static void Sta_SetColor (Sta_ColorType_t ColorType,float HitsNum,float HitsMax,
                           unsigned *R,unsigned *G,unsigned *B);
-static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
+static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
                                      MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
+static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
+                                    MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
                                     MYSQL_RES *mysql_res);
 static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth);
@@ -739,12 +743,12 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">&nbsp;%s&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
 
-   if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAYS ||
+   if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
        Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
-      Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAYS;
+      Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
    fprintf (Gbl.F.Out,"<select name=\"GroupedBy\">");
-   for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAYS;
+   for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 	ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
 	ClicksGroupedBy++)
      {
@@ -1075,16 +1079,16 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 sprintf (Query,"SELECT SQL_NO_CACHE UsrCod,%s AS Num FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_CLICKS_CRS_PER_DAYS:
-      case Sta_CLICKS_GBL_PER_DAYS:
+      case Sta_CLICKS_CRS_PER_DAY:
+      case Sta_CLICKS_GBL_PER_DAY:
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                         "%s FROM %s",
                   BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
-      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
@@ -1093,8 +1097,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                   BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_CLICKS_CRS_PER_WEEKS:
-      case Sta_CLICKS_GBL_PER_WEEKS:
+      case Sta_CLICKS_CRS_PER_WEEK:
+      case Sta_CLICKS_GBL_PER_WEEK:
 	 /* With %x%v the weeks are counted from monday to sunday.
 	    With %X%V the weeks are counted from sunday to saturday. */
 	 sprintf (Query,(Gbl.Prefs.FirstDayOfWeek == 0) ?
@@ -1107,10 +1111,18 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		  BrowserTimeZone,
 		  StrQueryCountType,LogTable);
 	 break;
-      case Sta_CLICKS_CRS_PER_MONTHS:
-      case Sta_CLICKS_GBL_PER_MONTHS:
+      case Sta_CLICKS_CRS_PER_MONTH:
+      case Sta_CLICKS_GBL_PER_MONTH:
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
+                        "%s FROM %s",
+                  BrowserTimeZone,
+                  StrQueryCountType,LogTable);
+	 break;
+      case Sta_CLICKS_CRS_PER_YEAR:
+      case Sta_CLICKS_GBL_PER_YEAR:
+         sprintf (Query,"SELECT SQL_NO_CACHE "
+                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y') AS Year,"
                         "%s FROM %s",
                   BrowserTimeZone,
                   StrQueryCountType,LogTable);
@@ -1140,7 +1152,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE log_ws.PlgCod,%s AS Num FROM %s,log_ws",
                   StrQueryCountType,LogTable);
          break;
-      case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
+      case Sta_CLICKS_GBL_PER_API_FUNCTION:
          sprintf (Query,"SELECT SQL_NO_CACHE log_ws.FunCod,%s AS Num FROM %s,log_ws",
                   StrQueryCountType,LogTable);
          break;
@@ -1302,7 +1314,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          switch (Gbl.Stat.ClicksGroupedBy)
            {
             case Sta_CLICKS_GBL_PER_PLUGIN:
-            case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
+            case Sta_CLICKS_GBL_PER_API_FUNCTION:
                sprintf (QueryAux," AND %s.LogCod=log_ws.LogCod",
                         LogTable);
                Str_Concat (Query,QueryAux,
@@ -1378,24 +1390,29 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          Str_Concat (Query,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
-      case Sta_CLICKS_CRS_PER_DAYS:
-      case Sta_CLICKS_GBL_PER_DAYS:
+      case Sta_CLICKS_CRS_PER_DAY:
+      case Sta_CLICKS_GBL_PER_DAY:
 	 Str_Concat (Query," GROUP BY Day DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
-      case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
-      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
 	 Str_Concat (Query," GROUP BY Day DESC,Hour",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
-      case Sta_CLICKS_CRS_PER_WEEKS:
-      case Sta_CLICKS_GBL_PER_WEEKS:
+      case Sta_CLICKS_CRS_PER_WEEK:
+      case Sta_CLICKS_GBL_PER_WEEK:
 	 Str_Concat (Query," GROUP BY Week DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
-      case Sta_CLICKS_CRS_PER_MONTHS:
-      case Sta_CLICKS_GBL_PER_MONTHS:
+      case Sta_CLICKS_CRS_PER_MONTH:
+      case Sta_CLICKS_GBL_PER_MONTH:
 	 Str_Concat (Query," GROUP BY Month DESC",
+	             Sta_MAX_BYTES_QUERY_ACCESS);
+	 break;
+      case Sta_CLICKS_CRS_PER_YEAR:
+      case Sta_CLICKS_GBL_PER_YEAR:
+	 Str_Concat (Query," GROUP BY Year DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
@@ -1418,7 +1435,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          Str_Concat (Query," GROUP BY log_ws.PlgCod ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
-      case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
+      case Sta_CLICKS_GBL_PER_API_FUNCTION:
          Str_Concat (Query," GROUP BY log_ws.FunCod ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
@@ -1454,8 +1471,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      }
    /***** Write query for debug *****/
    /*
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
-      Lay_ShowAlert (Lay_INFO,Query);
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ale_ShowAlert (Ale_INFO,Query);
    */
    /***** Make the query *****/
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
@@ -1487,21 +1504,25 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 case Sta_CLICKS_CRS_PER_USR:
 	    Sta_ShowNumHitsPerUsr (NumRows,mysql_res);
 	    break;
-	 case Sta_CLICKS_CRS_PER_DAYS:
-	 case Sta_CLICKS_GBL_PER_DAYS:
-	    Sta_ShowNumHitsPerDays (NumRows,mysql_res);
+	 case Sta_CLICKS_CRS_PER_DAY:
+	 case Sta_CLICKS_GBL_PER_DAY:
+	    Sta_ShowNumHitsPerDay (NumRows,mysql_res);
 	    break;
-	 case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
-	 case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
-	    Sta_ShowDistrAccessesPerDaysAndHour (NumRows,mysql_res);
+	 case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
+	 case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
+	    Sta_ShowDistrAccessesPerDayAndHour (NumRows,mysql_res);
 	    break;
-	 case Sta_CLICKS_CRS_PER_WEEKS:
-	 case Sta_CLICKS_GBL_PER_WEEKS:
-	    Sta_ShowNumHitsPerWeeks (NumRows,mysql_res);
+	 case Sta_CLICKS_CRS_PER_WEEK:
+	 case Sta_CLICKS_GBL_PER_WEEK:
+	    Sta_ShowNumHitsPerWeek (NumRows,mysql_res);
 	    break;
-	 case Sta_CLICKS_CRS_PER_MONTHS:
-	 case Sta_CLICKS_GBL_PER_MONTHS:
-	    Sta_ShowNumHitsPerMonths (NumRows,mysql_res);
+	 case Sta_CLICKS_CRS_PER_MONTH:
+	 case Sta_CLICKS_GBL_PER_MONTH:
+	    Sta_ShowNumHitsPerMonth (NumRows,mysql_res);
+	    break;
+	 case Sta_CLICKS_CRS_PER_YEAR:
+	 case Sta_CLICKS_GBL_PER_YEAR:
+	    Sta_ShowNumHitsPerYear (NumRows,mysql_res);
 	    break;
 	 case Sta_CLICKS_CRS_PER_HOUR:
 	 case Sta_CLICKS_GBL_PER_HOUR:
@@ -1518,7 +1539,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          case Sta_CLICKS_GBL_PER_PLUGIN:
             Sta_ShowNumHitsPerPlugin (NumRows,mysql_res);
             break;
-         case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
+         case Sta_CLICKS_GBL_PER_API_FUNCTION:
             Sta_ShowNumHitsPerWSFunction (NumRows,mysql_res);
             break;
          case Sta_CLICKS_GBL_PER_BANNER:
@@ -1557,14 +1578,16 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Write time zone used in the calculation of these statistics *****/
    switch (Gbl.Stat.ClicksGroupedBy)
      {
-      case Sta_CLICKS_CRS_PER_DAYS:
-      case Sta_CLICKS_GBL_PER_DAYS:
-      case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
-      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
-      case Sta_CLICKS_CRS_PER_WEEKS:
-      case Sta_CLICKS_GBL_PER_WEEKS:
-      case Sta_CLICKS_CRS_PER_MONTHS:
-      case Sta_CLICKS_GBL_PER_MONTHS:
+      case Sta_CLICKS_CRS_PER_DAY:
+      case Sta_CLICKS_GBL_PER_DAY:
+      case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
+      case Sta_CLICKS_CRS_PER_WEEK:
+      case Sta_CLICKS_GBL_PER_WEEK:
+      case Sta_CLICKS_CRS_PER_MONTH:
+      case Sta_CLICKS_GBL_PER_MONTH:
+      case Sta_CLICKS_CRS_PER_YEAR:
+      case Sta_CLICKS_GBL_PER_YEAR:
       case Sta_CLICKS_CRS_PER_HOUR:
       case Sta_CLICKS_GBL_PER_HOUR:
       case Sta_CLICKS_CRS_PER_MINUTE:
@@ -1994,7 +2017,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 /********** Show a listing of with the number of clicks in each date *********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Date;
    extern const char *Txt_Day;
@@ -2076,7 +2099,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
                 	            "LOG",
                   Txt_DAYS_SMALL[NumDayWeek]);
 
-         /* Draw bar proportional to number of pages generated */
+         /* Draw bar proportional to number of hits */
          Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
                                                'c',
                              D == NumDaysFromLastDateToCurrDate ? Hits.Num :
@@ -2116,7 +2139,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
         	                 "LOG",
                Txt_DAYS_SMALL[NumDayWeek]);
 
-      /* Draw bar proportional to number of pages generated */
+      /* Draw bar proportional to number of hits */
       Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
 	                                    'c',
 	                  0.0,Hits.Max,Hits.Total,500);
@@ -2133,7 +2156,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
 #define GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH 25
 #define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH * 24)
 
-static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
+static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Color_of_the_graphic;
@@ -2579,7 +2602,7 @@ static void Sta_SetColor (Sta_ColorType_t ColorType,float HitsNum,float HitsMax,
 /********** Show listing with number of pages generated per week *************/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
+static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
                                      MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Week;
@@ -2589,7 +2612,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
    struct Date LastDate;
    struct Date Date;
    unsigned W;
-   unsigned NumWeeksBetweenLastDateAndCurrentDate;
+   unsigned NumWeeksBetweenLastDateAndCurDate;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
 
@@ -2628,9 +2651,9 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
-      NumWeeksBetweenLastDateAndCurrentDate = Dat_GetNumWeeksBetweenDates (&ReadDate,&LastDate);
+      NumWeeksBetweenLastDateAndCurDate = Dat_GetNumWeeksBetweenDates (&ReadDate,&LastDate);
       for (W = 1;
-	   W <= NumWeeksBetweenLastDateAndCurrentDate;
+	   W <= NumWeeksBetweenLastDateAndCurDate;
 	   W++)
         {
          /* Write week */
@@ -2640,10 +2663,10 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
                             "</td>",
 	          Date.Year,Date.Week);
 
-         /* Draw bar proportional to number of pages generated */
+         /* Draw bar proportional to number of hits */
          Sta_DrawBarNumHits ('c',
-                             W == NumWeeksBetweenLastDateAndCurrentDate ? Hits.Num :
-                        	                                          0.0,
+                             W == NumWeeksBetweenLastDateAndCurDate ? Hits.Num :
+                        	                                      0.0,
                              Hits.Max,Hits.Total,500);
 
          /* Decrement week */
@@ -2654,9 +2677,10 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 
   /***** Finally, show the old weeks without pages generated *****/
   Dat_CalculateWeekOfYear (&Gbl.DateRange.DateIni.Date);	// Changes Week and Year
-  NumWeeksBetweenLastDateAndCurrentDate = Dat_GetNumWeeksBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
+  NumWeeksBetweenLastDateAndCurDate = Dat_GetNumWeeksBetweenDates (&Gbl.DateRange.DateIni.Date,
+                                                                   &LastDate);
   for (W = 1;
-       W <= NumWeeksBetweenLastDateAndCurrentDate;
+       W <= NumWeeksBetweenLastDateAndCurDate;
        W++)
     {
      /* Write week */
@@ -2666,7 +2690,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 	                "</td>",
               Date.Year,Date.Week);
 
-     /* Draw bar proportional to number of pages generated */
+     /* Draw bar proportional to number of hits */
      Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
 
      /* Decrement week */
@@ -2678,7 +2702,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 /********** Show a graph with the number of clicks in each month *************/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
+static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Month;
@@ -2688,7 +2712,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
    struct Date LastDate;
    struct Date Date;
    unsigned M;
-   unsigned NumMonthsBetweenLastDateAndCurrentDate;
+   unsigned NumMonthsBetweenLastDateAndCurDate;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
 
@@ -2726,9 +2750,10 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
-      NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&ReadDate,&LastDate);
+      NumMonthsBetweenLastDateAndCurDate = Dat_GetNumMonthsBetweenDates (&ReadDate,
+                                                                         &LastDate);
       for (M = 1;
-	   M <= NumMonthsBetweenLastDateAndCurrentDate;
+	   M <= NumMonthsBetweenLastDateAndCurDate;
 	   M++)
         {
          /* Write the month */
@@ -2738,10 +2763,10 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
                             "</td>",
 	          Date.Year,Date.Month);
 
-         /* Draw bar proportional to number of pages generated */
+         /* Draw bar proportional to number of hits */
          Sta_DrawBarNumHits ('c',
-                             M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
-                        	                                           0.0,
+                             M == NumMonthsBetweenLastDateAndCurDate ? Hits.Num :
+                        	                                       0.0,
                              Hits.Max,Hits.Total,500);
 
          /* Decrease month */
@@ -2751,9 +2776,10 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
      }
 
   /***** Finally, show the oldest months without clicks *****/
-  NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
+  NumMonthsBetweenLastDateAndCurDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,
+                                                                     &LastDate);
   for (M = 1;
-       M <= NumMonthsBetweenLastDateAndCurrentDate;
+       M <= NumMonthsBetweenLastDateAndCurDate;
        M++)
     {
      /* Write the month */
@@ -2763,11 +2789,110 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
 	                "</td>",
               Date.Year,Date.Month);
 
-     /* Draw bar proportional to number of pages generated */
+     /* Draw bar proportional to number of hits */
      Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
 
      /* Decrease month */
      Dat_GetMonthBefore (&Date,&Date);
+    }
+  }
+
+/*****************************************************************************/
+/*********** Show a graph with the number of clicks in each year *************/
+/*****************************************************************************/
+
+static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
+                                    MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_Year;
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   unsigned long NumRow;
+   struct Date ReadDate;
+   struct Date LastDate;
+   struct Date Date;
+   unsigned Y;
+   unsigned NumYearsBetweenLastDateAndCurDate;
+   struct Sta_Hits Hits;
+   MYSQL_ROW row;
+
+   /***** Initialize LastDate *****/
+   Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
+
+   /***** Write heading *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Year,
+            Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+
+   /***** Compute maximum number of pages generated per year *****/
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+
+   /***** Write rows *****/
+   mysql_data_seek (mysql_res,0);
+   for (NumRow = 1;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the year (in row[0] is the date in YYYY format) */
+      if (sscanf (row[0],"%04u",&ReadDate.Year) != 1)
+	 Lay_ShowErrorAndExit ("Wrong date.");
+
+      /* Get number of pages generated (in row[1]) */
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+
+      Dat_AssignDate (&Date,&LastDate);
+      NumYearsBetweenLastDateAndCurDate = Dat_GetNumYearsBetweenDates (&ReadDate,
+                                                                       &LastDate);
+      for (Y = 1;
+	   Y <= NumYearsBetweenLastDateAndCurDate;
+	   Y++)
+        {
+         /* Write the year */
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td class=\"LOG LEFT_TOP\">"
+                            "%04u&nbsp;"
+                            "</td>",
+	          Date.Year);
+
+         /* Draw bar proportional to number of hits */
+         Sta_DrawBarNumHits ('c',
+                             Y == NumYearsBetweenLastDateAndCurDate ? Hits.Num :
+                        	                                      0.0,
+                             Hits.Max,Hits.Total,500);
+
+         /* Decrease year */
+         Dat_GetYearBefore (&Date,&Date);
+        }
+      Dat_AssignDate (&LastDate,&Date);
+     }
+
+  /***** Finally, show the oldest years without clicks *****/
+  NumYearsBetweenLastDateAndCurDate = Dat_GetNumYearsBetweenDates (&Gbl.DateRange.DateIni.Date,
+                                                                   &LastDate);
+  for (Y = 1;
+       Y <= NumYearsBetweenLastDateAndCurDate;
+       Y++)
+    {
+     /* Write the year */
+     fprintf (Gbl.F.Out,"<tr>"
+	                "<td class=\"LOG LEFT_TOP\">"
+	                "%04u&nbsp;"
+	                "</td>",
+              Date.Year);
+
+     /* Draw bar proportional to number of hits */
+     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
+
+     /* Decrease year */
+     Dat_GetYearBefore (&Date,&Date);
     }
   }
 
@@ -3142,7 +3267,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
                             "?&nbsp;"
                             "</td>");
 
-      /* Draw bar proportional to number of pages generated */
+      /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
       Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
      }
@@ -3196,7 +3321,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
          fprintf (Gbl.F.Out,"?");
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
-      /* Draw bar proportional to number of pages generated */
+      /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
       Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
      }
@@ -3248,7 +3373,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
 	                 "</td>",
                Svc_GetFunctionNameFromFunCod (FunCod));
 
-      /* Draw bar proportional to number of pages generated */
+      /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
       Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
      }
@@ -3806,7 +3931,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Draw bar proportional to number of pages generated */
+      /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
       Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
      }

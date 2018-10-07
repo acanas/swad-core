@@ -40684,6 +40684,7 @@ const char *Txt_Source_of_information =
 
 const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
    {
+		   // Sta_CLICKS_CRS_DETAILED_LIST
 #if   L==1
 	 "clics detallats"
 #elif L==2
@@ -40703,7 +40704,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "detalhadamente cliques"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_USR
 #if   L==1
 	 "usuari"
 #elif L==2
@@ -40723,7 +40724,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "utilizador"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_DAY
 #if   L==1
 	 "dia"
 #elif L==2
@@ -40735,7 +40736,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5
 	 "jour"
 #elif L==6
-	 "d&iacute;a"	// Okoteve traducción
+	 "&aacute;ra"
 #elif L==7
 	 "giorno"
 #elif L==8
@@ -40743,7 +40744,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "dia"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_DAY_AND_HOUR
 #if   L==1
 	 "dia i hora"
 #elif L==2
@@ -40755,7 +40756,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5
 	 "jour et heure"
 #elif L==6
-	 "d&iacute;a y hora"	// Okoteve traducción
+	 "&aacute;ra ha aravo"
 #elif L==7
 	 "giorno e ora"
 #elif L==8
@@ -40763,7 +40764,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "dia e hora"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_WEEK
 #if   L==1
 	 "setmana"
 #elif L==2
@@ -40783,7 +40784,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "semana"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_MONTH
 #if   L==1
 	 "mes"
 #elif L==2
@@ -40803,7 +40804,27 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "m&ecirc;s"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_YEAR
+#if   L==1
+	"any"
+#elif L==2
+	"Jahr"
+#elif L==3
+	"year"
+#elif L==4
+	"a&ntilde;o"
+#elif L==5
+	"ann&eacute;e"
+#elif L==6
+	"ary"
+#elif L==7
+	"anno"
+#elif L==8
+	"rok"
+#elif L==9
+	"ano"
+#endif
+	 ,	// Sta_CLICKS_CRS_PER_HOUR
 #if   L==1
 	 "hora"
 #elif L==2
@@ -40823,7 +40844,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "hora"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_MINUTE
 #if   L==1
 	 "minut"
 #elif L==2
@@ -40843,7 +40864,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "minuto"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_CRS_PER_ACTION
 #if   L==1
 	 "acci&oacute;"
 #elif L==2
@@ -40863,7 +40884,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "a&ccedil;&atilde;o"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_DAY
 #if   L==1
 	 "dia"
 #elif L==2
@@ -40875,7 +40896,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5
 	 "jour"
 #elif L==6
-	 "d&iacute;a"	// Okoteve traducción
+	 "&aacute;ra"
 #elif L==7
 	 "giorno"
 #elif L==8
@@ -40883,7 +40904,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "dia"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_DAY_AND_HOUR
 #if   L==1
 	 "dia i hora"
 #elif L==2
@@ -40895,7 +40916,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==5
 	 "jour et heure"
 #elif L==6
-	 "d&iacute;a y hora"	// Okoteve traducción
+	 "&aacute;ra ha aravo"
 #elif L==7
 	 "giorno e ora"
 #elif L==8
@@ -40903,7 +40924,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "dia e hora"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_WEEK
 #if   L==1
 	 "setmana"
 #elif L==2
@@ -40923,7 +40944,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "semana"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_MONTH
 #if   L==1
 	 "mes"
 #elif L==2
@@ -40943,7 +40964,27 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "m&ecirc;s"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_YEAR
+#if   L==1
+	"any"
+#elif L==2
+	"Jahr"
+#elif L==3
+	"year"
+#elif L==4
+	"a&ntilde;o"
+#elif L==5
+	"ann&eacute;e"
+#elif L==6
+	"ary"
+#elif L==7
+	"anno"
+#elif L==8
+	"rok"
+#elif L==9
+	"ano"
+#endif
+	 ,	// Sta_CLICKS_GBL_PER_HOUR
 #if   L==1
 	 "hora"
 #elif L==2
@@ -40963,7 +41004,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "hora"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_MINUTE
 #if   L==1
 	 "minut"
 #elif L==2
@@ -40983,7 +41024,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "minuto"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_ACTION
 #if   L==1
 	 "acci&oacute;"
 #elif L==2
@@ -41003,7 +41044,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "a&ccedil;&atilde;o"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_PLUGIN
 #if   L==1
 	 "complement"
 #elif L==2
@@ -41023,7 +41064,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "plugin"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_API_FUNCTION
 #if   L==1
 	 "funci&oacute;"
 #elif L==2
@@ -41043,7 +41084,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "fun&ccedil;&atilde;o"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_BANNER
 #if   L==1
 	 "banner"
 #elif L==2
@@ -41063,7 +41104,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "banner"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_COUNTRY
 #if   L==1
 	"pa&iacute;s"
 #elif L==2
@@ -41083,7 +41124,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	"pa&iacute;s"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_INSTITUTION
 #if   L==1
 	"instituci&oacute;"
 #elif L==2
@@ -41103,7 +41144,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	"institu&ccedil;&atilde;o"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_CENTRE
 #if   L==1
 	"centre"
 #elif L==2
@@ -41123,7 +41164,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	"centro"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_DEGREE
 #if   L==1
 	 "titulaci&oacute;"
 #elif L==2
@@ -41143,7 +41184,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9
 	 "titula&ccedil;&atilde;o"
 #endif
-	 ,
+	 ,	// Sta_CLICKS_GBL_PER_COURSE
 #if   L==1
 	 "assignatura"
 #elif L==2
@@ -54139,6 +54180,27 @@ const char *Txt_XML_file_content =
 	"Zawarto&sacute;&cacute; pliku XML";
 #elif L==9
 	"Conte&uacute;do do arquivo XML";
+#endif
+
+const char *Txt_Year =	// 1984, 2011...
+#if   L==1
+	"Any";
+#elif L==2
+	"Jahr";
+#elif L==3
+	"Year";
+#elif L==4
+	"A&ntilde;o";
+#elif L==5
+	"Ann&eacute;e";
+#elif L==6
+	"Ary";
+#elif L==7
+	"Anno";
+#elif L==8
+	"Rok";
+#elif L==9
+	"Ano";
 #endif
 
 const char *Txt_Year_OF_A_DEGREE =	// 1, 2, 3..., not 1984, 2011...

@@ -1009,37 +1009,7 @@ void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm_ptr)
   }
 
 /*****************************************************************************/
-/************** Compute the preceding date of a given date *******************/
-/*****************************************************************************/
-
-void Dat_GetDateBefore (struct Date *Date,struct Date *PrecedingDate)
-  {
-   if (Date->Day == 1)
-     {
-      if (Date->Month == 1)
-        {
-         PrecedingDate->Year  = Date->Year - 1;
-         PrecedingDate->Month = 12;
-         PrecedingDate->Day   = 31;
-        }
-      else
-        {
-         PrecedingDate->Year  = Date->Year;
-         PrecedingDate->Month = Date->Month - 1;
-         PrecedingDate->Day   = (PrecedingDate->Month == 2) ? Dat_GetNumDaysFebruary (PrecedingDate->Year) :
-                                                              Dat_NumDaysMonth[PrecedingDate->Month];
-        }
-     }
-   else
-     {
-      PrecedingDate->Year  = Date->Year;
-      PrecedingDate->Month = Date->Month;
-      PrecedingDate->Day   = Date->Day - 1;
-     }
-  }
-
-/*****************************************************************************/
-/************** Compute the preceding date of a given date *******************/
+/************** Compute the subsequent date of a given date ******************/
 /*****************************************************************************/
 
 void Dat_GetDateAfter (struct Date *Date,struct Date *SubsequentDate)
@@ -1067,6 +1037,36 @@ void Dat_GetDateAfter (struct Date *Date,struct Date *SubsequentDate)
       SubsequentDate->Year  = Date->Year;
       SubsequentDate->Month = Date->Month;
       SubsequentDate->Day   = Date->Day + 1;
+     }
+  }
+
+/*****************************************************************************/
+/************** Compute the preceding date of a given date *******************/
+/*****************************************************************************/
+
+void Dat_GetDateBefore (struct Date *Date,struct Date *PrecedingDate)
+  {
+   if (Date->Day == 1)
+     {
+      if (Date->Month == 1)
+        {
+         PrecedingDate->Year  = Date->Year - 1;
+         PrecedingDate->Month = 12;
+         PrecedingDate->Day   = 31;
+        }
+      else
+        {
+         PrecedingDate->Year  = Date->Year;
+         PrecedingDate->Month = Date->Month - 1;
+         PrecedingDate->Day   = (PrecedingDate->Month == 2) ? Dat_GetNumDaysFebruary (PrecedingDate->Year) :
+                                                              Dat_NumDaysMonth[PrecedingDate->Month];
+        }
+     }
+   else
+     {
+      PrecedingDate->Year  = Date->Year;
+      PrecedingDate->Month = Date->Month;
+      PrecedingDate->Day   = Date->Day - 1;
      }
   }
 
@@ -1107,13 +1107,23 @@ void Dat_GetMonthBefore (struct Date *Date,struct Date *PrecedingDate)
   }
 
 /*****************************************************************************/
+/**************** Compute the year before to a given year ********************/
+/*****************************************************************************/
+
+void Dat_GetYearBefore (struct Date *Date,struct Date *PrecedingDate)
+  {
+   PrecedingDate->Year = Date->Year - 1;
+  }
+
+/*****************************************************************************/
 /************** Compute the number of days beteen two dates ******************/
 /*****************************************************************************/
 // If the dates are the same, return 1
 // If the old date is the day before the new data, return 2
 // ...
 
-unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,struct Date *DateEnd)
+unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,
+                                     struct Date *DateEnd)
   {
    int DiffDays;
    unsigned Year;
@@ -1138,7 +1148,8 @@ unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,struct Date *DateEnd)
 /*****************************************************************************/
 // If the two dates are in the same week, return 1
 
-unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,struct Date *DateEnd)
+unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,
+                                      struct Date *DateEnd)
   {
    int DiffWeeks;
    unsigned Year;
@@ -1148,7 +1159,8 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,struct Date *DateEnd)
    if (DateIni->Year > DateEnd->Year)
       return 0;
 
-   /***** Initial year is lower or equal to ending year ==> compute difference in weeks *****/
+   /***** Initial year is lower or equal to ending year ==>
+          compute difference in weeks *****/
    DiffWeeks = (int) DateEnd->Week - (int) DateIni->Week + 1;
    for (Year = DateIni->Year;
 	Year < DateEnd->Year;
@@ -1163,7 +1175,8 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,struct Date *DateEnd)
 /*****************************************************************************/
 // If the two dates are in the same month, return 1
 
-unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,struct Date *DateEnd)
+unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,
+                                       struct Date *DateEnd)
   {
    int DiffMonths;
 
@@ -1172,6 +1185,22 @@ unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,struct Date *DateEnd
 	         (int) DateEnd->Month - (int) DateIni->Month + 1;
    return (DiffMonths > 0) ? (unsigned) DiffMonths :
 	                     0;
+  }
+
+/*****************************************************************************/
+/************** Compute the number of years between two dates ****************/
+/*****************************************************************************/
+// If the two dates are in the same year, return 1
+
+unsigned Dat_GetNumYearsBetweenDates (struct Date *DateIni,
+                                      struct Date *DateEnd)
+  {
+   int DiffYears;
+
+   /***** Compute the difference in years *****/
+   DiffYears = (int) DateEnd->Year - (int) DateIni->Year + 1;
+   return (DiffYears > 0) ? (unsigned) DiffYears :
+	                    0;
   }
 
 /*****************************************************************************/

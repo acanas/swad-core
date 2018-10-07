@@ -340,7 +340,7 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 18.0 (2018-10-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.1 (2018-10-07)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 
@@ -359,6 +359,7 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 18.1:     Oct 07, 2018  New statistics grouped per year. (234943 lines)
         Version 18.0.1:   Oct 04, 2018  My courses are highlighted in listing of courses of current degree. (234738 lines)
         Version 18.0:     Oct 04, 2018  New version of fotomaton, programmed by Daniel Calandria and Jesús Mesa.
          				Changes in code to avoid new warnings with GCC 7.3. (234736 lines)
