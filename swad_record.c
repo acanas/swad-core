@@ -2112,12 +2112,6 @@ void Rec_ShowFormMySharedRecord (void)
 	    !Gbl.Usrs.Me.UsrDat.Surname1[0])
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
 
-   /***** Contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
-   Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** My record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
    Rec_WriteLinkToDataProtectionClause ();
@@ -2709,9 +2703,18 @@ static void Rec_PutIconsCommands (void)
       /***** Button to change user's photo *****/
       Pho_PutLinkToChangeOtherUsrPhoto ();
 
-      /***** Put link (form) to change my privacy *****/
+      /* Buttons to change my institution, my social networks and my privacy */
       if (ItsMe)
+        {
+	 /* Button to change my institution, centre, department... */
+	 Rec_PutLinkToChangeMyInsCtrDpt ();
+
+         /* Button to change my social networks */
+         Net_PutLinkToChangeMySocialNetworks ();
+
+         /* Button to change my privacy */
          Pri_PutLinkToChangeMyPrivacy ();
+        }
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
@@ -3941,7 +3944,7 @@ void Rec_PutLinkToChangeMyInsCtrDpt (void)
    /***** Link to edit my institution, centre, department... *****/
    Lay_PutContextualLink (ActReqEdiMyIns,NULL,NULL,
                           "ins64x64.gif",
-                          Txt_Edit_my_institution,Txt_Edit_my_institution,
+                          Txt_Edit_my_institution,NULL,
 		          NULL);
   }
 

@@ -87,8 +87,9 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /*****************************************************************************/
 
 static void Pho_PutIconToRequestRemoveMyPhoto (void);
+static void Pho_PutIconsMyPhoto (void);
+static void Pho_PutIconsOtherUsrPhoto (void);
 static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void);
-static void Pho_ReqMyPhoto (void);
 static void Pho_ReqOtherUsrPhoto (void);
 
 static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL);
@@ -208,6 +209,25 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
   }
 
 /*****************************************************************************/
+/************************* Put contextual icons ******************************/
+/*****************************************************************************/
+
+static void Pho_PutIconsMyPhoto (void)
+  {
+   /***** Put icon to remove my photo *****/
+   Pho_PutIconToRequestRemoveMyPhoto ();
+
+   /***** Put icon to change my privacy *****/
+   Pri_PutLinkToChangeMyPrivacy ();
+  }
+
+static void Pho_PutIconsOtherUsrPhoto (void)
+  {
+   /***** Put icon to remove another user's photo *****/
+   Pho_PutIconToRequestRemoveOtherUsrPhoto ();
+  }
+
+/*****************************************************************************/
 /************** Put a link to request the removal of my photo ****************/
 /*****************************************************************************/
 
@@ -263,21 +283,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
 /************************ Form for sending my photo **************************/
 /*****************************************************************************/
 
-void Pho_ReqMyPhotoWithContextLinks (void)
-  {
-   /***** Contextual links to remove photo and change privacy *****/
-   if (Gbl.Usrs.Me.MyPhotoExists)	// I have photo
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
-   /***** Show the form to send my photo *****/
-   Pho_ReqMyPhoto ();
-  }
-
-static void Pho_ReqMyPhoto (void)
+void Pho_ReqMyPhoto (void)
   {
    /***** Show the form for sending the photo *****/
    Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
@@ -314,9 +320,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    Act_Action_t NextAction;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Photo,
-                 ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
-                         Pho_PutIconToRequestRemoveOtherUsrPhoto,
+   Box_StartBox (NULL,Txt_Photo,ItsMe ? Pho_PutIconsMyPhoto :
+		                        Pho_PutIconsOtherUsrPhoto,
                  Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
@@ -383,7 +388,7 @@ void Pho_SendPhotoUsr (void)
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
          if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
 	    /***** Form to send my photo *****/
-	    Pho_ReqMyPhotoWithContextLinks ();
+            Pho_ReqMyPhoto ();
 	 else
 	    /***** Form to send another user's photo *****/
 	    Pho_ReqOtherUsrPhoto ();

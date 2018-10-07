@@ -3139,7 +3139,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActChgMyData	*/{ 298,-1,TabUnk,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Rec_UpdateMyRecord		,Rec_ShowMySharedRecordUpd	,NULL},
 
-   /* ActReqMyPho	*/{  30,-1,TabUnk,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ReqMyPhotoWithContextLinks	,NULL},
+   /* ActReqMyPho	*/{  30,-1,TabUnk,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ReqMyPhoto			,NULL},
    /* ActDetMyPho	*/{ 693,-1,TabUnk,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Pho_RecMyPhotoDetFaces		,NULL},
    /* ActUpdMyPho	*/{ 694,-1,TabUnk,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
    /* ActReqRemMyPho	*/{1577,-1,TabUnk,ActReqEdiRecCom	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ReqRemoveMyPhoto		,NULL},

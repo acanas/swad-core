@@ -278,7 +278,7 @@ void Net_PutLinkToChangeMySocialNetworks (void)
    /***** Link to edit my social networks *****/
    Lay_PutContextualLink (ActReqEdiMyNet,NULL,NULL,
                           "earth64x64.gif",
-                          Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks,
+                          Txt_Edit_my_webs_networks,NULL,
                           NULL);
   }
 
