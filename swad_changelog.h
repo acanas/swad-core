@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.1.4 (2018-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.1.5 (2018-10-07)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.1.5:   Oct 07, 2018  Icon to change user's provacy is moved to record card. (234958 lines)
         Version 18.1.4:   Oct 07, 2018  Icon to change user's photo is moved to record card. (234955 lines)
         Version 18.1.3:   Oct 07, 2018  Changes in statistic graphs. (234965 lines)
         Version 18.1.2:   Oct 07, 2018  Changes in statistic graphs. (234964 lines)

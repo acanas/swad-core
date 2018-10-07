@@ -80,7 +80,7 @@ void Pri_PutLinkToChangeMyPrivacy (void)
    /***** Link to edit my privacy *****/
    Lay_PutContextualLink (ActEdiPri,NULL,NULL,
                           "lock64x64.png",
-                          Txt_Privacy,Txt_Privacy,
+                          Txt_Privacy,NULL,
 		          NULL);
   }
 

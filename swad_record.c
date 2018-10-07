@@ -2116,7 +2116,6 @@ void Rec_ShowFormMySharedRecord (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-   Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
    fprintf (Gbl.F.Out,"</div>");
 
    /***** My record *****/
@@ -2709,6 +2708,10 @@ static void Rec_PutIconsCommands (void)
 
       /***** Button to change user's photo *****/
       Pho_PutLinkToChangeOtherUsrPhoto ();
+
+      /***** Put link (form) to change my privacy *****/
+      if (ItsMe)
+         Pri_PutLinkToChangeMyPrivacy ();
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
