@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.1.2 (2018-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.1.3 (2018-10-07)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.1.3:   Oct 07, 2018  Changes in statistic graphs. (234965 lines)
         Version 18.1.2:   Oct 07, 2018  Changes in statistic graphs. (234964 lines)
         Version 18.1.1:   Oct 07, 2018  New colors in statistic graphs. (234963 lines)
 Copy the following icons to icon public directory:

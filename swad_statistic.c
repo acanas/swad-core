@@ -2000,7 +2000,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                    " alt=\"\" title=\"\""
                             " class=\"LEFT_TOP\""
-	                    " style=\"width:%upx; height:18px;\" />"
+	                    " style=\"width:%upx; height:10px; padding-top:4px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
 		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
