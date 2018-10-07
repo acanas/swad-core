@@ -100,7 +100,6 @@ static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
 static void Rec_PutIconsCommands (void);
-static void Rec_PutParamUsrCodEncrypted (void);
 static void Rec_PutParamsWorks (void);
 static void Rec_PutParamsStudent (void);
 static void Rec_PutParamsMsgUsr (void);
@@ -2117,7 +2116,6 @@ void Rec_ShowFormMySharedRecord (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-   Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
    Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2709,12 +2707,15 @@ static void Rec_PutIconsCommands (void)
 				   NULL);	// Put button to follow
 	}
 
+      /***** Button to change user's photo *****/
+      Pho_PutLinkToChangeOtherUsrPhoto ();
+
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
      }
   }
 
-static void Rec_PutParamUsrCodEncrypted (void)
+void Rec_PutParamUsrCodEncrypted (void)
   {
    Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EncryptedUsrCod);
   }

@@ -84,7 +84,6 @@ typedef enum
 /*****************************************************************************/
 
 bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat);
-void Pho_PutLinkToChangeMyPhoto (void);
 void Pho_PutLinkToChangeOtherUsrPhoto (void);
 void Pho_ReqMyPhotoWithContextLinks (void);
 void Pho_ReqUsrPhotoWithContextualLinks (struct UsrData *UsrDat);

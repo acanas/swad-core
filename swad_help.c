@@ -80,10 +80,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Go_to_one_of_my_courses;
    extern const char *Txt_My_courses;
    extern const char *Txt_Sign_up;
-   extern const char *Txt_Remove_me_from_the_course_X;
+   extern const char *Txt_Remove_me_from_THE_COURSE_X;
    extern const char *Txt_Remove_me;
    extern const char *Txt_Register_me_in_X;
-   extern const char *Txt_Select_or_create_another_course_in_X;
+   extern const char *Txt_Select_create_course_in_X;
    extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_Courses;
    extern const char *Txt_Select_or_create_another_degree_in_X;
@@ -144,7 +144,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role] != ActUnk)
 		 {
 		  /* Request my removing from this course */
-		  sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
+		  sprintf (Gbl.Title,Txt_Remove_me_from_THE_COURSE_X,
 			   Gbl.CurrentCrs.Crs.ShrtName);
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role],
@@ -186,7 +186,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
 	{
 	 /* Select a course */
-	 sprintf (Gbl.Title,Gbl.CurrentCrs.Crs.CrsCod > 0 ? Txt_Select_or_create_another_course_in_X :
+	 sprintf (Gbl.Title,Gbl.CurrentCrs.Crs.CrsCod > 0 ? Txt_Select_create_course_in_X :
 							    Txt_Select_or_create_one_course_in_X,
 		  Gbl.CurrentDeg.Deg.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,

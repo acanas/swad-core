@@ -972,8 +972,8 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
-   extern const char *Txt_Remove_me_from_the_course_X;
-   extern const char *Txt_Remove_USER_from_the_course_X;
+   extern const char *Txt_Remove_me_from_THE_COURSE_X;
+   extern const char *Txt_Remove_USER_from_THE_COURSE_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_centre_X;
@@ -1155,8 +1155,8 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (UsrBelongsToCrs)
      {
       sprintf (Gbl.Alert.Txt,
-	       ItsMe ? Txt_Remove_me_from_the_course_X :
-		       Txt_Remove_USER_from_the_course_X,
+	       ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
+		       Txt_Remove_USER_from_THE_COURSE_X,
 	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
                          "<label>"
@@ -3336,20 +3336,18 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 
 static void Enr_ShowFormToEditOtherUsr (void)
   {
-   /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
      {
+      /***** Buttons for edition *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
       Mai_PutLinkToChangeOtherUsrEmails ();	// Put link (form) to change user's emails
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
+
+      fprintf (Gbl.F.Out,"</div>");
      }
-
-   if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
-      Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
-
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,

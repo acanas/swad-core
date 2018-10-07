@@ -33267,25 +33267,25 @@ const char *Txt_Remove_me_from_this_project =
 	"Tirar me deste projeto";
 #endif
 
-const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_me_from_THE_COURSE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Eliminarme de l'assignatura <strong>%s</strong>";
+	"Eliminarme de <strong>%s</strong>";
 #elif L==2
-	"Entfernen Sie mir aus dem Kurs <strong>%s</strong>";
+	"Entfernen Sie mir aus <strong>%s</strong>";
 #elif L==3
-	"Remove me from the course <strong>%s</strong>";
+	"Remove me from <strong>%s</strong>";
 #elif L==4
-	"Eliminarme de la asignatura <strong>%s</strong>";
+	"Eliminarme de <strong>%s</strong>";
 #elif L==5
-	"Enlever-moi de la mati&egrave;re <strong>%s</strong>";
+	"Enlever-moi de <strong>%s</strong>";
 #elif L==6
-	"Eliminarme de la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Eliminarme de <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Rimuovimi dal corso <strong>%s</strong>";
+	"Rimuovimi di <strong>%s</strong>";
 #elif L==8
-	"Usu&nacute; mnie w kurs <strong>%s</strong>";
+	"Usu&nacute; mnie w <strong>%s</strong>";
 #elif L==9
-	"Tirar me da disciplina <strong>%s</strong>";
+	"Tirar me de <strong>%s</strong>";
 #endif
 
 const char *Txt_Remove_old_files =
@@ -33651,25 +33651,25 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X =	// Warnin
 	" da institu&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
-const char *Txt_Remove_USER_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_USER_from_THE_COURSE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Eliminar de l'assignatura <strong>%s</strong>";
+	"Eliminar de <strong>%s</strong>";
 #elif L==2
-	"Entfernen aus dem Kurs <strong>%s</strong>";
+	"Entfernen aus <strong>%s</strong>";
 #elif L==3
-	"Remove from the course <strong>%s</strong>";
+	"Remove from <strong>%s</strong>";
 #elif L==4
-	"Eliminar de la asignatura <strong>%s</strong>";
+	"Eliminar de <strong>%s</strong>";
 #elif L==5
-	"Enlever de la mati&egrave;re <strong>%s</strong>";
+	"Enlever de <strong>%s</strong>";
 #elif L==6
-	"Eliminar de la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Eliminar de <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Rimuovi dal corso <strong>%s</strong>";
+	"Rimuovi di <strong>%s</strong>";
 #elif L==8
-	"Usu&nacute; w kurs <strong>%s</strong>";
+	"Usu&nacute; w <strong>%s</strong>";
 #elif L==9
-	"Tirar da disciplina <strong>%s</strong>";
+	"Tirar de <strong>%s</strong>";
 #endif
 
 const char *Txt_Reply =
@@ -38703,25 +38703,25 @@ const char *Txt_Select_or_create_another_centre_in_X =	// Warning: it is very im
 	"Selecionar ou criar um outro centro da institu&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
-const char *Txt_Select_or_create_another_course_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Select_create_course_in_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Seleccionar o crear una altra assignatura en <strong>%s</strong>";
+	"Seleccionar/crear assignatura en <strong>%s</strong>";
 #elif L==2
-	"W&auml;hlen oder erstellen Sie einen anderen Kurs von <strong>%s</strong>";
+	"W&auml;hlen/erstellen Kurs von <strong>%s</strong>";
 #elif L==3
-	"Select or create another course in <strong>%s</strong>";
+	"Select/create in <strong>%s</strong>";
 #elif L==4
-	"Seleccionar o crear otra asignatura en <strong>%s</strong>";
+	"Seleccionar/crear asignatura en <strong>%s</strong>";
 #elif L==5
-	"S&eacute;lectionnez ou cr&eacute;ez une autre mati&egrave;re dans <strong>%s</strong>";
+	"S&eacute;lectionner/cr&eacute;er mati&egrave;re dans <strong>%s</strong>";
 #elif L==6
-	"Seleccionar o crear otra asignatura en <strong>%s</strong>";	// Okoteve traducción
+	"Seleccionar/crear asignatura en <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Selezionare o creare un altro corso di <strong>%s</strong>";
+	"Selezionare/creare corso di <strong>%s</strong>";
 #elif L==8
-	"Select or create another course in <strong>%s</strong>";	// Potrzebujesz tlumaczenie
+	"Select/create course in <strong>%s</strong>";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"Selecionar ou criar uma outra disciplina de <strong>%s</strong>";
+	"Selecionar/criar disciplina de <strong>%s</strong>";
 #endif
 
 const char *Txt_Select_or_create_another_degree_in_X =	// Warning: it is very important to include %s in the following sentences
