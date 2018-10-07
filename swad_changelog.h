@@ -359,6 +359,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 /*
+        Version 18.1.1:   Oct 07, 2018  New colors in statistic graphs. (234963 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/o1x1.png /var/www/html/swad/icon/
+sudo cp icon/r1x1.png /var/www/html/swad/icon/
+
         Version 18.1:     Oct 07, 2018  New statistics grouped per year. (234943 lines)
         Version 18.0.1:   Oct 04, 2018  My courses are highlighted in listing of courses of current degree. (234738 lines)
         Version 18.0:     Oct 04, 2018  New version of fotomaton, programmed by Daniel Calandria and Jesús Mesa.

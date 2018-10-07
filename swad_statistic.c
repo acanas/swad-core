@@ -184,7 +184,9 @@ static void Sta_WriteDegree (long DegCod);
 static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 
-static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
+static void Sta_DrawBarNumHits (char Color,
+				float HitsNum,float HitsMax,float HitsTotal,
+				unsigned MaxBarWidth);
 
 static void Sta_PutParamsToShowFigure (void);
 static void Sta_PutHiddenParamFigureType (void);
@@ -1995,14 +1997,14 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (BarWidth)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                    " alt=\"\" title=\"\""
                             " class=\"LEFT_TOP\""
 	                    " style=\"width:%upx; height:18px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
-		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'c' :	// Student
-			                                      'v',	// Non-editing teacher or teacher
+		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
+			                                      'r',	// Non-editing teacher or teacher
 		  BarWidth);
       Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;</td>"
@@ -2100,8 +2102,8 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
                   Txt_DAYS_SMALL[NumDayWeek]);
 
          /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
-                                               'c',
+         Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :	// red background
+                                               'o',	// orange background
                              D == NumDaysFromLastDateToCurrDate ? Hits.Num :
                         	                                  0.0,
                              Hits.Max,Hits.Total,500);
@@ -2140,8 +2142,8 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
                Txt_DAYS_SMALL[NumDayWeek]);
 
       /* Draw bar proportional to number of hits */
-      Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
-	                                    'c',
+      Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :	// red background
+	                                    'o',	// orange background
 	                  0.0,Hits.Max,Hits.Total,500);
 
       /* Decrease day */
@@ -2664,7 +2666,7 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
 	          Date.Year,Date.Week);
 
          /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits ('c',
+         Sta_DrawBarNumHits ('o',	// orange background
                              W == NumWeeksBetweenLastDateAndCurDate ? Hits.Num :
                         	                                      0.0,
                              Hits.Max,Hits.Total,500);
@@ -2691,7 +2693,8 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
               Date.Year,Date.Week);
 
      /* Draw bar proportional to number of hits */
-     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
+     Sta_DrawBarNumHits ('o',	// orange background
+                         0.0,Hits.Max,Hits.Total,500);
 
      /* Decrement week */
      Dat_GetWeekBefore (&Date,&Date);
@@ -2764,7 +2767,7 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
 	          Date.Year,Date.Month);
 
          /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits ('c',
+         Sta_DrawBarNumHits ('o',	// orange background
                              M == NumMonthsBetweenLastDateAndCurDate ? Hits.Num :
                         	                                       0.0,
                              Hits.Max,Hits.Total,500);
@@ -2790,7 +2793,8 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
               Date.Year,Date.Month);
 
      /* Draw bar proportional to number of hits */
-     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
+     Sta_DrawBarNumHits ('o',	// orange background
+                         0.0,Hits.Max,Hits.Total,500);
 
      /* Decrease month */
      Dat_GetMonthBefore (&Date,&Date);
@@ -2863,7 +2867,7 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
 	          Date.Year);
 
          /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits ('c',
+         Sta_DrawBarNumHits ('o',	// orange background
                              Y == NumYearsBetweenLastDateAndCurDate ? Hits.Num :
                         	                                      0.0,
                              Hits.Max,Hits.Total,500);
@@ -2889,7 +2893,8 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
               Date.Year);
 
      /* Draw bar proportional to number of hits */
-     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
+     Sta_DrawBarNumHits ('o',	// orange background
+                         0.0,Hits.Max,Hits.Total,500);
 
      /* Decrease year */
      Dat_GetYearBefore (&Date,&Date);
@@ -2983,9 +2988,9 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
          BarHeight = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Orange background
 	                 " alt=\"\" title=\"\""
-	                 " style=\"width:10px; height:%upx;\" />",
+	                 " style=\"width:14px; height:%upx;\" />",
 	       Gbl.Prefs.IconsURL,BarHeight);
      }
    else
@@ -3197,16 +3202,16 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	    (Minute % 60) == 0 ? 'v' :
 		                 'h');
 
-   /***** Draw bar with anchura proporcional al number of clicks *****/
+   /***** Draw bar with a width proportional to the number of hits *****/
    if (HitsNum != 0.0)
       if ((BarWidth = (unsigned) (((HitsNum * (float) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />",
                   Gbl.Prefs.IconsURL,
-                  (Minute % 60) == 0 ? 'g' :
-                	               'b',
+                  (Minute % 60) == 0 ? 'r' :	// red background
+                	               'o',	// orange background
                   BarWidth);
 
    /***** End cell of graphic and end row *****/
@@ -3269,7 +3274,8 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
+      Sta_DrawBarNumHits ('o',	// orange background
+                          Hits.Num,Hits.Max,Hits.Total,500);
      }
   }
 
@@ -3323,7 +3329,8 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
+      Sta_DrawBarNumHits ('o',	// orange background
+                          Hits.Num,Hits.Max,Hits.Total,500);
      }
   }
 
@@ -3375,7 +3382,8 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
+      Sta_DrawBarNumHits ('o',	// orange background
+                          Hits.Num,Hits.Max,Hits.Total,500);
      }
   }
 
@@ -3450,7 +3458,8 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
 
       /* Draw bar proportional to number of clicks */
       NumClicks = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumClicks,MaxClicks,TotalClicks,500);
+      Sta_DrawBarNumHits ('o',	// orange background
+		      	  NumClicks,MaxClicks,TotalClicks,500);
      }
   }
 
@@ -3512,7 +3521,8 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
+      Sta_DrawBarNumHits ('o',	// orange background
+                          Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3605,7 +3615,8 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
+      Sta_DrawBarNumHits ('o',	// orange background
+		      	  Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3700,7 +3711,8 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
+      Sta_DrawBarNumHits ('o',	// orange background
+		      	  Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3795,7 +3807,8 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
+      Sta_DrawBarNumHits ('o',	// orange background
+		      	  Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3933,7 +3946,8 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
+      Sta_DrawBarNumHits ('o',	// orange background
+		      	  Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3975,7 +3989,9 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
 
-static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth)
+static void Sta_DrawBarNumHits (char Color,
+				float HitsNum,float HitsMax,float HitsTotal,
+				unsigned MaxBarWidth)
   {
    unsigned BarWidth;
 
@@ -3987,10 +4003,10 @@ static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float Hit
       BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
       if (BarWidth == 0)
          BarWidth = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                 " alt=\"\" title=\"\""
                          " class=\"LEFT_TOP\""
-	                 " style=\"width:%upx; height:18px;\" />"
+	                 " style=\"width:%upx; height:14px;\" />"
                          "&nbsp;",
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
