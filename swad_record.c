@@ -151,6 +151,9 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 static void Rec_ShowComments (struct UsrData *UsrDat,
                               bool ShowData,bool ICanEdit,
                               const char *ClassForm);
+static void Rec_ShowTeacherRows (struct UsrData *UsrDat,
+                                 struct Instit *Ins,
+                                 bool ShowData,const char *ClassForm);
 static void Rec_ShowInstitution (struct Instit *Ins,
                                  bool ShowData,const char *ClassForm);
 static void Rec_ShowCentre (struct UsrData *UsrDat,
@@ -166,6 +169,7 @@ static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
+static void Rec_PutLinkToChangeMyInsCtrDpt (void);
 
 /*****************************************************************************/
 /*************** Create, edit and remove fields of records *******************/
@@ -2421,6 +2425,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
             Rec_ShowCountry (UsrDat,TypeOfView,ClassForm);
 	}
 
+      /***** Address rows *****/
       if (ShowAddressRows)
 	{
 	 /***** Origin place *****/
@@ -2445,23 +2450,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          Rec_ShowComments (UsrDat,ShowData,ICanEdit,ClassForm);
 	}
 
-      if (ShowTeacherRows)
-	{
-	 /***** Institution *****/
-         Rec_ShowInstitution (&Ins,ShowData,ClassForm);
-
-	 /***** Centre *****/
-         Rec_ShowCentre (UsrDat,ShowData,ClassForm);
-
-	 /***** Department *****/
-         Rec_ShowDepartment (UsrDat,ShowData,ClassForm);
-
-	 /***** Office *****/
-         Rec_ShowOffice (UsrDat,ShowData,ClassForm);
-
-	 /***** Office phone *****/
-         Rec_ShowOfficePhone (UsrDat,ShowData,ClassForm);
-	}
+      /***** Teacher's rows *****/
+      if (ShowTeacherRows && TypeOfView != Rec_SHA_MY_RECORD_FORM)
+         Rec_ShowTeacherRows (UsrDat,&Ins,ShowData,ClassForm);
 
       Tbl_EndTable ();
 
@@ -2512,6 +2503,15 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    /***** End table and box *****/
    Box_EndBoxTable ();
+
+   /***** Table with teacher rows *****/
+   if (ShowTeacherRows && TypeOfView == Rec_SHA_MY_RECORD_FORM)
+     {
+      Box_StartBoxTable (StrRecordWidth,NULL,Rec_PutLinkToChangeMyInsCtrDpt,
+		         NULL,Box_NOT_CLOSABLE,2);
+      Rec_ShowTeacherRows (UsrDat,&Ins,ShowData,ClassForm);
+      Box_EndBoxTable ();
+     }
   }
 
 /*****************************************************************************/
@@ -2706,9 +2706,6 @@ static void Rec_PutIconsCommands (void)
       /* Buttons to change my institution, my social networks and my privacy */
       if (ItsMe)
         {
-	 /* Button to change my institution, centre, department... */
-	 Rec_PutLinkToChangeMyInsCtrDpt ();
-
          /* Button to change my social networks */
          Net_PutLinkToChangeMySocialNetworks ();
 
@@ -3628,6 +3625,30 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
+static void Rec_ShowTeacherRows (struct UsrData *UsrDat,
+                                 struct Instit *Ins,
+                                 bool ShowData,const char *ClassForm)
+  {
+   /***** Institution *****/
+   Rec_ShowInstitution (Ins,ShowData,ClassForm);
+
+   /***** Centre *****/
+   Rec_ShowCentre (UsrDat,ShowData,ClassForm);
+
+   /***** Department *****/
+   Rec_ShowDepartment (UsrDat,ShowData,ClassForm);
+
+   /***** Office *****/
+   Rec_ShowOffice (UsrDat,ShowData,ClassForm);
+
+   /***** Office phone *****/
+   Rec_ShowOfficePhone (UsrDat,ShowData,ClassForm);
+  }
+
+/*****************************************************************************/
+/************************** Show user's institution **************************/
+/*****************************************************************************/
+
 static void Rec_ShowInstitution (struct Instit *Ins,
                                  bool ShowData,const char *ClassForm)
   {
@@ -3640,7 +3661,6 @@ static void Rec_ShowInstitution (struct Instit *Ins,
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Institution);
    if (ShowData)
-     {
       if (Ins->InsCod > 0)
 	{
 	 if (Ins->WWW[0])
@@ -3651,7 +3671,6 @@ static void Rec_ShowInstitution (struct Instit *Ins,
 	 if (Ins->WWW[0])
 	    fprintf (Gbl.F.Out,"</a>");
 	}
-     }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }
@@ -3937,14 +3956,14 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 /*** Put a link to the action to edit my institution, centre, department... **/
 /*****************************************************************************/
 
-void Rec_PutLinkToChangeMyInsCtrDpt (void)
+static void Rec_PutLinkToChangeMyInsCtrDpt (void)
   {
    extern const char *Txt_Edit_my_institution;
 
-   /***** Link to edit my institution, centre, department... *****/
+   /***** Button to edit my institution *****/
    Lay_PutContextualLink (ActReqEdiMyIns,NULL,NULL,
-                          "ins64x64.gif",
-                          Txt_Edit_my_institution,NULL,
+		          "edit64x64.png",
+		          Txt_Edit_my_institution,NULL,
 		          NULL);
   }
 
