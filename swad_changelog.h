@@ -340,10 +340,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 18.1 (2018-10-07)"
-#define CSS_FILE		"swad17.25.4.css"
-#define JS_FILE			"swad17.17.1.js"
-
 // Size of photos:
 // find -iname '*.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
 // find -iname '*original.jpg' -exec du -cb {} + | grep total$ | cut -f1 | paste -sd+ - | bc
@@ -358,7 +354,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
+
+#define Log_PLATFORM_VERSION	"SWAD 18.1.2 (2018-10-07)"
+#define CSS_FILE		"swad17.25.4.css"
+#define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.1.2:   Oct 07, 2018  Changes in statistic graphs. (234964 lines)
         Version 18.1.1:   Oct 07, 2018  New colors in statistic graphs. (234963 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/o1x1.png /var/www/html/swad/icon/

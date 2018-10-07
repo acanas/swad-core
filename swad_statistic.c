@@ -2990,7 +2990,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
          BarHeight = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Orange background
 	                 " alt=\"\" title=\"\""
-	                 " style=\"width:14px; height:%upx;\" />",
+	                 " style=\"width:10px; height:%upx;\" />",
 	       Gbl.Prefs.IconsURL,BarHeight);
      }
    else
@@ -4005,8 +4005,8 @@ static void Sta_DrawBarNumHits (char Color,
          BarWidth = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                 " alt=\"\" title=\"\""
-                         " class=\"LEFT_TOP\""
-	                 " style=\"width:%upx; height:14px;\" />"
+                         " class=\"LEFT_MIDDLE\""
+	                 " style=\"width:%upx; height:10px;\" />"
                          "&nbsp;",
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
