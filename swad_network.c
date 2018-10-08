@@ -184,6 +184,8 @@ const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "YouTube",		// Net_YOUTUBE
   };
 
+#define Net_MY_WEBS_ID	"my_webs_section"
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -268,25 +270,8 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
   }
 
 /*****************************************************************************/
-/*********** Put a link to the action to edit my social networks *************/
-/*****************************************************************************/
-
-void Net_PutLinkToChangeMySocialNetworks (void)
-  {
-   extern const char *Txt_Edit_my_webs_networks;
-
-   /***** Link to edit my social networks *****/
-   Lay_PutContextualLink (ActReqEdiMyNet,NULL,NULL,
-                          "earth64x64.gif",
-                          Txt_Edit_my_webs_networks,NULL,
-                          NULL);
-  }
-
-/*****************************************************************************/
 /********************* Show form to edit my social networks ******************/
 /*****************************************************************************/
-
-#define Net_COL2_WIDTH 300
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
@@ -298,9 +283,15 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
+   char StrRecordWidth[10 + 1];
+
+   /***** Start section *****/
+   Lay_StartSection (Net_MY_WEBS_ID);
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Webs_social_networks,Net_PutIconsWebsSocialNetworks,
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBoxTable (StrRecordWidth,
+                      Txt_Webs_social_networks,Net_PutIconsWebsSocialNetworks,
                       Hlp_PROFILE_Webs,Box_NOT_CLOSABLE,2);
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
@@ -331,7 +322,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"LEFT_MIDDLE\">"
+			 "<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
 			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
@@ -340,20 +331,20 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "%s:"
 			 "</label>"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
+			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
 	       (unsigned) NumURL,The_ClassForm[Gbl.Prefs.Theme],
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
-	       Net_WebsAndSocialNetworksTitle[NumURL],
-	       Net_COL2_WIDTH);
-      Act_FormStart (ActChgMyNet);
+	       Net_WebsAndSocialNetworksTitle[NumURL]);
+      Act_FormStartAnchor (ActChgMyNet,Net_MY_WEBS_ID);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
       fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL\""
-			 " maxlength=\"%u\" value=\"%s\" style=\"width:%upx;\""
+			 " maxlength=\"%u\" value=\"%s\""
+		         " class=\"REC_C2_BOT_INPUT\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       (unsigned) NumURL,
-	       Cns_MAX_CHARS_WWW,URL,Net_COL2_WIDTH - 20,
+	       Cns_MAX_CHARS_WWW,URL,
 	       Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -362,6 +353,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
    /***** End table and box *****/
    Box_EndBoxTable ();
+
+   /***** End section *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -385,7 +379,7 @@ void Net_UpdateMyWebsAndSocialNets (void)
    Net_GetMyWebsAndSocialNetsFromForm ();
 
    /***** Show form again *****/
-   Net_ShowFormMyWebsAndSocialNets ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/

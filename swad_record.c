@@ -1072,7 +1072,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	    Ale_ShowPendingAlert ();
 
 	 /* Shared record */
-	 fprintf (Gbl.F.Out,"<div class=\"REC_SHA\">");
+	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
 	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
 	 fprintf (Gbl.F.Out,"</div>");
 
@@ -1141,7 +1141,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
    /***** Shared record *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_SHA\">");
+   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1152,14 +1152,14 @@ static void Rec_ShowRecordOneStdCrs (void)
 	  Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
-         fprintf (Gbl.F.Out,"<div class=\"REC_CRS\">");
+         fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 	 Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
          fprintf (Gbl.F.Out,"</div>");
 	}
       else if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
 	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
 	{
-         fprintf (Gbl.F.Out,"<div class=\"REC_CRS\">");
+         fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 	 Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
          fprintf (Gbl.F.Out,"</div>");
 	}
@@ -1268,7 +1268,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                Ale_ShowPendingAlert ();
 
             /* Shared record */
-            fprintf (Gbl.F.Out,"<div class=\"REC_SHA\">");
+            fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat,RecordSectionId);
             fprintf (Gbl.F.Out,"</div>");
 
@@ -1280,7 +1280,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&		// I am student in this course...
 		    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// ...and it's me
 		 {
-		  fprintf (Gbl.F.Out,"<div class=\"REC_CRS\">");
+		  fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
                   fprintf (Gbl.F.Out,"</div>");
 		 }
@@ -1361,14 +1361,14 @@ static void Rec_ShowRecordOneTchCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
    /***** Shared record *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_SHA\">");
+   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Office hours *****/
    if (ShowOfficeHours)
      {
-      fprintf (Gbl.F.Out,"<div class=\"REC_TT\">");
+      fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
@@ -1485,14 +1485,14 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	       Ale_ShowPendingAlert ();
 
 	    /* Shared record */
-            fprintf (Gbl.F.Out,"<div class=\"REC_SHA\">");
+            fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
             fprintf (Gbl.F.Out,"</div>");
 
             /* Office hours */
             if (ShowOfficeHours)
               {
-	       fprintf (Gbl.F.Out,"<div class=\"REC_TT\">");
+	       fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
 	       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
@@ -2696,15 +2696,10 @@ static void Rec_PutIconsCommands (void)
       /***** Button to change user's photo *****/
       Pho_PutLinkToChangeOtherUsrPhoto ();
 
-      /* Buttons to change my institution, my social networks and my privacy */
+      /* Button to change my privacy */
       if (ItsMe)
-        {
-         /* Button to change my social networks */
-         Net_PutLinkToChangeMySocialNetworks ();
-
          /* Button to change my privacy */
          Pri_PutLinkToChangeMyPrivacy ();
-        }
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
@@ -3951,11 +3946,29 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 
 void Rec_ShowMySharedRecordAndMyInsCtrDpt (void)
   {
-   /***** My shared record *****/
-   Rec_ShowFormMySharedRecord ();
+   /***** Start container for this user *****/
+   fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
-   /***** My institution, centre and department *****/
+   /***** My shared record *****/
+   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+   Rec_ShowFormMySharedRecord ();
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Right part *****/
+   /* Start container for right part */
+   fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+
+   /* My institution, centre and department */
    Rec_ShowFormMyInsCtrDpt ();
+
+   /* My webs / social networks */
+   Net_ShowFormMyWebsAndSocialNets ();
+
+   /* End container for right part */
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End container for this user *****/
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Data protection clause *****/
    Rec_WriteLinkToDataProtectionClause ();

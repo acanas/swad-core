@@ -41,7 +41,6 @@
 
 void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat);
 
-void Net_PutLinkToChangeMySocialNetworks (void);
 void Net_ShowFormMyWebsAndSocialNets (void);
 void Net_UpdateMyWebsAndSocialNets (void);
 void Net_ShowWebAndSocialNetworksStats (void);

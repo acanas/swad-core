@@ -10547,27 +10547,6 @@ const char *Txt_Edit_my_personal_data =
 	"Editar os meus dados pessoais";
 #endif
 
-const char *Txt_Edit_my_webs_networks =
-#if   L==1
-	"Edita meves webs / xarxes";
-#elif L==2
-	"Bearbeiten meiner Webs / Netzwerke";
-#elif L==3
-	"Edit my webs / networks";
-#elif L==4
-	"Editar mis webs / redes";
-#elif L==5
-	"&Eacute;diter mes webs / r&eacute;seaux";
-#elif L==6
-	"Editar mis webs / redes";	// Okoteve traducción
-#elif L==7
-	"Editare i miei webs / reti";
-#elif L==8
-	"Edycja moje webs / sieci";
-#elif L==9
-	"Editar as minhas webs / redes";
-#endif
-
 const char *Txt_Edit_plain_text =
 #if   L==1
 	"Editar text sense format";
