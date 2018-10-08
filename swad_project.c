@@ -498,7 +498,7 @@ static void Prj_ShowFormToFilterByDpt (void)
    /***** Write selector with departments *****/
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Prjs.Filter.DptCod,		// Selected department
-                                275,				// Width in pixels
+                                "PRJ_INPUT",			// Selector class
                                 -1L,				// First option
                                 Txt_Any_department,		// Text when no department selected
                                 true);				// Submit on change
@@ -3043,7 +3043,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
-                                375,				// Width in pixels
+                                "PRJ_INPUT",			// Selector class
                                 0,				// First option
                                 Txt_Another_department,		// Text when no department selected
                                 false);				// Don't submit on change

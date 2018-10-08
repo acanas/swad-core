@@ -1111,7 +1111,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*****************************************************************************/
 
 void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
-                                  unsigned SelectorWidth,	// In pixels
+		                  const char *SelectClass,
                                   long FirstOption,
                                   const char *TextWhenNoDptSelected,
                                   bool SubmitFormOnChange)
@@ -1126,9 +1126,9 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    /***** Selector to select department *****/
    /* Start selector */
    fprintf (Gbl.F.Out,"<select id=\"%s\" name=\"%s\""
-	              " style=\"width:%upx;\"",
+	              " class=\"%s\"",
 	    Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,
-	    SelectorWidth);
+	    SelectClass);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);

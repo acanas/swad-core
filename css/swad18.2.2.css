@@ -2272,6 +2272,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	padding-left:1em;
 	}
+.PRJ_INPUT
+	{
+	max-width:500px;
+	}
 
 /********************************** Tests ************************************/
 .TAG_SEL	{box-sizing:border-box; width:346px;}
@@ -3268,6 +3272,10 @@ a.PAG:hover, .PAG_CUR
 	color:#4D88A1;
 	font-size:12pt;
 	font-weight:bold;
+	}
+.INDICATORS_INPUT
+	{
+	max-width:500px;
 	}
 
 /********************* Used to align buttons in account forms ****************/

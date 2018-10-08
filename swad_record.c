@@ -3965,8 +3965,6 @@ void Rec_ShowMySharedRecordAndMyInsCtrDpt (void)
 /********* Show form to edit my institution, centre and department ***********/
 /*****************************************************************************/
 
-#define COL2_WIDTH 600
-
 static void Rec_ShowFormMyInsCtrDpt (void)
   {
    extern const char *Hlp_PROFILE_Institution;
@@ -3989,6 +3987,7 @@ static void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumIns;
    unsigned NumCtr;
    bool IAmATeacher;
+   char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
    Lay_StartSection (Rec_MY_INS_CTR_DPT_ID);
@@ -4014,19 +4013,20 @@ static void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /***** Start box and table *****/
-   Box_StartBoxTable ("800px",IAmATeacher ? Txt_Institution_centre_and_department :
-	                                    Txt_Institution,
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBoxTable (StrRecordWidth,
+                      IAmATeacher ? Txt_Institution_centre_and_department :
+	                            Txt_Institution,
 	              NULL,
 	              Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
                       "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
 		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-            ClassForm,Txt_Country_of_your_institution,
-            COL2_WIDTH);
+		      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+            ClassForm,Txt_Country_of_your_institution);
 
    /* If list of countries is empty, try to get it */
    if (!Gbl.Ctys.Num)
@@ -4036,10 +4036,9 @@ static void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /* Start form to select the country of my institution */
-   // Act_FormGoToStart (ActChgCtyMyIns);
    Act_FormStartAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
-	              " style=\"width:500px;\""
+		      " class=\"REC_C2_BOT_INPUT\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.Form.Id);
@@ -4064,12 +4063,11 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
                       "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
 		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-            ClassForm,Txt_Institution,
-	    COL2_WIDTH);
+		      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+            ClassForm,Txt_Institution);
 
    /* Get list of institutions in this country */
    Ins_FreeListInstitutions ();
@@ -4077,10 +4075,9 @@ static void Rec_ShowFormMyInsCtrDpt (void)
       Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_BASIC_DATA);
 
    /* Start form to select institution */
-   // Act_FormGoToStart (ActChgMyIns);
    Act_FormStartAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
-	              " style=\"width:500px;\""
+		      " class=\"REC_C2_BOT_INPUT\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.Form.Id);
@@ -4112,12 +4109,11 @@ static void Rec_ShowFormMyInsCtrDpt (void)
      {
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
                          "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-	       ClassForm,Txt_Centre,
-	       COL2_WIDTH);
+			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+	       ClassForm,Txt_Centre);
 
       /* Get list of centres in this institution */
       Ctr_FreeListCentres ();
@@ -4125,10 +4121,9 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 	 Ctr_GetListCentres (Gbl.Usrs.Me.UsrDat.InsCod);
 
       /* Start form to select centre */
-      // Act_FormGoToStart (ActChgMyCtr);
       Act_FormStartAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
-	                 " style=\"width:500px;\""
+		         " class=\"REC_C2_BOT_INPUT\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.Form.Id);
@@ -4158,17 +4153,15 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
                          "<label for=\"%s\" class=\"%s\">%s:</label>"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-	       Dpt_PARAM_DPT_COD_NAME,ClassForm,Txt_Department,
-	       COL2_WIDTH);
-      // Act_FormGoToStart (ActChgMyDpt);
+			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+	       Dpt_PARAM_DPT_COD_NAME,ClassForm,Txt_Department);
       Act_FormStartAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
       Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 				   Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-				   500,					// Width in pixels
+	                           "REC_C2_BOT_INPUT",			// Selector class
 				   -1L,					// First option
 				   "",					// Text when no department selected
 				   true);				// Submit on change
@@ -4178,19 +4171,17 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Office *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 		         "<label for=\"Office\" class=\"%s\">"
 	                 "%s:"
 	                 "</label>"
 	                 "</td>"
-                         "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-               ClassForm,Txt_Office,
-               COL2_WIDTH);
-      // Act_FormGoToStart (ActChgMyOff);
+                         "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+               ClassForm,Txt_Office);
       Act_FormStartAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Office\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:500px;\""
+		         " class=\"REC_C2_BOT_INPUT\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
                Usr_MAX_CHARS_ADDRESS,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
@@ -4201,20 +4192,18 @@ static void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Phone *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 		         "<label for=\"OfficePhone\" class=\"%s\">"
 	                 "%s:"
                          "</label>"
 	                 "</td>"
-	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-               ClassForm,Txt_Phone,
-               COL2_WIDTH);
-      // Act_FormGoToStart (ActChgMyOffPho);
+	                 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+               ClassForm,Txt_Phone);
       Act_FormStartAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<input type=\"tel\""
 	                 " id=\"OfficePhone\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:500px;\""
+		         " class=\"REC_C2_BOT_INPUT\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Usr_MAX_CHARS_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,

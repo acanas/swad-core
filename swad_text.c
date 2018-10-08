@@ -10526,27 +10526,6 @@ const char *Txt_Edit_game =
 	"Editar jogo";
 #endif
 
-const char *Txt_Edit_my_institution =
-#if   L==1
-	"Edita la meva instituci&oacute;";
-#elif L==2
-	"Bearbeiten meine Hochschule";
-#elif L==3
-	"Edit my institution";
-#elif L==4
-	"Editar mi instituci&oacute;n";
-#elif L==5
-	"&Eacute;diter mon &eacute;tablissement";
-#elif L==6
-	"Editar mi instituci&oacute;n";		// Okoteve traducción
-#elif L==7
-	"Editare la mia istituzione";
-#elif L==8
-	"Edycja moich instytucji";
-#elif L==9
-	"Editar minha institu&ccedil;&atilde;o";
-#endif
-
 const char *Txt_Edit_my_personal_data =
 #if   L==1
 	"Edita meves dades personals";

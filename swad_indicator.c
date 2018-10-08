@@ -151,7 +151,7 @@ void Ind_ReqIndicatorsCourses (void)
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department
-                                375,				// Width in pixels
+                                "INDICATORS_INPUT",		// Selector class
                                 -1L,				// First option
                                 Txt_Any_department,		// Text when no department selected
                                 true);				// Submit on change
