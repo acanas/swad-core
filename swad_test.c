@@ -1072,7 +1072,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
    /***** Convert the stem, that is in HTML, to rigorous HTML *****/
    StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-   if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
+   if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
    Str_Copy (StemRigorousHTML,Stem,
              StemLength);
@@ -1206,7 +1206,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	{
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
 	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_PER_CHAR;
-	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
+	 if ((FeedbackRigorousHTML = (char *) malloc (FeedbackLength + 1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
 	 Str_Copy (FeedbackRigorousHTML,Feedback,
 	           FeedbackLength);
@@ -3385,7 +3385,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
 
             /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
             LengthAnswer = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
-            if ((Answer = malloc (LengthAnswer + 1)) == NULL)
+            if ((Answer = (char *) malloc (LengthAnswer + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
             Str_Copy (Answer,row[1],
                       LengthAnswer);
@@ -3399,7 +3399,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
                if (row[2][0])
         	 {
 		  LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_PER_CHAR;
-		  if ((Feedback = malloc (LengthFeedback + 1)) == NULL)
+		  if ((Feedback = (char *) malloc (LengthFeedback + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
 		  Str_Copy (Feedback,row[2],
 		            LengthFeedback);
@@ -4714,7 +4714,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
    Gbl.Test.Tags.All = Par_GetParToBool ("AllTags");
 
    /* Get the tags */
-   if ((Gbl.Test.Tags.List = malloc (Tst_MAX_BYTES_TAGS_LIST + 1)) == NULL)
+   if ((Gbl.Test.Tags.List = (char *) malloc (Tst_MAX_BYTES_TAGS_LIST + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store tags.");
    Par_GetParMultiToText ("ChkTag",Gbl.Test.Tags.List,Tst_MAX_BYTES_TAGS_LIST);
 
@@ -5417,13 +5417,13 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
    Tst_FreeTextChoiceAnswer (NumOpt);
 
    if ((Gbl.Test.Answer.Options[NumOpt].Text =
-	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
       return 0;
      }
    if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
-	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       sprintf (Gbl.Alert.Txt,"Not enough memory to store feedback.");
       return 0;
@@ -6506,12 +6506,12 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    char *Query;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (512 +
-                        Gbl.Test.Stem.Length +
-                        Gbl.Test.Feedback.Length +
-                        Img_BYTES_NAME +
-                        Img_MAX_BYTES_TITLE +
-                        Cns_MAX_BYTES_WWW)) == NULL)
+   if ((Query = (char *) malloc (512 +
+                                 Gbl.Test.Stem.Length +
+                                 Gbl.Test.Feedback.Length +
+                                 Img_BYTES_NAME +
+                                 Img_MAX_BYTES_TITLE +
+                                 Cns_MAX_BYTES_WWW)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    if (Gbl.Test.QstCod < 0)	// It's a new question
@@ -6618,11 +6618,11 @@ static void Tst_InsertAnswersIntoDB (void)
    unsigned i;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (256 +
-                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK * 2 +
-                        Img_BYTES_NAME +
-                        Img_MAX_BYTES_TITLE +
-                        Cns_MAX_BYTES_WWW)) == NULL)
+   if ((Query = (char *) malloc (256 +
+                                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK * 2 +
+                                 Img_BYTES_NAME +
+                                 Img_MAX_BYTES_TITLE +
+                                 Cns_MAX_BYTES_WWW)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Insert answers in the answers table *****/

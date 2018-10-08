@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.2 (2018-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.2.1 (2018-10-08)"
 #define CSS_FILE		"swad17.25.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.2.1:   Oct 08, 2018  Changes in edition of user's institution, centre, department... (234989 lines)
         Version 18.2:     Oct 08, 2018  Changes in layout of record card. (234980 lines)
         Version 18.1.6:   Oct 07, 2018  Icon to change user's institution is moved to record card. (234963 lines)
         Version 18.1.5:   Oct 07, 2018  Icon to change user's privacy is moved to record card. (234958 lines)

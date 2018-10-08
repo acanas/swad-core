@@ -1531,7 +1531,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeMyTT		(ActSeeMyUsgRep +  4)
 #define ActSeeMyAgd		(ActSeeMyUsgRep +  5)
 #define ActFrmMyAcc		(ActSeeMyUsgRep +  6)
-#define ActReqEdiRecCom		(ActSeeMyUsgRep +  7)
+#define ActReqEdiRecSha		(ActSeeMyUsgRep +  7)
 #define ActEdiPrf		(ActSeeMyUsgRep +  8)
 // Secondary actions
 #define ActReqSndNewPwd		(ActSeeMyUsgRep +  9)

@@ -275,7 +275,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
 void Usr_UsrDataConstructor (struct UsrData *UsrDat)
   {
    /***** Allocate memory for the comments *****/
-   if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((UsrDat->Comments = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store user's data.");
 
    /***** Initialize to zero the data of the user *****/
@@ -2471,6 +2471,7 @@ void Usr_WelcomeUsr (void)
 /*****************************************************************************/
 /************ Write birthday string to insert or update database *************/
 /*****************************************************************************/
+// It can include start and ending apostrophes
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1])
@@ -2478,10 +2479,10 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
    if (UsrDat->Birthday.Year  == 0 ||
        UsrDat->Birthday.Month == 0 ||
        UsrDat->Birthday.Day   == 0)
-      Str_Copy (BirthdayStrDB,"NULL",
+      Str_Copy (BirthdayStrDB,"NULL",			// Without apostrophes
                 Usr_BIRTHDAY_STR_DB_LENGTH);
    else
-      sprintf (BirthdayStrDB,"'%04u-%02u-%02u'",
+      sprintf (BirthdayStrDB,"'%04u-%02u-%02u'",	// With apostrophes
 	       UsrDat->Birthday.Year,
 	       UsrDat->Birthday.Month,
 	       UsrDat->Birthday.Day);
@@ -5698,7 +5699,7 @@ static void Usr_AllocateListOtherRecipients (void)
   {
    if (!Gbl.Usrs.ListOtherRecipients)
      {
-      if ((Gbl.Usrs.ListOtherRecipients = malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
+      if ((Gbl.Usrs.ListOtherRecipients = (char *) malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of recipients.");
       Gbl.Usrs.ListOtherRecipients[0] = '\0';
      }

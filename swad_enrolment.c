@@ -530,18 +530,21 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    Enr_FilterUsrDat (UsrDat);
 
    /***** Update user's common data *****/
-   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
-   CommentsLength = strlen (UsrDat->Comments);
-   if ((Query = malloc (2048 +
-			Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
-			Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +// Surname1, Surname2, FirstName
-			Usr_MAX_BYTES_ADDRESS +			// LocalAddress
-			Usr_MAX_BYTES_PHONE +			// LocalPhone
-			Usr_MAX_BYTES_ADDRESS +			// FamilyAddress
-			Usr_MAX_BYTES_PHONE +			// FamilyPhone
-			Usr_MAX_BYTES_ADDRESS +			// OriginPlace
-			Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
-		        CommentsLength)) == NULL)		// Comments
+   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
+   if (UsrDat->Comments)
+      CommentsLength = strlen (UsrDat->Comments);
+   else
+      CommentsLength = 0;
+   if ((Query = (char *) malloc (2048 +
+			         Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
+			         Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +// Surname1, Surname2, FirstName
+			         Usr_MAX_BYTES_ADDRESS +		// LocalAddress
+			         Usr_MAX_BYTES_PHONE +			// LocalPhone
+			         Usr_MAX_BYTES_ADDRESS +		// FamilyAddress
+			         Usr_MAX_BYTES_PHONE +			// FamilyPhone
+			         Usr_MAX_BYTES_ADDRESS +		// OriginPlace
+			         Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
+			         CommentsLength)) == NULL)		// Comments
       Lay_ShowErrorAndExit ("Not enough memory to store query.");
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"

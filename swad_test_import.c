@@ -460,7 +460,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
    fseek (Gbl.Test.XML.FileXML,0L,SEEK_SET);
 
    /***** Allocate memory for XML buffer *****/
-   if ((XMLBuffer = malloc (FileSize + 1)) == NULL)
+   if ((XMLBuffer = (char *) malloc (FileSize + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory for XML buffer.");
    else
      {
@@ -724,7 +724,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
 
    /***** Check if stem exists *****/
    /* Allocate space for query */
-   if ((QueryQst = malloc (256 + Gbl.Test.Stem.Length)) == NULL)
+   if ((QueryQst = (char *) malloc (256 + Gbl.Test.Stem.Length)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /* Make database query */
@@ -1126,7 +1126,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             /* Convert the answer, that is in HTML, to rigorous HTML */
             AnswerTextLength = strlen (Gbl.Test.Answer.Options[NumOpt].Text) *
         	               Str_MAX_BYTES_PER_CHAR;
-            if ((AnswerText = malloc (AnswerTextLength + 1)) == NULL)
+            if ((AnswerText = (char *) malloc (AnswerTextLength + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
             Str_Copy (AnswerText,Gbl.Test.Answer.Options[NumOpt].Text,
                       AnswerTextLength);
@@ -1141,7 +1141,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 		 {
 	          AnswerFeedbackLength = strlen (Gbl.Test.Answer.Options[NumOpt].Feedback) *
 					 Str_MAX_BYTES_PER_CHAR;
-	          if ((AnswerFeedback = malloc (AnswerFeedbackLength + 1)) == NULL)
+	          if ((AnswerFeedback = (char *) malloc (AnswerFeedbackLength + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
 		  Str_Copy (AnswerFeedback,
 		            Gbl.Test.Answer.Options[NumOpt].Feedback,

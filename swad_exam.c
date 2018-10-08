@@ -195,25 +195,25 @@ static long Exa_GetParamsExamAnnouncement (void)
 
 static void Exa_AllocMemExamAnnouncement (void)
   {
-   if ((Gbl.ExamAnns.ExaDat.Place       = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.Place       = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.Mode        = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.Mode        = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.Structure   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.Structure   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.DocRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.DocRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.MatRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.MatRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.MatAllowed  = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.OtherInfo   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
   }
 
@@ -736,10 +736,10 @@ static long Exa_AddExamAnnouncementToDB (void)
    long ExaCod;
 
    /***** Add exam announcement *****/
-   if ((Query = malloc (512 +
-                        Hie_MAX_BYTES_FULL_NAME +
-                        Exa_MAX_BYTES_SESSION +
-                        7 * Cns_MAX_BYTES_TEXT)) == NULL)
+   if ((Query = (char *) malloc (512 +
+                                 Hie_MAX_BYTES_FULL_NAME +
+                                 Exa_MAX_BYTES_SESSION +
+                                 7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"INSERT INTO exam_announcements "
 	          "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
@@ -783,10 +783,10 @@ static void Exa_ModifyExamAnnouncementInDB (void)
    char *Query;
 
    /***** Modify exam announcement *****/
-   if ((Query = malloc (512 +
-                        Hie_MAX_BYTES_FULL_NAME +
-                        Exa_MAX_BYTES_SESSION +
-                        7 * Cns_MAX_BYTES_TEXT)) == NULL)
+   if ((Query = (char *) malloc (512 +
+                                 Hie_MAX_BYTES_FULL_NAME +
+                                 Exa_MAX_BYTES_SESSION +
+                                 7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"UPDATE exam_announcements"
                   " SET CrsFullName='%s',Year=%u,ExamSession='%s',"

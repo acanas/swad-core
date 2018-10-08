@@ -178,7 +178,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          /* Copy content */
          if (ContentLength)
            {
-            if ((ParentElem->Content = malloc (ContentLength + 1)) == NULL)
+            if ((ParentElem->Content = (char *) malloc (ContentLength + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory.");
             strncpy (ParentElem->Content,StartContent,ContentLength);
             ParentElem->Content[ContentLength] = '\0';
@@ -215,7 +215,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
 
          /***** Get child tag name *****/
          ChildElem->TagNameLength = strcspn (Gbl.XMLPtr,">/ \t");
-         if ((ChildElem->TagName = malloc (ChildElem->TagNameLength + 1)) == NULL)
+         if ((ChildElem->TagName = (char *) malloc (ChildElem->TagNameLength + 1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory.");
          strncpy (ChildElem->TagName,Gbl.XMLPtr,ChildElem->TagNameLength);
          ChildElem->TagName[ChildElem->TagNameLength] = '\0';
@@ -335,7 +335,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
 
          /***** Get attribute name *****/
          Attribute->AttributeNameLength = strcspn (Gbl.XMLPtr,"=");
-         if ((Attribute->AttributeName = malloc (Attribute->AttributeNameLength + 1)) == NULL)
+         if ((Attribute->AttributeName = (char *) malloc (Attribute->AttributeNameLength + 1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory.");
          strncpy (Attribute->AttributeName,Gbl.XMLPtr,Attribute->AttributeNameLength);
          Attribute->AttributeName[Attribute->AttributeNameLength] = '\0';
@@ -365,7 +365,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
             Lay_ShowErrorAndExit (Gbl.Alert.Txt);
            }
 
-         if ((Attribute->Content = malloc (Attribute->ContentLength + 1)) == NULL)
+         if ((Attribute->Content = (char *) malloc (Attribute->ContentLength + 1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory.");
          strncpy (Attribute->Content,Gbl.XMLPtr,Attribute->ContentLength);
          Attribute->Content[Attribute->ContentLength] = '\0';

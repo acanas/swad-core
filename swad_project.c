@@ -3182,13 +3182,13 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
 void Prj_AllocMemProject (struct Project *Prj)
   {
-   if ((Prj->Description = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Description = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store project.");
 
-   if ((Prj->Knowledge   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Knowledge   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store project.");
 
-   if ((Prj->Materials   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Materials   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store project.");
   }
 

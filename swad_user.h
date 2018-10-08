@@ -63,7 +63,7 @@
 						// Surname1                         +' '+ Surname2                           +  ','+' ' + FirstName
 						// Surname1                         +' '+ Surname2                           + '<br />' + FirstName
 
-#define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
+#define Usr_BIRTHDAY_STR_DB_LENGTH (1 + 4 + 1 + 2 + 1 + 2 + 1)	// "'%04u-%02u-%02u'"
 
 #define Usr_MAX_CHARS_ADDRESS	(128 - 1)	// 127
 #define Usr_MAX_BYTES_ADDRESS	((Usr_MAX_CHARS_ADDRESS + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047

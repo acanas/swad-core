@@ -20589,7 +20589,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conta"
 #endif
 	,
-	//  6: ActReqEdiRecCom
+	//  6: ActReqEdiRecSha
 #if   L==1
 	"Fitxa"
 #elif L==2
@@ -22615,7 +22615,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Criar ou editar minha conta de usu&aacute;rio"
 #endif
 	,
-	//  6: ActReqEdiRecCom
+	//  6: ActReqEdiRecSha
 #if   L==1
 	"Dades personals, comuns per a totes les assignatures"
 #elif L==2

@@ -1303,11 +1303,11 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    long MsgCod;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (512 +
-                        strlen (Subject) +
-			strlen (Content) +
-			Img_BYTES_NAME +
-			Img_MAX_BYTES_TITLE)) == NULL)
+   if ((Query = (char *) malloc (512 +
+                                 strlen (Subject) +
+			         strlen (Content) +
+			         Img_BYTES_NAME +
+			         Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Check if image is received and processed *****/

@@ -2913,7 +2913,7 @@ static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,
                                           unsigned NumAns)
   {
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
-   if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
+   if ((SvyQst->AnsChoice[NumAns].Text = (char *) malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
       sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
       return false;
@@ -3383,7 +3383,7 @@ static void Svy_WriteQstStem (const char *Stem)
 
    /* Convert the stem, that is in HTML, to rigorous HTML */
    Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-   if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
+   if ((HeadingRigorousHTML = (char *) malloc (Length + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
    Str_Copy (HeadingRigorousHTML,Stem,
              Length);

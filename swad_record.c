@@ -68,6 +68,8 @@ extern struct Globals Gbl;
 
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	true
 
+#define Rec_MY_INS_CTR_DPT_ID	"my_ins_ctr_dpt_section"
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -99,6 +101,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
+static void Rec_ShowFormMySharedRecord (void);
 static void Rec_PutIconsCommands (void);
 static void Rec_PutParamsWorks (void);
 static void Rec_PutParamsStudent (void);
@@ -169,7 +172,8 @@ static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
-static void Rec_PutLinkToChangeMyInsCtrDpt (void);
+
+static void Rec_ShowFormMyInsCtrDpt (void);
 
 /*****************************************************************************/
 /*************** Create, edit and remove fields of records *******************/
@@ -2050,7 +2054,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
 	NumField++)
       if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
          /* Allocate memory for the texts of the fields */
-         if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+         if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory to store records of the course.");
   }
 
@@ -2101,24 +2105,23 @@ void Rec_ShowFormSignUpInCrsWithMySharedRecord (void)
 /***************** Show form to edit my shared record card *******************/
 /*****************************************************************************/
 
-void Rec_ShowFormMySharedRecord (void)
+static void Rec_ShowFormMySharedRecord (void)
   {
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
    extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
 
-   /***** If user has no sex, name and surname... *****/
-   if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
+   /***** If user has no name and surname, sex... *****/
+   if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
+       !Gbl.Usrs.Me.UsrDat.Surname1[0])
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
    else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
-   else if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
-	    !Gbl.Usrs.Me.UsrDat.Surname1[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
+   else if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
 
    /***** My record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
-   Rec_WriteLinkToDataProtectionClause ();
   }
 
 /*****************************************************************************/
@@ -2247,7 +2250,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
 	                 UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
    TeacherInAnyCrs = UsrDat->Roles.InCrss & ((1 << Rol_NET) |
-			                    (1 << Rol_TCH));
+			                     (1 << Rol_TCH));
 
    ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
 		      TypeOfView == Rec_SHA_MY_RECORD_CHECK ||
@@ -2256,8 +2259,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		       IAmLoggedAsTeacherOrSysAdm &&
 		       StudentInCurrentCrs));			// He/she is a student in the current course
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get user's roles if not got
-   ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
-		        TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
+   ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
 		       TeacherInAnyCrs) ||			// He/she (me, really) is a teacher in any course
 		      ((TypeOfView == Rec_SHA_RECORD_LIST ||
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
@@ -2451,7 +2453,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	}
 
       /***** Teacher's rows *****/
-      if (ShowTeacherRows && TypeOfView != Rec_SHA_MY_RECORD_FORM)
+      if (ShowTeacherRows)
          Rec_ShowTeacherRows (UsrDat,&Ins,ShowData,ClassForm);
 
       Tbl_EndTable ();
@@ -2503,15 +2505,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    /***** End table and box *****/
    Box_EndBoxTable ();
-
-   /***** Table with teacher rows *****/
-   if (ShowTeacherRows && TypeOfView == Rec_SHA_MY_RECORD_FORM)
-     {
-      Box_StartBoxTable (StrRecordWidth,NULL,Rec_PutLinkToChangeMyInsCtrDpt,
-		         NULL,Box_NOT_CLOSABLE,2);
-      Rec_ShowTeacherRows (UsrDat,&Ins,ShowData,ClassForm);
-      Box_EndBoxTable ();
-     }
   }
 
 /*****************************************************************************/
@@ -2550,7 +2543,7 @@ static void Rec_PutIconsCommands (void)
 
       if (ItsMe)
          /***** Button to edit my record card *****/
-	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,NULL,
+	 Lay_PutContextualLink (ActReqEdiRecSha,NULL,NULL,
 	                        "edit64x64.png",
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
@@ -3953,18 +3946,19 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*** Put a link to the action to edit my institution, centre, department... **/
+/**** Show my shared record and a form to edit my institution, centre... *****/
 /*****************************************************************************/
 
-static void Rec_PutLinkToChangeMyInsCtrDpt (void)
+void Rec_ShowMySharedRecordAndMyInsCtrDpt (void)
   {
-   extern const char *Txt_Edit_my_institution;
+   /***** My shared record *****/
+   Rec_ShowFormMySharedRecord ();
 
-   /***** Button to edit my institution *****/
-   Lay_PutContextualLink (ActReqEdiMyIns,NULL,NULL,
-		          "edit64x64.png",
-		          Txt_Edit_my_institution,NULL,
-		          NULL);
+   /***** My institution, centre and department *****/
+   Rec_ShowFormMyInsCtrDpt ();
+
+   /***** Data protection clause *****/
+   Rec_WriteLinkToDataProtectionClause ();
   }
 
 /*****************************************************************************/
@@ -3973,7 +3967,7 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
 
 #define COL2_WIDTH 600
 
-void Rec_ShowFormMyInsCtrDpt (void)
+static void Rec_ShowFormMyInsCtrDpt (void)
   {
    extern const char *Hlp_PROFILE_Institution;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -3996,12 +3990,15 @@ void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumCtr;
    bool IAmATeacher;
 
+   /***** Start section *****/
+   Lay_StartSection (Rec_MY_INS_CTR_DPT_ID);
+
    /***** Get my roles if not yet got *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check if I am a teacher *****/
    IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-	                                      (1 << Rol_TCH)));	// ...or a teacher in any course
+	                                             (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** If there is no country, institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)
@@ -4039,7 +4036,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /* Start form to select the country of my institution */
-   Act_FormGoToStart (ActChgCtyMyIns);
+   // Act_FormGoToStart (ActChgCtyMyIns);
+   Act_FormStartAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 	              " style=\"width:500px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
@@ -4079,7 +4077,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_BASIC_DATA);
 
    /* Start form to select institution */
-   Act_FormGoToStart (ActChgMyIns);
+   // Act_FormGoToStart (ActChgMyIns);
+   Act_FormStartAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 	              " style=\"width:500px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
@@ -4126,7 +4125,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	 Ctr_GetListCentres (Gbl.Usrs.Me.UsrDat.InsCod);
 
       /* Start form to select centre */
-      Act_FormGoToStart (ActChgMyCtr);
+      // Act_FormGoToStart (ActChgMyCtr);
+      Act_FormStartAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 	                 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
@@ -4164,7 +4164,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       Dpt_PARAM_DPT_COD_NAME,ClassForm,Txt_Department,
 	       COL2_WIDTH);
-      Act_FormGoToStart (ActChgMyDpt);
+      // Act_FormGoToStart (ActChgMyDpt);
+      Act_FormStartAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
       Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 				   Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
 				   500,					// Width in pixels
@@ -4185,7 +4186,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
                          "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
                ClassForm,Txt_Office,
                COL2_WIDTH);
-      Act_FormGoToStart (ActChgMyOff);
+      // Act_FormGoToStart (ActChgMyOff);
+      Act_FormStartAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Office\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
@@ -4207,7 +4209,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
                ClassForm,Txt_Phone,
                COL2_WIDTH);
-      Act_FormGoToStart (ActChgMyOffPho);
+      // Act_FormGoToStart (ActChgMyOffPho);
+      Act_FormStartAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<input type=\"tel\""
 	                 " id=\"OfficePhone\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -4223,6 +4226,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** End table and box *****/
    Box_EndBoxTable ();
+
+   /***** End section *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -4255,7 +4261,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -4293,7 +4299,7 @@ void Rec_UpdateMyInstitution (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -4326,7 +4332,7 @@ void Rec_UpdateMyCentre (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -4357,7 +4363,7 @@ void Rec_UpdateMyDepartment (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -4378,7 +4384,7 @@ void Rec_UpdateMyOffice (void)
    DB_QueryUPDATE (Query,"can not update office");
 
    /***** Show form again *****/
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -4399,5 +4405,5 @@ void Rec_UpdateMyOfficePhone (void)
    DB_QueryUPDATE (Query,"can not update office phone");
 
    /***** Show form again *****/
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }

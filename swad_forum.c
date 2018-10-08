@@ -509,12 +509,12 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    long PstCod;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (512 +
-                        strlen (Subject) +
-			strlen (Content) +
-			Img_BYTES_NAME +
-			Img_MAX_BYTES_TITLE +
-			Cns_MAX_BYTES_WWW)) == NULL)
+   if ((Query = (char *) malloc (512 +
+                                 strlen (Subject) +
+			         strlen (Content) +
+			         Img_BYTES_NAME +
+			         Img_MAX_BYTES_TITLE +
+			         Cns_MAX_BYTES_WWW)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Check if image is received and processed *****/

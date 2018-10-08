@@ -732,19 +732,22 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 
    /***** Insert new user in database *****/
    /* Insert user's data */
-   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
-   CommentsLength = strlen (UsrDat->Comments);
-   if ((QueryUsrData = malloc (2048 +
-			       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +	// EncryptedUsrCod
-			       Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
-			       Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +	// Surname1, Surname2, FirstName
-			       Usr_MAX_BYTES_ADDRESS +			// LocalAddress
-			       Usr_MAX_BYTES_PHONE +			// LocalPhone
-			       Usr_MAX_BYTES_ADDRESS +			// FamilyAddress
-			       Usr_MAX_BYTES_PHONE +			// FamilyPhone
-			       Usr_MAX_BYTES_ADDRESS +			// OriginPlace
-			       Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
-		               CommentsLength)) == NULL)		// Comments
+   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
+   if (UsrDat->Comments)
+      CommentsLength = strlen (UsrDat->Comments);
+   else
+      CommentsLength = 0;
+   if ((QueryUsrData = (char *) malloc (2048 +
+			                Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +	// EncryptedUsrCod
+			                Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
+			                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +	// Surname1, Surname2, FirstName
+			                Usr_MAX_BYTES_ADDRESS +			// LocalAddress
+			                Usr_MAX_BYTES_PHONE +			// LocalPhone
+			                Usr_MAX_BYTES_ADDRESS +			// FamilyAddress
+			                Usr_MAX_BYTES_PHONE +			// FamilyPhone
+			                Usr_MAX_BYTES_ADDRESS +			// OriginPlace
+			                Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
+		                        CommentsLength)) == NULL)		// Comments
       Lay_ShowErrorAndExit ("Not enough memory to store query.");
    sprintf (QueryUsrData,"INSERT INTO usr_data"
 	                 " (EncryptedUsrCod,Password,"
@@ -796,9 +799,9 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
       sprintf (QueryUsrIDs,"INSERT INTO usr_IDs"
-	             " (UsrCod,UsrID,CreatTime,Confirmed)"
-		     " VALUES"
-		     " (%ld,'%s',NOW(),'%c')",
+	                   " (UsrCod,UsrID,CreatTime,Confirmed)"
+		           " VALUES"
+		           " (%ld,'%s',NOW(),'%c')",
 	       UsrDat->UsrCod,
 	       UsrDat->IDs.List[NumID].ID,
 	       UsrDat->IDs.List[NumID].Confirmed ? 'Y' :

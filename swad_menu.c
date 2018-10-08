@@ -285,7 +285,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeMyTT,		//  3
 		ActSeeMyAgd,		//  4
 		ActFrmMyAcc,		//  5
-		ActReqEdiRecCom,	//  6
+		ActReqEdiRecSha,	//  6
 		ActEdiPrf,		//  7
 		0,			//  8
 		0,			//  9
