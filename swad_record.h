@@ -163,6 +163,7 @@ void Rec_ShowFormSignUpInCrsWithMySharedRecord (void);
 void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole);
 void Rec_ShowMySharedRecordUpd (void);
 void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
+void Rec_ShowPublicSharedRecordOtherUsr (void);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct UsrData *UsrDat,const char *Anchor);
 void Rec_PutParamUsrCodEncrypted (void);

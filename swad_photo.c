@@ -282,7 +282,7 @@ static void Pho_ReqOtherUsrPhoto (void)
    Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);
 
    /***** Show another user's record card *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
+   Rec_ShowPublicSharedRecordOtherUsr ();
   }
 
 /*****************************************************************************/
@@ -409,7 +409,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
          Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
 
       /***** Show another user's record card *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
+      Rec_ShowPublicSharedRecordOtherUsr ();
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -442,6 +442,9 @@ void Pho_ReqRemoveMyPhoto (void)
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+
+   /***** Show my record and other data *****/
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -461,6 +464,9 @@ void Pho_RemoveMyPhoto2 (void)
   {
    /***** Write success / warning message *****/
    Ale_ShowPendingAlert ();
+
+   /***** Show my record and other data *****/
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -524,6 +530,9 @@ void Pho_ReqRemoveUsrPhoto (void)
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+   /***** Show another user's record card *****/
+   Rec_ShowPublicSharedRecordOtherUsr ();
   }
 
 /*****************************************************************************/
@@ -546,6 +555,9 @@ void Pho_RemoveUsrPhoto (void)
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+   /***** Show another user's record card *****/
+   Rec_ShowPublicSharedRecordOtherUsr ();
   }
 
 /*****************************************************************************/
@@ -848,7 +860,7 @@ void Pho_UpdateUsrPhoto2 (void)
    Pho_UpdatePhoto2 ();
 
    /***** Show another user's record card *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
+   Rec_ShowPublicSharedRecordOtherUsr ();
   }
 
 /*****************************************************************************/

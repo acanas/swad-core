@@ -2172,6 +2172,15 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
+/************** Show public shared record card of another user ***************/
+/*****************************************************************************/
+
+void Rec_ShowPublicSharedRecordOtherUsr (void)
+  {
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
+  }
+
+/*****************************************************************************/
 /************************** Show shared record card **************************/
 /*****************************************************************************/
 // Show form or only data depending on TypeOfView
