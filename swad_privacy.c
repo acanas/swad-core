@@ -58,6 +58,8 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Pri_PRIVACY_ID	"privacy"
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -78,7 +80,7 @@ void Pri_PutLinkToChangeMyPrivacy (void)
    extern const char *Txt_Privacy;
 
    /***** Link to edit my privacy *****/
-   Lay_PutContextualLink (ActEdiPri,NULL,NULL,
+   Lay_PutContextualLink (ActEdiPri,Pri_PRIVACY_ID,NULL,
                           "lock64x64.png",
                           Txt_Privacy,NULL,
 		          NULL);
@@ -96,6 +98,9 @@ void Pri_EditMyPrivacy (void)
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
    extern const char *Txt_Timeline;
+
+   /***** Start section with preferences on privacy *****/
+   Lay_StartSection (Pri_PRIVACY_ID);
 
    /***** If any of my preferences about privacy is unknown *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
@@ -132,6 +137,9 @@ void Pri_EditMyPrivacy (void)
 
    /***** End table and box *****/
    Box_EndBoxTable ();
+
+   /***** End section with preferences on privacy *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -168,7 +176,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
    /***** Form with list of options *****/
    if (Action != ActUnk)
-      Act_FormStart (Action);
+      Act_FormStartAnchor (Action,Pri_PRIVACY_ID);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (Visibility = Pri_VISIBILITY_USER;
 	Visibility <= Pri_VISIBILITY_WORLD;

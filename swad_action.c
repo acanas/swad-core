@@ -3145,7 +3145,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemMyPho	*/{1577,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ReqRemoveMyPhoto		,NULL},
    /* ActRemMyPho	*/{ 428,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
 
-   /* ActEdiPri		*/{1403,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pri_EditMyPrivacy		,NULL},
+   /* ActEdiPri		*/{1403,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,NULL},
    /* ActChgPriPho	*/{ 774,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
    /* ActChgPriPrf	*/{1404,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeProfileVisibility	,NULL},
 

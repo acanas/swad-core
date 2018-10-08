@@ -37,6 +37,7 @@
 #include "swad_nickname.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_role.h"
@@ -326,7 +327,6 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 void Prf_ChangeProfileVisibility (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_The_visibility_of_your_public_profile_has_changed;
    char Query[128];
 
    /***** Get param with public/private photo *****/
@@ -339,11 +339,8 @@ void Prf_ChangeProfileVisibility (void)
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about public profile visibility");
 
-   /***** Show alert *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_visibility_of_your_public_profile_has_changed);
-
    /***** Show form again *****/
-   Pri_EditMyPrivacy ();
+   Pre_EditPrefs ();
   }
 
 /*****************************************************************************/

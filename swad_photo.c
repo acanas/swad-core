@@ -44,6 +44,7 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_table.h"
 #include "swad_theme.h"
@@ -1293,7 +1294,6 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 void Pho_ChangePhotoVisibility (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_The_visibility_of_your_photo_has_changed;
    char Query[128];
 
    /***** Get param with public/private photo *****/
@@ -1306,11 +1306,8 @@ void Pho_ChangePhotoVisibility (void)
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
 
-   /***** Show alert *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_visibility_of_your_photo_has_changed);
-
    /***** Show form again *****/
-   Pri_EditMyPrivacy ();
+   Pre_EditPrefs ();
   }
 
 /*****************************************************************************/

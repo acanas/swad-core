@@ -48973,48 +48973,6 @@ const char *Txt_The_visibility_of_the_record_field_X_has_not_changed =	// Warnin
 	"The visibility of the record field <strong>%s</strong> has not changed.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_visibility_of_your_photo_has_changed =
-#if   L==1
-	"La visibilidad de su foto ha cambiado.";	// Necessita traduccio
-#elif L==2
-	"The visibility of your photo has changed.";	// Need Übersetzung
-#elif L==3
-	"The visibility of your photo has changed.";
-#elif L==4
-	"La visibilidad de su foto ha cambiado.";
-#elif L==5
-	"The visibility of your photo has changed.";	// Besoin de traduction
-#elif L==6
-	"La visibilidad de su foto ha cambiado.";	// Okoteve traducción
-#elif L==7
-	"The visibility of your photo has changed.";	// Bisogno di traduzione
-#elif L==8
-	"The visibility of your photo has changed.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"The visibility of your photo has changed.";	// Necessita de tradução
-#endif
-
-const char *Txt_The_visibility_of_your_public_profile_has_changed =
-#if   L==1
-	"La visibilidad de su perfil p&uacute;blico ha cambiado.";	// Necessita traduccio
-#elif L==2
-	"The visibility of your public profile has changed.";	// Need Übersetzung
-#elif L==3
-	"The visibility of your public profile has changed.";
-#elif L==4
-	"La visibilidad de su perfil p&uacute;blico ha cambiado.";
-#elif L==5
-	"The visibility of your public profile has changed.";	// Besoin de traduction
-#elif L==6
-	"La visibilidad de su perfil p&uacute;blico ha cambiado.";	// Okoteve traducción
-#elif L==7
-	"The visibility of your public profile has changed.";	// Bisogno di traduzione
-#elif L==8
-	"The visibility of your public profile has changed.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"The visibility of your public profile has changed.";	// Necessita de tradução
-#endif
-
 const char *Txt_The_whole_course =
 #if   L==1
 	"Toda la asignatura";		// Necessita traduccio

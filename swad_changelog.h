@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.2.5 (2018-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.2.6 (2018-10-09)"
 #define CSS_FILE		"swad18.2.2.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.2.6:   Oct 09, 2018  Changes in edition of preferences about privacy. (234905 lines)
         Version 18.2.5:   Oct 08, 2018  Changes in edition of user's shared record card. (234943 lines)
         Version 18.2.4:   Oct 08, 2018  Changes in edition of user's photo. (234953 lines)
         Version 18.2.3:   Oct 08, 2018  Changes in edition of webs/social networks. (234952 lines)
