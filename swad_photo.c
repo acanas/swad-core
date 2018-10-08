@@ -92,7 +92,7 @@ static void Pho_PutIconsOtherUsrPhoto (void);
 static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void);
 static void Pho_ReqOtherUsrPhoto (void);
 
-static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL);
+static void Pho_ReqPhoto (const struct UsrData *UsrDat);
 
 static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat);
 
@@ -286,7 +286,10 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
 void Pho_ReqMyPhoto (void)
   {
    /***** Show the form for sending the photo *****/
-   Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
+   Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Show form to edit my shared record *****/
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -295,20 +298,18 @@ void Pho_ReqMyPhoto (void)
 
 static void Pho_ReqOtherUsrPhoto (void)
   {
-   char PhotoURL[PATH_MAX + 1];
-
-   /***** Get photo URL *****/
-   Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-
    /***** Show the form to send another user's photo *****/
-   Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+   Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);
+
+   /***** Show another user's record card *****/
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
   }
 
 /*****************************************************************************/
 /****************** Show a form for sending an user's photo ******************/
 /*****************************************************************************/
 
-static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
+static void Pho_ReqPhoto (const struct UsrData *UsrDat)
   {
    extern const char *Hlp_PROFILE_Photo;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -321,8 +322,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Photo,ItsMe ? Pho_PutIconsMyPhoto :
-		                        Pho_PutIconsOtherUsrPhoto,
-                 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
+	                                Pho_PutIconsOtherUsrPhoto,
+		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    if (ItsMe)
@@ -346,12 +347,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
 
-   /***** Show current photo and help message *****/
-   fprintf (Gbl.F.Out,"<p>");
-   Pho_ShowUsrPhoto (UsrDat,PhotoURL,
-                     "PHOTO186x248",Pho_NO_ZOOM,false);
-   fprintf (Gbl.F.Out,"</p>");
-
+   /***** Show help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
    /***** Form to upload photo *****/
@@ -408,7 +404,10 @@ void Pho_RecMyPhotoDetFaces (void)
   {
    /***** Receive my photo and detect faces on it *****/
    if (!Pho_ReceivePhotoAndDetectFaces (true,&Gbl.Usrs.Me.UsrDat))
-      Pho_ReqMyPhoto ();	// Request my photograph again
+      Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);	// Request my photograph again
+
+   /***** Show form to edit my shared record *****/
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -427,7 +426,10 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
      {
       /***** Receive photo *****/
       if (!Pho_ReceivePhotoAndDetectFaces (false,&Gbl.Usrs.Other.UsrDat))
-	 Pho_ReqOtherUsrPhoto ();	// Request user's photograph again
+         Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
+
+      /***** Show another user's record card *****/
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -728,7 +730,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          break;
       default:        // Error
          sprintf (Gbl.Alert.Txt,"Photo could not be processed successfully.<br />"
-                              "Error code returned by the program of processing: %d",
+                                "Error code returned by the program of processing: %d",
                   ReturnCode);
          Lay_ShowErrorAndExit (Gbl.Alert.Txt);
          break;
@@ -736,39 +738,51 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 
    /***** Message to the user about the number of faces detected in the image*****/
    if (NumFacesTotal == 0)
-      Ale_ShowAlert (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_Could_not_detect_any_face_in_front_position_);
+     }
    else if (NumFacesTotal == 1)
      {
       if (NumFacesGreen == 1)
-         Ale_ShowAlert (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
+        {
+	 Gbl.Alert.Type = Ale_SUCCESS;
+         sprintf (Gbl.Alert.Txt,"%s",Txt_A_face_marked_in_green_has_been_detected_);
+        }
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
+        {
+	 Gbl.Alert.Type = Ale_WARNING;
+         sprintf (Gbl.Alert.Txt,"%s",Txt_A_face_marked_in_red_has_been_detected_);
+        }
      }
    else        // NumFacesTotal > 1
      {
       if (NumFacesRed == 0)
         {
+         Gbl.Alert.Type = Ale_SUCCESS;
          sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_green_have_been_detected_,
                   NumFacesGreen);
-         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
         }
       else if (NumFacesGreen == 0)
         {
+         Gbl.Alert.Type = Ale_WARNING;
          sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_red_have_been_detected_,
                   NumFacesRed);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else        // NumFacesGreen > 0
         {
+         Gbl.Alert.Type = Ale_SUCCESS;
          if (NumFacesGreen == 1)
             sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
                      NumFacesTotal,NumFacesRed);
          else
             sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
                      NumFacesTotal,NumFacesGreen,NumFacesRed);
-         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
         }
      }
+
+   /***** Start alert *****/
+   Ale_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Create map *****/
    fprintf (Gbl.F.Out,"<map name=\"faces_map\">\n");
@@ -807,6 +821,9 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
             Gbl.UniqueNameEncrypted,
             Txt_Faces_detected,Txt_Faces_detected);
 
+   /***** End alert *****/
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+
    /***** Button to send another photo *****/
    return (NumFacesGreen != 0);
   }
@@ -826,6 +843,9 @@ void Pho_UpdateMyPhoto1 (void)
 void Pho_UpdateMyPhoto2 (void)
   {
    Pho_UpdatePhoto2 ();
+
+   /***** Show form to edit my shared record *****/
+   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
   }
 
 /*****************************************************************************/
@@ -846,6 +866,9 @@ void Pho_UpdateUsrPhoto1 (void)
 void Pho_UpdateUsrPhoto2 (void)
   {
    Pho_UpdatePhoto2 ();
+
+   /***** Show another user's record card *****/
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -893,6 +916,9 @@ static void Pho_UpdatePhoto2 (void)
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
    unsigned NumPhoto;
 
+   /***** Start alert *****/
+   Ale_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
+
    /***** Show the three images resulting of the processing *****/
    Tbl_StartTableWide (0);
    fprintf (Gbl.F.Out,"<tr>");
@@ -914,8 +940,8 @@ static void Pho_UpdatePhoto2 (void)
    fprintf (Gbl.F.Out,"</tr>");
    Tbl_EndTable ();
 
-   /***** Show message *****/
-   Ale_ShowPendingAlert ();
+   /***** End alert *****/
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

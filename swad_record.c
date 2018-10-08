@@ -3988,7 +3988,7 @@ static void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *Txt_Please_fill_in_your_department;
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
-   extern const char *Txt_Country_of_your_institution;
+   extern const char *Txt_Country;
    extern const char *Txt_Another_institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Another_centre;
@@ -4039,7 +4039,7 @@ static void Rec_ShowFormMyInsCtrDpt (void)
                       "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
-            ClassForm,Txt_Country_of_your_institution);
+            ClassForm,Txt_Country);
 
    /* If list of countries is empty, try to get it */
    if (!Gbl.Ctys.Num)

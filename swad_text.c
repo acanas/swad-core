@@ -5939,27 +5939,6 @@ const char *Txt_country =
 	"pa&iacute;s";
 #endif
 
-const char *Txt_Country_of_your_institution =
-#if   L==1
-	"Pa&iacute;s de la seva instituci&oacute;";
-#elif L==2
-	"Land Ihrer Hochschule";
-#elif L==3
-	"Country of your institution";
-#elif L==4
-	"Pa&iacute;s de su instituci&oacute;n";
-#elif L==5
-	"Pays de votre &eacute;tablissement";
-#elif L==6
-	"Tet&atilde; mbo'ehao";
-#elif L==7
-	"Paese della vostra istituzione";
-#elif L==8
-	"Kraj swojej instytucji";
-#elif L==9
-	"Pa&iacute;s da sua institu&ccedil;&atilde;o";
-#endif
-
 const char *Txt_Country_unspecified =
 #if   L==1
 	"Pa&iacute;s sense especificar";
