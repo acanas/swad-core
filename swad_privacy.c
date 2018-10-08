@@ -72,21 +72,6 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    unsigned MaskAllowedVisibility);
 
 /*****************************************************************************/
-/*************** Put a link to the action to edit my privacy *****************/
-/*****************************************************************************/
-
-void Pri_PutLinkToChangeMyPrivacy (void)
-  {
-   extern const char *Txt_Privacy;
-
-   /***** Link to edit my privacy *****/
-   Lay_PutContextualLink (ActEdiPri,Pri_PRIVACY_ID,NULL,
-                          "lock64x64.png",
-                          Txt_Privacy,NULL,
-		          NULL);
-  }
-
-/*****************************************************************************/
 /******************************* Edit my privacy *****************************/
 /*****************************************************************************/
 

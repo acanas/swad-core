@@ -88,8 +88,6 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /*****************************************************************************/
 
 static void Pho_PutIconToRequestRemoveMyPhoto (void);
-static void Pho_PutIconsMyPhoto (void);
-static void Pho_PutIconsOtherUsrPhoto (void);
 static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void);
 static void Pho_ReqOtherUsrPhoto (void);
 
@@ -210,25 +208,6 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
   }
 
 /*****************************************************************************/
-/************************* Put contextual icons ******************************/
-/*****************************************************************************/
-
-static void Pho_PutIconsMyPhoto (void)
-  {
-   /***** Put icon to remove my photo *****/
-   Pho_PutIconToRequestRemoveMyPhoto ();
-
-   /***** Put icon to change my privacy *****/
-   Pri_PutLinkToChangeMyPrivacy ();
-  }
-
-static void Pho_PutIconsOtherUsrPhoto (void)
-  {
-   /***** Put icon to remove another user's photo *****/
-   Pho_PutIconToRequestRemoveOtherUsrPhoto ();
-  }
-
-/*****************************************************************************/
 /************** Put a link to request the removal of my photo ****************/
 /*****************************************************************************/
 
@@ -322,8 +301,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    Act_Action_t NextAction;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Photo,ItsMe ? Pho_PutIconsMyPhoto :
-	                                Pho_PutIconsOtherUsrPhoto,
+   Box_StartBox (NULL,Txt_Photo,ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
+	                                Pho_PutIconToRequestRemoveOtherUsrPhoto,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
    /***** Start form *****/

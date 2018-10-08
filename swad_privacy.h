@@ -42,7 +42,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Pri_PutLinkToChangeMyPrivacy (void);
 void Pri_EditMyPrivacy (void);
 
 Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);

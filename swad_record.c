@@ -2688,11 +2688,6 @@ static void Rec_PutIconsCommands (void)
       /***** Button to change user's photo *****/
       Pho_PutLinkToChangeOtherUsrPhoto ();
 
-      /* Button to change my privacy */
-      if (ItsMe)
-         /* Button to change my privacy */
-         Pri_PutLinkToChangeMyPrivacy ();
-
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
      }
