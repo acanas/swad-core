@@ -379,7 +379,7 @@ void Net_UpdateMyWebsAndSocialNets (void)
    Net_GetMyWebsAndSocialNetsFromForm ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/

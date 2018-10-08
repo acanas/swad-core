@@ -288,8 +288,8 @@ void Pho_ReqMyPhoto (void)
    /***** Show the form for sending the photo *****/
    Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);
 
-   /***** Show form to edit my shared record *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   /***** Show my record and other data *****/
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -406,8 +406,8 @@ void Pho_RecMyPhotoDetFaces (void)
    if (!Pho_ReceivePhotoAndDetectFaces (true,&Gbl.Usrs.Me.UsrDat))
       Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);	// Request my photograph again
 
-   /***** Show form to edit my shared record *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   /***** Show my record and other data *****/
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -844,8 +844,8 @@ void Pho_UpdateMyPhoto2 (void)
   {
    Pho_UpdatePhoto2 ();
 
-   /***** Show form to edit my shared record *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   /***** Show my record and other data *****/
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/

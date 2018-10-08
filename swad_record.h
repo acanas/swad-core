@@ -52,13 +52,12 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Rec_SHARED_NUM_VIEW_TYPES 9
+#define Rec_SHARED_NUM_VIEW_TYPES 8
 typedef enum
   {
    Rec_SHA_SIGN_UP_IN_CRS_FORM,
 
    Rec_SHA_MY_RECORD_FORM,
-   Rec_SHA_MY_RECORD_CHECK,
 
    Rec_SHA_OTHER_EXISTING_USR_FORM,
    Rec_SHA_OTHER_NEW_USR_FORM,
@@ -172,7 +171,7 @@ void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);
 void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat);
 
-void Rec_ShowMySharedRecordAndMyInsCtrDpt (void);
+void Rec_ShowMySharedRecordAndOtherData (void);
 void Rec_ChgCountryOfMyInstitution (void);
 void Rec_UpdateMyInstitution (void);
 void Rec_UpdateMyCentre (void);

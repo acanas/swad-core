@@ -2151,8 +2151,8 @@ void Rec_ShowMySharedRecordUpd (void)
    /***** Write alert *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
-   /***** Show my record for checking *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat,NULL);
+   /***** Show my record and other data *****/
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -2195,7 +2195,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       Hlp_USERS_SignUp,				// Rec_SHA_SIGN_UP_IN_CRS_FORM
 
       Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_FORM
-      Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_CHECK
 
       NULL,					// Rec_SHA_OTHER_EXISTING_USR_FORM
       NULL,					// Rec_SHA_OTHER_NEW_USR_FORM
@@ -2230,7 +2229,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    bool ShowAddressRows;
    bool StudentInCurrentCrs;
    bool TeacherInCurrentCrs;
-   bool TeacherInAnyCrs;
    bool ShowTeacherRows;
    struct Instit Ins;
    Act_Action_t NextAction;
@@ -2249,21 +2247,16 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_STD;
    TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
 	                 UsrDat->Roles.InCurrentCrs.Role == Rol_TCH;
-   TeacherInAnyCrs = UsrDat->Roles.InCrss & ((1 << Rol_NET) |
-			                     (1 << Rol_TCH));
 
    ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
-		      TypeOfView == Rec_SHA_MY_RECORD_CHECK ||
 		      ((TypeOfView == Rec_SHA_RECORD_LIST   ||
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		       IAmLoggedAsTeacherOrSysAdm &&
 		       StudentInCurrentCrs));			// He/she is a student in the current course
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get user's roles if not got
-   ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
-		       TeacherInAnyCrs) ||			// He/she (me, really) is a teacher in any course
-		      ((TypeOfView == Rec_SHA_RECORD_LIST ||
-		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
-		       TeacherInCurrentCrs));			// He/she is a teacher in the current course
+   ShowTeacherRows = (TypeOfView == Rec_SHA_RECORD_LIST ||
+		      TypeOfView == Rec_SHA_RECORD_PRINT) &&
+		     TeacherInCurrentCrs;			// He/she is a teacher in the current course
 
    /* Data form = I can edit fields like surnames and name */
    switch (TypeOfView)
@@ -2289,7 +2282,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
          ClassForm = The_ClassForm[Gbl.Prefs.Theme];
 	 break;
-      case Rec_SHA_MY_RECORD_CHECK:
       case Rec_SHA_OTHER_USR_CHECK:
       case Rec_SHA_RECORD_LIST:
       case Rec_SHA_RECORD_PUBLIC:
@@ -3195,10 +3187,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			 "</td>"
 			 "</tr>",
 	       ClassForm,
-	       TypeOfView == Rec_SHA_MY_RECORD_CHECK ? Txt_Sex :
-					               Txt_Role,
-	       TypeOfView == Rec_SHA_MY_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
-						       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+	       Txt_Role,
+	       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
   }
 
 /*****************************************************************************/
@@ -3944,7 +3934,7 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 /**** Show my shared record and a form to edit my institution, centre... *****/
 /*****************************************************************************/
 
-void Rec_ShowMySharedRecordAndMyInsCtrDpt (void)
+void Rec_ShowMySharedRecordAndOtherData (void)
   {
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
@@ -4263,7 +4253,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -4301,7 +4291,7 @@ void Rec_UpdateMyInstitution (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -4334,7 +4324,7 @@ void Rec_UpdateMyCentre (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -4365,7 +4355,7 @@ void Rec_UpdateMyDepartment (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -4386,7 +4376,7 @@ void Rec_UpdateMyOffice (void)
    DB_QueryUPDATE (Query,"can not update office");
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
 
 /*****************************************************************************/
@@ -4407,5 +4397,5 @@ void Rec_UpdateMyOfficePhone (void)
    DB_QueryUPDATE (Query,"can not update office phone");
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndMyInsCtrDpt ();
+   Rec_ShowMySharedRecordAndOtherData ();
   }
