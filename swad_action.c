@@ -2789,9 +2789,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmPwdOth	*/{1464,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormOthPwd		,NULL},
    /* ActFrmPwdStd	*/{1465,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormOthPwd		,NULL},
    /* ActFrmPwdTch	*/{1466,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormOthPwd		,NULL},
-   /* ActChgPwdOth	*/{1467,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
-   /* ActChgPwdStd	*/{1468,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
-   /* ActChgPwdTch	*/{1469,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActChgPwdOth	*/{1467,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherPwd		,Pwd_ShowFormOthPwd		,NULL},
+   /* ActChgPwdStd	*/{1468,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherPwd		,Pwd_ShowFormOthPwd		,NULL},
+   /* ActChgPwdTch	*/{1469,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherPwd		,Pwd_ShowFormOthPwd		,NULL},
 
    /* ActFrmMaiOth	*/{1475,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ShowFormOthEmail		,NULL},
    /* ActFrmMaiStd	*/{1476,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ShowFormOthEmail		,NULL},
@@ -3131,8 +3131,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewMaiMe	*/{1088,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,May_NewMyUsrEmail		,NULL},
    /* ActCnfMai		*/{1091,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ConfirmEmail		,NULL},
 
-   /* ActFrmChgMyPwd	*/{  34,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormChgPwd		,NULL},
-   /* ActChgPwd		*/{  35,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
+   /* ActFrmChgMyPwd	*/{  34,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormChgMyAccountAndPwd		,NULL},
+   /* ActChgPwd		*/{  35,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_ActChgMyPwd		,Acc_ShowFormChgMyAccountAndPwd		,NULL},
 
    /* ActReqRemMyAcc	*/{1430,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_AskIfRemoveMyAccount	,NULL},
    /* ActRemMyAcc	*/{1431,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_RemoveMyAccount		,NULL},

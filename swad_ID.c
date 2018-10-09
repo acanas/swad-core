@@ -734,7 +734,7 @@ void ID_RemoveMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 /*****************************************************************************/
@@ -850,7 +850,7 @@ void ID_NewMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 /*****************************************************************************/

@@ -56069,17 +56069,17 @@ const char *Txt_You_have_no_unread_notifications =
 
 const char *Txt_You_have_not_banned_any_sender =
 #if   L==1
-	"Usted no ha bloqueado ning&uacute;n remitente.";	// Necessita traduccio
+	"No ha bloqueado ning&uacute;n remitente.";	// Necessita traduccio
 #elif L==2
 	"You have not banned any sender.";			// Need Übersetzung
 #elif L==3
 	"You have not banned any sender.";
 #elif L==4
-	"Usted no ha bloqueado ning&uacute;n remitente.";
+	"No ha bloqueado ning&uacute;n remitente.";
 #elif L==5
 	"You have not banned any sender.";			// Besoin de traduction
 #elif L==6
-	"Usted no ha bloqueado ning&uacute;n remitente.";	// Okoteve traducción
+	"No ha bloqueado ning&uacute;n remitente.";	// Okoteve traducción
 #elif L==7
 	"You have not banned any sender.";			// Bisogno di traduzione
 #elif L==8
@@ -56132,17 +56132,17 @@ const char *Txt_You_have_not_entered_your_password_correctly =
 
 const char *Txt_You_have_not_written_twice_the_same_new_password =
 #if   L==1
-	"Usted no ha escrito dos veces la misma contrase&ntilde;a nueva.";	// Necessita traduccio
+	"No ha escrito dos veces la misma contrase&ntilde;a nueva.";	// Necessita traduccio
 #elif L==2
 	"You have not written twice the same new password.";			// Need Übersetzung
 #elif L==3
 	"You have not written twice the same new password.";
 #elif L==4
-	"Usted no ha escrito dos veces la misma contrase&ntilde;a nueva.";
+	"No ha escrito dos veces la misma contrase&ntilde;a nueva.";
 #elif L==5
 	"You have not written twice the same new password.";			// Besoin de traduction
 #elif L==6
-	"Usted no ha escrito dos veces la misma contrase&ntilde;a nueva.";	// Okoteve traducción
+	"No ha escrito dos veces la misma contrase&ntilde;a nueva.";	// Okoteve traducción
 #elif L==7
 	"Non hai scritto due volte la stessa password nuova.";
 #elif L==8

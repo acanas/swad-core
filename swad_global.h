@@ -407,7 +407,6 @@ struct Globals
            } Lst[Cfg_MAX_CONNECTED_SHOWN];
         } Connected;
       char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg) of the temporary file with the selected face
-      bool Error;	// To signal that an error has happened
       Enr_RegRemOneUsrAction_t RegRemAction;	// Enrolment action
      } Usrs;
    struct

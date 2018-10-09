@@ -1400,7 +1400,7 @@ void Mai_RemoveMyUsrEmail (void)
    Mai_RemoveEmail (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 /*****************************************************************************/
@@ -1479,7 +1479,7 @@ void May_NewMyUsrEmail (void)
    Mai_NewUsrEmail (&Gbl.Usrs.Me.UsrDat,true);	// It's me
 
    /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 /*****************************************************************************/

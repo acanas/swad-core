@@ -74,6 +74,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail);
+static void Acc_ShowFormChgMyAccount (void);
 static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
                                      char *NewEncryptedPassword);
@@ -113,7 +114,7 @@ void Acc_ShowFormMyAccount (void)
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
 
    if (Gbl.Usrs.Me.Logged)
-      Acc_ShowFormChangeMyAccount ();
+      Acc_ShowFormChgMyAccountAndPwd ();
    else	// Not logged
      {
       /***** Links to other actions *****/
@@ -424,10 +425,23 @@ void Acc_ShowFormGoToRequestNewAccount (void)
   }
 
 /*****************************************************************************/
+/************** Show forms to change my account and my password **************/
+/*****************************************************************************/
+
+void Acc_ShowFormChgMyAccountAndPwd (void)
+  {
+   /***** Show form to change my account *****/
+   Acc_ShowFormChgMyAccount ();
+
+   /***** Show form to change my password *****/
+   Pwd_ShowFormChgMyPwd ();
+  }
+
+/*****************************************************************************/
 /*********************** Show form to change my account **********************/
 /*****************************************************************************/
 
-void Acc_ShowFormChangeMyAccount (void)
+static void Acc_ShowFormChgMyAccount (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
@@ -463,12 +477,13 @@ void Acc_ShowFormChangeMyAccount (void)
    if (Gbl.Usrs.Me.ConfirmEmailJustSent)
       Mai_ShowMsgConfirmEmailHasBeenSent ();
 
-   /***** Put links to change my password and to remove my account*****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Pwd_PutLinkToChangeMyPassword ();
+   /***** Put link to remove my account *****/
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Acc_PutLinkToRemoveMyAccount ();
-   fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_User_account,NULL,
@@ -859,7 +874,7 @@ void Acc_AfterCreationNewAccount (void)
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
       /***** Show form with account data *****/
-      Acc_ShowFormChangeMyAccount ();
+      Acc_ShowFormChgMyAccountAndPwd ();
      }
   }
 

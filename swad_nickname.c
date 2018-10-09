@@ -324,7 +324,7 @@ void Nck_RemoveNick (void)
       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_delete_your_current_nickname);
 
    /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 /*****************************************************************************/
@@ -419,7 +419,7 @@ void Nck_UpdateNick (void)
 	          Gbl.Alert.Txt);
 
    /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 /*****************************************************************************/
