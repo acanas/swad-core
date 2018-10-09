@@ -2917,17 +2917,17 @@ static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search modu
   }
 
 /*****************************************************************************/
-/****************** Put a link (form) to select my courses *******************/
+/****************** Put an icon (form) to select my courses ******************/
 /*****************************************************************************/
 
-void Crs_PutFormToSelectMyCourses (void)
+void Crs_PutIconToSelectMyCourses (void)
   {
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
    Lay_PutContextualLink (ActMyCrs,NULL,NULL,
                           "hierarchy64x64.gif",
-                          Txt_My_courses,Txt_My_courses,
+                          Txt_My_courses,NULL,
                           NULL);
   }
 

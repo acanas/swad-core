@@ -3069,7 +3069,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqUseGbl	*/{ 761, 0,TabAna,ActReqUseGbl		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_ReqShowFigures		,"pie64x64.gif"		},
    /* ActSeePhoDeg	*/{ 447, 1,TabAna,ActSeePhoDeg		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
    /* ActReqStaCrs	*/{ 767, 2,TabAna,ActReqStaCrs		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
-   /* ActReqAccGbl	*/{ 591, 3,TabAna,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Sta_SetIniEndDates			,Sta_AskShowGblHits		,"stats64x64.gif"	},
+   /* ActReqAccGbl	*/{ 591, 3,TabAna,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
    /* ActReqMyUsgRep	*/{1586, 4,TabAna,ActReqMyUsgRep	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
    /* ActMFUAct		*/{ 993, 5,TabAna,ActMFUAct		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
@@ -3092,7 +3092,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
    /* ActSeeMyAgd	*/{1602, 4,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowMyAgenda		,"calendar64x64.png"	},
    /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
-   /* ActReqEdiRecSha	*/{ 285, 6,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndOtherData,"card64x64.gif"	},
+   /* ActReqEdiRecSha	*/{ 285, 6,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
 
    // Actions not in menu:
@@ -3149,7 +3149,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgPriPho	*/{ 774,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
    /* ActChgPriPrf	*/{1404,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeProfileVisibility	,NULL},
 
-   /* ActReqEdiMyIns	*/{1165,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndOtherData,NULL},
+   /* ActReqEdiMyIns	*/{1165,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore,NULL},
    /* ActChgCtyMyIns	*/{1166,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ChgCountryOfMyInstitution	,NULL},
    /* ActChgMyIns	*/{1167,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyInstitution	,NULL},
    /* ActChgMyCtr	*/{1168,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyCentre		,NULL},
@@ -3157,7 +3157,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgMyOff	*/{1170,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyOffice		,NULL},
    /* ActChgMyOffPho	*/{1171,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyOfficePhone	,NULL},
 
-   /* ActReqEdiMyNet	*/{1172,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndOtherData,NULL},
+   /* ActReqEdiMyNet	*/{1172,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore,NULL},
    /* ActChgMyNet	*/{1173,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Net_UpdateMyWebsAndSocialNets	,NULL},
 
    /* ActChgThe		*/{ 841,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,The_ChangeTheme		,Pre_EditPrefs			,NULL},

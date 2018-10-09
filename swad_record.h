@@ -172,7 +172,7 @@ void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);
 void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat);
 
-void Rec_ShowMySharedRecordAndOtherData (void);
+void Rec_ShowMySharedRecordAndMore (void);
 void Rec_ChgCountryOfMyInstitution (void);
 void Rec_UpdateMyInstitution (void);
 void Rec_UpdateMyCentre (void);

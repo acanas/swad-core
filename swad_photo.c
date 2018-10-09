@@ -269,7 +269,7 @@ void Pho_ReqMyPhoto (void)
    Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -387,7 +387,7 @@ void Pho_RecMyPhotoDetFaces (void)
       Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);	// Request my photograph again
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -444,7 +444,7 @@ void Pho_ReqRemoveMyPhoto (void)
       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -466,7 +466,7 @@ void Pho_RemoveMyPhoto2 (void)
    Ale_ShowPendingAlert ();
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -837,7 +837,7 @@ void Pho_UpdateMyPhoto2 (void)
    Pho_UpdatePhoto2 ();
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/

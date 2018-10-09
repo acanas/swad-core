@@ -85,14 +85,6 @@ static void Sch_SaveLastSearchIntoSession (void);
 
 void Sch_ReqSysSearch (void)
   {
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Crs_PutFormToSelectMyCourses ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_SYS);
@@ -104,14 +96,6 @@ void Sch_ReqSysSearch (void)
 
 void Sch_ReqCtySearch (void)
   {
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Crs_PutFormToSelectMyCourses ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_CTY);
@@ -123,14 +107,6 @@ void Sch_ReqCtySearch (void)
 
 void Sch_ReqInsSearch (void)
   {
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Crs_PutFormToSelectMyCourses ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INS);
@@ -142,14 +118,6 @@ void Sch_ReqInsSearch (void)
 
 void Sch_ReqCtrSearch (void)
   {
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Crs_PutFormToSelectMyCourses ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CTR);
@@ -161,14 +129,6 @@ void Sch_ReqCtrSearch (void)
 
 void Sch_ReqDegSearch (void)
   {
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Crs_PutFormToSelectMyCourses ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEG);
@@ -180,14 +140,6 @@ void Sch_ReqDegSearch (void)
 
 void Sch_ReqCrsSearch (void)
   {
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Crs_PutFormToSelectMyCourses ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_CRS);
@@ -234,11 +186,13 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
      };
    Sch_WhatToSearch_t WhatToSearch;
 
-   /***** Start form *****/
+   /***** Start box *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (Action);
-   Box_StartBox (NULL,Txt_Search,NULL,
+   Box_StartBox (NULL,Txt_Search,Crs_PutIconToSelectMyCourses,
                  Hlp_Search,Box_NOT_CLOSABLE);
+
+   /***** Start form *****/
+   Act_FormStart (Action);
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
@@ -283,11 +237,14 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Magnifying glass icon *****/
    Sch_PutMagnifyingGlassButton ("search64x64.png");
 
-   /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Search);
+   /***** Send button *****/
+   Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End box *****/
+   Box_EndBox ();
    fprintf (Gbl.F.Out,"</div>");
   }
 

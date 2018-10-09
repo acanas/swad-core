@@ -2152,7 +2152,7 @@ void Rec_ShowMySharedRecordUpd (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
    /***** Show my record and other data *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -3938,7 +3938,7 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 /**** Show my shared record and a form to edit my institution, centre... *****/
 /*****************************************************************************/
 
-void Rec_ShowMySharedRecordAndOtherData (void)
+void Rec_ShowMySharedRecordAndMore (void)
   {
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
@@ -4260,7 +4260,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4298,7 +4298,7 @@ void Rec_UpdateMyInstitution (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4331,7 +4331,7 @@ void Rec_UpdateMyCentre (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4362,7 +4362,7 @@ void Rec_UpdateMyDepartment (void)
    Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4383,7 +4383,7 @@ void Rec_UpdateMyOffice (void)
    DB_QueryUPDATE (Query,"can not update office");
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
@@ -4404,5 +4404,5 @@ void Rec_UpdateMyOfficePhone (void)
    DB_QueryUPDATE (Query,"can not update office phone");
 
    /***** Show form again *****/
-   Rec_ShowMySharedRecordAndOtherData ();
+   Rec_ShowMySharedRecordAndMore ();
   }
