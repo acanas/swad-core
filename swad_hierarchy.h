@@ -48,7 +48,7 @@
 void Hie_SeePending (void);
 
 void Hie_WriteMenuHierarchy (void);
-void Hie_WriteHierarchyBreadcrumb (void);
+void Hie_WriteHierarchyInBreadcrumb (void);
 void Hie_WriteBigNameCtyInsCtrDegCrs (void);
 void Hie_InitHierarchy (void);
 

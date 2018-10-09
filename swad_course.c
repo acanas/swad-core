@@ -1043,7 +1043,7 @@ void Crs_FreeListCoursesInDegree (struct Degree *Deg)
 /********************** Write selector of my coursess ************************/
 /*****************************************************************************/
 
-void Crs_WriteSelectorMyCourses (void)
+void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
   {
    extern const char *Txt_Course;
    unsigned NumMyCrs;
@@ -2914,6 +2914,28 @@ static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search modu
   {
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
+  }
+
+/*****************************************************************************/
+/********** Put an icon (form) to select my courses in breadcrumb ************/
+/*****************************************************************************/
+
+void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
+  {
+   extern const char *Txt_My_courses;
+
+   /***** Start form *****/
+   Act_FormStartAnchor (ActMyCrs,NULL);
+
+   /***** Put icon with link *****/
+   Act_LinkFormSubmit (Txt_My_courses,NULL,NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/hierarchy64x64.gif\" alt=\"%s\" title=\"%s\""
+	              " class=\"BC_ICON ICO_HIGHLIGHT\" />"
+	              "</a>",
+            Gbl.Prefs.IconsURL,Txt_My_courses,Txt_My_courses);
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

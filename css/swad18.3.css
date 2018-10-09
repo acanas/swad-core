@@ -439,6 +439,15 @@ a:hover						/* Default ==> underlined */
 .BC_BLUE	{color:#FFE880;}
 .BC_YELLOW	{color:#FFC040;}
 
+.BC_ICON
+	{
+	display:inline-block;
+	width:20px;
+	height:20px;
+	vertical-align:middle;
+	margin:-1px 0 1px 0;
+	}
+
 /******** Big name of country, institution, centre, degree or course *********/
 #main_title
 	{

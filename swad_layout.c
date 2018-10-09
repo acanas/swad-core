@@ -956,8 +956,9 @@ static void Lay_WritePageTopHeading (void)
 static void Lay_WriteBreadcrumb (void)
   {
    fprintf (Gbl.F.Out,"<nav id=\"breadcrumb\">");
-   Hie_WriteHierarchyBreadcrumb ();
-   Crs_WriteSelectorMyCourses ();
+   Crs_PutIconToSelectMyCoursesInBreadcrumb ();
+   Hie_WriteHierarchyInBreadcrumb ();
+   Crs_WriteSelectorMyCoursesInBreadcrumb ();
    fprintf (Gbl.F.Out,"</nav>");
   }
 

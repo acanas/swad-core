@@ -180,7 +180,7 @@ void Hie_WriteMenuHierarchy (void)
 /************* Write hierarchy breadcrumb in the top of the page *************/
 /*****************************************************************************/
 
-void Hie_WriteHierarchyBreadcrumb (void)
+void Hie_WriteHierarchyInBreadcrumb (void)
   {
    extern const char *The_ClassBreadcrumb[The_NUM_THEMES];
    extern const char *Txt_System;
@@ -191,7 +191,7 @@ void Hie_WriteHierarchyBreadcrumb (void)
    const char *ClassTxt = The_ClassBreadcrumb[Gbl.Prefs.Theme];
 
    /***** Form to go to the system *****/
-   fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+   fprintf (Gbl.F.Out,"<div class=\"BC %s\">&nbsp;",ClassTxt);
 
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
