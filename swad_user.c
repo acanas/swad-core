@@ -166,6 +166,8 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
 static void Usr_SetMyPrefsAndRoles (void);
 
+static void Usr_PutLinkToLogOut (void);
+
 static void Usr_InsertMyLastData (void);
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
@@ -2576,7 +2578,7 @@ void Usr_WriteLoggedUsrHead (void)
      }
    else
      {
-      Rol_PutFormToChangeMyRole ();
+      Rol_PutFormToChangeMyRole ("SEL_ROLE");
       fprintf (Gbl.F.Out,"&nbsp;");
      }
 
@@ -3230,20 +3232,12 @@ void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Log_out;
+   extern const char *Txt_Session;
    extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   /***** Link to log out *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLogOut,NULL,NULL,
-                          "logout-red64x64.png",
-                          Txt_Log_out,Txt_Log_out,
-		          NULL);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
    if (Gbl.Usrs.Me.Role.HasChanged)
@@ -3255,7 +3249,7 @@ void Usr_ShowFormsLogoutAndRole (void)
      }
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Role,NULL,
+   Box_StartBox (NULL,Txt_Session,Usr_PutLinkToLogOut,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
    /***** Put a form to change my role *****/
@@ -3268,12 +3262,27 @@ void Usr_ShowFormsLogoutAndRole (void)
      {
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Role);
-      Rol_PutFormToChangeMyRole ();
+      Rol_PutFormToChangeMyRole (NULL);
       fprintf (Gbl.F.Out,"</label>");
      }
 
    /***** End box *****/
    Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/************** Put an icon (form) to close the current session **************/
+/*****************************************************************************/
+
+static void Usr_PutLinkToLogOut (void)
+  {
+   extern const char *Txt_Log_out;
+
+   /***** Put form to log out *****/
+   Lay_PutContextualLink (ActLogOut,NULL,NULL,
+                          "logout-red64x64.png",
+                          Txt_Log_out,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/

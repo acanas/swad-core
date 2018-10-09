@@ -39051,9 +39051,30 @@ const char *Txt_Sender_permitted_click_to_ban_him =
 	"Sender permitted; click to ban her/him";		// Necessita de tradução
 #endif
 
+const char *Txt_Session =
+#if   L==1
+	"Sessi&oacute;";
+#elif L==2
+	"Sitzung";
+#elif L==3
+	"Session";
+#elif L==4
+	"Sesi&oacute;n";
+#elif L==5
+	"Session";
+#elif L==6
+	"Sesi&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Sessione";
+#elif L==8
+	"Sesja";
+#elif L==9
+	"Sess&atilde;o";
+#endif
+
 const char *Txt_session =
 #if   L==1
-	"sesi&oacute;n";	// Necessita traduccio
+	"sessi&oacute;";
 #elif L==2
 	"Sitzung";
 #elif L==3
