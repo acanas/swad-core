@@ -3943,17 +3943,20 @@ void Rec_ShowMySharedRecordAndOtherData (void)
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
-   /***** My shared record *****/
+   /***** Left part *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+
+   /* My shared record card */
    Rec_ShowFormMySharedRecord ();
+
+   /* My institution, centre and department */
+   Rec_ShowFormMyInsCtrDpt ();
+
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right part *****/
    /* Start container for right part */
    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
-
-   /* My institution, centre and department */
-   Rec_ShowFormMyInsCtrDpt ();
 
    /* My webs / social networks */
    Net_ShowFormMyWebsAndSocialNets ();
