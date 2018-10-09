@@ -101,7 +101,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
-static void Rec_ShowFormMySharedRecord (void);
 static void Rec_PutIconsCommands (void);
 static void Rec_PutParamsWorks (void);
 static void Rec_PutParamsStudent (void);
@@ -173,7 +172,7 @@ static void Rec_WriteLinkToDataProtectionClause (void);
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
 
-static void Rec_ShowFormMyInsCtrDpt (void);
+static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher);
 
 /*****************************************************************************/
 /*************** Create, edit and remove fields of records *******************/
@@ -2102,29 +2101,6 @@ void Rec_ShowFormSignUpInCrsWithMySharedRecord (void)
   }
 
 /*****************************************************************************/
-/***************** Show form to edit my shared record card *******************/
-/*****************************************************************************/
-
-static void Rec_ShowFormMySharedRecord (void)
-  {
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
-   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
-
-   /***** If user has no name and surname, sex... *****/
-   if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
-       !Gbl.Usrs.Me.UsrDat.Surname1[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
-   else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
-   else if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
-
-   /***** My record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
-  }
-
-/*****************************************************************************/
 /*************** Show form to edit the record of a new user ******************/
 /*****************************************************************************/
 
@@ -3940,17 +3916,57 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 
 void Rec_ShowMySharedRecordAndMore (void)
   {
-   /***** Start container for this user *****/
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
+   extern const char *Txt_Please_select_the_country_of_your_institution;
+   extern const char *Txt_Please_fill_in_your_institution;
+   extern const char *Txt_Please_fill_in_your_centre;
+   extern const char *Txt_Please_fill_in_your_department;
+   bool IAmATeacher;
+
+   /***** Get my roles if not yet got *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Check if I am a teacher *****/
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
+						     (1 << Rol_TCH)));	// ...or a teacher in any course
+
+   /***** If user has no name and surname, sex... *****/
+   if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
+       !Gbl.Usrs.Me.UsrDat.Surname1[0])			// 1. No name
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_Please_fill_in_your_record_card_including_your_name);
+   else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)	// 2. No sex
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_Please_fill_in_your_record_card_including_your_sex);
+   else if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)		// 3. No country
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_Please_fill_in_your_record_card_including_your_country_nationality);
+   else if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)		// 4. No institution country
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_Please_select_the_country_of_your_institution);
+   else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)		// 5. No institution
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_Please_fill_in_your_institution);
+   else if (IAmATeacher)
+     {
+      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)		// 6. No centre
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_Please_fill_in_your_centre);
+      else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_Please_fill_in_your_department);
+     }
+
+   /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
    /***** Left part *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
 
    /* My shared record card */
-   Rec_ShowFormMySharedRecord ();
-
-   /* My institution, centre and department */
-   Rec_ShowFormMyInsCtrDpt ();
+   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3958,13 +3974,16 @@ void Rec_ShowMySharedRecordAndMore (void)
    /* Start container for right part */
    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 
+   /* My institution, centre and department */
+   Rec_ShowFormMyInsCtrDpt (IAmATeacher);
+
    /* My webs / social networks */
    Net_ShowFormMyWebsAndSocialNets ();
 
    /* End container for right part */
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** End container for this user *****/
+   /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Data protection clause *****/
@@ -3975,14 +3994,10 @@ void Rec_ShowMySharedRecordAndMore (void)
 /********* Show form to edit my institution, centre and department ***********/
 /*****************************************************************************/
 
-static void Rec_ShowFormMyInsCtrDpt (void)
+static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Please_select_the_country_of_your_institution;
-   extern const char *Txt_Please_fill_in_your_institution;
-   extern const char *Txt_Please_fill_in_your_centre;
-   extern const char *Txt_Please_fill_in_your_department;
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
@@ -3996,31 +4011,10 @@ static void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;
-   bool IAmATeacher;
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
    Lay_StartSection (Rec_MY_INS_CTR_DPT_ID);
-
-   /***** Get my roles if not yet got *****/
-   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-
-   /***** Check if I am a teacher *****/
-   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-	                                             (1 << Rol_TCH)));	// ...or a teacher in any course
-
-   /***** If there is no country, institution, centre or department *****/
-   if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
-   else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
-   else if (IAmATeacher)
-     {
-      if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
-         Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre);
-      else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)
-         Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_department);
-     }
 
    /***** Start box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
