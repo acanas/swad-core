@@ -1695,9 +1695,6 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    switch (SeeOrPrint)
      {
       case Pho_DEGREES_SEE:
-	 /***** Link to computation of average photos *****/
-	 Pho_PutLinkToCalculateDegreeStats ();
-
 	 /***** Start box *****/
 	 Box_StartBox (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
@@ -1713,6 +1710,10 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Pho_PutSelectorForHowOrderDegrees ();
 
 	 Tbl_EndTable ();
+
+	 /***** Link to compute average photos *****/
+	 Pho_PutLinkToCalculateDegreeStats ();
+
 	 break;
       case Pho_DEGREES_PRINT:
 	 /***** Start box *****/
