@@ -120,7 +120,7 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
 static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
-static void Crs_PutLinkToSearchCourses (void);
+static void Crs_PutIconToSearchCourses (void);
 static void Sch_PutLinkToSearchCoursesParams (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
@@ -547,7 +547,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_My_courses,NULL,
+   Box_StartBox (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
@@ -2877,15 +2877,10 @@ static void Crs_PutButtonToRegisterInCrs (void)
 
 void Crs_ReqSelectOneOfMyCourses (void)
   {
-   /***** Search / select more courses *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Crs_PutLinkToSearchCourses ();
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Select one of my courses *****/
-   /* Fill the list with the courses I belong to, if not filled */
+   /***** Fill the list with the courses I belong to, if not filled *****/
    Usr_GetMyCourses ();
 
+   /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.MyCrss.Num)
       /* Show my courses */
       Crs_WriteListMyCoursesToSelectOne ();
@@ -2895,10 +2890,10 @@ void Crs_ReqSelectOneOfMyCourses (void)
   }
 
 /*****************************************************************************/
-/******************* Put a link (form) to search courses *********************/
+/******************* Put an icon (form) to search courses ********************/
 /*****************************************************************************/
 
-static void Crs_PutLinkToSearchCourses (void)
+static void Crs_PutIconToSearchCourses (void)
   {
    extern const char *Txt_Search_courses;
 
@@ -2911,7 +2906,7 @@ static void Crs_PutLinkToSearchCourses (void)
                                                            ActSysReqSch)))),
                           NULL,Sch_PutLinkToSearchCoursesParams,
 			  "search64x64.gif",
-			  Txt_Search_courses,Txt_Search_courses,
+			  Txt_Search_courses,NULL,
                           NULL);
   }
 
