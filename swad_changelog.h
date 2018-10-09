@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.3.3 (2018-10-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.3.4 (2018-10-09)"
 #define CSS_FILE		"swad18.3.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.3.4:   Oct 09, 2018  Changes in form to remove account. (234938 lines)
         Version 18.3.3:   Oct 09, 2018  Changes in form to remove account. (234932 lines)
         Version 18.3.2:   Oct 09, 2018  Changes in form to change password. (234935 lines)
         Version 18.3.1:   Oct 09, 2018  Changes in layout of session option. (234904 lines)

@@ -900,10 +900,12 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
 
 void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
   {
+   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+
    switch (RequestOrRemove)
      {
       case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
-	 Acc_AskIfRemoveUsrAccount (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Acc_AskIfRemoveUsrAccount (ItsMe);
 	 break;
       case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
 	 if (Pwd_GetConfirmationOnDangerousAction ())
@@ -913,6 +915,8 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 	    /***** Move unused contents of messages to table of deleted contents of messages *****/
 	    Msg_MoveUnusedMsgsContentToDeleted ();
 	   }
+	 else
+	    Acc_AskIfRemoveUsrAccount (ItsMe);
 	 break;
      }
   }
@@ -1014,6 +1018,8 @@ void Acc_RemoveMyAccount (void)
       /***** Move unused contents of messages to table of deleted contents of messages *****/
       Msg_MoveUnusedMsgsContentToDeleted ();
      }
+   else
+      Acc_AskIfRemoveUsrAccount (true);
   }
 
 void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
