@@ -359,7 +359,13 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.3.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-        Version 18.3:     Oct 09, 2018  New icon in breadcrumb to go to user's courses. (234878 lines)
+        Version 18.3:     Oct 09, 2018  New icon in breadcrumb to go to user's courses. (234874 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/theme/white/hierarchy64x64.png /var/www/html/swad/icon/theme/white/
+sudo cp icon/theme/grey/hierarchy64x64.png /var/www/html/swad/icon/theme/grey/
+sudo cp icon/theme/blue/hierarchy64x64.png /var/www/html/swad/icon/theme/blue/
+sudo cp icon/theme/yellow/hierarchy64x64.png /var/www/html/swad/icon/theme/yellow/
+
         Version 18.2.11:  Oct 09, 2018  Button to my courses is moved to left top corner of search box. (234850 lines)
         Version 18.2.10:  Oct 09, 2018  Button to search courses is moved to left top corner of my courses. (234888 lines)
         Version 18.2.9:   Oct 09, 2018  Changes in layout of user's record card. (234891 lines)

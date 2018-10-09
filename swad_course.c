@@ -2929,10 +2929,11 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
    /***** Put icon with link *****/
    Act_LinkFormSubmit (Txt_My_courses,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/hierarchy64x64.gif\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/hierarchy64x64.png\" alt=\"%s\" title=\"%s\""
 	              " class=\"BC_ICON ICO_HIGHLIGHT\" />"
 	              "</a>",
-            Gbl.Prefs.IconsURL,Txt_My_courses,Txt_My_courses);
+            Gbl.Prefs.PathTheme,
+	    Txt_My_courses,Txt_My_courses);
 
    /***** End form *****/
    Act_FormEnd ();

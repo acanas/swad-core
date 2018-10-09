@@ -1384,7 +1384,6 @@ a:hover						/* Default ==> underlined */
 	}
 .NOTICE_DATE_ACTIVE
 	{
-	display:inline-block;
 	float:right;
 	font-size:12pt;
 	color:#404040;
@@ -1393,7 +1392,6 @@ a:hover						/* Default ==> underlined */
 	}
 .NOTICE_DATE_OBSOLETE
 	{
-	display:inline-block;
 	float:right;
 	font-size:12pt;
 	color:#808080;
@@ -1443,7 +1441,6 @@ a:hover						/* Default ==> underlined */
 	}
 .NOTICE_AUTHOR
 	{
-	display:inline-block;
 	box-sizing:border-box;
 	float:right;
 	max-width:120px;
@@ -1620,7 +1617,6 @@ a:hover						/* Default ==> underlined */
 	}
 .FRAME_ICO_RIGHT
 	{
-	display:inline-block;
 	float:right;
 	}
 .FRAME_TBL_WIDE
@@ -1846,15 +1842,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /******************************* User's photo ********************************/
-.PHOTO15x20	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px;}
-.PHOTO15x20B	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px; display:block; margin:0 auto;}
-.PHOTO18x24	{width: 18px; height: 24px; vertical-align:middle; border-radius:2px;}
-.PHOTO21x28	{width: 21px; height: 28px; vertical-align:middle; border-radius:2px;}
-.PHOTO30x40	{width: 30px; height: 40px; vertical-align:middle; border-radius:2px;}
-.PHOTO42x56	{width: 42px; height: 56px; vertical-align:middle; border-radius:3px;}
-.PHOTO45x60	{width: 45px; height: 60px; vertical-align:middle; border-radius:3px;}
-.PHOTO60x80	{width: 60px; height: 80px; vertical-align:middle; border-radius:3px;}
-.PHOTO186x248	{width:186px; height:248px; vertical-align:middle; border-radius:8px;}
+.PHOTO15x20	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
+.PHOTO15x20B	{width: 15px; height: 20px; border-radius:2px; display:block; margin:0 auto;}
+.PHOTO18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
+.PHOTO21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
+.PHOTO30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
+.PHOTO42x56	{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
+.PHOTO45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
+.PHOTO60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
+.PHOTO186x248	{width:186px; height:248px; border-radius:8px; vertical-align:middle;}
 .IMG_USR
 	{
 	box-sizing:border-box;
@@ -2114,7 +2110,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:block;
 	margin:0 0 12px 0;
 	text-align:center;
-	vertical-align:top;
 	}
 .REC_LEFT, .REC_RIGHT
 	{
@@ -2431,24 +2426,18 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#808080;
 	font-size:48pt;
 	font-weight:bold;
-	
-	// background:pink;
-	}
+		}
 .GAM_PLAY_QST_CONTAINER
 	{
 	width:80%;
 	float:left;
 	/* position:relative; */
-
-	// background:blue;
 	}
 .GAM_PLAY_NXT_CONTAINER
 	{
 	width:10%;
 	float:left;
 	/* position:relative; */
-
-	// background:grey;
 	}
 .GAM_PLAY_QST
 	{
@@ -2866,7 +2855,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .SOCIAL_ICO_REMOVE
 	{
-	display:inline-block;
 	vertical-align:bottom;
 	float:right;
 	}
