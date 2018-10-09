@@ -477,16 +477,8 @@ static void Acc_ShowFormChgMyAccount (void)
    if (Gbl.Usrs.Me.ConfirmEmailJustSent)
       Mai_ShowMsgConfirmEmailHasBeenSent ();
 
-   /***** Put link to remove my account *****/
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Acc_PutLinkToRemoveMyAccount ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_User_account,NULL,
+   Box_StartBoxTable (NULL,Txt_User_account,Acc_PutLinkToRemoveMyAccount,
                       Hlp_PROFILE_Account,Box_NOT_CLOSABLE,2);
 
    /***** Nickname *****/
@@ -534,17 +526,18 @@ static void Acc_ShowFormChgMyAccount (void)
   }
 
 /*****************************************************************************/
-/******** Put a link to the action used to request user's password ***********/
+/************* Put an icon (form) to request removing my account *************/
 /*****************************************************************************/
 
 static void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
-   Lay_PutContextualLink (ActReqRemMyAcc,NULL,Acc_PutParamsToRemoveMyAccount,
-                          "remove-on64x64.png",
-                          Txt_Remove_account,Txt_Remove_account,
-                          NULL);
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
+      Lay_PutContextualLink (ActReqRemMyAcc,NULL,Acc_PutParamsToRemoveMyAccount,
+			     "remove-on64x64.png",
+			     Txt_Remove_account,NULL,
+			     NULL);
   }
 
 static void Acc_PutParamsToRemoveMyAccount (void)
@@ -974,6 +967,9 @@ void Acc_AskIfRemoveMyAccount (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+
+   /***** Show forms to change my account and my password *****/
+   Acc_ShowFormChgMyAccountAndPwd ();
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
