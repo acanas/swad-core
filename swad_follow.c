@@ -823,6 +823,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"FOLLOW_PHOTO\">");
@@ -850,11 +851,12 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       Act_FormEnd ();
      }
 
-   if (!Gbl.Usrs.Me.Logged ||				// Not logged
-       Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)	// It's me
+   ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   if (!Gbl.Usrs.Me.Logged ||	// Not logged
+       ItsMe)			// It's me
       /* Inactive icon to follow/unfollow */
       Fol_PutInactiveIconToFollowUnfollow ();
-   else
+   else				// It's not me
      {
       /* Put form to follow / unfollow */
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
@@ -877,6 +879,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -913,11 +916,11 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
 	              " style=\"width:48px;\">",
             Gbl.RowEvenOdd);
-   if (!Gbl.Usrs.Me.Logged ||				// Not logged
-       Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)	// It's me
+   if (!Gbl.Usrs.Me.Logged ||	// Not logged
+       ItsMe)			// It's me
       /* Inactive icon to follow/unfollow */
       Fol_PutInactiveIconToFollowUnfollow ();
-   else
+   else				// It's not me
      {
       /* Put form to follow / unfollow */
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user

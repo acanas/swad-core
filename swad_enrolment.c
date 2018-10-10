@@ -3520,21 +3520,21 @@ void Enr_RemUsrFromCrs2 (void)
 
 static bool Enr_CheckIfICanRemUsrFromCrs (void)
   {
-   /* Check if it's forbidden remove that user */
-   // A teacher can remove a student or himself
-   // An administrator can remove anyone
+   bool ItsMe;
 
+   /* Check if I can remove another user from current course */
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 return (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);	// It's me?
+	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 return ItsMe;	// A student or non-editing teacher can remove herself/himself
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 return true;
+	 return true;	// A teacher or administrator can remove anyone
       default:
 	 return false;
      }

@@ -135,7 +135,9 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
 
 bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
   {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
       return true;
 
    /* Check if I have permission to change user's photo */
@@ -170,9 +172,10 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    char PhotoURL[PATH_MAX + 1];
    const char *TitleText;
    Act_Action_t NextAction;
+   bool ItsMe = (Gbl.Record.UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Link for changing / uploading the photo *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod)	// It's me
+   if (ItsMe)
      {
       TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 			                      Txt_Upload_photo;
@@ -181,7 +184,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 			     TitleText,NULL,
 			     NULL);
      }
-   else								// Not me
+   else	// Not me
       if (Pho_ICanChangeOtherUsrPhoto (Gbl.Record.UsrDat))
 	{
 	 PhotoExists = Pho_BuildLinkToPhoto (Gbl.Record.UsrDat,PhotoURL);
@@ -355,6 +358,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 void Pho_SendPhotoUsr (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
 
    /***** Get user whose photo must be sent or removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -362,10 +366,11 @@ void Pho_SendPhotoUsr (void)
       if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
 	{
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-         if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+         if (ItsMe)
 	    /***** Form to send my photo *****/
             Pho_ReqMyPhoto ();
-	 else
+	 else	// Not me
 	    /***** Form to send another user's photo *****/
 	    Pho_ReqOtherUsrPhoto ();
 	}

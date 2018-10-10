@@ -1137,14 +1137,15 @@ void Mai_PutLinkToChangeOtherUsrEmails (void)
   {
    extern const char *Txt_Change_email;
    Act_Action_t NextAction;
+   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Link for changing the password *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (ItsMe)
       Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
                              "msg64x64.gif",
 			     Txt_Change_email,Txt_Change_email,
                              NULL);
-   else									// Not me
+   else	// Not me
      {
       switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
         {
@@ -1175,6 +1176,7 @@ void Mai_ShowFormOthEmail (void)
   {
    extern const char *Txt_Email;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
 
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -1191,8 +1193,8 @@ void Mai_ShowFormOthEmail (void)
 
 	 /***** Form with the user's email *****/
 	 Tbl_StartTableCenter (2);
-	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
-                                     (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
 	 Tbl_EndTable ();
 
          /***** End box *****/
@@ -1476,7 +1478,8 @@ static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EM
 void May_NewMyUsrEmail (void)
   {
    /***** Remove user's email *****/
-   Mai_NewUsrEmail (&Gbl.Usrs.Me.UsrDat,true);	// It's me
+   Mai_NewUsrEmail (&Gbl.Usrs.Me.UsrDat,
+		    true);	// It's me
 
    /***** Show my account again *****/
    Acc_ShowFormChgMyAccountAndPwd ();
@@ -1489,13 +1492,14 @@ void May_NewMyUsrEmail (void)
 void Mai_NewOtherUsrEmail (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
 
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** New user's ID *****/
-      Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,
-		       (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Show user's record *****/
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
@@ -1885,7 +1889,9 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
 
 bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
   {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
       return true;
 
    /***** Check if I have permission to see another user's email *****/

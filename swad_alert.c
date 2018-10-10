@@ -109,7 +109,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
      {
       false,	// Ale_NONE
       false,	// Ale_CLIPBOARD
-      false,	// Ale_INFO
+      true,	// Ale_INFO
       true,	// Ale_SUCCESS
       true,	// Ale_QUESTION
       true,	// Ale_WARNING

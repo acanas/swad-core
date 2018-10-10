@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.3.7 (2018-10-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.3.8 (2018-10-10)"
 #define CSS_FILE		"swad18.3.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.3.8:   Oct 10, 2018  Code refactoring related with checking if I am the logged user. (234984 lines)
         Version 18.3.7:   Oct 10, 2018  Fixed bug in icon in breadcrumb to go to user's courses. (234947 lines)
         Version 18.3.6:   Oct 09, 2018  Change in layout of user's record card. (234937 lines)
         Version 18.3.5:   Oct 09, 2018  Change in layout of classphoto of degrees. (234939 lines)

@@ -1109,6 +1109,8 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
 
 static void Rec_ShowRecordOneStdCrs (void)
   {
+   bool ItsMe;
+
    /***** Get if student has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
@@ -1147,21 +1149,27 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Record of the student in the course *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
      {
-      if (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	{
-         fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
-	 Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
-         fprintf (Gbl.F.Out,"</div>");
-	}
-      else if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
-	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
-	{
-         fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
-	 Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
-         fprintf (Gbl.F.Out,"</div>");
-	}
+      switch (Gbl.Usrs.Me.Role.Logged)
+        {
+         case Rol_STD:
+            ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+            if (ItsMe)
+	      {
+	       fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	       Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
+	       fprintf (Gbl.F.Out,"</div>");
+	      }
+            break;
+         case Rol_NET:
+         case Rol_TCH:
+         case Rol_SYS_ADM:
+	    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	    Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
+	    fprintf (Gbl.F.Out,"</div>");
+	    break;
+         default:
+            break;
+        }
      }
 
    /***** End container for this user *****/
@@ -1725,7 +1733,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      {
       case Rol_STD:	// I am a student
 	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);	// It's me
-	 if (ItsMe)	// It's me
+	 if (ItsMe)
 	   {
 	    switch (TypeOfView)
 	      {

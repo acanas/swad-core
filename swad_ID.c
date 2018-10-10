@@ -401,7 +401,9 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 
 bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
   {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
       return true;
 
    /***** Check if I have permission to see another user's IDs *****/
@@ -503,14 +505,15 @@ void ID_PutLinkToChangeUsrIDs (void)
   {
    extern const char *Txt_Change_IDs;
    Act_Action_t NextAction;
+   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Link for changing the password *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (ItsMe)
       Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
 			     "arroba64x64.gif",
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);
-   else									// Not me
+   else	// Not me
      {
       switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	{
@@ -541,6 +544,7 @@ void ID_ShowFormOthIDs (void)
   {
    extern const char *Txt_ID;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
 
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -557,8 +561,8 @@ void ID_ShowFormOthIDs (void)
 
 	 /***** Form with the user's ID *****/
          Tbl_StartTableWide (2);
-         ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
-                                 (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+         ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+         ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
          Tbl_EndTable ();
 
          /***** End box *****/
@@ -583,7 +587,6 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_ID_X_not_confirmed;
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
-   extern const char *Txt_If_there_are_multiple_versions_of_the_ID_;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
    Act_Action_t NextAction;
@@ -665,9 +668,16 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 			    "</tr>");
      }
 
-   /***** Form to enter new user's ID *****/
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
+      /***** Write help text *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"2\" class=\"DAT CENTER_MIDDLE\">");
+      Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
+      fprintf (Gbl.F.Out,"</td>"
+	                  "</tr>");
+
+      /***** Form to enter new user's ID *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"RIGHT_MIDDLE\">"
 			 "<label for=\"NewID\" class=\"%s\">%s:</label>"
@@ -706,19 +716,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
-			 "</tr>"
-			 "<tr>");
+			 "</tr>");
      }
-
-   /***** Write help text *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT CENTER_MIDDLE\">");
-   if (ItsMe)
-      fprintf (Gbl.F.Out,"%s ",
-               Txt_The_ID_is_used_in_order_to_facilitate_);
-   fprintf (Gbl.F.Out,"%s"
-		      "</td>"
-		      "</tr>",
-            Txt_If_there_are_multiple_versions_of_the_ID_);
   }
 
 /*****************************************************************************/
@@ -728,7 +727,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 void ID_RemoveMyUsrID (void)
   {
    /***** Remove user's ID *****/
-   ID_RemoveUsrID (&Gbl.Usrs.Me.UsrDat,true);	// It's me
+   ID_RemoveUsrID (&Gbl.Usrs.Me.UsrDat,
+		   true);	// It's me
 
    /***** Update list of IDs *****/
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
@@ -744,13 +744,14 @@ void ID_RemoveMyUsrID (void)
 void ID_RemoveOtherUsrID (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
 
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Remove user's ID *****/
-      ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
-                      (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Update list of IDs *****/
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
@@ -844,7 +845,8 @@ static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
 void ID_NewMyUsrID (void)
   {
    /***** Remove user's ID *****/
-   ID_NewUsrID (&Gbl.Usrs.Me.UsrDat,true);	// It's me
+   ID_NewUsrID (&Gbl.Usrs.Me.UsrDat,
+		true);	// It's me
 
    /***** Update list of IDs *****/
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
@@ -860,13 +862,14 @@ void ID_NewMyUsrID (void)
 void ID_NewOtherUsrID (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
 
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** New user's ID *****/
-      ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,
-                   (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Update list of IDs *****/
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
@@ -943,7 +946,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    /***** Save this new ID *****/
 	    // It's me ==> ID not confirmed
-	    // It's not me ==> ID confirmed
+	    // Not me  ==> ID confirmed
 	    ID_InsertANewUsrIDInDB (UsrDat->UsrCod,NewID,!ItsMe);
 
 	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_registered_successfully,

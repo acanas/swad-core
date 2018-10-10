@@ -854,7 +854,9 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
 
 bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
   {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
       return true;
 
    /***** Check if I have permission to see another user's IDs *****/
@@ -886,7 +888,9 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
 
 bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
   {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
       return true;
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1064,6 +1068,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
   {
+   bool ItsMe;
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -1089,7 +1095,8 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
       return false;
 
    /***** 7. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 8. Fast / slow check: Does he/she belong to the current course? *****/
@@ -1118,6 +1125,8 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
 
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
   {
+   bool ItsMe;
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -1147,7 +1156,8 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
      }
 
    /***** 4. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 5. Fast check: Am I a system admin? *****/
@@ -1164,6 +1174,8 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
 
 bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat)
   {
+   bool ItsMe;
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -1185,7 +1197,8 @@ bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat)
       return false;
 
    /***** 6. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 7. Fast check: Does he/she belong to the current course? *****/
@@ -1210,6 +1223,8 @@ bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat)
 
 bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
   {
+   bool ItsMe;
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -1236,7 +1251,8 @@ bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
       return false;
 
    /***** 7. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 8. Fast / slow check depending on roles *****/
@@ -1257,6 +1273,8 @@ bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
 
 bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
   {
+   bool ItsMe;
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -1282,7 +1300,8 @@ bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
       return false;
 
    /***** 7. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 8. Fast / slow check depending on roles *****/
@@ -1303,12 +1322,15 @@ bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
 
 bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
   {
+   bool ItsMe;
+
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
 
    /***** 2. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 3. Fast check: Am I logged as system admin? *****/
@@ -1332,6 +1354,7 @@ void Usr_FlushCacheUsrSharesAnyOfMyCrs (void)
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
   {
    char Query[256];
+   bool ItsMe;
 
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -1342,7 +1365,8 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/

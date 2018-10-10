@@ -75,7 +75,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them;
    extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
    extern const char *Txt_What_would_you_like_to_do;
-   extern const char *Txt_Register_students_in_the_course_X;
+   extern const char *Txt_Register_students_in_COURSE_X;
    extern const char *Txt_Register_students;
    extern const char *Txt_Go_to_one_of_my_courses;
    extern const char *Txt_My_courses;
@@ -169,7 +169,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_TCH)	// I am a teacher in current course
 	   {
 	    /* Request students enrolment */
-	    sprintf (Gbl.Title,Txt_Register_students_in_the_course_X,
+	    sprintf (Gbl.Title,Txt_Register_students_in_COURSE_X,
 		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqEnrSevStd,

@@ -3306,6 +3306,7 @@ void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
   {
    char Query[512];
+   bool ItsMe;
 
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -3324,7 +3325,8 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
       return false;
 
    /***** 5. Fast check: It's me? *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+   ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   if (ItsMe)
       return true;
 
    /***** 6. Fast check: Is already calculated if user shares

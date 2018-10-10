@@ -917,6 +917,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
+   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
@@ -930,8 +931,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
       Soc_PutFormWhichUsrs ();
 
    /***** Form to write a new post *****/
-   if (GlobalTimeline ||
-       Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (GlobalTimeline || ItsMe)
       Soc_PutFormToWriteNewPost ();
 
    /***** New publishings refreshed dynamically via AJAX *****/

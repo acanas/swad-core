@@ -918,11 +918,12 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
   {
    extern const char *Txt_Change_password;
    Act_Action_t NextAction;
+   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Link for changing the password *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (ItsMe)
       Pwd_PutLinkToChangeMyPassword ();
-   else									// Not me
+   else	// Not me
      {
       switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	{

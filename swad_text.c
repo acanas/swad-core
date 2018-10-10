@@ -15701,45 +15701,6 @@ const char *Txt_Identified_views =
 	"Acessos identificados";
 #endif
 
-const char *Txt_If_there_are_multiple_versions_of_the_ID_ =
-#if   L==1
-	"Si hi ha diverses versions de la ID"
-	" (per ex. DNI amb o sense lletra al final),"
-	" indiqueu totes les versions.";
-#elif L==2
-	"Wenn es mehrere Versionen der ID"
-	" (zB. mit oder ohne Buchstabe am Ende),"
-	" schreiben alle Versionen.";
-#elif L==3
-	"If there are multiple versions of the ID"
-	" (eg. with or without letter at the end),"
-	" write out all versions.";
-#elif L==4
-	"Si existen varias versiones del ID"
-	" (por ej. DNI con o sin letra al final),"
-	" indique todas las versiones.";
-#elif L==5
-	"S'il existe plusieurs versions du ID"
-	" (par example avec ou sans lettre &agrave; la fin),"
-	" &eacute;crire toutes les versions.";
-#elif L==6
-	"Si existen varias versiones del ID"
-	" (por ej. DNI con o sin letra al final),"
-	" indique todas las versiones.";	// Okoteve traducción
-#elif L==7
-	"Se ci sono pi&ugrave; versioni del ID"
-	" (ad es. con o senza lettera alla fine),"
-	" scrivere tutte le versioni.";
-#elif L==8
-	"Je&sacute;li istnieje wiele wersji identyfikatora"
-	" (np. Z lub bez litery na ko&nacute;cu),"
-	" wypisa&cacute; wszystkie wersje.";
-#elif L==9
-	"Se houver v&aacute;rias vers&otilde;es do n&ordm; de identifica&ccedil;&atilde;o"
-	" (eg., com ou sem letra no final),"
-	" escreva todas as vers&otilde;es.";
-#endif
-
 const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Si se trata de un usuario nuevo en %s,"
@@ -32427,25 +32388,25 @@ const char *Txt_Register_students =
 	"Registrar estudantes";
 #endif
 
-const char *Txt_Register_students_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_students_in_COURSE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Inscriure estudiants en l'assignatura <strong>%s</strong>";
+	"Inscriure estudiants en <strong>%s</strong>";
 #elif L==2
-	"Anmeldung Studenten im Kurs <strong>%s</strong>";
+	"Anmeldung Studenten im <strong>%s</strong>";
 #elif L==3
-	"Register students in the course <strong>%s</strong>";
+	"Register students in <strong>%s</strong>";
 #elif L==4
-	"Inscribir estudiantes en la asignatura <strong>%s</strong>";
+	"Inscribir estudiantes en <strong>%s</strong>";
 #elif L==5
-	"Inscrire &eacute;tudiants dans la mati&egrave;re <strong>%s</strong>";
+	"Inscrire &eacute;tudiants dans <strong>%s</strong>";
 #elif L==6
-	"Inscribir estudiantes en la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Inscribir estudiantes en <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Registrare studenti nel corso <strong>%s</strong>";
+	"Registrare studenti in <strong>%s</strong>";
 #elif L==8
-	"Rejestracja student&oacute;w w kurs <strong>%s</strong>";
+	"Rejestracja student&oacute;w w <strong>%s</strong>";
 #elif L==9
-	"Registrar estudantes na disciplina <strong>%s</strong>";
+	"Registrar estudantes em <strong>%s</strong>";
 #endif
 
 const char *Txt_Register_the_users_indicated_in_step_1 =
@@ -46007,39 +45968,66 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 #if   L==1
 	"L'ID s'utilitza per tal de facilitar"
 	" la inscripci&oacute; en les assignatures"
-	" i la consulta de qualificacions.";
+	" i la consulta de qualificacions."
+	" Si hi ha diverses versions de la ID"
+	" (per ex. DNI amb o sense lletra al final),"
+	" indiqueu totes les versions.";
 #elif L==2
 	"Die ID wird zu erleichtern,"
 	" um die Einschreibung in Kurse"
-	" und Beratungskompetenz eingesetzt.";
+	" und Beratungskompetenz eingesetzt."
+	" Wenn es mehrere Versionen der ID"
+	" (zB. mit oder ohne Buchstabe am Ende),"
+	" schreiben alle Versionen.";
 #elif L==3
 	"The ID is used in order to facilitate"
 	" enrolment in courses"
-	" and consulting marks.";
+	" and consulting marks."
+	" If there are multiple versions of the ID"
+	" (eg. with or without letter at the end),"
+	" write out all versions.";
 #elif L==4
 	"El ID se utiliza con el fin de facilitar"
 	" la inscripci&oacute;n en las asignaturas"
-	" y la consulta de calificaciones.";
+	" y la consulta de calificaciones."
+	" Si existen varias versiones del ID"
+	" (por ej. DNI con o sin letra al final),"
+	" indique todas las versiones.";
 #elif L==5
 	"L'ID est utilis&eacute; afin de faciliter"
 	" l'inscription &agrave; des mati&egrave;res"
-	" et la consulte des notes.";
+	" et la consulte des notes."
+	" S'il existe plusieurs versions du ID"
+	" (par example avec ou sans lettre &agrave; la fin),"
+	" &eacute;crire toutes les versions.";
 #elif L==6
 	"El ID se utiliza con el fin de facilitar"
 	" la inscripci&oacute;n en las asignaturas"
-	" y la consulta de calificaciones.";	// Okoteve traducción
+	" y la consulta de calificaciones."
+	" Si existen varias versiones del ID"
+	" (por ej. DNI con o sin letra al final),"
+	" indique todas las versiones.";	// Okoteve traducción
 #elif L==7
 	"L'ID &egrave; utilizzato per agevolare"
 	" l'iscrizione ai corsi"
-	" e consultare dei risultati.";
+	" e consultare dei risultati."
+	" Se ci sono pi&ugrave; versioni del ID"
+	" (ad es. con o senza lettera alla fine),"
+	" scrivere tutte le versioni.";
 #elif L==8
 	"Identyfikator jest u&zdot;ywany w celu u&lstrok;atwienia"
 	" rejestracji w kursach"
-	" i skonsultuje znak&oacute;w.";
+	" i skonsultuje znak&oacute;w."
+	" Je&sacute;li istnieje wiele wersji identyfikatora"
+	" (np. Z lub bez litery na ko&nacute;cu),"
+	" wypisa&cacute; wszystkie wersje.";
 #elif L==9
 	"O n&ordm; de identifica&ccedil;&atilde;o &eacute; usado para facilitar"
 	" a inscri&ccedil;&atilde;o em disciplinas"
-	" e consultas de notas.";
+	" e consultas de notas."
+	" Se houver v&aacute;rias vers&otilde;es do n&ordm; de identifica&ccedil;&atilde;o"
+	" (eg., com ou sem letra no final),"
+	" escreva todas as vers&otilde;es.";
 #endif
 
 const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
@@ -54537,11 +54525,11 @@ const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to
 #elif L==3
 	"You are now %s as <strong>%s</strong>.";
 #elif L==4
-	"Usted est&aacute; ahora %s como <strong>%s</strong>.";
+	"Ahora est&aacute; %s como <strong>%s</strong>.";
 #elif L==5
 	"Vous &ecirc;tes maintenant %s en tant que <strong>%s</strong>.";
 #elif L==6
-	"Usted est&aacute; ahora %s como <strong>%s</strong>.";	// Okoteve traducción
+	"Ahora est&aacute; %s como <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
 	"Sei ora %s come <strong>%s</strong>.";
 #elif L==8

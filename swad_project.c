@@ -1947,6 +1947,7 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
    struct ListUsrCods ListUsrCods;
    unsigned NumUsr;
    char Query[512];
+   bool ItsMe;
 
    /***** Get project code *****/
    if ((PrjCod = Prj_GetParamPrjCod ()) == -1L)
@@ -1975,7 +1976,8 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 	 DB_QueryREPLACE (Query,"can not add user to project");
 
 	 /***** Flush cache *****/
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 if (ItsMe)
 	    Prj_FlushCacheMyRoleInProject ();
 
 	 /* Show success alert */
@@ -2112,6 +2114,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
    struct Project Prj;
+   bool ItsMe;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -2138,7 +2141,8 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 DB_QueryDELETE (Query,"can not remove a user from a project");
 
 	 /***** Flush cache *****/
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 if (ItsMe)
 	    Prj_FlushCacheMyRoleInProject ();
 
 	 /***** Show success alert *****/
@@ -3449,13 +3453,15 @@ void Prj_RemoveCrsProjects (long CrsCod)
 void Prj_RemoveUsrFromProjects (long UsrCod)
   {
    char Query[128];
+   bool ItsMe;
 
    /***** Remove user from projects *****/
    sprintf (Query,"DELETE FROM prj_usr WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove user from projects");
 
    /***** Flush cache *****/
-   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ItsMe)
       Prj_FlushCacheMyRoleInProject ();
   }
 

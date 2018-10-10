@@ -233,8 +233,10 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
 
 bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
   {
-   /***** It's me? I always can see my things *****/
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** I always can see my things *****/
+   if (ItsMe)
       return true;
 
    /***** System admins always can see others' profiles *****/
