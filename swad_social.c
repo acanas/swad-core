@@ -917,7 +917,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
-   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
@@ -1258,6 +1258,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    struct UsrData UsrDat;
+   bool ItsMe;
    bool IAmTheAuthor = false;
    bool IAmASharerOfThisSocNot = false;
    bool IAmAFaverOfThisSocNot = false;
@@ -1316,7 +1317,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.Logged)
 	{
-	 IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+	 IAmTheAuthor = ItsMe;
 	 if (!IAmTheAuthor)
 	   {
 	    IAmASharerOfThisSocNot = Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
@@ -1539,8 +1541,7 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
    extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES];
    struct UsrData UsrDat;
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	        UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrCod);
 
    if (TopMessage != Soc_TOP_MESSAGE_NONE)
      {
@@ -1581,8 +1582,7 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	        UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">");
 
@@ -2523,6 +2523,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    struct UsrData UsrDat;
+   bool ItsMe;
    bool IAmTheAuthor;
    bool IAmAFaverOfThisSocCom = false;
    bool ShowPhoto = false;
@@ -2558,8 +2559,8 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       Usr_UsrDataConstructor (&UsrDat);
       UsrDat.UsrCod = SocCom->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
-	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+      IAmTheAuthor = ItsMe;
       if (!IAmTheAuthor)
 	 IAmAFaverOfThisSocCom = Soc_CheckIfCommIsFavedByUsr (SocCom->PubCod,
 							      Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2630,8 +2631,7 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	        UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">");
 
@@ -3101,6 +3101,7 @@ static long Soc_ShareSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
+   bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of social note *****/
@@ -3109,8 +3110,8 @@ static long Soc_ShareSocialNote (void)
 
    if (SocNot.NotCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-          SocNot.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
          if (!Soc_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
 					    Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
@@ -3179,6 +3180,7 @@ static long Soc_FavSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    char Query[256];
    struct SocialNote SocNot;
+   bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of social note *****/
@@ -3187,8 +3189,8 @@ static long Soc_FavSocialNote (void)
 
    if (SocNot.NotCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  SocNot.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
 	 if (!Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
@@ -3264,6 +3266,7 @@ static long Soc_FavSocialComment (void)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    struct SocialComment SocCom;
+   bool ItsMe;
    char Query[256];
 
    /***** Initialize image *****/
@@ -3275,8 +3278,8 @@ static long Soc_FavSocialComment (void)
 
    if (SocCom.PubCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  SocCom.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
+      ItsMe = Usr_ItsMe (SocCom.UsrCod);
+      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
 	 if (!Soc_CheckIfCommIsFavedByUsr (SocCom.PubCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
@@ -3390,6 +3393,7 @@ static long Soc_UnshareSocialNote (void)
    char Query[256];
    struct SocialNote SocNot;
    long OriginalPubCod;
+   bool ItsMe;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3397,9 +3401,9 @@ static long Soc_UnshareSocialNote (void)
 
    if (SocNot.NotCod > 0)
      {
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
       if (SocNot.NumShared &&
-	  Gbl.Usrs.Me.Logged &&
-	  SocNot.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
+	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
 	 if (Soc_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
@@ -3478,6 +3482,7 @@ static long Soc_UnfavSocialNote (void)
    struct SocialNote SocNot;
    char Query[256];
    long OriginalPubCod;
+   bool ItsMe;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3485,9 +3490,9 @@ static long Soc_UnfavSocialNote (void)
 
    if (SocNot.NotCod > 0)
      {
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
       if (SocNot.NumFavs &&
-	  Gbl.Usrs.Me.Logged &&
-	  SocNot.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
+	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
 	 if (Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
@@ -3560,6 +3565,7 @@ static long Soc_UnfavSocialComment (void)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    struct SocialComment SocCom;
+   bool ItsMe;
    char Query[256];
 
    /***** Initialize image *****/
@@ -3571,9 +3577,9 @@ static long Soc_UnfavSocialComment (void)
 
    if (SocCom.PubCod > 0)
      {
+      ItsMe = Usr_ItsMe (SocCom.UsrCod);
       if (SocCom.NumFavs &&
-	  Gbl.Usrs.Me.Logged &&
-	  SocCom.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
+	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
 	 if (Soc_CheckIfCommIsFavedByUsr (SocCom.PubCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
@@ -3645,6 +3651,7 @@ static void Soc_RequestRemovalSocialNote (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    extern const char *Txt_Remove;
    struct SocialNote SocNot;
+   bool ItsMe;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3652,8 +3659,8 @@ static void Soc_RequestRemovalSocialNote (void)
 
    if (SocNot.NotCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this note
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      if (ItsMe)	// I am the author of this note
 	{
 	 /***** Show question and button to remove social note *****/
 	 /* Start alert */
@@ -3732,6 +3739,7 @@ static void Soc_RemoveSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_Post_removed;
    struct SocialNote SocNot;
+   bool ItsMe;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3739,8 +3747,8 @@ static void Soc_RemoveSocialNote (void)
 
    if (SocNot.NotCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this note
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      if (ItsMe)	// I am the author of this note
 	{
 	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
             /***** Remove image file associated to social post *****/
@@ -3980,6 +3988,7 @@ static void Soc_RequestRemovalSocialComment (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
    struct SocialComment SocCom;
+   bool ItsMe;
 
    /***** Initialize image *****/
    Img_ImageConstructor (&SocCom.Image);
@@ -3990,8 +3999,8 @@ static void Soc_RequestRemovalSocialComment (void)
 
    if (SocCom.PubCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this comment
+      ItsMe = Usr_ItsMe (SocCom.UsrCod);
+      if (ItsMe)	// I am the author of this comment
 	{
 	 /***** Show question and button to remove social comment *****/
 	 /* Start alert */
@@ -4073,6 +4082,7 @@ static void Soc_RemoveSocialComment (void)
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Comment_removed;
    struct SocialComment SocCom;
+   bool ItsMe;
 
    /***** Initialize image *****/
    Img_ImageConstructor (&SocCom.Image);
@@ -4083,8 +4093,8 @@ static void Soc_RemoveSocialComment (void)
 
    if (SocCom.PubCod > 0)
      {
-      if (Gbl.Usrs.Me.Logged &&
-	  SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this comment
+      ItsMe = Usr_ItsMe (SocCom.UsrCod);
+      if (ItsMe)	// I am the author of this comment
 	{
 	 /***** Remove image file associated to social post *****/
 	 Soc_RemoveImgFileFromSocialComment (SocCom.PubCod);
@@ -4931,6 +4941,7 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
       size_t Length;		// Length of the nickname
      } Nickname;
    struct UsrData UsrDat;
+   bool ItsMe;
    bool CreateNotif;
    bool NotifyByEmail;
 
@@ -4972,7 +4983,9 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
-	       if (UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// It's not me
+	      {
+	       ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+	       if (!ItsMe)	// Not me
 		 {
 		  /* Get user's data */
 		  Usr_GetAllUsrDataFromUsrCod (&UsrDat);
@@ -4987,6 +5000,7 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 										    0));
 		    }
 		 }
+	      }
 	   }
 	}
       /* The next char is not the start of a nickname */

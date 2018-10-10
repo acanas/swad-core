@@ -918,7 +918,7 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
   {
    extern const char *Txt_Change_password;
    Act_Action_t NextAction;
-   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Link for changing the password *****/
    if (ItsMe)

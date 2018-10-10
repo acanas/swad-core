@@ -412,7 +412,7 @@ void Sta_LogAccess (const char *Comments)
      }
 
    /***** Increment my number of clicks *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
+   if (Gbl.Usrs.Me.Logged)
       Prf_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

@@ -1137,7 +1137,7 @@ void Mai_PutLinkToChangeOtherUsrEmails (void)
   {
    extern const char *Txt_Change_email;
    Act_Action_t NextAction;
-   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Link for changing the password *****/
    if (ItsMe)
@@ -1193,7 +1193,7 @@ void Mai_ShowFormOthEmail (void)
 
 	 /***** Form with the user's email *****/
 	 Tbl_StartTableCenter (2);
-	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
 	 Tbl_EndTable ();
 
@@ -1498,7 +1498,7 @@ void Mai_NewOtherUsrEmail (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** New user's ID *****/
-      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
       Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Show user's record *****/
@@ -1889,7 +1889,7 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
 
 bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
   {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (ItsMe)
       return true;

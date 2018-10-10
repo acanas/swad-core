@@ -1191,6 +1191,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    bool Enabled;
+   bool ItsMe;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1298,24 +1299,28 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
 
    /***** Form to remove post *****/
-   if (LastPst && Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)
-      // Post can be removed if post is the last (without answers) and it's mine
+   if (LastPst)
      {
-      if (PstNum == 1)	// First and unique post in thread
-	 Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
-			      For_FORUM_THREADS_SECTION_ID);
-      else		// Last of several posts in thread
-	 Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
-			      For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
-                                   Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
-                                   Gbl.Forum.ForumSet,
-				   Gbl.Forum.ThreadsOrder,
-				   Gbl.Forum.ForumSelected.Location,
-				   Gbl.Forum.ForumSelected.ThrCod,
-				   PstCod);
-      Ico_PutIconRemove ();
-      Act_FormEnd ();
+      ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+      if (ItsMe)
+	{
+	 // Post can be removed if post is the last (without answers) and it's mine
+	 if (PstNum == 1)	// First and unique post in thread
+	    Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
+				 For_FORUM_THREADS_SECTION_ID);
+	 else		// Last of several posts in thread
+	    Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
+				 For_FORUM_POSTS_SECTION_ID);
+	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+				      Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
+				      Gbl.Forum.ForumSet,
+				      Gbl.Forum.ThreadsOrder,
+				      Gbl.Forum.ForumSelected.Location,
+				      Gbl.Forum.ForumSelected.ThrCod,
+				      PstCod);
+	 Ico_PutIconRemove ();
+	 Act_FormEnd ();
+	}
      }
    fprintf (Gbl.F.Out,"</td>");
 
@@ -4069,6 +4074,7 @@ void For_RemovePost (void)
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
+   bool ItsMe;
    bool ThreadDeleted = false;
 
    /***** Get parameters related to forum *****/
@@ -4087,7 +4093,8 @@ void For_RemovePost (void)
       Lay_ShowErrorAndExit ("The post to remove no longer exists.");
 
    /* Check if I am the author of the message */
-   if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)
+   ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+   if (!ItsMe)
       Lay_ShowErrorAndExit ("You can not remove post because you aren't the author.");
 
    /* Check if the message is the last message in the thread */

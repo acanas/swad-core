@@ -7223,7 +7223,8 @@ void Brw_RemSubtreeInFileBrowser (void)
       Brw_RemoveChildrenOfFolderFromDB (Gbl.FileBrowser.Priv.FullPathInTree);
 
       /* Remove affected clipboards */
-      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				    Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Remove affected expanded folders */
       Brw_RemoveAffectedExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
@@ -8266,7 +8267,8 @@ void Brw_PasteIntoFileBrowser (void)
       Brw_PasteClipboard ();
 
       /***** Remove the affected clipboards *****/
-      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				    Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
      }
    else
       /***** Write message ******/
@@ -9085,7 +9087,9 @@ void Brw_RecFolderFileBrowser (void)
 	    else
               {
                /* Remove affected clipboards */
-               Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+               Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+        				     Gbl.Usrs.Me.UsrDat.UsrCod,
+					     Gbl.Usrs.Other.UsrDat.UsrCod);
 
                /* Add path where new file is created to table of expanded folders */
                Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
@@ -9397,7 +9401,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 	                else
                           {
                            /* Remove affected clipboards */
-                           Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+                           Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+                        				 Gbl.Usrs.Me.UsrDat.UsrCod,
+							 Gbl.Usrs.Other.UsrDat.UsrCod);
 
                            /* Add path where new file is created to table of expanded folders */
                            Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
@@ -9581,7 +9587,9 @@ void Brw_RecLinkFileBrowser (void)
 		  else
 		    {
 		     /* Remove affected clipboards */
-		     Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+		     Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+						   Gbl.Usrs.Me.UsrDat.UsrCod,
+						   Gbl.Usrs.Other.UsrDat.UsrCod);
 
 		     /* Add path where new file is created to table of expanded folders */
 		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
@@ -9744,7 +9752,9 @@ void Brw_SetDocumentAsVisible (void)
       Brw_ChangeFileOrFolderHiddenInDB (Gbl.FileBrowser.Priv.FullPathInTree,false);
 
    /***** Remove the affected clipboards *****/
-   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				 Gbl.Usrs.Me.UsrDat.UsrCod,
+				 Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Write message of confirmation *****/
    Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -9779,7 +9789,9 @@ void Brw_SetDocumentAsHidden (void)
       Brw_ChangeFileOrFolderHiddenInDB (Gbl.FileBrowser.Priv.FullPathInTree,true);
 
    /***** Remove the affected clipboards *****/
-   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				 Gbl.Usrs.Me.UsrDat.UsrCod,
+				 Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Write confirmation message *****/
    Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,

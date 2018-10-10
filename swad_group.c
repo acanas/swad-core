@@ -1182,7 +1182,7 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
   {
    char Query[512];
-   bool ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from all the groups of the course *****/
    sprintf (Query,"DELETE FROM crs_grp_usr"
@@ -1206,7 +1206,7 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
 void Grp_RemUsrFromAllGrps (long UsrCod)
   {
    char Query[128];
-   bool ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from all groups *****/
    sprintf (Query,"DELETE FROM crs_grp_usr WHERE UsrCod=%ld",
@@ -1226,7 +1226,7 @@ void Grp_RemUsrFromAllGrps (long UsrCod)
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
   {
    char Query[256];
-   bool ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from group *****/
    sprintf (Query,"DELETE FROM crs_grp_usr"
@@ -3325,7 +3325,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
       return false;
 
    /***** 5. Fast check: It's me? *****/
-   ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 

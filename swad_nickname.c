@@ -373,7 +373,7 @@ void Nck_UpdateNick (void)
          sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
                   NewNicknameWithoutArroba);
         }
-      else if (strcasecmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba)) // My nickname does not match, not even case insensitive, the new nickname
+      else if (strcasecmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba))	// My nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
          sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
@@ -385,7 +385,7 @@ void Nck_UpdateNick (void)
             sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
                            " WHERE Nickname='%s' AND UsrCod<>%ld",
                      NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
-            if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that my nickname
+            if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that my nickname
               {
                Error = true;
                sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_had_been_registered_by_another_user,

@@ -401,7 +401,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 
 bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
   {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (ItsMe)
       return true;
@@ -505,7 +505,7 @@ void ID_PutLinkToChangeUsrIDs (void)
   {
    extern const char *Txt_Change_IDs;
    Act_Action_t NextAction;
-   bool ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Link for changing the password *****/
    if (ItsMe)
@@ -561,7 +561,7 @@ void ID_ShowFormOthIDs (void)
 
 	 /***** Form with the user's ID *****/
          Tbl_StartTableWide (2);
-         ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+         ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
          Tbl_EndTable ();
 
@@ -750,7 +750,7 @@ void ID_RemoveOtherUsrID (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Remove user's ID *****/
-      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
       ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Update list of IDs *****/
@@ -868,7 +868,7 @@ void ID_NewOtherUsrID (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** New user's ID *****/
-      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
       ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Update list of IDs *****/
@@ -999,6 +999,7 @@ void ID_ConfirmOtherUsrID (void)
    long OriginalActCod;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanConfirm;
+   bool ItsMe;
    bool Found;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
@@ -1013,9 +1014,12 @@ void ID_ConfirmOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-      if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
+     {
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+      if (!ItsMe)	// Not me
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;
+     }
 
    if (ICanConfirm)
      {

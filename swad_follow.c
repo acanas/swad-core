@@ -496,7 +496,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Unfollow;
    extern const char *Txt_Follow;
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Start section *****/
    Lay_StartSection (Fol_FOLLOW_SECTION_ID);
@@ -531,7 +531,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 
    /* I follow user? */
    fprintf (Gbl.F.Out,"<div id=\"follow_usr\">");
-   if (Gbl.Usrs.Me.Logged && !ItsMe)	// It's another logged user
+   if (!ItsMe)	// Not me
      {
       if (IFollowUsr)	// I follow this user
 	{
@@ -755,6 +755,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData FollowerUsrDat;
+   bool ItsMe;
 
    /***** Show user's profile *****/
    if (Prf_ShowUserProfile (UsrDat))
@@ -804,7 +805,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** If it's me, mark possible notification as seen *****/
-      if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
+      ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+      if (ItsMe)
 	 Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
 			      -1L,-1L,
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -823,7 +825,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"FOLLOW_PHOTO\">");
@@ -851,7 +853,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       Act_FormEnd ();
      }
 
-   ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (!Gbl.Usrs.Me.Logged ||	// Not logged
        ItsMe)			// It's me
       /* Inactive icon to follow/unfollow */
@@ -879,7 +881,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<tr>"

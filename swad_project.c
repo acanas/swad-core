@@ -1976,7 +1976,7 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 	 DB_QueryREPLACE (Query,"can not add user to project");
 
 	 /***** Flush cache *****/
-	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (ItsMe)
 	    Prj_FlushCacheMyRoleInProject ();
 
@@ -2050,7 +2050,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
      {
       if (Prj_CheckIfICanEditProject (Prj.PrjCod))
 	{
-	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Show question and button to remove user as administrator *****/
 	 /* Start alert */
@@ -2141,7 +2141,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 DB_QueryDELETE (Query,"can not remove a user from a project");
 
 	 /***** Flush cache *****/
-	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (ItsMe)
 	    Prj_FlushCacheMyRoleInProject ();
 
@@ -3460,7 +3460,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
    DB_QueryDELETE (Query,"can not remove user from projects");
 
    /***** Flush cache *****/
-   ItsMe = (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrCod);
    if (ItsMe)
       Prj_FlushCacheMyRoleInProject ();
   }

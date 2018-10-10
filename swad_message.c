@@ -1453,7 +1453,8 @@ static void Msg_SetReceivedMsgAsReplied (long MsgCod)
    char Query[512];
 
    /***** Update received message by setting Replied field to true *****/
-   sprintf (Query,"UPDATE msg_rcv SET Replied='Y' WHERE MsgCod=%ld AND UsrCod=%ld",
+   sprintf (Query,"UPDATE msg_rcv SET Replied='Y'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update a received message");
   }

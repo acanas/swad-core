@@ -151,7 +151,8 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
                                           Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose);
 
-static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegName);
+static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,
+			     const char *InsCtrDegName);
 static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName);
 
@@ -308,6 +309,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    bool CreateNotif;
    bool NotifyByEmail;
    Ntf_NotifyEvent_t NotifyEvent;
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if user's role is allowed *****/
    switch (NewRole)
@@ -336,8 +338,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << NotifyEvent));
-   NotifyByEmail = CreateNotif &&
-		   (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
+   NotifyByEmail = CreateNotif && !ItsMe &&
 		   (UsrDat->Prefs.EmailNtfEvents & (1 << NotifyEvent));
    if (CreateNotif)
       Ntf_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
@@ -3527,7 +3528,7 @@ static bool Enr_CheckIfICanRemUsrFromCrs (void)
      {
       case Rol_STD:
       case Rol_NET:
-	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 return ItsMe;	// A student or non-editing teacher can remove herself/himself
       case Rol_TCH:
       case Rol_DEG_ADM:
@@ -3619,7 +3620,7 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if it's forbidden to remove an administrator */
-         ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+         ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
          ICanRemove = (ItsMe ||
                        (Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
                        (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
@@ -3878,7 +3879,7 @@ void Enr_ModifyUsr1 (void)
    /***** Get user from form *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Get the action to do *****/
       Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t)
@@ -4103,7 +4104,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Show question and button to remove user as administrator *****/
       /* Start alert */
@@ -4157,7 +4158,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[1024];
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
@@ -4242,7 +4243,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 /** Ask if really wanted to remove an administrator from current institution */
 /*****************************************************************************/
 
-static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegName)
+static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,
+			     const char *InsCtrDegName)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;

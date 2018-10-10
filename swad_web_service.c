@@ -3180,6 +3180,7 @@ int swad__sendMessage (struct soap *soap,
    bool FirstNickname = true;
    bool ThereAreNicknames = false;
    const char *Ptr;
+   bool ItsMe;
    bool NotifyByEmail;
 
    /***** Initializations *****/
@@ -3339,7 +3340,8 @@ int swad__sendMessage (struct soap *soap,
                if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
         	 {
                   /* This received message must be notified by email? */
-                  NotifyByEmail = ((Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
+        	  ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+                  NotifyByEmail = (!ItsMe &&
                                    (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_MESSAGE)));
 
                   /* Send message to this user */

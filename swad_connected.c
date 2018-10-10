@@ -961,14 +961,13 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
 	                                                                           "CON_NO_CRS");
    long UsrCod;
-   struct UsrData OtherUsrDat;
-   struct UsrData *UsrDat;
    bool ItsMe;
+   struct UsrData *UsrDat;
+   struct UsrData OtherUsrDat;
 
    /***** Get user's code from list *****/
    UsrCod = Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].UsrCod;
-   ItsMe = (Gbl.Usrs.Me.Logged &&
-	    UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// It's me
+   ItsMe = Usr_ItsMe (UsrCod);
 
    if (ItsMe)
       UsrDat = &Gbl.Usrs.Me.UsrDat;

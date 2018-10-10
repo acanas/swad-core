@@ -900,7 +900,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
 
 void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
   {
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    switch (RequestOrRemove)
      {
@@ -927,8 +927,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 
 bool Acc_CheckIfICanEliminateAccount (long UsrCod)
   {
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	         UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrCod);
 
    // A user logged as superuser can eliminate any user except her/him
    // Other users only can eliminate themselves
@@ -936,7 +935,7 @@ bool Acc_CheckIfICanEliminateAccount (long UsrCod)
 	    (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0)	// I can not be system admin
 	   ||
            (!ItsMe &&							// It's not me
-             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));		// I am logged as system admin
+             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));			// I am logged as system admin
   }
 
 /*****************************************************************************/

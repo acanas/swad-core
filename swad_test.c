@@ -7714,7 +7714,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    double ScoreInThisTest;
    double TotalScoreOfAllTests = 0.0;
    unsigned NumExamsVisibleByTchs = 0;
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ICanViewTest;
    bool ICanViewScore;
    time_t TimeUTC;
@@ -8117,7 +8117,7 @@ void Tst_ShowOneTestResult (void)
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
 
    /***** Check if I can view this test result *****/
-   ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:

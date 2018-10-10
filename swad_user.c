@@ -409,6 +409,16 @@ void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods)
   }
 
 /*****************************************************************************/
+/************************ Check if I am a given user *************************/
+/*****************************************************************************/
+
+bool Usr_ItsMe (long UsrCod)
+  {
+   return Gbl.Usrs.Me.Logged &&
+	  (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /******** Get user's code from database using encrypted user's code **********/
 /*****************************************************************************/
 // Input: UsrDat->EncryptedUsrCod must hold user's encrypted code
@@ -854,7 +864,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
 
 bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
   {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (ItsMe)
       return true;
@@ -888,7 +898,7 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
 
 bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
   {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (ItsMe)
       return true;
@@ -1095,7 +1105,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
       return false;
 
    /***** 7. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -1156,7 +1166,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
      }
 
    /***** 4. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -1197,7 +1207,7 @@ bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat)
       return false;
 
    /***** 6. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -1251,7 +1261,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
       return false;
 
    /***** 7. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -1300,7 +1310,7 @@ bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
       return false;
 
    /***** 7. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -1329,7 +1339,7 @@ bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
       return false;
 
    /***** 2. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -1365,7 +1375,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: It's me? *****/
-   ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
@@ -3701,7 +3711,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    struct Instit Ins;
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    bool ShowData = (ItsMe || UsrDat->Accepted ||
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
@@ -7244,7 +7254,7 @@ static void Usr_UpdateMyColsClassPhotoInDB (void)
   {
    char Query[256];
 
-   if (Gbl.Usrs.Me.UsrDat.UsrCod > 0 && Gbl.CurrentCrs.Crs.CrsCod > 0)
+   if (Gbl.Usrs.Me.Logged && Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       /***** Update number of colums in class photo for current course *****/
       sprintf (Query,"UPDATE crs_usr SET ColsClassPhoto=%u"
@@ -7346,7 +7356,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
   {
    char Query[256];
 
-   if (Gbl.Usrs.Me.UsrDat.UsrCod > 0 && Gbl.CurrentCrs.Crs.CrsCod > 0)
+   if (Gbl.Usrs.Me.Logged && Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       /***** Update number of colums in class photo for current course *****/
       sprintf (Query,"UPDATE crs_usr SET ListWithPhotos='%c'"

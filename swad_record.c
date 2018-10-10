@@ -1152,7 +1152,7 @@ static void Rec_ShowRecordOneStdCrs (void)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+            ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
             if (ItsMe)
 	      {
 	       fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
@@ -1204,6 +1204,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
+   bool ItsMe;
    char RecordSectionId[32];
 
    /***** Assign users listing type depending on current action *****/
@@ -1281,16 +1282,19 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
             /* Record of the student in the course */
             if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+              {
+               ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 	       if ( Gbl.Usrs.Me.Role.Logged == Rol_NET     ||
 		    Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
 		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-		   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&		// I am student in this course...
-		    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// ...and it's me
+		   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// I am student in this course...
+		    ItsMe))					// ...and it's me
 		 {
 		  fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
                   fprintf (Gbl.F.Out,"</div>");
 		 }
+              }
 
             /* End container for this user */
             fprintf (Gbl.F.Out,"</div>");
@@ -1732,7 +1736,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// I am a student
-	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);	// It's me
+	 ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	 if (ItsMe)
 	   {
 	    switch (TypeOfView)
@@ -1764,7 +1768,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		     break;
 		    }
 	   }
-	 else	// It's not me ==> I am a student trying to do something forbidden
+	 else	// Not me ==> I am a student trying to do something forbidden
 	    Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
 	 break;
       case Rol_NET:
@@ -2227,7 +2231,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Act_Action_t NextAction;
 
    /***** Initializations *****/
-   ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    IAmLoggedAsTeacherOrSysAdm = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||		// My current role is non-editing teacher
 	                         Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// My current role is teacher
                                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// My current role is system admin
@@ -2470,7 +2474,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 		     Grp_ShowLstGrpsToChgMyGrps ();
 		 }
-	       else
+	       else	// Not me
 		  Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 	      }
 
@@ -2512,7 +2516,7 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    Act_Action_t NextAction;
 
@@ -2610,7 +2614,7 @@ static void Rec_PutIconsCommands (void)
 					 "exam64x64.png",
 					 Txt_View_test_results,NULL,
 					 NULL);
-	       else
+	       else	// Not me
 		  Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
 					 "exam64x64.png",
 					 Txt_View_test_results,NULL,
@@ -2625,7 +2629,7 @@ static void Rec_PutIconsCommands (void)
 					 "folder64x64.gif",
 					 Txt_View_homework,NULL,
 					 NULL);
-	       else							// I am not a student in current course
+	       else	// Not me						// I am not a student in current course
 		  Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
 					 "folder64x64.gif",
 					 Txt_View_homework,NULL,
@@ -2640,7 +2644,7 @@ static void Rec_PutIconsCommands (void)
 					 "rollcall64x64.png",
 					 Txt_View_attendance,NULL,
 					 NULL);
-	       else
+	       else	// Not me
 		  Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
 					 "rollcall64x64.png",
 					 Txt_View_attendance,NULL,
@@ -2662,7 +2666,7 @@ static void Rec_PutIconsCommands (void)
 		             NULL);
 
       /***** Button to follow / unfollow *****/
-      if (!ItsMe)
+      if (!ItsMe)	// Not me
 	{
 	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 				       Gbl.Record.UsrDat->UsrCod))
@@ -2814,8 +2818,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
       if (PutFormLinks)
 	{
 	 /* Put form to go to public profile */
-         ItsMe = (Gbl.Usrs.Me.Logged &&
-	          UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+         ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	 Act_FormStart (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (ItsMe ? Txt_My_public_profile :

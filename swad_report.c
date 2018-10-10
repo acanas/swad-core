@@ -781,7 +781,8 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    sprintf (Query,"SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
                   " WHERE ClickTime>=FROM_UNIXTIME(%ld) AND UsrCod=%ld"
 		  " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
-            (long) Report->UsrFigures.FirstClickTimeUTC,Gbl.Usrs.Me.UsrDat.UsrCod,
+            (long) Report->UsrFigures.FirstClickTimeUTC,
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Rep_MAX_ACTIONS);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 

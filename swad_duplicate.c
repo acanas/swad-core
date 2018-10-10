@@ -86,7 +86,7 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /* Check if it's allowed to me to report users as possible duplicatedr */
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
       if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
 	 /***** Insert possible duplicate into database *****/

@@ -207,6 +207,7 @@ void Prf_RequestUserProfile (void)
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
    bool ProfileShown = false;
 
    /***** Get user's data *****/
@@ -240,7 +241,8 @@ void Prf_GetUsrDatAndShowUserProfile (void)
      }
 
    /***** If it's not me, mark possible notification as seen *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
+   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+   if (!ItsMe)	// Not me
       Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
                            Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
 			   Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -257,8 +259,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
    unsigned NumFollowers;
    bool UsrFollowsMe;
    bool IFollowUsr;
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	         UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
    if (Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat))
@@ -268,10 +269,10 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 if (ItsMe)	// It's me
+	 if (ItsMe)
 	    /* Put link to show another user's profile */
 	    Prf_PutLinkRequestAnotherUserProfile ();
-	 else		// Not me
+	 else	// Not me
 	    /* Put link to show my public profile */
 	    Prf_PutLinkMyPublicProfile ();
 
@@ -282,7 +283,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	}
 
       /***** Shared record card *****/
-      if (!ItsMe &&				// If not it's me...
+      if (!ItsMe &&				// If not me...
 	  Gbl.CurrentCrs.Crs.CrsCod > 0)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */

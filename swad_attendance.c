@@ -2037,6 +2037,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
    bool ShowPhoto;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
+   bool ItsMe;
    bool ICanChangeStdAttendance;
    bool ICanEditStdComment;
    bool ICanEditTchComment;
@@ -2046,7 +2047,8 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
      {
       case Rol_STD:
 	 // A student can see only her/his attendance
-	 if (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+	 ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+	 if (!ItsMe)
 	    Lay_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = false;
 	 ICanEditStdComment = Att->Open;	// Attendance event is open
@@ -2253,7 +2255,8 @@ void Att_RegisterMeAsStdInAttEvent (void)
    if (Att.Open)
      {
       /***** Get comments for this student *****/
-      Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,CommentStd,CommentTch);
+      Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                                         CommentStd,CommentTch);
       sprintf (CommentParamName,"CommentStd%ld",Gbl.Usrs.Me.UsrDat.UsrCod);
       Par_GetParToHTML (CommentParamName,CommentStd,Cns_MAX_BYTES_TEXT);
 

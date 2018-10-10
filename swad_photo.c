@@ -135,7 +135,7 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
 
 bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
   {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (ItsMe)
       return true;
@@ -172,7 +172,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    char PhotoURL[PATH_MAX + 1];
    const char *TitleText;
    Act_Action_t NextAction;
-   bool ItsMe = (Gbl.Record.UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
 
    /***** Link for changing / uploading the photo *****/
    if (ItsMe)
@@ -300,7 +300,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    Act_Action_t NextAction;
 
    /***** Start box *****/
@@ -366,7 +366,7 @@ void Pho_SendPhotoUsr (void)
       if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
 	{
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	 ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
          if (ItsMe)
 	    /***** Form to send my photo *****/
             Pho_ReqMyPhoto ();
@@ -969,7 +969,8 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       /* Update number of clicks */
       if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
         {
-         sprintf (Query,"UPDATE clicks_without_photo SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
+         sprintf (Query,"UPDATE clicks_without_photo"
+			" SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          DB_QueryUPDATE (Query,"can not update number of clicks without photo");
          NumClicks++;

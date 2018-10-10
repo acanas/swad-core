@@ -235,6 +235,7 @@ void Usr_UsrDataDestructor (struct UsrData *UsrDat);
 void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
+bool Usr_ItsMe (long UsrCod);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
 void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat);	// TODO: Remove this funcion, it's not used
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat);

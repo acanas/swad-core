@@ -365,7 +365,7 @@ void Agd_ShowUsrAgenda (void)
 
 	 /***** Start box *****/
 	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
-	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Box_StartBox ("100%",Gbl.Title,
 		       ItsMe ? Agd_PutIconsMyPublicAgenda :
 			       Agd_PutIconsOtherPublicAgenda,
@@ -408,7 +408,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	   {
 	    /***** Start box *****/
 	    sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
-	    ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	    Box_StartBox ("100%",Gbl.Title,
 			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 				  Agd_PutIconsOtherPublicAgenda,
