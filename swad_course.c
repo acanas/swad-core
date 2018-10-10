@@ -2924,19 +2924,29 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
   {
    extern const char *Txt_My_courses;
 
-   /***** Start form *****/
-   Act_FormStartAnchor (ActMyCrs,NULL);
+   if (Gbl.Usrs.Me.Logged)		// I am logged
+     {
+      /***** Fill the list with the courses I belong to, if not filled *****/
+      Usr_GetMyCourses ();
 
-   /***** Put icon with link *****/
-   Act_LinkFormSubmit (Txt_My_courses,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/hierarchy64x64.png\" alt=\"%s\" title=\"%s\""
-	              " class=\"BC_ICON ICO_HIGHLIGHT\" />"
-	              "</a>",
-            Gbl.Prefs.PathTheme,
-	    Txt_My_courses,Txt_My_courses);
+      if (Gbl.Usrs.Me.MyCrss.Num)	// I am enrolled in at least one course
+	{
+	 /***** Start form *****/
+	 Act_FormStart (ActMyCrs);
 
-   /***** End form *****/
-   Act_FormEnd ();
+	 /***** Put icon with link *****/
+	 Act_LinkFormSubmit (Txt_My_courses,NULL,NULL);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/hierarchy64x64.png\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"BC_ICON ICO_HIGHLIGHT\" />"
+			    "</a>",
+		  Gbl.Prefs.PathTheme,
+		  Txt_My_courses,Txt_My_courses);
+
+	 /***** End form *****/
+	 Act_FormEnd ();
+	}
+     }
   }
 
 /*****************************************************************************/

@@ -54553,81 +54553,81 @@ const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to
 const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 	{
 #if   L==1	// Usr_SEX_UNKNOWN
-	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
+	"No est&agrave; inscrit/a en cap assignatura."
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
 	"You are not enroled in any course."
 #elif L==4
-	"Usted no est&aacute; inscrito/a en ninguna asignatura."
+	"No est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5
 	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
+	"No est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
 #elif L==7
 	"Non ti sei iscritto/a ad alcun corso."
 #elif L==8
-	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
+	"Nie jeste&sacute; zapisany na &zdot;aden kurs."
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif
 	,
 #if   L==1	// Usr_SEX_FEMALE
-	"Usted no est&aacute; inscrita en ninguna asignatura."	// Necessita traduccio
+	"No est&agrave; inscrita en cap assignatura."
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
 	"You are not enroled in any course."
 #elif L==4
-	"Usted no est&aacute; inscrita en ninguna asignatura."
+	"No est&aacute; inscrita en ninguna asignatura."
 #elif L==5
 	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	"Usted no est&aacute; inscrita en ninguna asignatura."	// Okoteve traducción
+	"No est&aacute; inscrita en ninguna asignatura."	// Okoteve traducción
 #elif L==7
 	"Non ti sei iscritta ad alcun corso."
 #elif L==8
-	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
+	"Nie jeste&sacute; zapisany na &zdot;aden kurs."
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculada em nenhuma disciplina."
 #endif
 	,
 #if   L==1	// Usr_SEX_MALE
-	"Usted no est&aacute; inscrito en ninguna asignatura."	// Necessita traduccio
+	"No est&agrave; inscrit en cap assignatura."
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
 	"You are not enroled in any course."
 #elif L==4
-	"Usted no est&aacute; inscrito en ninguna asignatura."
+	"No est&aacute; inscrito en ninguna asignatura."
 #elif L==5
 	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	"Usted no est&aacute; inscrito en ninguna asignatura."	// Okoteve traducción
+	"No est&aacute; inscrito en ninguna asignatura."	// Okoteve traducción
 #elif L==7
 	"Non ti sei iscritto ad alcun corso."
 #elif L==8
-	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
+	"Nie jeste&sacute; zapisany na &zdot;aden kurs."
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado em nenhuma disciplina."
 #endif
 	,
 #if   L==1	// Usr_SEX_ALL
-	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
+	"No est&agrave; inscrit/a en cap assignatura."
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
 	"You are not enroled in any course."
 #elif L==4
-	"Usted no est&aacute; inscrito/a en ninguna asignatura."
+	"No est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5
 	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
+	"No est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
 #elif L==7
 	"Non ti sei iscritto/a ad alcun corso."
 #elif L==8
-	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
+	"Nie jeste&sacute; zapisany na &zdot;aden kurs."
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif

@@ -4027,7 +4027,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-                      "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
+                      "<label for=\"OthCtyCod\" class=\"%s\">%s*:</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
             ClassForm,Txt_Country);
@@ -4068,7 +4068,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-                      "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
+                      "<label for=\"OthInsCod\" class=\"%s\">%s*:</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
             ClassForm,Txt_Institution);
@@ -4114,7 +4114,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-                         "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
+                         "<label for=\"OthCtrCod\" class=\"%s\">%s*:</label>"
 			 "</td>"
 			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
 	       ClassForm,Txt_Centre);
@@ -4158,7 +4158,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-                         "<label for=\"%s\" class=\"%s\">%s:</label>"
+                         "<label for=\"%s\" class=\"%s\">%s*:</label>"
 			 "</td>"
 			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
 	       Dpt_PARAM_DPT_COD_NAME,ClassForm,Txt_Department);
