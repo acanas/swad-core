@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.3.9 (2018-10-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.3.10 (2018-10-11)"
 #define CSS_FILE		"swad18.3.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.3.10:  Oct 11, 2018  Fixed bug in text of menu options. (235007 lines)
         Version 18.3.9:   Oct 11, 2018  Code refactoring related with checking if I am the logged user. (235046 lines)
         Version 18.3.8:   Oct 10, 2018  Code refactoring related with checking if I am the logged user. (234984 lines)
         Version 18.3.7:   Oct 10, 2018  Fixed bug in icon in breadcrumb to go to user's courses. (234947 lines)
