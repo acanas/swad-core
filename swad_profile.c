@@ -173,7 +173,7 @@ void Prf_RequestUserProfile (void)
      }
 
    /***** Start form *****/
-   Act_FormStart (ActSeeOthPubPrf);
+   Act_StartForm (ActSeeOthPubPrf);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
@@ -196,7 +196,7 @@ void Prf_RequestUserProfile (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -603,12 +603,12 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Calculate;
 
-   Act_FormStart (Action);
+   Act_StartForm (Action);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
    Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
                                NULL);
    Ico_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -758,12 +758,12 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
 	    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs);
 
    /***** Rank in form to go to ranking *****/
-   Act_FormStart (ActSeeUseGbl);
+   Act_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Sta_USERS_RANKING);
    Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1527,14 +1527,14 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    /***** Put form to go to public profile *****/
    if (Visible)
      {
-      Act_FormStart (ActSeeOthPubPrf);
+      Act_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"<div class=\"RANK_USR\">");	// Limited width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
 	                 "</div>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    fprintf (Gbl.F.Out,"</td>");

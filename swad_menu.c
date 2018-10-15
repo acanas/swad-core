@@ -364,7 +364,7 @@ void Mnu_WriteMenuThisTab (void)
                 	                "MENU_OPT_OFF");
 
          /***** Start form and link *****/
-         Act_FormStart (NumAct);
+         Act_StartForm (NumAct);
          Act_LinkFormSubmit (Title,
                              IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
                                                    The_ClassTxtMenuOff[Gbl.Prefs.Theme],NULL);
@@ -386,7 +386,7 @@ void Mnu_WriteMenuThisTab (void)
          /***** End link and form *****/
          fprintf (Gbl.F.Out,"</div>"
 	                    "</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
          /***** End container used to highlight this option *****/
          fprintf (Gbl.F.Out,"</div>");
@@ -422,7 +422,7 @@ void Mnu_PutIconsToSelectMenu (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                Menu == Gbl.Prefs.Menu ? "PREF_ON" :
         	                        "PREF_OFF");
-      Act_FormStart (ActChgMnu);
+      Act_StartForm (ActChgMnu);
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
@@ -430,7 +430,7 @@ void Mnu_PutIconsToSelectMenu (void)
                Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

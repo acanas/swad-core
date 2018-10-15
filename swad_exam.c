@@ -720,9 +720,9 @@ static void Exa_PutButtonToCreateNewExamAnnouncement (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Act_FormStart (ActEdiExaAnn);
+   Act_StartForm (ActEdiExaAnn);
    Btn_PutConfirmButton (Txt_New_announcement_OF_EXAM);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1078,7 +1078,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       /***** Start form *****/
-      Act_FormStart (ActRcvExaAnn);
+      Act_StartForm (ActRcvExaAnn);
       if (Gbl.ExamAnns.ExaDat.ExaCod > 0)	// Existing announcement of exam
          Exa_PutParamExaCodToEdit ();
      }

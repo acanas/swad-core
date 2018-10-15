@@ -188,7 +188,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       (Gbl.Agenda.Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
 							         "PREF_OFF");
-      Act_FormStart (ActSeeMyAgd);
+      Act_StartForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents ^ (1 << PstFut),	// Toggle
 		             Gbl.Agenda.PrivatPublicEvents,
 		             Gbl.Agenda.HiddenVisiblEvents,
@@ -202,7 +202,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
 	       Image[PstFut],
 	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut],
 	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -230,7 +230,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       (Gbl.Agenda.PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
 							         "PREF_OFF");
-      Act_FormStart (ActSeeMyAgd);
+      Act_StartForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 		             Gbl.Agenda.PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
 		             Gbl.Agenda.HiddenVisiblEvents,
@@ -244,7 +244,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
 	       Image[PrvPub],
 	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub],
 	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -272,7 +272,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       (Gbl.Agenda.HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
 							         "PREF_OFF");
-      Act_FormStart (ActSeeMyAgd);
+      Act_StartForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 		             Gbl.Agenda.PrivatPublicEvents,
 		             Gbl.Agenda.HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
@@ -286,7 +286,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 	       Image[HidVis],
 	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis],
 	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -584,12 +584,12 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	{
 	 case Agd_MY_AGENDA_TODAY:
 	 case Agd_MY_AGENDA:
-	    Act_FormStart (ActSeeMyAgd);
+	    Act_StartForm (ActSeeMyAgd);
             Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,Gbl.Agenda.CurrentPage);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
 	 case Agd_ANOTHER_AGENDA:
-	    Act_FormStart (ActSeeUsrAgd);
+	    Act_StartForm (ActSeeUsrAgd);
 	    Usr_PutParamOtherUsrCodEncrypted ();
             Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Gbl.Agenda.CurrentPage);
 	    break;
@@ -602,7 +602,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
@@ -707,14 +707,14 @@ static void Agd_PutButtonToCreateNewEvent (void)
   {
    extern const char *Txt_New_event;
 
-   Act_FormStart (ActFrmNewEvtMyAgd);
+   Act_StartForm (ActFrmNewEvtMyAgd);
    Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 		          Gbl.Agenda.PrivatPublicEvents,
 		          Gbl.Agenda.HiddenVisiblEvents,
 		          Gbl.Agenda.CurrentPage,
 		          -1L);
    Btn_PutConfirmButton (Txt_New_event);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1522,12 +1522,12 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Start form *****/
    if (ItsANewEvent)
      {
-      Act_FormStart (ActNewEvtMyAgd);
+      Act_StartForm (ActNewEvtMyAgd);
       Gbl.Agenda.AgdCodToEdit = -1L;
      }
    else
      {
-      Act_FormStart (ActChgEvtMyAgd);
+      Act_StartForm (ActChgEvtMyAgd);
       Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
      }
    Agd_PutCurrentParamsMyAgenda ();
@@ -1597,7 +1597,7 @@ void Agd_RequestCreatOrEditEvent (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show current events, if any *****/
    Agd_ShowMyAgenda ();

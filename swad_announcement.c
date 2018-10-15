@@ -195,9 +195,9 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
   {
    extern const char *Txt_New_announcement;
 
-   Act_FormStart (ActWriAnn);
+   Act_StartForm (ActWriAnn);
    Btn_PutConfirmButton (Txt_New_announcement);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -407,7 +407,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Create_announcement;
 
    /***** Start form *****/
-   Act_FormStart (ActRcvAnn);
+   Act_StartForm (ActRcvAnn);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
@@ -443,7 +443,7 @@ void Ann_ShowFormAnnouncement (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

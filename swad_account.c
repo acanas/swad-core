@@ -74,16 +74,12 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail);
-static void Acc_ShowFormChgMyAccount (void);
 static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
                                      char *NewEncryptedPassword);
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
 
-static void Acc_PutLinkToRemoveMyAccount (void);
 static void Acc_PutParamsToRemoveMyAccount (void);
-
-static void Acc_PrintAccountSeparator (void);
 
 static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
@@ -114,7 +110,7 @@ void Acc_ShowFormMyAccount (void)
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered;
 
    if (Gbl.Usrs.Me.Logged)
-      Acc_ShowFormChgMyAccountAndPwd ();
+      Acc_ShowFormChgMyAccount ();
    else	// Not logged
      {
       /***** Links to other actions *****/
@@ -152,7 +148,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
 
    /***** Form to request user's ID for possible account already created *****/
-   Act_FormStart (ActChkUsrAcc);
+   Act_StartForm (ActChkUsrAcc);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s:&nbsp;"
 		      "<input type=\"text\" name=\"ID\""
@@ -162,7 +158,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
    Btn_PutConfirmButton (Txt_Check);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -308,10 +304,10 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    /***** Button to login with this account *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   Act_FormStart (ActLogInNew);
+   Act_StartForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -344,7 +340,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Start form to enter some data of the new user *****/
-   Act_FormStart (ActCreUsrAcc);
+   Act_StartForm (ActCreUsrAcc);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Create_account,NULL,
@@ -397,7 +393,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_account);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -416,39 +412,20 @@ void Acc_ShowFormGoToRequestNewAccount (void)
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Button to go to request the creation of a new account *****/
-   Act_FormStart (ActFrmMyAcc);
+   Act_StartForm (ActFrmMyAcc);
    Btn_PutCreateButton (Txt_Create_account);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
   }
 
 /*****************************************************************************/
-/************** Show forms to change my account and my password **************/
-/*****************************************************************************/
-
-void Acc_ShowFormChgMyAccountAndPwd (void)
-  {
-   /***** Show form to change my account *****/
-   Acc_ShowFormChgMyAccount ();
-
-   /***** Show form to change my password *****/
-   Pwd_ShowFormChgMyPwd ();
-  }
-
-/*****************************************************************************/
 /*********************** Show form to change my account **********************/
 /*****************************************************************************/
 
-static void Acc_ShowFormChgMyAccount (void)
+void Acc_ShowFormChgMyAccount (void)
   {
-   extern const char *Hlp_PROFILE_Account;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
-   extern const char *Txt_Please_fill_in_your_email_address;
-   extern const char *Txt_Please_fill_in_your_ID;
-   extern const char *Txt_Please_check_and_confirm_your_email_address;
-   extern const char *Txt_User_account;
    bool IMustFillNickname   = false;
    bool IMustFillEmail      = false;
    bool IShouldConfirmEmail = false;
@@ -473,63 +450,30 @@ static void Acc_ShowFormChgMyAccount (void)
 	 IShouldFillID = true;
      }
 
-   /***** Show alert to report that confirmation email has been sent *****/
-   if (Gbl.Usrs.Me.ConfirmEmailJustSent)
-      Mai_ShowMsgConfirmEmailHasBeenSent ();
+   /***** Start container for this user *****/
+   fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
-   /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_User_account,Acc_PutLinkToRemoveMyAccount,
-                      Hlp_PROFILE_Account,Box_NOT_CLOSABLE,2);
+   /***** Show form to change my nickname and my email *****/
+   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+   Nck_ShowFormChangeMyNickname (IMustFillNickname);
+   Mai_ShowFormChangeMyEmail (IMustFillEmail,IShouldConfirmEmail);
+   fprintf (Gbl.F.Out,"</div>");
 
-   /***** Nickname *****/
-   if (IMustFillNickname)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\">");
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
-   Nck_ShowFormChangeUsrNickname ();
+   /***** Show form to change my ID and my password *****/
+   fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+   ID_ShowFormChangeMyID (IShouldFillID);
+   Pwd_ShowFormChgMyPwd ();
+   fprintf (Gbl.F.Out,"</div>");
 
-   /***** Separator *****/
-   Acc_PrintAccountSeparator ();
-
-   /***** Email *****/
-   if (IMustFillEmail || IShouldConfirmEmail)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\">");
-      Ale_ShowAlert (Ale_WARNING,IMustFillEmail ? Txt_Please_fill_in_your_email_address :
-	                                          Txt_Please_check_and_confirm_your_email_address);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
-   Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,true);
-
-   /***** Separator *****/
-   Acc_PrintAccountSeparator ();
-
-   /***** User's ID *****/
-   if (IShouldFillID)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\">");
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
-   ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,true);
-
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+   /***** Start container for this user *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
 /************* Put an icon (form) to request removing my account *************/
 /*****************************************************************************/
 
-static void Acc_PutLinkToRemoveMyAccount (void)
+void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
@@ -545,23 +489,6 @@ static void Acc_PutParamsToRemoveMyAccount (void)
    Usr_PutParamMyUsrCodEncrypted ();
    Par_PutHiddenParamUnsigned ("RegRemAction",
                                (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-  }
-
-/*****************************************************************************/
-/******* Draw a separator between different parts of new account form ********/
-/*****************************************************************************/
-
-static void Acc_PrintAccountSeparator (void)
-  {
-   extern const char *The_ClassSeparator[The_NUM_THEMES];
-
-   /***** Separator *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"CENTER_MIDDLE\">"
-		      "<hr class=\"%s\" />"
-		      "</td>"
-		      "</tr>",
-	    The_ClassSeparator[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
@@ -867,7 +794,7 @@ void Acc_AfterCreationNewAccount (void)
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
       /***** Show form with account data *****/
-      Acc_ShowFormChgMyAccountAndPwd ();
+      Acc_ShowFormChgMyAccount ();
      }
   }
 
@@ -963,16 +890,16 @@ void Acc_AskIfRemoveMyAccount (void)
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
 
    /* Show form to request confirmation */
-   Act_FormStart (ActRemMyAcc);
+   Act_StartForm (ActRemMyAcc);
    Pwd_AskForConfirmationOnDangerousAction ();
    Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 
-   /***** Show forms to change my account and my password *****/
-   Acc_ShowFormChgMyAccountAndPwd ();
+   /***** Show forms to change my account *****/
+   Acc_ShowFormChgMyAccount ();
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -991,11 +918,11 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* Show form to request confirmation */
-      Act_FormStart (ActRemUsrGbl);
+      Act_StartForm (ActRemUsrGbl);
       Usr_PutParamOtherUsrCodEncrypted ();
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Eliminate_user_account);
-      Act_FormEnd ();
+      Act_EndForm ();
 
       /* End alert */
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);

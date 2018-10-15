@@ -3131,8 +3131,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewMaiMe	*/{1088,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,May_NewMyUsrEmail		,NULL},
    /* ActCnfMai		*/{1091,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ConfirmEmail		,NULL},
 
-   /* ActFrmChgMyPwd	*/{  34,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormChgMyAccountAndPwd		,NULL},
-   /* ActChgPwd		*/{  35,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_ActChgMyPwd		,Acc_ShowFormChgMyAccountAndPwd		,NULL},
+   /* ActFrmChgMyPwd	*/{  34,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormChgMyAccount	,NULL},
+   /* ActChgPwd		*/{  35,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_ActChgMyPwd		,Acc_ShowFormChgMyAccount	,NULL},
 
    /* ActReqRemMyAcc	*/{1430,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_AskIfRemoveMyAccount	,NULL},
    /* ActRemMyAcc	*/{1431,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_RemoveMyAccount		,NULL},
@@ -4925,7 +4925,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+static void Act_StartFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
@@ -5134,56 +5134,56 @@ char *Act_GetActionTextFromDB (long ActCod,
 /******************************** Start a form *******************************/
 /*****************************************************************************/
 
-void Act_FormGoToStart (Act_Action_t NextAction)
+void Act_StartFormGoTo (Act_Action_t NextAction)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
+   Act_StartFormInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
   }
 
-void Act_FormStart (Act_Action_t NextAction)
+void Act_StartForm (Act_Action_t NextAction)
   {
-   Act_FormStartAnchorOnSubmit (NextAction,NULL,NULL);
+   Act_StartFormAnchorOnSubmit (NextAction,NULL,NULL);
   }
 
-void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor)
+void Act_StartFormAnchor (Act_Action_t NextAction,const char *Anchor)
   {
-   Act_FormStartAnchorOnSubmit (NextAction,Anchor,NULL);
+   Act_StartFormAnchorOnSubmit (NextAction,Anchor,NULL);
   }
 
-void Act_FormStartOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
+void Act_StartFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
   {
-   Act_FormStartAnchorOnSubmit (NextAction,NULL,OnSubmit);
+   Act_StartFormAnchorOnSubmit (NextAction,NULL,OnSubmit);
   }
 
-void Act_FormStartAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
+void Act_StartFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
+   Act_StartFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
-void Act_FormStartUnique (Act_Action_t NextAction)
+void Act_StartFormUnique (Act_Action_t NextAction)
   {
-   Act_FormStartUniqueAnchor (NextAction,NULL);
+   Act_StartFormUniqueAnchor (NextAction,NULL);
   }
 
-void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
+void Act_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.UniqueId,"form_%s_%d",
             Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
+   Act_StartFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
 
-void Act_FormStartId (Act_Action_t NextAction,const char *Id)
+void Act_StartFormId (Act_Action_t NextAction,const char *Id)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   Act_FormStartInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
+   Act_StartFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
 // Id can not be NULL
-static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+static void Act_StartFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
@@ -5280,7 +5280,7 @@ void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
    sprintf (ParamsStr,"%s%s%s",ParamAction,ParamSession,ParamLocation);
   }
 
-void Act_FormEnd (void)
+void Act_EndForm (void)
   {
    if (Gbl.Form.Inside)
      {

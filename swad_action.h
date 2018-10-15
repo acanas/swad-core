@@ -1662,17 +1662,17 @@ const char *Act_GetSubtitleAction (Act_Action_t Action);
 char *Act_GetActionTextFromDB (long ActCod,
                                char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1]);
 
-void Act_FormGoToStart (Act_Action_t NextAction);
-void Act_FormStart (Act_Action_t NextAction);
-void Act_FormStartOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
-void Act_FormStartAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
-void Act_FormStartUnique (Act_Action_t NextAction);
-void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor);
-void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor);
-void Act_FormStartId (Act_Action_t NextAction,const char *Id);
+void Act_StartFormGoTo (Act_Action_t NextAction);
+void Act_StartForm (Act_Action_t NextAction);
+void Act_StartFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
+void Act_StartFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
+void Act_StartFormUnique (Act_Action_t NextAction);
+void Act_StartFormAnchor (Act_Action_t NextAction,const char *Anchor);
+void Act_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor);
+void Act_StartFormId (Act_Action_t NextAction,const char *Id);
 void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion);
-void Act_FormEnd (void);
+void Act_EndForm (void);
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,
                          const char *OnSubmit);
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle);

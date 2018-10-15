@@ -144,7 +144,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Ale_ShowAlert (Ale_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
 
    /***** Write a form to import questions *****/
-   Act_FormStart (ActImpTstQst);
+   Act_StartForm (ActImpTstQst);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\".xml\""
@@ -154,7 +154,7 @@ void TsI_ShowFormImportQstsFromXML (void)
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();

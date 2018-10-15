@@ -52,6 +52,8 @@ extern struct Globals Gbl;
 
 #define ID_MAX_IDS_PER_USER	3	// Maximum number of IDs per user
 
+#define ID_ID_SECTION_ID	"id_section"
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -68,6 +70,9 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor);
+
+static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
+			            bool ItsMe,bool IShouldFillID);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
@@ -467,7 +472,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	 NextAction = ActCnfID_Oth;
 	 break;
      }
-   Act_FormStartAnchor (NextAction,Anchor);
+   Act_StartFormAnchor (NextAction,Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
       Par_PutHiddenParamLong ("OriginalActCod",
@@ -494,7 +499,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                     The_ClassFormBold[Gbl.Prefs.Theme],NULL);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -544,7 +549,6 @@ void ID_ShowFormOthIDs (void)
   {
    extern const char *Txt_ID;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   bool ItsMe;
 
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -560,36 +564,105 @@ void ID_ShowFormOthIDs (void)
 	                          &Gbl.Usrs.Other.UsrDat,NULL);
 
 	 /***** Form with the user's ID *****/
-         Tbl_StartTableWide (2);
-         ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-         ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
-         Tbl_EndTable ();
+         ID_ShowFormChangeOtherUsrID ();
 
          /***** End box *****/
          Box_EndBox ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        {
+	 Gbl.Alert.Type = Ale_WARNING;
+	 Gbl.Alert.Section = ID_ID_SECTION_ID;
+	 sprintf (Gbl.Alert.Txt,"%s",
+	          Txt_User_not_found_or_you_do_not_have_permission_);
+        }
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = ID_ID_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 /*****************************************************************************/
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
+void ID_ShowFormChangeMyID (bool IShouldFillID)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID;
+   char StrRecordWidth[10 + 1];
+
+   /***** Start section *****/
+   Lay_StartSection (ID_ID_SECTION_ID);
+
+   /***** Start box *****/
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBox (StrRecordWidth,Txt_ID,Acc_PutLinkToRemoveMyAccount,
+                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+
+   /***** Show form to change ID *****/
+   ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,
+			   true,	// ItsMe
+			   IShouldFillID);
+
+   /***** End box *****/
+   Box_EndBox ();
+
+   /***** End section *****/
+   Lay_EndSection ();
+  }
+
+/*****************************************************************************/
+/*********************** Show form to change my user's ID ********************/
+/*****************************************************************************/
+
+void ID_ShowFormChangeOtherUsrID (void)
+  {
+   /***** Start section *****/
+   Lay_StartSection (ID_ID_SECTION_ID);
+
+   /***** Show form to change ID *****/
+   ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
+			   false,	// ItsMe
+			   false);	// IShouldFillID
+
+   /***** End section *****/
+   Lay_EndSection ();
+  }
+
+/*****************************************************************************/
+/*********************** Show form to change my user's ID ********************/
+/*****************************************************************************/
+
+static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
+			            bool ItsMe,bool IShouldFillID)
+  {
+   extern const char *Hlp_PROFILE_Account;
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_ID_X_not_confirmed;
+   extern const char *Txt_ID;
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
    Act_Action_t NextAction;
+
+   /***** Show possible alert *****/
+   if (Gbl.Alert.Section == (const char *) ID_ID_SECTION_ID)
+      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+   /***** Help message *****/
+   if (IShouldFillID)
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
+
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
 
    /***** List existing user's IDs *****/
    for (NumID = 0;
@@ -598,10 +671,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      {
       if (NumID == 0)
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_TOP\">"
+			    "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+			    "<label for=\"UsrID\" class=\"%s\">"
 			    "%s:"
+			    "</label>"
 			    "</td>"
-			    "<td class=\"LEFT_TOP\">",
+			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -615,7 +690,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    /* Form to remove user's ID */
 	    if (ItsMe)
-	       Act_FormStart (ActRemID_Me);
+	       Act_StartFormAnchor (ActRemID_Me,ID_ID_SECTION_ID);
 	    else
 	      {
 	       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -631,13 +706,14 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 		     NextAction = ActRemID_Oth;
 		     break;
 		 }
-	       Act_FormStart (NextAction);
+	       Act_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
-	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
+	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\""
+			       " value=\"%s\" />",
 		     UsrDat->IDs.List[NumID].ID);
 	    Ico_PutIconRemove ();
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
 	}
 
@@ -646,7 +722,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
                UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
                                                    Txt_ID_X_not_confirmed,
                UsrDat->IDs.List[NumID].ID);
-      fprintf (Gbl.F.Out,"<span class=\"USR_ID %s\" title=\"%s\">%s</span>",
+      fprintf (Gbl.F.Out,"<span class=\"%s\" title=\"%s\">%s</span>",
                UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
                                                    "USR_ID_NC",
                Gbl.Title,
@@ -679,15 +755,15 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
       /***** Form to enter new user's ID *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
+			 "<td class=\"REC_C1_BOT RIGHT_TOP\">"
 			 "<label for=\"NewID\" class=\"%s\">%s:</label>"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\">",
+			 "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
       if (ItsMe)
-	 Act_FormStart (ActNewIDMe);
+	 Act_StartFormAnchor (ActNewIDMe,ID_ID_SECTION_ID);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -703,21 +779,23 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       NextAction = ActNewID_Oth;
 	       break;
 	   }
-	 Act_FormStart (NextAction);
+	 Act_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
-                         "<input type=\"text\" id=\"NewID\" name=\"NewID\""
+      fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewID\" name=\"NewID\""
 	                 " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
-	                 "</div>",
+	                 "<br />",
 	       ID_MAX_BYTES_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "");	// Show the most recent ID
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
+
+   /***** End table *****/
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -734,7 +812,7 @@ void ID_RemoveMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Acc_ShowFormChgMyAccountAndPwd ();
+   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -756,12 +834,16 @@ void ID_RemoveOtherUsrID (void)
       /***** Update list of IDs *****/
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-                               &Gbl.Usrs.Other.UsrDat,NULL);
+      /***** Show form again *****/
+      ID_ShowFormOthIDs ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = ID_ID_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 /*****************************************************************************/
@@ -798,14 +880,24 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 ID_RemoveUsrIDFromDB (UsrDat->UsrCod,UsrID);
 
 	 /***** Show message *****/
+	 Gbl.Alert.Type = Ale_SUCCESS;
+	 Gbl.Alert.Section = ID_ID_SECTION_ID;
 	 sprintf (Gbl.Alert.Txt,Txt_ID_X_removed,UsrID);
-	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_delete_this_ID);
+        {
+	 Gbl.Alert.Type = Ale_WARNING;
+	 Gbl.Alert.Section = ID_ID_SECTION_ID;
+	 sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_delete_this_ID);
+        }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = ID_ID_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 /*****************************************************************************/
@@ -852,7 +944,7 @@ void ID_NewMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Acc_ShowFormChgMyAccountAndPwd ();
+   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -874,12 +966,16 @@ void ID_NewOtherUsrID (void)
       /***** Update list of IDs *****/
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-                               &Gbl.Usrs.Other.UsrDat,NULL);
+      /***** Show form again *****/
+      ID_ShowFormOthIDs ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = ID_ID_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 /*****************************************************************************/
@@ -898,7 +994,6 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    unsigned NumID;
    bool AlreadyExists;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
-   bool Error = false;
 
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
@@ -924,7 +1019,8 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    if (ItsMe || UsrDat->IDs.List[NumIDFound].Confirmed)
 	      {
-	       Error = true;
+	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.Alert.Section = ID_ID_SECTION_ID;
 	       sprintf (Gbl.Alert.Txt,Txt_The_ID_X_matches_one_of_the_existing,
 			NewID);
 	      }
@@ -932,13 +1028,17 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	      {
 	       /***** Mark this ID as confirmed *****/
 	       ID_ConfirmUsrID (UsrDat,NewID);
+
+	       Gbl.Alert.Type = Ale_SUCCESS;
+	       Gbl.Alert.Section = ID_ID_SECTION_ID;
 	       sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
 			NewID);
 	      }
 	   }
 	 else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
 	   {
-	    Error = true;
+	    Gbl.Alert.Type = Ale_WARNING;
+	    Gbl.Alert.Section = ID_ID_SECTION_ID;
 	    sprintf (Gbl.Alert.Txt,Txt_A_user_can_not_have_more_than_X_IDs,
 		     ID_MAX_IDS_PER_USER);
 	   }
@@ -949,23 +1049,26 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    // Not me  ==> ID confirmed
 	    ID_InsertANewUsrIDInDB (UsrDat->UsrCod,NewID,!ItsMe);
 
+	    Gbl.Alert.Type = Ale_SUCCESS;
+	    Gbl.Alert.Section = ID_ID_SECTION_ID;
 	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_registered_successfully,
 		     NewID);
 	   }
 	}
       else        // New ID is not valid
 	{
-	 Error = true;
+	 Gbl.Alert.Type = Ale_WARNING;
+	 Gbl.Alert.Section = ID_ID_SECTION_ID;
 	 sprintf (Gbl.Alert.Txt,Txt_The_ID_X_is_not_valid,NewID);
 	}
-
-      /***** Show message *****/
-      Ale_ShowAlert (Error ? Ale_WARNING :
-			     Ale_SUCCESS,
-		     Gbl.Alert.Txt);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = ID_ID_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 /*****************************************************************************/
@@ -1004,9 +1107,6 @@ void ID_ConfirmOtherUsrID (void)
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
-   /***** Initialize alert type and message *****/
-   Gbl.Alert.Type = Ale_NONE;	// Do not show alert
-
    /***** Get where we came from *****/
    OriginalActCod = Par_GetParToLong ("OriginalActCod");
    Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
@@ -1044,6 +1144,7 @@ void ID_ConfirmOtherUsrID (void)
 	   {
 	    /***** ID found and already confirmed *****/
             Gbl.Alert.Type = Ale_INFO;
+            Gbl.Alert.Section = ID_ID_SECTION_ID;
 	    sprintf (Gbl.Alert.Txt,Txt_ID_X_had_already_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
@@ -1056,6 +1157,7 @@ void ID_ConfirmOtherUsrID (void)
 
 	    /***** Write success message *****/
 	    Gbl.Alert.Type = Ale_SUCCESS;
+            Gbl.Alert.Section = ID_ID_SECTION_ID;
 	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
@@ -1063,13 +1165,17 @@ void ID_ConfirmOtherUsrID (void)
       else	// User's ID not found
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-         sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+         Gbl.Alert.Section = ID_ID_SECTION_ID;
+         sprintf (Gbl.Alert.Txt,"%s",
+                  Txt_User_not_found_or_you_do_not_have_permission_);
 	}
      }
    else	// I can not confirm
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+      Gbl.Alert.Section = ID_ID_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_User_not_found_or_you_do_not_have_permission_);
      }
 
    /***** Show one or multiple records *****/

@@ -129,9 +129,9 @@ void Ban_SeeBanners (void)
    /***** Button to create banner *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      Act_FormStart (ActEdiBan);
+      Act_StartForm (ActEdiBan);
       Btn_PutConfirmButton (Txt_New_banner);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    /***** End box *****/
@@ -396,15 +396,15 @@ static void Ban_ListBannersForEdition (void)
       /* Put icon to remove banner */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Act_FormStart (ActRemBan);
+      Act_StartForm (ActRemBan);
       Ban_PutParamBanCod (Ban->BanCod);
       Ico_PutIconRemove ();
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Put icon to hide/show banner */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
-      Act_FormStart (Ban->Hidden ? ActShoBan :
+      Act_StartForm (Ban->Hidden ? ActShoBan :
 	                           ActHidBan);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
@@ -416,7 +416,7 @@ static void Ban_ListBannersForEdition (void)
         	             Txt_Hide,
                Ban->Hidden ? Txt_Show :
         	             Txt_Hide);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner code */
@@ -429,49 +429,49 @@ static void Ban_ListBannersForEdition (void)
 
       /* Banner short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenBanSho);
+      Act_StartForm (ActRenBanSho);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenBanFul);
+      Act_StartForm (ActRenBanFul);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_CHARS_FULL_NAME,Ban->FullName,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner image */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgBanImg);
+      Act_StartForm (ActChgBanImg);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_CHARS_IMAGE,Ban->Img,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgBanWWW);
+      Act_StartForm (ActChgBanWWW);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Ban->WWW,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
      }
@@ -828,7 +828,7 @@ static void Ban_PutFormToCreateBanner (void)
    Ban = &Gbl.Banners.EditingBan;
 
    /***** Start form *****/
-   Act_FormStart (ActNewBan);
+   Act_StartForm (ActNewBan);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_banner,NULL,
@@ -883,7 +883,7 @@ static void Ban_PutFormToCreateBanner (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1018,7 +1018,7 @@ void Ban_WriteMenuWithBanners (void)
      {
       /* Write data of this banner */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActClkBan);
+      Act_StartForm (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
       Act_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
@@ -1030,7 +1030,7 @@ void Ban_WriteMenuWithBanners (void)
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
 

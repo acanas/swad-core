@@ -169,8 +169,6 @@ void Pwd_ActChgMyPwd (void)
    char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
-   Gbl.Alert.Type = Ale_NONE;
-
    /***** Get plain password from form *****/
    Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
@@ -187,6 +185,7 @@ void Pwd_ActChgMyPwd (void)
         {
          // Passwords don't match
          Gbl.Alert.Type = Ale_WARNING;
+         Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
          sprintf (Gbl.Alert.Txt,"%s",
                   Txt_You_have_not_written_twice_the_same_new_password);
         }
@@ -204,6 +203,7 @@ void Pwd_ActChgMyPwd (void)
             Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
 
             Gbl.Alert.Type = Ale_SUCCESS;
+            Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
             sprintf (Gbl.Alert.Txt,"%s",
         	     Txt_Your_password_has_been_changed_successfully);
            }
@@ -212,6 +212,7 @@ void Pwd_ActChgMyPwd (void)
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,"%s",
 	       Txt_You_have_not_entered_your_password_correctly);
      }
@@ -250,8 +251,11 @@ void Pwd_ShowFormSendNewPwd (void)
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Get_a_new_password;
 
+   /***** Start section *****/
+   Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
+
    /***** Start form *****/
-   Act_FormStart (ActSndNewPwd);
+   Act_StartFormAnchor (ActSndNewPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Forgotten_password,NULL,
@@ -273,7 +277,10 @@ void Pwd_ShowFormSendNewPwd (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
+
+   /***** End section *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -498,8 +505,6 @@ void Pwd_UpdateOtherPwd (void)
    char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
-   Gbl.Alert.Type = Ale_NONE;
-
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -512,6 +517,7 @@ void Pwd_UpdateOtherPwd (void)
 	   {
 	    // Paswords don't match
 	    Gbl.Alert.Type = Ale_WARNING;
+            Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
 	    sprintf (Gbl.Alert.Txt,"%s",
 		     Txt_You_have_not_written_twice_the_same_new_password);
 	   }
@@ -528,6 +534,7 @@ void Pwd_UpdateOtherPwd (void)
 	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
 
 	       Gbl.Alert.Type = Ale_SUCCESS;
+               Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
 	       sprintf (Gbl.Alert.Txt,Txt_The_X_password_has_been_changed_successfully,
 			Gbl.Usrs.Other.UsrDat.FullName);
 	      }
@@ -536,6 +543,7 @@ void Pwd_UpdateOtherPwd (void)
       else
         {
 	 Gbl.Alert.Type = Ale_WARNING;
+         Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
 	 sprintf (Gbl.Alert.Txt,"%s",
 	          Txt_User_not_found_or_you_do_not_have_permission_);
         }
@@ -543,6 +551,7 @@ void Pwd_UpdateOtherPwd (void)
    else		// User not found
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,"%s",
 	       Txt_User_not_found_or_you_do_not_have_permission_);
      }
@@ -566,6 +575,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_is_too_trivial_);
       return false;
      }
@@ -575,6 +585,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_is_too_trivial_);
       return false;
      }
@@ -645,6 +656,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    if (LengthPassword < Pwd_MIN_BYTES_PLAIN_PASSWORD)	// PlainPassword too short
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,Txt_The_password_must_be_at_least_X_characters,
                Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
@@ -654,6 +666,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_can_not_contain_spaces);
       return false;
      }
@@ -667,6 +680,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    if (ItsANumber)
      {
       Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
       sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_can_not_consist_only_of_digits);
       return false;
      }
@@ -689,70 +703,74 @@ void Pwd_ShowFormChgMyPwd (void)
    extern const char *Txt_Current_password;
    extern const char *Txt_Change_password;
    extern const char *Txt_Set_password;
+   char StrRecordWidth[10 + 1];
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
    /***** Start section *****/
    Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
+   /***** Start form *****/
+   Act_StartFormAnchor (ActChgPwd,Pwd_PASSWORD_SECTION_ID);
+
+   /***** Start box *****/
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBox (StrRecordWidth,Txt_Password,NULL,
+		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
+
    /***** Show possible alert *****/
-   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+   if (Gbl.Alert.Section == (const char *) Pwd_PASSWORD_SECTION_ID)
+      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
-   /***** Success changing password ==> don't show form again *****/
-   if (Gbl.Alert.Type != Ale_SUCCESS)
+   /***** Help message *****/
+   if (!IHaveAPasswordInDB) // If I don't have a password in database...
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_Before_going_to_any_other_option_you_must_create_your_password);
+   else if (Gbl.Usrs.Me.LoginPlainPassword[0])
      {
-      /***** Help message *****/
-      if (!IHaveAPasswordInDB) // If I don't have a password in database...
-	 Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-      else if (Gbl.Usrs.Me.LoginPlainPassword[0])
-	{
-	 if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
-	    Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
-	}
-
-      /***** Start form *****/
-      Act_FormStartAnchor (ActChgPwd,Pwd_PASSWORD_SECTION_ID);
-
-      /***** Start box and table *****/
-      Box_StartBoxTable (NULL,Txt_Password,NULL,
-			 Hlp_PROFILE_Password,Box_NOT_CLOSABLE,2);
-
-      /* Current password */
-      if (IHaveAPasswordInDB) // If I have a password in database...
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_MIDDLE\">"
-			    "<label for=\"UsrPwd\" class=\"%s\">%s:</label>"
-			    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">"
-			    "<input type=\"password\""
-			    " id=\"UsrPwd\" name=\"UsrPwd\""
-			    " size=\"18\" maxlength=\"%u\""
-			    " autocomplete=\"off\" required=\"required\" />"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Current_password,
-		  Pwd_MAX_CHARS_PLAIN_PASSWORD);
-
-      /* Help message */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"2\">");
-      sprintf (Gbl.Alert.Txt,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
-	       Pwd_MIN_CHARS_PLAIN_PASSWORD);
-      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /* New password */
-      Pwd_PutFormToGetNewPasswordTwice ();
-
-      /***** End table, send button and end box *****/
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,
-				 IHaveAPasswordInDB ? Txt_Change_password :
-						      Txt_Set_password);
-
-      /***** End form *****/
-      Act_FormEnd ();
+      if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_Your_password_is_not_secure_enough);
      }
+
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
+
+   /***** Current password *****/
+   if (IHaveAPasswordInDB) // If I have a password in database...
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+			 "<label for=\"UsrPwd\" class=\"%s\">%s:</label>"
+			 "</td>"
+			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
+			 "<input type=\"password\""
+			 " id=\"UsrPwd\" name=\"UsrPwd\""
+			 " size=\"18\" maxlength=\"%u\""
+			 " autocomplete=\"off\" required=\"required\" />"
+			 "</td>"
+			 "</tr>",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Current_password,
+	       Pwd_MAX_CHARS_PLAIN_PASSWORD);
+
+   /***** Help message *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"2\">");
+   sprintf (Gbl.Alert.Txt,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
+	    Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** New password *****/
+   Pwd_PutFormToGetNewPasswordTwice ();
+
+   /***** End table, send button and end box *****/
+   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,
+			      IHaveAPasswordInDB ? Txt_Change_password :
+						   Txt_Set_password);
+
+   /***** End form *****/
+   Act_EndForm ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -798,20 +816,20 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    sprintf (Gbl.Alert.Txt,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>"
 	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+                      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
                       "<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" required=\"required\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd2\" class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+                      "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
                       "<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" required=\"required\" />"
@@ -838,61 +856,62 @@ void Pwd_ShowFormOthPwd (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    Act_Action_t NextAction;
 
-   /***** Show possible alert *****/
-   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
-
-   /***** Success changing password ==> don't show form again *****/
-   if (Gbl.Alert.Type != Ale_SUCCESS)
+   /***** Get user whose password must be changed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Get user whose password must be changed *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	 /***** Start box *****/
+	 Box_StartBox (NULL,Txt_Password,NULL,
+		       NULL,Box_NOT_CLOSABLE);
+
+	 /***** Show user's record *****/
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+				  &Gbl.Usrs.Other.UsrDat,NULL);
+	 /***** Start section *****/
+	 Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
+
+	 /***** Show possible alert *****/
+	 Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+	 /***** Form to change password *****/
+	 /* Start form */
+	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
 	   {
-	    /***** Start box *****/
-	    Box_StartBox (NULL,Txt_Password,NULL,
-			  NULL,Box_NOT_CLOSABLE);
-
-	    /***** Show user's record *****/
-	    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-				     &Gbl.Usrs.Other.UsrDat,NULL);
-
-	    /***** Form to change password *****/
-	    /* Start form */
-	    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
-	      {
-	       case Rol_STD:
-		  NextAction = ActChgPwdStd;
-		  break;
-	       case Rol_NET:
-	       case Rol_TCH:
-		  NextAction = ActChgPwdTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActChgPwdOth;
-		  break;
-	      }
-	    Act_FormStart (NextAction);
-	    Usr_PutParamOtherUsrCodEncrypted ();
-
-	    /* New password */
-	    Tbl_StartTableCenter (2);
-	    Pwd_PutFormToGetNewPasswordTwice ();
-	    Tbl_EndTable ();
-
-	    /* End form */
-	    Btn_PutConfirmButton (Txt_Change_password);
-	    Act_FormEnd ();
-
-	    /***** End box *****/
-	    Box_EndBox ();
+	    case Rol_STD:
+	       NextAction = ActChgPwdStd;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActChgPwdTch;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActChgPwdOth;
+	       break;
 	   }
-	 else
-	    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Act_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
+	 Usr_PutParamOtherUsrCodEncrypted ();
+
+	 /* New password */
+	 Tbl_StartTableCenter (2);
+	 Pwd_PutFormToGetNewPasswordTwice ();
+	 Tbl_EndTable ();
+
+	 /* End form */
+	 Btn_PutConfirmButton (Txt_Change_password);
+	 Act_EndForm ();
+
+	 /***** End box *****/
+	 Box_EndBox ();
+
+	 /***** End section *****/
+	 Lay_EndSection ();
 	}
-      else		// User not found
+      else
 	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
+   else		// User not found
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

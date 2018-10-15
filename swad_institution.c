@@ -221,7 +221,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
 
    if (PutLink)
      {
-      Act_FormStart (ActSeeInsInf);
+      Act_StartForm (ActSeeInsInf);
       Ins_PutParamInsCod (Ins->InsCod);
       Act_LinkFormSubmit (Ins->FullName,NULL,NULL);
      }
@@ -230,7 +230,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
    if (PutLink)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
   }
 
@@ -244,7 +244,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    extern const char *Txt_Go_to_X;
 
    /***** Start form *****/
-   Act_FormGoToStart (Action);
+   Act_StartFormGoTo (Action);
    Ins_PutParamInsCod (Ins->InsCod);
 
    /***** Link to action *****/
@@ -258,7 +258,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -350,7 +350,7 @@ static void Ins_Configuration (bool PrintView)
          Cty_GetListCountries (Cty_GET_BASIC_DATA);
 
 	 /* Put form to select country */
-	 Act_FormStart (ActChgInsCtyCfg);
+	 Act_StartForm (ActChgInsCtyCfg);
 	 fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
@@ -364,7 +364,7 @@ static void Ins_Configuration (bool PrintView)
 										"",
 		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
 	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 /* Free list of countries */
 	 Cty_FreeListCountries ();
@@ -388,7 +388,7 @@ static void Ins_Configuration (bool PrintView)
 	 // Only system admins can edit institution full name
 	{
 	 /* Form to change institution full name */
-	 Act_FormStart (ActRenInsFulCfg);
+	 Act_StartForm (ActRenInsFulCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"FullName\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -397,7 +397,7 @@ static void Ins_Configuration (bool PrintView)
 		  Hie_MAX_CHARS_FULL_NAME,
 		  Gbl.CurrentIns.Ins.FullName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not edit institution full name
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.FullName);
@@ -417,7 +417,7 @@ static void Ins_Configuration (bool PrintView)
 	 // Only system admins can edit institution short name
 	{
 	 /* Form to change institution short name */
-	 Act_FormStart (ActRenInsShoCfg);
+	 Act_StartForm (ActRenInsShoCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"ShortName\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -426,7 +426,7 @@ static void Ins_Configuration (bool PrintView)
 		  Hie_MAX_CHARS_SHRT_NAME,
 		  Gbl.CurrentIns.Ins.ShrtName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not edit institution short name
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShrtName);
@@ -447,7 +447,7 @@ static void Ins_Configuration (bool PrintView)
 	 // can change institution WWW
 	{
 	 /* Form to change institution WWW */
-	 Act_FormStart (ActChgInsWWWCfg);
+	 Act_StartForm (ActChgInsWWWCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
@@ -455,7 +455,7 @@ static void Ins_Configuration (bool PrintView)
 		  Cns_MAX_CHARS_WWW,
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not change institution WWW
 	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
@@ -527,14 +527,14 @@ static void Ins_Configuration (bool PrintView)
 		  Txt_Centres);
 
 	 /* Form to go to see centres of this institution */
-	 Act_FormGoToStart (ActSeeCtr);
+	 Act_StartFormGoTo (ActSeeCtr);
 	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
 	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
 	          Gbl.CurrentIns.Ins.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -695,10 +695,10 @@ static void Ins_ListInstitutions (void)
    /***** Button to create institution *****/
    if (Ins_CheckIfICanCreateInstitutions ())
      {
-      Act_FormStart (ActEdiIns);
+      Act_StartForm (ActEdiIns);
       Btn_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
 	                                   Txt_Create_institution);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    Box_EndBox ();
@@ -851,7 +851,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
         	                                   "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
-	 Act_FormStart (ActSeeIns);
+	 Act_StartForm (ActSeeIns);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Inss.SelectedOrder)
@@ -863,7 +863,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	 if (Order == Gbl.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
@@ -1347,7 +1347,7 @@ void Ins_WriteSelectorOfInstitution (void)
    long InsCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (ActSeeCtr);
+   Act_StartFormGoTo (ActSeeCtr);
    fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" style=\"width:175px;\"");
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
@@ -1394,7 +1394,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1437,10 +1437,10 @@ static void Ins_ListInstitutionsForEdition (void)
          Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_FormStart (ActRemIns);
+         Act_StartForm (ActRemIns);
          Ins_PutParamOtherInsCod (Ins->InsCod);
          Ico_PutIconRemove ();
-         Act_FormEnd ();
+         Act_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1461,7 +1461,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActRenInsSho);
+	 Act_StartForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -1469,7 +1469,7 @@ static void Ins_ListInstitutionsForEdition (void)
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ins->ShrtName);
@@ -1479,7 +1479,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActRenInsFul);
+	 Act_StartForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -1488,7 +1488,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Hie_MAX_CHARS_FULL_NAME,
 		  Ins->FullName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
@@ -1498,7 +1498,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActChgInsWWW);
+	 Act_StartForm (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -1507,7 +1507,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Cns_MAX_CHARS_WWW,
 		  Ins->WWW,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
@@ -1555,7 +1555,7 @@ static void Ins_ListInstitutionsForEdition (void)
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
-	 Act_FormStart (ActChgInsSta);
+	 Act_StartForm (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();\">"
@@ -1567,7 +1567,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING],
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
@@ -2169,9 +2169,9 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Act_FormStart (ActNewIns);
+      Act_StartForm (ActNewIns);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Act_FormStart (ActReqIns);
+      Act_StartForm (ActReqIns);
    else
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
@@ -2250,7 +2250,7 @@ static void Ins_PutFormToCreateInstitution (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

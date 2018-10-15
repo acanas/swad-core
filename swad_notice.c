@@ -100,7 +100,7 @@ void Not_ShowFormNotice (void)
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Start form *****/
-   Act_FormStart (ActRcvNot);
+   Act_StartForm (ActRcvNot);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_New_notice,NULL,
@@ -115,7 +115,7 @@ void Not_ShowFormNotice (void)
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES);
@@ -525,9 +525,9 @@ static void Not_PutButtonToAddNewNotice (void)
   {
    extern const char *Txt_New_notice;
 
-   Act_FormStart (ActWriNot);
+   Act_StartForm (ActWriNot);
    Btn_PutConfirmButton (Txt_New_notice);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -655,7 +655,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 				      NULL);
                break;
            }
-         Act_FormEnd ();
+         Act_EndForm ();
    	}
       else	// Don't put forms
 	 /* Status of the notice */
@@ -693,7 +693,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
-      Act_FormStart (ActSeeOneNot);
+      Act_StartForm (ActSeeOneNot);
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,DateClass[Status],NULL);
      }
@@ -702,7 +702,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('not_date_%u',%ld,"

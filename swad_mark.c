@@ -129,11 +129,11 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Gbl.RowEvenOdd);
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
-         Act_FormStart (ActChgNumRowHeaGrp);
+         Act_StartForm (ActChgNumRowHeaGrp);
          Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
         }
       else					// Course zone
-         Act_FormStart (ActChgNumRowHeaCrs);
+         Act_StartForm (ActChgNumRowHeaCrs);
       fprintf (Gbl.F.Out,"<label>&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
@@ -147,7 +147,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       Brw_PutParamsFileBrowser (ActUnk,
                                 PathInTree,FileName,
                                 FileType,-1L);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write the number of rows of footer *****/
@@ -156,11 +156,11 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Gbl.RowEvenOdd);
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
-         Act_FormStart (ActChgNumRowFooGrp);
+         Act_StartForm (ActChgNumRowFooGrp);
          Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
         }
       else					// Course zone
-         Act_FormStart (ActChgNumRowFooCrs);
+         Act_StartForm (ActChgNumRowFooCrs);
       fprintf (Gbl.F.Out,"<label>&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
@@ -174,7 +174,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       Brw_PutParamsFileBrowser (ActUnk,
                                 PathInTree,FileName,
                                 FileType,-1L);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
      }
   }

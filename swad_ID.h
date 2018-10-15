@@ -74,7 +74,9 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat);
 
 void ID_PutLinkToChangeUsrIDs (void);
 void ID_ShowFormOthIDs (void);
-void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe);
+void ID_ShowFormChangeMyID (bool IShouldFillID);
+void ID_ShowFormChangeOtherUsrID (void);
+
 void ID_RemoveMyUsrID (void);
 void ID_RemoveOtherUsrID (void);
 void ID_NewMyUsrID (void);

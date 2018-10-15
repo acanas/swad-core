@@ -237,7 +237,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    extern const char *Txt_Go_to_X;
 
    /***** Start form *****/
-   Act_FormGoToStart (Action);
+   Act_StartFormGoTo (Action);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
 
    /***** Link to action *****/
@@ -251,7 +251,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -369,7 +369,7 @@ static void Ctr_Configuration (bool PrintView)
 	    // have permission to edit photo attribution
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	    Act_FormStart (ActChgCtrPhoAtt);
+	    Act_StartForm (ActChgCtrPhoAtt);
 	    fprintf (Gbl.F.Out,"<textarea id=\"AttributionArea\""
 		               " name=\"Attribution\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
@@ -377,7 +377,7 @@ static void Ctr_Configuration (bool PrintView)
             if (PhotoAttribution)
 	       fprintf (Gbl.F.Out,"%s",PhotoAttribution);
 	    fprintf (Gbl.F.Out,"</textarea>");
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	    fprintf (Gbl.F.Out,"</div>");
 	   }
 	 else if (PhotoAttribution)
@@ -410,7 +410,7 @@ static void Ctr_Configuration (bool PrintView)
          Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
 
 	 /* Put form to select institution */
-	 Act_FormStart (ActChgCtrInsCfg);
+	 Act_StartForm (ActChgCtrInsCfg);
 	 fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
@@ -424,7 +424,7 @@ static void Ctr_Configuration (bool PrintView)
 										"",
 		     Gbl.Inss.Lst[NumIns].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 /* Free list of institutions */
 	 Ins_FreeListInstitutions ();
@@ -448,7 +448,7 @@ static void Ctr_Configuration (bool PrintView)
 	 // Only institution admins and system admins can edit centre full name
 	{
 	 /* Form to change centre full name */
-	 Act_FormStart (ActRenCtrFulCfg);
+	 Act_StartForm (ActRenCtrFulCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"FullName\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -457,7 +457,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Hie_MAX_CHARS_FULL_NAME,
 		  Gbl.CurrentCtr.Ctr.FullName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not edit centre full name
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
@@ -477,7 +477,7 @@ static void Ctr_Configuration (bool PrintView)
 	 // Only institution admins and system admins can edit centre short name
 	{
 	 /* Form to change centre short name */
-	 Act_FormStart (ActRenCtrShoCfg);
+	 Act_StartForm (ActRenCtrShoCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"ShortName\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -486,7 +486,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Hie_MAX_CHARS_SHRT_NAME,
 		  Gbl.CurrentCtr.Ctr.ShrtName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not edit centre short name
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShrtName);
@@ -513,7 +513,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Plc_GetListPlaces ();
 
 	 /* Put form to select place */
-	 Act_FormStart (ActChgCtrPlcCfg);
+	 Act_StartForm (ActChgCtrPlcCfg);
 	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
@@ -530,7 +530,7 @@ static void Ctr_Configuration (bool PrintView)
 			                                                          "",
 		     Gbl.Plcs.Lst[NumPlc].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 /* Free list of places */
 	 Plc_FreeListPlaces ();
@@ -554,7 +554,7 @@ static void Ctr_Configuration (bool PrintView)
 	 // can change centre WWW
 	{
 	 /* Form to change centre WWW */
-	 Act_FormStart (ActChgCtrWWWCfg);
+	 Act_StartForm (ActChgCtrWWWCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
@@ -562,7 +562,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Cns_MAX_CHARS_WWW,
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not change centre WWW
 	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
@@ -634,14 +634,14 @@ static void Ctr_Configuration (bool PrintView)
 		  Txt_Degrees);
 
 	 /* Form to go to see degrees of this centre */
-	 Act_FormGoToStart (ActSeeDeg);
+	 Act_StartFormGoTo (ActSeeDeg);
 	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
 	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
 	          Gbl.CurrentCtr.Ctr.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -808,10 +808,10 @@ static void Ctr_ListCentres (void)
    /***** Button to create centre *****/
    if (Ctr_CheckIfICanCreateCentres ())
      {
-      Act_FormStart (ActEdiCtr);
+      Act_StartForm (ActEdiCtr);
       Btn_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
 	                                   Txt_Create_centre);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    /***** End box *****/
@@ -1375,7 +1375,7 @@ void Ctr_WriteSelectorOfCentre (void)
    long CtrCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (ActSeeDeg);
+   Act_StartFormGoTo (ActSeeDeg);
    fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" style=\"width:175px;\"");
    if (Gbl.CurrentIns.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
@@ -1424,7 +1424,7 @@ void Ctr_WriteSelectorOfCentre (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1469,10 +1469,10 @@ static void Ctr_ListCentresForEdition (void)
 	 Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_FormStart (ActRemCtr);
+         Act_StartForm (ActRemCtr);
          Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
          Ico_PutIconRemove ();
-         Act_FormEnd ();
+         Act_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1493,7 +1493,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActChgCtrPlc);
+	 Act_StartForm (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
@@ -1511,7 +1511,7 @@ static void Ctr_ListCentresForEdition (void)
 			                                            "",
 		     Gbl.Plcs.Lst[NumPlc].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	 for (NumPlc = 0;
@@ -1525,14 +1525,14 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActRenCtrSho);
+	 Act_StartForm (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
@@ -1543,14 +1543,14 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActRenCtrFul);
+	 Act_StartForm (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
@@ -1561,14 +1561,14 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActChgCtrWWW);
+	 Act_StartForm (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_CHARS_WWW,Ctr->WWW,Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	{
@@ -1615,7 +1615,7 @@ static void Ctr_ListCentresForEdition (void)
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
-	 Act_FormStart (ActChgCtrSta);
+	 Act_StartForm (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();\">"
@@ -1627,7 +1627,7 @@ static void Ctr_ListCentresForEdition (void)
 		  Txt_CENTRE_STATUS[Ctr_STATUS_PENDING],
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
@@ -2285,7 +2285,7 @@ void Ctr_RequestPhoto (void)
    extern const char *Txt_File_with_the_photo;
 
    /***** Start form to upload photo *****/
-   Act_FormStart (ActRecCtrPho);
+   Act_StartForm (ActRecCtrPho);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Photo,NULL,
@@ -2317,7 +2317,7 @@ void Ctr_RequestPhoto (void)
    Box_EndBox ();
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2476,9 +2476,9 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      Act_FormStart (ActNewCtr);
+      Act_StartForm (ActNewCtr);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Act_FormStart (ActReqCtr);
+      Act_StartForm (ActReqCtr);
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
@@ -2575,7 +2575,7 @@ static void Ctr_PutFormToCreateCentre (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2603,7 +2603,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
         	                              "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
-	 Act_FormStart (ActSeeCtr);
+	 Act_StartForm (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Ctrs.SelectedOrder)
@@ -2615,7 +2615,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	 if (Order == Gbl.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</th>");
      }

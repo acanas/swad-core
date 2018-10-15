@@ -161,7 +161,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
    /***** Form with list of options *****/
    if (Action != ActUnk)
-      Act_FormStartAnchor (Action,Pri_PRIVACY_ID);
+      Act_StartFormAnchor (Action,Pri_PRIVACY_ID);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (Visibility = Pri_VISIBILITY_USER;
 	Visibility <= Pri_VISIBILITY_WORLD;
@@ -191,7 +191,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    /***** End list and form *****/
    fprintf (Gbl.F.Out,"</ul>");
    if (Action != ActUnk)
-      Act_FormEnd ();
+      Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }

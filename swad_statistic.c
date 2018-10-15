@@ -506,7 +506,7 @@ void Sta_AskShowCrsHits (void)
          Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	 /***** Start form *****/
-         Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+         Act_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamLong ("FirstRow",0);
@@ -614,7 +614,7 @@ void Sta_AskShowCrsHits (void)
 	 Btn_PutConfirmButton (Txt_Show_hits);
 
          /***** End form *****/
-         Act_FormEnd ();
+         Act_EndForm ();
         }
      }
    else	// No teachers nor students found
@@ -680,7 +680,7 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start form *****/
-   Act_FormStartAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
+   Act_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Statistics_of_all_visits,NULL,
@@ -775,7 +775,7 @@ void Sta_AskShowGblHits (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_hits);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1681,7 +1681,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /* Put link to jump to previous page (older clicks) */
    if (FirstRow > 1)
      {
-      Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+      Act_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
@@ -1701,7 +1701,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      }
    fprintf (Gbl.F.Out,"</td>");
    if (FirstRow > 1)
-      Act_FormEnd ();
+      Act_EndForm ();
 
    /* Write number of current page */
    fprintf (Gbl.F.Out,"<td class=\"DAT_N CENTER_MIDDLE\" style=\"width:60%%;\">"
@@ -1716,7 +1716,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /* Put link to jump to next page (more recent clicks) */
    if (LastRow < NumRows)
      {
-      Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+      Act_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
@@ -1737,7 +1737,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      }
    fprintf (Gbl.F.Out,"</td>");
    if (LastRow < NumRows)
-      Act_FormEnd ();
+      Act_EndForm ();
 
    fprintf (Gbl.F.Out,"</tr>");
    Tbl_EndTable ();
@@ -2192,7 +2192,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
 
-   Act_FormStartAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
+   Act_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Sta_WriteParamsDatesSeeAccesses ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
@@ -2222,7 +2222,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "</label>");
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -3929,7 +3929,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
       if (CrsOK)
         {
-         Act_FormGoToStart (ActSeeCrsInf);
+         Act_StartFormGoTo (ActSeeCrsInf);
          Crs_PutParamCrsCod (Crs.CrsCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
          Act_LinkFormSubmit (Gbl.Title,"LOG",NULL);
@@ -3941,7 +3941,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          fprintf (Gbl.F.Out,"-");
       fprintf (Gbl.F.Out,"&nbsp;");
       if (CrsOK)
-         Act_FormEnd ();
+         Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Draw bar proportional to number of hits */
@@ -4051,7 +4051,7 @@ void Sta_ReqShowFigures (void)
    Sta_FigureType_t FigureType;
 
    /***** Form to show statistic *****/
-   Act_FormStart (ActSeeUseGbl);
+   Act_StartForm (ActSeeUseGbl);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Figures,NULL,
@@ -4095,7 +4095,7 @@ void Sta_ReqShowFigures (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_statistic);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -5516,7 +5516,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 			The_ClassForm[Gbl.Prefs.Theme]);
 
 	       /* Icon and name of this institution */
-	       Act_FormStart (ActSeeInsInf);
+	       Act_StartForm (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins.InsCod);
 	       Act_LinkFormSubmit (Ins.ShrtName,The_ClassForm[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)
@@ -5526,7 +5526,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	          fprintf (Gbl.F.Out,"&nbsp;");
 		 }
 	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);
-	       Act_FormEnd ();
+	       Act_EndForm ();
 
 	       fprintf (Gbl.F.Out,"</td>");
 

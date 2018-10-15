@@ -126,9 +126,9 @@ void Lnk_SeeLinks (void)
    /***** Button to create link *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      Act_FormStart (ActEdiLnk);
+      Act_StartForm (ActEdiLnk);
       Btn_PutConfirmButton (Txt_New_link);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    /***** End box *****/
@@ -163,12 +163,12 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
      {
       fprintf (Gbl.F.Out,"<div id=\"institutional_links\">");
 
-      Act_FormStart (ActSeeLnk);
+      Act_StartForm (ActSeeLnk);
       Act_LinkFormSubmit (Txt_Links,NULL,NULL);
       fprintf (Gbl.F.Out," %s"
 			 "</a>",
 	       Txt_Links);
-      Act_FormEnd ();
+      Act_EndForm ();
 
       Lnk_WriteListOfLinks ();
       fprintf (Gbl.F.Out,"</div>");
@@ -404,10 +404,10 @@ static void Lnk_ListLinksForEdition (void)
       /* Put icon to remove link */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Act_FormStart (ActRemLnk);
+      Act_StartForm (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       Ico_PutIconRemove ();
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Link code */
@@ -418,7 +418,7 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Link short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenLnkSho);
+      Act_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                 " maxlength=\"%u\" value=\"%s\""
@@ -426,12 +426,12 @@ static void Lnk_ListLinksForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Link full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenLnkFul);
+      Act_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                 " maxlength=\"%u\" value=\"%s\""
@@ -439,12 +439,12 @@ static void Lnk_ListLinksForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Link WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgLnkWWW);
+      Act_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                 " maxlength=\"%u\" value=\"%s\""
@@ -452,7 +452,7 @@ static void Lnk_ListLinksForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Lnk->WWW,
                Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
      }
@@ -704,7 +704,7 @@ static void Lnk_PutFormToCreateLink (void)
    Lnk = &Gbl.Links.EditingLnk;
 
    /***** Start form *****/
-   Act_FormStart (ActNewLnk);
+   Act_StartForm (ActNewLnk);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_link,NULL,
@@ -750,7 +750,7 @@ static void Lnk_PutFormToCreateLink (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

@@ -152,7 +152,7 @@ void Rep_ReqMyUsageReport (void)
    extern const char *Txt_Generate_report;
 
    /***** Form to show my usage report *****/
-   Act_FormStart (ActSeeMyUsgRep);
+   Act_StartForm (ActSeeMyUsgRep);
 
    /***** Start box *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
@@ -166,7 +166,7 @@ void Rep_ReqMyUsageReport (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Generate_report);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

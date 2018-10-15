@@ -87,7 +87,7 @@ void Ico_PutIconsToSelectIconSet (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
         	                              "PREF_OFF");
-      Act_FormStart (ActChgIco);
+      Act_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart64x64.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
@@ -97,7 +97,7 @@ void Ico_PutIconsToSelectIconSet (void)
                Cfg_ICON_ACTION,
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

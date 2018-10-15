@@ -281,7 +281,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
      }
 
    /***** Start form to upload logo *****/
-   Act_FormStart (ActionRec);
+   Act_StartForm (ActionRec);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Logo,NULL,
@@ -307,7 +307,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Box_EndBox ();
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

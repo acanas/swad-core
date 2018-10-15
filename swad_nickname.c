@@ -28,10 +28,12 @@
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -44,6 +46,8 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Nck_NICKNAME_SECTION_ID	"nickname_section"
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -55,6 +59,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname);
 
 static void Nck_RemoveNicknameFromDB (const char *Nickname);
 
@@ -182,22 +188,48 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-void Nck_ShowFormChangeUsrNickname (void)
+void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
   {
+   Nck_ShowFormChangeUsrNickname (IMustFillNickname);
+  }
+
+/*****************************************************************************/
+/*********************** Show form to change my nickname *********************/
+/*****************************************************************************/
+
+// Not yet used
+
+void Nck_ShowFormChangeOtherUsrNickname (void)
+  {
+   Nck_ShowFormChangeUsrNickname (false);	// IMustFillNickname
+  }
+
+/*****************************************************************************/
+/*********************** Show form to change my nickname *********************/
+/*****************************************************************************/
+
+static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
+  {
+   extern const char *Hlp_PROFILE_Account;
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Nickname;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
    extern const char *Txt_Other_nicknames;
    extern const char *Txt_QR_code;
    extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
-   extern const char *Txt_Nickname;
    extern const char *Txt_Change_nickname;
    extern const char *Txt_Save;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   char StrRecordWidth[10 + 1];
    unsigned NumNicks;
    unsigned NumNick;
+
+   /***** Start section *****/
+   Lay_StartSection (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
@@ -205,6 +237,23 @@ void Nck_ShowFormChangeUsrNickname (void)
                   " ORDER BY CreatTime DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumNicks = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get nicknames of a user");
+
+   /***** Start box *****/
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBox (StrRecordWidth,Txt_Nickname,Acc_PutLinkToRemoveMyAccount,
+                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+
+   /***** Show possible alert *****/
+   if (Gbl.Alert.Section == (const char *) Nck_NICKNAME_SECTION_ID)
+      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+   /***** Help message *****/
+   if (IMustFillNickname)
+      Ale_ShowAlert (Ale_WARNING,
+	             Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
 
    /***** List my nicknames *****/
    for (NumNick = 1;
@@ -217,39 +266,40 @@ void Nck_ShowFormChangeUsrNickname (void)
       if (NumNick == 1)
 	 /* The first nickname is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+			    "<label for=\"Nick\" class=\"%s\">"
 			    "%s:"
+			    "</label>"
 			    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">"
-			    "<div class=\"FORM_ACCOUNT\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Current_nickname);
+			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_Current_nickname);
       else	// NumNick >= 2
 	{
 	 fprintf (Gbl.F.Out,"<tr>");
 	 if (NumNick == 2)
-	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"%s RIGHT_TOP\">"
-			       "%s:",
+	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\""
+			       " class=\"REC_C1_BOT RIGHT_TOP\">"
+			       "<label for=\"Nick\" class=\"%s\">"
+			       "%s:"
+			       "</label>"
+			       "</td>",
 		     NumNicks - 1,
 		     The_ClassForm[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"LEFT_TOP\">"
-			    "<div class=\"FORM_ACCOUNT\">");
+	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
 
 	 /* Form to remove old nickname */
-	 Act_FormStart (ActRemOldNic);
+	 Act_StartFormAnchor (ActRemOldNic,Nck_NICKNAME_SECTION_ID);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\""
 	                    " value=\"%s\" />",
 		  row[0]);
 	 Ico_PutIconRemove ();
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
 
       /* Nickname */
-      fprintf (Gbl.F.Out,"<span class=\"%s\">@%s</span>",
-	       NumNick == 1 ? "USR_ID" :
-		              "DAT",
-	       row[0]);
+      fprintf (Gbl.F.Out,"@%s",row[0]);
 
       /* Link to QR code */
       if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
@@ -258,17 +308,17 @@ void Nck_ShowFormChangeUsrNickname (void)
 				Txt_QR_code,NULL,
 				NULL);
 
-      fprintf (Gbl.F.Out,"</div>");
 
       /* Form to change the nickname */
       if (NumNick > 1)
 	{
-	 Act_FormStart (ActChgNic);
+         fprintf (Gbl.F.Out,"<br />");
+         Act_StartFormAnchor (ActChgNic,Nck_NICKNAME_SECTION_ID);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\""
 	                    " value=\"@%s\" />",
 		  row[0]);	// Nickname
 	 Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
 
       fprintf (Gbl.F.Out,"</td>"
@@ -277,25 +327,32 @@ void Nck_ShowFormChangeUsrNickname (void)
 
    /***** Form to enter new nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"NewNick\" class=\"%s\">%s:</label>"
+                      "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+                      "<label for=\"NewNick\" class=\"%s\">"
+                      "%s:"
+                      "</label>"
                       "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
             The_ClassForm[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
-   Act_FormStart (ActChgNic);
-   fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
-                      "<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
+   Act_StartFormAnchor (ActChgNic,Nck_NICKNAME_SECTION_ID);
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
 	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
-	              "</div>",
+	              "<br />",
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save);			// I have no nickname yet);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
+
+   /***** End section *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -317,14 +374,19 @@ void Nck_RemoveNick (void)
       Nck_RemoveNicknameFromDB (NicknameWithoutArroba);
 
       /***** Show message *****/
+      Gbl.Alert.Type = Ale_SUCCESS;
+      Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
       sprintf (Gbl.Alert.Txt,Txt_Nickname_X_removed,NicknameWithoutArroba);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_delete_your_current_nickname);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_delete_your_current_nickname);
+     }
 
    /***** Show my account again *****/
-   Acc_ShowFormChgMyAccountAndPwd ();
+   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
@@ -355,7 +417,6 @@ void Nck_UpdateNick (void)
    char Query[1024];
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   bool Error = false;
 
    /***** Get new nickname from form *****/
    Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_FROM_FORM);
@@ -369,7 +430,8 @@ void Nck_UpdateNick (void)
       /***** Check if new nickname exists in database *****/
       if (!strcmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba)) // My nickname match exactly the new nickname
         {
-         Error = true;
+         Gbl.Alert.Type = Ale_WARNING;
+         Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
          sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
                   NewNicknameWithoutArroba);
         }
@@ -387,39 +449,38 @@ void Nck_UpdateNick (void)
                      NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
             if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that my nickname
               {
-               Error = true;
+               Gbl.Alert.Type = Ale_WARNING;
+               Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
                sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_had_been_registered_by_another_user,
                         NewNicknameWithoutArroba);
               }
            }
         }
-      if (!Error)
+      if (Gbl.Alert.Type == Ale_NONE)
         {
          // Now we know the new nickname is not already in database and is diffent to the current one
          Nck_UpdateMyNick (NewNicknameWithoutArroba);
          Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
                    Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
+         Gbl.Alert.Type = Ale_SUCCESS;
+         Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
          sprintf (Gbl.Alert.Txt,Txt_Your_nickname_X_has_been_registered_successfully,
                   NewNicknameWithoutArroba);
         }
      }
    else        // New nickname is not valid
      {
-      Error = true;
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
       sprintf (Gbl.Alert.Txt,Txt_The_nickname_entered_X_is_not_valid_,
                NewNicknameWithArroba,
                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
      }
 
-   /***** Show message *****/
-   Ale_ShowAlert (Error ? Ale_WARNING :
-	                  Ale_SUCCESS,
-	          Gbl.Alert.Txt);
-
    /***** Show my account again *****/
-   Acc_ShowFormChgMyAccountAndPwd ();
+   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/

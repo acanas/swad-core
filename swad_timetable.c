@@ -1514,9 +1514,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
    /***** Form to modify this cell *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT)
-      Act_FormStart (ActChgCrsTT);
+      Act_StartForm (ActChgCrsTT);
    else if (Gbl.TimeTable.View == TT_TUT_EDIT)
-      Act_FormStart (ActChgTut);
+      Act_StartForm (ActChgTut);
 
    /***** Draw cell depending on type of view *****/
    switch (Gbl.TimeTable.View)
@@ -1699,7 +1699,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    /***** End form *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT ||
        Gbl.TimeTable.View == TT_TUT_EDIT)
-      Act_FormEnd ();
+      Act_EndForm ();
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");

@@ -315,7 +315,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
 
    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
-   Act_FormStart (ActCht);
+   Act_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
    Act_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
   }
@@ -338,7 +338,7 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
    if (NumUsrsInRoom)
       fprintf (Gbl.F.Out,"</strong>");
    fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</li>");
   }
 

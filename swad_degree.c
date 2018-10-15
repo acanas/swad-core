@@ -239,7 +239,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    extern const char *Txt_Go_to_X;
 
    /***** Start form *****/
-   Act_FormGoToStart (Action);
+   Act_StartFormGoTo (Action);
    Deg_PutParamDegCod (Deg->DegCod);
 
    /***** Link to action *****/
@@ -253,7 +253,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg->FullName);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -342,7 +342,7 @@ static void Deg_Configuration (bool PrintView)
 	 Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
 	 /* Put form to select centre */
-	 Act_FormStart (ActChgDegCtrCfg);
+	 Act_StartForm (ActChgDegCtrCfg);
 	 fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
@@ -356,7 +356,7 @@ static void Deg_Configuration (bool PrintView)
 										"",
 		     Gbl.Ctrs.Lst[NumCtr].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 /* Free list of centres */
 	 Ctr_FreeListCentres ();
@@ -381,7 +381,7 @@ static void Deg_Configuration (bool PrintView)
 	 // can edit degree full name
 	{
 	 /* Form to change degree full name */
-	 Act_FormStart (ActRenDegFulCfg);
+	 Act_StartForm (ActRenDegFulCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"FullName\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -390,7 +390,7 @@ static void Deg_Configuration (bool PrintView)
 		  Hie_MAX_CHARS_FULL_NAME,
 		  Gbl.CurrentDeg.Deg.FullName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not edit degree full name
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
@@ -411,7 +411,7 @@ static void Deg_Configuration (bool PrintView)
 	 // can edit degree short name
 	{
 	 /* Form to change degree short name */
-	 Act_FormStart (ActRenDegShoCfg);
+	 Act_StartForm (ActRenDegShoCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"ShortName\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -420,7 +420,7 @@ static void Deg_Configuration (bool PrintView)
 		  Hie_MAX_CHARS_SHRT_NAME,
 		  Gbl.CurrentDeg.Deg.ShrtName,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not edit degree short name
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShrtName);
@@ -441,7 +441,7 @@ static void Deg_Configuration (bool PrintView)
 	 // and system admins can change degree WWW
 	{
 	 /* Form to change degree WWW */
-	 Act_FormStart (ActChgDegWWWCfg);
+	 Act_StartForm (ActChgDegWWWCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
@@ -449,7 +449,7 @@ static void Deg_Configuration (bool PrintView)
 		  Cns_MAX_CHARS_WWW,
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else	// I can not change degree WWW
 	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
@@ -508,14 +508,14 @@ static void Deg_Configuration (bool PrintView)
 		  Txt_Courses);
 
 	 /* Form to go to see courses of this degree */
-	 Act_FormGoToStart (ActSeeCrs);
+	 Act_StartFormGoTo (ActSeeCrs);
 	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
 	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
 	          Gbl.CurrentDeg.Deg.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -590,7 +590,7 @@ void Deg_WriteSelectorOfDegree (void)
    long DegCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (ActSeeCrs);
+   Act_StartFormGoTo (ActSeeCrs);
    fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" style=\"width:175px;\"");
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
@@ -638,7 +638,7 @@ void Deg_WriteSelectorOfDegree (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -708,10 +708,10 @@ static void Deg_ListDegreesForEdition (void)
          Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_FormStart (ActRemDeg);
+         Act_StartForm (ActRemDeg);
          Deg_PutParamOtherDegCod (Deg->DegCod);
          Ico_PutIconRemove ();
-         Act_FormEnd ();
+         Act_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -731,14 +731,14 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActRenDegSho);
+	 Act_StartForm (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Deg->ShrtName);
@@ -748,14 +748,14 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActRenDegFul);
+	 Act_StartForm (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_FULL_NAME,Deg->FullName,Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Deg->FullName);
@@ -765,7 +765,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActChgDegTyp);
+	 Act_StartForm (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
 	                    " style=\"width:62px;\""
@@ -783,7 +783,7 @@ static void Deg_ListDegreesForEdition (void)
 		     DegTyp->DegTypName);
 	   }
 	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	 for (NumDegTyp = 0;
@@ -797,14 +797,14 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
-	 Act_FormStart (ActChgDegWWW);
+	 Act_StartForm (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_CHARS_WWW,Deg->WWW,Gbl.Form.Id);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else
 	{
@@ -839,7 +839,7 @@ static void Deg_ListDegreesForEdition (void)
       if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
-	 Act_FormStart (ActChgDegSta);
+	 Act_StartForm (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();\">"
@@ -851,7 +851,7 @@ static void Deg_ListDegreesForEdition (void)
 		  Txt_DEGREE_STATUS[Deg_STATUS_PENDING],
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE),
 		  Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else if (StatusTxt != Deg_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
@@ -936,9 +936,9 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      Act_FormStart (ActNewDeg);
+      Act_StartForm (ActNewDeg);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Act_FormStart (ActReqDeg);
+      Act_StartForm (ActReqDeg);
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
@@ -1024,7 +1024,7 @@ static void Deg_PutFormToCreateDegree (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1197,10 +1197,10 @@ static void Deg_ListDegrees (void)
    /***** Button to create degree *****/
    if (Deg_CheckIfICanCreateDegrees ())
      {
-      Act_FormStart (ActEdiDeg);
+      Act_StartForm (ActEdiDeg);
       Btn_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
 	                                                  Txt_Create_degree);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    /***** End box *****/

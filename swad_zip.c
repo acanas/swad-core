@@ -363,7 +363,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
-   Act_FormStart (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
+   Act_StartForm (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
@@ -375,7 +375,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
 	 Gbl.Prefs.IconsURL,
 	 Txt_Create_ZIP_file,
 	 Txt_Create_ZIP_file);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

@@ -107,7 +107,7 @@ void Dat_PutBoxToSelectDateFormat (void)
                  Hlp_PROFILE_Preferences_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
-   Act_FormStart (ActChgDatFmt);
+   Act_StartForm (ActChgDatFmt);
 
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (Format = (Dat_Format_t) 0;
@@ -134,7 +134,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -314,19 +314,19 @@ void Dat_ShowClientLocalTime (void)
 
    /* Month with link to calendar */
    fprintf (Gbl.F.Out,"<div id=\"current_month\">");
-   Act_FormStart (Cal_GetActionToSeeCalendar ());
+   Act_StartForm (Cal_GetActionToSeeCalendar ());
    Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
    fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
                       "</span>"
                       "</a>");
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    /* Day with link to agenda (if I am logged) */
    fprintf (Gbl.F.Out,"<div id=\"current_day\">");
    if (Gbl.Usrs.Me.Logged)
      {
-      Act_FormStart (ActSeeMyAgd);
+      Act_StartForm (ActSeeMyAgd);
       Act_LinkFormSubmit (Txt_Show_agenda,"CURRENT_DAY",NULL);
      }
    fprintf (Gbl.F.Out,"<span id=\"current_day_txt\">"	// JavaScript will write HTML here
@@ -334,7 +334,7 @@ void Dat_ShowClientLocalTime (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    fprintf (Gbl.F.Out,"</div>");
 

@@ -192,7 +192,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
                  Hlp_Search,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_FormStart (Action);
+   Act_StartForm (Action);
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
@@ -241,7 +241,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -291,11 +291,11 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 
    /***** Put form *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
-   Act_FormStart (ActionSearch);
+   Act_StartForm (ActionSearch);
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white64x64.png");
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
   }
 

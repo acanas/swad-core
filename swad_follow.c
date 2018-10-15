@@ -197,10 +197,10 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
 
       /***** Title with link to suggest more users to follow *****/
-      Act_FormStart (ActSeeSocPrf);
+      Act_StartForm (ActSeeSocPrf);
       Act_LinkFormSubmit (Txt_Who_to_follow,"CONNECTED_TXT",NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Who_to_follow);
-      Act_FormEnd ();
+      Act_EndForm ();
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table>");
@@ -429,11 +429,11 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update;
 
-   Act_FormStart (ActSeeSocPrf);
+   Act_StartForm (ActSeeSocPrf);
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
                                NULL);
    Ico_PutCalculateIcon (Txt_Update);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -535,7 +535,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
      {
       if (IFollowUsr)	// I follow this user
 	{
-	 Act_FormStart (ActUnfUsr);
+	 Act_StartForm (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD",NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
@@ -547,11 +547,11 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Unfollow,Txt_Following_unfollow);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
       else		// I do not follow this user
 	{
-	 Act_FormStart (ActFolUsr);
+	 Act_StartForm (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD",NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
@@ -563,7 +563,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Follow,Txt_Follow);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -595,7 +595,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       /* Form to list users */
-      Act_FormStartAnchor (Action,Fol_FOLLOW_SECTION_ID);
+      Act_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
@@ -609,7 +609,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    else
       fprintf (Gbl.F.Out,"</span>");
@@ -621,7 +621,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       /* Form to list users */
-      Act_FormStartAnchor (Action,Fol_FOLLOW_SECTION_ID);
+      Act_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
@@ -631,7 +631,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    fprintf (Gbl.F.Out,"</div>");
 
@@ -843,14 +843,14 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    if (Visible)
      {
       /* Put form to go to public profile */
-      Act_FormStart (ActSeeOthPubPrf);
+      Act_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_NAME\">");	// Limited width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
 	                 "</div>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    ItsMe = Usr_ItsMe (UsrDat->UsrCod);
@@ -903,14 +903,14 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    if (Visible)
      {
       /* Put form to go to public profile */
-      Act_FormStart (ActSeeOthPubPrf);
+      Act_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
 	                 "</div>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    fprintf (Gbl.F.Out,"</td>");
 
@@ -962,7 +962,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
    extern const char *Txt_Follow;
 
    /***** Form to unfollow *****/
-   Act_FormStart (ActFolUsr);
+   Act_StartForm (ActFolUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (Txt_Follow,NULL,NULL);
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
@@ -973,7 +973,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
 		      "</a>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Follow,Txt_Follow);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -985,7 +985,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    extern const char *Txt_Unfollow;
 
    /* Form to follow */
-   Act_FormStart (ActUnfUsr);
+   Act_StartForm (ActUnfUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (Txt_Unfollow,NULL,NULL);
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
@@ -996,7 +996,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 		      "</a>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Unfollow,Txt_Unfollow);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

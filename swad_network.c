@@ -337,7 +337,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
-      Act_FormStartAnchor (ActChgMyNet,Net_MY_WEBS_ID);
+      Act_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
       fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -346,7 +346,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       (unsigned) NumURL,
 	       Cns_MAX_CHARS_WWW,URL,
 	       Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }

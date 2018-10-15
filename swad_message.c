@@ -269,7 +269,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start form to select recipients and write the message *****/
-   Act_FormStart (ActRcvMsgUsr);
+   Act_StartForm (ActRcvMsgUsr);
    if (Gbl.Msg.Reply.IsReply)
      {
       Par_PutHiddenParamChar ("IsReply",'Y');
@@ -328,7 +328,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Btn_PutCreateButton (Txt_Send_message);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -1764,7 +1764,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
                  HelpFilter[Gbl.Msg.TypeOfMessages],Box_CLOSABLE);
 
    /* Form to see messages again */
-   Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
+   Act_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Msg_ShowFormSelectCourseSentOrRecMsgs ();
@@ -1780,7 +1780,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Ico_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /* End box */
    Box_EndBox ();
@@ -3091,7 +3091,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
         	   "MSG_TIT_BG_NEW");
 
    /***** Start form to expand/contract the message *****/
-   Act_FormStart (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Expanded ? ActConRcvMsg :
+   Act_StartForm (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Expanded ? ActConRcvMsg :
 	                                                                        ActExpRcvMsg) :
                                                                     (Expanded ? ActConSntMsg :
                                                         	                ActExpSntMsg));
@@ -3110,7 +3110,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
 
    /***** End form to expand the message *****/
    fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
@@ -3214,7 +3214,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
          else	// Message sent from another course
            {
             /* Write course, including link */
-            Act_FormGoToStart (ActSeeCrsInf);
+            Act_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
         	               "(");
@@ -3223,7 +3223,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             fprintf (Gbl.F.Out,"%s</a>)"
         	               "</div>",
         	     Crs.ShrtName);
-            Act_FormEnd ();
+            Act_EndForm ();
            }
 	}
      }
@@ -3252,10 +3252,10 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
 
    /***** Form start and parameters *****/
    if (FromThisCrs)
-      Act_FormStart (ActReqMsgUsr);
+      Act_StartForm (ActReqMsgUsr);
    else	// Not the current course ==> go to another course
      {
-      Act_FormGoToStart (ActReqMsgUsr);
+      Act_StartFormGoTo (ActReqMsgUsr);
       Crs_PutParamCrsCod (CrsCod);
      }
    Grp_PutParamAllGroups ();
@@ -3487,7 +3487,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          /***** Start form to show all the users *****/
          fprintf (Gbl.F.Out,"<tr>"
                             "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">");
-         Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
+         Act_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
          Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
          Msg_PutHiddenParamsOneMsg ();
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
@@ -3495,7 +3495,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
                   NumRecipientsKnown - NumRecipientsToShow);
          fprintf (Gbl.F.Out,"</a>");
-         Act_FormEnd ();
+         Act_EndForm ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
@@ -3584,7 +3584,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
   {
    extern const char *Txt_Sender_permitted_click_to_ban_him;
 
-   Act_FormStart (ActBanUsrMsg);
+   Act_StartForm (ActBanUsrMsg);
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3595,7 +3595,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3606,7 +3606,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
   {
    extern const char *Txt_Sender_banned_click_to_unban_him;
 
-   Act_FormStart (ActUnbUsrMsg);
+   Act_StartForm (ActUnbUsrMsg);
    Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3617,7 +3617,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
             Gbl.Prefs.IconsURL,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3790,7 +3790,7 @@ void Msg_ListBannedUsrs (void)
             /* Put form to unban user */
             fprintf (Gbl.F.Out,"<tr>"
                                "<td class=\"BM\">");
-            Act_FormStart (ActUnbUsrLst);
+            Act_StartForm (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             fprintf (Gbl.F.Out,"<input type=\"image\""
         	               " src=\"%s/lock-on64x64.png\""
@@ -3799,7 +3799,7 @@ void Msg_ListBannedUsrs (void)
                      Gbl.Prefs.IconsURL,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);
-            Act_FormEnd ();
+            Act_EndForm ();
             fprintf (Gbl.F.Out,"</td>");
 
             /* Show photo */

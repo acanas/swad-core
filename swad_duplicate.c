@@ -395,10 +395,10 @@ static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat)
   {
    extern const char *Txt_Similar_users;
 
-   Act_FormStart (ActLstSimUsr);
+   Act_StartForm (ActLstSimUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutConfirmButtonInline (Txt_Similar_users);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -409,11 +409,11 @@ static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat)
   {
    extern const char *Txt_Eliminate_user_account;
 
-   Act_FormStart (ActUpdOth);
+   Act_StartForm (ActUpdOth);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
    Btn_PutRemoveButtonInline (Txt_Eliminate_user_account);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -424,10 +424,10 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat
   {
    extern const char *Txt_Not_duplicated;
 
-   Act_FormStart (ActRemDupUsr);
+   Act_StartForm (ActRemDupUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutConfirmButtonInline (Txt_Not_duplicated);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

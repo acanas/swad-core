@@ -203,7 +203,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 
       if (!PrintView)
 	{
-	 Act_FormStart (ActSeeAsg);
+	 Act_StartForm (ActSeeAsg);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -217,7 +217,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
 
       fprintf (Gbl.F.Out,"</th>");
@@ -287,10 +287,10 @@ static void Asg_PutButtonToCreateNewAsg (void)
    extern const char *Txt_New_assignment;
 
    Gbl.Asgs.AsgCodToEdit = -1L;
-   Act_FormStart (ActFrmNewAsg);
+   Act_StartForm (ActFrmNewAsg);
    Asg_PutParams ();
    Btn_PutConfirmButton (Txt_New_assignment);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -515,7 +515,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
        ICanSendFiles)	// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
-      Act_FormStart (ActFrmCreAsgUsr);
+      Act_StartForm (ActFrmCreAsgUsr);
       Brw_PutParamsFileBrowser (ActUnk,
 				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Asg->Folder,
@@ -528,7 +528,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	       Gbl.Prefs.IconsURL,
 	       Gbl.Title,
 	       Gbl.Title);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    else				// I can't send files to this assignment folder
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
@@ -1157,12 +1157,12 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Start form *****/
    if (ItsANewAssignment)
      {
-      Act_FormStart (ActNewAsg);
+      Act_StartForm (ActNewAsg);
       Gbl.Asgs.AsgCodToEdit = -1L;
      }
    else
      {
-      Act_FormStart (ActChgAsg);
+      Act_StartForm (ActChgAsg);
       Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
      }
    Asg_PutParams ();
@@ -1238,7 +1238,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show current assignments, if any *****/
    Asg_ShowAllAssignments ();

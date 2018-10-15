@@ -52328,27 +52328,6 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #endif
 	};
 
-const char *Txt_User_account =
-#if   L==1
-	"Compte d'usuari";
-#elif L==2
-	"Benutzerkonto";
-#elif L==3
-	"User account";
-#elif L==4
-	"Cuenta de usuario/a";
-#elif L==5
-	"Compte d'utilisateur";
-#elif L==6
-	"Cuenta de usuario/a";	// Okoteve traducción
-#elif L==7
-	"Account utente";
-#elif L==8
-	"Konto u&zdot;ytkownika";
-#elif L==9
-	"Conta de usu&aacute;rio";
-#endif
-
 const char *Txt_USER_comments =
 #if   L==1
 	"Observaciones";	// Necessita traduccio

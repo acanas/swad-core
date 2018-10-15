@@ -76,10 +76,6 @@ address
 	{
 	font-style: normal;
 	}
-hr.WHITE_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
-hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
-hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
-hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
 /*********************** Text decoration of links ****************************/
 a
@@ -3273,14 +3269,6 @@ a.PAG:hover, .PAG_CUR
 .INDICATORS_INPUT
 	{
 	max-width:500px;
-	}
-
-/********************* Used to align buttons in account forms ****************/
-.FORM_ACCOUNT
-	{
-	display:inline-block;
-	box-sizing:border-box;
-	min-width:312px;
 	}
 
 /************* Forms to edit institution, centre, degree, course *************/

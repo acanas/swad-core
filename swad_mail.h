@@ -79,7 +79,9 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_PutLinkToChangeOtherUsrEmails (void);
 void Mai_ShowFormOthEmail (void);
-void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe);
+void Mai_ShowFormChangeMyEmail (bool IMustFillEmail,bool IShouldConfirmEmail);
+void Mai_ShowFormChangeOtherUsrEmail (void);
+
 void Mai_RemoveMyUsrEmail (void);
 void Mai_RemoveOtherUsrEmail (void);
 void May_NewMyUsrEmail (void);
@@ -88,7 +90,6 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
 
 void Mai_PutButtonToCheckEmailAddress (void);
 bool Mai_SendMailMsgToConfirmEmail (void);
-void Mai_ShowMsgConfirmEmailHasBeenSent (void);
 void Mai_ConfirmEmail (void);
 
 void Mai_CreateFileNameMail (void);

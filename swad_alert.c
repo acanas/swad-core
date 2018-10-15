@@ -167,8 +167,8 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
       if (TxtButton[0])
 	{
          /* Start form */
-	 Act_FormStartAnchor (NextAction,Anchor);
-         Act_FormStartAnchorOnSubmit (NextAction,Anchor,OnSubmit);
+	 Act_StartFormAnchor (NextAction,Anchor);
+         Act_StartFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
 	 if (FuncParams)
 	    FuncParams ();
 
@@ -176,7 +176,7 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
 	 Btn_PutButton (Button,TxtButton);
 
          /* End form */
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
 
    /***** End box *****/

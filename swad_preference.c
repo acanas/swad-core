@@ -247,7 +247,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
         	                                "PREF_OFF");
-      Act_FormStart (ActChgCol);
+      Act_StartForm (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x25\" />",
@@ -255,7 +255,7 @@ static void Pre_PutIconsToSelectSideCols (void)
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

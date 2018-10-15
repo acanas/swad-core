@@ -243,7 +243,7 @@ static void Att_ShowAllAttEvents (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_FormStart (ActSeeAtt);
+	 Act_StartForm (ActSeeAtt);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -254,7 +254,7 @@ static void Att_ShowAllAttEvents (void)
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</th>");
 	}
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
@@ -336,10 +336,10 @@ static void Att_PutButtonToCreateNewAttEvent (void)
   {
    extern const char *Txt_New_event;
 
-   Act_FormStart (ActFrmNewAtt);
+   Act_StartForm (ActFrmNewAtt);
    Att_PutParamsToCreateNewAttEvent ();
    Btn_PutConfirmButton (Txt_New_event);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -431,13 +431,13 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    fprintf (Gbl.F.Out,"\">");
 
    /* Put form to view attendance event */
-   Act_FormStart (ActSeeOneAtt);
+   Act_StartForm (ActSeeOneAtt);
    Att_PutParamAttCod (Att->AttCod);
    Att_PutParamsCodGrps (Att->AttCod);
    Act_LinkFormSubmit (Txt_View_event,Att->Hidden ? "ASG_TITLE_LIGHT" :
 	                                            "ASG_TITLE",NULL);
    fprintf (Gbl.F.Out,"%s</a>",Att->Title);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
 
    /* Number of students in this event */
@@ -880,7 +880,7 @@ void Att_AskRemAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Button of confirmation of removing *****/
-   Act_FormStart (ActRemAtt);
+   Act_StartForm (ActRemAtt);
    Att_PutParamAttCod (Att.AttCod);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
@@ -891,7 +891,7 @@ void Att_AskRemAttEvent (void)
             Att.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
    Btn_PutRemoveButton (Txt_Remove_event);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1076,10 +1076,10 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Start form *****/
    if (ItsANewAttEvent)
-      Act_FormStart (ActNewAtt);
+      Act_StartForm (ActNewAtt);
    else
      {
-      Act_FormStart (ActChgAtt);
+      Act_StartForm (ActChgAtt);
       Att_PutParamAttCod (Att.AttCod);
      }
    Att_PutHiddenParamAttOrder ();
@@ -1164,7 +1164,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show current attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
@@ -1870,7 +1870,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /***** Start form *****/
    if (Att->Open)
      {
-      Act_FormStart (ActRecAttMe);
+      Act_StartForm (ActRecAttMe);
       Att_PutParamAttCod (Att->AttCod);
      }
 
@@ -1908,7 +1908,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
      {
       /***** Send button *****/
       Btn_PutConfirmButton (Txt_Save);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
   }
 
@@ -1953,7 +1953,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start form *****/
-      Act_FormStart (ActRecAttStd);
+      Act_StartForm (ActRecAttStd);
       Att_PutParamAttCod (Att->AttCod);
       Grp_PutParamsCodGrps ();
 
@@ -2000,7 +2000,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Btn_PutConfirmButton (Txt_Save);
 
       /***** End form *****/
-      Act_FormEnd ();
+      Act_EndForm ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -2696,7 +2696,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt);
 
 	 /* Start form */
-	 Act_FormStart (ActSeeLstStdAtt);
+	 Act_StartForm (ActSeeLstStdAtt);
 	 Grp_PutParamsCodGrps ();
 
 	 /* Write list of students to select some of them */
@@ -2708,7 +2708,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Btn_PutConfirmButton (Txt_Show_list);
 
 	 /* End form */
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
          /***** Free memory used by list of selected users' codes *****/
 	 Usr_FreeListsSelectedUsrsCods ();
@@ -3067,14 +3067,14 @@ static void Att_PutButtonToShowDetails (void)
    extern const char *Txt_Show_more_details;
 
    /***** Button to show more details *****/
-   Act_FormStart (Gbl.Action.Act);
+   Act_StartForm (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
    Btn_PutConfirmButton (Txt_Show_more_details);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3099,7 +3099,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
        TypeOfView == Att_NORMAL_VIEW_STUDENTS)
      {
-      Act_FormStart (Gbl.Action.Act);
+      Act_StartForm (Gbl.Action.Act);
       Grp_PutParamsCodGrps ();
       Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
      }
@@ -3190,7 +3190,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    /***** End form *****/
    if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
        TypeOfView == Att_NORMAL_VIEW_STUDENTS)
-      Act_FormEnd ();
+      Act_EndForm ();
   }
 
 /*****************************************************************************/

@@ -272,9 +272,9 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
 
    /***** Button *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   Act_FormStart (Action);
+   Act_StartForm (Action);
    Btn_PutButtonInline (Button,TxtButton);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }

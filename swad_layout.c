@@ -862,7 +862,7 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
 
    /* Start form to go to home page */
-   Act_FormGoToStart (ActMnu);
+   Act_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">");
@@ -893,7 +893,7 @@ static void Lay_WritePageTopHeading (void)
             Txt_TAGLINE_BR);
 
    /* End form to go to home page */
-   Act_FormEnd ();
+   Act_EndForm ();
 
    Sch_PutFormToSearchInPageTopHeading ();
 
@@ -1102,7 +1102,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
 				// jumping to the next line on narrow screens
 
    /***** Start form *****/
-   Act_FormStartAnchor (NextAction,Anchor);
+   Act_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams ();
 
@@ -1113,7 +1113,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                     OnSubmit);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Separator *****/
    if (Text)
@@ -1139,7 +1139,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				// jumping to the next line on narrow screens
 
    /***** Start form *****/
-   Act_FormStart (NextAction);
+   Act_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
 
@@ -1172,7 +1172,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	              "</div>");
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Separator *****/
    if (Text)

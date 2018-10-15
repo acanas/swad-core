@@ -239,7 +239,7 @@ static void Crs_Configuration (bool PrintView)
       Deg_GetListDegsOfCurrentCtr ();
 
       /* Put form to select degree */
-      Act_FormStart (ActChgCrsDegCfg);
+      Act_StartForm (ActChgCrsDegCfg);
       fprintf (Gbl.F.Out,"<select id=\"OthDegCod\" name=\"OthDegCod\""
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\">",
@@ -253,7 +253,7 @@ static void Crs_Configuration (bool PrintView)
 										            "",
 		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
-      Act_FormEnd ();
+      Act_EndForm ();
 
       /* Free list of degrees of the current centre */
       Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
@@ -277,7 +277,7 @@ static void Crs_Configuration (bool PrintView)
       // Only degree admins, centre admins, institution admins and system admins can edit course full name
      {
       /* Form to change course full name */
-      Act_FormStart (ActRenCrsFulCfg);
+      Act_StartForm (ActRenCrsFulCfg);
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"FullName\" name=\"FullName\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -286,7 +286,7 @@ static void Crs_Configuration (bool PrintView)
 	       Hie_MAX_CHARS_FULL_NAME,
 	       Gbl.CurrentCrs.Crs.FullName,
 	       Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    else	// I can not edit course full name
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.FullName);
@@ -306,7 +306,7 @@ static void Crs_Configuration (bool PrintView)
       // Only degree admins, centre admins, institution admins and system admins can edit course short name
      {
       /* Form to change course short name */
-      Act_FormStart (ActRenCrsShoCfg);
+      Act_StartForm (ActRenCrsShoCfg);
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"ShortName\" name=\"ShortName\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -315,7 +315,7 @@ static void Crs_Configuration (bool PrintView)
 	       Hie_MAX_CHARS_SHRT_NAME,
 	       Gbl.CurrentCrs.Crs.ShrtName,
 	       Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    else	// I can not edit course short name
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.ShrtName);
@@ -332,7 +332,7 @@ static void Crs_Configuration (bool PrintView)
             Txt_Year_OF_A_DEGREE);
    if (IsForm)
      {
-      Act_FormStart (ActChgCrsYeaCfg);
+      Act_StartForm (ActChgCrsYeaCfg);
       fprintf (Gbl.F.Out,"<select id=\"OthCrsYear\" name=\"OthCrsYear\""
 	                 " onchange=\"document.getElementById('%s').submit();\">",
                Gbl.Form.Id);
@@ -345,7 +345,7 @@ static void Crs_Configuration (bool PrintView)
 						    "",
 		  Txt_YEAR_OF_DEGREE[Year]);
       fprintf (Gbl.F.Out,"</select>");
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    else
       fprintf (Gbl.F.Out,"%s",
@@ -366,7 +366,7 @@ static void Crs_Configuration (bool PrintView)
               Txt_Institutional_code);
       if (IsForm)
 	{
-         Act_FormStart (ActChgInsCrsCodCfg);
+         Act_StartForm (ActChgInsCrsCodCfg);
          fprintf (Gbl.F.Out,"<input type=\"text\""
                             " id=\"InsCrsCod\" name=\"InsCrsCod\""
                             " size=\"%u\" maxlength=\"%u\" value=\"%s\""
@@ -375,7 +375,7 @@ static void Crs_Configuration (bool PrintView)
                   Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
                   Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
                   Gbl.Form.Id);
-         Act_FormEnd ();
+         Act_EndForm ();
 	}
       else
          fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.InstitutionalCrsCod);
@@ -447,7 +447,7 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"LEFT_MIDDLE\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Indicators);
-      Act_FormStart (ActReqStaCrs);
+      Act_StartForm (ActReqStaCrs);
       sprintf (Gbl.Title,"%u %s %u",
                Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
@@ -459,7 +459,7 @@ static void Crs_Configuration (bool PrintView)
                (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green16x16.gif" :
         	                                                  "warning64x64.png",
                Gbl.Title);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
      }
@@ -556,7 +556,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
 	    Highlight ? ClassHighlight :
 			ClassNormal);
-   Act_FormStart (ActMyCrs);
+   Act_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
    Act_LinkFormSubmit (Txt_System,
                        Highlight ? ClassHighlight :
@@ -568,7 +568,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Txt_System,
 	    Txt_System,
 	    Txt_System);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</li>");
 
    /***** Get my countries *****/
@@ -593,7 +593,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	           ClassNormal);
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
-      Act_FormStart (ActMyCrs);
+      Act_StartForm (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 			  Highlight ? ClassHighlight :
@@ -608,7 +608,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Cty.Alpha2,
 	       Cty.Name[Gbl.Prefs.Language],
                Cty.Name[Gbl.Prefs.Language]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Get my institutions in this country *****/
@@ -634,14 +634,14 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			      ClassNormal);
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
-         Act_FormStart (ActMyCrs);
+         Act_StartForm (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</li>");
 
 	 /***** Get my centres in this institution *****/
@@ -667,14 +667,14 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			         ClassNormal);
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
-            Act_FormStart (ActMyCrs);
+            Act_StartForm (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr.FullName);
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	    fprintf (Gbl.F.Out,"</li>");
 
 	    /***** Get my degrees in this centre *****/
@@ -700,14 +700,14 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			            ClassNormal);
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
-               Act_FormStart (ActMyCrs);
+               Act_StartForm (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
-	       Act_FormEnd ();
+	       Act_EndForm ();
 	       fprintf (Gbl.F.Out,"</li>");
 
 	       /***** Get my courses in this degree *****/
@@ -732,7 +732,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			               ClassNormal);
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
-                  Act_FormStart (ActMyCrs);
+                  Act_StartForm (ActMyCrs);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShrtName);
 		  Act_LinkFormSubmit (Gbl.Title,
@@ -747,7 +747,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		           Crs.ShrtName,
 		           Crs.FullName,
 		           Crs.FullName);
-		  Act_FormEnd ();
+		  Act_EndForm ();
 
 		  /***** Put link to register students *****/
 		  Enr_PutButtonInlineToRegisterStds (Crs.CrsCod);
@@ -893,7 +893,7 @@ void Crs_WriteSelectorOfCourse (void)
    long CrsCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (ActSeeCrsInf);
+   Act_StartFormGoTo (ActSeeCrsInf);
    fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" style=\"width:175px;\"");
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
@@ -941,7 +941,7 @@ void Crs_WriteSelectorOfCourse (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1058,7 +1058,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
       Usr_GetMyCourses ();
 
    /***** Start form *****/
-   Act_FormGoToStart (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
+   Act_StartFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
                                                ActSysReqSch);
 
    /***** Start selector of courses *****/
@@ -1118,7 +1118,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1162,10 +1162,10 @@ static void Crs_ListCourses (void)
    /***** Button to create course *****/
    if (Crs_CheckIfICanCreateCourses ())
      {
-      Act_FormStart (ActEdiCrs);
+      Act_StartForm (ActEdiCrs);
       Btn_PutConfirmButton (Gbl.CurrentDeg.NumCrss ? Txt_Create_another_course :
 	                                             Txt_Create_course);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    /***** End box *****/
@@ -1282,13 +1282,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 /* Course full name */
 	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
 		  TxtClassStrong,BgColor);
-	 Act_FormGoToStart (ActSeeCrsInf);
+	 Act_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (Crs->CrsCod);
 	 sprintf (Gbl.Title,Txt_Go_to_X,Crs->FullName);
 	 Act_LinkFormSubmit (Gbl.Title,TxtClassStrong,NULL);
 	 fprintf (Gbl.F.Out,"%s</a>",
 		  Crs->FullName);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Current number of teachers in this course */
@@ -1425,10 +1425,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Ico_PutIconRemovalNotAllowed ();
 	 else	// Crs->NumUsrs == 0 && ICanEdit
 	   {
-	    Act_FormStart (ActRemCrs);
+	    Act_StartForm (ActRemCrs);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    Ico_PutIconRemove ();
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
 	 fprintf (Gbl.F.Out,"</td>");
 
@@ -1442,7 +1442,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
 	 if (ICanEdit)
 	   {
-	    Act_FormStart (ActChgInsCrsCod);
+	    Act_StartForm (ActChgInsCrsCod);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
 			       " maxlength=\"%u\" value=\"%s\""
@@ -1451,7 +1451,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 		     Crs->InstitutionalCrsCod,
 		     Gbl.Form.Id);
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
@@ -1461,7 +1461,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
 	 if (ICanEdit)
 	   {
-	    Act_FormStart (ActChgCrsYea);
+	    Act_StartForm (ActChgCrsYea);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
 			       " style=\"width:50px;\""
@@ -1476,7 +1476,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 					       "",
 			Txt_YEAR_OF_DEGREE[YearAux]);
 	    fprintf (Gbl.F.Out,"</select>");
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
@@ -1486,7 +1486,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
 	 if (ICanEdit)
 	   {
-	    Act_FormStart (ActRenCrsSho);
+	    Act_StartForm (ActRenCrsSho);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 			       " maxlength=\"%u\" value=\"%s\""
@@ -1494,7 +1494,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " onchange=\"document.getElementById('%s').submit();\" />",
 		     Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 		     Gbl.Form.Id);
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->ShrtName);
@@ -1504,7 +1504,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
 	 if (ICanEdit)
 	   {
-	    Act_FormStart (ActRenCrsFul);
+	    Act_StartForm (ActRenCrsFul);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 			       " maxlength=\"%u\" value=\"%s\""
@@ -1512,7 +1512,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " onchange=\"document.getElementById('%s').submit();\" />",
 		     Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
 		     Gbl.Form.Id);
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->FullName);
@@ -1544,7 +1544,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM &&
 	     StatusTxt == Crs_STATUS_PENDING)
 	   {
-	    Act_FormStart (ActChgCrsSta);
+	    Act_StartForm (ActChgCrsSta);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			       " onchange=\"document.getElementById('%s').submit();\">"
@@ -1556,7 +1556,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     Txt_COURSE_STATUS[Crs_STATUS_PENDING],
 		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),
 		     Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
-	    Act_FormEnd ();
+	    Act_EndForm ();
 	   }
          else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
 	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
@@ -1635,9 +1635,9 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-      Act_FormStart (ActNewCrs);
+      Act_StartForm (ActNewCrs);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Act_FormStart (ActReqCrs);
+      Act_StartForm (ActReqCrs);
    else
       Lay_ShowErrorAndExit ("You can not edit courses.");
 
@@ -1720,7 +1720,7 @@ static void Crs_PutFormToCreateCourse (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_course);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2844,11 +2844,11 @@ static void Crs_PutButtonToGoToCrs (void)
    // If the course being edited is different to the current one...
    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
      {
-      Act_FormStart (ActSeeCrsInf);
+      Act_StartForm (ActSeeCrsInf);
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingCrs.ShrtName);
       Btn_PutConfirmButton (Gbl.Title);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
   }
 
@@ -2862,13 +2862,13 @@ static void Crs_PutButtonToRegisterInCrs (void)
   {
    extern const char *Txt_Register_me_in_X;
 
-   Act_FormStart (ActReqSignUp);
+   Act_StartForm (ActReqSignUp);
    // If the course beeing edited is different to the current one...
    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
    sprintf (Gbl.Title,Txt_Register_me_in_X,Gbl.Degs.EditingCrs.ShrtName);
    Btn_PutCreateButton (Gbl.Title);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2932,7 +2932,7 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enrolled in at least one course
 	{
 	 /***** Start form *****/
-	 Act_FormStart (ActMyCrs);
+	 Act_StartForm (ActMyCrs);
 
 	 /***** Put icon with link *****/
 	 Act_LinkFormSubmit (Txt_My_courses,NULL,NULL);
@@ -2944,7 +2944,7 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 		  Txt_My_courses,Txt_My_courses);
 
 	 /***** End form *****/
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
      }
   }
@@ -3261,7 +3261,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
           and centre short name (row[6]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
             StyleNoBR,BgColor);
-   Act_FormGoToStart (ActSeeDegInf);
+   Act_StartFormGoTo (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
@@ -3269,7 +3269,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
             row[2],row[6]);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write year (row[4]) *****/
@@ -3281,12 +3281,12 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Write course full name (row[5]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
             Style,BgColor);
-   Act_FormGoToStart (ActSeeCrsInf);
+   Act_StartFormGoTo (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
    Act_LinkFormSubmit (Gbl.Title,Style,NULL);
    fprintf (Gbl.F.Out,"%s</a>",row[5]);
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write number of teachers in course *****/
@@ -3355,7 +3355,7 @@ void Crs_AskRemoveOldCrss (void)
    unsigned i;
 
    /***** Start form *****/
-   Act_FormStart (ActRemOldCrs);
+   Act_StartForm (ActRemOldCrs);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Eliminate_old_courses,NULL,
@@ -3384,7 +3384,7 @@ void Crs_AskRemoveOldCrss (void)
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

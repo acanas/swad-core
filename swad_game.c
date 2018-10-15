@@ -236,7 +236,7 @@ static void Gam_ListAllGames (void)
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 
 	 /* Form to change order */
-	 Act_FormStart (ActSeeAllGam);
+	 Act_StartForm (ActSeeAllGam);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -247,7 +247,7 @@ static void Gam_ListAllGames (void)
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</th>");
 	}
@@ -354,10 +354,10 @@ static void Gam_PutButtonToCreateNewGame (void)
   {
    extern const char *Txt_New_game;
 
-   Act_FormStart (ActFrmNewGam);
+   Act_StartForm (ActFrmNewGam);
    Gam_PutParamsToCreateNewGame ();
    Btn_PutConfirmButton (Txt_New_game);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -509,7 +509,7 @@ static void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"\">");
 
    /* Put form to view game */
-   Act_FormStart (ActSeeOneGam);
+   Act_StartForm (ActSeeOneGam);
    Gam_PutParamGameCod (GamCod);
    Gam_PutHiddenParamGameOrder ();
    Grp_PutParamWhichGrps ();
@@ -519,7 +519,7 @@ static void Gam_ShowOneGame (long GamCod,
 	                                     "ASG_TITLE_LIGHT",NULL);
    fprintf (Gbl.F.Out,"%s</a>",
             Game.Title);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /* Number of questions and number of distinct users who have already answered this game */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
@@ -542,13 +542,13 @@ static void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-      Act_FormStart (ActPlyGam);
+      Act_StartForm (ActPlyGam);
       Gam_PutParamGameCod (Game.GamCod);
       Gam_PutHiddenParamGameOrder ();
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
       Btn_PutCreateButtonInline (Txt_Play);
-      Act_FormEnd ();
+      Act_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -559,13 +559,13 @@ static void Gam_ShowOneGame (long GamCod,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Act_FormStart (ActSeeOneGam);
+	 Act_StartForm (ActSeeOneGam);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Play);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -574,13 +574,13 @@ static void Gam_ShowOneGame (long GamCod,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Act_FormStart (ActSeeOneGam);
+	 Act_StartForm (ActSeeOneGam);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_game_results);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -1596,10 +1596,10 @@ static void Gam_PutButtonToResetGame (void)
   {
    extern const char *Txt_Reset_game;
 
-   Act_FormStart (ActRstGam);
+   Act_StartForm (ActRstGam);
    Gam_PutParams ();
    Btn_PutRemoveButton (Txt_Reset_game);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1793,7 +1793,7 @@ void Gam_RequestCreatOrEditGame (void)
 
    /***** Start form *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   Act_FormStart (ItsANewGame ? ActNewGam :
+   Act_StartForm (ItsANewGame ? ActNewGam :
 	                        ActChgGam);
    Gam_PutParams ();
 
@@ -1881,7 +1881,7 @@ void Gam_RequestCreatOrEditGame (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show questions of the game ready to be edited *****/
    if (!ItsANewGame)
@@ -2810,7 +2810,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 	 Btn_PutConfirmButton (Txt_Done);
 
 	 /***** End form *****/
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
      }
    else	// This game has no questions
@@ -2907,11 +2907,11 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
-      Act_FormStart (ActReqRemGamQst);
+      Act_StartForm (ActReqRemGamQst);
       Gam_PutParamGameCod (Game->GamCod);
       Gam_PutParamQstCod (QstCod);
       Ico_PutIconRemove ();
-      Act_FormEnd ();
+      Act_EndForm ();
 
       /* Put icon to move up the question */
       if (NumQst)
@@ -3020,10 +3020,10 @@ static void Gam_PutButtonToAddNewQuestions (void)
   {
    extern const char *Txt_Add_questions;
 
-   Act_FormStart (ActAddOneGamQst);
+   Act_StartForm (ActAddOneGamQst);
    Gam_PutParams ();
    Btn_PutConfirmButton (Txt_Add_questions);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3520,7 +3520,7 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
    extern const char *Txt_Play;
 
    /***** Start form *****/
-   Act_FormStart (ActPlyGam1stQst);
+   Act_StartForm (ActPlyGam1stQst);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -3532,7 +3532,7 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3668,7 +3668,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
-   Act_FormStart (NextAction);
+   Act_StartForm (NextAction);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (QstInd);
 
@@ -3683,7 +3683,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

@@ -1256,7 +1256,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	              "<td class=\"CONTEXT_COL\">");
    if (ICanModerateForum)
      {
-      Act_FormStartAnchor (Enabled ? For_ActionsDisPstFor[Gbl.Forum.ForumSelected.Type] :
+      Act_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Gbl.Forum.ForumSelected.Type] :
 				     For_ActionsEnbPstFor[Gbl.Forum.ForumSelected.Type],
 			   For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
@@ -1278,7 +1278,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 			 "eye-slash",
 	       Gbl.Title,
 	       Gbl.Title);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
    else
      {
@@ -1306,10 +1306,10 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	{
 	 // Post can be removed if post is the last (without answers) and it's mine
 	 if (PstNum == 1)	// First and unique post in thread
-	    Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
+	    Act_StartFormAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
 				 For_FORUM_THREADS_SECTION_ID);
 	 else		// Last of several posts in thread
-	    Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
+	    Act_StartFormAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
 				      Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
@@ -1319,7 +1319,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				      Gbl.Forum.ForumSelected.ThrCod,
 				      PstCod);
 	 Ico_PutIconRemove ();
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
      }
    fprintf (Gbl.F.Out,"</td>");
@@ -1790,7 +1790,7 @@ static void For_PutFormWhichForums (void)
    /***** Form to select which forums I want to see:
           - all my forums
           - only the forums of current institution/degree/course *****/
-   Act_FormStart (ActSeeFor);
+   Act_StartForm (ActSeeFor);
    For_PutParamForumOrder (Gbl.Forum.ThreadsOrder);
    fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
 	              "<ul>");
@@ -1814,7 +1814,7 @@ static void For_PutFormWhichForums (void)
      }
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2102,7 +2102,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                   Txt_Copy_not_allowed,Txt_Copy_not_allowed);
       else
         {
-         Act_FormStartAnchor (For_ActionsPasThrFor[Forum->Type],
+         Act_StartFormAnchor (For_ActionsPasThrFor[Forum->Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                       1,	// Page of posts   = first
@@ -2117,12 +2117,12 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                   Gbl.Prefs.IconsURL,
                   Txt_Paste_thread,
                   Txt_Paste_thread);
-         Act_FormEnd ();
+         Act_EndForm ();
         }
      }
 
    /***** Write link to forum *****/
-   Act_FormStartAnchor (For_ActionsSeeFor[Forum->Type],
+   Act_StartFormAnchor (For_ActionsSeeFor[Forum->Type],
                         For_FORUM_THREADS_SECTION_ID);
    For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                 1,	// Page of posts   = first
@@ -2186,7 +2186,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Put link to register students *****/
    if (Forum->Type == For_FORUM_COURSE_USRS)
@@ -2600,7 +2600,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_MIDDLE\">");
-         Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+         Act_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
@@ -2616,7 +2616,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
          if (Order == Gbl.Forum.ThreadsOrder)
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
-         Act_FormEnd ();
+         Act_EndForm ();
          fprintf (Gbl.F.Out,"</th>");
 	}
       fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
@@ -3365,7 +3365,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 	  (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
         {
          fprintf (Gbl.F.Out,"<br />");
-         Act_FormStartAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
+         Act_StartFormAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
                               For_REMOVE_THREAD_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
@@ -3375,14 +3375,14 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 				      Thr.ThrCod,
 				      -1L);
          Ico_PutIconRemove ();
-         Act_FormEnd ();
+         Act_EndForm ();
         }
 
       /***** Put button to cut the thread for moving it to another forum *****/
       if (ICanMoveThreads)
         {
          fprintf (Gbl.F.Out,"<br />");
-         Act_FormStartAnchor (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type],
+         Act_StartFormAnchor (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
@@ -3397,7 +3397,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                   Gbl.Prefs.IconsURL,
                   Txt_Move_thread,
                   Txt_Move_thread);
-         Act_FormEnd ();
+         Act_EndForm ();
         }
 
       fprintf (Gbl.F.Out,"</td>");
@@ -3870,13 +3870,13 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread
      {
-      Act_FormStartAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
+      Act_StartFormAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewPost ();
      }
    else		// Form to write the first post of a new thread
      {
-      Act_FormStartAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
+      Act_StartFormAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
                            For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewThread ();
      }
@@ -3928,7 +3928,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    Btn_PutCreateButton (Txt_Send);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();

@@ -461,9 +461,9 @@ static void Inf_PutButtonToEditInfo (void)
   {
    extern const char *Txt_Edit;
 
-   Act_FormStart (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -605,13 +605,13 @@ void Inf_WriteMsgYouMustReadInfo (void)
       if (Gbl.CurrentCrs.Info.MustBeRead[InfoType])
         {
          fprintf (Gbl.F.Out,"<li>");
-         Act_FormStart (Inf_ActionsSeeInfo[InfoType]);
+         Act_StartForm (Inf_ActionsSeeInfo[InfoType]);
          Act_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
                              The_ClassForm[Gbl.Prefs.Theme],NULL);
          fprintf (Gbl.F.Out,"%s"
                             "</a>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
-         Act_FormEnd ();
+         Act_EndForm ();
          fprintf (Gbl.F.Out,"</li>");
         }
    fprintf (Gbl.F.Out,"</ul>"
@@ -1130,7 +1130,7 @@ void Inf_FormsToSelSendInfo (void)
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">");
-      Act_FormStart (Inf_ActionsSelecInfoSrc[Gbl.CurrentCrs.Info.Type]);
+      Act_StartForm (Inf_ActionsSelecInfoSrc[Gbl.CurrentCrs.Info.Type]);
       fprintf (Gbl.F.Out,"<input type=\"radio\""
 	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
 	       (unsigned) InfoSrc,(unsigned) InfoSrc);
@@ -1146,7 +1146,7 @@ void Inf_FormsToSelSendInfo (void)
 	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
 	}
       fprintf (Gbl.F.Out," />");
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Form for this info source */
@@ -1215,9 +1215,9 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit;
 
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1228,9 +1228,9 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit_plain_text);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1241,9 +1241,9 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit_rich_text);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1257,7 +1257,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_Upload_file;
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** File *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -1273,7 +1273,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    Btn_PutCreateButton (Txt_Upload_file);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1292,7 +1292,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** Link *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -1319,7 +1319,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Btn_PutCreateButton (Txt_Send_URL);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2055,7 +2055,7 @@ void Inf_EditPlainTxtInfo (void)
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Start form and box *****/
-   Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
                  HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
@@ -2078,7 +2078,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2106,7 +2106,7 @@ void Inf_EditRichTxtInfo (void)
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Start form and box *****/
-   Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
+   Act_StartForm (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
                  HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
 
@@ -2129,7 +2129,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

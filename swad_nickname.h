@@ -51,7 +51,9 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba);
 bool Nck_GetNicknameFromUsrCod (long UsrCod,
                                 char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1]);
 long Nck_GetUsrCodFromNickname (const char *Nickname);
-void Nck_ShowFormChangeUsrNickname (void);
+
+void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
+void Nck_ShowFormChangeOtherUsrNickname (void);
 
 void Nck_RemoveNick (void);
 void Nck_UpdateNick (void);

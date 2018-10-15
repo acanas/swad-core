@@ -113,7 +113,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /***** Form to update indicators *****/
    /* Start form and table */
-   Act_FormStart (ActReqStaCrs);
+   Act_StartForm (ActReqStaCrs);
    Tbl_StartTableWide (2);
 
    /* Scope */
@@ -183,7 +183,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* End table and form */
    Tbl_EndTable ();
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show the stats of courses *****/
    for (Ind = 0, NumCrssToList = 0;
@@ -197,14 +197,14 @@ void Ind_ReqIndicatorsCourses (void)
       Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
 
       /* Button to show more details */
-      Act_FormStart (ActSeeAllStaCrs);
+      Act_StartForm (ActSeeAllStaCrs);
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
       Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
       Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
       if (Gbl.Stat.StrIndicatorsSelected[0])
          Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
       Btn_PutConfirmButton (Txt_Show_more_details);
-      Act_FormEnd ();
+      Act_EndForm ();
      }
 
    /***** End box *****/

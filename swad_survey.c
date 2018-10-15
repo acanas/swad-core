@@ -241,7 +241,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 
 	 /* Form to change order */
-	 Act_FormStart (ActSeeAllSvy);
+	 Act_StartForm (ActSeeAllSvy);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -252,7 +252,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</th>");
 	}
@@ -356,10 +356,10 @@ static void Svy_PutButtonToCreateNewSvy (void)
   {
    extern const char *Txt_New_survey;
 
-   Act_FormStart (ActFrmNewSvy);
+   Act_StartForm (ActFrmNewSvy);
    Svy_PutParamsToCreateNewSvy ();
    Btn_PutConfirmButton (Txt_New_survey);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -509,7 +509,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"\">");
 
    /* Put form to view survey */
-   Act_FormStart (ActSeeOneSvy);
+   Act_StartForm (ActSeeOneSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
@@ -519,7 +519,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	                                    "ASG_TITLE_LIGHT",NULL);
    fprintf (Gbl.F.Out,"%s</a>",
             Svy.Title);
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
@@ -545,13 +545,13 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Act_FormStart (ActSeeOneSvy);
+	 Act_StartForm (ActSeeOneSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Answer_survey);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -560,13 +560,13 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Act_FormStart (ActSeeOneSvy);
+	 Act_StartForm (ActSeeOneSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_survey_results);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -1627,10 +1627,10 @@ static void Svy_PutButtonToResetSurvey (void)
   {
    extern const char *Txt_Reset_survey;
 
-   Act_FormStart (ActRstSvy);
+   Act_StartForm (ActRstSvy);
    Svy_PutParams ();
    Btn_PutRemoveButton (Txt_Reset_survey);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1840,7 +1840,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Start form *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
-   Act_FormStart (ItsANewSurvey ? ActNewSvy :
+   Act_StartForm (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
    Svy_PutParams ();
 
@@ -1928,7 +1928,7 @@ void Svy_RequestCreatOrEditSvy (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** Show questions of the survey ready to be edited *****/
    if (!ItsANewSurvey)
@@ -2700,7 +2700,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                     Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_FormStart (ActRcvSvyQst);
+   Act_StartForm (ActRcvSvyQst);
    Svy_PutParamSvyCod (SvyCod);
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Svy_PutParamQstCod (SvyQst->QstCod);
@@ -2792,7 +2792,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Btn_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -3224,7 +3224,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
       if (PutFormAnswerSurvey)
 	{
 	 /***** Start form to send answers to survey *****/
-	 Act_FormStart (ActAnsSvy);
+	 Act_StartForm (ActAnsSvy);
 	 Svy_PutParamSvyCod (Svy->SvyCod);
 	}
 
@@ -3267,11 +3267,11 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 	    fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
             /* Write icon to remove the question */
-            Act_FormStart (ActReqRemSvyQst);
+            Act_StartForm (ActReqRemSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
             Ico_PutIconRemove ();
-            Act_FormEnd ();
+            Act_EndForm ();
 
             /* Write icon to edit the question */
             Gbl.Svys.SvyCodToEdit    = Svy->SvyCod;
@@ -3314,7 +3314,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 	 Btn_PutConfirmButton (Txt_Done);
 
 	 /***** End form *****/
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
      }
    else	// This survey has no questions
@@ -3366,10 +3366,10 @@ static void Svy_PutButtonToCreateNewQuestion (void)
   {
    extern const char *Txt_New_question;
 
-   Act_FormStart (ActEdiOneSvyQst);
+   Act_StartForm (ActEdiOneSvyQst);
    Svy_PutParams ();
    Btn_PutConfirmButton (Txt_New_question);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

@@ -128,7 +128,7 @@ void Plc_SeePlaces (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_FormStart (ActSeePlc);
+	 Act_StartForm (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Plcs.SelectedOrder)
@@ -137,7 +137,7 @@ void Plc_SeePlaces (void)
 	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</th>");
 	}
       fprintf (Gbl.F.Out,"</tr>");
@@ -200,9 +200,9 @@ void Plc_SeePlaces (void)
       /***** Button to create place *****/
       if (ICanEdit)
 	{
-	 Act_FormStart (ActEdiPlc);
+	 Act_StartForm (ActEdiPlc);
 	 Btn_PutConfirmButton (Txt_New_place);
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	}
 
       /***** End box *****/
@@ -480,10 +480,10 @@ static void Plc_ListPlacesForEdition (void)
          Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_FormStart (ActRemPlc);
+         Act_StartForm (ActRemPlc);
          Plc_PutParamPlcCod (Plc->PlcCod);
          Ico_PutIconRemove ();
-         Act_FormEnd ();
+         Act_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -495,26 +495,26 @@ static void Plc_ListPlacesForEdition (void)
 
       /* Place short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenPlcSho);
+      Act_StartForm (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenPlcFul);
+      Act_StartForm (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of centres */
@@ -736,7 +736,7 @@ static void Plc_PutFormToCreatePlace (void)
    Plc = &Gbl.Plcs.EditingPlc;
 
    /***** Start form *****/
-   Act_FormStart (ActNewPlc);
+   Act_StartForm (ActNewPlc);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_place,NULL,
@@ -780,7 +780,7 @@ static void Plc_PutFormToCreatePlace (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_place);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/

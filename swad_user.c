@@ -2387,7 +2387,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
    /***** Start form *****/
-   Act_FormStart (NextAction);
+   Act_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
 
@@ -2432,7 +2432,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Log_in);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2569,7 +2569,7 @@ void Usr_PutFormLogIn (void)
    extern const char *Txt_Log_in;
 
    /***** Link to log in form *****/
-   Act_FormStart (ActFrmLogIn);
+   Act_StartForm (ActFrmLogIn);
    Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
                       " alt=\"%s\" title=\"%s\""
@@ -2580,7 +2580,7 @@ void Usr_PutFormLogIn (void)
             Txt_Log_in,
             Txt_Log_in,
             Txt_Log_in);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2603,11 +2603,11 @@ void Usr_WriteLoggedUsrHead (void)
    /***** User's role *****/
    if (NumAvailableRoles == 1)
      {
-      Act_FormStart (ActFrmRolSes);
+      Act_StartForm (ActFrmRolSes);
       Act_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"%s</a>",
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,":&nbsp;");
      }
    else
@@ -2638,7 +2638,7 @@ void Usr_PutFormLogOut (void)
    extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *Txt_Log_out;
 
-   Act_FormStart (ActLogOut);
+   Act_StartForm (ActLogOut);
    Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
@@ -2649,7 +2649,7 @@ void Usr_PutFormLogOut (void)
             Txt_Log_out,
             Txt_Log_out,
             Txt_Log_out);
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -5776,13 +5776,13 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
-   Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Select Usr_LIST_AS_LISTING *****/
@@ -5792,12 +5792,12 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
-   Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutCheckboxListWithPhotos ();
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    fprintf (Gbl.F.Out,"</div>");
@@ -5813,7 +5813,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
    /***** Start form *****/
-   Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (ListType);
    Usr_PutParamListWithPhotos ();
@@ -5835,7 +5835,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
             Txt_USR_LIST_TYPES[ListType]);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
@@ -6970,13 +6970,13 @@ void Usr_ListDataAdms (void)
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (ActLstOth);
+   Act_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
@@ -6984,10 +6984,10 @@ void Usr_ListDataAdms (void)
       /****** Show photos? *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                 " style=\"margin-bottom:8px;\">");
-      Act_FormStart (ActLstOth);
+      Act_StartForm (ActLstOth);
       Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
@@ -7447,13 +7447,13 @@ void Usr_SeeGuests (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActLstGst);
+      Act_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       fprintf (Gbl.F.Out,"</label>");
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -7480,7 +7480,7 @@ void Usr_SeeGuests (void)
 				       -1L);
 
          /* Start form */
-	 Act_FormStart (ActSeeRecSevGst);
+	 Act_StartForm (ActSeeRecSevGst);
 
          /* Start table */
 	 Tbl_StartTableWide (0);
@@ -7506,7 +7506,7 @@ void Usr_SeeGuests (void)
 	 Btn_PutConfirmButton (Txt_Show_records);
 
          /* End form */
-         Act_FormEnd ();
+         Act_EndForm ();
 	}
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
@@ -7597,13 +7597,13 @@ void Usr_SeeStudents (void)
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	 Act_FormStart (ActLstStd);
+	 Act_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 fprintf (Gbl.F.Out,"</label>");
-	 Act_FormEnd ();
+	 Act_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
 	 break;
       default:
@@ -7644,7 +7644,7 @@ void Usr_SeeStudents (void)
          /* Start form */
          if (ICanViewRecords)
            {
-	    Act_FormStart (ActSeeRecSevStd);
+	    Act_StartForm (ActSeeRecSevStd);
 	    Grp_PutParamsCodGrps ();
            }
 
@@ -7675,7 +7675,7 @@ void Usr_SeeStudents (void)
 	    Btn_PutConfirmButton (Txt_Show_records);
 
 	    /* End form */
-	    Act_FormEnd ();
+	    Act_EndForm ();
            }
 	}
      }
@@ -7776,13 +7776,13 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (ActLstTch);
+   Act_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
-   Act_FormEnd ();
+   Act_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to select groups *****/
@@ -7815,7 +7815,7 @@ void Usr_SeeTeachers (void)
 
          /* Start form */
          if (ICanViewRecords)
-            Act_FormStart (ActSeeRecSevTch);
+            Act_StartForm (ActSeeRecSevTch);
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -7853,7 +7853,7 @@ void Usr_SeeTeachers (void)
 	    Btn_PutConfirmButton (Txt_Show_records);
 
 	    /* End form */
-	    Act_FormEnd ();
+	    Act_EndForm ();
            }
 	}
      }

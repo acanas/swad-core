@@ -80,14 +80,6 @@ const char *The_TabOffBgColors[The_NUM_THEMES] =
    "TAB_OFF_YELLOW",
   };
 
-const char *The_ClassSeparator[The_NUM_THEMES] =
-  {
-   "WHITE_SEPARA",
-   "GREY_SEPARA",
-   "BLUE_SEPARA",
-   "YELLOW_SEPARA",
-  };
-
 const char *The_ClassHead[The_NUM_THEMES] =
   {
    "WHITE_HEAD",
@@ -250,7 +242,7 @@ void The_PutIconsToSelectTheme (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                Theme == Gbl.Prefs.Theme ? "PREF_ON" :
         	                          "PREF_OFF");
-      Act_FormStart (ActChgThe);
+      Act_StartForm (ActChgThe);
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
@@ -260,7 +252,7 @@ void The_PutIconsToSelectTheme (void)
                The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

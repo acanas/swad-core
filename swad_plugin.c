@@ -362,10 +362,10 @@ static void Plg_ListPluginsForEdition (void)
       /* Put icon to remove plugin */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Act_FormStart (ActRemPlg);
+      Act_StartForm (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       Ico_PutIconRemove ();
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin code */
@@ -388,69 +388,69 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRenPlg);
+      Act_StartForm (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
 	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin description */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgPlgDes);
+      Act_StartForm (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin logo */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgPlgLog);
+      Act_StartForm (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
 	                 " size=\"4\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin application key */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgPlgAppKey);
+      Act_StartForm (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
 	                 " size=\"16\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin URL */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgPlgURL);
+      Act_StartForm (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Plg->URL,Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin IP */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgPlgIP);
+      Act_StartForm (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
 	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_IP,Plg->IP,
                Gbl.Form.Id);
-      Act_FormEnd ();
+      Act_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
      }
@@ -839,7 +839,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Plg = &Gbl.Plugins.EditingPlg;
 
    /***** Start form *****/
-   Act_FormStart (ActNewPlg);
+   Act_StartForm (ActNewPlg);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
@@ -926,7 +926,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/
-   Act_FormEnd ();
+   Act_EndForm ();
   }
 
 /*****************************************************************************/
