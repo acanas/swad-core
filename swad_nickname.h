@@ -55,8 +55,12 @@ long Nck_GetUsrCodFromNickname (const char *Nickname);
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
 void Nck_ShowFormChangeOtherUsrNickname (void);
 
-void Nck_RemoveNick (void);
-void Nck_UpdateNick (void);
-void Nck_UpdateMyNick (const char *NewNickname);
+void Nck_RemoveMyNick (void);
+void Nck_RemoveOtherUsrNick (void);
+
+void Nck_UpdateMyNick (void);
+void Nck_UpdateOtherUsrNick (void);
+
+void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname);
 
 #endif

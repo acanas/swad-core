@@ -46,8 +46,6 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Nck_NICKNAME_SECTION_ID	"nickname_section"
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -56,13 +54,18 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+const char *Nck_NICKNAME_SECTION_ID = "nickname_section";
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname);
+static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool ItsMe,
+                                           bool IMustFillNickname);
 
-static void Nck_RemoveNicknameFromDB (const char *Nickname);
+static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname);
+
+static void Nck_UpdateUsrNick (struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /********* Check whether a nickname (with initial arroba) if valid ***********/
@@ -190,25 +193,28 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
   {
-   Nck_ShowFormChangeUsrNickname (IMustFillNickname);
+   Nck_ShowFormChangeUsrNickname (&Gbl.Usrs.Me.UsrDat,
+				  true,		// ItsMe
+				  IMustFillNickname);
   }
 
 /*****************************************************************************/
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
-
-// Not yet used
 
 void Nck_ShowFormChangeOtherUsrNickname (void)
   {
-   Nck_ShowFormChangeUsrNickname (false);	// IMustFillNickname
+   Nck_ShowFormChangeUsrNickname (&Gbl.Usrs.Other.UsrDat,
+				  false,	// ItsMe
+				  false);	// IMustFillNickname
   }
 
 /*****************************************************************************/
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
+static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool ItsMe,
+                                           bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -227,6 +233,7 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
    char StrRecordWidth[10 + 1];
    unsigned NumNicks;
    unsigned NumNick;
+   Act_Action_t NextAction;
 
    /***** Start section *****/
    Lay_StartSection (Nck_NICKNAME_SECTION_ID);
@@ -235,7 +242,7 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
                   " WHERE UsrCod=%ld"
                   " ORDER BY CreatTime DESC",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
+            UsrDat->UsrCod);
    NumNicks = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get nicknames of a user");
 
    /***** Start box *****/
@@ -255,7 +262,7 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
    /***** Start table *****/
    Tbl_StartTableWide (2);
 
-   /***** List my nicknames *****/
+   /***** List nicknames *****/
    for (NumNick = 1;
 	NumNick <= NumNicks;
 	NumNick++)
@@ -290,7 +297,26 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
 	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
 
 	 /* Form to remove old nickname */
-	 Act_StartFormAnchor (ActRemOldNic,Nck_NICKNAME_SECTION_ID);
+	 if (ItsMe)
+	    Act_StartFormAnchor (ActRemOldNicMe,Nck_NICKNAME_SECTION_ID);
+	 else
+	   {
+	    switch (UsrDat->Roles.InCurrentCrs.Role)
+	      {
+	       case Rol_STD:
+		  NextAction = ActRemOldNicStd;
+		  break;
+	       case Rol_NET:
+	       case Rol_TCH:
+		  NextAction = ActRemOldNicTch;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActRemOldNicOth;
+		  break;
+	      }
+	    Act_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\""
 	                    " value=\"%s\" />",
 		  row[0]);
@@ -302,7 +328,7 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
       fprintf (Gbl.F.Out,"@%s",row[0]);
 
       /* Link to QR code */
-      if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
+      if (NumNick == 1 && UsrDat->Nickname[0])
          Lay_PutContextualLink (ActPrnUsrQR,NULL,Usr_PutParamMyUsrCodEncrypted,
 				"qr64x64.gif",
 				Txt_QR_code,NULL,
@@ -313,7 +339,26 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
       if (NumNick > 1)
 	{
          fprintf (Gbl.F.Out,"<br />");
-         Act_StartFormAnchor (ActChgNic,Nck_NICKNAME_SECTION_ID);
+	 if (ItsMe)
+	    Act_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
+	 else
+	   {
+	    switch (UsrDat->Roles.InCurrentCrs.Role)
+	      {
+	       case Rol_STD:
+		  NextAction = ActChgNicStd;
+		  break;
+	       case Rol_NET:
+	       case Rol_TCH:
+		  NextAction = ActChgNicTch;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActChgNicOth;
+		  break;
+	      }
+	    Act_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\""
 	                    " value=\"@%s\" />",
 		  row[0]);	// Nickname
@@ -336,14 +381,33 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
             The_ClassForm[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
-   Act_StartFormAnchor (ActChgNic,Nck_NICKNAME_SECTION_ID);
+   if (ItsMe)
+      Act_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
+   else
+     {
+      switch (UsrDat->Roles.InCurrentCrs.Role)
+	{
+	 case Rol_STD:
+	    NextAction = ActChgNicStd;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActChgNicTch;
+	    break;
+	 default:	// Guest, user or admin
+	    NextAction = ActChgNicOth;
+	    break;
+	}
+      Act_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+     }
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
 	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
 	              "<br />",
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
-        	                         Txt_Save);			// I have no nickname yet);
+        	                         Txt_Save);		// I have no nickname yet);
    Act_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -356,22 +420,23 @@ static void Nck_ShowFormChangeUsrNickname (bool IMustFillNickname)
   }
 
 /*****************************************************************************/
-/******************************* Remove nickname *****************************/
+/***************************** Remove my nickname ****************************/
 /*****************************************************************************/
 
-void Nck_RemoveNick (void)
+void Nck_RemoveMyNick (void)
   {
    extern const char *Txt_Nickname_X_removed;
    extern const char *Txt_You_can_not_delete_your_current_nickname;
    char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
-   /***** Get new nickname from form *****/
-   Par_GetParToText ("Nick",NicknameWithoutArroba,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+   /***** Get nickname from form *****/
+   Par_GetParToText ("Nick",NicknameWithoutArroba,
+	             Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
    if (strcasecmp (NicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.Nickname))	// Only if not my current nickname
      {
       /***** Remove one of my old nicknames *****/
-      Nck_RemoveNicknameFromDB (NicknameWithoutArroba);
+      Nck_RemoveNicknameFromDB (Gbl.Usrs.Me.UsrDat.UsrCod,NicknameWithoutArroba);
 
       /***** Show message *****/
       Gbl.Alert.Type = Ale_SUCCESS;
@@ -390,36 +455,113 @@ void Nck_RemoveNick (void)
   }
 
 /*****************************************************************************/
-/******************* Remove an old nickname from database ********************/
+/********************* Remove another user's nickname ************************/
 /*****************************************************************************/
 
-static void Nck_RemoveNicknameFromDB (const char *Nickname)
+void Nck_RemoveOtherUsrNick (void)
   {
-   char Query[256];
+   extern const char *Txt_Nickname_X_removed;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
-   /***** Remove an old nickname *****/
-   sprintf (Query,"DELETE FROM usr_nicknames"
-                  " WHERE UsrCod=%ld AND Nickname='%s'",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Nickname);
-   DB_QueryREPLACE (Query,"can not remove an old nickname");
+   /***** Get user whose nick must be removed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** Get nickname from form *****/
+	 Par_GetParToText ("Nick",NicknameWithoutArroba,
+			   Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
+
+	 /***** Remove one of the old nicknames *****/
+	 Nck_RemoveNicknameFromDB (Gbl.Usrs.Other.UsrDat.UsrCod,NicknameWithoutArroba);
+
+	 /***** Show message *****/
+	 Gbl.Alert.Type = Ale_SUCCESS;
+	 Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
+	 sprintf (Gbl.Alert.Txt,Txt_Nickname_X_removed,NicknameWithoutArroba);
+
+	 /***** Show user's account again *****/
+	 Acc_ShowFormChgOtherUsrAccount ();
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else		// User not found
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
-/******************************* Update nickname *****************************/
+/********************** Remove a nickname from database **********************/
 /*****************************************************************************/
 
-void Nck_UpdateNick (void)
+static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname)
+  {
+   char Query[256];
+
+   /***** Remove a nickname *****/
+   sprintf (Query,"DELETE FROM usr_nicknames"
+                  " WHERE UsrCod=%ld AND Nickname='%s'",
+            UsrCod,Nickname);
+   DB_QueryREPLACE (Query,"can not remove a nickname");
+  }
+
+/*****************************************************************************/
+/***************************** Update my nickname ****************************/
+/*****************************************************************************/
+
+void Nck_UpdateMyNick (void)
+  {
+   /***** Update my nickname *****/
+   Nck_UpdateUsrNick (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Show my account again *****/
+   Acc_ShowFormChgMyAccount ();
+  }
+
+/*****************************************************************************/
+/*********************** Update another user's nickname **********************/
+/*****************************************************************************/
+
+void Nck_UpdateOtherUsrNick (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user whose nick must be changed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** Update my nickname *****/
+	 Nck_UpdateUsrNick (&Gbl.Usrs.Other.UsrDat);
+
+	 /***** Show user's account again *****/
+	 Acc_ShowFormChgOtherUsrAccount ();
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else		// User not found
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/*************************** Update user's nickname **************************/
+/*****************************************************************************/
+
+static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
   {
    extern const char *Txt_The_nickname_X_matches_the_one_you_had_previously_registered;
    extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
-   extern const char *Txt_Your_nickname_X_has_been_registered_successfully;
+   extern const char *Txt_The_nickname_X_has_been_registered_successfully;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
-   char Query[1024];
+   char Query[128 + Nck_MAX_BYTES_NICKNAME_FROM_FORM];
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_FROM_FORM);
+   Par_GetParToText ("NewNick",NewNicknameWithArroba,
+		     Nck_MAX_BYTES_NICKNAME_FROM_FORM);
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
@@ -428,26 +570,26 @@ void Nck_UpdateNick (void)
       Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
       /***** Check if new nickname exists in database *****/
-      if (!strcmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba)) // My nickname match exactly the new nickname
+      if (!strcmp (UsrDat->Nickname,NewNicknameWithoutArroba))		// User's nickname match exactly the new nickname
         {
          Gbl.Alert.Type = Ale_WARNING;
          Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
          sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
                   NewNicknameWithoutArroba);
         }
-      else if (strcasecmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba))	// My nickname does not match, not even case insensitive, the new nickname
+      else if (strcasecmp (UsrDat->Nickname,NewNicknameWithoutArroba))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
          sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
                         " WHERE UsrCod=%ld AND Nickname='%s'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,NewNicknameWithoutArroba);
+                  UsrDat->UsrCod,NewNicknameWithoutArroba);
          if (!DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // No matches
            {
             /***** Check if the new nickname matches any of the nicknames of other users *****/
             sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
                            " WHERE Nickname='%s' AND UsrCod<>%ld",
-                     NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
-            if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that my nickname
+                     NewNicknameWithoutArroba,UsrDat->UsrCod);
+            if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that user's nickname
               {
                Gbl.Alert.Type = Ale_WARNING;
                Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
@@ -458,14 +600,15 @@ void Nck_UpdateNick (void)
         }
       if (Gbl.Alert.Type == Ale_NONE)
         {
-         // Now we know the new nickname is not already in database and is diffent to the current one
-         Nck_UpdateMyNick (NewNicknameWithoutArroba);
-         Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
+         // Now we know the new nickname is not already in database
+	 // and is diffent to the current one
+         Nck_UpdateNickInDB (UsrDat->UsrCod,NewNicknameWithoutArroba);
+         Str_Copy (UsrDat->Nickname,NewNicknameWithoutArroba,
                    Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
          Gbl.Alert.Type = Ale_SUCCESS;
-         Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-         sprintf (Gbl.Alert.Txt,Txt_Your_nickname_X_has_been_registered_successfully,
+	 Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
+         sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_has_been_registered_successfully,
                   NewNicknameWithoutArroba);
         }
      }
@@ -478,24 +621,21 @@ void Nck_UpdateNick (void)
                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
      }
-
-   /***** Show my account again *****/
-   Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
-/********************** Update my nickname in database ***********************/
+/******************* Update user's nickname in database **********************/
 /*****************************************************************************/
 
-void Nck_UpdateMyNick (const char *NewNickname)
+void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname)
   {
    char Query[512];
 
-   /***** Update my nickname in database *****/
+   /***** Update user's nickname in database *****/
    sprintf (Query,"REPLACE INTO usr_nicknames"
                   " (UsrCod,Nickname,CreatTime)"
                   " VALUES"
                   " (%ld,'%s',NOW())",
-            Gbl.Usrs.Me.UsrDat.UsrCod,NewNickname);
-   DB_QueryREPLACE (Query,"can not update your nickname");
+            UsrCod,NewNickname);
+   DB_QueryREPLACE (Query,"can not update nickname");
   }

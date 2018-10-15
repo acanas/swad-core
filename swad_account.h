@@ -57,6 +57,7 @@ void Acc_CheckIfEmptyAccountExists (void);
 
 void Acc_ShowFormGoToRequestNewAccount (void);
 void Acc_ShowFormChgMyAccount (void);
+void Acc_ShowFormChgOtherUsrAccount (void);
 void Acc_PutLinkToRemoveMyAccount (void);
 bool Acc_CreateMyNewAccountAndLogIn (void);
 void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount);
@@ -70,5 +71,7 @@ void Acc_AskIfRemoveMyAccount (void);
 void Acc_RemoveMyAccount (void);
 void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                                      Cns_QuietOrVerbose_t QuietOrVerbose);
+
+void Acc_PutIconToChangeUsrAccount (void);
 
 #endif

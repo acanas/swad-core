@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>
 
+#include "swad_account.h"
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_config.h"
@@ -2683,7 +2684,10 @@ static void Rec_PutIconsCommands (void)
 	}
 
       /***** Button to change user's photo *****/
-      Pho_PutLinkToChangeOtherUsrPhoto ();
+      Pho_PutIconToChangeUsrPhoto ();
+
+      /***** Button to change user's account *****/
+      Acc_PutIconToChangeUsrAccount ();
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");

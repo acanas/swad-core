@@ -58,6 +58,8 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Ale_ResetAlert (void);
+
 void Ale_ShowPendingAlert (void);
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *Txt);
 void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,

@@ -355,10 +355,32 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.4 (2018-10-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.5 (2018-10-16)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.5:     Oct 16, 2018  Changes in management of other users. (235292 lines)
+					19 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1735','es','N','Administrar cuenta otro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1736','es','N','Administrar cuenta estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1737','es','N','Administrar cuenta profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1738','es','N','Eliminar apodo otro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1739','es','N','Eliminar apodo estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1740','es','N','Eliminar apodo profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1741','es','N','Cambiar apodo otro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1742','es','N','Cambiar apodo estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1743','es','N','Cambiar apodo profesor');
+UPDATE actions SET Txt='Cambiar mi apodo' WHERE ActCod='37' AND Language='es';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1464';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1465';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1466';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1464';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1465';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1466';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1447';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1448';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1449';
+
         Version 18.4:     Oct 15, 2018  Changes in user's account and management of other users. (235134 lines)
         Version 18.3.10:  Oct 11, 2018  Fixed bug in text of menu options. (235007 lines)
         Version 18.3.9:   Oct 11, 2018  Code refactoring related with checking if I am the logged user. (235046 lines)

@@ -52,8 +52,6 @@ extern struct Globals Gbl;
 
 #define ID_MAX_IDS_PER_USER	3	// Maximum number of IDs per user
 
-#define ID_ID_SECTION_ID	"id_section"
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -61,6 +59,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
+
+const char *ID_ID_SECTION_ID = "id_section";
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -503,45 +503,6 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
   }
 
 /*****************************************************************************/
-/*********** Put a link to the action used to request user's IDs *************/
-/*****************************************************************************/
-
-void ID_PutLinkToChangeUsrIDs (void)
-  {
-   extern const char *Txt_Change_IDs;
-   Act_Action_t NextAction;
-   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Link for changing the password *****/
-   if (ItsMe)
-      Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
-			     "arroba64x64.gif",
-			     Txt_Change_IDs,Txt_Change_IDs,
-                             NULL);
-   else	// Not me
-     {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
-	{
-	 case Rol_STD:
-	    NextAction = ActFrmIDsStd;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActFrmIDsTch;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActFrmIDsOth;
-	    break;
-	}
-      Lay_PutContextualLink (NextAction,NULL,
-                             Usr_PutParamOtherUsrCodEncrypted,
-			     "arroba64x64.gif",
-			     Txt_Change_IDs,Txt_Change_IDs,
-                             NULL);
-     }
-  }
-
-/*****************************************************************************/
 /************* Show form to the change of IDs of another user ****************/
 /*****************************************************************************/
 
@@ -622,13 +583,25 @@ void ID_ShowFormChangeMyID (bool IShouldFillID)
 
 void ID_ShowFormChangeOtherUsrID (void)
   {
+   extern const char *Hlp_PROFILE_Account;
+   extern const char *Txt_ID;
+   char StrRecordWidth[10 + 1];
+
    /***** Start section *****/
    Lay_StartSection (ID_ID_SECTION_ID);
+
+   /***** Start box *****/
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBox (StrRecordWidth,Txt_ID,NULL,
+                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change ID *****/
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
 			   false,	// ItsMe
 			   false);	// IShouldFillID
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -835,7 +808,7 @@ void ID_RemoveOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show form again *****/
-      ID_ShowFormOthIDs ();
+      Acc_ShowFormChgOtherUsrAccount ();
      }
    else		// User not found
      {
@@ -936,7 +909,7 @@ static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
 
 void ID_NewMyUsrID (void)
   {
-   /***** Remove user's ID *****/
+   /***** New user's ID *****/
    ID_NewUsrID (&Gbl.Usrs.Me.UsrDat,
 		true);	// It's me
 
@@ -967,7 +940,7 @@ void ID_NewOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show form again *****/
-      ID_ShowFormOthIDs ();
+      Acc_ShowFormChgOtherUsrAccount ();
      }
    else		// User not found
      {

@@ -64,6 +64,17 @@ static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
 /*****************************************************************************/
 
 /*****************************************************************************/
+/******************************** Reset alert ********************************/
+/*****************************************************************************/
+
+void Ale_ResetAlert (void)
+  {
+   Gbl.Alert.Type = Ale_NONE;	// Reset alert
+   Gbl.Alert.Section = NULL;
+   Gbl.Alert.Txt[0] = '\0';
+  }
+
+/*****************************************************************************/
 /*********************** Show a write-pending alert **************************/
 /*****************************************************************************/
 // Gbl.Alert.Type must be Ale_NONE or any type of alert
@@ -76,8 +87,7 @@ void Ale_ShowPendingAlert (void)
       /***** Show alert *****/
       Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
-   // Do not be tempted to restore the value of Gbl.Alert.Type to Ale_NONE here,
-   // since it can still be used after calling this function.
+   Ale_ResetAlert ();
   }
 
 /*****************************************************************************/
@@ -89,6 +99,8 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *Txt)
    if (AlertType != Ale_NONE)
       Ale_ShowAlertAndButton (AlertType,Txt,
                               ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+
+   Ale_ResetAlert ();
   }
 
 void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,

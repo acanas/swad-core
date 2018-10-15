@@ -4656,6 +4656,27 @@ const char *Txt_Centres_with_pending_degrees =
 	"Centros com titula&ccedil;&otilde;es pendentes";
 #endif
 
+const char *Txt_Change_account =
+#if   L==1
+	"Canviar compte";
+#elif L==2
+	"Benutzerkonto &auml;ndern";
+#elif L==3
+	"Change account";
+#elif L==4
+	"Cambiar cuenta";
+#elif L==5
+	"Changer compte";
+#elif L==6
+	"Cambiar cuenta";	// Okoteve traducción
+#elif L==7
+	"Cambiare account";
+#elif L==8
+	"Zmie&nacute; konto";
+#elif L==9
+	"Alterar conta";
+#endif
+
 const char *Txt_Change_email =
 #if   L==1
 	"Canviar correu";
@@ -46914,6 +46935,36 @@ const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include 
 	"The new logo is <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
+const char *Txt_The_nickname_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"El apodo <strong>@%s</strong>"
+	" se ha registrado correctamente.";		// Necessita traduccio
+#elif L==2
+	"The nickname <strong>@%s</strong>"
+	" has been registered successfully.";		// Need Übersetzung
+#elif L==3
+	"The nickname <strong>@%s</strong>"
+	" has been registered successfully.";
+#elif L==4
+	"El apodo <strong>@%s</strong>"
+	" se ha registrado correctamente.";
+#elif L==5
+	"The nickname <strong>@%s</strong>"
+	" has been registered successfully.";		// Besoin de traduction
+#elif L==6
+	"El apodo <strong>@%s</strong>"
+	" se ha registrado correctamente.";		// Okoteve traducción
+#elif L==7
+	"Il nome utente <strong>@%s</strong>"
+	" &egrave; stato registrato con successo.";
+#elif L==8
+	"The nickname <strong>@%s</strong>"
+	" has been registered successfully.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"The nickname <strong>@%s</strong>"
+	" has been registered successfully.";		// Necessita de tradução
+#endif
+
 const char *Txt_The_nickname_entered_X_is_not_valid_ =	// Warning: it is very important to include %s and two %u in the following sentences
 #if   L==1
 	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
@@ -47436,25 +47487,25 @@ const char *Txt_The_password_must_be_at_least_X_characters =	// Warning: it is v
 	"The password must be at least %u characters.";			// Necessita de tradução
 #endif
 
-const char *Txt_The_X_password_has_been_changed_successfully =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_password_has_been_changed_successfully =
 #if   L==1
-	"La contrase&ntilde;a de %s se ha modificado con &eacute;xito.";	// Necessita traduccio
+	"La contrase&ntilde;a se ha modificado con &eacute;xito.";	// Necessita traduccio
 #elif L==2
-	"The %s password has been changed successfully.";			// Need Übersetzung
+	"The password has been changed successfully.";			// Need Übersetzung
 #elif L==3
-	"The %s password has been changed successfully.";
+	"The password has been changed successfully.";
 #elif L==4
-	"La contrase&ntilde;a de %s se ha modificado con &eacute;xito.";
+	"La contrase&ntilde;a se ha modificado con &eacute;xito.";
 #elif L==5
-	"The %s password has been changed successfully.";			// Besoin de traduction
+	"The %password has been changed successfully.";			// Besoin de traduction
 #elif L==6
-	"La contrase&ntilde;a de %s se ha modificado con &eacute;xito.";	// Okoteve traducción
+	"La contrase&ntilde;a se ha modificado con &eacute;xito.";	// Okoteve traducción
 #elif L==7
-	"La %s password &egrave; stata cambiata con successo.";
+	"La password &egrave; stata cambiata con successo.";
 #elif L==8
-	"The %s password has been changed successfully.";			// Potrzebujesz tlumaczenie
+	"The password has been changed successfully.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"The %s password has been changed successfully.";			// Necessita de tradução
+	"The password has been changed successfully.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_place_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -57403,36 +57454,6 @@ const char *Txt_Your_comment_has_been_updated =
 	"Komentarz zosta&lstrok; zaktualizowany.";
 #elif L==9
 	"O seu coment&aacute;rio foi atualizado.";
-#endif
-
-const char *Txt_Your_nickname_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Su apodo <strong>@%s</strong>"
-	" se ha registrado correctamente.";		// Necessita traduccio
-#elif L==2
-	"Your nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Need Übersetzung
-#elif L==3
-	"Your nickname <strong>@%s</strong>"
-	" has been registered successfully.";
-#elif L==4
-	"Su apodo <strong>@%s</strong>"
-	" se ha registrado correctamente.";
-#elif L==5
-	"Your nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Besoin de traduction
-#elif L==6
-	"Su apodo <strong>@%s</strong>"
-	" se ha registrado correctamente.";		// Okoteve traducción
-#elif L==7
-	"Il tuo nome utente <strong>@%s</strong>"
-	" &egrave; stato registrato con successo.";
-#elif L==8
-	"Your nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"Your nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Necessita de tradução
 #endif
 
 const char *Txt_Your_password_has_been_changed_successfully =

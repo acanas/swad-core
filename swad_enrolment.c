@@ -3340,19 +3340,6 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 
 static void Enr_ShowFormToEditOtherUsr (void)
   {
-
-   if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-     {
-      /***** Buttons for edition *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
-      Mai_PutLinkToChangeOtherUsrEmails ();	// Put link (form) to change user's emails
-      ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** User's record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,
                             &Gbl.Usrs.Other.UsrDat,NULL);

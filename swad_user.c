@@ -2877,6 +2877,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 
 	    /* Send message via email to confirm the new email address */
 	    Mai_SendMailMsgToConfirmEmail ();
+	    Ale_ShowPendingAlert ();	// Show alert after sending email confirmation
 	   }
 	}
       else	// Gbl.Action.Act != ActCreUsrAcc

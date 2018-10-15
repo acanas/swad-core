@@ -67,10 +67,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword);
 void Pwd_ShowFormChgMyPwd (void);
 void Pwd_PutFormToGetNewPasswordOnce (void);
 void Pwd_PutFormToGetNewPasswordTwice (void);
-void Pwd_ShowFormOthPwd (void);
-
-void Pwd_PutLinkToChangeMyPassword (void);
-void Pwd_PutLinkToChangeOtherUsrPassword (void);
+void Pwd_ShowFormChgOtherUsrPwd (void);
 
 void Pwd_AskForConfirmationOnDangerousAction (void);
 bool Pwd_GetConfirmationOnDangerousAction (void);

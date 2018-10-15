@@ -38,6 +38,7 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_language.h"
+#include "swad_nickname.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
@@ -470,6 +471,53 @@ void Acc_ShowFormChgMyAccount (void)
   }
 
 /*****************************************************************************/
+/***************** Show form to change another user's account ****************/
+/*****************************************************************************/
+
+void Acc_ShowFormChgOtherUsrAccount (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user whose account must be changed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** Get user's nickname and email address
+		It's necessary because nickname or email could be just updated *****/
+	 Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
+	 Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+	 /***** Show user's record *****/
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+				  &Gbl.Usrs.Other.UsrDat,NULL);
+
+	 /***** Start container for this user *****/
+	 fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
+
+	 /***** Show form to change nickname and email *****/
+	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+	 Nck_ShowFormChangeOtherUsrNickname ();
+	 Mai_ShowFormChangeOtherUsrEmail ();
+	 fprintf (Gbl.F.Out,"</div>");
+
+	 /***** Show form to change ID and password *****/
+	 fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	 ID_ShowFormChangeOtherUsrID ();
+	 Pwd_ShowFormChgOtherUsrPwd ();
+	 fprintf (Gbl.F.Out,"</div>");
+
+	 /***** Start container for this user *****/
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else		// User not found
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
 /************* Put an icon (form) to request removing my account *************/
 /*****************************************************************************/
 
@@ -518,7 +566,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
                         true);	// I am creating my own account
 
       /***** Save nickname *****/
-      Nck_UpdateMyNick (NewNicknameWithoutArroba);
+      Nck_UpdateNickInDB (Gbl.Usrs.Me.UsrDat.UsrCod,NewNicknameWithoutArroba);
       Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
                 Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
@@ -1149,4 +1197,43 @@ static void Acc_RemoveUsr (struct UsrData *UsrDat)
    sprintf (Query,"DELETE FROM usr_data WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's data");
+  }
+
+/*****************************************************************************/
+/********* Put an icon to the action used to manage user's account ***********/
+/*****************************************************************************/
+
+void Acc_PutIconToChangeUsrAccount (void)
+  {
+   extern const char *Txt_Change_account;
+   Act_Action_t NextAction;
+   bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
+
+   /***** Link for changing the account *****/
+   if (ItsMe)
+      Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
+			     "arroba64x64.gif",
+			     Txt_Change_account,NULL,
+			     NULL);
+   else	// Not me
+      if (Usr_ICanEditOtherUsr (Gbl.Record.UsrDat))
+	{
+	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
+	   {
+	    case Rol_STD:
+	       NextAction = ActFrmAccStd;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActFrmAccTch;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActFrmAccOth;
+	       break;
+	   }
+	 Lay_PutContextualLink (NextAction,NULL,Rec_PutParamUsrCodEncrypted,
+	                        "arroba64x64.gif",
+				Txt_Change_account,NULL,
+				NULL);
+	}
   }

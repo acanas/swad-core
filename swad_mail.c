@@ -54,8 +54,6 @@ extern struct Globals Gbl;
 
 #define Mai_LENGTH_EMAIL_CONFIRM_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 
-#define Mai_EMAIL_SECTION_ID	"email_section"
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -63,6 +61,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
+
+const char *Mai_EMAIL_SECTION_ID = "email_section";
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -1139,45 +1139,6 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   }
 
 /*****************************************************************************/
-/********** Put a link to the action used to change user's emails ************/
-/*****************************************************************************/
-
-void Mai_PutLinkToChangeOtherUsrEmails (void)
-  {
-   extern const char *Txt_Change_email;
-   Act_Action_t NextAction;
-   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Link for changing the password *****/
-   if (ItsMe)
-      Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
-                             "msg64x64.gif",
-			     Txt_Change_email,Txt_Change_email,
-                             NULL);
-   else	// Not me
-     {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
-        {
-	 case Rol_STD:
-	    NextAction = ActFrmMaiStd;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActFrmMaiTch;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActFrmMaiOth;
-	    break;
-        }
-      Lay_PutContextualLink (NextAction,NULL,
-                             Usr_PutParamOtherUsrCodEncrypted,
-                             "msg64x64.gif",
-                             Txt_Change_email,Txt_Change_email,
-                             NULL);
-     }
-  }
-
-/*****************************************************************************/
 /*********** Show form to the change the email of another user ***************/
 /*****************************************************************************/
 
@@ -1248,14 +1209,26 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillEmail,bool IShouldConfirmEmail)
 
 void Mai_ShowFormChangeOtherUsrEmail (void)
   {
+   extern const char *Hlp_PROFILE_Account;
+   extern const char *Txt_Email;
+   char StrRecordWidth[10 + 1];
+
    /***** Start section *****/
    Lay_StartSection (Mai_EMAIL_SECTION_ID);
+
+   /***** Start box *****/
+   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   Box_StartBox (StrRecordWidth,Txt_Email,NULL,
+                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/
    Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
 			       false,	// ItsMe
 			       false,	// IMustFillEmail
 			       false);	// IShouldConfirmEmail
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -1364,7 +1337,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 Act_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />",
+      fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\""
+	                 " value=\"%s\" />",
 	       row[0]);
       Ico_PutIconRemove ();
       Act_EndForm ();
@@ -1421,10 +1395,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 
    /***** Form to enter new email *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
+                      "<td class=\"REC_C1_BOT RIGHT_TOP\">"
                       "<label for=\"NewEmail\" class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td class=\"LEFT_TOP DAT\">",
+                      "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
             The_ClassForm[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new email
         	        Txt_Email);	// The first email
@@ -1491,7 +1465,7 @@ void Mai_RemoveOtherUsrEmail (void)
       Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show form again *****/
-      Mai_ShowFormOthEmail ();
+      Acc_ShowFormChgOtherUsrAccount ();
      }
    else		// User not found
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -1577,7 +1551,7 @@ void Mai_NewOtherUsrEmail (void)
       Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
       /***** Show form again *****/
-      Mai_ShowFormOthEmail ();
+      Acc_ShowFormChgOtherUsrAccount ();
      }
    else		// User not found
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

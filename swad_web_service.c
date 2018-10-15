@@ -711,7 +711,7 @@ int swad__createAccount (struct soap *soap,
                      true);	// I am creating my own account
 
    /***** Save nickname *****/
-   Nck_UpdateMyNick (NewNicknameWithoutArroba);
+   Nck_UpdateNickInDB (Gbl.Usrs.Me.UsrDat.UsrCod,NewNicknameWithoutArroba);
    Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
              Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 

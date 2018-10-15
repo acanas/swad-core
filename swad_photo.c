@@ -164,7 +164,7 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
 /********** Put a link to the action used to request user's photo ************/
 /*****************************************************************************/
 
-void Pho_PutLinkToChangeOtherUsrPhoto (void)
+void Pho_PutIconToChangeUsrPhoto (void)
   {
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;

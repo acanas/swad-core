@@ -55,8 +55,6 @@ extern struct Globals Gbl;
 // and another user can not change his/her password to this
 #define Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD 2
 
-#define Pwd_PASSWORD_SECTION_ID	"password_section"
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -64,6 +62,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
+
+const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -500,7 +500,7 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
 void Pwd_UpdateOtherPwd (void)
   {
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
-   extern const char *Txt_The_X_password_has_been_changed_successfully;
+   extern const char *Txt_The_password_has_been_changed_successfully;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
@@ -535,8 +535,8 @@ void Pwd_UpdateOtherPwd (void)
 
 	       Gbl.Alert.Type = Ale_SUCCESS;
                Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-	       sprintf (Gbl.Alert.Txt,Txt_The_X_password_has_been_changed_successfully,
-			Gbl.Usrs.Other.UsrDat.FullName);
+	       sprintf (Gbl.Alert.Txt,"%s",
+		        Txt_The_password_has_been_changed_successfully);
 	      }
 	   }
 	}
@@ -849,7 +849,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 /********** Show form to the change of password of another user **************/
 /*****************************************************************************/
 
-void Pwd_ShowFormOthPwd (void)
+void Pwd_ShowFormChgOtherUsrPwd (void)
   {
    extern const char *Txt_Password;
    extern const char *Txt_Change_password;
@@ -865,14 +865,12 @@ void Pwd_ShowFormOthPwd (void)
 	 Box_StartBox (NULL,Txt_Password,NULL,
 		       NULL,Box_NOT_CLOSABLE);
 
-	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-				  &Gbl.Usrs.Other.UsrDat,NULL);
 	 /***** Start section *****/
 	 Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
 	 /***** Show possible alert *****/
-	 Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+	 if (Gbl.Alert.Section == (const char *) Pwd_PASSWORD_SECTION_ID)
+	    Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
 	 /***** Form to change password *****/
 	 /* Start form */
@@ -893,7 +891,7 @@ void Pwd_ShowFormOthPwd (void)
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
-	 Tbl_StartTableCenter (2);
+	 Tbl_StartTableWide (2);
 	 Pwd_PutFormToGetNewPasswordTwice ();
 	 Tbl_EndTable ();
 
@@ -912,57 +910,6 @@ void Pwd_ShowFormOthPwd (void)
      }
    else		// User not found
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-  }
-
-/*****************************************************************************/
-/********* Put a link to the action used to change user's password ***********/
-/*****************************************************************************/
-
-void Pwd_PutLinkToChangeMyPassword (void)
-  {
-   extern const char *Txt_Change_password;
-
-   /***** Link for changing the password *****/
-   Lay_PutContextualLink (ActFrmChgMyPwd,NULL,NULL,
-                          "key64x64.gif",
-                          Txt_Change_password,Txt_Change_password,
-                          NULL);
-  }
-
-/*****************************************************************************/
-/********* Put a link to the action used to change user's password ***********/
-/*****************************************************************************/
-
-void Pwd_PutLinkToChangeOtherUsrPassword (void)
-  {
-   extern const char *Txt_Change_password;
-   Act_Action_t NextAction;
-   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Link for changing the password *****/
-   if (ItsMe)
-      Pwd_PutLinkToChangeMyPassword ();
-   else	// Not me
-     {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
-	{
-	 case Rol_STD:
-	    NextAction = ActFrmPwdStd;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActFrmPwdTch;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActFrmPwdOth;
-	    break;
-	}
-      Lay_PutContextualLink (NextAction,NULL,
-                             Usr_PutParamOtherUsrCodEncrypted,
-                             "key64x64.gif",
-                             Txt_Change_password,Txt_Change_password,
-                             NULL);
-     }
   }
 
 /*****************************************************************************/

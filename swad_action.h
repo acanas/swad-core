@@ -62,7 +62,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 157 + 437 + 165 + 172 + 42 + 14 + 76)
 
-#define Act_MAX_ACTION_COD 1734
+#define Act_MAX_ACTION_COD 1743
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -1223,24 +1223,26 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActCnfID_Std		(ActRemOldBrf + 128)
 #define ActCnfID_Tch		(ActRemOldBrf + 129)
 
-#define ActFrmIDsOth		(ActRemOldBrf + 130)
-#define ActFrmIDsStd		(ActRemOldBrf + 131)
-#define ActFrmIDsTch		(ActRemOldBrf + 132)
-#define ActRemID_Oth		(ActRemOldBrf + 133)
-#define ActRemID_Std		(ActRemOldBrf + 134)
-#define ActRemID_Tch		(ActRemOldBrf + 135)
-#define ActNewID_Oth		(ActRemOldBrf + 136)
-#define ActNewID_Std		(ActRemOldBrf + 137)
-#define ActNewID_Tch		(ActRemOldBrf + 138)
-#define ActFrmPwdOth		(ActRemOldBrf + 139)
-#define ActFrmPwdStd		(ActRemOldBrf + 140)
-#define ActFrmPwdTch		(ActRemOldBrf + 141)
-#define ActChgPwdOth		(ActRemOldBrf + 142)
-#define ActChgPwdStd		(ActRemOldBrf + 143)
-#define ActChgPwdTch		(ActRemOldBrf + 144)
-#define ActFrmMaiOth		(ActRemOldBrf + 145)
-#define ActFrmMaiStd		(ActRemOldBrf + 146)
-#define ActFrmMaiTch		(ActRemOldBrf + 147)
+#define ActFrmAccOth		(ActRemOldBrf + 130)
+#define ActFrmAccStd		(ActRemOldBrf + 131)
+#define ActFrmAccTch		(ActRemOldBrf + 132)
+
+#define ActRemOldNicOth		(ActRemOldBrf + 133)
+#define ActRemOldNicStd		(ActRemOldBrf + 134)
+#define ActRemOldNicTch		(ActRemOldBrf + 135)
+#define ActChgNicOth		(ActRemOldBrf + 136)
+#define ActChgNicStd		(ActRemOldBrf + 137)
+#define ActChgNicTch		(ActRemOldBrf + 138)
+
+#define ActRemID_Oth		(ActRemOldBrf + 139)
+#define ActRemID_Std		(ActRemOldBrf + 140)
+#define ActRemID_Tch		(ActRemOldBrf + 141)
+#define ActNewID_Oth		(ActRemOldBrf + 142)
+#define ActNewID_Std		(ActRemOldBrf + 143)
+#define ActNewID_Tch		(ActRemOldBrf + 144)
+#define ActChgPwdOth		(ActRemOldBrf + 145)
+#define ActChgPwdStd		(ActRemOldBrf + 146)
+#define ActChgPwdTch		(ActRemOldBrf + 147)
 #define ActRemMaiOth		(ActRemOldBrf + 148)
 #define ActRemMaiStd		(ActRemOldBrf + 149)
 #define ActRemMaiTch		(ActRemOldBrf + 150)
@@ -1558,8 +1560,8 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActCreUsrAcc		(ActSeeMyUsgRep + 29)
 #define ActRemID_Me		(ActSeeMyUsgRep + 30)
 #define ActNewIDMe		(ActSeeMyUsgRep + 31)
-#define ActRemOldNic		(ActSeeMyUsgRep + 32)
-#define ActChgNic		(ActSeeMyUsgRep + 33)
+#define ActRemOldNicMe		(ActSeeMyUsgRep + 32)
+#define ActChgNicMe		(ActSeeMyUsgRep + 33)
 #define ActRemMaiMe		(ActSeeMyUsgRep + 34)
 #define ActNewMaiMe		(ActSeeMyUsgRep + 35)
 #define ActCnfMai		(ActSeeMyUsgRep + 36)
