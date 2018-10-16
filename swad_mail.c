@@ -1208,7 +1208,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_email_address;
-   extern const char *Txt_Please_check_and_confirm_your_email_address;
+   extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
    extern const char *Txt_Other_emails;
    extern const char *Txt_Email_X_confirmed;
@@ -1234,7 +1234,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    if (IMustFillEmail)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_email_address);
    else if (IShouldConfirmEmail)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
@@ -1600,8 +1600,8 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
+      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -1654,13 +1654,13 @@ void Mai_PutButtonToCheckEmailAddress (void)
   {
    extern const char *Hlp_PROFILE_Account_email;
    extern const char *Txt_Email_unconfirmed;
-   extern const char *Txt_Please_check_and_confirm_your_email_address;
+   extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Check;
 
    /***** Box with button to check email address *****/
    Box_StartBox (NULL,Txt_Email_unconfirmed,NULL,
                  Hlp_PROFILE_Account_email,Box_CLOSABLE);
-   Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address,
+   Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_confirm_your_email_address,
                            ActFrmMyAcc,NULL,NULL,NULL,
                            Btn_CONFIRM_BUTTON,Txt_Check);
    Box_EndBox ();
@@ -1737,8 +1737,8 @@ bool Mai_SendMailMsgToConfirmEmail (void)
       case 1:
 	 Gbl.Alert.Type = Ale_ERROR;
 	 Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-         sprintf (Gbl.Alert.Txt,"%s",
-                  Txt_There_was_a_problem_sending_an_email_automatically);
+	 Str_Copy (Gbl.Alert.Txt,Txt_There_was_a_problem_sending_an_email_automatically,
+		   Ale_MAX_BYTES_ALERT);
          return false;
       default:
 	 Gbl.Alert.Type = Ale_ERROR;

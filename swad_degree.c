@@ -1574,16 +1574,10 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 	    Deg_CreateDegree (Status);
 	}
       else	// If there is not a degree logo or web
-	{
-	 sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_web_address_of_the_new_degree);
-	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-	}
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_degree);
      }
    else	// If there is not a degree name
-     {
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();

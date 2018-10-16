@@ -181,8 +181,8 @@ void Pwd_UpdateMyPwd (void)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_You_have_not_entered_your_password_correctly);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_have_not_entered_your_password_correctly,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -227,8 +227,8 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
       // Passwords don't match
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_You_have_not_written_twice_the_same_new_password);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_have_not_written_twice_the_same_new_password,
+		Ale_MAX_BYTES_ALERT);
      }
    else
      {
@@ -245,8 +245,8 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
 
 	 Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-	 sprintf (Gbl.Alert.Txt,"%s",
-		  Txt_The_password_has_been_changed_successfully);
+	 Str_Copy (Gbl.Alert.Txt,Txt_The_password_has_been_changed_successfully,
+		   Ale_MAX_BYTES_ALERT);
 	}
      }
   }
@@ -546,7 +546,8 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_is_too_trivial_);
+      Str_Copy (Gbl.Alert.Txt,Txt_The_password_is_too_trivial_,
+		Ale_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -556,7 +557,8 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_is_too_trivial_);
+      Str_Copy (Gbl.Alert.Txt,Txt_The_password_is_too_trivial_,
+		Ale_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -637,7 +639,8 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_can_not_contain_spaces);
+      Str_Copy (Gbl.Alert.Txt,Txt_The_password_can_not_contain_spaces,
+		Ale_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -651,7 +654,8 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_can_not_consist_only_of_digits);
+      Str_Copy (Gbl.Alert.Txt,Txt_The_password_can_not_consist_only_of_digits,
+		Ale_MAX_BYTES_ALERT);
       return false;
      }
 

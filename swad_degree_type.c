@@ -728,10 +728,7 @@ void DT_RecFormNewDegreeType (void)
          DT_CreateDegreeType (DegTyp);
      }
    else	// If there is not a degree type name
-     {
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_type_of_degree);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_type_of_degree);
 
    /***** Show the form again *****/
    DT_EditDegreeTypes ();

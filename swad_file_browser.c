@@ -9291,8 +9291,10 @@ void Brw_RcvFileInFileBrwDropzone (void)
 void Brw_RcvFileInFileBrwClassic (void)
   {
    /***** Receive file and show feedback message *****/
-   if (!Brw_RcvFileInFileBrw (Brw_CLASSIC_UPLOAD))
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+   Brw_RcvFileInFileBrw (Brw_CLASSIC_UPLOAD);
+
+   /***** Show possible alert *****/
+   Ale_ShowPendingAlert ();
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -9363,6 +9365,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                /* Check if the destination file exists */
                if (Fil_CheckIfPathExists (Path))
                  {
+        	  Gbl.Alert.Type = Ale_WARNING;
                   sprintf (Gbl.Alert.Txt,Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
                            Gbl.FileBrowser.NewFilFolLnkName);
                  }
@@ -9384,6 +9387,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                      if (rename (PathTmp,Path))	// Fail
 	               {
 	                Fil_RemoveTree (PathTmp);
+        	        Gbl.Alert.Type = Ale_WARNING;
                         sprintf (Gbl.Alert.Txt,Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
                                  Gbl.FileBrowser.NewFilFolLnkName);
 	               }
@@ -9395,6 +9399,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                         if (Brw_CheckIfQuotaExceded ())
 	                  {
 	                   Fil_RemoveTree (Path);
+        	           Gbl.Alert.Type = Ale_WARNING;
 	                   sprintf (Gbl.Alert.Txt,Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
 		                    Gbl.FileBrowser.NewFilFolLnkName);
 	                  }
@@ -9423,10 +9428,10 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 			                                             Brw_IS_FOLDER,
 			                                             Gbl.FileBrowser.FilFolLnkName,
 			                                             FileNameToShow);
+        	              Gbl.Alert.Type = Ale_SUCCESS;
 			      sprintf (Gbl.Alert.Txt,Txt_The_file_X_has_been_placed_inside_the_folder_Y,
 			               Gbl.FileBrowser.NewFilFolLnkName,
 			               FileNameToShow);
-			      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
                              }
 			   UploadSucessful = true;
 
@@ -9470,10 +9475,18 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
            }
         }
       else	// Empty filename
-         sprintf (Gbl.Alert.Txt,"%s",Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML);
+        {
+	 Gbl.Alert.Type = Ale_WARNING;
+	 Str_Copy (Gbl.Alert.Txt,Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML,
+		   Ale_MAX_BYTES_ALERT);
+        }
      }
    else		// I do not have permission to create files here
-      sprintf (Gbl.Alert.Txt,"%s",Txt_UPLOAD_FILE_Forbidden_NO_HTML);
+     {
+      Gbl.Alert.Type = Ale_WARNING;
+      Str_Copy (Gbl.Alert.Txt,Txt_UPLOAD_FILE_Forbidden_NO_HTML,
+		Ale_MAX_BYTES_ALERT);
+     }
 
    return UploadSucessful;
   }

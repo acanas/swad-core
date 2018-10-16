@@ -1045,7 +1045,8 @@ void Fol_FollowUsr1 (void)
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -1058,7 +1059,8 @@ void Fol_FollowUsr2 (void)
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-	 sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		   Ale_MAX_BYTES_ALERT);
 	}
 
    if (Gbl.Alert.Type != Ale_SUCCESS)
@@ -1093,7 +1095,8 @@ void Fol_UnfollowUsr1 (void)
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 

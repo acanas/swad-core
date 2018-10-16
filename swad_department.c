@@ -837,10 +837,7 @@ void Dpt_ChangeDptWWW (void)
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-     {
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_leave_the_web_address_empty);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Str_Copy (Dpt->WWW,NewWWW,
@@ -1038,16 +1035,10 @@ void Dpt_RecFormNewDpt (void)
             Dpt_CreateDepartment (Dpt);
         }
       else	// If there is not a web
-        {
-         sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_web_address_of_the_new_department);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_department);
      }
    else	// If there is not a department name
-     {
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
 
    /***** Show the form again *****/
    Dpt_EditDepartments ();

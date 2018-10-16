@@ -6221,7 +6221,6 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
    MYSQL_ROW row;
    unsigned long NumRows;
    long TagCod = -1L;	// -1 means that the tag does not exist in database
-   bool Error = false;
 
    /***** Get tag code from database *****/
    sprintf (Query,"SELECT TagCod FROM tst_tags"
@@ -6229,26 +6228,29 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
             Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tag");
 
+   Gbl.Alert.Type = Ale_NONE;
    if (NumRows == 1)
      {
       /***** Get tag code *****/
       row = mysql_fetch_row (mysql_res);
       if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
         {
-         sprintf (Gbl.Alert.Txt,"%s","Wrong code of tag.");
-         Error = true;
+         Gbl.Alert.Type = Ale_ERROR;
+	 Str_Copy (Gbl.Alert.Txt,"Wrong code of tag.",
+		   Ale_MAX_BYTES_ALERT);
         }
      }
    else if (NumRows > 1)
      {
-      sprintf (Gbl.Alert.Txt,"%s","Duplicated tag.");
-      Error = true;
+      Gbl.Alert.Type = Ale_ERROR;
+      Str_Copy (Gbl.Alert.Txt,"Duplicated tag.",
+		Ale_MAX_BYTES_ALERT);
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (Error)
+   if (Gbl.Alert.Type == Ale_ERROR)
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
    return TagCod;

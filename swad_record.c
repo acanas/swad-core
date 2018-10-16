@@ -1680,8 +1680,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
    Gbl.Alert.Type = Ale_SUCCESS;
-   sprintf (Gbl.Alert.Txt,"%s",
-            Txt_Student_record_card_in_this_course_has_been_updated);
+   Str_Copy (Gbl.Alert.Txt,Txt_Student_record_card_in_this_course_has_been_updated,
+	     Ale_MAX_BYTES_ALERT);
 
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)

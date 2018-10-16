@@ -447,7 +447,8 @@ void Nck_RemoveMyNick (void)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_delete_your_current_nickname);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_can_not_delete_your_current_nickname,
+		Ale_MAX_BYTES_ALERT);
      }
 
    /***** Show my account again *****/

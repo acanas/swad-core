@@ -816,15 +816,16 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
         {
 	 Gbl.Alert.Type = Ale_WARNING;
 	 Gbl.Alert.Section = ID_ID_SECTION_ID;
-	 sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_delete_this_ID);
+	 Str_Copy (Gbl.Alert.Txt,Txt_You_can_not_delete_this_ID,
+		   Ale_MAX_BYTES_ALERT);
         }
      }
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = ID_ID_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
+      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -994,8 +995,8 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = ID_ID_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
+      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -1094,16 +1095,16 @@ void ID_ConfirmOtherUsrID (void)
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
          Gbl.Alert.Section = ID_ID_SECTION_ID;
-         sprintf (Gbl.Alert.Txt,"%s",
-                  Txt_User_not_found_or_you_do_not_have_permission_);
+	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		   Ale_MAX_BYTES_ALERT);
 	}
      }
    else	// I can not confirm
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = ID_ID_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
+      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		Ale_MAX_BYTES_ALERT);
      }
 
    /***** Show one or multiple records *****/

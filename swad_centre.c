@@ -1892,7 +1892,8 @@ void Ctr_ChangeCtrPlc (void)
    /***** Write message to show the change made
 	  and put button to go to centre changed *****/
    Gbl.Alert.Type = Ale_SUCCESS;
-   sprintf (Gbl.Alert.Txt,"%s",Txt_The_place_of_the_centre_has_changed);
+   Str_Copy (Gbl.Alert.Txt,Txt_The_place_of_the_centre_has_changed,
+	     Ale_MAX_BYTES_ALERT);
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
@@ -2769,16 +2770,10 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
             Ctr_CreateCentre (Status);
         }
       else	// If there is not a web
-        {
-         sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_web_address_of_the_new_centre);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_centre);
      }
    else	// If there is not a centre name
-     {
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre);
 
    /***** Show the form again *****/
    Ctr_EditCentres ();

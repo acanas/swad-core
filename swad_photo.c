@@ -737,19 +737,22 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    if (NumFacesTotal == 0)
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_Could_not_detect_any_face_in_front_position_);
+      Str_Copy (Gbl.Alert.Txt,Txt_Could_not_detect_any_face_in_front_position_,
+		Ale_MAX_BYTES_ALERT);
      }
    else if (NumFacesTotal == 1)
      {
       if (NumFacesGreen == 1)
         {
 	 Gbl.Alert.Type = Ale_SUCCESS;
-         sprintf (Gbl.Alert.Txt,"%s",Txt_A_face_marked_in_green_has_been_detected_);
+	 Str_Copy (Gbl.Alert.Txt,Txt_A_face_marked_in_green_has_been_detected_,
+		   Ale_MAX_BYTES_ALERT);
         }
       else
         {
 	 Gbl.Alert.Type = Ale_WARNING;
-         sprintf (Gbl.Alert.Txt,"%s",Txt_A_face_marked_in_red_has_been_detected_);
+	 Str_Copy (Gbl.Alert.Txt,Txt_A_face_marked_in_red_has_been_detected_,
+		   Ale_MAX_BYTES_ALERT);
         }
      }
    else        // NumFacesTotal > 1
@@ -899,12 +902,14 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
       Gbl.Alert.Type = Ale_SUCCESS;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_Photo_has_been_updated);
+      Str_Copy (Gbl.Alert.Txt,Txt_Photo_has_been_updated,
+		Ale_MAX_BYTES_ALERT);
      }
    else
      {
       Gbl.Alert.Type = Ale_ERROR;
-      sprintf (Gbl.Alert.Txt,"%s","Error updating photo.");
+      Str_Copy (Gbl.Alert.Txt,"Error updating photo.",
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -1131,13 +1136,15 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
    if (NumErrors)
      {
       Gbl.Alert.Type = Ale_ERROR;
-      sprintf (Gbl.Alert.Txt,"%s","Error removing photo.");
+      Str_Copy (Gbl.Alert.Txt,"Error removing photo.",
+		Ale_MAX_BYTES_ALERT);
       return false;
      }
    else
      {
       Gbl.Alert.Type = Ale_SUCCESS;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_Photo_removed);
+      Str_Copy (Gbl.Alert.Txt,Txt_Photo_removed,
+	        Ale_MAX_BYTES_ALERT);
       return true;
      }
   }

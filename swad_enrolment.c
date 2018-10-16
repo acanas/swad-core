@@ -3486,13 +3486,15 @@ void Enr_RemUsrFromCrs1 (void)
 	 else
 	   {
 	    Gbl.Alert.Type = Ale_WARNING;
-	    sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	    Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		      Ale_MAX_BYTES_ALERT);
 	   }
 	}
       else
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-	 sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		   Ale_MAX_BYTES_ALERT);
 	}
      }
   }
@@ -4222,7 +4224,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       if (QuietOrVerbose == Cns_VERBOSE)
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-         sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+		   Ale_MAX_BYTES_ALERT);
 	}
   }
 

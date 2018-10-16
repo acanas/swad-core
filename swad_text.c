@@ -2847,21 +2847,21 @@ const char *Txt_Another_department =
 
 const char *Txt_Another_ID =
 #if   L==1
-	"Un altre ID (DNI/c&egrave;dula)";
+	"Un altre ID";
 #elif L==2
 	"Ein anderer Ausweis-Nr.";
 #elif L==3
 	"Another ID";
 #elif L==4
-	"Otro ID (DNI/c&eacute;dula)";
+	"Otro ID";
 #elif L==5
 	"Un autre num&eacute;ro d'identit&eacute;";
 #elif L==6
-	"Otro ID (DNI/c&eacute;dula)";		// Okoteve traducción
+	"Otro ID";		// Okoteve traducción
 #elif L==7
 	"Un'altra carta d'identit&agrave;";
 #elif L==8
-	"Another ID";				// Potrzebujesz tlumaczenie
+	"Another ID";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"Outro n&ordm; de identif.";
 #endif
@@ -29780,25 +29780,25 @@ const char *Txt_Play =	// To play a game
 	"Jogar";
 #endif
 
-const char *Txt_Please_check_and_confirm_your_email_address =
+const char *Txt_Please_confirm_your_email_address =
 #if   L==1
-	"Si us plau, comproveu i confirmeu la seva adre&ccedil;a de correu.";
+	"Si us plau, confirmeu la seva adre&ccedil;a de correu.";
 #elif L==2
-	"Bitte &uuml;berpr&uuml;fen Sie und Ihre E-Mail-Adresse best&auml;tigen.";
+	"Bitte Ihre E-Mail-Adresse best&auml;tigen.";
 #elif L==3
-	"Please check and confirm your email address.";
+	"Please confirm your email address.";
 #elif L==4
-	"Por favor, compruebe y confirme su direcci&oacute;n de correo.";
+	"Por favor, confirme su direcci&oacute;n de correo.";
 #elif L==5
-	"S'il vous pla&iacute;t, v&eacute;rifiez et confirmez votre adresse email.";
+	"S'il vous pla&iacute;t, confirmez votre adresse email.";
 #elif L==6
-	"Por favor, compruebe y confirme su direcci&oacute;n de correo.";	// Okoteve traducción
+	"Por favor, confirme su direcci&oacute;n de correo.";	// Okoteve traducción
 #elif L==7
-	"Per favore, verifica e conferma il tuo indirizzo email.";
+	"Per favore, conferma il tuo indirizzo email.";
 #elif L==8
-	"Prosz&eogon; sprawdzi&cacute; i potwierdzi&cacute; sw&oacute;j adres email.";
+	"Prosz&eogon; potwierdzi&cacute; sw&oacute;j adres email.";
 #elif L==9
-	"Por favor, verificar e confirmar o seu endere&ccedil;o de email.";
+	"Por favor, confirmar o seu endere&ccedil;o de email.";
 #endif
 
 const char *Txt_Please_enter_your_ID =
@@ -45951,63 +45951,63 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 	" la inscripci&oacute; en les assignatures"
 	" i la consulta de qualificacions."
 	" Si hi ha diverses versions de la ID"
-	" (per ex. DNI amb o sense lletra al final),"
+	" (per ex. DNI amb o sense lletra),"
 	" indiqueu totes les versions.";
 #elif L==2
 	"Die ID wird zu erleichtern,"
 	" um die Einschreibung in Kurse"
 	" und Beratungskompetenz eingesetzt."
 	" Wenn es mehrere Versionen der ID"
-	" (zB. mit oder ohne Buchstabe am Ende),"
+	" (zB. mit oder ohne Buchstabe),"
 	" schreiben alle Versionen.";
 #elif L==3
 	"The ID is used in order to facilitate"
 	" enrolment in courses"
 	" and consulting marks."
 	" If there are multiple versions of the ID"
-	" (eg. with or without letter at the end),"
+	" (eg. with or without letter),"
 	" write out all versions.";
 #elif L==4
-	"El ID se utiliza con el fin de facilitar"
+	"El ID se utiliza para facilitar"
 	" la inscripci&oacute;n en las asignaturas"
 	" y la consulta de calificaciones."
 	" Si existen varias versiones del ID"
-	" (por ej. DNI con o sin letra al final),"
+	" (por ej. DNI con o sin letra),"
 	" indique todas las versiones.";
 #elif L==5
 	"L'ID est utilis&eacute; afin de faciliter"
 	" l'inscription &agrave; des mati&egrave;res"
 	" et la consulte des notes."
 	" S'il existe plusieurs versions du ID"
-	" (par example avec ou sans lettre &agrave; la fin),"
+	" (par example avec ou sans lettre),"
 	" &eacute;crire toutes les versions.";
 #elif L==6
-	"El ID se utiliza con el fin de facilitar"
+	"El ID se utiliza para facilitar"
 	" la inscripci&oacute;n en las asignaturas"
 	" y la consulta de calificaciones."
 	" Si existen varias versiones del ID"
-	" (por ej. DNI con o sin letra al final),"
+	" (por ej. DNI con o sin letra),"
 	" indique todas las versiones.";	// Okoteve traducción
 #elif L==7
 	"L'ID &egrave; utilizzato per agevolare"
 	" l'iscrizione ai corsi"
 	" e consultare dei risultati."
 	" Se ci sono pi&ugrave; versioni del ID"
-	" (ad es. con o senza lettera alla fine),"
+	" (ad es. con o senza lettera),"
 	" scrivere tutte le versioni.";
 #elif L==8
 	"Identyfikator jest u&zdot;ywany w celu u&lstrok;atwienia"
 	" rejestracji w kursach"
 	" i skonsultuje znak&oacute;w."
 	" Je&sacute;li istnieje wiele wersji identyfikatora"
-	" (np. Z lub bez litery na ko&nacute;cu),"
+	" (np. Z lub bez litery),"
 	" wypisa&cacute; wszystkie wersje.";
 #elif L==9
 	"O n&ordm; de identifica&ccedil;&atilde;o &eacute; usado para facilitar"
 	" a inscri&ccedil;&atilde;o em disciplinas"
 	" e consultas de notas."
 	" Se houver v&aacute;rias vers&otilde;es do n&ordm; de identifica&ccedil;&atilde;o"
-	" (eg., com ou sem letra no final),"
+	" (eg., com ou sem letra),"
 	" escreva todas as vers&otilde;es.";
 #endif
 

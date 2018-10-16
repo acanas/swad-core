@@ -671,19 +671,22 @@ void Grp_ChangeMyGrps (Cns_QuietOrVerbose_t QuietOrVerbose)
 	    if (ChangesMade)
 	      {
 	       Gbl.Alert.Type = Ale_SUCCESS;
-	       sprintf (Gbl.Alert.Txt,"%s",Txt_The_requested_group_changes_were_successful);
+	       Str_Copy (Gbl.Alert.Txt,Txt_The_requested_group_changes_were_successful,
+			 Ale_MAX_BYTES_ALERT);
 	      }
 	    else
 	      {
 	       Gbl.Alert.Type = Ale_WARNING;
-	       sprintf (Gbl.Alert.Txt,"%s",Txt_There_has_been_no_change_in_groups);
+	       Str_Copy (Gbl.Alert.Txt,Txt_There_has_been_no_change_in_groups,
+			 Ale_MAX_BYTES_ALERT);
 	      }
 	   }
 	}
       else if (QuietOrVerbose == Cns_VERBOSE)
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-	 sprintf (Gbl.Alert.Txt,"%s",Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+	 Str_Copy (Gbl.Alert.Txt,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group,
+		   Ale_MAX_BYTES_ALERT);
 	}
 
       /***** Free memory with the list of groups which I want to belong to *****/
@@ -3690,7 +3693,8 @@ void Grp_RecFormNewGrpTyp (void)
    else	// If there is not a group type name
      {
       AlertType = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_type_of_group);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_must_specify_the_name_of_the_new_type_of_group,
+		Ale_MAX_BYTES_ALERT);
      }
 
    /***** Show the form again *****/
@@ -3759,13 +3763,15 @@ void Grp_RecFormNewGrp (void)
       else	// If there is not a group name
         {
          AlertType = Ale_ERROR;
-         sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_group);
+	 Str_Copy (Gbl.Alert.Txt,Txt_You_must_specify_the_name_of_the_new_group,
+		   Ale_MAX_BYTES_ALERT);
         }
      }
    else	// Invalid group type
      {
       AlertType = Ale_ERROR;
-      sprintf (Gbl.Alert.Txt,"%s","Wrong type of group.");
+      Str_Copy (Gbl.Alert.Txt,"Wrong type of group.",
+		Ale_MAX_BYTES_ALERT);
      }
 
    /***** Show the form again *****/
@@ -4430,7 +4436,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    DB_QueryUPDATE (Query,"can not update enrolment type of a type of group");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,"%s",Txt_The_date_time_of_opening_of_groups_has_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,Gbl.Alert.Txt,

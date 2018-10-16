@@ -633,10 +633,7 @@ void Plg_ChangePlgDescription (void)
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-     {
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_leave_the_description_empty);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_description_empty);
 
    /***** Show the form again *****/
    Str_Copy (Plg->Description,NewDescription,

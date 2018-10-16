@@ -1880,7 +1880,8 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
       else	// If there is not a course name
 	{
          Gbl.Alert.Type = Ale_WARNING;
-	 sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
+	 Str_Copy (Gbl.Alert.Txt,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course,
+		   Ale_MAX_BYTES_ALERT);
 	}
      }
    else	// Year not valid
@@ -2343,7 +2344,8 @@ void Crs_ChangeInsCrsCod (void)
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_dont_have_permission_to_edit_this_course);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_dont_have_permission_to_edit_this_course,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -2547,7 +2549,8 @@ void Crs_ChangeCrsYear (void)
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_dont_have_permission_to_edit_this_course);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_dont_have_permission_to_edit_this_course,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 
@@ -2704,7 +2707,8 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_dont_have_permission_to_edit_this_course);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_dont_have_permission_to_edit_this_course,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 

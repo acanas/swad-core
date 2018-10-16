@@ -4165,8 +4165,8 @@ void For_RequestRemoveThread (void)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                Subject);
    else
-      sprintf (Gbl.Alert.Txt,"%s",
-               Txt_Do_you_really_want_to_remove_the_entire_thread);
+      Str_Copy (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread,
+		Ale_MAX_BYTES_ALERT);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
 			   For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			   For_FORUM_THREADS_SECTION_ID,NULL,

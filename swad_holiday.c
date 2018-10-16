@@ -1158,7 +1158,8 @@ void Hld_RecFormNewHoliday1 (void)
      {
       /* Error message */
       Gbl.Alert.Type = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_holiday);
+      Str_Copy (Gbl.Alert.Txt,Txt_You_must_specify_the_name_of_the_new_holiday,
+		Ale_MAX_BYTES_ALERT);
      }
   }
 

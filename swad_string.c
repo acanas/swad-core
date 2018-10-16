@@ -2793,9 +2793,10 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
 		   FileName);
      }
    else	// FileName is empty
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
-						       Txt_UPLOAD_FILE_Invalid_name);
+      Str_Copy (Gbl.Alert.Txt,
+	        Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
+						        Txt_UPLOAD_FILE_Invalid_name,
+		Ale_MAX_BYTES_ALERT);
 
    return FileNameIsOK;
   }

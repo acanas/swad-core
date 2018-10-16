@@ -3327,8 +3327,7 @@ void Gam_RemoveQst (void)
    DB_QueryUPDATE (Query,"can not update indexes of questions");
 
    /***** Write message *****/
-   sprintf (Gbl.Alert.Txt,"%s",Txt_Question_removed);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
