@@ -489,7 +489,7 @@ static void Img_ProcessImage (struct Image *Image,
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode != 0)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Image could not be processed successfully.<br />"
 		"Error code returned by the program of processing: %d",
 	        ReturnCode);

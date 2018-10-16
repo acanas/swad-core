@@ -201,10 +201,11 @@ void ZIP_CreateZIPAsgWrk (void)
    Brw_CreateDirDownloadTmp ();
 
    /***** Relative path of the directory with the works to compress *****/
-   sprintf (Path,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,
-	    Cfg_FOLDER_ZIP,
-	    Gbl.FileBrowser.ZIP.TmpDir);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,
+	     Cfg_FOLDER_ZIP,
+	     Gbl.FileBrowser.ZIP.TmpDir);
 
    /***** Change to directory of the assignments and works
           in order to start the path in the zip file from there *****/
@@ -212,14 +213,18 @@ void ZIP_CreateZIPAsgWrk (void)
       Lay_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
    /***** Create public zip file with the assignment and works *****/
-   sprintf (FileNameZIP,"%s.zip",Txt_works_ZIP_FILE_NAME);
-   sprintf (PathFileZIP,"%s/%s/%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,
-            Cfg_FOLDER_FILE_BROWSER_TMP,
-            Gbl.FileBrowser.TmpPubDir,
-            FileNameZIP);
-   sprintf (StrZip,"nice -n 19 zip -q -r '%s' *",
-            PathFileZIP);
+   snprintf (FileNameZIP,sizeof (FileNameZIP),
+	     "%s.zip",
+	     Txt_works_ZIP_FILE_NAME);
+   snprintf (PathFileZIP,sizeof (PathFileZIP),
+	     "%s/%s/%s/%s",
+	     Cfg_PATH_SWAD_PUBLIC,
+             Cfg_FOLDER_FILE_BROWSER_TMP,
+             Gbl.FileBrowser.TmpPubDir,
+             FileNameZIP);
+   snprintf (StrZip,sizeof (StrZip),
+	     "nice -n 19 zip -q -r '%s' *",
+             PathFileZIP);
    Result = system (StrZip);
 
    /***** Return to the CGI directory *****/
@@ -235,11 +240,12 @@ void ZIP_CreateZIPAsgWrk (void)
       else
 	{
 	 /***** Create URL pointing to ZIP file *****/
-	 sprintf (URLWithSpaces,"%s/%s/%s/%s",
-		  Cfg_URL_SWAD_PUBLIC,
-		  Cfg_FOLDER_FILE_BROWSER_TMP,
-		  Gbl.FileBrowser.TmpPubDir,
-		  FileNameZIP);
+	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),
+	           "%s/%s/%s/%s",
+		   Cfg_URL_SWAD_PUBLIC,
+		   Cfg_FOLDER_FILE_BROWSER_TMP,
+		   Gbl.FileBrowser.TmpPubDir,
+		   FileNameZIP);
 	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
 	 /****** Link to download file *****/
@@ -263,7 +269,9 @@ static void ZIP_CreateTmpDirForCompression (void)
    char PathDirTmp[PATH_MAX + 1];
 
    /***** If the private directory does not exist, create it *****/
-   sprintf (PathZipPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_ZIP);
+   snprintf (PathZipPriv,sizeof (PathZipPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_ZIP);
    Fil_CreateDirIfNotExists (PathZipPriv);
 
    /***** First of all, we remove the oldest temporary directories.
@@ -275,7 +283,9 @@ static void ZIP_CreateTmpDirForCompression (void)
    /***** Create a new temporary directory *****/
    Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,
              NAME_MAX);
-   sprintf (PathDirTmp,"%s/%s",PathZipPriv,Gbl.FileBrowser.ZIP.TmpDir);
+   snprintf (PathDirTmp,sizeof (PathDirTmp),
+	     "%s/%s",
+	     PathZipPriv,Gbl.FileBrowser.ZIP.TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
   }
@@ -325,15 +335,17 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    Str_ConvertToValidFileName (FullNameAndUsrID);
 
    /* Create path to folder and link */
-   sprintf (PathFolderUsrInsideCrs,"%s/usr/%02u/%ld",
-	    Gbl.CurrentCrs.PathPriv,
-	    (unsigned) (UsrDat->UsrCod % 100),
-	    UsrDat->UsrCod);
-   sprintf (LinkTmpUsr,"%s/%s/%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,
-	    Cfg_FOLDER_ZIP,
-	    Gbl.FileBrowser.ZIP.TmpDir,
-	    FullNameAndUsrID);
+   snprintf (PathFolderUsrInsideCrs,sizeof (PathFolderUsrInsideCrs),
+	     "%s/usr/%02u/%ld",
+	     Gbl.CurrentCrs.PathPriv,
+	     (unsigned) (UsrDat->UsrCod % 100),
+	     UsrDat->UsrCod);
+   snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),
+	     "%s/%s/%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,
+	     Cfg_FOLDER_ZIP,
+	     Gbl.FileBrowser.ZIP.TmpDir,
+	     FullNameAndUsrID);
 
    /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
    if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr) != 0)
@@ -344,7 +356,9 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
 	{
 	 // Link exists ==> a former user share the same name and ID
 	 // (probably a unique user has created two or more accounts)
-	 sprintf (Link,"%s-%u",LinkTmpUsr,NumTry);
+	 snprintf (Link,sizeof (Link),
+	          "%s-%u",
+		  LinkTmpUsr,NumTry);
 	 if (symlink (PathFolderUsrInsideCrs,Link) == 0)
 	    Success = true;
 	}
@@ -427,13 +441,15 @@ static void ZIP_CompressFolderIntoZIP (void)
    Brw_CreateDirDownloadTmp ();
 
    /***** Create a copy of the directory to compress *****/
-   sprintf (Path,"%s/%s",
-	    Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	    Gbl.FileBrowser.Priv.FullPathInTree);
-   sprintf (PathCompression,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,
-	    Cfg_FOLDER_ZIP,
-	    Gbl.FileBrowser.ZIP.TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
+   snprintf (Path,sizeof (Path),
+	     "%s/%s",
+	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     Gbl.FileBrowser.Priv.FullPathInTree);
+   snprintf (PathCompression,sizeof (PathCompression),
+	     "%s/%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,
+	     Cfg_FOLDER_ZIP,
+	     Gbl.FileBrowser.ZIP.TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
    UncompressedSize = ZIP_CloneDir (Path,PathCompression,Gbl.FileBrowser.Priv.FullPathInTree);
 
@@ -449,15 +465,19 @@ static void ZIP_CompressFolderIntoZIP (void)
 	 Lay_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
       /***** Create public zip file with the assignment and works *****/
-      sprintf (FileNameZIP,"%s.zip",strcmp (Gbl.FileBrowser.FilFolLnkName,".") ? Gbl.FileBrowser.FilFolLnkName :
-										 Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
-      sprintf (PathFileZIP,"%s/%s/%s/%s",
-	       Cfg_PATH_SWAD_PUBLIC,
-	       Cfg_FOLDER_FILE_BROWSER_TMP,
-	       Gbl.FileBrowser.TmpPubDir,
-	       FileNameZIP);
-      sprintf (StrZip,"nice -n 19 zip -q -5 -r '%s' *",
-	       PathFileZIP);
+      snprintf (FileNameZIP,sizeof (FileNameZIP),
+	        "%s.zip",
+	        strcmp (Gbl.FileBrowser.FilFolLnkName,".") ? Gbl.FileBrowser.FilFolLnkName :
+							    Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
+      snprintf (PathFileZIP,sizeof (PathFileZIP),
+	        "%s/%s/%s/%s",
+	        Cfg_PATH_SWAD_PUBLIC,
+	        Cfg_FOLDER_FILE_BROWSER_TMP,
+	        Gbl.FileBrowser.TmpPubDir,
+	        FileNameZIP);
+      snprintf (StrZip,sizeof (StrZip),
+	        "nice -n 19 zip -q -5 -r '%s' *",
+	        PathFileZIP);
       Result = system (StrZip);
 
       /***** Return to the CGI directory *****/
@@ -473,11 +493,12 @@ static void ZIP_CompressFolderIntoZIP (void)
 	 else
 	   {
 	    /***** Create URL pointing to ZIP file *****/
-	    sprintf (URLWithSpaces,"%s/%s/%s/%s",
-		     Cfg_URL_SWAD_PUBLIC,
-		     Cfg_FOLDER_FILE_BROWSER_TMP,
-		     Gbl.FileBrowser.TmpPubDir,
-		     FileNameZIP);
+	    snprintf (URLWithSpaces,sizeof (URLWithSpaces),
+		      "%s/%s/%s/%s",
+		      Cfg_URL_SWAD_PUBLIC,
+		      Cfg_FOLDER_FILE_BROWSER_TMP,
+		      Gbl.FileBrowser.TmpPubDir,
+		      FileNameZIP);
 	    Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
 	    /****** Link to download file *****/
@@ -541,12 +562,15 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    sprintf (PathFileInTree,"%s/%s",
-	             PathInTree,FileList[NumFile]->d_name);
-	    sprintf (PathFile,"%s/%s",
-		     Path,FileList[NumFile]->d_name);
-	    sprintf (PathFileClone,"%s/%s",
-		     PathClone,FileList[NumFile]->d_name);
+	    snprintf (PathFileInTree,sizeof (PathFileInTree),
+		      "%s/%s",
+	              PathInTree,FileList[NumFile]->d_name);
+	    snprintf (PathFile,sizeof (PathFile),
+		      "%s/%s",
+		      Path,FileList[NumFile]->d_name);
+	    snprintf (PathFileClone,sizeof (PathFileClone),
+		      "%s/%s",
+		      PathClone,FileList[NumFile]->d_name);
 
 	    FileType = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned

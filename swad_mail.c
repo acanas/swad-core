@@ -376,7 +376,7 @@ void Mai_WriteWarningEmailNotifications (void)
    Tab_Tab_t TabMyAccount   = Act_GetTab (ActFrmMyAcc  );
    Tab_Tab_t TabMailDomains = Act_GetTab (ActSeeMai);
 
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_You_can_only_receive_email_notifications_if_,
 	     Txt_TABS_TXT  [TabMyAccount  ],
 	     Txt_MENU_TITLE[TabMyAccount  ][Act_GetIndexInMenu (ActFrmMyAcc)],
@@ -560,7 +560,7 @@ void Mai_RemoveMailDomain (void)
    DB_QueryDELETE (Query,"can not remove a mail domain");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Email_domain_X_removed,
              Mai.Domain);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -637,7 +637,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
                 CurrentMaiName);
      }
@@ -651,7 +651,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
 	    Gbl.Alert.Type = Ale_WARNING;
 	    Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_email_domain_X_already_exists,
                       NewMaiName);
            }
@@ -663,7 +663,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
             /* Write message to show the change made */
 	    Gbl.Alert.Type = Ale_SUCCESS;
 	    Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_email_domain_X_has_been_renamed_as_Y,
                       CurrentMaiName,NewMaiName);
            }
@@ -672,7 +672,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
         {
 	 Gbl.Alert.Type = Ale_INFO;
 	 Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_email_domain_X_has_not_changed,
                    CurrentMaiName);
         }
@@ -827,14 +827,14 @@ void Mai_RecFormNewMailDomain (void)
       /***** If name of mail was in database... *****/
       if (Mai_CheckIfMailDomainNameExists ("Domain",Mai->Domain,-1L))
         {
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_email_domain_X_already_exists,
                    Mai->Domain);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Mai_CheckIfMailDomainNameExists ("Info",Mai->Info,-1L))
         {
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_email_domain_X_already_exists,
                    Mai->Info);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -869,7 +869,7 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
    DB_QueryINSERT (Query,"can not create mail domain");
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_email_domain_X,
              Mai->Domain);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1471,7 +1471,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
       /***** Show message *****/
       Gbl.Alert.Type = Ale_SUCCESS;
       Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Email_X_removed,
 		Email);
 
@@ -1569,7 +1569,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    Gbl.Alert.Type = Ale_WARNING;
 	    Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_email_address_X_matches_one_previously_registered,
 		      NewEmail);
 	   }
@@ -1580,7 +1580,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	       /***** Email updated sucessfully *****/
 	       Gbl.Alert.Type = Ale_SUCCESS;
 	       Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                 Txt_The_email_address_X_has_been_registered_successfully,
 			 NewEmail);
 
@@ -1596,7 +1596,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	      {
 	       Gbl.Alert.Type = Ale_WARNING;
 	       Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                 Txt_The_email_address_X_had_been_registered_by_another_user,
 			 NewEmail);
 	      }
@@ -1606,7 +1606,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	{
          Gbl.Alert.Type = Ale_WARNING;
          Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_email_address_entered_X_is_not_valid,
 		   NewEmail);
 	}
@@ -1746,7 +1746,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
          Gbl.Usrs.Me.ConfirmEmailJustSent = true;
 	 Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
 	   	   Gbl.Usrs.Me.UsrDat.Email);
          return true;
@@ -1759,7 +1759,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
       default:
 	 Gbl.Alert.Type = Ale_ERROR;
 	 Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           "Internal error: an email message has not been sent successfully."
                    " Error code returned by the script: %d",
                    ReturnCode);
@@ -1858,7 +1858,7 @@ void Mai_ConfirmEmail (void)
 
          /***** Confirm email *****/
          if (Confirmed)
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_Email_X_has_already_been_confirmed_before,
 		      Email);
          else
@@ -1869,7 +1869,7 @@ void Mai_ConfirmEmail (void)
 		     UsrCod,Email);
 	    DB_QueryUPDATE (Query,"can not confirm email");
 
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_email_X_has_been_confirmed,
 		      Email);
            }

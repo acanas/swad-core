@@ -1709,7 +1709,7 @@ void Cty_RemoveCountry (void)
       Cty_FlushCacheCountryName ();
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Country_X_removed,
 	        Cty.Name[Gbl.Prefs.Language]);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1752,7 +1752,7 @@ void Cty_RenameCountry (void)
    /***** Check if new name is empty *****/
    if (!NewCtyName[0])
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_country_X_empty,
 	        Cty->Name[Language]);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1765,7 +1765,7 @@ void Cty_RenameCountry (void)
 	 /***** If country was in database... *****/
 	 if (Cty_CheckIfCountryNameExists (Language,NewCtyName,Cty->CtyCod))
 	   {
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_country_X_already_exists,
 		      NewCtyName);
 	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1777,7 +1777,7 @@ void Cty_RenameCountry (void)
 	    Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
 
 	    /* Write message to show the change made */
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_country_X_has_been_renamed_as_Y,
 		      Cty->Name[Language],NewCtyName);
 	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1789,7 +1789,7 @@ void Cty_RenameCountry (void)
 	}
       else	// The same name
 	{
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_country_X_has_not_changed,
 		   Cty->Name[Language]);
 	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
@@ -1897,7 +1897,7 @@ void Cty_ChangeCtyWWW (void)
 	     Cns_MAX_BYTES_WWW);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_The_new_web_address_is_X,
 	     NewWWW);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2109,7 +2109,7 @@ void Cty_RecFormNewCountry (void)
      }
    else if (Cty_CheckIfNumericCountryCodeExists (Cty->CtyCod))
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	       Txt_The_numerical_code_X_already_exists,
                Cty->CtyCod);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2126,7 +2126,7 @@ void Cty_RecFormNewCountry (void)
          if (Cty->Alpha2[i] < 'A' ||
              Cty->Alpha2[i] > 'Z')
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_alphabetical_code_X_is_not_correct,
                       Cty->Alpha2);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2136,7 +2136,7 @@ void Cty_RecFormNewCountry (void)
         {
          if (Cty_CheckIfAlpha2CountryCodeExists (Cty->Alpha2))
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_alphabetical_code_X_already_exists,
                       Cty->Alpha2);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2157,7 +2157,7 @@ void Cty_RecFormNewCountry (void)
                   /***** If name of country was in database... *****/
                   if (Cty_CheckIfCountryNameExists (Lan,Cty->Name[Lan],-1L))
                     {
-                     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+                     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                       Txt_The_country_X_already_exists,
                                Cty->Name[Lan]);
                      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2249,7 +2249,7 @@ static void Cty_CreateCountry (struct Country *Cty)
    DB_QueryINSERT (Query,"can not create country");
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_country_X,
              Cty->Name);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);

@@ -426,7 +426,7 @@ void TsI_ImportQstsFromXML (void)
 
    if (WrongType)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_file_is_not_X,
 		"xml");
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);

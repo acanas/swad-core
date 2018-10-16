@@ -1508,7 +1508,7 @@ void Svy_AskRemSurvey (void)
 
    /***** Show question and button to remove survey *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_remove_the_survey_X,
              Svy.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
@@ -1572,7 +1572,7 @@ void Svy_RemoveSurvey (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Survey_X_removed,
              Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1609,7 +1609,7 @@ void Svy_AskResetSurvey (void)
       Lay_ShowErrorAndExit ("You can not reset this survey.");
 
    /***** Ask for confirmation of reset *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_reset_the_survey_X,
              Svy.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1672,7 +1672,7 @@ void Svy_ResetSurvey (void)
    DB_QueryUPDATE (Query,"can not reset answers of a survey");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Survey_X_reset,
              Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1710,7 +1710,7 @@ void Svy_HideSurvey (void)
    DB_QueryUPDATE (Query,"can not hide survey");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Survey_X_is_now_hidden,
              Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1748,7 +1748,7 @@ void Svy_UnhideSurvey (void)
    DB_QueryUPDATE (Query,"can not show survey");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Survey_X_is_now_visible,
              Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2201,7 +2201,7 @@ void Svy_RecFormSurvey (void)
       if (Svy_CheckIfSimilarSurveyExists (&NewSvy))
         {
          NewSurveyIsCorrect = false;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Already_existed_a_survey_with_the_title_X,
                    NewSvy.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2288,7 +2288,7 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_survey_X,
              Svy->Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -3595,7 +3595,7 @@ void Svy_RequestRemoveQst (void)
    /***** Show question and button to remove question *****/
    Gbl.Svys.SvyCodToEdit    = SvyCod;
    Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_remove_the_question_X,
 	     (unsigned long) (SvyQst.QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,

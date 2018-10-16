@@ -1775,7 +1775,7 @@ void Ctr_RemoveCentre (void)
       DB_QueryDELETE (Query,"can not remove a centre");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Centre_X_removed,
 	        Ctr.FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1811,7 +1811,7 @@ void Ctr_ChangeCtrInsInConfig (void)
                                          NewIns.InsCod))
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_centre_X_already_exists,
 		   Gbl.CurrentCtr.Ctr.ShrtName);
 	}
@@ -1821,7 +1821,7 @@ void Ctr_ChangeCtrInsInConfig (void)
                                               NewIns.InsCod))
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_centre_X_already_exists,
 		   Gbl.CurrentCtr.Ctr.FullName);
 	}
@@ -1837,7 +1837,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 
 	 /***** Write message to show the change made *****/
          Gbl.Alert.Type = Ale_SUCCESS;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_centre_X_has_been_moved_to_the_institution_Y,
 		   Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
 	}
@@ -2009,7 +2009,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
    if (!NewCtrName[0])
      {
       Gbl.Alert.Type = Ale_WARNING;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
                 CurrentCtrName);
      }
@@ -2022,7 +2022,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
          if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.CurrentIns.Ins.InsCod))
            {
             Gbl.Alert.Type = Ale_WARNING;
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_centre_X_already_exists,NewCtrName);
            }
          else
@@ -2032,7 +2032,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
             /* Write message to show the change made */
             Gbl.Alert.Type = Ale_SUCCESS;
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_centre_X_has_been_renamed_as_Y,
                       CurrentCtrName,NewCtrName);
 
@@ -2044,7 +2044,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
       else	// The same name
 	{
          Gbl.Alert.Type = Ale_INFO;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_centre_X_has_not_changed,
                    CurrentCtrName);
 	}
@@ -2110,7 +2110,7 @@ void Ctr_ChangeCtrWWW (void)
       /***** Write message to show the change made
 	     and put button to go to centre changed *****/
       Gbl.Alert.Type = Ale_SUCCESS;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
       Ctr_ShowAlertAndButtonToGoToCtr ();
@@ -2141,7 +2141,7 @@ void Ctr_ChangeCtrWWWInConfig (void)
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2205,7 +2205,7 @@ void Ctr_ChangeCtrStatus (void)
    /***** Write message to show the change made
 	  and put button to go to centre changed *****/
    Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_The_status_of_the_centre_X_has_changed,
 	     Gbl.Ctrs.EditingCtr.ShrtName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
@@ -2306,7 +2306,7 @@ void Ctr_RequestPhoto (void)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     "%s: %s<br />"
              "%s: %u&times;%u %s",
              Txt_Recommended_aspect_ratio,
@@ -2442,7 +2442,7 @@ void Ctr_ReceivePhoto (void)
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode != 0)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Image could not be processed successfully.<br />"
 		"Error code returned by the program of processing: %d",
 	        ReturnCode);
@@ -2771,14 +2771,14 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
          /***** If name of centre was in database... *****/
          if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_centre_X_already_exists,
                       Gbl.Ctrs.EditingCtr.ShrtName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.Ctrs.EditingCtr.FullName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_centre_X_already_exists,
                       Gbl.Ctrs.EditingCtr.FullName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2828,7 +2828,7 @@ static void Ctr_CreateCentre (unsigned Status)
    /***** Write message to show the change made
 	  and put button to go to centre created *****/
    Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_centre_X,
              Gbl.Ctrs.EditingCtr.FullName);
    Ctr_ShowAlertAndButtonToGoToCtr ();

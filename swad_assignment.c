@@ -972,7 +972,7 @@ void Asg_ReqRemAssignment (void)
 
    /***** Show question and button to remove the assignment *****/
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_remove_the_assignment_X,
              Asg.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
@@ -1017,7 +1017,7 @@ void Asg_RemoveAssignment (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Assignment_X_removed,
              Asg.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1050,7 +1050,7 @@ void Asg_HideAssignment (void)
    DB_QueryUPDATE (Query,"can not hide assignment");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Assignment_X_is_now_hidden,
              Asg.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1083,7 +1083,7 @@ void Asg_ShowAssignment (void)
    DB_QueryUPDATE (Query,"can not show assignment");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Assignment_X_is_now_visible,
              Asg.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1372,7 +1372,7 @@ void Asg_RecFormAssignment (void)
       if (Asg_CheckIfSimilarAssignmentExists ("Title",NewAsg.Title,NewAsg.AsgCod))
         {
          NewAssignmentIsCorrect = false;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Already_existed_an_assignment_with_the_title_X,
                    NewAsg.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1386,7 +1386,7 @@ void Asg_RecFormAssignment (void)
                if (Asg_CheckIfSimilarAssignmentExists ("Folder",NewAsg.Folder,NewAsg.AsgCod))	// If folder of assignment was in database...
                  {
                   NewAssignmentIsCorrect = false;
-                  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+                  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                    Txt_Already_existed_an_assignment_with_the_folder_X,
                             NewAsg.Folder);
                   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1428,7 +1428,7 @@ void Asg_RecFormAssignment (void)
          Asg_CreateAssignment (&NewAsg,Txt);	// Add new assignment to database
 
 	 /***** Write success message *****/
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Created_new_assignment_X,
 		   NewAsg.Title);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);

@@ -441,7 +441,7 @@ void Nck_RemoveMyNick (void)
       /***** Show message *****/
       Gbl.Alert.Type = Ale_SUCCESS;
       Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Nickname_X_removed,
 		NicknameWithoutArroba);
      }
@@ -482,7 +482,7 @@ void Nck_RemoveOtherUsrNick (void)
 	 /***** Show message *****/
 	 Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Nickname_X_removed,
 		   NicknameWithoutArroba);
 
@@ -579,7 +579,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
         {
          Gbl.Alert.Type = Ale_WARNING;
          Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
                    NewNicknameWithoutArroba);
         }
@@ -599,7 +599,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
               {
                Gbl.Alert.Type = Ale_WARNING;
                Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-               snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+               snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                 Txt_The_nickname_X_had_been_registered_by_another_user,
                          NewNicknameWithoutArroba);
               }
@@ -615,7 +615,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 
          Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_nickname_X_has_been_registered_successfully,
                    NewNicknameWithoutArroba);
         }
@@ -624,7 +624,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_nickname_entered_X_is_not_valid_,
                 NewNicknameWithArroba,
                 Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,

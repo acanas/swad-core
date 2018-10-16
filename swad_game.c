@@ -1495,7 +1495,7 @@ void Gam_AskRemGame (void)
 
    /***** Show question and button to remove game *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_remove_the_game_X,
              Game.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
@@ -1545,7 +1545,7 @@ void Gam_RemoveGame (void)
    DB_QueryDELETE (Query,"can not remove game");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_removed,
              Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1578,7 +1578,7 @@ void Gam_AskResetGame (void)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
    /***** Ask for confirmation of reset *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_reset_the_game_X,
              Game.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1637,7 +1637,7 @@ void Gam_ResetGame (void)
    DB_QueryUPDATE (Query,"can not reset answers of a game");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_reset,
              Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1671,7 +1671,7 @@ void Gam_HideGame (void)
    DB_QueryUPDATE (Query,"can not hide game");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_is_now_hidden,
              Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1705,7 +1705,7 @@ void Gam_UnhideGame (void)
    DB_QueryUPDATE (Query,"can not show game");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_is_now_visible,
              Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2149,7 +2149,7 @@ void Gam_RecFormGame (void)
       if (Gam_CheckIfSimilarGameExists (&NewGame))
         {
          NewGameIsCorrect = false;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Already_existed_a_game_with_the_title_X,
                    NewGame.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -2215,7 +2215,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_game_X,
              Game->Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -3280,7 +3280,7 @@ void Gam_RequestRemoveQst (void)
    /***** Show question and button to remove question *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
    Gbl.Games.CurrentQstCod = QstCod;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_remove_the_question_X,
 	     (unsigned long) (QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,

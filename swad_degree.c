@@ -1153,7 +1153,7 @@ static void Deg_CreateDegree (unsigned Status)
    /***** Write message to show the change made
           and put button to go to degree created *****/
    Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_degree_X,
              Gbl.Degs.EditingDeg.FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();
@@ -1561,14 +1561,14 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 	 /***** If name of degree was in database... *****/
 	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Degs.EditingDeg.ShrtName,-1L,Gbl.Degs.EditingDeg.CtrCod))
 	   {
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_degree_X_already_exists,
 		      Gbl.Degs.EditingDeg.ShrtName);
 	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	   }
 	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Degs.EditingDeg.FullName,-1L,Gbl.Degs.EditingDeg.CtrCod))
 	   {
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_degree_X_already_exists,
 		      Gbl.Degs.EditingDeg.FullName);
 	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1611,7 +1611,7 @@ void Deg_RemoveDegree (void)
       Deg_RemoveDegreeCompletely (Deg.DegCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Degree_X_removed,
                 Deg.FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1970,7 +1970,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
    if (!NewDegName[0])
      {
       Gbl.Alert.Type = Ale_WARNING;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_degree_X_empty,
                 CurrentDegName);
      }
@@ -1983,7 +1983,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
          if (Deg_CheckIfDegNameExistsInCtr (ParamName,NewDegName,Deg->DegCod,Deg->CtrCod))
            {
             Gbl.Alert.Type = Ale_WARNING;
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_degree_X_already_exists,
 		      NewDegName);
            }
@@ -1994,7 +1994,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
 
             /* Write message to show the change made */
             Gbl.Alert.Type = Ale_SUCCESS;
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_name_of_the_degree_X_has_changed_to_Y,
                       CurrentDegName,NewDegName);
 
@@ -2006,7 +2006,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
       else	// The same name
 	{
          Gbl.Alert.Type = Ale_INFO;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_degree_X_has_not_changed,
                    CurrentDegName);
 	}
@@ -2065,14 +2065,14 @@ void Deg_ChangeDegCtrInConfig (void)
       if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.CurrentDeg.Deg.ShrtName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
 	{
          Gbl.Alert.Type = Ale_WARNING;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_degree_X_already_exists,
 		   Gbl.CurrentDeg.Deg.ShrtName);
 	}
       else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
 	{
          Gbl.Alert.Type = Ale_WARNING;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_degree_X_already_exists,
 		   Gbl.CurrentDeg.Deg.FullName);
 	}
@@ -2088,7 +2088,7 @@ void Deg_ChangeDegCtrInConfig (void)
 
 	 /***** Create message to show the change made *****/
          Gbl.Alert.Type = Ale_SUCCESS;
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_degree_X_has_been_moved_to_the_centre_Y,
 		   Gbl.CurrentDeg.Deg.FullName,
 		   Gbl.CurrentCtr.Ctr.FullName);
@@ -2154,7 +2154,7 @@ void Deg_ChangeDegWWW (void)
       /***** Write message to show the change made
 	     and put button to go to degree changed *****/
       Gbl.Alert.Type = Ale_SUCCESS;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
       Deg_ShowAlertAndButtonToGoToDeg ();
@@ -2185,7 +2185,7 @@ void Deg_ChangeDegWWWInConfig (void)
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2250,7 +2250,7 @@ void Deg_ChangeDegStatus (void)
    /***** Write message to show the change made
 	  and put button to go to degree changed *****/
    Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_The_status_of_the_degree_X_has_changed,
              Gbl.Degs.EditingDeg.ShrtName);
    Deg_ShowAlertAndButtonToGoToDeg ();

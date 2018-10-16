@@ -4162,7 +4162,7 @@ void For_RequestRemoveThread (void)
    /***** Show question and button to remove the thread *****/
    Lay_StartSection (For_REMOVE_THREAD_SECTION_ID);
    if (Subject[0])
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                 Subject);
    else
@@ -4219,7 +4219,7 @@ void For_RemoveThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
       	{
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Thread_X_removed,Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 	                                            Ale_SUCCESS,Gbl.Alert.Txt);
@@ -4257,7 +4257,7 @@ void For_CutThread (void)
    /***** Show the threads again *****/
    if (Subject[0])
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						 Ale_SUCCESS,Gbl.Alert.Txt);
@@ -4295,7 +4295,7 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_thread_X_is_already_in_this_forum,
                    Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4316,7 +4316,7 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Thread_X_moved_to_this_forum,
                    Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,

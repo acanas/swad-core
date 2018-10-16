@@ -501,7 +501,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 	   {
 	    /***** Show question and button to remove user's photo *****/
 	    /* Start alert */
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_Do_you_really_want_to_remove_the_photo_of_X,
 	              Gbl.Usrs.Other.UsrDat.FullName);
 	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
@@ -645,7 +645,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
                   WrongType = true;
    if (WrongType)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_file_is_not_X,
 		"jpg");
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -729,7 +729,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          NumFacesTotal = NumFacesGreen = NumFacesRed = 0;
          break;
       default:        // Error
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           "Photo could not be processed successfully.<br />"
                    "Error code returned by the program of processing: %d",
                    ReturnCode);
@@ -764,14 +764,14 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
       if (NumFacesRed == 0)
         {
          Gbl.Alert.Type = Ale_SUCCESS;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_X_faces_marked_in_green_have_been_detected_,
                    NumFacesGreen);
         }
       else if (NumFacesGreen == 0)
         {
          Gbl.Alert.Type = Ale_WARNING;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_X_faces_marked_in_red_have_been_detected_,
                    NumFacesRed);
         }
@@ -779,11 +779,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         {
          Gbl.Alert.Type = Ale_SUCCESS;
          if (NumFacesGreen == 1)
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_X_faces_have_been_detected_in_front_position_1_Z_,
                       NumFacesTotal,NumFacesRed);
          else
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
                       NumFacesTotal,NumFacesGreen,NumFacesRed);
         }

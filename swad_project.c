@@ -1981,7 +1981,7 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 	    Prj_FlushCacheMyRoleInProject ();
 
 	 /* Show success alert */
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
 		   Gbl.Usrs.Other.UsrDat.FullName,
 		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
@@ -2055,7 +2055,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
 	 /***** Show question and button to remove user as administrator *****/
 	 /* Start alert */
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
 			   Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
 		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
@@ -2147,7 +2147,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	    Prj_FlushCacheMyRoleInProject ();
 
 	 /***** Show success alert *****/
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
 		   Gbl.Usrs.Other.UsrDat.FullName,
 		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
@@ -2733,7 +2733,7 @@ void Prj_ReqRemProject (void)
      {
       /***** Show question and button to remove the project *****/
       Gbl.Prjs.PrjCod = Prj.PrjCod;
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Do_you_really_want_to_remove_the_project_X,
 	        Prj.Title);
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
@@ -2800,7 +2800,7 @@ void Prj_RemoveProject (void)
       Fil_RemoveTree (PathRelPrj);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Project_X_removed,
 	        Prj.Title);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2845,7 +2845,7 @@ void Prj_HideProject (void)
       DB_QueryUPDATE (Query,"can not hide project");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Project_X_is_now_hidden,
 	        Prj.Title);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2890,7 +2890,7 @@ void Prj_ShowProject (void)
       DB_QueryUPDATE (Query,"can not show project");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Project_X_is_now_visible,
 	        Prj.Title);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -3311,7 +3311,7 @@ void Prj_RecFormProject (void)
 	    Prj_CreateProject (&Prj);	// Add new project to database
 
 	    /* Write success message */
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_Created_new_project_X,
 		      Prj.Title);
 	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);

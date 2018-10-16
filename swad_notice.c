@@ -95,7 +95,7 @@ void Not_ShowFormNotice (void)
    extern const char *Txt_Create_notice;
 
    /***** Help message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_The_notice_will_appear_as_a_yellow_note_,
              Gbl.CurrentCrs.Crs.FullName);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);

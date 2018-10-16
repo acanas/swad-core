@@ -887,7 +887,7 @@ void Att_AskRemAttEvent (void)
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_remove_the_event_X,
              Att.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -919,7 +919,7 @@ void Att_GetAndRemAttEvent (void)
    Att_RemoveAttEventFromDB (Att.AttCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Event_X_removed,
 	     Att.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -968,7 +968,7 @@ void Att_HideAttEvent (void)
    DB_QueryUPDATE (Query,"can not hide attendance event");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Event_X_is_now_hidden,
              Att.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1001,7 +1001,7 @@ void Att_ShowAttEvent (void)
    DB_QueryUPDATE (Query,"can not show attendance event");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Event_X_is_now_visible,
              Att.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1287,7 +1287,7 @@ void Att_RecFormAttEvent (void)
       if (Att_CheckIfSimilarAttEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
         {
          ReceivedAttEventIsCorrect = false;
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Already_existed_an_event_with_the_title_X,
                    ReceivedAtt.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1311,7 +1311,7 @@ void Att_RecFormAttEvent (void)
          Att_CreateAttEvent (&ReceivedAtt,Txt);	// Add new attendance event to database
 
          /***** Write success message *****/
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Created_new_event_X,
 		   ReceivedAtt.Title);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2404,7 +2404,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
       /***** Write final message *****/
       sprintf (Format,"%s: %%u<br />%s: %%u",Txt_Presents,Txt_Absents);
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Format,
 	        NumStdsPresent,NumStdsAbsent);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);

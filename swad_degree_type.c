@@ -551,7 +551,7 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
    DB_QueryINSERT (Query,"can not create a new type of degree");
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_type_of_degree_X,
              DegTyp->DegTypName);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -721,7 +721,7 @@ void DT_RecFormNewDegreeType (void)
       /***** If name of degree type was in database... *****/
       if (DT_CheckIfDegreeTypeNameExists (DegTyp->DegTypName,-1L))
         {
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_type_of_degree_X_already_exists,
                    DegTyp->DegTypName);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -762,7 +762,7 @@ void DT_RemoveDegreeType (void)
       DT_RemoveDegreeTypeCompletely (DegTyp.DegTypCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Type_of_degree_X_removed,
                 DegTyp.DegTypName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -937,7 +937,7 @@ void DT_RenameDegreeType (void)
    /***** Check if new name is empty *****/
    if (!NewNameDegTyp[0])
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty,
                 DegTyp->DegTypName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -950,7 +950,7 @@ void DT_RenameDegreeType (void)
          /***** If degree type was in database... *****/
          if (DT_CheckIfDegreeTypeNameExists (NewNameDegTyp,DegTyp->DegTypCod))
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_type_of_degree_X_already_exists,
                       NewNameDegTyp);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -964,7 +964,7 @@ void DT_RenameDegreeType (void)
             DB_QueryUPDATE (Query,"can not update the type of a degree");
 
             /* Write message to show the change made */
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_type_of_degree_X_has_been_renamed_as_Y,
                       DegTyp->DegTypName,NewNameDegTyp);
             Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -972,7 +972,7 @@ void DT_RenameDegreeType (void)
         }
       else	// The same name
         {
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_type_of_degree_X_has_not_changed,
                    NewNameDegTyp);
          Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
@@ -1028,7 +1028,7 @@ void DT_ChangeDegreeType (void)
    /***** Write message to show the change made
           and put button to go to degree changed *****/
    Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_The_type_of_degree_of_the_degree_X_has_changed,
 	     Gbl.Degs.EditingDeg.FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();

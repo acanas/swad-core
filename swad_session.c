@@ -485,7 +485,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
 
    if (ParameterIsTooBig)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Hidden parameter <strong>%s</strong> too large,"
                 " it exceed the maximum allowed size (%lu bytes).",
                 ParamName,(unsigned long) MaxBytes);

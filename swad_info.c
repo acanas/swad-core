@@ -2234,7 +2234,7 @@ void Inf_ReceiveURLInfo (void)
       fclose (FileURL);
 
       /***** Write message *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_URL_X_has_been_updated,
                 Gbl.CurrentCrs.Info.URL);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -2304,7 +2304,7 @@ void Inf_ReceivePagInfo (void)
                            WrongType = true;
    if (WrongType)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
                 MIMEType);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);

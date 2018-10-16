@@ -1038,7 +1038,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 /*
   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
     {
-     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	       "Str_ChangeFormat (&quot;%s&quot;)",
 	       Str);
      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
@@ -2789,7 +2789,7 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
                    Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
                 	                                   Txt_UPLOAD_FILE_X_invalid_name,
 		   FileName);
@@ -2882,7 +2882,7 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
    /***** Check if buffer has enough space for source *****/
    if (LengthSrc > DstSize)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Trying to copy %lu chars into a %lu-chars buffer.",
                 LengthSrc,DstSize);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
@@ -2906,7 +2906,7 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthDst = strlen (Dst);
    if (LengthDst > DstSize)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "%lu-chars buffer has %lu chars!",
                 DstSize,LengthDst);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
@@ -2918,7 +2918,7 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthSrc = strlen (Src);
    if (FreeSpace < LengthSrc)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Trying to concatenate %lu chars to a %lu-chars buffer with free space for only %lu chars!",
                 LengthSrc,DstSize,FreeSpace);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);

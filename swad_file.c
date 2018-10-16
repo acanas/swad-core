@@ -141,11 +141,11 @@ bool Fil_ReadStdinIntoTmpFile (void)
      {
       Fil_EndOfReadingStdin ();  // If stdin were not fully read, there will be problems with buffers
       if (FileIsTooBig)
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
                    (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
       else
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
                    (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
 
@@ -343,7 +343,7 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
    /* Open the new file */
    if ((*NewFile = fopen (NewName,"wb")) == NULL)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Can not create file <strong>%s</strong>.",
 		NewName);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
@@ -362,14 +362,14 @@ void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char
    /* Rename the old file and the new file */
    if (rename (CurrentName,OldName)) // mv CurrentName OldName Ej: mv file.html file.old
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
                 CurrentName,OldName);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
    if (rename (NewName,CurrentName)) // mv NewName CurrentName Ej: mv file.new file.html
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
                 NewName,CurrentName);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
@@ -392,12 +392,12 @@ bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew)
         {
 	 case ENOTEMPTY:
 	 case EEXIST:
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_There_is_already_a_non_empty_folder_named_X,
 	              PathNew);
 	    break;
 	 case ENOTDIR:
-	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_There_is_already_a_file_named_X,
 	              PathNew);
 	    break;
@@ -434,7 +434,7 @@ void Fil_CreateDirIfNotExists (const char *Path)
    if (!Fil_CheckIfPathExists (Path))
       if (mkdir (Path,(mode_t) 0xFFF) != 0)
         {
-	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           "Can not create folder <strong>%s</strong>.",
 		   Path);
 	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
@@ -495,7 +495,7 @@ void Fil_RemoveTree (const char *Path)
 	       Error = true;
 	    if (Error)
 	      {
-	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                 "Can not remove folder %s.",
 			 Path);
 	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);

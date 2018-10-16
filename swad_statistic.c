@@ -1041,7 +1041,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
 	        Cfg_DAYS_IN_RECENT_LOG);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);	// ...write warning message and show the form again

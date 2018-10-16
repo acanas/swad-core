@@ -501,7 +501,7 @@ void Plg_RemovePlugin (void)
    DB_QueryDELETE (Query,"can not remove a plugin");
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Plugin_X_removed,
              Plg.Name);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -540,7 +540,7 @@ void Plg_RenamePlugin (void)
    /***** Check if new name is empty *****/
    if (!NewPlgName[0])
      {
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
                 Plg->Name);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -553,7 +553,7 @@ void Plg_RenamePlugin (void)
          /***** If plugin was in database... *****/
          if (Plg_CheckIfPluginNameExists (NewPlgName,Plg->PlgCod))
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_plugin_X_already_exists,
                       NewPlgName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -566,7 +566,7 @@ void Plg_RenamePlugin (void)
             DB_QueryUPDATE (Query,"can not update the name of a plugin");
 
             /***** Write message to show the change made *****/
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_plugin_X_has_been_renamed_as_Y,
                       Plg->Name,NewPlgName);
             Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -574,7 +574,7 @@ void Plg_RenamePlugin (void)
         }
       else	// The same name
         {
-         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_plugin_X_has_not_changed,
                    Plg->Name);
          Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
@@ -633,7 +633,7 @@ void Plg_ChangePlgDescription (void)
       DB_QueryUPDATE (Query,"can not update the description of a plugin");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_description_is_X,
                 NewDescription);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -678,7 +678,7 @@ void Plg_ChangePlgLogo (void)
       DB_QueryUPDATE (Query,"can not update the logo of a plugin");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_logo_is_X,
                 NewLogo);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -723,7 +723,7 @@ void Plg_ChangePlgAppKey (void)
       DB_QueryUPDATE (Query,"can not update the application key of a plugin");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_logo_is_X,	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 NewAppKey);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -768,7 +768,7 @@ void Plg_ChangePlgURL (void)
       DB_QueryUPDATE (Query,"can not update the URL of a plugin");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_URL_is_X,
                 NewURL);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -813,7 +813,7 @@ void Plg_ChangePlgIP (void)
       DB_QueryUPDATE (Query,"can not update the IP address of a plugin");
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_IP_address_is_X,
                 NewIP);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
@@ -1023,7 +1023,7 @@ void Plg_RecFormNewPlg (void)
          /***** If name of plugin was in database... *****/
          if (Plg_CheckIfPluginNameExists (Plg->Name,-1L))
            {
-            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_plugin_X_already_exists,
                       Plg->Name);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
@@ -1064,7 +1064,7 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
    DB_QueryINSERT (Query,"can not create plugin");
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_plugin_X,
              Plg->Name);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
