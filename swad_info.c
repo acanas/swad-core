@@ -2234,8 +2234,9 @@ void Inf_ReceiveURLInfo (void)
       fclose (FileURL);
 
       /***** Write message *****/
-      sprintf (Gbl.Alert.Txt,Txt_The_URL_X_has_been_updated,
-               Gbl.CurrentCrs.Info.URL);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_URL_X_has_been_updated,
+                Gbl.CurrentCrs.Info.URL);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
       URLIsOK = true;
      }
@@ -2303,8 +2304,9 @@ void Inf_ReceivePagInfo (void)
                            WrongType = true;
    if (WrongType)
      {
-      sprintf (Gbl.Alert.Txt,Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
-               MIMEType);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
+                MIMEType);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else

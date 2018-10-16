@@ -658,8 +658,9 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
      {
-      sprintf (Gbl.Alert.Txt,Txt_No_announcements_of_exams_of_X,
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_No_announcements_of_exams_of_X,
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 

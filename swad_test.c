@@ -584,13 +584,15 @@ void Tst_AssessTest (void)
          Tst_SetTstStatus (NumTst,Tst_STATUS_ASSESSED);
          break;
       case Tst_STATUS_ASSESSED:
-         sprintf (Gbl.Alert.Txt,Txt_The_test_X_has_already_been_assessed_previously,
-                  NumTst);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_test_X_has_already_been_assessed_previously,
+                   NumTst);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
          break;
       case Tst_STATUS_ERROR:
-         sprintf (Gbl.Alert.Txt,Txt_There_was_an_error_in_assessing_the_test_X,
-                  NumTst);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_There_was_an_error_in_assessing_the_test_X,
+                   NumTst);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
          break;
      }
@@ -698,14 +700,15 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Write warning *****/
-      sprintf (Gbl.Alert.Txt,"%s:<br /><span id=\"date_next_test\"></span>."
-                           "<script type=\"text/javascript\">"
-			   "writeLocalDateHMSFromUTC('date_next_test',%ld,"
-			   "%u,',&nbsp;','%s',true,true,0x7);"
-			   "</script>",
-	       Txt_You_can_not_take_a_new_test_until,
-	       (long) TimeNextTestUTC,
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "%s:<br /><span id=\"date_next_test\"></span>."
+                "<script type=\"text/javascript\">"
+		"writeLocalDateHMSFromUTC('date_next_test',%ld,"
+		"%u,',&nbsp;','%s',true,true,0x7);"
+		"</script>",
+	        Txt_You_can_not_take_a_new_test_until,
+	        (long) TimeNextTestUTC,
+	        (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 
       return false;
@@ -1552,8 +1555,9 @@ void Tst_RenameTag (void)
    /***** Check that the new tag is not empty *****/
    if (!NewTagTxt[0])	// New tag empty
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
-               OldTagTxt);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
+                OldTagTxt);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else			// New tag not empty
@@ -1564,8 +1568,9 @@ void Tst_RenameTag (void)
 						// This happens when user press INTRO
 						// without changing anything in the form.
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_tag_X_has_not_changed,
-                  NewTagTxt);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_tag_X_has_not_changed,
+                   NewTagTxt);
          Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
       else					// The old and the new tag
@@ -1648,8 +1653,9 @@ void Tst_RenameTag (void)
 	   }
 
 	 /***** Write message to show the change made *****/
-	 sprintf (Gbl.Alert.Txt,Txt_The_tag_X_has_been_renamed_as_Y,
-		  OldTagTxt,NewTagTxt);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_tag_X_has_been_renamed_as_Y,
+		   OldTagTxt,NewTagTxt);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
      }
@@ -4760,8 +4766,9 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 	 if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
 	     Gbl.Test.NumQsts > Gbl.Test.Config.Max)
 	   {
-	    sprintf (Gbl.Alert.Txt,Txt_The_number_of_questions_must_be_in_the_interval_X,
-		     Gbl.Test.Config.Min,Gbl.Test.Config.Max);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_number_of_questions_must_be_in_the_interval_X,
+		      Gbl.Test.Config.Min,Gbl.Test.Config.Max);
 	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	    Error = true;
 	   }
@@ -5419,13 +5426,15 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
    if ((Gbl.Test.Answer.Options[NumOpt].Text =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
+      Str_Copy (Gbl.Alert.Txt,"Not enough memory to store answer.",
+	        Ale_MAX_BYTES_ALERT);
       return 0;
      }
    if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      sprintf (Gbl.Alert.Txt,"Not enough memory to store feedback.");
+      Str_Copy (Gbl.Alert.Txt,"Not enough memory to store feedback.",
+	        Ale_MAX_BYTES_ALERT);
       return 0;
      }
 
@@ -6325,8 +6334,9 @@ void Tst_RequestRemoveQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
-	    (unsigned long) Gbl.Test.QstCod);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_remove_the_question_X,
+	     (unsigned long) Gbl.Test.QstCod);
    if (EditingOnlyThisQst)
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                               ActRemTstQst,NULL,NULL,
@@ -6448,10 +6458,10 @@ void Tst_ChangeShuffleQst (void)
    DB_QueryUPDATE (Query,"can not update the shuffle type of a question");
 
    /***** Write message *****/
-   sprintf (Gbl.Alert.Txt,
-            Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
-                      Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
-            Gbl.Test.QstCod);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
+                       Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
+             Gbl.Test.QstCod);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Continue editing questions *****/

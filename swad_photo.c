@@ -501,8 +501,9 @@ void Pho_ReqRemoveUsrPhoto (void)
 	   {
 	    /***** Show question and button to remove user's photo *****/
 	    /* Start alert */
-	    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_photo_of_X,
-	             Gbl.Usrs.Other.UsrDat.FullName);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_Do_you_really_want_to_remove_the_photo_of_X,
+	              Gbl.Usrs.Other.UsrDat.FullName);
 	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
 	    /* Show current photo */
@@ -644,7 +645,9 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
                   WrongType = true;
    if (WrongType)
      {
-      sprintf (Gbl.Alert.Txt,Txt_The_file_is_not_X,"jpg");
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_file_is_not_X,
+		"jpg");
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
       return false;
      }
@@ -726,9 +729,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          NumFacesTotal = NumFacesGreen = NumFacesRed = 0;
          break;
       default:        // Error
-         sprintf (Gbl.Alert.Txt,"Photo could not be processed successfully.<br />"
-                                "Error code returned by the program of processing: %d",
-                  ReturnCode);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           "Photo could not be processed successfully.<br />"
+                   "Error code returned by the program of processing: %d",
+                   ReturnCode);
          Lay_ShowErrorAndExit (Gbl.Alert.Txt);
          break;
      }
@@ -760,24 +764,28 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
       if (NumFacesRed == 0)
         {
          Gbl.Alert.Type = Ale_SUCCESS;
-         sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_green_have_been_detected_,
-                  NumFacesGreen);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_X_faces_marked_in_green_have_been_detected_,
+                   NumFacesGreen);
         }
       else if (NumFacesGreen == 0)
         {
          Gbl.Alert.Type = Ale_WARNING;
-         sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_red_have_been_detected_,
-                  NumFacesRed);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_X_faces_marked_in_red_have_been_detected_,
+                   NumFacesRed);
         }
       else        // NumFacesGreen > 0
         {
          Gbl.Alert.Type = Ale_SUCCESS;
          if (NumFacesGreen == 1)
-            sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
-                     NumFacesTotal,NumFacesRed);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_X_faces_have_been_detected_in_front_position_1_Z_,
+                      NumFacesTotal,NumFacesRed);
          else
-            sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
-                     NumFacesTotal,NumFacesGreen,NumFacesRed);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
+                      NumFacesTotal,NumFacesGreen,NumFacesRed);
         }
      }
 

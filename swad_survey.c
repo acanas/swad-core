@@ -1508,8 +1508,9 @@ void Svy_AskRemSurvey (void)
 
    /***** Show question and button to remove survey *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_survey_X,
-            Svy.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_remove_the_survey_X,
+             Svy.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemSvy,NULL,NULL,Svy_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_survey);
@@ -1571,8 +1572,9 @@ void Svy_RemoveSurvey (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Survey_X_removed,
-            Svy.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Survey_X_removed,
+             Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
@@ -1607,8 +1609,9 @@ void Svy_AskResetSurvey (void)
       Lay_ShowErrorAndExit ("You can not reset this survey.");
 
    /***** Ask for confirmation of reset *****/
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_reset_the_survey_X,
-            Svy.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_reset_the_survey_X,
+             Svy.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 
    /***** Button of confirmation of reset *****/
@@ -1669,8 +1672,9 @@ void Svy_ResetSurvey (void)
    DB_QueryUPDATE (Query,"can not reset answers of a survey");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Survey_X_reset,
-            Svy.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Survey_X_reset,
+             Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
@@ -1706,8 +1710,9 @@ void Svy_HideSurvey (void)
    DB_QueryUPDATE (Query,"can not hide survey");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Survey_X_is_now_hidden,
-            Svy.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Survey_X_is_now_hidden,
+             Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
@@ -1743,8 +1748,9 @@ void Svy_UnhideSurvey (void)
    DB_QueryUPDATE (Query,"can not show survey");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Survey_X_is_now_visible,
-            Svy.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Survey_X_is_now_visible,
+             Svy.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
@@ -2195,8 +2201,9 @@ void Svy_RecFormSurvey (void)
       if (Svy_CheckIfSimilarSurveyExists (&NewSvy))
         {
          NewSurveyIsCorrect = false;
-         sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_survey_with_the_title_X,
-                  NewSvy.Title);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_Already_existed_a_survey_with_the_title_X,
+                   NewSvy.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
      }
@@ -2281,8 +2288,9 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
-   sprintf (Gbl.Alert.Txt,Txt_Created_new_survey_X,
-            Svy->Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Created_new_survey_X,
+             Svy->Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
@@ -2915,7 +2923,8 @@ static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = (char *) malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
-      sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
+      Str_Copy (Gbl.Alert.Txt,"Not enough memory to store answer.",
+	        Ale_MAX_BYTES_ALERT);
       return false;
      }
    SvyQst->AnsChoice[NumAns].Text[0] = '\0';
@@ -3586,8 +3595,9 @@ void Svy_RequestRemoveQst (void)
    /***** Show question and button to remove question *****/
    Gbl.Svys.SvyCodToEdit    = SvyCod;
    Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
-	    (unsigned long) (SvyQst.QstInd + 1));
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_remove_the_question_X,
+	     (unsigned long) (SvyQst.QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemSvyQst,NULL,NULL,Svy_PutParamsRemoveOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);

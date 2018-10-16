@@ -80,9 +80,10 @@ void Cht_ShowChatRooms (void)
    extern const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_;
 
    /***** Help message about software needed to use the whiteboard/chat *****/
-   sprintf (Gbl.Alert.Txt,Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_,
-            Cfg_JAVA_URL,Cfg_JAVA_NAME,
-            Cfg_PLATFORM_SERVER);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_,
+             Cfg_JAVA_URL,Cfg_JAVA_NAME,
+             Cfg_PLATFORM_SERVER);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** List available chat rooms *****/

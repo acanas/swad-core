@@ -403,9 +403,10 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 		  Ale_ShowAlert (Ale_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
 		  break;
 	       default:
-		  sprintf (Gbl.Alert.Txt,"Internal error: an email message has not been sent successfully."
-				         " Error code returned by the script: %d",
-			   ReturnCode);
+		  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    "Internal error: an email message has not been sent successfully."
+		            " Error code returned by the script: %d",
+			    ReturnCode);
 		  Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
 		  break;
 	      }
@@ -418,8 +419,9 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	 /***** Help message *****/
 	 // TODO: This message allows to know if a ID exists in database (when no unique).
 	 // This should be hidden!
-	 sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-		  Gbl.Usrs.Me.UsrIdLogin);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+		   Gbl.Usrs.Me.UsrIdLogin);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 
 	 Pwd_ShowFormSendNewPwd ();
@@ -629,8 +631,9 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,Txt_The_password_must_be_at_least_X_characters,
-               Pwd_MIN_CHARS_PLAIN_PASSWORD);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_password_must_be_at_least_X_characters,
+                Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
      }
 
@@ -729,8 +732,9 @@ void Pwd_ShowFormChgMyPwd (void)
    /***** Help message *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td colspan=\"2\">");
-   sprintf (Gbl.Alert.Txt,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
-	    Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
+	     Pwd_MIN_CHARS_PLAIN_PASSWORD);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -760,7 +764,9 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
-   sprintf (Gbl.Alert.Txt,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_HELP_password,
+	     Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Passwd\" class=\"%s\">%s:</label>"
@@ -788,7 +794,9 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *Txt_HELP_password;
    extern const char *Txt_Retype_new_password;
 
-   sprintf (Gbl.Alert.Txt,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_HELP_password,
+	     Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>"

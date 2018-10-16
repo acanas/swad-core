@@ -281,8 +281,9 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
       DB_QueryUPDATE (Query,"can not update properties of marks");
 
       /***** Write message of success *****/
-      sprintf (Gbl.Alert.Txt,Txt_The_number_of_rows_is_now_X,
-               NumRows);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_number_of_rows_is_now_X,
+                NumRows);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
@@ -399,8 +400,9 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
      }
    /*
    if (FileIsCorrect)
-      sprintf (Gbl.Alert.Txt,Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found,
-               Marks->Header,NumRowsStds,Marks->Footer);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found,
+                Marks->Header,NumRowsStds,Marks->Footer);
    */
 
    return FileIsCorrect;
@@ -599,8 +601,9 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
    /***** User's ID not found in table *****/
    fclose (FileAllMarks);
-   sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
-	    UsrDat->FullName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
+	     UsrDat->FullName);
    return false;
   }
 

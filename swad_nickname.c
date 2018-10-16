@@ -441,7 +441,9 @@ void Nck_RemoveMyNick (void)
       /***** Show message *****/
       Gbl.Alert.Type = Ale_SUCCESS;
       Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,Txt_Nickname_X_removed,NicknameWithoutArroba);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Nickname_X_removed,
+		NicknameWithoutArroba);
      }
    else
      {
@@ -480,7 +482,9 @@ void Nck_RemoveOtherUsrNick (void)
 	 /***** Show message *****/
 	 Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-	 sprintf (Gbl.Alert.Txt,Txt_Nickname_X_removed,NicknameWithoutArroba);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_Nickname_X_removed,
+		   NicknameWithoutArroba);
 
 	 /***** Show user's account again *****/
 	 Acc_ShowFormChgOtherUsrAccount ();
@@ -575,8 +579,9 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
         {
          Gbl.Alert.Type = Ale_WARNING;
          Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-         sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
-                  NewNicknameWithoutArroba);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
+                   NewNicknameWithoutArroba);
         }
       else if (strcasecmp (UsrDat->Nickname,NewNicknameWithoutArroba))	// User's nickname does not match, not even case insensitive, the new nickname
         {
@@ -594,8 +599,9 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
               {
                Gbl.Alert.Type = Ale_WARNING;
                Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-               sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_had_been_registered_by_another_user,
-                        NewNicknameWithoutArroba);
+               snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_The_nickname_X_had_been_registered_by_another_user,
+                         NewNicknameWithoutArroba);
               }
            }
         }
@@ -609,18 +615,20 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 
          Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-         sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_has_been_registered_successfully,
-                  NewNicknameWithoutArroba);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_nickname_X_has_been_registered_successfully,
+                   NewNicknameWithoutArroba);
         }
      }
    else        // New nickname is not valid
      {
       Gbl.Alert.Type = Ale_WARNING;
       Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,Txt_The_nickname_entered_X_is_not_valid_,
-               NewNicknameWithArroba,
-               Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
-               Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_nickname_entered_X_is_not_valid_,
+                NewNicknameWithArroba,
+                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
+                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
      }
   }
 

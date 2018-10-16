@@ -4162,8 +4162,9 @@ void For_RequestRemoveThread (void)
    /***** Show question and button to remove the thread *****/
    Lay_StartSection (For_REMOVE_THREAD_SECTION_ID);
    if (Subject[0])
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
-               Subject);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_entire_thread_X,
+                Subject);
    else
       Str_Copy (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread,
 		Ale_MAX_BYTES_ALERT);
@@ -4218,7 +4219,8 @@ void For_RemoveThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
       	{
-         sprintf (Gbl.Alert.Txt,Txt_Thread_X_removed,Subject);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_Thread_X_removed,Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 	                                            Ale_SUCCESS,Gbl.Alert.Txt);
       	}
@@ -4255,7 +4257,8 @@ void For_CutThread (void)
    /***** Show the threads again *****/
    if (Subject[0])
      {
-      sprintf (Gbl.Alert.Txt,Txt_Thread_X_marked_to_be_moved,Subject);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						 Ale_SUCCESS,Gbl.Alert.Txt);
      }
@@ -4292,8 +4295,9 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         sprintf (Gbl.Alert.Txt,Txt_The_thread_X_is_already_in_this_forum,
-                  Subject);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_thread_X_is_already_in_this_forum,
+                   Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						    Ale_WARNING,Gbl.Alert.Txt);
         }
@@ -4312,8 +4316,9 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         sprintf (Gbl.Alert.Txt,Txt_Thread_X_moved_to_this_forum,
-                  Subject);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_Thread_X_moved_to_this_forum,
+                   Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						    Ale_SUCCESS,Gbl.Alert.Txt);
 	}

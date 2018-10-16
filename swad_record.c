@@ -202,8 +202,9 @@ void Rec_ReqEditRecordFields (void)
      }
    else	// No fields of records found for current course in the database
      {
-      sprintf (Gbl.Alert.Txt,Txt_There_are_no_record_fields_in_the_course_X,
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_There_are_no_record_fields_in_the_course_X,
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
@@ -482,8 +483,9 @@ void Rec_ReceiveFormField (void)
       /***** If the field already was in the database... *****/
       if (Rec_CheckIfRecordFieldIsRepeated (Gbl.CurrentCrs.Records.Field.Name))
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_record_field_X_already_exists,
-                  Gbl.CurrentCrs.Records.Field.Name);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_record_field_X_already_exists,
+                   Gbl.CurrentCrs.Records.Field.Name);
          Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
         }
       else	// Add the new field to the database
@@ -586,8 +588,9 @@ void Rec_CreateRecordField (void)
    DB_QueryINSERT (Query,"can not create field of record");
 
    /***** Write message of success *****/
-   sprintf (Gbl.Alert.Txt,Txt_Created_new_record_field_X,
-            Gbl.CurrentCrs.Records.Field.Name);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Created_new_record_field_X,
+             Gbl.CurrentCrs.Records.Field.Name);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
@@ -655,8 +658,9 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Show question and button to remove my photo *****/
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
-            Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
+             Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
    if (NumRecords == 1)
       Str_Concat (Gbl.Alert.Txt,Txt_this_field_is_filled_in_the_record_of_one_student,
                   Ale_MAX_BYTES_ALERT);
@@ -701,8 +705,9 @@ void Rec_RemoveFieldFromDB (void)
    DB_QueryDELETE (Query,"can not remove field of record");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Record_field_X_removed,
-            Gbl.CurrentCrs.Records.Field.Name);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Record_field_X_removed,
+             Gbl.CurrentCrs.Records.Field.Name);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
@@ -807,8 +812,9 @@ void Rec_RenameField (void)
    /***** Check if new name is empty *****/
    if (!NewFieldName[0])
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_field_X_empty,
-               Gbl.CurrentCrs.Records.Field.Name);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_can_not_leave_the_name_of_the_field_X_empty,
+                Gbl.CurrentCrs.Records.Field.Name);
       Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
      }
    else
@@ -820,8 +826,9 @@ void Rec_RenameField (void)
          /***** If the group ya estaba in the database... *****/
          if (Rec_CheckIfRecordFieldIsRepeated (NewFieldName))
            {
-            sprintf (Gbl.Alert.Txt,Txt_The_record_field_X_already_exists,
-                     NewFieldName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_record_field_X_already_exists,
+                      NewFieldName);
             Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
            }
          else
@@ -833,15 +840,17 @@ void Rec_RenameField (void)
             DB_QueryUPDATE (Query,"can not update name of field of record");
 
             /***** Write message to show the change made *****/
-            sprintf (Gbl.Alert.Txt,Txt_The_record_field_X_has_been_renamed_as_Y,
-                     Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_record_field_X_has_been_renamed_as_Y,
+                      Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
             Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_field_X_has_not_changed,
-                  NewFieldName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_name_of_the_field_X_has_not_changed,
+                   NewFieldName);
          Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
@@ -882,8 +891,9 @@ void Rec_ChangeLinesField (void)
           (this happens when return is pressed without changes) *****/
    if (Gbl.CurrentCrs.Records.Field.NumLines == NewNumLines)
      {
-      sprintf (Gbl.Alert.Txt,Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
-               Gbl.CurrentCrs.Records.Field.Name);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
+                Gbl.CurrentCrs.Records.Field.Name);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else
@@ -895,8 +905,9 @@ void Rec_ChangeLinesField (void)
       DB_QueryUPDATE (Query,"can not update the number of lines of a field of record");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Alert.Txt,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
-	       Gbl.CurrentCrs.Records.Field.Name,NewNumLines);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
+	        Gbl.CurrentCrs.Records.Field.Name,NewNumLines);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -935,8 +946,9 @@ void Rec_ChangeVisibilityField (void)
           (this happens whe return is pressed without changes in the form) *****/
    if (Gbl.CurrentCrs.Records.Field.Visibility == NewVisibility)
      {
-      sprintf (Gbl.Alert.Txt,Txt_The_visibility_of_the_record_field_X_has_not_changed,
-               Gbl.CurrentCrs.Records.Field.Name);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_visibility_of_the_record_field_X_has_not_changed,
+                Gbl.CurrentCrs.Records.Field.Name);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else
@@ -948,8 +960,9 @@ void Rec_ChangeVisibilityField (void)
       DB_QueryUPDATE (Query,"can not update the visibility of a field of record");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Alert.Txt,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
-	       Gbl.CurrentCrs.Records.Field.Name);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
+	        Gbl.CurrentCrs.Records.Field.Name);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 

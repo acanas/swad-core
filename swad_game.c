@@ -1495,8 +1495,9 @@ void Gam_AskRemGame (void)
 
    /***** Show question and button to remove game *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_game_X,
-            Game.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_remove_the_game_X,
+             Game.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGam,NULL,NULL,Gam_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game);
@@ -1544,8 +1545,9 @@ void Gam_RemoveGame (void)
    DB_QueryDELETE (Query,"can not remove game");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Game_X_removed,
-            Game.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Game_X_removed,
+             Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
@@ -1576,8 +1578,9 @@ void Gam_AskResetGame (void)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
    /***** Ask for confirmation of reset *****/
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_reset_the_game_X,
-            Game.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_reset_the_game_X,
+             Game.Title);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 
    /***** Button of confirmation of reset *****/
@@ -1634,8 +1637,9 @@ void Gam_ResetGame (void)
    DB_QueryUPDATE (Query,"can not reset answers of a game");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Game_X_reset,
-            Game.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Game_X_reset,
+             Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
@@ -1667,8 +1671,9 @@ void Gam_HideGame (void)
    DB_QueryUPDATE (Query,"can not hide game");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Game_X_is_now_hidden,
-            Game.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Game_X_is_now_hidden,
+             Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
@@ -1700,8 +1705,9 @@ void Gam_UnhideGame (void)
    DB_QueryUPDATE (Query,"can not show game");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Game_X_is_now_visible,
-            Game.Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Game_X_is_now_visible,
+             Game.Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
@@ -2143,8 +2149,9 @@ void Gam_RecFormGame (void)
       if (Gam_CheckIfSimilarGameExists (&NewGame))
         {
          NewGameIsCorrect = false;
-         sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_game_with_the_title_X,
-                  NewGame.Title);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_Already_existed_a_game_with_the_title_X,
+                   NewGame.Title);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
      }
@@ -2208,8 +2215,9 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
-   sprintf (Gbl.Alert.Txt,Txt_Created_new_game_X,
-            Game->Title);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Created_new_game_X,
+             Game->Title);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
@@ -3272,8 +3280,9 @@ void Gam_RequestRemoveQst (void)
    /***** Show question and button to remove question *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
    Gbl.Games.CurrentQstCod = QstCod;
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
-	    (unsigned long) (QstInd + 1));
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Do_you_really_want_to_remove_the_question_X,
+	     (unsigned long) (QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question);

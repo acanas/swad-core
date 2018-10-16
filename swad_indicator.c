@@ -529,8 +529,9 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
-   sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
-            NumCrss);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
+             NumCrss);
    Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
                            Gbl.Action.Act,NULL,NULL,
                            Ind_PutParamsConfirmIWantToSeeBigList,

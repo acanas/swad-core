@@ -503,8 +503,9 @@ void Lnk_RemoveLink (void)
    DB_QueryDELETE (Query,"can not remove an institutional link");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Link_X_removed,
-            Lnk.ShrtName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Link_X_removed,
+             Lnk.ShrtName);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
@@ -577,8 +578,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewLnkName[0])
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_link_X_empty,
-               CurrentLnkName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_can_not_leave_the_name_of_the_link_X_empty,
+                CurrentLnkName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
@@ -589,8 +591,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If link was in database... *****/
          if (Lnk_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk->LnkCod))
            {
-            sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
-                     NewLnkName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_link_X_already_exists,
+                      NewLnkName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
@@ -599,15 +602,17 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
             Lnk_UpdateLnkNameDB (Lnk->LnkCod,FieldName,NewLnkName);
 
             /* Write message to show the change made */
-            sprintf (Gbl.Alert.Txt,Txt_The_link_X_has_been_renamed_as_Y,
-                     CurrentLnkName,NewLnkName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_link_X_has_been_renamed_as_Y,
+                      CurrentLnkName,NewLnkName);
             Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_link_X_has_not_changed,
-                  CurrentLnkName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_name_of_the_link_X_has_not_changed,
+                   CurrentLnkName);
          Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
@@ -677,8 +682,9 @@ void Lnk_ChangeLinkWWW (void)
       DB_QueryUPDATE (Query,"can not update the web of an institutional link");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,
-               NewWWW);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_new_web_address_is_X,
+                NewWWW);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
@@ -813,14 +819,16 @@ void Lnk_RecFormNewLink (void)
       /***** If name of link was in database... *****/
       if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk->ShrtName,-1L))
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
-                  Lnk->ShrtName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_link_X_already_exists,
+                   Lnk->ShrtName);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk->FullName,-1L))
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
-                  Lnk->FullName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_link_X_already_exists,
+                   Lnk->FullName);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (!Lnk->WWW[0])
@@ -856,7 +864,8 @@ static void Lnk_CreateLink (struct Link *Lnk)
    DB_QueryINSERT (Query,"can not create institutional link");
 
    /***** Write success message *****/
-   sprintf (Gbl.Alert.Txt,Txt_Created_new_link_X,
-            Lnk->ShrtName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Created_new_link_X,
+             Lnk->ShrtName);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }

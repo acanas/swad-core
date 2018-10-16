@@ -281,8 +281,9 @@ static void Grp_EditGroupTypes (void)
       Grp_ListGroupTypesForEdition ();
    else	// No group types found in this course
      {
-      sprintf (Gbl.Alert.Txt,Txt_There_are_no_types_of_group_in_the_course_X,
-               Gbl.CurrentCrs.Crs.ShrtName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_There_are_no_types_of_group_in_the_course_X,
+                Gbl.CurrentCrs.Crs.ShrtName);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
@@ -312,8 +313,9 @@ static void Grp_EditGroups (void)
       Grp_ListGroupsForEdition ();
    else	// There are group types, but there aren't groups
      {
-      sprintf (Gbl.Alert.Txt,Txt_No_groups_have_been_created_in_the_course_X,
-               Gbl.CurrentCrs.Crs.ShrtName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_No_groups_have_been_created_in_the_course_X,
+                Gbl.CurrentCrs.Crs.ShrtName);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
@@ -1103,17 +1105,19 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
                      /* If the enrolment is single and the group to which the user belongs is different from the selected ==>
                         remove user from the group to which he belongs */
                      Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
-                     sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
-			      UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+                     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                       Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
+			       UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
                     }
 
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
                   Grp_AddUsrToGroup (UsrDat,LstGrps->GrpCods[NumGrpSel]);
-                  sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
-		           UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-                           Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
+                  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
+		            UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
+                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
                   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
                  }
 
@@ -1162,14 +1166,17 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 
    /***** Write message to inform about how many groups the student has been removed from *****/
    if (NumGrpsHeIsRemoved == 0)
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_not_been_removed_from_any_group,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_not_been_removed_from_any_group,
+                UsrDat->FullName);
    else if (NumGrpsHeIsRemoved == 1)
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_one_group,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_been_removed_from_one_group,
+                UsrDat->FullName);
    else	// NumGrpsHeIsRemoved > 1
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_Y_groups,
-               UsrDat->FullName,NumGrpsHeIsRemoved);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_been_removed_from_Y_groups,
+                UsrDat->FullName,NumGrpsHeIsRemoved);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Free the list of groups of this type to which the user belonged *****/
@@ -1800,8 +1807,9 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
    else	// This course has no groups
      {
-      sprintf (Gbl.Alert.Txt,Txt_No_groups_have_been_created_in_the_course_X,
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_No_groups_have_been_created_in_the_course_X,
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
       /***** Button to create group *****/
@@ -1854,18 +1862,18 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 	      {
 	       if (GrpTyp->MandatoryEnrolment)
 		 {
-		  sprintf (Gbl.Alert.Txt,
-			   GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
-						       Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,
-			   GrpTyp->GrpTypName);
+		  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
+						        Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,
+			    GrpTyp->GrpTypName);
 		  Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		 }
 	       else
 		 {
-		  sprintf (Gbl.Alert.Txt,
-			   GrpTyp->MultipleEnrolment ? Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X :
-						       Txt_You_can_register_voluntarily_in_one_group_of_type_X,
-			   GrpTyp->GrpTypName);
+		  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    GrpTyp->MultipleEnrolment ? Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X :
+						        Txt_You_can_register_voluntarily_in_one_group_of_type_X,
+			    GrpTyp->GrpTypName);
 		  Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 		 }
 	      }
@@ -3678,16 +3686,18 @@ void Grp_RecFormNewGrpTyp (void)
       if (Grp_CheckIfGroupTypeNameExists (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,-1L))
         {
          AlertType = Ale_WARNING;
-         sprintf (Gbl.Alert.Txt,Txt_The_type_of_group_X_already_exists,
-                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_type_of_group_X_already_exists,
+                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
         }
       else	// Add new group type to database
 	{
          Grp_CreateGroupType ();
 
          AlertType = Ale_SUCCESS;
-	 sprintf (Gbl.Alert.Txt,Txt_Created_new_type_of_group_X,
-		  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_Created_new_type_of_group_X,
+		   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 	}
      }
    else	// If there is not a group type name
@@ -3747,8 +3757,9 @@ void Grp_RecFormNewGrp (void)
          if (Grp_CheckIfGroupNameExists (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,Gbl.CurrentCrs.Grps.GrpName,-1L))
            {
             AlertType = Ale_WARNING;
-            sprintf (Gbl.Alert.Txt,Txt_The_group_X_already_exists,
-                     Gbl.CurrentCrs.Grps.GrpName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_group_X_already_exists,
+                      Gbl.CurrentCrs.Grps.GrpName);
            }
          else	// Add new group to database
            {
@@ -3756,8 +3767,9 @@ void Grp_RecFormNewGrp (void)
 
 	    /* Write success message */
             AlertType = Ale_SUCCESS;
-	    sprintf (Gbl.Alert.Txt,Txt_Created_new_group_X,
-		     Gbl.CurrentCrs.Grps.GrpName);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_Created_new_group_X,
+		      Gbl.CurrentCrs.Grps.GrpName);
            }
         }
       else	// If there is not a group name
@@ -3904,11 +3916,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
 
    /***** Show question and button to remove type of group *****/
    if (NumGrps == 1)
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
    else
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NumGrps);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NumGrps);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
                            Grp_PutParamRemGrpTyp,
@@ -3954,14 +3968,17 @@ static void Grp_AskConfirmRemGrp (void)
 
    /***** Show question and button to remove group *****/
    if (NumStds == 0)
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X,
-               GrpDat.GrpName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_group_X,
+                GrpDat.GrpName);
    else if (NumStds == 1)
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
-               GrpDat.GrpName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
+                GrpDat.GrpName);
    else
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
-               GrpDat.GrpName,NumStds);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
+                GrpDat.GrpName,NumStds);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
                            Grp_PutParamRemGrp,
@@ -4055,9 +4072,10 @@ static void Grp_RemoveGroupTypeCompletely (void)
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryDELETE (Query,"can not remove a type of group");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Type_of_group_X_removed,
-            Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+   /***** Create message to show the change made *****/
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Type_of_group_X_removed,
+             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,Gbl.Alert.Txt,
@@ -4105,8 +4123,10 @@ static void Grp_RemoveGroupCompletely (void)
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryDELETE (Query,"can not remove a group");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_Group_X_removed,GrpDat.GrpName);
+   /***** Create message to show the change made *****/
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Group_X_removed,
+	     GrpDat.GrpName);
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
@@ -4136,8 +4156,10 @@ void Grp_OpenGroup (void)
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not open a group");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_The_group_X_is_now_open,GrpDat.GrpName);
+   /***** Create message to show the change made *****/
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_The_group_X_is_now_open,
+	     GrpDat.GrpName);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.Open = true;
@@ -4168,8 +4190,10 @@ void Grp_CloseGroup (void)
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not close a group");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_The_group_X_is_now_closed,GrpDat.GrpName);
+   /***** Create message to show the change made *****/
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_The_group_X_is_now_closed,
+	     GrpDat.GrpName);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.Open = false;
@@ -4200,9 +4224,10 @@ void Grp_EnableFileZonesGrp (void)
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not enable file zones of a group");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_File_zones_of_the_group_X_are_now_enabled,
-            GrpDat.GrpName);
+   /***** Create message to show the change made *****/
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_File_zones_of_the_group_X_are_now_enabled,
+             GrpDat.GrpName);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.FileZones = true;
@@ -4233,9 +4258,10 @@ void Grp_DisableFileZonesGrp (void)
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not disable file zones of a group");
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Alert.Txt,Txt_File_zones_of_the_group_X_are_now_disabled,
-            GrpDat.GrpName);
+   /***** Create message to show the change made *****/
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_File_zones_of_the_group_X_are_now_disabled,
+             GrpDat.GrpName);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.FileZones = false;
@@ -4271,20 +4297,24 @@ void Grp_ChangeGroupType (void)
    /***** If group was in database... *****/
    if (Grp_CheckIfGroupNameExists (NewGrpTypCod,GrpDat.GrpName,-1L))
      {
+      /* Create warning message */
       AlertType = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,Txt_The_group_X_already_exists,GrpDat.GrpName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_group_X_already_exists,
+		GrpDat.GrpName);
      }
-   else
+   else	// Group is not in database
      {
       /* Update the table of groups changing old type by new type */
       sprintf (Query,"UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
                NewGrpTypCod,Gbl.CurrentCrs.Grps.GrpCod);
       DB_QueryUPDATE (Query,"can not update the type of a group");
 
-      /***** Write message to show the change made *****/
+      /* Create message to show the change made */
       AlertType = Ale_SUCCESS;
-      sprintf (Gbl.Alert.Txt,Txt_The_type_of_group_of_the_group_X_has_changed,
-               GrpDat.GrpName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_type_of_group_of_the_group_X_has_changed,
+                GrpDat.GrpName);
      }
 
    /***** Show the form again *****/
@@ -4322,8 +4352,9 @@ void Grp_ChangeMandatGrpTyp (void)
    if (Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment == NewMandatoryEnrolment)
      {
       AlertType = Ale_INFO;
-      sprintf (Gbl.Alert.Txt,Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
      }
    else
      {
@@ -4336,10 +4367,10 @@ void Grp_ChangeMandatGrpTyp (void)
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
-      sprintf (Gbl.Alert.Txt,
-               NewMandatoryEnrolment ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
-                                       Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        NewMandatoryEnrolment ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
+                                        Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
      }
 
    /***** Show the form again *****/
@@ -4377,8 +4408,9 @@ void Grp_ChangeMultiGrpTyp (void)
    if (Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment == NewMultipleEnrolment)
      {
       AlertType = Ale_INFO;
-      sprintf (Gbl.Alert.Txt,Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
      }
    else
      {
@@ -4392,10 +4424,10 @@ void Grp_ChangeMultiGrpTyp (void)
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
-      sprintf (Gbl.Alert.Txt,
-               NewMultipleEnrolment ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
-                                      Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        NewMultipleEnrolment ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
+                                       Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
      }
 
    /***** Show the form again *****/
@@ -4477,8 +4509,9 @@ void Grp_ChangeMaxStdsGrp (void)
    if (GrpDat.MaxStudents == NewMaxStds)
      {
       AlertType = Ale_INFO;
-      sprintf (Gbl.Alert.Txt,Txt_The_maximum_number_of_students_in_the_group_X_has_not_changed,
-               GrpDat.GrpName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_maximum_number_of_students_in_the_group_X_has_not_changed,
+                GrpDat.GrpName);
      }
    else
      {
@@ -4490,11 +4523,13 @@ void Grp_ChangeMaxStdsGrp (void)
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
       if (NewMaxStds > Grp_MAX_STUDENTS_IN_A_GROUP)
-         sprintf (Gbl.Alert.Txt,Txt_The_group_X_now_has_no_limit_of_students,
-                  GrpDat.GrpName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_group_X_now_has_no_limit_of_students,
+                   GrpDat.GrpName);
       else
-         sprintf (Gbl.Alert.Txt,Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y,
-                  GrpDat.GrpName,NewMaxStds);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y,
+                   GrpDat.GrpName,NewMaxStds);
      }
 
    /***** Show the form again *****/
@@ -4557,8 +4592,9 @@ void Grp_RenameGroupType (void)
    if (!NewNameGrpTyp[0])
      {
       AlertType = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty,
-               Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty,
+                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
      }
    else
      {
@@ -4569,8 +4605,9 @@ void Grp_RenameGroupType (void)
          if (Grp_CheckIfGroupTypeNameExists (NewNameGrpTyp,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod))
            {
 	    AlertType = Ale_WARNING;
-            sprintf (Gbl.Alert.Txt,Txt_The_type_of_group_X_already_exists,
-                     NewNameGrpTyp);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_type_of_group_X_already_exists,
+                      NewNameGrpTyp);
            }
          else
            {
@@ -4583,15 +4620,17 @@ void Grp_RenameGroupType (void)
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
-            sprintf (Gbl.Alert.Txt,Txt_The_type_of_group_X_has_been_renamed_as_Y,
-                     Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_type_of_group_X_has_been_renamed_as_Y,
+                      Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp);
            }
         }
       else	// The same name
         {
 	 AlertType = Ale_INFO;
-         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_type_of_group_X_has_not_changed,
-                  NewNameGrpTyp);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_name_of_the_type_of_group_X_has_not_changed,
+                   NewNameGrpTyp);
         }
      }
 
@@ -4633,8 +4672,9 @@ void Grp_RenameGroup (void)
    if (!NewNameGrp[0])
      {
       AlertType = Ale_WARNING;
-      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_group_X_empty,
-               GrpDat.GrpName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_can_not_leave_the_name_of_the_group_X_empty,
+                GrpDat.GrpName);
      }
    else
      {
@@ -4645,7 +4685,9 @@ void Grp_RenameGroup (void)
          if (Grp_CheckIfGroupNameExists (GrpDat.GrpTypCod,NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod))
            {
 	    AlertType = Ale_WARNING;
-            sprintf (Gbl.Alert.Txt,Txt_The_group_X_already_exists,NewNameGrp);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_group_X_already_exists,
+		      NewNameGrp);
            }
          else
            {
@@ -4656,15 +4698,17 @@ void Grp_RenameGroup (void)
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
-            sprintf (Gbl.Alert.Txt,Txt_The_group_X_has_been_renamed_as_Y,
-                     GrpDat.GrpName,NewNameGrp);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_group_X_has_been_renamed_as_Y,
+                      GrpDat.GrpName,NewNameGrp);
            }
         }
       else	// The same name
         {
 	 AlertType = Ale_INFO;
-         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_group_X_has_not_changed,
-                  NewNameGrp);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_name_of_the_group_X_has_not_changed,
+                   NewNameGrp);
         }
      }
 

@@ -288,8 +288,9 @@ void Log_RequestLogo (Sco_Scope_t Scope)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
-   sprintf (Gbl.Alert.Txt,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
-	    64,64);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
+	     64,64);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Upload logo *****/
@@ -377,7 +378,9 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
                   WrongType = true;
    if (WrongType)
      {
-      sprintf (Gbl.Alert.Txt,Txt_The_file_is_not_X,"png");
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_file_is_not_X,
+		"png");
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else

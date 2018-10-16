@@ -810,7 +810,9 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 /***** Show message *****/
 	 Gbl.Alert.Type = Ale_SUCCESS;
 	 Gbl.Alert.Section = ID_ID_SECTION_ID;
-	 sprintf (Gbl.Alert.Txt,Txt_ID_X_removed,UsrID);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_ID_X_removed,
+		   UsrID);
 	}
       else
         {
@@ -950,8 +952,9 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	      {
 	       Gbl.Alert.Type = Ale_WARNING;
 	       Gbl.Alert.Section = ID_ID_SECTION_ID;
-	       sprintf (Gbl.Alert.Txt,Txt_The_ID_X_matches_one_of_the_existing,
-			NewID);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_The_ID_X_matches_one_of_the_existing,
+			 NewID);
 	      }
 	    else	// It's not me && !Confirmed
 	      {
@@ -960,16 +963,18 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 	       Gbl.Alert.Type = Ale_SUCCESS;
 	       Gbl.Alert.Section = ID_ID_SECTION_ID;
-	       sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
-			NewID);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_The_ID_X_has_been_confirmed,
+			 NewID);
 	      }
 	   }
 	 else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
 	   {
 	    Gbl.Alert.Type = Ale_WARNING;
 	    Gbl.Alert.Section = ID_ID_SECTION_ID;
-	    sprintf (Gbl.Alert.Txt,Txt_A_user_can_not_have_more_than_X_IDs,
-		     ID_MAX_IDS_PER_USER);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_A_user_can_not_have_more_than_X_IDs,
+		      ID_MAX_IDS_PER_USER);
 	   }
 	 else	// OK ==> add this new ID to my list of IDs
 	   {
@@ -980,15 +985,18 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 	    Gbl.Alert.Type = Ale_SUCCESS;
 	    Gbl.Alert.Section = ID_ID_SECTION_ID;
-	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_registered_successfully,
-		     NewID);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_ID_X_has_been_registered_successfully,
+		      NewID);
 	   }
 	}
       else        // New ID is not valid
 	{
 	 Gbl.Alert.Type = Ale_WARNING;
 	 Gbl.Alert.Section = ID_ID_SECTION_ID;
-	 sprintf (Gbl.Alert.Txt,Txt_The_ID_X_is_not_valid,NewID);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_ID_X_is_not_valid,
+		   NewID);
 	}
      }
    else
@@ -1074,8 +1082,9 @@ void ID_ConfirmOtherUsrID (void)
 	    /***** ID found and already confirmed *****/
             Gbl.Alert.Type = Ale_INFO;
             Gbl.Alert.Section = ID_ID_SECTION_ID;
-	    sprintf (Gbl.Alert.Txt,Txt_ID_X_had_already_been_confirmed,
-		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_ID_X_had_already_been_confirmed,
+		      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	 else
 	   {
@@ -1087,8 +1096,9 @@ void ID_ConfirmOtherUsrID (void)
 	    /***** Write success message *****/
 	    Gbl.Alert.Type = Ale_SUCCESS;
             Gbl.Alert.Section = ID_ID_SECTION_ID;
-	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
-		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_ID_X_has_been_confirmed,
+		      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	}
       else	// User's ID not found

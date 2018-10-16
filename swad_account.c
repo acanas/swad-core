@@ -247,8 +247,9 @@ void Acc_CheckIfEmptyAccountExists (void)
 	}
       else
 	{
-	 sprintf (Gbl.Alert.Txt,Txt_There_is_no_empty_account_associated_with_your_ID_X,
-		  ID);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_There_is_no_empty_account_associated_with_your_ID_X,
+		   ID);
 	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 	}
 
@@ -630,18 +631,20 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
       if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
 	{
 	 Error = true;
-	 sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_had_been_registered_by_another_user,
-		  NewNicknameWithoutArroba);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_nickname_X_had_been_registered_by_another_user,
+		   NewNicknameWithoutArroba);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
      }
    else        // New nickname is not valid
      {
       Error = true;
-      sprintf (Gbl.Alert.Txt,Txt_The_nickname_entered_X_is_not_valid_,
-               NewNicknameWithArroba,
-               Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
-               Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_nickname_entered_X_is_not_valid_,
+                NewNicknameWithArroba,
+                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
+                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
@@ -658,16 +661,18 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
       if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
 	{
 	 Error = true;
-	 sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_had_been_registered_by_another_user,
-		  NewEmail);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_email_address_X_had_been_registered_by_another_user,
+		   NewEmail);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
      }
    else	// New email is not valid
      {
       Error = true;
-      sprintf (Gbl.Alert.Txt,Txt_The_email_address_entered_X_is_not_valid,
-               NewEmail);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_email_address_entered_X_is_not_valid,
+                NewEmail);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
@@ -836,9 +841,10 @@ void Acc_AfterCreationNewAccount (void)
    if (Gbl.Usrs.Me.Logged)	// If account has been created without problem, I am logged
      {
       /***** Show message of success *****/
-      sprintf (Gbl.Alert.Txt,Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
-	       Gbl.Usrs.Me.UsrDat.Nickname,
-	       Cfg_PLATFORM_SHORT_NAME);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
+	        Gbl.Usrs.Me.UsrDat.Nickname,
+	        Cfg_PLATFORM_SHORT_NAME);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
       /***** Show form with account data *****/
@@ -1038,8 +1044,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
+                UsrDat->FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1050,8 +1057,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_as_administrator,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_been_removed_as_administrator,
+                UsrDat->FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1065,8 +1073,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Acc_RemoveUsrBriefcase (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Alert.Txt,Txt_Briefcase_of_THE_USER_X_has_been_removed,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Briefcase_of_THE_USER_X_has_been_removed,
+                UsrDat->FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1081,8 +1090,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Msg_DelAllRecAndSntMsgsUsr (UsrDat->UsrCod);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Alert.Txt,Txt_Messages_of_THE_USER_X_have_been_deleted,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Messages_of_THE_USER_X_have_been_deleted,
+                UsrDat->FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1128,8 +1138,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
    if (PhotoRemoved && QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Alert.Txt,Txt_Photo_of_THE_USER_X_has_been_removed,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Photo_of_THE_USER_X_has_been_removed,
+                UsrDat->FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -1137,8 +1148,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Acc_RemoveUsr (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Alert.Txt,Txt_Record_card_of_THE_USER_X_has_been_removed,
-               UsrDat->FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Record_card_of_THE_USER_X_has_been_removed,
+                UsrDat->FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
   }

@@ -360,12 +360,13 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
    Act_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
-   fprintf (Gbl.F.Out,"<label class=\"%s RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<label for=\"OtherUsrIDNickOrEMail\""
+	              " class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
-                      "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
-                      " size=\"18\" maxlength=\"%u\""
-                      " required=\"required\" />"
-                      "</label>",
+                      "</label>"
+                      "<input type=\"text\" id=\"OtherUsrIDNickOrEMail\""
+                      " name=\"OtherUsrIDNickOrEMail\""
+                      " size=\"18\" maxlength=\"%u\" required=\"required\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS);
@@ -394,9 +395,10 @@ void Enr_ReqAcceptRegisterInCrs (void)
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
    /***** Show message *****/
-   sprintf (Gbl.Alert.Txt,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
-            Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
-            Gbl.CurrentCrs.Crs.FullName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
+             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+             Gbl.CurrentCrs.Crs.FullName);
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Send button to accept register in the current course *****/
@@ -772,8 +774,9 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
       else
 	{
 	 /* Write help message */
-	 sprintf (Gbl.Alert.Txt,Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
-		  Gbl.CurrentCrs.Crs.FullName);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
+		   Gbl.CurrentCrs.Crs.FullName);
 	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 	}
      }
@@ -895,10 +898,11 @@ void Enr_RemoveOldUsrs (void)
             (unsigned long) SecondsWithoutAccess);
    if ((NumUsrs = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))
      {
-      sprintf (Gbl.Alert.Txt,Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
-               NumUsrs,
-               MonthsWithoutAccess,
-               Cfg_PLATFORM_SHORT_NAME);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
+                NumUsrs,
+                MonthsWithoutAccess,
+                Cfg_PLATFORM_SHORT_NAME);
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
       /***** Initialize structure with user's data *****/
@@ -929,8 +933,9 @@ void Enr_RemoveOldUsrs (void)
      }
 
    /***** Write end message *****/
-   sprintf (Gbl.Alert.Txt,Txt_X_users_have_been_eliminated,
-            NumUsrsEliminated);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_X_users_have_been_eliminated,
+             NumUsrsEliminated);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
@@ -1027,15 +1032,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
      {
-      sprintf (Gbl.Alert.Txt,UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
-		                                        Txt_Modify_user_in_the_course_X) :
-	                                       (ItsMe ? Txt_Register_me_in_X :
-		                                        Txt_Register_USER_in_the_course_X),
-	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
-                         "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\"",
+			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 " name=\"RegRemAction\" value=\"%u\"",
+               (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,
                (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS);
       if (!OptionChecked)
 	{
@@ -1043,10 +1043,16 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
          OptionChecked = true;
 	}
       fprintf (Gbl.F.Out," />"
-	                 "%s"
-                         "</label>"
-	                 "</li>",
-	       Gbl.Alert.Txt);
+                         "<label for=\"RegRemAction%u\">",
+	       (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS);
+      fprintf (Gbl.F.Out,
+	       UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
+		                          Txt_Modify_user_in_the_course_X) :
+	                         (ItsMe ? Txt_Register_me_in_X :
+		                          Txt_Register_USER_in_the_course_X),
+	       Gbl.CurrentCrs.Crs.ShrtName);
+      fprintf (Gbl.F.Out,"</label>"
+	                 "</li>");
 
       NumOptionsShown++;
      }
@@ -1060,12 +1066,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    if (!UsrIsDegAdmin &&
 		Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 	      {
-	       sprintf (Gbl.Alert.Txt,Txt_Register_USER_as_an_administrator_of_the_degree_X,
-			Gbl.CurrentDeg.Deg.ShrtName);
 	       fprintf (Gbl.F.Out,"<li>"
-                                  "<label>"
-				  "<input type=\"radio\" name=\"RegRemAction\""
-				  " value=\"%u\"",
+				  "<input type=\"radio\" id=\"RegRemAction%u\""
+				  " name=\"RegRemAction\" value=\"%u\"",
+			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN,
 			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
 	       if (!OptionChecked)
 		 {
@@ -1073,10 +1077,13 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 		  OptionChecked = true;
 		 }
 	       fprintf (Gbl.F.Out," />"
-		                  "%s"
-	                          "</label>"
-		                  "</li>",
-		        Gbl.Alert.Txt);
+                                  "<label for=\"RegRemAction%u\">",
+			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
+	       fprintf (Gbl.F.Out,
+		        Txt_Register_USER_as_an_administrator_of_the_degree_X,
+			Gbl.CurrentDeg.Deg.ShrtName);
+	       fprintf (Gbl.F.Out,"</label>"
+		                  "</li>");
 
 	       NumOptionsShown++;
 	      }
@@ -1085,12 +1092,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 if (!UsrIsCtrAdmin &&
 	     Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	   {
-	    sprintf (Gbl.Alert.Txt,Txt_Register_USER_as_an_administrator_of_the_centre_X,
-		     Gbl.CurrentCtr.Ctr.ShrtName);
 	    fprintf (Gbl.F.Out,"<li>"
-	                       "<label>"
-			       "<input type=\"radio\" name=\"RegRemAction\""
-			       " value=\"%u\"",
+			       "<input type=\"radio\" id=\"RegRemAction%u\""
+			       " name=\"RegRemAction\" value=\"%u\"",
+		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN,
 		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
 	    if (!OptionChecked)
 	      {
@@ -1098,10 +1103,13 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	       OptionChecked = true;
 	      }
 	    fprintf (Gbl.F.Out," />"
-		               "%s"
-	                       "</label>"
-		               "</li>",
-		     Gbl.Alert.Txt);
+	                       "<label for=\"RegRemAction%u\">",
+		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
+	    fprintf (Gbl.F.Out,
+	             Txt_Register_USER_as_an_administrator_of_the_centre_X,
+		     Gbl.CurrentCtr.Ctr.ShrtName);
+	    fprintf (Gbl.F.Out,"</label>"
+		               "</li>");
 
 	    NumOptionsShown++;
 	   }
@@ -1111,12 +1119,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       if (!UsrIsInsAdmin &&
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
-	 sprintf (Gbl.Alert.Txt,Txt_Register_USER_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentIns.Ins.ShrtName);
 	 fprintf (Gbl.F.Out,"<li>"
-	                    "<label>"
-			    "<input type=\"radio\" name=\"RegRemAction\""
-			    " value=\"%u\"",
+			    "<input type=\"radio\" id=\"RegRemAction%u\""
+			    " name=\"RegRemAction\" value=\"%u\"",
+		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN,
 		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
 	 if (!OptionChecked)
 	   {
@@ -1124,10 +1130,12 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    OptionChecked = true;
 	   }
 	 fprintf (Gbl.F.Out," />"
-	                    "%s"
-	                    "</label>"
-	                    "</li>",
-	          Gbl.Alert.Txt);
+	                    "<label for=\"RegRemAction%u\">",
+		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
+	 fprintf (Gbl.F.Out,Txt_Register_USER_as_an_administrator_of_the_institution_X,
+		  Gbl.CurrentIns.Ins.ShrtName);
+	 fprintf (Gbl.F.Out,"</label>"
+	                    "</li>");
 
 	 NumOptionsShown++;
 	}
@@ -1137,9 +1145,9 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
      {
       fprintf (Gbl.F.Out,"<li>"
-                         "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\"",
+			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 " name=\"RegRemAction\" value=\"%u\"",
+	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,
 	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE);
       if (!OptionChecked)
 	{
@@ -1147,9 +1155,11 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 OptionChecked = true;
 	}
       fprintf (Gbl.F.Out," />"
+                         "<label for=\"RegRemAction%u\">"
 	                 "%s"
                          "</label>"
 	                 "</li>",
+	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,
 	       Txt_Report_possible_duplicate_user);
 
       NumOptionsShown++;
@@ -1158,14 +1168,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    /***** Remove user from the course *****/
    if (UsrBelongsToCrs)
      {
-      sprintf (Gbl.Alert.Txt,
-	       ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
-		       Txt_Remove_USER_from_THE_COURSE_X,
-	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
-                         "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\"",
+			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 " name=\"RegRemAction\" value=\%u\"",
+	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS,
 	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS);
       if (!OptionChecked)
 	{
@@ -1173,10 +1179,14 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 OptionChecked = true;
 	}
       fprintf (Gbl.F.Out," />"
-	                 "%s"
-	                 "</label>"
-	                 "</li>",
-               Gbl.Alert.Txt);
+                         "<label for=\"RegRemAction%u\">",
+	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS);
+      fprintf (Gbl.F.Out,
+	       ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
+		       Txt_Remove_USER_from_THE_COURSE_X,
+	       Gbl.CurrentCrs.Crs.ShrtName);
+      fprintf (Gbl.F.Out,"</label>"
+	                 "</li>");
 
       NumOptionsShown++;
      }
@@ -1190,14 +1200,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    if (UsrIsDegAdmin &&
 		(ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
 	      {
-	       sprintf (Gbl.Alert.Txt,
-			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-				Txt_Remove_USER_as_an_administrator_of_the_degree_X,
-			Gbl.CurrentDeg.Deg.ShrtName);
 	       fprintf (Gbl.F.Out,"<li>"
-	                          "<label>"
-				  "<input type=\"radio\" name=\"RegRemAction\""
-				  " value=\"%u\"",
+				  "<input type=\"radio\" id=\"RegRemAction%u\" "
+				  " name=\"RegRemAction\" value=\"%u\"",
+			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN,
 			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
 	       if (!OptionChecked)
 		 {
@@ -1205,10 +1211,14 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 		  OptionChecked = true;
 		 }
 	       fprintf (Gbl.F.Out," />"
-		                  "%s"
-	                          "</label>"
-		                  "</li>",
-	                Gbl.Alert.Txt);
+	                          "<label for=\"RegRemAction%u\">",
+			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
+	       fprintf (Gbl.F.Out,
+			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
+				Txt_Remove_USER_as_an_administrator_of_the_degree_X,
+			Gbl.CurrentDeg.Deg.ShrtName);
+	       fprintf (Gbl.F.Out,"</label>"
+		                  "</li>");
 
 	       NumOptionsShown++;
 	      }
@@ -1217,14 +1227,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	  if (UsrIsCtrAdmin &&
 	     (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	   {
-	    sprintf (Gbl.Alert.Txt,
-		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
-			     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
-		     Gbl.CurrentCtr.Ctr.ShrtName);
 	    fprintf (Gbl.F.Out,"<li>"
-	                       "<label>"
-			       "<input type=\"radio\" name=\"RegRemAction\""
-			       " value=\"%u\"",
+			       "<input type=\"radio\" id=\"RegRemAction%u\""
+			       " name=\"RegRemAction\" value=\"%u\"",
+		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN,
 		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
 	    if (!OptionChecked)
 	      {
@@ -1232,10 +1238,14 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	       OptionChecked = true;
 	      }
 	    fprintf (Gbl.F.Out," />"
-		               "%s"
-	                       "</label>"
-		               "</li>",
-	             Gbl.Alert.Txt);
+	                       "<label for=\"RegRemAction%u\">",
+		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
+	    fprintf (Gbl.F.Out,
+		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
+			     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
+		     Gbl.CurrentCtr.Ctr.ShrtName);
+	    fprintf (Gbl.F.Out,"</label>"
+		               "</li>");
 
 	    NumOptionsShown++;
 	   }
@@ -1245,14 +1255,10 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       if (UsrIsInsAdmin &&
 	  (ItsMe || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
 	{
-	 sprintf (Gbl.Alert.Txt,
-		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
-			  Txt_Remove_USER_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentIns.Ins.ShrtName);
 	 fprintf (Gbl.F.Out,"<li>"
-	                    "<label>"
-			    "<input type=\"radio\" name=\"RegRemAction\""
-			    " value=\"%u\"",
+			    "<input type=\"radio\" id=\"RegRemAction%u\""
+			    " name=\"RegRemAction\" value=\"%u\"",
+		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN,
 		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
 	 if (!OptionChecked)
 	   {
@@ -1260,10 +1266,14 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    OptionChecked = true;
 	   }
 	 fprintf (Gbl.F.Out," />"
-	                    "%s"
-	                    "</label>"
-	                    "</li>",
-	          Gbl.Alert.Txt);
+	                    "<label for=\"RegRemAction%u\">",
+		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
+	 fprintf (Gbl.F.Out,
+		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
+			  Txt_Remove_USER_as_an_administrator_of_the_institution_X,
+		  Gbl.CurrentIns.Ins.ShrtName);
+	 fprintf (Gbl.F.Out,"</label>"
+	                    "</li>");
 
 	 NumOptionsShown++;
 	}
@@ -1273,16 +1283,18 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       fprintf (Gbl.F.Out,"<li>"
-                         "<label>"
-                         "<input type=\"radio\" name=\"RegRemAction\""
-                         " value=\"%u\"",
+                         "<input type=\"radio\" id=\"RegRemAction%u\""
+                         " name=\"RegRemAction\" value=\"%u\"",
+               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,
                (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
       if (!OptionChecked)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
+                         "<label for=\"RegRemAction%u\">"
 	                 "%s"
                          "</label>"
 	                 "</li>",
+               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,
                ItsMe ? Txt_Eliminate_my_user_account :
         	       Txt_Eliminate_user_account);
 
@@ -1316,51 +1328,61 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    /***** Register / remove users listed or not listed *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
       fprintf (Gbl.F.Out,"<li>"
-			 "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\" checked=\"checked\" />"
+			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 " name=\"RegRemAction\" value=\"%u\" checked=\"checked\" />"
+			 "<label for=\"RegRemAction%u\">"
 			 "%s"
 			 "</label>"
 			 "</li>"
 			 "<li>"
-			 "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\" />"
+			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 " name=\"RegRemAction\" value=\"%u\" />"
+			 "<label for=\"RegRemAction%u\">"
 			 "%s"
 			 "</label>"
 			 "</li>"
 			 "<li>"
-			 "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\" />"
+			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 " name=\"RegRemAction\" value=\"%u\" />"
+			 "<label for=\"RegRemAction%u\">"
 			 "%s"
 			 "</label>"
 			 "</li>"
 			 "<li>"
-			 "<label>"
-			 "<input type=\"radio\" name=\"RegRemAction\""
-			 " value=\"%u\" />"
+			 "<input id=\"RegRemAction%u\" type=\"radio\""
+			 " name=\"RegRemAction\" value=\"%u\" />"
+			 "<label for=\"RegRemAction%u\">"
 			 "%s"
 			 "</label>"
 			 "</li>",
 	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
+	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
+	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
 	       Txt_Register_the_users_indicated_in_step_1,
+	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
 	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
 	       Txt_Remove_the_users_indicated_in_step_1,
 	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
 	       Txt_Remove_the_users_not_indicated_in_step_1,
+	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
+	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
 
    /***** Only for superusers *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       fprintf (Gbl.F.Out,"<li>"
-			 "<label>"
-                         "<input type=\"radio\" name=\"RegRemAction\""
-                         " value=\"%u\" />"
+                         "<input type=\"radio\" id=\"RegRemAction%u\""
+                         " name=\"RegRemAction\" value=\"%u\" />"
+			 "<label for=\"RegRemAction%u\">"
                          "%s"
 			 "</label>"
                          "</li>",
+               (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
+               (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
 
@@ -1757,8 +1779,9 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_eliminated);
 	       break;
 	    default:
-	       sprintf (Gbl.Alert.Txt,Txt_X_users_have_been_eliminated,
-			NumUsrsEliminated);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_X_users_have_been_eliminated,
+			 NumUsrsEliminated);
 	       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	       break;
 	   }
@@ -1772,8 +1795,9 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_removed);
 	       break;
 	    default:
-	       sprintf (Gbl.Alert.Txt,Txt_X_users_have_been_removed,
-			NumUsrsRemoved);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_X_users_have_been_removed,
+			 NumUsrsRemoved);
 	       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	       break;
 	   }
@@ -1788,8 +1812,9 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_enroled);
 	    break;
 	 default:
-	    sprintf (Gbl.Alert.Txt,Txt_X_users_have_been_enroled_including_possible_repetitions,
-		     NumUsrsRegistered);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_X_users_have_been_enroled_including_possible_repetitions,
+		      NumUsrsRegistered);
 	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	    break;
 	}
@@ -1886,9 +1911,10 @@ void Enr_AskRemAllStdsThisCrs (void)
      {
       /***** Show question and button to remove students *****/
       /* Start alert */
-      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
-               Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD],
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
+                Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD],
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
       /* Show form to request confirmation */
@@ -1922,8 +1948,9 @@ void Enr_RemAllStdsThisCrs (void)
      {
       if ((NumStdsInCrs = Enr_RemAllStdsInCrs (&Gbl.CurrentCrs.Crs)))
 	{
-	 sprintf (Gbl.Alert.Txt,Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
-		  NumStdsInCrs,Gbl.CurrentCrs.Crs.FullName);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
+		   NumStdsInCrs,Gbl.CurrentCrs.Crs.FullName);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else	// NumStdsInCrs == 0
@@ -1975,9 +2002,10 @@ void Enr_ReqSignUpInCrs (void)
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_were_already_enroled_as_X_in_the_course_Y,
-               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_were_already_enroled_as_X_in_the_course_Y,
+                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
@@ -2006,9 +2034,10 @@ void Enr_SignUpInCrs (void)
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_were_already_enroled_as_X_in_the_course_Y,
-               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_were_already_enroled_as_X_in_the_course_Y,
+                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
@@ -2064,9 +2093,10 @@ void Enr_SignUpInCrs (void)
         }
 
       /***** Show confirmation message *****/
-      sprintf (Gbl.Alert.Txt,Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing,
-               Txt_ROLES_SINGUL_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
-               Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing,
+                Txt_ROLES_SINGUL_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
+                Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
       /***** Notify teachers or admins by email about the new enrolment request *****/
@@ -2159,8 +2189,9 @@ void Enr_AskIfRejectSignUp (void)
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
-         sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                  Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
@@ -2176,10 +2207,11 @@ void Enr_AskIfRejectSignUp (void)
            {
 	    /***** Show question and button to reject user's enrolment request *****/
 	    /* Start alert */
-            sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
-                     Gbl.Usrs.Other.UsrDat.FullName,
-                     Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
-                     Gbl.CurrentCrs.Crs.FullName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_Do_you_really_want_to_reject_the_enrolment_request_,
+                      Gbl.Usrs.Other.UsrDat.FullName,
+                      Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
+                      Gbl.CurrentCrs.Crs.FullName);
 	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
 	    /* Show user's record */
@@ -2216,8 +2248,9 @@ void Enr_RejectSignUp (void)
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
-         sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                  Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
         }
@@ -2226,8 +2259,9 @@ void Enr_RejectSignUp (void)
       Enr_RemoveEnrolmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Confirmation message */
-      sprintf (Gbl.Alert.Txt,Txt_Enrolment_of_X_rejected,
-               Gbl.Usrs.Other.UsrDat.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Enrolment_of_X_rejected,
+                Gbl.Usrs.Other.UsrDat.FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
@@ -3254,8 +3288,9 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
       /***** Warning if more than one user found *****/
       if (ListUsrCods->NumUsrs > 1)
 	{
-	 sprintf (Gbl.Alert.Txt,Txt_There_are_X_users_with_the_ID_Y,
-		  ListUsrCods->NumUsrs,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_There_are_X_users_with_the_ID_Y,
+		   ListUsrCods->NumUsrs,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
 	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 	}
 
@@ -3275,19 +3310,23 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       if (Gbl.Usrs.Other.UsrDat.Accepted)
-		  sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-			   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+		  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+			    Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 	       else        // Enrolment not yet accepted
-		  sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-			   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+		  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
+			    Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 	       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
 	       Enr_ShowFormToEditOtherUsr ();
 	      }
 	    else        // User does not belong to the current course
 	      {
-	       sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
-			Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
+			 Gbl.Usrs.Other.UsrDat.FullName,
+			 Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
 	       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
 	       Enr_ShowFormToEditOtherUsr ();
@@ -3295,8 +3334,9 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	   }
 	 else	// No course selected
 	   {
-	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_already_exists_in_Y,
-		     Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_THE_USER_X_already_exists_in_Y,
+		      Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
 	    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
 	    Enr_ShowFormToEditOtherUsr ();
@@ -3318,16 +3358,18 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
       if (NewUsrIDValid)
 	{
 	 /***** Show form to enter the data of a new user *****/
-	 sprintf (Gbl.Alert.Txt,Txt_The_user_is_new_not_yet_in_X,
-		  Cfg_PLATFORM_SHORT_NAME);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_user_is_new_not_yet_in_X,
+		   Cfg_PLATFORM_SHORT_NAME);
 	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat,Role);
 	}
       else        // User's ID is not valid
 	{
 	 /* Write message and request a new user's ID */
-	 sprintf (Gbl.Alert.Txt,Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
-		  Cfg_PLATFORM_SHORT_NAME);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
+		   Cfg_PLATFORM_SHORT_NAME);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	 Enr_ReqRegRemUsr (Role);
 	}
@@ -3420,8 +3462,9 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
 
    /***** Check if user was and administrator of current institution/centre/degree *****/
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_already_an_administrator_of_Y,
-               UsrDat->FullName,InsCtrDegName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_is_already_an_administrator_of_Y,
+                UsrDat->FullName,InsCtrDegName);
    else        // User was not administrator of current institution/centre/degree
      {
       /***** Insert or replace administrator in current institution/centre/degree *****/
@@ -3432,8 +3475,9 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
                UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryREPLACE (Query,"can not create administrator");
 
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
-               UsrDat->FullName,InsCtrDegName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
+                UsrDat->FullName,InsCtrDegName);
      }
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
@@ -3632,8 +3676,9 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
               }
             else        // The other user is not an administrator of current institution
               {
-               sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_not_an_administrator_of_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
+               snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_THE_USER_X_is_not_an_administrator_of_Y,
+                         Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
                Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
               }
            }
@@ -3680,8 +3725,9 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
            {
             if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/centre/degree
               {
-               sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_already_an_administrator_of_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
+               snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_THE_USER_X_is_already_an_administrator_of_Y,
+                         Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
                Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
               }
@@ -3689,8 +3735,9 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
               {
 	       /***** Show question and button to register user as administrator *****/
 	       /* Start alert */
-               sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
-                        InsCtrDegName);
+               snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
+                         InsCtrDegName);
 	       Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
 	       /* Show user's record */
@@ -3729,8 +3776,9 @@ void Enr_AcceptRegisterMeInCrs (void)
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/
-   sprintf (Gbl.Alert.Txt,Txt_You_have_confirmed_your_enrolment_in_the_course_X,
-            Gbl.CurrentCrs.Crs.FullName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_You_have_confirmed_your_enrolment_in_the_course_X,
+             Gbl.CurrentCrs.Crs.FullName);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
@@ -3781,10 +3829,12 @@ void Enr_CreateNewUsr1 (void)
 
 	       /* Success message */
                Gbl.Alert.Type = Ale_SUCCESS;
-	       sprintf (Gbl.Alert.Txt,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
-			Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
-			Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-			Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+			 Gbl.Usrs.Other.UsrDat.FullName,
+			 Gbl.CurrentCrs.Crs.FullName,
+			 Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+			 Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
 	      }
 	   }
 	 else      // User does not belong to current course
@@ -3795,8 +3845,10 @@ void Enr_CreateNewUsr1 (void)
 
 	    /* Success message */
             Gbl.Alert.Type = Ale_SUCCESS;
-	    sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-		     Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
+		      Gbl.Usrs.Other.UsrDat.FullName,
+		      Gbl.CurrentCrs.Crs.FullName);
 	   }
 
 	 /***** Change user's groups *****/
@@ -3829,8 +3881,9 @@ void Enr_CreateNewUsr1 (void)
      {
       /***** Error message *****/
       Gbl.Alert.Type = Ale_ERROR;
-      sprintf (Gbl.Alert.Txt,Txt_The_ID_X_is_not_valid,
-               Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_ID_X_is_not_valid,
+                Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
      }
   }
 
@@ -3904,10 +3957,12 @@ void Enr_ModifyUsr1 (void)
 
 			/* Set success message */
 			Gbl.Alert.Type = Ale_SUCCESS;
-			sprintf (Gbl.Alert.Txt,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
-				 Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
-				 Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-				 Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+			snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                          Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+				  Gbl.Usrs.Other.UsrDat.FullName,
+				  Gbl.CurrentCrs.Crs.FullName,
+				  Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+				  Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
 		       }
 		    }
 		  else	      // User does not belong to current course
@@ -3918,8 +3973,9 @@ void Enr_ModifyUsr1 (void)
 
 		     /* Set success message */
 	             Gbl.Alert.Type = Ale_SUCCESS;
-		     sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+		     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                       Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
+			       Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 		    }
 
 		  /***** Change user's groups *****/
@@ -4097,10 +4153,10 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 
       /***** Show question and button to remove user as administrator *****/
       /* Start alert */
-      sprintf (Gbl.Alert.Txt,
-               ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
-		       Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
-	       Gbl.CurrentCrs.Crs.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
+		        Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
+	        Gbl.CurrentCrs.Crs.FullName);
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
       /* Show user's record */
@@ -4216,8 +4272,9 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       if (QuietOrVerbose == Cns_VERBOSE)
         {
 	 Gbl.Alert.Type = Ale_SUCCESS;
-         sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_the_course_Y,
-                  UsrDat->FullName,Crs->FullName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_THE_USER_X_has_been_removed_from_the_course_Y,
+                   UsrDat->FullName,Crs->FullName);
         }
      }
    else        // User does not belong to course
@@ -4255,10 +4312,10 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,
      {
       /***** Show question and button to remove user as administrator *****/
       /* Start alert */
-      sprintf (Gbl.Alert.Txt,
-               ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
-                       Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
-               InsCtrDegName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
+                        Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
+                InsCtrDegName);
       Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
       /* Show user's record */
@@ -4295,14 +4352,16 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryDELETE (Query,"can not remove an administrator");
 
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
-               UsrDat->FullName,InsCtrDegName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
+                UsrDat->FullName,InsCtrDegName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else        // User is not an administrator of the current institution/centre/degree
      {
-      sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_not_an_administrator_of_Y,
-               UsrDat->FullName,InsCtrDegName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_THE_USER_X_is_not_an_administrator_of_Y,
+                UsrDat->FullName,InsCtrDegName);
       Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
      }
   }

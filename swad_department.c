@@ -628,7 +628,9 @@ void Dpt_RemoveDepartment (void)
       DB_QueryDELETE (Query,"can not remove a department");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Alert.Txt,Txt_Department_X_removed,Dpt.FullName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_Department_X_removed,
+		Dpt.FullName);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -732,8 +734,9 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewDptName[0])
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_department_X_empty,
-               CurrentDptName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_can_not_leave_the_name_of_the_department_X_empty,
+                CurrentDptName);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
@@ -744,8 +747,9 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If degree was in database... *****/
          if (Dpt_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt->DptCod))
            {
-            sprintf (Gbl.Alert.Txt,Txt_The_department_X_already_exists,
-                     NewDptName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_department_X_already_exists,
+                      NewDptName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
@@ -754,15 +758,17 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
             Dpt_UpdateDegNameDB (Dpt->DptCod,FieldName,NewDptName);
 
             /* Write message to show the change made */
-            sprintf (Gbl.Alert.Txt,Txt_The_department_X_has_been_renamed_as_Y,
-                     CurrentDptName,NewDptName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_department_X_has_been_renamed_as_Y,
+                      CurrentDptName,NewDptName);
             Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_department_X_has_not_changed,
-                  CurrentDptName);
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_name_of_the_department_X_has_not_changed,
+                   CurrentDptName);
          Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
@@ -832,8 +838,9 @@ void Dpt_ChangeDptWWW (void)
       DB_QueryUPDATE (Query,"can not update the web of a department");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,
-               NewWWW);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_new_web_address_is_X,
+                NewWWW);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
@@ -1021,14 +1028,16 @@ void Dpt_RecFormNewDpt (void)
          /***** If name of department was in database... *****/
          if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt->ShrtName,-1L))
            {
-            sprintf (Gbl.Alert.Txt,Txt_The_department_X_already_exists,
-                     Dpt->ShrtName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_department_X_already_exists,
+                      Dpt->ShrtName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else if (Dpt_CheckIfDepartmentNameExists ("FullName",Dpt->FullName,-1L))
            {
-            sprintf (Gbl.Alert.Txt,Txt_The_department_X_already_exists,
-                     Dpt->FullName);
+            snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_The_department_X_already_exists,
+                      Dpt->FullName);
             Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new department to database
@@ -1065,8 +1074,9 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
    DB_QueryINSERT (Query,"can not create a new department");
 
    /***** Write success message *****/
-   sprintf (Gbl.Alert.Txt,Txt_Created_new_department_X,
-            Dpt->FullName);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_Created_new_department_X,
+             Dpt->FullName);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 

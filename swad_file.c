@@ -141,11 +141,13 @@ bool Fil_ReadStdinIntoTmpFile (void)
      {
       Fil_EndOfReadingStdin ();  // If stdin were not fully read, there will be problems with buffers
       if (FileIsTooBig)
-         sprintf (Gbl.Alert.Txt,Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
-                  (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
+                   (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
       else
-         sprintf (Gbl.Alert.Txt,Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
-                  (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
+                   (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
 
       /* Don't write HTML at all */
       Gbl.Layout.HTMLStartWritten =
@@ -341,7 +343,9 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
    /* Open the new file */
    if ((*NewFile = fopen (NewName,"wb")) == NULL)
      {
-      sprintf (Gbl.Alert.Txt,"Can not create file <strong>%s</strong>.",NewName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "Can not create file <strong>%s</strong>.",
+		NewName);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
   }
@@ -358,14 +362,16 @@ void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char
    /* Rename the old file and the new file */
    if (rename (CurrentName,OldName)) // mv CurrentName OldName Ej: mv file.html file.old
      {
-      sprintf (Gbl.Alert.Txt,"Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
-               CurrentName,OldName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
+                CurrentName,OldName);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
    if (rename (NewName,CurrentName)) // mv NewName CurrentName Ej: mv file.new file.html
      {
-      sprintf (Gbl.Alert.Txt,"Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
-               NewName,CurrentName);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
+                NewName,CurrentName);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
   }
@@ -386,12 +392,14 @@ bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew)
         {
 	 case ENOTEMPTY:
 	 case EEXIST:
-	    sprintf (Gbl.Alert.Txt,Txt_There_is_already_a_non_empty_folder_named_X,
-	             PathNew);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_There_is_already_a_non_empty_folder_named_X,
+	              PathNew);
 	    break;
 	 case ENOTDIR:
-	    sprintf (Gbl.Alert.Txt,Txt_There_is_already_a_file_named_X,
-	             PathNew);
+	    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	              Txt_There_is_already_a_file_named_X,
+	              PathNew);
 	    break;
 	 case EACCES:
 	    Lay_ShowErrorAndExit ("Write is forbidden.");
@@ -426,7 +434,9 @@ void Fil_CreateDirIfNotExists (const char *Path)
    if (!Fil_CheckIfPathExists (Path))
       if (mkdir (Path,(mode_t) 0xFFF) != 0)
         {
-	 sprintf (Gbl.Alert.Txt,"Can not create folder <strong>%s</strong>.",Path);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           "Can not create folder <strong>%s</strong>.",
+		   Path);
 	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
         }
   }
@@ -485,7 +495,9 @@ void Fil_RemoveTree (const char *Path)
 	       Error = true;
 	    if (Error)
 	      {
-	       sprintf (Gbl.Alert.Txt,"Can not remove folder %s.",Path);
+	       snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 "Can not remove folder %s.",
+			 Path);
 	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 	      }
 	   }

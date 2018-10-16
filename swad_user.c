@@ -2473,12 +2473,14 @@ void Usr_WelcomeUsr (void)
                            Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
-                  sprintf (Gbl.Alert.Txt,Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
-                           Gbl.Usrs.Me.UsrDat.FirstName);
+                  snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                    Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
+                            Gbl.Usrs.Me.UsrDat.FirstName);
                  }
             if (!CongratulateMyBirthday)
-               sprintf (Gbl.Alert.Txt,Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
-                        Gbl.Usrs.Me.UsrDat.FirstName);
+               snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                 Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
+                         Gbl.Usrs.Me.UsrDat.FirstName);
             Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
            }
          else
@@ -2749,8 +2751,9 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
    if (Wrong)
      {
       /***** String is not a valid user's nickname, email or ID *****/
-      sprintf (Gbl.Alert.Txt,Txt_The_ID_nickname_or_email_X_is_not_valid,
-	       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_The_ID_nickname_or_email_X_is_not_valid,
+	        Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
@@ -3182,8 +3185,9 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
 
    Gbl.Action.Act = ActFrmLogIn;
    Tab_SetCurrentTab ();
-   sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-	    Gbl.Usrs.Me.UsrIdLogin);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+	     Gbl.Usrs.Me.UsrIdLogin);
    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
   }
 
@@ -3277,9 +3281,10 @@ void Usr_ShowFormsLogoutAndRole (void)
    /***** Write message with my new logged role *****/
    if (Gbl.Usrs.Me.Role.HasChanged)
      {
-      sprintf (Gbl.Alert.Txt,Txt_You_are_now_LOGGED_IN_as_X,
-	       Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
-	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        Txt_You_are_now_LOGGED_IN_as_X,
+	        Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
+	        Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
@@ -5130,8 +5135,9 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {
-	 sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
-		  Gbl.Usrs.LstUsrs[Role].NumUsrs);
+	 snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	           Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+		   Gbl.Usrs.LstUsrs[Role].NumUsrs);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
          Abort = true;
         }
@@ -5319,7 +5325,9 @@ static void Usr_AllocateUsrsList (Rol_Role_t Role)
 /*
 if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
    {
-    sprintf (Gbl.Alert.Txt,"Memory used by list = %lu",(long) sizeof (struct UsrInList) * NumUsrs);
+    snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	      "Memory used by list = %lu",
+	      (long) sizeof (struct UsrInList) * NumUsrs);
     Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
    }
 */
@@ -5380,8 +5388,9 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
-   sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
-            NumUsrs);
+   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	     Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+             NumUsrs);
    Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
                            Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParamsConfirmIWantToSeeBigList,
@@ -5525,8 +5534,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  if (WriteErrorMsgs)
 		    {
-		     sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_nickname_X,
-			      UsrIDNickOrEmail);
+		     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                       Txt_There_is_no_user_with_nickname_X,
+			       UsrIDNickOrEmail);
 		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
@@ -5544,8 +5554,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  if (WriteErrorMsgs)
 		    {
-		     sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_email_X,
-			      UsrIDNickOrEmail);
+		     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                       Txt_There_is_no_user_with_email_X,
+			       UsrIDNickOrEmail);
 		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
@@ -5572,8 +5583,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		       {// TODO: Consider forbid IDs here
 			if (WriteErrorMsgs)
 			  {
-			   sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-				    UsrIDNickOrEmail);
+			   snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                             Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+				     UsrIDNickOrEmail);
 			   Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
 			  }
 			Error = true;
@@ -5583,8 +5595,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		    {
 		     if (WriteErrorMsgs)
 		       {
-			sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_ID_nick_or_email_X,
-				 UsrIDNickOrEmail);
+			snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                          Txt_There_is_no_user_with_ID_nick_or_email_X,
+				  UsrIDNickOrEmail);
 			Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
 		       }
 		     Error = true;
@@ -5594,8 +5607,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  if (WriteErrorMsgs)
 		    {
-		     sprintf (Gbl.Alert.Txt,Txt_The_ID_nickname_or_email_X_is_not_valid,
-			      UsrIDNickOrEmail);
+		     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	                       Txt_The_ID_nickname_or_email_X_is_not_valid,
+			       UsrIDNickOrEmail);
 		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;

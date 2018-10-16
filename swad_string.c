@@ -1038,7 +1038,9 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 /*
   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
     {
-     sprintf (Gbl.Alert.Txt,"Str_ChangeFormat (&quot;%s&quot;)",Str);
+     snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	       "Str_ChangeFormat (&quot;%s&quot;)",
+	       Str);
      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
     }
 */
@@ -2880,8 +2882,9 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
    /***** Check if buffer has enough space for source *****/
    if (LengthSrc > DstSize)
      {
-      sprintf (Gbl.Alert.Txt,"Trying to copy %lu chars into a %lu-chars buffer.",
-               LengthSrc,DstSize);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "Trying to copy %lu chars into a %lu-chars buffer.",
+                LengthSrc,DstSize);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
 
@@ -2903,8 +2906,9 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthDst = strlen (Dst);
    if (LengthDst > DstSize)
      {
-      sprintf (Gbl.Alert.Txt,"%lu-chars buffer has %lu chars!",
-               DstSize,LengthDst);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "%lu-chars buffer has %lu chars!",
+                DstSize,LengthDst);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
 
@@ -2914,8 +2918,9 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthSrc = strlen (Src);
    if (FreeSpace < LengthSrc)
      {
-      sprintf (Gbl.Alert.Txt,"Trying to concatenate %lu chars to a %lu-chars buffer with free space for only %lu chars!",
-               LengthSrc,DstSize,FreeSpace);
+      snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
+	        "Trying to concatenate %lu chars to a %lu-chars buffer with free space for only %lu chars!",
+                LengthSrc,DstSize,FreeSpace);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
 
