@@ -2265,7 +2265,9 @@ void Att_RegisterMeAsStdInAttEvent (void)
       /***** Get comments for this student *****/
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
-      sprintf (CommentParamName,"CommentStd%ld",Gbl.Usrs.Me.UsrDat.UsrCod);
+      snprintf (CommentParamName,sizeof (CommentParamName),
+	        "CommentStd%ld",
+		Gbl.Usrs.Me.UsrDat.UsrCod);
       Par_GetParToHTML (CommentParamName,CommentStd,Cns_MAX_BYTES_TEXT);
 
       if (Present ||
@@ -2305,7 +2307,6 @@ void Att_RegisterStudentsInAttEvent (void)
    extern const char *Txt_Presents;
    extern const char *Txt_Absents;
    struct AttendanceEvent Att;
-   char Format[256];
    unsigned NumStd;
    const char *Ptr;
    bool Present;
@@ -2378,7 +2379,9 @@ void Att_RegisterStudentsInAttEvent (void)
 	{
 	 /***** Get comments for this student *****/
 	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumStd].UsrCod,CommentStd,CommentTch);
-	 sprintf (CommentParamName,"CommentTch%ld",Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumStd].UsrCod);
+	 snprintf (CommentParamName,sizeof (CommentParamName),
+	           "CommentTch%ld",
+		   Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumStd].UsrCod);
 	 Par_GetParToHTML (CommentParamName,CommentTch,Cns_MAX_BYTES_TEXT);
 
 	 Present = !Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumStd].Remove;
@@ -2403,10 +2406,11 @@ void Att_RegisterStudentsInAttEvent (void)
       Usr_FreeUsrsList (Rol_STD);
 
       /***** Write final message *****/
-      sprintf (Format,"%s: %%u<br />%s: %%u",Txt_Presents,Txt_Absents);
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Format,
-	        NumStdsPresent,NumStdsAbsent);
+	        "%s: %u<br />"
+	        "%s: %u",
+	        Txt_Presents,NumStdsPresent,
+		Txt_Absents ,NumStdsAbsent );
       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0

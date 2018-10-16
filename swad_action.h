@@ -29,6 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
+#include "swad_constant.h"
 #include "swad_cryptography.h"
 #include "swad_string.h"
 #include "swad_tab.h"
@@ -67,6 +68,11 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
 #define Act_MAX_BYTES_ID (32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1)
+
+#define Act_MAX_BYTES_PARAM_ACTION	256
+#define Act_MAX_BYTES_PARAM_SESSION	(256 + Cns_BYTES_SESSION_ID)
+#define Act_MAX_BYTES_PARAM_LOCATION	256
+#define Act_MAX_BYTES_PARAMS_STR	(Act_MAX_BYTES_PARAM_ACTION + Act_MAX_BYTES_PARAM_SESSION + Act_MAX_BYTES_PARAM_LOCATION)
 
 /*****************************************************************************/
 /************************* Not asociates with tabs ***************************/
@@ -1672,7 +1678,7 @@ void Act_StartFormUnique (Act_Action_t NextAction);
 void Act_StartFormAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_StartFormId (Act_Action_t NextAction,const char *Id);
-void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
+void Act_SetParamsForm (char ParamsStr[Act_MAX_BYTES_PARAMS_STR],Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion);
 void Act_EndForm (void);
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,

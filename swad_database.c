@@ -1357,7 +1357,7 @@ mysql> DESCRIBE hidden_params;
 4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
-			"SessionId CHAR(43) NOT NULL,"	// Ses_BYTES_SESSION_ID
+			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"Action INT NOT NULL,"
 			"ParamName VARCHAR(255) NOT NULL,"
 			"ParamValue LONGTEXT NOT NULL,"
@@ -2075,7 +2075,7 @@ mysql> DESCRIBE sessions;
 18 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
-			"SessionId CHAR(43) NOT NULL,"				// Ses_BYTES_SESSION_ID
+			"SessionId CHAR(43) NOT NULL,"				// Cns_BYTES_SESSION_ID
 			"UsrCod INT NOT NULL,"
 			"Password CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
 			"Role TINYINT NOT NULL DEFAULT 0,"
@@ -2253,7 +2253,7 @@ mysql> DESCRIBE social_timelines;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timelines ("
-			"SessionId CHAR(43) NOT NULL,"	// Ses_BYTES_SESSION_ID
+			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"NotCod BIGINT NOT NULL,"
 		   "UNIQUE INDEX(SessionId,NotCod))");
 

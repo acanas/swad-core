@@ -131,7 +131,9 @@ void Agd_PutParamAgd (void)
   {
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   sprintf (Nickname,"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
+   snprintf (Nickname,sizeof (Nickname),
+	     "@%s",
+	     Gbl.Usrs.Other.UsrDat.Nickname);
    Par_PutHiddenParamString ("agd",Nickname);
   }
 
@@ -364,7 +366,9 @@ void Agd_ShowUsrAgenda (void)
 	 Error = false;
 
 	 /***** Start box *****/
-	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Public_agenda_USER,
+		   Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Box_StartBox ("100%",Gbl.Title,
 		       ItsMe ? Agd_PutIconsMyPublicAgenda :
@@ -407,7 +411,9 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
 	   {
 	    /***** Start box *****/
-	    sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      Txt_Public_agenda_USER,
+		      Gbl.Usrs.Other.UsrDat.FullName);
 	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	    Box_StartBox ("100%",Gbl.Title,
 			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
@@ -660,10 +666,11 @@ static void Agd_PutIconToShowQR (void)
    char URL[Cns_MAX_BYTES_WWW + 1];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
-   sprintf (URL,"%s/%s?agd=@%s",
-            Cfg_URL_SWAD_CGI,
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Usrs.Me.UsrDat.Nickname);
+   snprintf (URL,sizeof (URL),
+	     "%s/%s?agd=@%s",
+             Cfg_URL_SWAD_CGI,
+             Txt_STR_LANG_ID[Gbl.Prefs.Language],
+             Gbl.Usrs.Me.UsrDat.Nickname);
    Gbl.QR.Str = URL;
    QR_PutLinkToPrintQRCode (ActPrnAgdQR);
   }
@@ -1951,7 +1958,9 @@ void Agd_PrintAgdQRCode (void)
    extern const char *Txt_Where_s_USER;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Where_s_USER,
+	     Gbl.Usrs.Me.UsrDat.FullName);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  NULL,Box_NOT_CLOSABLE);
 

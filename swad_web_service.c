@@ -327,7 +327,7 @@ static int Svc_CheckIdSession (const char *IdSession)
   {
    const char *Ptr;
    unsigned i;
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Check if pointer is NULL *****/
    if (IdSession == NULL)
@@ -336,7 +336,7 @@ static int Svc_CheckIdSession (const char *IdSession)
 	                        "Session identifier is a null pointer");
 
    /***** Check length of session identifier *****/
-   if (strlen (IdSession) != Ses_BYTES_SESSION_ID)
+   if (strlen (IdSession) != Cns_BYTES_SESSION_ID)
       return soap_sender_fault (Gbl.soap,
 	                        "Bad session identifier",
 	                        "The length of the session identifier is wrong");
@@ -962,7 +962,7 @@ int swad__loginBySessionKey (struct soap *soap,
                              struct swad__loginBySessionKeyOutput *loginBySessionKeyOut)	// output
   {
    int ReturnCode;
-   char Query[256 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;

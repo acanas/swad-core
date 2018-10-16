@@ -790,7 +790,7 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 
 void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Save last page of received/sent messages *****/
    sprintf (Query,"UPDATE sessions SET %s=%u WHERE SessionId='%s'",
@@ -806,7 +806,7 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
 
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;

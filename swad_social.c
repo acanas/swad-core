@@ -808,7 +808,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 
 static long Soc_GetPubCodFromSession (const char *FieldName)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
@@ -836,7 +836,7 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
 
 static void Soc_UpdateLastPubCodIntoSession (void)
   {
-   char Query[256 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Cns_BYTES_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions"
@@ -852,7 +852,7 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions SET FirstPubCod=%ld WHERE SessionId='%s'",
@@ -4767,7 +4767,7 @@ void Soc_ClearOldTimelinesDB (void)
 
 static void Soc_ClearTimelineThisSession (void)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Remove social timeline for this session *****/
    sprintf (Query,"DELETE FROM social_timelines WHERE SessionId='%s'",
@@ -4781,7 +4781,7 @@ static void Soc_ClearTimelineThisSession (void)
 
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
-   char Query[256 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Cns_BYTES_SESSION_ID];
 
    sprintf (Query,"INSERT IGNORE INTO social_timelines"
 	          " (SessionId,NotCod)"

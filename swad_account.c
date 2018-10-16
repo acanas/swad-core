@@ -350,7 +350,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
-      sprintf (NewNicknameWithArroba,"@%s",NewNicknameWithoutArroba);
+      snprintf (NewNicknameWithArroba,sizeof (NewNicknameWithArroba),
+	        "@%s",
+		NewNicknameWithoutArroba);
    else
       NewNicknameWithArroba[0] = '\0';
    fprintf (Gbl.F.Out,"<tr>"
@@ -409,7 +411,9 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    extern const char *Txt_Create_account;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_New_on_PLATFORM_Sign_up,
+	     Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
@@ -619,7 +623,9 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
    /* Create a new version of the nickname with arroba */
-   sprintf (NewNicknameWithArroba,"@%s",NewNicknameWithoutArroba);
+   snprintf (NewNicknameWithArroba,sizeof (NewNicknameWithArroba),
+	     "@%s",
+	     NewNicknameWithoutArroba);
 
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {

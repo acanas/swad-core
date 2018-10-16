@@ -174,7 +174,7 @@ struct Globals
       unsigned NumSessions;
       bool IsOpen;
       bool HasBeenDisconnected;
-      char Id[Ses_BYTES_SESSION_ID + 1];
+      char Id[Cns_BYTES_SESSION_ID + 1];
       long UsrCod;
      } Session;
 

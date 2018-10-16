@@ -80,7 +80,7 @@ void Plg_ListPlugins (void)
    extern const char *Txt_Plugin;
    unsigned NumPlg;
    struct Plugin *Plg;
-   char URL[Cns_MAX_BYTES_WWW + Ses_BYTES_SESSION_ID + 1];
+   char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
 
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
      {

@@ -204,7 +204,7 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
 void Cal_DrawCurrentMonth (void)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[256 + 256 + Ses_BYTES_SESSION_ID + 256];
+   char ParamsStr[Act_MAX_BYTES_PARAMS_STR];
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -304,7 +304,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
   {
    extern const char *Hlp_Calendar;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[256 + 256 + Ses_BYTES_SESSION_ID + 256];
+   char ParamsStr[Act_MAX_BYTES_PARAMS_STR];
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)

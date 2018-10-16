@@ -5150,7 +5150,9 @@ char *Act_GetActionTextFromDB (long ActCod,
 void Act_StartFormGoTo (Act_Action_t NextAction)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
+	     "form_%d",
+	     Gbl.Form.Num);
    Act_StartFormInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
   }
 
@@ -5172,7 +5174,9 @@ void Act_StartFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
 void Act_StartFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
+	     "form_%d",
+	     Gbl.Form.Num);
    Act_StartFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
@@ -5184,8 +5188,9 @@ void Act_StartFormUnique (Act_Action_t NextAction)
 void Act_StartFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.Form.UniqueId,"form_%s_%d",
-            Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+   snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
+	     "form_%s_%d",
+             Gbl.UniqueNameEncrypted,Gbl.Form.Num);
    Act_StartFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
 
@@ -5200,7 +5205,7 @@ static void Act_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[256 + 256 + Ses_BYTES_SESSION_ID + 256];
+   char ParamsStr[Act_MAX_BYTES_PARAMS_STR];
 
    if (!Gbl.Form.Inside)
      {
@@ -5236,27 +5241,26 @@ static void Act_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
      }
   }
 
-// Params should have space for 256 + 256 + Ses_BYTES_SESSION_ID + 256 bytes
-void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
+void Act_SetParamsForm (char ParamsStr[Act_MAX_BYTES_PARAMS_STR],Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion)
   {
-   char ParamAction[256];
-   char ParamSession[256 + Ses_BYTES_SESSION_ID];
-   char ParamLocation[256];
+   char ParamAction[Act_MAX_BYTES_PARAM_ACTION];
+   char ParamSession[Act_MAX_BYTES_PARAM_SESSION];
+   char ParamLocation[Act_MAX_BYTES_PARAM_LOCATION];
 
    ParamAction[0] = '\0';
    ParamSession[0] = '\0';
    ParamLocation[0] = '\0';
 
    if (NextAction != ActUnk)
-      sprintf (ParamAction,"<input type=\"hidden\" name=\"act\""
-	                   " value=\"%ld\" />",
-	       Act_GetActCod (NextAction));
+      snprintf (ParamAction,sizeof (ParamAction),
+	        "<input type=\"hidden\" name=\"act\" value=\"%ld\" />",
+	        Act_GetActCod (NextAction));
 
    if (Gbl.Session.Id[0])
-      sprintf (ParamSession,"<input type=\"hidden\" name=\"ses\""
-	                    " value=\"%s\" />",
-	       Gbl.Session.Id);
+      snprintf (ParamSession,sizeof (ParamSession),
+	        "<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
+	        Gbl.Session.Id);
    else if (PutParameterLocationIfNoSesion)
       // Extra parameters necessary when there's no open session
      {
@@ -5265,32 +5269,34 @@ void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
 	 it is necessary to send a parameter with course code */
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	 // If course selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"crs\""
-                                " value=\"%ld\" />",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         snprintf (ParamLocation,sizeof (ParamLocation),
+                   "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
+                   Gbl.CurrentCrs.Crs.CrsCod);
       else if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	 // If no course selected, but degree selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"deg\""
-                                " value=\"%ld\" />",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         snprintf (ParamLocation,sizeof (ParamLocation),
+                   "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
+                   Gbl.CurrentDeg.Deg.DegCod);
       else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	 // If no degree selected, but centre selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"ctr\""
-                                " value=\"%ld\" />",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         snprintf (ParamLocation,sizeof (ParamLocation),
+                   "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
+                   Gbl.CurrentCtr.Ctr.CtrCod);
       else if (Gbl.CurrentIns.Ins.InsCod > 0)
 	 // If no centre selected, but institution selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"ins\""
-                                " value=\"%ld\" />",
-                  Gbl.CurrentIns.Ins.InsCod);
+         snprintf (ParamLocation,sizeof (ParamLocation),
+                   "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
+                   Gbl.CurrentIns.Ins.InsCod);
       else if (Gbl.CurrentCty.Cty.CtyCod > 0)
 	 // If no institution selected, but country selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"cty\""
-                                " value=\"%ld\" />",
-                  Gbl.CurrentCty.Cty.CtyCod);
+         snprintf (ParamLocation,sizeof (ParamLocation),
+                   "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
+                   Gbl.CurrentCty.Cty.CtyCod);
      }
 
-   sprintf (ParamsStr,"%s%s%s",ParamAction,ParamSession,ParamLocation);
+   snprintf (ParamsStr,Act_MAX_BYTES_PARAMS_STR,
+	     "%s%s%s",
+	     ParamAction,ParamSession,ParamLocation);
   }
 
 void Act_EndForm (void)
@@ -5378,9 +5384,10 @@ void Act_SetUniqueId (char UniqueId[Act_MAX_BYTES_ID])
           So, Id uses:
           - a name for this execution (Gbl.UniqueNameEncrypted)
           - a number for each element in this execution (CountForThisExecution) *****/
-   sprintf (UniqueId,"id_%s_%u",
-            Gbl.UniqueNameEncrypted,
-            ++CountForThisExecution);
+   snprintf (UniqueId,Act_MAX_BYTES_ID,
+	     "id_%s_%u",
+             Gbl.UniqueNameEncrypted,
+             ++CountForThisExecution);
   }
 
 /*****************************************************************************/

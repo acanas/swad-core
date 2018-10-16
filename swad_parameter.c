@@ -740,7 +740,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get session identifier, if exists *****/
-   Par_GetParToText ("ses",Gbl.Session.Id,Ses_BYTES_SESSION_ID);
+   Par_GetParToText ("ses",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
    if (Gbl.Session.Id[0])
      {
       /***** Get user's code, password, current degree and current course from stored session *****/
@@ -755,7 +755,7 @@ void Par_GetMainParameters (void)
    else
      {
       // Try old parameter "IdSes" (allowed for compatibility, to be removed soon)
-      Par_GetParToText ("IdSes",Gbl.Session.Id,Ses_BYTES_SESSION_ID);
+      Par_GetParToText ("IdSes",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
       if (Gbl.Session.Id[0])
 	{
 	 /***** Get user's code, password, current degree and current course from stored session *****/

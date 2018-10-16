@@ -241,7 +241,9 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    Ctr_PutParamCtrCod (Ctr->CtrCod);
 
    /***** Link to action *****/
-   sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Go_to_X,
+	     Ctr->FullName);
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw centre logo *****/
@@ -307,11 +309,12 @@ static void Ctr_Configuration (bool PrintView)
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
       /***** Path to photo *****/
-      sprintf (PathPhoto,"%s/%s/%02u/%u/%u.jpg",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+      snprintf (PathPhoto,sizeof (PathPhoto),
+	        "%s/%s/%02u/%u/%u.jpg",
+                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	        (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	        (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
+	        (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
       /***** Start box *****/
@@ -636,8 +639,9 @@ static void Ctr_Configuration (bool PrintView)
 	 /* Form to go to see degrees of this centre */
 	 Act_StartFormGoTo (ActSeeDeg);
 	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-	          Gbl.CurrentCtr.Ctr.ShrtName);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Degrees_of_CENTRE_X,
+	           Gbl.CurrentCtr.Ctr.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
@@ -707,11 +711,12 @@ static void Ctr_PutIconToChangePhoto (void)
    bool PhotoExists;
 
    /***** Link to upload photo of centre *****/
-   sprintf (PathPhoto,"%s/%s/%02u/%u/%u.jpg",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	    (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
-	    (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
+   snprintf (PathPhoto,sizeof (PathPhoto),
+	     "%s/%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
+	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
    Lay_PutContextualLink (ActReqCtrPho,NULL,NULL,
 			  "photo64x64.gif",
@@ -783,7 +788,9 @@ static void Ctr_ListCentres (void)
    unsigned NumCtr;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Centres_of_INSTITUTION_X,
+	     Gbl.CurrentIns.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
@@ -976,8 +983,9 @@ void Ctr_EditCentres (void)
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Centres_of_INSTITUTION_X,
+             Gbl.CurrentIns.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
@@ -1763,10 +1771,11 @@ void Ctr_RemoveCentre (void)
       Brw_RemoveCtrFilesFromDB (Ctr.CtrCod);
 
       /***** Remove directories of the centre *****/
-      sprintf (PathCtr,"%s/%s/%02u/%u",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (Ctr.CtrCod % 100),
-	       (unsigned) Ctr.CtrCod);
+      snprintf (PathCtr,sizeof (PathCtr),
+	        "%s/%s/%02u/%u",
+	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	        (unsigned) (Ctr.CtrCod % 100),
+	        (unsigned) Ctr.CtrCod);
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
@@ -2243,7 +2252,9 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
    if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
      {
       /***** Alert with button to go to centre *****/
-      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Ctrs.EditingCtr.ShrtName);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Gbl.Ctrs.EditingCtr.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
                               Btn_CONFIRM_BUTTON,Gbl.Title);
@@ -2373,13 +2384,15 @@ void Ctr_ReceivePhoto (void)
 
    /***** Create private directories if not exist *****/
    /* Create private directory for images if it does not exist */
-   sprintf (PathImgPriv,"%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
+   snprintf (PathImgPriv,sizeof (PathImgPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Create temporary private directory for images if it does not exist */
-   sprintf (PathImgPriv,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
+   snprintf (PathImgPriv,sizeof (PathImgPriv),
+	     "%s/%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Get filename extension */
@@ -2397,9 +2410,10 @@ void Ctr_ReceivePhoto (void)
      }
 
    /* End the reception of image in a temporary file */
-   sprintf (FileNameImgTmp,"%s/%s/%s/%s.%s",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
-            Gbl.UniqueNameEncrypted,PtrExtension);
+   snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
+	     "%s/%s/%s/%s.%s",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
+             Gbl.UniqueNameEncrypted,PtrExtension);
    if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
@@ -2407,33 +2421,38 @@ void Ctr_ReceivePhoto (void)
      }
 
    /***** Creates public directories if not exist *****/
-   sprintf (Path,"%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
    Fil_CreateDirIfNotExists (Path);
-   sprintf (Path,"%s/%s/%02u",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
+   snprintf (Path,sizeof (Path),
+	     "%s/%s/%02u",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
    Fil_CreateDirIfNotExists (Path);
-   sprintf (Path,"%s/%s/%02u/%u",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s/%02u/%u",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
-   sprintf (FileNameImg,"%s/%s/%02u/%u/%u.jpg",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+   snprintf (FileNameImg,sizeof (FileNameImg),
+	     "%s/%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
+	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
 
    /* Call to program that makes the conversion */
-   sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
-            FileNameImgTmp,
-            Ctr_PHOTO_SAVED_MAX_WIDTH,
-            Ctr_PHOTO_SAVED_MAX_HEIGHT,
-            Ctr_PHOTO_SAVED_QUALITY,
-            FileNameImg);
+   snprintf (Command,sizeof (Command),
+	     "convert %s -resize '%ux%u>' -quality %u %s",
+             FileNameImgTmp,
+             Ctr_PHOTO_SAVED_MAX_WIDTH,
+             Ctr_PHOTO_SAVED_MAX_HEIGHT,
+             Ctr_PHOTO_SAVED_QUALITY,
+             FileNameImg);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running command to process image.");
@@ -2969,9 +2988,10 @@ unsigned Ctr_ListCtrsFound (const char *Query)
      {
       /***** Start box and table *****/
       /* Number of centres found */
-      sprintf (Gbl.Title,"%u %s",
-               NumCtrs,(NumCtrs == 1) ? Txt_centre :
-	                                Txt_centres);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s",
+                NumCtrs,(NumCtrs == 1) ? Txt_centre :
+	                                 Txt_centres);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 

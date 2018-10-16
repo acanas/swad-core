@@ -1302,7 +1302,7 @@ static void Sch_SaveLastSearchIntoSession (void)
   {
    char Query[256 +
               Sch_MAX_BYTES_STRING_TO_FIND +
-              Ses_BYTES_SESSION_ID];
+              Cns_BYTES_SESSION_ID];
 
    if (Gbl.Usrs.Me.Logged)
      {

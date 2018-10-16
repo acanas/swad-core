@@ -722,7 +722,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
 
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
   {
-   char Query[256 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Cns_BYTES_SESSION_ID];
 
    /***** Delete old status from expired sessions *****/
    sprintf (Query,"DELETE FROM tst_status"
@@ -745,7 +745,7 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
 
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
   {
-   char Query[256 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;

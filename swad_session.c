@@ -83,7 +83,7 @@ void Ses_CreateSession (void)
   {
    /***** Create a unique name for the session *****/
    Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,
-             Ses_BYTES_SESSION_ID);
+             Cns_BYTES_SESSION_ID);
 
    /***** Check that session is not open *****/
    if (Ses_CheckIfSessionExists (Gbl.Session.Id))
@@ -107,7 +107,7 @@ void Ses_CreateSession (void)
 
 bool Ses_CheckIfSessionExists (const char *IdSes)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Get if session already exists in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",
@@ -157,7 +157,7 @@ void Ses_CloseSession (void)
 void Ses_InsertSessionInDB (void)
   {
    char Query[1024 +
-              Ses_BYTES_SESSION_ID +
+              Cns_BYTES_SESSION_ID +
               Pwd_BYTES_ENCRYPTED_PASSWORD];
 
    /***** Insert session in the database *****/
@@ -191,7 +191,7 @@ void Ses_UpdateSessionDataInDB (void)
   {
    char Query[1024 +
               Pwd_BYTES_ENCRYPTED_PASSWORD +
-              Ses_BYTES_SESSION_ID];
+              Cns_BYTES_SESSION_ID];
 
    /***** Update session in database *****/
    sprintf (Query,"UPDATE sessions SET UsrCod=%ld,Password='%s',Role=%u,"
@@ -216,7 +216,7 @@ void Ses_UpdateSessionDataInDB (void)
 
 void Ses_UpdateSessionLastRefreshInDB (void)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Update session in database *****/
    sprintf (Query,"UPDATE sessions SET LastRefresh=NOW() WHERE SessionId='%s'",
@@ -230,7 +230,7 @@ void Ses_UpdateSessionLastRefreshInDB (void)
 
 static void Ses_RemoveSessionFromDB (void)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Remove current session *****/
    sprintf (Query,"DELETE FROM sessions WHERE SessionId='%s'",
@@ -272,7 +272,7 @@ void Ses_RemoveExpiredSessions (void)
 
 bool Ses_GetSessionData (void)
   {
-   char Query[256 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
@@ -368,7 +368,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
 	    else
 	       LengthParamValue = 0;
 	    MaxLength = 256 +
-			Ses_BYTES_SESSION_ID +
+			Cns_BYTES_SESSION_ID +
 			LengthParamName +
 			LengthParamValue;
 	    if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
@@ -398,7 +398,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
 
 void Ses_RemoveHiddenParFromThisSession (void)
   {
-   char Query[128 + Ses_BYTES_SESSION_ID];
+   char Query[128 + Cns_BYTES_SESSION_ID];
 
    if (Gbl.Session.IsOpen &&			// There is an open session
        !Gbl.HiddenParamsInsertedIntoDB)		// No params just inserted
@@ -432,7 +432,7 @@ void Ses_RemoveHiddenParFromExpiredSessions (void)
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
                                                const char *ParamName)
   {
-   char Query[512 + Ses_BYTES_SESSION_ID];
+   char Query[512 + Cns_BYTES_SESSION_ID];
 
    /***** Get a hidden parameter from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM hidden_params"
@@ -450,7 +450,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
                                  const char *ParamName,char *ParamValue,
                                  size_t MaxBytes)
   {
-   char Query[512 + Ses_BYTES_SESSION_ID];
+   char Query[512 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;

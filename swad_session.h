@@ -33,11 +33,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Ses_BYTES_SESSION_ID Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
-
-#define Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS	(Cfg_MIN_TIME_TO_REFRESH_CONNECTED * 1000L)	// Refresh period of connected users in miliseconds
-#define Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS	(Cfg_MAX_TIME_TO_REFRESH_CONNECTED * 1000L)	// Refresh period of connected users in miliseconds
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

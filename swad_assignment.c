@@ -520,8 +520,9 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Asg->Folder,
 				Brw_IS_FOLDER,-1L);
-      sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,
-	       Asg->Folder);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Upload_file_or_create_folder_in_FOLDER,
+	        Asg->Folder);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 			 " src=\"%s/folder-open-plus16x16.gif\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",

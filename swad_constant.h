@@ -54,6 +54,8 @@
 #define Cns_MAX_BYTES_TEXT	( 64 * 1024 - 1)	// Used for medium texts
 #define Cns_MAX_BYTES_LONG_TEXT	(256 * 1024 - 1)	// Used for big contents
 
+#define Cns_BYTES_SESSION_ID	Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
