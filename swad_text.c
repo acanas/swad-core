@@ -57456,27 +57456,6 @@ const char *Txt_Your_comment_has_been_updated =
 	"O seu coment&aacute;rio foi atualizado.";
 #endif
 
-const char *Txt_Your_password_has_been_changed_successfully =
-#if   L==1
-	"Su contrase&ntilde;a se ha modificado con &eacute;xito.";	// Necessita traduccio
-#elif L==2
-	"Your password has been changed successfully.";			// Need Übersetzung
-#elif L==3
-	"Your password has been changed successfully.";
-#elif L==4
-	"Su contrase&ntilde;a se ha modificado con &eacute;xito.";
-#elif L==5
-	"Your password has been changed successfully.";			// Besoin de traduction
-#elif L==6
-	"Su contrase&ntilde;a se ha modificado con &eacute;xito.";	// Okoteve traducción
-#elif L==7
-	"La tua password &egrave; stata cambiata con successo.";
-#elif L==8
-	"Your password has been changed successfully.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"Your password has been changed successfully.";			// Necessita de tradução
-#endif
-
 const char *Txt_Your_password_is_not_secure_enough =
 #if   L==1
 	"Su contrase&ntilde;a no es suficientemente segura.";	// Necessita traduccio

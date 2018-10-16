@@ -69,6 +69,8 @@ const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat);
+
 static void Pwd_PutLinkToSendNewPasswdParams (void);
 
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
@@ -162,12 +164,8 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
 
 void Pwd_UpdateMyPwd (void)
   {
-   extern const char *Txt_You_have_not_written_twice_the_same_new_password;
-   extern const char *Txt_Your_password_has_been_changed_successfully;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
    char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    /***** Get plain password from form *****/
    Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
@@ -175,40 +173,10 @@ void Pwd_UpdateMyPwd (void)
    /***** Encrypt password *****/
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.LoginEncryptedPassword);
 
+   /***** Check current password *****/
    if (Pwd_CheckCurrentPassword ())
-     {
-      Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
-      Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
-
-      /***** Check if I have written twice the same password *****/
-      if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
-        {
-         // Passwords don't match
-         Gbl.Alert.Type = Ale_WARNING;
-         Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-         sprintf (Gbl.Alert.Txt,"%s",
-                  Txt_You_have_not_written_twice_the_same_new_password);
-        }
-      else
-        {
-         Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
-         if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],
-                                            NewEncryptedPassword,
-                                            Gbl.Usrs.Me.UsrDat.UsrCod))        // New password is good?
-           {
-	    /* Update my data */
-            Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-                      Pwd_BYTES_ENCRYPTED_PASSWORD);
-            Ses_UpdateSessionDataInDB ();
-            Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
-
-            Gbl.Alert.Type = Ale_SUCCESS;
-            Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-            sprintf (Gbl.Alert.Txt,"%s",
-        	     Txt_Your_password_has_been_changed_successfully);
-           }
-        }
-     }
+      /***** Check and update new password *****/
+      Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
@@ -224,52 +192,63 @@ void Pwd_UpdateMyPwd (void)
 
 void Pwd_UpdateOtherUsrPwd (void)
   {
-   extern const char *Txt_You_have_not_written_twice_the_same_new_password;
-   extern const char *Txt_The_password_has_been_changed_successfully;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
-	 Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
-
-	 if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
-	   {
-	    // Paswords don't match
-	    Gbl.Alert.Type = Ale_WARNING;
-            Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-	    sprintf (Gbl.Alert.Txt,"%s",
-		     Txt_You_have_not_written_twice_the_same_new_password);
-	   }
-	 else
-	   {
-	    Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
-	    if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],
-		                               NewEncryptedPassword,
-	                                       Gbl.Usrs.Other.UsrDat.UsrCod))        // New password is good?
-	      {
-	       /* Update other user's data */
-	       Str_Copy (Gbl.Usrs.Other.UsrDat.Password,NewEncryptedPassword,
-	                 Pwd_BYTES_ENCRYPTED_PASSWORD);
-	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
-
-	       Gbl.Alert.Type = Ale_SUCCESS;
-               Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-	       sprintf (Gbl.Alert.Txt,"%s",
-		        Txt_The_password_has_been_changed_successfully);
-	      }
-	   }
-	}
+         /***** Check and update password *****/
+	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/********************* Check and update new password *************************/
+/*****************************************************************************/
+
+static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_You_have_not_written_twice_the_same_new_password;
+   extern const char *Txt_The_password_has_been_changed_successfully;
+   char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
+   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
+
+   Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
+   Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
+
+   /***** Check if I have written twice the same password *****/
+   if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
+     {
+      // Passwords don't match
+      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
+      sprintf (Gbl.Alert.Txt,"%s",
+	       Txt_You_have_not_written_twice_the_same_new_password);
+     }
+   else
+     {
+      Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
+      if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],
+					 NewEncryptedPassword,
+					 UsrDat->UsrCod))        // New password is good?
+	{
+	 /* Update user's data */
+	 Str_Copy (UsrDat->Password,NewEncryptedPassword,
+		   Pwd_BYTES_ENCRYPTED_PASSWORD);
+	 Ses_UpdateSessionDataInDB ();
+	 Enr_UpdateUsrData (UsrDat);
+
+	 Gbl.Alert.Type = Ale_SUCCESS;
+	 Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
+	 sprintf (Gbl.Alert.Txt,"%s",
+		  Txt_The_password_has_been_changed_successfully);
+	}
+     }
   }
 
 /*****************************************************************************/
