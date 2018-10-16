@@ -503,51 +503,6 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
   }
 
 /*****************************************************************************/
-/************* Show form to the change of IDs of another user ****************/
-/*****************************************************************************/
-
-void ID_ShowFormOthIDs (void)
-  {
-   extern const char *Txt_ID;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   /***** Get user whose password must be changed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 /***** Start box *****/
-         Box_StartBox (NULL,Txt_ID,NULL,
-                       NULL,Box_NOT_CLOSABLE);
-
-	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-	                          &Gbl.Usrs.Other.UsrDat,NULL);
-
-	 /***** Form with the user's ID *****/
-         ID_ShowFormChangeOtherUsrID ();
-
-         /***** End box *****/
-         Box_EndBox ();
-	}
-      else
-        {
-	 Gbl.Alert.Type = Ale_WARNING;
-	 Gbl.Alert.Section = ID_ID_SECTION_ID;
-	 sprintf (Gbl.Alert.Txt,"%s",
-	          Txt_User_not_found_or_you_do_not_have_permission_);
-        }
-     }
-   else		// User not found
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = ID_ID_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
-     }
-  }
-
-/*****************************************************************************/
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
@@ -800,23 +755,23 @@ void ID_RemoveOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Remove user's ID *****/
-      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-      ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** Remove user's ID *****/
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
-      /***** Update list of IDs *****/
-      ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	 /***** Update list of IDs *****/
+	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show form again *****/
-      Acc_ShowFormChgOtherUsrAccount ();
+	 /***** Show form again *****/
+	 Acc_ShowFormChgOtherUsrAccount ();
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = ID_ID_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -932,23 +887,23 @@ void ID_NewOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** New user's ID *****/
-      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-      ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** New user's ID *****/
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
-      /***** Update list of IDs *****/
-      ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	 /***** Update list of IDs *****/
+	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show form again *****/
-      Acc_ShowFormChgOtherUsrAccount ();
+	 /***** Show form again *****/
+	 Acc_ShowFormChgOtherUsrAccount ();
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = ID_ID_SECTION_ID;
-      sprintf (Gbl.Alert.Txt,"%s",
-	       Txt_User_not_found_or_you_do_not_have_permission_);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

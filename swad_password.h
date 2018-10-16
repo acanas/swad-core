@@ -49,15 +49,14 @@ bool Pwd_CheckCurrentPassword (void);
 bool Pwd_CheckPendingPassword (void);
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void);
 
-void Pwd_ActChgMyPwd (void);
+void Pwd_UpdateMyPwd (void);
+void Pwd_UpdateOtherUsrPwd (void);
 
 void Pwd_PutLinkToSendNewPasswd (void);
 void Pwd_ShowFormSendNewPwd (void);
 void Pwd_ChkIdLoginAndSendNewPwd (void);
 int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
-
-void Pwd_UpdateOtherPwd (void);
 
 bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
                                     const char *EncryptedPassword,

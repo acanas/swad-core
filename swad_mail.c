@@ -1139,41 +1139,6 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   }
 
 /*****************************************************************************/
-/*********** Show form to the change the email of another user ***************/
-/*****************************************************************************/
-
-void Mai_ShowFormOthEmail (void)
-  {
-   extern const char *Txt_Email;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   /***** Get user whose password must be changed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-	{
-	 /***** Start box *****/
-	 Box_StartBox (NULL,Txt_Email,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-
-	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-				  &Gbl.Usrs.Other.UsrDat,NULL);
-
-	 /***** Form with the user's email *****/
-	 Mai_ShowFormChangeOtherUsrEmail ();
-
-	 /***** End box *****/
-	 Box_EndBox ();
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
-   else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-  }
-
-/*****************************************************************************/
 /*********************** Show form to change my email ************************/
 /*****************************************************************************/
 
@@ -1461,11 +1426,16 @@ void Mai_RemoveOtherUsrEmail (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Remove user's email *****/
-      Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** Remove user's email *****/
+	 Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show form again *****/
-      Acc_ShowFormChgOtherUsrAccount ();
+	 /***** Show form again *****/
+	 Acc_ShowFormChgOtherUsrAccount ();
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -1546,12 +1516,17 @@ void Mai_NewOtherUsrEmail (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** New user's ID *****/
-      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-      Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** New user's ID *****/
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
 
-      /***** Show form again *****/
-      Acc_ShowFormChgOtherUsrAccount ();
+	 /***** Show form again *****/
+	 Acc_ShowFormChgOtherUsrAccount ();
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

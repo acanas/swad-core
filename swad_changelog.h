@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.5 (2018-10-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.5.1 (2018-10-16)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.5.1:   Oct 16, 2018  Code refactoring related to edition. of another user's account. (235212 lines)
         Version 18.5:     Oct 16, 2018  Changes in management of other users. (235292 lines)
 					19 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1735','es','N','Administrar cuenta otro');
