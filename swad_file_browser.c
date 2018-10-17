@@ -25,10 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
 #include <time.h>		// For time
@@ -6070,8 +6072,10 @@ void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *
    if (!PathInTreeUntilFileOrFolder[0])
       Gbl.FileBrowser.Priv.FullPathInTree[0] = '\0';
    else if (strcmp (FilFolLnkName,"."))
-      sprintf (Gbl.FileBrowser.Priv.FullPathInTree,"%s/%s",
-	       PathInTreeUntilFileOrFolder,FilFolLnkName);
+      snprintf (Gbl.FileBrowser.Priv.FullPathInTree,
+	        sizeof (Gbl.FileBrowser.Priv.FullPathInTree),
+	        "%s/%s",
+	        PathInTreeUntilFileOrFolder,FilFolLnkName);
    else	// It's the root folder
       Str_Copy (Gbl.FileBrowser.Priv.FullPathInTree,PathInTreeUntilFileOrFolder,
 	        PATH_MAX);
@@ -6156,9 +6160,10 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
    if (Gbl.FileBrowser.Clipboard.IsThisTree)	// We are in the same tree of the clipboard ==> we can paste or not depending on the subtree
      {
       /***** Construct the name of the file or folder destination *****/
-      sprintf (PathDstWithFile,"%s/%s",
-	       Gbl.FileBrowser.Priv.FullPathInTree,
-	       Gbl.FileBrowser.Clipboard.FileName);
+      snprintf (PathDstWithFile,sizeof (PathDstWithFile),
+	        "%s/%s",
+	        Gbl.FileBrowser.Priv.FullPathInTree,
+	        Gbl.FileBrowser.Clipboard.FileName);
 
       return !Str_Path1BeginsByPath2 (PathDstWithFile,
 		                      Gbl.FileBrowser.Clipboard.Path);
@@ -6186,7 +6191,9 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
       Brw_PutParamsFileBrowser (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
                                 PathInTree,FileName,
                                 Gbl.FileBrowser.FileType,-1L);
-      sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Remove_FILE_OR_LINK_X,
+		FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
@@ -6219,7 +6226,9 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
       Brw_PutParamsFileBrowser (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
                                 PathInTree,FileName,
                                 Brw_IS_FOLDER,-1L);
-      sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Remove_folder_X,
+		FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
@@ -6250,7 +6259,9 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
    Brw_PutParamsFileBrowser (Brw_ActCopy[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Gbl.FileBrowser.FileType,-1L);
-   sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Copy_FOLDER_FILE_OR_LINK_X,
+	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
@@ -6278,7 +6289,9 @@ static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
    Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
-   sprintf (Gbl.Title,Txt_Paste_in_X,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Paste_in_X,
+	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
@@ -6393,7 +6406,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
                                        const char *FileNameToShow)
   {
    extern const char *Txt_Expand;
-   char JavaScriptFunctionToExpandFolder[256 + Brw_MAX_ROW_ID];
+   char JavaScriptFuncToExpandFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"expand_%s_%s\"",
@@ -6403,15 +6416,18 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    fprintf (Gbl.F.Out,">");
 
    /***** Form and icon *****/
-   sprintf (JavaScriptFunctionToExpandFolder,"ExpandFolder('%s_%s')",
-	    FileBrowserId,RowId);
+   snprintf (JavaScriptFuncToExpandFolder,sizeof (JavaScriptFuncToExpandFolder),
+	     "ExpandFolder('%s_%s')",
+	     FileBrowserId,RowId);
    Act_StartFormAnchorOnSubmit (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
-				JavaScriptFunctionToExpandFolder);	// JavaScript function to unhide rows
+				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
    Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
-   sprintf (Gbl.Title,"%s %s",Txt_Expand,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     "%s %s",
+	     Txt_Expand,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
@@ -6435,7 +6451,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
                                          const char *FileNameToShow)
   {
    extern const char *Txt_Contract;
-   char JavaScriptFunctionToContractFolder[256 + Brw_MAX_ROW_ID];
+   char JavaScriptFuncToContractFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"contract_%s_%s\"",
@@ -6445,15 +6461,18 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    fprintf (Gbl.F.Out,">");
 
    /***** Form and icon *****/
-   sprintf (JavaScriptFunctionToContractFolder,"ContractFolder('%s_%s')",
-	    FileBrowserId,RowId);
+   snprintf (JavaScriptFuncToContractFolder,sizeof (JavaScriptFuncToContractFolder),
+	     "ContractFolder('%s_%s')",
+	     FileBrowserId,RowId);
    Act_StartFormAnchorOnSubmit (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
-				JavaScriptFunctionToContractFolder);	// JavaScript function to hide rows
+				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
    Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
-   sprintf (Gbl.Title,"%s %s",Txt_Contract,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     "%s %s",
+	     Txt_Contract,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
@@ -6479,7 +6498,9 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
    Brw_PutParamsFileBrowser (ActUnk,
                              PathInTree,FileName,
                              Gbl.FileBrowser.FileType,-1L);
-   sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Show_FOLDER_FILE_OR_LINK_X,
+	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
@@ -6505,7 +6526,9 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
    Brw_PutParamsFileBrowser (ActUnk,
                              PathInTree,FileName,
                              Gbl.FileBrowser.FileType,-1L);
-   sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Hide_FOLDER_FILE_OR_LINK_X,
+	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
@@ -6674,7 +6697,9 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
    Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
-   sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Upload_file_or_create_folder_in_FOLDER,
+	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\""
 		      " src=\"%s/folder-%s-plus16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
@@ -6727,8 +6752,9 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                              FileMetadata->FilCod);
 
    /***** Name and link of the file or folder *****/
-   sprintf (Gbl.Title,Txt_View_data_of_FILE_OR_LINK_X,
-	    FileNameToShow);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_View_data_of_FILE_OR_LINK_X,
+	     FileNameToShow);
 
    /* Link to the form and to the file */
    Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
@@ -6864,10 +6890,11 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                                 Gbl.FileBrowser.FileType,-1L);
 
       /* Link to the form and to the file */
-      sprintf (Gbl.Title,(Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-	                  Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_file_X :
-	                	                                        Txt_Download_FILE_OR_LINK_X,
-	       FileNameToShow);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
+	         Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_file_X :
+	                	                             Txt_Download_FILE_OR_LINK_X,
+	        FileNameToShow);
       Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
 	       FileNameToShow);
@@ -6929,9 +6956,10 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
    char Link[PATH_MAX + 1];
 
    /***** Create, into temporary public directory, a symbolic link to file *****/
-   sprintf (Link,"%s/%s/%s/%s",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-            Gbl.FileBrowser.TmpPubDir,FileName);
+   snprintf (Link,sizeof (Link),
+	     "%s/%s/%s/%s",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+             Gbl.FileBrowser.TmpPubDir,FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
       Lay_ShowErrorAndExit ("Can not create temporary link.");
   }
@@ -7151,9 +7179,10 @@ void Brw_RemFileFromTree (void)
 
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
-      sprintf (Path,"%s/%s",
-	       Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	       Gbl.FileBrowser.Priv.FullPathInTree);
+      snprintf (Path,sizeof (Path),
+	        "%s/%s",
+	        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	        Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Check if is a file/link or a folder *****/
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
@@ -7206,9 +7235,10 @@ void Brw_RemFolderFromTree (void)
 
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this folder?
      {
-      sprintf (Path,"%s/%s",
-	       Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	       Gbl.FileBrowser.Priv.FullPathInTree);
+      snprintf (Path,sizeof (Path),
+	        "%s/%s",
+	        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	        Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Check if it's a file or a folder *****/
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
@@ -7293,9 +7323,10 @@ void Brw_RemSubtreeInFileBrowser (void)
 
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this subtree?
      {
-      sprintf (Path,"%s/%s",
-	       Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	       Gbl.FileBrowser.Priv.FullPathInTree);
+      snprintf (Path,sizeof (Path),
+	        "%s/%s",
+	        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	        Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Remove the whole tree *****/
       Fil_RemoveTree (Path);
@@ -7428,111 +7459,125 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_DOC_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ins_GetDataOfInstitutionByCod (&Ins,false);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_documents_management_area,
-                  Txt_institution,Ins.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_documents_management_area,
+                   Txt_institution,Ins.ShrtName);
          break;
       case Brw_ADMI_SHR_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ins_GetDataOfInstitutionByCod (&Ins,false);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_shared_files_area,
-                  Txt_institution,Ins.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_shared_files_area,
+                   Txt_institution,Ins.ShrtName);
          break;
       case Brw_ADMI_DOC_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_documents_management_area,
-                  Txt_centre,Ctr.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_documents_management_area,
+                   Txt_centre,Ctr.ShrtName);
          break;
       case Brw_ADMI_SHR_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_shared_files_area,
-                  Txt_centre,Ctr.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_shared_files_area,
+                   Txt_centre,Ctr.ShrtName);
          break;
       case Brw_ADMI_DOC_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_documents_management_area,
-                  Txt_degree,Deg.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_documents_management_area,
+                   Txt_degree,Deg.ShrtName);
          break;
       case Brw_ADMI_SHR_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_shared_files_area,
-                  Txt_degree,Deg.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_shared_files_area,
+                   Txt_degree,Deg.ShrtName);
          break;
       case Brw_ADMI_DOC_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_documents_management_area,
-                  Txt_course,Crs.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_documents_management_area,
+                   Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_DOC_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
-                  Txt_documents_management_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+                   Txt_documents_management_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_TCH_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_teachers_files_area,
-                  Txt_course,Crs.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_teachers_files_area,
+                   Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_TCH_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
-                  Txt_teachers_files_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+                   Txt_teachers_files_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_SHR_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_shared_files_area,
-                  Txt_course,Crs.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_shared_files_area,
+                   Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_SHR_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
-                  Txt_shared_files_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+                   Txt_shared_files_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_ASG_USR:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
-                  Txt_assignments_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+                   Txt_assignments_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_WRK_USR:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
-                  Txt_works_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+                   Txt_works_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_ASG_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -7540,10 +7585,11 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
-                  Txt_assignments_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_user[UsrDat.Sex],UsrDat.FullName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+                   Txt_assignments_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_ADMI_WRK_CRS:
@@ -7552,10 +7598,11 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
-                  Txt_works_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_user[UsrDat.Sex],UsrDat.FullName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+                   Txt_works_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_ADMI_DOC_PRJ:
@@ -7565,34 +7612,38 @@ static void Brw_WriteCurrentClipboard (void)
          Prj_GetDataOfProjectByCod (&Prj);
 	 Crs.CrsCod = Prj.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
-                  Gbl.FileBrowser.Clipboard.FileBrowser == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
-                                                                              Txt_project_assessment,
-                  Txt_course,Crs.ShrtName,
-                  Txt_project,Prj.Title);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+                   Gbl.FileBrowser.Clipboard.FileBrowser == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
+                                                                               Txt_project_assessment,
+                   Txt_course,Crs.ShrtName,
+                   Txt_project,Prj.Title);
          Prj_FreeMemProject (&Prj);
          break;
       case Brw_ADMI_MRK_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_marks_management_area,
-                  Txt_course,Crs.ShrtName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_marks_management_area,
+                   Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_MRK_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
-                  Txt_marks_management_area,
-                  Txt_course,Crs.ShrtName,
-                  Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+                   Txt_marks_management_area,
+                   Txt_course,Crs.ShrtName,
+                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_BRF_USR:
-         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
-                  Txt_temporary_private_storage_area,
-                  Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
+         snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
+                   "%s, %s <strong>%s</strong>",
+                   Txt_temporary_private_storage_area,
+                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       default:
          break;
@@ -8417,11 +8468,12 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_SHR_INS:
             Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ins_GetDataOfInstitutionByCod (&Ins,false))
-	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
-		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
-		        (unsigned) (Ins.InsCod % 100),
-		        (unsigned) Ins.InsCod,
-			Gbl.FileBrowser.Clipboard.Path);
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%02u/%u/%s",
+		         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+		         (unsigned) (Ins.InsCod % 100),
+		         (unsigned) Ins.InsCod,
+			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -8429,11 +8481,12 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_SHR_CTR:
             Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ctr_GetDataOfCentreByCod (&Ctr))
-	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
-		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
-		        (unsigned) (Ctr.CtrCod % 100),
-		        (unsigned) Ctr.CtrCod,
-			Gbl.FileBrowser.Clipboard.Path);
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%02u/%u/%s",
+		         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+		         (unsigned) (Ctr.CtrCod % 100),
+		         (unsigned) Ctr.CtrCod,
+			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -8441,11 +8494,12 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_SHR_DEG:
             Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Deg_GetDataOfDegreeByCod (&Deg))
-	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
-		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
-		        (unsigned) (Deg.DegCod % 100),
-		        (unsigned) Deg.DegCod,
-			Gbl.FileBrowser.Clipboard.Path);
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%02u/%u/%s",
+		         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+		         (unsigned) (Deg.DegCod % 100),
+		         (unsigned) Deg.DegCod,
+			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -8455,9 +8509,10 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_MRK_CRS:
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/%s",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
-			Gbl.FileBrowser.Clipboard.Path);
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%ld/%s",
+                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -8469,10 +8524,11 @@ static void Brw_PasteClipboard (void)
 	    Grp_GetDataOfGroupByCod (&GrpDat);
             Crs.CrsCod = GrpDat.CrsCod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/%s/%ld/%s",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_GRP,
-			GrpDat.GrpCod,
-			Gbl.FileBrowser.Clipboard.Path);
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%ld/%s/%ld/%s",
+                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_GRP,
+			 GrpDat.GrpCod,
+			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -8480,11 +8536,12 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_WRK_USR:
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/%s/%02u/%ld/%s",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
-			(unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-			Gbl.Usrs.Me.UsrDat.UsrCod,
-			Gbl.FileBrowser.Clipboard.Path);
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%ld/%s/%02u/%ld/%s",
+                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
+			 (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -8493,7 +8550,8 @@ static void Brw_PasteClipboard (void)
             PrjCod = Gbl.FileBrowser.Clipboard.Cod;
 	    Crs.CrsCod = Prj_GetCourseOfProject (PrjCod);
 	    if (Crs_GetDataOfCourseByCod (&Crs))
-	       sprintf (PathOrg,"%s/%s/%ld/%s/%02u/%ld/%s",
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%ld/%s/%02u/%ld/%s",
 			Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_PRJ,
 			(unsigned) (PrjCod % 100),
 			PrjCod,
@@ -8502,9 +8560,10 @@ static void Brw_PasteClipboard (void)
 	       Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
          case Brw_ADMI_BRF_USR:
-            sprintf (PathOrg,"%s/%s",
-        	     Gbl.Usrs.Me.PathDir,
-        	     Gbl.FileBrowser.Clipboard.Path);
+            snprintf (PathOrg,sizeof (PathOrg),
+        	      "%s/%s",
+        	      Gbl.Usrs.Me.PathDir,
+        	      Gbl.FileBrowser.Clipboard.Path);
             break;
          default:
             break;
@@ -8652,12 +8711,15 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
                 PATH_MAX);
    else			// Origin of copy is a file or folder inside the root folder
 			// for example "sha/folder1/file1"
-      sprintf (PathDstInTreeWithFile,"%s/%s",PathDstInTree,FileNameOrg);
+      snprintf (PathDstInTreeWithFile,sizeof (PathDstInTreeWithFile),
+	        "%s/%s",
+	        PathDstInTree,FileNameOrg);
 
    /***** Construct the relative path of the destination file or folder *****/
-   sprintf (PathDstWithFile,"%s/%s",
-	    Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	    PathDstInTreeWithFile);
+   snprintf (PathDstWithFile,sizeof (PathDstWithFile),
+	     "%s/%s",
+	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     PathDstInTreeWithFile);
 
    /***** Update and check number of levels *****/
    // The number of levels is counted starting on the root folder raíz, not included.
@@ -8803,7 +8865,9 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 		   strcmp (FileList[NumFile]->d_name,".") &&
 		   strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 		 {
-		  sprintf (PathInFolderOrg,"%s/%s",PathOrg,FileList[NumFile]->d_name);
+		  snprintf (PathInFolderOrg,sizeof (PathInFolderOrg),
+			    "%s/%s",
+			    PathOrg,FileList[NumFile]->d_name);
 		  /* Recursive call to this function */
 		  if (!Brw_PasteTreeIntoFolder (LevelOrg + 1,
 			                        PathInFolderOrg,
@@ -9158,9 +9222,10 @@ void Brw_RecFolderFileBrowser (void)
       if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
         {
          /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
-         sprintf (Path,"%s/%s",
-        	  Gbl.FileBrowser.Priv.PathAboveRootFolder,
-		  Gbl.FileBrowser.Priv.FullPathInTree);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s",
+        	   Gbl.FileBrowser.Priv.PathAboveRootFolder,
+		   Gbl.FileBrowser.Priv.FullPathInTree);
 
          if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 	    Lay_ShowErrorAndExit ("Path is too long.");
@@ -9194,9 +9259,10 @@ void Brw_RecFolderFileBrowser (void)
                Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
 
                /* Add entry to the table of files/folders */
-               sprintf (PathCompleteInTreeIncludingFolder,"%s/%s",
-        		Gbl.FileBrowser.Priv.FullPathInTree,
-			Gbl.FileBrowser.NewFilFolLnkName);
+               snprintf (PathCompleteInTreeIncludingFolder,sizeof (PathCompleteInTreeIncludingFolder),
+			 "%s/%s",
+			 Gbl.FileBrowser.Priv.FullPathInTree,
+			 Gbl.FileBrowser.NewFilFolLnkName);
                Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FOLDER,
                                 PathCompleteInTreeIncludingFolder,false,Brw_LICENSE_DEFAULT);
 
@@ -9266,24 +9332,28 @@ void Brw_RenFolderFileBrowser (void)
          if (strcmp (Gbl.FileBrowser.FilFolLnkName,Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
            {
             /* Gbl.FileBrowser.FilFolLnkName holds the new name of the folder */
-            sprintf (OldPathInTree,"%s/%s",
-        	     Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-		     Gbl.FileBrowser.FilFolLnkName);
-            sprintf (OldPath,"%s/%s",
-        	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
-		     OldPathInTree);
+            snprintf (OldPathInTree,sizeof (OldPathInTree),
+        	      "%s/%s",
+        	      Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+		      Gbl.FileBrowser.FilFolLnkName);
+            snprintf (OldPath,sizeof (OldPath),
+        	      "%s/%s",
+        	      Gbl.FileBrowser.Priv.PathAboveRootFolder,
+		      OldPathInTree);
 
             /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
             if (strlen (Gbl.FileBrowser.Priv.PathAboveRootFolder) + 1 +
                 strlen (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk) + 1 +
                 strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 	       Lay_ShowErrorAndExit ("Path is too long.");
-            sprintf (NewPathInTree,"%s/%s",
-        	     Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-		     Gbl.FileBrowser.NewFilFolLnkName);
-            sprintf (NewPath,"%s/%s",
-        	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
-		     NewPathInTree);
+            snprintf (NewPathInTree,sizeof (NewPathInTree),
+        	      "%s/%s",
+        	      Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+		      Gbl.FileBrowser.NewFilFolLnkName);
+            snprintf (NewPath,sizeof (NewPath),
+        	      "%s/%s",
+        	      Gbl.FileBrowser.Priv.PathAboveRootFolder,
+		      NewPathInTree);
 
             /* We should check here that a folder with the same name does not exist.
 	       but we leave this work to the system */
@@ -9456,10 +9526,13 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
             if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))	// Gbl.Alert.Txt contains feedback text
               {
                /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
-               sprintf (Path,"%s/%s",
-                        Gbl.FileBrowser.Priv.PathAboveRootFolder,
-                        Gbl.FileBrowser.Priv.FullPathInTree);
-               if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) + strlen (".tmp") > PATH_MAX)
+               snprintf (Path,sizeof (Path),
+        	         "%s/%s",
+                         Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                         Gbl.FileBrowser.Priv.FullPathInTree);
+               if (strlen (Path) + 1 +
+        	   strlen (Gbl.FileBrowser.NewFilFolLnkName) +
+		   strlen (".tmp") > PATH_MAX)
 	          Lay_ShowErrorAndExit ("Path is too long.");
                Str_Concat (Path,"/",
                            PATH_MAX);
@@ -9477,7 +9550,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                else	// Destination file does not exist
                  {
                   /* End receiving the file */
-                  sprintf (PathTmp,"%s.tmp",Path);
+                  snprintf (PathTmp,sizeof (PathTmp),
+                	    "%s.tmp",
+			    Path);
                   FileIsValid = Fil_EndReceptionOfFile (PathTmp,Param);	// Gbl.Alert.Txt contains feedback text
 
                   /* Check if the content of the file of marks is valid */
@@ -9521,9 +9596,11 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                            Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
 
                            /* Add entry to the table of files/folders */
-                           sprintf (PathCompleteInTreeIncludingFile,"%s/%s",
-                        	    Gbl.FileBrowser.Priv.FullPathInTree,
-				    Gbl.FileBrowser.NewFilFolLnkName);
+                           snprintf (PathCompleteInTreeIncludingFile,
+                        	     sizeof (PathCompleteInTreeIncludingFile),
+                        	     "%s/%s",
+                        	     Gbl.FileBrowser.Priv.FullPathInTree,
+				     Gbl.FileBrowser.NewFilFolLnkName);
                            FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
                                                      PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
@@ -9665,9 +9742,10 @@ void Brw_RecLinkFileBrowser (void)
 	 if (Str_ConvertFilFolLnkNameToValid (FileName))	// Gbl.Alert.Txt contains feedback text
 	   {
 	    /* The name of the file with the link will be the FileName.url */
-	    sprintf (Path,"%s/%s",
-		     Gbl.FileBrowser.Priv.PathAboveRootFolder,
-		     Gbl.FileBrowser.Priv.FullPathInTree);
+	    snprintf (Path,sizeof (Path),
+		      "%s/%s",
+		      Gbl.FileBrowser.Priv.PathAboveRootFolder,
+		      Gbl.FileBrowser.Priv.FullPathInTree);
 	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
 	       Lay_ShowErrorAndExit ("Path is too long.");
 	    Str_Concat (Path,"/",
@@ -9718,9 +9796,11 @@ void Brw_RecLinkFileBrowser (void)
 		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
 
 		     /* Add entry to the table of files/folders */
-		     sprintf (PathCompleteInTreeIncludingFile,"%s/%s.url",
-			      Gbl.FileBrowser.Priv.FullPathInTree,
-			      FileName);
+		     snprintf (PathCompleteInTreeIncludingFile,
+			       sizeof (PathCompleteInTreeIncludingFile),
+			       "%s/%s.url",
+			       Gbl.FileBrowser.Priv.FullPathInTree,
+			       FileName);
 		     FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
 					       PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
@@ -10670,7 +10750,9 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			        FileMetadata->FileType,-1L);
 
       /* Link begin */
-      sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Check_marks_in_file_X,
+		FileNameToShow);
       Act_LinkFormSubmit (Gbl.Title,"FILENAME_TXT",NULL);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
@@ -10726,7 +10808,9 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
 			        FileType,-1L);
 
       /* Link begin */
-      sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Check_marks_in_file_X,
+		FileNameToShow);
       Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 
       /* Name of the file of marks, link end and form end */
@@ -10750,9 +10834,10 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
    char URLWithSpaces[PATH_MAX + 1];
 
    /***** Construct absolute path to file in the private directory *****/
-   sprintf (FullPathIncludingFile,"%s/%s/%s",
-	    Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	    PathInTree,FileName);
+   snprintf (FullPathIncludingFile,sizeof (FullPathIncludingFile),
+	     "%s/%s/%s",
+	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     PathInTree,FileName);
 
    if (Str_FileIs (FileName,"url"))	// It's a link (URL inside a .url file)
      {
@@ -10774,10 +10859,11 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathIncludingFile,FileName);
 
       /***** Create URL pointing to symbolic link *****/
-      sprintf (URLWithSpaces,"%s/%s/%s/%s",
-	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-	       Gbl.FileBrowser.TmpPubDir,
-	       FileName);
+      snprintf (URLWithSpaces,sizeof (URLWithSpaces),
+	        "%s/%s/%s/%s",
+	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	        Gbl.FileBrowser.TmpPubDir,
+	        FileName);
      }
 
    Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
@@ -11250,8 +11336,10 @@ bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    struct stat FileStatus;
 
-   sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	                 FileMetadata->FullPathInTree);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s",
+	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     FileMetadata->FullPathInTree);
    if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
      {
       // Error on lstat
@@ -12334,8 +12422,9 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
    Brw_RemoveGrpFilesFromDB (GrpCod);
 
    /***** Remove group zones *****/
-   sprintf (PathGrpFileZones,"%s/%s/%ld/grp/%ld",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod);
+   snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),
+	     "%s/%s/%ld/grp/%ld",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod);
    Fil_RemoveTree (PathGrpFileZones);
   }
 
@@ -12351,9 +12440,10 @@ void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs)
    Brw_RemoveWrkFilesFromDB (Crs->CrsCod,UsrDat->UsrCod);
 
    /***** Remove the folder for this user inside the course *****/
-   sprintf (PathUsrInCrs,"%s/%s/%ld/usr/%02u/%ld",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs->CrsCod,
-            (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+   snprintf (PathUsrInCrs,sizeof (PathUsrInCrs),
+	     "%s/%s/%ld/usr/%02u/%ld",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs->CrsCod,
+             (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
    Fil_RemoveTree (PathUsrInCrs);
    // If this was the last user in his/her subfolder ==> the subfolder will be empty
   }
@@ -12397,8 +12487,6 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-#define Brw_MAX_BYTES_FILE_CONTENT_STR (100 + NAME_MAX + 100 + PATH_MAX + 100 + Usr_MAX_BYTES_FULL_NAME + 100 + Fil_MAX_BYTES_FILE_SIZE_STRING)
-
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long FilCod,bool GetContent)
@@ -12427,32 +12515,31 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Copy some file metadata into content string *****/
    if (GetContent && ContentStr)
      {
-      if ((*ContentStr = (char *) malloc (Brw_MAX_BYTES_FILE_CONTENT_STR)))
+      /* Get publisher */
+      if (FileMetadata.PublisherUsrCod > 0)
 	{
-	 /* Get publisher */
-	 if (FileMetadata.PublisherUsrCod > 0)
-	   {
-	    /* Initialize structure with publisher's data */
-	    Usr_UsrDataConstructor (&PublisherUsrDat);
-	    PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat);
-	   }
-	 else
-	    /* Unknown publisher */
-	    FileHasPublisher = false;
-
-	 sprintf (*ContentStr,"%s: %s<br />"	// File name
-	                      "%s: %s<br />"	// File path
-	                      "%s: %s",		// Publisher
-	          Txt_Filename,FileMetadata.FilFolLnkName,
-	          Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,	// TODO: Fix bug: do not write internal name (for example "comun")
-	          Txt_Uploaded_by,FileHasPublisher ? PublisherUsrDat.FullName :
-	                                             Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-
-	 /* Free memory used for publisher's data */
-	 if (FileMetadata.PublisherUsrCod > 0)
-	    Usr_UsrDataDestructor (&PublisherUsrDat);
+	 /* Initialize structure with publisher's data */
+	 Usr_UsrDataConstructor (&PublisherUsrDat);
+	 PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
+	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat);
 	}
+      else
+	 /* Unknown publisher */
+	 FileHasPublisher = false;
+
+      if (asprintf (ContentStr,"%s: %s<br />"	// File name
+			       "%s: %s<br />"	// File path
+			       "%s: %s",	// Publisher
+		    Txt_Filename,FileMetadata.FilFolLnkName,
+		    Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,	// TODO: Fix bug: do not write internal name (for example "comun")
+		    Txt_Uploaded_by,
+		    FileHasPublisher ? PublisherUsrDat.FullName :
+				       Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]) < 0)
+	 Lay_ShowErrorAndExit ("Not enough memory to store string.");
+
+      /* Free memory used for publisher's data */
+      if (FileMetadata.PublisherUsrCod > 0)
+	 Usr_UsrDataDestructor (&PublisherUsrDat);
      }
   }
 
