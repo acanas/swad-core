@@ -251,13 +251,15 @@ void Dat_GetAndConvertCurrentDateTime (void)
    Gbl.Now.Time.Second = tm_ptr->tm_sec;
 
    /***** Initialize current date in format YYYYMMDD *****/
-   sprintf (Gbl.Now.Date.YYYYMMDD,"%04u%02u%02u",
-            Gbl.Now.Date.Year,Gbl.Now.Date.Month,Gbl.Now.Date.Day);
+   snprintf (Gbl.Now.Date.YYYYMMDD,sizeof (Gbl.Now.Date.YYYYMMDD),
+	     "%04u%02u%02u",
+             Gbl.Now.Date.Year,Gbl.Now.Date.Month,Gbl.Now.Date.Day);
 
    /***** Initialize current time in format YYYYMMDDHHMMSS *****/
-   sprintf (Gbl.Now.YYYYMMDDHHMMSS,"%04u%02u%02u%02u%02u%02u",
-            Gbl.Now.Date.Year,Gbl.Now.Date.Month,Gbl.Now.Date.Day,
-            Gbl.Now.Time.Hour,Gbl.Now.Time.Minute,Gbl.Now.Time.Second);
+   snprintf (Gbl.Now.YYYYMMDDHHMMSS,sizeof (Gbl.Now.YYYYMMDDHHMMSS),
+	     "%04u%02u%02u%02u%02u%02u",
+             Gbl.Now.Date.Year,Gbl.Now.Date.Month,Gbl.Now.Date.Day,
+             Gbl.Now.Time.Hour,Gbl.Now.Time.Minute,Gbl.Now.Time.Second);
 
    /***** Compute what day was yesterday *****/
    Dat_GetDateBefore (&Gbl.Now.Date,&Gbl.Yesterday);
@@ -393,22 +395,25 @@ void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 
       switch (Gbl.Prefs.DateFormat)
         {
 	 case Dat_FORMAT_YYYY_MM_DD:
-	    sprintf (StrDate,"%04u-%02u-%02u",
-		     Date->Year,
-		     Date->Month,
-		     Date->Day);
+	    snprintf (StrDate,Cns_MAX_BYTES_DATE,
+		      "%04u-%02u-%02u",
+		      Date->Year,
+		      Date->Month,
+		      Date->Day);
 	    break;
 	 case Dat_FORMAT_DD_MONTH_YYYY:
-	    sprintf (StrDate,"%u&nbsp;%s&nbsp;%04u",
-		     Date->Day,
-		     Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
-		     Date->Year);
+	    snprintf (StrDate,Cns_MAX_BYTES_DATE,
+		      "%u&nbsp;%s&nbsp;%04u",
+		      Date->Day,
+		      Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
+		      Date->Year);
 	    break;
 	 case Dat_FORMAT_MONTH_DD_YYYY:
-	    sprintf (StrDate,"%s&nbsp;%u,&nbsp;%04u",
-		     Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
-		     Date->Day,
-		     Date->Year);
+	    snprintf (StrDate,Cns_MAX_BYTES_DATE,
+		      "%s&nbsp;%u,&nbsp;%04u",
+		      Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
+		      Date->Day,
+		      Date->Year);
 	    break;
         }
   }
@@ -776,13 +781,15 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
       /* Convert from minutes to +-hh:mm */
       // BrowserTimeZone must have space for strings in +hh:mm format (6 chars + \0)
       if (ClientUTCMinusLocal > 0)
-	 sprintf (BrowserTimeZone,"-%02u:%02u",
-		  (unsigned) ClientUTCMinusLocal / 60,
-		  (unsigned) ClientUTCMinusLocal % 60);
+	 snprintf (BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE,
+	           "-%02u:%02u",
+		   (unsigned) ClientUTCMinusLocal / 60,
+		   (unsigned) ClientUTCMinusLocal % 60);
       else	// ClientUTCMinusLocal <= 0
-	 sprintf (BrowserTimeZone,"+%02u:%02u",
-		  (unsigned) (-ClientUTCMinusLocal) / 60,
-		  (unsigned) (-ClientUTCMinusLocal) % 60);
+	 snprintf (BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE,
+	           "+%02u:%02u",
+		   (unsigned) (-ClientUTCMinusLocal) / 60,
+		   (unsigned) (-ClientUTCMinusLocal) % 60);
      }
   }
 

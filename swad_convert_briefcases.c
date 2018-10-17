@@ -52,17 +52,20 @@ int main (void)
    char OldPathUsr[PATH_MAX + 1];
    char Command[1024 + PATH_MAX * 2];
 
-   sprintf (Command,"mv %s/%s %s/%s_backup",
-	    PATH_SWAD_PRIVATE,FOLDER_USR,
-	    PATH_SWAD_PRIVATE,FOLDER_USR);
+   snprintf (Command,sizeof (Command),
+	     "mv %s/%s %s/%s_backup",
+	     PATH_SWAD_PRIVATE,FOLDER_USR,
+	     PATH_SWAD_PRIVATE,FOLDER_USR);
    ExecuteCommand (Command);
-   sprintf (Command,"mkdir %s/%s",
-	    PATH_SWAD_PRIVATE,FOLDER_USR);
+   snprintf (Command,sizeof (Command),
+	     "mkdir %s/%s",
+	     PATH_SWAD_PRIVATE,FOLDER_USR);
    ExecuteCommand (Command);
    for (i=0; i<100; i++)
      {
-      sprintf (Command,"mkdir %s/%s/%02u",
-	       PATH_SWAD_PRIVATE,FOLDER_USR,i);
+      snprintf (Command,sizeof (Command),
+	        "mkdir %s/%s/%02u",
+	        PATH_SWAD_PRIVATE,FOLDER_USR,i);
       ExecuteCommand (Command);
      }
 
@@ -98,13 +101,15 @@ int main (void)
 		    {
                      Str_Copy (UsrID,row[1],
                                ID_MAX_BYTES_USR_ID);	// UsrID
-                     sprintf (OldPathUsr,"%s/%s_backup/%c/%s",
-                	      PATH_SWAD_PRIVATE,FOLDER_USR,UsrID[strlen (UsrID)-1],UsrID);
+                     snprintf (OldPathUsr,sizeof (OldPathUsr),
+                	       "%s/%s_backup/%c/%s",
+                	       PATH_SWAD_PRIVATE,FOLDER_USR,UsrID[strlen (UsrID)-1],UsrID);
                      if (CheckIfPathExists (OldPathUsr))
                        {
-                        sprintf (Command,"mv %s %s/%s/%02u/%ld",
-                	         OldPathUsr,
-                	         PATH_SWAD_PRIVATE,FOLDER_USR,(unsigned) (UsrCod % 100),UsrCod);
+                        snprintf (Command,sizeof (Command),
+                                  "mv %s %s/%s/%02u/%ld",
+                	          OldPathUsr,
+                	          PATH_SWAD_PRIVATE,FOLDER_USR,(unsigned) (UsrCod % 100),UsrCod);
                         ExecuteCommand (Command);
                         NumUsrs++;
                        }
@@ -112,9 +117,10 @@ int main (void)
 	}
      }
    mysql_free_result (mysql_res);
-   sprintf (Command,"chown -R %s:%s %s/%s",
-	    WEB_USER,WEB_USER,
-	    PATH_SWAD_PRIVATE,FOLDER_USR);
+   snprintf (Command,sizeof (Command),
+	     "chown -R %s:%s %s/%s",
+	     WEB_USER,WEB_USER,
+	     PATH_SWAD_PRIVATE,FOLDER_USR);
    ExecuteCommand (Command);
 
    printf ("# Rows : %u\n"

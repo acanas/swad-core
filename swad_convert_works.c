@@ -82,21 +82,28 @@ int main (void)
      }
    if ((NumCrss = (unsigned) mysql_num_rows (mysql_res_crs)))
      {
-      for (NumCrs=0; NumCrs<NumCrss; NumCrs++)
+      for (NumCrs = 0;
+	   NumCrs < NumCrss;
+	   NumCrs++)
 	{
 	 row = mysql_fetch_row (mysql_res_crs);
 	 if (row[0])
 	    if (row[0][0])
 	       if (sscanf (row[0],"%ld",&CrsCod) == 1)	// CrsCod
 		 {
-		  sprintf (OldPathUsrs,"%s/%s/%ld/%s",
-			   PATH_SWAD_PRIVATE,FOLDER_CRS,CrsCod,FOLDER_USR);
+		  snprintf (OldPathUsrs,sizeof (OldPathUsrs),
+			    "%s/%s/%ld/%s",
+			    PATH_SWAD_PRIVATE,FOLDER_CRS,CrsCod,FOLDER_USR);
 		  if (CheckIfPathExists (OldPathUsrs))
 		    {
-		     sprintf (Command,"mv %s %s_backup",OldPathUsrs,OldPathUsrs);
+		     snprintf (Command,sizeof (Command),
+			       "mv %s %s_backup",
+			       OldPathUsrs,OldPathUsrs);
 		     ExecuteCommand (Command);
 
-		     sprintf (Command,"mkdir %s",OldPathUsrs);
+		     snprintf (Command,sizeof (Command),
+			       "mkdir %s",
+			       OldPathUsrs);
 		     ExecuteCommand (Command);
 
 		     sprintf (Query,"SELECT usr_IDs.UsrCod,usr_IDs.UsrID"
@@ -128,27 +135,38 @@ int main (void)
 				      {
 				       Str_Copy (UsrID,row[1],
 				                 ID_MAX_BYTES_USR_ID,62);	// UsrID
-				       sprintf (OldPathUsr,"%s_backup/%s",OldPathUsrs,UsrID);
+				       snprintf (OldPathUsr,sizeof (OldPathUsr),
+					         "%s_backup/%s",
+						 OldPathUsrs,UsrID);
 				       if (CheckIfPathExists (OldPathUsr))
 					 {
-					  sprintf (Path02u,"%s/%02u",
-						   OldPathUsrs,(unsigned) (UsrCod % 100));
+					  snprintf (Path02u,sizeof (Path02u),
+						    "%s/%02u",
+						    OldPathUsrs,(unsigned) (UsrCod % 100));
 					  if (!CheckIfPathExists (Path02u))
 					    {
-					     sprintf (Command,"mkdir %s",Path02u);
+					     snprintf (Command,sizeof (Command),
+						       "mkdir %s",
+						       Path02u);
 					     ExecuteCommand (Command);
 					    }
-					  sprintf (Command,"mv %s %s/%ld",OldPathUsr,Path02u,UsrCod);
+					  snprintf (Command,sizeof (Command),
+						    "mv %s %s/%ld",
+						    OldPathUsr,Path02u,UsrCod);
 					  ExecuteCommand (Command);
 					 }
 				      }
 		          }
 			mysql_free_result (mysql_res_usr);
 		       }
-		     sprintf (Command,"chown -R %s:%s %s",WEB_USER,WEB_USER,OldPathUsrs);
+		     snprintf (Command,sizeof (Command),
+			       "chown -R %s:%s %s",
+			       WEB_USER,WEB_USER,OldPathUsrs);
 		     ExecuteCommand (Command);
 /*
-		     sprintf (Command,"rm -Rf %s_backup",OldPathUsrs);
+		     snprintf (Command,sizeof (Command),
+		               "rm -Rf %s_backup",
+		               OldPathUsrs);
 		     ExecuteCommand (Command);
 */
 		     printf ("\n");

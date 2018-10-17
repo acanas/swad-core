@@ -448,8 +448,10 @@ static void Crs_Configuration (bool PrintView)
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Indicators);
       Act_StartForm (ActReqStaCrs);
-      sprintf (Gbl.Title,"%u %s %u",
-               Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s %u",
+                Indicators.NumIndicators,
+		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
       fprintf (Gbl.F.Out,"%s "
                          "<img src=\"%s/%s\" alt=\"%s\""
@@ -544,7 +546,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ClassHighlight[64];
 
    ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
-   sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
+   snprintf (ClassHighlight,sizeof (ClassHighlight),
+	     "%s LIGHT_BLUE",
+	     The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
@@ -734,7 +738,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
                   Act_StartForm (ActMyCrs);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
-		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShrtName);
+		  snprintf (Gbl.Title,sizeof (Gbl.Title),
+			    Txt_Go_to_X,
+			    Crs.ShrtName);
 		  Act_LinkFormSubmit (Gbl.Title,
 		                      Highlight ? ClassHighlight :
         	                                  ClassNormal,NULL);
@@ -1135,7 +1141,9 @@ static void Crs_ListCourses (void)
    unsigned Year;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Courses_of_DEGREE_X,
+	     Gbl.CurrentDeg.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
 
@@ -1284,7 +1292,9 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 		  TxtClassStrong,BgColor);
 	 Act_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (Crs->CrsCod);
-	 sprintf (Gbl.Title,Txt_Go_to_X,Crs->FullName);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Go_to_X,
+		   Crs->FullName);
 	 Act_LinkFormSubmit (Gbl.Title,TxtClassStrong,NULL);
 	 fprintf (Gbl.F.Out,"%s</a>",
 		  Crs->FullName);
@@ -2274,11 +2284,13 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       DB_QueryDELETE (Query,"can not remove users from a course");
 
       /***** Remove directories of the course *****/
-      sprintf (PathRelCrs,"%s/%s/%ld",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod);
+      snprintf (PathRelCrs,sizeof (PathRelCrs),
+	        "%s/%s/%ld",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod);
       Fil_RemoveTree (PathRelCrs);
-      sprintf (PathRelCrs,"%s/%s/%ld",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod);
+      snprintf (PathRelCrs,sizeof (PathRelCrs),
+	        "%s/%s/%ld",
+	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod);
       Fil_RemoveTree (PathRelCrs);
      }
   }
@@ -2881,7 +2893,9 @@ static void Crs_PutButtonToGoToCrs (void)
      {
       Act_StartForm (ActSeeCrsInf);
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingCrs.ShrtName);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Gbl.Degs.EditingCrs.ShrtName);
       Btn_PutConfirmButton (Gbl.Title);
       Act_EndForm ();
      }
@@ -2901,7 +2915,9 @@ static void Crs_PutButtonToRegisterInCrs (void)
    // If the course beeing edited is different to the current one...
    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
-   sprintf (Gbl.Title,Txt_Register_me_in_X,Gbl.Degs.EditingCrs.ShrtName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Register_me_in_X,
+	     Gbl.Degs.EditingCrs.ShrtName);
    Btn_PutCreateButton (Gbl.Title);
    Act_EndForm ();
   }
@@ -3075,9 +3091,10 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
                          NULL,Box_NOT_CLOSABLE,2);
 
       /* Heading row */
-      sprintf (Gbl.Title,Txt_USER_in_COURSE,
-               Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-        	                     Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_USER_in_COURSE,
+                Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+        	                  Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s:</th>"
                          "</tr>"
@@ -3153,9 +3170,10 @@ unsigned Crs_ListCrssFound (const char *Query)
      {
       /***** Start box and table *****/
       /* Number of courses found */
-      sprintf (Gbl.Title,"%u %s",
-               NumCrss,(NumCrss == 1) ? Txt_course :
-	                                Txt_courses);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s",
+                NumCrss,(NumCrss == 1) ? Txt_course :
+	                                 Txt_courses);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
@@ -3298,7 +3316,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
             StyleNoBR,BgColor);
    Act_StartFormGoTo (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Go_to_X,
+	     row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
    Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
@@ -3318,7 +3338,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
             Style,BgColor);
    Act_StartFormGoTo (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Go_to_X,
+	     row[6]);
    Act_LinkFormSubmit (Gbl.Title,Style,NULL);
    fprintf (Gbl.F.Out,"%s</a>",row[5]);
    Act_EndForm ();

@@ -385,8 +385,9 @@ static void Cty_Configuration (bool PrintView)
 	 /* Form to go to see institutions of this country */
 	 Act_StartFormGoTo (ActSeeIns);
 	 Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
-	 sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
-	          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Institutions_of_COUNTRY_X,
+	           Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod));
@@ -803,7 +804,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
 
    /***** Link to action *****/
-   sprintf (Gbl.Title,Txt_Go_to_X,Cty->Name[Gbl.Prefs.Language]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Go_to_X,
+	     Cty->Name[Gbl.Prefs.Language]);
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw country map *****/
@@ -852,12 +855,13 @@ bool Cty_CheckIfCountryMapExists (struct Country *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
-   sprintf (PathMap,"%s/%s/%s/%s/%s.png",
-	    Cfg_PATH_SWAD_PUBLIC,
-	    Cfg_FOLDER_PUBLIC_ICON,
-	    Cfg_ICON_FOLDER_COUNTRIES,
-	    Cty->Alpha2,
-	    Cty->Alpha2);
+   snprintf (PathMap,sizeof (PathMap),
+	     "%s/%s/%s/%s/%s.png",
+	     Cfg_PATH_SWAD_PUBLIC,
+	     Cfg_FOLDER_PUBLIC_ICON,
+	     Cfg_ICON_FOLDER_COUNTRIES,
+	     Cty->Alpha2,
+	     Cty->Alpha2);
    return Fil_CheckIfPathExists (PathMap);
   }
 
@@ -1015,21 +1019,25 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
               Lan <= Txt_NUM_LANGUAGES;
               Lan++)
            {
-            sprintf (StrField,"countries.Name_%s,",
-        	     Txt_STR_LANG_ID[Lan]);
+            snprintf (StrField,sizeof (StrField),
+        	      "countries.Name_%s,",
+        	      Txt_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryNam1,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
-            sprintf (StrField,"Name_%s,",
-        	     Txt_STR_LANG_ID[Lan]);
+            snprintf (StrField,sizeof (StrField),
+        	      "Name_%s,",
+        	      Txt_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryNam2,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
 
-            sprintf (StrField,"countries.WWW_%s,",
-        	     Txt_STR_LANG_ID[Lan]);
+            snprintf (StrField,sizeof (StrField),
+        	      "countries.WWW_%s,",
+        	      Txt_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryWWW1,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
-            sprintf (StrField,"WWW_%s,",
-        	     Txt_STR_LANG_ID[Lan]);
+            snprintf (StrField,sizeof (StrField),
+        	      "WWW_%s,",
+        	      Txt_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryWWW2,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
            }
@@ -1311,17 +1319,25 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	      Lan <= Txt_NUM_LANGUAGES;
 	      Lan++)
 	   {
-	    sprintf (StrField,"countries.Name_%s,",Txt_STR_LANG_ID[Lan]);
+	    snprintf (StrField,sizeof (StrField),
+		      "countries.Name_%s,",
+		      Txt_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryNam1,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
-	    sprintf (StrField,"Name_%s,",Txt_STR_LANG_ID[Lan]);
+	    snprintf (StrField,sizeof (StrField),
+		      "Name_%s,",
+		      Txt_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryNam2,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 
-	    sprintf (StrField,"countries.WWW_%s,",Txt_STR_LANG_ID[Lan]);
+	    snprintf (StrField,sizeof (StrField),
+		      "countries.WWW_%s,",
+		      Txt_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryWWW1,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
-	    sprintf (StrField,"WWW_%s,",Txt_STR_LANG_ID[Lan]);
+	    snprintf (StrField,sizeof (StrField),
+		      "WWW_%s,",
+		      Txt_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryWWW2,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 	   }
@@ -1773,7 +1789,9 @@ void Cty_RenameCountry (void)
 	 else
 	   {
 	    /* Update the table changing old name by new name */
-	    sprintf (FieldName,"Name_%s",Txt_STR_LANG_ID[Language]);
+	    snprintf (FieldName,sizeof (FieldName),
+		      "Name_%s",
+		      Txt_STR_LANG_ID[Language]);
 	    Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
 
 	    /* Write message to show the change made */
@@ -2149,7 +2167,9 @@ void Cty_RecFormNewCountry (void)
         	 Lan <= Txt_NUM_LANGUAGES;
         	 Lan++)
               {
-               sprintf (ParamName,"Name_%s",Txt_STR_LANG_ID[Lan]);
+               snprintf (ParamName,sizeof (ParamName),
+        	         "Name_%s",
+			 Txt_STR_LANG_ID[Lan]);
                Par_GetParToText (ParamName,Cty->Name[Lan],Cty_MAX_BYTES_NAME);
 
                if (Cty->Name[Lan][0])	// If there's a country name
@@ -2172,7 +2192,9 @@ void Cty_RecFormNewCountry (void)
                   break;
                  }
 
-               sprintf (ParamName,"WWW_%s",Txt_STR_LANG_ID[Lan]);
+               snprintf (ParamName,sizeof (ParamName),
+        	         "WWW_%s",
+			 Txt_STR_LANG_ID[Lan]);
                Par_GetParToText (ParamName,Cty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
@@ -2218,7 +2240,9 @@ static void Cty_CreateCountry (struct Country *Cty)
 	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)
      {
-      sprintf (StrField,",Name_%s",Txt_STR_LANG_ID[Lan]);
+      snprintf (StrField,sizeof (StrField),
+	        ",Name_%s",
+		Txt_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryNam1,StrField,
                   Cty_MAX_BYTES_SUBQUERY_CTYS);
 
@@ -2229,7 +2253,9 @@ static void Cty_CreateCountry (struct Country *Cty)
       Str_Concat (SubQueryNam2,"'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
 
-      sprintf (StrField,",WWW_%s",Txt_STR_LANG_ID[Lan]);
+      snprintf (StrField,sizeof (StrField),
+	        ",WWW_%s",
+		Txt_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryWWW1,StrField,
                   Cty_MAX_BYTES_SUBQUERY_CTYS);
 
@@ -2379,9 +2405,10 @@ unsigned Cty_ListCtysFound (const char *Query)
      {
       /***** Start box and table *****/
       /* Number of countries found */
-      sprintf (Gbl.Title,"%u %s",
-               NumCtys,NumCtys == 1 ? Txt_country :
-				      Txt_countries);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s",
+                NumCtys,NumCtys == 1 ? Txt_country :
+				       Txt_countries);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 

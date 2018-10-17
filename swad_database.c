@@ -3195,9 +3195,10 @@ void DB_FreeMySQLResult (MYSQL_RES **mysql_res)
 
 void DB_ExitOnMySQLError (const char *Message)
   {
-   char BigErrorMsg[1024 * 1024];
+   char BigErrorMsg[64 * 1024];
 
-   sprintf (BigErrorMsg,"Database error: %s (%s).",
-            Message,mysql_error (&Gbl.mysql));
+   snprintf (BigErrorMsg,sizeof (BigErrorMsg),
+	     "Database error: %s (%s).",
+             Message,mysql_error (&Gbl.mysql));
    Lay_ShowErrorAndExit (BigErrorMsg);
   }

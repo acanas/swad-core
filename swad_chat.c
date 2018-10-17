@@ -144,7 +144,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Link to chat available for all the users *****/
    IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
                            !Gbl.Usrs.Me.MyDegs.Num);
-   sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
+   snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+	     "%s (%s)",
+	     Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
    Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
    fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
@@ -158,8 +160,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         sprintf (ThisRoomFullName,"%s (%s)",
-                  Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
+         snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+                   "%s (%s)",
+                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_STD",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
@@ -170,8 +173,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
          break;
       case Rol_NET:
       case Rol_TCH:
-         sprintf (ThisRoomFullName,"%s (%s)",
-                  Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
+         snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+                   "%s (%s)",
+                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_TCH",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
@@ -196,9 +200,15 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
       /* Link to the room of this degree */
       IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);
-      sprintf (ThisRoomCode,"DEG_%ld",Deg.DegCod);
-      sprintf (ThisRoomShrtName,"%s",Deg.ShrtName);
-      sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShrtName);
+      snprintf (ThisRoomCode,sizeof (ThisRoomCode),
+	        "DEG_%ld",
+		Deg.DegCod);
+      snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),
+	        "%s",
+		Deg.ShrtName);
+      snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+	        "%s %s",
+		Txt_Degree,Deg.ShrtName);
       Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
       Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
@@ -220,9 +230,15 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
                /* Link to the room of this course */
                IsLastItemInLevel[2] = (NumRow == NumRows - 1);
-               sprintf (ThisRoomCode,"CRS_%ld",Crs.CrsCod);
-               sprintf (ThisRoomShrtName,"%s",Crs.ShrtName);
-               sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShrtName);
+               snprintf (ThisRoomCode,sizeof (ThisRoomCode),
+        	         "CRS_%ld",
+			 Crs.CrsCod);
+               snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),
+        	         "%s",
+			 Crs.ShrtName);
+               snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+        	         "%s %s",
+			 Txt_Course,Crs.ShrtName);
                Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
                fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
@@ -448,7 +464,9 @@ void Cht_OpenChatWindow (void)
                Usr_MAX_BYTES_FULL_NAME);
 
    /***** Build the lists of available rooms *****/
-   sprintf (ListRoomCodes,"#%s",RoomCode);
+   snprintf (ListRoomCodes,sizeof (ListRoomCodes),
+	     "#%s",
+	     RoomCode);
    Str_Copy (ListRoomShrtNames,RoomShrtName,
              Cht_MAX_BYTES_ROOM_SHRT_NAMES);
    Str_Copy (ListRoomFullNames ,RoomFullName,
@@ -459,12 +477,15 @@ void Cht_OpenChatWindow (void)
       Str_Concat (ListRoomCodes,"|#GBL_USR",
                   Cht_MAX_BYTES_ROOM_CODES);
 
-      sprintf (RoomShrtName,"|%s",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL]);
+      snprintf (RoomShrtName,sizeof (RoomShrtName),
+	        "|%s",
+		Txt_SEX_PLURAL_Abc[Usr_SEX_ALL]);
       Str_Concat (ListRoomShrtNames,RoomShrtName,
                   Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
-      sprintf (RoomFullName,"|%s (%s)",
-               Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
+      snprintf (RoomFullName,sizeof (RoomFullName),
+	        "|%s (%s)",
+                Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
       Str_Concat (ListRoomFullNames,RoomFullName,
                   Cht_MAX_BYTES_ROOM_FULL_NAMES);
      }
@@ -475,12 +496,15 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomCodes,"|#GBL_STD",
                      Cht_MAX_BYTES_ROOM_CODES);
 
-         sprintf (RoomShrtName,"|%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+         snprintf (RoomShrtName,sizeof (RoomShrtName),
+                   "|%s",
+		   Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
          Str_Concat (ListRoomShrtNames,RoomShrtName,
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
-         sprintf (RoomFullName,"|%s (%s)",Txt_General,
-                  Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
+         snprintf (RoomFullName,sizeof (RoomFullName),
+                   "|%s (%s)",
+		   Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
 	 Str_Concat (ListRoomFullNames,RoomFullName,
 	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
@@ -492,12 +516,15 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomCodes,"|#GBL_TCH",
                      Cht_MAX_BYTES_ROOM_CODES);
 
-         sprintf (RoomShrtName,"|%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+         snprintf (RoomShrtName,sizeof (RoomShrtName),
+                   "|%s",
+		   Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
          Str_Concat (ListRoomShrtNames,RoomShrtName,
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
-         sprintf (RoomFullName,"|%s (%s)",
-                  Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
+         snprintf (RoomFullName,sizeof (RoomFullName),
+                   "|%s (%s)",
+                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
 	 Str_Concat (ListRoomFullNames,RoomFullName,
 	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
@@ -506,7 +533,9 @@ void Cht_OpenChatWindow (void)
 	NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
 	NumMyDeg++)
      {
-      sprintf (ThisRoomCode,"DEG_%ld",Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod);
+      snprintf (ThisRoomCode,sizeof (ThisRoomCode),
+	        "DEG_%ld",
+		Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",
@@ -518,13 +547,17 @@ void Cht_OpenChatWindow (void)
          Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
          Deg_GetDataOfDegreeByCod (&Deg);
 
-         sprintf (ThisRoomShortName,"%s",Deg.ShrtName);
+         snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
+                   "%s",
+		   Deg.ShrtName);
          Str_Concat (ListRoomShrtNames,"|",
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
          Str_Concat (ListRoomShrtNames,ThisRoomShortName,
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
-         sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShrtName);
+         snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+                   "%s %s",
+		   Txt_Degree,Deg.ShrtName);
          Str_Concat (ListRoomFullNames,"|",
                      Cht_MAX_BYTES_ROOM_FULL_NAMES);
          Str_Concat (ListRoomFullNames,ThisRoomFullName,
@@ -536,7 +569,9 @@ void Cht_OpenChatWindow (void)
 	NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
 	NumMyCrs++)
      {
-      sprintf (ThisRoomCode,"CRS_%ld",Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
+      snprintf (ThisRoomCode,sizeof (ThisRoomCode),
+	        "CRS_%ld",
+		Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",
@@ -548,13 +583,17 @@ void Cht_OpenChatWindow (void)
          Crs.CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
          Crs_GetDataOfCourseByCod (&Crs);
 
-         sprintf (ThisRoomShortName,"%s",Crs.ShrtName);
+         snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
+                   "%s",
+		   Crs.ShrtName);
          Str_Concat (ListRoomShrtNames,"|",
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
          Str_Concat (ListRoomShrtNames,ThisRoomShortName,
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
-         sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShrtName);
+         snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),
+                   "%s %s",
+		   Txt_Course,Crs.ShrtName);
          Str_Concat (ListRoomFullNames,"|",
                      Cht_MAX_BYTES_ROOM_FULL_NAMES);
          Str_Concat (ListRoomFullNames,ThisRoomFullName,

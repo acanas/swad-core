@@ -53,17 +53,20 @@ int main (void)
    char OldPathPhoto[PATH_MAX + 1];
    char Command[1024 + PATH_MAX * 2];
 
-   sprintf (Command,"mv %s/%s %s/%s_backup",
-	    PATH_SWAD_PRIVATE,FOLDER_PHOTO,
-	    PATH_SWAD_PRIVATE,FOLDER_PHOTO);
+   snprintf (Command,sizeof (Command),
+	     "mv %s/%s %s/%s_backup",
+	     PATH_SWAD_PRIVATE,FOLDER_PHOTO,
+	     PATH_SWAD_PRIVATE,FOLDER_PHOTO);
    ExecuteCommand (Command);
-   sprintf (Command,"mkdir %s/%s",
-	    PATH_SWAD_PRIVATE,FOLDER_PHOTO);
+   snprintf (Command,sizeof (Command),
+	     "mkdir %s/%s",
+	     PATH_SWAD_PRIVATE,FOLDER_PHOTO);
    ExecuteCommand (Command);
    for (i=0; i<100; i++)
      {
-      sprintf (Command,"mkdir %s/%s/%02u",
-	       PATH_SWAD_PRIVATE,FOLDER_PHOTO,i);
+      snprintf (Command,sizeof (Command),
+	        "mkdir %s/%s/%02u",
+	        PATH_SWAD_PRIVATE,FOLDER_PHOTO,i);
       ExecuteCommand (Command);
      }
 
@@ -99,23 +102,27 @@ int main (void)
 		    {
                      Str_Copy (UsrID,row[1],
                                ID_MAX_BYTES_USR_ID);	// UsrID
-                     sprintf (OldPathPhoto,"%s/%s_backup/%s_original.jpg",
-                	      PATH_SWAD_PRIVATE,FOLDER_PHOTO,UsrID);
+                     snprintf (OldPathPhoto,sizeof (OldPathPhoto),
+                	       "%s/%s_backup/%s_original.jpg",
+                	       PATH_SWAD_PRIVATE,FOLDER_PHOTO,UsrID);
                      if (CheckIfPathExists (OldPathPhoto))
                        {
-                        sprintf (Command,"cp -a %s %s/%s/%02u/%ld_original.jpg",
-                	         OldPathPhoto,
-                	         PATH_SWAD_PRIVATE,FOLDER_PHOTO,(unsigned) (UsrCod % 100),UsrCod);
+                        snprintf (Command,sizeof (Command),
+                                  "cp -a %s %s/%s/%02u/%ld_original.jpg",
+                	          OldPathPhoto,
+                	          PATH_SWAD_PRIVATE,FOLDER_PHOTO,(unsigned) (UsrCod % 100),UsrCod);
                         ExecuteCommand (Command);
                        }
 
-                     sprintf (OldPathPhoto,"%s/%s_backup/%s.jpg",
-                	      PATH_SWAD_PRIVATE,FOLDER_PHOTO,UsrID);
+                     snprintf (OldPathPhoto,sizeof (OldPathPhoto),
+                	       "%s/%s_backup/%s.jpg",
+                	       PATH_SWAD_PRIVATE,FOLDER_PHOTO,UsrID);
                      if (CheckIfPathExists (OldPathPhoto))
                        {
-                        sprintf (Command,"cp -a %s %s/%s/%02u/%ld.jpg",
-                	         OldPathPhoto,
-                	         PATH_SWAD_PRIVATE,FOLDER_PHOTO,(unsigned) (UsrCod % 100),UsrCod);
+                        snprintf (Command,sizeof (Command),
+                                  "cp -a %s %s/%s/%02u/%ld.jpg",
+                	          OldPathPhoto,
+                	          PATH_SWAD_PRIVATE,FOLDER_PHOTO,(unsigned) (UsrCod % 100),UsrCod);
                         ExecuteCommand (Command);
                         NumPhotos++;
                        }
@@ -123,13 +130,15 @@ int main (void)
 	}
      }
    mysql_free_result (mysql_res);
-   sprintf (Command,"chown -R %s:%s %s/%s",
-	    WEB_USER,WEB_USER,
-	    PATH_SWAD_PRIVATE,FOLDER_PHOTO);
+   snprintf (Command,sizeof (Command),
+	     "chown -R %s:%s %s/%s",
+	     WEB_USER,WEB_USER,
+	     PATH_SWAD_PRIVATE,FOLDER_PHOTO);
    ExecuteCommand (Command);
 
-   sprintf (Command,"rm -f %s/%s/*.jpg",
-	    PATH_SWAD_PUBLIC,FOLDER_PHOTO);
+   snprintf (Command,sizeof (Command),
+	     "rm -f %s/%s/*.jpg",
+	     PATH_SWAD_PUBLIC,FOLDER_PHOTO);
    ExecuteCommand (Command);
 
    printf ("# Rows : %u\n"

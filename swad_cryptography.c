@@ -149,7 +149,8 @@ void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED
    char UniqueNamePlain[Cns_MAX_BYTES_IP + 1 + 10 + 1 + 10 + 1 + 10 + 1];
 
    NumCall++;
-   sprintf (UniqueNamePlain,"%s-%lx-%x-%x",
-            Gbl.IP,Gbl.StartExecutionTimeUTC,Gbl.PID,NumCall);
+   snprintf (UniqueNamePlain,sizeof (UniqueNamePlain),
+	     "%s-%lx-%x-%x",
+             Gbl.IP,Gbl.StartExecutionTimeUTC,Gbl.PID,NumCall);
    Cry_EncryptSHA256Base64 (UniqueNamePlain,UniqueNameEncrypted);	// Make difficult to guess a unique name
   }

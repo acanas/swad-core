@@ -97,8 +97,10 @@ void Con_ShowConnectedUsrs (void)
 
    /***** Start box *****/
    /* Current time */
-   sprintf (Gbl.Title,"%s<div id=\"connected_current_time\"></div>",
-	    Txt_Connected_users);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     "%s"
+	     "<div id=\"connected_current_time\"></div>",
+	     Txt_Connected_users);
    Box_StartBox (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"

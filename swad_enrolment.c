@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 
@@ -2154,10 +2156,11 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                       Ntf_MAX_BYTES_SUMMARY);
 
             if (GetContent)
-               if ((*ContentStr = (char *) malloc (256)))
-                  /* Write desired role into content */
-                  sprintf (*ContentStr,"%s",	// TODO: Write more info in this content
-                           Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]);
+               /* Write desired role into content */
+               if (asprintf (ContentStr,
+        	             "%s",	// TODO: Write more info in this content
+                             Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]) < 0)
+                  Lay_ShowErrorAndExit ("Not enough memory to store string.");
 
             /* Free memory used for user's data */
             Usr_UsrDataDestructor (&UsrDat);

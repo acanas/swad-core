@@ -243,7 +243,9 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    Deg_PutParamDegCod (Deg->DegCod);
 
    /***** Link to action *****/
-   sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Go_to_X,
+	     Deg->FullName);
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw degree logo *****/
@@ -510,8 +512,9 @@ static void Deg_Configuration (bool PrintView)
 	 /* Form to go to see courses of this degree */
 	 Act_StartFormGoTo (ActSeeCrs);
 	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
-	          Gbl.CurrentDeg.Deg.ShrtName);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Courses_of_DEGREE_X,
+	           Gbl.CurrentDeg.Deg.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
@@ -1173,7 +1176,9 @@ static void Deg_ListDegrees (void)
    unsigned NumDeg;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Degrees_of_CENTRE_X,
+	     Gbl.CurrentCtr.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
@@ -1351,8 +1356,9 @@ void Deg_EditDegrees (void)
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Degrees_of_CENTRE_X,
+             Gbl.CurrentCtr.Ctr.FullName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
@@ -1877,10 +1883,11 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Brw_RemoveDegFilesFromDB (DegCod);
 
    /***** Remove directories of the degree *****/
-   sprintf (PathDeg,"%s/%s/%02u/%u",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
-	    (unsigned) (DegCod % 100),
-	    (unsigned) DegCod);
+   snprintf (PathDeg,sizeof (PathDeg),
+	     "%s/%s/%02u/%u",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+	     (unsigned) (DegCod % 100),
+	     (unsigned) DegCod);
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
@@ -2288,7 +2295,9 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
    if (Gbl.Degs.EditingDeg.DegCod != Gbl.CurrentDeg.Deg.DegCod)
      {
       /***** Alert with button to go to degree *****/
-      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingDeg.ShrtName);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Gbl.Degs.EditingDeg.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeCrs,NULL,NULL,Deg_PutParamGoToDeg,
                               Btn_CONFIRM_BUTTON,Gbl.Title);
@@ -2580,9 +2589,10 @@ unsigned Deg_ListDegsFound (const char *Query)
      {
       /***** Start box and table *****/
       /* Number of degrees found */
-      sprintf (Gbl.Title,"%u %s",
-               NumDegs,(NumDegs == 1) ? Txt_degree :
-        	                        Txt_degrees);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s",
+                NumDegs,(NumDegs == 1) ? Txt_degree :
+        	                         Txt_degrees);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
