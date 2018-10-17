@@ -2919,7 +2919,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
             Act_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
+            snprintf (Gbl.Title,sizeof (Gbl.Title),
+        	      Txt_Go_to_X,
+		      Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
             fprintf (Gbl.F.Out,"%s &gt; %s"
         	               "</a>",

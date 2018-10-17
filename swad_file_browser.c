@@ -2717,7 +2717,7 @@ void Brw_InitializeFileBrowser (void)
 
 static void Brw_SetPathFileBrowser (void)
   {
-   char Path[PATH_MAX*2 + 128];
+   char Path[PATH_MAX * 2 + 128];
 
    /***** Reset paths. An empty path means that
           we don't have to create that directory *****/
@@ -2731,64 +2731,76 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_DOC_INS:
       case Brw_ADMI_SHR_INS:
 	 /* Create a directory for institutions */
-	 sprintf (Path,"%s/%s",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS);
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS);
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all institutions which codes end in
 	    institution-code mod 100 */
-	 sprintf (Path,"%s/%s/%02u",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
-		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100));
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s/%02u",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+		   (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
-	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
-		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
-		  (unsigned) Gbl.CurrentIns.Ins.InsCod);
+	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
+	           "%s/%s/%02u/%u",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+		   (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
+		   (unsigned) Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
 	 /* Create a directory for centres */
-	 sprintf (Path,"%s/%s",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR);
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR);
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all centres which codes end in
 	    centre-code mod 100 */
-	 sprintf (Path,"%s/%s/%02u",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
-		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s/%02u",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+		   (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current centre */
-	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
-		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
+	           "%s/%s/%02u/%u",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+		   (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+		   (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
       case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
 	 /* Create a directory for degrees */
-	 sprintf (Path,"%s/%s",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG);
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG);
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all degrees which codes end in
 	    degree-code mod 100 */
-	 sprintf (Path,"%s/%s/%02u",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
-		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100));
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s/%02u",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+		   (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
-	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
-		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
-		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100),
-		  (unsigned) Gbl.CurrentDeg.Deg.DegCod);
+	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
+	           "%s/%s/%02u/%u",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+		   (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100),
+		   (unsigned) Gbl.CurrentDeg.Deg.DegCod);
 	 break;
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -2808,14 +2820,16 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
 	 /* Create a directory for groups inside the current course */
-         sprintf (Path,"%s/%s",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to this group */
-         sprintf (Path,"%s/%s/%ld",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP,
-                  Gbl.CurrentCrs.Grps.GrpCod);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s/%ld",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_GRP,
+                   Gbl.CurrentCrs.Grps.GrpCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
         	   Path,
                    PATH_MAX);
@@ -2823,22 +2837,25 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
 	 /* Create a directory for me inside the current course */
-         sprintf (Path,"%s/%s",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all users whose codes end in
 	    my-user-code mod 100 */
-         sprintf (Path,"%s/%s/%02u",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
-                  (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
+         snprintf (Path,sizeof (Path),
+                   "%s/%s/%02u",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
+                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to me */
-         sprintf (Path,"%s/%s/%02u/%ld",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
-                  (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s/%02u/%ld",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
+                   (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
         	   Path,
                    PATH_MAX);
@@ -2848,22 +2865,25 @@ static void Brw_SetPathFileBrowser (void)
          if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
            {
 	    /* Create a directory for this user inside the current course */
-            sprintf (Path,"%s/%s",
-        	     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
+            snprintf (Path,sizeof (Path),
+        	      "%s/%s",
+        	      Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
 
 	    /* Create a directory for all users whose codes end in
 	       user-code mod 100 */
-	    sprintf (Path,"%s/%s/%02u",
-		     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
-		     (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
+	    snprintf (Path,sizeof (Path),
+		      "%s/%s/%02u",
+		      Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
+		      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
             /* Create path to user */
-            sprintf (Path,"%s/%s/%02u/%ld",
-        	     Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
-                     (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
-        	     Gbl.Usrs.Other.UsrDat.UsrCod);
+            snprintf (Path,sizeof (Path),
+        	      "%s/%s/%02u/%ld",
+        	      Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_USR,
+                      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
+        	      Gbl.Usrs.Other.UsrDat.UsrCod);
             Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
            	      Path,
                       PATH_MAX);
@@ -2872,22 +2892,25 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 /* Create a directory for projects inside the current course */
-         sprintf (Path,"%s/%s",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all projects which codes end in
 	    project-code mod 100 */
-	 sprintf (Path,"%s/%s/%02u",
-		  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
-                  (unsigned) (Gbl.Prjs.PrjCod % 100));
+	 snprintf (Path,sizeof (Path),
+	           "%s/%s/%02u",
+		   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
+                   (unsigned) (Gbl.Prjs.PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
-         sprintf (Path,"%s/%s/%02u/%ld",
-                  Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
-                  (unsigned) (Gbl.Prjs.PrjCod % 100),
-                  Gbl.Prjs.PrjCod);
+         snprintf (Path,sizeof (Path),
+                   "%s/%s/%02u/%ld",
+                   Gbl.CurrentCrs.PathPriv,Cfg_FOLDER_PRJ,
+                   (unsigned) (Gbl.Prjs.PrjCod % 100),
+                   Gbl.Prjs.PrjCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
         	   Path,
                    PATH_MAX);
@@ -2905,9 +2928,10 @@ static void Brw_SetPathFileBrowser (void)
    if (Gbl.FileBrowser.Priv.PathAboveRootFolder[0])
      {
       Fil_CreateDirIfNotExists (Gbl.FileBrowser.Priv.PathAboveRootFolder);
-      sprintf (Path,"%s/%s",
-               Gbl.FileBrowser.Priv.PathAboveRootFolder,
-               Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+      snprintf (Path,sizeof (Path),
+	        "%s/%s",
+                Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
       Str_Copy (Gbl.FileBrowser.Priv.PathRootFolder,
      	        Path,
                 PATH_MAX);
@@ -2953,12 +2977,13 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Check if folder exists */
-      sprintf (PathFolder,"%s/usr/%02u/%ld/%s/%s",
-               Gbl.CurrentCrs.PathPriv,
-               (unsigned) (UsrCod % 100),
-               UsrCod,	// User's code
-               Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-               FolderName);
+      snprintf (PathFolder,sizeof (PathFolder),
+	        "%s/usr/%02u/%ld/%s/%s",
+                Gbl.CurrentCrs.PathPriv,
+                (unsigned) (UsrCod % 100),
+                UsrCod,	// User's code
+                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                FolderName);
       FolderExists = Fil_CheckIfPathExists (PathFolder);
      }
 
@@ -3007,8 +3032,9 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 	 if (row[0])	// Not necessary, because folder name is checked in query to be not empty
 	   {
 	    /* Create folder if not exists */
-	    sprintf (PathFolderAsg,"%s/%s",
-		     Gbl.FileBrowser.Priv.PathRootFolder,row[0]);
+	    snprintf (PathFolderAsg,sizeof (PathFolderAsg),
+		      "%s/%s",
+		      Gbl.FileBrowser.Priv.PathRootFolder,row[0]);
 	    Fil_CreateDirIfNotExists (PathFolderAsg);
 	   }
      }
@@ -3057,18 +3083,20 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Rename folder if exists */
-      sprintf (PathOldFolder,"%s/usr/%02u/%ld/%s/%s",
-               Gbl.CurrentCrs.PathPriv,
-               (unsigned) (UsrCod % 100),
-               UsrCod,	// User's code
-               Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-               OldFolderName);
-      sprintf (PathNewFolder,"%s/usr/%02u/%ld/%s/%s",
-               Gbl.CurrentCrs.PathPriv,
-               (unsigned) (UsrCod % 100),
-               UsrCod,	// User's code
-               Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-               NewFolderName);
+      snprintf (PathOldFolder,sizeof (PathOldFolder),
+	        "%s/usr/%02u/%ld/%s/%s",
+                Gbl.CurrentCrs.PathPriv,
+                (unsigned) (UsrCod % 100),
+                UsrCod,	// User's code
+                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                OldFolderName);
+      snprintf (PathNewFolder,sizeof (PathNewFolder),
+	        "%s/usr/%02u/%ld/%s/%s",
+                Gbl.CurrentCrs.PathPriv,
+                (unsigned) (UsrCod % 100),
+                UsrCod,	// User's code
+                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                NewFolderName);
       if (Fil_CheckIfPathExists (PathOldFolder) &&
           Fil_CheckIfPathExists (PathNewFolder))
          RenamingIsPossible = false;
@@ -3087,20 +3115,22 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 	 UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Rename folder if exists */
-         sprintf (PathOldFolder,"%s/usr/%02u/%ld/%s/%s",
-                  Gbl.CurrentCrs.PathPriv,
-                  (unsigned) (UsrCod % 100),
-                  UsrCod,	// User's code
-                  Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                  OldFolderName);
+         snprintf (PathOldFolder,sizeof (PathOldFolder),
+                   "%s/usr/%02u/%ld/%s/%s",
+                   Gbl.CurrentCrs.PathPriv,
+                   (unsigned) (UsrCod % 100),
+                   UsrCod,	// User's code
+                   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                   OldFolderName);
          if (Fil_CheckIfPathExists (PathOldFolder))
            {
-            sprintf (PathNewFolder,"%s/usr/%02u/%ld/%s/%s",
-                     Gbl.CurrentCrs.PathPriv,
-		     (unsigned) (UsrCod % 100),
-		     UsrCod,	// User's code
-                     Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                     NewFolderName);
+            snprintf (PathNewFolder,sizeof (PathNewFolder),
+        	      "%s/usr/%02u/%ld/%s/%s",
+                      Gbl.CurrentCrs.PathPriv,
+	 	      (unsigned) (UsrCod % 100),
+ 		      UsrCod,	// User's code
+                      Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                      NewFolderName);
             if (rename (PathOldFolder,PathNewFolder))	// Fail
 	      {
                Ale_ShowAlert (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
@@ -3113,10 +3143,16 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
                Brw_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
 
                /* Rename affected expanded folders */
-               sprintf (OldPath,"%s/%s",Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
-               sprintf (NewPath,"%s/%s",Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
-               Brw_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,OldPath,NewPath);
-               Brw_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,OldPath,NewPath);
+               snprintf (OldPath,sizeof (OldPath),
+        	         "%s/%s",
+			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
+               snprintf (NewPath,sizeof (NewPath),
+        	         "%s/%s",
+			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
+               Brw_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
+        	                                  OldPath,NewPath);
+               Brw_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
+        	                                  OldPath,NewPath);
 
                NumUsrsSuccess++;
               }
@@ -3173,12 +3209,13 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Remove tree if exists */
-      sprintf (PathFolder,"%s/usr/%02u/%ld/%s/%s",
-               Gbl.CurrentCrs.PathPriv,
-               (unsigned) (UsrCod % 100),
-               UsrCod,	// User's code
-               Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-               FolderName);
+      snprintf (PathFolder,sizeof (PathFolder),
+	        "%s/usr/%02u/%ld/%s/%s",
+                Gbl.CurrentCrs.PathPriv,
+                (unsigned) (UsrCod % 100),
+                UsrCod,	// User's code
+                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                FolderName);
       Fil_RemoveTree (PathFolder);
      }
 
@@ -3992,7 +4029,9 @@ static void Brw_ShowFileBrowser (void)
 
    /***** Start box *****/
    Gbl.FileBrowser.Id++;
-   sprintf (FileBrowserSectionId,"file_browser_%u",Gbl.FileBrowser.Id);
+   snprintf (FileBrowserSectionId,sizeof (FileBrowserSectionId),
+	     "file_browser_%u",
+	     Gbl.FileBrowser.Id);
    Lay_StartSection (FileBrowserSectionId);
    Box_StartBox ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                  Brw_PutIconsFileBrowser,
@@ -4281,77 +4320,93 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOC_INS:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution);
 	 break;
       case Brw_ADMI_DOC_INS:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution);
 	 break;
       case Brw_ADMI_SHR_INS:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution);
 	 break;
       case Brw_SHOW_DOC_CTR:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre);
 	 break;
       case Brw_ADMI_DOC_CTR:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre);
 	 break;
       case Brw_ADMI_SHR_CTR:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre);
 	 break;
       case Brw_SHOW_DOC_DEG:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree);
 	 break;
       case Brw_ADMI_DOC_DEG:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree);
 	 break;
       case Brw_ADMI_SHR_DEG:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree);
 	 break;
       case Brw_SHOW_DOC_CRS:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course);
 	 break;
       case Brw_SHOW_DOC_GRP:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course);
 	 break;
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_CRS:
       case Brw_ADMI_TCH_GRP:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_teachers_of_the_course);
 	 break;
       case Brw_ADMI_SHR_CRS:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course);
 	 break;
       case Brw_ADMI_SHR_GRP:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course);
 	 break;
       case Brw_SHOW_MRK_CRS:
       case Brw_SHOW_MRK_GRP:
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       sprintf (Subtitle,"(%s)",
-			Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
+	       snprintf (Subtitle,sizeof (Subtitle),
+                         "(%s)",
+			 Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
-	       sprintf (Subtitle,"(%s)",
-			Txt_the_marks_of_a_student_chosen_at_random_);
+	       snprintf (Subtitle,sizeof (Subtitle),
+                         "(%s)",
+			 Txt_the_marks_of_a_student_chosen_at_random_);
 	       break;
 	    default:
 	       Subtitle[0] = '\0';
@@ -4361,32 +4416,38 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
  	 break;
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_teachers_of_the_course);
 	 break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
-         sprintf (Subtitle,"%s<br />(%s)",
-                  Gbl.Usrs.Me.UsrDat.FullName,
-                  Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "%s<br />(%s)",
+                   Gbl.Usrs.Me.UsrDat.FullName,
+                   Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course);
 	 break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
-         sprintf (Subtitle,"%s",
-                  Gbl.Usrs.Other.UsrDat.FullName);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "%s",
+                   Gbl.Usrs.Other.UsrDat.FullName);
 	 break;
       case Brw_ADMI_DOC_PRJ:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_project_members);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_project_members);
 	 break;
       case Brw_ADMI_ASS_PRJ:
-         sprintf (Subtitle,"(%s)",
-                  Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "(%s)",
+                   Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators);
 	 break;
       case Brw_ADMI_BRF_USR:
-         sprintf (Subtitle,"%s<br />(%s)",
-                  Gbl.Usrs.Me.UsrDat.FullName,
-                  Txt_nobody_else_can_access_this_content);
+         snprintf (Subtitle,sizeof (Subtitle),
+                   "%s<br />(%s)",
+                   Gbl.Usrs.Me.UsrDat.FullName,
+                   Txt_nobody_else_can_access_this_content);
 	 break;
       case Brw_UNKNOWN:
          return;
@@ -5391,8 +5452,9 @@ void Brw_CreateDirDownloadTmp (void)
    /* Example: /var/www/html/swad/tmp/SSujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
 
    /***** If the public directory does not exist, create it *****/
-   sprintf (PathFileBrowserTmpPubl,"%s/%s",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP);
+   snprintf (PathFileBrowserTmpPubl,sizeof (PathFileBrowserTmpPubl),
+	     "%s/%s",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP);
    Fil_CreateDirIfNotExists (PathFileBrowserTmpPubl);
 
    /***** First of all, we remove the oldest temporary directories.
@@ -5405,11 +5467,15 @@ void Brw_CreateDirDownloadTmp (void)
    /***** Create a new temporary directory.
           Important: number of directories inside a directory is limited to 32K in Linux *****/
    if (NumDir)
-      sprintf (Gbl.FileBrowser.TmpPubDir,"%s_%u",Gbl.UniqueNameEncrypted,NumDir);
+      snprintf (Gbl.FileBrowser.TmpPubDir,sizeof (Gbl.FileBrowser.TmpPubDir),
+	        "%s_%u",
+		Gbl.UniqueNameEncrypted,NumDir);
    else
       Str_Copy (Gbl.FileBrowser.TmpPubDir,Gbl.UniqueNameEncrypted,
                 NAME_MAX);
-   sprintf (PathPubDirTmp,"%s/%s",PathFileBrowserTmpPubl,Gbl.FileBrowser.TmpPubDir);
+   snprintf (PathPubDirTmp,sizeof (PathPubDirTmp),
+	     "%s/%s",
+	     PathFileBrowserTmpPubl,Gbl.FileBrowser.TmpPubDir);
    if (mkdir (PathPubDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create a temporary folder for download.");
    NumDir++;
@@ -5610,7 +5676,9 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 	       Gbl.FileBrowser.Size.NumLevls++;
 
 	    /* Update counters depending on whether it's a directory or a regular file */
-	    sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+	    snprintf (PathFileRel,sizeof (PathFileRel),
+		      "%s/%s",
+		      Path,FileList[NumFile]->d_name);
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
 	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
@@ -5667,13 +5735,19 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
 	    /***** Construct the full path of the file or folder *****/
-	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
-	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
+	    snprintf (PathFileRel,sizeof (PathFileRel),
+		      "%s/%s",
+		      Path      ,FileList[NumFile]->d_name);
+	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),
+		      "%s/%s",
+		      PathInTree,FileList[NumFile]->d_name);
 	    Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
 
 	    /***** Add number of row to parent row id *****/
 	    NumRow++;
-	    sprintf (RowId,"%s_%u",ParentRowId,NumRow);
+	    snprintf (RowId,sizeof (RowId),
+		      "%s_%u",
+		      ParentRowId,NumRow);
 
 	    /***** Get file or folder status *****/
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
@@ -5779,7 +5853,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
-   sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
+   snprintf (FileBrowserId,sizeof (FileBrowserId),
+	     "file_browser_%u",
+	     Gbl.FileBrowser.Id);
 
    /***** Is this row hidden or visible? *****/
    if (SeeDocsZone || AdminDocsZone ||

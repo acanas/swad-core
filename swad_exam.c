@@ -30,8 +30,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For sscanf, etc.
+#include <stdio.h>		// For sscanf, asprintf, etc.
 #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
 #include <string.h>		// For string functions
 
@@ -1616,11 +1617,12 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUM
    /***** Summary *****/
    /* Name of the course and date of exam */
    Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,StrExamDate);
-   sprintf (CrsNameAndDate,"%s, %s, %2u:%02u",
-            Gbl.ExamAnns.ExaDat.CrsFullName,
-            StrExamDate,
-            Gbl.ExamAnns.ExaDat.StartTime.Hour,
-            Gbl.ExamAnns.ExaDat.StartTime.Minute);
+   snprintf (CrsNameAndDate,sizeof (CrsNameAndDate),
+	     "%s, %s, %2u:%02u",
+             Gbl.ExamAnns.ExaDat.CrsFullName,
+             StrExamDate,
+             Gbl.ExamAnns.ExaDat.StartTime.Hour,
+             Gbl.ExamAnns.ExaDat.StartTime.Minute);
    Str_Copy (SummaryStr,CrsNameAndDate,
              Ntf_MAX_BYTES_SUMMARY);
 
@@ -1656,10 +1658,6 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    struct Instit Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
-   if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT * 8)) == NULL)
-      Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-   (*ContentStr)[0] = '\0';	// Return nothing on error
-
    /***** Get data of course *****/
    Crs.CrsCod = Gbl.ExamAnns.ExaDat.CrsCod;
    Crs_GetDataOfCourseByCod (&Crs);
@@ -1672,41 +1670,43 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
+   /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,StrExamDate);
 
-   /***** Institution *****/
-   sprintf (*ContentStr,"%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %2u:%02u %s<br />"
-                        "%s: %2u:%02u %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s<br />"
-                        "%s: %s",
-            Txt_Institution,Ins.FullName,
-            Txt_Degree,Deg.FullName,
-            Txt_EXAM_ANNOUNCEMENT_Course,Gbl.ExamAnns.ExaDat.CrsFullName,
-            Txt_EXAM_ANNOUNCEMENT_Year_or_semester,Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year],
-            Txt_EXAM_ANNOUNCEMENT_Session,Gbl.ExamAnns.ExaDat.Session,
-            Txt_EXAM_ANNOUNCEMENT_Exam_date,StrExamDate,
-            Txt_EXAM_ANNOUNCEMENT_Start_time,Gbl.ExamAnns.ExaDat.StartTime.Hour,
-                                             Gbl.ExamAnns.ExaDat.StartTime.Minute,
-            Txt_hours_ABBREVIATION,
-            Txt_EXAM_ANNOUNCEMENT_Approximate_duration,Gbl.ExamAnns.ExaDat.Duration.Hour,
-                                                       Gbl.ExamAnns.ExaDat.Duration.Minute,
-            Txt_hours_ABBREVIATION,
-            Txt_EXAM_ANNOUNCEMENT_Place_of_exam,Gbl.ExamAnns.ExaDat.Place,
-            Txt_EXAM_ANNOUNCEMENT_Mode,Gbl.ExamAnns.ExaDat.Mode,
-            Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,Gbl.ExamAnns.ExaDat.Structure,
-            Txt_EXAM_ANNOUNCEMENT_Documentation_required,Gbl.ExamAnns.ExaDat.DocRequired,
-            Txt_EXAM_ANNOUNCEMENT_Material_required,Gbl.ExamAnns.ExaDat.MatRequired,
-            Txt_EXAM_ANNOUNCEMENT_Material_allowed,Gbl.ExamAnns.ExaDat.MatAllowed,
-            Txt_EXAM_ANNOUNCEMENT_Other_information,Gbl.ExamAnns.ExaDat.OtherInfo);
+   /***** Fill content string *****/
+   if (asprintf (ContentStr,"%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %2u:%02u %s<br />"
+                            "%s: %2u:%02u %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s<br />"
+                            "%s: %s",
+                 Txt_Institution,Ins.FullName,
+                 Txt_Degree,Deg.FullName,
+                 Txt_EXAM_ANNOUNCEMENT_Course,Gbl.ExamAnns.ExaDat.CrsFullName,
+                 Txt_EXAM_ANNOUNCEMENT_Year_or_semester,Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year],
+                 Txt_EXAM_ANNOUNCEMENT_Session,Gbl.ExamAnns.ExaDat.Session,
+                 Txt_EXAM_ANNOUNCEMENT_Exam_date,StrExamDate,
+                 Txt_EXAM_ANNOUNCEMENT_Start_time,Gbl.ExamAnns.ExaDat.StartTime.Hour,
+                                                  Gbl.ExamAnns.ExaDat.StartTime.Minute,
+                 Txt_hours_ABBREVIATION,
+                 Txt_EXAM_ANNOUNCEMENT_Approximate_duration,Gbl.ExamAnns.ExaDat.Duration.Hour,
+                                                            Gbl.ExamAnns.ExaDat.Duration.Minute,
+                 Txt_hours_ABBREVIATION,
+                 Txt_EXAM_ANNOUNCEMENT_Place_of_exam,Gbl.ExamAnns.ExaDat.Place,
+                 Txt_EXAM_ANNOUNCEMENT_Mode,Gbl.ExamAnns.ExaDat.Mode,
+                 Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,Gbl.ExamAnns.ExaDat.Structure,
+                 Txt_EXAM_ANNOUNCEMENT_Documentation_required,Gbl.ExamAnns.ExaDat.DocRequired,
+                 Txt_EXAM_ANNOUNCEMENT_Material_required,Gbl.ExamAnns.ExaDat.MatRequired,
+                 Txt_EXAM_ANNOUNCEMENT_Material_allowed,Gbl.ExamAnns.ExaDat.MatAllowed,
+                 Txt_EXAM_ANNOUNCEMENT_Other_information,Gbl.ExamAnns.ExaDat.OtherInfo) < 0)
+      Lay_ShowErrorAndExit ("Not enough memory to store string.");
   }
