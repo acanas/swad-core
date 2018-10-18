@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -144,7 +146,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 
 void Cal_ChangeFirstDayOfWeek (void)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get param with icon set *****/
    Gbl.Prefs.FirstDayOfWeek = Cal_GetParamFirstDayOfWeek ();
@@ -152,11 +154,12 @@ void Cal_ChangeFirstDayOfWeek (void)
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET FirstDayOfWeek=%u"
-	             " WHERE UsrCod=%ld",
-               Gbl.Prefs.FirstDayOfWeek,
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preference about first day of week");
+      if (asprintf (&Query,"UPDATE usr_data SET FirstDayOfWeek=%u"
+	                   " WHERE UsrCod=%ld",
+                    Gbl.Prefs.FirstDayOfWeek,
+                    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update your preference about first day of week");
      }
 
    /***** Set preferences from current IP *****/

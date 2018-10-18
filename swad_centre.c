@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -131,7 +133,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    extern const char *Txt_Centre;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtrs;
@@ -143,29 +145,31 @@ void Ctr_SeeCtrWithPendingDegs (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_CTR_ADM:
-         sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
-                        " FROM degrees,ctr_admin,centres"
-                        " WHERE (degrees.Status & %u)<>0"
-                        " AND degrees.CtrCod=ctr_admin.CtrCod"
-                        " AND ctr_admin.UsrCod=%ld"
-                        " AND degrees.CtrCod=centres.CtrCod"
-                        " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
-                  (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
+         if (asprintf (&Query,"SELECT degrees.CtrCod,COUNT(*)"
+                              " FROM degrees,ctr_admin,centres"
+                              " WHERE (degrees.Status & %u)<>0"
+                              " AND degrees.CtrCod=ctr_admin.CtrCod"
+                              " AND ctr_admin.UsrCod=%ld"
+                              " AND degrees.CtrCod=centres.CtrCod"
+                              " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
+                        (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Rol_SYS_ADM:
-         sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
-                        " FROM degrees,centres"
-                        " WHERE (degrees.Status & %u)<>0"
-                        " AND degrees.CtrCod=centres.CtrCod"
-                        " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
-                  (unsigned) Deg_STATUS_BIT_PENDING);
+         if (asprintf (&Query,"SELECT degrees.CtrCod,COUNT(*)"
+                              " FROM degrees,centres"
+                              " WHERE (degrees.Status & %u)<>0"
+                              " AND degrees.CtrCod=centres.CtrCod"
+                              " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
+                       (unsigned) Deg_STATUS_BIT_PENDING) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:	// Forbidden for other users
 	 return;
      }
 
    /***** Get centres *****/
-   if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres with pending degrees")))
+   if ((NumCtrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get centres with pending degrees")))
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
@@ -1033,7 +1037,7 @@ static void Ctr_PutIconToViewCentres (void)
 void Ctr_GetListCentres (long InsCod)
   {
    char OrderBySubQuery[256];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1050,26 +1054,27 @@ void Ctr_GetListCentres (long InsCod)
          sprintf (OrderBySubQuery,"NumUsrs DESC,FullName");
          break;
      }
-   sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
-		  "centres.Status,centres.RequesterUsrCod,"
-		  "centres.ShortName,centres.FullName,centres.WWW,"
-		  "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
-		  " FROM centres,usr_data"
-		  " WHERE centres.InsCod=%ld"
-		  " AND centres.CtrCod=usr_data.CtrCod"
-		  " GROUP BY centres.CtrCod)"
-		  " UNION "
-		  "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-		  "ShortName,FullName,WWW,0 AS NumUsrs"
-		  " FROM centres"
-		  " WHERE centres.InsCod=%ld"
-		  " AND CtrCod NOT IN"
-		  " (SELECT DISTINCT CtrCod FROM usr_data))"
-		  " ORDER BY %s",
-	    InsCod,
-	    InsCod,
-	    OrderBySubQuery);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get centres");
+   if (asprintf (&Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
+		        "centres.Status,centres.RequesterUsrCod,"
+		        "centres.ShortName,centres.FullName,centres.WWW,"
+		        "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+		        " FROM centres,usr_data"
+		        " WHERE centres.InsCod=%ld"
+		        " AND centres.CtrCod=usr_data.CtrCod"
+		        " GROUP BY centres.CtrCod)"
+		        " UNION "
+		        "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
+		        "ShortName,FullName,WWW,0 AS NumUsrs"
+		        " FROM centres"
+		        " WHERE centres.InsCod=%ld"
+		        " AND CtrCod NOT IN"
+		        " (SELECT DISTINCT CtrCod FROM usr_data))"
+		        " ORDER BY %s",
+	         InsCod,
+	         InsCod,
+	         OrderBySubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get centres");
 
    if (NumRows) // Centres found...
      {
@@ -1146,7 +1151,7 @@ void Ctr_GetListCentres (long InsCod)
 
 bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool CtrFound = false;
@@ -1168,26 +1173,27 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get data of a centre from database *****/
-      sprintf (Query,"(SELECT centres.InsCod,centres.PlcCod,"
-	             "centres.Status,centres.RequesterUsrCod,"
-	             "centres.ShortName,centres.FullName,centres.WWW,"
-	             "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
-                     " FROM centres,usr_data"
-                     " WHERE centres.CtrCod=%ld"
-                     " AND centres.CtrCod=usr_data.CtrCod"
-                     " GROUP BY centres.CtrCod)"
-                     " UNION "
-                     "(SELECT InsCod,PlcCod,"
-                     "Status,RequesterUsrCod,"
-                     "ShortName,FullName,WWW,"
-                     "0 AS NumUsrs"
-                     " FROM centres"
-                     " WHERE CtrCod=%ld"
-                     " AND CtrCod NOT IN"
-                     " (SELECT DISTINCT CtrCod FROM usr_data))",
-               Ctr->CtrCod,
-               Ctr->CtrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a centre")) // Centre found...
+      if (asprintf (&Query,"(SELECT centres.InsCod,centres.PlcCod,"
+	                   "centres.Status,centres.RequesterUsrCod,"
+	                   "centres.ShortName,centres.FullName,centres.WWW,"
+	                   "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+                           " FROM centres,usr_data"
+                           " WHERE centres.CtrCod=%ld"
+                           " AND centres.CtrCod=usr_data.CtrCod"
+                           " GROUP BY centres.CtrCod)"
+                           " UNION "
+                           "(SELECT InsCod,PlcCod,"
+                           "Status,RequesterUsrCod,"
+                           "ShortName,FullName,WWW,"
+                           "0 AS NumUsrs"
+                           " FROM centres"
+                           " WHERE CtrCod=%ld"
+                           " AND CtrCod NOT IN"
+                           " (SELECT DISTINCT CtrCod FROM usr_data))",
+                    Ctr->CtrCod,
+                    Ctr->CtrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a centre")) // Centre found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -1247,7 +1253,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 
 long Ctr_GetInsCodOfCentreByCod (long CtrCod)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long InsCod = -1L;
@@ -1255,9 +1261,10 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Get the institution code of a centre from database *****/
-      sprintf (Query,"SELECT InsCod FROM centres WHERE CtrCod=%ld",
-               CtrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a centre") == 1)
+      if (asprintf (&Query,"SELECT InsCod FROM centres WHERE CtrCod=%ld",
+                    CtrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the institution of a centre") == 1)
 	{
 	 /***** Get the institution code of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1277,7 +1284,7 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
 
 void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1285,9 +1292,10 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get the short name of a centre from database *****/
-      sprintf (Query,"SELECT ShortName FROM centres"
-		     " WHERE CtrCod=%ld",
-	       Ctr->CtrCod);
+      if (asprintf (&Query,"SELECT ShortName FROM centres"
+		           " WHERE CtrCod=%ld",
+	            Ctr->CtrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a centre") == 1)
 	{
 	 /***** Get the short name of this centre *****/
@@ -1308,7 +1316,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
@@ -1317,9 +1325,11 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
    Ctr_FreePhotoAttribution (PhotoAttribution);
 
    /***** Get photo attribution from database *****/
-   sprintf (Query,"SELECT PhotoAttribution FROM centres WHERE CtrCod=%ld",
-	    CtrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get photo attribution"))
+   if (asprintf (&Query,"SELECT PhotoAttribution"
+	                " FROM centres WHERE CtrCod=%ld",
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get photo attribution"))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1375,7 +1385,7 @@ void Ctr_FreeListCentres (void)
 void Ctr_WriteSelectorOfCentre (void)
   {
    extern const char *Txt_Centre;
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtrs;
@@ -1399,12 +1409,13 @@ void Ctr_WriteSelectorOfCentre (void)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Get centres from database *****/
-      sprintf (Query,"SELECT DISTINCT CtrCod,ShortName"
-	             " FROM centres"
-                     " WHERE InsCod=%ld"
-                     " ORDER BY ShortName",
-               Gbl.CurrentIns.Ins.InsCod);
-      NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres");
+      if (asprintf (&Query,"SELECT DISTINCT CtrCod,ShortName"
+	                   " FROM centres"
+                           " WHERE InsCod=%ld"
+                           " ORDER BY ShortName",
+                    Gbl.CurrentIns.Ins.InsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumCtrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get centres");
 
       /***** Get centres *****/
       for (NumCtr = 0;
@@ -1744,7 +1755,7 @@ void Ctr_RemoveCentre (void)
   {
    extern const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre;
    extern const char *Txt_Centre_X_removed;
-   char Query[512];
+   char *Query;
    struct Centre Ctr;
    char PathCtr[PATH_MAX + 1];
 
@@ -1779,9 +1790,10 @@ void Ctr_RemoveCentre (void)
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
-      sprintf (Query,"DELETE FROM centres WHERE CtrCod=%ld",
-	       Ctr.CtrCod);
-      DB_QueryDELETE (Query,"can not remove a centre");
+      if (asprintf (&Query,"DELETE FROM centres WHERE CtrCod=%ld",
+	            Ctr.CtrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove a centre");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1872,12 +1884,13 @@ void Ctr_ContEditAfterChgCtrInConfig (void)
 
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Update institution in table of centres *****/
-   sprintf (Query,"UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
-            InsCod,CtrCod);
-   DB_QueryUPDATE (Query,"can not update the institution of a centre");
+   if (asprintf (&Query,"UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
+                 InsCod,CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the institution of a centre");
   }
 
 /*****************************************************************************/
@@ -1938,11 +1951,12 @@ void Ctr_ChangeCtrPlcInConfig (void)
 
 static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
   {
-   char Query[256];
+   char *Query;
 
-   sprintf (Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
-	    NewPlcCod,CtrCod);
-   DB_QueryUPDATE (Query,"can not update the place of a centre");
+   if (asprintf (&Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
+	         NewPlcCod,CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the place of a centre");
   }
 
 /*****************************************************************************/
@@ -2066,13 +2080,14 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
-   char Query[256 + Hie_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Get number of centres with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
-            InsCod,FieldName,Name,CtrCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a centre already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM centres"
+	                " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
+                 InsCod,FieldName,Name,CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name of a centre already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -2081,12 +2096,13 @@ static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Nam
 
 static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName)
   {
-   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Update centre changing old name by new name */
-   sprintf (Query,"UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
-	    FieldName,NewCtrName,CtrCod);
-   DB_QueryUPDATE (Query,"can not update the name of a centre");
+   if (asprintf (&Query,"UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
+	         FieldName,NewCtrName,CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of a centre");
   }
 
 /*****************************************************************************/
@@ -2169,12 +2185,13 @@ void Ctr_ChangeCtrWWWInConfig (void)
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
                                 const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
 
    /***** Update database changing old WWW by new WWW *****/
-   sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
-	    NewWWW,CtrCod);
-   DB_QueryUPDATE (Query,"can not update the web of a centre");
+   if (asprintf (&Query,"UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
+	         NewWWW,CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the web of a centre");
   }
 
 /*****************************************************************************/
@@ -2184,7 +2201,7 @@ static void Ctr_UpdateCtrWWWDB (long CtrCod,
 void Ctr_ChangeCtrStatus (void)
   {
    extern const char *Txt_The_status_of_the_centre_X_has_changed;
-   char Query[256];
+   char *Query;
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
@@ -2206,9 +2223,10 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Update status in table of centres *****/
-   sprintf (Query,"UPDATE centres SET Status=%u WHERE CtrCod=%ld",
-	    (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
-   DB_QueryUPDATE (Query,"can not update the status of a centre");
+   if (asprintf (&Query,"UPDATE centres SET Status=%u WHERE CtrCod=%ld",
+	         (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the status of a centre");
    Gbl.Ctrs.EditingCtr.Status = Status;
 
    /***** Write message to show the change made
@@ -2481,7 +2499,7 @@ void Ctr_ReceivePhoto (void)
 
 void Ctr_ChangeCtrPhotoAttribution (void)
   {
-   char Query[256 + Img_MAX_BYTES_ATTRIBUTION];
+   char *Query;
    char NewPhotoAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
@@ -2489,10 +2507,11 @@ void Ctr_ChangeCtrPhotoAttribution (void)
    Par_GetParToText ("Attribution",NewPhotoAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   sprintf (Query,"UPDATE centres SET PhotoAttribution='%s'"
-		  " WHERE CtrCod=%ld",
-	    NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod);
-   DB_QueryUPDATE (Query,"can not update the photo attribution of the current centre");
+   if (asprintf (&Query,"UPDATE centres SET PhotoAttribution='%s'"
+		        " WHERE CtrCod=%ld",
+	         NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the photo attribution of the current centre");
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();
@@ -2823,26 +2842,24 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 static void Ctr_CreateCentre (unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
-   char Query[512 +
-              Hie_MAX_BYTES_SHRT_NAME +
-              Hie_MAX_BYTES_FULL_NAME +
-              Cns_MAX_BYTES_WWW];
+   char *Query;
 
    /***** Create a new centre *****/
-   sprintf (Query,"INSERT INTO centres"
-	          " (InsCod,PlcCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,WWW,PhotoAttribution)"
-                  " VALUES"
-                  " (%ld,%ld,%u,%ld,"
-                  "'%s','%s','%s','')",
-            Gbl.Ctrs.EditingCtr.InsCod,
-            Gbl.Ctrs.EditingCtr.PlcCod,
-            Status,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.Ctrs.EditingCtr.ShrtName,
-            Gbl.Ctrs.EditingCtr.FullName,
-            Gbl.Ctrs.EditingCtr.WWW);
-   Gbl.Ctrs.EditingCtr.CtrCod = DB_QueryINSERTandReturnCode (Query,"can not create a new centre");
+   if (asprintf (&Query,"INSERT INTO centres"
+	                " (InsCod,PlcCod,Status,RequesterUsrCod,"
+                        "ShortName,FullName,WWW,PhotoAttribution)"
+                        " VALUES"
+                        " (%ld,%ld,%u,%ld,"
+                        "'%s','%s','%s','')",
+                 Gbl.Ctrs.EditingCtr.InsCod,
+                 Gbl.Ctrs.EditingCtr.PlcCod,
+                 Status,
+                 Gbl.Usrs.Me.UsrDat.UsrCod,
+                 Gbl.Ctrs.EditingCtr.ShrtName,
+                 Gbl.Ctrs.EditingCtr.FullName,
+                 Gbl.Ctrs.EditingCtr.WWW) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Gbl.Ctrs.EditingCtr.CtrCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new centre");
 
    /***** Write message to show the change made
 	  and put button to go to centre created *****/
@@ -2859,11 +2876,12 @@ static void Ctr_CreateCentre (unsigned Status)
 
 unsigned Ctr_GetNumCtrsTotal (void)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get total number of centres from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM centres");
-   return (unsigned) DB_QueryCOUNT (Query,"can not get total number of centres");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM centres") < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get total number of centres");
   }
 
 /*****************************************************************************/
@@ -2872,14 +2890,15 @@ unsigned Ctr_GetNumCtrsTotal (void)
 
 unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of centres of a country from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM institutions,centres"
-	          " WHERE institutions.CtyCod=%ld"
-	          " AND institutions.InsCod=centres.InsCod",
-	    CtyCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres in a country");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM institutions,centres"
+	                " WHERE institutions.CtyCod=%ld"
+	                " AND institutions.InsCod=centres.InsCod",
+	         CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres in a country");
   }
 
 /*****************************************************************************/
@@ -2888,14 +2907,14 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 
 unsigned Ctr_GetNumCtrsInIns (long InsCod)
   {
-   char Query[128];
-
+   char *Query;
 
    /***** Get number of centres of an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE InsCod=%ld",
-	    InsCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres in an institution");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM centres"
+	                " WHERE InsCod=%ld",
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres in an institution");
   }
 
 /*****************************************************************************/
@@ -2904,13 +2923,14 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of centres (of the current institution) in a place *****/
-   sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE InsCod=%ld AND PlcCod=%ld",
-	    Gbl.CurrentIns.Ins.InsCod,PlcCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of centres in a place");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM centres"
+	                " WHERE InsCod=%ld AND PlcCod=%ld",
+	         Gbl.CurrentIns.Ins.InsCod,PlcCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of centres in a place");
   }
 
 /*****************************************************************************/
@@ -2919,15 +2939,16 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
 
 unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of centres with degrees from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
-                  " FROM institutions,centres,degrees"
-                  " WHERE %sinstitutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod",
-            SubQuery);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres with degrees");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
+                        " FROM institutions,centres,degrees"
+                        " WHERE %sinstitutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod",
+                 SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres with degrees");
   }
 
 /*****************************************************************************/
@@ -2936,16 +2957,17 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery)
 
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of centres with courses from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
-                  " FROM institutions,centres,degrees,courses"
-                  " WHERE %sinstitutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod",
-            SubQuery);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres with courses");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
+                        " FROM institutions,centres,degrees,courses"
+                        " WHERE %sinstitutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod",
+                 SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres with courses");
   }
 
 /*****************************************************************************/
@@ -2954,18 +2976,19 @@ unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery)
 
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of centres with users from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
-                  " FROM institutions,centres,degrees,courses,crs_usr"
-                  " WHERE %sinstitutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role=%u",
-            SubQuery,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres with users");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
+                        " FROM institutions,centres,degrees,courses,crs_usr"
+                        " WHERE %sinstitutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role=%u",
+                 SubQuery,(unsigned) Role) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres with users");
   }
 
 /*****************************************************************************/
