@@ -242,7 +242,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
      {
       /***** Create a list of fields *****/
       if ((Gbl.CurrentCrs.Records.LstFields.Lst = (struct RecordField *) calloc (Gbl.CurrentCrs.Records.LstFields.Num,sizeof (struct RecordField))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store fields of records in current course.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the fields *****/
       for (NumRow = 0;
@@ -2095,7 +2095,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
       if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
          /* Allocate memory for the texts of the fields */
          if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-            Lay_ShowErrorAndExit ("Not enough memory to store records of the course.");
+            Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/

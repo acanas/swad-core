@@ -526,7 +526,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
 	{
 	 /* Allocate space for list of selected groups */
 	 if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = (long *) calloc (LstGrpsIBelong.NumGrps,sizeof (long))) == NULL)
-	    Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+	    Lay_NotEnoughMemoryExit ();
 
 	 /* Fill list of selected groups with list of groups I belong to */
 	 for (NumGrp = 0;
@@ -564,7 +564,7 @@ void Grp_GetParCodsSeveralGrps (void)
      {
       /***** Allocate memory for the list of group codes selected *****/
       if ((ParamLstCodGrps = (char *) malloc (MaxSizeLstGrpCods + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+	 Lay_NotEnoughMemoryExit ();
 
       /***** Get parameter with list of groups to list *****/
       Par_GetParMultiToText ("GrpCods",ParamLstCodGrps,MaxSizeLstGrpCods);
@@ -582,7 +582,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	   {
 	    /***** Create a list of groups selected from LstCodGrps *****/
 	    if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
-	       Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+	       Lay_NotEnoughMemoryExit ();
 	    for (Ptr = ParamLstCodGrps, NumGrp = 0;
 		 *Ptr;
 		 NumGrp++)
@@ -1030,7 +1030,7 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
 
    /***** Allocate memory to a list of booleanos that indica if already se ha selected a group of cada type *****/
    if ((*AlreadyExistsGroupOfType = (struct ListGrpsAlreadySelec *) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (struct ListGrpsAlreadySelec))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store type of group.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Initialize the list *****/
    for (NumGrpTyp = 0;
@@ -2726,7 +2726,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
      {
       /***** Create a list of group types *****/
       if ((Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes = (struct GroupType *) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (struct GroupType))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store types of group.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get group types *****/
       for (NumRow = 0;
@@ -2856,7 +2856,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
             /***** Create list with groups of this type *****/
             if ((GrpTyp->LstGrps = (struct Group *) calloc (GrpTyp->NumGrps,sizeof (struct Group))) == NULL)
-               Lay_ShowErrorAndExit ("Not enough memory to store groups of a type.");
+               Lay_NotEnoughMemoryExit ();
 
             /***** Get the groups of this type *****/
             for (NumGrp = 0;
@@ -3536,7 +3536,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
      {
       /***** Create a list of groups the user belongs to *****/
       if ((LstGrps->GrpCods = (long *) calloc (LstGrps->NumGrps,sizeof (long))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store codes of groups a user belongs to.");
+         Lay_NotEnoughMemoryExit ();
       for (NumGrp = 0;
 	   NumGrp < LstGrps->NumGrps;
 	   NumGrp++)
@@ -3581,7 +3581,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
      {
       /***** Create a list of groups I belong to *****/
       if ((LstGrps->GrpCods = (long *) calloc (LstGrps->NumGrps,sizeof (long))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store codes of groups I belongs to.");
+         Lay_NotEnoughMemoryExit ();
       for (NumGrp = 0;
 	   NumGrp < LstGrps->NumGrps;
 	   NumGrp++)
@@ -4775,7 +4775,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 
    /***** Allocate memory for the strings with group codes in each type *****/
    if ((LstStrCodGrps = (char **) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (char *))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enroled.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Get lists with the groups that I want in each type
           in order to count the total number of groups selected *****/
@@ -4786,7 +4786,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
       /***** Allocate memory for the list of group codes of this type *****/
       if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((size_t) ((1 + 10 + 1) *
                                                                  Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enroled.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the multiple parameter code of group of this type *****/
       snprintf (Param,sizeof (Param),

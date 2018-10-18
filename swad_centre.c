@@ -1078,7 +1078,7 @@ void Ctr_GetListCentres (long InsCod)
 
       /***** Create list with courses in degree *****/
       if ((Gbl.Ctrs.Lst = (struct Centre *) calloc (NumRows,sizeof (struct Centre))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store centres.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
       for (NumCtr = 0;

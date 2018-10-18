@@ -247,7 +247,7 @@ static void Ban_GetListBanners (const char *Query)
 
 	 /***** Create list with banners *****/
 	 if ((Gbl.Banners.Lst = (struct Banner *) calloc (NumRows,sizeof (struct Banner))) == NULL)
-	     Lay_ShowErrorAndExit ("Not enough memory to store banners.");
+	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the banners *****/
 	 for (NumBan = 0;

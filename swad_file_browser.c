@@ -12535,7 +12535,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		    Txt_Uploaded_by,
 		    FileHasPublisher ? PublisherUsrDat.FullName :
 				       Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]) < 0)
-	 Lay_ShowErrorAndExit ("Not enough memory to store string.");
+	 Lay_NotEnoughMemoryExit ();
 
       /* Free memory used for publisher's data */
       if (FileMetadata.PublisherUsrCod > 0)

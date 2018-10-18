@@ -676,7 +676,7 @@ void Asg_GetListAssignments (void)
 
       /***** Create list of assignments *****/
       if ((Gbl.Asgs.LstAsgCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store list of assignments.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the assignments codes *****/
       for (NumAsg = 0;

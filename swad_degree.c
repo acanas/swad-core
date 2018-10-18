@@ -1436,7 +1436,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
      {
       /***** Create list with degrees *****/
       if ((Degs->Lst = (struct Degree *) calloc (Degs->Num,sizeof (struct Degree))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store degrees admin by you.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees *****/
       for (NumDeg = 0;
@@ -1482,7 +1482,7 @@ void Deg_GetListDegsOfCurrentCtr (void)
       /***** Create list with degrees of this centre *****/
       if ((Gbl.CurrentCtr.Ctr.Degs.Lst = (struct Degree *) calloc (Gbl.CurrentCtr.Ctr.Degs.Num,
                                                                    sizeof (struct Degree))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store degrees of a centre.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this centre *****/
       for (NumDeg = 0;

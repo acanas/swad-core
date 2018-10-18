@@ -997,7 +997,7 @@ void Gam_GetListGames (void)
 
       /***** Create list of games *****/
       if ((Gbl.Games.LstGamCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of games.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the games codes *****/
       for (NumGame = 0;
@@ -3114,7 +3114,7 @@ static void Gam_AllocateListSelectedQuestions (void)
    if (!Gbl.Games.ListQuestions)
      {
       if ((Gbl.Games.ListQuestions = (char *) malloc (Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of questions.");
+         Lay_NotEnoughMemoryExit ();;
       Gbl.Games.ListQuestions[0] = '\0';
      }
   }

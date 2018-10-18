@@ -550,7 +550,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 			         Usr_MAX_BYTES_ADDRESS +		// OriginPlace
 			         Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
 			         CommentsLength)) == NULL)		// Comments
-      Lay_ShowErrorAndExit ("Not enough memory to store query.");
+      Lay_NotEnoughMemoryExit ();
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
@@ -1549,7 +1549,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
    /***** Get list of users' IDs *****/
    if ((ListUsrsIDs = (char *) malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store users' IDs.");
+      Lay_NotEnoughMemoryExit ();
    Par_GetParToText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
    /***** Initialize structure with user's data *****/
@@ -2160,7 +2160,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                if (asprintf (ContentStr,
         	             "%s",	// TODO: Write more info in this content
                              Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]) < 0)
-                  Lay_ShowErrorAndExit ("Not enough memory to store string.");
+                  Lay_NotEnoughMemoryExit ();
 
             /* Free memory used for user's data */
             Usr_UsrDataDestructor (&UsrDat);

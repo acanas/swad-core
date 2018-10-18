@@ -374,7 +374,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
 
    /***** Allocate memory for the list of items *****/
    if ((LstItemsSyllabus.Lst = (struct ItemSyllabus *) calloc (LstItemsSyllabus.NumItems + 1,sizeof (struct ItemSyllabus))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store syllabus.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Return to the start of the list *****/
    fseek (Gbl.F.XML,PostBeginList,SEEK_SET);

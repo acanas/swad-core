@@ -144,7 +144,7 @@ void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs)
 
    /***** Allocate space for the list *****/
    if ((UsrDat->IDs.List = (struct ListIDs *) malloc (NumIDs * sizeof (struct ListIDs))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store list of user's IDs.");
+      Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -191,7 +191,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
       /***** Allocate memory for query string *****/
       MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
       if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of user's IDs.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get user's code(s) from database *****/
       Str_Copy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"

@@ -663,7 +663,7 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
 
       /***** Create list of attendance events *****/
       if ((Gbl.AttEvents.Lst = (struct AttendanceEvent *) calloc (NumRows,sizeof (struct AttendanceEvent))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store list of attendance events.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the attendance events codes *****/
       for (NumAttEvent = 0;
@@ -2466,7 +2466,7 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
       /***** Allocate space for query *****/
       MaxLength = 256 + NumStdsInList * (1 + 1 + 10);
       if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory for query.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Count number of students registered in an event in database *****/
       sprintf (Query,"SELECT COUNT(*) FROM att_usr"
@@ -2948,7 +2948,7 @@ static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelecte
 
    /***** Create list of user codes *****/
    if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumStdsInList,sizeof (long))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store list of user codes.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -2990,7 +2990,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    /***** Allocate memory for list of attendance events selected *****/
    MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (1 + 10 + 1);
    if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store list of attendance events selected.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of attendance events selected *****/
    Par_GetParMultiToText ("AttCods",*StrAttCodsSelected,MaxSizeListAttCodsSelected);

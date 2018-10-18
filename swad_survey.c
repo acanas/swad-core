@@ -960,7 +960,7 @@ void Svy_GetListSurveys (void)
 
       /***** Create list of surveys *****/
       if ((Gbl.Svys.LstSvyCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of surveys.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the surveys codes *****/
       for (NumSvy = 0;
@@ -3396,7 +3396,7 @@ static void Svy_WriteQstStem (const char *Stem)
    /* Convert the stem, that is in HTML, to rigorous HTML */
    Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
    if ((HeadingRigorousHTML = (char *) malloc (Length + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
+      Lay_NotEnoughMemoryExit ();
    Str_Copy (HeadingRigorousHTML,Stem,
              Length);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,

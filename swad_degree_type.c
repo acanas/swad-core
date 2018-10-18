@@ -657,7 +657,7 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
      {
       /***** Create a list of degree types *****/
       if ((Gbl.Degs.DegTypes.Lst = (struct DegreeType *) calloc (Gbl.Degs.DegTypes.Num,sizeof (struct DegreeType))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store types of degree.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
       for (NumRow = 0;

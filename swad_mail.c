@@ -271,7 +271,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
       /***** Create list with places *****/
       if ((Gbl.Mails.Lst = (struct Mail *) calloc (NumRows,sizeof (struct Mail))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store mail domains.");
+          Lay_NotEnoughMemoryExit ();
 
       /***** Get the mail domains *****/
       for (NumMai = 0;

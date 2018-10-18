@@ -880,7 +880,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                         fclose (FileUsrMarks);
                         if (asprintf (ContentStr,"<![CDATA[%s]]>",
                                       Gbl.Alert.Txt) < 0)
-                           Lay_ShowErrorAndExit ("Not enough memory to store string.");
+                           Lay_NotEnoughMemoryExit ();
                        }
                     }
                   else
@@ -890,7 +890,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 			       Ale_MAX_BYTES_ALERT);
                      if (asprintf (ContentStr,"<![CDATA[%s]]>",
                 	           Gbl.Alert.Txt) < 0)
-                        Lay_ShowErrorAndExit ("Not enough memory to store string.");
+                        Lay_NotEnoughMemoryExit ();
                     }
                   unlink (FileNameUsrMarks);	// File with marks is no longer necessary
                  }
@@ -901,7 +901,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 			    Ale_MAX_BYTES_ALERT);
                   if (asprintf (ContentStr,"<![CDATA[%s]]>",
                 	        Gbl.Alert.Txt) < 0)
-                     Lay_ShowErrorAndExit ("Not enough memory to store string.");
+                     Lay_NotEnoughMemoryExit ();
                  }
               }
            }

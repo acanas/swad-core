@@ -295,7 +295,7 @@ void Hld_GetListHolidays (void)
 	{
 	 /***** Create list of holidays *****/
 	 if ((Gbl.Hlds.Lst = (struct Holiday *) calloc ((size_t) Gbl.Hlds.Num,sizeof (struct Holiday))) == NULL)
-	     Lay_ShowErrorAndExit ("Not enough memory to store holidays.");
+	     Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the holidays *****/
 	 for (NumHld = 0;

@@ -197,25 +197,25 @@ static long Exa_GetParamsExamAnnouncement (void)
 static void Exa_AllocMemExamAnnouncement (void)
   {
    if ((Gbl.ExamAnns.ExaDat.Place       = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Gbl.ExamAnns.ExaDat.Mode        = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Gbl.ExamAnns.ExaDat.Structure   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Gbl.ExamAnns.ExaDat.DocRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Gbl.ExamAnns.ExaDat.MatRequired = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Gbl.ExamAnns.ExaDat.MatAllowed  = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Gbl.ExamAnns.ExaDat.OtherInfo   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
+      Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -742,7 +742,7 @@ static long Exa_AddExamAnnouncementToDB (void)
                                  Hie_MAX_BYTES_FULL_NAME +
                                  Exa_MAX_BYTES_SESSION +
                                  7 * Cns_MAX_BYTES_TEXT)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to query database.");
+      Lay_NotEnoughMemoryExit ();
    sprintf (Query,"INSERT INTO exam_announcements "
 	          "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
 	          "CallDate,ExamDate,Duration,"
@@ -789,7 +789,7 @@ static void Exa_ModifyExamAnnouncementInDB (void)
                                  Hie_MAX_BYTES_FULL_NAME +
                                  Exa_MAX_BYTES_SESSION +
                                  7 * Cns_MAX_BYTES_TEXT)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to query database.");
+      Lay_NotEnoughMemoryExit ();
    sprintf (Query,"UPDATE exam_announcements"
                   " SET CrsFullName='%s',Year=%u,ExamSession='%s',"
                   "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
@@ -850,7 +850,7 @@ void Exa_CreateListDatesOfExamAnnouncements (void)
 	{
 	 /***** Allocate memory for the list *****/
 	 if ((Gbl.ExamAnns.Lst = (struct Date *) calloc (NumExaAnns,sizeof (struct Date))) == NULL)
-	    Lay_ShowErrorAndExit ("Not enough memory to store dates of exam announcements.");
+	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the dates of the existing exam announcements *****/
 	 for (NumExaAnn = 0;
@@ -1708,5 +1708,5 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
                  Txt_EXAM_ANNOUNCEMENT_Material_required,Gbl.ExamAnns.ExaDat.MatRequired,
                  Txt_EXAM_ANNOUNCEMENT_Material_allowed,Gbl.ExamAnns.ExaDat.MatAllowed,
                  Txt_EXAM_ANNOUNCEMENT_Other_information,Gbl.ExamAnns.ExaDat.OtherInfo) < 0)
-      Lay_ShowErrorAndExit ("Not enough memory to store string.");
+      Lay_NotEnoughMemoryExit ();
   }

@@ -321,7 +321,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		      ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
 	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength + 1)) == NULL)
-	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
+	       Lay_NotEnoughMemoryExit ();
 	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
 
@@ -335,7 +335,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 			                   Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);
 	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength + 1)) == NULL)
-	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
+	       Lay_NotEnoughMemoryExit ();
 	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
 	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
 
@@ -1054,7 +1054,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
      {
       /***** Allocate memory for a destination string where to do the changes *****/
       if ((StrDst = (char *) malloc (MaxLengthStr + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to change the format of a string.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Make the change *****/
       for (PtrSrc = Str, PtrDst = StrDst;

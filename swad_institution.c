@@ -1016,7 +1016,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 
       /***** Create list with institutions *****/
       if ((Gbl.Inss.Lst = (struct Instit *) calloc (NumRows,sizeof (struct Instit))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store institutions.");
+          Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;

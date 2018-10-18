@@ -515,7 +515,7 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 			         Img_BYTES_NAME +
 			         Img_MAX_BYTES_TITLE +
 			         Cns_MAX_BYTES_WWW)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Check if image is received and processed *****/
    if (Image->Action == Img_ACTION_NEW_IMAGE &&	// Upload new image

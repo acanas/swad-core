@@ -306,7 +306,7 @@ void Dpt_GetListDepartments (long InsCod)
 	 /***** Create list with courses in degree *****/
 	 if ((Gbl.Dpts.Lst = (struct Department *) calloc ((size_t) Gbl.Dpts.Num,
 	                                                   sizeof (struct Department))) == NULL)
-	     Lay_ShowErrorAndExit ("Not enough memory to store departments.");
+	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the departments *****/
 	 for (NumDpt = 0;

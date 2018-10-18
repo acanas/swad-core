@@ -1116,7 +1116,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 
 	 /***** Create list of events *****/
 	 if ((Gbl.Agenda.LstAgdCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-	     Lay_ShowErrorAndExit ("Not enough memory to store list of agenda events.");
+	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the events codes *****/
 	 for (NumEvent = 0;

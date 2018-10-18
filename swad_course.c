@@ -1010,7 +1010,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
      {
       /***** Create list with courses in degree *****/
       if ((Gbl.CurrentDeg.Deg.LstCrss = (struct Course *) calloc ((size_t) NumCrss,sizeof (struct Course))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store the courses of a degree.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/
       for (NumCrs = 0;

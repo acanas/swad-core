@@ -279,7 +279,7 @@ void Usr_UsrDataConstructor (struct UsrData *UsrDat)
   {
    /***** Allocate memory for the comments *****/
    if ((UsrDat->Comments = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store user's data.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Initialize to zero the data of the user *****/
    Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);
@@ -392,7 +392,7 @@ void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat)
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods)
   {
    if ((ListUsrCods->Lst = (long *) malloc (ListUsrCods->NumUsrs * sizeof (long))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store list of users' codes.");
+      Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -4283,7 +4283,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
       if ((AddStdsWithoutGroupOf = (bool *) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (bool))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store types of group.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Initialize vector of booleans that indicates whether it's necessary add to the list
              the students who don't belong to any group of each type *****/
@@ -5345,7 +5345,7 @@ if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 */
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
       if ((Gbl.Usrs.LstUsrs[Role].Lst = (struct UsrInList *) calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,sizeof (struct UsrInList))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store users list.");
+         Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -5737,7 +5737,7 @@ static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role)
    if (!Gbl.Usrs.Select[Role])
      {
       if ((Gbl.Usrs.Select[Role] = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
+         Lay_NotEnoughMemoryExit ();
       Gbl.Usrs.Select[Role][0] = '\0';
      }
   }
@@ -5770,7 +5770,7 @@ static void Usr_AllocateListOtherRecipients (void)
    if (!Gbl.Usrs.ListOtherRecipients)
      {
       if ((Gbl.Usrs.ListOtherRecipients = (char *) malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of recipients.");
+         Lay_NotEnoughMemoryExit ();
       Gbl.Usrs.ListOtherRecipients[0] = '\0';
      }
   }
@@ -6186,7 +6186,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if ((GroupNames = (char *) malloc ((Grp_MAX_BYTES_GROUP_NAME + 3) *
                                          Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Start table with list of students *****/
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
@@ -6513,7 +6513,7 @@ void Usr_ListAllDataStds (void)
 	{
 	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = (char *) malloc (Length + 1)) == NULL)
-            Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
+            Lay_NotEnoughMemoryExit ();
 	}
 
       /***** Start table with list of students *****/

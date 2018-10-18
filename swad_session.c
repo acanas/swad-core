@@ -372,7 +372,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
 			LengthParamName +
 			LengthParamValue;
 	    if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-	       Lay_ShowErrorAndExit ("Not enough memory for query.");
+	       Lay_NotEnoughMemoryExit ();
 
 	    /***** Insert parameter in the database *****/
 	    sprintf (Query,"INSERT INTO hidden_params"

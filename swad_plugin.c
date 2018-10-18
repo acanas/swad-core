@@ -202,7 +202,7 @@ static void Plg_GetListPlugins (void)
 
       /***** Create list with plugins *****/
       if ((Gbl.Plugins.Lst = (struct Plugin *) calloc ((size_t) Gbl.Plugins.Num,sizeof (struct Plugin))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store plugins.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the plugins *****/
       for (NumPlg = 0;

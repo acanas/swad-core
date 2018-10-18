@@ -1082,7 +1082,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
    /***** Convert the stem, that is in HTML, to rigorous HTML *****/
    StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
    if ((StemRigorousHTML = (char *) malloc (StemLength + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
+      Lay_NotEnoughMemoryExit ();
    Str_Copy (StemRigorousHTML,Stem,
              StemLength);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1216,7 +1216,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
 	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_PER_CHAR;
 	 if ((FeedbackRigorousHTML = (char *) malloc (FeedbackLength + 1)) == NULL)
-	    Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
+	    Lay_NotEnoughMemoryExit ();
 	 Str_Copy (FeedbackRigorousHTML,Feedback,
 	           FeedbackLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -3410,7 +3410,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
             /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
             LengthAnswer = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
             if ((Answer = (char *) malloc (LengthAnswer + 1)) == NULL)
-               Lay_ShowErrorAndExit ("Not enough memory to store answer.");
+               Lay_NotEnoughMemoryExit ();
             Str_Copy (Answer,row[1],
                       LengthAnswer);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -3424,7 +3424,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
         	 {
 		  LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_PER_CHAR;
 		  if ((Feedback = (char *) malloc (LengthFeedback + 1)) == NULL)
-		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
+		     Lay_NotEnoughMemoryExit ();
 		  Str_Copy (Feedback,row[2],
 		            LengthFeedback);
                   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -4743,7 +4743,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 
    /* Get the tags */
    if ((Gbl.Test.Tags.List = (char *) malloc (Tst_MAX_BYTES_TAGS_LIST + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store tags.");
+      Lay_NotEnoughMemoryExit ();
    Par_GetParMultiToText ("ChkTag",Gbl.Test.Tags.List,Tst_MAX_BYTES_TAGS_LIST);
 
    /* Check number of tags selected */
@@ -6559,7 +6559,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
                                  Img_BYTES_NAME +
                                  Img_MAX_BYTES_TITLE +
                                  Cns_MAX_BYTES_WWW)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+      Lay_NotEnoughMemoryExit ();
 
    if (Gbl.Test.QstCod < 0)	// It's a new question
      {
@@ -6670,7 +6670,7 @@ static void Tst_InsertAnswersIntoDB (void)
                                  Img_BYTES_NAME +
                                  Img_MAX_BYTES_TITLE +
                                  Cns_MAX_BYTES_WWW)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Insert answers in the answers table *****/
    switch (Gbl.Test.AnswerType)

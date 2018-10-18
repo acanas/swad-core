@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -181,7 +183,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -201,13 +203,15 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (ID))
      {
-      sprintf (Query,"SELECT usr_IDs.UsrCod"
-	             " FROM usr_IDs,usr_data"
-		     " WHERE usr_IDs.UsrID='%s'"
-		     " AND usr_IDs.UsrCod=usr_data.UsrCod"
-	             " AND usr_data.Password=''",
-	       ID);
+      if (asprintf (&Query,"SELECT usr_IDs.UsrCod"
+	                   " FROM usr_IDs,usr_data"
+		           " WHERE usr_IDs.UsrID='%s'"
+		           " AND usr_IDs.UsrCod=usr_data.UsrCod"
+	                   " AND usr_data.Password=''",
+	            ID) < 0)
+         Lay_NotEnoughMemoryExit ();
       NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
+      free ((void *) Query);
 
       if (NumUsrs)
 	{
@@ -608,7 +612,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char Query[256 + Cns_MAX_CHARS_EMAIL_ADDRESS];
+   char *Query;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
@@ -631,9 +635,10 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
-      sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
-		     " WHERE Nickname='%s' AND UsrCod<>%ld",
-	       NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_nicknames"
+		           " WHERE Nickname='%s' AND UsrCod<>%ld",
+	            NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
       if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
 	{
 	 Error = true;
@@ -642,6 +647,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 		   NewNicknameWithoutArroba);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
+      free ((void *) Query);
      }
    else        // New nickname is not valid
      {
@@ -661,9 +667,10 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      {
       /* Check if the new email matches
          any of the confirmed emails of other users */
-      sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
-		     " WHERE E_mail='%s' AND Confirmed='Y'",
-	       NewEmail);
+      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_emails"
+		           " WHERE E_mail='%s' AND Confirmed='Y'",
+	            NewEmail) < 0)
+         Lay_NotEnoughMemoryExit ();
       if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
 	{
 	 Error = true;
@@ -672,6 +679,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 		   NewEmail);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
+      free ((void *) Query);
      }
    else	// New email is not valid
      {
@@ -710,7 +718,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char *QueryUsrData;
    size_t CommentsLength;
-   char QueryUsrIDs[256 + ID_MAX_BYTES_USR_ID];
+   char *QueryUsrIDs;
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
 
@@ -731,57 +739,46 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
       CommentsLength = strlen (UsrDat->Comments);
    else
       CommentsLength = 0;
-   if ((QueryUsrData = (char *) malloc (2048 +
-			                Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +	// EncryptedUsrCod
-			                Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
-			                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +	// Surname1, Surname2, FirstName
-			                Usr_MAX_BYTES_ADDRESS +			// LocalAddress
-			                Usr_MAX_BYTES_PHONE +			// LocalPhone
-			                Usr_MAX_BYTES_ADDRESS +			// FamilyAddress
-			                Usr_MAX_BYTES_PHONE +			// FamilyPhone
-			                Usr_MAX_BYTES_ADDRESS +			// OriginPlace
-			                Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
-		                        CommentsLength)) == NULL)		// Comments
-      Lay_ShowErrorAndExit ("Not enough memory to store query.");
-   sprintf (QueryUsrData,"INSERT INTO usr_data"
-	                 " (EncryptedUsrCod,Password,"
-	                 "Surname1,Surname2,FirstName,Sex,"
-		         "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
-		         "PhotoVisibility,ProfileVisibility,"
-		         "CtyCod,"
-		         "LocalAddress,LocalPhone,"
-		         "FamilyAddress,FamilyPhone,"
-		         "OriginPlace,Birthday,Comments,"
-		         "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
-		         " VALUES"
-		         " ('%s','%s',"
-		         "'%s','%s','%s','%s',"
-		         "'%s','%s','%s',%u,%u,"
-		         "'%s','%s',"
-		         "%ld,"
-		         "'%s','%s',"
-		         "'%s','%s','%s',"
-		         "%s,'%s',"
-		         "%u,%u,-1,0)",
-	    UsrDat->EncryptedUsrCod,
-	    UsrDat->Password,
-	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
-	    Usr_StringsSexDB[UsrDat->Sex],
-	    The_ThemeId[UsrDat->Prefs.Theme],
-	    Ico_IconSetId[UsrDat->Prefs.IconSet],
-	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
-	    Cal_FIRST_DAY_OF_WEEK_DEFAULT,
-	    (unsigned) Dat_FORMAT_DEFAULT,
-            Pri_VisibilityDB[UsrDat->PhotoVisibility],
-            Pri_VisibilityDB[UsrDat->ProfileVisibility],
-	    UsrDat->CtyCod,
-	    UsrDat->LocalAddress ,UsrDat->LocalPhone,
-	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
-	    BirthdayStrDB,
-	    CommentsLength ? UsrDat->Comments :
-		             "",
-            (unsigned) Mnu_MENU_DEFAULT,
-            (unsigned) Cfg_DEFAULT_COLUMNS);
+   if (asprintf (&QueryUsrData,"INSERT INTO usr_data"
+	                       " (EncryptedUsrCod,Password,"
+	                       "Surname1,Surname2,FirstName,Sex,"
+		               "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
+		               "PhotoVisibility,ProfileVisibility,"
+		               "CtyCod,"
+		               "LocalAddress,LocalPhone,"
+		               "FamilyAddress,FamilyPhone,"
+		               "OriginPlace,Birthday,Comments,"
+		               "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
+		               " VALUES"
+		               " ('%s','%s',"
+		               "'%s','%s','%s','%s',"
+		               "'%s','%s','%s',%u,%u,"
+		               "'%s','%s',"
+		               "%ld,"
+		               "'%s','%s',"
+		               "'%s','%s','%s',"
+		               "%s,'%s',"
+		               "%u,%u,-1,0",
+		 UsrDat->EncryptedUsrCod,
+		 UsrDat->Password,
+		 UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+		 Usr_StringsSexDB[UsrDat->Sex],
+		 The_ThemeId[UsrDat->Prefs.Theme],
+		 Ico_IconSetId[UsrDat->Prefs.IconSet],
+		 Txt_STR_LANG_ID[UsrDat->Prefs.Language],
+		 Cal_FIRST_DAY_OF_WEEK_DEFAULT,
+		 (unsigned) Dat_FORMAT_DEFAULT,
+		 Pri_VisibilityDB[UsrDat->PhotoVisibility],
+		 Pri_VisibilityDB[UsrDat->ProfileVisibility],
+		 UsrDat->CtyCod,
+		 UsrDat->LocalAddress ,UsrDat->LocalPhone,
+		 UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
+		 BirthdayStrDB,
+		 CommentsLength ? UsrDat->Comments :
+		                  "",
+		 (unsigned) Mnu_MENU_DEFAULT,
+		 (unsigned) Cfg_DEFAULT_COLUMNS) < 0)
+         Lay_NotEnoughMemoryExit ();
    UsrDat->UsrCod = DB_QueryINSERTandReturnCode (QueryUsrData,
 		                                 "can not create user");
    free ((void *) QueryUsrData);
@@ -792,15 +789,17 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      sprintf (QueryUsrIDs,"INSERT INTO usr_IDs"
-	                   " (UsrCod,UsrID,CreatTime,Confirmed)"
-		           " VALUES"
-		           " (%ld,'%s',NOW(),'%c')",
-	       UsrDat->UsrCod,
-	       UsrDat->IDs.List[NumID].ID,
-	       UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
-		                                   'N');
+      if (asprintf (&QueryUsrIDs,"INSERT INTO usr_IDs"
+	                         " (UsrCod,UsrID,CreatTime,Confirmed)"
+		                 " VALUES"
+		                 " (%ld,'%s',NOW(),'%c')",
+		    UsrDat->UsrCod,
+		    UsrDat->IDs.List[NumID].ID,
+		    UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
+							'N') < 0)
+         Lay_NotEnoughMemoryExit ();
       DB_QueryINSERT (QueryUsrIDs,"can not store user's ID when creating user");
+      free ((void *) QueryUsrIDs);
      }
 
    /***** Create directory for the user, if not exists *****/
@@ -1017,7 +1016,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    extern const char *Txt_Briefcase_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Photo_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Record_card_of_THE_USER_X_has_been_removed;
-   char Query[128];
+   char *Query;
    bool PhotoRemoved = false;
 
    /***** Remove the works zones of the user in all courses *****/
@@ -1036,17 +1035,21 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Grp_RemUsrFromAllGrps (UsrDat->UsrCod);
 
    /***** Remove user's requests for inscription *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
-            UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's requests for inscription");
+   free ((void *) Query);
 
    /***** Remove user from possible duplicate users *****/
    Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the table of courses and users *****/
-   sprintf (Query,"DELETE FROM crs_usr WHERE UsrCod=%ld",
-            UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM crs_usr WHERE UsrCod=%ld",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove a user from all courses");
+   free ((void *) Query);
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1057,9 +1060,11 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      }
 
    /***** Remove user as administrator of any degree *****/
-   sprintf (Query,"DELETE FROM admin WHERE UsrCod=%ld",
-            UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM admin WHERE UsrCod=%ld",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove a user as administrator");
+   free ((void *) Query);
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1113,14 +1118,18 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
    /***** Remove user from table of connected users *****/
-   sprintf (Query,"DELETE FROM connected WHERE UsrCod=%ld",
-            UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM connected WHERE UsrCod=%ld",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove a user from table of connected users");
+   free ((void *) Query);
 
    /***** Remove all sessions of this user *****/
-   sprintf (Query,"DELETE FROM sessions WHERE UsrCod=%ld",
-            UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM sessions WHERE UsrCod=%ld",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove sessions of a user");
+   free ((void *) Query);
 
    /***** Remove social content associated to the user *****/
    Soc_RemoveUsrSocialContent (UsrDat->UsrCod);
@@ -1180,41 +1189,55 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
 
 static void Acc_RemoveUsr (struct UsrData *UsrDat)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove user's webs / social networks *****/
-   sprintf (Query,"DELETE FROM usr_webs WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM usr_webs WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's webs / social networks");
+   free ((void *) Query);
 
    /***** Remove user's nicknames *****/
-   sprintf (Query,"DELETE FROM usr_nicknames WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM usr_nicknames WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's nicknames");
+   free ((void *) Query);
 
    /***** Remove user's emails *****/
-   sprintf (Query,"DELETE FROM pending_emails WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM pending_emails WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove pending user's emails");
+   free ((void *) Query);
 
-   sprintf (Query,"DELETE FROM usr_emails WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM usr_emails WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's emails");
+   free ((void *) Query);
 
    /***** Remove user's IDs *****/
-   sprintf (Query,"DELETE FROM usr_IDs WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM usr_IDs WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's IDs");
+   free ((void *) Query);
 
    /***** Remove user's last data *****/
-   sprintf (Query,"DELETE FROM usr_last WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM usr_last WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's last data");
+   free ((void *) Query);
 
    /***** Remove user's data  *****/
-   sprintf (Query,"DELETE FROM usr_data WHERE UsrCod=%ld",
-	    UsrDat->UsrCod);
+   if (asprintf (&Query,"DELETE FROM usr_data WHERE UsrCod=%ld",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryDELETE (Query,"can not remove user's data");
+   free ((void *) Query);
   }
 
 /*****************************************************************************/

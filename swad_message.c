@@ -1322,7 +1322,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 			         strlen (Content) +
 			         Img_BYTES_NAME +
 			         Img_MAX_BYTES_TITLE)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+      Lay_NotEnoughMemoryExit ();
 
    /***** Check if image is received and processed *****/
    if (Image->Action == Img_ACTION_NEW_IMAGE &&	// Upload new image

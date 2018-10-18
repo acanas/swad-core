@@ -89,7 +89,7 @@ void Cfg_GetConfigFromFile (void)
    if ((Config = (char *) malloc (Length + 1)) == NULL)
      {
       fclose (FileCfg);
-      Lay_ShowErrorAndExit ("Not enough memory for config.");
+      Lay_NotEnoughMemoryExit ();
      }
 
    /* Copy file content into buffer */

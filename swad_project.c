@@ -2452,7 +2452,7 @@ void Prj_GetListProjects (void)
 
 	 /***** Create list of projects *****/
 	 if ((Gbl.Prjs.LstPrjCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-	     Lay_ShowErrorAndExit ("Not enough memory to store list of projects.");
+	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Get the projects codes *****/
 	 for (NumPrj = 0;
@@ -3198,13 +3198,13 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 void Prj_AllocMemProject (struct Project *Prj)
   {
    if ((Prj->Description = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store project.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Prj->Knowledge   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store project.");
+      Lay_NotEnoughMemoryExit ();
 
    if ((Prj->Materials   = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store project.");
+      Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/

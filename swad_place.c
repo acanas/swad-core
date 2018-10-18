@@ -325,7 +325,7 @@ void Plc_GetListPlaces (void)
 
       /***** Create list with courses in centre *****/
       if ((Gbl.Plcs.Lst = (struct Place *) calloc (NumRows,sizeof (struct Place))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store places.");
+          Lay_NotEnoughMemoryExit ();
 
       /***** Get the places *****/
       for (NumPlc = 0;

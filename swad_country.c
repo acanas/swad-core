@@ -1076,7 +1076,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
       /***** Create list with countries *****/
       if ((Gbl.Ctys.Lst = (struct Country *) calloc (NumRows,sizeof (struct Country))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store countries.");
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;

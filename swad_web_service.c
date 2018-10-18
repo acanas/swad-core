@@ -1937,7 +1937,7 @@ int swad__sendMyGroups (struct soap *soap,
         {
          /***** Create a list of groups selected from myGroups *****/
          if ((LstGrpsIWant.GrpCods = (long *) calloc (LstGrpsIWant.NumGrps,sizeof (long))) == NULL)
-	    Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+	    Lay_NotEnoughMemoryExit ();
          for (NumGrp = 0, Ptr = myGroups;
               *Ptr;
               NumGrp++)
@@ -2491,7 +2491,7 @@ static void Svc_GetLstGrpsSel (const char *Groups)
       Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls++;
       // Here NestedCalls is always 1
       if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
-	 Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+	 Lay_NotEnoughMemoryExit ();
 
       for (Ptr = Groups, NumGrp = 0;
 	   *Ptr;

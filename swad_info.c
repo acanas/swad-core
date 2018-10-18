@@ -903,7 +903,7 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
       if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTML);
-	 Lay_ShowErrorAndExit ("Not enough memory for buffer.");
+	 Lay_NotEnoughMemoryExit ();
          return soap_receiver_fault (Gbl.soap,
                                      "Web page can not be copied into buffer",
                                      "Not enough memory for buffer");
