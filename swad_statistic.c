@@ -484,8 +484,9 @@ void Sta_AskShowCrsHits (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
-	    Gbl.CurrentCrs.Crs.ShrtName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Statistics_of_visits_to_the_course_X,
+	     Gbl.CurrentCrs.Crs.ShrtName);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
@@ -1694,8 +1695,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20%%;\">");
    if (FirstRow > 1)
      {
-      sprintf (Gbl.Title,Txt_Show_previous_X_clicks,
-               Gbl.Stat.RowsPerPage);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Show_previous_X_clicks,
+                Gbl.Stat.RowsPerPage);
       Act_LinkFormSubmit (Gbl.Title,"TIT_TBL",NULL);
       fprintf (Gbl.F.Out,"<strong>&lt;%s</strong></a>",
                Txt_PAGES_Previous);
@@ -1729,8 +1731,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20%%;\">");
    if (LastRow < NumRows)
      {
-      sprintf (Gbl.Title,Txt_Show_next_X_clicks,
-               Gbl.Stat.RowsPerPage);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Show_next_X_clicks,
+                Gbl.Stat.RowsPerPage);
       Act_LinkFormSubmit (Gbl.Title,"TIT_TBL",NULL);
       fprintf (Gbl.F.Out,"<strong>%s&gt;</strong>"
 	                 "</a>",
@@ -3932,7 +3935,9 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
         {
          Act_StartFormGoTo (ActSeeCrsInf);
          Crs_PutParamCrsCod (Crs.CrsCod);
-         sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Txt_Go_to_X,
+		   Crs.FullName);
          Act_LinkFormSubmit (Gbl.Title,"LOG",NULL);
          fprintf (Gbl.F.Out,"%s"
                             "</a>",
@@ -5749,15 +5754,19 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
      }
    else
      {
-      sprintf (StrNumCrss,"%d",SizeOfFileZones.NumCrss);
-      sprintf (StrNumFoldersPerCrs,"%.1f",
-               SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFolders /
-        	                         (double) SizeOfFileZones.NumCrss :
-        	                         0.0);
-      sprintf (StrNumFilesPerCrs,"%.1f",
-               SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFiles /
-        	                         (double) SizeOfFileZones.NumCrss :
-        	                         0.0);
+      snprintf (StrNumCrss,sizeof (StrNumCrss),
+	        "%d",
+		SizeOfFileZones.NumCrss);
+      snprintf (StrNumFoldersPerCrs,sizeof (StrNumFoldersPerCrs),
+	        "%.1f",
+                SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFolders /
+        	                          (double) SizeOfFileZones.NumCrss :
+        	                          0.0);
+      snprintf (StrNumFilesPerCrs,sizeof (StrNumFilesPerCrs),
+	        "%.1f",
+                SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFiles /
+        	                          (double) SizeOfFileZones.NumCrss :
+        	                          0.0);
       Fil_WriteFileSizeFull (SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.Size /
 	                                               (double) SizeOfFileZones.NumCrss :
 	                                               0.0,
@@ -5768,7 +5777,9 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
       Str_Copy (StrNumGrps,"-",
                 10);
    else
-      sprintf (StrNumGrps,"%d",SizeOfFileZones.NumGrps);
+      snprintf (StrNumGrps,sizeof (StrNumGrps),
+	        "%d",
+		SizeOfFileZones.NumGrps);
 
    if (SizeOfFileZones.NumUsrs == -1)
      {
@@ -5783,15 +5794,19 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
      }
    else
      {
-      sprintf (StrNumUsrs,"%d",SizeOfFileZones.NumUsrs);
-      sprintf (StrNumFoldersPerUsr,"%.1f",
-               SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFolders /
-        	                         (double) SizeOfFileZones.NumUsrs :
-        	                         0.0);
-      sprintf (StrNumFilesPerUsr,"%.1f",
-               SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFiles /
-        	                         (double) SizeOfFileZones.NumUsrs :
-        	                         0.0);
+      snprintf (StrNumUsrs,sizeof (StrNumUsrs),
+	        "%d",
+		SizeOfFileZones.NumUsrs);
+      snprintf (StrNumFoldersPerUsr,sizeof (StrNumFoldersPerUsr),
+	        "%.1f",
+                SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFolders /
+        	                          (double) SizeOfFileZones.NumUsrs :
+        	                          0.0);
+      snprintf (StrNumFilesPerUsr,sizeof (StrNumFilesPerUsr),
+	        "%.1f",
+                SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFiles /
+        	                          (double) SizeOfFileZones.NumUsrs :
+        	                          0.0);
       Fil_WriteFileSizeFull (SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.Size /
 	                                               (double) SizeOfFileZones.NumUsrs :
 	                                               0.0,
@@ -9919,8 +9934,8 @@ void Sta_WriteTimeToGenerateAndSendPage (void)
   {
    extern const char *Txt_PAGE1_Page_generated_in;
    extern const char *Txt_PAGE2_and_sent_in;
-   char StrTimeGenerationInMicroseconds[64];
-   char StrTimeSendInMicroseconds[64];
+   char StrTimeGenerationInMicroseconds[Dat_MAX_BYTES_TIME + 1];
+   char StrTimeSendInMicroseconds[Dat_MAX_BYTES_TIME + 1];
 
    Sta_WriteTime (StrTimeGenerationInMicroseconds,Gbl.TimeGenerationInMicroseconds);
    Sta_WriteTime (StrTimeSendInMicroseconds,Gbl.TimeSendInMicroseconds);
@@ -9933,16 +9948,23 @@ void Sta_WriteTimeToGenerateAndSendPage (void)
 /********* Write time (given in microseconds) depending on amount ************/
 /*****************************************************************************/
 
-void Sta_WriteTime (char *Str,long TimeInMicroseconds)
+void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds)
   {
    if (TimeInMicroseconds < 1000L)
-      sprintf (Str,"%ld &micro;s",TimeInMicroseconds);
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,
+	        "%ld &micro;s",
+		TimeInMicroseconds);
    else if (TimeInMicroseconds < 1000000L)
-      sprintf (Str,"%ld ms",TimeInMicroseconds / 1000);
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,
+	        "%ld ms",
+		TimeInMicroseconds / 1000);
    else if (TimeInMicroseconds < (60 * 1000000L))
-      sprintf (Str,"%.1f s",(float) TimeInMicroseconds / 1E6);
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,
+	        "%.1f s",
+		(float) TimeInMicroseconds / 1E6);
    else
-      sprintf (Str,"%ld min, %ld s",
-               TimeInMicroseconds / (60 * 1000000L),
-               (TimeInMicroseconds / 1000000L) % 60);
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,
+	        "%ld min, %ld s",
+                TimeInMicroseconds / (60 * 1000000L),
+                (TimeInMicroseconds / 1000000L) % 60);
   }

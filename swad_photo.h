@@ -104,9 +104,9 @@ void Pho_UpdateUsrPhoto2 (void);
 unsigned Pho_UpdateMyClicksWithoutPhoto (void);
 void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 
-bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL);
-bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL);
-bool Pho_CheckIfPrivPhotoExists (long UsrCod,char *PathPrivRelPhoto);
+bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1]);
+bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1]);
+bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]);
 bool Pho_RemovePhoto (struct UsrData *UsrDat);
 void Pho_UpdatePhotoName (struct UsrData *UsrDat);
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,

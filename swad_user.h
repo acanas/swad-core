@@ -415,7 +415,7 @@ void Usr_SeeStdClassPhotoPrn (void);
 void Usr_SeeTchClassPhotoPrn (void);
 void Usr_PutSelectorNumColsClassPhoto (void);
 
-void Usr_ConstructPathUsr (long UsrCod,char *PathUsr);
+void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1]);
 bool Usr_ChkIfUsrCodExists (long UsrCod);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);

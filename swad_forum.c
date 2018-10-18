@@ -1009,7 +1009,9 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
          Ale_ShowAlert (AlertType,Message);
 
    /***** Start box *****/
-   sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
+   snprintf (FrameTitle,sizeof (FrameTitle),
+	     "%s: %s",
+	     Txt_Thread,Thr.Subject);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
                  Hlp_SOCIAL_Forums_posts,Box_NOT_CLOSABLE);
 
@@ -1267,9 +1269,10 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				   Gbl.Forum.ForumSelected.ThrCod,
 				   PstCod);
 
-      sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
-				   Txt_Post_X_banned_Click_to_unban_it,
-	       PstNum);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
+			  Txt_Post_X_banned_Click_to_unban_it,
+	        PstNum);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO20x20\" />",
@@ -1282,9 +1285,10 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
    else
      {
-      sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed :
-				   Txt_Post_X_banned,
-	       PstNum);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Enabled ? Txt_Post_X_allowed :
+			  Txt_Post_X_banned,
+	        PstNum);
       fprintf (Gbl.F.Out,"<span title=\"%s\">"
 			 "<img src=\"%s/%s-off64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
@@ -2221,20 +2225,22 @@ void For_SetForumName (struct Forum *Forum,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_GLOBAL_TCHS:
-         sprintf (ForumName,"%s%s",
-                  UseHTMLEntities ? Txt_General :
-                                    Txt_General_NO_HTML[Language],
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
+                   "%s%s",
+                   UseHTMLEntities ? Txt_General :
+                                     Txt_General_NO_HTML[Language],
+                   UseHTMLEntities ? Txt_only_teachers :
+                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM__SWAD__USRS:
          Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM__SWAD__TCHS:
-         sprintf (ForumName,"%s%s",Cfg_PLATFORM_SHORT_NAME,
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
+                   "%s%s",Cfg_PLATFORM_SHORT_NAME,
+                   UseHTMLEntities ? Txt_only_teachers :
+                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
 	 Ins.InsCod = Forum->Location;
@@ -2247,9 +2253,10 @@ void For_SetForumName (struct Forum *Forum,
 	 Ins.InsCod = Forum->Location;
 	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Institution not found.");
-         sprintf (ForumName,"%s%s",Ins.ShrtName,
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
+                   "%s%s",Ins.ShrtName,
+                   UseHTMLEntities ? Txt_only_teachers :
+                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTRE_USRS:
 	 Ctr.CtrCod = Forum->Location;
@@ -2262,9 +2269,10 @@ void For_SetForumName (struct Forum *Forum,
 	 Ctr.CtrCod = Forum->Location;
 	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
 	    Lay_ShowErrorAndExit ("Centre not found.");
-         sprintf (ForumName,"%s%s",Ctr.ShrtName,
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
+                   "%s%s",Ctr.ShrtName,
+                   UseHTMLEntities ? Txt_only_teachers :
+                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
 	 Deg.DegCod = Forum->Location;
@@ -2277,9 +2285,10 @@ void For_SetForumName (struct Forum *Forum,
 	 Deg.DegCod = Forum->Location;
 	 if (!Deg_GetDataOfDegreeByCod (&Deg))
 	    Lay_ShowErrorAndExit ("Degree not found.");
-         sprintf (ForumName,"%s%s",Deg.ShrtName,
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
+                   "%s%s",Deg.ShrtName,
+                   UseHTMLEntities ? Txt_only_teachers :
+                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_COURSE_USRS:
 	 Crs.CrsCod = Forum->Location;
@@ -2292,9 +2301,10 @@ void For_SetForumName (struct Forum *Forum,
 	 Crs.CrsCod = Forum->Location;
 	 if (!Crs_GetDataOfCourseByCod (&Crs))
 	    Lay_ShowErrorAndExit ("Course not found.");
-         sprintf (ForumName,"%s%s",Crs.ShrtName,
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
+         snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,
+                   "%s%s",Crs.ShrtName,
+                   UseHTMLEntities ? Txt_only_teachers :
+                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       default:
          Str_Copy (ForumName,Txt_Unknown_FORUM,
@@ -2575,7 +2585,9 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
          Ale_ShowAlert (AlertType,Message);
 
    /***** Start box for threads of this forum *****/
-   sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
+   snprintf (FrameTitle,sizeof (FrameTitle),
+	     "%s: %s",
+	     Txt_Forum,ForumName);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
 		 Hlp_SOCIAL_Forums_threads,Box_NOT_CLOSABLE);
 
@@ -3548,7 +3560,9 @@ static void For_GetThrData (struct ForumThread *Thr)
    Str_Copy (Thr->Subject,row[6],
              Cns_MAX_BYTES_SUBJECT);
    if (!Thr->Subject[0])
-      sprintf (Thr->Subject,"[%s]",Txt_no_subject);
+      snprintf (Thr->Subject,sizeof (Thr->Subject),
+	        "[%s]",
+		Txt_no_subject);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

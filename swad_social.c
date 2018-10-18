@@ -183,10 +183,10 @@ static void Soc_PutTextarea (const char *Placeholder,
 
 static long Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID]);
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID + 1]);
 static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Act_MAX_BYTES_ID]);
+                                                            const char IdNewComment[Act_MAX_BYTES_ID + 1]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
@@ -396,7 +396,9 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
                                 Query);
 
    /***** Show timeline *****/
-   sprintf (Gbl.Title,Txt_Timeline_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Timeline_OF_A_USER,
+	     Gbl.Usrs.Other.UsrDat.FirstName);
    Soc_ShowTimeline (Query,Gbl.Title,NotCod);
 
    /***** Drop temporary tables *****/
@@ -1271,7 +1273,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
-   char IdNewComment[Act_MAX_BYTES_ID];
+   char IdNewComment[Act_MAX_BYTES_ID + 1];
 
    /***** Start box ****/
    if (ShowNoteAlone)
@@ -1615,7 +1617,7 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
 static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
-   char IdDateTime[Act_MAX_BYTES_ID];
+   char IdDateTime[Act_MAX_BYTES_ID + 1];
 
    /***** Create unique Id *****/
    Act_SetUniqueId (IdDateTime);
@@ -1854,7 +1856,9 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	}
 
       /***** Link and end form *****/
-      sprintf (Class,"%s ICO_HIGHLIGHT",The_ClassFormBold[Gbl.Prefs.Theme]);
+      snprintf (Class,sizeof (Class),
+	        "%s ICO_HIGHLIGHT",
+		The_ClassFormBold[Gbl.Prefs.Theme]);
       Act_LinkFormSubmitUnique (Txt_SOCIAL_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
@@ -2196,7 +2200,7 @@ static void Soc_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit)
   {
    extern const char *Txt_Post;
-   char IdDivImgButton[Act_MAX_BYTES_ID];
+   char IdDivImgButton[Act_MAX_BYTES_ID + 1];
 
    /***** Set unique id for the hidden div *****/
    Act_SetUniqueId (IdDivImgButton);
@@ -2345,7 +2349,7 @@ static long Soc_ReceiveSocialPost (void)
 /****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID])
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_Comment;
 
@@ -2387,7 +2391,7 @@ static void Soc_PutIconCommentDisabled (void)
 // All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Act_MAX_BYTES_ID])
+                                                            const char IdNewComment[Act_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_New_SOCIAL_comment;
    bool ShowPhoto = false;
@@ -2713,7 +2717,9 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
    extern const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone;
 
    if (NumShared)
-      sprintf (Gbl.Title,Txt_SOCIAL_NOTE_Shared_by_X_USERS,NumShared);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_SOCIAL_NOTE_Shared_by_X_USERS,
+		NumShared);
    else
       Str_Copy (Gbl.Title,Txt_SOCIAL_NOTE_Not_shared_by_anyone,
                 Lay_MAX_BYTES_TITLE);
@@ -2738,7 +2744,9 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
    extern const char *Txt_SOCIAL_NOTE_Not_favourited_by_anyone;
 
    if (NumFavs)
-      sprintf (Gbl.Title,Txt_SOCIAL_NOTE_Favourited_by_X_USERS,NumFavs);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_SOCIAL_NOTE_Favourited_by_X_USERS,
+		NumFavs);
    else
       Str_Copy (Gbl.Title,Txt_SOCIAL_NOTE_Not_favourited_by_anyone,
                 Lay_MAX_BYTES_TITLE);

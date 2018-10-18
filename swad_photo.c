@@ -609,24 +609,28 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    Act_Action_t NextAction;
 
    /***** Creates directories if not exist *****/
-   sprintf (PathPhotosPriv,"%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO);
+   snprintf (PathPhotosPriv,sizeof (PathPhotosPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO);
    Fil_CreateDirIfNotExists (PathPhotosPriv);
-   sprintf (PathPhotosPriv,"%s/%s/%02u",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-	    (unsigned) (UsrDat->UsrCod % 100));
+   snprintf (PathPhotosPriv,sizeof (PathPhotosPriv),
+	     "%s/%s/%02u",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+	     (unsigned) (UsrDat->UsrCod % 100));
    Fil_CreateDirIfNotExists (PathPhotosPriv);
 
    /***** Create directories if not exists
           and remove old temporary files *****/
    /* Create public directory for photos */
-   sprintf (PathPhotosPubl,"%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO);
+   snprintf (PathPhotosPubl,sizeof (PathPhotosPubl),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO);
    Fil_CreateDirIfNotExists (PathPhotosPubl);
 
    /* Create temporary directory for photos */
-   sprintf (PathPhotosPubl,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
+   snprintf (PathPhotosPubl,sizeof (PathPhotosPubl),
+	     "%s/%s/%s",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
    Fil_CreateDirIfNotExists (PathPhotosPubl);
 
    /* Remove old temporary files */
@@ -653,9 +657,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
      }
 
    /* End the reception of photo in a temporary file */
-   sprintf (FileNamePhotoTmp,"%s/%s/%s/%s.jpg",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
-            Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
+   snprintf (FileNamePhotoTmp,sizeof (FileNamePhotoTmp),
+	     "%s/%s/%s/%s.jpg",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+             Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
    if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
@@ -664,13 +669,16 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 
    /* Copy the original photo received to private directory.
       The purpose of this copy is only to have a backup used for researching better methods to detect faces in images */
-   sprintf (PathRelPhoto,"%s/%s/%02u/%ld_original.jpg",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-            (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+   snprintf (PathRelPhoto,sizeof (PathRelPhoto),
+	     "%s/%s/%02u/%ld_original.jpg",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+             (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
    Fil_FastCopyOfFiles (FileNamePhotoTmp,PathRelPhoto);
 
    /***** Call to program that makes photo processing / face detection *****/
-   sprintf (Command,Cfg_COMMAND_FACE_DETECTION,FileNamePhotoTmp);
+   snprintf (Command,sizeof (Command),
+	     Cfg_COMMAND_FACE_DETECTION,
+	     FileNamePhotoTmp);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running command to process photo and detect faces.");
@@ -681,9 +689,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
      {
       case 0:        // Faces detected
          /***** Open text file with text for image map *****/
-         sprintf (FileNameTxtMap,"%s/%s/%s/%s_map.txt",
-                  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
-                  Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
+         snprintf (FileNameTxtMap,sizeof (FileNameTxtMap),
+                   "%s/%s/%s/%s_map.txt",
+                   Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+                   Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
          if ((FileTxtMap = fopen (FileNameTxtMap,"rb")) == NULL)
             Lay_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
 
@@ -805,7 +814,9 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          if (BackgroundCode == 1)
            {
             NumFace++;
-            sprintf (FormId,"form_%d",NumLastForm + NumFace);
+            snprintf (FormId,sizeof (FormId),
+        	      "form_%d",
+		      NumLastForm + NumFace);
             fprintf (Gbl.F.Out,"<area shape=\"circle\""
                                " href=\"javascript:document.getElementById('%s').submit();\""
                                " coords=\"%u,%u,%u\">\n",
@@ -818,8 +829,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    fprintf (Gbl.F.Out,"</map>\n");
 
    /***** Show map photo *****/
-   sprintf (FileNamePhotoMap,"%s/%s/%s/%s_map.jpg",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
+   snprintf (FileNamePhotoMap,sizeof (FileNamePhotoMap),
+	     "%s/%s/%s/%s_map.jpg",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
+	     Gbl.UniqueNameEncrypted);
    fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">"
                       "<img src=\"%s/%s/%s/%s_map.jpg\""
                       " usemap=\"#faces_map\""
@@ -893,14 +906,16 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
    Par_GetParToText ("FileName",Gbl.Usrs.FileNamePhoto,NAME_MAX);        // Example of FileNamePhoto: "4924a838630e_016"
 
    /***** Convert the temporary photo resulting of the processing to the current photo of the user *****/
-   sprintf (PathPhotoTmp,"%s/%s/%s/%s_paso3.jpg",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.Usrs.FileNamePhoto);
+   snprintf (PathPhotoTmp,sizeof (PathPhotoTmp),
+	     "%s/%s/%s/%s_paso3.jpg",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.Usrs.FileNamePhoto);
    if (Fil_CheckIfPathExists (PathPhotoTmp))        // The file with the selected photo exists
      {
       /* Copy the temporary file of the third (last) step resulting of the processing to the directory of private photos */
-      sprintf (PathRelPhoto,"%s/%s/%02u/%ld.jpg",
-               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-               (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+      snprintf (PathRelPhoto,sizeof (PathRelPhoto),
+	        "%s/%s/%02u/%ld.jpg",
+                Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
       Fil_FastCopyOfFiles (PathPhotoTmp,PathRelPhoto);
 
       /* Update public photo name in database */
@@ -1026,7 +1041,7 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
 // Returns true if the photo can be shown and false if not.
 // Public photo means two different things depending on the user's type
 
-bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
+bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1])
   {
    bool ICanSeePhoto;
 
@@ -1044,7 +1059,7 @@ bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
 // Returns false if photo does not exist
 // Returns true if link is created successfully
 
-bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
+bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1])
   {
    char PathPublPhoto[PATH_MAX + 1];
    char PathPrivPhoto[PATH_MAX + 1];
@@ -1052,13 +1067,15 @@ bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
    if (UsrDat->Photo[0])
      {
       /***** Make path to public photo *****/
-      sprintf (PathPublPhoto,"%s/%s/%s.jpg",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
+      snprintf (PathPublPhoto,sizeof (PathPublPhoto),
+	        "%s/%s/%s.jpg",
+                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
 
       /***** Make path to private photo from public directory *****/
-      sprintf (PathPrivPhoto,"%s/%s/%02u/%ld.jpg",
-               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-               (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+      snprintf (PathPrivPhoto,sizeof (PathPrivPhoto),
+	        "%s/%s/%02u/%ld.jpg",
+                Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
 
       /***** Create a symbolic link to the private photo, if not exists *****/
       if (!Fil_CheckIfPathExists (PathPublPhoto))
@@ -1067,8 +1084,9 @@ bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
                                  " to access to user's private photo");
 
       /***** Create the public URL of the photo *****/
-      sprintf (PhotoURL,"%s/%s/%s.jpg",
-               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
+      snprintf (PhotoURL,PATH_MAX + 1,
+	        "%s/%s/%s.jpg",
+                Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
 
       return true;
      }
@@ -1085,12 +1103,13 @@ bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
 // Returns false if photo does not exist
 // Returns true if photo exists
 
-bool Pho_CheckIfPrivPhotoExists (long UsrCod,char *PathPrivRelPhoto)
+bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1])
   {
    /***** Make path to private photo *****/
-   sprintf (PathPrivRelPhoto,"%s/%s/%02u/%ld.jpg",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-            (unsigned) (UsrCod % 100),UsrCod);
+   snprintf (PathPrivRelPhoto,PATH_MAX + 1,
+	     "%s/%s/%02u/%ld.jpg",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+             (unsigned) (UsrCod % 100),UsrCod);
 
    return Fil_CheckIfPathExists (PathPrivRelPhoto);
   }
@@ -1113,16 +1132,18 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
       Pho_ClearPhotoName (UsrDat->UsrCod);
 
       /***** Remove public link *****/
-      sprintf (PathPublPhoto,"%s/%s/%s.jpg",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
+      snprintf (PathPublPhoto,sizeof (PathPublPhoto),
+	        "%s/%s/%s.jpg",
+                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
       if (Fil_CheckIfPathExists (PathPublPhoto))	// Public link exists
          if (unlink (PathPublPhoto))			// Remove public link
             NumErrors++;
 
       /***** Remove photo *****/
-      sprintf (PathPrivRelPhoto,"%s/%s/%02u/%ld.jpg",
-               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-               (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),
+	        "%s/%s/%02u/%ld.jpg",
+                Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
       if (Fil_CheckIfPathExists (PathPrivRelPhoto))        // Photo exists
         {
          if (unlink (PathPrivRelPhoto))                        // Remove photo
@@ -1130,9 +1151,10 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
         }
 
       /***** Remove original photo *****/
-      sprintf (PathPrivRelPhoto,"%s/%s/%02u/%ld_original.jpg",
-               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
-               (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+      snprintf (PathPrivRelPhoto,sizeof (PathPrivRelPhoto),
+	        "%s/%s/%02u/%ld_original.jpg",
+                Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,
+                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
       if (Fil_CheckIfPathExists (PathPrivRelPhoto))		// Original photo exists
          if (unlink (PathPrivRelPhoto))				// Remove original photo
             NumErrors++;
@@ -1188,8 +1210,9 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
    DB_QueryUPDATE (Query,"can not update the name of a user's photo");
 
    /***** Remove the old symbolic link to photo *****/
-   sprintf (PathPublPhoto,"%s/%s/%s.jpg",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
+   snprintf (PathPublPhoto,sizeof (PathPublPhoto),
+	     "%s/%s/%s.jpg",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
    unlink (PathPublPhoto);                // Remove public link
 
    /***** Update photo name in user's data *****/
@@ -1211,7 +1234,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                                  BrowserTabIs1stTab;	// Only in main browser tab
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab
-   char IdCaption[Act_MAX_BYTES_ID];
+   char IdCaption[Act_MAX_BYTES_ID + 1];
 
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
@@ -1341,21 +1364,25 @@ void Pho_CalcPhotoDegree (void)
    Gbl.Stat.DegPhotos.TypeOfAverage = Pho_GetPhotoAvgTypeFromForm ();
 
    /***** Create public directories for average photos if not exist *****/
-   sprintf (PathPhotosPublic,"%s/%s",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO);
+   snprintf (PathPhotosPublic,sizeof (PathPhotosPublic),
+	     "%s/%s",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO);
    Fil_CreateDirIfNotExists (PathPhotosPublic);
    for (TypeOfAverage = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAverage < Pho_NUM_AVERAGE_PHOTO_TYPES;
 	TypeOfAverage++)
      {
-      sprintf (DirAvgPhotosRelPath[TypeOfAverage],"%s/%s/%s",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Pho_StrAvgPhotoDirs[TypeOfAverage]);
+      snprintf (DirAvgPhotosRelPath[TypeOfAverage],
+	        sizeof (DirAvgPhotosRelPath[TypeOfAverage]),
+	        "%s/%s/%s",
+                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Pho_StrAvgPhotoDirs[TypeOfAverage]);
       Fil_CreateDirIfNotExists (DirAvgPhotosRelPath[TypeOfAverage]);
      }
 
    /***** Creates private directory for lists of users' photos if not exists *****/
-   sprintf (PathPhotosTmpPriv,"%s/%s/%s",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
+   snprintf (PathPhotosTmpPriv,sizeof (PathPhotosTmpPriv),
+	     "%s/%s/%s",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
    Fil_CreateDirIfNotExists (PathPhotosTmpPriv);
 
    /***** Remove old private files used for lists *****/
@@ -1602,16 +1629,18 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    *NumStds = *NumStdsWithPhoto = 0;
 
    /***** Build name for file with average photo *****/
-   sprintf (PathRelAvgPhoto,"%s/%ld_%s.jpg",
-            DirAvgPhotosRelPath,DegCod,Usr_StringsSexDB[Sex]);
+   snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),
+	     "%s/%ld_%s.jpg",
+             DirAvgPhotosRelPath,DegCod,Usr_StringsSexDB[Sex]);
 
    /***** Remove old file if exists *****/
    if (Fil_CheckIfPathExists (PathRelAvgPhoto))  // If file exists
       unlink (PathRelAvgPhoto);
 
    /***** Build names for text file with photo paths *****/
-   sprintf (FileNamePhotoNames,"%s/%s/%s/%ld.txt",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,DegCod);
+   snprintf (FileNamePhotoNames,sizeof (FileNamePhotoNames),
+	     "%s/%s/%s/%ld.txt",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,DegCod);
    if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open file to compute average photo.");
 
@@ -1639,9 +1668,10 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
    /***** Call to program to calculate average photo *****/
    if (*NumStdsWithPhoto)
      {
-      sprintf (StrCallToProgram,"%s %s %s",
-	       Pho_StrAvgPhotoPrograms[TypeOfAverage],
-	       FileNamePhotoNames,PathRelAvgPhoto);
+      snprintf (StrCallToProgram,sizeof (StrCallToProgram),
+	        "%s %s %s",
+	        Pho_StrAvgPhotoPrograms[TypeOfAverage],
+	        FileNamePhotoNames,PathRelAvgPhoto);
       ReturnCode = system (StrCallToProgram);
       if (ReturnCode == -1)
 	 Lay_ShowErrorAndExit ("Error when running program that computes the average photo.");
@@ -1969,8 +1999,6 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 /*************** Put a link to calculate the stats of degrees ****************/
 /*****************************************************************************/
 
-#define Pho_MAX_BYTES_ESTIMATED_TIME (128 - 1)
-
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -1982,7 +2010,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
    unsigned NumDeg;
    struct Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
-   char StrEstimatedTimeToComputeAvgPhoto[Pho_MAX_BYTES_ESTIMATED_TIME + 1];
+   char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
 
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -2017,7 +2045,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
          EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
          if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
             Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
-                      Pho_MAX_BYTES_ESTIMATED_TIME);
+                      Dat_MAX_BYTES_TIME);
          else
             Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
                            EstimatedTimeToComputeAvgPhotoInMicroseconds);
@@ -2412,7 +2440,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    char PhotoURL[PATH_MAX + 1];
    char PhotoCaption[1024 + Hie_MAX_BYTES_SHRT_NAME];
    bool ShowDegPhoto;
-   char IdCaption[Act_MAX_BYTES_ID];
+   char IdCaption[Act_MAX_BYTES_ID + 1];
 
    /***** Initializations *****/
    PhotoURL[0] = '\0';
@@ -2427,7 +2455,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
      {
       Act_StartFormGoTo (ActSeeDegInf);
       Deg_PutParamDegCod (Deg->DegCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Deg->FullName);
       Act_LinkFormSubmit (Gbl.Title,NULL,NULL);
      }
 
@@ -2440,28 +2470,30 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 
    if (ShowDegPhoto)
      {
-      sprintf (PathRelAvgPhoto,"%s/%s/%s/%ld_%s.jpg",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
-	       Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
-	       Deg->DegCod,Usr_StringsSexDB[Sex]);
+      snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),
+	        "%s/%s/%s/%ld_%s.jpg",
+	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+	        Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
+	        Deg->DegCod,Usr_StringsSexDB[Sex]);
       if (Fil_CheckIfPathExists (PathRelAvgPhoto))
 	{
-	 sprintf (PhotoURL,"%s/%s/%s/%ld_%s.jpg",
-		  Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
-		  Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
-		  Deg->DegCod,Usr_StringsSexDB[Sex]);
-		    if (SeeOrPrint == Pho_DEGREES_SEE)
+	 snprintf (PhotoURL,sizeof (PhotoURL),
+	           "%s/%s/%s/%ld_%s.jpg",
+		   Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+		   Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
+		   Deg->DegCod,Usr_StringsSexDB[Sex]);
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
             /***** Hidden div to pass user's name to Javascript *****/
-	    sprintf (PhotoCaption,"%s<br />"
-				  "%d&nbsp;%s&nbsp;(%s)<br />"
-				  "%d&nbsp;%s&nbsp;(%d%%)",
-		     Deg->ShrtName,
-		     NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
-		     NumStdsWithPhoto,Txt_photos,
-		     NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-				   0);
+	    snprintf (PhotoCaption,sizeof (PhotoCaption),
+		      "%s<br />"
+		      "%d&nbsp;%s&nbsp;(%s)<br />"
+		      "%d&nbsp;%s&nbsp;(%d%%)",
+		      Deg->ShrtName,
+		      NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
+		      NumStdsWithPhoto,Txt_photos,
+		      NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+				    0);
 	    Act_SetUniqueId (IdCaption);
 	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
 	                       "<div class=\"ZOOM_TXT_LINE DAT_N\">"

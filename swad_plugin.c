@@ -114,7 +114,9 @@ void Plg_ListPlugins (void)
      {
       Plg = &(Gbl.Plugins.Lst[NumPlg]);
 
-      sprintf (URL,"%s%s",Plg->URL,Gbl.Session.Id);
+      snprintf (URL,sizeof (URL),
+	        "%s%s",
+		Plg->URL,Gbl.Session.Id);
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32

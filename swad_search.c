@@ -627,7 +627,9 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COUNTRIES))
 	{
 	 /***** Split countries string into words *****/
-	 sprintf (FieldName,"Name_%s",Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	 snprintf (FieldName,sizeof (FieldName),
+	           "Name_%s",
+		   Txt_STR_LANG_ID[Gbl.Prefs.Language]);
 	 if (Sch_BuildSearchQuery (SearchQuery,FieldName,NULL,NULL))
 	   {
 	    /***** Query database and list institutions found *****/

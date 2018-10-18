@@ -248,7 +248,9 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    Ins_PutParamInsCod (Ins->InsCod);
 
    /***** Link to action *****/
-   sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Go_to_X,
+	     Ins->FullName);
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw institution logo *****/
@@ -529,8 +531,9 @@ static void Ins_Configuration (bool PrintView)
 	 /* Form to go to see centres of this institution */
 	 Act_StartFormGoTo (ActSeeCtr);
 	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-	          Gbl.CurrentIns.Ins.ShrtName);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Centres_of_INSTITUTION_X,
+	           Gbl.CurrentIns.Ins.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
@@ -670,7 +673,9 @@ static void Ins_ListInstitutions (void)
    unsigned NumIns;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Institutions_of_COUNTRY_X,
+	     Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
@@ -919,8 +924,9 @@ void Ins_EditInstitutions (void)
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
-            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Institutions_of_COUNTRY_X,
+             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
@@ -1711,10 +1717,11 @@ void Ins_RemoveInstitution (void)
       Brw_RemoveInsFilesFromDB (Ins.InsCod);
 
       /***** Remove directories of the institution *****/
-      sprintf (PathIns,"%s/%s/%02u/%u",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
-	       (unsigned) (Ins.InsCod % 100),
-	       (unsigned) Ins.InsCod);
+      snprintf (PathIns,sizeof (PathIns),
+	        "%s/%s/%02u/%u",
+	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+	        (unsigned) (Ins.InsCod % 100),
+	        (unsigned) Ins.InsCod);
       Fil_RemoveTree (PathIns);
 
       /***** Remove institution *****/
@@ -2129,7 +2136,9 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
    if (Gbl.Inss.EditingIns.InsCod != Gbl.CurrentIns.Ins.InsCod)
      {
       /***** Alert with button to go to degree *****/
-      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Inss.EditingIns.ShrtName);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Gbl.Inss.EditingIns.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
                               Btn_CONFIRM_BUTTON,Gbl.Title);
@@ -2549,9 +2558,10 @@ unsigned Ins_ListInssFound (const char *Query)
      {
       /***** Start box and table *****/
       /* Number of institutions found */
-      sprintf (Gbl.Title,"%u %s",
-               NumInss,NumInss == 1 ? Txt_institution :
-				      Txt_institutions);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s",
+                NumInss,NumInss == 1 ? Txt_institution :
+				       Txt_institutions);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 

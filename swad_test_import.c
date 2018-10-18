@@ -180,9 +180,10 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    Brw_CreateDirDownloadTmp ();
 
    /***** Create public XML file with the questions *****/
-   sprintf (PathPubFile,"%s/%s/%s/test.xml",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-            Gbl.FileBrowser.TmpPubDir);
+   snprintf (PathPubFile,sizeof (PathPubFile),
+	     "%s/%s/%s/test.xml",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+             Gbl.FileBrowser.TmpPubDir);
    if ((Gbl.Test.XML.FileXML = fopen (PathPubFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open target file.");
 
@@ -406,7 +407,9 @@ void TsI_ImportQstsFromXML (void)
    bool WrongType = false;
 
    /***** Creates directory if not exists *****/
-   sprintf (PathTestPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_TEST);
+   snprintf (PathTestPriv,sizeof (PathTestPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_TEST);
    Fil_CreateDirIfNotExists (PathTestPriv);
 
    /***** Remove old files *****/
@@ -434,7 +437,9 @@ void TsI_ImportQstsFromXML (void)
    else
      {
       /* End the reception of XML in a temporary file */
-      sprintf (FileNameXMLTmp,"%s/%s.xml",PathTestPriv,Gbl.UniqueNameEncrypted);
+      snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),
+	        "%s/%s.xml",
+		PathTestPriv,Gbl.UniqueNameEncrypted);
       if (Fil_EndReceptionOfFile (FileNameXMLTmp,Param))
          /***** Get questions from XML file and store them in database *****/
          TsI_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);

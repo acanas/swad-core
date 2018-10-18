@@ -25,9 +25,11 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <malloc.h>		// For malloc
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 #include <unistd.h>		// For unlink
 
@@ -628,9 +630,10 @@ void Mrk_ShowMyMarks (void)
    /***** Get the path of the file of marks *****/
    Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 	                  Gbl.FileBrowser.FilFolLnkName);
-   sprintf (PathPrivate,"%s/%s",
-            Gbl.FileBrowser.Priv.PathAboveRootFolder,
-            Gbl.FileBrowser.Priv.FullPathInTree);
+   snprintf (PathPrivate,sizeof (PathPrivate),
+	     "%s/%s",
+             Gbl.FileBrowser.Priv.PathAboveRootFolder,
+             Gbl.FileBrowser.Priv.FullPathInTree);
 
    /***** Get number of rows of header or footer *****/
    Mrk_GetNumRowsHeaderAndFooter (&Marks);
@@ -670,8 +673,9 @@ void Mrk_ShowMyMarks (void)
 
       /***** Create temporal file to store my marks (in HTML) *****/
       /* If the private directory does not exist, create it */
-      sprintf (PathMarksPriv,"%s/%s",
-               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
+      snprintf (PathMarksPriv,sizeof (PathMarksPriv),
+	        "%s/%s",
+                Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
       Fil_CreateDirIfNotExists (PathMarksPriv);
 
       /* First of all, we remove the oldest temporary files.
@@ -681,7 +685,9 @@ void Mrk_ShowMyMarks (void)
       Fil_RemoveOldTmpFiles (PathMarksPriv,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,false);
 
       /* Create a new temporary file *****/
-      sprintf (FileNameUsrMarks,"%s/%s.html",PathMarksPriv,Gbl.UniqueNameEncrypted);
+      snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
+	        "%s/%s.html",
+		PathMarksPriv,Gbl.UniqueNameEncrypted);
       if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
          Lay_ShowErrorAndExit ("Can not open file for my marks.");
 
@@ -811,18 +817,21 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                if (UsrDat.IDs.Num)
                  {
                   if (GrpCod > 0)
-                     sprintf (PathMarks,"%s/%s/%ld/grp/%ld/%s",
-                              Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod,
-                              FullPathInTreeFromDBMarksTable);
+                     snprintf (PathMarks,sizeof (PathMarks),
+                	       "%s/%s/%ld/grp/%ld/%s",
+                               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod,
+                               FullPathInTreeFromDBMarksTable);
                   else
-                     sprintf (PathMarks,"%s/%s/%ld/%s",
-                              Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
-                              FullPathInTreeFromDBMarksTable);
+                     snprintf (PathMarks,sizeof (PathMarks),
+                	       "%s/%s/%ld/%s",
+                               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+                               FullPathInTreeFromDBMarksTable);
 
                   /***** Create temporal file to store my marks (in HTML) *****/
                   /* If the private directory does not exist, create it */
-                  sprintf (PathMarksPriv,"%s/%s",
-                           Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
+                  snprintf (PathMarksPriv,sizeof (PathMarksPriv),
+                	    "%s/%s",
+                            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
                   Fil_CreateDirIfNotExists (PathMarksPriv);
 
                   /* First of all, we remove the oldest temporary files.
@@ -832,7 +841,9 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                   Fil_RemoveOldTmpFiles (PathMarksPriv,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,false);
 
                   /* Create a new temporary file *****/
-                  sprintf (FileNameUsrMarks,"%s/%s.html",PathMarksPriv,Gbl.UniqueNameEncrypted);
+                  snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
+                	    "%s/%s.html",
+			    PathMarksPriv,Gbl.UniqueNameEncrypted);
                   if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
                     {
                      /***** Get user's marks *****/
@@ -867,8 +878,9 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                      else
                        {
                         fclose (FileUsrMarks);
-                        if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Alert.Txt) + 3 + 1)))
-                           sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Alert.Txt);
+                        if (asprintf (ContentStr,"<![CDATA[%s]]>",
+                                      Gbl.Alert.Txt) < 0)
+                           Lay_ShowErrorAndExit ("Not enough memory to store string.");
                        }
                     }
                   else
@@ -876,8 +888,9 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		     Gbl.Alert.Type = Ale_WARNING;
 		     Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",	// TODO: Need translation!
 			       Ale_MAX_BYTES_ALERT);
-                     if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Alert.Txt) + 3 + 1)))
-                        sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Alert.Txt);
+                     if (asprintf (ContentStr,"<![CDATA[%s]]>",
+                	           Gbl.Alert.Txt) < 0)
+                        Lay_ShowErrorAndExit ("Not enough memory to store string.");
                     }
                   unlink (FileNameUsrMarks);	// File with marks is no longer necessary
                  }
@@ -886,8 +899,9 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		  Gbl.Alert.Type = Ale_WARNING;
 		  Str_Copy (Gbl.Alert.Txt,"User's IDs not found!",	// TODO: Need translation!
 			    Ale_MAX_BYTES_ALERT);
-                  if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Alert.Txt) + 3 + 1)))
-                     sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Alert.Txt);
+                  if (asprintf (ContentStr,"<![CDATA[%s]]>",
+                	        Gbl.Alert.Txt) < 0)
+                     Lay_ShowErrorAndExit ("Not enough memory to store string.");
                  }
               }
            }

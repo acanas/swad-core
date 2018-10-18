@@ -543,12 +543,15 @@ void Hie_InitHierarchy (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       /***** Paths of course directories *****/
-      sprintf (Gbl.CurrentCrs.PathPriv,"%s/%s/%ld",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
-      sprintf (Gbl.CurrentCrs.PathRelPubl,"%s/%s/%ld",
-	       Cfg_PATH_SWAD_PUBLIC ,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
-      sprintf (Gbl.CurrentCrs.PathURLPubl,"%s/%s/%ld",
-	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+      snprintf (Gbl.CurrentCrs.PathPriv,sizeof (Gbl.CurrentCrs.PathPriv),
+	        "%s/%s/%ld",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+      snprintf (Gbl.CurrentCrs.PathRelPubl,sizeof (Gbl.CurrentCrs.PathRelPubl),
+	        "%s/%s/%ld",
+	        Cfg_PATH_SWAD_PUBLIC ,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+      snprintf (Gbl.CurrentCrs.PathURLPubl,sizeof (Gbl.CurrentCrs.PathURLPubl),
+	        "%s/%s/%ld",
+	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** If any of the course directories does not exist, create it *****/
       if (!Fil_CheckIfPathExists (Gbl.CurrentCrs.PathPriv))

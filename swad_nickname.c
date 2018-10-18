@@ -246,7 +246,9 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    NumNicks = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get nicknames of a user");
 
    /***** Start box *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
    Box_StartBox (StrRecordWidth,Txt_Nickname,Acc_PutLinkToRemoveMyAccount,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 

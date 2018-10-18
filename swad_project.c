@@ -1708,7 +1708,9 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
-	    sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      Txt_Add_USER,
+		      Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
 	    Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutCurrentParams,
 				   "plus64x64.png",
 				   Gbl.Title,NULL,
@@ -1905,7 +1907,9 @@ static void Prj_ReqAnotherUsrID (Prj_RoleInProject_t RoleInProject)
       Lay_ShowErrorAndExit ("Code of project is missing.");
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Add_USER,Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Add_USER,
+	     Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ASSESSMENT_Projects_add_user,Box_NOT_CLOSABLE);
 
@@ -2794,9 +2798,10 @@ void Prj_RemoveProject (void)
       Brw_RemovePrjFilesFromDB (Prj.PrjCod);
 
       /***** Remove directory of the project *****/
-      sprintf (PathRelPrj,"%s/%s/%ld/%s/%02u/%ld",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Prj.CrsCod,Cfg_FOLDER_PRJ,
-	       (unsigned) (Prj.PrjCod % 100),Prj.PrjCod);
+      snprintf (PathRelPrj,sizeof (PathRelPrj),
+	        "%s/%s/%ld/%s/%02u/%ld",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Prj.CrsCod,Cfg_FOLDER_PRJ,
+	        (unsigned) (Prj.PrjCod % 100),Prj.PrjCod);
       Fil_RemoveTree (PathRelPrj);
 
       /***** Write message to show the change made *****/

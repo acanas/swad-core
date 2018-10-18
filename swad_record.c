@@ -666,8 +666,9 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                   Ale_MAX_BYTES_ALERT);
    else
      {
-      sprintf (Message_part2,Txt_this_field_is_filled_in_the_records_of_X_students,
-               NumRecords);
+      snprintf (Message_part2,sizeof (Message_part2),
+	        Txt_this_field_is_filled_in_the_records_of_X_students,
+                NumRecords);
       Str_Concat (Gbl.Alert.Txt,Message_part2,
                   Ale_MAX_BYTES_ALERT);
      }
@@ -1071,7 +1072,9 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
 	{
          /* Start container for this user */
-	 sprintf (RecordSectionId,"record_%u",NumUsr);
+	 snprintf (RecordSectionId,sizeof (RecordSectionId),
+	           "record_%u",
+		   NumUsr);
 	 Lay_StartSection (RecordSectionId);
 	 fprintf (Gbl.F.Out,"<div class=\"REC_USR\"");
 	 if (Gbl.Action.Act == ActPrnRecSevGst &&
@@ -1276,7 +1279,9 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
             UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Start container for this user */
-	    sprintf (RecordSectionId,"record_%u",NumUsr);
+	    snprintf (RecordSectionId,sizeof (RecordSectionId),
+		      "record_%u",
+		      NumUsr);
 	    Lay_StartSection (RecordSectionId);
 	    fprintf (Gbl.F.Out,"<div class=\"REC_USR\"");
             if (Gbl.Action.Act == ActPrnRecSevStd &&
@@ -1355,7 +1360,9 @@ static void Rec_ShowRecordOneTchCrs (void)
    bool ShowOfficeHours;
 
    /***** Width for office hours *****/
-   sprintf (Width,"%upx",Rec_RECORD_WIDTH);
+   snprintf (Width,sizeof (Width),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
 
    /***** Get if teacher has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -1434,7 +1441,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    char Width[10 + 2 + 1];
 
    /***** Width for office hours *****/
-   sprintf (Width,"%upx",Rec_RECORD_WIDTH);
+   snprintf (Width,sizeof (Width),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1496,7 +1505,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
             UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Start container for this user */
-	    sprintf (RecordSectionId,"record_%u",NumUsr);
+	    snprintf (RecordSectionId,sizeof (RecordSectionId),
+		      "record_%u",
+		      NumUsr);
 	    Lay_StartSection (RecordSectionId);
 	    fprintf (Gbl.F.Out,"<div class=\"REC_USR\"");
             if (Gbl.Action.Act == ActPrnRecSevTch &&
@@ -1806,7 +1817,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      }
 
    /***** Start box and table *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
    Box_StartBoxTable (StrRecordWidth,NULL,NULL,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
@@ -1960,7 +1973,9 @@ void Rec_GetFieldsCrsRecordFromForm (void)
       if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
         {
          /* Get text of the form */
-         sprintf (FieldParamName,"Field%ld",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+         snprintf (FieldParamName,sizeof (FieldParamName),
+                   "Field%ld",
+		   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
          Par_GetParToHTML (FieldParamName,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
         }
   }

@@ -473,16 +473,17 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
    fclose (Gbl.Msg.FileMail);
 
    /***** Call the script to send an email *****/
-   sprintf (Command,"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-	    Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
-	    Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
-	    Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
-	    Cfg_AUTOMATIC_EMAIL_FROM,
-            Gbl.Config.SMTPPassword,
-	    Gbl.Usrs.Me.UsrDat.Email,
-	    Cfg_PLATFORM_SHORT_NAME,
-	    Txt_New_password_NO_HTML[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	    Gbl.Msg.FileNameMail);
+   snprintf (Command,sizeof (Command),
+	     "%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
+	     Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
+	     Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
+	     Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
+	     Cfg_AUTOMATIC_EMAIL_FROM,
+             Gbl.Config.SMTPPassword,
+	     Gbl.Usrs.Me.UsrDat.Email,
+	     Cfg_PLATFORM_SHORT_NAME,
+	     Txt_New_password_NO_HTML[Gbl.Usrs.Me.UsrDat.Prefs.Language],
+	     Gbl.Msg.FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running script to send email.");
@@ -690,7 +691,9 @@ void Pwd_ShowFormChgMyPwd (void)
    Act_StartFormAnchor (ActChgPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Start box *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
    Box_StartBox (StrRecordWidth,Txt_Password,NULL,
 		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 

@@ -613,17 +613,23 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
 	NumQst++)
      {
       /* Get question code */
-      sprintf (StrQstIndOrAns,"Qst%06u",NumQst);
+      snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
+	        "Qst%06u",
+		NumQst);
       if ((Gbl.Test.QstCodes[NumQst] = Par_GetParToLong (StrQstIndOrAns)) <= 0)
 	 Lay_ShowErrorAndExit ("Code of question is missing.");
 
       /* Get indexes for this question */
-      sprintf (StrQstIndOrAns,"Ind%06u",NumQst);
+      snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
+	        "Ind%06u",
+		NumQst);
       Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrIndexesOneQst[NumQst],
                              Tst_MAX_BYTES_INDEXES_ONE_QST);  /* If choice ==> "0", "1", "2",... */
 
       /* Get answers selected by user for this question */
-      sprintf (StrQstIndOrAns,"Ans%06u",NumQst);
+      snprintf (StrQstIndOrAns,sizeof (StrQstIndOrAns),
+	        "Ans%06u",
+		NumQst);
       Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrAnswersOneQst[NumQst],
                              Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
@@ -1881,7 +1887,9 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
    Act_StartForm (ActEnableTag);
    Par_PutHiddenParamLong ("TagCod",TagCod);
-   sprintf (Gbl.Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Tag_X_not_allowed_Click_to_allow_it,
+	     TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
@@ -1903,7 +1911,9 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
    Act_StartForm (ActDisableTag);
    Par_PutHiddenParamLong ("TagCod",TagCod);
-   sprintf (Gbl.Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Tag_X_allowed_Click_to_disable_it,
+	     TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
@@ -2526,17 +2536,23 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 
    Str_Concat (Query," WHERE tst_questions.CrsCod='",
                Tst_MAX_BYTES_QUERY_TEST);
-   sprintf (CrsCodStr,"%ld",Gbl.CurrentCrs.Crs.CrsCod);
+   snprintf (CrsCodStr,sizeof (CrsCodStr),
+	     "%ld",
+	     Gbl.CurrentCrs.Crs.CrsCod);
    Str_Concat (Query,CrsCodStr,
                Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
-   sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[0]);
+   snprintf (LongStr,sizeof (LongStr),
+	     "%ld",
+	     (long) Gbl.DateRange.TimeUTC[0]);
    Str_Concat (Query,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
-   sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[1]);
+   snprintf (LongStr,sizeof (LongStr),
+	     "%ld",
+	     (long) Gbl.DateRange.TimeUTC[1]);
    Str_Concat (Query,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"')",
@@ -2759,7 +2775,9 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    /* End query */
    Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",
                Tst_MAX_BYTES_QUERY_TEST);
-   sprintf (StrNumQsts,"%u",Gbl.Test.NumQsts);
+   snprintf (StrNumQsts,sizeof (StrNumQsts),
+	     "%u",
+	     Gbl.Test.NumQsts);
    Str_Concat (Query,StrNumQsts,
                Tst_MAX_BYTES_QUERY_TEST);
 /*
@@ -3768,7 +3786,9 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       /***** Write selectors and letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_TOP\">");
-      sprintf (ParamName,"Ind%06u",NumQst);
+      snprintf (ParamName,sizeof (ParamName),
+	        "Ind%06u",
+		NumQst);
       Par_PutHiddenParamUnsigned (ParamName,Index);
       fprintf (Gbl.F.Out,"<input type=\"");
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
@@ -4637,7 +4657,9 @@ static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
   {
    char ParamName[3 + 6 + 1];
 
-   sprintf (ParamName,"Qst%06u",NumQst);
+   snprintf (ParamName,sizeof (ParamName),
+	     "Qst%06u",
+	     NumQst);
    Par_PutHiddenParamLong (ParamName,QstCod);
   }
 
@@ -4752,7 +4774,9 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 /* The unique allowed type of answer in a game is unique choice */
 	 Gbl.Test.AllAnsTypes = false;
-	 sprintf (Gbl.Test.ListAnsTypes,"%u",(unsigned) Tst_ANS_UNIQUE_CHOICE);
+	 snprintf (Gbl.Test.ListAnsTypes,sizeof (Gbl.Test.ListAnsTypes),
+	           "%u",
+		   (unsigned) Tst_ANS_UNIQUE_CHOICE);
 	 break;
       default:
 	 break;
@@ -4950,7 +4974,6 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    extern const char *Txt_Contract;
    extern const char *Txt_Save;
    extern const char *Txt_Create_question;
-   char Title[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -4966,8 +4989,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Start box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
-      sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Box_StartBox (NULL,Title,Tst_PutIconToRemoveOneQst,
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Question_code_X,
+		Gbl.Test.QstCod);
+      Box_StartBox (NULL,Gbl.Title,Tst_PutIconToRemoveOneQst,
                     Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
      }
    else
@@ -5231,7 +5256,9 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                'a' + (char) NumOpt);
 
       /* Icon to expand (show the answer) */
-      sprintf (Gbl.Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%s %c)",
+		Txt_Expand,'a' + (char) NumOpt);
       fprintf (Gbl.F.Out,"<a href=\"\" id=\"exp_%u\"",NumOpt);
       if (DisplayRightColumn)	// Answer does not have content
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
@@ -5243,7 +5270,9 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	       Gbl.Title,Gbl.Title);
 
       /* Icon to contract (hide the answer) */
-      sprintf (Gbl.Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%s %c)",
+		Txt_Contract,'a' + (char) NumOpt);
       fprintf (Gbl.F.Out,"<a href=\"\" id=\"con_%u\"",NumOpt);
       if (!DisplayRightColumn)	// Answer does not have content
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
@@ -5792,7 +5821,9 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
 	NumTag++)
      {
-      sprintf (TagStr,"TagTxt%u",NumTag);
+      snprintf (TagStr,sizeof (TagStr),
+	        "TagTxt%u",
+		NumTag);
       Par_GetParToText (TagStr,Gbl.Test.Tags.Txt[NumTag],Tst_MAX_BYTES_TAG);
 
       if (Gbl.Test.Tags.Txt[NumTag][0])
@@ -5865,7 +5896,9 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
                Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
             /* Get answer */
-            sprintf (AnsStr,"AnsStr%u",NumOpt);
+            snprintf (AnsStr,sizeof (AnsStr),
+        	      "AnsStr%u",
+		      NumOpt);
 	    Par_GetParToHTML (AnsStr,Gbl.Test.Answer.Options[NumOpt].Text,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	    if (Gbl.Test.AnswerType == Tst_ANS_TEXT)
@@ -5874,7 +5907,9 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
                Str_ReplaceSeveralSpacesForOne (Gbl.Test.Answer.Options[NumOpt].Text);
 
             /* Get feedback */
-            sprintf (FbStr,"FbStr%u",NumOpt);
+            snprintf (FbStr,sizeof (FbStr),
+        	      "FbStr%u",
+		      NumOpt);
 	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 

@@ -2698,8 +2698,9 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Gbl.Svys.SvyCodToEdit    = SvyCod;
       Gbl.Svys.SvyQstCodToEdit = SvyQst->QstCod;
 
-      sprintf (Gbl.Title,"%s %u",
-               Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%s %u",
+                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
       Box_StartBox (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
                     NULL,Box_NOT_CLOSABLE);
      }
@@ -3006,7 +3007,9 @@ void Svy_ReceiveQst (void)
      {
       if (!Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns))
 	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
-      sprintf (AnsStr,"AnsStr%u",NumAns);
+      snprintf (AnsStr,sizeof (AnsStr),
+	        "AnsStr%u",
+		NumAns);
       Par_GetParToHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
      }
 
@@ -3515,13 +3518,15 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
    /***** String with the number of users *****/
    if (MaxUsrs)
-      sprintf (Gbl.Title,"%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-               NumUsrs,
-               (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
-               Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
+                NumUsrs,
+                (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
+                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
    else
-      sprintf (Gbl.Title,"0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-               Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
+                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
 
    /***** Draw bar with a with proportional to the number of clicks *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:%upx;\">",
@@ -3732,7 +3737,9 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
             Lay_ShowErrorAndExit ("Error: wrong question code.");
 
          /* Get possible parameter with the user's answer */
-         sprintf (ParamName,"Ans%010u",(unsigned) QstCod);
+         snprintf (ParamName,sizeof (ParamName),
+                   "Ans%010u",
+		   (unsigned) QstCod);
          // Lay_ShowAlert (Lay_INFO,ParamName);
          Par_GetParMultiToText (ParamName,StrAnswersIndexes,
                                 Svy_MAX_ANSWERS_PER_QUESTION * (10 + 1));

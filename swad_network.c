@@ -289,7 +289,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    Lay_StartSection (Net_MY_WEBS_ID);
 
    /***** Start box and table *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
    Box_StartBoxTable (StrRecordWidth,
                       Txt_Webs_social_networks,Net_PutIconsWebsSocialNetworks,
                       Hlp_PROFILE_Webs,Box_NOT_CLOSABLE,2);

@@ -1378,7 +1378,9 @@ static void Grp_ListGroupTypesForEdition (void)
         	                                                                  Txt_The_groups_will_not_automatically_open,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open);
-      sprintf (Id,"open_time_%u",UniqueId);
+      snprintf (Id,sizeof (Id),
+	        "open_time_%u",
+		UniqueId);
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id,
                                                    "Open",
 						   Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
@@ -1521,10 +1523,10 @@ static void Grp_ListGroupsForEdition (void)
                                           ActOpeGrp,
                               Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         sprintf (Gbl.Title,
-                  Grp->Open ? Txt_Group_X_open_click_to_close_it :
-                              Txt_Group_X_closed_click_to_open_it,
-                  Grp->GrpName);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Grp->Open ? Txt_Group_X_open_click_to_close_it :
+                               Txt_Group_X_closed_click_to_open_it,
+                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
@@ -1542,10 +1544,10 @@ static void Grp_ListGroupsForEdition (void)
                                                ActEnaFilZonGrp,
                               Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         sprintf (Gbl.Title,
-                  Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
-                                   Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
-                  Grp->GrpName);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
+                                    Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
+                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
@@ -2380,9 +2382,10 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    Rol_Role_t Role;
 
    /***** Write icon to show if group is open or closed *****/
-   sprintf (Gbl.Title,Grp->Open ? Txt_Group_X_open :
-	                          Txt_Group_X_closed,
-            Grp->GrpName);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Grp->Open ? Txt_Group_X_open :
+	                 Txt_Group_X_closed,
+             Grp->GrpName);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
@@ -4786,8 +4789,9 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
          Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enroled.");
 
       /***** Get the multiple parameter code of group of this type *****/
-      sprintf (Param,"GrpCod%ld",
-               Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      snprintf (Param,sizeof (Param),
+	        "GrpCod%ld",
+                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Par_GetParMultiToText (Param,LstStrCodGrps[NumGrpTyp],
                              ((1 + 10 + 1) * Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])

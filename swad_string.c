@@ -300,21 +300,25 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    /* Create id for this form */
 	    Gbl.Form.Num++;
 	    if (Gbl.Usrs.Me.Logged)
-	       sprintf (Gbl.Form.UniqueId,"form_%s_%d",
-			Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+	       snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
+		         "form_%s_%d",
+			 Gbl.UniqueNameEncrypted,Gbl.Form.Num);
 	    else
-	       sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+	       snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
+		         "form_%d",
+			 Gbl.Form.Num);
 
 	    /* Store first part of anchor */
 	    Act_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
-	    sprintf (Anchor1Nick,"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
-				 "%s"
-				 "<input type=\"hidden\" name=\"usr\" value=\"",
-		     Cfg_URL_SWAD_CGI,
-		     Txt_STR_LANG_ID[Gbl.Prefs.Language],
-		     Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-			                  Gbl.Form.Id,
-		     ParamsStr);
+	    snprintf (Anchor1Nick,sizeof (Anchor1Nick),
+		      "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
+		      "%s"
+		      "<input type=\"hidden\" name=\"usr\" value=\"",
+		      Cfg_URL_SWAD_CGI,
+		      Txt_STR_LANG_ID[Gbl.Prefs.Language],
+		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+			                   Gbl.Form.Id,
+		      ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
 	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
@@ -322,12 +326,13 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
 
 	    /* Store second part of anchor */
-	    sprintf (Anchor2Nick,"\">"
-				 "<a href=\"\""
-				 " onclick=\"document.getElementById('%s').submit();"
-				 "return false;\">",
-		     Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-			                  Gbl.Form.Id);
+	    snprintf (Anchor2Nick,sizeof (Anchor2Nick),
+		      "\">"
+		      "<a href=\"\""
+		      " onclick=\"document.getElementById('%s').submit();"
+		      "return false;\">",
+		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+			                   Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);
 	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
@@ -1236,7 +1241,8 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	     StrSpecialChar[2] = '\0';	// End of string
         	    }
         	  else
-                     sprintf (StrSpecialChar,"&#34;");	// Double comilla is stored as HTML code to avoid problems when displaying it
+                     Str_Copy (StrSpecialChar,"&#34;",	// Double comilla is stored as HTML code to avoid problems when displaying it
+                	       Str_MAX_BYTES_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1260,7 +1266,8 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	     StrSpecialChar[2] = '\0';	// End of string
         	    }
         	  else
-        	     sprintf (StrSpecialChar,"&#39;");	// Single comilla is stored as HTML entity to avoid problem when querying database (SQL code injection)
+                     Str_Copy (StrSpecialChar,"&#39;",	// Single comilla is stored as HTML entity to avoid problem when querying database (SQL code injection)
+                	       Str_MAX_BYTES_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1422,11 +1429,11 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                default: /* The rest of special chars are stored as special code */
-                  sprintf (StrSpecialChar,
-                           (ChangeTo == Str_TO_TEXT ||
-                            ChangeTo == Str_TO_MARKDOWN) ? "%c" :
-                        	                           "&#%u;",
-                	   SpecialChar);
+                  snprintf (StrSpecialChar,sizeof (StrSpecialChar),
+                            (ChangeTo == Str_TO_TEXT ||
+                             ChangeTo == Str_TO_MARKDOWN) ? "%c" :
+                        	                            "&#%u;",
+                	    SpecialChar);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -2874,6 +2881,7 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
 /*****************************************************************************/
 /****************************** Safe string copy *****************************/
 /*****************************************************************************/
+// DstSize does not include ending byte '\0'
 
 void Str_Copy (char *Dst,const char *Src,size_t DstSize)
   {
@@ -2895,6 +2903,7 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
 /*****************************************************************************/
 /************************** Safe string concatenation ************************/
 /*****************************************************************************/
+// DstSize does not include ending byte '\0'
 
 void Str_Concat (char *Dst,const char *Src,size_t DstSize)
   {

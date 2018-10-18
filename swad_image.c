@@ -197,7 +197,7 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
    extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Link;
    struct ParamUploadImg ParamUploadImg;
-   char Id[Act_MAX_BYTES_ID];
+   char Id[Act_MAX_BYTES_ID + 1];
 
    /***** Set names of parameters depending on number of image in form *****/
    Img_SetParamNames (&ParamUploadImg,NumImgInForm);
@@ -361,10 +361,18 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
      }
    else				// Several images in form ==> add suffix
      {
-      sprintf (ParamUploadImg->Action,"ImgAct%u",NumImgInForm);
-      sprintf (ParamUploadImg->File  ,"ImgFil%u",NumImgInForm);
-      sprintf (ParamUploadImg->Title ,"ImgTit%u",NumImgInForm);
-      sprintf (ParamUploadImg->URL   ,"ImgURL%u",NumImgInForm);
+      snprintf (ParamUploadImg->Action,sizeof (ParamUploadImg->Action),
+	        "ImgAct%u",
+		NumImgInForm);
+      snprintf (ParamUploadImg->File  ,sizeof (ParamUploadImg->File),
+	        "ImgFil%u",
+		NumImgInForm);
+      snprintf (ParamUploadImg->Title ,sizeof (ParamUploadImg->Title),
+	        "ImgTit%u",
+		NumImgInForm);
+      snprintf (ParamUploadImg->URL   ,sizeof (ParamUploadImg->URL),
+	        "ImgURL%u",
+		NumImgInForm);
      }
   }
 
@@ -429,13 +437,15 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
 
    /***** Create private directories if not exist *****/
    /* Create private directory for images if it does not exist */
-   sprintf (PathImgPriv,"%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
+   snprintf (PathImgPriv,sizeof (PathImgPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Create temporary private directory for images if it does not exist */
-   sprintf (PathImgPriv,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
+   snprintf (PathImgPriv,sizeof (PathImgPriv),
+	     "%s/%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /***** Remove old temporary private files *****/
@@ -444,18 +454,20 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
    /***** End the reception of original not processed image
           (it can be very big) into a temporary file *****/
    Image->Status = Img_FILE_NONE;
-   sprintf (FileNameImgOrig,"%s/%s/%s/%s_original.%s",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
-            Image->Name,PtrExtension);
+   snprintf (FileNameImgOrig,sizeof (FileNameImgOrig),
+	     "%s/%s/%s/%s_original.%s",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
+             Image->Name,PtrExtension);
    if (Fil_EndReceptionOfFile (FileNameImgOrig,Param))	// Success
      {
       Image->Status = Img_FILE_RECEIVED;
 
       /***** Convert original image to temporary JPEG processed file
              by calling to program that makes the conversion *****/
-      sprintf (FileNameImgTmp,"%s/%s/%s/%s.jpg",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
-	       Image->Name);
+      snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
+	        "%s/%s/%s/%s.jpg",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
+	        Image->Name);
       Img_ProcessImage (Image,FileNameImgOrig,FileNameImgTmp);
       Image->Status = Img_FILE_PROCESSED;
 
@@ -475,12 +487,13 @@ static void Img_ProcessImage (struct Image *Image,
    char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
 
-   sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
-            FileNameImgOriginal,
-            Image->Width,
-            Image->Height,
-            Image->Quality,
-            FileNameImgProcessed);
+   snprintf (Command,sizeof (Command),
+	     "convert %s -resize '%ux%u>' -quality %u %s",
+             FileNameImgOriginal,
+             Image->Width,
+             Image->Height,
+             Image->Quality,
+             FileNameImgProcessed);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running command to process image.");
@@ -508,23 +521,26 @@ void Img_MoveImageToDefinitiveDirectory (struct Image *Image)
    char FileNameImg[PATH_MAX + 1];	// Full name of definitive processed file
 
    /***** Create subdirectory if it does not exist *****/
-   sprintf (PathImgPriv,"%s/%s/%c%c",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Image->Name[0],
-	    Image->Name[1]);
+   snprintf (PathImgPriv,sizeof (PathImgPriv),
+	     "%s/%s/%c%c",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	     Image->Name[0],
+	     Image->Name[1]);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /***** Temporary processed file *****/
-   sprintf (FileNameImgTmp,"%s/%s/%s/%s.jpg",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
-	    Image->Name);
+   snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
+	     "%s/%s/%s/%s.jpg",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
+	     Image->Name);
 
    /***** Definitive processed file *****/
-   sprintf (FileNameImg,"%s/%s/%c%c/%s.jpg",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Image->Name[0],
-	    Image->Name[1],
-	    Image->Name);
+   snprintf (FileNameImg,sizeof (FileNameImg),
+	     "%s/%s/%c%c/%s.jpg",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	     Image->Name[0],
+	     Image->Name[1],
+	     Image->Name);
 
    /***** Move file *****/
    if (rename (FileNameImgTmp,FileNameImg))	// Fail
@@ -558,12 +574,15 @@ void Img_ShowImage (struct Image *Image,
    Brw_CreateDirDownloadTmp ();
 
    /***** Build private path to image *****/
-   sprintf (FileNameImgPriv,"%s.jpg",Image->Name);
-   sprintf (FullPathImgPriv,"%s/%s/%c%c/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Image->Name[0],
-	    Image->Name[1],
-	    FileNameImgPriv);
+   snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
+	     "%s.jpg",
+	     Image->Name);
+   snprintf (FullPathImgPriv,sizeof (FullPathImgPriv),
+	     "%s/%s/%c%c/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	     Image->Name[0],
+	     Image->Name[1],
+	     FileNameImgPriv);
 
    /***** Check if private image file exists *****/
    if (Fil_CheckIfPathExists (FullPathImgPriv))
@@ -573,10 +592,11 @@ void Img_ShowImage (struct Image *Image,
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathImgPriv,FileNameImgPriv);
 
       /***** Create URL pointing to symbolic link *****/
-      sprintf (URL,"%s/%s/%s/%s",
-	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-	       Gbl.FileBrowser.TmpPubDir,
-	       FileNameImgPriv);
+      snprintf (URL,sizeof (URL),
+	        "%s/%s/%s/%s",
+	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	        Gbl.FileBrowser.TmpPubDir,
+	        FileNameImgPriv);
 
       /***** Show image *****/
       /* Check if optional link is present */
@@ -621,11 +641,12 @@ void Img_RemoveImageFile (const char *ImageName)
    if (ImageName[0])
      {
       /***** Build path to private file *****/
-      sprintf (FullPathImgPriv,"%s/%s/%c%c/%s.jpg",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	       ImageName[0],
-	       ImageName[1],
-	       ImageName);
+      snprintf (FullPathImgPriv,sizeof (FullPathImgPriv),
+	        "%s/%s/%c%c/%s.jpg",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	        ImageName[0],
+	        ImageName[1],
+	        ImageName);
 
       /***** Remove private file *****/
       unlink (FullPathImgPriv);

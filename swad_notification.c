@@ -1747,16 +1747,17 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	 fclose (Gbl.Msg.FileMail);
 
 	 /***** Call the command to send an email *****/
-	 sprintf (Command,"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-		  Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
-		  Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
-		  Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
-		  Cfg_AUTOMATIC_EMAIL_FROM,
-		  Gbl.Config.SMTPPassword,
-		  ToUsrDat->Email,
-		  Cfg_PLATFORM_SHORT_NAME,
-		  Txt_Notifications_NO_HTML[ToUsrLanguage],
-		  Gbl.Msg.FileNameMail);
+	 snprintf (Command,sizeof (Command),
+	           "%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
+		   Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
+		   Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
+		   Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
+		   Cfg_AUTOMATIC_EMAIL_FROM,
+		   Gbl.Config.SMTPPassword,
+		   ToUsrDat->Email,
+		   Cfg_PLATFORM_SHORT_NAME,
+		   Txt_Notifications_NO_HTML[ToUsrLanguage],
+		   Gbl.Msg.FileNameMail);
 	 ReturnCode = system (Command);
 	 if (ReturnCode == -1)
 	    Lay_ShowErrorAndExit ("Error when running script to send email.");

@@ -235,7 +235,9 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	           MFU_MAX_BYTES_TAB);
 	 Str_Copy (MenuStr,Title,
 	           MFU_MAX_BYTES_MENU);
-         sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
+         snprintf (TabMenuStr,sizeof (TabMenuStr),
+                   "%s &gt; %s",
+		   TabStr,MenuStr);
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<li>");
@@ -296,7 +298,9 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	           MFU_MAX_BYTES_TAB);
 	 Str_Copy (MenuStr,Title,
 	           MFU_MAX_BYTES_MENU);
-         sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
+         snprintf (TabMenuStr,sizeof (TabMenuStr),
+                   "%s &gt; %s",
+		   TabStr,MenuStr);
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<li>");

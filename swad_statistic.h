@@ -189,6 +189,6 @@ void Sta_WriteParamsDatesSeeAccesses (void);
 void Sta_ComputeTimeToGeneratePage (void);
 void Sta_ComputeTimeToSendPage (void);
 void Sta_WriteTimeToGenerateAndSendPage (void);
-void Sta_WriteTime (char *Str,long TimeInMicroseconds);
+void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds);
 
 #endif

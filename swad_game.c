@@ -2889,7 +2889,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
      {
       Gbl.RowEvenOdd = NumQst % 2;
 
-      sprintf (StrNumQst,"%u",NumQst + 1);
+      snprintf (StrNumQst,sizeof (StrNumQst),
+	        "%u",
+		NumQst + 1);
 
       row = mysql_fetch_row (mysql_res);
       /*
@@ -2924,7 +2926,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       /* Put icon to move up the question */
       if (NumQst)
 	{
-	 sprintf (Gbl.Title,Txt_Move_up_X,StrNumQst);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Move_up_X,
+		   StrNumQst);
 	 Lay_PutContextualLink (ActUp_GamQst,NULL,Gam_PutParamsOneQst,
 				"up_on16x16.gif",
 				Gbl.Title,NULL,
@@ -2936,7 +2940,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       /* Put icon to move down the question */
       if (NumQst + 1 < NumQsts)
 	{
-	 sprintf (Gbl.Title,Txt_Move_down_X,StrNumQst);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Move_down_X,
+		   StrNumQst);
 	 Lay_PutContextualLink (ActDwnGamQst,NULL,Gam_PutParamsOneQst,
 				"down_on16x16.gif",
 				Gbl.Title,NULL,
@@ -3204,13 +3210,15 @@ static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
    /***** String with the number of users *****/
    if (MaxUsrs)
-      sprintf (Gbl.Title,"%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-               NumUsrs,
-               (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
-               Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
+                NumUsrs,
+                (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
+                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
    else
-      sprintf (Gbl.Title,"0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-               Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
+                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
 
    /***** Draw bar with a with proportional to the number of clicks *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:%upx;\">",
@@ -3770,7 +3778,9 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
             Lay_ShowErrorAndExit ("Error: wrong question code.");
 
          /* Get possible parameter with the user's answer */
-         sprintf (ParamName,"Ans%010u",(unsigned) QstCod);
+         snprintf (ParamName,sizeof (ParamName),
+                   "Ans%010u",
+		   (unsigned) QstCod);
          // Lay_ShowAlert (Lay_INFO,ParamName);
          Par_GetParMultiToText (ParamName,StrAnswersIndexes,
                                 Gam_MAX_ANSWERS_PER_QUESTION * (10 + 1));

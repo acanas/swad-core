@@ -5241,12 +5241,12 @@ static void Act_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
      }
   }
 
-void Act_SetParamsForm (char ParamsStr[Act_MAX_BYTES_PARAMS_STR],Act_Action_t NextAction,
+void Act_SetParamsForm (char ParamsStr[Act_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion)
   {
-   char ParamAction[Act_MAX_BYTES_PARAM_ACTION];
-   char ParamSession[Act_MAX_BYTES_PARAM_SESSION];
-   char ParamLocation[Act_MAX_BYTES_PARAM_LOCATION];
+   char ParamAction[Act_MAX_BYTES_PARAM_ACTION + 1];
+   char ParamSession[Act_MAX_BYTES_PARAM_SESSION + 1];
+   char ParamLocation[Act_MAX_BYTES_PARAM_LOCATION + 1];
 
    ParamAction[0] = '\0';
    ParamSession[0] = '\0';
@@ -5294,7 +5294,7 @@ void Act_SetParamsForm (char ParamsStr[Act_MAX_BYTES_PARAMS_STR],Act_Action_t Ne
                    Gbl.CurrentCty.Cty.CtyCod);
      }
 
-   snprintf (ParamsStr,Act_MAX_BYTES_PARAMS_STR,
+   snprintf (ParamsStr,Act_MAX_BYTES_PARAMS_STR + 1,
 	     "%s%s%s",
 	     ParamAction,ParamSession,ParamLocation);
   }
@@ -5375,7 +5375,7 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
 /***************************** Get unique Id *********************************/
 /*****************************************************************************/
 
-void Act_SetUniqueId (char UniqueId[Act_MAX_BYTES_ID])
+void Act_SetUniqueId (char UniqueId[Act_MAX_BYTES_ID + 1])
   {
    static unsigned CountForThisExecution = 0;
 
@@ -5384,7 +5384,7 @@ void Act_SetUniqueId (char UniqueId[Act_MAX_BYTES_ID])
           So, Id uses:
           - a name for this execution (Gbl.UniqueNameEncrypted)
           - a number for each element in this execution (CountForThisExecution) *****/
-   snprintf (UniqueId,Act_MAX_BYTES_ID,
+   snprintf (UniqueId,Act_MAX_BYTES_ID + 1,
 	     "id_%s_%u",
              Gbl.UniqueNameEncrypted,
              ++CountForThisExecution);

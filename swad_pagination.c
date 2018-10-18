@@ -234,8 +234,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         sprintf (Gbl.Title,Txt_Page_X_of_Y,
-                  1,Pagination->NumPags);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Txt_Page_X_of_Y,
+                   1,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
         }
       else
@@ -257,7 +258,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    /***** Links to several pages start here *****/
    if (Pagination->MoreThanOnePage)
      {
-      sprintf (LinkStyle,"PAG %s",Font);
+      snprintf (LinkStyle,sizeof (LinkStyle),
+	        "PAG %s",
+		Font);
 
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
@@ -342,8 +345,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         sprintf (Gbl.Title,Txt_Page_X_of_Y,
-                  1,Pagination->NumPags);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Txt_Page_X_of_Y,
+                   1,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"1"
                             "</a>");
@@ -436,9 +440,10 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         sprintf (Gbl.Title,Txt_Page_X_of_Y,
-                  Pagination->LeftPage,
-                  Pagination->NumPags);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Txt_Page_X_of_Y,
+                   Pagination->LeftPage,
+                   Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"%u</a>",
                   Pagination->LeftPage);
@@ -452,8 +457,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	   NumPage <= Pagination->EndPage;
 	   NumPage++)
         {
-	 sprintf (Gbl.Title,Txt_Page_X_of_Y,
-		  NumPage,Pagination->NumPags);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Page_X_of_Y,
+		   NumPage,Pagination->NumPags);
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
             fprintf (Gbl.F.Out,"<span title=\"%s\" class=\"PAG_CUR %s\">"
                                "%u"
@@ -634,8 +640,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
-         sprintf (Gbl.Title,Txt_Page_X_of_Y,
-                  Pagination->RightPage,Pagination->NumPags);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Txt_Page_X_of_Y,
+                   Pagination->RightPage,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"%u</a>",Pagination->RightPage);
          Act_EndForm ();
@@ -726,8 +733,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
-         sprintf (Gbl.Title,Txt_Page_X_of_Y,
-                  Pagination->NumPags,Pagination->NumPags);
+         snprintf (Gbl.Title,sizeof (Gbl.Title),
+                   Txt_Page_X_of_Y,
+                   Pagination->NumPags,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"%u</a>",Pagination->NumPags);
          Act_EndForm ();

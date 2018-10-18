@@ -178,10 +178,12 @@ static void Par_GetBoundary (void)
       Lay_ShowErrorAndExit ("Delimiter string too long.");
 
    /***** Create boundary strings *****/
-   sprintf (Gbl.Boundary.StrWithoutCRLF,"--%s",
-	    PtrToBoundary);
-   sprintf (Gbl.Boundary.StrWithCRLF,"%c%c%s",
-	    0x0D,0x0A,Gbl.Boundary.StrWithoutCRLF);
+   snprintf (Gbl.Boundary.StrWithoutCRLF,sizeof (Gbl.Boundary.StrWithoutCRLF),
+	     "--%s",
+	     PtrToBoundary);
+   snprintf (Gbl.Boundary.StrWithCRLF,sizeof (Gbl.Boundary.StrWithCRLF),
+	     "%c%c%s",
+	     0x0D,0x0A,Gbl.Boundary.StrWithoutCRLF);
 
    /***** Compute lengths *****/
    Gbl.Boundary.LengthWithoutCRLF = strlen (Gbl.Boundary.StrWithoutCRLF);
@@ -794,15 +796,17 @@ void Par_GetMainParameters (void)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 
       /***** Set path of theme *****/
-      sprintf (Path,"%s/%s/%s",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
+      snprintf (Path,sizeof (Path),
+	        "%s/%s/%s",
+                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
       Str_Copy (Gbl.Prefs.PathTheme,Path,
                 PATH_MAX);
 
       /***** Set path of icon set *****/
-      sprintf (Path,"%s/%s/%s",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
-               Ico_IconSetId[Gbl.Prefs.IconSet]);
+      snprintf (Path,sizeof (Path),
+	        "%s/%s/%s",
+                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
+                Ico_IconSetId[Gbl.Prefs.IconSet]);
       Str_Copy (Gbl.Prefs.PathIconSet,Path,
                 PATH_MAX);
      }

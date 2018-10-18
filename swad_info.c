@@ -310,11 +310,12 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead);
 
 static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType);
 static bool Inf_CheckAndShowPage (void);
-static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char *PathDir);
+static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1]);
 
 static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType);
 static bool Inf_CheckAndShowURL (void);
-static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,char *PathFile);
+static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,
+                              char PathFile[PATH_MAX + 1]);
 
 static void Inf_ShowPage (const char *URL);
 
@@ -771,12 +772,16 @@ static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	     "%s/index.html",
+	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
       return true;
 
    /* 2. If index.html does not exist, try index.htm */
-   sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	     "%s/index.htm",
+	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
       return true;
 
@@ -802,24 +807,30 @@ static bool Inf_CheckAndShowPage (void)
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	     "%s/index.html",
+	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
-      sprintf (URL,"%s/%s/%ld/%s/index.html",
-	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
-	       Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+      snprintf (URL,sizeof (URL),
+	        "%s/%s/%ld/%s/index.html",
+	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	        Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
 
       return true;
      }
 
    /* 2. If index.html does not exist, try index.htm */
-   sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	     "%s/index.htm",
+	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
-      sprintf (URL,"%s/%s/%ld/%s/index.htm",
-	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
-	       Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+      snprintf (URL,sizeof (URL),
+	        "%s/%s/%ld/%s/index.htm",
+	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	        Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
 
       return true;
@@ -832,11 +843,12 @@ static bool Inf_CheckAndShowPage (void)
 /* Build path inside a course for a given a info type to store web page file */
 /*****************************************************************************/
 
-static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char *PathDir)
+static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1])
   {
-   sprintf (PathDir,"%s/%s/%ld/%s",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,
-            Inf_FileNamesForInfoType[InfoType]);
+   snprintf (PathDir,PATH_MAX + 1,
+	     "%s/%s/%ld/%s",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,
+             Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -860,13 +872,17 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	     "%s/index.html",
+	     PathRelDirHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))		// TODO: Check if not empty?
       FileExists = true;
    else
      {
       /* 2. If index.html not exists, try index.htm */
-      sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+      snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	        "%s/index.htm",
+		PathRelDirHTML);
       if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
          FileExists = true;
      }
@@ -973,11 +989,13 @@ static bool Inf_CheckAndShowURL (void)
 /*** Build path inside a course for a given a info type to store URL file ****/
 /*****************************************************************************/
 
-static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,char *PathFile)
+static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,
+                              char PathFile[PATH_MAX + 1])
   {
-   sprintf (PathFile,"%s/%s/%ld/%s.url",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
-	    Inf_FileNamesForInfoType[InfoType]);
+   snprintf (PathFile,PATH_MAX + 1,
+	     "%s/%s/%ld/%s.url",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+	     Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -1844,7 +1862,7 @@ static bool Inf_CheckAndShowRichTxt (void)
    char PathFileHTML[PATH_MAX + 1];
    FILE *FileMD;		// Temporary Markdown file
    FILE *FileHTML;		// Temporary HTML file
-   char MathJaxURL[PATH_MAX];
+   char MathJaxURL[PATH_MAX + 1];
    char Command[512 + PATH_MAX * 3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -1882,10 +1900,12 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Store text into a temporary .md file in HTML output directory *****/
       // TODO: change to another directory?
       /* Create a unique name for the .md file */
-      sprintf (PathFileMD,"%s/%s/%s.md",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
-      sprintf (PathFileHTML,"%s/%s/%s.md.html",	// Do not use only .html because that is the output temporary file
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+      snprintf (PathFileMD,sizeof (PathFileMD),
+	        "%s/%s/%s.md",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+      snprintf (PathFileHTML,sizeof (PathFileHTML),
+	        "%s/%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
 
       /* Open Markdown file for writing */
       if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
@@ -1900,8 +1920,9 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Convert from Markdown to HTML *****/
 #ifdef Cfg_MATHJAX_LOCAL
       // Use the local copy of MathJax
-      sprintf (MathJaxURL,"=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
-	       Cfg_URL_SWAD_PUBLIC);
+      snprintf (MathJaxURL,sizeof (MathJaxURL),
+	        "=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
+	        Cfg_URL_SWAD_PUBLIC);
 #else
       // Use the MathJax Content Delivery Network (CDN)
       MathJaxURL[0] = '\0';
@@ -1909,14 +1930,15 @@ static bool Inf_CheckAndShowRichTxt (void)
       // --ascii uses only ascii characters in output
       //         (uses numerical entities instead of UTF-8)
       //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
-      sprintf (Command,"iconv -f WINDOWS-1252 -t UTF-8 %s"
-	               " | "
-	               "pandoc --ascii --mathjax%s -f markdown -t html5"
-	               " | "
-	               "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
-	       PathFileMD,
-	       MathJaxURL,
-	       PathFileHTML);
+      snprintf (Command,sizeof (Command),
+	        "iconv -f WINDOWS-1252 -t UTF-8 %s"
+	        " | "
+	        "pandoc --ascii --mathjax%s -f markdown -t html5"
+	        " | "
+	        "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
+	        PathFileMD,
+	        MathJaxURL,
+	        PathFileHTML);
       ReturnCode = system (Command);
       if (ReturnCode == -1)
 	 Lay_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
@@ -1969,8 +1991,9 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
    if (TxtHTML[0])
      {
       /***** Create a unique name for the file *****/
-      sprintf (FileNameHTMLTmp,"%s/%s/%s_info.html",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
+	        "%s/%s/%s_info.html",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
 
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
@@ -2320,7 +2343,9 @@ void Inf_ReceivePagInfo (void)
         {
          Fil_RemoveTree (PathRelDirHTML);
          Fil_CreateDirIfNotExists (PathRelDirHTML);
-         sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+         snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+                   "%s/index.html",
+		   PathRelDirHTML);
          if (Fil_EndReceptionOfFile (PathRelFileHTML,Param))
            {
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
@@ -2333,21 +2358,25 @@ void Inf_ReceivePagInfo (void)
         {
          Fil_RemoveTree (PathRelDirHTML);
          Fil_CreateDirIfNotExists (PathRelDirHTML);
-         sprintf (PathRelFileZIP,"%s/%s.zip",
-                  Gbl.CurrentCrs.PathPriv,
-                  Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+         snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),
+                   "%s/%s.zip",
+                   Gbl.CurrentCrs.PathPriv,
+                   Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
 
          if (Fil_EndReceptionOfFile (PathRelFileZIP,Param))
            {
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 
             /* Uncompress ZIP */
-            sprintf (StrUnzip,"unzip -qq -o %s -d %s",
-                     PathRelFileZIP,PathRelDirHTML);
+            snprintf (StrUnzip,sizeof (StrUnzip),
+        	      "unzip -qq -o %s -d %s",
+                      PathRelFileZIP,PathRelDirHTML);
             if (system (StrUnzip) == 0)
               {
                /* Check if uploaded file is index.html or index.htm */
-               sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+               snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+        	         "%s/index.html",
+			 PathRelDirHTML);
                if (Fil_CheckIfPathExists (PathRelFileHTML))
                  {
                   Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
@@ -2356,7 +2385,9 @@ void Inf_ReceivePagInfo (void)
                  }
 	       else
 	         {
-	          sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+	          snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),
+	        	    "%s/index.htm",
+			    PathRelDirHTML);
 	          if (Fil_CheckIfPathExists (PathRelFileHTML))
                     {
                      Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);

@@ -125,10 +125,11 @@ void Ico_ChangeIconSet (void)
 
    /***** Get param with icon set *****/
    Gbl.Prefs.IconSet = Ico_GetParamIconSet ();
-   sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s/%s",
-            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-            Cfg_ICON_FOLDER_ICON_SETS,
-            Ico_IconSetId[Gbl.Prefs.IconSet]);
+   snprintf (Gbl.Prefs.PathIconSet,sizeof (Gbl.Prefs.PathIconSet),
+	     "%s/%s/%s/%s",
+             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
+             Cfg_ICON_FOLDER_ICON_SETS,
+             Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)

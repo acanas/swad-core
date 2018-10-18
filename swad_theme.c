@@ -283,10 +283,11 @@ void The_ChangeTheme (void)
 
    /***** Get param theme *****/
    Gbl.Prefs.Theme = The_GetParamTheme ();
-   sprintf (Path,"%s/%s/%s",
-            Gbl.Prefs.IconsURL,
-            Cfg_ICON_FOLDER_THEMES,
-            The_ThemeId[Gbl.Prefs.Theme]);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s/%s",
+             Gbl.Prefs.IconsURL,
+             Cfg_ICON_FOLDER_THEMES,
+             The_ThemeId[Gbl.Prefs.Theme]);
    Str_Copy (Gbl.Prefs.PathTheme,Path,
              PATH_MAX);
 

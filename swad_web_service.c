@@ -2278,10 +2278,10 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
 
 	 /* Get group code (row[0]) */
 	 GrpCod = Str_ConvertStrCodToLongCod (row[0]);
-	 sprintf (GrpCodStr,
-		  NumGrp ? ",%ld" :
-			   "%ld",
-		  GrpCod);
+	 snprintf (GrpCodStr,sizeof (GrpCodStr),
+		   NumGrp ? ",%ld" :
+			    "%ld",
+		   GrpCod);
 	 Str_Concat (*ListGroups,GrpCodStr,
 	             Length);
 	}
@@ -4099,12 +4099,16 @@ int swad__getTrivialQuestion (struct soap *soap,
 	    /* Add this degree to query */
 	    if (FirstDegree)
 	      {
-	       sprintf (DegreesStr,"%ld",DegCod);
+	       snprintf (DegreesStr,sizeof (DegreesStr),
+		         "%ld",
+			 DegCod);
 	       FirstDegree = false;
 	      }
 	    else
 	      {
-	       sprintf (DegStr,",%ld",DegCod);
+	       snprintf (DegStr,sizeof (DegStr),
+		         ",%ld",
+			 DegCod);
 	       Str_Concat (DegreesStr,DegStr,
 	                   Svc_MAX_BYTES_DEGREES_STR);
 	      }
@@ -4377,18 +4381,22 @@ int swad__getDirectoryTree (struct soap *soap,
    Gbl.CurrentCrs.Grps.GrpCod = (groupCode > 0) ? (long) groupCode :
 	                                          -1L;
 
-   sprintf (Gbl.CurrentCrs.PathPriv,"%s/%s/%ld",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+   snprintf (Gbl.CurrentCrs.PathPriv,sizeof (Gbl.CurrentCrs.PathPriv),
+	     "%s/%s/%ld",
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
    Brw_InitializeFileBrowser ();
    Brw_SetFullPathInTree (Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],".");
 
    /* Check if exists the directory for HTML output. If not exists, create it */
-   sprintf (PathXMLPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
+   snprintf (PathXMLPriv,sizeof (PathXMLPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
    Fil_CreateDirIfNotExists (PathXMLPriv);
 
    /* Create a unique name for the file */
-   sprintf (XMLFileName,"%s/%s.xml",
-            PathXMLPriv,Gbl.UniqueNameEncrypted);
+   snprintf (XMLFileName,sizeof (XMLFileName),
+	     "%s/%s.xml",
+             PathXMLPriv,Gbl.UniqueNameEncrypted);
 
    /* Open file for writing and reading */
    if ((Gbl.F.XML = fopen (XMLFileName,"w+t")) == NULL)
@@ -4445,8 +4453,12 @@ static void Svc_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
-	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
+	    snprintf (PathFileRel,sizeof (PathFileRel),
+		      "%s/%s",
+		      Path,FileList[NumFile]->d_name);
+	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),
+		      "%s/%s",
+		      PathInTree,FileList[NumFile]->d_name);
 
 	    if (!lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
 	      {

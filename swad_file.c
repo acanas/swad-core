@@ -75,15 +75,18 @@ void Fil_CreateFileForHTMLOutput (void)
    char PathHTMLOutputPriv[PATH_MAX + 1];
 
    /***** Check if exists the directory for HTML output. If not exists, create it *****/
-   sprintf (PathHTMLOutputPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
+   snprintf (PathHTMLOutputPriv,sizeof (PathHTMLOutputPriv),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
    Fil_CreateDirIfNotExists (PathHTMLOutputPriv);
 
    /***** Remove old files *****/
    Fil_RemoveOldTmpFiles (PathHTMLOutputPriv,Cfg_TIME_TO_DELETE_HTML_OUTPUT,false);
 
    /***** Create a unique name for the file *****/
-   sprintf (Gbl.HTMLOutput.FileName,"%s/%s.html",
-            PathHTMLOutputPriv,Gbl.UniqueNameEncrypted);
+   snprintf (Gbl.HTMLOutput.FileName,sizeof (Gbl.HTMLOutput.FileName),
+	     "%s/%s.html",
+             PathHTMLOutputPriv,Gbl.UniqueNameEncrypted);
 
    /***** Open file for writing and reading *****/
    if ((Gbl.F.Out = fopen (Gbl.HTMLOutput.FileName,"w+t")) == NULL)
@@ -331,7 +334,9 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
    Str_Copy (NewName,CurrentName,
              PATH_MAX);
    NewName[LengthFileRoot] = '\0';
-   sprintf (OldName,"%s%s",NewName,ExtensionOldName);
+   snprintf (OldName,PATH_MAX + 1,
+	     "%s%s",
+	     NewName,ExtensionOldName);
    Str_Concat (NewName,".new",
                PATH_MAX);
 
@@ -477,7 +482,9 @@ void Fil_RemoveTree (const char *Path)
 		     if (strcmp (FileList[NumFile]->d_name,".") &&
 			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 		       {
-			sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+			snprintf (PathFileRel,sizeof (PathFileRel),
+			          "%s/%s",
+				  Path,FileList[NumFile]->d_name);
 			Fil_RemoveTree (PathFileRel);
 		       }
 		     free ((void *) FileList[NumFile]);
@@ -535,7 +542,9 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
 	    if (strcmp (FileList[NumFile]->d_name,".") &&
 		strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	      {
-	       sprintf (Path2,"%s/%s",Path,FileList[NumFile]->d_name);
+	       snprintf (Path2,sizeof (Path2),
+		         "%s/%s",
+			 Path,FileList[NumFile]->d_name);
 	       Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
 	      }
 	    free ((void *) FileList[NumFile]);
@@ -632,28 +641,48 @@ void Fil_WriteFileSizeBrief (double SizeInBytes,
                              char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1])
   {
    if (SizeInBytes < Ki)
-      sprintf (FileSizeStr,"%.0f&nbsp;B"  ,SizeInBytes);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.0f&nbsp;B",
+		SizeInBytes);
    else if (SizeInBytes < Mi)
-      sprintf (FileSizeStr,"%.0f&nbsp;KiB",SizeInBytes / Ki);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.0f&nbsp;KiB",
+		SizeInBytes / Ki);
    else if (SizeInBytes < Gi)
-      sprintf (FileSizeStr,"%.0f&nbsp;MiB",SizeInBytes / Mi);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.0f&nbsp;MiB",
+		SizeInBytes / Mi);
    else if (SizeInBytes < Ti)
-      sprintf (FileSizeStr,"%.0f&nbsp;GiB",SizeInBytes / Gi);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.0f&nbsp;GiB",
+		SizeInBytes / Gi);
    else
-      sprintf (FileSizeStr,"%.0f&nbsp;TiB",SizeInBytes / Ti);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.0f&nbsp;TiB",
+		SizeInBytes / Ti);
   }
 
 void Fil_WriteFileSizeFull (double SizeInBytes,
                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1])
   {
    if (SizeInBytes < Ki)
-      sprintf (FileSizeStr,"%.0f&nbsp;B"  ,SizeInBytes);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.0f&nbsp;B",
+		SizeInBytes);
    else if (SizeInBytes < Mi)
-      sprintf (FileSizeStr,"%.1f&nbsp;KiB",SizeInBytes / Ki);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.1f&nbsp;KiB",
+		SizeInBytes / Ki);
    else if (SizeInBytes < Gi)
-      sprintf (FileSizeStr,"%.1f&nbsp;MiB",SizeInBytes / Mi);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.1f&nbsp;MiB",
+		SizeInBytes / Mi);
    else if (SizeInBytes < Ti)
-      sprintf (FileSizeStr,"%.1f&nbsp;GiB",SizeInBytes / Gi);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.1f&nbsp;GiB",
+		SizeInBytes / Gi);
    else
-      sprintf (FileSizeStr,"%.1f&nbsp;TiB",SizeInBytes / Ti);
+      snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,
+	        "%.1f&nbsp;TiB",
+		SizeInBytes / Ti);
   }

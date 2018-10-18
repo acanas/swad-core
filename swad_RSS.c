@@ -65,11 +65,15 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    struct tm *tm;
 
    /***** Create RSS directory if not exists *****/
-   sprintf (PathRelPublRSSDir,"%s/%s/%ld/%s",Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Crs->CrsCod,Cfg_RSS_FOLDER);
+   snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),
+	     "%s/%s/%ld/%s",
+	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Crs->CrsCod,Cfg_RSS_FOLDER);
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
-   sprintf (PathRelPublRSSFile,"%s/%s",PathRelPublRSSDir,Cfg_RSS_FILE);
+   snprintf (PathRelPublRSSFile,sizeof (PathRelPublRSSFile),
+	     "%s/%s",
+	     PathRelPublRSSDir,Cfg_RSS_FILE);
    if ((FileRSS = fopen (PathRelPublRSSFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create RSS file.");
 

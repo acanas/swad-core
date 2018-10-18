@@ -51,7 +51,8 @@ struct UsrFigures
 
 void Prf_SeeSocialProfiles (void);
 
-char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba);
+char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
+                               const char *NicknameWithoutArroba);
 void Prf_PutLinkMyPublicProfile (void);
 void Prf_PutLinkRequestAnotherUserProfile (void);
 void Prf_RequestUserProfile (void);

@@ -135,16 +135,19 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu
    Gbl.Prefs.Theme          = The_THEME_DEFAULT;		// Default theme
    Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
-   sprintf (Gbl.Prefs.IconsURL,"%s/%s",
-            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
-   sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s/%s",
-            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-            Cfg_ICON_FOLDER_THEMES,
-	    The_ThemeId[Gbl.Prefs.Theme]);
-   sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s/%s",
-	    Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-	    Cfg_ICON_FOLDER_ICON_SETS,
-	    Ico_IconSetId[Gbl.Prefs.IconSet]);
+   snprintf (Gbl.Prefs.IconsURL,sizeof (Gbl.Prefs.IconsURL),
+	     "%s/%s",
+             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
+   snprintf (Gbl.Prefs.PathTheme,sizeof (Gbl.Prefs.PathTheme),
+	     "%s/%s/%s/%s",
+             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
+             Cfg_ICON_FOLDER_THEMES,
+	     The_ThemeId[Gbl.Prefs.Theme]);
+   snprintf (Gbl.Prefs.PathIconSet,sizeof (Gbl.Prefs.PathIconSet),
+	     "%s/%s/%s/%s",
+	     Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
+	     Cfg_ICON_FOLDER_ICON_SETS,
+	     Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    Gbl.Session.NumSessions = 0;
    Gbl.Session.IsOpen = false;

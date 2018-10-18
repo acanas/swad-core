@@ -155,7 +155,9 @@ void Rep_ReqMyUsageReport (void)
    Act_StartForm (ActSeeMyUsgRep);
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Report_of_use_of_PLATFORM,
+	     Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
@@ -260,7 +262,9 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
    /***** Start box *****/
-   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Report_of_use_of_PLATFORM,
+	     Cfg_PLATFORM_SHORT_NAME);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
@@ -333,14 +337,18 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
    if ((gmtime_r (&CurrentTime,&Report->tm_CurrentTime)) != NULL)
      {
       /* Date and time as strings */
-      sprintf (Report->CurrentTimeUTC.StrDate,"%04d-%02d-%02d",
-	       1900 + Report->tm_CurrentTime.tm_year,	// year
-	       1 + Report->tm_CurrentTime.tm_mon,	// month
-	       Report->tm_CurrentTime.tm_mday);		// day of the month
-      sprintf (Report->CurrentTimeUTC.StrTime,"%02d:%02d:%02d",
-	       Report->tm_CurrentTime.tm_hour,		// hours
-	       Report->tm_CurrentTime.tm_min,		// minutes
-	       Report->tm_CurrentTime.tm_sec);		// seconds
+      snprintf (Report->CurrentTimeUTC.StrDate,
+	        sizeof (Report->CurrentTimeUTC.StrDate),
+	        "%04d-%02d-%02d",
+	        1900 + Report->tm_CurrentTime.tm_year,	// year
+	        1 + Report->tm_CurrentTime.tm_mon,	// month
+	        Report->tm_CurrentTime.tm_mday);		// day of the month
+      snprintf (Report->CurrentTimeUTC.StrTime,
+	        sizeof (Report->CurrentTimeUTC.StrTime),
+	        "%02d:%02d:%02d",
+	        Report->tm_CurrentTime.tm_hour,		// hours
+	        Report->tm_CurrentTime.tm_min,		// minutes
+	        Report->tm_CurrentTime.tm_sec);		// seconds
 
       /* Date and time as unsigned */
       Report->CurrentTimeUTC.Date = (1900 + Report->tm_CurrentTime.tm_year) * 10000 +
@@ -362,43 +370,54 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    char PathUniqueDirL[PATH_MAX + 1];
    char PathUniqueDirR[PATH_MAX + 1];
    char PathFileReport[PATH_MAX + 1];
+   char Permalink[128 +
+		  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
+		  NAME_MAX];
 
    /***** Path for reports *****/
-   sprintf (PathReports,"%s/%s",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP);
+   snprintf (PathReports,sizeof (PathReports),
+	     "%s/%s",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP);
    Fil_CreateDirIfNotExists (PathReports);
 
    /***** Unique directory for the file with the report *****/
    /* 1. Create a directory using the leftmost 2 chars of a unique name */
-   sprintf (PathUniqueDirL,"%s/%s/%c%c",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,
-            Gbl.UniqueNameEncrypted[0],
-            Gbl.UniqueNameEncrypted[1]);
+   snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),
+	     "%s/%s/%c%c",
+             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,
+             Gbl.UniqueNameEncrypted[0],
+             Gbl.UniqueNameEncrypted[1]);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 2. Create a directory using the rightmost 41 chars of a unique name */
-   sprintf (PathUniqueDirR,"%s/%s",
-            PathUniqueDirL,
-            &Gbl.UniqueNameEncrypted[2]);
+   snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),
+	     "%s/%s",
+             PathUniqueDirL,
+             &Gbl.UniqueNameEncrypted[2]);
    if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create directory for report.");
 
    /***** Path of the public file with the report */
-   sprintf (Report->FilenameReport,"%s_%06u_%06u.html",
-            Rep_FILENAME_ROOT,Report->CurrentTimeUTC.Date,Report->CurrentTimeUTC.Time);
-   sprintf (PathFileReport,"%s/%s",
-            PathUniqueDirR,Report->FilenameReport);
+   snprintf (Report->FilenameReport,sizeof (Report->FilenameReport),
+	     "%s_%06u_%06u.html",
+             Rep_FILENAME_ROOT,Report->CurrentTimeUTC.Date,Report->CurrentTimeUTC.Time);
+   snprintf (PathFileReport,sizeof (PathFileReport),
+	     "%s/%s",
+             PathUniqueDirR,Report->FilenameReport);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create report file.");
 
    /***** Permalink *****/
-   sprintf (Report->Permalink,"%s/%s/%c%c/%s/%s",
-            Cfg_URL_SWAD_PUBLIC,
-            Cfg_FOLDER_REP,
-            Gbl.UniqueNameEncrypted[0],
-            Gbl.UniqueNameEncrypted[1],
-            &Gbl.UniqueNameEncrypted[2],
-            Report->FilenameReport);
+   snprintf (Permalink,sizeof (Permalink),
+	     "%s/%s/%c%c/%s/%s",
+             Cfg_URL_SWAD_PUBLIC,
+             Cfg_FOLDER_REP,
+             Gbl.UniqueNameEncrypted[0],
+             Gbl.UniqueNameEncrypted[1],
+             &Gbl.UniqueNameEncrypted[2],
+             Report->FilenameReport);
+   Str_Copy (Report->Permalink,Permalink,
+	     Cns_MAX_BYTES_WWW);
   }
 
 /*****************************************************************************/
@@ -447,7 +466,9 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"<header>");
 
    /***** Main title *****/
-   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Report_of_use_of_PLATFORM,
+	     Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Rep,"<h1>%s</h1>"
 	              "<ul>",
 	    Gbl.Title);
@@ -984,7 +1005,9 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    long CrsCod;
 
    NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
-   sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_USER_in_COURSE,
+	     Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
    fprintf (Gbl.F.Rep,"<li>%s %u %s",
 	    Gbl.Title,
 	    NumCrss,
@@ -1097,8 +1120,9 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Heading row */
-      sprintf (Gbl.Title,Txt_Hits_as_a_USER,
-               Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Hits_as_a_USER,
+                Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
       fprintf (Gbl.F.Rep,"<li>%s:"
 	                 "<ol>",
 	       Gbl.Title);
@@ -1397,8 +1421,9 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
       row = mysql_fetch_row (mysql_res);
 
       /* Remove report directory and file */
-      sprintf (PathUniqueDirReport,"%s/%s/%s/%s",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,row[0],row[1]);
+      snprintf (PathUniqueDirReport,sizeof (PathUniqueDirReport),
+	        "%s/%s/%s/%s",
+	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,row[0],row[1]);
       Fil_RemoveTree (PathUniqueDirReport);
      }
 

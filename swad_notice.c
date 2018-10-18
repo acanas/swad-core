@@ -389,8 +389,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
 	{
 	 /***** Start box *****/
-	 sprintf (StrWidth,"%upx",
-	          Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
+	 snprintf (StrWidth,sizeof (StrWidth),
+	           "%upx",
+	           Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
 	 Box_StartBox (StrWidth,
 	               Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                    Txt_Notices,
@@ -442,8 +443,10 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 case Not_LIST_BRIEF_NOTICES:
             /***** Link to RSS file *****/
 	    /* Create RSS file if not exists */
-	    sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
-		     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+	    snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),
+		      "%s/%s/%ld/%s/%s",
+		      Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,
+		      Gbl.CurrentCrs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	    if (!Fil_CheckIfPathExists (PathRelRSSFile))
 	       RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
 

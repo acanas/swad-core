@@ -110,15 +110,17 @@ void Prf_SeeSocialProfiles (void)
 /************************** Get public profile URL ***************************/
 /*****************************************************************************/
 
-char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
+char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
+                               const char *NicknameWithoutArroba)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
-   sprintf (URL,"%s/%s?usr=@%s",
-	    Cfg_URL_SWAD_CGI,
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	    NicknameWithoutArroba);
+   snprintf (URL,Cns_MAX_BYTES_WWW + 1,
+	     "%s/%s?usr=@%s",
+	     Cfg_URL_SWAD_CGI,
+	     Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	     NicknameWithoutArroba);
 
    return URL;
   }
@@ -379,7 +381,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumCrssUsrIsStudent;
    unsigned NumFiles;
    unsigned NumPublicFiles;
-   char IdFirstClickTime[Act_MAX_BYTES_ID];
+   char IdFirstClickTime[Act_MAX_BYTES_ID + 1];
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
@@ -754,8 +756,9 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
-   sprintf (Gbl.Title,"#%lu %s %lu",
-	    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs);
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     "#%lu %s %lu",
+	     Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs);
 
    /***** Rank in form to go to ranking *****/
    Act_StartForm (ActSeeUseGbl);

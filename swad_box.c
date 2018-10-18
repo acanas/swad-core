@@ -114,7 +114,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
   {
    extern const char *Txt_Help;
    extern const char *Txt_Close;
-   char IdFrame[Act_MAX_BYTES_ID];
+   char IdFrame[Act_MAX_BYTES_ID + 1];
 
    /***** Start box container *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");

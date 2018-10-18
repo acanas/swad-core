@@ -516,7 +516,9 @@ void ID_ShowFormChangeMyID (bool IShouldFillID)
    Lay_StartSection (ID_ID_SECTION_ID);
 
    /***** Start box *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
    Box_StartBox (StrRecordWidth,Txt_ID,Acc_PutLinkToRemoveMyAccount,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
@@ -546,7 +548,9 @@ void ID_ShowFormChangeOtherUsrID (void)
    Lay_StartSection (ID_ID_SECTION_ID);
 
    /***** Start box *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+   snprintf (StrRecordWidth,sizeof (StrRecordWidth),
+	     "%upx",
+	     Rec_RECORD_WIDTH);
    Box_StartBox (StrRecordWidth,Txt_ID,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
@@ -646,10 +650,10 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	}
 
       /* User's ID */
-      sprintf (Gbl.Title,
-               UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-                                                   Txt_ID_X_not_confirmed,
-               UsrDat->IDs.List[NumID].ID);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+                UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+                                                    Txt_ID_X_not_confirmed,
+                UsrDat->IDs.List[NumID].ID);
       fprintf (Gbl.F.Out,"<span class=\"%s\" title=\"%s\">%s</span>",
                UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
                                                    "USR_ID_NC",
@@ -659,7 +663,9 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       /* ID confirmed? */
       if (UsrDat->IDs.List[NumID].Confirmed)
 	{
-	 sprintf (Gbl.Title,Txt_ID_X_confirmed,UsrDat->IDs.List[NumID].ID);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_ID_X_confirmed,
+		   UsrDat->IDs.List[NumID].ID);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",

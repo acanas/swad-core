@@ -351,10 +351,11 @@ void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
    unsigned NumItemsWithChildren = 0;
 
    /* Path of the private directory for the XML file with the syllabus */
-   sprintf (Gbl.Syllabus.PathDir,"%s/%s/%ld/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
-	    Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
-		                                         Cfg_SYLLABUS_FOLDER_PRACTICALS);
+   snprintf (Gbl.Syllabus.PathDir,sizeof (Gbl.Syllabus.PathDir),
+	     "%s/%s/%ld/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+	     Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
+		                                          Cfg_SYLLABUS_FOLDER_PRACTICALS);
 
    /***** Open the file with the syllabus *****/
    Syl_OpenSyllabusFile (Gbl.Syllabus.PathDir,PathFile);
@@ -622,10 +623,10 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
-            sprintf (Gbl.Title,
-                     LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-                                                                 Txt_Move_up_X,
-                     StrItemCod);
+            snprintf (Gbl.Title,sizeof (Gbl.Title),
+                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
+                                                                  Txt_Move_up_X,
+                      StrItemCod);
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
                                                                               ActUp_IteSylPra,
                                    NULL,Syl_PutParamNumItem,
@@ -642,10 +643,10 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
-            sprintf (Gbl.Title,
-                     LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-                                                                 Txt_Move_down_X,
-                     StrItemCod);
+            snprintf (Gbl.Title,sizeof (Gbl.Title),
+                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
+                                                                  Txt_Move_down_X,
+                      StrItemCod);
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
                                                                               ActDwnIteSylPra,
                                    NULL,Syl_PutParamNumItem,
@@ -661,7 +662,9 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Level > 1)
 	   {
-	    sprintf (Gbl.Title,Txt_Increase_level_of_X,StrItemCod);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      Txt_Increase_level_of_X,
+		      StrItemCod);
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
                                                                               ActRgtIteSylPra,
                                    NULL,Syl_PutParamNumItem,
@@ -678,7 +681,9 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	 if (Level < LastLevel + 1 &&
 	     Level < Syl_MAX_LEVELS_SYLLABUS)
 	   {
-	    sprintf (Gbl.Title,Txt_Decrease_level_of_X,StrItemCod);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      Txt_Decrease_level_of_X,
+		      StrItemCod);
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
                                                                               ActLftIteSylPra,
                                    NULL,Syl_PutParamNumItem,
@@ -749,8 +754,9 @@ int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
    if (LstItemsSyllabus.NumItems)
      {
       /***** Create a unique name for the file *****/
-      sprintf (FileNameHTMLTmp,"%s/%s/%s_syllabus.html",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
+	        "%s/%s/%s_syllabus.html",
+	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
 
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
@@ -958,7 +964,9 @@ static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
 	 if (FileTgt)
 	    fprintf (FileTgt,".");
 	}
-      sprintf (InStr,"%d",CodItem[N]);
+      snprintf (InStr,sizeof (InStr),
+	        "%d",
+		CodItem[N]);
       if (StrDst)
 	 Str_Concat (StrDst,InStr,
 	             Syl_MAX_BYTES_ITEM_COD);
@@ -1406,7 +1414,9 @@ void Syl_BuildPathFileSyllabus (char *PathFile)
   {
    char Path[PATH_MAX + 1 + NAME_MAX + 1];
 
-   sprintf (Path,"%s/%s",Gbl.Syllabus.PathDir,Cfg_SYLLABUS_FILENAME);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s",
+	     Gbl.Syllabus.PathDir,Cfg_SYLLABUS_FILENAME);
    Str_Copy (PathFile,Path,
 	     PATH_MAX);
   }

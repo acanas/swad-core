@@ -261,8 +261,9 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
         {
-         sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
-                  Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
+         snprintf (Message,sizeof (Message),
+                   Txt_You_can_only_perform_X_further_actions_,
+                   Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
          Ale_ShowAlertAndButton (Ale_WARNING,Message,
                                  ActReqMyPho,NULL,NULL,NULL,
                                  Btn_CONFIRM_BUTTON,Txt_Upload_photo);
@@ -2520,10 +2521,11 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
       Str_Copy (BirthdayStrDB,"NULL",			// Without apostrophes
                 Usr_BIRTHDAY_STR_DB_LENGTH);
    else
-      sprintf (BirthdayStrDB,"'%04u-%02u-%02u'",	// With apostrophes
-	       UsrDat->Birthday.Year,
-	       UsrDat->Birthday.Month,
-	       UsrDat->Birthday.Day);
+      snprintf (BirthdayStrDB,Usr_BIRTHDAY_STR_DB_LENGTH + 1,
+	        "'%04u-%02u-%02u'",	// With apostrophes
+	        UsrDat->Birthday.Year,
+	        UsrDat->Birthday.Month,
+	        UsrDat->Birthday.Day);
   }
 
 /*****************************************************************************/
@@ -3216,16 +3218,18 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
    Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
-   sprintf (Path,"%s/%s/%s",
-	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,
-	    The_ThemeId[Gbl.Prefs.Theme]);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s/%s",
+	     Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,
+	     The_ThemeId[Gbl.Prefs.Theme]);
    Str_Copy (Gbl.Prefs.PathTheme,Path,
              PATH_MAX);
 
    Gbl.Prefs.IconSet = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
-   sprintf (Path,"%s/%s/%s",
-	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
-	    Ico_IconSetId[Gbl.Prefs.IconSet]);
+   snprintf (Path,sizeof (Path),
+	     "%s/%s/%s",
+	     Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
+	     Ico_IconSetId[Gbl.Prefs.IconSet]);
    Str_Copy (Gbl.Prefs.PathIconSet,Path,
              PATH_MAX);
 
@@ -3422,7 +3426,9 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       Str_Copy (BgColor,"LIGHT_GREEN",
                 Usr_MAX_BYTES_BG_COLOR);
    else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+      snprintf (BgColor,sizeof (BgColor),
+	        "COLOR%u",
+		Gbl.RowEvenOdd);
 
    if (PutCheckBoxToSelectUsr)
      {
@@ -3874,7 +3880,9 @@ static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
      {
       ShowEmail = Mai_ICanSeeOtherUsrEmail (UsrDat);
       if (ShowEmail)
-         sprintf (MailLink,"mailto:%s",UsrDat->Email);
+         snprintf (MailLink,sizeof (MailLink),
+                   "mailto:%s",
+		   UsrDat->Email);
      }
    else
       ShowEmail = false;
@@ -4317,7 +4325,9 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
                   Str_Concat (Query,NumPositiveCods ? " OR GrpCod='" :
                 	                              " GrpCod='",
                 	      Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-                  sprintf (LongStr,"%ld",GrpCod);
+                  snprintf (LongStr,sizeof (LongStr),
+                	    "%ld",
+			    GrpCod);
                   Str_Concat (Query,LongStr,
                               Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   Str_Concat (Query,"'",
@@ -4347,7 +4357,9 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
                               " FROM crs_grp,crs_grp_usr"
                               " WHERE crs_grp.GrpTypCod='",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-            sprintf (LongStr,"%ld",Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+            snprintf (LongStr,sizeof (LongStr),
+        	      "%ld",
+		      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
             Str_Concat (Query,LongStr,
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             Str_Concat (Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
@@ -6825,12 +6837,13 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       /***** Start box and table *****/
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
-      sprintf (Gbl.Title,"%u %s",
-	       NumUsrs,
-	       (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
-		                                     Txt_users[Sex]) :
-		                   ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-		                                     Txt_ROLES_PLURAL_abc[Role][Sex]));
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        "%u %s",
+	        NumUsrs,
+	        (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
+		                                      Txt_users[Sex]) :
+		                    ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+		                                      Txt_ROLES_PLURAL_abc[Role][Sex]));
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
@@ -8356,21 +8369,27 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 /********** Build the relative path of a user from his user's code ***********/
 /*****************************************************************************/
 
-void Usr_ConstructPathUsr (long UsrCod,char *PathUsr)
+void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
   {
    char PathUsrs[PATH_MAX + 1];
    char PathAboveUsr[PATH_MAX + 1];
 
    /***** Path for users *****/
-   sprintf (PathUsrs,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_USR);
+   snprintf (PathUsrs,sizeof (PathUsrs),
+	     "%s/%s",
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_USR);
    Fil_CreateDirIfNotExists (PathUsrs);
 
    /***** Path above user's ID *****/
-   sprintf (PathAboveUsr,"%s/%02u",PathUsrs,(unsigned) (UsrCod % 100));
+   snprintf (PathAboveUsr,sizeof (PathAboveUsr),
+	     "%s/%02u",
+	     PathUsrs,(unsigned) (UsrCod % 100));
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   sprintf (PathUsr,"%s/%ld",PathAboveUsr,UsrCod);
+   snprintf (PathUsr,PATH_MAX + 1,
+	     "%s/%ld",
+	     PathAboveUsr,UsrCod);
   }
 
 /*****************************************************************************/
@@ -8503,7 +8522,9 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
 	   Role++)
 	 if (Roles & (1 << Role))
 	   {
-	    sprintf (UnsignedStr,"%u",(unsigned) Role);
+	    snprintf (UnsignedStr,sizeof (UnsignedStr),
+		      "%u",
+		      (unsigned) Role);
 	    if (FirstRole)	// Not the first role
 	       FirstRole = false;
 	    else
@@ -8964,7 +8985,9 @@ void Usr_PrintUsrQRCode (void)
       /***** Show QR code *****/
       if (Gbl.Usrs.Other.UsrDat.Nickname[0])
 	{
-	 sprintf (NewNicknameWithArroba,"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
+	 snprintf (NewNicknameWithArroba,sizeof (NewNicknameWithArroba),
+	           "@%s",
+		   Gbl.Usrs.Other.UsrDat.Nickname);
 	 QR_ImageQRCode (NewNicknameWithArroba);
 	}
 

@@ -116,7 +116,7 @@ void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,
 void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
   {
    extern const char *Txt_Close;
-   char IdAlert[Act_MAX_BYTES_ID];
+   char IdAlert[Act_MAX_BYTES_ID + 1];
    static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
      {
       false,	// Ale_NONE

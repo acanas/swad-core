@@ -620,7 +620,9 @@ void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
+   snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
+	     "@%s",
+	     UsrDat->Nickname);
    Par_PutHiddenParamString ("OtherRecipients",NicknameWithArroba);
   }
 
@@ -2388,34 +2390,41 @@ static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs)
 	 if (Gbl.Msg.NumMsgs == 1)
 	   {
 	    if (NumUnreadMsgs)
-	       sprintf (Gbl.Title,"1 %s, 1 %s",
-			Txt_message_received,Txt_unread_MESSAGE);
+	       snprintf (Gbl.Title,sizeof (Gbl.Title),
+		         "1 %s, 1 %s",
+			 Txt_message_received,Txt_unread_MESSAGE);
 	    else
-	       sprintf (Gbl.Title,"1 %s",
-			Txt_message_received);
+	       snprintf (Gbl.Title,sizeof (Gbl.Title),
+		         "1 %s",
+			 Txt_message_received);
 	   }
 	 else
 	   {
 	    if (NumUnreadMsgs == 0)
-	       sprintf (Gbl.Title,"%u %s",
-			Gbl.Msg.NumMsgs,Txt_messages_received);
+	       snprintf (Gbl.Title,sizeof (Gbl.Title),
+		         "%u %s",
+			 Gbl.Msg.NumMsgs,Txt_messages_received);
 	    else if (NumUnreadMsgs == 1)
-	       sprintf (Gbl.Title,"%u %s, 1 %s",
-			Gbl.Msg.NumMsgs,Txt_messages_received,
-			Txt_unread_MESSAGE);
+	       snprintf (Gbl.Title,sizeof (Gbl.Title),
+		         "%u %s, 1 %s",
+			 Gbl.Msg.NumMsgs,Txt_messages_received,
+			 Txt_unread_MESSAGE);
 	    else
-	       sprintf (Gbl.Title,"%u %s, %u %s",
-			Gbl.Msg.NumMsgs,Txt_messages_received,
-			NumUnreadMsgs,Txt_unread_MESSAGES);
+	       snprintf (Gbl.Title,sizeof (Gbl.Title),
+		         "%u %s, %u %s",
+			 Gbl.Msg.NumMsgs,Txt_messages_received,
+			 NumUnreadMsgs,Txt_unread_MESSAGES);
 	   }
 	 break;
       case Msg_MESSAGES_SENT:
 	 if (Gbl.Msg.NumMsgs == 1)
-	    sprintf (Gbl.Title,"1 %s",
-		     Txt_message_sent);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      "1 %s",
+		      Txt_message_sent);
 	 else
-	    sprintf (Gbl.Title,"%u %s",
-		     Gbl.Msg.NumMsgs,Txt_messages_sent);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      "%u %s",
+		      Gbl.Msg.NumMsgs,Txt_messages_sent);
 	 break;
      }
 
@@ -3230,7 +3239,9 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             Crs_PutParamCrsCod (Crs.CrsCod);
             fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
         	               "(");
-            sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
+            snprintf (Gbl.Title,sizeof (Gbl.Title),
+        	      Txt_Go_to_X,
+		      Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"AUTHOR_TXT",NULL);
             fprintf (Gbl.F.Out,"%s</a>)"
         	               "</div>",
