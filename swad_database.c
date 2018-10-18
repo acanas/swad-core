@@ -3196,6 +3196,17 @@ long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError)
 /******************** Make an REPLACE query in database **********************/
 /*****************************************************************************/
 
+void DB_QueryREPLACE_free (const char *Query,const char *MsgError)
+  {
+   int Result;
+
+   /***** Query database *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+  }
+
 void DB_QueryREPLACE (const char *Query,const char *MsgError)
   {
    /***** Query database *****/

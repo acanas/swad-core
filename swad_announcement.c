@@ -25,6 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_announcement.h"
 #include "swad_box.h"
 #include "swad_database.h"
@@ -80,7 +83,7 @@ void Ann_ShowAllAnnouncements (void)
    extern const char *Hlp_MESSAGES_Announcements;
    extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAnnouncements;
@@ -95,29 +98,36 @@ void Ann_ShowAllAnnouncements (void)
 
    /***** Get announcements from database *****/
    if (ICanEdit)
+     {
       /* Select all announcements */
-      sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-		     " FROM announcements"
-		     " ORDER BY AnnCod DESC");
+      if (asprintf (&Query,"SELECT AnnCod,Status,Roles,Subject,Content"
+		           " FROM announcements"
+		           " ORDER BY AnnCod DESC") < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
    else if (Gbl.Usrs.Me.Logged)
      {
       /* Select only announcements I can see */
       Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-      sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-		     " FROM announcements"
-                     " WHERE (Roles&%u)<>0 "
-		     " ORDER BY AnnCod DESC",
-               (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
+      if (asprintf (&Query,"SELECT AnnCod,Status,Roles,Subject,Content"
+		           " FROM announcements"
+                           " WHERE (Roles&%u)<>0 "
+		           " ORDER BY AnnCod DESC",
+                    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss) < 0)	// All my roles in different courses
+         Lay_NotEnoughMemoryExit ();
      }
    else // No user logged
+     {
       /* Select only active announcements for unknown users */
-      sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-		     " FROM announcements"
-                     " WHERE Status=%u AND (Roles&%u)<>0 "
-		     " ORDER BY AnnCod DESC",
-               (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-               (unsigned) (1 << Rol_UNK));
-   NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
+      if (asprintf (&Query,"SELECT AnnCod,Status,Roles,Subject,Content"
+		           " FROM announcements"
+                           " WHERE Status=%u AND (Roles&%u)<>0 "
+		           " ORDER BY AnnCod DESC",
+                    (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+                    (unsigned) (1 << Rol_UNK)) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
+   NumAnnouncements = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get announcements");
 
    /***** Start box *****/
    Box_StartBox ("550px",Txt_Announcements,
@@ -206,7 +216,7 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
 
 void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAnnouncements;
@@ -217,15 +227,16 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   sprintf (Query,"SELECT AnnCod,Subject,Content FROM announcements"
-                  " WHERE Status=%u AND (Roles&%u)<>0 "
-                  " AND AnnCod NOT IN"
-                  " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
-                  " ORDER BY AnnCod DESC",	// Newest first
-            (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-            (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
+   if (asprintf (&Query,"SELECT AnnCod,Subject,Content FROM announcements"
+                        " WHERE Status=%u AND (Roles&%u)<>0 "
+                        " AND AnnCod NOT IN"
+                        " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
+                        " ORDER BY AnnCod DESC",	// Newest first
+                 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+                 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
+                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumAnnouncements = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get announcements");
 
    /***** Show the announcements *****/
    if (NumAnnouncements)
@@ -507,15 +518,16 @@ void Ann_ReceiveAnnouncement (void)
 
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content)
   {
-   char Query[128 + Cns_MAX_BYTES_SUBJECT + Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Select announcements not seen *****/
-   sprintf (Query,"INSERT INTO announcements"
-	          " (Roles,Subject,Content)"
-                  " VALUES"
-                  " (%u,'%s','%s')",
-            Roles,Subject,Content);
-   DB_QueryINSERT (Query,"can not create announcement");
+   if (asprintf (&Query,"INSERT INTO announcements"
+	                " (Roles,Subject,Content)"
+                        " VALUES"
+                        " (%u,'%s','%s')",
+                 Roles,Subject,Content) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create announcement");
   }
 
 /*****************************************************************************/
@@ -524,16 +536,17 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 
 void Ann_HideActiveAnnouncement (void)
   {
-   char Query[256];
+   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement to hide *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as hidden *****/
-   sprintf (Query,"UPDATE announcements SET Status=%u"
-                  " WHERE AnnCod=%ld",
-            (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod);
+   if (asprintf (&Query,"UPDATE announcements SET Status=%u"
+                        " WHERE AnnCod=%ld",
+                 (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryUPDATE (Query,"can not hide announcement");
   }
 
@@ -543,16 +556,17 @@ void Ann_HideActiveAnnouncement (void)
 
 void Ann_RevealHiddenAnnouncement (void)
   {
-   char Query[256];
+   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement to show *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as shown *****/
-   sprintf (Query,"UPDATE announcements SET Status=%u"
-                  " WHERE AnnCod=%ld",
-            (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod);
+   if (asprintf (&Query,"UPDATE announcements SET Status=%u"
+                        " WHERE AnnCod=%ld",
+                 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryUPDATE (Query,"can not reveal announcement");
   }
 
@@ -563,21 +577,23 @@ void Ann_RevealHiddenAnnouncement (void)
 void Ann_RemoveAnnouncement (void)
   {
    extern const char *Txt_Announcement_removed;
-   char Query[128];
+   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Remove announcement *****/
-   sprintf (Query,"DELETE FROM announcements WHERE AnnCod=%ld",
-            AnnCod);
-   DB_QueryDELETE (Query,"can not remove announcement");
+   if (asprintf (&Query,"DELETE FROM announcements WHERE AnnCod=%ld",
+                 AnnCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove announcement");
 
    /***** Remove users who have seen the announcement *****/
-   sprintf (Query,"DELETE FROM ann_seen WHERE AnnCod=%ld",
-            AnnCod);
-   DB_QueryDELETE (Query,"can not remove announcement");
+   if (asprintf (&Query,"DELETE FROM ann_seen WHERE AnnCod=%ld",
+                 AnnCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove announcement");
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_removed);
@@ -592,19 +608,20 @@ void Ann_RemoveAnnouncement (void)
 
 void Ann_MarkAnnouncementAsSeen (void)
   {
-   char Query[128];
+   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Mark announcement as seen *****/
-   sprintf (Query,"REPLACE INTO ann_seen"
-	          " (AnnCod,UsrCod)"
-	          " VALUES"
-	          " (%ld,%ld)",
-            AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryREPLACE (Query,"can not mark announcement as seen");
+   if (asprintf (&Query,"REPLACE INTO ann_seen"
+	                " (AnnCod,UsrCod)"
+	                " VALUES"
+	                " (%ld,%ld)",
+                 AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not mark announcement as seen");
 
    /***** Show other announcements again *****/
    Ann_ShowMyAnnouncementsNotMarkedAsSeen ();
@@ -616,10 +633,11 @@ void Ann_MarkAnnouncementAsSeen (void)
 
 void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove user from seen announcements *****/
-   sprintf (Query,"DELETE FROM ann_seen WHERE UsrCod=%ld",
-            UsrCod);
-   DB_QueryDELETE (Query,"can not remove user from seen announcements");
+   if (asprintf (&Query,"DELETE FROM ann_seen WHERE UsrCod=%ld",
+                 UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove user from seen announcements");
   }
