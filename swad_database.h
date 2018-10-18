@@ -36,13 +36,25 @@
 void DB_CreateTablesIfNotExist (void);
 void DB_OpenDBConnection (void);
 void DB_CloseDBConnection (void);
+
+unsigned long DB_QuerySELECT_free (const char *Query,MYSQL_RES **mysql_res,const char *MsgError);
 unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char *MsgError);
+
+unsigned long DB_QueryCOUNT_free (const char *Query,const char *MsgError);
 unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError);
+
+void DB_QueryINSERT_free (const char *Query,const char *MsgError);
 void DB_QueryINSERT (const char *Query,const char *MsgError);
+
+long DB_QueryINSERTandReturnCode_free (const char *Query,const char *MsgError);
 long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError);
+
 void DB_QueryREPLACE (const char *Query,const char *MsgError);
 void DB_QueryUPDATE (const char *Query,const char *MsgError);
+
+void DB_QueryDELETE_free (const char *Query,const char *MsgError);
 void DB_QueryDELETE (const char *Query,const char *MsgError);
+
 void DB_Query (const char *Query,const char *MsgError);
 void DB_FreeMySQLResult (MYSQL_RES **mysql_res);
 void DB_ExitOnMySQLError (const char *Message);

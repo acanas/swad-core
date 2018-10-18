@@ -25,8 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For fprintf
+#include <stdio.h>		// For fprintf, asprintf
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
@@ -5119,15 +5120,16 @@ char *Act_GetActionTextFromDB (long ActCod,
                                char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get test for an action from database *****/
-   sprintf (Query,"SELECT Txt FROM actions"
-	          " WHERE ActCod=%ld AND Language='%s'",
-            ActCod,Txt_STR_LANG_ID[Txt_LANGUAGE_ES]);	// !!! TODO: Replace Txt_LANGUAGE_ES by Gbl.Prefs.Language !!!
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get text for an action"))
+   if (asprintf (&Query,"SELECT Txt FROM actions"
+	                " WHERE ActCod=%ld AND Language='%s'",
+                 ActCod,Txt_STR_LANG_ID[Txt_LANGUAGE_ES]) < 0)	// !!! TODO: Replace Txt_LANGUAGE_ES by Gbl.Prefs.Language !!!
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get text for an action"))
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);

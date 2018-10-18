@@ -210,8 +210,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	                   " AND usr_data.Password=''",
 	            ID) < 0)
          Lay_NotEnoughMemoryExit ();
-      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
-      free ((void *) Query);
+      NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's codes");
 
       if (NumUsrs)
 	{
@@ -639,7 +638,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 		           " WHERE Nickname='%s' AND UsrCod<>%ld",
 	            NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
          Lay_NotEnoughMemoryExit ();
-      if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
+      if (DB_QueryCOUNT_free (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
 	{
 	 Error = true;
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -647,7 +646,6 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 		   NewNicknameWithoutArroba);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
-      free ((void *) Query);
      }
    else        // New nickname is not valid
      {
@@ -671,7 +669,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 		           " WHERE E_mail='%s' AND Confirmed='Y'",
 	            NewEmail) < 0)
          Lay_NotEnoughMemoryExit ();
-      if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
+      if (DB_QueryCOUNT_free (Query,"can not check if email already existed"))	// An email of another user is the same that my email
 	{
 	 Error = true;
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -679,7 +677,6 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 		   NewEmail);
 	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
-      free ((void *) Query);
      }
    else	// New email is not valid
      {
@@ -779,9 +776,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 		 (unsigned) Mnu_MENU_DEFAULT,
 		 (unsigned) Cfg_DEFAULT_COLUMNS) < 0)
          Lay_NotEnoughMemoryExit ();
-   UsrDat->UsrCod = DB_QueryINSERTandReturnCode (QueryUsrData,
-		                                 "can not create user");
-   free ((void *) QueryUsrData);
+   UsrDat->UsrCod = DB_QueryINSERTandReturnCode_free (QueryUsrData,"can not create user");
 
    /* Insert user's IDs as confirmed */
    for (NumID = 0;
@@ -798,8 +793,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 		    UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
 							'N') < 0)
          Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT (QueryUsrIDs,"can not store user's ID when creating user");
-      free ((void *) QueryUsrIDs);
+      DB_QueryINSERT_free (QueryUsrIDs,"can not store user's ID when creating user");
      }
 
    /***** Create directory for the user, if not exists *****/
@@ -1038,8 +1032,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    if (asprintf (&Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
                  UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's requests for inscription");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's requests for inscription");
 
    /***** Remove user from possible duplicate users *****/
    Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
@@ -1048,8 +1041,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    if (asprintf (&Query,"DELETE FROM crs_usr WHERE UsrCod=%ld",
                  UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove a user from all courses");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove a user from all courses");
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1063,8 +1055,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    if (asprintf (&Query,"DELETE FROM admin WHERE UsrCod=%ld",
                  UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove a user as administrator");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove a user as administrator");
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1121,15 +1112,13 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    if (asprintf (&Query,"DELETE FROM connected WHERE UsrCod=%ld",
                  UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove a user from table of connected users");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove a user from table of connected users");
 
    /***** Remove all sessions of this user *****/
    if (asprintf (&Query,"DELETE FROM sessions WHERE UsrCod=%ld",
                  UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove sessions of a user");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove sessions of a user");
 
    /***** Remove social content associated to the user *****/
    Soc_RemoveUsrSocialContent (UsrDat->UsrCod);
@@ -1195,49 +1184,42 @@ static void Acc_RemoveUsr (struct UsrData *UsrDat)
    if (asprintf (&Query,"DELETE FROM usr_webs WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's webs / social networks");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's webs / social networks");
 
    /***** Remove user's nicknames *****/
    if (asprintf (&Query,"DELETE FROM usr_nicknames WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's nicknames");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's nicknames");
 
    /***** Remove user's emails *****/
    if (asprintf (&Query,"DELETE FROM pending_emails WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove pending user's emails");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove pending user's emails");
 
    if (asprintf (&Query,"DELETE FROM usr_emails WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's emails");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's emails");
 
    /***** Remove user's IDs *****/
    if (asprintf (&Query,"DELETE FROM usr_IDs WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's IDs");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's IDs");
 
    /***** Remove user's last data *****/
    if (asprintf (&Query,"DELETE FROM usr_last WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's last data");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's last data");
 
    /***** Remove user's data  *****/
    if (asprintf (&Query,"DELETE FROM usr_data WHERE UsrCod=%ld",
 	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE (Query,"can not remove user's data");
-   free ((void *) Query);
+   DB_QueryDELETE_free (Query,"can not remove user's data");
   }
 
 /*****************************************************************************/

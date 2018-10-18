@@ -3066,6 +3066,24 @@ void DB_CloseDBConnection (void)
 /******************** Make a SELECT query from database **********************/
 /*****************************************************************************/
 
+unsigned long DB_QuerySELECT_free (const char *Query,MYSQL_RES **mysql_res,const char *MsgError)
+  {
+   int Result;
+
+   /***** Query database *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+
+   /***** Store query result *****/
+   if ((*mysql_res = mysql_store_result (&Gbl.mysql)) == NULL)
+      DB_ExitOnMySQLError (MsgError);
+
+   /***** Return number of rows of result *****/
+   return (unsigned long) mysql_num_rows (*mysql_res);
+  }
+
 unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char *MsgError)
   {
    /***** Query database *****/
@@ -3083,6 +3101,26 @@ unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char
 /*****************************************************************************/
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
+
+unsigned long DB_QueryCOUNT_free (const char *Query,const char *MsgError)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+
+   /***** Make query "SELECT COUNT(*) FROM..." *****/
+   DB_QuerySELECT_free (Query,&mysql_res,MsgError);
+
+   /***** Get number of rows *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%lu",&NumRows) != 1)
+      Lay_ShowErrorAndExit ("Error when counting number of rows.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumRows;
+  }
 
 unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError)
   {
@@ -3108,6 +3146,17 @@ unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError)
 /******************** Make an INSERT query in database ***********************/
 /*****************************************************************************/
 
+void DB_QueryINSERT_free (const char *Query,const char *MsgError)
+  {
+   int Result;
+
+   /***** Query database *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+  }
+
 void DB_QueryINSERT (const char *Query,const char *MsgError)
   {
    /***** Query database *****/
@@ -3118,6 +3167,20 @@ void DB_QueryINSERT (const char *Query,const char *MsgError)
 /*****************************************************************************/
 /** Make an INSERT query in database and return code of last inserted item ***/
 /*****************************************************************************/
+
+long DB_QueryINSERTandReturnCode_free (const char *Query,const char *MsgError)
+  {
+   int Result;
+
+   /***** Query database *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+
+   /***** Return the code of the inserted item *****/
+   return (long) mysql_insert_id (&Gbl.mysql);
+  }
 
 long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError)
   {
@@ -3157,6 +3220,17 @@ void DB_QueryUPDATE (const char *Query,const char *MsgError)
 /*****************************************************************************/
 /******************** Make a DELETE query from database **********************/
 /*****************************************************************************/
+
+void DB_QueryDELETE_free (const char *Query,const char *MsgError)
+  {
+   int Result;
+
+   /***** Query database *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+  }
 
 void DB_QueryDELETE (const char *Query,const char *MsgError)
   {
