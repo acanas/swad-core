@@ -64,12 +64,12 @@ extern struct Globals Gbl;
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (Act_Action_t Action)
+void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) ())
   {
    extern const char *Txt_QR_code;
 
    /***** Link to print QR *****/
-   Lay_PutContextualLink (Action,NULL,QR_PutParamQRString,
+   Lay_PutContextualLink (Action,NULL,FuncParams,
                           "qr64x64.gif",
                           Txt_QR_code,NULL,
 		          NULL);

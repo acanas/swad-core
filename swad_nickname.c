@@ -222,7 +222,6 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
    extern const char *Txt_Other_nicknames;
-   extern const char *Txt_QR_code;
    extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
@@ -331,11 +330,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
       /* Link to QR code */
       if (NumNick == 1 && UsrDat->Nickname[0])
-         Lay_PutContextualLink (ActPrnUsrQR,NULL,Usr_PutParamMyUsrCodEncrypted,
-				"qr64x64.gif",
-				Txt_QR_code,NULL,
-				NULL);
-
+	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted);
 
       /* Form to change the nickname */
       if (NumNick > 1)

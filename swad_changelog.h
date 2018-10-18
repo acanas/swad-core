@@ -355,13 +355,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.6.6 (2018-10-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.6.7 (2018-10-17)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
- *
- * Código QR no sale en la ficha cuando no estoy en una asignatura!!!!!
-        Version 18.6.6:   Oct 17, 2018  Some sprintf changed by snprintf. (236560 lines)
+        Version 18.6.7:   Oct 18, 2018  Changes related to QR codes. (236556 lines)
+        Version 18.6.6:   Oct 18, 2018  Some sprintf changed by snprintf. (236560 lines)
         Version 18.6.5:   Oct 17, 2018  Some sprintf changed by snprintf or asprintf. (236125 lines)
         Version 18.6.4:   Oct 17, 2018  Some sprintf changed by snprintf or asprintf. (236034 lines)
         Version 18.6.3:   Oct 17, 2018  Some sprintf changed by snprintf or asprintf. (235954 lines)

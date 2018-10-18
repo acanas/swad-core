@@ -75,6 +75,7 @@ typedef enum
 static void Att_ShowAllAttEvents (void);
 static void Att_PutFormToSelectWhichGroupsToShow (void);
 static void Att_ParamsWhichGroupsToShow (void);
+static void Att_PutIconsInListOfAttEvents (void);
 static void Att_PutIconToCreateNewAttEvent (void);
 static void Att_PutButtonToCreateNewAttEvent (void);
 static void Att_PutParamsToCreateNewAttEvent (void);
@@ -147,8 +148,6 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
-   extern const char *Txt_QR_code;
-
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
@@ -157,36 +156,26 @@ void Att_SeeAttEvents (void)
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
 
-   /***** Show contextual menu *****/
-   if (Gbl.AttEvents.Num ||
+   /***** Put link to show list of attendance *****/
+   if (Gbl.AttEvents.Num &&
        Gbl.Usrs.Me.UsrDat.Nickname[0])
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      /* Put link to show list of attendance */
-      if (Gbl.AttEvents.Num)
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       Att_PutFormToListMyAttendance ();
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       Att_PutFormToListStdsAttendance ();
-	       break;
-	    default:
-	       break;
-	   }
-
-      /* Put link to my QR code */
-      Lay_PutContextualLink (ActPrnUsrQR,NULL,Usr_PutParamMyUsrCodEncrypted,
-			     "qr64x64.gif",
-			     Txt_QR_code,Txt_QR_code,
-			     NULL);
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	    Att_PutFormToListMyAttendance ();
+	    fprintf (Gbl.F.Out,"</div>");
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	    Att_PutFormToListStdsAttendance ();
+	    fprintf (Gbl.F.Out,"</div>");
+	    break;
+	 default:
+	    break;
+	}
 
    /***** Show all the attendance events *****/
    Att_ShowAllAttEvents ();
@@ -224,8 +213,7 @@ static void Att_ShowAllAttEvents (void)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Events,ICanEdit ? Att_PutIconToCreateNewAttEvent :
-				              NULL,
+   Box_StartBox ("100%",Txt_Events,Att_PutIconsInListOfAttEvents,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -314,6 +302,23 @@ static void Att_ParamsWhichGroupsToShow (void)
   }
 
 /*****************************************************************************/
+/************* Put contextual icons in list of attendance events *************/
+/*****************************************************************************/
+
+static void Att_PutIconsInListOfAttEvents (void)
+  {
+   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+
+   /***** Put icon to create a new attendance event *****/
+   if (ICanEdit)
+      Att_PutIconToCreateNewAttEvent ();
+
+   /***** Put icon to print my QR code *****/
+   QR_PutLinkToPrintQRCode (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted);
+  }
+
+/*****************************************************************************/
 /**************** Put icon to create a new attendance event ******************/
 /*****************************************************************************/
 
@@ -321,7 +326,7 @@ static void Att_PutIconToCreateNewAttEvent (void)
   {
    extern const char *Txt_New_event;
 
-   /***** Put form to create a new attendance event *****/
+   /***** Put icon to create a new attendance event *****/
    Lay_PutContextualLink (ActFrmNewAtt,NULL,Att_PutParamsToCreateNewAttEvent,
                           "plus64x64.png",
                           Txt_New_event,NULL,

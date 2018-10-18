@@ -2538,7 +2538,6 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_record_and_office_hours;
    extern const char *Txt_Show_agenda;
    extern const char *Txt_Administer_user;
-   extern const char *Txt_QR_code;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_test_results;
@@ -2680,13 +2679,10 @@ static void Rec_PutIconsCommands (void)
 					 NULL);
 	      }
            }
-
-	 /***** Button to print QR code *****/
-	 Lay_PutContextualLink (ActPrnUsrQR,NULL,Rec_PutParamUsrCodEncrypted,
-				"qr64x64.gif",
-				Txt_QR_code,NULL,
-				NULL);
 	}
+
+      /***** Button to print QR code *****/
+      QR_PutLinkToPrintQRCode (ActPrnUsrQR,Rec_PutParamUsrCodEncrypted);
 
       /***** Button to send a message *****/
       Lay_PutContextualLink (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
