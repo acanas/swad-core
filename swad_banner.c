@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -101,6 +103,7 @@ void Ban_SeeBanners (void)
    extern const char *Txt_Banners;
    extern const char *Txt_No_banners;
    extern const char *Txt_New_banner;
+   char *Query;
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -111,10 +114,12 @@ void Ban_SeeBanners (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of banners *****/
-   Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-	               " FROM banners"
-                       " WHERE Hidden='N'"
-	               " ORDER BY ShortName");
+   if (asprintf (&Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
+	                " FROM banners"
+                        " WHERE Hidden='N'"
+	                " ORDER BY ShortName") < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ban_GetListBanners (Query);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutFormToEditBanners,
@@ -193,6 +198,7 @@ void Ban_EditBanners (void)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
+   char *Query;
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -203,8 +209,10 @@ void Ban_EditBanners (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of banners *****/
-   Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-	               " FROM banners ORDER BY ShortName");
+   if (asprintf (&Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
+	                " FROM banners ORDER BY ShortName") < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ban_GetListBanners (Query);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutIconToViewBanners,
@@ -239,7 +247,7 @@ static void Ban_GetListBanners (const char *Query)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get banners from database *****/
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get banners");
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get banners");
 
       if (NumRows) // Banners found...
 	{
@@ -297,7 +305,7 @@ static void Ban_GetListBanners (const char *Query)
 
 void Ban_GetDataOfBannerByCod (struct Banner *Ban)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -310,10 +318,11 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      sprintf (Query,"SELECT Hidden,ShortName,FullName,Img,WWW"
-	             " FROM banners WHERE BanCod=%ld",
-               Ban->BanCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a banner");
+      if (asprintf (&Query,"SELECT Hidden,ShortName,FullName,Img,WWW"
+	                   " FROM banners WHERE BanCod=%ld",
+                    Ban->BanCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a banner");
 
       if (NumRows) // Banner found...
         {
@@ -506,7 +515,7 @@ long Ban_GetParamBanCod (void)
 void Ban_RemoveBanner (void)
   {
    extern const char *Txt_Banner_X_removed;
-   char Query[512];
+   char *Query;
    struct Banner Ban;
 
    /***** Get banner code *****/
@@ -517,8 +526,9 @@ void Ban_RemoveBanner (void)
    Ban_GetDataOfBannerByCod (&Ban);
 
    /***** Remove banner *****/
-   sprintf (Query,"DELETE FROM banners WHERE BanCod=%ld",Ban.BanCod);
-   DB_QueryDELETE (Query,"can not remove a banner");
+   if (asprintf (&Query,"DELETE FROM banners WHERE BanCod=%ld",Ban.BanCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove a banner");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -558,7 +568,7 @@ static void Ban_ShowOrHideBanner (bool Hide)
   {
    extern const char *Txt_The_banner_X_is_now_hidden;
    extern const char *Txt_The_banner_X_is_now_visible;
-   char Query[256];
+   char *Query;
    struct Banner Ban;
 
    /***** Get banner code *****/
@@ -571,12 +581,13 @@ static void Ban_ShowOrHideBanner (bool Hide)
    /***** Mark file as hidden/visible in database *****/
    if (Ban.Hidden != Hide)
      {
-      sprintf (Query,"UPDATE banners SET Hidden='%c'"
-		     " WHERE BanCod=%ld",
-	       Hide ? 'Y' :
-		      'N',
-	       Ban.BanCod);
-      DB_QueryUPDATE (Query,"can not change status of a banner in database");
+      if (asprintf (&Query,"UPDATE banners SET Hidden='%c'"
+		           " WHERE BanCod=%ld",
+	            Hide ? 'Y' :
+		           'N',
+	            Ban.BanCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not change status of a banner in database");
      }
 
    /***** Write message to show the change made *****/
@@ -708,12 +719,14 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
   {
-   char Query[128 + Ban_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Get number of banners with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM banners WHERE %s='%s' AND BanCod<>%ld",
-            FieldName,Name,BanCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a banner already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM banners"
+	                " WHERE %s='%s' AND BanCod<>%ld",
+                 FieldName,Name,BanCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name of a banner already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -722,12 +735,13 @@ static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,
 
 static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,const char *NewBanName)
   {
-   char Query[128 + Ban_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Update banner changing old name by new name *****/
-   sprintf (Query,"UPDATE banners SET %s='%s' WHERE BanCod=%ld",
-	    FieldName,NewBanName,BanCod);
-   DB_QueryUPDATE (Query,"can not update the name of a banner");
+   if (asprintf (&Query,"UPDATE banners SET %s='%s' WHERE BanCod=%ld",
+	         FieldName,NewBanName,BanCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of a banner");
   }
 
 /*****************************************************************************/
@@ -739,7 +753,7 @@ void Ban_ChangeBannerImg (void)
    extern const char *Txt_The_new_image_is_X;
    extern const char *Txt_You_can_not_leave_the_image_empty;
    struct Banner *Ban;
-   char Query[256 + Ban_MAX_BYTES_IMAGE];
+   char *Query;
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
    Ban = &Gbl.Banners.EditingBan;
@@ -756,9 +770,10 @@ void Ban_ChangeBannerImg (void)
    if (NewImg[0])
      {
       /* Update the table changing old image by new image */
-      sprintf (Query,"UPDATE banners SET Img='%s' WHERE BanCod=%ld",
-               NewImg,Ban->BanCod);
-      DB_QueryUPDATE (Query,"can not update the image of a banner");
+      if (asprintf (&Query,"UPDATE banners SET Img='%s' WHERE BanCod=%ld",
+                    NewImg,Ban->BanCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update the image of a banner");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -785,7 +800,7 @@ void Ban_ChangeBannerWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Banner *Ban;
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Ban = &Gbl.Banners.EditingBan;
@@ -802,9 +817,10 @@ void Ban_ChangeBannerWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
-               NewWWW,Ban->BanCod);
-      DB_QueryUPDATE (Query,"can not update the web of a banner");
+      if (asprintf (&Query,"UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
+                    NewWWW,Ban->BanCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update the web of a banner");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -987,14 +1003,15 @@ void Ban_RecFormNewBanner (void)
 static void Ban_CreateBanner (struct Banner *Ban)
   {
    extern const char *Txt_Created_new_banner_X;
-   char Query[256 + Ban_MAX_BYTES_SHRT_NAME + Ban_MAX_BYTES_FULL_NAME + Ban_MAX_BYTES_IMAGE + Cns_MAX_BYTES_WWW];
+   char *Query;
 
    /***** Create a new banner *****/
-   sprintf (Query,"INSERT INTO banners"
-	          " (Hidden,ShortName,FullName,Img,WWW)"
-	          " VALUES"
-	          " ('N','%s','%s','%s','%s')",
-            Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
+   if (asprintf (&Query,"INSERT INTO banners"
+	                " (Hidden,ShortName,FullName,Img,WWW)"
+	                " VALUES"
+	                " ('N','%s','%s','%s','%s')",
+                 Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW) < 0)
+      Lay_NotEnoughMemoryExit ();
    DB_QueryINSERT (Query,"can not create banner");
 
    /***** Write success message *****/
@@ -1010,16 +1027,18 @@ static void Ban_CreateBanner (struct Banner *Ban)
 
 void Ban_WriteMenuWithBanners (void)
   {
-   char Query[256];
+   char *Query;
    unsigned NumBan;
 
    /***** Get random banner *****/
-   sprintf (Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-	          " FROM banners"
-	          " WHERE Hidden='N'"
-	          " ORDER BY RAND(%lu) LIMIT %u",
-	    (unsigned long) (Gbl.StartExecutionTimeUTC / Cfg_TIME_TO_CHANGE_BANNER),
-	    Cfg_NUMBER_OF_BANNERS);	// The banner(s) will change once in a while
+   // The banner(s) will change once in a while
+   if (asprintf (&Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
+	                " FROM banners"
+	                " WHERE Hidden='N'"
+	                " ORDER BY RAND(%lu) LIMIT %u",
+	         (unsigned long) (Gbl.StartExecutionTimeUTC / Cfg_TIME_TO_CHANGE_BANNER),
+	         Cfg_NUMBER_OF_BANNERS) < 0)
+      Lay_NotEnoughMemoryExit ();
    Ban_GetListBanners (Query);
 
    /***** Write all the banners *****/
