@@ -53,7 +53,8 @@ extern struct Globals Gbl;
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
-#define Att_ATTENDANCE_TABLE_ID	"att_table"
+#define Att_ATTENDANCE_TABLE_ID		"att_table"
+#define Att_ATTENDANCE_DETAILS_ID	"att_details"
 
 /*****************************************************************************/
 /******************************** Private types ******************************/
@@ -3132,7 +3133,7 @@ static void Att_PutButtonToShowDetails (void)
    extern const char *Txt_Show_more_details;
 
    /***** Button to show more details *****/
-   Act_StartForm (Gbl.Action.Act);
+   Act_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
@@ -3516,6 +3517,9 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
+   /***** Start section with attendance details *****/
+   Lay_StartSection (Att_ATTENDANCE_DETAILS_ID);
+
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Details,NULL,
 	              NULL,Box_NOT_CLOSABLE,2);
@@ -3536,6 +3540,9 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,
 
    /***** End table and box *****/
    Box_EndBoxTable ();
+
+   /***** End section with attendance details *****/
+   Lay_EndSection ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
