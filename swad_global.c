@@ -371,6 +371,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.AttEvents.Lst = NULL;
    Gbl.AttEvents.SelectedOrder = Att_ORDER_DEFAULT;
    Gbl.AttEvents.AttCod = -1L;
+   Gbl.AttEvents.StrAttCodsSelected = NULL;
 
    Gbl.Mails.Num = 0;
    Gbl.Mails.Lst = NULL;
