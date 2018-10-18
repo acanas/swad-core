@@ -132,13 +132,13 @@ static void Att_PutParamsToPrintStdsList (void);
 
 static void Att_PutButtonToShowDetails (void);
 static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView);
+static void Att_PutIconToViewEditAttEvents (void);
 static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                                          unsigned NumStdsInList,
                                          long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
-static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
-                                              unsigned NumStdsInList,
+static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,
                                               long *LstSelectedUsrCods);
 static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
@@ -2768,6 +2768,8 @@ void Usr_PrintMyAttendanceCrs (void)
 
 static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
+   extern const char *Hlp_USERS_Attendance_attendance_list;
+   extern const char *Txt_Attendance;
    unsigned NumAttEvent;
 
    /***** Get list of attendance events *****/
@@ -2790,6 +2792,14 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    /***** Get list of attendance events selected *****/
    Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Attendance,
+                 TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Att_PutIconToPrintMyList :
+                                                         NULL,
+                 TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Hlp_USERS_Attendance_attendance_list :
+                                                         NULL,
+                 Box_NOT_CLOSABLE);
+
    /***** List events to select *****/
    Att_ListEventsToSelect (TypeOfView);
 
@@ -2801,7 +2811,10 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
    /***** Show details or put button to show details *****/
    if (Gbl.AttEvents.ShowDetails)
-      Att_ListStdsWithAttEventsDetails (TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+      Att_ListStdsWithAttEventsDetails (1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** Free memory for list of attendance events selected *****/
    free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -2829,6 +2842,8 @@ void Usr_PrintStdsAttendanceCrs (void)
 
 static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
+   extern const char *Hlp_USERS_Attendance_attendance_list;
+   extern const char *Txt_Attendance;
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
@@ -2863,6 +2878,14 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       /***** Get list of attendance events selected *****/
       Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
+      /***** Start box *****/
+      Box_StartBox (NULL,Txt_Attendance,
+	            TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconToPrintStdsList :
+						             NULL,
+		    TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Hlp_USERS_Attendance_attendance_list :
+						             NULL,
+		    Box_NOT_CLOSABLE);
+
       /***** List events to select *****/
       Att_ListEventsToSelect (TypeOfView);
 
@@ -2874,7 +2897,10 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
       /***** Show details or put button to show details *****/
       if (Gbl.AttEvents.ShowDetails)
-	 Att_ListStdsWithAttEventsDetails (TypeOfView,NumStdsInList,LstSelectedUsrCods);
+	 Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
+
+      /***** End box *****/
+      Box_EndBox ();
 
       /***** Free memory for list of attendance events selected *****/
       free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -3101,7 +3127,6 @@ static void Att_PutButtonToShowDetails (void)
 
 static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
   {
-   extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
@@ -3111,22 +3136,27 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    extern const char *Txt_Update_attendance;
    unsigned UniqueId;
    unsigned NumAttEvent;
+   bool NormalView = (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
+                      TypeOfView == Att_NORMAL_VIEW_STUDENTS);
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Events,
+	         TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconToViewEditAttEvents :
+	        	                                  NULL,
+                 NULL,
+		 Box_NOT_CLOSABLE);
 
    /***** Start form to update the attendance
 	  depending on the events selected *****/
-   if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
-       TypeOfView == Att_NORMAL_VIEW_STUDENTS)
+   if (NormalView)
      {
       Act_StartForm (Gbl.Action.Act);
       Grp_PutParamsCodGrps ();
       Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
      }
 
-   /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Events,NULL,
-                      TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                     Hlp_USERS_Attendance_attendance_list,
-		      Box_NOT_CLOSABLE,2);
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3188,8 +3218,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Put button to refresh *****/
-   if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
-       TypeOfView == Att_NORMAL_VIEW_STUDENTS)
+   if (NormalView)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" class=\"CENTER_MIDDLE\">");
@@ -3202,13 +3231,24 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "</tr>");
      }
 
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+   /***** End table *****/
+   Tbl_EndTable ();
 
    /***** End form *****/
-   if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
-       TypeOfView == Att_NORMAL_VIEW_STUDENTS)
+   if (NormalView)
       Act_EndForm ();
+
+   /***** End box *****/
+   Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/************** Put icon to view/edit all attendance events ******************/
+/*****************************************************************************/
+
+static void Att_PutIconToViewEditAttEvents (void)
+  {
+   Ico_PutContextualIconToEdit (ActSeeAtt,NULL);
   }
 
 /*****************************************************************************/
@@ -3219,32 +3259,19 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                                          unsigned NumStdsInList,
                                          long *LstSelectedUsrCods)
   {
-   extern const char *Hlp_USERS_Attendance_attendance_list;
-   extern const char *Txt_Attendance;
    extern const char *Txt_Number_of_students;
    struct UsrData UsrDat;
    unsigned NumStd;
    unsigned NumAttEvent;
    unsigned Total;
-   bool PutButtonShowDetails = (!Gbl.AttEvents.ShowDetails &&
-                                (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
-	                         TypeOfView == Att_NORMAL_VIEW_STUDENTS));
+   bool PutButtonShowDetails = (TypeOfView != Att_PRINT_VIEW &&
+	                        !Gbl.AttEvents.ShowDetails);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Start box *****/
-   Box_StartBox (NULL,Txt_Attendance,
-                  (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
-                 ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
-                        	                             NULL),
-                 TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                Hlp_USERS_Attendance_attendance_list,
-                 Box_NOT_CLOSABLE);
-   if (PutButtonShowDetails)
-      Tbl_StartTableWideMargin (2);
-   else
-      Tbl_StartTableWide (2);
+   /***** Start table *****/
+   Tbl_StartTableCenter (2);
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3297,9 +3324,6 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    /***** Button to show more details *****/
    if (PutButtonShowDetails)
       Att_PutButtonToShowDetails ();
-
-   /***** End box *****/
-   Box_EndBox ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -3444,11 +3468,9 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 /**************** List the students with details and comments ****************/
 /*****************************************************************************/
 
-static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
-                                              unsigned NumStdsInList,
+static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,
                                               long *LstSelectedUsrCods)
   {
-   extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Details;
    struct UsrData UsrDat;
    unsigned NumStd;
@@ -3458,9 +3480,7 @@ static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Details,NULL,
-                      TypeOfView == Att_PRINT_VIEW ? NULL :
-                        	                     Hlp_USERS_Attendance_attendance_list,
-		      Box_NOT_CLOSABLE,2);
+	              NULL,Box_NOT_CLOSABLE,2);
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;
