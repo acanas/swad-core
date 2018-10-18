@@ -53,6 +53,8 @@ extern struct Globals Gbl;
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
+#define Att_ATTENDANCE_TABLE_ID	"att_table"
+
 /*****************************************************************************/
 /******************************** Private types ******************************/
 /*****************************************************************************/
@@ -3171,7 +3173,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	  depending on the events selected *****/
    if (NormalView)
      {
-      Act_StartForm (Gbl.Action.Act);
+      Act_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
       Grp_PutParamsCodGrps ();
       Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
      }
@@ -3300,6 +3302,9 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
+   /***** Start section with attendance table *****/
+   Lay_StartSection (Att_ATTENDANCE_TABLE_ID);
+
    /***** Start table *****/
    Tbl_StartTableCenter (2);
 
@@ -3354,6 +3359,9 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    /***** Button to show more details *****/
    if (PutButtonShowDetails)
       Att_PutButtonToShowDetails ();
+
+   /***** End section with attendance table *****/
+   Lay_EndSection ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

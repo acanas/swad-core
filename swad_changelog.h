@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.7.1 (2018-10-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.7.2 (2018-10-18)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+        Version 18.7.2:   Oct 18, 2018  Changes in layout of list of attendance. (236602 lines)
         Version 18.7.1:   Oct 18, 2018  Changes in layout of list of attendance. (236596 lines)
         Version 18.7:     Oct 18, 2018  Changes in layout of list of attendance. (236570 lines)
         Version 18.6.7:   Oct 18, 2018  Changes related to QR codes. (236556 lines)
