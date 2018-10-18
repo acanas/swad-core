@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -985,7 +987,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    char OrderBySubQuery[Agd_MAX_BYTES_SUBQUERY];
-   char Query[128 + Agd_MAX_BYTES_SUBQUERY * 5];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1100,15 +1102,16 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 	}
 
       /* Build full query */
-      sprintf (Query,"SELECT AgdCod FROM agendas"
-		     " WHERE %s%s%s%s"
-		     " ORDER BY %s",
-	       UsrSubQuery,
-	       Past__FutureEventsSubQuery,
-	       PrivatPublicEventsSubQuery,
-	       HiddenVisiblEventsSubQuery,
-	       OrderBySubQuery);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
+      if (asprintf (&Query,"SELECT AgdCod FROM agendas"
+		           " WHERE %s%s%s%s"
+		           " ORDER BY %s",
+	            UsrSubQuery,
+	            Past__FutureEventsSubQuery,
+	            PrivatPublicEventsSubQuery,
+	            HiddenVisiblEventsSubQuery,
+	            OrderBySubQuery) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get agenda events");
 
       if (NumRows) // Events found...
 	{
@@ -1145,23 +1148,24 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Build query *****/
-   sprintf (Query,"SELECT AgdCod,Public,Hidden,"
-                  "UNIX_TIMESTAMP(StartTime),"
-                  "UNIX_TIMESTAMP(EndTime),"
-                  "NOW()>EndTime,"	// Past event?
-                  "NOW()<StartTime,"	// Future event?
-                  "Event,Location"
-                  " FROM agendas"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent->AgdCod,AgdEvent->UsrCod);
+   if (asprintf (&Query,"SELECT AgdCod,Public,Hidden,"
+                        "UNIX_TIMESTAMP(StartTime),"
+                        "UNIX_TIMESTAMP(EndTime),"
+                        "NOW()>EndTime,"	// Past event?
+                        "NOW()<StartTime,"	// Future event?
+                        "Event,Location"
+                        " FROM agendas"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent->AgdCod,AgdEvent->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Get data of event from database *****/
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get agenda event data")) // Event found...
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get agenda event data")) // Event found...
      {
       /* Get row:
       row[0] AgdCod
@@ -1244,16 +1248,17 @@ void Agd_FreeListEvents (void)
 static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
                                    char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get text of event from database *****/
-   sprintf (Query,"SELECT Txt FROM agendas"
-	          " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent->AgdCod,AgdEvent->UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get event text");
+   if (asprintf (&Query,"SELECT Txt FROM agendas"
+	                " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent->AgdCod,AgdEvent->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get event text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1325,7 +1330,7 @@ void Agd_AskRemEvent (void)
 void Agd_RemoveEvent (void)
   {
    extern const char *Txt_Event_X_removed;
-   char Query[512];
+   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1337,10 +1342,11 @@ void Agd_RemoveEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Remove event *****/
-   sprintf (Query,"DELETE FROM agendas"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryDELETE (Query,"can not remove event");
+   if (asprintf (&Query,"DELETE FROM agendas"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1359,7 +1365,7 @@ void Agd_RemoveEvent (void)
 void Agd_HideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
-   char Query[512];
+   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1371,10 +1377,11 @@ void Agd_HideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event private *****/
-   sprintf (Query,"UPDATE agendas SET Hidden='Y'"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE (Query,"can not hide event");
+   if (asprintf (&Query,"UPDATE agendas SET Hidden='Y'"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not hide event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1393,7 +1400,7 @@ void Agd_HideEvent (void)
 void Agd_UnhideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
-   char Query[256];
+   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1405,10 +1412,11 @@ void Agd_UnhideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event public *****/
-   sprintf (Query,"UPDATE agendas SET Hidden='N'"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE (Query,"can not show event");
+   if (asprintf (&Query,"UPDATE agendas SET Hidden='N'"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not show event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1427,7 +1435,7 @@ void Agd_UnhideEvent (void)
 void Agd_MakeEventPrivate (void)
   {
    extern const char *Txt_Event_X_is_now_private;
-   char Query[512];
+   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1439,10 +1447,11 @@ void Agd_MakeEventPrivate (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event private *****/
-   sprintf (Query,"UPDATE agendas SET Public='N'"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE (Query,"can not make event private");
+   if (asprintf (&Query,"UPDATE agendas SET Public='N'"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not make event private");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1461,7 +1470,7 @@ void Agd_MakeEventPrivate (void)
 void Agd_MakeEventPublic (void)
   {
    extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
-   char Query[256];
+   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1473,10 +1482,11 @@ void Agd_MakeEventPublic (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event public *****/
-   sprintf (Query,"UPDATE agendas SET Public='Y'"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE (Query,"can not make event public");
+   if (asprintf (&Query,"UPDATE agendas SET Public='Y'"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not make event public");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1710,24 +1720,22 @@ void Agd_RecFormEvent (void)
 
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char Query[1024 +
-              Agd_MAX_BYTES_EVENT +
-              Agd_MAX_BYTES_LOCATION +
-              Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Create a new event *****/
-   sprintf (Query,"INSERT INTO agendas"
-	          " (UsrCod,StartTime,EndTime,Event,Location,Txt)"
-                  " VALUES"
-                  " (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-                  "'%s','%s','%s')",
-            AgdEvent->UsrCod,
-            AgdEvent->TimeUTC[Agd_START_TIME],
-            AgdEvent->TimeUTC[Agd_END_TIME  ],
-            AgdEvent->Event,
-            AgdEvent->Location,
-            Txt);
-   AgdEvent->AgdCod = DB_QueryINSERTandReturnCode (Query,"can not create new event");
+   if (asprintf (&Query,"INSERT INTO agendas"
+	                " (UsrCod,StartTime,EndTime,Event,Location,Txt)"
+                        " VALUES"
+                        " (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+                        "'%s','%s','%s')",
+		 AgdEvent->UsrCod,
+		 AgdEvent->TimeUTC[Agd_START_TIME],
+		 AgdEvent->TimeUTC[Agd_END_TIME  ],
+		 AgdEvent->Event,
+		 AgdEvent->Location,
+		 Txt) < 0)
+      Lay_NotEnoughMemoryExit ();
+   AgdEvent->AgdCod = DB_QueryINSERTandReturnCode_free (Query,"can not create new event");
   }
 
 /*****************************************************************************/
@@ -1736,22 +1744,20 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char Query[1024 +
-              Agd_MAX_BYTES_EVENT +
-              Agd_MAX_BYTES_LOCATION +
-              Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Update the data of the event *****/
-   sprintf (Query,"UPDATE agendas SET "
-	          "StartTime=FROM_UNIXTIME(%ld),"
-	          "EndTime=FROM_UNIXTIME(%ld),"
-                  "Event='%s',Location='%s',Txt='%s'"
-                  " WHERE AgdCod=%ld AND UsrCod=%ld",
-            AgdEvent->TimeUTC[Agd_START_TIME],
-            AgdEvent->TimeUTC[Agd_END_TIME  ],
-            AgdEvent->Event,AgdEvent->Location,Txt,
-            AgdEvent->AgdCod,AgdEvent->UsrCod);
-   DB_QueryUPDATE (Query,"can not update event");
+   if (asprintf (&Query,"UPDATE agendas SET "
+	                "StartTime=FROM_UNIXTIME(%ld),"
+	                "EndTime=FROM_UNIXTIME(%ld),"
+                        "Event='%s',Location='%s',Txt='%s'"
+                        " WHERE AgdCod=%ld AND UsrCod=%ld",
+                 AgdEvent->TimeUTC[Agd_START_TIME],
+                 AgdEvent->TimeUTC[Agd_END_TIME  ],
+                 AgdEvent->Event,AgdEvent->Location,Txt,
+                 AgdEvent->AgdCod,AgdEvent->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update event");
   }
 
 /*****************************************************************************/
@@ -1760,11 +1766,13 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
 void Agd_RemoveUsrEvents (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove events *****/
-   sprintf (Query,"DELETE FROM agendas WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE (Query,"can not remove all the events of a user");
+   if (asprintf (&Query,"DELETE FROM agendas WHERE UsrCod=%ld",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove all the events of a user");
   }
 
 /*****************************************************************************/
@@ -1773,12 +1781,13 @@ void Agd_RemoveUsrEvents (long UsrCod)
 
 unsigned Agd_GetNumEventsFromUsr (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get number of events in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM agendas WHERE UsrCod=%ld",
-            UsrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of events from user");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM agendas WHERE UsrCod=%ld",
+                 UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of events from user");
   }
 
 /*****************************************************************************/
@@ -1788,7 +1797,7 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod)
 
 unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1797,64 +1806,70 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
-                        " FROM agendas"
-                        " WHERE UsrCod>0");
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT UsrCod)"
+                              " FROM agendas"
+                              " WHERE UsrCod>0") < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
        case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
-                        " FROM institutions,centres,degrees,courses,crs_usr,agendas"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentCty.Cty.CtyCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                              " FROM institutions,centres,degrees,courses,crs_usr,agendas"
+                              " WHERE institutions.CtyCod=%ld"
+                              " AND institutions.InsCod=centres.InsCod"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentCty.Cty.CtyCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
        case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
-                        " FROM centres,degrees,courses,crs_usr,agendas"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                              " FROM centres,degrees,courses,crs_usr,agendas"
+                              " WHERE centres.InsCod=%ld"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentIns.Ins.InsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
-                        " FROM degrees,courses,crs_usr,agendas"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                              " FROM degrees,courses,crs_usr,agendas"
+                              " WHERE degrees.CtrCod=%ld"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
-                        " FROM courses,crs_usr,agendas"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                              " FROM courses,crs_usr,agendas"
+                              " WHERE courses.DegCod=%ld"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
-                        " FROM crs_usr,agendas"
-                        " WHERE crs_usr.CrsCod=%ld"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                              " FROM crs_usr,agendas"
+                              " WHERE crs_usr.CrsCod=%ld"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of users with events");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of users with events");
 
    /***** Get number of users *****/
    row = mysql_fetch_row (mysql_res);
@@ -1874,7 +1889,7 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
 
 unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumEvents;
@@ -1883,60 +1898,66 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM agendas"
-                        " WHERE UsrCod>0");
+         if (asprintf (&Query,"SELECT COUNT(*)"
+                              " FROM agendas"
+                              " WHERE UsrCod>0") < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM institutions,centres,degrees,courses,crs_usr,agendas"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentCty.Cty.CtyCod);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+                              " FROM institutions,centres,degrees,courses,crs_usr,agendas"
+                              " WHERE institutions.CtyCod=%ld"
+                              " AND institutions.InsCod=centres.InsCod"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentCty.Cty.CtyCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM centres,degrees,courses,crs_usr,agendas"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+                              " FROM centres,degrees,courses,crs_usr,agendas"
+                              " WHERE centres.InsCod=%ld"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentIns.Ins.InsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM degrees,courses,crs_usr,agendas"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+                              " FROM degrees,courses,crs_usr,agendas"
+                              " WHERE degrees.CtrCod=%ld"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM courses,crs_usr,agendas"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+                              " FROM courses,crs_usr,agendas"
+                              " WHERE courses.DegCod=%ld"
+                              " AND courses.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                        Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM crs_usr,agendas"
-                        " WHERE crs_usr.CrsCod=%ld"
-                        " AND crs_usr.UsrCod=agendas.UsrCod",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+                              " FROM crs_usr,agendas"
+                              " WHERE crs_usr.CrsCod=%ld"
+                              " AND crs_usr.UsrCod=agendas.UsrCod",
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of events");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of events");
 
    /***** Get number of events *****/
    row = mysql_fetch_row (mysql_res);
