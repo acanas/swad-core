@@ -25,9 +25,11 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -604,7 +606,7 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
   {
    char HiddenSubQuery[256];
    char OrderBySubQuery[256];
-   char Query[2048];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -640,24 +642,30 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
 	 break;
      }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-      sprintf (Query,"SELECT AttCod"
-                     " FROM att_events"
-                     " WHERE CrsCod=%ld%s"
-                     " AND (AttCod NOT IN (SELECT AttCod FROM att_grp) OR"
-                     " AttCod IN (SELECT att_grp.AttCod FROM att_grp,crs_grp_usr"
-                     " WHERE crs_grp_usr.UsrCod=%ld"
-                     " AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
-                     " ORDER BY %s",
-               Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-               Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+     {
+      if (asprintf (&Query,"SELECT AttCod"
+                           " FROM att_events"
+                           " WHERE CrsCod=%ld%s"
+                           " AND (AttCod NOT IN (SELECT AttCod FROM att_grp) OR"
+                           " AttCod IN (SELECT att_grp.AttCod FROM att_grp,crs_grp_usr"
+                           " WHERE crs_grp_usr.UsrCod=%ld"
+                           " AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
+                           " ORDER BY %s",
+                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+                    Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-      sprintf (Query,"SELECT AttCod"
-                     " FROM att_events"
-                     " WHERE CrsCod=%ld%s"
-                     " ORDER BY %s",
-               Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
+     {
+      if (asprintf (&Query,"SELECT AttCod"
+                           " FROM att_events"
+                           " WHERE CrsCod=%ld%s"
+                           " ORDER BY %s",
+                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
 
-   if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get attendance events"))) // Attendance events found...
+   if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get attendance events"))) // Attendance events found...
      {
       Gbl.AttEvents.Num = (unsigned) NumRows;
 
@@ -708,7 +716,7 @@ static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att)
 
 bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool Found = false;
@@ -719,18 +727,19 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
    if (Att->AttCod > 0)
      {
       /***** Build query *****/
-      sprintf (Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
-		     "UNIX_TIMESTAMP(StartTime),"
-		     "UNIX_TIMESTAMP(EndTime),"
-		     "NOW() BETWEEN StartTime AND EndTime,"
-		     "CommentTchVisible,"
-		     "Title"
-		     " FROM att_events"
-		     " WHERE AttCod=%ld",
-	       Att->AttCod);
+      if (asprintf (&Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
+		           "UNIX_TIMESTAMP(StartTime),"
+		           "UNIX_TIMESTAMP(EndTime),"
+		           "NOW() BETWEEN StartTime AND EndTime,"
+		           "CommentTchVisible,"
+		           "Title"
+		           " FROM att_events"
+		           " WHERE AttCod=%ld",
+	            Att->AttCod) < 0)
+         Lay_NotEnoughMemoryExit ();
 
       /***** Get data of attendance event from database *****/
-      if ((Found = (DB_QuerySELECT (Query,&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
+      if ((Found = (DB_QuerySELECT_free (Query,&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -816,16 +825,17 @@ void Att_FreeListAttEvents (void)
 
 static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get text of attendance event from database *****/
-   sprintf (Query,"SELECT Txt FROM att_events"
-	          " WHERE AttCod=%ld AND CrsCod=%ld",
-            AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get attendance event text");
+   if (asprintf (&Query,"SELECT Txt FROM att_events"
+	                " WHERE AttCod=%ld AND CrsCod=%ld",
+                 AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get attendance event text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -960,7 +970,7 @@ void Att_RemoveAttEventFromDB (long AttCod)
 void Att_HideAttEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
-   char Query[512];
+   char *Query;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -971,10 +981,11 @@ void Att_HideAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Hide attendance event *****/
-   sprintf (Query,"UPDATE att_events SET Hidden='Y'"
-                  " WHERE AttCod=%ld AND CrsCod=%ld",
-            Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not hide attendance event");
+   if (asprintf (&Query,"UPDATE att_events SET Hidden='Y'"
+                        " WHERE AttCod=%ld AND CrsCod=%ld",
+                 Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not hide attendance event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -993,7 +1004,7 @@ void Att_HideAttEvent (void)
 void Att_ShowAttEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
-   char Query[512];
+   char *Query;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -1004,10 +1015,11 @@ void Att_ShowAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Hide attendance event *****/
-   sprintf (Query,"UPDATE att_events SET Hidden='N'"
-                  " WHERE AttCod=%ld AND CrsCod=%ld",
-            Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not show attendance event");
+   if (asprintf (&Query,"UPDATE att_events SET Hidden='N'"
+                        " WHERE AttCod=%ld AND CrsCod=%ld",
+                 Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not show attendance event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1025,13 +1037,14 @@ void Att_ShowAttEvent (void)
 
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
   {
-   char Query[256 + Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE];
+   char *Query;
 
    /***** Get number of attendance events with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM att_events"
-	          " WHERE CrsCod=%ld AND %s='%s' AND AttCod<>%ld",
-            Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AttCod);
-   return (DB_QueryCOUNT (Query,"can not get similar attendance events") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM att_events"
+	                " WHERE CrsCod=%ld AND %s='%s' AND AttCod<>%ld",
+                 Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not get similar attendance events") != 0);
   }
 
 /*****************************************************************************/
@@ -1349,28 +1362,27 @@ void Att_RecFormAttEvent (void)
 
 void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char Query[1024 +
-              Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE +
-              Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Create a new attendance event *****/
-   sprintf (Query,"INSERT INTO att_events"
-	          " (CrsCod,Hidden,UsrCod,"
-	          "StartTime,EndTime,CommentTchVisible,Title,Txt)"
-                  " VALUES"
-                  " (%ld,'%c',%ld,"
-                  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Att->Hidden ? 'Y' :
-        	          'N',
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Att->TimeUTC[Att_START_TIME],
-            Att->TimeUTC[Att_END_TIME  ],
-            Att->CommentTchVisible ? 'Y' :
-        	                     'N',
-            Att->Title,
-            Txt);
-   Att->AttCod = DB_QueryINSERTandReturnCode (Query,"can not create new attendance event");
+   if (asprintf (&Query,"INSERT INTO att_events"
+	                " (CrsCod,Hidden,UsrCod,"
+	                "StartTime,EndTime,CommentTchVisible,Title,Txt)"
+                        " VALUES"
+                        " (%ld,'%c',%ld,"
+                        "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
+                 Gbl.CurrentCrs.Crs.CrsCod,
+                 Att->Hidden ? 'Y' :
+        	               'N',
+                 Gbl.Usrs.Me.UsrDat.UsrCod,
+                 Att->TimeUTC[Att_START_TIME],
+                 Att->TimeUTC[Att_END_TIME  ],
+                 Att->CommentTchVisible ? 'Y' :
+        	                          'N',
+                 Att->Title,
+                 Txt) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Att->AttCod = DB_QueryINSERTandReturnCode_free (Query,"can not create new attendance event");
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
@@ -1383,27 +1395,26 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
 void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char Query[1024 +
-              Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE +
-              Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Update the data of the attendance event *****/
-   sprintf (Query,"UPDATE att_events SET "
-                  "Hidden='%c',"
-	          "StartTime=FROM_UNIXTIME(%ld),"
-	          "EndTime=FROM_UNIXTIME(%ld),"
-                  "CommentTchVisible='%c',Title='%s',Txt='%s'"
-                  " WHERE AttCod=%ld AND CrsCod=%ld",
-            Att->Hidden ? 'Y' :
-        	          'N',
-            Att->TimeUTC[Att_START_TIME],
-            Att->TimeUTC[Att_END_TIME  ],
-            Att->CommentTchVisible ? 'Y' :
-        	                     'N',
-            Att->Title,
-            Txt,
-            Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not update attendance event");
+   if (asprintf (&Query,"UPDATE att_events SET "
+                        "Hidden='%c',"
+	                "StartTime=FROM_UNIXTIME(%ld),"
+	                "EndTime=FROM_UNIXTIME(%ld),"
+                        "CommentTchVisible='%c',Title='%s',Txt='%s'"
+                        " WHERE AttCod=%ld AND CrsCod=%ld",
+                 Att->Hidden ? 'Y' :
+        	               'N',
+                 Att->TimeUTC[Att_START_TIME],
+                 Att->TimeUTC[Att_END_TIME  ],
+                 Att->CommentTchVisible ? 'Y' :
+        	                          'N',
+                 Att->Title,
+                 Txt,
+                 Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update attendance event");
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -1420,12 +1431,13 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
 bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get if an attendance event is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",
-            AttCod);
-   return (DB_QueryCOUNT (Query,"can not check if an attendance event is associated to groups") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",
+                 AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if an attendance event is associated to groups") != 0);
   }
 
 /*****************************************************************************/
@@ -1434,13 +1446,14 @@ bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
 
 bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get if an attendance event is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM att_grp"
-	          " WHERE AttCod=%ld AND GrpCod=%ld",
-            AttCod,GrpCod);
-   return (DB_QueryCOUNT (Query,"can not check if an attendance event is associated to a group") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM att_grp"
+	                " WHERE AttCod=%ld AND GrpCod=%ld",
+                 AttCod,GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if an attendance event is associated to a group") != 0);
   }
 
 /*****************************************************************************/
@@ -1449,11 +1462,12 @@ bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
 
 static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove groups of the attendance event *****/
-   sprintf (Query,"DELETE FROM att_grp WHERE AttCod=%ld",AttCod);
-   DB_QueryDELETE (Query,"can not remove the groups associated to an attendance event");
+   if (asprintf (&Query,"DELETE FROM att_grp WHERE AttCod=%ld",AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove the groups associated to an attendance event");
   }
 
 /*****************************************************************************/
@@ -1462,11 +1476,12 @@ static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
 
 void Att_RemoveGroup (long GrpCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove group from all the attendance events *****/
-   sprintf (Query,"DELETE FROM att_grp WHERE GrpCod=%ld",GrpCod);
-   DB_QueryDELETE (Query,"can not remove group from the associations between attendance events and groups");
+   if (asprintf (&Query,"DELETE FROM att_grp WHERE GrpCod=%ld",GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove group from the associations between attendance events and groups");
   }
 
 /*****************************************************************************/
@@ -1475,14 +1490,15 @@ void Att_RemoveGroup (long GrpCod)
 
 void Att_RemoveGroupsOfType (long GrpTypCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove group from all the attendance events *****/
-   sprintf (Query,"DELETE FROM att_grp USING crs_grp,att_grp"
-                  " WHERE crs_grp.GrpTypCod=%ld"
-                  " AND crs_grp.GrpCod=att_grp.GrpCod",
-            GrpTypCod);
-   DB_QueryDELETE (Query,"can not remove groups of a type from the associations between attendance events and groups");
+   if (asprintf (&Query,"DELETE FROM att_grp USING crs_grp,att_grp"
+                        " WHERE crs_grp.GrpTypCod=%ld"
+                        " AND crs_grp.GrpCod=att_grp.GrpCod",
+                 GrpTypCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove groups of a type from the associations between attendance events and groups");
   }
 
 /*****************************************************************************/
@@ -1492,7 +1508,7 @@ void Att_RemoveGroupsOfType (long GrpTypCod)
 static void Att_CreateGrps (long AttCod)
   {
    unsigned NumGrpSel;
-   char Query[256];
+   char *Query;
 
    /***** Create groups of the attendance event *****/
    for (NumGrpSel = 0;
@@ -1500,12 +1516,13 @@ static void Att_CreateGrps (long AttCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO att_grp"
-	             " (AttCod,GrpCod)"
-	             " VALUES"
-	             " (%ld,%ld)",
-               AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT (Query,"can not associate a group to an attendance event");
+      if (asprintf (&Query,"INSERT INTO att_grp"
+	                   " (AttCod,GrpCod)"
+	                   " VALUES"
+	                   " (%ld,%ld)",
+                    AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryINSERT_free (Query,"can not associate a group to an attendance event");
      }
   }
 
@@ -1519,21 +1536,22 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrp;
    unsigned NumGrps;
 
    /***** Get groups associated to an attendance event from database *****/
-   sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-	          " FROM att_grp,crs_grp,crs_grp_types"
-                  " WHERE att_grp.AttCod=%ld"
-                  " AND att_grp.GrpCod=crs_grp.GrpCod"
-                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-            Att->AttCod);
-   NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event");
+   if (asprintf (&Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
+	                " FROM att_grp,crs_grp,crs_grp_types"
+                        " WHERE att_grp.AttCod=%ld"
+                        " AND att_grp.GrpCod=crs_grp.GrpCod"
+                        " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+                        " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+                 Att->AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumGrps = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an attendance event");
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
@@ -1582,10 +1600,11 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 
 static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
   {
-   char Query[256];
+   char *Query;
 
-   sprintf (Query,"DELETE FROM att_usr WHERE AttCod=%ld",AttCod);
-   DB_QueryDELETE (Query,"can not remove attendance event");
+   if (asprintf (&Query,"DELETE FROM att_usr WHERE AttCod=%ld",AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove attendance event");
   }
 
 /*****************************************************************************/
@@ -1594,11 +1613,12 @@ static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
 
 void Att_RemoveUsrFromAllAttEvents (long UsrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove group from all the attendance events *****/
-   sprintf (Query,"DELETE FROM att_usr WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE (Query,"can not remove user from all attendance events");
+   if (asprintf (&Query,"DELETE FROM att_usr WHERE UsrCod=%ld",UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove user from all attendance events");
   }
 
 /*****************************************************************************/
@@ -1607,15 +1627,16 @@ void Att_RemoveUsrFromAllAttEvents (long UsrCod)
 
 void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove group from all the attendance events *****/
-   sprintf (Query,"DELETE FROM att_usr USING att_events,att_usr"
-                  " WHERE att_events.CrsCod=%ld"
-                  " AND att_events.AttCod=att_usr.AttCod"
-                  " AND att_usr.UsrCod=%ld",
-            CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove user from attendance events of a course");
+   if (asprintf (&Query,"DELETE FROM att_usr USING att_events,att_usr"
+                        " WHERE att_events.CrsCod=%ld"
+                        " AND att_events.AttCod=att_usr.AttCod"
+                        " AND att_usr.UsrCod=%ld",
+                 CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove user from attendance events of a course");
   }
 
 /*****************************************************************************/
@@ -1624,12 +1645,13 @@ void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
 
 static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
   {
-   char Query[256];
+   char *Query;
 
-   sprintf (Query,"DELETE FROM att_events"
-                  " WHERE AttCod=%ld AND CrsCod=%ld",
-            AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE (Query,"can not remove attendance event");
+   if (asprintf (&Query,"DELETE FROM att_events"
+                        " WHERE AttCod=%ld AND CrsCod=%ld",
+                 AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove attendance event");
   }
 
 /*****************************************************************************/
@@ -1638,26 +1660,29 @@ static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
 
 void Att_RemoveCrsAttEvents (long CrsCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove students *****/
-   sprintf (Query,"DELETE FROM att_usr USING att_events,att_usr"
-                  " WHERE att_events.CrsCod=%ld"
-                  " AND att_events.AttCod=att_usr.AttCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the students registered in events of a course");
+   if (asprintf (&Query,"DELETE FROM att_usr USING att_events,att_usr"
+                        " WHERE att_events.CrsCod=%ld"
+                        " AND att_events.AttCod=att_usr.AttCod",
+                 CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove all the students registered in events of a course");
 
    /***** Remove groups *****/
-   sprintf (Query,"DELETE FROM att_grp USING att_events,att_grp"
-                  " WHERE att_events.CrsCod=%ld"
-                  " AND att_events.AttCod=att_grp.AttCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the groups associated to attendance events of a course");
+   if (asprintf (&Query,"DELETE FROM att_grp USING att_events,att_grp"
+                        " WHERE att_events.CrsCod=%ld"
+                        " AND att_events.AttCod=att_grp.AttCod",
+                 CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove all the groups associated to attendance events of a course");
 
    /***** Remove attendance events *****/
-   sprintf (Query,"DELETE FROM att_events WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the attendance events of a course");
+   if (asprintf (&Query,"DELETE FROM att_events WHERE CrsCod=%ld",
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove all the attendance events of a course");
   }
 
 /*****************************************************************************/
@@ -1666,12 +1691,13 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 
 unsigned Att_GetNumAttEventsInCrs (long CrsCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of attendance events in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM att_events WHERE CrsCod=%ld",
-            CrsCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of attendance events in course");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM att_events WHERE CrsCod=%ld",
+                 CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of attendance events in course");
   }
 
 /*****************************************************************************/
@@ -1682,7 +1708,7 @@ unsigned Att_GetNumAttEventsInCrs (long CrsCod)
 
 unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -1691,48 +1717,53 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
-                        " FROM att_events"
-                        " WHERE CrsCod>0");
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
+                              " FROM att_events"
+                              " WHERE CrsCod>0") < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
-                        " FROM centres,degrees,courses,att_events"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
+                              " FROM centres,degrees,courses,att_events"
+                              " WHERE centres.InsCod=%ld"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=att_events.CrsCod",
+                  Gbl.CurrentIns.Ins.InsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
-                        " FROM degrees,courses,att_events"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
+                              " FROM degrees,courses,att_events"
+                              " WHERE degrees.CtrCod=%ld"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=att_events.CrsCod",
+                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
-                        " FROM courses,att_events"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.Status=0"
-                        " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
+                              " FROM courses,att_events"
+                              " WHERE courses.DegCod=%ld"
+                              " AND courses.Status=0"
+                              " AND courses.CrsCod=att_events.CrsCod",
+                       Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
-                        " FROM att_events"
-                        " WHERE CrsCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
+                              " FROM att_events"
+                              " WHERE CrsCod=%ld",
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with attendance events");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with attendance events");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -1753,7 +1784,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
 
 unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAttEvents;
@@ -1762,45 +1793,50 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
-                        " FROM att_events"
-                        " WHERE CrsCod>0");
+         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
+                              " FROM att_events"
+                              " WHERE CrsCod>0") < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
-                        " FROM centres,degrees,courses,att_events"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+         if (asprintf (&Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
+                              " FROM centres,degrees,courses,att_events"
+                              " WHERE centres.InsCod=%ld"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=att_events.CrsCod",
+                       Gbl.CurrentIns.Ins.InsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
-                        " FROM degrees,courses,att_events"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         if (asprintf (&Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
+                              " FROM degrees,courses,att_events"
+                              " WHERE degrees.CtrCod=%ld"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=att_events.CrsCod",
+                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
-                        " FROM courses,att_events"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
+                              " FROM courses,att_events"
+                              " WHERE courses.DegCod=%ld"
+                              " AND courses.CrsCod=att_events.CrsCod",
+                       Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
-                        " FROM att_events"
-                        " WHERE CrsCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
+                              " FROM att_events"
+                              " WHERE CrsCod=%ld",
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of attendance events");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of attendance events");
 
    /***** Get number of attendance events *****/
    row = mysql_fetch_row (mysql_res);
@@ -2205,7 +2241,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
 
 static void Att_PutParamsCodGrps (long AttCod)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrp;
@@ -2214,9 +2250,11 @@ static void Att_PutParamsCodGrps (long AttCod)
    /***** Get groups associated to an attendance event from database *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
-      sprintf (Query,"SELECT GrpCod FROM att_grp WHERE att_grp.AttCod=%ld",
-               AttCod);
-      NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event");
+      if (asprintf (&Query,"SELECT GrpCod FROM att_grp"
+	                   " WHERE att_grp.AttCod=%ld",
+                    AttCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumGrps = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an attendance event");
      }
    else
       NumGrps = 0;
@@ -2440,13 +2478,14 @@ void Att_RegisterStudentsInAttEvent (void)
 
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
   {
-   char Query[128];
+   char *Query;
 
    /***** Count number of students registered in an event in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM att_usr"
-                  " WHERE AttCod=%ld AND Present='Y'",
-            Att->AttCod);
-   Att->NumStdsTotal = (unsigned) DB_QueryCOUNT (Query,"can not get number of students who are registered in an event");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM att_usr"
+                        " WHERE AttCod=%ld AND Present='Y'",
+                 Att->AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Att->NumStdsTotal = (unsigned) DB_QueryCOUNT_free (Query,"can not get number of students who are registered in an event");
   }
 
 /*****************************************************************************/
@@ -2501,17 +2540,18 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
 
 static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
    bool InDBTable;
 
    /***** Check if a student is registered in an event in database *****/
-   sprintf (Query,"SELECT Present FROM att_usr"
-                  " WHERE AttCod=%ld AND UsrCod=%ld",
-            AttCod,UsrCod);
-   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get if a student is already registered in an event")))
+   if (asprintf (&Query,"SELECT Present FROM att_usr"
+                        " WHERE AttCod=%ld AND UsrCod=%ld",
+                 AttCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if ((NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get if a student is already registered in an event")))
      {
       InDBTable = true;
 
@@ -2554,17 +2594,18 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
                                                              char CommentStd[Cns_MAX_BYTES_TEXT + 1],
                                                              char CommentTch[Cns_MAX_BYTES_TEXT + 1])
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
    bool Present;
 
    /***** Check if a students is registered in an event in database *****/
-   sprintf (Query,"SELECT Present,CommentStd,CommentTch FROM att_usr"
-                  " WHERE AttCod=%ld AND UsrCod=%ld",
-            AttCod,UsrCod);
-   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get if a student is already registered in an event")))
+   if (asprintf (&Query,"SELECT Present,CommentStd,CommentTch FROM att_usr"
+                        " WHERE AttCod=%ld AND UsrCod=%ld",
+                 AttCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if ((NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get if a student is already registered in an event")))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -2600,7 +2641,7 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
   {
    bool Present;
-   char Query[256];
+   char *Query;
 
    /***** Check if user is already in table att_usr (present or not) *****/
    if (Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_usr
@@ -2609,10 +2650,11 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
       if (!Present)
 	{
 	 /***** Set user as present in database *****/
-	 sprintf (Query,"UPDATE att_usr SET Present='Y'"
-			" WHERE AttCod=%ld AND UsrCod=%ld",
-		  AttCod,UsrCod);
-         DB_QueryUPDATE (Query,"can not set user as present in an event");
+	 if (asprintf (&Query,"UPDATE att_usr SET Present='Y'"
+			      " WHERE AttCod=%ld AND UsrCod=%ld",
+		       AttCod,UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+         DB_QueryUPDATE_free (Query,"can not set user as present in an event");
 	}
      }
    else			// User is not in table att_usr
@@ -2626,19 +2668,20 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
 static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool Present,
                                                   const char *CommentStd,const char *CommentTch)
   {
-   char Query[256 + Cns_MAX_BYTES_TEXT * 2];
+   char *Query;
 
    /***** Register user as assistant to an event in database *****/
-   sprintf (Query,"REPLACE INTO att_usr"
-	          " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
-                  " VALUES"
-                  " (%ld,%ld,'%c','%s','%s')",
-            AttCod,UsrCod,
-            Present ? 'Y' :
-        	      'N',
-            CommentStd,
-            CommentTch);
-   DB_QueryREPLACE (Query,"can not register user in an event");
+   if (asprintf (&Query,"REPLACE INTO att_usr"
+	                " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
+                        " VALUES"
+                        " (%ld,%ld,'%c','%s','%s')",
+                 AttCod,UsrCod,
+                 Present ? 'Y' :
+        	           'N',
+                 CommentStd,
+                 CommentTch) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not register user in an event");
   }
 
 /*****************************************************************************/
@@ -2647,13 +2690,14 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
 
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove user if there is no comment in database *****/
-   sprintf (Query,"DELETE FROM att_usr"
-	          " WHERE AttCod=%ld AND UsrCod=%ld",
-            AttCod,UsrCod);
-   DB_QueryREPLACE (Query,"can not remove student from an event");
+   if (asprintf (&Query,"DELETE FROM att_usr"
+	                " WHERE AttCod=%ld AND UsrCod=%ld",
+                 AttCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not remove student from an event");
   }
 
 /*****************************************************************************/
@@ -2662,14 +2706,16 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
 
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Clean table att_usr *****/
-   sprintf (Query,"DELETE FROM att_usr"
-		  " WHERE AttCod=%ld AND Present='N'"
-		  " AND CommentStd='' AND CommentTch=''",
-	    AttCod);
-   DB_QueryDELETE (Query,"can not remove users absent without comments from an event");
+   if (asprintf (&Query,"DELETE FROM att_usr"
+		        " WHERE AttCod=%ld AND Present='N'"
+		        " AND CommentStd='' AND CommentTch=''",
+	         AttCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove users absent"
+	                      " without comments from an event");
   }
 
 /*****************************************************************************/
@@ -2979,7 +3025,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    const char *Ptr;
    long AttCod;
    char LongStr[1 + 10 + 1];
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrpsInThisEvent;
@@ -3045,10 +3091,11 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 	    else						// No students attended to this event
 	      {
 	       /***** Get groups associated to an attendance event from database *****/
-	       sprintf (Query,"SELECT GrpCod FROM att_grp"
-			      " WHERE att_grp.AttCod=%ld",
-			Gbl.AttEvents.Lst[NumAttEvent].AttCod);
-	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event");
+	       if (asprintf (&Query,"SELECT GrpCod FROM att_grp"
+			            " WHERE att_grp.AttCod=%ld",
+			     Gbl.AttEvents.Lst[NumAttEvent].AttCod) < 0)
+                  Lay_NotEnoughMemoryExit ();
+	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an attendance event");
 
 	       if (NumGrpsInThisEvent)	// This event is associated to groups
 		  /* Get groups associated to this event */
