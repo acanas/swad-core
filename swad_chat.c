@@ -25,9 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For sprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>
 
 #include "swad_box.h"
@@ -267,15 +268,16 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    extern const char *Txt_Rooms_with_users;
    extern const char *Txt_CHAT_Room_code;
    extern const char *Txt_No_of_users;
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
 
    /***** Get chat rooms with connected users from database *****/
-   sprintf (Query,"SELECT RoomCode,NumUsrs FROM chat"
-                  " WHERE NumUsrs>0 ORDER BY NumUsrs DESC,RoomCode");
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get chat rooms with connected users");
+   if (asprintf (&Query,"SELECT RoomCode,NumUsrs FROM chat"
+                        " WHERE NumUsrs>0 ORDER BY NumUsrs DESC,RoomCode") < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get chat rooms with connected users");
 
    if (NumRows > 0) // If not empty chat rooms found
      {
@@ -376,15 +378,16 @@ void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtN
 
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
   {
-   char Query[128 + Cht_MAX_BYTES_ROOM_CODE];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;
 
    /***** Get number of users connected to chat rooms from database *****/
-   sprintf (Query,"SELECT NumUsrs FROM chat WHERE RoomCode='%s'",
-            RoomCode);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of users connected to a chat room"))
+   if (asprintf (&Query,"SELECT NumUsrs FROM chat WHERE RoomCode='%s'",
+                 RoomCode) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get number of users connected to a chat room"))
      {
       /* Get number of users connected to the chat room */
       row = mysql_fetch_row (mysql_res);
