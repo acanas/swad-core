@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <math.h>		// For log10, ceil, pow...
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -109,7 +111,7 @@ void Cty_SeeCtyWithPendingInss (void)
    extern const char *Txt_Country;
    extern const char *Txt_Institutions_ABBREVIATION;
    extern const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtys;
@@ -121,21 +123,24 @@ void Cty_SeeCtyWithPendingInss (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
-         sprintf (Query,"SELECT institutions.CtyCod,COUNT(*)"
-                        " FROM institutions,countries"
-                        " WHERE (institutions.Status & %u)<>0"
-                        " AND institutions.CtyCod=countries.CtyCod"
-                        " GROUP BY institutions.CtyCod"
-                        " ORDER BY countries.Name_%s",
-                  (unsigned) Ins_STATUS_BIT_PENDING,
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+         if (asprintf (&Query,"SELECT institutions.CtyCod,COUNT(*)"
+                              " FROM institutions,countries"
+                              " WHERE (institutions.Status & %u)<>0"
+                              " AND institutions.CtyCod=countries.CtyCod"
+                              " GROUP BY institutions.CtyCod"
+                              " ORDER BY countries.Name_%s",
+                       (unsigned) Ins_STATUS_BIT_PENDING,
+                       Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:	// Forbidden for other users
 	 return;
      }
 
    /***** Get countries *****/
-   if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
+   if ((NumCtys = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,
+	                                          "can not get countries"
+	                                          "with pending institutions")))
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
@@ -777,13 +782,16 @@ static void Cty_PutIconToEditCountries (void)
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of users from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-	          " WHERE CtyCod=%ld",
-            CtyCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who claim to belong to other countries");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
+	                " WHERE CtyCod=%ld",
+                 CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of users"
+	                                       " who claim to belong"
+	                                       " to other countries");
   }
 
 /*****************************************************************************/
@@ -993,7 +1001,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char OrderBySubQuery[256];
-   char Query[1024 + Cty_MAX_BYTES_SUBQUERY_CTYS * 4];
+   char *Query = NULL;	// Initialized to avoid warning
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1005,10 +1013,11 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    switch (GetExtraData)
      {
       case Cty_GET_BASIC_DATA:
-         sprintf (Query,"SELECT CtyCod,Alpha2,Name_%s"
-                        " FROM countries ORDER BY Name_%s",
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+         if (asprintf (&Query,"SELECT CtyCod,Alpha2,Name_%s"
+                              " FROM countries ORDER BY Name_%s",
+                       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+                       Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Cty_GET_EXTRA_DATA:
          SubQueryNam1[0] = '\0';
@@ -1053,23 +1062,24 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         	        Txt_STR_LANG_ID[Gbl.Prefs.Language]);
                break;
            }
-         sprintf (Query,"(SELECT countries.CtyCod,countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
-                        " FROM countries,usr_data"
-                        " WHERE countries.CtyCod=usr_data.CtyCod"
-                        " GROUP BY countries.CtyCod)"
-                        " UNION "
-                        "(SELECT CtyCod,Alpha2,%s%s0 AS NumUsrs"
-                        " FROM countries"
-                        " WHERE CtyCod NOT IN"
-                        " (SELECT DISTINCT CtyCod FROM usr_data))"
-                        " ORDER BY %s",
-                  SubQueryNam1,SubQueryWWW1,
-                  SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
+         if (asprintf (&Query,"(SELECT countries.CtyCod,countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
+                              " FROM countries,usr_data"
+                              " WHERE countries.CtyCod=usr_data.CtyCod"
+                              " GROUP BY countries.CtyCod)"
+                              " UNION "
+                              "(SELECT CtyCod,Alpha2,%s%s0 AS NumUsrs"
+                              " FROM countries"
+                              " WHERE CtyCod NOT IN"
+                              " (SELECT DISTINCT CtyCod FROM usr_data))"
+                              " ORDER BY %s",
+                       SubQueryNam1,SubQueryWWW1,
+                       SubQueryNam2,SubQueryWWW2,OrderBySubQuery) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
      }
 
    /***** Count number of rows in result *****/
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get countries");
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get countries");
    if (NumRows) // Countries found...
      {
       Gbl.Ctys.Num = (unsigned) NumRows;
@@ -1164,7 +1174,7 @@ void Cty_WriteSelectorOfCountry (void)
   {
    extern const char *Txt_Country;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtys;
@@ -1183,12 +1193,13 @@ void Cty_WriteSelectorOfCountry (void)
             Txt_Country);
 
    /***** Get countries from database *****/
-   sprintf (Query,"SELECT DISTINCT CtyCod,Name_%s"
-	          " FROM countries"
-                  " ORDER BY countries.Name_%s",
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
-            Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries");
+   if (asprintf (&Query,"SELECT DISTINCT CtyCod,Name_%s"
+	                " FROM countries"
+                        " ORDER BY countries.Name_%s",
+                 Txt_STR_LANG_ID[Gbl.Prefs.Language],
+                 Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumCtys = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get countries");
 
    /***** List countries *****/
    for (NumCty = 0;
@@ -1261,7 +1272,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char Query[1024 + Cty_MAX_BYTES_SUBQUERY_CTYS * 4];
+   char *Query = NULL;	// Initialized to avoid warning
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1303,12 +1314,13 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    switch (GetExtraData)
      {
       case Cty_GET_BASIC_DATA:
-         sprintf (Query,"SELECT Alpha2,Name_%s,WWW_%s"
-                        " FROM countries"
-			" WHERE CtyCod='%03ld'",
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                  Cty->CtyCod);
+         if (asprintf (&Query,"SELECT Alpha2,Name_%s,WWW_%s"
+                              " FROM countries"
+			      " WHERE CtyCod='%03ld'",
+                       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+                       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+                       Cty->CtyCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Cty_GET_EXTRA_DATA:
 	 SubQueryNam1[0] = '\0';
@@ -1341,22 +1353,23 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    Str_Concat (SubQueryWWW2,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 	   }
-	 sprintf (Query,"(SELECT countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
-			" FROM countries,usr_data"
-			" WHERE countries.CtyCod='%03ld'"
-			" AND countries.CtyCod=usr_data.CtyCod)"
-			" UNION "
-			"(SELECT Alpha2,%s%s0 AS NumUsrs"
-			" FROM countries"
-			" WHERE CtyCod='%03ld'"
-			" AND CtyCod NOT IN"
-			" (SELECT DISTINCT CtyCod FROM usr_data))",
-		  SubQueryNam1,SubQueryWWW1,Cty->CtyCod,
-		  SubQueryNam2,SubQueryWWW2,Cty->CtyCod);
+	 if (asprintf (&Query,"(SELECT countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
+			      " FROM countries,usr_data"
+			      " WHERE countries.CtyCod='%03ld'"
+			      " AND countries.CtyCod=usr_data.CtyCod)"
+			      " UNION "
+			      "(SELECT Alpha2,%s%s0 AS NumUsrs"
+			      " FROM countries"
+			      " WHERE CtyCod='%03ld'"
+			      " AND CtyCod NOT IN"
+			      " (SELECT DISTINCT CtyCod FROM usr_data))",
+		       SubQueryNam1,SubQueryWWW1,Cty->CtyCod,
+		       SubQueryNam2,SubQueryWWW2,Cty->CtyCod) < 0)
+            Lay_NotEnoughMemoryExit ();
 	 break;
      }
 
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a country");
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a country");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Country found...
@@ -1427,7 +1440,7 @@ void Cty_FlushCacheCountryName (void)
 void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1449,9 +1462,10 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
    /***** 3. Slow: get country name from database *****/
    Gbl.Cache.CountryName.CtyCod = CtyCod;
 
-   sprintf (Query,"SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get the name of a country")) // Country found...
+   if (asprintf (&Query,"SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
+	         Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the name of a country")) // Country found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1476,7 +1490,7 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
 
 static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
@@ -1485,9 +1499,10 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
    Cty_FreeMapAttribution (MapAttribution);
 
    /***** Get photo attribution from database *****/
-   sprintf (Query,"SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
-	    CtyCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get photo attribution"))
+   if (asprintf (&Query,"SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
+	         CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get photo attribution"))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1697,7 +1712,7 @@ void Cty_RemoveCountry (void)
   {
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
-   char Query[512];
+   char *Query;
    struct Country Cty;
 
    /***** Get country code *****/
@@ -1717,9 +1732,10 @@ void Cty_RemoveCountry (void)
       Svy_RemoveSurveys (Sco_SCOPE_CTY,Cty.CtyCod);
 
       /***** Remove country *****/
-      sprintf (Query,"DELETE FROM countries WHERE CtyCod='%03ld'",
-	       Cty.CtyCod);
-      DB_QueryDELETE (Query,"can not remove a country");
+      if (asprintf (&Query,"DELETE FROM countries WHERE CtyCod='%03ld'",
+	            Cty.CtyCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove a country");
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
@@ -1824,12 +1840,14 @@ void Cty_RenameCountry (void)
 
 static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get number of countries with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM countries WHERE CtyCod='%03ld'",
-            CtyCod);
-   return (DB_QueryCOUNT (Query,"can not check if the numeric code of a country already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM countries WHERE CtyCod='%03ld'",
+                 CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the numeric code"
+	                             " of a country already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -1838,12 +1856,14 @@ static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod)
 
 static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
   {
-   char Query[128];
+   char *Query;
 
    /***** Get number of countries with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM countries WHERE Alpha2='%s'",
-            Alpha2);
-   return (DB_QueryCOUNT (Query,"can not check if the alphabetic code of a country already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM countries WHERE Alpha2='%s'",
+                 Alpha2) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the alphabetic code"
+	                             " of a country already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -1853,13 +1873,15 @@ static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
 static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[256 + Cty_MAX_BYTES_NAME];
+   char *Query;
 
    /***** Get number of countries with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM countries"
-	          " WHERE Name_%s='%s' AND CtyCod<>'%03ld'",
-            Txt_STR_LANG_ID[Language],Name,CtyCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a country already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM countries"
+	                " WHERE Name_%s='%s' AND CtyCod<>'%03ld'",
+                 Txt_STR_LANG_ID[Language],Name,CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name"
+	                        " of a country already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -1868,12 +1890,13 @@ static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Na
 
 static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName)
   {
-   char Query[128 + Cty_MAX_BYTES_NAME];
+   char *Query;
 
    /***** Update country changing old name by new name */
-   sprintf (Query,"UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
-	    FieldName,NewCtyName,CtyCod);
-   DB_QueryUPDATE (Query,"can not update the name of a country");
+   if (asprintf (&Query,"UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
+	         FieldName,NewCtyName,CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of a country");
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1887,7 +1910,7 @@ void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
    struct Country *Cty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Txt_Language_t Language;
@@ -1907,10 +1930,11 @@ void Cty_ChangeCtyWWW (void)
    Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
 
    /***** Update the table changing old WWW by new WWW *****/
-   sprintf (Query,"UPDATE countries SET WWW_%s='%s'"
-		  " WHERE CtyCod='%03ld'",
-	    Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
-   DB_QueryUPDATE (Query,"can not update the web of a country");
+   if (asprintf (&Query,"UPDATE countries SET WWW_%s='%s'"
+		        " WHERE CtyCod='%03ld'",
+	         Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the web of a country");
    Str_Copy (Cty->WWW[Language],NewWWW,
 	     Cns_MAX_BYTES_WWW);
 
@@ -1930,7 +1954,7 @@ void Cty_ChangeCtyWWW (void)
 
 void Cty_ChangeCtyMapAttribution (void)
   {
-   char Query[256 + Img_MAX_BYTES_ATTRIBUTION];
+   char *Query;
    char NewMapAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
@@ -1938,10 +1962,11 @@ void Cty_ChangeCtyMapAttribution (void)
    Par_GetParToText ("Attribution",NewMapAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   sprintf (Query,"UPDATE countries SET MapAttribution='%s'"
-		  " WHERE CtyCod='%03ld'",
-	    NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod);
-   DB_QueryUPDATE (Query,"can not update the map attribution of a country");
+   if (asprintf (&Query,"UPDATE countries SET MapAttribution='%s'"
+		       " WHERE CtyCod='%03ld'",
+	         NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the map attribution of a country");
 
    /***** Show the country information again *****/
    Cty_ShowConfiguration ();
@@ -2225,11 +2250,7 @@ static void Cty_CreateCountry (struct Country *Cty)
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS_NAME + 1];
    char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS_WWW + 1];
-   char Query[1024 +
-              Cty_MAX_BYTES_SUBQUERY_CTYS +
-              Cty_MAX_BYTES_SUBQUERY_CTYS_NAME +
-              Cty_MAX_BYTES_SUBQUERY_CTYS +
-              Cty_MAX_BYTES_SUBQUERY_CTYS_WWW];
+   char *Query;
 
    /***** Create a new country *****/
    SubQueryNam1[0] = '\0';
@@ -2266,13 +2287,14 @@ static void Cty_CreateCountry (struct Country *Cty)
       Str_Concat (SubQueryWWW2,"'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
      }
-   sprintf (Query,"INSERT INTO countries"
-	          " (CtyCod,Alpha2%s%s)"
-	          " VALUES"
-	          " ('%03ld','%s'%s%s)",
-            SubQueryNam1,SubQueryWWW1,
-            Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
-   DB_QueryINSERT (Query,"can not create country");
+   if (asprintf (&Query,"INSERT INTO countries"
+	                " (CtyCod,Alpha2%s%s)"
+	                " VALUES"
+	                " ('%03ld','%s'%s%s)",
+                 SubQueryNam1,SubQueryWWW1,
+                 Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create country");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2287,11 +2309,12 @@ static void Cty_CreateCountry (struct Country *Cty)
 
 unsigned Cty_GetNumCtysTotal (void)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get total number of degrees from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM countries");
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the total number of countries");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM countries") < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the total number of countries");
   }
 
 /*****************************************************************************/
@@ -2300,14 +2323,15 @@ unsigned Cty_GetNumCtysTotal (void)
 
 unsigned Cty_GetNumCtysWithInss (const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of countries with institutions from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
-                  " FROM countries,institutions"
-                  " WHERE %scountries.CtyCod=institutions.CtyCod",
-            SubQuery);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with institutions");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
+                        " FROM countries,institutions"
+                        " WHERE %scountries.CtyCod=institutions.CtyCod",
+                 SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of countries with institutions");
   }
 
 /*****************************************************************************/
@@ -2316,15 +2340,16 @@ unsigned Cty_GetNumCtysWithInss (const char *SubQuery)
 
 unsigned Cty_GetNumCtysWithCtrs (const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of countries with centres from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
-                  " FROM countries,institutions,centres"
-                  " WHERE %scountries.CtyCod=institutions.CtyCod"
-                  " AND institutions.InsCod=centres.InsCod",
-            SubQuery);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with centres");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
+                        " FROM countries,institutions,centres"
+                        " WHERE %scountries.CtyCod=institutions.CtyCod"
+                        " AND institutions.InsCod=centres.InsCod",
+                 SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of countries with centres");
   }
 
 /*****************************************************************************/
@@ -2333,16 +2358,17 @@ unsigned Cty_GetNumCtysWithCtrs (const char *SubQuery)
 
 unsigned Cty_GetNumCtysWithDegs (const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of countries with degrees from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
-                  " FROM countries,institutions,centres,degrees"
-                  " WHERE %scountries.CtyCod=institutions.CtyCod"
-                  " AND institutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod",
-            SubQuery);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with degrees");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
+                        " FROM countries,institutions,centres,degrees"
+                        " WHERE %scountries.CtyCod=institutions.CtyCod"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod",
+                 SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of countries with degrees");
   }
 
 /*****************************************************************************/
@@ -2351,17 +2377,18 @@ unsigned Cty_GetNumCtysWithDegs (const char *SubQuery)
 
 unsigned Cty_GetNumCtysWithCrss (const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of countries with courses from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
-                  " FROM countries,institutions,centres,degrees,courses"
-                  " WHERE %scountries.CtyCod=institutions.CtyCod"
-                  " AND institutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod",
-            SubQuery);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with courses");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
+                        " FROM countries,institutions,centres,degrees,courses"
+                        " WHERE %scountries.CtyCod=institutions.CtyCod"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod",
+                 SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of countries with courses");
   }
 
 /*****************************************************************************/
@@ -2370,19 +2397,20 @@ unsigned Cty_GetNumCtysWithCrss (const char *SubQuery)
 
 unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of countries with users from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
-                  " FROM countries,institutions,centres,degrees,courses,crs_usr"
-                  " WHERE %scountries.CtyCod=institutions.CtyCod"
-                  " AND institutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role=%u",
-            SubQuery,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with users");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT countries.CtyCod)"
+                        " FROM countries,institutions,centres,degrees,courses,crs_usr"
+                        " WHERE %scountries.CtyCod=institutions.CtyCod"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role=%u",
+                 SubQuery,(unsigned) Role) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of countries with users");
   }
 
 /*****************************************************************************/
