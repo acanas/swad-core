@@ -25,9 +25,11 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <limits.h>		// For maximum values
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For getenv, etc.
 #include <string.h>		// For string functions
 
@@ -791,11 +793,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 unsigned Crs_GetNumCrssTotal (void)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get total number of courses from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM courses");
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the total number of courses");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM courses") < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the total number of courses");
   }
 
 /*****************************************************************************/
@@ -804,16 +807,17 @@ unsigned Crs_GetNumCrssTotal (void)
 
 unsigned Crs_GetNumCrssInCty (long CtyCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of courses in a country from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM institutions,centres,degrees,courses"
-	          " WHERE institutions.CtyCod=%ld"
-	          " AND institutions.InsCod=centres.InsCod"
-	          " AND centres.CtrCod=degrees.CtrCod"
-	          " AND degrees.DegCod=courses.DegCod",
-	    CtyCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in a country");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM institutions,centres,degrees,courses"
+	                " WHERE institutions.CtyCod=%ld"
+	                " AND institutions.InsCod=centres.InsCod"
+	                " AND centres.CtrCod=degrees.CtrCod"
+	                " AND degrees.DegCod=courses.DegCod",
+	         CtyCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of courses in a country");
   }
 
 /*****************************************************************************/
@@ -822,15 +826,16 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 
 unsigned Crs_GetNumCrssInIns (long InsCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of courses in a degree from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM centres,degrees,courses"
-	          " WHERE centres.InsCod=%ld"
-	          " AND centres.CtrCod=degrees.CtrCod"
-	          " AND degrees.DegCod=courses.DegCod",
-	    InsCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in an institution");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM centres,degrees,courses"
+	                " WHERE centres.InsCod=%ld"
+	                " AND centres.CtrCod=degrees.CtrCod"
+	                " AND degrees.DegCod=courses.DegCod",
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of courses in an institution");
   }
 
 /*****************************************************************************/
@@ -839,14 +844,15 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
 
 unsigned Crs_GetNumCrssInCtr (long CtrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of courses in a degree from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM degrees,courses"
-	          " WHERE degrees.CtrCod=%ld"
-	          " AND degrees.DegCod=courses.DegCod",
-	    CtrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in a centre");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM degrees,courses"
+	                " WHERE degrees.CtrCod=%ld"
+	                " AND degrees.DegCod=courses.DegCod",
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of courses in a centre");
   }
 
 /*****************************************************************************/
@@ -855,13 +861,14 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
 
 unsigned Crs_GetNumCrssInDeg (long DegCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get number of courses in a degree from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM courses"
-	          " WHERE DegCod=%ld",
-	    DegCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in a degree");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM courses"
+	                " WHERE DegCod=%ld",
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of courses in a degree");
   }
 
 /*****************************************************************************/
@@ -870,18 +877,19 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
 
 unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of degrees with users from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT courses.CrsCod)"
-                  " FROM institutions,centres,degrees,courses,crs_usr"
-                  " WHERE %sinstitutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role=%u",
-            SubQuery,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of courses with users");
+   if (asprintf (&Query,"SELECT COUNT(DISTINCT courses.CrsCod)"
+                        " FROM institutions,centres,degrees,courses,crs_usr"
+                        " WHERE %sinstitutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role=%u",
+                 SubQuery,(unsigned) Role) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of courses with users");
   }
 
 /*****************************************************************************/
@@ -891,7 +899,7 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
 void Crs_WriteSelectorOfCourse (void)
   {
    extern const char *Txt_Course;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -915,11 +923,12 @@ void Crs_WriteSelectorOfCourse (void)
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       /***** Get courses belonging to the current degree from database *****/
-      sprintf (Query,"SELECT CrsCod,ShortName FROM courses"
-                     " WHERE DegCod=%ld"
-                     " ORDER BY ShortName",
-               Gbl.CurrentDeg.Deg.DegCod);
-      NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a degree");
+      if (asprintf (&Query,"SELECT CrsCod,ShortName FROM courses"
+                           " WHERE DegCod=%ld"
+                           " ORDER BY ShortName",
+                    Gbl.CurrentDeg.Deg.DegCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumCrss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get courses of a degree");
 
       /***** Get courses of this degree *****/
       for (NumCrs = 0;
@@ -978,7 +987,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
 
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -989,22 +998,24 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
    switch (WhatCourses)
      {
       case Crs_ACTIVE_COURSES:
-         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-                        " FROM courses WHERE DegCod=%ld AND Status=0"
-                        " ORDER BY Year,ShortName",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+                              " FROM courses WHERE DegCod=%ld AND Status=0"
+                              " ORDER BY Year,ShortName",
+                       Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
-         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-                        " FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
-                        " ORDER BY Year,ShortName",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Crs_STATUS_BIT_REMOVED);
+         if (asprintf (&Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+                              " FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
+                              " ORDER BY Year,ShortName",
+                       Gbl.CurrentDeg.Deg.DegCod,
+                       (unsigned) Crs_STATUS_BIT_REMOVED) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 break;
      }
-   NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the courses of a degree");
+   NumCrss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get the courses of a degree");
 
    if (NumCrss) // Courses found...
      {
@@ -1938,21 +1949,20 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 static void Crs_CreateCourse (unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
-   char Query[512 +
-              Hie_MAX_BYTES_SHRT_NAME +
-              Hie_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Insert new course into pending requests *****/
-   sprintf (Query,"INSERT INTO courses"
-	          " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
-                  " VALUES"
-                  " (%ld,%u,'%s',%u,%ld,'%s','%s')",
-            Gbl.Degs.EditingCrs.DegCod,Gbl.Degs.EditingCrs.Year,
-            Gbl.Degs.EditingCrs.InstitutionalCrsCod,
-            Status,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.Degs.EditingCrs.ShrtName,Gbl.Degs.EditingCrs.FullName);
-   Gbl.Degs.EditingCrs.CrsCod = DB_QueryINSERTandReturnCode (Query,"can not create a new course");
+   if (asprintf (&Query,"INSERT INTO courses"
+	                " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
+                        " VALUES"
+                        " (%ld,%u,'%s',%u,%ld,'%s','%s')",
+                 Gbl.Degs.EditingCrs.DegCod,Gbl.Degs.EditingCrs.Year,
+                 Gbl.Degs.EditingCrs.InstitutionalCrsCod,
+                 Status,
+                 Gbl.Usrs.Me.UsrDat.UsrCod,
+                 Gbl.Degs.EditingCrs.ShrtName,Gbl.Degs.EditingCrs.FullName) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Gbl.Degs.EditingCrs.CrsCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new course");
 
    /***** Create success message *****/
    Gbl.Alert.Type = Ale_SUCCESS;
@@ -2008,7 +2018,7 @@ void Crs_RemoveCourse (void)
 
 bool Crs_GetDataOfCourseByCod (struct Course *Crs)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool CrsFound = false;
@@ -2029,10 +2039,11 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    if (Crs->CrsCod > 0)
      {
       /***** Get data of a course from database *****/
-      sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-		     " FROM courses WHERE CrsCod=%ld",
-	       Crs->CrsCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a course")) // Course found...
+      if (asprintf (&Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+		           " FROM courses WHERE CrsCod=%ld",
+	            Crs->CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a course")) // Course found...
 	{
 	 /***** Get data of the course *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -2101,7 +2112,7 @@ static void Crs_GetShortNamesByCod (long CrsCod,
                                     char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
                                     char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1])
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -2110,12 +2121,13 @@ static void Crs_GetShortNamesByCod (long CrsCod,
    if (CrsCod > 0)
      {
       /***** Get the short name of a degree from database *****/
-      sprintf (Query,"SELECT courses.ShortName,degrees.ShortName"
-		     " FROM courses,degrees"
-		     " WHERE courses.CrsCod=%ld"
-		     " AND courses.DegCod=degrees.DegCod",
-	       CrsCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a course") == 1)
+      if (asprintf (&Query,"SELECT courses.ShortName,degrees.ShortName"
+		           " FROM courses,degrees"
+		           " WHERE courses.CrsCod=%ld"
+		           " AND courses.DegCod=degrees.DegCod",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the short name of a course") == 1)
 	{
 	 /***** Get the short name of this course *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -2137,7 +2149,7 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 
 void Crs_RemoveCourseCompletely (long CrsCod)
   {
-   char Query[128];
+   char *Query;
 
    if (CrsCod > 0)
      {
@@ -2145,12 +2157,14 @@ void Crs_RemoveCourseCompletely (long CrsCod)
       Crs_EmptyCourseCompletely (CrsCod);
 
       /***** Remove course from table of last accesses to courses in database *****/
-      sprintf (Query,"DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove a course");
+      if (asprintf (&Query,"DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove a course");
 
       /***** Remove course from table of courses in database *****/
-      sprintf (Query,"DELETE FROM courses WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove a course");
+      if (asprintf (&Query,"DELETE FROM courses WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove a course");
      }
   }
 
@@ -2163,8 +2177,8 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 static void Crs_EmptyCourseCompletely (long CrsCod)
   {
    struct Course Crs;
+   char *Query;
    char PathRelCrs[PATH_MAX + 1];
-   char Query[512];
 
    if (CrsCod > 0)
      {
@@ -2181,34 +2195,40 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove information of the course ****/
       /* Remove timetable of the course */
-      sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove the timetable of a course");
+      if (asprintf (&Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove the timetable of a course");
 
       /* Remove other information of the course */
-      sprintf (Query,"DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove info sources of a course");
+      if (asprintf (&Query,"DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove info sources of a course");
 
-      sprintf (Query,"DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove info of a course");
+      if (asprintf (&Query,"DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove info of a course");
 
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
-      sprintf (Query,"UPDATE exam_announcements SET Status=%u"
-		     " WHERE CrsCod=%ld",
-	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
-      DB_QueryUPDATE (Query,"can not remove exam announcements of a course");
+      if (asprintf (&Query,"UPDATE exam_announcements SET Status=%u"
+		           " WHERE CrsCod=%ld",
+	            (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not remove exam announcements of a course");
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
-      sprintf (Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
-		     " WHERE crs_record_fields.CrsCod=%ld"
-		     " AND crs_record_fields.FieldCod=crs_records.FieldCod",
-	       CrsCod);
-      DB_QueryDELETE (Query,"can not remove content of cards in a course");
+      if (asprintf (&Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
+		           " WHERE crs_record_fields.CrsCod=%ld"
+		           " AND crs_record_fields.FieldCod=crs_records.FieldCod",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove content of cards in a course");
 
       /* Remove definition of fields in course cards */
-      sprintf (Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove fields of cards in a course");
+      if (asprintf (&Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove fields of cards in a course");
 
       /***** Remove information related to files in course,
              including groups and projects,
@@ -2227,15 +2247,18 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove notices in the course *****/
       /* Copy all notices from the course to table of deleted notices */
-      sprintf (Query,"INSERT INTO notices_deleted"
-		     " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		     " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif FROM notices"
-		     " WHERE CrsCod=%ld",
-	       CrsCod);
-      DB_QueryINSERT (Query,"can not remove notices in a course");
+      if (asprintf (&Query,"INSERT INTO notices_deleted"
+		           " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		           " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
+		           " FROM notices"
+		           " WHERE CrsCod=%ld",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryINSERT_free (Query,"can not remove notices in a course");
       /* Remove all notices from the course */
-      sprintf (Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod);
-      DB_QueryDELETE (Query,"can not remove notices in a course");
+      if (asprintf (&Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove notices in a course");
 
       /***** Remove all the threads and posts in forums of the course *****/
       For_RemoveForums (Sco_SCOPE_CRS,CrsCod);
@@ -2251,37 +2274,42 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove groups in the course *****/
       /* Remove all the users in groups in the course */
-      sprintf (Query,"DELETE FROM crs_grp_usr"
-		     " USING crs_grp_types,crs_grp,crs_grp_usr"
-		     " WHERE crs_grp_types.CrsCod=%ld"
-		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
-	       CrsCod);
-      DB_QueryDELETE (Query,"can not remove users from groups of a course");
+      if (asprintf (&Query,"DELETE FROM crs_grp_usr"
+		           " USING crs_grp_types,crs_grp,crs_grp_usr"
+		           " WHERE crs_grp_types.CrsCod=%ld"
+		           " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		           " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove users from groups of a course");
 
       /* Remove all the groups in the course */
-      sprintf (Query,"DELETE FROM crs_grp"
-		     " USING crs_grp_types,crs_grp"
-		     " WHERE crs_grp_types.CrsCod=%ld"
-		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
-	       CrsCod);
-      DB_QueryDELETE (Query,"can not remove groups of a course");
+      if (asprintf (&Query,"DELETE FROM crs_grp"
+		           " USING crs_grp_types,crs_grp"
+		           " WHERE crs_grp_types.CrsCod=%ld"
+		           " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove groups of a course");
 
       /* Remove all the group types in the course */
-      sprintf (Query,"DELETE FROM crs_grp_types"
-		     " WHERE CrsCod=%ld",
-	       CrsCod);
-      DB_QueryDELETE (Query,"can not remove types of group of a course");
+      if (asprintf (&Query,"DELETE FROM crs_grp_types"
+		           " WHERE CrsCod=%ld",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove types of group of a course");
 
       /***** Remove users' requests for inscription in the course *****/
-      sprintf (Query,"DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
-	       CrsCod);
-      DB_QueryDELETE (Query,"can not remove requests for inscription to a course");
+      if (asprintf (&Query,"DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove requests for inscription to a course");
 
       /***** Remove possible users remaining in the course (teachers) *****/
-      sprintf (Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
-	       CrsCod);
-      DB_QueryDELETE (Query,"can not remove users from a course");
+      if (asprintf (&Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
+	            CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove users from a course");
 
       /***** Remove directories of the course *****/
       snprintf (PathRelCrs,sizeof (PathRelCrs),
@@ -2450,12 +2478,13 @@ void Crs_ContEditAfterChgCrsInConfig (void)
 
 static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Update degree in table of courses *****/
-   sprintf (Query,"UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
-	    DegCod,CrsCod);
-   DB_QueryUPDATE (Query,"can not move course to another degree");
+   if (asprintf (&Query,"UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
+	         DegCod,CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not move course to another degree");
   }
 
 /*****************************************************************************/
@@ -2598,12 +2627,13 @@ void Crs_ChangeCrsYear (void)
 
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
   {
-   char Query[128];
+   char *Query;
 
    /***** Update year/semester in table of courses *****/
-   sprintf (Query,"UPDATE courses SET Year=%u WHERE CrsCod=%ld",
-	    NewYear,Crs->CrsCod);
-   DB_QueryUPDATE (Query,"can not update the year of a course");
+   if (asprintf (&Query,"UPDATE courses SET Year=%u WHERE CrsCod=%ld",
+	         NewYear,Crs->CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the year of a course");
 
    /***** Copy course year/semester *****/
    Crs->Year = NewYear;
@@ -2615,12 +2645,14 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
 
 void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Update institutional course code in table of courses *****/
-   sprintf (Query,"UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
-            NewInstitutionalCrsCod,Crs->CrsCod);
-   DB_QueryUPDATE (Query,"can not update the institutional code of the current course");
+   if (asprintf (&Query,"UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
+                 NewInstitutionalCrsCod,Crs->CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the institutional code"
+	                      " of the current course");
 
    /***** Copy institutional course code *****/
    Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
@@ -2761,14 +2793,16 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
 static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
                                                  long DegCod,unsigned Year)
   {
-   char Query[256 + Hie_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Get number of courses in a year of a degree and with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM courses"
-                  " WHERE DegCod=%ld AND Year=%u"
-                  " AND %s='%s' AND CrsCod<>%ld",
-            DegCod,Year,FieldName,Name,CrsCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a course already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM courses"
+                        " WHERE DegCod=%ld AND Year=%u"
+                        " AND %s='%s' AND CrsCod<>%ld",
+                 DegCod,Year,FieldName,Name,CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name"
+	                             " of a course already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -2777,12 +2811,13 @@ static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const cha
 
 static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *NewCrsName)
   {
-   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
+   char *Query;
 
    /***** Update course changing old name by new name *****/
-   sprintf (Query,"UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
-	    FieldName,NewCrsName,CrsCod);
-   DB_QueryUPDATE (Query,"can not update the name of a course");
+   if (asprintf (&Query,"UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
+	         FieldName,NewCrsName,CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of a course");
   }
 
 /*****************************************************************************/
@@ -2792,7 +2827,7 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
 void Crs_ChangeCrsStatus (void)
   {
    extern const char *Txt_The_status_of_the_course_X_has_changed;
-   char Query[256];
+   char *Query;
    Crs_Status_t Status;
    Crs_StatusTxt_t StatusTxt;
 
@@ -2815,9 +2850,10 @@ void Crs_ChangeCrsStatus (void)
    Crs_GetDataOfCourseByCod (&Gbl.Degs.EditingCrs);
 
    /***** Update status in table of courses *****/
-   sprintf (Query,"UPDATE courses SET Status=%u WHERE CrsCod=%ld",
-            (unsigned) Status,Gbl.Degs.EditingCrs.CrsCod);
-   DB_QueryUPDATE (Query,"can not update the status of a course");
+   if (asprintf (&Query,"UPDATE courses SET Status=%u WHERE CrsCod=%ld",
+                 (unsigned) Status,Gbl.Degs.EditingCrs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the status of a course");
    Gbl.Degs.EditingCrs.Status = Status;
 
    /***** Create message to show the change made *****/
@@ -3062,7 +3098,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    char SubQuery[32];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -3073,18 +3109,19 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       SubQuery[0] = '\0';	// Role == Rol_UNK ==> any role
    else
       sprintf (SubQuery," AND crs_usr.Role=%u",(unsigned) Role);
-   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-                  "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
-                  " FROM crs_usr,courses,degrees,centres"
-                  " WHERE crs_usr.UsrCod=%ld%s"
-                  " AND crs_usr.CrsCod=courses.CrsCod"
-                  " AND courses.DegCod=degrees.DegCod"
-                  " AND degrees.CtrCod=centres.CtrCod"
-                  " ORDER BY degrees.FullName,courses.Year,courses.FullName",
-            UsrDat->UsrCod,SubQuery);
+   if (asprintf (&Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
+                        "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
+                        " FROM crs_usr,courses,degrees,centres"
+                        " WHERE crs_usr.UsrCod=%ld%s"
+                        " AND crs_usr.CrsCod=courses.CrsCod"
+                        " AND courses.DegCod=degrees.DegCod"
+                        " AND degrees.CtrCod=centres.CtrCod"
+                        " ORDER BY degrees.FullName,courses.Year,courses.FullName",
+                 UsrDat->UsrCod,SubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** List the courses (one row per course) *****/
-   if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
+   if ((NumCrss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Start box and table */
       Box_StartBoxTable ("100%",NULL,NULL,
@@ -3368,16 +3405,17 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
 void Crs_UpdateCrsLast (void)
   {
-   char Query[128];
+   char *Query;
 
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
      {
       /***** Update my last access to current course *****/
-      sprintf (Query,"REPLACE INTO crs_last (CrsCod,LastTime)"
-	             " VALUES (%ld,NOW())",
-	       Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryUPDATE (Query,"can not update last access to current course");
+      if (asprintf (&Query,"REPLACE INTO crs_last (CrsCod,LastTime)"
+	                   " VALUES (%ld,NOW())",
+	            Gbl.CurrentCrs.Crs.CrsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update last access to current course");
      }
   }
 
@@ -3454,7 +3492,7 @@ void Crs_RemoveOldCrss (void)
    extern const char *Txt_X_courses_have_been_eliminated;
    unsigned MonthsWithoutAccess;
    unsigned long SecondsWithoutAccess;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumCrs;
@@ -3473,11 +3511,12 @@ void Crs_RemoveOldCrss (void)
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old courses from database *****/
-   sprintf (Query,"SELECT CrsCod FROM crs_last WHERE"
-                  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-                  " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
-            SecondsWithoutAccess);
-   if ((NumCrss = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))
+   if (asprintf (&Query,"SELECT CrsCod FROM crs_last WHERE"
+                        " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+                        " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
+                 SecondsWithoutAccess) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if ((NumCrss = DB_QuerySELECT_free (Query,&mysql_res,"can not get old users")))
      {
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,
