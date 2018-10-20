@@ -209,7 +209,7 @@ void Enr_PutLinkToRequestSignUp (void)
 
 void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
   {
-   char Query[256];
+   char *Query;
 
    /***** Check if user's role is allowed *****/
    switch (NewRole)
@@ -223,10 +223,11 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   sprintf (Query,"UPDATE crs_usr SET Role=%u"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-	    (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-   DB_QueryUPDATE (Query,"can not modify user's role in course");
+   if (asprintf (&Query,"UPDATE crs_usr SET Role=%u"
+		        " WHERE CrsCod=%ld AND UsrCod=%ld",
+	         (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not modify user's role in course");
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -253,7 +254,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
-   char Query[1024];
+   char *Query;
 
    /***** Check if user's role is allowed *****/
    switch (NewRole)
@@ -267,25 +268,26 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Register user in current course in database *****/
-   sprintf (Query,"INSERT INTO crs_usr"
-	          " (CrsCod,UsrCod,Role,Accepted,"
-		  "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
-		  "NumAccTst,LastAccTst,NumQstsLastTst,"
-		  "UsrListType,ColsClassPhoto,ListWithPhotos)"
-		  " VALUES"
-		  " (%ld,%ld,%u,'%c',"
-		  "-1,-1,-1,"
-		  "0,FROM_UNIXTIME(%ld),0,"
-		  "'%s',%u,'%c')",
-	    Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
-	    KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
-		                                            'N',
-            (long) (time_t) 0,	// The user never accessed to tests in this course
-	    Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
-	    Usr_CLASS_PHOTO_COLS_DEF,
-	    Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
-		                       'N');
-   DB_QueryINSERT (Query,"can not register user in course");
+   if (asprintf (&Query,"INSERT INTO crs_usr"
+			" (CrsCod,UsrCod,Role,Accepted,"
+			"LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
+			"NumAccTst,LastAccTst,NumQstsLastTst,"
+			"UsrListType,ColsClassPhoto,ListWithPhotos)"
+			" VALUES"
+			" (%ld,%ld,%u,'%c',"
+			"-1,-1,-1,"
+			"0,FROM_UNIXTIME(%ld),0,"
+			"'%s',%u,'%c')",
+	         Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
+	         KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
+							         'N',
+	         (long) (time_t) 0,	// The user never accessed to tests in this course
+	         Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
+	         Usr_CLASS_PHOTO_COLS_DEF,
+	         Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
+					    'N') < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not register user in course");
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -466,53 +468,51 @@ void Enr_ReqAcceptRegisterInCrs (void)
 /*****************************************************************************/
 /****************** Put an enrolment into a notification ********************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData UsrDat;
    Rol_Role_t Role;
 
    SummaryStr[0] = '\0';        // Return nothing on error
+   // This function may be called inside a web service, so don't report error
 
    /***** Get user's role in course from database *****/
-   sprintf (Query,"SELECT Role"
-                  " FROM crs_usr"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-            CrsCod,UsrCod);
+   if (asprintf (&Query,"SELECT Role"
+			" FROM crs_usr"
+			" WHERE CrsCod=%ld AND UsrCod=%ld",
+                 CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
 
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get user's role in course *****/
-            row = mysql_fetch_row (mysql_res);
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's role"
+	                                     " in course") == 1)	// Result should have a unique row
+     {
+      /***** Get user's role in course *****/
+      row = mysql_fetch_row (mysql_res);
 
-            /* Initialize structure with user's data */
-            Usr_UsrDataConstructor (&UsrDat);
+      /* Initialize structure with user's data */
+      Usr_UsrDataConstructor (&UsrDat);
 
-            /* Get user's data */
-            UsrDat.UsrCod = UsrCod;
-            Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      /* Get user's data */
+      UsrDat.UsrCod = UsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 
-            /* Role (row[0]) */
-            Role = Rol_ConvertUnsignedStrToRole (row[0]);
-            Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
-                      Ntf_MAX_BYTES_SUMMARY);
+      /* Role (row[0]) */
+      Role = Rol_ConvertUnsignedStrToRole (row[0]);
+      Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
+		Ntf_MAX_BYTES_SUMMARY);
 
-            /* Free memory used for user's data */
-            Usr_UsrDataDestructor (&UsrDat);
-           }
+      /* Free memory used for user's data */
+      Usr_UsrDataDestructor (&UsrDat);
+     }
 
-         mysql_free_result (mysql_res);
-        }
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -525,7 +525,6 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char *Query;
-   size_t CommentsLength;
 
    /***** Check if user's code is initialized *****/
    if (UsrDat->UsrCod <= 0)
@@ -536,43 +535,28 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 
    /***** Update user's common data *****/
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-   if (UsrDat->Comments)
-      CommentsLength = strlen (UsrDat->Comments);
-   else
-      CommentsLength = 0;
-   if ((Query = (char *) malloc (2048 +
-			         Pwd_BYTES_ENCRYPTED_PASSWORD +		// Password
-			         Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3 +// Surname1, Surname2, FirstName
-			         Usr_MAX_BYTES_ADDRESS +		// LocalAddress
-			         Usr_MAX_BYTES_PHONE +			// LocalPhone
-			         Usr_MAX_BYTES_ADDRESS +		// FamilyAddress
-			         Usr_MAX_BYTES_PHONE +			// FamilyPhone
-			         Usr_MAX_BYTES_ADDRESS +		// OriginPlace
-			         Usr_BIRTHDAY_STR_DB_LENGTH +		// BirthdayStrDB
-			         CommentsLength)) == NULL)		// Comments
+   if (asprintf (&Query,"UPDATE usr_data"
+			" SET Password='%s',"
+			"Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
+			"CtyCod=%ld,"
+			"LocalAddress='%s',LocalPhone='%s',"
+			"FamilyAddress='%s',FamilyPhone='%s',"
+			"OriginPlace='%s',Birthday=%s,"
+			"Comments='%s'"
+			" WHERE UsrCod=%ld",
+	         UsrDat->Password,
+	         UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+	         Usr_StringsSexDB[UsrDat->Sex],
+	         UsrDat->CtyCod,
+	         UsrDat->LocalAddress,UsrDat->LocalPhone,
+	         UsrDat->FamilyAddress,UsrDat->FamilyPhone,
+	         UsrDat->OriginPlace,
+	         BirthdayStrDB,
+	         UsrDat->Comments ? UsrDat->Comments :
+				    "",
+	         UsrDat->UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   sprintf (Query,"UPDATE usr_data"
-		  " SET Password='%s',"
-		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "CtyCod=%ld,"
-		  "LocalAddress='%s',LocalPhone='%s',"
-		  "FamilyAddress='%s',FamilyPhone='%s',"
-		  "OriginPlace='%s',Birthday=%s,"
-		  "Comments='%s'"
-		  " WHERE UsrCod=%ld",
-	    UsrDat->Password,
-	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
-	    Usr_StringsSexDB[UsrDat->Sex],
-	    UsrDat->CtyCod,
-	    UsrDat->LocalAddress,UsrDat->LocalPhone,
-	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,
-	    UsrDat->OriginPlace,
-	    BirthdayStrDB,
-	    CommentsLength ? UsrDat->Comments :
-		             "",
-	    UsrDat->UsrCod);
-   DB_QueryUPDATE (Query,"can not update user's data");
-   free ((void *) Query);
+   DB_QueryUPDATE_free (Query,"can not update user's data");
   }
 
 /*****************************************************************************/
@@ -595,17 +579,18 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat)
 
 void Enr_UpdateInstitutionCentreDepartment (void)
   {
-   char Query[256];
+   char *Query;
 
-   sprintf (Query,"UPDATE usr_data"
-	          " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
-	          " WHERE UsrCod=%ld",
-	    Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	    Gbl.Usrs.Me.UsrDat.InsCod,
-            Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
-            Gbl.Usrs.Me.UsrDat.Tch.DptCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update institution, centre and department");
+   if (asprintf (&Query,"UPDATE usr_data"
+			" SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
+			" WHERE UsrCod=%ld",
+	         Gbl.Usrs.Me.UsrDat.InsCtyCod,
+	         Gbl.Usrs.Me.UsrDat.InsCod,
+	         Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
+	         Gbl.Usrs.Me.UsrDat.Tch.DptCod,
+	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update institution, centre and department");
   }
 
 /*****************************************************************************/
@@ -869,7 +854,7 @@ void Enr_RemoveOldUsrs (void)
    extern const char *Txt_X_users_have_been_eliminated;
    unsigned MonthsWithoutAccess;
    time_t SecondsWithoutAccess;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumUsr;
@@ -888,17 +873,18 @@ void Enr_RemoveOldUsrs (void)
    SecondsWithoutAccess = (time_t) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old users from database *****/
-   sprintf (Query,"SELECT UsrCod FROM"
-                  "("
-                  "SELECT UsrCod FROM usr_last WHERE"
-                  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-                  " UNION "
-                  "SELECT UsrCod FROM usr_data WHERE"
-                  " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
-                  ") AS candidate_usrs"
-                  " WHERE UsrCod NOT IN (SELECT DISTINCT UsrCod FROM crs_usr)",
-            (unsigned long) SecondsWithoutAccess);
-   if ((NumUsrs = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))
+   if (asprintf (&Query,"SELECT UsrCod FROM"
+			"("
+			"SELECT UsrCod FROM usr_last WHERE"
+			" LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+			" UNION "
+			"SELECT UsrCod FROM usr_data WHERE"
+			" UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
+			") AS candidate_usrs"
+			" WHERE UsrCod NOT IN (SELECT DISTINCT UsrCod FROM crs_usr)",
+                 (unsigned long) SecondsWithoutAccess) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if ((NumUsrs = DB_QuerySELECT_free (Query,&mysql_res,"can not get old users")))
      {
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
@@ -2027,7 +2013,7 @@ void Enr_SignUpInCrs (void)
    extern const char *Txt_You_were_already_enroled_as_X_in_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Rol_Role_t RoleFromForm;
@@ -2058,11 +2044,12 @@ void Enr_SignUpInCrs (void)
          Lay_ShowErrorAndExit ("Wrong role.");
 
       /***** Try to get and old request of the same user in the same course from database *****/
-      sprintf (Query,"SELECT ReqCod FROM crs_usr_requests"
-                     " WHERE CrsCod=%ld AND UsrCod=%ld",
-               Gbl.CurrentCrs.Crs.CrsCod,
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get enrolment request"))
+      if (asprintf (&Query,"SELECT ReqCod FROM crs_usr_requests"
+                           " WHERE CrsCod=%ld AND UsrCod=%ld",
+		    Gbl.CurrentCrs.Crs.CrsCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get enrolment request"))
         {
          row = mysql_fetch_row (mysql_res);
          /* Get request code (row[0]) */
@@ -2074,24 +2061,26 @@ void Enr_SignUpInCrs (void)
       /***** Request user in current course in database *****/
       if (ReqCod > 0)        // Old request exists in database
         {
-         sprintf (Query,"UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
-                        " WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
-                  (unsigned) RoleFromForm,
-                  ReqCod,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-         DB_QueryUPDATE (Query,"can not update enrolment request");
+         if (asprintf (&Query,"UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
+                              " WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
+		       (unsigned) RoleFromForm,
+		       ReqCod,
+		       Gbl.CurrentCrs.Crs.CrsCod,
+		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+         DB_QueryUPDATE_free (Query,"can not update enrolment request");
         }
       else                // No request in database for this user in this course
         {
-         sprintf (Query,"INSERT INTO crs_usr_requests"
-                        " (CrsCod,UsrCod,Role,RequestTime)"
-                        " VALUES"
-                        " (%ld,%ld,%u,NOW())",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) RoleFromForm);
-         ReqCod = DB_QueryINSERTandReturnCode (Query,"can not save enrolment request");
+         if (asprintf (&Query,"INSERT INTO crs_usr_requests"
+			      " (CrsCod,UsrCod,Role,RequestTime)"
+			      " VALUES"
+			      " (%ld,%ld,%u,NOW())",
+		       Gbl.CurrentCrs.Crs.CrsCod,
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       (unsigned) RoleFromForm) < 0)
+            Lay_NotEnoughMemoryExit ();
+         ReqCod = DB_QueryINSERTandReturnCode_free (Query,"can not save enrolment request");
         }
 
       /***** Show confirmation message *****/
@@ -2113,61 +2102,58 @@ void Enr_SignUpInCrs (void)
 /*****************************************************************************/
 /************** Put an enrolment request into a notification *****************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                    char **ContentStr,
                                    long ReqCod,bool GetContent)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData UsrDat;
    Rol_Role_t DesiredRole;
 
    SummaryStr[0] = '\0';        // Return nothing on error
+   // This function may be called inside a web service, so don't report error
 
    /***** Get user and requested role from database *****/
-   sprintf (Query,"SELECT UsrCod,Role"
-                  " FROM crs_usr_requests"
-                  " WHERE ReqCod=%ld",
-            ReqCod);
+   if (asprintf (&Query,"SELECT UsrCod,Role"
+			" FROM crs_usr_requests"
+			" WHERE ReqCod=%ld",
+                 ReqCod) < 0)
+      Lay_NotEnoughMemoryExit ();
 
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get user and requested role *****/
-            row = mysql_fetch_row (mysql_res);
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get enrolment request") == 1)	// Result should have a unique row
+     {
+      /***** Get user and requested role *****/
+      row = mysql_fetch_row (mysql_res);
 
-            /* Initialize structure with user's data */
-            Usr_UsrDataConstructor (&UsrDat);
+      /* Initialize structure with user's data */
+      Usr_UsrDataConstructor (&UsrDat);
 
-            /* User's code (row[0]) */
-            UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-            Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      /* User's code (row[0]) */
+      UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 
-            /* Role (row[1]) */
-            DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
-            Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],
-                      Ntf_MAX_BYTES_SUMMARY);
+      /* Role (row[1]) */
+      DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
+      Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],
+		Ntf_MAX_BYTES_SUMMARY);
 
-            if (GetContent)
-               /* Write desired role into content */
-               if (asprintf (ContentStr,
-        	             "%s",	// TODO: Write more info in this content
-                             Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]) < 0)
-                  Lay_NotEnoughMemoryExit ();
+      if (GetContent)
+	 /* Write desired role into content */
+	 if (asprintf (ContentStr,
+		       "%s",	// TODO: Write more info in this content
+		       Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]) < 0)
+	    Lay_NotEnoughMemoryExit ();
 
-            /* Free memory used for user's data */
-            Usr_UsrDataDestructor (&UsrDat);
-           }
+      /* Free memory used for user's data */
+      Usr_UsrDataDestructor (&UsrDat);
+     }
 
-         mysql_free_result (mysql_res);
-        }
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -2338,7 +2324,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrolment_requests;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumReq;
@@ -2413,84 +2399,89 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          switch (Gbl.Usrs.Me.Role.Logged)
            {
             case Rol_TCH:
-               	// Requests in all courses in which I am teacher
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM crs_usr,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TCH,
-                        RolesSelected);
+               // Requests in all courses in which I am teacher
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM crs_usr,crs_usr_requests"
+				    " WHERE crs_usr.UsrCod=%ld"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     (unsigned) Rol_TCH,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_DEG_ADM:
-               	// Requests in all degrees administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
-                        RolesSelected);
+               // Requests in all degrees administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+                             Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+                             RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_CTR_ADM:
-               	// Requests in all centres administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
-                        RolesSelected);
+               // Requests in all centres administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+                             Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+                             RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_INS_ADM:
-               	// Requests in all institutions administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=centres.InsCod"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
-                        RolesSelected);
+               // Requests in all institutions administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,centres,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
            case Rol_SYS_ADM:
-               	// All requests
-               sprintf (Query,"SELECT ReqCod,"
-        	              "CrsCod,"
-        	              "UsrCod,"
-        	              "Role,"
-        	              "UNIX_TIMESTAMP(RequestTime)"
-                              " FROM crs_usr_requests"
-                              " WHERE ((1<<Role)&%u)<>0"
-                              " ORDER BY RequestTime DESC",
-                        RolesSelected);
+               // All requests
+               if (asprintf (&Query,"SELECT ReqCod,"
+				    "CrsCod,"
+				    "UsrCod,"
+				    "Role,"
+				    "UNIX_TIMESTAMP(RequestTime)"
+				    " FROM crs_usr_requests"
+				    " WHERE ((1<<Role)&%u)<>0"
+				    " ORDER BY RequestTime DESC",
+                            RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2501,108 +2492,113 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          switch (Gbl.Usrs.Me.Role.Logged)
            {
             case Rol_TCH:
-               	// Requests in courses of this country in which I am teacher
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM crs_usr,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND courses.DegCod=degrees.DegCod"
-                              " AND degrees.CtrCod=centres.CtrCod"
-                              " AND centres.InsCod=institutions.InsCod"
-                              " AND institutions.CtyCod=%ld"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TCH,
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+               // Requests in courses of this country in which I am teacher
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM crs_usr,institutions,centres,degrees,courses,crs_usr_requests"
+				    " WHERE crs_usr.UsrCod=%ld"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=institutions.InsCod"
+				    " AND institutions.CtyCod=%ld"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     (unsigned) Rol_TCH,
+			     Gbl.CurrentCty.Cty.CtyCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_DEG_ADM:
-               	// Requests in degrees of this country administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=degrees.DegCod"
-                              " AND degrees.CtrCod=centres.CtrCod"
-                              " AND centres.InsCod=institutions.InsCod"
-                              " AND institutions.CtyCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+               // Requests in degrees of this country administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=institutions.InsCod"
+				    " AND institutions.CtyCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+			     Gbl.CurrentCty.Cty.CtyCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_CTR_ADM:
-               	// Requests in centres of this country administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=centres.CtrCod"
-                              " AND centres.InsCod=institutions.InsCod"
-                              " AND institutions.CtyCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+               // Requests in centres of this country administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=centres.CtrCod"
+				    " AND centres.InsCod=institutions.InsCod"
+				    " AND institutions.CtyCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+                             Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+                             Gbl.CurrentCty.Cty.CtyCod,
+                             RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_INS_ADM:
-               	// Requests in institutions of this country administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=institutions.InsCod"
-                              " AND institutions.CtyCod=%ld"
-                              " AND institutions.InsCod=centres.InsCod"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+               // Requests in institutions of this country administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=institutions.InsCod"
+				    " AND institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+			     Gbl.CurrentCty.Cty.CtyCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_SYS_ADM:
-               	// Requests in any course of this country
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE institutions.CtyCod=%ld"
-                              " AND institutions.InsCod=centres.InsCod"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+               // Requests in any course of this country
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM institutions,centres,degrees,courses,crs_usr_requests"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+                             Gbl.CurrentCty.Cty.CtyCod,
+                             RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2613,84 +2609,88 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          switch (Gbl.Usrs.Me.Role.Logged)
            {
             case Rol_TCH:
-               	// Requests in courses of this institution in which I am teacher
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM crs_usr,centres,degrees,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND courses.DegCod=degrees.DegCod"
-                              " AND degrees.CtrCod=centres.CtrCod"
-                              " AND centres.InsCod=%ld"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TCH,
-                        Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+               // Requests in courses of this institution in which I am teacher
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM crs_usr,centres,degrees,courses,crs_usr_requests"
+				    " WHERE crs_usr.UsrCod=%ld"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=%ld"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     (unsigned) Rol_TCH,
+			     Gbl.CurrentIns.Ins.InsCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_DEG_ADM:
-               	// Requests in degrees of this institution administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=degrees.DegCod"
-                              " AND degrees.CtrCod=centres.CtrCod"
-                              " AND centres.InsCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
-                        Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+               // Requests in degrees of this institution administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,centres,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+			     Gbl.CurrentIns.Ins.InsCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_CTR_ADM:
-               	// Requests in centres of this institution administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=centres.CtrCod"
-                              " AND centres.InsCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
-                        Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+               // Requests in centres of this institution administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,centres,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=centres.CtrCod"
+				    " AND centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+			     Gbl.CurrentIns.Ins.InsCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this institution
             case Rol_SYS_ADM:
                // Requests in any course of this institution
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM centres,degrees,courses,crs_usr_requests"
-                              " WHERE centres.InsCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM centres,degrees,courses,crs_usr_requests"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.CurrentIns.Ins.InsCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2701,62 +2701,65 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          switch (Gbl.Usrs.Me.Role.Logged)
            {
             case Rol_TCH:
-               	// Requests in courses of this centre in which I am teacher
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM crs_usr,degrees,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND courses.DegCod=degrees.DegCod"
-                              " AND degrees.CtrCod=%ld"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TCH,
-                        Gbl.CurrentCtr.Ctr.CtrCod,
-                        RolesSelected);
+               // Requests in courses of this centre in which I am teacher
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM crs_usr,degrees,courses,crs_usr_requests"
+				    " WHERE crs_usr.UsrCod=%ld"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=%ld"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     (unsigned) Rol_TCH,
+			     Gbl.CurrentCtr.Ctr.CtrCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_DEG_ADM:
-               	// Requests in degrees of this centre administrated by me
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM admin,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-                              " AND admin.Cod=degrees.DegCod"
-                              " AND degrees.CtrCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
-                        Gbl.CurrentCtr.Ctr.CtrCod,
-                        RolesSelected);
+               // Requests in degrees of this centre administrated by me
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM admin,degrees,courses,crs_usr_requests"
+				    " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+				    " AND admin.Cod=degrees.DegCod"
+				    " AND degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+			     Gbl.CurrentCtr.Ctr.CtrCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this centre
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this centre
             case Rol_SYS_ADM:
                // Request in any course of this centre
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM degrees,courses,crs_usr_requests"
-                              " WHERE degrees.CtrCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.CurrentCtr.Ctr.CtrCod,
-                        RolesSelected);
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM degrees,courses,crs_usr_requests"
+				    " WHERE degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+                             Gbl.CurrentCtr.Ctr.CtrCod,
+                             RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2767,42 +2770,44 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          switch (Gbl.Usrs.Me.Role.Logged)
            {
             case Rol_TCH:
-               	// Requests in courses of this degree in which I am teacher
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM crs_usr,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND courses.DegCod=%ld"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TCH,
-                        Gbl.CurrentDeg.Deg.DegCod,
-                        RolesSelected);
+               // Requests in courses of this degree in which I am teacher
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM crs_usr,courses,crs_usr_requests"
+				    " WHERE crs_usr.UsrCod=%ld"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=%ld"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     (unsigned) Rol_TCH,
+			     Gbl.CurrentDeg.Deg.DegCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this degree
             case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this degree
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this degree
             case Rol_SYS_ADM:
                // Requests in any course of this degree
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
-        	              "crs_usr_requests.CrsCod,"
-        	              "crs_usr_requests.UsrCod,"
-        	              "crs_usr_requests.Role,"
-        	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
-                              " FROM courses,crs_usr_requests"
-                              " WHERE courses.DegCod=%ld"
-                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
-                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
-                              " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.CurrentDeg.Deg.DegCod,
-                        RolesSelected);
+               if (asprintf (&Query,"SELECT crs_usr_requests.ReqCod,"
+				    "crs_usr_requests.CrsCod,"
+				    "crs_usr_requests.UsrCod,"
+				    "crs_usr_requests.Role,"
+				    "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
+				    " FROM courses,crs_usr_requests"
+				    " WHERE courses.DegCod=%ld"
+				    " AND courses.CrsCod=crs_usr_requests.CrsCod"
+				    " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+				    " ORDER BY crs_usr_requests.RequestTime DESC",
+			     Gbl.CurrentDeg.Deg.DegCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2817,15 +2822,16 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this course
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this course
             case Rol_SYS_ADM:
-               	// Requests in this course
-               sprintf (Query,"SELECT ReqCod,CrsCod,UsrCod,Role,"
-        	              "UNIX_TIMESTAMP(RequestTime)"
-                              " FROM crs_usr_requests"
-                              " WHERE CrsCod=%ld"
-                              " AND ((1<<Role)&%u)<>0"
-                              " ORDER BY RequestTime DESC",
-                        Gbl.CurrentCrs.Crs.CrsCod,
-                        RolesSelected);
+               // Requests in this course
+               if (asprintf (&Query,"SELECT ReqCod,CrsCod,UsrCod,Role,"
+				    "UNIX_TIMESTAMP(RequestTime)"
+				    " FROM crs_usr_requests"
+				    " WHERE CrsCod=%ld"
+				    " AND ((1<<Role)&%u)<>0"
+				    " ORDER BY RequestTime DESC",
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     RolesSelected) < 0)
+                  Lay_NotEnoughMemoryExit ();
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2837,7 +2843,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          break;
      }
 
-   NumRequests = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrolment");
+   NumRequests = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get requests for enrolment");
 
    /***** List requests *****/
    if (NumRequests)
@@ -3023,7 +3029,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long ReqCod;
@@ -3031,10 +3037,11 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
    /***** Mark possible notifications as removed
           Important: do this before removing the request *****/
    /* Request request code (returns 0 or 1 rows) */
-   sprintf (Query,"SELECT ReqCod FROM crs_usr_requests"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-            CrsCod,UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get request code"))        // Request exists
+   if (asprintf (&Query,"SELECT ReqCod FROM crs_usr_requests"
+                        " WHERE CrsCod=%ld AND UsrCod=%ld",
+                 CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get request code"))        // Request exists
      {
       /* Get request code */
       row = mysql_fetch_row (mysql_res);
@@ -3047,10 +3054,11 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove enrolment request *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-            CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove a request for enrolment");
+   if (asprintf (&Query,"DELETE FROM crs_usr_requests"
+                        " WHERE CrsCod=%ld AND UsrCod=%ld",
+                 CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove a request for enrolment");
   }
 
 /*****************************************************************************/
@@ -3059,25 +3067,27 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
 
 static void Enr_RemoveExpiredEnrolmentRequests (void)
   {
-   char Query[512];
+   char *Query;
 
    /***** Mark possible notifications as removed
           Important: do this before removing the request *****/
-   sprintf (Query,"UPDATE notif,crs_usr_requests"
-	          " SET notif.Status=(notif.Status | %u)"
-                  " WHERE notif.NotifyEvent=%u"
-                  " AND notif.Cod=crs_usr_requests.ReqCod"
-                  " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            (unsigned) Ntf_STATUS_BIT_REMOVED,
-            (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
-            Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
-   DB_QueryUPDATE (Query,"can not set notification(s) as removed");
+   if (asprintf (&Query,"UPDATE notif,crs_usr_requests"
+			" SET notif.Status=(notif.Status | %u)"
+			" WHERE notif.NotifyEvent=%u"
+			" AND notif.Cod=crs_usr_requests.ReqCod"
+			" AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+	         (unsigned) Ntf_STATUS_BIT_REMOVED,
+	         (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
+	         Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
 
    /***** Remove expired requests for enrolment *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests"
-                  " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
-   DB_QueryDELETE (Query,"can not remove expired requests for enrolment");
+   if (asprintf (&Query,"DELETE FROM crs_usr_requests"
+                        " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                 Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expired requests for enrolment");
   }
 
 /*****************************************************************************/
@@ -3463,7 +3473,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
-   char Query[512];
+   char *Query;
 
    /***** Check if user was and administrator of current institution/centre/degree *****/
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
@@ -3473,12 +3483,13 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
    else        // User was not administrator of current institution/centre/degree
      {
       /***** Insert or replace administrator in current institution/centre/degree *****/
-      sprintf (Query,"REPLACE INTO admin"
-	             " (UsrCod,Scope,Cod)"
-                     " VALUES"
-                     " (%ld,'%s',%ld)",
-               UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
-      DB_QueryREPLACE (Query,"can not create administrator");
+      if (asprintf (&Query,"REPLACE INTO admin"
+	                   " (UsrCod,Scope,Cod)"
+                           " VALUES"
+                           " (%ld,'%s',%ld)",
+                    UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryREPLACE_free (Query,"can not create administrator");
 
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
@@ -4129,13 +4140,14 @@ void Enr_ModifyUsr2 (void)
 
 void Enr_AcceptUsrInCrs (long UsrCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Set enrolment of a user to "accepted" in the current course *****/
-   sprintf (Query,"UPDATE crs_usr SET Accepted='Y'"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
-   DB_QueryUPDATE (Query,"can not confirm user's enrolment");
+   if (asprintf (&Query,"UPDATE crs_usr SET Accepted='Y'"
+                        " WHERE CrsCod=%ld AND UsrCod=%ld",
+                 Gbl.CurrentCrs.Crs.CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not confirm user's enrolment");
   }
 
 /*****************************************************************************/
@@ -4207,7 +4219,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char Query[1024];
+   char *Query;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
@@ -4239,10 +4251,11 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from the table of courses-users *****/
-      sprintf (Query,"DELETE FROM crs_usr"
-                     " WHERE CrsCod=%ld AND UsrCod=%ld",
-               Crs->CrsCod,UsrDat->UsrCod);
-      DB_QueryDELETE (Query,"can not remove a user from a course");
+      if (asprintf (&Query,"DELETE FROM crs_usr"
+                           " WHERE CrsCod=%ld AND UsrCod=%ld",
+                    Crs->CrsCod,UsrDat->UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove a user from a course");
 
       /***** Flush caches *****/
       Usr_FlushCachesUsr ();
@@ -4347,15 +4360,16 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
-   char Query[1024];
+   char *Query;
 
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/centre/degree
      {
       /***** Remove user from the table of admins *****/
-      sprintf (Query,"DELETE FROM admin"
-                     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-               UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
-      DB_QueryDELETE (Query,"can not remove an administrator");
+      if (asprintf (&Query,"DELETE FROM admin"
+                           " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
+                    UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove an administrator");
 
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,

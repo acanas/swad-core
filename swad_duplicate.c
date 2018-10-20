@@ -25,6 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"
@@ -79,7 +82,7 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
   {
    extern const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char Query[256];
+   char *Query;
    bool ItsMe;
 
    /***** Get user to be reported as possible duplicate *****/
@@ -90,13 +93,14 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
       if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
 	 /***** Insert possible duplicate into database *****/
-         sprintf (Query,"REPLACE INTO usr_duplicated"
-                        " (UsrCod,InformerCod,InformTime)"
-                        " VALUES"
-                        " (%ld,%ld,NOW())",
-                  Gbl.Usrs.Other.UsrDat.UsrCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-         DB_QueryINSERT (Query,"can not report duplicate");
+         if (asprintf (&Query,"REPLACE INTO usr_duplicated"
+			      " (UsrCod,InformerCod,InformTime)"
+			      " VALUES"
+			      " (%ld,%ld,NOW())",
+                       Gbl.Usrs.Other.UsrDat.UsrCod,
+                       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+         DB_QueryINSERT_free (Query,"can not report duplicate");
 
          /***** Show feedback message *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
@@ -132,7 +136,7 @@ void Dup_ListDuplicateUsrs (void)
    extern const char *Hlp_USERS_Duplicates_possibly_duplicate_users;
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -145,11 +149,12 @@ void Dup_ListDuplicateUsrs (void)
                  Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
    /***** Build query *****/
-   sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
-	          " FROM usr_duplicated"
-		  " GROUP BY UsrCod"
-		  " ORDER BY N DESC,T DESC");
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get possibly duplicate users");
+   if (asprintf (&Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
+			" FROM usr_duplicated"
+			" GROUP BY UsrCod"
+			" ORDER BY N DESC,T DESC") < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get possibly duplicate users");
 
    /***** List possible duplicated users *****/
    if (NumUsrs)
@@ -229,6 +234,9 @@ void Dup_ListDuplicateUsrs (void)
       /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
    /***** End box *****/
    Box_EndBox ();
   }
@@ -253,7 +261,7 @@ static void Dup_ListSimilarUsrs (void)
    extern const char *Hlp_USERS_Duplicates_similar_users;
    extern const char *Txt_Similar_users;
    struct UsrData UsrDat;
-   char Query[512 + Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME * 3];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -266,22 +274,26 @@ static void Dup_ListSimilarUsrs (void)
    /***** Build query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&
        Gbl.Usrs.Other.UsrDat.FirstName[0])	// Name and surname 1 not empty
-      sprintf (Query,"SELECT DISTINCT UsrCod FROM"
-	             "(SELECT DISTINCT UsrCod FROM usr_IDs"
-		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)"
-		     " UNION"
-		     " SELECT UsrCod FROM usr_data"
-		     " WHERE Surname1='%s' AND Surname2='%s' AND FirstName='%s')"
-		     " AS U",
-	       Gbl.Usrs.Other.UsrDat.UsrCod,
-	       Gbl.Usrs.Other.UsrDat.Surname1,
-	       Gbl.Usrs.Other.UsrDat.Surname2,
-	       Gbl.Usrs.Other.UsrDat.FirstName);
+     {
+      if (asprintf (&Query,"SELECT DISTINCT UsrCod FROM"
+			   "(SELECT DISTINCT UsrCod FROM usr_IDs"
+			   " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)"
+			   " UNION"
+			   " SELECT UsrCod FROM usr_data"
+			   " WHERE Surname1='%s' AND Surname2='%s' AND FirstName='%s')"
+			   " AS U",
+		    Gbl.Usrs.Other.UsrDat.UsrCod,
+		    Gbl.Usrs.Other.UsrDat.Surname1,
+		    Gbl.Usrs.Other.UsrDat.Surname2,
+		    Gbl.Usrs.Other.UsrDat.FirstName) < 0)
+      Lay_NotEnoughMemoryExit ();
+     }
    else
-      sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
-		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)",
-	       Gbl.Usrs.Other.UsrDat.UsrCod);
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
+      if (asprintf (&Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
+		           " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)",
+	            Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get similar users");
 
    /***** List possible similar users *****/
    if (NumUsrs)
@@ -370,6 +382,9 @@ static void Dup_ListSimilarUsrs (void)
       /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
    /***** End box *****/
    Box_EndBox ();
   }
@@ -380,11 +395,12 @@ static void Dup_ListSimilarUsrs (void)
 
 static bool Dup_CheckIfUsrIsDup (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
-   sprintf (Query,"SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod=%ld",
-	    UsrCod);
-   return (DB_QueryCOUNT (Query,"can not if user is in list of possible duplicate users") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod=%ld",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not if user is in list of possible duplicate users") != 0);
   }
 
 /*****************************************************************************/
@@ -460,10 +476,11 @@ void Dup_RemoveUsrFromListDupUsrs (void)
 
 void Dup_RemoveUsrFromDuplicated (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove user from list of duplicated users *****/
-   sprintf (Query,"DELETE FROM usr_duplicated WHERE UsrCod=%ld",
-            UsrCod);
-   DB_QueryDELETE (Query,"can not remove a user from possible duplicates");
+   if (asprintf (&Query,"DELETE FROM usr_duplicated WHERE UsrCod=%ld",
+                 UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove a user from possible duplicates");
   }
