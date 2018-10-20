@@ -2955,7 +2955,7 @@ static void Brw_SetPathFileBrowser (void)
 
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -2965,9 +2965,10 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    bool FolderExists = false;
 
    /***** Get all the users belonging to current course from database *****/
-   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users from current course");
+   if (asprintf (&Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
+                 Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get users from current course");
 
    /***** Check folders *****/
    for (NumUsr = 0;
@@ -3006,7 +3007,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 
 static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -3014,14 +3015,15 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
    char PathFolderAsg[PATH_MAX + 1 + PATH_MAX + 1];
 
    /***** Get assignment folders from database *****/
-   sprintf (Query,"SELECT Folder FROM assignments"
-                  " WHERE CrsCod=%ld AND Hidden='N' AND Folder<>''"
-                  " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
-                  " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod=%ld"
-                  " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
-            Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get folders of assignments");
+   if (asprintf (&Query,"SELECT Folder FROM assignments"
+			" WHERE CrsCod=%ld AND Hidden='N' AND Folder<>''"
+			" AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
+			" AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
+			" WHERE crs_grp_usr.UsrCod=%ld"
+			" AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
+                 Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get folders of assignments");
 
    /***** Create one folder for each assignment *****/
    for (NumRow = 0;
@@ -3056,7 +3058,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    extern const char *Txt_Users;
    extern const char *Txt_Folders_renamed;
    extern const char *Txt_Folders_not_renamed;
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -3071,9 +3073,10 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    unsigned NumUsrsSuccess = 0;
 
    /***** Get all the users belonging to current course from database *****/
-   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users from current course");
+   if (asprintf (&Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
+                 Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get users from current course");
 
    /***** Check if there exist folders with the new name *****/
    for (NumUsr = 0;
@@ -3188,7 +3191,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -3197,9 +3200,10 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
    char PathFolder[PATH_MAX * 2 + 128];
 
    /***** Get all the users belonging to current course from database *****/
-   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users from current course");
+   if (asprintf (&Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
+                 Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get users from current course");
 
    /***** Remove folders *****/
    for (NumUsr = 0;
@@ -4259,14 +4263,15 @@ static void Brw_UpdateLastAccess (void)
 
 static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Update the group of my last access to a common zone *****/
-   sprintf (Query,"UPDATE crs_usr SET %s=%ld"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-            FieldNameDB,GrpCod,
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update the group of the last access to a file browser");
+   if (asprintf (&Query,"UPDATE crs_usr SET %s=%ld"
+                        " WHERE CrsCod=%ld AND UsrCod=%ld",
+                 FieldNameDB,GrpCod,
+                 Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the group of the last access to a file browser");
   }
 
 /*****************************************************************************/
@@ -4531,21 +4536,22 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512];
+   char *Query;
 
    /***** Update size of the file browser in database *****/
-   sprintf (Query,"REPLACE INTO file_browser_size"
-	          " (FileBrowser,Cod,ZoneUsrCod,"
-                  "NumLevels,NumFolders,NumFiles,TotalSize)"
-                  " VALUES"
-                  " (%u,%ld,%ld,"
-                  "%u,'%lu','%lu','%llu')",
-            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
-            Gbl.FileBrowser.Size.NumLevls,
-            Gbl.FileBrowser.Size.NumFolds,
-            Gbl.FileBrowser.Size.NumFiles,
-            Gbl.FileBrowser.Size.TotalSiz);
-   DB_QueryREPLACE (Query,"can not store the size of a file browser");
+   if (asprintf (&Query,"REPLACE INTO file_browser_size"
+			" (FileBrowser,Cod,ZoneUsrCod,"
+			"NumLevels,NumFolders,NumFiles,TotalSize)"
+			" VALUES"
+			" (%u,%ld,%ld,"
+			"%u,'%lu','%lu','%llu')",
+	         (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
+	         Gbl.FileBrowser.Size.NumLevls,
+	         Gbl.FileBrowser.Size.NumFolds,
+	         Gbl.FileBrowser.Size.NumFiles,
+	         Gbl.FileBrowser.Size.TotalSiz) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not store the size of a file browser");
   }
 
 /*****************************************************************************/
@@ -4554,58 +4560,64 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
 
 void Brw_RemoveInsFilesFromDB (long InsCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove from database the entries that store the file views *****/
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_INS,
-	    (unsigned) Brw_ADMI_SHR_INS,
-	    InsCod);
-   DB_QueryDELETE (Query,"can not remove file views to files of an institution");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_INS,
+	         (unsigned) Brw_ADMI_SHR_INS,
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of an institution");
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_INS,
-	    (unsigned) Brw_ADMI_SHR_INS,
-	    InsCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of an institution");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_INS,
+	         (unsigned) Brw_ADMI_SHR_INS,
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of an institution");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_INS,
-	    (unsigned) Brw_ADMI_SHR_INS,
-	    InsCod);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of an institution");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_INS,
+	         (unsigned) Brw_ADMI_SHR_INS,
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of an institution");
 
    /***** Remove from database the entries that store
           the last time users visited file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_INS,
-	    (unsigned) Brw_ADMI_SHR_INS,
-	    InsCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of an institution");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_INS,
+	         (unsigned) Brw_ADMI_SHR_INS,
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of an institution");
 
    /***** Remove from database the entries that store
           the sizes of the file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_INS,
-	    (unsigned) Brw_ADMI_SHR_INS,
-	    InsCod);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of an institution");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_INS,
+	         (unsigned) Brw_ADMI_SHR_INS,
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of an institution");
 
    /***** Remove from database the entries that store the data files *****/
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_INS,
-	    (unsigned) Brw_ADMI_SHR_INS,
-	    InsCod);
-   DB_QueryDELETE (Query,"can not remove files of an institution");
+   if (asprintf (&Query,"DELETE FROM files"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_INS,
+	         (unsigned) Brw_ADMI_SHR_INS,
+	         InsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of an institution");
   }
 
 /*****************************************************************************/
@@ -4614,56 +4626,62 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
 void Brw_RemoveCtrFilesFromDB (long CtrCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove from database the entries that store the file views *****/
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_CTR,
-	    (unsigned) Brw_ADMI_SHR_CTR,
-	    CtrCod);
-   DB_QueryDELETE (Query,"can not remove file views to files of a centre");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_CTR,
+	         (unsigned) Brw_ADMI_SHR_CTR,
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a centre");
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CTR,
-	    (unsigned) Brw_ADMI_SHR_CTR,
-	    CtrCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a centre");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CTR,
+	         (unsigned) Brw_ADMI_SHR_CTR,
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a centre");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CTR,
-	    (unsigned) Brw_ADMI_SHR_CTR,
-	    CtrCod);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a centre");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CTR,
+	         (unsigned) Brw_ADMI_SHR_CTR,
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a centre");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CTR,
-	    (unsigned) Brw_ADMI_SHR_CTR,
-	    CtrCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a centre");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CTR,
+	         (unsigned) Brw_ADMI_SHR_CTR,
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a centre");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CTR,
-	    (unsigned) Brw_ADMI_SHR_CTR,
-	    CtrCod);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a centre");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CTR,
+	         (unsigned) Brw_ADMI_SHR_CTR,
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a centre");
 
    /***** Remove from database the entries that store the data files *****/
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CTR,
-	    (unsigned) Brw_ADMI_SHR_CTR,
-	    CtrCod);
-   DB_QueryDELETE (Query,"can not remove files of a centre");
+   if (asprintf (&Query,"DELETE FROM files"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CTR,
+	         (unsigned) Brw_ADMI_SHR_CTR,
+	         CtrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a centre");
   }
 
 /*****************************************************************************/
@@ -4672,56 +4690,62 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
 void Brw_RemoveDegFilesFromDB (long DegCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove from database the entries that store the file views *****/
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_DEG,
-	    (unsigned) Brw_ADMI_SHR_DEG,
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove file views to files of a degree");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+		        " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
+		        " AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_DEG,
+	         (unsigned) Brw_ADMI_SHR_DEG,
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a degree");
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_DEG,
-	    (unsigned) Brw_ADMI_SHR_DEG,
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a degree");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_DEG,
+	         (unsigned) Brw_ADMI_SHR_DEG,
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a degree");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_DEG,
-	    (unsigned) Brw_ADMI_SHR_DEG,
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a degree");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_DEG,
+	         (unsigned) Brw_ADMI_SHR_DEG,
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a degree");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_DEG,
-	    (unsigned) Brw_ADMI_SHR_DEG,
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a degree");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_DEG,
+	         (unsigned) Brw_ADMI_SHR_DEG,
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a degree");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_DEG,
-	    (unsigned) Brw_ADMI_SHR_DEG,
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a degree");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_DEG,
+	         (unsigned) Brw_ADMI_SHR_DEG,
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a degree");
 
    /***** Remove from database the entries that store the data files *****/
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_DEG,
-	    (unsigned) Brw_ADMI_SHR_DEG,
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove files of a degree");
+   if (asprintf (&Query,"DELETE FROM files"
+		        " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_DEG,
+	         (unsigned) Brw_ADMI_SHR_DEG,
+	         DegCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a degree");
   }
 
 /*****************************************************************************/
@@ -4736,7 +4760,7 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
   {
    char SubqueryGrp[256];
    char SubqueryPrj[128];
-   char Query[1024];
+   char *Query;
 
    /***** Build subquery for groups *****/
    sprintf (SubqueryGrp,"(SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
@@ -4749,225 +4773,244 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
             CrsCod);
 
    /***** Remove format of files of marks *****/
-   sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-	          " WHERE files.FileBrowser=%u"
-	          " AND files.Cod=%ld"
-	          " AND files.FilCod=marks_properties.FilCod",
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove the properties of marks associated to a course");
+   if (asprintf (&Query,"DELETE FROM marks_properties USING files,marks_properties"
+			" WHERE files.FileBrowser=%u"
+			" AND files.Cod=%ld"
+			" AND files.FilCod=marks_properties.FilCod",
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove the properties of marks associated to a course");
 
    /***** Remove from database the entries that store the file views *****/
    /* Remove from course file zones */
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		  " AND files.Cod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_CRS,
-	    (unsigned) Brw_ADMI_TCH_CRS,
-	    (unsigned) Brw_ADMI_SHR_CRS,
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove file views to files of a course");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+			" AND files.Cod=%ld"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a course");
 
    /* Remove from group file zones */
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u,%u,%u)"
-		  " AND files.Cod IN %s"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    SubqueryGrp);
-   DB_QueryDELETE (Query,"can not remove file views to files of a course");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u,%u,%u)"
+			" AND files.Cod IN %s"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         SubqueryGrp) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a course");
 
    /* Remove from project file zones */
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u)"
-		  " AND files.Cod IN %s"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    SubqueryPrj);
-   DB_QueryDELETE (Query,"can not remove file views to files of a course");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u)"
+			" AND files.Cod IN %s"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         SubqueryPrj) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a course");
 
    /***** Remove from database expanded folders *****/
    /* Remove from course file zones */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CRS,
-	    (unsigned) Brw_ADMI_TCH_CRS,
-	    (unsigned) Brw_ADMI_SHR_CRS,
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_ASG_CRS,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    (unsigned) Brw_ADMI_WRK_CRS,
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a course");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_ASG_CRS,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_WRK_CRS,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a course");
 
    /* Remove from group file zones */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    SubqueryGrp);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a course");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN %s",
+	          (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         SubqueryGrp) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a course");
 
    /* Remove from project file zones */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    SubqueryPrj);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a course");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         SubqueryPrj) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a course");
 
    /***** Remove from database the entries that store clipboards *****/
    /* Remove from course file zones */
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CRS,
-	    (unsigned) Brw_ADMI_TCH_CRS,
-	    (unsigned) Brw_ADMI_SHR_CRS,
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_ASG_CRS,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    (unsigned) Brw_ADMI_WRK_CRS,
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a course");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+			" WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_ASG_CRS,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_WRK_CRS,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a course");
 
    /* Remove from group file zones */
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    SubqueryGrp);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a course");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+		        " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		        " AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         SubqueryGrp) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a course");
 
    /* Remove from project file zones */
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    SubqueryPrj);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a course");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         SubqueryPrj) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a course");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    // Assignments and works are stored as one in file_browser_last...
    // ...because a user views them at the same time
    /* Remove from course file zones */
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CRS,
-	    (unsigned) Brw_ADMI_TCH_CRS,
-	    (unsigned) Brw_ADMI_SHR_CRS,
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a course");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+			" WHERE FileBrowser IN (%u,%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a course");
 
    /* Remove from group file zones */
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    SubqueryGrp);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a course");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         SubqueryGrp) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a course");
 
    /* Remove from project file zones */
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    SubqueryPrj);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a course");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         SubqueryPrj) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a course");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    /* Remove from course file zones */
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CRS,
-	    (unsigned) Brw_ADMI_TCH_CRS,
-	    (unsigned) Brw_ADMI_SHR_CRS,
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a course");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+			" WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a course");
 
    /* Remove from group file zones */
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    SubqueryGrp);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a course");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         SubqueryGrp) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a course");
 
    /* Remove from project file zones */
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    SubqueryPrj);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a course");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         SubqueryPrj) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a course");
 
    /***** Remove from database the entries that store the data files *****/
    /* Remove from course file zones */
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_CRS,
-	    (unsigned) Brw_ADMI_TCH_CRS,
-	    (unsigned) Brw_ADMI_SHR_CRS,
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove files of a course");
+   if (asprintf (&Query,"DELETE FROM files"
+			" WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a course");
 
    /* Remove from group file zones */
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    SubqueryGrp);
-   DB_QueryDELETE (Query,"can not remove files of a course");
+   if (asprintf (&Query,"DELETE FROM files"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         SubqueryGrp) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a course");
 
    /* Remove from project file zones */
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod IN %s",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    SubqueryPrj);
-   DB_QueryDELETE (Query,"can not remove files of a course");
+   if (asprintf (&Query,"DELETE FROM files"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod IN %s",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         SubqueryPrj) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a course");
   }
 
 /*****************************************************************************/
@@ -4976,83 +5019,90 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
 void Brw_RemoveGrpFilesFromDB (long GrpCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove format of files of marks *****/
-   sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-	          " WHERE files.FileBrowser=%u"
-	          " AND files.Cod=%ld"
-	          " AND files.FilCod=marks_properties.FilCod",
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove the properties of marks associated to a group");
+   if (asprintf (&Query,"DELETE FROM marks_properties USING files,marks_properties"
+			" WHERE files.FileBrowser=%u"
+			" AND files.Cod=%ld"
+			" AND files.FilCod=marks_properties.FilCod",
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove the properties of marks associated to a group");
 
    /***** Remove from database the entries that store the file views *****/
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u,%u,%u)"
-		  " AND files.Cod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove file views to files of a group");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u,%u,%u)"
+			" AND files.Cod=%ld"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a group");
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a group");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a group");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a group");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+		        " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		        " AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a group");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a group");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a group");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a group");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+		        " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		        " AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a group");
 
    /***** Remove from database the entries that store the data files *****/
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_GRP,
-	    (unsigned) Brw_ADMI_TCH_GRP,
-	    (unsigned) Brw_ADMI_SHR_GRP,
-	    (unsigned) Brw_ADMI_MRK_GRP,
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove files of a group");
+   if (asprintf (&Query,"DELETE FROM files"
+			" WHERE FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a group");
   }
 
 /*****************************************************************************/
@@ -5061,62 +5111,68 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
 void Brw_RemovePrjFilesFromDB (long PrjCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove from database the entries that store the file views *****/
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u)"
-		  " AND files.Cod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    PrjCod);
-   DB_QueryDELETE (Query,"can not remove file views to files of a project");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+		        " WHERE files.FileBrowser IN (%u,%u)"
+		        " AND files.Cod=%ld"
+		        " AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         PrjCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views to files of a project");
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    PrjCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a project");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         PrjCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a project");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    PrjCod);
-   DB_QueryDELETE (Query,"can not remove clipboards related to files of a project");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         PrjCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards related to files of a project");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    PrjCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a project");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         PrjCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a project");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    PrjCod);
-   DB_QueryDELETE (Query,"can not remove sizes of file zones of a project");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         PrjCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove sizes of file zones of a project");
 
    /***** Remove from database the entries that store the data files *****/
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld",
-	    (unsigned) Brw_ADMI_DOC_PRJ,
-	    (unsigned) Brw_ADMI_ASS_PRJ,
-	    PrjCod);
-   DB_QueryDELETE (Query,"can not remove files of a project");
+   if (asprintf (&Query,"DELETE FROM files"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld",
+	         (unsigned) Brw_ADMI_DOC_PRJ,
+	         (unsigned) Brw_ADMI_ASS_PRJ,
+	         PrjCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files of a project");
   }
 
 /*****************************************************************************/
@@ -5125,93 +5181,96 @@ void Brw_RemovePrjFilesFromDB (long PrjCod)
 
 void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-                  " WHERE UsrCod=%ld AND ("
-                  "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-                  " AND Cod=%ld)"
-                  " OR "
-                  "(FileBrowser IN (%u,%u,%u,%u)"
-                  " AND Cod IN"
-                  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
-                  ")",
-            UsrCod,
-            (unsigned) Brw_ADMI_DOC_CRS,
-            (unsigned) Brw_ADMI_TCH_CRS,
-            (unsigned) Brw_ADMI_SHR_CRS,
-            (unsigned) Brw_ADMI_ASG_USR,
-            (unsigned) Brw_ADMI_ASG_CRS,
-            (unsigned) Brw_ADMI_WRK_USR,
-            (unsigned) Brw_ADMI_WRK_CRS,
-            (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod,
-	    (unsigned) Brw_ADMI_DOC_GRP,
-            (unsigned) Brw_ADMI_TCH_GRP,
-            (unsigned) Brw_ADMI_SHR_GRP,
-            (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders for a user in a course");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE UsrCod=%ld AND ("
+			"(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+			" AND Cod=%ld)"
+			" OR "
+			"(FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN"
+			" (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+			" WHERE crs_grp_types.CrsCod=%ld"
+			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
+			")",
+	         UsrCod,
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_ASG_CRS,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_WRK_CRS,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod,
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders for a user in a course");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-                  " WHERE UsrCod=%ld AND ("
-                  "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-                  " AND Cod=%ld)"
-                  " OR "
-                  "(FileBrowser IN (%u,%u,%u,%u)"
-                  " AND Cod IN"
-                  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
-                  ")",
-            UsrCod,
-            (unsigned) Brw_ADMI_DOC_CRS,
-            (unsigned) Brw_ADMI_TCH_CRS,
-            (unsigned) Brw_ADMI_SHR_CRS,
-            (unsigned) Brw_ADMI_ASG_USR,
-            (unsigned) Brw_ADMI_ASG_CRS,
-            (unsigned) Brw_ADMI_WRK_USR,
-            (unsigned) Brw_ADMI_WRK_CRS,
-            (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod,
-	    (unsigned) Brw_ADMI_DOC_GRP,
-            (unsigned) Brw_ADMI_TCH_GRP,
-            (unsigned) Brw_ADMI_SHR_GRP,
-            (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove source of copy for a user in a course");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+			" WHERE UsrCod=%ld AND ("
+			"(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+			" AND Cod=%ld)"
+			" OR "
+			"(FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN"
+			" (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+			" WHERE crs_grp_types.CrsCod=%ld"
+			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
+			")",
+	         UsrCod,
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_ASG_CRS,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         (unsigned) Brw_ADMI_WRK_CRS,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod,
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove source of copy for a user in a course");
 
    /***** Remove from database the entries that store the last time user visited file zones *****/
    // Assignments and works are stored as one in file_browser_last...
    // ...because a user views them at the same time
-   sprintf (Query,"DELETE FROM file_browser_last"
-                  " WHERE UsrCod=%ld AND ("
-                  "(FileBrowser IN (%u,%u,%u,%u,%u)"
-                  " AND Cod=%ld)"
-                  " OR "
-                  "(FileBrowser IN (%u,%u,%u,%u)"
-                  " AND Cod IN"
-                  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
-                  ")",
-            UsrCod,
-            (unsigned) Brw_ADMI_DOC_CRS,
-            (unsigned) Brw_ADMI_TCH_CRS,
-            (unsigned) Brw_ADMI_SHR_CRS,
-            (unsigned) Brw_ADMI_ASG_USR,
-            (unsigned) Brw_ADMI_MRK_CRS,
-	    CrsCod,
-	    (unsigned) Brw_ADMI_DOC_GRP,
-            (unsigned) Brw_ADMI_TCH_GRP,
-            (unsigned) Brw_ADMI_SHR_GRP,
-            (unsigned) Brw_ADMI_MRK_GRP,
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove file last visits to files of a course from a user");
+   if (asprintf (&Query,"DELETE FROM file_browser_last"
+			" WHERE UsrCod=%ld AND ("
+			"(FileBrowser IN (%u,%u,%u,%u,%u)"
+			" AND Cod=%ld)"
+			" OR "
+			"(FileBrowser IN (%u,%u,%u,%u)"
+			" AND Cod IN"
+			" (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+			" WHERE crs_grp_types.CrsCod=%ld"
+			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
+			")",
+	         UsrCod,
+	         (unsigned) Brw_ADMI_DOC_CRS,
+	         (unsigned) Brw_ADMI_TCH_CRS,
+	         (unsigned) Brw_ADMI_SHR_CRS,
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_MRK_CRS,
+	         CrsCod,
+	         (unsigned) Brw_ADMI_DOC_GRP,
+	         (unsigned) Brw_ADMI_TCH_GRP,
+	         (unsigned) Brw_ADMI_SHR_GRP,
+	         (unsigned) Brw_ADMI_MRK_GRP,
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file last visits to files of a course from a user");
   }
 
 /*****************************************************************************/
@@ -5220,53 +5279,58 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 
 void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove from database the entries that store the file views *****/
-   sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN (%u,%u)"
-		  " AND files.Cod=%ld AND files.ZoneUsrCod=%ld"
-		  " AND files.FilCod=file_view.FilCod",
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove file views");
+   if (asprintf (&Query,"DELETE FROM file_view USING file_view,files"
+			" WHERE files.FileBrowser IN (%u,%u)"
+			" AND files.Cod=%ld AND files.ZoneUsrCod=%ld"
+			" AND files.FilCod=file_view.FilCod",
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file views");
 
    /***** Remove from database expanded folders *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld AND WorksUsrCod=%ld",
-	    (unsigned) Brw_ADMI_ASG_CRS,
-	    (unsigned) Brw_ADMI_WRK_CRS,
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders of a group");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld AND WorksUsrCod=%ld",
+	       (unsigned) Brw_ADMI_ASG_CRS,
+	       (unsigned) Brw_ADMI_WRK_CRS,
+	       CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expanded folders of a group");
 
    /***** Remove from database the entries that store clipboards *****/
-   sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld AND WorksUsrCod=%ld",
-	    (unsigned) Brw_ADMI_ASG_CRS,
-	    (unsigned) Brw_ADMI_WRK_CRS,
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove clipboards");
+   if (asprintf (&Query,"DELETE FROM clipboard"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld AND WorksUsrCod=%ld",
+	         (unsigned) Brw_ADMI_ASG_CRS,
+	         (unsigned) Brw_ADMI_WRK_CRS,
+	         CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove clipboards");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
-   sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld AND ZoneUsrCod=%ld",
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove file browser sizes");
+   if (asprintf (&Query,"DELETE FROM file_browser_size"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld AND ZoneUsrCod=%ld",
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove file browser sizes");
 
    /***** Remove from database the entries that store the data files *****/
-   sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN (%u,%u)"
-		  " AND Cod=%ld AND ZoneUsrCod=%ld",
-	    (unsigned) Brw_ADMI_ASG_USR,
-	    (unsigned) Brw_ADMI_WRK_USR,
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove files");
+   if (asprintf (&Query,"DELETE FROM files"
+			" WHERE FileBrowser IN (%u,%u)"
+			" AND Cod=%ld AND ZoneUsrCod=%ld",
+	         (unsigned) Brw_ADMI_ASG_USR,
+	         (unsigned) Brw_ADMI_WRK_USR,
+	         CrsCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove files");
   }
 
 /*****************************************************************************/
