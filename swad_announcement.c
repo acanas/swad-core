@@ -547,7 +547,7 @@ void Ann_HideActiveAnnouncement (void)
                         " WHERE AnnCod=%ld",
                  (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not hide announcement");
+   DB_QueryUPDATE_free (Query,"can not hide announcement");
   }
 
 /*****************************************************************************/
@@ -567,7 +567,7 @@ void Ann_RevealHiddenAnnouncement (void)
                         " WHERE AnnCod=%ld",
                  (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not reveal announcement");
+   DB_QueryUPDATE_free (Query,"can not reveal announcement");
   }
 
 /*****************************************************************************/

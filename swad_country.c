@@ -2429,7 +2429,7 @@ unsigned Cty_ListCtysFound (const char *Query)
    struct Country Cty;
 
    /***** Query database *****/
-   if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries")))
+   if ((NumCtys = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get countries")))
      {
       /***** Start box and table *****/
       /* Number of countries found */

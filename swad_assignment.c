@@ -875,7 +875,7 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
 	                " WHERE AsgCod=%ld AND CrsCod=%ld",
                  AsgCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get assignment text");
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get assignment text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)

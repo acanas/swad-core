@@ -3200,7 +3200,7 @@ unsigned Crs_ListCrssFound (const char *Query)
    unsigned NumCrs;
 
    /***** Query database *****/
-   NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses");
+   NumCrss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get courses");
 
    /***** List the courses (one row per course) *****/
    if (NumCrss)

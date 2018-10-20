@@ -1012,7 +1012,7 @@ static void Ban_CreateBanner (struct Banner *Ban)
 	                " ('N','%s','%s','%s','%s')",
                  Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT (Query,"can not create banner");
+   DB_QueryINSERT_free (Query,"can not create banner");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

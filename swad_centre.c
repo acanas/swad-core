@@ -1296,7 +1296,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 		           " WHERE CtrCod=%ld",
 	            Ctr->CtrCod) < 0)
          Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a centre") == 1)
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the short name of a centre") == 1)
 	{
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -3007,7 +3007,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
    struct Centre Ctr;
 
    /***** Query database *****/
-   if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres")))
+   if ((NumCtrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get centres")))
      {
       /***** Start box and table *****/
       /* Number of centres found */
