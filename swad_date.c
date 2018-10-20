@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 #include <time.h>		// For time functions (mktime...)
 
@@ -177,7 +179,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
 
 void Dat_ChangeDateFormat (void)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get param with date format *****/
    Gbl.Prefs.DateFormat = Dat_GetParamDateFormat ();
@@ -185,11 +187,12 @@ void Dat_ChangeDateFormat (void)
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET DateFormat=%u"
-	             " WHERE UsrCod=%ld",
-               (unsigned) Gbl.Prefs.DateFormat,
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preference about date format");
+      if (asprintf (&Query,"UPDATE usr_data SET DateFormat=%u"
+	                   " WHERE UsrCod=%ld",
+                    (unsigned) Gbl.Prefs.DateFormat,
+                    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update your preference about date format");
      }
 
    /***** Set preferences from current IP *****/
@@ -735,7 +738,7 @@ void Dat_PutHiddenParBrowserTZDiff (void)
 
 void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool TZNameIsUsable = false;
@@ -755,9 +758,10 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
    if (BrowserTimeZone[0])
      {
       /* Try to convert a date from server time zone to browser time zone */
-      sprintf (Query,"SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
-               BrowserTimeZone);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not check if time zone name is usable"))
+      if (asprintf (&Query,"SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
+                    BrowserTimeZone) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not check if time zone name is usable"))
 	{
          row = mysql_fetch_row (mysql_res);
          if (row[0] != NULL)
