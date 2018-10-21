@@ -2615,7 +2615,7 @@ unsigned Deg_ListDegsFound (const char *Query)
    struct Degree Deg;
 
    /***** Query database *****/
-   if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees")))
+   if ((NumDegs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees")))
      {
       /***** Start box and table *****/
       /* Number of degrees found */

@@ -725,7 +725,7 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
 static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
-   char Query[1024 + Sch_MAX_BYTES_SEARCH_QUERY * 2];
+   char *Query;
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_CRS)
@@ -735,15 +735,16 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 	 if (Sch_BuildSearchQuery (SearchQuery,"degrees.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list degrees found *****/
-	    sprintf (Query,"SELECT degrees.DegCod"
-			   " FROM degrees,centres,institutions,countries"
-			   " WHERE %s"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=countries.CtyCod"
-			   "%s"
-			   " ORDER BY degrees.FullName,institutions.FullName",
-		     SearchQuery,RangeQuery);
+	    if (asprintf (&Query,"SELECT degrees.DegCod"
+				 " FROM degrees,centres,institutions,countries"
+				 " WHERE %s"
+				 " AND degrees.CtrCod=centres.CtrCod"
+				 " AND centres.InsCod=institutions.InsCod"
+				 " AND institutions.CtyCod=countries.CtyCod"
+				 "%s"
+				 " ORDER BY degrees.FullName,institutions.FullName",
+		          SearchQuery,RangeQuery) < 0)
+               Lay_NotEnoughMemoryExit ();
 	    return Deg_ListDegsFound (Query);
 	   }
 
@@ -822,7 +823,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
    extern const char *Txt_open_document;
    extern const char *Txt_open_documents;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
-   char Query[(512 + Sch_MAX_BYTES_SEARCH_QUERY) * 4];
+   char *Query;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_OPEN_DOCUMENTS))
@@ -831,88 +832,89 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Build the query *****/
-	 sprintf (Query,"SELECT * FROM "
-			"("
-			"SELECT files.FilCod,"	// Institution
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"-1 AS CtrCod,'' AS CtrShortName,"
-			"-1 AS DegCod,'' AS DegShortName,"
-			"-1 AS CrsCod,'' AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Centre
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"-1 AS DegCod,'' AS DegShortName,"
-			"-1 AS CrsCod,'' AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Degree
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"-1,'' AS CrsShortName,"
-	                "-1"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-	                "SELECT files.FilCod,"	// Course
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "-1"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.Public='Y' AND %s"
-	                " AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			") AS selected_files"
-			" WHERE PathFromRoot<>''"
-			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
-		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_INS,
-		  (unsigned) Brw_ADMI_SHR_INS,
-		  RangeQuery,
-		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_CTR,
-		  (unsigned) Brw_ADMI_SHR_CTR,
-		  RangeQuery,
-		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_DEG,
-		  (unsigned) Brw_ADMI_SHR_DEG,
-		  RangeQuery,
-		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-		  RangeQuery);
+	 if (asprintf (&Query,"SELECT * FROM "
+			      "("
+			      "SELECT files.FilCod,"	// Institution
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "-1 AS CtrCod,'' AS CtrShortName,"
+			      "-1 AS DegCod,'' AS DegShortName,"
+			      "-1 AS CrsCod,'' AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.Public='Y' AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Centre
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "-1 AS DegCod,'' AS DegShortName,"
+			      "-1 AS CrsCod,'' AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.Public='Y' AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Degree
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "-1,'' AS CrsShortName,"
+			      "-1"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.Public='Y' AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Course
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "courses.CrsCod,courses.ShortName AS CrsShortName,"
+			      "-1"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.Public='Y' AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      ") AS selected_files"
+			      " WHERE PathFromRoot<>''"
+			      " ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
+		       SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_INS,
+		       (unsigned) Brw_ADMI_SHR_INS,
+		       RangeQuery,
+		       SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_CTR,
+		       (unsigned) Brw_ADMI_SHR_CTR,
+		       RangeQuery,
+		       SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_DEG,
+		       (unsigned) Brw_ADMI_SHR_DEG,
+		       RangeQuery,
+		       SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_CRS,
+		       (unsigned) Brw_ADMI_SHR_CRS,
+		       RangeQuery) < 0)
+            Lay_NotEnoughMemoryExit ();
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
@@ -934,7 +936,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
    extern const char *Txt_document_in_my_courses;
    extern const char *Txt_documents_in_my_courses;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
-   char Query[(1024 + Sch_MAX_BYTES_SEARCH_QUERY) * 2];
+   char *Query;
    unsigned NumDocs;
 
    /***** Check user's permission *****/
@@ -945,95 +947,96 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	{
 	 /***** Create temporary table with codes of files in documents and shared areas accessible by me.
 		It is necessary to speed up the second query *****/
-	 sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
-	 if (mysql_query (&Gbl.mysql,Query))
-	    DB_ExitOnMySQLError ("can not remove temporary table");
+	 if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp") < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_Query_free (Query,"can not remove temporary table");
 
-	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_crs"
-	                " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
-	                " ENGINE=MEMORY"
-			" SELECT files.FilCod FROM crs_usr,files"
-			" WHERE crs_usr.UsrCod=%ld"
-			" AND crs_usr.CrsCod=files.Cod"
-			" AND files.FileBrowser IN (%u,%u,%u,%u)",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_TCH_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-		  (unsigned) Brw_ADMI_MRK_CRS);
-	 if (mysql_query (&Gbl.mysql,Query))
-	    DB_ExitOnMySQLError ("can not create temporary table");
+	 if (asprintf (&Query,"CREATE TEMPORARY TABLE my_files_crs"
+			      " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+			      " ENGINE=MEMORY"
+			      " SELECT files.FilCod FROM crs_usr,files"
+			      " WHERE crs_usr.UsrCod=%ld"
+			      " AND crs_usr.CrsCod=files.Cod"
+			      " AND files.FileBrowser IN (%u,%u,%u,%u)",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       (unsigned) Brw_ADMI_DOC_CRS,
+		       (unsigned) Brw_ADMI_TCH_CRS,
+		       (unsigned) Brw_ADMI_SHR_CRS,
+		       (unsigned) Brw_ADMI_MRK_CRS) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_Query_free (Query,"can not create temporary table");
 
-	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_grp"
-	                " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
-	                " ENGINE=MEMORY"
-			" SELECT files.FilCod FROM crs_grp_usr,files"
-			" WHERE crs_grp_usr.UsrCod=%ld"
-			" AND crs_grp_usr.GrpCod=files.Cod"
-			" AND files.FileBrowser IN (%u,%u,%u,%u)",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Brw_ADMI_DOC_GRP,
-		  (unsigned) Brw_ADMI_TCH_GRP,
-		  (unsigned) Brw_ADMI_SHR_GRP,
-		  (unsigned) Brw_ADMI_MRK_GRP);
+	 if (asprintf (&Query,"CREATE TEMPORARY TABLE my_files_grp"
+			      " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+			      " ENGINE=MEMORY"
+			      " SELECT files.FilCod FROM crs_grp_usr,files"
+			      " WHERE crs_grp_usr.UsrCod=%ld"
+			      " AND crs_grp_usr.GrpCod=files.Cod"
+			      " AND files.FileBrowser IN (%u,%u,%u,%u)",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       (unsigned) Brw_ADMI_DOC_GRP,
+		       (unsigned) Brw_ADMI_TCH_GRP,
+		       (unsigned) Brw_ADMI_SHR_GRP,
+		       (unsigned) Brw_ADMI_MRK_GRP) < 0)
+            Lay_NotEnoughMemoryExit ();
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
-	 if (mysql_query (&Gbl.mysql,Query))
-	    DB_ExitOnMySQLError ("can not create temporary table");
+	 DB_Query_free (Query,"can not create temporary table");
 
 	 /***** Build the query *****/
-	 sprintf (Query,"SELECT * FROM "
-			"("
-	                "SELECT files.FilCod,"
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.FilCod IN (SELECT FilCod FROM my_files_crs) AND %s"
-	                " AND files.FileBrowser IN (%u,%u,%u,%u)"
-	                " AND files.Cod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-	                "SELECT files.FilCod,"
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "crs_grp.GrpCod"
-			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
-			" WHERE files.FilCod IN (SELECT FilCod FROM my_files_grp) AND %s"
-	                " AND files.FileBrowser IN (%u,%u,%u,%u)"
-	                " AND files.Cod=crs_grp.GrpCod"
-	                " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-	                " AND crs_grp_types.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			") AS selected_files"
-	                " WHERE PathFromRoot<>''"
-			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
-		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_TCH_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-		  (unsigned) Brw_ADMI_MRK_CRS,
-		  RangeQuery,
-		  SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_GRP,
-		  (unsigned) Brw_ADMI_TCH_GRP,
-		  (unsigned) Brw_ADMI_SHR_GRP,
-		  (unsigned) Brw_ADMI_MRK_GRP,
-		  RangeQuery);
+	 if (asprintf (&Query,"SELECT * FROM "
+			      "("
+			      "SELECT files.FilCod,"
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "courses.CrsCod,courses.ShortName AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.FilCod IN (SELECT FilCod FROM my_files_crs) AND %s"
+			      " AND files.FileBrowser IN (%u,%u,%u,%u)"
+			      " AND files.Cod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "courses.CrsCod,courses.ShortName AS CrsShortName,"
+			      "crs_grp.GrpCod"
+			      " FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
+			      " WHERE files.FilCod IN (SELECT FilCod FROM my_files_grp) AND %s"
+			      " AND files.FileBrowser IN (%u,%u,%u,%u)"
+			      " AND files.Cod=crs_grp.GrpCod"
+			      " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			      " AND crs_grp_types.CrsCod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      ") AS selected_files"
+			      " WHERE PathFromRoot<>''"
+			      " ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
+		       SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_CRS,
+		       (unsigned) Brw_ADMI_TCH_CRS,
+		       (unsigned) Brw_ADMI_SHR_CRS,
+		       (unsigned) Brw_ADMI_MRK_CRS,
+		       RangeQuery,
+		       SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_GRP,
+		       (unsigned) Brw_ADMI_TCH_GRP,
+		       (unsigned) Brw_ADMI_SHR_GRP,
+		       (unsigned) Brw_ADMI_MRK_GRP,
+		       RangeQuery) < 0)
+            Lay_NotEnoughMemoryExit ();
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
@@ -1043,9 +1046,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                              Txt_documents_in_my_courses);
 
 	 /***** Drop temporary table *****/
-	 sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
-	 if (mysql_query (&Gbl.mysql,Query))
-	    DB_ExitOnMySQLError ("can not remove temporary table");
+	 if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp") < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_Query_free (Query,"can not remove temporary table");
 
 	 return NumDocs;
 	}
@@ -1062,7 +1065,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
    extern const char *Txt_document_from_me;
    extern const char *Txt_documents_from_me;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
-   char Query[(512 + Sch_MAX_BYTES_SEARCH_QUERY) * 5];
+   char *Query;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_MY_DOCUMENTS))
@@ -1071,128 +1074,129 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Build the query *****/
-	 sprintf (Query,"SELECT * FROM "
-			"("
-			"SELECT files.FilCod,"	// Institution
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"-1 AS CtrCod,'' AS CtrShortName,"
-			"-1 AS DegCod,'' AS DegShortName,"
-			"-1 AS CrsCod,'' AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod=%ld AND %s"
-			" AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Centre
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"-1 AS DegCod,'' AS DegShortName,"
-			"-1 AS CrsCod,'' AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod=%ld AND %s"
-			" AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Degree
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"-1 AS CrsCod,'' AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod=%ld AND %s"
-			" AND files.FileBrowser IN (%u,%u)"
-			" AND files.Cod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Course
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod=%ld AND %s"
-			" AND files.FileBrowser IN (%u,%u,%u,%u)"
-			" AND files.Cod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Group
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "crs_grp.GrpCod"
-			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod=%ld AND %s"
-			" AND files.FileBrowser IN (%u,%u,%u,%u)"
-			" AND files.Cod=crs_grp.GrpCod"
-			" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			" AND crs_grp_types.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" UNION "
-			"SELECT files.FilCod,"	// Briefcase
-			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"-1 AS InsCod,'' AS InsShortName,"
-			"-1 AS CtrCod,'' AS CtrShortName,"
-			"-1 AS DegCod,'' AS DegShortName,"
-			"-1 AS CrsCod,'' AS CrsShortName,"
-	                "-1 AS GrpCod"
-			" FROM files"
-			" WHERE files.PublisherUsrCod=%ld AND %s"
-			" AND files.FileBrowser=%u"
-			") AS selected_files"
-			" WHERE PathFromRoot<>''"
-			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_INS,
-		  (unsigned) Brw_ADMI_SHR_INS,
-		  RangeQuery,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_CTR,
-		  (unsigned) Brw_ADMI_SHR_CTR,
-		  RangeQuery,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_DEG,
-		  (unsigned) Brw_ADMI_SHR_DEG,
-		  RangeQuery,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_TCH_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-		  (unsigned) Brw_ADMI_MRK_CRS,
-		  RangeQuery,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_DOC_GRP,
-		  (unsigned) Brw_ADMI_TCH_GRP,
-		  (unsigned) Brw_ADMI_SHR_GRP,
-		  (unsigned) Brw_ADMI_MRK_GRP,
-		  RangeQuery,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_ADMI_BRF_USR);
+	 if (asprintf (&Query,"SELECT * FROM "
+			      "("
+			      "SELECT files.FilCod,"	// Institution
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "-1 AS CtrCod,'' AS CtrShortName,"
+			      "-1 AS DegCod,'' AS DegShortName,"
+			      "-1 AS CrsCod,'' AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.PublisherUsrCod=%ld AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Centre
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "-1 AS DegCod,'' AS DegShortName,"
+			      "-1 AS CrsCod,'' AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.PublisherUsrCod=%ld AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Degree
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "-1 AS CrsCod,'' AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.PublisherUsrCod=%ld AND %s"
+			      " AND files.FileBrowser IN (%u,%u)"
+			      " AND files.Cod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Course
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "courses.CrsCod,courses.ShortName AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files,courses,degrees,centres,institutions,countries"
+			      " WHERE files.PublisherUsrCod=%ld AND %s"
+			      " AND files.FileBrowser IN (%u,%u,%u,%u)"
+			      " AND files.Cod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Group
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "institutions.InsCod,institutions.ShortName AS InsShortName,"
+			      "centres.CtrCod,centres.ShortName AS CtrShortName,"
+			      "degrees.DegCod,degrees.ShortName AS DegShortName,"
+			      "courses.CrsCod,courses.ShortName AS CrsShortName,"
+			      "crs_grp.GrpCod"
+			      " FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
+			      " WHERE files.PublisherUsrCod=%ld AND %s"
+			      " AND files.FileBrowser IN (%u,%u,%u,%u)"
+			      " AND files.Cod=crs_grp.GrpCod"
+			      " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			      " AND crs_grp_types.CrsCod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod=countries.CtyCod"
+			      "%s"
+			      " UNION "
+			      "SELECT files.FilCod,"	// Briefcase
+			      "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			      "-1 AS InsCod,'' AS InsShortName,"
+			      "-1 AS CtrCod,'' AS CtrShortName,"
+			      "-1 AS DegCod,'' AS DegShortName,"
+			      "-1 AS CrsCod,'' AS CrsShortName,"
+			      "-1 AS GrpCod"
+			      " FROM files"
+			      " WHERE files.PublisherUsrCod=%ld AND %s"
+			      " AND files.FileBrowser=%u"
+			      ") AS selected_files"
+			      " WHERE PathFromRoot<>''"
+			      " ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_INS,
+		       (unsigned) Brw_ADMI_SHR_INS,
+		       RangeQuery,
+		       Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_CTR,
+		       (unsigned) Brw_ADMI_SHR_CTR,
+		       RangeQuery,
+		       Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_DEG,
+		       (unsigned) Brw_ADMI_SHR_DEG,
+		       RangeQuery,
+		       Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_CRS,
+		       (unsigned) Brw_ADMI_TCH_CRS,
+		       (unsigned) Brw_ADMI_SHR_CRS,
+		       (unsigned) Brw_ADMI_MRK_CRS,
+		       RangeQuery,
+		       Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		       (unsigned) Brw_ADMI_DOC_GRP,
+		       (unsigned) Brw_ADMI_TCH_GRP,
+		       (unsigned) Brw_ADMI_SHR_GRP,
+		       (unsigned) Brw_ADMI_MRK_GRP,
+		       RangeQuery,
+		       Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		       (unsigned) Brw_ADMI_BRF_USR) < 0)
+            Lay_NotEnoughMemoryExit ();
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
