@@ -355,18 +355,19 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.7.23 (2018-10-22)"
+#define Log_PLATFORM_VERSION	"SWAD 18.7.24 (2018-10-22)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.7.23:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (? lines)
-	Version 18.7.22:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237286 lines)
-	Version 18.7.21:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237157 lines)
-	Version 18.7.20:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237092 lines)
-	Version 18.7.19:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237089 lines)
-	Version 18.7.18:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237060 lines)
-	Version 18.7.17:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237047 lines)
-	Version 18.7.16:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (237016 lines)
+	Version 18.7.24:  Oct 22, 2018  Some sprintf for database queries changed by asprintf. (237527 lines)
+	Version 18.7.23:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237311 lines)
+	Version 18.7.22:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237286 lines)
+	Version 18.7.21:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237157 lines)
+	Version 18.7.20:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237092 lines)
+	Version 18.7.19:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237089 lines)
+	Version 18.7.18:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237060 lines)
+	Version 18.7.17:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237047 lines)
+	Version 18.7.16:  Oct 21, 2018  Some sprintf for database queries changed by asprintf. (237016 lines)
 	Version 18.7.15:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (236996 lines)
 	Version 18.7.14:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (236993 lines)
 	Version 18.7.13:  Oct 20, 2018  Some sprintf for database queries changed by asprintf. (236953 lines)
