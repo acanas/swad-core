@@ -25,7 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -1184,89 +1186,95 @@ void Prf_GetAndShowRankingMsgSnt (void)
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName)
   {
-   char Query[1024];
+   char *Query;
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT UsrCod,%s"
-	                " FROM usr_figures"
-			" WHERE %s>=0"
-			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY %s DESC,UsrCod LIMIT 100",
-		  FieldName,
-		  FieldName,FieldName);
+	 if (asprintf (&Query,"SELECT UsrCod,%s"
+			      " FROM usr_figures"
+			      " WHERE %s>=0"
+			      " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY %s DESC,UsrCod LIMIT 100",
+		       FieldName,
+		       FieldName,FieldName) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-                        " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		  FieldName,
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  FieldName,FieldName);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+			      " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.%s>=0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+		       FieldName,
+		       Gbl.CurrentCty.Cty.CtyCod,
+		       FieldName,FieldName) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-                        " FROM centres,degrees,courses,crs_usr,usr_figures"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		  FieldName,
-                  Gbl.CurrentIns.Ins.InsCod,
-                  FieldName,FieldName);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+			      " FROM centres,degrees,courses,crs_usr,usr_figures"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.%s>=0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+		       FieldName,
+		       Gbl.CurrentIns.Ins.InsCod,
+		       FieldName,FieldName) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-                        " FROM degrees,courses,crs_usr,usr_figures"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		  FieldName,
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  FieldName,FieldName);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+			      " FROM degrees,courses,crs_usr,usr_figures"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.%s>=0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+		       FieldName,
+		       Gbl.CurrentCtr.Ctr.CtrCod,
+		       FieldName,FieldName) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-                        " FROM courses,crs_usr,usr_figures"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		  FieldName,
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  FieldName,FieldName);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+			      " FROM courses,crs_usr,usr_figures"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.%s>=0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+		       FieldName,
+		       Gbl.CurrentDeg.Deg.DegCod,
+		       FieldName,FieldName) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-                        " FROM crs_usr,usr_figures"
-                        " WHERE crs_usr.CrsCod=%ld"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		  FieldName,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  FieldName,FieldName);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+			      " FROM crs_usr,usr_figures"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.%s>=0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+		       FieldName,
+		       Gbl.CurrentCrs.Crs.CrsCod,
+		       FieldName,FieldName) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
          Lay_ShowErrorAndExit ("Wrong scope.");
@@ -1286,7 +1294,7 @@ void Prf_ShowRankingFigure (const char *Query)
    long FigureHigh = LONG_MAX;
    long Figure;
 
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get ranking");
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get ranking");
    if (NumUsrs)
      {
       /***** Initialize structure with user's data *****/
