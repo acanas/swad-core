@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
@@ -717,7 +719,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
    extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
    char *QueryQst;
    MYSQL_RES *mysql_res_qst;
-   char QueryAns[256];
+   char *QueryAns;
    MYSQL_RES *mysql_res_ans;
    MYSQL_ROW row;
    bool IdenticalQuestionFound = false;
@@ -735,12 +737,13 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
       Lay_NotEnoughMemoryExit ();
 
    /* Make database query */
-   sprintf (QueryQst,"SELECT QstCod FROM tst_questions"
-                     " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-            Gbl.Test.Stem.Text);
-   NumQstsWithThisStem = (unsigned) DB_QuerySELECT (QueryQst,&mysql_res_qst,"can not check if a question exists");
+   if (asprintf (&QueryQst,"SELECT QstCod FROM tst_questions"
+                           " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
+                 Gbl.CurrentCrs.Crs.CrsCod,
+                 Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+                 Gbl.Test.Stem.Text) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumQstsWithThisStem = (unsigned) DB_QuerySELECT_free (QueryQst,&mysql_res_qst,"can not check if a question exists");
 
    /* Free space user for query */
    free ((void *) QueryQst);
@@ -758,10 +761,11 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
             Lay_ShowErrorAndExit ("Wrong code of question.");
 
          /* Get answers from this question */
-         sprintf (QueryAns,"SELECT Answer FROM tst_answers"
-                           " WHERE QstCod=%ld ORDER BY AnsInd",
-                  QstCod);
-         NumOptsExistingQstInDB = (unsigned) DB_QuerySELECT (QueryAns,&mysql_res_ans,"can not get the answer of a question");
+         if (asprintf (&QueryAns,"SELECT Answer FROM tst_answers"
+                                 " WHERE QstCod=%ld ORDER BY AnsInd",
+                       QstCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+         NumOptsExistingQstInDB = (unsigned) DB_QuerySELECT_free (QueryAns,&mysql_res_ans,"can not get the answer of a question");
 
          switch (Gbl.Test.AnswerType)
            {

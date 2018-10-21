@@ -25,8 +25,10 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <string.h>
 
 #include "swad_changelog.h"
@@ -148,7 +150,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
 static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
   {
    extern const char *Txt_Notice;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData UsrDat;
@@ -159,12 +161,13 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get active notices in course *****/
-   sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
-                  " FROM notices"
-                  " WHERE CrsCod=%ld AND Status=%u"
-                  " ORDER BY T DESC",
-            Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
-   NumNotices = DB_QuerySELECT (Query,&mysql_res,"can not get notices from database");
+   if (asprintf (&Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
+			" FROM notices"
+			" WHERE CrsCod=%ld AND Status=%u"
+			" ORDER BY T DESC",
+                 Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumNotices = DB_QuerySELECT_free (Query,&mysql_res,"can not get notices from database");
 
    /***** Write items with notices *****/
    if (NumNotices)
@@ -245,7 +248,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
 static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
   {
    extern const char *Txt_Exam;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData UsrDat;
@@ -257,14 +260,15 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam announcements (only future exams) in current course from database *****/
-      sprintf (Query,"SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
-	             "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
-		     " FROM exam_announcements"
-		     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
-		     " ORDER BY T",
-	       Gbl.CurrentCrs.Crs.CrsCod,
-	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
-      NumExamAnnouncements = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements");
+      if (asprintf (&Query,"SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
+			   "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
+			   " FROM exam_announcements"
+			   " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
+			   " ORDER BY T",
+	            Gbl.CurrentCrs.Crs.CrsCod,
+	            (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumExamAnnouncements = DB_QuerySELECT_free (Query,&mysql_res,"can not get exam announcements");
 
       /***** Write items with notices *****/
       if (NumExamAnnouncements)
