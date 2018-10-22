@@ -25,7 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>	// For fprintf, etc.
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf, fprintf, etc.
 #include <string.h>
 
 #include "swad_box.h"
@@ -121,7 +122,7 @@ static void Ico_PutIconsIconSet (void)
 
 void Ico_ChangeIconSet (void)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get param with icon set *****/
    Gbl.Prefs.IconSet = Ico_GetParamIconSet ();
@@ -134,10 +135,11 @@ void Ico_ChangeIconSet (void)
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
-               Ico_IconSetId[Gbl.Prefs.IconSet],
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preference about icon set");
+      if (asprintf (&Query,"UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
+		    Ico_IconSetId[Gbl.Prefs.IconSet],
+		    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update your preference about icon set");
      }
 
    /***** Set preferences from current IP *****/

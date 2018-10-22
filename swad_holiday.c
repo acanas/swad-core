@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -247,7 +249,7 @@ void Hld_EditHolidays (void)
 void Hld_GetListHolidays (void)
   {
    char OrderBySubQuery[256];
-   char Query[2048];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumHld;
@@ -268,30 +270,31 @@ void Hld_GetListHolidays (void)
 	    sprintf (OrderBySubQuery,"StartDate,Place");
 	    break;
 	}
-      sprintf (Query,"(SELECT holidays.HldCod,holidays.PlcCod,"
-	             "places.FullName as Place,HldTyp,"
-	             "DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d') AS StartDate,"
-	             "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d') AS EndDate,"
-	             "holidays.Name"
-		     " FROM holidays,places"
-		     " WHERE holidays.InsCod=%ld"
-		     " AND holidays.PlcCod=places.PlcCod"
-		     " AND places.InsCod=%ld)"
-		     " UNION "
-		     "(SELECT HldCod,PlcCod,'' as Place,HldTyp,"
-		     "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"
-		     "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,Name"
-		     " FROM holidays"
-		     " WHERE InsCod=%ld"
-		     " AND PlcCod NOT IN"
-		     "(SELECT DISTINCT PlcCod FROM places WHERE InsCod=%ld))"
-		     " ORDER BY %s",
-	       Gbl.CurrentIns.Ins.InsCod,
-	       Gbl.CurrentIns.Ins.InsCod,
-	       Gbl.CurrentIns.Ins.InsCod,
-	       Gbl.CurrentIns.Ins.InsCod,
-	       OrderBySubQuery);
-      if ((Gbl.Hlds.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get holidays"))) // Holidays found...
+      if (asprintf (&Query,"(SELECT holidays.HldCod,holidays.PlcCod,"
+			   "places.FullName as Place,HldTyp,"
+			   "DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d') AS StartDate,"
+			   "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d') AS EndDate,"
+			   "holidays.Name"
+			   " FROM holidays,places"
+			   " WHERE holidays.InsCod=%ld"
+			   " AND holidays.PlcCod=places.PlcCod"
+			   " AND places.InsCod=%ld)"
+			   " UNION "
+			   "(SELECT HldCod,PlcCod,'' as Place,HldTyp,"
+			   "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"
+			   "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,Name"
+			   " FROM holidays"
+			   " WHERE InsCod=%ld"
+			   " AND PlcCod NOT IN"
+			   "(SELECT DISTINCT PlcCod FROM places WHERE InsCod=%ld))"
+			   " ORDER BY %s",
+		    Gbl.CurrentIns.Ins.InsCod,
+		    Gbl.CurrentIns.Ins.InsCod,
+		    Gbl.CurrentIns.Ins.InsCod,
+		    Gbl.CurrentIns.Ins.InsCod,
+		    OrderBySubQuery) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if ((Gbl.Hlds.Num = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get holidays"))) // Holidays found...
 	{
 	 /***** Create list of holidays *****/
 	 if ((Gbl.Hlds.Lst = (struct Holiday *) calloc ((size_t) Gbl.Hlds.Num,sizeof (struct Holiday))) == NULL)
@@ -358,7 +361,7 @@ void Hld_GetListHolidays (void)
 
 static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
   {
-   char Query[2048];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -375,30 +378,31 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
       Lay_ShowErrorAndExit ("Wrong code of holiday.");
 
    /***** Get data of holiday from database *****/
-   sprintf (Query,"(SELECT holidays.PlcCod,places.FullName as Place,HldTyp,"
-                  "DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d'),"
-                  "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d'),holidays.Name"
-                  " FROM holidays,places"
-                  " WHERE holidays.HldCod=%ld"
-                  " AND holidays.InsCod=%ld"
-                  " AND holidays.PlcCod=places.PlcCod"
-                  " AND places.InsCod=%ld)"
-                  " UNION "
-                  "(SELECT PlcCod,'' as Place,HldTyp,"
-                  "DATE_FORMAT(StartDate,'%%Y%%m%%d'),"
-                  "DATE_FORMAT(EndDate,'%%Y%%m%%d'),Name"
-                  " FROM holidays"
-                  " WHERE HldCod=%ld"
-                  " AND InsCod=%ld"
-                  " AND PlcCod NOT IN"
-                  "(SELECT DISTINCT PlcCod FROM places WHERE InsCod=%ld))",
-            Hld->HldCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Hld->HldCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentIns.Ins.InsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a holiday")) // Holiday found...
+   if (asprintf (&Query,"(SELECT holidays.PlcCod,places.FullName as Place,HldTyp,"
+			"DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d'),"
+			"DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d'),holidays.Name"
+			" FROM holidays,places"
+			" WHERE holidays.HldCod=%ld"
+			" AND holidays.InsCod=%ld"
+			" AND holidays.PlcCod=places.PlcCod"
+			" AND places.InsCod=%ld)"
+			" UNION "
+			"(SELECT PlcCod,'' as Place,HldTyp,"
+			"DATE_FORMAT(StartDate,'%%Y%%m%%d'),"
+			"DATE_FORMAT(EndDate,'%%Y%%m%%d'),Name"
+			" FROM holidays"
+			" WHERE HldCod=%ld"
+			" AND InsCod=%ld"
+			" AND PlcCod NOT IN"
+			"(SELECT DISTINCT PlcCod FROM places WHERE InsCod=%ld))",
+	         Hld->HldCod,
+	         Gbl.CurrentIns.Ins.InsCod,
+	         Gbl.CurrentIns.Ins.InsCod,
+	         Hld->HldCod,
+	         Gbl.CurrentIns.Ins.InsCod,
+	         Gbl.CurrentIns.Ins.InsCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a holiday")) // Holiday found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -639,7 +643,7 @@ long Hld_GetParamHldCod (void)
 void Hld_RemoveHoliday1 (void)
   {
    extern const char *Txt_Holiday_X_removed;
-   char Query[128];
+   char *Query;
    struct Holiday Hld;
 
    /***** Get holiday code *****/
@@ -650,9 +654,10 @@ void Hld_RemoveHoliday1 (void)
    Hld_GetDataOfHolidayByCod (&Hld);
 
    /***** Remove holiday *****/
-   sprintf (Query,"DELETE FROM holidays WHERE HldCod=%ld",
-            Hld.HldCod);
-   DB_QueryDELETE (Query,"can not remove a holiday");
+   if (asprintf (&Query,"DELETE FROM holidays WHERE HldCod=%ld",
+                 Hld.HldCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove a holiday");
 
    /***** Write message to show the change made *****/
    Gbl.Alert.Type = Ale_SUCCESS;
@@ -678,7 +683,7 @@ void Hld_RemoveHoliday2 (void)
 void Hld_ChangeHolidayPlace1 (void)
   {
    extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
-   char Query[128];
+   char *Query;
    struct Holiday *Hld;
    struct Place NewPlace;
 
@@ -699,9 +704,10 @@ void Hld_ChangeHolidayPlace1 (void)
    Hld_GetDataOfHolidayByCod (Hld);
 
    /***** Update the place in database *****/
-   sprintf (Query,"UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
-            NewPlace.PlcCod,Hld->HldCod);
-   DB_QueryUPDATE (Query,"can not update the place of a holiday");
+   if (asprintf (&Query,"UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
+                 NewPlace.PlcCod,Hld->HldCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the place of a holiday");
    Hld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld->PlaceFullName,NewPlace.FullName,
              Plc_MAX_BYTES_PLACE_FULL_NAME);
@@ -729,7 +735,7 @@ void Hld_ChangeHolidayPlace2 (void)
 void Hld_ChangeHolidayType1 (void)
   {
    extern const char *Txt_The_type_of_the_holiday_X_has_changed;
-   char Query[256];
+   char *Query;
    struct Holiday *Hld;
 
    Hld = &Gbl.Hlds.EditingHld;
@@ -746,10 +752,11 @@ void Hld_ChangeHolidayType1 (void)
 
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
-   sprintf (Query,"UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
-		  " WHERE HldCod=%ld",
-	    (unsigned) Hld->HldTyp,Hld->HldCod);
-   DB_QueryUPDATE (Query,"can not update the type of a holiday");
+   if (asprintf (&Query,"UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
+		        " WHERE HldCod=%ld",
+	         (unsigned) Hld->HldTyp,Hld->HldCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the type of a holiday");
 
    /***** Write message to show the change made *****/
    Gbl.Alert.Type = Ale_SUCCESS;
@@ -792,7 +799,7 @@ void Hld_ChangeEndDate1 (void)
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
   {
    extern const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y;
-   char Query[128];
+   char *Query;
    struct Holiday *Hld;
    struct Date NewDate;
    struct Date *PtrDate = NULL;			// Initialized to avoid warning
@@ -842,13 +849,14 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
      }
 
    /***** Update the date in database *****/
-   sprintf (Query,"UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
-            StrStartOrEndDate,
-            NewDate.Year,
-            NewDate.Month,
-            NewDate.Day,
-            Hld->HldCod);
-   DB_QueryUPDATE (Query,"can not update the date of a holiday");
+   if (asprintf (&Query,"UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
+	         StrStartOrEndDate,
+	         NewDate.Year,
+	         NewDate.Month,
+	         NewDate.Day,
+	         Hld->HldCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the date of a holiday");
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
@@ -881,7 +889,7 @@ void Hld_RenameHoliday1 (void)
    extern const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty;
    extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
-   char Query[128 + Hld_MAX_BYTES_HOLIDAY_NAME];
+   char *Query;
    struct Holiday *Hld;
    char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
 
@@ -913,9 +921,10 @@ void Hld_RenameHoliday1 (void)
         {
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
-	 sprintf (Query,"UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
-		  NewHldName,Hld->HldCod);
-	 DB_QueryUPDATE (Query,"can not update the text of a holiday");
+	 if (asprintf (&Query,"UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
+		       NewHldName,Hld->HldCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_QueryUPDATE_free (Query,"can not update the text of a holiday");
 	 Str_Copy (Hld->Name,NewHldName,
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 
@@ -1188,20 +1197,21 @@ void Hld_RecFormNewHoliday2 (void)
 
 static void Hld_CreateHoliday (struct Holiday *Hld)
   {
-   char Query[256 + Hld_MAX_BYTES_HOLIDAY_NAME];
+   char *Query;
 
    /***** Create a new holiday or no school period *****/
-   sprintf (Query,"INSERT INTO holidays"
-	          " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
-	          " VALUES"
-	          " (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
-            Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
-            Hld->StartDate.Year,
-            Hld->StartDate.Month,
-            Hld->StartDate.Day,
-            Hld->EndDate.Year,
-            Hld->EndDate.Month,
-            Hld->EndDate.Day,
-            Hld->Name);
-   DB_QueryINSERT (Query,"can not create holiday");
+   if (asprintf (&Query,"INSERT INTO holidays"
+			" (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
+			" VALUES"
+			" (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
+	         Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
+	         Hld->StartDate.Year,
+	         Hld->StartDate.Month,
+	         Hld->StartDate.Day,
+	         Hld->EndDate.Year,
+	         Hld->EndDate.Month,
+	         Hld->EndDate.Day,
+	         Hld->Name) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create holiday");
   }
