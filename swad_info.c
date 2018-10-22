@@ -25,9 +25,11 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX, NAME_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For getenv, etc
 #include <stdsoap2.h>		// For SOAP_OK and soap functions
 #include <string.h>		// For string functions
@@ -520,15 +522,16 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
 
 static bool Inf_CheckIfIHaveReadInfo (void)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get if info source is already stored in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_info_read"
-                  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-   return (DB_QueryCOUNT (Query,"can not get if I have read course info") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_info_read"
+                        " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+	         Gbl.Usrs.Me.UsrDat.UsrCod,
+	         Gbl.CurrentCrs.Crs.CrsCod,
+	         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not get if I have read course info") != 0);
   }
 
 /*****************************************************************************/
@@ -537,7 +540,7 @@ static bool Inf_CheckIfIHaveReadInfo (void)
 
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -550,14 +553,15 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       Gbl.CurrentCrs.Info.MustBeRead[InfoType] = false;
 
    /***** Get info types where students must read info *****/
-   sprintf (Query,"SELECT InfoType FROM crs_info_src"
-                  " WHERE CrsCod=%ld AND MustBeRead='Y'"
-                  " AND InfoType NOT IN"
-                  " (SELECT InfoType FROM crs_info_read"
-                  " WHERE UsrCod=%ld AND CrsCod=%ld)",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get if you must read any course info");
+   if (asprintf (&Query,"SELECT InfoType FROM crs_info_src"
+			" WHERE CrsCod=%ld AND MustBeRead='Y'"
+			" AND InfoType NOT IN"
+			" (SELECT InfoType FROM crs_info_read"
+			" WHERE UsrCod=%ld AND CrsCod=%ld)",
+	         Gbl.CurrentCrs.Crs.CrsCod,
+	         Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get if you must read any course info");
 
    /***** Set must-be-read to true for each rown in result *****/
    for (NumRow = 0;
@@ -696,15 +700,16 @@ static bool Inf_GetIfIHaveReadFromForm (void)
 
 static void Inf_SetForceReadIntoDB (bool MustBeRead)
   {
-   char Query[512];
+   char *Query;
 
    /***** Insert or replace info source for a specific type of course information *****/
-   sprintf (Query,"UPDATE crs_info_src SET MustBeRead='%c'"
-                  " WHERE CrsCod=%ld AND InfoType='%s'",
-            MustBeRead ? 'Y' :
-        	         'N',
-            Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-   DB_QueryUPDATE (Query,"can not update if info must be read");
+   if (asprintf (&Query,"UPDATE crs_info_src SET MustBeRead='%c'"
+                        " WHERE CrsCod=%ld AND InfoType='%s'",
+                 MustBeRead ? 'Y' :
+        	              'N',
+                 Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update if info must be read");
   }
 
 /*****************************************************************************/
@@ -713,29 +718,31 @@ static void Inf_SetForceReadIntoDB (bool MustBeRead)
 
 static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
   {
-   char Query[512];
+   char *Query;
 
    if (IHaveRead)
      {
       /***** Insert I have read course information *****/
-      sprintf (Query,"REPLACE INTO crs_info_read"
-	             " (UsrCod,CrsCod,InfoType)"
-                     " VALUES"
-                     " (%ld,%ld,'%s')",
-               Gbl.Usrs.Me.UsrDat.UsrCod,
-               Gbl.CurrentCrs.Crs.CrsCod,
-               Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-      DB_QueryUPDATE (Query,"can not set that I have read course info");
+      if (asprintf (&Query,"REPLACE INTO crs_info_read"
+			   " (UsrCod,CrsCod,InfoType)"
+			   " VALUES"
+			   " (%ld,%ld,'%s')",
+                    Gbl.Usrs.Me.UsrDat.UsrCod,
+                    Gbl.CurrentCrs.Crs.CrsCod,
+                    Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not set that I have read course info");
      }
    else
      {
       /***** Remove I have read course information *****/
-      sprintf (Query,"DELETE FROM crs_info_read"
-                     " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
-               Gbl.Usrs.Me.UsrDat.UsrCod,
-               Gbl.CurrentCrs.Crs.CrsCod,
-               Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-      DB_QueryDELETE (Query,"can not set that I have not read course info");
+      if (asprintf (&Query,"DELETE FROM crs_info_read"
+                           " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Gbl.CurrentCrs.Crs.CrsCod,
+		   Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not set that I have not read course info");
      }
   }
 
@@ -745,13 +752,14 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
 
 void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Remove user's status about reading of course information *****/
-   sprintf (Query,"DELETE FROM crs_info_read"
-                  " WHERE UsrCod=%ld AND CrsCod=%ld",
-            UsrCod,CrsCod);
-   DB_QueryDELETE (Query,"can not set that I have not read course info");
+   if (asprintf (&Query,"DELETE FROM crs_info_read"
+                        " WHERE UsrCod=%ld AND CrsCod=%ld",
+                 UsrCod,CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not set that I have not read course info");
   }
 
 /*****************************************************************************/
@@ -1483,39 +1491,47 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
 
 void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get if info source is already stored in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_info_src"
-                  " WHERE CrsCod=%ld AND InfoType='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_info_src"
+                       " WHERE CrsCod=%ld AND InfoType='%s'",
+	         Gbl.CurrentCrs.Crs.CrsCod,
+	         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+      Lay_NotEnoughMemoryExit ();
    if (DB_QueryCOUNT (Query,"can not get if info source is already stored in database"))	// Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
-         sprintf (Query,"UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
-                        " WHERE CrsCod=%ld AND InfoType='%s'",
-                  Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+        {
+         if (asprintf (&Query,"UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
+                              " WHERE CrsCod=%ld AND InfoType='%s'",
+                       Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
+                       Gbl.CurrentCrs.Crs.CrsCod,
+                       Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+            Lay_NotEnoughMemoryExit ();
+        }
       else	// MustBeRead remains unchanged
-         sprintf (Query,"UPDATE crs_info_src SET InfoSrc='%s'"
-                        " WHERE CrsCod=%ld AND InfoType='%s'",
-                  Inf_NamesInDBForInfoSrc[InfoSrc],
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-      DB_QueryUPDATE (Query,"can not update info source");
+        {
+         if (asprintf (&Query,"UPDATE crs_info_src SET InfoSrc='%s'"
+                             " WHERE CrsCod=%ld AND InfoType='%s'",
+		         Inf_NamesInDBForInfoSrc[InfoSrc],
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
+            Lay_NotEnoughMemoryExit ();
+        }
+      DB_QueryUPDATE_free (Query,"can not update info source");
      }
    else		// Info is not stored in database, so insert it
      {
-      sprintf (Query,"INSERT INTO crs_info_src"
-	             " (CrsCod,InfoType,InfoSrc,MustBeRead)"
-                     " VALUES"
-                     " (%ld,'%s','%s','N')",
-               Gbl.CurrentCrs.Crs.CrsCod,
-               Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
-               Inf_NamesInDBForInfoSrc[InfoSrc]);
-      DB_QueryINSERT (Query,"can not insert info source");
+      if (asprintf (&Query,"INSERT INTO crs_info_src"
+			   " (CrsCod,InfoType,InfoSrc,MustBeRead)"
+			   " VALUES"
+			   " (%ld,'%s','%s','N')",
+		    Gbl.CurrentCrs.Crs.CrsCod,
+		    Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		    Inf_NamesInDBForInfoSrc[InfoSrc]) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryINSERT_free (Query,"can not insert info source");
      }
   }
 
@@ -1526,16 +1542,17 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 
 Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Inf_InfoSrc_t InfoSrc;
 
    /***** Get info source for a specific type of info from database *****/
-   sprintf (Query,"SELECT InfoSrc FROM crs_info_src"
-	          " WHERE CrsCod=%ld AND InfoType='%s'",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get info source"))
+   if (asprintf (&Query,"SELECT InfoSrc FROM crs_info_src"
+	                " WHERE CrsCod=%ld AND InfoType='%s'",
+                 CrsCod,Inf_NamesInDBForInfoType[InfoType]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get info source"))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1560,7 +1577,7 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
                                    Inf_InfoType_t InfoType,
                                    Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1570,10 +1587,11 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
    *MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
-   sprintf (Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src"
-	          " WHERE CrsCod=%ld AND InfoType='%s'",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info source");
+   if (asprintf (&Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src"
+	                " WHERE CrsCod=%ld AND InfoType='%s'",
+                 CrsCod,Inf_NamesInDBForInfoType[InfoType]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get info source");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1693,17 +1711,18 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
 
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
   {
-   char Query[256 + Cns_MAX_BYTES_LONG_TEXT];
+   char *Query;
 
    /***** Insert or replace info source for a specific type of course information *****/
-   sprintf (Query,"REPLACE INTO crs_info_txt"
-	          " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
-                  " VALUES"
-                  " (%ld,'%s','%s','%s')",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
-            InfoTxtHTML,InfoTxtMD);
-   DB_QueryREPLACE (Query,"can not update info text");
+   if (asprintf (&Query,"REPLACE INTO crs_info_txt"
+			" (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
+			" VALUES"
+			" (%ld,'%s','%s','%s')",
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		  InfoTxtHTML,InfoTxtMD) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not update info text");
   }
 
 /*****************************************************************************/
@@ -1714,16 +1733,17 @@ static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
                                   char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
                                   char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   sprintf (Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
-                  " WHERE CrsCod=%ld AND InfoType='%s'",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+   if (asprintf (&Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
+                        " WHERE CrsCod=%ld AND InfoType='%s'",
+                 CrsCod,Inf_NamesInDBForInfoType[InfoType]) < 0)
+      Lay_NotEnoughMemoryExit ();
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
 
    /***** The result of the query must have one row or none *****/
