@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -884,7 +886,7 @@ void Gam_GetListGames (void)
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char SubQuery[Sco_NUM_SCOPES][256];
    char OrderBySubQuery[256];
-   char Query[2048];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -974,22 +976,23 @@ void Gam_GetListGames (void)
 	    break;
 	}
 
-      sprintf (Query,"SELECT GamCod FROM games"
-		     " WHERE %s%s%s%s%s%s"
-		     " ORDER BY %s",
-		  SubQuery[Sco_SCOPE_SYS],
-		  SubQuery[Sco_SCOPE_CTY],
-		  SubQuery[Sco_SCOPE_INS],
-		  SubQuery[Sco_SCOPE_CTR],
-		  SubQuery[Sco_SCOPE_DEG],
-		  SubQuery[Sco_SCOPE_CRS],
-		  OrderBySubQuery);
+      if (asprintf (&Query,"SELECT GamCod FROM games"
+			   " WHERE %s%s%s%s%s%s"
+			   " ORDER BY %s",
+		    SubQuery[Sco_SCOPE_SYS],
+		    SubQuery[Sco_SCOPE_CTY],
+		    SubQuery[Sco_SCOPE_INS],
+		    SubQuery[Sco_SCOPE_CTR],
+		    SubQuery[Sco_SCOPE_DEG],
+		    SubQuery[Sco_SCOPE_CRS],
+		    OrderBySubQuery) < 0)
+         Lay_NotEnoughMemoryExit ();
      }
    else
       Lay_ShowErrorAndExit ("Can not get list of games.");
 
    /* Make query */
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get games");
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get games");
 
    if (NumRows) // Games found...
      {
@@ -1192,23 +1195,24 @@ static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 
 void Gam_GetDataOfGameByCod (struct Game *Game)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Build query *****/
-   sprintf (Query,"SELECT GamCod,Scope,Cod,Hidden,Roles,UsrCod,"
-                  "UNIX_TIMESTAMP(StartTime),"
-                  "UNIX_TIMESTAMP(EndTime),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title"
-                  " FROM games"
-                  " WHERE GamCod=%ld",
-            Game->GamCod);
+   if (asprintf (&Query,"SELECT GamCod,Scope,Cod,Hidden,Roles,UsrCod,"
+			"UNIX_TIMESTAMP(StartTime),"
+			"UNIX_TIMESTAMP(EndTime),"
+			"NOW() BETWEEN StartTime AND EndTime,"
+			"Title"
+			" FROM games"
+			" WHERE GamCod=%ld",
+                 Game->GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Get data of game from database *****/
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get game data");
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get game data");
 
    if (NumRows) // Game found...
      {
@@ -1423,14 +1427,15 @@ void Gam_FreeListGames (void)
 
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get text of game from database *****/
-   sprintf (Query,"SELECT Txt FROM games WHERE GamCod=%ld",GamCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get game text");
+   if (asprintf (&Query,"SELECT Txt FROM games WHERE GamCod=%ld",GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get game text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1513,7 +1518,7 @@ void Gam_AskRemGame (void)
 void Gam_RemoveGame (void)
   {
    extern const char *Txt_Game_X_removed;
-   char Query[512];
+   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1526,23 +1531,26 @@ void Gam_RemoveGame (void)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Remove all the users in this game *****/
-   sprintf (Query,"DELETE FROM gam_users WHERE GamCod=%ld",
-            Game.GamCod);
-   DB_QueryDELETE (Query,"can not remove users who are answered a game");
+   if (asprintf (&Query,"DELETE FROM gam_users WHERE GamCod=%ld",
+                 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove users who are answered a game");
 
    /***** Remove all the questions in this game *****/
-   sprintf (Query,"DELETE FROM gam_questions"
-                  " WHERE GamCod=%ld",
-            Game.GamCod);
-   DB_QueryDELETE (Query,"can not remove questions of a game");
+   if (asprintf (&Query,"DELETE FROM gam_questions"
+                        " WHERE GamCod=%ld",
+                 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove questions of a game");
 
    /***** Remove all the groups of this game *****/
    Gam_RemoveAllTheGrpsAssociatedToAndGame (Game.GamCod);
 
    /***** Remove game *****/
-   sprintf (Query,"DELETE FROM games WHERE GamCod=%ld",
-            Game.GamCod);
-   DB_QueryDELETE (Query,"can not remove game");
+   if (asprintf (&Query,"DELETE FROM games WHERE GamCod=%ld",
+                 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1612,7 +1620,7 @@ static void Gam_PutButtonToResetGame (void)
 void Gam_ResetGame (void)
   {
    extern const char *Txt_Game_X_reset;
-   char Query[512];
+   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1625,16 +1633,18 @@ void Gam_ResetGame (void)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
    /***** Remove all the users in this game *****/
-   sprintf (Query,"DELETE FROM gam_users WHERE GamCod=%ld",
-            Game.GamCod);
-   DB_QueryDELETE (Query,"can not remove users who are answered a game");
+   if (asprintf (&Query,"DELETE FROM gam_users WHERE GamCod=%ld",
+                 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove users who are answered a game");
 
    /***** Reset all the answers in this game *****/
-   sprintf (Query,"UPDATE gam_answers,gam_questions SET gam_answers.NumUsrs=0"
-                  " WHERE gam_questions.GamCod=%ld"
-                  " AND gam_questions.QstCod=gam_answers.QstCod",
-            Game.GamCod);
-   DB_QueryUPDATE (Query,"can not reset answers of a game");
+   if (asprintf (&Query,"UPDATE gam_answers,gam_questions SET gam_answers.NumUsrs=0"
+			" WHERE gam_questions.GamCod=%ld"
+			" AND gam_questions.QstCod=gam_answers.QstCod",
+		 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not reset answers of a game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1653,7 +1663,7 @@ void Gam_ResetGame (void)
 void Gam_HideGame (void)
   {
    extern const char *Txt_Game_X_is_now_hidden;
-   char Query[128];
+   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1666,9 +1676,10 @@ void Gam_HideGame (void)
       Lay_ShowErrorAndExit ("You can not hide this game.");
 
    /***** Hide game *****/
-   sprintf (Query,"UPDATE games SET Hidden='Y' WHERE GamCod=%ld",
-            Game.GamCod);
-   DB_QueryUPDATE (Query,"can not hide game");
+   if (asprintf (&Query,"UPDATE games SET Hidden='Y' WHERE GamCod=%ld",
+                 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not hide game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1687,7 +1698,7 @@ void Gam_HideGame (void)
 void Gam_UnhideGame (void)
   {
    extern const char *Txt_Game_X_is_now_visible;
-   char Query[128];
+   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1700,9 +1711,10 @@ void Gam_UnhideGame (void)
       Lay_ShowErrorAndExit ("You can not unhide this game.");
 
    /***** Show game *****/
-   sprintf (Query,"UPDATE games SET Hidden='N' WHERE GamCod=%ld",
-            Game.GamCod);
-   DB_QueryUPDATE (Query,"can not show game");
+   if (asprintf (&Query,"UPDATE games SET Hidden='N' WHERE GamCod=%ld",
+                 Game.GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not show game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1721,15 +1733,16 @@ void Gam_UnhideGame (void)
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512 + Gam_MAX_BYTES_SURVEY_TITLE];
+   char *Query;
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM games"
-                  " WHERE Scope='%s' AND Cod=%ld"
-                  " AND Title='%s' AND GamCod<>%ld",
-            Sco_ScopeDB[Game->Scope],Game->Cod,
-            Game->Title,Game->GamCod);
-   return (DB_QueryCOUNT (Query,"can not get similar games") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM games"
+			" WHERE Scope='%s' AND Cod=%ld"
+			" AND Title='%s' AND GamCod<>%ld",
+	         Sco_ScopeDB[Game->Scope],Game->Cod,
+	         Game->Title,Game->GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not get similar games") != 0);
   }
 
 /*****************************************************************************/
@@ -2190,25 +2203,24 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_game_X;
-   char Query[1024 +
-              Gam_MAX_BYTES_SURVEY_TITLE +
-              Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Create a new game *****/
-   sprintf (Query,"INSERT INTO games"
-	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-                  " VALUES"
-                  " ('%s',%ld,'N',%u,%ld,"
-                  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-                  "'%s','%s')",
-            Sco_ScopeDB[Game->Scope],Game->Cod,
-            Game->Roles,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Game->TimeUTC[Gam_START_TIME],
-            Game->TimeUTC[Gam_END_TIME  ],
-            Game->Title,
-            Txt);
-   Game->GamCod = DB_QueryINSERTandReturnCode (Query,"can not create new game");
+   if (asprintf (&Query,"INSERT INTO games"
+			" (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+			" VALUES"
+			" ('%s',%ld,'N',%u,%ld,"
+			"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+			"'%s','%s')",
+	         Sco_ScopeDB[Game->Scope],Game->Cod,
+	         Game->Roles,
+	         Gbl.Usrs.Me.UsrDat.UsrCod,
+	         Game->TimeUTC[Gam_START_TIME],
+	         Game->TimeUTC[Gam_END_TIME  ],
+	         Game->Title,
+	         Txt) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Game->GamCod = DB_QueryINSERTandReturnCode_free (Query,"can not create new game");
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
@@ -2229,25 +2241,24 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_game_has_been_modified;
-   char Query[1024 +
-              Gam_MAX_BYTES_SURVEY_TITLE +
-              Cns_MAX_BYTES_TEXT];
+   char *Query;
 
    /***** Update the data of the game *****/
-   sprintf (Query,"UPDATE games"
-	          " SET Scope='%s',Cod=%ld,Roles=%u,"
-	          "StartTime=FROM_UNIXTIME(%ld),"
-	          "EndTime=FROM_UNIXTIME(%ld),"
-	          "Title='%s',Txt='%s'"
-                  " WHERE GamCod=%ld",
-            Sco_ScopeDB[Game->Scope],Game->Cod,
-            Game->Roles,
-            Game->TimeUTC[Gam_START_TIME],
-            Game->TimeUTC[Gam_END_TIME  ],
-            Game->Title,
-            Txt,
-            Game->GamCod);
-   DB_QueryUPDATE (Query,"can not update game");
+   if (asprintf (&Query,"UPDATE games"
+			" SET Scope='%s',Cod=%ld,Roles=%u,"
+			"StartTime=FROM_UNIXTIME(%ld),"
+			"EndTime=FROM_UNIXTIME(%ld),"
+			"Title='%s',Txt='%s'"
+			" WHERE GamCod=%ld",
+	         Sco_ScopeDB[Game->Scope],Game->Cod,
+	         Game->Roles,
+	         Game->TimeUTC[Gam_START_TIME],
+	         Game->TimeUTC[Gam_END_TIME  ],
+	         Game->Title,
+	         Txt,
+	         Game->GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update game");
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -2267,12 +2278,13 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
 
 static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get if a game is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM gam_grp WHERE GamCod=%ld",
-            GamCod);
-   return (DB_QueryCOUNT (Query,"can not check if a game is associated to groups") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_grp WHERE GamCod=%ld",
+                 GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if a game is associated to groups") != 0);
   }
 
 /*****************************************************************************/
@@ -2281,13 +2293,14 @@ static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
 
 bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get if a game is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM gam_grp"
-	          " WHERE GamCod=%ld AND GrpCod=%ld",
-            GamCod,GrpCod);
-   return (DB_QueryCOUNT (Query,"can not check if a game is associated to a group") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_grp"
+	                " WHERE GamCod=%ld AND GrpCod=%ld",
+                 GamCod,GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if a game is associated to a group") != 0);
   }
 
 /*****************************************************************************/
@@ -2296,12 +2309,13 @@ bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
 
 static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove groups of the game *****/
-   sprintf (Query,"DELETE FROM gam_grp WHERE GamCod=%ld",
-            GamCod);
-   DB_QueryDELETE (Query,"can not remove the groups associated to a game");
+   if (asprintf (&Query,"DELETE FROM gam_grp WHERE GamCod=%ld",
+                 GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove the groups associated to a game");
   }
 
 /*****************************************************************************/
@@ -2310,13 +2324,14 @@ static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
 
 void Gam_RemoveGroup (long GrpCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove group from all the games *****/
-   sprintf (Query,"DELETE FROM gam_grp WHERE GrpCod=%ld",
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove group"
-	                 " from the associations between games and groups");
+   if (asprintf (&Query,"DELETE FROM gam_grp WHERE GrpCod=%ld",
+	         GrpCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove group"
+	                      " from the associations between games and groups");
   }
 
 /*****************************************************************************/
@@ -2325,15 +2340,16 @@ void Gam_RemoveGroup (long GrpCod)
 
 void Gam_RemoveGroupsOfType (long GrpTypCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove group from all the games *****/
-   sprintf (Query,"DELETE FROM gam_grp USING crs_grp,gam_grp"
-                  " WHERE crs_grp.GrpTypCod=%ld"
-                  " AND crs_grp.GrpCod=gam_grp.GrpCod",
-            GrpTypCod);
-   DB_QueryDELETE (Query,"can not remove groups of a type"
-	                 " from the associations between games and groups");
+   if (asprintf (&Query,"DELETE FROM gam_grp USING crs_grp,gam_grp"
+			" WHERE crs_grp.GrpTypCod=%ld"
+			" AND crs_grp.GrpCod=gam_grp.GrpCod",
+                 GrpTypCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove groups of a type"
+	                      " from the associations between games and groups");
   }
 
 /*****************************************************************************/
@@ -2343,7 +2359,7 @@ void Gam_RemoveGroupsOfType (long GrpTypCod)
 static void Gam_CreateGrps (long GamCod)
   {
    unsigned NumGrpSel;
-   char Query[256];
+   char *Query;
 
    /***** Create groups of the game *****/
    for (NumGrpSel = 0;
@@ -2351,12 +2367,13 @@ static void Gam_CreateGrps (long GamCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO gam_grp"
-	             " (GamCod,GrpCod)"
-	             " VALUES"
-	             " (%ld,%ld)",
-               GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT (Query,"can not associate a group to a game");
+      if (asprintf (&Query,"INSERT INTO gam_grp"
+			   " (GamCod,GrpCod)"
+			   " VALUES"
+			   " (%ld,%ld)",
+                    GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryINSERT_free (Query,"can not associate a group to a game");
      }
   }
 
@@ -2370,21 +2387,22 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
 
    /***** Get groups associated to a game from database *****/
-   sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-                  " FROM gam_grp,crs_grp,crs_grp_types"
-                  " WHERE gam_grp.GamCod=%ld"
-                  " AND gam_grp.GrpCod=crs_grp.GrpCod"
-                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-            Game->GamCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get groups of a game");
+   if (asprintf (&Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
+			" FROM gam_grp,crs_grp,crs_grp_types"
+			" WHERE gam_grp.GamCod=%ld"
+			" AND gam_grp.GrpCod=crs_grp.GrpCod"
+			" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			" ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+                 Game->GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of a game");
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
@@ -2435,48 +2453,53 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
 void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512];
+   char *Query;
 
    /***** Remove all the users in course games *****/
-   sprintf (Query,"DELETE FROM gam_users"
-	          " USING games,gam_users"
-                  " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=gam_users.GamCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove users"
-	                 " who had answered games in a place on the hierarchy");
+   if (asprintf (&Query,"DELETE FROM gam_users"
+			" USING games,gam_users"
+			" WHERE games.Scope='%s' AND games.Cod=%ld"
+			" AND games.GamCod=gam_users.GamCod",
+                 Sco_ScopeDB[Scope],Cod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove users"
+	                      " who had answered games in a place on the hierarchy");
 
    /***** Remove all the answers in course games *****/
-   sprintf (Query,"DELETE FROM gam_answers"
-	          " USING games,gam_questions,gam_answers"
-                  " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=gam_questions.GamCod"
-                  " AND gam_questions.QstCod=gam_answers.QstCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove answers of games in a place on the hierarchy");
+   if (asprintf (&Query,"DELETE FROM gam_answers"
+			" USING games,gam_questions,gam_answers"
+			" WHERE games.Scope='%s' AND games.Cod=%ld"
+			" AND games.GamCod=gam_questions.GamCod"
+			" AND gam_questions.QstCod=gam_answers.QstCod",
+                 Sco_ScopeDB[Scope],Cod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove answers of games in a place on the hierarchy");
 
    /***** Remove all the questions in course games *****/
-   sprintf (Query,"DELETE FROM gam_questions"
-	          " USING games,gam_questions"
-                  " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=gam_questions.GamCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove questions of games in a place on the hierarchy");
+   if (asprintf (&Query,"DELETE FROM gam_questions"
+			" USING games,gam_questions"
+			" WHERE games.Scope='%s' AND games.Cod=%ld"
+			" AND games.GamCod=gam_questions.GamCod",
+                 Sco_ScopeDB[Scope],Cod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove questions of games in a place on the hierarchy");
 
    /***** Remove groups *****/
-   sprintf (Query,"DELETE FROM gam_grp"
-	          " USING games,gam_grp"
-                  " WHERE games.Scope='%s' AND games.Cod=%ld"
-                  " AND games.GamCod=gam_grp.GamCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove all the groups"
-	                 " associated to games of a course");
+   if (asprintf (&Query,"DELETE FROM gam_grp"
+			" USING games,gam_grp"
+			" WHERE games.Scope='%s' AND games.Cod=%ld"
+			" AND games.GamCod=gam_grp.GamCod",
+                 Sco_ScopeDB[Scope],Cod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove all the groups"
+	                      " associated to games of a course");
 
    /***** Remove course games *****/
-   sprintf (Query,"DELETE FROM games"
-	          " WHERE Scope='%s' AND Cod=%ld",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove all the games in a place on the hierarchy");
+   if (asprintf (&Query,"DELETE FROM games"
+	                " WHERE Scope='%s' AND Cod=%ld",
+                 Sco_ScopeDB[Scope],Cod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove all the games in a place on the hierarchy");
   }
 
 /*****************************************************************************/
@@ -2485,17 +2508,18 @@ void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
 
 static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get if I can do a game from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM games"
-                  " WHERE GamCod=%ld"
-                  " AND (GamCod NOT IN (SELECT GamCod FROM gam_grp) OR"
-                  " GamCod IN (SELECT gam_grp.GamCod FROM gam_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod=%ld"
-                  " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
-            GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if I can do a game") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM games"
+			" WHERE GamCod=%ld"
+			" AND (GamCod NOT IN (SELECT GamCod FROM gam_grp) OR"
+			" GamCod IN (SELECT gam_grp.GamCod FROM gam_grp,crs_grp_usr"
+			" WHERE crs_grp_usr.UsrCod=%ld"
+			" AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
+		 GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if I can do a game") != 0);
   }
 
 /*****************************************************************************/
@@ -2504,12 +2528,13 @@ static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
 
 static unsigned Gam_GetNumQstsGame (long GamCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get data of questions from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM gam_questions WHERE GamCod=%ld",
-            GamCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of questions of a game");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_questions WHERE GamCod=%ld",
+                 GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of questions of a game");
   }
 
 /*****************************************************************************/
@@ -2587,12 +2612,13 @@ static unsigned Gam_GetParamQstInd (void)
 
 static void Gam_RemAnswersOfAQuestion (long QstCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove answers *****/
-   sprintf (Query,"DELETE FROM gam_answers WHERE QstCod=%ld",
-            QstCod);
-   DB_QueryDELETE (Query,"can not remove the answers of a question");
+   if (asprintf (&Query,"DELETE FROM gam_answers WHERE QstCod=%ld",
+                 QstCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove the answers of a question");
   }
 
 /*****************************************************************************/
@@ -2602,16 +2628,17 @@ static void Gam_RemAnswersOfAQuestion (long QstCod)
 
 static int Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    int QstInd = -1;
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT QstInd FROM gam_questions"
-	          " WHERE GamCod=%ld AND QstCod=%ld",
-            GamCod,QstCod);
-   if (!DB_QuerySELECT (Query,&mysql_res,"can not get question index"))
+   if (asprintf (&Query,"SELECT QstInd FROM gam_questions"
+	                " WHERE GamCod=%ld AND QstCod=%ld",
+                 GamCod,QstCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (!DB_QuerySELECT_free (Query,&mysql_res,"can not get question index"))
      {
       Ale_ShowAlert (Ale_INFO,Query);
       Lay_ShowErrorAndExit ("Error when getting question index.");
@@ -2635,16 +2662,17 @@ static int Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
 
 static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long QstCod;
 
    /***** Get question code of thw question to be moved up *****/
-   sprintf (Query,"SELECT QstCod FROM gam_questions"
-		  " WHERE GamCod=%ld AND QstInd=%u",
-	    GamCod,QstInd);
-   if (!DB_QuerySELECT (Query,&mysql_res,"can not get question code"))
+   if (asprintf (&Query,"SELECT QstCod FROM gam_questions"
+		        " WHERE GamCod=%ld AND QstInd=%u",
+	         GamCod,QstInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (!DB_QuerySELECT_free (Query,&mysql_res,"can not get question code"))
       Lay_ShowErrorAndExit ("Error: wrong question code.");
 
    /***** Get question code (row[0]) *****/
@@ -2666,15 +2694,16 @@ static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
 
 static int Gam_GetMaxQuestionIndexInGame (long GamCod)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    int QstInd = -1;
 
    /***** Get maximum question index in a game from database *****/
-   sprintf (Query,"SELECT MAX(QstInd) FROM gam_questions WHERE GamCod=%ld",
-            GamCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
+   if (asprintf (&Query,"SELECT MAX(QstInd) FROM gam_questions WHERE GamCod=%ld",
+                 GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get last question index");
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are questions
       if (sscanf (row[0],"%d",&QstInd) != 1)
@@ -2694,7 +2723,7 @@ static int Gam_GetMaxQuestionIndexInGame (long GamCod)
 
 static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    int PrevQstInd = -1;
@@ -2702,10 +2731,11 @@ static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
    /***** Get previous question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   sprintf (Query,"SELECT MAX(QstInd) FROM gam_questions"
-	          " WHERE GamCod=%ld AND QstInd<%u",
-            GamCod,QstInd);
-   if (!DB_QuerySELECT (Query,&mysql_res,"can not get previous question index"))
+   if (asprintf (&Query,"SELECT MAX(QstInd) FROM gam_questions"
+	                " WHERE GamCod=%ld AND QstInd<%u",
+                 GamCod,QstInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (!DB_QuerySELECT_free (Query,&mysql_res,"can not get previous question index"))
       Lay_ShowErrorAndExit ("Error: previous question index not found.");
 
    /***** Get previous question index (row[0]) *****/
@@ -2728,7 +2758,7 @@ static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 
 static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    int NextQstInd = -1;
@@ -2736,10 +2766,11 @@ static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   sprintf (Query,"SELECT MIN(QstInd) FROM gam_questions"
-	          " WHERE GamCod=%ld AND QstInd>%u",
-            GamCod,QstInd);
-   if (!DB_QuerySELECT (Query,&mysql_res,"can not get next question index"))
+   if (asprintf (&Query,"SELECT MIN(QstInd) FROM gam_questions"
+	                " WHERE GamCod=%ld AND QstInd>%u",
+                 GamCod,QstInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (!DB_QuerySELECT_free (Query,&mysql_res,"can not get next question index"))
       Lay_ShowErrorAndExit ("Error: next question index not found.");
 
    /***** Get next question index (row[0]) *****/
@@ -2764,7 +2795,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    extern const char *Txt_Questions;
    extern const char *Txt_This_game_has_no_questions;
    extern const char *Txt_Done;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
@@ -2787,19 +2818,20 @@ static void Gam_ListGameQuestions (struct Game *Game)
    row[5] ImageTitle
    row[6] ImageURL
    */
-   sprintf (Query,"SELECT tst_questions.QstCod,"
-                  "tst_questions.AnsType,"
-                  "tst_questions.Stem,"
-                  "tst_questions.Feedback,"
-                  "tst_questions.ImageName,"
-                  "tst_questions.ImageTitle,"
-                  "tst_questions.ImageURL"
-                  " FROM gam_questions,tst_questions"
-                  " WHERE gam_questions.GamCod=%ld"
-                  " AND gam_questions.QstCod=tst_questions.QstCod"
-                  " ORDER BY gam_questions.QstInd",
-            Game->GamCod);
-   NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
+   if (asprintf (&Query,"SELECT tst_questions.QstCod,"
+			"tst_questions.AnsType,"
+			"tst_questions.Stem,"
+			"tst_questions.Feedback,"
+			"tst_questions.ImageName,"
+			"tst_questions.ImageTitle,"
+			"tst_questions.ImageURL"
+			" FROM gam_questions,tst_questions"
+			" WHERE gam_questions.GamCod=%ld"
+			" AND gam_questions.QstCod=tst_questions.QstCod"
+			" ORDER BY gam_questions.QstInd",
+                 Game->GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumQsts = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a question");
 
    /***** Start box *****/
    Gbl.Games.CurrentGamCod = Game->GamCod;
@@ -3052,7 +3084,7 @@ void Gam_AddTstQuestionsToGame (void)
    char LongStr[1 + 10 + 1];
    long QstCod;
    int MaxQstInd;
-   char Query[256];
+   char *Query;
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
@@ -3087,12 +3119,13 @@ void Gam_AddTstQuestionsToGame (void)
       MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
 
       /* Insert question in the table of questions */
-      sprintf (Query,"INSERT INTO gam_questions"
-		     " (GamCod,QstCod,QstInd)"
-		     " VALUES"
-		     " (%ld,%ld,%u)",
-	       Game.GamCod,QstCod,(unsigned) (MaxQstInd + 1));
-      DB_QueryINSERT (Query,"can not create question");
+      if (asprintf (&Query,"INSERT INTO gam_questions"
+			   " (GamCod,QstCod,QstInd)"
+			   " VALUES"
+			   " (%ld,%ld,%u)",
+	            Game.GamCod,QstCod,(unsigned) (MaxQstInd + 1)) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryINSERT_free (Query,"can not create question");
      }
 
    /***** Free space for selected question codes *****/
@@ -3177,16 +3210,17 @@ void Gam_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned
 
 static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;	// Default returned value
 
    /***** Get answers of a question from database *****/
-   sprintf (Query,"SELECT NumUsrs FROM gam_answers"
-                  " WHERE GamCod=%ld AND QstCod=%ld AND AnsInd=%u",
-            GamCod,QstCod,AnsInd);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of users who answered"))
+   if (asprintf (&Query,"SELECT NumUsrs FROM gam_answers"
+                        " WHERE GamCod=%ld AND QstCod=%ld AND AnsInd=%u",
+                 GamCod,QstCod,AnsInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get number of users who answered"))
      {
       row = mysql_fetch_row (mysql_res);
       if (row[0])	// There are users who selected this answer
@@ -3309,7 +3343,7 @@ void Gam_RequestRemoveQst (void)
 void Gam_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
-   char Query[512];
+   char *Query;
    struct Game Game;
    long QstCod;
    unsigned QstInd;
@@ -3331,17 +3365,19 @@ void Gam_RemoveQst (void)
    Gam_RemAnswersOfAQuestion (QstCod);
 
    /* Remove the question itself */
-   sprintf (Query,"DELETE FROM gam_questions WHERE QstCod=%ld",
-            QstCod);
-   DB_QueryDELETE (Query,"can not remove a question");
+   if (asprintf (&Query,"DELETE FROM gam_questions WHERE QstCod=%ld",
+                 QstCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
    /* Change index of questions greater than this */
-   sprintf (Query,"UPDATE gam_questions SET QstInd=QstInd-1"
-                  " WHERE GamCod=%ld AND QstInd>%u",
-            Game.GamCod,QstInd);
-   DB_QueryUPDATE (Query,"can not update indexes of questions");
+   if (asprintf (&Query,"UPDATE gam_questions SET QstInd=QstInd-1"
+                        " WHERE GamCod=%ld AND QstInd>%u",
+                 Game.GamCod,QstInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update indexes of questions");
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -3459,7 +3495,7 @@ void Gam_MoveDownQst (void)
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom)
   {
-   char Query[256];
+   char *Query;
    long QstCodTop;
    long QstCodBottom;
 
@@ -3485,16 +3521,18 @@ static void Gam_ExchangeQuestions (long GamCod,
    |      2 |    232 |		|      2 |    232 |	|      2 |    232 |
    +--------+--------+		+--------+--------+	+--------+--------+
  */
-   sprintf (Query,"UPDATE gam_questions SET QstInd=%u"
-		  " WHERE GamCod=%ld AND QstCod=%ld",
-	    QstIndBottom,
-	    GamCod,QstCodTop);
-   DB_QueryUPDATE (Query,"can not exchange indexes of questions");
-   sprintf (Query,"UPDATE gam_questions SET QstInd=%u"
-		  " WHERE GamCod=%ld AND QstCod=%ld",
-	    QstIndTop,
-	    GamCod,QstCodBottom);
-   DB_QueryUPDATE (Query,"can not exchange indexes of questions");
+   if (asprintf (&Query,"UPDATE gam_questions SET QstInd=%u"
+		        " WHERE GamCod=%ld AND QstCod=%ld",
+	         QstIndBottom,
+	         GamCod,QstCodTop) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not exchange indexes of questions");
+   if (asprintf (&Query,"UPDATE gam_questions SET QstInd=%u"
+		        " WHERE GamCod=%ld AND QstCod=%ld",
+	         QstIndTop,
+	         GamCod,QstCodBottom) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not exchange indexes of questions");
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
@@ -3575,7 +3613,7 @@ void Gam_PlayGameShowAnswers (void)
 
 static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct Game Game;
@@ -3600,19 +3638,20 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    row[4] ImageTitle
    row[5] ImageURL
    */
-   sprintf (Query,"SELECT "
-                  "tst_questions.QstCod,"
-                  "tst_questions.AnsType,"
-                  "tst_questions.Stem,"
-                  "tst_questions.ImageName,"
-                  "tst_questions.ImageTitle,"
-                  "tst_questions.ImageURL"
-                  " FROM gam_questions,tst_questions"
-                  " WHERE gam_questions.GamCod=%ld"
-                  " AND gam_questions.QstInd=%u"
-                  " AND gam_questions.QstCod=tst_questions.QstCod",
-            Game.GamCod,QstInd);
-   if (!DB_QuerySELECT (Query,&mysql_res,"can not get data of a question"))
+   if (asprintf (&Query,"SELECT "
+			"tst_questions.QstCod,"
+			"tst_questions.AnsType,"
+			"tst_questions.Stem,"
+			"tst_questions.ImageName,"
+			"tst_questions.ImageTitle,"
+			"tst_questions.ImageURL"
+			" FROM gam_questions,tst_questions"
+			" WHERE gam_questions.GamCod=%ld"
+			" AND gam_questions.QstInd=%u"
+			" AND gam_questions.QstCod=tst_questions.QstCod",
+                 Game.GamCod,QstInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (!DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a question"))
       Ale_ShowAlert (Ale_WARNING,"Questions doesn't exist.");
    row = mysql_fetch_row (mysql_res);
 
@@ -3745,7 +3784,7 @@ void Gam_ReceiveGameAnswers (void)
 
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
@@ -3758,12 +3797,11 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    unsigned AnsInd;
 
    /***** Get questions of this game from database *****/
-   sprintf (Query,"SELECT QstCod FROM gam_questions"
-                  " WHERE GamCod=%ld ORDER BY QstCod",
-            GamCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get questions of a game");
-
-   if ((NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get games"))) // The game has questions
+   if (asprintf (&Query,"SELECT QstCod FROM gam_questions"
+                        " WHERE GamCod=%ld ORDER BY QstCod",
+                 GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if ((NumQsts = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get questions of a game"))) // The game has questions
      {
       /***** Get questions *****/
       for (NumQst = 0;
@@ -3810,14 +3848,15 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
 
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
-   char Query[256];
+   char *Query;
 
    /***** Increase number of users who have selected
           the answer AnsInd in the question QstCod *****/
-   sprintf (Query,"UPDATE gam_answers SET NumUsrs=NumUsrs+1"
-                  " WHERE QstCod=%ld AND AnsInd=%u",
-            QstCod,AnsInd);
-   DB_QueryINSERT (Query,"can not register your answer to the game");
+   if (asprintf (&Query,"UPDATE gam_answers SET NumUsrs=NumUsrs+1"
+                        " WHERE QstCod=%ld AND AnsInd=%u",
+                 QstCod,AnsInd) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not register your answer to the game");
   }
 
 /*****************************************************************************/
@@ -3826,14 +3865,15 @@ static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
 static void Gam_RegisterIHaveAnsweredGame (long GamCod)
   {
-   char Query[256];
+   char *Query;
 
-   sprintf (Query,"INSERT INTO gam_users"
-	          " (GamCod,UsrCod)"
-                  " VALUES"
-                  " (%ld,%ld)",
-            GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT (Query,"can not register that you have answered the game");
+   if (asprintf (&Query,"INSERT INTO gam_users"
+	                " (GamCod,UsrCod)"
+                        " VALUES"
+                        " (%ld,%ld)",
+                 GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not register that you have answered the game");
   }
 
 /*****************************************************************************/
@@ -3842,13 +3882,14 @@ static void Gam_RegisterIHaveAnsweredGame (long GamCod)
 
 static bool Gam_CheckIfIHaveAnsweredGame (long GamCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM gam_users"
-                  " WHERE GamCod=%ld AND UsrCod=%ld",
-            GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if you have answered a game") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_users"
+                        " WHERE GamCod=%ld AND UsrCod=%ld",
+                 GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if you have answered a game") != 0);
   }
 
 /*****************************************************************************/
@@ -3857,12 +3898,13 @@ static bool Gam_CheckIfIHaveAnsweredGame (long GamCod)
 
 static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get number of games with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM gam_users WHERE GamCod=%ld",
-            GamCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who have answered a game");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_users WHERE GamCod=%ld",
+                 GamCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of users who have answered a game");
   }
 
 /*****************************************************************************/
@@ -3873,7 +3915,7 @@ static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
 unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -3882,65 +3924,71 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT Cod)"
-                        " FROM games"
-                        " WHERE Scope='%s'",
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT Cod)"
+			      " FROM games"
+			      " WHERE Scope='%s'",
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT games.Cod)"
-                        " FROM institutions,centres,degrees,courses,games"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT games.Cod)"
+			      " FROM institutions,centres,degrees,courses,games"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+                       Gbl.CurrentIns.Ins.InsCod,
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT games.Cod)"
-                        " FROM centres,degrees,courses,games"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT games.Cod)"
+			      " FROM centres,degrees,courses,games"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+		       Gbl.CurrentIns.Ins.InsCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT games.Cod)"
-                        " FROM degrees,courses,games"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT games.Cod)"
+			      " FROM degrees,courses,games"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+                       Gbl.CurrentCtr.Ctr.CtrCod,
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT games.Cod)"
-                        " FROM courses,games"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT games.Cod)"
+			      " FROM courses,games"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+		       Gbl.CurrentDeg.Deg.DegCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT Cod)"
-                        " FROM games"
-                        " WHERE Scope='%s' AND Cod=%ld",
-                  Sco_ScopeDB[Sco_SCOPE_CRS],
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT COUNT(DISTINCT Cod)"
+			      " FROM games"
+			      " WHERE Scope='%s' AND Cod=%ld",
+                       Sco_ScopeDB[Sco_SCOPE_CRS],
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with games");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with games");
 
    /***** Get number of games *****/
    row = mysql_fetch_row (mysql_res);
@@ -3961,7 +4009,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 unsigned Gam_GetNumGames (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGames;
@@ -3970,66 +4018,72 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM games"
-                        " WHERE Scope='%s'",
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+			      " FROM games"
+			      " WHERE Scope='%s'",
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM institutions,centres,degrees,courses,games"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+			      " FROM institutions,centres,degrees,courses,games"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+		       Gbl.CurrentCty.Cty.CtyCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM centres,degrees,courses,games"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+			      " FROM centres,degrees,courses,games"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+		       Gbl.CurrentIns.Ins.InsCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM degrees,courses,games"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+			      " FROM degrees,courses,games"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+		       Gbl.CurrentCtr.Ctr.CtrCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM courses,games"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+			      " FROM courses,games"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'",
+		       Gbl.CurrentDeg.Deg.DegCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(*)"
-                        " FROM games"
-                        " WHERE games.Scope='%s'"
-                        " AND CrsCod=%ld",
-                  Sco_ScopeDB[Sco_SCOPE_CRS],
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT COUNT(*)"
+			      " FROM games"
+			      " WHERE games.Scope='%s'"
+			      " AND CrsCod=%ld",
+                       Sco_ScopeDB[Sco_SCOPE_CRS],
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of games");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of games");
 
    /***** Get number of games *****/
    row = mysql_fetch_row (mysql_res);
@@ -4049,7 +4103,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    float NumQstsPerGame;
@@ -4058,82 +4112,88 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-                        " FROM games,gam_questions"
-                        " WHERE games.Scope='%s'"
-                        " AND games.GamCod=gam_questions.GamCod"
-                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT AVG(NumQsts) FROM"
+			      " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			      " FROM games,gam_questions"
+			      " WHERE games.Scope='%s'"
+			      " AND games.GamCod=gam_questions.GamCod"
+			      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-                        " FROM institutions,centres,degrees,courses,games,gam_questions"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'"
-                        " AND games.GamCod=gam_questions.GamCod"
-                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT AVG(NumQsts) FROM"
+			      " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			      " FROM institutions,centres,degrees,courses,games,gam_questions"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'"
+			      " AND games.GamCod=gam_questions.GamCod"
+			      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                       Gbl.CurrentCty.Cty.CtyCod,
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-                        " FROM centres,degrees,courses,games,gam_questions"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'"
-                        " AND games.GamCod=gam_questions.GamCod"
-                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT AVG(NumQsts) FROM"
+			      " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			      " FROM centres,degrees,courses,games,gam_questions"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'"
+			      " AND games.GamCod=gam_questions.GamCod"
+			      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+		       Gbl.CurrentIns.Ins.InsCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-                        " FROM degrees,courses,games,gam_questions"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'"
-                        " AND games.GamCod=gam_questions.GamCod"
-                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT AVG(NumQsts) FROM"
+			      " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			      " FROM degrees,courses,games,gam_questions"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'"
+			      " AND games.GamCod=gam_questions.GamCod"
+			      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                       Gbl.CurrentCtr.Ctr.CtrCod,
+                       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-                        " FROM courses,games,gam_questions"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=games.Cod"
-                        " AND games.Scope='%s'"
-                        " AND games.GamCod=gam_questions.GamCod"
-                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Sco_ScopeDB[Sco_SCOPE_CRS]);
+         if (asprintf (&Query,"SELECT AVG(NumQsts) FROM"
+			      " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			      " FROM courses,games,gam_questions"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=games.Cod"
+			      " AND games.Scope='%s'"
+			      " AND games.GamCod=gam_questions.GamCod"
+			      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+		       Gbl.CurrentDeg.Deg.DegCod,
+		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT AVG(NumQsts) FROM"
-                        " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-                        " FROM games,gam_questions"
-                        " WHERE games.Scope='%s' AND games.Cod=%ld"
-                        " AND games.GamCod=gam_questions.GamCod"
-                        " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                  Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT AVG(NumQsts) FROM"
+			      " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			      " FROM games,gam_questions"
+			      " WHERE games.Scope='%s' AND games.Cod=%ld"
+			      " AND games.GamCod=gam_questions.GamCod"
+			      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                       Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of questions per game");
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of questions per game");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
