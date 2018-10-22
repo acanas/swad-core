@@ -96,6 +96,9 @@ static void Grp_PutIconToCreateNewGroup (void);
 
 static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
 
+static void Grp_LockTables (void);
+static void Grp_UnlockTables (void);
+
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
@@ -760,10 +763,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    bool ChangesMade = false;
 
    /***** Lock tables to make the inscription atomic *****/
-   DB_Query ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
-	     "crs_grp_usr WRITE,crs_usr READ",
-	     "Can not lock tables to change user's groups");
-   Gbl.DB.LockedTables = true;
+   Grp_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -881,10 +881,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_FreeListCodGrp (&LstGrpsIBelong);
 
    /***** Unlock tables after changes in my groups *****/
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("UNLOCK TABLES",
-	     "Can not unlock tables after changes in user's groups");
+   Grp_UnlockTables ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -904,14 +901,9 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    bool RemoveUsrFromThisGrp;
    bool RegisterUsrInThisGrp;
 
+   /***** Lock tables to make the inscription atomic *****/
    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
-     {
-      /***** Lock tables to make the inscription atomic *****/
-      DB_Query ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
-		"crs_grp_usr WRITE,crs_usr READ",
-		"Can not lock tables to change user's groups");
-      Gbl.DB.LockedTables = true;
-     }
+      Grp_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -948,20 +940,45 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 	 Grp_AddUsrToGroup (&Gbl.Usrs.Other.UsrDat,LstGrpsUsrWants->GrpCods[NumGrpUsrWants]);
      }
 
-   /***** Free memory with the list of groups which I belonged to *****/
+   /***** Free memory with the list of groups which user belonged to *****/
    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
-   /***** Unlock tables after changes in my groups *****/
+   /***** Unlock tables after changes in groups *****/
    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
-     {
-      Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-					// ...to not retry the unlock if error in unlocking
-      DB_Query ("UNLOCK TABLES",
-		"Can not unlock tables after changes in user's groups");
-     }
+      Grp_UnlockTables ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
+  }
+
+/*****************************************************************************/
+/*********** Lock tables to make the registration in groups atomic ***********/
+/*****************************************************************************/
+
+static void Grp_LockTables (void)
+  {
+   char *Query;
+
+   if (asprintf (&Query,"LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
+			"crs_grp_usr WRITE,crs_usr READ") < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_Query_free (Query,"can not lock tables to change user's groups");
+   Gbl.DB.LockedTables = true;
+  }
+
+/*****************************************************************************/
+/*********** Unlock tables after changes in registration in groups ***********/
+/*****************************************************************************/
+
+static void Grp_UnlockTables (void)
+  {
+   char *Query;
+
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   if (asprintf (&Query,"UNLOCK TABLES") < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_Query_free (Query,"can not unlock tables after changing user's groups");
   }
 
 /*****************************************************************************/
@@ -3326,8 +3343,8 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
                  GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
    Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
-   Gbl.Cache.IBelongToGrp.IBelong = (DB_QueryCOUNT (Query,"can not check"
-	                                                  " if you belong to a group") != 0);
+   Gbl.Cache.IBelongToGrp.IBelong = (DB_QueryCOUNT_free (Query,"can not check"
+	                                                       " if you belong to a group") != 0);
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
 
@@ -4678,7 +4695,7 @@ void Grp_RenameGroupType (void)
                           NewNameGrpTyp,
                           Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
                Lay_NotEnoughMemoryExit ();
-            DB_QueryUPDATE (Query,"can not update the type of a group");
+            DB_QueryUPDATE_free (Query,"can not update the type of a group");
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;

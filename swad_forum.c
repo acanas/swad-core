@@ -904,8 +904,8 @@ static unsigned For_GetNumMyPstInThr (long ThrCod)
                         " WHERE ThrCod=%ld AND UsrCod=%ld",
                  ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not check if you have written"
-	                                  " posts in a thead of a forum");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not check if you have written"
+	                                       " posts in a thead of a forum");
   }
 
 /*****************************************************************************/
