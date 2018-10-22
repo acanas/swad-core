@@ -359,6 +359,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.7.32:  Oct 22, 2018  Some sprintf for database queries changed by asprintf. (237786 lines)
 	Version 18.7.31:  Oct 22, 2018  Some sprintf for database queries changed by asprintf. (237765 lines)
 	Version 18.7.30:  Oct 22, 2018  Some sprintf for database queries changed by asprintf. (237744 lines)
 	Version 18.7.29:  Oct 22, 2018  Some sprintf for database queries changed by asprintf. (237687 lines)
