@@ -25,6 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -176,16 +179,17 @@ void Lan_ChangeLanguage (void)
 void Lan_UpdateMyLanguageToCurrentLanguage (void)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[128];
+   char *Query;
 
    /***** Set my language to the current language *****/
    Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
 
    /***** Update my language in database *****/
-   sprintf (Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your language");
+   if (asprintf (&Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
+	         Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update your language");
   }
 
 /*****************************************************************************/

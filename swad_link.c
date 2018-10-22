@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -252,7 +254,7 @@ void Lnk_EditLinks (void)
 
 void Lnk_GetListLinks (void)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -262,9 +264,10 @@ void Lnk_GetListLinks (void)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get institutional links from database *****/
-      sprintf (Query,"SELECT LnkCod,ShortName,FullName,WWW"
-	             " FROM links ORDER BY ShortName");
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get institutional links");
+      if (asprintf (&Query,"SELECT LnkCod,ShortName,FullName,WWW"
+	                   " FROM links ORDER BY ShortName") < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get institutional links");
 
       if (NumRows) // Places found...
 	{
@@ -315,7 +318,7 @@ void Lnk_GetListLinks (void)
 
 void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -327,10 +330,11 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      sprintf (Query,"SELECT ShortName,FullName,WWW FROM links"
-	             " WHERE LnkCod=%ld",
-               Lnk->LnkCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of an institutional link");
+      if (asprintf (&Query,"SELECT ShortName,FullName,WWW FROM links"
+	                   " WHERE LnkCod=%ld",
+                    Lnk->LnkCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of an institutional link");
 
       if (NumRows) // Link found...
         {
@@ -487,7 +491,7 @@ long Lnk_GetParamLnkCod (void)
 void Lnk_RemoveLink (void)
   {
    extern const char *Txt_Link_X_removed;
-   char Query[128];
+   char *Query;
    struct Link Lnk;
 
    /***** Get link code *****/
@@ -498,9 +502,10 @@ void Lnk_RemoveLink (void)
    Lnk_GetDataOfLinkByCod (&Lnk);
 
    /***** Remove link *****/
-   sprintf (Query,"DELETE FROM links WHERE LnkCod=%ld",
-            Lnk.LnkCod);
-   DB_QueryDELETE (Query,"can not remove an institutional link");
+   if (asprintf (&Query,"DELETE FROM links WHERE LnkCod=%ld",
+                 Lnk.LnkCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove an institutional link");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -629,12 +634,13 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod)
   {
-   char Query[256 + Lnk_MAX_BYTES_LINK_FULL_NAME];
+   char *Query;
 
    /***** Get number of links with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM links WHERE %s='%s' AND LnkCod<>%ld",
-            FieldName,Name,LnkCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of an institutional link already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM links WHERE %s='%s' AND LnkCod<>%ld",
+                 FieldName,Name,LnkCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name of an institutional link already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -643,12 +649,13 @@ static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,lo
 
 static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName)
   {
-   char Query[128 + Lnk_MAX_BYTES_LINK_FULL_NAME];
+   char *Query;
 
    /***** Update institutional link changing old name by new name */
-   sprintf (Query,"UPDATE links SET %s='%s' WHERE LnkCod=%ld",
-	    FieldName,NewLnkName,LnkCod);
-   DB_QueryUPDATE (Query,"can not update the name of an institutional link");
+   if (asprintf (&Query,"UPDATE links SET %s='%s' WHERE LnkCod=%ld",
+	         FieldName,NewLnkName,LnkCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of an institutional link");
   }
 
 /*****************************************************************************/
@@ -660,7 +667,7 @@ void Lnk_ChangeLinkWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Link *Lnk;
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Lnk = &Gbl.Links.EditingLnk;
@@ -677,9 +684,10 @@ void Lnk_ChangeLinkWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
-               NewWWW,Lnk->LnkCod);
-      DB_QueryUPDATE (Query,"can not update the web of an institutional link");
+      if (asprintf (&Query,"UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
+                    NewWWW,Lnk->LnkCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update the web of an institutional link");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -850,18 +858,16 @@ void Lnk_RecFormNewLink (void)
 static void Lnk_CreateLink (struct Link *Lnk)
   {
    extern const char *Txt_Created_new_link_X;
-   char Query[256 +
-              Lnk_MAX_BYTES_LINK_SHRT_NAME +
-              Lnk_MAX_BYTES_LINK_FULL_NAME +
-              Cns_MAX_BYTES_WWW];
+   char *Query;
 
    /***** Create a new link *****/
-   sprintf (Query,"INSERT INTO links"
-	          " (ShortName,FullName,WWW)"
-                  " VALUES"
-                  " ('%s','%s','%s')",
-            Lnk->ShrtName,Lnk->FullName,Lnk->WWW);
-   DB_QueryINSERT (Query,"can not create institutional link");
+   if (asprintf (&Query,"INSERT INTO links"
+			" (ShortName,FullName,WWW)"
+			" VALUES"
+			" ('%s','%s','%s')",
+                 Lnk->ShrtName,Lnk->FullName,Lnk->WWW) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create institutional link");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

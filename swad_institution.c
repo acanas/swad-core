@@ -153,7 +153,7 @@ void Ins_SeeInsWithPendingCtrs (void)
      }
 
    /***** Get institutions *****/
-   if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
+   if ((NumInss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
@@ -1013,7 +1013,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
             Lay_NotEnoughMemoryExit ();
          break;
      }
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get institutions");
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions");
 
    if (NumRows) // Institutions found...
      {
@@ -1149,7 +1149,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
          Lay_NotEnoughMemoryExit ();
 
       /***** Count number of rows in result *****/
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of an institution")) // Institution found...
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get data of an institution")) // Institution found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -1240,7 +1240,7 @@ void Ins_GetShortNameOfInstitution (struct Instit *Ins)
    if (asprintf (&Query,"SELECT ShortName FROM institutions WHERE InsCod=%ld",
 	         Ins->InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of an institution") == 1)
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the short name of an institution") == 1)
      {
       /* Get the short name of this institution */
       row = mysql_fetch_row (mysql_res);
@@ -1304,7 +1304,7 @@ static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
 			" AND institutions.CtyCod=countries.CtyCod",
 	         Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get the full name of an institution") == 1)
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the full name of an institution") == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1383,7 +1383,7 @@ void Ins_WriteSelectorOfInstitution (void)
 			   " ORDER BY ShortName",
                     Gbl.CurrentCty.Cty.CtyCod) < 0)
          Lay_NotEnoughMemoryExit ();
-      NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions");
+      NumInss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions");
 
       /***** List institutions *****/
       for (NumIns = 0;
@@ -1738,7 +1738,7 @@ void Ins_RemoveInstitution (void)
       if (asprintf (&Query,"DELETE FROM institutions WHERE InsCod=%ld",
                     Ins.InsCod) < 0)
          Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE (Query,"can not remove an institution");
+      DB_QueryDELETE_free (Query,"can not remove an institution");
 
       /***** Flush caches *****/
       Ins_FlushCacheShortNameOfInstitution ();
@@ -1883,7 +1883,7 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
                         " WHERE CtyCod=%ld AND %s='%s' AND InsCod<>%ld",
                  CtyCod,FieldName,Name,InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT (Query,"can not check if the name of an institution already existed") != 0);
+   return (DB_QueryCOUNT_free (Query,"can not check if the name of an institution already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -1898,7 +1898,7 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *N
    if (asprintf (&Query,"UPDATE institutions SET %s='%s' WHERE InsCod=%ld",
 	         FieldName,NewInsName,InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not update the name of an institution");
+   DB_QueryUPDATE_free (Query,"can not update the name of an institution");
 
    /***** Flush caches *****/
    Ins_FlushCacheShortNameOfInstitution ();
@@ -1983,7 +1983,7 @@ static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod)
    if (asprintf (&Query,"UPDATE institutions SET CtyCod=%ld WHERE InsCod=%ld",
                  CtyCod,InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not update the country of an institution");
+   DB_QueryUPDATE_free (Query,"can not update the country of an institution");
   }
 
 /*****************************************************************************/
@@ -2072,7 +2072,7 @@ static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW 
    if (asprintf (&Query,"UPDATE institutions SET WWW='%s' WHERE InsCod=%ld",
 	         NewWWW,InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not update the web of an institution");
+   DB_QueryUPDATE_free (Query,"can not update the web of an institution");
   }
 
 /*****************************************************************************/
@@ -2108,7 +2108,7 @@ void Ins_ChangeInsStatus (void)
    if (asprintf (&Query,"UPDATE institutions SET Status=%u WHERE InsCod=%ld",
                  (unsigned) Status,Gbl.Inss.EditingIns.InsCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not update the status of an institution");
+   DB_QueryUPDATE_free (Query,"can not update the status of an institution");
    Gbl.Inss.EditingIns.Status = Status;
 
    /***** Write message to show the change made
@@ -2443,7 +2443,7 @@ static void Ins_CreateInstitution (unsigned Status)
 	         Gbl.Inss.EditingIns.FullName,
 	         Gbl.Inss.EditingIns.WWW) < 0)
       Lay_NotEnoughMemoryExit ();
-   Gbl.Inss.EditingIns.InsCod = DB_QueryINSERTandReturnCode (Query,"can not create institution");
+   Gbl.Inss.EditingIns.InsCod = DB_QueryINSERTandReturnCode_free (Query,"can not create institution");
 
    /***** Write message to show the change made
 	  and put button to go to institution created *****/
@@ -2465,7 +2465,7 @@ unsigned Ins_GetNumInssTotal (void)
    /***** Get total number of degrees from database *****/
    if (asprintf (&Query,"SELECT COUNT(*) FROM institutions") < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the total number of institutions");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the total number of institutions");
   }
 
 /*****************************************************************************/
@@ -2480,7 +2480,7 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
    if (asprintf (&Query,"SELECT COUNT(*) FROM institutions WHERE CtyCod=%ld",
                  CtyCod) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of institutions in a country");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of institutions in a country");
   }
 
 /*****************************************************************************/
@@ -2497,7 +2497,7 @@ unsigned Ins_GetNumInssWithCtrs (const char *SubQuery)
 			" WHERE %sinstitutions.InsCod=centres.InsCod",
                  SubQuery) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of institutions with centres");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with centres");
   }
 
 /*****************************************************************************/
@@ -2515,7 +2515,7 @@ unsigned Ins_GetNumInssWithDegs (const char *SubQuery)
 			" AND centres.CtrCod=degrees.CtrCod",
                  SubQuery) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of institutions with degrees");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with degrees");
   }
 
 /*****************************************************************************/
@@ -2534,7 +2534,7 @@ unsigned Ins_GetNumInssWithCrss (const char *SubQuery)
 			" AND degrees.DegCod=courses.DegCod",
                  SubQuery) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of institutions with courses");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with courses");
   }
 
 /*****************************************************************************/
@@ -2555,7 +2555,7 @@ unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
 			" AND crs_usr.Role=%u",
                 SubQuery,(unsigned) Role) < 0)
       Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of institutions with users");
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with users");
   }
 
 /*****************************************************************************/
