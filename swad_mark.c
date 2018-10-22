@@ -87,19 +87,20 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
 void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks)
   {
-   char Query[256];
+   char *Query;
 
    /***** Add file of marks to the database *****/
-   sprintf (Query,"INSERT INTO marks_properties"
-	          " (FilCod,%s,%s)"
-                  " VALUES"
-                  " (%ld,%u,%u)",
-            Mrk_HeadOrFootStr[Brw_HEADER],
-            Mrk_HeadOrFootStr[Brw_FOOTER],
-            FilCod,
-	    Marks->Header,
-	    Marks->Footer);
-   DB_QueryINSERT (Query,"can not add properties of marks to database");
+   if (asprintf (&Query,"INSERT INTO marks_properties"
+			" (FilCod,%s,%s)"
+			" VALUES"
+			" (%ld,%u,%u)",
+	         Mrk_HeadOrFootStr[Brw_HEADER],
+	         Mrk_HeadOrFootStr[Brw_FOOTER],
+	         FilCod,
+	         Marks->Header,
+	         Marks->Footer) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not add properties of marks to database");
   }
 
 /*****************************************************************************/
@@ -189,7 +190,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFiles ();
-   char Query[512 + PATH_MAX];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -198,17 +199,18 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   sprintf (Query,"SELECT marks_properties.%s,marks_properties.%s"
-	          " FROM files,marks_properties"
-                  " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-                  " AND files.FilCod=marks_properties.FilCod"
-                  " ORDER BY files.FilCod DESC LIMIT 1",	// On duplicate entries, get the more recent
-            Mrk_HeadOrFootStr[Brw_HEADER],
-            Mrk_HeadOrFootStr[Brw_FOOTER],
-            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-            Cod,
-	    Gbl.FileBrowser.Priv.FullPathInTree);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the number of rows in header and footer");
+   if (asprintf (&Query,"SELECT marks_properties.%s,marks_properties.%s"
+			" FROM files,marks_properties"
+			" WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
+			" AND files.FilCod=marks_properties.FilCod"
+			" ORDER BY files.FilCod DESC LIMIT 1",	// On duplicate entries, get the more recent
+	         Mrk_HeadOrFootStr[Brw_HEADER],
+	         Mrk_HeadOrFootStr[Brw_FOOTER],
+	         (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	         Cod,
+	         Gbl.FileBrowser.Priv.FullPathInTree) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get the number of rows in header and footer");
 
    /***** The result of the query must have only one row *****/
    if (NumRows == 1)
@@ -260,7 +262,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    extern const char *Txt_The_number_of_rows_is_now_X;
    char UnsignedStr[10 + 1];
    long Cod;
-   char Query[512 + PATH_MAX];
+   char *Query;
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
@@ -272,15 +274,16 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
      {
       /***** Update properties of marks in the database *****/
       Cod = Brw_GetCodForFiles ();
-      sprintf (Query,"UPDATE marks_properties,files"
-	             " SET marks_properties.%s=%u"
-	             " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-	             " AND files.FilCod=marks_properties.FilCod",
-               Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
-               (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-               Cod,
-               Gbl.FileBrowser.Priv.FullPathInTree);
-      DB_QueryUPDATE (Query,"can not update properties of marks");
+      if (asprintf (&Query,"UPDATE marks_properties,files"
+			   " SET marks_properties.%s=%u"
+			   " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
+			   " AND files.FilCod=marks_properties.FilCod",
+		    Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
+		    (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		    Cod,
+		    Gbl.FileBrowser.Priv.FullPathInTree) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update properties of marks");
 
       /***** Write message of success *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -728,13 +731,12 @@ void Mrk_ShowMyMarks (void)
 /*****************************************************************************/
 /******************** Put my marks into a notification ***********************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
 void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,
                           long MrkCod,long UsrCod,bool GetContent)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData UsrDat;
@@ -760,6 +762,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    char *Ptr;
 
    SummaryStr[0] = '\0';	// Return nothing on error
+   // This function may be called inside a web service, so don't report error
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -769,145 +772,142 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    ID_GetListIDsFromUsrCod (&UsrDat);
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT files.FileBrowser,files.Cod,files.Path,"
-	          "marks_properties.Header,marks_properties.Footer"
-	          " FROM files,marks_properties"
-	          " WHERE files.FilCod=%ld"
-	          " AND files.FilCod=marks_properties.FilCod",
-	    MrkCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get data of this file of marks *****/
-            row = mysql_fetch_row (mysql_res);
+   if (asprintf (&Query,"SELECT files.FileBrowser,files.Cod,files.Path,"
+			"marks_properties.Header,marks_properties.Footer"
+			" FROM files,marks_properties"
+			" WHERE files.FilCod=%ld"
+			" AND files.FilCod=marks_properties.FilCod",
+	         MrkCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the number of rows in header and footer") == 1)	// Result should have a unique row
+     {
+      /***** Get data of this file of marks *****/
+      row = mysql_fetch_row (mysql_res);
 
-	    /* Get file browser type in database (row[0]) */
-	    FileBrowser = Brw_UNKNOWN;
-	    if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-	       if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
-		  FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
+      /* Get file browser type in database (row[0]) */
+      FileBrowser = Brw_UNKNOWN;
+      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
+	    FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-            /* Course/group code (row[1]) */
-            Cod = Str_ConvertStrCodToLongCod (row[1]);
-            Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,
-                                           &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
+      /* Course/group code (row[1]) */
+      Cod = Str_ConvertStrCodToLongCod (row[1]);
+      Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,
+				     &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
 
-            /* Path (row[2]) */
-            Str_Copy (FullPathInTreeFromDBMarksTable,row[2],
-                      PATH_MAX);
-            Str_SplitFullPathIntoPathAndFileName (FullPathInTreeFromDBMarksTable,
-        	                                  PathUntilFileName,
-        	                                  FileName);
-            Str_Copy (SummaryStr,FileName,
-                      Cns_MAX_BYTES_TEXT);
+      /* Path (row[2]) */
+      Str_Copy (FullPathInTreeFromDBMarksTable,row[2],
+		PATH_MAX);
+      Str_SplitFullPathIntoPathAndFileName (FullPathInTreeFromDBMarksTable,
+					    PathUntilFileName,
+					    FileName);
+      Str_Copy (SummaryStr,FileName,
+		Cns_MAX_BYTES_TEXT);
 
-            if (GetContent)
-              {
-               /* Header (row[3]) */
-               if (sscanf (row[3],"%u",&(Marks.Header)) != 1)
-                  Lay_ShowErrorAndExit ("Wrong number of header rows.");
+      if (GetContent)
+	{
+	 /* Header (row[3]) */
+	 if (sscanf (row[3],"%u",&(Marks.Header)) != 1)
+	    Lay_ShowErrorAndExit ("Wrong number of header rows.");
 
-               /* Footer (row[4]) */
-               if (sscanf (row[4],"%u",&(Marks.Footer)) != 1)
-                  Lay_ShowErrorAndExit ("Wrong number of footer rows.");
+	 /* Footer (row[4]) */
+	 if (sscanf (row[4],"%u",&(Marks.Footer)) != 1)
+	    Lay_ShowErrorAndExit ("Wrong number of footer rows.");
 
-               if (UsrDat.IDs.Num)
-                 {
-                  if (GrpCod > 0)
-                     snprintf (PathMarks,sizeof (PathMarks),
-                	       "%s/%s/%ld/grp/%ld/%s",
-                               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod,
-                               FullPathInTreeFromDBMarksTable);
-                  else
-                     snprintf (PathMarks,sizeof (PathMarks),
-                	       "%s/%s/%ld/%s",
-                               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
-                               FullPathInTreeFromDBMarksTable);
+	 if (UsrDat.IDs.Num)
+	   {
+	    if (GrpCod > 0)
+	       snprintf (PathMarks,sizeof (PathMarks),
+			 "%s/%s/%ld/grp/%ld/%s",
+			 Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod,
+			 FullPathInTreeFromDBMarksTable);
+	    else
+	       snprintf (PathMarks,sizeof (PathMarks),
+			 "%s/%s/%ld/%s",
+			 Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+			 FullPathInTreeFromDBMarksTable);
 
-                  /***** Create temporal file to store my marks (in HTML) *****/
-                  /* If the private directory does not exist, create it */
-                  snprintf (PathMarksPriv,sizeof (PathMarksPriv),
-                	    "%s/%s",
-                            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
-                  Fil_CreateDirIfNotExists (PathMarksPriv);
+	    /***** Create temporal file to store my marks (in HTML) *****/
+	    /* If the private directory does not exist, create it */
+	    snprintf (PathMarksPriv,sizeof (PathMarksPriv),
+		      "%s/%s",
+		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
+	    Fil_CreateDirIfNotExists (PathMarksPriv);
 
-                  /* First of all, we remove the oldest temporary files.
-                     Such temporary files have been created by me or by other users.
-                     This is a bit sloppy, but they must be removed by someone.
-                     Here "oldest" means more than x time from their creation */
-                  Fil_RemoveOldTmpFiles (PathMarksPriv,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,false);
+	    /* First of all, we remove the oldest temporary files.
+	       Such temporary files have been created by me or by other users.
+	       This is a bit sloppy, but they must be removed by someone.
+	       Here "oldest" means more than x time from their creation */
+	    Fil_RemoveOldTmpFiles (PathMarksPriv,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,false);
 
-                  /* Create a new temporary file *****/
-                  snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
-                	    "%s/%s.html",
-			    PathMarksPriv,Gbl.UniqueNameEncrypted);
-                  if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
-                    {
-                     /***** Get user's marks *****/
-                     if (Mrk_GetUsrMarks (FileUsrMarks,&UsrDat,PathMarks,&Marks))
-                       {
-                        SizeOfMyMarks = (size_t) ftell (FileUsrMarks);
-                        fclose (FileUsrMarks);
+	    /* Create a new temporary file *****/
+	    snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
+		      "%s/%s.html",
+		      PathMarksPriv,Gbl.UniqueNameEncrypted);
+	    if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
+	      {
+	       /***** Get user's marks *****/
+	       if (Mrk_GetUsrMarks (FileUsrMarks,&UsrDat,PathMarks,&Marks))
+		 {
+		  SizeOfMyMarks = (size_t) ftell (FileUsrMarks);
+		  fclose (FileUsrMarks);
 
-                        Length = 9 + SizeOfMyMarks + 3;
-                        if ((*ContentStr = (char *) malloc (Length + 1)))
-                          {
-                           /* 9 starting chars */
-                           Str_Copy (*ContentStr,"<![CDATA[",
-                                     9);
+		  Length = 9 + SizeOfMyMarks + 3;
+		  if ((*ContentStr = (char *) malloc (Length + 1)))
+		    {
+		     /* 9 starting chars */
+		     Str_Copy (*ContentStr,"<![CDATA[",
+			       9);
 
-                           /* Content */
-                           Ptr = (*ContentStr) + 9;
-                           if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")))
-                             {
-                              for (i = 0;
-                        	   i < SizeOfMyMarks;
-                        	   i++)
-                                 *Ptr++ = (char) fgetc (FileUsrMarks);
-                              fclose (FileUsrMarks);
-                             }
+		     /* Content */
+		     Ptr = (*ContentStr) + 9;
+		     if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")))
+		       {
+			for (i = 0;
+			     i < SizeOfMyMarks;
+			     i++)
+			   *Ptr++ = (char) fgetc (FileUsrMarks);
+			fclose (FileUsrMarks);
+		       }
 
-                           /* 3 ending chars */
-                           Str_Copy (Ptr,"]]>",
-                                     3);
-                          }
-                       }
-                     else
-                       {
-                        fclose (FileUsrMarks);
-                        if (asprintf (ContentStr,"<![CDATA[%s]]>",
-                                      Gbl.Alert.Txt) < 0)
-                           Lay_NotEnoughMemoryExit ();
-                       }
-                    }
-                  else
-                    {
-		     Gbl.Alert.Type = Ale_WARNING;
-		     Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",	// TODO: Need translation!
-			       Ale_MAX_BYTES_ALERT);
-                     if (asprintf (ContentStr,"<![CDATA[%s]]>",
-                	           Gbl.Alert.Txt) < 0)
-                        Lay_NotEnoughMemoryExit ();
-                    }
-                  unlink (FileNameUsrMarks);	// File with marks is no longer necessary
-                 }
-               else
-                 {
-		  Gbl.Alert.Type = Ale_WARNING;
-		  Str_Copy (Gbl.Alert.Txt,"User's IDs not found!",	// TODO: Need translation!
-			    Ale_MAX_BYTES_ALERT);
-                  if (asprintf (ContentStr,"<![CDATA[%s]]>",
-                	        Gbl.Alert.Txt) < 0)
-                     Lay_NotEnoughMemoryExit ();
-                 }
-              }
-           }
+		     /* 3 ending chars */
+		     Str_Copy (Ptr,"]]>",
+			       3);
+		    }
+		 }
+	       else
+		 {
+		  fclose (FileUsrMarks);
+		  if (asprintf (ContentStr,"<![CDATA[%s]]>",
+				Gbl.Alert.Txt) < 0)
+		     Lay_NotEnoughMemoryExit ();
+		 }
+	      }
+	    else
+	      {
+	       Gbl.Alert.Type = Ale_WARNING;
+	       Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",	// TODO: Need translation!
+			 Ale_MAX_BYTES_ALERT);
+	       if (asprintf (ContentStr,"<![CDATA[%s]]>",
+			     Gbl.Alert.Txt) < 0)
+		  Lay_NotEnoughMemoryExit ();
+	      }
+	    unlink (FileNameUsrMarks);	// File with marks is no longer necessary
+	   }
+	 else
+	   {
+	    Gbl.Alert.Type = Ale_WARNING;
+	    Str_Copy (Gbl.Alert.Txt,"User's IDs not found!",	// TODO: Need translation!
+		      Ale_MAX_BYTES_ALERT);
+	    if (asprintf (ContentStr,"<![CDATA[%s]]>",
+			  Gbl.Alert.Txt) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	   }
+	}
+     }
 
-         mysql_free_result (mysql_res);
-        }
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

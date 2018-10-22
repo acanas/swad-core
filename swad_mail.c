@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -216,7 +218,7 @@ void Mai_EditMailDomains (void)
 static void Mai_GetListMailDomainsAllowedForNotif (void)
   {
    char OrderBySubQuery[256];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -228,19 +230,19 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    // ...because a unique temporary table can not be used twice in the same query
 
    /***** Create temporary table with all the mail domains present in users' emails table *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary tables");
+   if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2") < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_Query_free (Query,"can not remove temporary tables");
 
-   sprintf (Query,"CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
-	          " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
-	          " FROM usr_emails GROUP BY Domain");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not create temporary table");
+   if (asprintf (&Query,"CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
+	                " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
+	                " FROM usr_emails GROUP BY Domain") < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_Query_free (Query,"can not create temporary table");
 
-   sprintf (Query,"CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not create temporary table");
+   if (asprintf (&Query,"CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1") < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_Query_free (Query,"can not create temporary table");
 
    /***** Get mail domains from database *****/
    switch (Gbl.Mails.SelectedOrder)
@@ -255,17 +257,18 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
          sprintf (OrderBySubQuery,"N DESC,Info,Domain");
          break;
      }
-   sprintf (Query,"(SELECT mail_domains.MaiCod,mail_domains.Domain AS Domain,mail_domains.Info AS Info,T1.N AS N"
-                  " FROM mail_domains,T1"
-                  " WHERE mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
-                  " UNION "
-                  "(SELECT MaiCod,Domain,Info,0 AS N"
-                  " FROM mail_domains"
-                  " WHERE Domain NOT IN (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
-                  " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
-            OrderBySubQuery);
+   if (asprintf (&Query,"(SELECT mail_domains.MaiCod,mail_domains.Domain AS Domain,mail_domains.Info AS Info,T1.N AS N"
+			" FROM mail_domains,T1"
+			" WHERE mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
+			" UNION "
+			"(SELECT MaiCod,Domain,Info,0 AS N"
+			" FROM mail_domains"
+			" WHERE Domain NOT IN (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
+			" ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
+                 OrderBySubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
 
-   if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get mail domains"))) // Mail domains found...
+   if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get mail domains"))) // Mail domains found...
      {
       Gbl.Mails.Num = (unsigned) NumRows;
 
@@ -307,9 +310,9 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Drop temporary table *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary tables");
+   if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2") < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_Query_free (Query,"can not remove temporary tables");
   }
 
 /*****************************************************************************/
@@ -355,12 +358,13 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_E
 
 static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   char Query[128 + Cns_MAX_BYTES_EMAIL_ADDRESS];
+   char *Query;
 
    /***** Get number of mail_domains with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM mail_domains WHERE Domain='%s'",
-            MailDomain);
-   return (DB_QueryCOUNT (Query,"can not check if a mail domain is allowed for notifications") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM mail_domains WHERE Domain='%s'",
+                 MailDomain) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if a mail domain is allowed for notifications") != 0);
   }
 
 /*****************************************************************************/
@@ -392,7 +396,7 @@ void Mai_WriteWarningEmailNotifications (void)
 
 void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -404,9 +408,10 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      sprintf (Query,"SELECT Domain,Info FROM mail_domains WHERE MaiCod=%ld",
-               Mai->MaiCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a mail domain");
+      if (asprintf (&Query,"SELECT Domain,Info FROM mail_domains WHERE MaiCod=%ld",
+                    Mai->MaiCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a mail domain");
 
       if (NumRows) // Mail found...
         {
@@ -544,7 +549,7 @@ long Mai_GetParamMaiCod (void)
 void Mai_RemoveMailDomain (void)
   {
    extern const char *Txt_Email_domain_X_removed;
-   char Query[128];
+   char *Query;
    struct Mail Mai;
 
    /***** Get mail code *****/
@@ -555,9 +560,10 @@ void Mai_RemoveMailDomain (void)
    Mai_GetDataOfMailDomainByCod (&Mai);
 
    /***** Remove mail *****/
-   sprintf (Query,"DELETE FROM mail_domains WHERE MaiCod=%ld",
-            Mai.MaiCod);
-   DB_QueryDELETE (Query,"can not remove a mail domain");
+   if (asprintf (&Query,"DELETE FROM mail_domains WHERE MaiCod=%ld",
+                 Mai.MaiCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove a mail domain");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -690,13 +696,14 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
   {
-   char Query[256 + Mai_MAX_BYTES_MAIL_INFO];
+   char *Query;
 
    /***** Get number of mail_domains with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM mail_domains"
-	          " WHERE %s='%s' AND MaiCod<>%ld",
-            FieldName,Name,MaiCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a mail domain already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM mail_domains"
+	                " WHERE %s='%s' AND MaiCod<>%ld",
+                 FieldName,Name,MaiCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name of a mail domain already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -705,12 +712,13 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
 
 static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const char *NewMaiName)
   {
-   char Query[128 + Mai_MAX_BYTES_MAIL_INFO];
+   char *Query;
 
    /***** Update mail domain changing old name by new name */
-   sprintf (Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod=%ld",
-	    FieldName,NewMaiName,MaiCod);
-   DB_QueryUPDATE (Query,"can not update the name of a mail domain");
+   if (asprintf (&Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod=%ld",
+	         FieldName,NewMaiName,MaiCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of a mail domain");
   }
 
 /*****************************************************************************/
@@ -856,17 +864,16 @@ void Mai_RecFormNewMailDomain (void)
 static void Mai_CreateMailDomain (struct Mail *Mai)
   {
    extern const char *Txt_Created_new_email_domain_X;
-   char Query[128 +
-              Cns_MAX_BYTES_EMAIL_ADDRESS +
-              Mai_MAX_BYTES_MAIL_INFO];
+   char *Query;
 
    /***** Create a new mail *****/
-   sprintf (Query,"INSERT INTO mail_domains"
-	          " (Domain,Info)"
-	          " VALUES"
-	          " ('%s','%s')",
-            Mai->Domain,Mai->Info);
-   DB_QueryINSERT (Query,"can not create mail domain");
+   if (asprintf (&Query,"INSERT INTO mail_domains"
+			" (Domain,Info)"
+			" VALUES"
+			" ('%s','%s')",
+	         Mai->Domain,Mai->Info) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create mail domain");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1069,17 +1076,18 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
 
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
-	          " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
-	    UsrDat->UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get email address");
+   if (asprintf (&Query,"SELECT E_mail,Confirmed FROM usr_emails"
+	                " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
+	         UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get email address");
 
    if (NumRows == 0)
      {
@@ -1110,7 +1118,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 
 long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   char Query[512 + Cns_MAX_BYTES_EMAIL_ADDRESS];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1121,11 +1129,12 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
 	{
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_emails is also in table usr_data */
-	 sprintf (Query,"SELECT usr_emails.UsrCod FROM usr_emails,usr_data"
-			" WHERE usr_emails.E_mail='%s'"
-			" AND usr_emails.UsrCod=usr_data.UsrCod",
-		  Email);
-	 NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's code");
+	 if (asprintf (&Query,"SELECT usr_emails.UsrCod FROM usr_emails,usr_data"
+			      " WHERE usr_emails.E_mail='%s'"
+			      " AND usr_emails.UsrCod=usr_data.UsrCod",
+		       Email) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code");
 	 if (NumUsrs == 0)
 	    /* User not found for this email ==> set user's code to void */
 	    UsrCod = -1L;
@@ -1231,7 +1240,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    extern const char *Txt_Email;
    extern const char *Txt_Change_email;
    extern const char *Txt_Save;
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumEmails;
@@ -1250,11 +1259,12 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
-   sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
-                  " WHERE UsrCod=%ld"
-                  " ORDER BY CreatTime DESC",
-            UsrDat->UsrCod);
-   NumEmails = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get old email addresses of a user");
+   if (asprintf (&Query,"SELECT E_mail,Confirmed FROM usr_emails"
+                        " WHERE UsrCod=%ld"
+                        " ORDER BY CreatTime DESC",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumEmails = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get old email addresses of a user");
 
    /***** Start table *****/
    Tbl_StartTableWide (2);
@@ -1498,13 +1508,14 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
 
 static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   char Query[256 + Cns_MAX_BYTES_EMAIL_ADDRESS];
+   char *Query;
 
    /***** Remove an old email address *****/
-   sprintf (Query,"DELETE FROM usr_emails"
-                  " WHERE UsrCod=%ld AND E_mail='%s'",
-            UsrCod,Email);
-   DB_QueryREPLACE (Query,"can not remove an old email address");
+   if (asprintf (&Query,"DELETE FROM usr_emails"
+                        " WHERE UsrCod=%ld AND E_mail='%s'",
+                 UsrCod,Email) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not remove an old email address");
   }
 
 /*****************************************************************************/
@@ -1634,35 +1645,39 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 
 bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   char Query[256 + Cns_MAX_BYTES_EMAIL_ADDRESS];
+   char *Query;
 
    /***** Check if the new email matches any of the confirmed emails of other users *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
-                  " WHERE E_mail='%s' AND Confirmed='Y'"
-		  " AND UsrCod<>%ld",
-	    NewEmail,UsrDat->UsrCod);
-   if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_emails"
+			" WHERE E_mail='%s' AND Confirmed='Y'"
+			" AND UsrCod<>%ld",
+	         NewEmail,UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QueryCOUNT_free (Query,"can not check if email already existed"))	// An email of another user is the same that my email
       return false;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/
-   sprintf (Query,"DELETE FROM pending_emails"
-                  " WHERE E_mail='%s' AND UsrCod<>%ld",
-	    NewEmail,UsrDat->UsrCod);
-   DB_QueryDELETE (Query,"can not remove pending email for other users");
+   if (asprintf (&Query,"DELETE FROM pending_emails"
+                        " WHERE E_mail='%s' AND UsrCod<>%ld",
+	         NewEmail,UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove pending email for other users");
 
-   sprintf (Query,"DELETE FROM usr_emails"
-                  " WHERE E_mail='%s' AND Confirmed='N'"
-		  " AND UsrCod<>%ld",
-	    NewEmail,UsrDat->UsrCod);
-   DB_QueryDELETE (Query,"can not remove not confirmed email for other users");
+   if (asprintf (&Query,"DELETE FROM usr_emails"
+                        " WHERE E_mail='%s' AND Confirmed='N'"
+		        " AND UsrCod<>%ld",
+	         NewEmail,UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove not confirmed email for other users");
 
    /***** Update email in database *****/
-   sprintf (Query,"REPLACE INTO usr_emails"
-                  " (UsrCod,E_mail,CreatTime)"
-                  " VALUES"
-                  " (%ld,'%s',NOW())",
-            UsrDat->UsrCod,NewEmail);
-   DB_QueryREPLACE (Query,"can not update email");
+   if (asprintf (&Query,"REPLACE INTO usr_emails"
+			" (UsrCod,E_mail,CreatTime)"
+			" VALUES"
+			" (%ld,'%s',NOW())",
+                 UsrDat->UsrCod,NewEmail) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not update email");
 
    return true;	// Successfully updated
   }
@@ -1781,25 +1796,25 @@ bool Mai_SendMailMsgToConfirmEmail (void)
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
-   char Query[256 +
-              Cns_MAX_BYTES_EMAIL_ADDRESS +
-              Mai_LENGTH_EMAIL_CONFIRM_KEY];
+   char *Query;
 
    /***** Remove expired pending emails from database *****/
-   sprintf (Query,"DELETE FROM pending_emails"
-                  " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);
-   DB_QueryDELETE (Query,"can not remove old pending mail keys");
+   if (asprintf (&Query,"DELETE FROM pending_emails"
+                        " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                 Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove old pending mail keys");
 
    /***** Insert mail key in database *****/
-   sprintf (Query,"INSERT INTO pending_emails"
-	          " (UsrCod,E_mail,MailKey,DateAndTime)"
-                  " VALUES"
-                  " (%ld,'%s','%s',NOW())",
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Email,
-            MailKey);
-   DB_QueryREPLACE (Query,"can not create pending password");
+   if (asprintf (&Query,"INSERT INTO pending_emails"
+			" (UsrCod,E_mail,MailKey,DateAndTime)"
+			" VALUES"
+			" (%ld,'%s','%s',NOW())",
+	         Gbl.Usrs.Me.UsrDat.UsrCod,
+	         Email,
+	         MailKey) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not create pending password");
   }
 
 /*****************************************************************************/
@@ -1812,9 +1827,7 @@ void Mai_ConfirmEmail (void)
    extern const char *Txt_The_email_X_has_been_confirmed;
    extern const char *Txt_The_email_address_has_not_been_confirmed;
    extern const char *Txt_Failed_email_confirmation_key;
-   char Query[256 +
-              Cns_MAX_BYTES_EMAIL_ADDRESS +
-              Mai_LENGTH_EMAIL_CONFIRM_KEY];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
@@ -1827,10 +1840,11 @@ void Mai_ConfirmEmail (void)
    Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
    /***** Get user's code and email from key *****/
-   sprintf (Query,"SELECT UsrCod,E_mail FROM pending_emails"
-	          " WHERE MailKey='%s'",
-            MailKey);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and email from key"))
+   if (asprintf (&Query,"SELECT UsrCod,E_mail FROM pending_emails"
+	                " WHERE MailKey='%s'",
+                 MailKey) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code and email from key"))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1850,16 +1864,18 @@ void Mai_ConfirmEmail (void)
    if (KeyIsCorrect)
      {
       /***** Delete this key *****/
-      sprintf (Query,"DELETE FROM pending_emails WHERE MailKey='%s'",
-               MailKey);
-      DB_QueryDELETE (Query,"can not remove an email key");
+      if (asprintf (&Query,"DELETE FROM pending_emails WHERE MailKey='%s'",
+                    MailKey) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove an email key");
 
       /***** Check user's code and email
              and get if email is already confirmed *****/
-      sprintf (Query,"SELECT Confirmed FROM usr_emails"
-		     " WHERE UsrCod=%ld AND E_mail='%s'",
-	       UsrCod,Email);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and email"))
+      if (asprintf (&Query,"SELECT Confirmed FROM usr_emails"
+		           " WHERE UsrCod=%ld AND E_mail='%s'",
+	            UsrCod,Email) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code and email"))
 	{
          Confirmed = (row[0][0] == 'Y');
 
@@ -1870,11 +1886,12 @@ void Mai_ConfirmEmail (void)
 		      Email);
          else
            {
-	    sprintf (Query,"UPDATE usr_emails SET Confirmed='Y'"
-			   " WHERE usr_emails.UsrCod=%ld"
-			   " AND usr_emails.E_mail='%s'",
-		     UsrCod,Email);
-	    DB_QueryUPDATE (Query,"can not confirm email");
+	    if (asprintf (&Query,"UPDATE usr_emails SET Confirmed='Y'"
+				 " WHERE usr_emails.UsrCod=%ld"
+				 " AND usr_emails.E_mail='%s'",
+		          UsrCod,Email) < 0)
+               Lay_NotEnoughMemoryExit ();
+	    DB_QueryUPDATE_free (Query,"can not confirm email");
 
 	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_email_X_has_been_confirmed,
