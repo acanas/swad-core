@@ -25,7 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>	// For fprintf, etc.
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf, fprintf, etc.
 
 #include "swad_box.h"
 #include "swad_database.h"
@@ -454,7 +455,7 @@ static void Mnu_PutIconsMenu (void)
 
 void Mnu_ChangeMenu (void)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get param with menu *****/
    Gbl.Prefs.Menu = Mnu_GetParamMenu ();
@@ -462,9 +463,10 @@ void Mnu_ChangeMenu (void)
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET Menu=%u WHERE UsrCod=%ld",
-               (unsigned) Gbl.Prefs.Menu,Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preference about menu");
+      if (asprintf (&Query,"UPDATE usr_data SET Menu=%u WHERE UsrCod=%ld",
+                    (unsigned) Gbl.Prefs.Menu,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update your preference about menu");
      }
 
    /***** Set preferences from current IP *****/
