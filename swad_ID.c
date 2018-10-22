@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <ctype.h>		// For isalnum, isdigit, etc.
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 
@@ -86,7 +88,7 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
 
 void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumIDs;
@@ -100,11 +102,12 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       /***** Get user's IDs from database *****/
       // First the confirmed (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
-      sprintf (Query,"SELECT UsrID,Confirmed FROM usr_IDs"
-	             " WHERE UsrCod=%ld"
-	             " ORDER BY Confirmed DESC,UsrID",
-               UsrDat->UsrCod);
-      if ((NumIDs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's IDs")))
+      if (asprintf (&Query,"SELECT UsrID,Confirmed FROM usr_IDs"
+			   " WHERE UsrCod=%ld"
+			   " ORDER BY Confirmed DESC,UsrID",
+                    UsrDat->UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if ((NumIDs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's IDs")))
 	{
 	 /***** Allocate space for the list *****/
          ID_ReallocateListIDs (UsrDat,NumIDs);
@@ -843,13 +846,14 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
   {
-   char Query[128];
+   char *Query;
 
    /***** Get if ID is confirmed from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_IDs"
-		  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
-	    UsrCod,UsrID);
-   return (DB_QueryCOUNT (Query,"can not check if ID is confirmed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_IDs"
+		        " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
+	         UsrCod,UsrID) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if ID is confirmed") != 0);
   }
 
 /*****************************************************************************/
@@ -858,13 +862,14 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
 
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
   {
-   char Query[256 + ID_MAX_BYTES_USR_ID];
+   char *Query;
 
    /***** Remove one of my user's IDs *****/
-   sprintf (Query,"DELETE FROM usr_IDs"
-                  " WHERE UsrCod=%ld AND UsrID='%s'",
-            UsrCod,UsrID);
-   DB_QueryREPLACE (Query,"can not remove a user's ID");
+   if (asprintf (&Query,"DELETE FROM usr_IDs"
+                        " WHERE UsrCod=%ld AND UsrID='%s'",
+                 UsrCod,UsrID) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not remove a user's ID");
   }
 
 /*****************************************************************************/
@@ -1020,17 +1025,18 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed)
   {
-   char Query[256 + ID_MAX_BYTES_USR_ID];
+   char *Query;
 
    /***** Update my nickname in database *****/
-   sprintf (Query,"INSERT INTO usr_IDs"
-                  " (UsrCod,UsrID,CreatTime,Confirmed)"
-                  " VALUES"
-                  " (%ld,'%s',NOW(),'%c')",
-            UsrCod,NewID,
-            Confirmed ? 'Y' :
-        	        'N');
-   DB_QueryINSERT (Query,"can not insert a new ID");
+   if (asprintf (&Query,"INSERT INTO usr_IDs"
+			" (UsrCod,UsrID,CreatTime,Confirmed)"
+			" VALUES"
+			" (%ld,'%s',NOW(),'%c')",
+	         UsrCod,NewID,
+	         Confirmed ? 'Y' :
+			     'N') < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not insert a new ID");
   }
 
 /*****************************************************************************/
@@ -1155,11 +1161,12 @@ void ID_ConfirmOtherUsrID (void)
 
 void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
   {
-   char Query[256 + ID_MAX_BYTES_USR_ID];
+   char *Query;
 
    /***** Update database *****/
-   sprintf (Query,"UPDATE usr_IDs SET Confirmed='Y'"
-                  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed<>'Y'",
-            UsrDat->UsrCod,UsrID);
-   DB_QueryINSERT (Query,"can not confirm a user's ID");
+   if (asprintf (&Query,"UPDATE usr_IDs SET Confirmed='Y'"
+			" WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed<>'Y'",
+                 UsrDat->UsrCod,UsrID) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not confirm a user's ID");
   }

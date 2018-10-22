@@ -25,8 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For fprintf
+#include <stdio.h>		// For aprintf
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_action.h"
@@ -326,7 +327,7 @@ static void Ind_GetParamNumIndicators (void)
 
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
   {
-   char Query[1024];
+   char *Query;
 
    switch (Gbl.Scope.Current)
      {
@@ -334,170 +335,212 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
            {
             if (Gbl.Stat.DegTypCod > 0)
-               sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                              " FROM degrees,courses,crs_usr,usr_data"
-                              " WHERE degrees.DegTypCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr.CrsCod"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.UsrCod=usr_data.UsrCod"
-                              " AND usr_data.DptCod=%ld"
-                              " ORDER BY degrees.FullName,courses.FullName",
-                        Gbl.Stat.DegTypCod,
-                        (unsigned) Rol_TCH,
-                        Gbl.Stat.DptCod);
+              {
+               if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				    " FROM degrees,courses,crs_usr,usr_data"
+				    " WHERE degrees.DegTypCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.DptCod=%ld"
+				    " ORDER BY degrees.FullName,courses.FullName",
+			     Gbl.Stat.DegTypCod,
+			     (unsigned) Rol_TCH,
+			     Gbl.Stat.DptCod) < 0)
+                 Lay_NotEnoughMemoryExit ();
+              }
             else
-               sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                              " FROM degrees,courses,crs_usr,usr_data"
-                              " WHERE degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=crs_usr.CrsCod"
-                              " AND crs_usr.Role=%u"
-                              " AND crs_usr.UsrCod=usr_data.UsrCod"
-                              " AND usr_data.DptCod=%ld"
-                              " ORDER BY degrees.FullName,courses.FullName",
-                        (unsigned) Rol_TCH,
-                        Gbl.Stat.DptCod);
+              {
+               if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				    " FROM degrees,courses,crs_usr,usr_data"
+				    " WHERE degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.Role=%u"
+				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.DptCod=%ld"
+				    " ORDER BY degrees.FullName,courses.FullName",
+			     (unsigned) Rol_TCH,
+			     Gbl.Stat.DptCod) < 0)
+                 Lay_NotEnoughMemoryExit ();
+              }
            }
          else
            {
             if (Gbl.Stat.DegTypCod > 0)
-               sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                              " FROM degrees,courses"
-                              " WHERE degrees.DegTypCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " ORDER BY degrees.FullName,courses.FullName",
-                        Gbl.Stat.DegTypCod);
+              {
+               if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				    " FROM degrees,courses"
+				    " WHERE degrees.DegTypCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " ORDER BY degrees.FullName,courses.FullName",
+			     Gbl.Stat.DegTypCod) < 0)
+                 Lay_NotEnoughMemoryExit ();
+              }
             else
-               sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                              " FROM degrees,courses"
-                              " WHERE degrees.DegCod=courses.DegCod"
-                              " ORDER BY degrees.FullName,courses.FullName");
+              {
+               if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				    " FROM degrees,courses"
+				    " WHERE degrees.DegCod=courses.DegCod"
+				    " ORDER BY degrees.FullName,courses.FullName") < 0)
+                 Lay_NotEnoughMemoryExit ();
+              }
            }
          break;
       case Sco_SCOPE_CTY:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
-            sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod=%ld"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentCty.Cty.CtyCod,
-                     (unsigned) Rol_TCH,
-                     Gbl.Stat.DptCod);
+           {
+            if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				 " WHERE institutions.CtyCod=%ld"
+				 " AND institutions.InsCod=centres.InsCod"
+				 " AND centres.CtrCod=degrees.CtrCod"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " AND courses.CrsCod=crs_usr.CrsCod"
+				 " AND crs_usr.Role=%u"
+				 " AND crs_usr.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.DptCod=%ld"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentCty.Cty.CtyCod,
+			  (unsigned) Rol_TCH,
+			  Gbl.Stat.DptCod) < 0)
+              Lay_NotEnoughMemoryExit ();
+           }
          else
-            sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM institutions,centres,degrees,courses"
-                          " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentCty.Cty.CtyCod);
+           {
+            if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM institutions,centres,degrees,courses"
+				 " WHERE institutions.CtyCod=%ld"
+				 " AND institutions.InsCod=centres.InsCod"
+				 " AND centres.CtrCod=degrees.CtrCod"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentCty.Cty.CtyCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          break;
       case Sco_SCOPE_INS:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
-            sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod=%ld"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentIns.Ins.InsCod,
-                     (unsigned) Rol_TCH,
-                     Gbl.Stat.DptCod);
+           {
+            if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM centres,degrees,courses,crs_usr,usr_data"
+				 " WHERE centres.InsCod=%ld"
+				 " AND centres.CtrCod=degrees.CtrCod"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " AND courses.CrsCod=crs_usr.CrsCod"
+				 " AND crs_usr.Role=%u"
+				 " AND crs_usr.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.DptCod=%ld"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentIns.Ins.InsCod,
+			  (unsigned) Rol_TCH,
+			  Gbl.Stat.DptCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          else
-            sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM centres,degrees,courses"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentIns.Ins.InsCod);
+           {
+            if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM centres,degrees,courses"
+				 " WHERE centres.InsCod=%ld"
+				 " AND centres.CtrCod=degrees.CtrCod"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentIns.Ins.InsCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          break;
       case Sco_SCOPE_CTR:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
-            sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod=%ld"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentCtr.Ctr.CtrCod,
-                     (unsigned) Rol_TCH,
-                     Gbl.Stat.DptCod);
+           {
+            if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM degrees,courses,crs_usr,usr_data"
+				 " WHERE degrees.CtrCod=%ld"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " AND courses.CrsCod=crs_usr.CrsCod"
+				 " AND crs_usr.Role=%u"
+				 " AND crs_usr.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.DptCod=%ld"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentCtr.Ctr.CtrCod,
+			  (unsigned) Rol_TCH,
+			  Gbl.Stat.DptCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          else
-            sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM degrees,courses"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
+           {
+            if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM degrees,courses"
+				 " WHERE degrees.CtrCod=%ld"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          break;
       case Sco_SCOPE_DEG:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
-            sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.DegCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod=%ld"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentDeg.Deg.DegCod,
-                     (unsigned) Rol_TCH,
-                     Gbl.Stat.DptCod);
+           {
+            if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM degrees,courses,crs_usr,usr_data"
+				 " WHERE degrees.DegCod=%ld"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " AND courses.CrsCod=crs_usr.CrsCod"
+				 " AND crs_usr.Role=%u"
+				 " AND crs_usr.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.DptCod=%ld"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentDeg.Deg.DegCod,
+			  (unsigned) Rol_TCH,
+			  Gbl.Stat.DptCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          else
-            sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM degrees,courses"
-                           " WHERE degrees.DegCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentDeg.Deg.DegCod);
+           {
+            if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM degrees,courses"
+				 " WHERE degrees.DegCod=%ld"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentDeg.Deg.DegCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          break;
       case Sco_SCOPE_CRS:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
-            sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE courses.CrsCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.CrsCod=%ld"
-                           " AND crs_usr.Role=%u"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod=%ld"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     (unsigned) Rol_TCH,
-                     Gbl.Stat.DptCod);
+           {
+            if (asprintf (&Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM degrees,courses,crs_usr,usr_data"
+				 " WHERE courses.CrsCod=%ld"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " AND courses.CrsCod=crs_usr.CrsCod"
+				 " AND crs_usr.CrsCod=%ld"
+				 " AND crs_usr.Role=%u"
+				 " AND crs_usr.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.DptCod=%ld"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentCrs.Crs.CrsCod,
+			  Gbl.CurrentCrs.Crs.CrsCod,
+			  (unsigned) Rol_TCH,
+			  Gbl.Stat.DptCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          else
-            sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
-                           " FROM degrees,courses"
-                           " WHERE courses.CrsCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " ORDER BY degrees.FullName,courses.FullName",
-                     Gbl.CurrentCrs.Crs.CrsCod);
+           {
+            if (asprintf (&Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+				 " FROM degrees,courses"
+				 " WHERE courses.CrsCod=%ld"
+				 " AND degrees.DegCod=courses.DegCod"
+				 " ORDER BY degrees.FullName,courses.FullName",
+			  Gbl.CurrentCrs.Crs.CrsCod) < 0)
+               Lay_NotEnoughMemoryExit ();
+           }
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
 
-   return (unsigned) DB_QuerySELECT (Query,mysql_res,"can not get courses");
+   return (unsigned) DB_QuerySELECT_free (Query,mysql_res,"can not get courses");
   }
 
 /*****************************************************************************/
@@ -1390,15 +1433,16 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
 
 int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
   {
-   char Query[128];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
    /***** Get number of indicators of a course from database *****/
-   sprintf (Query,"SELECT NumIndicators FROM courses WHERE CrsCod=%ld",
-	    CrsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of indicators"))
+   if (asprintf (&Query,"SELECT NumIndicators FROM courses WHERE CrsCod=%ld",
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get number of indicators"))
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1420,12 +1464,13 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 
 static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators)
   {
-   char Query[128];
+   char *Query;
 
    /***** Store number of indicators of a course in database *****/
-   sprintf (Query,"UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
-            NumIndicators,CrsCod);
-   DB_QueryUPDATE (Query,"can not store number of indicators of a course");
+   if (asprintf (&Query,"UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
+                 NumIndicators,CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not store number of indicators of a course");
   }
 
 /*****************************************************************************/
@@ -1507,27 +1552,28 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
 static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   sprintf (Query,"SELECT"
-	          " (SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld) +"
-		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
-		  " FROM crs_grp_types,crs_grp,file_browser_size"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND file_browser_size.FileBrowser=%u"
-		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
-	    CrsCod,
-	    CrsCod,
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
-   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+   if (asprintf (&Query,"SELECT"
+			" (SELECT COALESCE(SUM(NumFiles),0)"
+			" FROM file_browser_size"
+			" WHERE FileBrowser=%u AND Cod=%ld) +"
+			" (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
+			" FROM crs_grp_types,crs_grp,file_browser_size"
+			" WHERE crs_grp_types.CrsCod=%ld"
+			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			" AND file_browser_size.FileBrowser=%u"
+			" AND file_browser_size.Cod=crs_grp.GrpCod)",
+	         (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
+	         CrsCod,
+	         CrsCod,
+	         (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1549,27 +1595,28 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
 static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   sprintf (Query,"SELECT"
-	          " (SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld) +"
-		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
-		  " FROM crs_grp_types,crs_grp,file_browser_size"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND file_browser_size.FileBrowser=%u"
-		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
-	    CrsCod,
-	    CrsCod,
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
-   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+   if (asprintf (&Query,"SELECT"
+			" (SELECT COALESCE(SUM(NumFiles),0)"
+			" FROM file_browser_size"
+			" WHERE FileBrowser=%u AND Cod=%ld) +"
+			" (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
+			" FROM crs_grp_types,crs_grp,file_browser_size"
+			" WHERE crs_grp_types.CrsCod=%ld"
+			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			" AND file_browser_size.FileBrowser=%u"
+			" AND file_browser_size.Cod=crs_grp.GrpCod)",
+	         (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
+	         CrsCod,
+	         CrsCod,
+	         (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1591,18 +1638,19 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
 static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
-	    CrsCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+   if (asprintf (&Query,"SELECT COALESCE(SUM(NumFiles),0)"
+			" FROM file_browser_size"
+			" WHERE FileBrowser=%u AND Cod=%ld",
+	         (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1624,18 +1672,19 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
 static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld",
-	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
-	    CrsCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+   if (asprintf (&Query,"SELECT COALESCE(SUM(NumFiles),0)"
+			" FROM file_browser_size"
+			" WHERE FileBrowser=%u AND Cod=%ld",
+	         (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
+	         CrsCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QuerySELECT_free (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
