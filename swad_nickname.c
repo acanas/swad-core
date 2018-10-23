@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -113,16 +115,17 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
 bool Nck_GetNicknameFromUsrCod (long UsrCod,
                                 char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1])
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   sprintf (Query,"SELECT Nickname FROM usr_nicknames"
-	          " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
-	    UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get nickname"))
+   if (asprintf (&Query,"SELECT Nickname FROM usr_nicknames"
+			" WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get nickname"))
      {
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
@@ -151,7 +154,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
 long Nck_GetUsrCodFromNickname (const char *Nickname)
   {
    char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long UsrCod = -1L;
@@ -166,12 +169,13 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_nicknames is also in table usr_data */
-	 sprintf (Query,"SELECT usr_nicknames.UsrCod"
-	                " FROM usr_nicknames,usr_data"
-			" WHERE usr_nicknames.Nickname='%s'"
-			" AND usr_nicknames.UsrCod=usr_data.UsrCod",
-		  NicknameWithoutArroba);
-	 if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code"))
+	 if (asprintf (&Query,"SELECT usr_nicknames.UsrCod"
+			      " FROM usr_nicknames,usr_data"
+			      " WHERE usr_nicknames.Nickname='%s'"
+			      " AND usr_nicknames.UsrCod=usr_data.UsrCod",
+		       NicknameWithoutArroba) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code"))
 	   {
 	    /* Get row */
 	    row = mysql_fetch_row (mysql_res);
@@ -226,7 +230,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
    extern const char *Txt_Save;
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrRecordWidth[10 + 1];
@@ -238,11 +242,12 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    Lay_StartSection (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
-   sprintf (Query,"SELECT Nickname FROM usr_nicknames"
-                  " WHERE UsrCod=%ld"
-                  " ORDER BY CreatTime DESC",
-            UsrDat->UsrCod);
-   NumNicks = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get nicknames of a user");
+   if (asprintf (&Query,"SELECT Nickname FROM usr_nicknames"
+			" WHERE UsrCod=%ld"
+			" ORDER BY CreatTime DESC",
+                 UsrDat->UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumNicks = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get nicknames of a user");
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -499,13 +504,14 @@ void Nck_RemoveOtherUsrNick (void)
 
 static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove a nickname *****/
-   sprintf (Query,"DELETE FROM usr_nicknames"
-                  " WHERE UsrCod=%ld AND Nickname='%s'",
-            UsrCod,Nickname);
-   DB_QueryREPLACE (Query,"can not remove a nickname");
+   if (asprintf (&Query,"DELETE FROM usr_nicknames"
+			" WHERE UsrCod=%ld AND Nickname='%s'",
+                 UsrCod,Nickname) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not remove a nickname");
   }
 
 /*****************************************************************************/
@@ -557,7 +563,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
    extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_X_has_been_registered_successfully;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
-   char Query[128 + Nck_MAX_BYTES_NICKNAME_FROM_FORM];
+   char *Query;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
@@ -583,16 +589,18 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
       else if (strcasecmp (UsrDat->Nickname,NewNicknameWithoutArroba))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
-         sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
-                        " WHERE UsrCod=%ld AND Nickname='%s'",
-                  UsrDat->UsrCod,NewNicknameWithoutArroba);
-         if (!DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // No matches
+         if (asprintf (&Query,"SELECT COUNT(*) FROM usr_nicknames"
+			      " WHERE UsrCod=%ld AND Nickname='%s'",
+                       UsrDat->UsrCod,NewNicknameWithoutArroba) < 0)
+            Lay_NotEnoughMemoryExit ();
+         if (!DB_QueryCOUNT_free (Query,"can not check if nickname already existed"))        // No matches
            {
             /***** Check if the new nickname matches any of the nicknames of other users *****/
-            sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
-                           " WHERE Nickname='%s' AND UsrCod<>%ld",
-                     NewNicknameWithoutArroba,UsrDat->UsrCod);
-            if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that user's nickname
+            if (asprintf (&Query,"SELECT COUNT(*) FROM usr_nicknames"
+				 " WHERE Nickname='%s' AND UsrCod<>%ld",
+			  NewNicknameWithoutArroba,UsrDat->UsrCod) < 0)
+              Lay_NotEnoughMemoryExit ();
+            if (DB_QueryCOUNT_free (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that user's nickname
               {
                Gbl.Alert.Type = Ale_WARNING;
                Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
@@ -635,13 +643,14 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 
 void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname)
   {
-   char Query[512];
+   char *Query;
 
    /***** Update user's nickname in database *****/
-   sprintf (Query,"REPLACE INTO usr_nicknames"
-                  " (UsrCod,Nickname,CreatTime)"
-                  " VALUES"
-                  " (%ld,'%s',NOW())",
-            UsrCod,NewNickname);
-   DB_QueryREPLACE (Query,"can not update nickname");
+   if (asprintf (&Query,"REPLACE INTO usr_nicknames"
+			" (UsrCod,Nickname,CreatTime)"
+			" VALUES"
+			" (%ld,'%s',NOW())",
+                 UsrCod,NewNickname) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not update nickname");
   }

@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>
 
 #include "swad_box.h"
@@ -203,7 +205,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
 void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
   {
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -222,12 +224,13 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
-      sprintf (Query,"SELECT URL FROM usr_webs"
-		     " WHERE UsrCod=%ld AND Web='%s'",
-	       UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]);
+      if (asprintf (&Query,"SELECT URL FROM usr_webs"
+			   " WHERE UsrCod=%ld AND Web='%s'",
+	            UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]) < 0)
+         Lay_NotEnoughMemoryExit ();
 
       /***** Check if exists the web / social network for this user *****/
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's web / social network"))
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's web / social network"))
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
@@ -278,7 +281,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *Hlp_PROFILE_Webs;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -301,13 +304,14 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
-      sprintf (Query,"SELECT URL FROM usr_webs"
-		     " WHERE UsrCod=%ld AND Web='%s'",
-	       Gbl.Usrs.Me.UsrDat.UsrCod,
-	       Net_WebsAndSocialNetworksDB[NumURL]);
+      if (asprintf (&Query,"SELECT URL FROM usr_webs"
+			   " WHERE UsrCod=%ld AND Web='%s'",
+	            Gbl.Usrs.Me.UsrDat.UsrCod,
+	            Net_WebsAndSocialNetworksDB[NumURL]) < 0)
+         Lay_NotEnoughMemoryExit ();
 
       /***** Check number of rows in result *****/
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's web / social network"))
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's web / social network"))
 	{
 	 /***** Read the data comunes a all the users *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -390,7 +394,7 @@ void Net_UpdateMyWebsAndSocialNets (void)
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char *Query;
    Net_WebsAndSocialNetworks_t Web;
    char URL[Cns_MAX_BYTES_WWW + 1];
 
@@ -406,22 +410,24 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    if (URL[0])
      {
       /***** Insert or replace web / social network *****/
-      sprintf (Query,"REPLACE INTO usr_webs"
-	             " (UsrCod,Web,URL)"
-		     " VALUES"
-		     " (%ld,'%s','%s')",
-	       Gbl.Usrs.Me.UsrDat.UsrCod,
-	       Net_WebsAndSocialNetworksDB[Web],
-	       URL);
-      DB_QueryREPLACE (Query,"can not update user's web / social network");
+      if (asprintf (&Query,"REPLACE INTO usr_webs"
+			   " (UsrCod,Web,URL)"
+			   " VALUES"
+			   " (%ld,'%s','%s')",
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Net_WebsAndSocialNetworksDB[Web],
+		    URL) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryREPLACE_free (Query,"can not update user's web / social network");
      }
    else
      {
       /***** Remove web / social network *****/
-      sprintf (Query,"DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
-	       Gbl.Usrs.Me.UsrDat.UsrCod,
-	       Net_WebsAndSocialNetworksDB[Web]);
-      DB_QueryREPLACE (Query,"can not remove user's web / social network");
+      if (asprintf (&Query,"DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Net_WebsAndSocialNetworksDB[Web]) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryREPLACE_free (Query,"can not remove user's web / social network");
      }
   }
 
@@ -436,7 +442,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    extern const char *Txt_Web_social_network;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -457,77 +463,83 @@ void Net_ShowWebAndSocialNetworksStats (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT Web,COUNT(*) AS N"
-                        " FROM usr_webs"
-                        " GROUP BY Web"
-                        " ORDER BY N DESC,Web");
+         if (asprintf (&Query,"SELECT Web,COUNT(*) AS N"
+			      " FROM usr_webs"
+			      " GROUP BY Web"
+			      " ORDER BY N DESC,Web") < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT usr_webs.Web,"
-                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-                        " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_webs.UsrCod"
-                        " GROUP BY usr_webs.Web"
-                        " ORDER BY N DESC,usr_webs.Web",
-                  Gbl.CurrentCty.Cty.CtyCod);
+         if (asprintf (&Query,"SELECT usr_webs.Web,"
+			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			      " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			      " GROUP BY usr_webs.Web"
+			      " ORDER BY N DESC,usr_webs.Web",
+                       Gbl.CurrentCty.Cty.CtyCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT usr_webs.Web,"
-                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-                        " FROM centres,degrees,courses,crs_usr,usr_webs"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_webs.UsrCod"
-                        " GROUP BY usr_webs.Web"
-                        " ORDER BY N DESC,usr_webs.Web",
-                  Gbl.CurrentIns.Ins.InsCod);
+         if (asprintf (&Query,"SELECT usr_webs.Web,"
+			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			      " FROM centres,degrees,courses,crs_usr,usr_webs"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			      " GROUP BY usr_webs.Web"
+			      " ORDER BY N DESC,usr_webs.Web",
+                       Gbl.CurrentIns.Ins.InsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT usr_webs.Web,"
-                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-                        " FROM degrees,courses,crs_usr,usr_webs"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_webs.UsrCod"
-                        " GROUP BY usr_webs.Web"
-                        " ORDER BY N DESC,usr_webs.Web",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         if (asprintf (&Query,"SELECT usr_webs.Web,"
+			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			      " FROM degrees,courses,crs_usr,usr_webs"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			      " GROUP BY usr_webs.Web"
+			      " ORDER BY N DESC,usr_webs.Web",
+                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT usr_webs.Web,"
-                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-                        " FROM courses,crs_usr,usr_webs"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_webs.UsrCod"
-                        " GROUP BY usr_webs.Web"
-                        " ORDER BY N DESC,usr_webs.Web",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT usr_webs.Web,"
+			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			      " FROM courses,crs_usr,usr_webs"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			      " GROUP BY usr_webs.Web"
+			      " ORDER BY N DESC,usr_webs.Web",
+                       Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT usr_webs.Web,"
-                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-                        " FROM crs_usr,usr_webs"
-                        " WHERE crs_usr.CrsCod=%ld"
-                        " AND crs_usr.UsrCod=usr_webs.UsrCod"
-                        " GROUP BY usr_webs.Web"
-                        " ORDER BY N DESC,usr_webs.Web",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT usr_webs.Web,"
+			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			      " FROM crs_usr,usr_webs"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
+			      " GROUP BY usr_webs.Web"
+			      " ORDER BY N DESC,usr_webs.Web",
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,
-                                        "can not get number of users with webs / social networks");
+   NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,
+                                             "can not get number of users with webs / social networks");
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,
