@@ -25,7 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 
 #include "swad_action.h"
 #include "swad_database.h"
@@ -798,14 +800,15 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 
 void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
+   char *Query;
 
    /***** Save last page of received/sent messages *****/
-   sprintf (Query,"UPDATE sessions SET %s=%u WHERE SessionId='%s'",
-            WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-        	                                    "LastPageMsgSnt",
-            NumPage,Gbl.Session.Id);
-   DB_QueryUPDATE (Query,"can not update last page of messages");
+   if (asprintf (&Query,"UPDATE sessions SET %s=%u WHERE SessionId='%s'",
+                 WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+        	                                         "LastPageMsgSnt",
+                 NumPage,Gbl.Session.Id) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update last page of messages");
   }
 
 /*****************************************************************************/
@@ -814,18 +817,19 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
 
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumPage;
 
    /***** Get last page of received/sent messages from database *****/
-   sprintf (Query,"SELECT %s FROM sessions WHERE SessionId='%s'",
-            WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-        	                                    "LastPageMsgSnt",
-            Gbl.Session.Id);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last page of messages");
+   if (asprintf (&Query,"SELECT %s FROM sessions WHERE SessionId='%s'",
+	         WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+						         "LastPageMsgSnt",
+	         Gbl.Session.Id) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get last page of messages");
 
    /***** Check number of rows of the result ****/
    if (NumRows != 1)

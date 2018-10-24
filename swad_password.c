@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system, getenv, etc.
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -112,15 +114,16 @@ bool Pwd_CheckCurrentPassword (void)
 
 bool Pwd_CheckPendingPassword (void)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get pending password from database *****/
-   sprintf (Query,"SELECT PendingPassword FROM pending_passwd"
-                  " WHERE UsrCod=%ld",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get pending password"))
+   if (asprintf (&Query,"SELECT PendingPassword FROM pending_passwd"
+			" WHERE UsrCod=%ld",
+                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get pending password"))
      {
       /* Get encrypted pending password */
       row = mysql_fetch_row (mysql_res);
@@ -144,14 +147,15 @@ bool Pwd_CheckPendingPassword (void)
 
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
   {
-   char Query[128 + Pwd_BYTES_ENCRYPTED_PASSWORD];
+   char *Query;
 
    /***** Update my current password in database *****/
-   sprintf (Query,"UPDATE usr_data SET Password='%s'"
-	          " WHERE UsrCod=%ld",
-            Gbl.Usrs.Me.PendingPassword,
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your password");
+   if (asprintf (&Query,"UPDATE usr_data SET Password='%s'"
+			" WHERE UsrCod=%ld",
+	         Gbl.Usrs.Me.PendingPassword,
+	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update your password");
 
    /***** Update my current password *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,
@@ -510,24 +514,26 @@ static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSW
 
 void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
-   char Query[256 + Pwd_BYTES_ENCRYPTED_PASSWORD];
+   char *Query;
 
    /***** Encrypt my pending password *****/
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.PendingPassword);
 
    /***** Remove expired pending passwords from database *****/
-   sprintf (Query,"DELETE FROM pending_passwd"
-                  " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
-   DB_QueryDELETE (Query,"can not remove expired pending passwords");
+   if (asprintf (&Query,"DELETE FROM pending_passwd"
+			" WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                 Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove expired pending passwords");
 
    /***** Update my current password in database *****/
-   sprintf (Query,"REPLACE INTO pending_passwd"
-	          " (UsrCod,PendingPassword,DateAndTime)"
-                  " VALUES"
-                  " (%ld,'%s',NOW())",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
-   DB_QueryREPLACE (Query,"can not create pending password");
+   if (asprintf (&Query,"REPLACE INTO pending_passwd"
+			" (UsrCod,PendingPassword,DateAndTime)"
+			" VALUES"
+			" (%ld,'%s',NOW())",
+                 Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not create pending password");
   }
 
 /*****************************************************************************/
@@ -574,21 +580,23 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
   {
-   char Query[128 + 3 * Pwd_MAX_BYTES_PLAIN_PASSWORD];
+   char *Query;
    bool Found;
 
    /***** Get if password is found in user's ID from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_IDs WHERE UsrID='%s'",
-            PlainPassword);
-   Found = (DB_QueryCOUNT (Query,"can not check if a password matches a user's ID") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_IDs WHERE UsrID='%s'",
+                 PlainPassword) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Found = (DB_QueryCOUNT_free (Query,"can not check if a password matches a user's ID") != 0);
 
    /***** Get if password is found in first name or surnames of anybody, from database *****/
    if (!Found)
      {
-      sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-		     " WHERE FirstName='%s' OR Surname1='%s' OR Surname2='%s'",
-	       PlainPassword,PlainPassword,PlainPassword);
-      Found = (DB_QueryCOUNT (Query,"can not check if a password matches a first name or a surname") != 0);
+      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
+		           " WHERE FirstName='%s' OR Surname1='%s' OR Surname2='%s'",
+	            PlainPassword,PlainPassword,PlainPassword) < 0)
+         Lay_NotEnoughMemoryExit ();
+      Found = (DB_QueryCOUNT_free (Query,"can not check if a password matches a first name or a surname") != 0);
      }
 
    return Found;
@@ -600,19 +608,25 @@ static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
 
 static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPassword,long UsrCod)
   {
-   char Query[512];
+   char *Query;
 
    /***** Get number of other users who use a password from database *****/
    /* Query database */
    if (UsrCod > 0)
-      sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-		     " WHERE Password='%s' AND UsrCod<>%ld",
-	       EncryptedPassword,UsrCod);
+     {
+      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
+			   " WHERE Password='%s' AND UsrCod<>%ld",
+	            EncryptedPassword,UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
    else
-      sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-		     " WHERE Password='%s'",
-	       EncryptedPassword);
-   return (unsigned) DB_QueryCOUNT (Query,"can not check if a password is trivial");
+     {
+      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
+			   " WHERE Password='%s'",
+	            EncryptedPassword) < 0)
+         Lay_NotEnoughMemoryExit ();
+     }
+   return (unsigned) DB_QueryCOUNT_free (Query,"can not check if a password is trivial");
   }
 
 /*****************************************************************************/
