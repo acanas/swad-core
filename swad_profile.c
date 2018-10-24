@@ -332,17 +332,18 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 void Prf_ChangeProfileVisibility (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   char Query[128];
+   char *Query;
 
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.ProfileVisibility = Pri_GetParamVisibility ("VisPrf");
 
    /***** Store public/private photo in database *****/
-   sprintf (Query,"UPDATE usr_data SET ProfileVisibility='%s'"
-	          " WHERE UsrCod=%ld",
-            Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ProfileVisibility],
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your preference about public profile visibility");
+   if (asprintf (&Query,"UPDATE usr_data SET ProfileVisibility='%s'"
+			" WHERE UsrCod=%ld",
+                 Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ProfileVisibility],
+                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update your preference about public profile visibility");
 
    /***** Show form again *****/
    Pre_EditPrefs ();
@@ -621,18 +622,19 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
 
 void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
   {
-   char Query[512];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
 
    /***** Get user's figures from database *****/
-   sprintf (Query,"SELECT UNIX_TIMESTAMP(FirstClickTime),"
-	          "DATEDIFF(NOW(),FirstClickTime)+1,"
-	          "NumClicks,NumFileViews,NumForPst,NumMsgSnt"
-	          " FROM usr_figures WHERE UsrCod=%ld",
-	    UsrCod);
-   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's figures")))
+   if (asprintf (&Query,"SELECT UNIX_TIMESTAMP(FirstClickTime),"
+			"DATEDIFF(NOW(),FirstClickTime)+1,"
+			"NumClicks,NumFileViews,NumForPst,NumMsgSnt"
+			" FROM usr_figures WHERE UsrCod=%ld",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   if ((NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's figures")))
      {
       /***** Get user's figures *****/
       row = mysql_fetch_row (mysql_res);
@@ -679,16 +681,17 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
   {
-   char Query[256];
+   char *Query;
 
    /***** Select number of rows with figure
           greater than the figure of this user *****/
-   sprintf (Query,"SELECT COUNT(*)+1 FROM usr_figures"
-	          " WHERE UsrCod<>%ld"	// Really not necessary here
-                  " AND %s>"
-	          "(SELECT %s FROM usr_figures WHERE UsrCod=%ld)",
-	    UsrCod,FieldName,FieldName,UsrCod);
-   return DB_QueryCOUNT (Query,"can not get ranking using a figure");
+   if (asprintf (&Query,"SELECT COUNT(*)+1 FROM usr_figures"
+			" WHERE UsrCod<>%ld"	// Really not necessary here
+			" AND %s>"
+			"(SELECT %s FROM usr_figures WHERE UsrCod=%ld)",
+	         UsrCod,FieldName,FieldName,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return DB_QueryCOUNT_free (Query,"can not get ranking using a figure");
   }
 
 /*****************************************************************************/
@@ -697,12 +700,13 @@ static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
 
 static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
   {
-   char Query[128];
+   char *Query;
 
    /***** Select number of rows with values already calculated *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE %s>=0",
-            FieldName);
-   return DB_QueryCOUNT (Query,"can not get number of users with a figure");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_figures WHERE %s>=0",
+                 FieldName) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return DB_QueryCOUNT_free (Query,"can not get number of users with a figure");
   }
 
 /*****************************************************************************/
@@ -711,26 +715,27 @@ static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
 
 static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
   {
-   char Query[1024];
+   char *Query;
 
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
-   sprintf (Query,"SELECT COUNT(*)+1 FROM"
-                  " (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-                  " AS NumClicksPerDay"
-                  " FROM usr_figures"
-                  " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
-                  " AND NumClicks>0"
-                  " AND UNIX_TIMESTAMP(FirstClickTime)>0)"
-                  " AS TableNumClicksPerDay"
-                  " WHERE NumClicksPerDay>"
-                  "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-                  " FROM usr_figures"
-                  " WHERE UsrCod=%ld"
-                  " AND NumClicks>0"
-                  " AND UNIX_TIMESTAMP(FirstClickTime)>0)",
-	    UsrCod,UsrCod);
-   return DB_QueryCOUNT (Query,"can not get ranking using number of clicks per day");
+   if (asprintf (&Query,"SELECT COUNT(*)+1 FROM"
+			" (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+			" AS NumClicksPerDay"
+			" FROM usr_figures"
+			" WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
+			" AND NumClicks>0"
+			" AND UNIX_TIMESTAMP(FirstClickTime)>0)"
+			" AS TableNumClicksPerDay"
+			" WHERE NumClicksPerDay>"
+			"(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+			" FROM usr_figures"
+			" WHERE UsrCod=%ld"
+			" AND NumClicks>0"
+			" AND UNIX_TIMESTAMP(FirstClickTime)>0)",
+	         UsrCod,UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return DB_QueryCOUNT_free (Query,"can not get ranking using number of clicks per day");
   }
 
 /*****************************************************************************/
@@ -739,13 +744,14 @@ static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
 
 static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
   {
-   char Query[128];
+   char *Query;
 
    /***** Select number of rows with values already calculated *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_figures"
-	          " WHERE NumClicks>0"
-	          " AND UNIX_TIMESTAMP(FirstClickTime)>0");
-   return DB_QueryCOUNT (Query,"can not get number of users with number of clicks per day");
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_figures"
+			" WHERE NumClicks>0"
+			" AND UNIX_TIMESTAMP(FirstClickTime)>0") < 0)
+      Lay_NotEnoughMemoryExit ();
+   return DB_QueryCOUNT_free (Query,"can not get number of users with number of clicks per day");
   }
 
 /*****************************************************************************/
@@ -839,7 +845,7 @@ bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
 static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
   {
-   char Query[256];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrFigures UsrFigures;
@@ -850,11 +856,12 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get first click from log table *****/
-      sprintf (Query,"SELECT UNIX_TIMESTAMP("
-	             "(SELECT MIN(ClickTime) FROM log_full WHERE UsrCod=%ld)"
-	             ")",
-	       UsrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's first click"))
+      if (asprintf (&Query,"SELECT UNIX_TIMESTAMP("
+			   "(SELECT MIN(ClickTime) FROM log_full WHERE UsrCod=%ld)"
+			   ")",
+	            UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's first click"))
 	{
 	 /* Get first click */
 	 row = mysql_fetch_row (mysql_res);
@@ -869,11 +876,12 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       /***** Update first click time in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	{
-	 sprintf (Query,"UPDATE usr_figures"
-	                " SET FirstClickTime=FROM_UNIXTIME(%ld)"
-			" WHERE UsrCod=%ld",
-		  (long) UsrFigures.FirstClickTimeUTC,UsrCod);
-	 DB_QueryUPDATE (Query,"can not update user's figures");
+	 if (asprintf (&Query,"UPDATE usr_figures"
+			      " SET FirstClickTime=FROM_UNIXTIME(%ld)"
+			      " WHERE UsrCod=%ld",
+		       (long) UsrFigures.FirstClickTimeUTC,UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_QueryUPDATE_free (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
@@ -886,7 +894,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
   {
-   char Query[256];
+   char *Query;
    struct UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
@@ -895,17 +903,19 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of clicks from database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM log_full WHERE UsrCod=%ld",
-	       UsrCod);
-      UsrFigures.NumClicks = (long) DB_QueryCOUNT (Query,"can not get number of clicks");
+      if (asprintf (&Query,"SELECT COUNT(*) FROM log_full WHERE UsrCod=%ld",
+	            UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      UsrFigures.NumClicks = (long) DB_QueryCOUNT_free (Query,"can not get number of clicks");
 
       /***** Update number of clicks in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	{
-	 sprintf (Query,"UPDATE usr_figures SET NumClicks=%ld"
-			" WHERE UsrCod=%ld",
-		  UsrFigures.NumClicks,UsrCod);
-	 DB_QueryUPDATE (Query,"can not update user's figures");
+	 if (asprintf (&Query,"UPDATE usr_figures SET NumClicks=%ld"
+			      " WHERE UsrCod=%ld",
+		       UsrFigures.NumClicks,UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_QueryUPDATE_free (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
@@ -918,7 +928,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
   {
-   char Query[256];
+   char *Query;
    struct UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
@@ -932,10 +942,11 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of file views in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	{
-	 sprintf (Query,"UPDATE usr_figures SET NumFileViews=%ld"
-			" WHERE UsrCod=%ld",
-		  UsrFigures.NumFileViews,UsrCod);
-	 DB_QueryUPDATE (Query,"can not update user's figures");
+	 if (asprintf (&Query,"UPDATE usr_figures SET NumFileViews=%ld"
+			      " WHERE UsrCod=%ld",
+		       UsrFigures.NumFileViews,UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_QueryUPDATE_free (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
@@ -948,7 +959,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
   {
-   char Query[256];
+   char *Query;
    struct UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
@@ -962,10 +973,11 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	{
-	 sprintf (Query,"UPDATE usr_figures SET NumForPst=%ld"
-			" WHERE UsrCod=%ld",
-		  UsrFigures.NumForPst,UsrCod);
-	 DB_QueryUPDATE (Query,"can not update user's figures");
+	 if (asprintf (&Query,"UPDATE usr_figures SET NumForPst=%ld"
+			      " WHERE UsrCod=%ld",
+		       UsrFigures.NumForPst,UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_QueryUPDATE_free (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
@@ -978,7 +990,7 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
   {
-   char Query[256];
+   char *Query;
    struct UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
@@ -992,10 +1004,11 @@ static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
       /***** Update number of messages sent in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	{
-	 sprintf (Query,"UPDATE usr_figures SET NumMsgSnt=%ld"
-			" WHERE UsrCod=%ld",
-		  UsrFigures.NumMsgSnt,UsrCod);
-	 DB_QueryUPDATE (Query,"can not update user's figures");
+	 if (asprintf (&Query,"UPDATE usr_figures SET NumMsgSnt=%ld"
+			      " WHERE UsrCod=%ld",
+		       UsrFigures.NumMsgSnt,UsrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
+	 DB_QueryUPDATE_free (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
@@ -1044,7 +1057,7 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
                                   bool CreatingMyOwnAccount)
   {
-   char Query[512 + Prf_MAX_BYTES_SUBQUERY_FIRST_CLICK_TIME];
+   char *Query;
    char SubQueryFirstClickTime[Prf_MAX_BYTES_SUBQUERY_FIRST_CLICK_TIME + 1];
 
    if (CreatingMyOwnAccount)
@@ -1056,17 +1069,18 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
 
    /***** Create user's figures *****/
-   sprintf (Query,"INSERT INTO usr_figures"
-	          " (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
-		  " VALUES"
-		  " (%ld,%s,%ld,%ld,%ld,%ld)",
-	    UsrCod,
-	    SubQueryFirstClickTime,
-	    UsrFigures->NumClicks,	// -1L ==> unknown number of clicks
-	    UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
-	    UsrFigures->NumForPst,	// -1L ==> unknown number of forum posts
-	    UsrFigures->NumMsgSnt);	// -1L ==> unknown number of messages sent
-   DB_QueryINSERT (Query,"can not create user's figures");
+   if (asprintf (&Query,"INSERT INTO usr_figures"
+			" (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+			" VALUES"
+			" (%ld,%s,%ld,%ld,%ld,%ld)",
+		 UsrCod,
+		 SubQueryFirstClickTime,
+		 UsrFigures->NumClicks,		// -1L ==> unknown number of clicks
+		 UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
+		 UsrFigures->NumForPst,		// -1L ==> unknown number of forum posts
+		 UsrFigures->NumMsgSnt) < 0)	// -1L ==> unknown number of messages sent
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create user's figures");
   }
 
 /*****************************************************************************/
@@ -1075,12 +1089,13 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 
 void Prf_RemoveUsrFigures (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
    /***** Remove user's figures *****/
-   sprintf (Query,"DELETE FROM usr_figures WHERE UsrCod=%ld",
-	    UsrCod);
-   DB_QueryDELETE (Query,"can not delete user's figures");
+   if (asprintf (&Query,"DELETE FROM usr_figures WHERE UsrCod=%ld",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not delete user's figures");
   }
 
 /*****************************************************************************/
@@ -1089,11 +1104,12 @@ void Prf_RemoveUsrFigures (long UsrCod)
 
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
   {
-   char Query[128];
+   char *Query;
 
-   sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE UsrCod=%ld",
-	    UsrCod);
-   return (DB_QueryCOUNT (Query,"can not get user's first click") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_figures WHERE UsrCod=%ld",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not get user's first click") != 0);
   }
 
 /*****************************************************************************/
@@ -1102,14 +1118,15 @@ static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
 
 void Prf_IncrementNumClicksUsr (long UsrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
-   sprintf (Query,"UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
-	          " WHERE UsrCod=%ld AND NumClicks>=0",
-	    UsrCod);
-   DB_QueryINSERT (Query,"can not increment user's clicks");
+   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
+			" WHERE UsrCod=%ld AND NumClicks>=0",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not increment user's clicks");
   }
 
 /*****************************************************************************/
@@ -1118,14 +1135,15 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
 
 void Prf_IncrementNumFileViewsUsr (long UsrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Increment number of file views *****/
    // If NumFileViews < 0 ==> not yet calculated, so do nothing
-   sprintf (Query,"UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
-	          " WHERE UsrCod=%ld AND NumFileViews>=0",
-	    UsrCod);
-   DB_QueryINSERT (Query,"can not increment user's file views");
+   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
+			" WHERE UsrCod=%ld AND NumFileViews>=0",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not increment user's file views");
   }
 
 /*****************************************************************************/
@@ -1134,14 +1152,15 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod)
 
 void Prf_IncrementNumForPstUsr (long UsrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Increment number of forum posts *****/
    // If NumForPst < 0 ==> not yet calculated, so do nothing
-   sprintf (Query,"UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
-	          " WHERE UsrCod=%ld AND NumForPst>=0",
-	    UsrCod);
-   DB_QueryINSERT (Query,"can not increment user's forum posts");
+   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
+			" WHERE UsrCod=%ld AND NumForPst>=0",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not increment user's forum posts");
   }
 
 /*****************************************************************************/
@@ -1150,14 +1169,15 @@ void Prf_IncrementNumForPstUsr (long UsrCod)
 
 void Prf_IncrementNumMsgSntUsr (long UsrCod)
   {
-   char Query[256];
+   char *Query;
 
    /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
-   sprintf (Query,"UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
-	          " WHERE UsrCod=%ld AND NumMsgSnt>=0",
-	    UsrCod);
-   DB_QueryINSERT (Query,"can not increment user's messages sent");
+   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
+			" WHERE UsrCod=%ld AND NumMsgSnt>=0",
+	         UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not increment user's messages sent");
   }
 
 /*****************************************************************************/
@@ -1277,7 +1297,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
+         Lay_WrongScopeExit ();
          break;
      }
    Prf_ShowRankingFigure (Query);
@@ -1351,7 +1371,7 @@ void Prf_ShowRankingFigure (const char *Query)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1365,94 +1385,100 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT UsrCod,"
-	                "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
-	                " FROM usr_figures"
-			" WHERE NumClicks>0"
-			" AND UNIX_TIMESTAMP(FirstClickTime)>0"
-			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
+	 if (asprintf (&Query,"SELECT UsrCod,"
+			      "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
+			      " FROM usr_figures"
+			      " WHERE NumClicks>0"
+			      " AND UNIX_TIMESTAMP(FirstClickTime)>0"
+			      " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100") < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
-                        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-                        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-                        " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                  Gbl.CurrentCty.Cty.CtyCod);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+			      "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			      "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+			      " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.NumClicks>0"
+			      " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+                       Gbl.CurrentCty.Cty.CtyCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
-                        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-                        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-                        " FROM centres,degrees,courses,crs_usr,usr_figures"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                  Gbl.CurrentIns.Ins.InsCod);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+			      "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			      "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+			      " FROM centres,degrees,courses,crs_usr,usr_figures"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.NumClicks>0"
+			      " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+                       Gbl.CurrentIns.Ins.InsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
-                        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-                        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-                        " FROM degrees,courses,crs_usr,usr_figures"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+			      "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			      "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+			      " FROM degrees,courses,crs_usr,usr_figures"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.NumClicks>0"
+			      " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
-                        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-                        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-                        " FROM courses,crs_usr,usr_figures"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                  Gbl.CurrentDeg.Deg.DegCod);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+			      "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			      "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+			      " FROM courses,crs_usr,usr_figures"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.NumClicks>0"
+			      " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+                       Gbl.CurrentDeg.Deg.DegCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
-                        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-                        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-                        " FROM crs_usr,usr_figures"
-                        " WHERE crs_usr.CrsCod=%ld"
-                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+         if (asprintf (&Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+			      "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			      "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+			      " FROM crs_usr,usr_figures"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			      " AND usr_figures.NumClicks>0"
+			      " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+			      " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			      " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
+            Lay_NotEnoughMemoryExit ();
          break;
       default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
+         Lay_WrongScopeExit ();
          break;
      }
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get ranking");
+   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get ranking");
    if (NumUsrs)
      {
       /***** Initialize structure with user's data *****/

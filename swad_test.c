@@ -7108,7 +7108,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of test questions");
@@ -7257,7 +7257,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with test questions");
@@ -7426,7 +7426,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                      Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with pluggable test questions");

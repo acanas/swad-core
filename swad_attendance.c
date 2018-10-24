@@ -1760,7 +1760,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with attendance events");
@@ -1833,7 +1833,7 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of attendance events");

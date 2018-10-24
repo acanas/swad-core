@@ -778,7 +778,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
                   Lay_NotEnoughMemoryExit ();
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
 	 break;
@@ -876,7 +876,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
                   Lay_NotEnoughMemoryExit ();
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
 	 break;
@@ -1191,7 +1191,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                   Lay_NotEnoughMemoryExit ();
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
 	 break;

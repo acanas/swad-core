@@ -123,7 +123,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 		  WriteScope = true;
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
 
@@ -166,7 +166,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 			   Gbl.CurrentCrs.Crs.ShrtName);
 		  break;
 	       default:
-		  Lay_ShowErrorAndExit ("Wrong scope.");
+		  Lay_WrongScopeExit ();
 		  break;
 	      }
 	    fprintf (Gbl.F.Out,"</option>");

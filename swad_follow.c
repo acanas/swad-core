@@ -1204,7 +1204,7 @@ void Fol_GetAndShowRankingFollowers (void)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
+         Lay_WrongScopeExit ();
          break;
      }
    Prf_ShowRankingFigure (Query);

@@ -1866,7 +1866,7 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of users with events");
@@ -1954,7 +1954,7 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of events");

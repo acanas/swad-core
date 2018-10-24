@@ -4522,7 +4522,7 @@ void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
 	 Usr_BuildQueryToGetUsrsLstCrs (Role,Query);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 /*
@@ -4657,7 +4657,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			OrderQuery);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
          break;
@@ -4782,7 +4782,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			OrderQuery);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
 	 break;
@@ -4989,7 +4989,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                   Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
          break;
      }
 
@@ -5229,7 +5229,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		  switch (Scope)
 		    {
 		     case Sco_SCOPE_UNK:	// Unknown
-			Lay_ShowErrorAndExit ("Wrong scope.");
+			Lay_WrongScopeExit ();
 			break;
 		     case Sco_SCOPE_SYS:	// System
 			// Query result has not a column with the acceptation
@@ -5267,7 +5267,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		  switch (Scope)
 		    {
 		     case Sco_SCOPE_UNK:	// Unknown
-			Lay_ShowErrorAndExit ("Wrong scope.");
+			Lay_WrongScopeExit ();
 			break;
 		     case Sco_SCOPE_SYS:	// System
 		     case Sco_SCOPE_CTY:	// Country
@@ -8632,7 +8632,7 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
                      Gbl.CurrentCrs.Crs.CrsCod,SubQueryRoles);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -8775,7 +8775,7 @@ float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
       case Sco_SCOPE_CRS:
          return 1.0;
       default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
+         Lay_WrongScopeExit ();
          break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of courses per user");
@@ -8926,7 +8926,7 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	   }
 	 break;
       default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
+         Lay_WrongScopeExit ();
          break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of users per course");

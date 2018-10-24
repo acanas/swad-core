@@ -654,7 +654,7 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
             Lay_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get types of degree");

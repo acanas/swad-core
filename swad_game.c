@@ -2132,7 +2132,7 @@ void Gam_RecFormGame (void)
 	 NewGame.Cod = Gbl.CurrentCrs.Crs.CrsCod;
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -3987,7 +3987,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with games");
@@ -4082,7 +4082,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of games");
@@ -4192,7 +4192,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of questions per game");

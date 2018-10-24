@@ -2588,7 +2588,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		 }
 	       break;
 	    default:	// There are no administrators in other scopes
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
            }
          fprintf (Gbl.F.Out,"</td>"

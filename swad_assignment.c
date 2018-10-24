@@ -1875,7 +1875,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with assignments");
@@ -1959,7 +1959,7 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of assignments");

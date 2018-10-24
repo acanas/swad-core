@@ -535,7 +535,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,

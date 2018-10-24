@@ -2839,7 +2839,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
            }
          break;
       default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
+         Lay_WrongScopeExit ();
          break;
      }
 

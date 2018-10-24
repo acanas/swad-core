@@ -2171,7 +2171,7 @@ void Svy_RecFormSurvey (void)
 	 NewSvy.Cod = Gbl.CurrentCrs.Crs.CrsCod;
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -3897,7 +3897,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with surveys");
@@ -3987,7 +3987,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of surveys");
@@ -4100,7 +4100,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                   Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of questions per survey");

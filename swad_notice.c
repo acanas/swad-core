@@ -889,7 +889,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of notices");
@@ -981,7 +981,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT_free (Query,&mysql_res,"can not get number of deleted notices");

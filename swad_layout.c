@@ -1200,7 +1200,16 @@ void Lay_EndSection (void)
 
 void Lay_NotEnoughMemoryExit (void)
   {
-   Lay_NotEnoughMemoryExit ();
+   Lay_ShowErrorAndExit ("Not enough memory.");
+  }
+
+/*****************************************************************************/
+/************* Write error message and exit when wrong scope *****************/
+/*****************************************************************************/
+
+void Lay_WrongScopeExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong scope.");
   }
 
 /*****************************************************************************/

@@ -67,6 +67,7 @@ void Lay_StartSection (const char *SectionId);
 void Lay_EndSection (void);
 
 void Lay_NotEnoughMemoryExit (void);
+void Lay_WrongScopeExit (void);
 void Lay_ShowErrorAndExit (const char *Txt);
 
 void Lay_RefreshNotifsAndConnected (void);

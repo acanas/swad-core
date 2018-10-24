@@ -4585,7 +4585,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -4721,7 +4721,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -4847,7 +4847,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -4963,7 +4963,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -5069,7 +5069,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -5188,7 +5188,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
                      Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    Sta_GetAndShowInss (Query,Txt_Centres);
@@ -5244,7 +5244,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
                      Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    Sta_GetAndShowInss (Query,Txt_Degrees);
@@ -5303,7 +5303,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
                      Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    Sta_GetAndShowInss (Query,Txt_Courses);
@@ -5365,7 +5365,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
                      Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    Sta_GetAndShowInss (Query,Txt_Users);
@@ -5421,7 +5421,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
                      Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    Sta_GetAndShowInss (Query,Txt_Users);
@@ -6634,7 +6634,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	   }
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get size of a file browser");
@@ -6841,7 +6841,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                   (unsigned) License);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get number of OERs");
@@ -7352,7 +7352,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 		     (unsigned) NoteType);
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
 	}
       NumSocialNotes = 0;
@@ -7456,7 +7456,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 		  Gbl.CurrentCrs.Crs.CrsCod);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    NumSocialNotes = 0;
@@ -7631,7 +7631,7 @@ static void Sta_GetAndShowFollowStats (void)
 		     FieldDB[Fol]);
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
 	}
       NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of following/followers");
@@ -7742,7 +7742,7 @@ static void Sta_GetAndShowFollowStats (void)
 		     FieldDB[1 - Fol]);
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
 	}
       DB_QuerySELECT (Query,&mysql_res,"can not get number of questions per survey");
@@ -7902,7 +7902,7 @@ static void Sta_GetAndShowForumStats (void)
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 
@@ -8249,7 +8249,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of users who want to be notified by email on some event");
@@ -8318,7 +8318,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                      Gbl.CurrentCrs.Crs.CrsCod,(1 << NotifyEvent));
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[NotifyEvent] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who want to be notified by email on an event");
@@ -8374,7 +8374,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) NotifyEvent);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       DB_QuerySELECT (Query,&mysql_res,"can not get the number of notifications by email");
@@ -8873,7 +8873,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
                      Pri_VisibilityDB[Visibility]);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[Visibility] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a privacy");
@@ -9010,7 +9010,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
                      Txt_STR_LANG_ID[Lan]);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[Lan] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a language");
@@ -9147,7 +9147,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FirstDayOfWeek);
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
 	   }
 	 NumUsrs[FirstDayOfWeek] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a first day of week");
@@ -9286,7 +9286,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 		     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Format);
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
 	}
       NumUsrs[Format] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a date format");
@@ -9424,7 +9424,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                      Gbl.CurrentCrs.Crs.CrsCod,Ico_IconSetId[IconSet]);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[IconSet] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen an icon set");
@@ -9567,7 +9567,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Menu);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[Menu] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a menu");
@@ -9707,7 +9707,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                      Gbl.CurrentCrs.Crs.CrsCod,The_ThemeId[Theme]);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[Theme] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a theme");
@@ -9846,7 +9846,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                      Gbl.CurrentCrs.Crs.CrsCod,SideCols);
             break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    Lay_WrongScopeExit ();
 	    break;
         }
       NumUsrs[SideCols] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a layout of columns");

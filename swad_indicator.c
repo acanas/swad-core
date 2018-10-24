@@ -536,7 +536,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
            }
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
 

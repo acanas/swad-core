@@ -2190,7 +2190,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
             Lay_NotEnoughMemoryExit ();
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_WrongScopeExit ();
 	 break;
      }
    return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of sent messages");
@@ -2282,7 +2282,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                   Lay_NotEnoughMemoryExit ();
                break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
            }
          break;
@@ -2406,7 +2406,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                   Lay_NotEnoughMemoryExit ();
                break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       Lay_WrongScopeExit ();
 	       break;
            }
          break;
