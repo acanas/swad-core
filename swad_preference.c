@@ -25,9 +25,10 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For fprintf, etc.
+#include <stdio.h>		// For asprintf, fprintf, etc.
 #include <string.h>
 
 #include "swad_box.h"
@@ -121,7 +122,7 @@ void Pre_EditPrefs (void)
 
 void Pre_GetPrefsFromIP (void)
   {
-   char Query[1024];
+   char *Query;
    unsigned long NumRows;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -129,10 +130,11 @@ void Pre_GetPrefsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      sprintf (Query,"SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
-		     " FROM IP_prefs WHERE IP='%s'",
-	       Gbl.IP);
-      if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get preferences")))
+      if (asprintf (&Query,"SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
+			   " FROM IP_prefs WHERE IP='%s'",
+	            Gbl.IP) < 0)
+         Lay_NotEnoughMemoryExit ();
+      if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get preferences")))
 	{
 	 if (NumRows != 1)
 	    Lay_ShowErrorAndExit ("Internal error while getting preferences.");
@@ -175,39 +177,41 @@ void Pre_SetPrefsFromIP (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   char Query[512];
+   char *Query;
 
    /***** Update preferences from current IP in database *****/
-   sprintf (Query,"REPLACE INTO IP_prefs"
-	          " (IP,UsrCod,LastChange,"
-	          "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
-                  " VALUES"
-                  " ('%s',%ld,NOW(),"
-                  "%u,%u,'%s','%s',%u,%u)",
-            Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.Prefs.FirstDayOfWeek,
-            (unsigned) Gbl.Prefs.DateFormat,
-            The_ThemeId[Gbl.Prefs.Theme],
-            Ico_IconSetId[Gbl.Prefs.IconSet],
-            (unsigned) Gbl.Prefs.Menu,
-            Gbl.Prefs.SideCols);
-   DB_QueryREPLACE (Query,"can not store preferences from current IP address");
+   if (asprintf (&Query,"REPLACE INTO IP_prefs"
+			" (IP,UsrCod,LastChange,"
+			"FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
+			" VALUES"
+			" ('%s',%ld,NOW(),"
+			"%u,%u,'%s','%s',%u,%u)",
+	         Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
+	         Gbl.Prefs.FirstDayOfWeek,
+	         (unsigned) Gbl.Prefs.DateFormat,
+	         The_ThemeId[Gbl.Prefs.Theme],
+	         Ico_IconSetId[Gbl.Prefs.IconSet],
+	         (unsigned) Gbl.Prefs.Menu,
+	         Gbl.Prefs.SideCols) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryREPLACE_free (Query,"can not store preferences from current IP address");
 
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE IP_prefs"
-	            " SET FirstDayOfWeek=%u,DateFormat=%u,"
-	            "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
-                     " WHERE UsrCod=%ld",
-               Gbl.Prefs.FirstDayOfWeek,
-               (unsigned) Gbl.Prefs.DateFormat,
-               The_ThemeId[Gbl.Prefs.Theme],
-               Ico_IconSetId[Gbl.Prefs.IconSet],
-               (unsigned) Gbl.Prefs.Menu,
-               Gbl.Prefs.SideCols,
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preferences");
+      if (asprintf (&Query,"UPDATE IP_prefs"
+			  " SET FirstDayOfWeek=%u,DateFormat=%u,"
+			  "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
+			   " WHERE UsrCod=%ld",
+		    Gbl.Prefs.FirstDayOfWeek,
+		    (unsigned) Gbl.Prefs.DateFormat,
+		    The_ThemeId[Gbl.Prefs.Theme],
+		    Ico_IconSetId[Gbl.Prefs.IconSet],
+		    (unsigned) Gbl.Prefs.Menu,
+		    Gbl.Prefs.SideCols,
+		    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryUPDATE_free (Query,"can not update your preferences");
      }
   }
 
@@ -217,13 +221,14 @@ void Pre_SetPrefsFromIP (void)
 
 void Pre_RemoveOldPrefsFromIP (void)
   {
-   char Query[256];
+   char *Query;
 
    /***** Remove old preferences *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM IP_prefs"
-                  " WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            Cfg_TIME_TO_DELETE_IP_PREFS);
-   DB_QueryDELETE (Query,"can not remove old preferences");
+   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM IP_prefs"
+			" WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                 Cfg_TIME_TO_DELETE_IP_PREFS) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryDELETE_free (Query,"can not remove old preferences");
   }
 
 /*****************************************************************************/
@@ -352,12 +357,13 @@ void Pre_ShowRightCol (void)
 
 static void Pre_UpdateSideColsOnUsrDataTable (void)
   {
-   char Query[512];
+   char *Query;
 
-   sprintf (Query,"UPDATE usr_data SET SideCols=%u"
-	          " WHERE UsrCod=%ld",
-            Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your preference about side columns");
+   if (asprintf (&Query,"UPDATE usr_data SET SideCols=%u"
+			" WHERE UsrCod=%ld",
+		 Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update your preference about side columns");
   }
 
 /*****************************************************************************/

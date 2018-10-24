@@ -25,7 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -281,7 +283,7 @@ static void Plc_PutIconToViewPlacesWhenEditing (void)
 void Plc_GetListPlaces (void)
   {
    char OrderBySubQuery[256];
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -298,25 +300,26 @@ void Plc_GetListPlaces (void)
          sprintf (OrderBySubQuery,"NumCtrs DESC,FullName");
          break;
      }
-   sprintf (Query,"(SELECT places.PlcCod,places.ShortName,places.FullName,COUNT(*) AS NumCtrs"
-                  " FROM places,centres"
-                  " WHERE places.InsCod=%ld"
-                  " AND places.PlcCod=centres.PlcCod"
-                  " AND centres.InsCod=%ld"
-                  " GROUP BY places.PlcCod)"
-                  " UNION "
-                  "(SELECT PlcCod,ShortName,FullName,0 AS NumCtrs"
-                  " FROM places"
-                  " WHERE InsCod=%ld"
-                  " AND PlcCod NOT IN"
-                  " (SELECT DISTINCT PlcCod FROM centres WHERE InsCod=%ld))"
-                  " ORDER BY %s",
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            OrderBySubQuery);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get places");
+   if (asprintf (&Query,"(SELECT places.PlcCod,places.ShortName,places.FullName,COUNT(*) AS NumCtrs"
+			" FROM places,centres"
+			" WHERE places.InsCod=%ld"
+			" AND places.PlcCod=centres.PlcCod"
+			" AND centres.InsCod=%ld"
+			" GROUP BY places.PlcCod)"
+			" UNION "
+			"(SELECT PlcCod,ShortName,FullName,0 AS NumCtrs"
+			" FROM places"
+			" WHERE InsCod=%ld"
+			" AND PlcCod NOT IN"
+			" (SELECT DISTINCT PlcCod FROM centres WHERE InsCod=%ld))"
+			" ORDER BY %s",
+	         Gbl.CurrentIns.Ins.InsCod,
+	         Gbl.CurrentIns.Ins.InsCod,
+	         Gbl.CurrentIns.Ins.InsCod,
+	         Gbl.CurrentIns.Ins.InsCod,
+	         OrderBySubQuery) < 0)
+      Lay_NotEnoughMemoryExit ();
+   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get places");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Places found...
@@ -369,7 +372,7 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
   {
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_Another_place;
-   char Query[1024];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -397,22 +400,23 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      sprintf (Query,"(SELECT places.ShortName,places.FullName,COUNT(*)"
-                     " FROM places,centres"
-                     " WHERE places.PlcCod=%ld"
-                     " AND places.PlcCod=centres.PlcCod"
-                     " AND centres.PlcCod=%ld"
-                     " GROUP BY places.PlcCod)"
-                     " UNION "
-                     "(SELECT ShortName,FullName,0"
-                     " FROM places"
-                     " WHERE PlcCod=%ld"
-                     " AND PlcCod NOT IN"
-                     " (SELECT DISTINCT PlcCod FROM centres))",
-               Plc->PlcCod,
-               Plc->PlcCod,
-               Plc->PlcCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a place");
+      if (asprintf (&Query,"(SELECT places.ShortName,places.FullName,COUNT(*)"
+			   " FROM places,centres"
+			   " WHERE places.PlcCod=%ld"
+			   " AND places.PlcCod=centres.PlcCod"
+			   " AND centres.PlcCod=%ld"
+			   " GROUP BY places.PlcCod)"
+			   " UNION "
+			   "(SELECT ShortName,FullName,0"
+			   " FROM places"
+			   " WHERE PlcCod=%ld"
+			   " AND PlcCod NOT IN"
+			   " (SELECT DISTINCT PlcCod FROM centres))",
+		    Plc->PlcCod,
+		    Plc->PlcCod,
+		    Plc->PlcCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a place");
 
       /***** Count number of rows in result *****/
       if (NumRows) // Place found...
@@ -556,7 +560,7 @@ void Plc_RemovePlace (void)
   {
    extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place;
    extern const char *Txt_Place_X_removed;
-   char Query[128];
+   char *Query;
    struct Place Plc;
 
    /***** Get place code *****/
@@ -572,9 +576,10 @@ void Plc_RemovePlace (void)
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
-      sprintf (Query,"DELETE FROM places WHERE PlcCod=%ld",
-	       Plc.PlcCod);
-      DB_QueryDELETE (Query,"can not remove a place");
+      if (asprintf (&Query,"DELETE FROM places WHERE PlcCod=%ld",
+	            Plc.PlcCod) < 0)
+         Lay_NotEnoughMemoryExit ();
+      DB_QueryDELETE_free (Query,"can not remove a place");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -704,13 +709,14 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod)
   {
-   char Query[256 + Plc_MAX_BYTES_PLACE_FULL_NAME];
+   char *Query;
 
    /***** Get number of places with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM places"
-	          " WHERE InsCod=%ld AND %s='%s' AND PlcCod<>%ld",
-            Gbl.CurrentIns.Ins.InsCod,FieldName,Name,PlcCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a place already existed") != 0);
+   if (asprintf (&Query,"SELECT COUNT(*) FROM places"
+			" WHERE InsCod=%ld AND %s='%s' AND PlcCod<>%ld",
+                 Gbl.CurrentIns.Ins.InsCod,FieldName,Name,PlcCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   return (DB_QueryCOUNT_free (Query,"can not check if the name of a place already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -719,12 +725,13 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 
 static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName)
   {
-   char Query[128 + Plc_MAX_BYTES_PLACE_FULL_NAME];
+   char *Query;
 
    /***** Update place changing old name by new name */
-   sprintf (Query,"UPDATE places SET %s='%s' WHERE PlcCod=%ld",
-	    FieldName,NewPlcName,PlcCod);
-   DB_QueryUPDATE (Query,"can not update the name of a place");
+   if (asprintf (&Query,"UPDATE places SET %s='%s' WHERE PlcCod=%ld",
+		 FieldName,NewPlcName,PlcCod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryUPDATE_free (Query,"can not update the name of a place");
   }
 
 /*****************************************************************************/
@@ -873,17 +880,16 @@ void Plc_RecFormNewPlace (void)
 static void Plc_CreatePlace (struct Place *Plc)
   {
    extern const char *Txt_Created_new_place_X;
-   char Query[256 +
-              Plc_MAX_BYTES_PLACE_SHRT_NAME +
-              Plc_MAX_BYTES_PLACE_FULL_NAME];
+   char *Query;
 
    /***** Create a new place *****/
-   sprintf (Query,"INSERT INTO places"
-	          " (InsCod,ShortName,FullName)"
-	          " VALUES"
-	          " (%ld,'%s','%s')",
-            Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
-   DB_QueryINSERT (Query,"can not create place");
+   if (asprintf (&Query,"INSERT INTO places"
+			" (InsCod,ShortName,FullName)"
+			" VALUES"
+			" (%ld,'%s','%s')",
+                 Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName) < 0)
+      Lay_NotEnoughMemoryExit ();
+   DB_QueryINSERT_free (Query,"can not create place");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
