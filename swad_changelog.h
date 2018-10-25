@@ -355,11 +355,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.8.1 (2018-10-25)"
+#define Log_PLATFORM_VERSION	"SWAD 18.8.2 (2018-10-25)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.8.1:   Oct 25, 2018  Fixed bug in password, reported by Francisco A. Ocaña. (238047 lines)
+	Version 18.8.2:   Oct 25, 2018  Changes in alerts.
+					Fixed bug in account creation. (238051 lines)
+	Version 18.8.1:   Oct 25, 2018  Fixed bug in password, reported by Francisco A. Ocaña and Ana del Carmen Ruiz Reina. (238047 lines)
 	Version 18.8:     Oct 25, 2018  New internal functions to build database queries. (238043 lines)
 	Version 18.7.42:  Oct 25, 2018  Some sprintf for database queries changed by asprintf. (238146 lines)
 	Version 18.7.41:  Oct 24, 2018  Some sprintf for database queries changed by asprintf. (238125 lines)

@@ -99,8 +99,7 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *Txt)
    if (AlertType != Ale_NONE)
       Ale_ShowAlertAndButton (AlertType,Txt,
                               ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
-
-   Ale_ResetAlert ();
+   // Ale_ResetAlert ();
   }
 
 void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,

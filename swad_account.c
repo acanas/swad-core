@@ -433,10 +433,15 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
 void Acc_ShowFormChgMyAccount (void)
   {
-   bool IMustFillNickname   = false;
-   bool IMustFillEmail      = false;
-   bool IShouldConfirmEmail = false;
-   bool IShouldFillID       = false;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
+   extern const char *Txt_Please_fill_in_your_email_address;
+   bool IMustFillPassword   = (Gbl.Usrs.Me.UsrDat.Password[0] == '\0');
+   bool IMustFillNickname   = (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0');
+   bool IMustFillEmail      = (Gbl.Usrs.Me.UsrDat.Email[0] == '\0');
+   bool IShouldConfirmEmail = (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&		// Email not yet confirmed
+	                       !Gbl.Usrs.Me.ConfirmEmailJustSent);		// Do not ask for email confirmation when confirmation email is just sent
+   bool IShouldFillID       = (Gbl.Usrs.Me.UsrDat.IDs.Num == 0);
 
    /***** Get current user's nickname and email address
           It's necessary because current nickname or email could be just updated *****/
@@ -444,18 +449,15 @@ void Acc_ShowFormChgMyAccount (void)
    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check nickname, email and ID *****/
-   if (!Gbl.Usrs.Me.UsrDat.Nickname[0])
-      IMustFillNickname = true;
-   else if (!Gbl.Usrs.Me.UsrDat.Email[0])
-      IMustFillEmail = true;
-   else
-     {
-      if (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&		// Email not yet confirmed
-	  !Gbl.Usrs.Me.ConfirmEmailJustSent)		// Do not ask for email confirmation when confirmation email is just sent
-	 IShouldConfirmEmail = true;
-      if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
-	 IShouldFillID = true;
-     }
+   if (IMustFillPassword)
+      Ale_ShowAlert (Ale_WARNING,
+	             Txt_Before_going_to_any_other_option_you_must_create_your_password);
+   if (IMustFillNickname)
+      Ale_ShowAlert (Ale_WARNING,
+	             Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+   if (IMustFillEmail)
+      Ale_ShowAlert (Ale_WARNING,
+	             Txt_Please_fill_in_your_email_address);
 
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
@@ -753,7 +755,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 		               "'%s','%s',"
 		               "'%s','%s','%s',"
 		               "%s,'%s',"
-		               "%u,%u,-1,0",
+		               "%u,%u,-1,0)",
 		 UsrDat->EncryptedUsrCod,
 		 UsrDat->Password,
 		 UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
