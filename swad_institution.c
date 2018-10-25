@@ -118,7 +118,6 @@ void Ins_SeeInsWithPendingCtrs (void)
    extern const char *Txt_Institution;
    extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumInss;
@@ -130,30 +129,29 @@ void Ins_SeeInsWithPendingCtrs (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_INS_ADM:
-         if (asprintf (&Query,"SELECT centres.InsCod,COUNT(*)"
-			      " FROM centres,ins_admin,institutions"
-			      " WHERE (centres.Status & %u)<>0"
-			      " AND centres.InsCod=ins_admin.InsCod AND ins_admin.UsrCod=%ld"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " GROUP BY centres.InsCod ORDER BY institutions.ShortName",
-                       (unsigned) Ctr_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT centres.InsCod,COUNT(*)"
+			" FROM centres,ins_admin,institutions"
+			" WHERE (centres.Status & %u)<>0"
+			" AND centres.InsCod=ins_admin.InsCod AND ins_admin.UsrCod=%ld"
+			" AND centres.InsCod=institutions.InsCod"
+			" GROUP BY centres.InsCod ORDER BY institutions.ShortName",
+                        (unsigned) Ctr_STATUS_BIT_PENDING,
+			Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Rol_SYS_ADM:
-         if (asprintf (&Query,"SELECT centres.InsCod,COUNT(*)"
-			      " FROM centres,institutions"
-			      " WHERE (centres.Status & %u)<>0"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " GROUP BY centres.InsCod ORDER BY institutions.ShortName",
-                       (unsigned) Ctr_STATUS_BIT_PENDING) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT centres.InsCod,COUNT(*)"
+			" FROM centres,institutions"
+			" WHERE (centres.Status & %u)<>0"
+			" AND centres.InsCod=institutions.InsCod"
+			" GROUP BY centres.InsCod ORDER BY institutions.ShortName",
+                        (unsigned) Ctr_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
 	 return;
      }
 
    /***** Get institutions *****/
-   if ((NumInss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions with pending centres")))
+   if ((NumInss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
@@ -965,7 +963,6 @@ static void Ins_PutIconToViewInstitutions (void)
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
   {
    char OrderBySubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -976,12 +973,11 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
    switch (GetExtraData)
      {
       case Ins_GET_BASIC_DATA:
-	 if (asprintf (&Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
-			      " FROM institutions"
-			      " WHERE CtyCod=%ld"
-			      " ORDER BY FullName",
-		       CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
+			" FROM institutions"
+			" WHERE CtyCod=%ld"
+			" ORDER BY FullName",
+		        CtyCod);
          break;
       case Ins_GET_EXTRA_DATA:
          switch (Gbl.Inss.SelectedOrder)
@@ -993,27 +989,26 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                sprintf (OrderBySubQuery,"NumUsrs DESC,FullName");
                break;
            }
-	 if (asprintf (&Query,"(SELECT institutions.InsCod,institutions.CtyCod,"
-			      "institutions.Status,institutions.RequesterUsrCod,"
-			      "institutions.ShortName,institutions.FullName,"
-			      "institutions.WWW,COUNT(*) AS NumUsrs"
-			      " FROM institutions,usr_data"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=usr_data.InsCod"
-			      " GROUP BY institutions.InsCod)"
-			      " UNION "
-			      "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
-			      " FROM institutions"
-			      " WHERE CtyCod=%ld"
-			      " AND InsCod NOT IN"
-			      " (SELECT DISTINCT InsCod FROM usr_data))"
-			      " ORDER BY %s",
-	            CtyCod,CtyCod,
-	            OrderBySubQuery) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("(SELECT institutions.InsCod,institutions.CtyCod,"
+			"institutions.Status,institutions.RequesterUsrCod,"
+			"institutions.ShortName,institutions.FullName,"
+			"institutions.WWW,COUNT(*) AS NumUsrs"
+			" FROM institutions,usr_data"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=usr_data.InsCod"
+			" GROUP BY institutions.InsCod)"
+			" UNION "
+			"(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
+			" FROM institutions"
+			" WHERE CtyCod=%ld"
+			" AND InsCod NOT IN"
+			" (SELECT DISTINCT InsCod FROM usr_data))"
+			" ORDER BY %s",
+	                CtyCod,CtyCod,
+	                OrderBySubQuery);
          break;
      }
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get institutions");
 
    if (NumRows) // Institutions found...
      {
@@ -1123,7 +1118,6 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
                                     Ins_GetExtraData_t GetExtraData)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool InsFound = false;
@@ -1143,13 +1137,12 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    if (Ins->InsCod > 0)
      {
       /***** Get data of an institution from database *****/
-      if (asprintf (&Query,"SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
-		           " FROM institutions WHERE InsCod=%ld",
-	            Ins->InsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
+		     " FROM institutions WHERE InsCod=%ld",
+	             Ins->InsCod);
 
       /***** Count number of rows in result *****/
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get data of an institution")) // Institution found...
+      if (DB_QuerySELECT_new (&mysql_res,"can not get data of an institution")) // Institution found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -1215,7 +1208,6 @@ void Ins_FlushCacheShortNameOfInstitution (void)
 
 void Ins_GetShortNameOfInstitution (struct Instit *Ins)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1237,10 +1229,9 @@ void Ins_GetShortNameOfInstitution (struct Instit *Ins)
    /***** 3. Slow: get short name of institution from database *****/
    Gbl.Cache.InstitutionShrtName.InsCod = Ins->InsCod;
 
-   if (asprintf (&Query,"SELECT ShortName FROM institutions WHERE InsCod=%ld",
-	         Ins->InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the short name of an institution") == 1)
+   DB_BuildQuery ("SELECT ShortName FROM institutions WHERE InsCod=%ld",
+	          Ins->InsCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get the short name of an institution") == 1)
      {
       /* Get the short name of this institution */
       row = mysql_fetch_row (mysql_res);
@@ -1273,7 +1264,6 @@ static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1298,13 +1288,12 @@ static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
    /***** 3. Slow: get full name and country of institution from database *****/
    Gbl.Cache.InstitutionFullNameAndCty.InsCod = Ins->InsCod;
 
-   if (asprintf (&Query,"SELECT institutions.FullName,countries.Name_%s"
-			" FROM institutions,countries"
-			" WHERE institutions.InsCod=%ld"
-			" AND institutions.CtyCod=countries.CtyCod",
-	         Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the full name of an institution") == 1)
+   DB_BuildQuery ("SELECT institutions.FullName,countries.Name_%s"
+		  " FROM institutions,countries"
+		  " WHERE institutions.InsCod=%ld"
+		  " AND institutions.CtyCod=countries.CtyCod",
+	          Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get the full name of an institution") == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1354,7 +1343,6 @@ void Ins_FreeListInstitutions (void)
 void Ins_WriteSelectorOfInstitution (void)
   {
    extern const char *Txt_Institution;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumInss;
@@ -1378,12 +1366,11 @@ void Ins_WriteSelectorOfInstitution (void)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Get institutions of selected country from database *****/
-      if (asprintf (&Query,"SELECT DISTINCT InsCod,ShortName FROM institutions"
-			   " WHERE CtyCod=%ld"
-			   " ORDER BY ShortName",
-                    Gbl.CurrentCty.Cty.CtyCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumInss = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions");
+      DB_BuildQuery ("SELECT DISTINCT InsCod,ShortName FROM institutions"
+		     " WHERE CtyCod=%ld"
+		     " ORDER BY ShortName",
+                     Gbl.CurrentCty.Cty.CtyCod);
+      NumInss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions");
 
       /***** List institutions *****/
       for (NumIns = 0;

@@ -100,7 +100,6 @@ void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -108,11 +107,10 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
    Act_Action_t Action;
 
    /***** Get most frequently used actions *****/
-   if (asprintf (&Query,"SELECT ActCod FROM actions_MFU"
-			" WHERE UsrCod=%ld ORDER BY Score DESC,LastClick DESC",
-                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get most frequently used actions");
+   DB_BuildQuery ("SELECT ActCod FROM actions_MFU"
+		  " WHERE UsrCod=%ld ORDER BY Score DESC,LastClick DESC",
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get most frequently used actions");
 
    /***** Write list of frequently used actions *****/
    for (NumRow = 0, ListMFUActions->NumActions = 0;
@@ -141,7 +139,6 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumActions;
@@ -153,12 +150,11 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
      {
       /***** Get my most frequently used actions *****/
-      if (asprintf (&Query,"SELECT ActCod FROM actions_MFU"
-			   " WHERE UsrCod=%ld"
-			   " ORDER BY LastClick DESC,Score DESC",
-                    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumActions = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get most frequently used actions");
+      DB_BuildQuery ("SELECT ActCod FROM actions_MFU"
+		     " WHERE UsrCod=%ld"
+		     " ORDER BY LastClick DESC,Score DESC",
+                     Gbl.Usrs.Me.UsrDat.UsrCod);
+      NumActions = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get most frequently used actions");
 
       /***** Loop over list of frequently used actions *****/
       for (NumAct = 0;
@@ -357,11 +353,10 @@ void MFU_UpdateMFUActions (void)
    Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 
    /***** Get current score *****/
-   if (asprintf (&Query,"SELECT Score FROM actions_MFU"
-			" WHERE UsrCod=%ld AND ActCod=%ld",
-                 Gbl.Usrs.Me.UsrDat.UsrCod,ActCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get score for current action"))
+   DB_BuildQuery ("SELECT Score FROM actions_MFU"
+		  " WHERE UsrCod=%ld AND ActCod=%ld",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get score for current action"))
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%f",&Score) != 1)

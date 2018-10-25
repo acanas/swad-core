@@ -184,7 +184,6 @@ void Plg_EditPlugins (void)
 
 static void Plg_GetListPlugins (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -192,10 +191,9 @@ static void Plg_GetListPlugins (void)
    struct Plugin *Plg;
 
    /***** Get plugins from database *****/
-   if (asprintf (&Query,"SELECT PlgCod,Name,Description,Logo,AppKey,URL,IP"
-			" FROM plugins ORDER BY Name") < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get plugins");
+   DB_BuildQuery ("SELECT PlgCod,Name,Description,Logo,AppKey,URL,IP"
+		  " FROM plugins ORDER BY Name");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get plugins");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Plugins found...
@@ -258,7 +256,6 @@ static void Plg_GetListPlugins (void)
 
 bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -277,12 +274,11 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
    // Plg->PlgCod > 0
 
    /***** Get data of a plugin from database *****/
-   if (asprintf (&Query,"SELECT Name,Description,Logo,AppKey,URL,IP"
-			" FROM plugins"
-			" WHERE PlgCod=%ld",
-                 Plg->PlgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a plugin");
+   DB_BuildQuery ("SELECT Name,Description,Logo,AppKey,URL,IP"
+		  " FROM plugins"
+		  " WHERE PlgCod=%ld",
+                  Plg->PlgCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a plugin");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Plugin found...

@@ -356,7 +356,6 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    extern const char *Txt_All_notices;
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
-   char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrWidth[10 + 2 + 1];
@@ -377,24 +376,22 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       switch (TypeNoticesListing)
 	{
 	 case Not_LIST_BRIEF_NOTICES:
-	    if (asprintf (&Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
-				 " FROM notices"
-				 " WHERE CrsCod=%ld AND Status=%u"
-				 " ORDER BY CreatTime DESC",
-			  Gbl.CurrentCrs.Crs.CrsCod,
-			  (unsigned) Not_ACTIVE_NOTICE) < 0)
-               Lay_NotEnoughMemoryExit ();
+	    DB_BuildQuery ("SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
+			   " FROM notices"
+			   " WHERE CrsCod=%ld AND Status=%u"
+			   " ORDER BY CreatTime DESC",
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   (unsigned) Not_ACTIVE_NOTICE);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
-	    if (asprintf (&Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
+	    DB_BuildQuery ("SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 			   " FROM notices"
 			   " WHERE CrsCod=%ld"
 			   " ORDER BY CreatTime DESC",
-		     Gbl.CurrentCrs.Crs.CrsCod) < 0)
-               Lay_NotEnoughMemoryExit ();
+		           Gbl.CurrentCrs.Crs.CrsCod);
 	    break;
 	}
-      NumNotices = DB_QuerySELECT_free (Query,&mysql_res,"can not get notices from database");
+      NumNotices = DB_QuerySELECT_new (&mysql_res,"can not get notices from database");
 
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
 	{
@@ -550,7 +547,6 @@ static void Not_PutButtonToAddNewNotice (void)
 
 static void Not_GetDataAndShowNotice (long NotCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char Content[Cns_MAX_BYTES_TEXT + 1];
@@ -560,13 +556,12 @@ static void Not_GetDataAndShowNotice (long NotCod)
    Not_Status_t Status;
 
    /***** Get notice data from database *****/
-   if (asprintf (&Query,"SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
-			" FROM notices"
-			" WHERE NotCod=%ld AND CrsCod=%ld",
-		 NotCod,
-		 Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get notice from database"))
+   DB_BuildQuery ("SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
+		  " FROM notices"
+		  " WHERE NotCod=%ld AND CrsCod=%ld",
+		  NotCod,
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get notice from database"))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -766,7 +761,6 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long NotCod,bool GetContent)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
@@ -775,10 +769,8 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    // This function may be called inside a web service, so don't report error
 
    /***** Get subject of message from database *****/
-   if (asprintf (&Query,"SELECT Content FROM notices WHERE NotCod=%ld",
-                 NotCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get content of notice") == 1)	// Result should have a unique row
+   DB_BuildQuery ("SELECT Content FROM notices WHERE NotCod=%ld",NotCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get content of notice") == 1)	// Result should have a unique row
      {
       /***** Get sumary / content *****/
       row = mysql_fetch_row (mysql_res);
@@ -818,7 +810,6 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
@@ -827,72 +818,66 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-			      " FROM notices"
-			      " WHERE Status=%u",
-                       Status) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM notices"
+			" WHERE Status=%u",
+                        Status);
          break;
       case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
-			      " FROM institutions,centres,degrees,courses,notices"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=notices.CrsCod"
-			      " AND notices.Status=%u",
-                       Gbl.CurrentCty.Cty.CtyCod,
-                       Status) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
+			" FROM institutions,centres,degrees,courses,notices"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=notices.CrsCod"
+			" AND notices.Status=%u",
+                        Gbl.CurrentCty.Cty.CtyCod,
+                        Status);
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
-			      " FROM centres,degrees,courses,notices"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=notices.CrsCod"
-			      " AND notices.Status=%u",
-                       Gbl.CurrentIns.Ins.InsCod,
-                       Status) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
+			" FROM centres,degrees,courses,notices"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=notices.CrsCod"
+			" AND notices.Status=%u",
+                        Gbl.CurrentIns.Ins.InsCod,
+                        Status);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
-			      " FROM degrees,courses,notices"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=notices.CrsCod"
-			      " AND notices.Status=%u",
-                       Gbl.CurrentCtr.Ctr.CtrCod,
-                       Status) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
+			" FROM degrees,courses,notices"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=notices.CrsCod"
+			" AND notices.Status=%u",
+                        Gbl.CurrentCtr.Ctr.CtrCod,
+                        Status);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
-			      " FROM courses,notices"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=notices.CrsCod"
-			      " AND notices.Status=%u",
-                       Gbl.CurrentDeg.Deg.DegCod,
-                       Status) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
+			" FROM courses,notices"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=notices.CrsCod"
+			" AND notices.Status=%u",
+                        Gbl.CurrentDeg.Deg.DegCod,
+                        Status);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-			      " FROM notices"
-			      " WHERE CrsCod=%ld"
-			      " AND Status=%u",
-                       Gbl.CurrentCrs.Crs.CrsCod,
-                       Status) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM notices"
+			" WHERE CrsCod=%ld"
+			" AND Status=%u",
+                        Gbl.CurrentCrs.Crs.CrsCod,
+                        Status);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of notices");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of notices");
 
    /***** Get number of notices *****/
    row = mysql_fetch_row (mysql_res);
@@ -922,7 +907,6 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
 
 unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
@@ -931,60 +915,54 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-                              " FROM notices_deleted") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM notices_deleted");
          break;
       case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			      " FROM institutions,centres,degrees,courses,notices_deleted"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=notices_deleted.CrsCod",
-                       Gbl.CurrentCty.Cty.CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			" FROM institutions,centres,degrees,courses,notices_deleted"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=notices_deleted.CrsCod",
+                        Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			      " FROM centres,degrees,courses,notices_deleted"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=notices_deleted.CrsCod",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			" FROM centres,degrees,courses,notices_deleted"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=notices_deleted.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			      " FROM degrees,courses,notices_deleted"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=notices_deleted.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			" FROM degrees,courses,notices_deleted"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=notices_deleted.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			      " FROM courses,notices_deleted"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=notices_deleted.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			" FROM courses,notices_deleted"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=notices_deleted.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-			      " FROM notices_deleted"
-			      " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM notices_deleted"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of deleted notices");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of deleted notices");
 
    /***** Get number of notices *****/
    row = mysql_fetch_row (mysql_res);

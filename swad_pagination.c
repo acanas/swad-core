@@ -817,19 +817,17 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
 
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumPage;
 
    /***** Get last page of received/sent messages from database *****/
-   if (asprintf (&Query,"SELECT %s FROM sessions WHERE SessionId='%s'",
-	         WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-						         "LastPageMsgSnt",
-	         Gbl.Session.Id) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get last page of messages");
+   DB_BuildQuery ("SELECT %s FROM sessions WHERE SessionId='%s'",
+	          WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+						          "LastPageMsgSnt",
+	          Gbl.Session.Id);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get last page of messages");
 
    /***** Check number of rows of the result ****/
    if (NumRows != 1)

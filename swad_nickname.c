@@ -115,17 +115,15 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
 bool Nck_GetNicknameFromUsrCod (long UsrCod,
                                 char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   if (asprintf (&Query,"SELECT Nickname FROM usr_nicknames"
-			" WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get nickname"))
+   DB_BuildQuery ("SELECT Nickname FROM usr_nicknames"
+		  " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
+	          UsrCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get nickname"))
      {
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
@@ -154,7 +152,6 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
 long Nck_GetUsrCodFromNickname (const char *Nickname)
   {
    char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long UsrCod = -1L;
@@ -169,13 +166,12 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_nicknames is also in table usr_data */
-	 if (asprintf (&Query,"SELECT usr_nicknames.UsrCod"
-			      " FROM usr_nicknames,usr_data"
-			      " WHERE usr_nicknames.Nickname='%s'"
-			      " AND usr_nicknames.UsrCod=usr_data.UsrCod",
-		       NicknameWithoutArroba) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code"))
+	 DB_BuildQuery ("SELECT usr_nicknames.UsrCod"
+			" FROM usr_nicknames,usr_data"
+			" WHERE usr_nicknames.Nickname='%s'"
+			" AND usr_nicknames.UsrCod=usr_data.UsrCod",
+		        NicknameWithoutArroba);
+	 if (DB_QuerySELECT_new (&mysql_res,"can not get user's code"))
 	   {
 	    /* Get row */
 	    row = mysql_fetch_row (mysql_res);
@@ -230,7 +226,6 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
    extern const char *Txt_Save;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrRecordWidth[10 + 1];
@@ -242,12 +237,11 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    Lay_StartSection (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
-   if (asprintf (&Query,"SELECT Nickname FROM usr_nicknames"
-			" WHERE UsrCod=%ld"
-			" ORDER BY CreatTime DESC",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumNicks = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get nicknames of a user");
+   DB_BuildQuery ("SELECT Nickname FROM usr_nicknames"
+		  " WHERE UsrCod=%ld"
+		  " ORDER BY CreatTime DESC",
+                  UsrDat->UsrCod);
+   NumNicks = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get nicknames of a user");
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),

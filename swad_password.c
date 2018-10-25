@@ -114,16 +114,14 @@ bool Pwd_CheckCurrentPassword (void)
 
 bool Pwd_CheckPendingPassword (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get pending password from database *****/
-   if (asprintf (&Query,"SELECT PendingPassword FROM pending_passwd"
-			" WHERE UsrCod=%ld",
-                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get pending password"))
+   DB_BuildQuery ("SELECT PendingPassword FROM pending_passwd"
+		  " WHERE UsrCod=%ld",
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get pending password"))
      {
       /* Get encrypted pending password */
       row = mysql_fetch_row (mysql_res);

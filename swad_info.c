@@ -540,7 +540,6 @@ static bool Inf_CheckIfIHaveReadInfo (void)
 
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -553,15 +552,14 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       Gbl.CurrentCrs.Info.MustBeRead[InfoType] = false;
 
    /***** Get info types where students must read info *****/
-   if (asprintf (&Query,"SELECT InfoType FROM crs_info_src"
-			" WHERE CrsCod=%ld AND MustBeRead='Y'"
-			" AND InfoType NOT IN"
-			" (SELECT InfoType FROM crs_info_read"
-			" WHERE UsrCod=%ld AND CrsCod=%ld)",
-	         Gbl.CurrentCrs.Crs.CrsCod,
-	         Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get if you must read any course info");
+   DB_BuildQuery ("SELECT InfoType FROM crs_info_src"
+		  " WHERE CrsCod=%ld AND MustBeRead='Y'"
+		  " AND InfoType NOT IN"
+		  " (SELECT InfoType FROM crs_info_read"
+		  " WHERE UsrCod=%ld AND CrsCod=%ld)",
+	          Gbl.CurrentCrs.Crs.CrsCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get if you must read any course info");
 
    /***** Set must-be-read to true for each rown in result *****/
    for (NumRow = 0;
@@ -1542,17 +1540,15 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 
 Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Inf_InfoSrc_t InfoSrc;
 
    /***** Get info source for a specific type of info from database *****/
-   if (asprintf (&Query,"SELECT InfoSrc FROM crs_info_src"
-	                " WHERE CrsCod=%ld AND InfoType='%s'",
-                 CrsCod,Inf_NamesInDBForInfoType[InfoType]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get info source"))
+   DB_BuildQuery ("SELECT InfoSrc FROM crs_info_src"
+		  " WHERE CrsCod=%ld AND InfoType='%s'",
+                  CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get info source"))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1577,7 +1573,6 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
                                    Inf_InfoType_t InfoType,
                                    Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1587,11 +1582,10 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
    *MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
-   if (asprintf (&Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src"
-	                " WHERE CrsCod=%ld AND InfoType='%s'",
-                 CrsCod,Inf_NamesInDBForInfoType[InfoType]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get info source");
+   DB_BuildQuery ("SELECT InfoSrc,MustBeRead FROM crs_info_src"
+		  " WHERE CrsCod=%ld AND InfoType='%s'",
+                  CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get info source");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)

@@ -1799,21 +1799,18 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
                                   MYSQL_RES **mysql_res)
   {
-   char *Query;
-
    /***** Get users in project from database *****/
-   if (asprintf (&Query,"SELECT prj_usr.UsrCod,"
-			"usr_data.Surname1 AS S1,"
-			"usr_data.Surname2 AS S2,"
-			"usr_data.FirstName AS FN"
-			" FROM prj_usr,usr_data"
-			" WHERE prj_usr.PrjCod=%ld AND RoleInProject=%u"
-			" AND prj_usr.UsrCod=usr_data.UsrCod"
-			" ORDER BY S1,S2,FN",
-                 PrjCod,(unsigned) RoleInProject) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QuerySELECT_free (Query,mysql_res,
-                                          "can not get users in project");
+   DB_BuildQuery ("SELECT prj_usr.UsrCod,"
+		  "usr_data.Surname1 AS S1,"
+		  "usr_data.Surname2 AS S2,"
+		  "usr_data.FirstName AS FN"
+		  " FROM prj_usr,usr_data"
+		  " WHERE prj_usr.PrjCod=%ld AND RoleInProject=%u"
+		  " AND prj_usr.UsrCod=usr_data.UsrCod"
+		  " ORDER BY S1,S2,FN",
+                  PrjCod,(unsigned) RoleInProject);
+   return (unsigned) DB_QuerySELECT_new (mysql_res,
+                                         "can not get users in project");
   }
 
 /*****************************************************************************/
@@ -1828,7 +1825,6 @@ void Prj_FlushCacheMyRoleInProject (void)
 
 Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1845,11 +1841,10 @@ Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod)
 			 The result of the query will have one row or none *****/
    Gbl.Cache.MyRoleInProject.PrjCod = PrjCod;
    Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ROLE_UNK;
-   if (asprintf (&Query,"SELECT RoleInProject FROM prj_usr"
-			" WHERE PrjCod=%ld AND UsrCod=%ld",
-	         PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get my role in project"))
+   DB_BuildQuery ("SELECT RoleInProject FROM prj_usr"
+		  " WHERE PrjCod=%ld AND UsrCod=%ld",
+	          PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get my role in project"))
      {
       row = mysql_fetch_row (mysql_res);
       Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ConvertUnsignedStrToRoleInProject (row[0]);
@@ -2295,7 +2290,6 @@ void Prj_GetListProjects (void)
    char HidVisSubQuery[Prj_MAX_BYTES_SUBQUERY];
    char DptCodSubQuery[Prj_MAX_BYTES_SUBQUERY];
    char OrderBySubQuery[Prj_MAX_BYTES_SUBQUERY];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -2396,33 +2390,31 @@ void Prj_GetListProjects (void)
 	    case Prj_ORDER_START_TIME:
 	    case Prj_ORDER_END_TIME:
 	    case Prj_ORDER_TITLE:
-	       if (asprintf (&Query,"SELECT projects.PrjCod"
-				    " FROM projects,prj_usr"
-				    " WHERE projects.CrsCod=%ld"
-				    "%s%s%s"
-				    " AND projects.PrjCod=prj_usr.PrjCod"
-				    " AND prj_usr.UsrCod=%ld"
-				    " ORDER BY %s",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     OrderBySubQuery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT projects.PrjCod"
+			      " FROM projects,prj_usr"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s%s"
+			      " AND projects.PrjCod=prj_usr.PrjCod"
+			      " AND prj_usr.UsrCod=%ld"
+			      " ORDER BY %s",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+			      Gbl.Usrs.Me.UsrDat.UsrCod,
+			      OrderBySubQuery);
 	       break;
 	    case Prj_ORDER_DEPARTMENT:
-	       if (asprintf (&Query,"SELECT projects.PrjCod"
-				    " FROM prj_usr,projects LEFT JOIN departments"
-				    " ON projects.DptCod=departments.DptCod"
-				    " WHERE projects.CrsCod=%ld"
-				    "%s%s%s"
-				    " AND projects.PrjCod=prj_usr.PrjCod"
-				    " AND prj_usr.UsrCod=%ld"
-				    " ORDER BY %s",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     OrderBySubQuery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT projects.PrjCod"
+			      " FROM prj_usr,projects LEFT JOIN departments"
+			      " ON projects.DptCod=departments.DptCod"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s%s"
+			      " AND projects.PrjCod=prj_usr.PrjCod"
+			      " AND prj_usr.UsrCod=%ld"
+			      " ORDER BY %s",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+			      Gbl.Usrs.Me.UsrDat.UsrCod,
+			      OrderBySubQuery);
 	       break;
 	   }
       else	// Gbl.Prjs.My_All == Prj_ALL_PROJECTS
@@ -2431,31 +2423,29 @@ void Prj_GetListProjects (void)
 	    case Prj_ORDER_START_TIME:
 	    case Prj_ORDER_END_TIME:
 	    case Prj_ORDER_TITLE:
-	       if (asprintf (&Query,"SELECT projects.PrjCod"
-				    " FROM projects"
-				    " WHERE projects.CrsCod=%ld"
-				    "%s%s%s"
-				    " ORDER BY %s",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-			     OrderBySubQuery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT projects.PrjCod"
+			      " FROM projects"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s%s"
+			      " ORDER BY %s",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+			      OrderBySubQuery);
 	       break;
 	    case Prj_ORDER_DEPARTMENT:
-	       if (asprintf (&Query,"SELECT projects.PrjCod"
-				    " FROM projects LEFT JOIN departments"
-				    " ON projects.DptCod=departments.DptCod"
-				    " WHERE projects.CrsCod=%ld"
-				    "%s%s%s"
-				    " ORDER BY %s",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-			     OrderBySubQuery) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT projects.PrjCod"
+			      " FROM projects LEFT JOIN departments"
+			      " ON projects.DptCod=departments.DptCod"
+			      " WHERE projects.CrsCod=%ld"
+			      "%s%s%s"
+			      " ORDER BY %s",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
+			      OrderBySubQuery);
 	       break;
 	   }
 
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get projects");
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get projects");
 
       if (NumRows) // Projects found...
 	{
@@ -2492,7 +2482,6 @@ void Prj_GetListProjects (void)
 
 long Prj_GetCourseOfProject (long PrjCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long CrsCod = -1L;
@@ -2500,10 +2489,8 @@ long Prj_GetCourseOfProject (long PrjCod)
    if (PrjCod > 0)
      {
       /***** Get course code from database *****/
-      if (asprintf (&Query,"SELECT CrsCod FROM projects WHERE PrjCod=%ld",
-	            PrjCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get project course")) // Project found...
+      DB_BuildQuery ("SELECT CrsCod FROM projects WHERE PrjCod=%ld",PrjCod);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get project course")) // Project found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -3504,7 +3491,6 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 
 unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -3513,65 +3499,59 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
-			      " FROM projects"
-			      " WHERE CrsCod>0") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
+			" FROM projects"
+			" WHERE CrsCod>0");
          break;
        case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT projects.CrsCod)"
-			      " FROM institutions,centres,degrees,courses,projects"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.Status=0"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentCty.Cty.CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT projects.CrsCod)"
+			" FROM institutions,centres,degrees,courses,projects"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentCty.Cty.CtyCod);
          break;
        case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT projects.CrsCod)"
-			      " FROM centres,degrees,courses,projects"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.Status=0"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT projects.CrsCod)"
+			" FROM centres,degrees,courses,projects"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT projects.CrsCod)"
-			      " FROM degrees,courses,projects"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.Status=0"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT projects.CrsCod)"
+			" FROM degrees,courses,projects"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT projects.CrsCod)"
-			      " FROM courses,projects"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.Status=0"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT projects.CrsCod)"
+			" FROM courses,projects"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
-			      " FROM projects"
-			      " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
+			" FROM projects"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with projects");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with projects");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -3591,7 +3571,6 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
 
 unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumProjects;
@@ -3600,61 +3579,55 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(*)"
+         DB_BuildQuery ("SELECT COUNT(*)"
                         " FROM projects"
-                        " WHERE CrsCod>0") < 0)
-            Lay_NotEnoughMemoryExit ();
+                        " WHERE CrsCod>0");
          break;
       case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM institutions,centres,degrees,courses,projects"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentCty.Cty.CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM institutions,centres,degrees,courses,projects"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM centres,degrees,courses,projects"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM centres,degrees,courses,projects"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM degrees,courses,projects"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM degrees,courses,projects"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM courses,projects"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=projects.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM courses,projects"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=projects.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM projects"
-			      " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM projects"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of projects");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of projects");
 
    /***** Get number of projects *****/
    row = mysql_fetch_row (mysql_res);

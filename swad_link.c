@@ -254,7 +254,6 @@ void Lnk_EditLinks (void)
 
 void Lnk_GetListLinks (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -264,10 +263,9 @@ void Lnk_GetListLinks (void)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get institutional links from database *****/
-      if (asprintf (&Query,"SELECT LnkCod,ShortName,FullName,WWW"
-	                   " FROM links ORDER BY ShortName") < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get institutional links");
+      DB_BuildQuery ("SELECT LnkCod,ShortName,FullName,WWW"
+		     " FROM links ORDER BY ShortName");
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get institutional links");
 
       if (NumRows) // Places found...
 	{
@@ -318,7 +316,6 @@ void Lnk_GetListLinks (void)
 
 void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -330,11 +327,10 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      if (asprintf (&Query,"SELECT ShortName,FullName,WWW FROM links"
-	                   " WHERE LnkCod=%ld",
-                    Lnk->LnkCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of an institutional link");
+      DB_BuildQuery ("SELECT ShortName,FullName,WWW FROM links"
+		     " WHERE LnkCod=%ld",
+                     Lnk->LnkCod);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of an institutional link");
 
       if (NumRows) // Link found...
         {

@@ -88,7 +88,6 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
 
 void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumIDs;
@@ -102,12 +101,11 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       /***** Get user's IDs from database *****/
       // First the confirmed (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
-      if (asprintf (&Query,"SELECT UsrID,Confirmed FROM usr_IDs"
-			   " WHERE UsrCod=%ld"
-			   " ORDER BY Confirmed DESC,UsrID",
-                    UsrDat->UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if ((NumIDs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's IDs")))
+      DB_BuildQuery ("SELECT UsrID,Confirmed FROM usr_IDs"
+		     " WHERE UsrCod=%ld"
+		     " ORDER BY Confirmed DESC,UsrID",
+                     UsrDat->UsrCod);
+      if ((NumIDs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's IDs")))
 	{
 	 /***** Allocate space for the list *****/
          ID_ReallocateListIDs (UsrDat,NumIDs);

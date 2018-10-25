@@ -122,7 +122,6 @@ void Pre_EditPrefs (void)
 
 void Pre_GetPrefsFromIP (void)
   {
-   char *Query;
    unsigned long NumRows;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -130,11 +129,10 @@ void Pre_GetPrefsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      if (asprintf (&Query,"SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
-			   " FROM IP_prefs WHERE IP='%s'",
-	            Gbl.IP) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get preferences")))
+      DB_BuildQuery ("SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
+		     " FROM IP_prefs WHERE IP='%s'",
+	             Gbl.IP);
+      if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get preferences")))
 	{
 	 if (NumRows != 1)
 	    Lay_ShowErrorAndExit ("Internal error while getting preferences.");

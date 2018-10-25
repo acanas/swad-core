@@ -257,18 +257,17 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
          sprintf (OrderBySubQuery,"N DESC,Info,Domain");
          break;
      }
-   if (asprintf (&Query,"(SELECT mail_domains.MaiCod,mail_domains.Domain AS Domain,mail_domains.Info AS Info,T1.N AS N"
-			" FROM mail_domains,T1"
-			" WHERE mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
-			" UNION "
-			"(SELECT MaiCod,Domain,Info,0 AS N"
-			" FROM mail_domains"
-			" WHERE Domain NOT IN (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
-			" ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
-                 OrderBySubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
+   DB_BuildQuery ("(SELECT mail_domains.MaiCod,mail_domains.Domain AS Domain,mail_domains.Info AS Info,T1.N AS N"
+		  " FROM mail_domains,T1"
+		  " WHERE mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
+		  " UNION "
+		  "(SELECT MaiCod,Domain,Info,0 AS N"
+		  " FROM mail_domains"
+		  " WHERE Domain NOT IN (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
+		  " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
+                  OrderBySubQuery);
 
-   if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get mail domains"))) // Mail domains found...
+   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get mail domains"))) // Mail domains found...
      {
       Gbl.Mails.Num = (unsigned) NumRows;
 
@@ -396,7 +395,6 @@ void Mai_WriteWarningEmailNotifications (void)
 
 void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -408,10 +406,9 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      if (asprintf (&Query,"SELECT Domain,Info FROM mail_domains WHERE MaiCod=%ld",
-                    Mai->MaiCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a mail domain");
+      DB_BuildQuery ("SELECT Domain,Info FROM mail_domains WHERE MaiCod=%ld",
+                     Mai->MaiCod);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a mail domain");
 
       if (NumRows) // Mail found...
         {
@@ -1076,18 +1073,16 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
 
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   if (asprintf (&Query,"SELECT E_mail,Confirmed FROM usr_emails"
-	                " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get email address");
+   DB_BuildQuery ("SELECT E_mail,Confirmed FROM usr_emails"
+		  " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
+	          UsrDat->UsrCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get email address");
 
    if (NumRows == 0)
      {
@@ -1118,7 +1113,6 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 
 long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1129,12 +1123,11 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
 	{
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_emails is also in table usr_data */
-	 if (asprintf (&Query,"SELECT usr_emails.UsrCod FROM usr_emails,usr_data"
-			      " WHERE usr_emails.E_mail='%s'"
-			      " AND usr_emails.UsrCod=usr_data.UsrCod",
-		       Email) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code");
+	 DB_BuildQuery ("SELECT usr_emails.UsrCod FROM usr_emails,usr_data"
+			" WHERE usr_emails.E_mail='%s'"
+			" AND usr_emails.UsrCod=usr_data.UsrCod",
+		        Email);
+	 NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's code");
 	 if (NumUsrs == 0)
 	    /* User not found for this email ==> set user's code to void */
 	    UsrCod = -1L;
@@ -1240,7 +1233,6 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    extern const char *Txt_Email;
    extern const char *Txt_Change_email;
    extern const char *Txt_Save;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumEmails;
@@ -1259,12 +1251,11 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
-   if (asprintf (&Query,"SELECT E_mail,Confirmed FROM usr_emails"
-                        " WHERE UsrCod=%ld"
-                        " ORDER BY CreatTime DESC",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumEmails = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get old email addresses of a user");
+   DB_BuildQuery ("SELECT E_mail,Confirmed FROM usr_emails"
+		  " WHERE UsrCod=%ld"
+		  " ORDER BY CreatTime DESC",
+                  UsrDat->UsrCod);
+   NumEmails = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get old email addresses of a user");
 
    /***** Start table *****/
    Tbl_StartTableWide (2);
@@ -1840,11 +1831,10 @@ void Mai_ConfirmEmail (void)
    Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
    /***** Get user's code and email from key *****/
-   if (asprintf (&Query,"SELECT UsrCod,E_mail FROM pending_emails"
-	                " WHERE MailKey='%s'",
-                 MailKey) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code and email from key"))
+   DB_BuildQuery ("SELECT UsrCod,E_mail FROM pending_emails"
+		  " WHERE MailKey='%s'",
+                  MailKey);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get user's code and email from key"))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1871,11 +1861,10 @@ void Mai_ConfirmEmail (void)
 
       /***** Check user's code and email
              and get if email is already confirmed *****/
-      if (asprintf (&Query,"SELECT Confirmed FROM usr_emails"
-		           " WHERE UsrCod=%ld AND E_mail='%s'",
-	            UsrCod,Email) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's code and email"))
+      DB_BuildQuery ("SELECT Confirmed FROM usr_emails"
+		     " WHERE UsrCod=%ld AND E_mail='%s'",
+	             UsrCod,Email);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get user's code and email"))
 	{
          Confirmed = (row[0][0] == 'Y');
 

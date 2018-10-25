@@ -205,7 +205,6 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
 void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -224,13 +223,12 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
-      if (asprintf (&Query,"SELECT URL FROM usr_webs"
-			   " WHERE UsrCod=%ld AND Web='%s'",
-	            UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT URL FROM usr_webs"
+		     " WHERE UsrCod=%ld AND Web='%s'",
+	             UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]);
 
       /***** Check if exists the web / social network for this user *****/
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's web / social network"))
+      if (DB_QuerySELECT_new (&mysql_res,"can not get user's web / social network"))
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
@@ -281,7 +279,6 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *Hlp_PROFILE_Webs;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -304,14 +301,13 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
-      if (asprintf (&Query,"SELECT URL FROM usr_webs"
-			   " WHERE UsrCod=%ld AND Web='%s'",
-	            Gbl.Usrs.Me.UsrDat.UsrCod,
-	            Net_WebsAndSocialNetworksDB[NumURL]) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT URL FROM usr_webs"
+		     " WHERE UsrCod=%ld AND Web='%s'",
+	             Gbl.Usrs.Me.UsrDat.UsrCod,
+	             Net_WebsAndSocialNetworksDB[NumURL]);
 
       /***** Check number of rows in result *****/
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get user's web / social network"))
+      if (DB_QuerySELECT_new (&mysql_res,"can not get user's web / social network"))
 	{
 	 /***** Read the data comunes a all the users *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -442,7 +438,6 @@ void Net_ShowWebAndSocialNetworksStats (void)
    extern const char *Txt_Web_social_network;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -463,83 +458,77 @@ void Net_ShowWebAndSocialNetworksStats (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT Web,COUNT(*) AS N"
-			      " FROM usr_webs"
-			      " GROUP BY Web"
-			      " ORDER BY N DESC,Web") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT Web,COUNT(*) AS N"
+			" FROM usr_webs"
+			" GROUP BY Web"
+			" ORDER BY N DESC,Web");
          break;
       case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT usr_webs.Web,"
-			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			      " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
-			      " GROUP BY usr_webs.Web"
-			      " ORDER BY N DESC,usr_webs.Web",
-                       Gbl.CurrentCty.Cty.CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT usr_webs.Web,"
+			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			" FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=usr_webs.UsrCod"
+			" GROUP BY usr_webs.Web"
+			" ORDER BY N DESC,usr_webs.Web",
+                        Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT usr_webs.Web,"
-			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			      " FROM centres,degrees,courses,crs_usr,usr_webs"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
-			      " GROUP BY usr_webs.Web"
-			      " ORDER BY N DESC,usr_webs.Web",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT usr_webs.Web,"
+			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			" FROM centres,degrees,courses,crs_usr,usr_webs"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=usr_webs.UsrCod"
+			" GROUP BY usr_webs.Web"
+			" ORDER BY N DESC,usr_webs.Web",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT usr_webs.Web,"
-			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			      " FROM degrees,courses,crs_usr,usr_webs"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
-			      " GROUP BY usr_webs.Web"
-			      " ORDER BY N DESC,usr_webs.Web",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT usr_webs.Web,"
+			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			" FROM degrees,courses,crs_usr,usr_webs"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=usr_webs.UsrCod"
+			" GROUP BY usr_webs.Web"
+			" ORDER BY N DESC,usr_webs.Web",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT usr_webs.Web,"
-			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			      " FROM courses,crs_usr,usr_webs"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
-			      " GROUP BY usr_webs.Web"
-			      " ORDER BY N DESC,usr_webs.Web",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT usr_webs.Web,"
+			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			" FROM courses,crs_usr,usr_webs"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=usr_webs.UsrCod"
+			" GROUP BY usr_webs.Web"
+			" ORDER BY N DESC,usr_webs.Web",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT usr_webs.Web,"
-			      "COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			      " FROM crs_usr,usr_webs"
-			      " WHERE crs_usr.CrsCod=%ld"
-			      " AND crs_usr.UsrCod=usr_webs.UsrCod"
-			      " GROUP BY usr_webs.Web"
-			      " ORDER BY N DESC,usr_webs.Web",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT usr_webs.Web,"
+			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
+			" FROM crs_usr,usr_webs"
+			" WHERE crs_usr.CrsCod=%ld"
+			" AND crs_usr.UsrCod=usr_webs.UsrCod"
+			" GROUP BY usr_webs.Web"
+			" ORDER BY N DESC,usr_webs.Web",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,
-                                             "can not get number of users with webs / social networks");
+   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,
+                                            "can not get number of users with webs / social networks");
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,

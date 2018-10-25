@@ -1220,7 +1220,6 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1244,46 +1243,42 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_DOC_CRS:
             case Brw_ADMI_SHR_CRS:
             case Brw_ADMI_MRK_CRS:	// Notify all users in course except me
-               if (asprintf (&Query,"SELECT UsrCod FROM crs_usr"
-				    " WHERE CrsCod=%ld"
-				    " AND UsrCod<>%ld",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT UsrCod FROM crs_usr"
+			      " WHERE CrsCod=%ld"
+			      " AND UsrCod<>%ld",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
-               if (asprintf (&Query,"SELECT UsrCod FROM crs_usr"
-				    " WHERE CrsCod=%ld"
-				    " AND UsrCod<>%ld"
-				    " AND Role=%u",	// Notify teachers only
-                             Gbl.CurrentCrs.Crs.CrsCod,
-                             Gbl.Usrs.Me.UsrDat.UsrCod,
-                             (unsigned) Rol_TCH) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT UsrCod FROM crs_usr"
+			      " WHERE CrsCod=%ld"
+			      " AND UsrCod<>%ld"
+			      " AND Role=%u",	// Notify teachers only
+                              Gbl.CurrentCrs.Crs.CrsCod,
+                              Gbl.Usrs.Me.UsrDat.UsrCod,
+                              (unsigned) Rol_TCH);
                break;
             case Brw_ADMI_DOC_GRP:
             case Brw_ADMI_SHR_GRP:
             case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
-               if (asprintf (&Query,"SELECT UsrCod FROM crs_grp_usr"
-				    " WHERE crs_grp_usr.GrpCod=%ld"
-				    " AND crs_grp_usr.UsrCod<>%ld",
-                             Gbl.CurrentCrs.Grps.GrpCod,
-                             Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT UsrCod FROM crs_grp_usr"
+			      " WHERE crs_grp_usr.GrpCod=%ld"
+			      " AND crs_grp_usr.UsrCod<>%ld",
+                              Gbl.CurrentCrs.Grps.GrpCod,
+                              Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
-               if (asprintf (&Query,"SELECT crs_grp_usr.UsrCod"
-				    " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
-				    " WHERE crs_grp_usr.GrpCod=%ld"
-				    " AND crs_grp_usr.UsrCod<>%ld"
-				    " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-				    " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-				    " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-				    " AND crs_usr.Role=%u",	// Notify teachers only
-                             Gbl.CurrentCrs.Grps.GrpCod,
-                             Gbl.Usrs.Me.UsrDat.UsrCod,
-                             (unsigned) Rol_TCH) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT crs_grp_usr.UsrCod"
+			      " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
+			      " WHERE crs_grp_usr.GrpCod=%ld"
+			      " AND crs_grp_usr.UsrCod<>%ld"
+			      " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+			      " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			      " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u",	// Notify teachers only
+                              Gbl.CurrentCrs.Grps.GrpCod,
+                              Gbl.Usrs.Me.UsrDat.UsrCod,
+                              (unsigned) Rol_TCH);
                break;
             default:	// This function should not be called in other cases
                return 0;
@@ -1293,30 +1288,28 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // 1. If the assignment is available for the whole course ==> get all users enroled in the course except me
          // 2. If the assignment is available only for some groups ==> get all users who belong to any of the groups except me
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
-         if (asprintf (&Query,"(SELECT crs_usr.UsrCod"
-			      " FROM assignments,crs_usr"
-			      " WHERE assignments.AsgCod=%ld"
-			      " AND assignments.AsgCod NOT IN"
-			      " (SELECT AsgCod FROM asg_grp WHERE AsgCod=%ld)"
-			      " AND assignments.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod<>%ld)"
-			      " UNION "
-			      "(SELECT DISTINCT crs_grp_usr.UsrCod"
-			      " FROM asg_grp,crs_grp_usr"
-			      " WHERE asg_grp.AsgCod=%ld"
-			      " AND asg_grp.GrpCod=crs_grp_usr.GrpCod"
-			      " AND crs_grp_usr.UsrCod<>%ld)",
-                       Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                       Cod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("(SELECT crs_usr.UsrCod"
+			" FROM assignments,crs_usr"
+			" WHERE assignments.AsgCod=%ld"
+			" AND assignments.AsgCod NOT IN"
+			" (SELECT AsgCod FROM asg_grp WHERE AsgCod=%ld)"
+			" AND assignments.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod<>%ld)"
+			" UNION "
+			"(SELECT DISTINCT crs_grp_usr.UsrCod"
+			" FROM asg_grp,crs_grp_usr"
+			" WHERE asg_grp.AsgCod=%ld"
+			" AND asg_grp.GrpCod=crs_grp_usr.GrpCod"
+			" AND crs_grp_usr.UsrCod<>%ld)",
+                        Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
       case Ntf_EVENT_NOTICE:
-         if (asprintf (&Query,"SELECT UsrCod FROM crs_usr"
-			      " WHERE CrsCod=%ld AND UsrCod<>%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod,
-                       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT UsrCod FROM crs_usr"
+			" WHERE CrsCod=%ld AND UsrCod<>%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_NET:	// This function should not be called in this case
@@ -1326,14 +1319,13 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH])
 	   {
 	    // If this course has teachers ==> send notification to teachers
-	    if (asprintf (&Query,"SELECT UsrCod FROM crs_usr"
-				 " WHERE CrsCod=%ld"
-				 " AND UsrCod<>%ld"
-				 " AND Role=%u",	// Notify teachers only
-		          Gbl.CurrentCrs.Crs.CrsCod,
-		          Gbl.Usrs.Me.UsrDat.UsrCod,
-		          (unsigned) Rol_TCH) < 0)
-               Lay_NotEnoughMemoryExit ();
+	    DB_BuildQuery ("SELECT UsrCod FROM crs_usr"
+			   " WHERE CrsCod=%ld"
+			   " AND UsrCod<>%ld"
+			   " AND Role=%u",	// Notify teachers only
+		           Gbl.CurrentCrs.Crs.CrsCod,
+		           Gbl.Usrs.Me.UsrDat.UsrCod,
+		           (unsigned) Rol_TCH);
 	   }
 	 else	// Course without teachers
 	   {
@@ -1341,28 +1333,26 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // and I want to be a teacher (checked before calling this function
 	    // to not send requests to be a student to admins)
 	    // ==> send notification to administrators or superusers
-	    if (asprintf (&Query,"SELECT UsrCod FROM admin"
-				 " WHERE (Scope='%s'"
-				 " OR (Scope='%s' AND Cod=%ld)"
-				 " OR (Scope='%s' AND Cod=%ld)"
-				 " OR (Scope='%s' AND Cod=%ld))"
-				 " AND UsrCod<>%ld",
-	 	          Sco_ScopeDB[Sco_SCOPE_SYS],
-	 	          Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-	 	          Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
-	 	          Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod,
-	 	          Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-               Lay_NotEnoughMemoryExit ();
+	    DB_BuildQuery ("SELECT UsrCod FROM admin"
+			   " WHERE (Scope='%s'"
+			   " OR (Scope='%s' AND Cod=%ld)"
+			   " OR (Scope='%s' AND Cod=%ld)"
+			   " OR (Scope='%s' AND Cod=%ld))"
+			   " AND UsrCod<>%ld",
+	 	           Sco_ScopeDB[Sco_SCOPE_SYS],
+	 	           Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+	 	           Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
+	 	           Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod,
+	 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 	   }
          break;
       case Ntf_EVENT_TIMELINE_COMMENT:	// New comment to one of my social notes or comments
          // Cod is the code of the social publishing
-	 if (asprintf (&Query,"SELECT DISTINCT(PublisherCod) FROM social_pubs"
-			      " WHERE NotCod = (SELECT NotCod FROM social_pubs"
-			      " WHERE PubCod=%ld)"
-			      " AND PublisherCod<>%ld",
-                       Cod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT DISTINCT(PublisherCod) FROM social_pubs"
+			" WHERE NotCod = (SELECT NotCod FROM social_pubs"
+			" WHERE PubCod=%ld)"
+			" AND PublisherCod<>%ld",
+                        Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TIMELINE_FAV:		// New favourite to one of my social notes or comments
       case Ntf_EVENT_TIMELINE_SHARE:		// New sharing of one of my social notes
@@ -1376,31 +1366,28 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 switch (ForumSelected.Type)
 	   {
 	    case For_FORUM_COURSE_USRS:
-	       if (asprintf (&Query,"SELECT UsrCod FROM crs_usr"
-				    " WHERE CrsCod=%ld AND UsrCod<>%ld",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT UsrCod FROM crs_usr"
+			      " WHERE CrsCod=%ld AND UsrCod<>%ld",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case For_FORUM_COURSE_TCHS:
-	       if (asprintf (&Query,"SELECT UsrCod FROM crs_usr"
-				    " WHERE CrsCod=%ld AND Role=%u AND UsrCod<>%ld",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     (unsigned) Rol_TCH,
-			     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT UsrCod FROM crs_usr"
+			      " WHERE CrsCod=%ld AND Role=%u AND UsrCod<>%ld",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      (unsigned) Rol_TCH,
+			      Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:
 	       return 0;
 	   }
          break;
       case Ntf_EVENT_FORUM_REPLY:
-         if (asprintf (&Query,"SELECT DISTINCT(UsrCod) FROM forum_post"
-			      " WHERE ThrCod = (SELECT ThrCod FROM forum_post"
-			      " WHERE PstCod=%ld)"
-			      " AND UsrCod<>%ld",
-                       Cod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT DISTINCT(UsrCod) FROM forum_post"
+			" WHERE ThrCod = (SELECT ThrCod FROM forum_post"
+			" WHERE PstCod=%ld)"
+			" AND UsrCod<>%ld",
+                        Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_MESSAGE:		// This function should not be called in this case
 	 return 0;
@@ -1408,36 +1395,35 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // 1. If the survey is available for the whole course ==> get users enroled in the course whose role is available in survey, except me
          // 2. If the survey is available only for some groups ==> get users who belong to any of the groups and whose role is available in survey, except me
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
-         if (asprintf (&Query,"(SELECT crs_usr.UsrCod"
-			      " FROM surveys,crs_usr"
-			      " WHERE surveys.SvyCod=%ld"
-			      " AND surveys.SvyCod NOT IN"
-			      " (SELECT SvyCod FROM svy_grp WHERE SvyCod=%ld)"
-			      " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod<>%ld"
-			      " AND (surveys.Roles&(1<<crs_usr.Role))<>0)"
-			      " UNION "
-			      "(SELECT DISTINCT crs_grp_usr.UsrCod"
-			      " FROM svy_grp,crs_grp_usr,surveys,crs_usr"
-			      " WHERE svy_grp.SvyCod=%ld"
-			      " AND svy_grp.GrpCod=crs_grp_usr.GrpCod"
-			      " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-			      " AND crs_grp_usr.UsrCod<>%ld"
-			      " AND svy_grp.SvyCod=surveys.SvyCod"
-			      " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
-			      " AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
-		       Cod,
-		       Cod,
-		       Sco_ScopeDB[Sco_SCOPE_CRS],
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       Cod,
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       Sco_ScopeDB[Sco_SCOPE_CRS]) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("(SELECT crs_usr.UsrCod"
+			" FROM surveys,crs_usr"
+			" WHERE surveys.SvyCod=%ld"
+			" AND surveys.SvyCod NOT IN"
+			" (SELECT SvyCod FROM svy_grp WHERE SvyCod=%ld)"
+			" AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod<>%ld"
+			" AND (surveys.Roles&(1<<crs_usr.Role))<>0)"
+			" UNION "
+			"(SELECT DISTINCT crs_grp_usr.UsrCod"
+			" FROM svy_grp,crs_grp_usr,surveys,crs_usr"
+			" WHERE svy_grp.SvyCod=%ld"
+			" AND svy_grp.GrpCod=crs_grp_usr.GrpCod"
+			" AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+			" AND crs_grp_usr.UsrCod<>%ld"
+			" AND svy_grp.SvyCod=surveys.SvyCod"
+			" AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
+			" AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
+		        Cod,
+		        Cod,
+		        Sco_ScopeDB[Sco_SCOPE_CRS],
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        Cod,
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
      }
 
-   if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get users to be notified"))) // Users found
+   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get users to be notified"))) // Users found
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -1572,15 +1558,14 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 
    /***** Get users who must be notified from database ******/
    // (Status & Ntf_STATUS_BIT_EMAIL) && !(Status & Ntf_STATUS_BIT_SENT) && !(Status & (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED))
-   if (asprintf (&Query,"SELECT DISTINCT ToUsrCod FROM notif"
-			" WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-			" AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0",
-	         Cfg_TIME_TO_SEND_PENDING_NOTIF,
-	         (unsigned) Ntf_STATUS_BIT_EMAIL,
-	         (unsigned) Ntf_STATUS_BIT_SENT,
-	         (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED)) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get users who must be notified"))) // Events found
+   DB_BuildQuery ("SELECT DISTINCT ToUsrCod FROM notif"
+		  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+		  " AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0",
+	          Cfg_TIME_TO_SEND_PENDING_NOTIF,
+	          (unsigned) Ntf_STATUS_BIT_EMAIL,
+	          (unsigned) Ntf_STATUS_BIT_SENT,
+	          (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get users who must be notified"))) // Events found
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -1664,16 +1649,15 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    if (Mai_CheckIfUsrCanReceiveEmailNotif (ToUsrDat))
      {
       /***** Get pending notifications of this user from database ******/
-      if (asprintf (&Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod"
-			   " FROM notif WHERE ToUsrCod=%ld"
-			   " AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0"
-			   " ORDER BY TimeNotif,NotifyEvent",
-		    ToUsrDat->UsrCod,
-		    (unsigned) Ntf_STATUS_BIT_EMAIL,
-		    (unsigned) Ntf_STATUS_BIT_SENT,
-		    (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED)) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get pending notifications of a user");
+      DB_BuildQuery ("SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod"
+		     " FROM notif WHERE ToUsrCod=%ld"
+		     " AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0"
+		     " ORDER BY TimeNotif,NotifyEvent",
+		     ToUsrDat->UsrCod,
+		     (unsigned) Ntf_STATUS_BIT_EMAIL,
+		     (unsigned) Ntf_STATUS_BIT_SENT,
+		     (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get pending notifications of a user");
 
       if (NumRows) // Events found
 	{
@@ -1874,17 +1858,15 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
                                  Ntf_NotifyEvent_t NotifyEvent,
                                  unsigned *NumEvents,unsigned *NumMails)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get number of notifications sent by email from database *****/
-   if (asprintf (&Query,"SELECT NumEvents,NumMails FROM sta_notif"
-                        " WHERE DegCod=%ld AND CrsCod=%ld AND NotifyEvent=%u",
-                 DegCod,CrsCod,(unsigned) NotifyEvent) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get number of notifications sent by email");
+   DB_BuildQuery ("SELECT NumEvents,NumMails FROM sta_notif"
+		  " WHERE DegCod=%ld AND CrsCod=%ld AND NotifyEvent=%u",
+                  DegCod,CrsCod,(unsigned) NotifyEvent);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get number of notifications sent by email");
 
    /***** Get number of rows *****/
    if (NumRows)

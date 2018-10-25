@@ -283,7 +283,6 @@ static void Plc_PutIconToViewPlacesWhenEditing (void)
 void Plc_GetListPlaces (void)
   {
    char OrderBySubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -300,26 +299,25 @@ void Plc_GetListPlaces (void)
          sprintf (OrderBySubQuery,"NumCtrs DESC,FullName");
          break;
      }
-   if (asprintf (&Query,"(SELECT places.PlcCod,places.ShortName,places.FullName,COUNT(*) AS NumCtrs"
-			" FROM places,centres"
-			" WHERE places.InsCod=%ld"
-			" AND places.PlcCod=centres.PlcCod"
-			" AND centres.InsCod=%ld"
-			" GROUP BY places.PlcCod)"
-			" UNION "
-			"(SELECT PlcCod,ShortName,FullName,0 AS NumCtrs"
-			" FROM places"
-			" WHERE InsCod=%ld"
-			" AND PlcCod NOT IN"
-			" (SELECT DISTINCT PlcCod FROM centres WHERE InsCod=%ld))"
-			" ORDER BY %s",
-	         Gbl.CurrentIns.Ins.InsCod,
-	         Gbl.CurrentIns.Ins.InsCod,
-	         Gbl.CurrentIns.Ins.InsCod,
-	         Gbl.CurrentIns.Ins.InsCod,
-	         OrderBySubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get places");
+   DB_BuildQuery ("(SELECT places.PlcCod,places.ShortName,places.FullName,COUNT(*) AS NumCtrs"
+		  " FROM places,centres"
+		  " WHERE places.InsCod=%ld"
+		  " AND places.PlcCod=centres.PlcCod"
+		  " AND centres.InsCod=%ld"
+		  " GROUP BY places.PlcCod)"
+		  " UNION "
+		  "(SELECT PlcCod,ShortName,FullName,0 AS NumCtrs"
+		  " FROM places"
+		  " WHERE InsCod=%ld"
+		  " AND PlcCod NOT IN"
+		  " (SELECT DISTINCT PlcCod FROM centres WHERE InsCod=%ld))"
+		  " ORDER BY %s",
+	          Gbl.CurrentIns.Ins.InsCod,
+	          Gbl.CurrentIns.Ins.InsCod,
+	          Gbl.CurrentIns.Ins.InsCod,
+	          Gbl.CurrentIns.Ins.InsCod,
+	          OrderBySubQuery);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get places");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Places found...
@@ -372,7 +370,6 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
   {
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_Another_place;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -400,23 +397,22 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      if (asprintf (&Query,"(SELECT places.ShortName,places.FullName,COUNT(*)"
-			   " FROM places,centres"
-			   " WHERE places.PlcCod=%ld"
-			   " AND places.PlcCod=centres.PlcCod"
-			   " AND centres.PlcCod=%ld"
-			   " GROUP BY places.PlcCod)"
-			   " UNION "
-			   "(SELECT ShortName,FullName,0"
-			   " FROM places"
-			   " WHERE PlcCod=%ld"
-			   " AND PlcCod NOT IN"
-			   " (SELECT DISTINCT PlcCod FROM centres))",
-		    Plc->PlcCod,
-		    Plc->PlcCod,
-		    Plc->PlcCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a place");
+      DB_BuildQuery ("(SELECT places.ShortName,places.FullName,COUNT(*)"
+		     " FROM places,centres"
+		     " WHERE places.PlcCod=%ld"
+		     " AND places.PlcCod=centres.PlcCod"
+		     " AND centres.PlcCod=%ld"
+		     " GROUP BY places.PlcCod)"
+		     " UNION "
+		     "(SELECT ShortName,FullName,0"
+		     " FROM places"
+		     " WHERE PlcCod=%ld"
+		     " AND PlcCod NOT IN"
+		     " (SELECT DISTINCT PlcCod FROM centres))",
+		     Plc->PlcCod,
+		     Plc->PlcCod,
+		     Plc->PlcCod);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a place");
 
       /***** Count number of rows in result *****/
       if (NumRows) // Place found...
