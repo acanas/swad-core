@@ -355,6 +355,7 @@ void Ntf_ShowMyNotifications (void)
       sprintf (SubQuery," AND (Status&%u)=0",
                Ntf_STATUS_BIT_READ |
                Ntf_STATUS_BIT_REMOVED);
+   /*
    if (asprintf (&Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,"
 			"Cod,UNIX_TIMESTAMP(TimeNotif),Status"
 			" FROM notif"
@@ -362,7 +363,14 @@ void Ntf_ShowMyNotifications (void)
 			" ORDER BY TimeNotif DESC",
                  Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery) < 0)
       Lay_NotEnoughMemoryExit ();
-   NumNotifications = DB_QuerySELECT_free (Query,&mysql_res,"can not get your notifications");
+   */
+   DB_BuildQuery ("SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,"
+		  "Cod,UNIX_TIMESTAMP(TimeNotif),Status"
+		  " FROM notif"
+		  " WHERE ToUsrCod=%ld%s"
+		  " ORDER BY TimeNotif DESC",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
+   NumNotifications = DB_QuerySELECT_new (&mysql_res,"can not get your notifications");
 
    /***** Contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");

@@ -142,6 +142,7 @@ struct Globals
      {
       bool DatabaseIsOpen;
       bool LockedTables;
+      char *QueryPtr;	// Pointer to query string, allocated dinamically
      } DB;
 
    bool HiddenParamsInsertedIntoDB;	// If parameters are inserted in the database in this execution

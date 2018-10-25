@@ -83,7 +83,6 @@ void Ann_ShowAllAnnouncements (void)
    extern const char *Hlp_MESSAGES_Announcements;
    extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAnnouncements;
@@ -100,34 +99,31 @@ void Ann_ShowAllAnnouncements (void)
    if (ICanEdit)
      {
       /* Select all announcements */
-      if (asprintf (&Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-		           " FROM announcements"
-		           " ORDER BY AnnCod DESC") < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT AnnCod,Status,Roles,Subject,Content"
+		     " FROM announcements"
+		     " ORDER BY AnnCod DESC");
      }
    else if (Gbl.Usrs.Me.Logged)
      {
       /* Select only announcements I can see */
       Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-      if (asprintf (&Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-		           " FROM announcements"
-                           " WHERE (Roles&%u)<>0 "
-		           " ORDER BY AnnCod DESC",
-                    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss) < 0)	// All my roles in different courses
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT AnnCod,Status,Roles,Subject,Content"
+		     " FROM announcements"
+		     " WHERE (Roles&%u)<>0 "
+		     " ORDER BY AnnCod DESC",
+                     (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
      }
    else // No user logged
      {
       /* Select only active announcements for unknown users */
-      if (asprintf (&Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-		           " FROM announcements"
-                           " WHERE Status=%u AND (Roles&%u)<>0 "
-		           " ORDER BY AnnCod DESC",
-                    (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-                    (unsigned) (1 << Rol_UNK)) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT AnnCod,Status,Roles,Subject,Content"
+		     " FROM announcements"
+		     " WHERE Status=%u AND (Roles&%u)<>0 "
+		     " ORDER BY AnnCod DESC",
+                     (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+                     (unsigned) (1 << Rol_UNK));
      }
-   NumAnnouncements = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get announcements");
+   NumAnnouncements = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get announcements");
 
    /***** Start box *****/
    Box_StartBox ("550px",Txt_Announcements,
@@ -216,7 +212,6 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
 
 void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAnnouncements;
@@ -227,16 +222,15 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   if (asprintf (&Query,"SELECT AnnCod,Subject,Content FROM announcements"
-                        " WHERE Status=%u AND (Roles&%u)<>0 "
-                        " AND AnnCod NOT IN"
-                        " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
-                        " ORDER BY AnnCod DESC",	// Newest first
-                 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-                 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
-                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumAnnouncements = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get announcements");
+   DB_BuildQuery ("SELECT AnnCod,Subject,Content FROM announcements"
+		  " WHERE Status=%u AND (Roles&%u)<>0 "
+		  " AND AnnCod NOT IN"
+		  " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
+		  " ORDER BY AnnCod DESC",	// Newest first
+                  (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+                  (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumAnnouncements = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get announcements");
 
    /***** Show the announcements *****/
    if (NumAnnouncements)

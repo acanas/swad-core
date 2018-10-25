@@ -37,6 +37,9 @@ void DB_CreateTablesIfNotExist (void);
 void DB_OpenDBConnection (void);
 void DB_CloseDBConnection (void);
 
+void DB_BuildQuery (const char *fmt,...);
+
+unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError);
 unsigned long DB_QuerySELECT_free (const char *Query,MYSQL_RES **mysql_res,const char *MsgError);
 unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char *MsgError);
 

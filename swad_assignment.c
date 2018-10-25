@@ -81,7 +81,7 @@ static void Asg_GetParamAsgOrder (void);
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
 static void Asg_PutParams (void);
-static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query);
+static void Asg_GetDataOfAssignment (struct Assignment *Asg);
 static void Asg_ResetAssignment (struct Assignment *Asg);
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Asg_PutParamAsgCod (long AsgCod);
@@ -623,7 +623,6 @@ void Asg_GetListAssignments (void)
   {
    char HiddenSubQuery[256];
    char OrderBySubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -653,30 +652,24 @@ void Asg_GetListAssignments (void)
          break;
      }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-     {
-      if (asprintf (&Query,"SELECT AsgCod"
-                           " FROM assignments"
-                           " WHERE CrsCod=%ld%s"
-                           " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
-                           " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-                           " WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
-                           " ORDER BY %s",
-                    Gbl.CurrentCrs.Crs.CrsCod,
-                    HiddenSubQuery,
-                    Gbl.Usrs.Me.UsrDat.UsrCod,
-                    OrderBySubQuery) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("SELECT AsgCod"
+		     " FROM assignments"
+		     " WHERE CrsCod=%ld%s"
+		     " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
+		     " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
+		     " WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
+		     " ORDER BY %s",
+                     Gbl.CurrentCrs.Crs.CrsCod,
+                     HiddenSubQuery,
+                     Gbl.Usrs.Me.UsrDat.UsrCod,
+                     OrderBySubQuery);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-     {
-      if (asprintf (&Query,"SELECT AsgCod"
-                           " FROM assignments"
-                           " WHERE CrsCod=%ld%s"
-                           " ORDER BY %s",
-                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get assignments");
+      DB_BuildQuery ("SELECT AsgCod"
+		     " FROM assignments"
+		     " WHERE CrsCod=%ld%s"
+		     " ORDER BY %s",
+                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get assignments");
 
    if (NumRows) // Assignments found...
      {
@@ -712,23 +705,20 @@ void Asg_GetListAssignments (void)
 
 void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
   {
-   char *Query;
-
    if (Asg->AsgCod > 0)
      {
       /***** Build query *****/
-      if (asprintf (&Query,"SELECT AsgCod,Hidden,UsrCod,"
-		           "UNIX_TIMESTAMP(StartTime),"
-		           "UNIX_TIMESTAMP(EndTime),"
-		           "NOW() BETWEEN StartTime AND EndTime,"
-		           "Title,Folder"
-		           " FROM assignments"
-		           " WHERE AsgCod=%ld AND CrsCod=%ld",
-	            Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT AsgCod,Hidden,UsrCod,"
+		     "UNIX_TIMESTAMP(StartTime),"
+		     "UNIX_TIMESTAMP(EndTime),"
+		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "Title,Folder"
+		     " FROM assignments"
+		     " WHERE AsgCod=%ld AND CrsCod=%ld",
+	             Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Get data of assignment *****/
-      Asg_GetDataOfAssignment (Asg,Query);
+      Asg_GetDataOfAssignment (Asg);
      }
    else
      {
@@ -744,23 +734,20 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
 
 void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
   {
-   char *Query;
-
    if (Asg->Folder[0])
      {
       /***** Query database *****/
-      if (asprintf (&Query,"SELECT AsgCod,Hidden,UsrCod,"
-		           "UNIX_TIMESTAMP(StartTime),"
-		           "UNIX_TIMESTAMP(EndTime),"
-		           "NOW() BETWEEN StartTime AND EndTime,"
-		           "Title,Folder"
-		           " FROM assignments"
-		           " WHERE CrsCod=%ld AND Folder='%s'",
-	            Gbl.CurrentCrs.Crs.CrsCod,Asg->Folder) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT AsgCod,Hidden,UsrCod,"
+		     "UNIX_TIMESTAMP(StartTime),"
+		     "UNIX_TIMESTAMP(EndTime),"
+		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "Title,Folder"
+		     " FROM assignments"
+		     " WHERE CrsCod=%ld AND Folder='%s'",
+	             Gbl.CurrentCrs.Crs.CrsCod,Asg->Folder);
 
       /***** Get data of assignment *****/
-      Asg_GetDataOfAssignment (Asg,Query);
+      Asg_GetDataOfAssignment (Asg);
      }
    else
      {
@@ -774,7 +761,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
 /************************* Get assignment data *******************************/
 /*****************************************************************************/
 
-static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
+static void Asg_GetDataOfAssignment (struct Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -783,7 +770,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
    Asg_ResetAssignment (Asg);
 
    /***** Get data of assignment from database *****/
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get assignment data")) // Assignment found...
+   if (DB_QuerySELECT_new (&mysql_res,"can not get assignment data")) // Assignment found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -865,17 +852,15 @@ void Asg_FreeListAssignments (void)
 
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get text of assignment from database *****/
-   if (asprintf (&Query,"SELECT Txt FROM assignments"
-	                " WHERE AsgCod=%ld AND CrsCod=%ld",
-                 AsgCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get assignment text");
+   DB_BuildQuery ("SELECT Txt FROM assignments"
+		  " WHERE AsgCod=%ld AND CrsCod=%ld",
+                  AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get assignment text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -904,7 +889,6 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,
                              long AsgCod,bool GetContent)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -913,10 +897,8 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   if (asprintf (&Query,"SELECT Title,Txt FROM assignments WHERE AsgCod=%ld",
-                 AsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get assignment title and text");
+   DB_BuildQuery ("SELECT Title,Txt FROM assignments WHERE AsgCod=%ld",AsgCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get assignment title and text");
 
    /***** Result should have a unique row *****/
    if (NumRows == 1)
@@ -1668,22 +1650,20 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
 
    /***** Get groups associated to an assignment from database *****/
-   if (asprintf (&Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-	                " FROM asg_grp,crs_grp,crs_grp_types"
-                        " WHERE asg_grp.AsgCod=%ld"
-                        " AND asg_grp.GrpCod=crs_grp.GrpCod"
-                        " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                        " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-                 Asg->AsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an assignment");
+   DB_BuildQuery ("SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
+		  " FROM asg_grp,crs_grp,crs_grp_types"
+		  " WHERE asg_grp.AsgCod=%ld"
+		  " AND asg_grp.GrpCod=crs_grp.GrpCod"
+		  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+		  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+                  Asg->AsgCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get groups of an assignment");
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
@@ -1811,7 +1791,6 @@ unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
 
 unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -1820,65 +1799,59 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
-                              " FROM assignments"
-                              " WHERE CrsCod>0") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
+			" FROM assignments"
+			" WHERE CrsCod>0");
          break;
        case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
-                              " FROM institutions,centres,degrees,courses,assignments"
-                              " WHERE institutions.CtyCod=%ld"
-                              " AND institutions.InsCod=centres.InsCod"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentCty.Cty.CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT assignments.CrsCod)"
+			" FROM institutions,centres,degrees,courses,assignments"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentCty.Cty.CtyCod);
          break;
        case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
-                              " FROM centres,degrees,courses,assignments"
-                              " WHERE centres.InsCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT assignments.CrsCod)"
+			" FROM centres,degrees,courses,assignments"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
-                              " FROM degrees,courses,assignments"
-                              " WHERE degrees.CtrCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT assignments.CrsCod)"
+			" FROM degrees,courses,assignments"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
-                              " FROM courses,assignments"
-                              " WHERE courses.DegCod=%ld"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT assignments.CrsCod)"
+			" FROM courses,assignments"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
-                              " FROM assignments"
-                              " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
+			" FROM assignments"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with assignments");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with assignments");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -1899,7 +1872,6 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
 
 unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAssignments;
@@ -1908,61 +1880,55 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-                              " FROM assignments"
-                              " WHERE CrsCod>0") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM assignments"
+			" WHERE CrsCod>0");
          break;
       case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
-                              " FROM institutions,centres,degrees,courses,assignments"
-                              " WHERE institutions.CtyCod=%ld"
-                              " AND institutions.InsCod=centres.InsCod"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentCty.Cty.CtyCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(assignments.NumNotif)"
+			" FROM institutions,centres,degrees,courses,assignments"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
-                              " FROM centres,degrees,courses,assignments"
-                              " WHERE centres.InsCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(assignments.NumNotif)"
+			" FROM centres,degrees,courses,assignments"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
-                              " FROM degrees,courses,assignments"
-                              " WHERE degrees.CtrCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(assignments.NumNotif)"
+			" FROM degrees,courses,assignments"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
-                              " FROM courses,assignments"
-                              " WHERE courses.DegCod=%ld"
-                              " AND courses.CrsCod=assignments.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(assignments.NumNotif)"
+			" FROM courses,assignments"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=assignments.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-                              " FROM assignments"
-                              " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM assignments"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of assignments");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of assignments");
 
    /***** Get number of assignments *****/
    row = mysql_fetch_row (mysql_res);

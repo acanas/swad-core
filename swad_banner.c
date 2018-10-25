@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 
 static void Ban_WriteListOfBanners (void);
 static void Ban_PutFormToEditBanners (void);
-static void Ban_GetListBanners (const char *Query);
+static void Ban_GetListBanners (void);
 static void Ban_PutIconToViewBanners (void);
 static void Ban_ListBannersForEdition (void);
 static void Ban_PutParamBanCod (long BanCod);
@@ -103,7 +103,6 @@ void Ban_SeeBanners (void)
    extern const char *Txt_Banners;
    extern const char *Txt_No_banners;
    extern const char *Txt_New_banner;
-   char *Query;
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -114,12 +113,11 @@ void Ban_SeeBanners (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of banners *****/
-   if (asprintf (&Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-	                " FROM banners"
-                        " WHERE Hidden='N'"
-	                " ORDER BY ShortName") < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ban_GetListBanners (Query);
+   DB_BuildQuery ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
+		  " FROM banners"
+		  " WHERE Hidden='N'"
+		  " ORDER BY ShortName");
+   Ban_GetListBanners ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutFormToEditBanners,
@@ -198,7 +196,6 @@ void Ban_EditBanners (void)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
-   char *Query;
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -209,10 +206,9 @@ void Ban_EditBanners (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get list of banners *****/
-   if (asprintf (&Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-	                " FROM banners ORDER BY ShortName") < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ban_GetListBanners (Query);
+   DB_BuildQuery ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
+		  " FROM banners ORDER BY ShortName");
+   Ban_GetListBanners ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Banners,Ban_PutIconToViewBanners,
@@ -236,7 +232,7 @@ void Ban_EditBanners (void)
 /**************************** List all the banners ***************************/
 /*****************************************************************************/
 
-static void Ban_GetListBanners (const char *Query)
+static void Ban_GetListBanners (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -247,7 +243,7 @@ static void Ban_GetListBanners (const char *Query)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get banners from database *****/
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get banners");
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get banners");
 
       if (NumRows) // Banners found...
 	{
@@ -305,7 +301,6 @@ static void Ban_GetListBanners (const char *Query)
 
 void Ban_GetDataOfBannerByCod (struct Banner *Ban)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -318,11 +313,10 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      if (asprintf (&Query,"SELECT Hidden,ShortName,FullName,Img,WWW"
-	                   " FROM banners WHERE BanCod=%ld",
-                    Ban->BanCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a banner");
+      DB_BuildQuery ("SELECT Hidden,ShortName,FullName,Img,WWW"
+		     " FROM banners WHERE BanCod=%ld",
+                     Ban->BanCod);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a banner");
 
       if (NumRows) // Banner found...
         {
@@ -1027,19 +1021,17 @@ static void Ban_CreateBanner (struct Banner *Ban)
 
 void Ban_WriteMenuWithBanners (void)
   {
-   char *Query;
    unsigned NumBan;
 
    /***** Get random banner *****/
    // The banner(s) will change once in a while
-   if (asprintf (&Query,"SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
-	                " FROM banners"
-	                " WHERE Hidden='N'"
-	                " ORDER BY RAND(%lu) LIMIT %u",
-	         (unsigned long) (Gbl.StartExecutionTimeUTC / Cfg_TIME_TO_CHANGE_BANNER),
-	         Cfg_NUMBER_OF_BANNERS) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ban_GetListBanners (Query);
+   DB_BuildQuery ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
+		  " FROM banners"
+		  " WHERE Hidden='N'"
+		  " ORDER BY RAND(%lu) LIMIT %u",
+	          (unsigned long) (Gbl.StartExecutionTimeUTC / Cfg_TIME_TO_CHANGE_BANNER),
+	          Cfg_NUMBER_OF_BANNERS);
+   Ban_GetListBanners ();
 
    /***** Write all the banners *****/
    for (NumBan = 0;

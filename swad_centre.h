@@ -134,6 +134,6 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-unsigned Ctr_ListCtrsFound (const char *Query);
+unsigned Ctr_ListCtrsFound (void);
 
 #endif

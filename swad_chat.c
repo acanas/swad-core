@@ -268,16 +268,14 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    extern const char *Txt_Rooms_with_users;
    extern const char *Txt_CHAT_Room_code;
    extern const char *Txt_No_of_users;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
 
    /***** Get chat rooms with connected users from database *****/
-   if (asprintf (&Query,"SELECT RoomCode,NumUsrs FROM chat"
-                        " WHERE NumUsrs>0 ORDER BY NumUsrs DESC,RoomCode") < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get chat rooms with connected users");
+   DB_BuildQuery ("SELECT RoomCode,NumUsrs FROM chat"
+		  " WHERE NumUsrs>0 ORDER BY NumUsrs DESC,RoomCode");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get chat rooms with connected users");
 
    if (NumRows > 0) // If not empty chat rooms found
      {
@@ -378,16 +376,14 @@ void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtN
 
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;
 
    /***** Get number of users connected to chat rooms from database *****/
-   if (asprintf (&Query,"SELECT NumUsrs FROM chat WHERE RoomCode='%s'",
-                 RoomCode) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QuerySELECT_free (Query,&mysql_res,"can not get number of users connected to a chat room"))
+   DB_BuildQuery ("SELECT NumUsrs FROM chat WHERE RoomCode='%s'",
+                 RoomCode);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get number of users connected to a chat room"))
      {
       /* Get number of users connected to the chat room */
       row = mysql_fetch_row (mysql_res);

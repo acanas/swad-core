@@ -25,8 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -183,7 +181,6 @@ void Acc_CheckIfEmptyAccountExists (void)
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -203,14 +200,13 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (ID))
      {
-      if (asprintf (&Query,"SELECT usr_IDs.UsrCod"
-	                   " FROM usr_IDs,usr_data"
-		           " WHERE usr_IDs.UsrID='%s'"
-		           " AND usr_IDs.UsrCod=usr_data.UsrCod"
-	                   " AND usr_data.Password=''",
-	            ID) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get user's codes");
+      DB_BuildQuery ("SELECT usr_IDs.UsrCod"
+		     " FROM usr_IDs,usr_data"
+		     " WHERE usr_IDs.UsrID='%s'"
+		     " AND usr_IDs.UsrCod=usr_data.UsrCod"
+		     " AND usr_data.Password=''",
+	             ID);
+      NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's codes");
 
       if (NumUsrs)
 	{

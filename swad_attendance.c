@@ -606,7 +606,6 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
   {
    char HiddenSubQuery[256];
    char OrderBySubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -642,30 +641,24 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
 	 break;
      }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-     {
-      if (asprintf (&Query,"SELECT AttCod"
-                           " FROM att_events"
-                           " WHERE CrsCod=%ld%s"
-                           " AND (AttCod NOT IN (SELECT AttCod FROM att_grp) OR"
-                           " AttCod IN (SELECT att_grp.AttCod FROM att_grp,crs_grp_usr"
-                           " WHERE crs_grp_usr.UsrCod=%ld"
-                           " AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
-                           " ORDER BY %s",
-                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-                    Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("SELECT AttCod"
+		     " FROM att_events"
+		     " WHERE CrsCod=%ld%s"
+		     " AND (AttCod NOT IN (SELECT AttCod FROM att_grp) OR"
+		     " AttCod IN (SELECT att_grp.AttCod FROM att_grp,crs_grp_usr"
+		     " WHERE crs_grp_usr.UsrCod=%ld"
+		     " AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
+		     " ORDER BY %s",
+                     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+                     Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-     {
-      if (asprintf (&Query,"SELECT AttCod"
-                           " FROM att_events"
-                           " WHERE CrsCod=%ld%s"
-                           " ORDER BY %s",
-                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("SELECT AttCod"
+		     " FROM att_events"
+		     " WHERE CrsCod=%ld%s"
+		     " ORDER BY %s",
+                     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
 
-   if ((NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get attendance events"))) // Attendance events found...
+   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get attendance events"))) // Attendance events found...
      {
       Gbl.AttEvents.Num = (unsigned) NumRows;
 
@@ -716,7 +709,6 @@ static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att)
 
 bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool Found = false;
@@ -727,19 +719,18 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
    if (Att->AttCod > 0)
      {
       /***** Build query *****/
-      if (asprintf (&Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
-		           "UNIX_TIMESTAMP(StartTime),"
-		           "UNIX_TIMESTAMP(EndTime),"
-		           "NOW() BETWEEN StartTime AND EndTime,"
-		           "CommentTchVisible,"
-		           "Title"
-		           " FROM att_events"
-		           " WHERE AttCod=%ld",
-	            Att->AttCod) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT AttCod,CrsCod,Hidden,UsrCod,"
+		     "UNIX_TIMESTAMP(StartTime),"
+		     "UNIX_TIMESTAMP(EndTime),"
+		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "CommentTchVisible,"
+		     "Title"
+		     " FROM att_events"
+		     " WHERE AttCod=%ld",
+	             Att->AttCod);
 
       /***** Get data of attendance event from database *****/
-      if ((Found = (DB_QuerySELECT_free (Query,&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
+      if ((Found = (DB_QuerySELECT_new (&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -825,17 +816,15 @@ void Att_FreeListAttEvents (void)
 
 static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get text of attendance event from database *****/
-   if (asprintf (&Query,"SELECT Txt FROM att_events"
-	                " WHERE AttCod=%ld AND CrsCod=%ld",
-                 AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get attendance event text");
+   DB_BuildQuery ("SELECT Txt FROM att_events"
+		  " WHERE AttCod=%ld AND CrsCod=%ld",
+                  AttCod,Gbl.CurrentCrs.Crs.CrsCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get attendance event text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1536,22 +1525,20 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrp;
    unsigned NumGrps;
 
    /***** Get groups associated to an attendance event from database *****/
-   if (asprintf (&Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-	                " FROM att_grp,crs_grp,crs_grp_types"
-                        " WHERE att_grp.AttCod=%ld"
-                        " AND att_grp.GrpCod=crs_grp.GrpCod"
-                        " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                        " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-                 Att->AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumGrps = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an attendance event");
+   DB_BuildQuery ("SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
+		  " FROM att_grp,crs_grp,crs_grp_types"
+		  " WHERE att_grp.AttCod=%ld"
+		  " AND att_grp.GrpCod=crs_grp.GrpCod"
+		  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+		  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+                  Att->AttCod);
+   NumGrps = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get groups of an attendance event");
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
@@ -1708,7 +1695,6 @@ unsigned Att_GetNumAttEventsInCrs (long CrsCod)
 
 unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -1717,53 +1703,48 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
-                              " FROM att_events"
-                              " WHERE CrsCod>0") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
+			" FROM att_events"
+			" WHERE CrsCod>0");
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
-                              " FROM centres,degrees,courses,att_events"
-                              " WHERE centres.InsCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=att_events.CrsCod",
-                  Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT att_events.CrsCod)"
+			" FROM centres,degrees,courses,att_events"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=att_events.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
-                              " FROM degrees,courses,att_events"
-                              " WHERE degrees.CtrCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=att_events.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT att_events.CrsCod)"
+			" FROM degrees,courses,att_events"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=att_events.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
-                              " FROM courses,att_events"
-                              " WHERE courses.DegCod=%ld"
-                              " AND courses.Status=0"
-                              " AND courses.CrsCod=att_events.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT att_events.CrsCod)"
+			" FROM courses,att_events"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.Status=0"
+			" AND courses.CrsCod=att_events.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(DISTINCT CrsCod)"
-                              " FROM att_events"
-                              " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
+			" FROM att_events"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of courses with attendance events");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with attendance events");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -1784,7 +1765,6 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
 
 unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAttEvents;
@@ -1793,50 +1773,45 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-                              " FROM att_events"
-                              " WHERE CrsCod>0") < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM att_events"
+			" WHERE CrsCod>0");
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
-                              " FROM centres,degrees,courses,att_events"
-                              " WHERE centres.InsCod=%ld"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=att_events.CrsCod",
-                       Gbl.CurrentIns.Ins.InsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(att_events.NumNotif)"
+			" FROM centres,degrees,courses,att_events"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=att_events.CrsCod",
+                        Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
-                              " FROM degrees,courses,att_events"
-                              " WHERE degrees.CtrCod=%ld"
-                              " AND degrees.DegCod=courses.DegCod"
-                              " AND courses.CrsCod=att_events.CrsCod",
-                       Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(att_events.NumNotif)"
+			" FROM degrees,courses,att_events"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=att_events.CrsCod",
+                        Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
-                              " FROM courses,att_events"
-                              " WHERE courses.DegCod=%ld"
-                              " AND courses.CrsCod=att_events.CrsCod",
-                       Gbl.CurrentDeg.Deg.DegCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(att_events.NumNotif)"
+			" FROM courses,att_events"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=att_events.CrsCod",
+                        Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(*),SUM(NumNotif)"
-                              " FROM att_events"
-                              " WHERE CrsCod=%ld",
-                       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
+			" FROM att_events"
+			" WHERE CrsCod=%ld",
+                        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of attendance events");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of attendance events");
 
    /***** Get number of attendance events *****/
    row = mysql_fetch_row (mysql_res);
@@ -2241,7 +2216,6 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
 
 static void Att_PutParamsCodGrps (long AttCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrp;
@@ -2250,11 +2224,10 @@ static void Att_PutParamsCodGrps (long AttCod)
    /***** Get groups associated to an attendance event from database *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
-      if (asprintf (&Query,"SELECT GrpCod FROM att_grp"
-	                   " WHERE att_grp.AttCod=%ld",
-                    AttCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumGrps = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an attendance event");
+      DB_BuildQuery ("SELECT GrpCod FROM att_grp"
+		     " WHERE att_grp.AttCod=%ld",
+                     AttCod);
+      NumGrps = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get groups of an attendance event");
      }
    else
       NumGrps = 0;
@@ -2537,18 +2510,16 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
 
 static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
    bool InDBTable;
 
    /***** Check if a student is registered in an event in database *****/
-   if (asprintf (&Query,"SELECT Present FROM att_usr"
-                        " WHERE AttCod=%ld AND UsrCod=%ld",
-                 AttCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if ((NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get if a student is already registered in an event")))
+   DB_BuildQuery ("SELECT Present FROM att_usr"
+		  " WHERE AttCod=%ld AND UsrCod=%ld",
+                  AttCod,UsrCod);
+   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get if a student is already registered in an event")))
      {
       InDBTable = true;
 
@@ -2591,18 +2562,16 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
                                                              char CommentStd[Cns_MAX_BYTES_TEXT + 1],
                                                              char CommentTch[Cns_MAX_BYTES_TEXT + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
    bool Present;
 
    /***** Check if a students is registered in an event in database *****/
-   if (asprintf (&Query,"SELECT Present,CommentStd,CommentTch FROM att_usr"
-                        " WHERE AttCod=%ld AND UsrCod=%ld",
-                 AttCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if ((NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get if a student is already registered in an event")))
+   DB_BuildQuery ("SELECT Present,CommentStd,CommentTch FROM att_usr"
+		  " WHERE AttCod=%ld AND UsrCod=%ld",
+                  AttCod,UsrCod);
+   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get if a student is already registered in an event")))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -3022,7 +2991,6 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    const char *Ptr;
    long AttCod;
    char LongStr[1 + 10 + 1];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrpsInThisEvent;
@@ -3088,11 +3056,10 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 	    else						// No students attended to this event
 	      {
 	       /***** Get groups associated to an attendance event from database *****/
-	       if (asprintf (&Query,"SELECT GrpCod FROM att_grp"
-			            " WHERE att_grp.AttCod=%ld",
-			     Gbl.AttEvents.Lst[NumAttEvent].AttCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
-	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get groups of an attendance event");
+	       DB_BuildQuery ("SELECT GrpCod FROM att_grp"
+			      " WHERE att_grp.AttCod=%ld",
+			      Gbl.AttEvents.Lst[NumAttEvent].AttCod);
+	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get groups of an attendance event");
 
 	       if (NumGrpsInThisEvent)	// This event is associated to groups
 		  /* Get groups associated to this event */

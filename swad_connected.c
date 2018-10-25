@@ -192,7 +192,6 @@ void Con_GetAndShowLastClicks (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Action;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;
@@ -208,21 +207,20 @@ void Con_GetAndShowLastClicks (void)
    /***** Get last clicks from database *****/
    /* Important for maximum performance:
       do the LIMIT in the big log table before the JOIN */
-   if (asprintf (&Query,"SELECT last_logs.LogCod,last_logs.ActCod,"
-	                "last_logs.Dif,last_logs.Role,"
-	                "last_logs.CtyCod,last_logs.InsCod,"
-	                "last_logs.CtrCod,last_logs.DegCod,"
-	                "actions.Txt"
-	                " FROM"
-	                " (SELECT LogCod,ActCod,"
-	                "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,"
-	                "Role,CtyCod,InsCod,CtrCod,DegCod"
-                        " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
-                        " AS last_logs,actions"
-	                " WHERE last_logs.ActCod=actions.ActCod"
-	                " AND actions.Language='es'") < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get last clicks");
+   DB_BuildQuery ("SELECT last_logs.LogCod,last_logs.ActCod,"
+		  "last_logs.Dif,last_logs.Role,"
+		  "last_logs.CtyCod,last_logs.InsCod,"
+		  "last_logs.CtrCod,last_logs.DegCod,"
+		  "actions.Txt"
+		  " FROM"
+		  " (SELECT LogCod,ActCod,"
+		  "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,"
+		  "Role,CtyCod,InsCod,CtrCod,DegCod"
+		  " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
+		  " AS last_logs,actions"
+		  " WHERE last_logs.ActCod=actions.ActCod"
+		  " AND actions.Language='es'");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get last clicks");
 
    /***** Write list of connected users *****/
    Tbl_StartTableCenter (1);
@@ -698,7 +696,6 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
 static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,struct ConnectedUsrs *Usrs)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumSexs;
@@ -711,71 +708,65 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM connected,usr_data"
-			            " WHERE connected.UsrCod=usr_data.UsrCod") < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM connected,usr_data"
+			      " WHERE connected.UsrCod=usr_data.UsrCod");
 	       break;
 	    case Sco_SCOPE_CTY:		// Show connected users in the current country
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-			            " WHERE institutions.CtyCod=%ld"
-			            " AND institutions.InsCod=centres.InsCod"
-			            " AND centres.CtrCod=degrees.CtrCod"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentCty.Cty.CtyCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentCty.Cty.CtyCod);
 	       break;
 	    case Sco_SCOPE_INS:		// Show connected users in the current institution
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-			            " WHERE centres.InsCod=%ld"
-			            " AND centres.CtrCod=degrees.CtrCod"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentIns.Ins.InsCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentIns.Ins.InsCod);
 	       break;
 	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM degrees,courses,crs_usr,connected,usr_data"
-			            " WHERE degrees.CtrCod=%ld"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentCtr.Ctr.CtrCod);
 	       break;
 	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM courses,crs_usr,connected,usr_data"
-			            " WHERE courses.DegCod=%ld"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentDeg.Deg.DegCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM courses,crs_usr,connected,usr_data"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentDeg.Deg.DegCod);
 	       break;
 	    case Sco_SCOPE_CRS:		// Show connected users in the current course
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM crs_usr,connected,usr_data"
-			            " WHERE crs_usr.CrsCod=%ld"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentCrs.Crs.CrsCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM crs_usr,connected,usr_data"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentCrs.Crs.CrsCod);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -783,12 +774,11 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	   }
 	 break;
       case Rol_GST:
-	 if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-	                      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM connected,usr_data"
-			      " WHERE connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-			      " AND connected.UsrCod=usr_data.UsrCod") < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			"COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			" FROM connected,usr_data"
+			" WHERE connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			" AND connected.UsrCod=usr_data.UsrCod");
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -796,84 +786,78 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM connected,crs_usr,usr_data"
-			            " WHERE connected.UsrCod=crs_usr.UsrCod"
-			            " AND crs_usr.Role=%u"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM connected,crs_usr,usr_data"
+			      " WHERE connected.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.Role=%u"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_CTY:		// Show connected users in the current country
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-			            " WHERE institutions.CtyCod=%ld"
-			            " AND institutions.InsCod=centres.InsCod"
-			            " AND centres.CtrCod=degrees.CtrCod"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			Gbl.CurrentCty.Cty.CtyCod,
-			(unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_INS:		// Show connected users in the current institution
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-			            " WHERE centres.InsCod=%ld"
-			            " AND centres.CtrCod=degrees.CtrCod"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			      Gbl.CurrentIns.Ins.InsCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM degrees,courses,crs_usr,connected,usr_data"
-			            " WHERE degrees.CtrCod=%ld"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentCtr.Ctr.CtrCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM courses,crs_usr,connected,usr_data"
-			            " WHERE courses.DegCod=%ld"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentDeg.Deg.DegCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM courses,crs_usr,connected,usr_data"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_CRS:		// Show connected users in the current course
-	       if (asprintf (&Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
-		                    "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			            " FROM crs_usr,connected,usr_data"
-			            " WHERE crs_usr.CrsCod=%ld"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " AND connected.UsrCod=usr_data.UsrCod",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
+			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM crs_usr,connected,usr_data"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      (unsigned) Role);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -884,7 +868,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   DB_QuerySELECT_free (Query,&mysql_res,"can not get number of connected users who belong to this location");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of connected users who belong to this location");
 
    row = mysql_fetch_row (mysql_res);
 
@@ -918,25 +902,23 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 
 static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumUsr = Gbl.Usrs.Connected.NumUsrs;	// Save current number of users
 
    /***** Get connected users who belong to current course from database *****/
-   if (asprintf (&Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM connected,crs_usr"
-                        " WHERE crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
-                        " AND crs_usr.UsrCod=connected.UsrCod"
-                       " ORDER BY Dif",
-                 Gbl.CurrentCrs.Crs.CrsCod,
-                 (unsigned) Role) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,
-	                          "can not get list of connected users"
-	                          " who belong to this course");
+   DB_BuildQuery ("SELECT connected.UsrCod,connected.LastCrsCod,"
+		  "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+		  " FROM connected,crs_usr"
+		  " WHERE crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
+		  " AND crs_usr.UsrCod=connected.UsrCod"
+		  " ORDER BY Dif",
+                  Gbl.CurrentCrs.Crs.CrsCod,
+                  (unsigned) Role);
+   NumRows = DB_QuerySELECT_new (&mysql_res,
+	                         "can not get list of connected users"
+	                         " who belong to this course");
    Gbl.Usrs.Connected.NumUsrs       += (unsigned) NumRows;
    Gbl.Usrs.Connected.NumUsrsToList += (unsigned) NumRows;
    if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
@@ -1077,7 +1059,6 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
 static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1098,12 +1079,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    switch (Role)
      {
       case Rol_GST:
-	 if (asprintf (&Query,"SELECT UsrCod,LastCrsCod,"
-		  	      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(LastTime) AS Dif"
-			      " FROM connected"
-			      " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-			      " ORDER BY Dif") < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT UsrCod,LastCrsCod,"
+			"UNIX_TIMESTAMP()-UNIX_TIMESTAMP(LastTime) AS Dif"
+			" FROM connected"
+			" WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			" ORDER BY Dif");
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -1111,84 +1091,78 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-	       if (asprintf (&Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-			            " FROM connected,crs_usr"
-			            " WHERE connected.UsrCod=crs_usr.UsrCod"
-			            " AND crs_usr.Role=%u"
-			            " ORDER BY Dif",
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM connected,crs_usr"
+			      " WHERE connected.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.Role=%u"
+			      " ORDER BY Dif",
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_CTY:		// Show connected users in the current country
-	       if (asprintf (&Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-			            " FROM institutions,centres,degrees,courses,crs_usr,connected"
-			            " WHERE institutions.CtyCod=%ld"
-			            " AND institutions.InsCod=centres.InsCod"
-			            " AND centres.CtrCod=degrees.CtrCod"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " ORDER BY Dif",
-			     Gbl.CurrentCty.Cty.CtyCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM institutions,centres,degrees,courses,crs_usr,connected"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_INS:		// Show connected users in the current institution
-	       if (asprintf (&Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-			            " FROM centres,degrees,courses,crs_usr,connected"
-			            " WHERE centres.InsCod=%ld"
-			            " AND centres.CtrCod=degrees.CtrCod"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " ORDER BY Dif",
-			     Gbl.CurrentIns.Ins.InsCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM centres,degrees,courses,crs_usr,connected"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			      Gbl.CurrentIns.Ins.InsCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
-	       if (asprintf (&Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-			            " FROM degrees,courses,crs_usr,connected"
-			            " WHERE degrees.CtrCod=%ld"
-			            " AND degrees.DegCod=courses.DegCod"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " ORDER BY Dif",
-			     Gbl.CurrentCtr.Ctr.CtrCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM degrees,courses,crs_usr,connected"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
-	       if (asprintf (&Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-			            " FROM courses,crs_usr,connected"
-			            " WHERE courses.DegCod=%ld"
-			            " AND courses.CrsCod=crs_usr.CrsCod"
-			            " AND crs_usr.Role=%u"
-			            " AND crs_usr.UsrCod=connected.UsrCod"
-			            " ORDER BY Dif",
-			     Gbl.CurrentDeg.Deg.DegCod,
-			     (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM courses,crs_usr,connected"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      (unsigned) Role);
 	       break;
 	    case Sco_SCOPE_CRS:		// Show connected users in the current course
-	       if (asprintf (&Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
-			            "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-			           " FROM crs_usr,connected"
-			           " WHERE crs_usr.CrsCod=%ld"
-			           " AND crs_usr.Role=%u"
-			           " AND crs_usr.UsrCod=connected.UsrCod"
-			          " ORDER BY Dif",
-			    Gbl.CurrentCrs.Crs.CrsCod,
-			    (unsigned) Role) < 0)
-                  Lay_NotEnoughMemoryExit ();
+	       DB_BuildQuery ("SELECT connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM crs_usr,connected"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      (unsigned) Role);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -1200,9 +1174,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	 break;
      }
 
-   NumUsrs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,
-	                                     "can not get list of connected users"
-	                                     " who belong to this location");
+   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,
+	                                    "can not get list of connected users"
+	                                    " who belong to this location");
 
    if (NumUsrs)
      {

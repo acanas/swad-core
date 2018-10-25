@@ -26,9 +26,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For vasprintf
 #include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
-#include <stdio.h>		// For FILE,fprintf
+#include <stdio.h>		// For FILE, fprintf, vasprintf
 
 #include "swad_config.h"
 #include "swad_database.h"
@@ -50,6 +51,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void DB_CreateTable (const char *Query);
+
+// static void DB_QueryPrintf (char **strp,const char *fmt,...);
 
 /*****************************************************************************/
 /***************************** Database tables *******************************/
@@ -3060,6 +3063,67 @@ void DB_CloseDBConnection (void)
       mysql_close (&Gbl.mysql);	// Close the connection to the database
       Gbl.DB.DatabaseIsOpen = false;
      }
+  }
+
+void DB_BuildQuery (const char *fmt,...)
+  {
+   int NumBytesPrinted;
+   va_list ap;
+
+   if (Gbl.DB.QueryPtr != NULL)
+      Lay_ShowErrorAndExit ("Error building query.");
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Gbl.DB.QueryPtr,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+  }
+/*
+static void DB_QueryPrintf (char **strp,const char *fmt,...)
+  {
+   int NumBytesPrinted;
+   va_list ap;
+
+   va_start (ap, fmt);
+   NumBytesPrinted = vasprintf (strp, fmt, ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+  }
+*/
+/*****************************************************************************/
+/******************** Make a SELECT query from database **********************/
+/*****************************************************************************/
+
+unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
+  {
+   int Result;
+
+   /***** Check that query string pointer
+          does not point to an allocated string *****/
+   if (Gbl.DB.QueryPtr == NULL)
+      Lay_ShowErrorAndExit ("Wrong query string.");
+
+   /***** Query database and free query string pointer *****/
+   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
+   free ((void *) Gbl.DB.QueryPtr);
+   Gbl.DB.QueryPtr = NULL;
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+
+   /***** Store query result *****/
+   if ((*mysql_res = mysql_store_result (&Gbl.mysql)) == NULL)
+      DB_ExitOnMySQLError (MsgError);
+
+   /***** Return number of rows of result *****/
+   return (unsigned long) mysql_num_rows (*mysql_res);
   }
 
 /*****************************************************************************/
