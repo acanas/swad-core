@@ -755,7 +755,6 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
-   char *Query;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COURSES))
@@ -763,19 +762,18 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
       if (Sch_BuildSearchQuery (SearchQuery,"courses.FullName",NULL,NULL))
 	{
 	 /***** Query database and list courses found *****/
-	 if (asprintf (&Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-			      "courses.Year,courses.FullName,centres.ShortName"
-			      " FROM courses,degrees,centres,institutions,countries"
-			      " WHERE %s"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod=countries.CtyCod"
-			      "%s"
-			      " ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
-		       SearchQuery,RangeQuery) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 return Crs_ListCrssFound (Query);
+	 DB_BuildQuery ("SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
+			"courses.Year,courses.FullName,centres.ShortName"
+			" FROM courses,degrees,centres,institutions,countries"
+			" WHERE %s"
+			" AND courses.DegCod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod=countries.CtyCod"
+			"%s"
+			" ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
+		        SearchQuery,RangeQuery);
+	 return Crs_ListCrssFound ();
 	}
 
    return 0;

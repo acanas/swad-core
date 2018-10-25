@@ -570,7 +570,6 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
       "DegTypName",			// DT_ORDER_BY_DEGREE_TYPE
       "NumDegs DESC,DegTypName",	// DT_ORDER_BY_NUM_DEGREES
      };
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -583,81 +582,76 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
 	    all degree types with degrees
 	    union with
 	    all degree types without any degree */
-	 if (asprintf (&Query,"(SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-			      "COUNT(degrees.DegCod) AS NumDegs"
-			      " FROM degrees,deg_types"
-			      " WHERE degrees.DegTypCod=deg_types.DegTypCod"
-			      " GROUP BY degrees.DegTypCod)"
-			      " UNION "
-			      "(SELECT DegTypCod,DegTypName,0 AS NumDegs"	// Do not use '0' because NumDegs will be casted to string and order will be wrong
-			      " FROM deg_types"
-			      " WHERE DegTypCod NOT IN"
-			      " (SELECT DegTypCod FROM degrees))"
-			      " ORDER BY %s",
-		       OrderBySubQuery[Order]) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("(SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM degrees,deg_types"
+			" WHERE degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod)"
+			" UNION "
+			"(SELECT DegTypCod,DegTypName,0 AS NumDegs"	// Do not use '0' because NumDegs will be casted to string and order will be wrong
+			" FROM deg_types"
+			" WHERE DegTypCod NOT IN"
+			" (SELECT DegTypCod FROM degrees))"
+			" ORDER BY %s",
+		        OrderBySubQuery[Order]);
          break;
       case Sco_SCOPE_CTY:
 	 /* Get only degree types with degrees in the current country */
-	 if (asprintf (&Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-			      "COUNT(degrees.DegCod) AS NumDegs"
-			      " FROM institutions,centres,degrees,deg_types"
-			      " WHERE institutions.CtyCod=%ld"
-                              " AND institutions.InsCod=centres.InsCod"
-                              " AND centres.CtrCod=degrees.CtrCod"
-                              " AND degrees.DegTypCod=deg_types.DegTypCod"
-			      " GROUP BY degrees.DegTypCod"
-			      " ORDER BY %s",
-		       Gbl.CurrentCty.Cty.CtyCod,
-		       OrderBySubQuery[Order]) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM institutions,centres,degrees,deg_types"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		        Gbl.CurrentCty.Cty.CtyCod,
+		        OrderBySubQuery[Order]);
          break;
       case Sco_SCOPE_INS:
 	 /* Get only degree types with degrees in the current institution */
-	 if (asprintf (&Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-			      "COUNT(degrees.DegCod) AS NumDegs"
-			      " FROM centres,degrees,deg_types"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegTypCod=deg_types.DegTypCod"
-			      " GROUP BY degrees.DegTypCod"
-			      " ORDER BY %s",
-		       Gbl.CurrentIns.Ins.InsCod,
-		       OrderBySubQuery[Order]) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM centres,degrees,deg_types"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		        Gbl.CurrentIns.Ins.InsCod,
+		        OrderBySubQuery[Order]);
 	 break;
       case Sco_SCOPE_CTR:
 	 /* Get only degree types with degrees in the current centre */
-	 if (asprintf (&Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-			      "COUNT(degrees.DegCod) AS NumDegs"
-			      " FROM degrees,deg_types"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegTypCod=deg_types.DegTypCod"
-			      " GROUP BY degrees.DegTypCod"
-			      " ORDER BY %s",
-		       Gbl.CurrentCtr.Ctr.CtrCod,
-		       OrderBySubQuery[Order]) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM degrees,deg_types"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		        Gbl.CurrentCtr.Ctr.CtrCod,
+		        OrderBySubQuery[Order]);
 	 break;
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
 	 /* Get only degree types with degrees in the current degree */
-	 if (asprintf (&Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
-			      "COUNT(degrees.DegCod) AS NumDegs"
-			      " FROM degrees,deg_types"
-			      " WHERE degrees.DegCod=%ld"
-			      " AND degrees.DegTypCod=deg_types.DegTypCod"
-			      " GROUP BY degrees.DegTypCod"
-			      " ORDER BY %s",
-		       Gbl.CurrentDeg.Deg.DegCod,
-		       OrderBySubQuery[Order]) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM degrees,deg_types"
+			" WHERE degrees.DegCod=%ld"
+			" AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		        Gbl.CurrentDeg.Deg.DegCod,
+		        OrderBySubQuery[Order]);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get types of degree");
+   Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get types of degree");
 
    /***** Get degree types *****/
    if (Gbl.Degs.DegTypes.Num)
@@ -824,7 +818,6 @@ static unsigned DT_CountNumDegsOfType (long DegTypCod)
 
 bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -839,10 +832,9 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
      }
 
    /***** Get the name of a type of degree from database *****/
-   if (asprintf (&Query,"SELECT DegTypName FROM deg_types WHERE DegTypCod=%ld",
-                 DegTyp->DegTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get the name of a type of degree");
+   DB_BuildQuery ("SELECT DegTypName FROM deg_types WHERE DegTypCod=%ld",
+                  DegTyp->DegTypCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the name of a type of degree");
 
    if (NumRows == 1)
      {
@@ -888,10 +880,9 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
    long DegCod;
 
    /***** Get degrees of a type from database *****/
-   if (asprintf (&Query,"SELECT DegCod FROM degrees WHERE DegTypCod=%ld",
-                 DegTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees of a type");
+   DB_BuildQuery ("SELECT DegCod FROM degrees WHERE DegTypCod=%ld",
+                  DegTypCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees of a type");
 
    /* Get degrees of this type */
    for (NumRow = 0;

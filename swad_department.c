@@ -261,7 +261,6 @@ void Dpt_EditDepartments (void)
 void Dpt_GetListDepartments (long InsCod)
   {
    char OrderBySubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDpt;
@@ -282,27 +281,26 @@ void Dpt_GetListDepartments (long InsCod)
 	    sprintf (OrderBySubQuery,"NumTchs DESC,FullName");
 	    break;
 	}
-      if (asprintf (&Query,"(SELECT departments.DptCod,departments.InsCod,"
-			   "departments.ShortName,departments.FullName,departments.WWW,"
-			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-			   " FROM departments,usr_data,crs_usr"
-			   " WHERE departments.InsCod=%ld"
-			   " AND departments.DptCod=usr_data.DptCod"
-			   " AND usr_data.UsrCod=crs_usr.UsrCod"
-			   " AND crs_usr.Role IN (%u,%u)"
-			   " GROUP BY departments.DptCod)"
-			   " UNION "
-			   "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
-			   " FROM departments"
-			   " WHERE InsCod=%ld AND DptCod NOT IN"
-			   " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-			   " WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
-			   " ORDER BY %s",
-	            InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-	            InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-	            OrderBySubQuery) < 0)
-         Lay_NotEnoughMemoryExit ();
-      Gbl.Dpts.Num = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get departments");
+      DB_BuildQuery ("(SELECT departments.DptCod,departments.InsCod,"
+		     "departments.ShortName,departments.FullName,departments.WWW,"
+		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
+		     " FROM departments,usr_data,crs_usr"
+		     " WHERE departments.InsCod=%ld"
+		     " AND departments.DptCod=usr_data.DptCod"
+		     " AND usr_data.UsrCod=crs_usr.UsrCod"
+		     " AND crs_usr.Role IN (%u,%u)"
+		     " GROUP BY departments.DptCod)"
+		     " UNION "
+		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
+		     " FROM departments"
+		     " WHERE InsCod=%ld AND DptCod NOT IN"
+		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
+		     " WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
+		     " ORDER BY %s",
+	             InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+	             InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+	             OrderBySubQuery);
+      Gbl.Dpts.Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get departments");
 
       if (Gbl.Dpts.Num) // Departments found...
 	{
@@ -359,7 +357,6 @@ void Dpt_GetListDepartments (long InsCod)
 void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
   {
    extern const char *Txt_Another_department;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -380,24 +377,23 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      if (asprintf (&Query,"(SELECT departments.InsCod,departments.ShortName,departments.FullName,departments.WWW,"
-			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-			   " FROM departments,usr_data,crs_usr"
-			   " WHERE departments.DptCod=%ld"
-			   " AND departments.DptCod=usr_data.DptCod"
-			   " AND usr_data.UsrCod=crs_usr.UsrCod"
-			   " AND crs_usr.Role=%u"
-			   " GROUP BY departments.DptCod)"
-			   " UNION "
-			   "(SELECT InsCod,ShortName,FullName,WWW,0"
-			   " FROM departments"
-			   " WHERE DptCod=%ld AND DptCod NOT IN"
-			   " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-			   " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
-		    Dpt->DptCod,(unsigned) Rol_TCH,
-		    Dpt->DptCod,(unsigned) Rol_TCH) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a department");
+      DB_BuildQuery ("(SELECT departments.InsCod,departments.ShortName,departments.FullName,departments.WWW,"
+		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
+		     " FROM departments,usr_data,crs_usr"
+		     " WHERE departments.DptCod=%ld"
+		     " AND departments.DptCod=usr_data.DptCod"
+		     " AND usr_data.UsrCod=crs_usr.UsrCod"
+		     " AND crs_usr.Role=%u"
+		     " GROUP BY departments.DptCod)"
+		     " UNION "
+		     "(SELECT InsCod,ShortName,FullName,WWW,0"
+		     " FROM departments"
+		     " WHERE DptCod=%ld AND DptCod NOT IN"
+		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
+		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
+		     Dpt->DptCod,(unsigned) Rol_TCH,
+		     Dpt->DptCod,(unsigned) Rol_TCH);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a department");
 
       if (NumRows) // Department found...
         {

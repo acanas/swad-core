@@ -134,7 +134,6 @@ void Deg_SeeDegWithPendingCrss (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDegs;
@@ -146,32 +145,30 @@ void Deg_SeeDegWithPendingCrss (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_DEG_ADM:
-         if (asprintf (&Query,"SELECT courses.DegCod,COUNT(*)"
-			      " FROM admin,courses,degrees"
-			      " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-			      " AND admin.Cod=courses.DegCod"
-			      " AND (courses.Status & %u)<>0"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-                       Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
-                       (unsigned) Crs_STATUS_BIT_PENDING) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT courses.DegCod,COUNT(*)"
+			" FROM admin,courses,degrees"
+			" WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+			" AND admin.Cod=courses.DegCod"
+			" AND (courses.Status & %u)<>0"
+			" AND courses.DegCod=degrees.DegCod"
+			" GROUP BY courses.DegCod ORDER BY degrees.ShortName",
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+                        (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
-         if (asprintf (&Query,"SELECT courses.DegCod,COUNT(*)"
-			      " FROM courses,degrees"
-			      " WHERE (courses.Status & %u)<>0"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-                       (unsigned) Crs_STATUS_BIT_PENDING) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT courses.DegCod,COUNT(*)"
+			" FROM courses,degrees"
+			" WHERE (courses.Status & %u)<>0"
+			" AND courses.DegCod=degrees.DegCod"
+			" GROUP BY courses.DegCod ORDER BY degrees.ShortName",
+                        (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
 	 return;
      }
 
    /***** Get degrees *****/
-   if ((NumDegs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees with pending courses")))
+   if ((NumDegs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees with pending courses")))
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
@@ -589,7 +586,6 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
 void Deg_WriteSelectorOfDegree (void)
   {
    extern const char *Txt_Degree;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDegs;
@@ -614,11 +610,10 @@ void Deg_WriteSelectorOfDegree (void)
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
       /***** Get degrees belonging to the current centre from database *****/
-      if (asprintf (&Query,"SELECT DegCod,ShortName FROM degrees"
-                           " WHERE CtrCod=%ld ORDER BY ShortName",
-                    Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-          Lay_NotEnoughMemoryExit ();
-      NumDegs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees of a centre");
+      DB_BuildQuery ("SELECT DegCod,ShortName FROM degrees"
+		     " WHERE CtrCod=%ld ORDER BY ShortName",
+                     Gbl.CurrentCtr.Ctr.CtrCod);
+      NumDegs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees of a centre");
 
       /***** Get degrees of this centre *****/
       for (NumDeg = 0;
@@ -1418,23 +1413,21 @@ static void Deg_PutIconToViewDegrees (void)
 
 void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   if (asprintf (&Query,"SELECT DISTINCTROW degrees.DegCod,degrees.CtrCod,"
-			"degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
-			"degrees.ShortName,degrees.FullName,degrees.WWW"
-			" FROM degrees,courses,crs_usr"
-			" WHERE degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.Role=%u"
-			" ORDER BY degrees.ShortName",
-                 (unsigned) Rol_STD) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Degs->Num = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees admin by you");
+   DB_BuildQuery ("SELECT DISTINCTROW degrees.DegCod,degrees.CtrCod,"
+		  "degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
+		  "degrees.ShortName,degrees.FullName,degrees.WWW"
+		  " FROM degrees,courses,crs_usr"
+		  " WHERE degrees.DegCod=courses.DegCod"
+		  " AND courses.CrsCod=crs_usr.CrsCod"
+		  " AND crs_usr.Role=%u"
+		  " ORDER BY degrees.ShortName",
+                  (unsigned) Rol_STD);
+   Degs->Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees admin by you");
 
    if (Degs->Num) // Degrees found...
      {
@@ -1465,19 +1458,17 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
 
 void Deg_GetListDegsOfCurrentCtr (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumDeg;
 
    /***** Get degrees of the current centre from database *****/
-   if (asprintf (&Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                        "ShortName,FullName,WWW"
-                        " FROM degrees WHERE CtrCod=%ld ORDER BY FullName",
-                 Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees of a centre");
+   DB_BuildQuery ("SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
+		  "ShortName,FullName,WWW"
+		  " FROM degrees WHERE CtrCod=%ld ORDER BY FullName",
+                  Gbl.CurrentCtr.Ctr.CtrCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees of a centre");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Degrees found...
@@ -1672,7 +1663,6 @@ long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed)
 
 bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool DegFound = false;
@@ -1691,12 +1681,11 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get data of a degree from database *****/
-      if (asprintf (&Query,"SELECT DegCod,CtrCod,DegTypCod,Status,"
-	                   "RequesterUsrCod,ShortName,FullName,WWW"
-		           " FROM degrees WHERE DegCod=%ld",
-	            Deg->DegCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get data of a degree")) // Degree found...
+      DB_BuildQuery ("SELECT DegCod,CtrCod,DegTypCod,Status,"
+		     "RequesterUsrCod,ShortName,FullName,WWW"
+		     " FROM degrees WHERE DegCod=%ld",
+	             Deg->DegCod);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get data of a degree")) // Degree found...
 	{
 	 /***** Get data of degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1755,7 +1744,6 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 
 void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1763,10 +1751,9 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get the short name of a degree from database *****/
-      if (asprintf (&Query,"SELECT ShortName FROM degrees WHERE DegCod=%ld",
-	            Deg->DegCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the short name of a degree") == 1)
+      DB_BuildQuery ("SELECT ShortName FROM degrees WHERE DegCod=%ld",
+	             Deg->DegCod);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get the short name of a degree") == 1)
 	{
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1786,7 +1773,6 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
 
 long Deg_GetCtrCodOfDegreeByCod (long DegCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long CtrCod = -1L;
@@ -1794,10 +1780,8 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
    if (DegCod > 0)
      {
       /***** Get the centre code of a degree from database *****/
-      if (asprintf (&Query,"SELECT CtrCod FROM degrees WHERE DegCod=%ld",
-	            DegCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the centre of a degree") == 1)
+      DB_BuildQuery ("SELECT CtrCod FROM degrees WHERE DegCod=%ld",DegCod);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get the centre of a degree") == 1)
 	{
 	 /***** Get the centre code of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1817,7 +1801,6 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
 
 long Deg_GetInsCodOfDegreeByCod (long DegCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long InsCod = -1L;
@@ -1825,12 +1808,11 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
    if (DegCod > 0)
      {
       /***** Get the institution code of a degree from database *****/
-      if (asprintf (&Query,"SELECT centres.InsCod FROM degrees,centres"
-		           " WHERE degrees.DegCod=%ld"
-		           " AND degrees.CtrCod=centres.CtrCod",
-	            DegCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not get the institution of a degree") == 1)
+      DB_BuildQuery ("SELECT centres.InsCod FROM degrees,centres"
+		     " WHERE degrees.DegCod=%ld"
+		     " AND degrees.CtrCod=centres.CtrCod",
+	             DegCod);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get the institution of a degree") == 1)
 	{
 	 /***** Get the institution code of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1859,10 +1841,8 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    char PathDeg[PATH_MAX + 1];
 
    /***** Get courses of a degree from database *****/
-   if (asprintf (&Query,"SELECT CrsCod FROM courses WHERE DegCod=%ld",
-                 DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT_free (Query,&mysql_res,"can not get courses of a degree");
+   DB_BuildQuery ("SELECT CrsCod FROM courses WHERE DegCod=%ld",DegCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get courses of a degree");
 
    /* Get courses in this degree */
    for (NumRow = 0;

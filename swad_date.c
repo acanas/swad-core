@@ -738,7 +738,6 @@ void Dat_PutHiddenParBrowserTZDiff (void)
 
 void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool TZNameIsUsable = false;
@@ -758,10 +757,9 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
    if (BrowserTimeZone[0])
      {
       /* Try to convert a date from server time zone to browser time zone */
-      if (asprintf (&Query,"SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
-                    BrowserTimeZone) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QuerySELECT_free (Query,&mysql_res,"can not check if time zone name is usable"))
+      DB_BuildQuery ("SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
+                     BrowserTimeZone);
+      if (DB_QuerySELECT_new (&mysql_res,"can not check if time zone name is usable"))
 	{
          row = mysql_fetch_row (mysql_res);
          if (row[0] != NULL)
