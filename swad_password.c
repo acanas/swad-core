@@ -180,7 +180,7 @@ void Pwd_UpdateMyPwd (void)
    /***** Check current password *****/
    if (Pwd_CheckCurrentPassword ())
       /***** Check and update new password *****/
-      Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
+      Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Me.UsrDat);
    else
      {
       Gbl.Alert.Type = Ale_WARNING;
