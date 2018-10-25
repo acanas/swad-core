@@ -29,7 +29,9 @@
 #define _GNU_SOURCE 		// For vasprintf
 #include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stdarg.h>		// For va_start, va_end
 #include <stdio.h>		// For FILE, fprintf, vasprintf
+#include <stdlib.h>		// For free
 
 #include "swad_config.h"
 #include "swad_database.h"

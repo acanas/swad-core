@@ -322,7 +322,6 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
-   char *Query;
    char SubQuery[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

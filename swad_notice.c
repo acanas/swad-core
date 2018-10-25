@@ -356,7 +356,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    extern const char *Txt_All_notices;
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
-   char *Query;
+   char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrWidth[10 + 2 + 1];

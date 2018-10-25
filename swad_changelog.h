@@ -359,7 +359,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.8.1:   Oct 25, 2018  Fix bug in password, reported by Francisco A. Ocaña. (238044 lines)
+	Version 18.8.1:   Oct 25, 2018  Fixed bug in password, reported by Francisco A. Ocaña. (238047 lines)
 	Version 18.8:     Oct 25, 2018  New internal functions to build database queries. (238043 lines)
 	Version 18.7.42:  Oct 25, 2018  Some sprintf for database queries changed by asprintf. (238146 lines)
 	Version 18.7.41:  Oct 24, 2018  Some sprintf for database queries changed by asprintf. (238125 lines)
