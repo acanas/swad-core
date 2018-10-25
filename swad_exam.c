@@ -549,7 +549,6 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    extern const char *Txt_All_announcements_of_exams;
    extern const char *Txt_Announcements_of_exams;
    extern const char *Txt_No_announcements_of_exams_of_X;
-   char *Query;
    char SubQueryStatus[64];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -570,14 +569,13 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    if (Gbl.ExamAnns.HighlightExaCod > 0)
      {
       /***** Get one exam announcement from database *****/
-      if (asprintf (&Query,"SELECT ExaCod"
-		           " FROM exam_announcements"
-		           " WHERE ExaCod=%ld"
-		           " AND CrsCod=%ld AND %s",
-	            Gbl.ExamAnns.HighlightExaCod,
-	            Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumExaAnns = DB_QuerySELECT_free (Query,&mysql_res,"can not get exam announcements in this course for listing");
+      DB_BuildQuery ("SELECT ExaCod"
+		     " FROM exam_announcements"
+		     " WHERE ExaCod=%ld"
+		     " AND CrsCod=%ld AND %s",
+	             Gbl.ExamAnns.HighlightExaCod,
+	             Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus);
+      NumExaAnns = DB_QuerySELECT_new (&mysql_res,"can not get exam announcements in this course for listing");
 
       /***** List the existing exam announcements *****/
       for (NumExaAnn = 0;
@@ -609,16 +607,15 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
      {
       /***** Get exam announcements (the most recent first)
 	     in current course for a date from database *****/
-      if (asprintf (&Query,"SELECT ExaCod"
-			   " FROM exam_announcements"
-			   " WHERE CrsCod=%ld AND %s"
-			   " AND DATE(ExamDate)='%s'"
-			   " ORDER BY ExamDate DESC",
-	            Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus,
-	            Gbl.ExamAnns.HighlightDate) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumExaAnns = DB_QuerySELECT_free (Query,&mysql_res,"can not get exam announcements"
-	                                                 " in this course for listing");
+      DB_BuildQuery ("SELECT ExaCod"
+		     " FROM exam_announcements"
+		     " WHERE CrsCod=%ld AND %s"
+		     " AND DATE(ExamDate)='%s'"
+		     " ORDER BY ExamDate DESC",
+	             Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus,
+	             Gbl.ExamAnns.HighlightDate);
+      NumExaAnns = DB_QuerySELECT_new (&mysql_res,"can not get exam announcements"
+	                                          " in this course for listing");
 
       /***** List the existing exam announcements *****/
       for (NumExaAnn = 0;
@@ -647,14 +644,13 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** Get exam announcements (the most recent first)
           in current course from database *****/
-   if (asprintf (&Query,"SELECT ExaCod"
-	                " FROM exam_announcements"
-                        " WHERE CrsCod=%ld AND %s"
-                        " ORDER BY ExamDate DESC",
-                 Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumExaAnns = DB_QuerySELECT_free (Query,&mysql_res,"can not get exam announcements"
-	                                              " in this course for listing");
+   DB_BuildQuery ("SELECT ExaCod"
+		  " FROM exam_announcements"
+		  " WHERE CrsCod=%ld AND %s"
+		  " ORDER BY ExamDate DESC",
+                  Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus);
+   NumExaAnns = DB_QuerySELECT_new (&mysql_res,"can not get exam announcements"
+	                                       " in this course for listing");
 
    /***** Start box *****/
    Box_StartBox (NULL,
@@ -824,7 +820,6 @@ static void Exa_ModifyExamAnnouncementInDB (void)
 
 void Exa_CreateListDatesOfExamAnnouncements (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumExaAnn;
@@ -835,14 +830,13 @@ void Exa_CreateListDatesOfExamAnnouncements (void)
       /***** Get exam dates (no matter in what order)
              of visible exam announcements
              in current course from database *****/
-      if (asprintf (&Query,"SELECT DISTINCT(DATE(ExamDate))"
-			   " FROM exam_announcements"
-			   " WHERE CrsCod=%ld AND Status=%u",
-		    Gbl.CurrentCrs.Crs.CrsCod,
-		    (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT) < 0)
-         Lay_NotEnoughMemoryExit ();
-      NumExaAnns = DB_QuerySELECT_free (Query,&mysql_res,"can not get exam announcements"
-	                                                 " in this course");
+      DB_BuildQuery ("SELECT DISTINCT(DATE(ExamDate))"
+		     " FROM exam_announcements"
+		     " WHERE CrsCod=%ld AND Status=%u",
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
+      NumExaAnns = DB_QuerySELECT_new (&mysql_res,"can not get exam announcements"
+	                                          " in this course");
 
       /***** The result of the query may be empty *****/
       Gbl.ExamAnns.Lst = NULL;
@@ -898,7 +892,6 @@ void Exa_FreeListExamAnnouncements (void)
 
 static void Exa_GetDataExamAnnouncementFromDB (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumExaAnns;
@@ -908,13 +901,12 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
    unsigned Second;
 
    /***** Get data of an exam announcement from database *****/
-   if (asprintf (&Query,"SELECT CrsCod,Status,CrsFullName,Year,ExamSession,"
-			"CallDate,ExamDate,Duration,Place,ExamMode,"
-			"Structure,DocRequired,MatRequired,MatAllowed,OtherInfo"
-			" FROM exam_announcements WHERE ExaCod=%ld",
-                 Gbl.ExamAnns.ExaDat.ExaCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumExaAnns = DB_QuerySELECT_free (Query,&mysql_res,"can not get data of an exam announcement");
+   DB_BuildQuery ("SELECT CrsCod,Status,CrsFullName,Year,ExamSession,"
+		  "CallDate,ExamDate,Duration,Place,ExamMode,"
+		  "Structure,DocRequired,MatRequired,MatAllowed,OtherInfo"
+		  " FROM exam_announcements WHERE ExaCod=%ld",
+                  Gbl.ExamAnns.ExaDat.ExaCod);
+   NumExaAnns = DB_QuerySELECT_new (&mysql_res,"can not get data of an exam announcement");
 
    /***** The result of the query must have one row *****/
    if (NumExaAnns != 1)

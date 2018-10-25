@@ -143,6 +143,6 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetNumDegsWithCrss (const char *SubQuery);
 unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-unsigned Deg_ListDegsFound (const char *Query);
+unsigned Deg_ListDegsFound (void);
 
 #endif

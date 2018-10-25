@@ -2454,7 +2454,6 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_all_degrees;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;
@@ -2464,36 +2463,35 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    struct Degree Deg;
 
    /***** Get institutions, centres, degrees admin by user from database *****/
-   if (asprintf (&Query,"(SELECT %u AS S,-1 AS Cod,'' AS FullName"
-			" FROM admin"
-			" WHERE UsrCod=%ld"
-			" AND Scope='%s')"
-			" UNION "
-			"(SELECT %u AS S,admin.Cod,institutions.FullName"
-			" FROM admin,institutions"
-			" WHERE admin.UsrCod=%ld"
-			" AND admin.Scope='%s'"
-			" AND admin.Cod=institutions.InsCod)"
-			" UNION "
-			"(SELECT %u AS S,admin.Cod,centres.FullName"
-			" FROM admin,centres"
-			" WHERE admin.UsrCod=%ld"
-			" AND admin.Scope='%s'"
-			" AND admin.Cod=centres.CtrCod)"
-			" UNION "
-			"(SELECT %u AS S,admin.Cod,degrees.FullName"
-			" FROM admin,degrees"
-			" WHERE admin.UsrCod=%ld"
-			" AND admin.Scope='%s'"
-			" AND admin.Cod=degrees.DegCod)"
-			" ORDER BY S,FullName",
-	         (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS],
-	         (unsigned) Sco_SCOPE_INS,UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
-	         (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
-	         (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG]) < 0)
-      Lay_NotEnoughMemoryExit ();
+   DB_BuildQuery ("(SELECT %u AS S,-1 AS Cod,'' AS FullName"
+		  " FROM admin"
+		  " WHERE UsrCod=%ld"
+		  " AND Scope='%s')"
+		  " UNION "
+		  "(SELECT %u AS S,admin.Cod,institutions.FullName"
+		  " FROM admin,institutions"
+		  " WHERE admin.UsrCod=%ld"
+		  " AND admin.Scope='%s'"
+		  " AND admin.Cod=institutions.InsCod)"
+		  " UNION "
+		  "(SELECT %u AS S,admin.Cod,centres.FullName"
+		  " FROM admin,centres"
+		  " WHERE admin.UsrCod=%ld"
+		  " AND admin.Scope='%s'"
+		  " AND admin.Cod=centres.CtrCod)"
+		  " UNION "
+		  "(SELECT %u AS S,admin.Cod,degrees.FullName"
+		  " FROM admin,degrees"
+		  " WHERE admin.UsrCod=%ld"
+		  " AND admin.Scope='%s'"
+		  " AND admin.Cod=degrees.DegCod)"
+		  " ORDER BY S,FullName",
+	          (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS],
+	          (unsigned) Sco_SCOPE_INS,UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+	          (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+	          (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG]);
 
-   if ((NumRows = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get institutions, centres, degrees admin by a user")))
+   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions, centres, degrees admin by a user")))
       /***** Get the list of degrees *****/
       for (NumRow = 1;
 	   NumRow <= NumRows;
@@ -2584,7 +2582,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 /*****************************************************************************/
 // Returns number of degrees found
 
-unsigned Deg_ListDegsFound (const char *Query)
+unsigned Deg_ListDegsFound (void)
   {
    extern const char *Txt_degree;
    extern const char *Txt_degrees;
@@ -2595,7 +2593,7 @@ unsigned Deg_ListDegsFound (const char *Query)
    struct Degree Deg;
 
    /***** Query database *****/
-   if ((NumDegs = (unsigned) DB_QuerySELECT_free (Query,&mysql_res,"can not get degrees")))
+   if ((NumDegs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees")))
      {
       /***** Start box and table *****/
       /* Number of degrees found */

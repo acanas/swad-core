@@ -259,8 +259,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long FilCod,bool GetContent);
 
-unsigned Brw_ListDocsFound (const char *Query,
-                            const char *TitleSingular,const char *TitlePlural);
+unsigned Brw_ListDocsFound (const char *TitleSingular,const char *TitlePlural);
 
 void Brw_AskRemoveOldFiles (void);
 void Brw_RemoveOldFilesBriefcase (void);
