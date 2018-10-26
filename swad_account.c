@@ -611,7 +611,6 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char *Query;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
@@ -634,11 +633,10 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
-      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_nicknames"
-		           " WHERE Nickname='%s' AND UsrCod<>%ld",
-	            NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QueryCOUNT_free (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames"
+		     " WHERE Nickname='%s' AND UsrCod<>%ld",
+	             NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (DB_QueryCOUNT_new ("can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
 	{
 	 Error = true;
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -665,11 +663,10 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      {
       /* Check if the new email matches
          any of the confirmed emails of other users */
-      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_emails"
-		           " WHERE E_mail='%s' AND Confirmed='Y'",
-	            NewEmail) < 0)
-         Lay_NotEnoughMemoryExit ();
-      if (DB_QueryCOUNT_free (Query,"can not check if email already existed"))	// An email of another user is the same that my email
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_emails"
+		     " WHERE E_mail='%s' AND Confirmed='Y'",
+	             NewEmail);
+      if (DB_QueryCOUNT_new ("can not check if email already existed"))	// An email of another user is the same that my email
 	{
 	 Error = true;
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

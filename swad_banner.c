@@ -713,14 +713,11 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
   {
-   char *Query;
-
    /***** Get number of banners with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM banners"
-	                " WHERE %s='%s' AND BanCod<>%ld",
-                 FieldName,Name,BanCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of a banner already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM banners"
+		  " WHERE %s='%s' AND BanCod<>%ld",
+                  FieldName,Name,BanCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of a banner already existed") != 0);
   }
 
 /*****************************************************************************/

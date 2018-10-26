@@ -3128,10 +3128,6 @@ unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
    return (unsigned long) mysql_num_rows (*mysql_res);
   }
 
-/*****************************************************************************/
-/******************** Make a SELECT query from database **********************/
-/*****************************************************************************/
-
 unsigned long DB_QuerySELECT_free (const char *Query,MYSQL_RES **mysql_res,const char *MsgError)
   {
    int Result;
@@ -3167,6 +3163,26 @@ unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char
 /*****************************************************************************/
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
+
+unsigned long DB_QueryCOUNT_new (const char *MsgError)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+
+   /***** Make query "SELECT COUNT(*) FROM..." *****/
+   DB_QuerySELECT_new (&mysql_res,MsgError);
+
+   /***** Get number of rows *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%lu",&NumRows) != 1)
+      Lay_ShowErrorAndExit ("Error when counting number of rows.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumRows;
+  }
 
 unsigned long DB_QueryCOUNT_free (const char *Query,const char *MsgError)
   {

@@ -676,16 +676,13 @@ void Con_RemoveOldConnected (void)
 
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
   {
-   char *Query;
-
    if (!Gbl.DB.DatabaseIsOpen)
       return 0;
 
    /***** Get number of connected users with a role from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs=%u",
-                 (unsigned) Role) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of connected users");
+   DB_BuildQuery ("SELECT COUNT(*) FROM connected WHERE RoleInLastCrs=%u",
+                  (unsigned) Role);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of connected users");
   }
 
 /*****************************************************************************/

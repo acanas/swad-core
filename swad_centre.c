@@ -2065,14 +2065,11 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
-   char *Query;
-
    /***** Get number of centres with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM centres"
-	                " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
-                 InsCod,FieldName,Name,CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of a centre already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM centres"
+		  " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
+                  InsCod,FieldName,Name,CtrCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of a centre already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -2861,12 +2858,9 @@ static void Ctr_CreateCentre (unsigned Status)
 
 unsigned Ctr_GetNumCtrsTotal (void)
   {
-   char *Query;
-
    /***** Get total number of centres from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM centres") < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get total number of centres");
+   DB_BuildQuery ("SELECT COUNT(*) FROM centres");
+   return (unsigned) DB_QueryCOUNT_new ("can not get total number of centres");
   }
 
 /*****************************************************************************/
@@ -2875,15 +2869,12 @@ unsigned Ctr_GetNumCtrsTotal (void)
 
 unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   {
-   char *Query;
-
    /***** Get number of centres of a country from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM institutions,centres"
-	                " WHERE institutions.CtyCod=%ld"
-	                " AND institutions.InsCod=centres.InsCod",
-	         CtyCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres in a country");
+   DB_BuildQuery ("SELECT COUNT(*) FROM institutions,centres"
+		  " WHERE institutions.CtyCod=%ld"
+		  " AND institutions.InsCod=centres.InsCod",
+	          CtyCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres in a country");
   }
 
 /*****************************************************************************/
@@ -2892,14 +2883,9 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 
 unsigned Ctr_GetNumCtrsInIns (long InsCod)
   {
-   char *Query;
-
    /***** Get number of centres of an institution from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM centres"
-	                " WHERE InsCod=%ld",
-	         InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres in an institution");
+   DB_BuildQuery ("SELECT COUNT(*) FROM centres WHERE InsCod=%ld",InsCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres in an institution");
   }
 
 /*****************************************************************************/
@@ -2908,14 +2894,11 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
   {
-   char *Query;
-
    /***** Get number of centres (of the current institution) in a place *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM centres"
-	                " WHERE InsCod=%ld AND PlcCod=%ld",
-	         Gbl.CurrentIns.Ins.InsCod,PlcCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of centres in a place");
+   DB_BuildQuery ("SELECT COUNT(*) FROM centres"
+		  " WHERE InsCod=%ld AND PlcCod=%ld",
+	          Gbl.CurrentIns.Ins.InsCod,PlcCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get the number of centres in a place");
   }
 
 /*****************************************************************************/
@@ -2924,16 +2907,13 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
 
 unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of centres with degrees from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
-                        " FROM institutions,centres,degrees"
-                        " WHERE %sinstitutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod",
-                 SubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres with degrees");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.CtrCod)"
+		  " FROM institutions,centres,degrees"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=degrees.CtrCod",
+                  SubQuery);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres with degrees");
   }
 
 /*****************************************************************************/
@@ -2942,17 +2922,14 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery)
 
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of centres with courses from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
-                        " FROM institutions,centres,degrees,courses"
-                        " WHERE %sinstitutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod",
-                 SubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres with courses");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.CtrCod)"
+		  " FROM institutions,centres,degrees,courses"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=degrees.CtrCod"
+		  " AND degrees.DegCod=courses.DegCod",
+                  SubQuery);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres with courses");
   }
 
 /*****************************************************************************/
@@ -2961,19 +2938,16 @@ unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery)
 
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of centres with users from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT centres.CtrCod)"
-                        " FROM institutions,centres,degrees,courses,crs_usr"
-                        " WHERE %sinstitutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role=%u",
-                 SubQuery,(unsigned) Role) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of centres with users");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.CtrCod)"
+		  " FROM institutions,centres,degrees,courses,crs_usr"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=degrees.CtrCod"
+		  " AND degrees.DegCod=courses.DegCod"
+		  " AND courses.CrsCod=crs_usr.CrsCod"
+		  " AND crs_usr.Role=%u",
+                  SubQuery,(unsigned) Role);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres with users");
   }
 
 /*****************************************************************************/

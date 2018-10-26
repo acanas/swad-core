@@ -43,6 +43,7 @@ unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError);
 unsigned long DB_QuerySELECT_free (const char *Query,MYSQL_RES **mysql_res,const char *MsgError);
 unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char *MsgError);
 
+unsigned long DB_QueryCOUNT_new (const char *MsgError);
 unsigned long DB_QueryCOUNT_free (const char *Query,const char *MsgError);
 unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError);
 

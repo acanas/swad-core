@@ -1775,13 +1775,9 @@ void Agd_RemoveUsrEvents (long UsrCod)
 
 unsigned Agd_GetNumEventsFromUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Get number of events in a course from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM agendas WHERE UsrCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of events from user");
+   DB_BuildQuery ("SELECT COUNT(*) FROM agendas WHERE UsrCod=%ld",UsrCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of events from user");
   }
 
 /*****************************************************************************/

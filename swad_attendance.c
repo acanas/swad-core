@@ -1026,14 +1026,11 @@ void Att_ShowAttEvent (void)
 
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
   {
-   char *Query;
-
    /***** Get number of attendance events with a field value from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM att_events"
-	                " WHERE CrsCod=%ld AND %s='%s' AND AttCod<>%ld",
-                 Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not get similar attendance events") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM att_events"
+		  " WHERE CrsCod=%ld AND %s='%s' AND AttCod<>%ld",
+                  Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AttCod);
+   return (DB_QueryCOUNT_new ("can not get similar attendance events") != 0);
   }
 
 /*****************************************************************************/
@@ -1420,13 +1417,9 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
 bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
   {
-   char *Query;
-
    /***** Get if an attendance event is associated to a group from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",
-                 AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if an attendance event is associated to groups") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",AttCod);
+   return (DB_QueryCOUNT_new ("can not check if an attendance event is associated to groups") != 0);
   }
 
 /*****************************************************************************/
@@ -1435,14 +1428,11 @@ bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
 
 bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
   {
-   char *Query;
-
    /***** Get if an attendance event is associated to a group from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM att_grp"
-	                " WHERE AttCod=%ld AND GrpCod=%ld",
-                 AttCod,GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if an attendance event is associated to a group") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM att_grp"
+		  " WHERE AttCod=%ld AND GrpCod=%ld",
+                  AttCod,GrpCod);
+   return (DB_QueryCOUNT_new ("can not check if an attendance event is associated to a group") != 0);
   }
 
 /*****************************************************************************/
@@ -1678,13 +1668,9 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 
 unsigned Att_GetNumAttEventsInCrs (long CrsCod)
   {
-   char *Query;
-
    /***** Get number of attendance events in a course from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM att_events WHERE CrsCod=%ld",
-                 CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of attendance events in course");
+   DB_BuildQuery ("SELECT COUNT(*) FROM att_events WHERE CrsCod=%ld",CrsCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of attendance events in course");
   }
 
 /*****************************************************************************/
@@ -2451,14 +2437,11 @@ void Att_RegisterStudentsInAttEvent (void)
 
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
   {
-   char *Query;
-
    /***** Count number of students registered in an event in database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM att_usr"
-                        " WHERE AttCod=%ld AND Present='Y'",
-                 Att->AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Att->NumStdsTotal = (unsigned) DB_QueryCOUNT_free (Query,"can not get number of students who are registered in an event");
+   DB_BuildQuery ("SELECT COUNT(*) FROM att_usr"
+		  " WHERE AttCod=%ld AND Present='Y'",
+                  Att->AttCod);
+   Att->NumStdsTotal = (unsigned) DB_QueryCOUNT_new ("can not get number of students who are registered in an event");
   }
 
 /*****************************************************************************/
@@ -2467,7 +2450,6 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
 
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList)
   {
-   char *Query;
    char SubQuery[1 + 1 + 10 + 1];
    unsigned NumStd;
    unsigned NumStdsInAttEvent = 0;
@@ -2477,13 +2459,13 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
      {
       /***** Allocate space for query *****/
       MaxLength = 256 + NumStdsInList * (1 + 1 + 10);
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
+      if ((Gbl.DB.QueryPtr = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Count number of students registered in an event in database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM att_usr"
-                     " WHERE AttCod=%ld"
-	             " AND UsrCod IN (",
+      sprintf (Gbl.DB.QueryPtr,"SELECT COUNT(*) FROM att_usr"
+                               " WHERE AttCod=%ld"
+	                       " AND UsrCod IN (",
                AttCod);
       for (NumStd = 0;
 	   NumStd < NumStdsInList;
@@ -2493,13 +2475,13 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
                   NumStd ? ",%ld" :
                 	   "%ld",
                   LstSelectedUsrCods[NumStd]);
-	 Str_Concat (Query,SubQuery,
+	 Str_Concat (Gbl.DB.QueryPtr,SubQuery,
 	             MaxLength);
 	}
-      Str_Concat (Query,") AND Present='Y'",
+      Str_Concat (Gbl.DB.QueryPtr,") AND Present='Y'",
                   MaxLength);
 
-      NumStdsInAttEvent = (unsigned) DB_QueryCOUNT_free (Query,"can not get number of students from a list who are registered in an event");
+      NumStdsInAttEvent = (unsigned) DB_QueryCOUNT_new ("can not get number of students from a list who are registered in an event");
      }
    return NumStdsInAttEvent;
   }

@@ -442,17 +442,14 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
 
 bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
   {
-   char *Query;
-
    if (FollowerCod == FollowedCod)
       return false;
 
    /***** Check if a user is a follower of another user *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_follow"
-	                " WHERE FollowerCod=%ld AND FollowedCod=%ld",
-                 FollowerCod,FollowedCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not get if a user is a follower of another one") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_follow"
+		  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
+                  FollowerCod,FollowedCod);
+   return (DB_QueryCOUNT_new ("can not get if a user is a follower of another one") != 0);
   }
 
 /*****************************************************************************/
@@ -461,13 +458,10 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 
 unsigned Fol_GetNumFollowing (long UsrCod)
   {
-   char *Query;
-
    /***** Check if a user is a follower of another user *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowerCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get number of followed");
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_follow WHERE FollowerCod=%ld",
+                  UsrCod);
+   return DB_QueryCOUNT_new ("can not get number of followed");
   }
 
 /*****************************************************************************/
@@ -476,13 +470,10 @@ unsigned Fol_GetNumFollowing (long UsrCod)
 
 unsigned Fol_GetNumFollowers (long UsrCod)
   {
-   char *Query;
-
    /***** Check if a user is a follower of another user *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowedCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get number of followers");
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_follow WHERE FollowedCod=%ld",
+                  UsrCod);
+   return DB_QueryCOUNT_new ("can not get number of followers");
   }
 
 /*****************************************************************************/

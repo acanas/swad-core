@@ -445,14 +445,10 @@ void Dpt_FreeListDepartments (void)
 
 unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
   {
-   char *Query;
-
    /***** Get number of departments in an institution from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM departments WHERE InsCod=%ld",
-	         InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of departments"
-	                                       " in an institution");
+   DB_BuildQuery ("SELECT COUNT(*) FROM departments WHERE InsCod=%ld",InsCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of departments"
+	                                " in an institution");
   }
 
 /*****************************************************************************/
@@ -789,15 +785,12 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
   {
-   char *Query;
-
    /***** Get number of departments with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM departments"
-	                " WHERE %s='%s' AND DptCod<>%ld",
-                 FieldName,Name,DptCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name"
-	                             " of a department already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM departments"
+		  " WHERE %s='%s' AND DptCod<>%ld",
+                  FieldName,Name,DptCod);
+   return (DB_QueryCOUNT_new ("can not check if the name"
+	                      " of a department already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -1092,12 +1085,9 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
 
 unsigned Dpt_GetTotalNumberOfDepartments (void)
   {
-   char *Query;
-
    /***** Get number of departments from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM departments") < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of departments");
+   DB_BuildQuery ("SELECT COUNT(*) FROM departments");
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of departments");
   }
 
 /*****************************************************************************/
@@ -1106,13 +1096,9 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 
 unsigned Dpt_GetNumDptsInIns (long InsCod)
   {
-   char *Query;
-
    /***** Get departments in an institution from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM departments WHERE InsCod=%ld",
-                 InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of departments in an institution");
+   DB_BuildQuery ("SELECT COUNT(*) FROM departments WHERE InsCod=%ld",InsCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of departments in an institution");
   }
 
 /*****************************************************************************/

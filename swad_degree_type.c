@@ -803,13 +803,9 @@ long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
 
 static unsigned DT_CountNumDegsOfType (long DegTypCod)
   {
-   char *Query;
-
    /***** Get number of degrees of a type from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM degrees WHERE DegTypCod=%ld",
-                 DegTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of degrees of a type");
+   DB_BuildQuery ("SELECT COUNT(*) FROM degrees WHERE DegTypCod=%ld",DegTypCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of degrees of a type");
   }
 
 /*****************************************************************************/
@@ -995,14 +991,11 @@ void DT_RenameDegreeType (void)
 
 static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
   {
-   char *Query;
-
    /***** Get number of degree types with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM deg_types"
-                        " WHERE DegTypName='%s' AND DegTypCod<>%ld",
-                 DegTypName,DegTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of a type of degree already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM deg_types"
+                  " WHERE DegTypName='%s' AND DegTypCod<>%ld",
+                  DegTypName,DegTypCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of a type of degree already existed") != 0);
   }
 
 /*****************************************************************************/

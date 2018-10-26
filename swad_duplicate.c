@@ -390,12 +390,9 @@ static void Dup_ListSimilarUsrs (void)
 
 static bool Dup_CheckIfUsrIsDup (long UsrCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod=%ld",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not if user is in list of possible duplicate users") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod=%ld",
+	          UsrCod);
+   return (DB_QueryCOUNT_new ("can not if user is in list of possible duplicate users") != 0);
   }
 
 /*****************************************************************************/

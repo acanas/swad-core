@@ -1097,14 +1097,11 @@ void Asg_ShowAssignment (void)
 
 static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod)
   {
-   char *Query;
-
    /***** Get number of assignments with a field value from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM assignments"
-	                " WHERE CrsCod=%ld AND %s='%s' AND AsgCod<>%ld",
-                 Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not get similar assignments") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM assignments"
+		  " WHERE CrsCod=%ld AND %s='%s' AND AsgCod<>%ld",
+                  Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AsgCod);
+   return (DB_QueryCOUNT_new ("can not get similar assignments") != 0);
   }
 
 /*****************************************************************************/
@@ -1545,13 +1542,9 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
 
 static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod)
   {
-   char *Query;
-
    /***** Get if an assignment is associated to a group from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM asg_grp WHERE AsgCod=%ld",
-                 AsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if an assignment is associated to groups") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM asg_grp WHERE AsgCod=%ld",AsgCod);
+   return (DB_QueryCOUNT_new ("can not check if an assignment is associated to groups") != 0);
   }
 
 /*****************************************************************************/
@@ -1560,14 +1553,11 @@ static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod)
 
 bool Asg_CheckIfAsgIsAssociatedToGrp (long AsgCod,long GrpCod)
   {
-   char *Query;
-
    /***** Get if an assignment is associated to a group from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM asg_grp"
-	                " WHERE AsgCod=%ld AND GrpCod=%ld",
-                 AsgCod,GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if an assignment is associated to a group") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM asg_grp"
+		  " WHERE AsgCod=%ld AND GrpCod=%ld",
+                  AsgCod,GrpCod);
+   return (DB_QueryCOUNT_new ("can not check if an assignment is associated to a group") != 0);
   }
 
 /*****************************************************************************/
@@ -1734,8 +1724,6 @@ void Asg_RemoveCrsAssignments (long CrsCod)
 
 static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   {
-   char *Query;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
@@ -1743,20 +1731,19 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
       case Rol_TCH:
 	 // Students and teachers can do assignments depending on groups
 	 /***** Get if I can do an assignment from database *****/
-	 if (asprintf (&Query,"SELECT COUNT(*) FROM assignments"
-			      " WHERE AsgCod=%ld"
-			      " AND "
-			      "("
-			      "AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"	// Assignment is for the whole course
-			      " OR "
-			      "AsgCod IN"					// Assignment is for specific groups
-			      " (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
-			      ")",
-		       AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 return (DB_QueryCOUNT_free (Query,"can not check if I can do an assignment") != 0);
+	 DB_BuildQuery ("SELECT COUNT(*) FROM assignments"
+			" WHERE AsgCod=%ld"
+			" AND "
+			"("
+			"AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"	// Assignment is for the whole course
+			" OR "
+			"AsgCod IN"					// Assignment is for specific groups
+			" (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
+			" WHERE crs_grp_usr.UsrCod=%ld"
+			" AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+			")",
+		        AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 return (DB_QueryCOUNT_new ("can not check if I can do an assignment") != 0);
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -1774,13 +1761,9 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 
 unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
   {
-   char *Query;
-
    /***** Get number of assignments in a course from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM assignments WHERE CrsCod=%ld",
-                 CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of assignments in course");
+   DB_BuildQuery ("SELECT COUNT(*) FROM assignments WHERE CrsCod=%ld",CrsCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of assignments in course");
   }
 
 /*****************************************************************************/

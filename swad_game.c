@@ -1727,16 +1727,14 @@ void Gam_UnhideGame (void)
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char *Query;
 
    /***** Get number of games with a field value from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM games"
-			" WHERE Scope='%s' AND Cod=%ld"
-			" AND Title='%s' AND GamCod<>%ld",
-	         Sco_ScopeDB[Game->Scope],Game->Cod,
-	         Game->Title,Game->GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not get similar games") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM games"
+		  " WHERE Scope='%s' AND Cod=%ld"
+		  " AND Title='%s' AND GamCod<>%ld",
+	          Sco_ScopeDB[Game->Scope],Game->Cod,
+	          Game->Title,Game->GamCod);
+   return (DB_QueryCOUNT_new ("can not get similar games") != 0);
   }
 
 /*****************************************************************************/
@@ -2272,13 +2270,9 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
 
 static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
   {
-   char *Query;
-
    /***** Get if a game is associated to a group from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_grp WHERE GamCod=%ld",
-                 GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if a game is associated to groups") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM gam_grp WHERE GamCod=%ld",GamCod);
+   return (DB_QueryCOUNT_new ("can not check if a game is associated to groups") != 0);
   }
 
 /*****************************************************************************/
@@ -2287,14 +2281,11 @@ static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
 
 bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
   {
-   char *Query;
-
    /***** Get if a game is associated to a group from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_grp"
-	                " WHERE GamCod=%ld AND GrpCod=%ld",
-                 GamCod,GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if a game is associated to a group") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM gam_grp"
+		  " WHERE GamCod=%ld AND GrpCod=%ld",
+                  GamCod,GrpCod);
+   return (DB_QueryCOUNT_new ("can not check if a game is associated to a group") != 0);
   }
 
 /*****************************************************************************/
@@ -2500,18 +2491,15 @@ void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
 
 static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
   {
-   char *Query;
-
    /***** Get if I can do a game from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM games"
-			" WHERE GamCod=%ld"
-			" AND (GamCod NOT IN (SELECT GamCod FROM gam_grp) OR"
-			" GamCod IN (SELECT gam_grp.GamCod FROM gam_grp,crs_grp_usr"
-			" WHERE crs_grp_usr.UsrCod=%ld"
-			" AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
-		 GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if I can do a game") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM games"
+		  " WHERE GamCod=%ld"
+		  " AND (GamCod NOT IN (SELECT GamCod FROM gam_grp) OR"
+		  " GamCod IN (SELECT gam_grp.GamCod FROM gam_grp,crs_grp_usr"
+		  " WHERE crs_grp_usr.UsrCod=%ld"
+		  " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
+		  GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (DB_QueryCOUNT_new ("can not check if I can do a game") != 0);
   }
 
 /*****************************************************************************/
@@ -2520,13 +2508,9 @@ static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
 
 static unsigned Gam_GetNumQstsGame (long GamCod)
   {
-   char *Query;
-
    /***** Get data of questions from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_questions WHERE GamCod=%ld",
-                 GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of questions of a game");
+   DB_BuildQuery ("SELECT COUNT(*) FROM gam_questions WHERE GamCod=%ld",GamCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of questions of a game");
   }
 
 /*****************************************************************************/
@@ -3855,14 +3839,11 @@ static void Gam_RegisterIHaveAnsweredGame (long GamCod)
 
 static bool Gam_CheckIfIHaveAnsweredGame (long GamCod)
   {
-   char *Query;
-
    /***** Get number of games with a field value from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_users"
-                        " WHERE GamCod=%ld AND UsrCod=%ld",
-                 GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if you have answered a game") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM gam_users"
+		  " WHERE GamCod=%ld AND UsrCod=%ld",
+                  GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (DB_QueryCOUNT_new ("can not check if you have answered a game") != 0);
   }
 
 /*****************************************************************************/
@@ -3871,13 +3852,9 @@ static bool Gam_CheckIfIHaveAnsweredGame (long GamCod)
 
 static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
   {
-   char *Query;
-
    /***** Get number of games with a field value from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM gam_users WHERE GamCod=%ld",
-                 GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of users who have answered a game");
+   DB_BuildQuery ("SELECT COUNT(*) FROM gam_users WHERE GamCod=%ld",GamCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of users who have answered a game");
   }
 
 /*****************************************************************************/

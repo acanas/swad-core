@@ -8278,48 +8278,38 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForExpandedFolders ();
    long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
-   char *Query;
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Get if a folder is expanded from database *****/
    if (Cod > 0)
      {
       if (WorksUsrCod > 0)
-        {
-         if (asprintf (&Query,"SELECT COUNT(*) FROM expanded_folders"
-			      " WHERE UsrCod=%ld AND FileBrowser=%u"
-			      " AND Cod=%ld AND WorksUsrCod=%ld"
-			      " AND Path='%s/'",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       (unsigned) FileBrowserForExpandedFolders,
-		       Cod,WorksUsrCod,
-		       Path) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
+         DB_BuildQuery ("SELECT COUNT(*) FROM expanded_folders"
+			" WHERE UsrCod=%ld AND FileBrowser=%u"
+			" AND Cod=%ld AND WorksUsrCod=%ld"
+			" AND Path='%s/'",
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        (unsigned) FileBrowserForExpandedFolders,
+		        Cod,WorksUsrCod,
+		        Path);
       else
-        {
-         if (asprintf (&Query,"SELECT COUNT(*) FROM expanded_folders"
-			      " WHERE UsrCod=%ld AND FileBrowser=%u"
-			      " AND Cod=%ld"
-			      " AND Path='%s/'",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       (unsigned) FileBrowserForExpandedFolders,
-		       Cod,
-		       Path) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
+         DB_BuildQuery ("SELECT COUNT(*) FROM expanded_folders"
+			" WHERE UsrCod=%ld AND FileBrowser=%u"
+			" AND Cod=%ld"
+			" AND Path='%s/'",
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        (unsigned) FileBrowserForExpandedFolders,
+		        Cod,
+		        Path);
      }
    else	// Briefcase
-     {
-      if (asprintf (&Query,"SELECT COUNT(*) FROM expanded_folders"
-			   " WHERE UsrCod=%ld AND FileBrowser=%u"
-			   " AND Path='%s/'",
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    (unsigned) FileBrowserForExpandedFolders,
-		    Path) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
-   return (DB_QueryCOUNT_free (Query,"can not get check if a folder is expanded") != 0);
+      DB_BuildQuery ("SELECT COUNT(*) FROM expanded_folders"
+		     " WHERE UsrCod=%ld AND FileBrowser=%u"
+		     " AND Path='%s/'",
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     (unsigned) FileBrowserForExpandedFolders,
+		     Path);
+   return (DB_QueryCOUNT_new ("can not get check if a folder is expanded") != 0);
   }
 
 /*****************************************************************************/
@@ -10186,8 +10176,6 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
 bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
   {
-   char *Query;
-
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*
       The argument Path passed to this function is hidden if:
@@ -10195,18 +10183,17 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
          or
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
-   if (asprintf (&Query,"SELECT COUNT(*) FROM files"
-			" WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-			" AND Hidden='Y'"
-			" AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
-	         FileMetadata->FileBrowser,
-	         FileMetadata->Cod,
-	         FileMetadata->ZoneUsrCod,
-	         FileMetadata->FullPathInTree,
-	         FileMetadata->FullPathInTree) < 0)
-      Lay_NotEnoughMemoryExit ();
+   DB_BuildQuery ("SELECT COUNT(*) FROM files"
+		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		  " AND Hidden='Y'"
+		  " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
+	          FileMetadata->FileBrowser,
+	          FileMetadata->Cod,
+	          FileMetadata->ZoneUsrCod,
+	          FileMetadata->FullPathInTree,
+	          FileMetadata->FullPathInTree);
 
-   return (DB_QueryCOUNT_free (Query,"can not check if a file or folder is hidden") != 0);
+   return (DB_QueryCOUNT_new ("can not check if a file or folder is hidden") != 0);
   }
 
 /*****************************************************************************/
@@ -11720,17 +11707,15 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char *Query;
 
    /***** Get if a file or folder is public from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM files"
-			" WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-			" AND Path LIKE '%s/%%' AND Public='Y'",
-	         (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	         Cod,ZoneUsrCod,
-	         Path) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if a folder contains public files") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM files"
+		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		  " AND Path LIKE '%s/%%' AND Public='Y'",
+	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	          Cod,ZoneUsrCod,
+	          Path);
+   return (DB_QueryCOUNT_new ("can not check if a folder contains public files") != 0);
   }
 
 /*****************************************************************************/
@@ -11739,16 +11724,13 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 
 unsigned Brw_GetNumFilesUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Get current number of files published by a user from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM files"
-	                " WHERE PublisherUsrCod=%ld AND FileType IN (%u,%u)",
-                 UsrCod,
-                 (unsigned) Brw_IS_FILE,
-                 (unsigned) Brw_IS_UNKNOWN) < 0)	// Unknown entries are counted as files
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of files from a user");
+   DB_BuildQuery ("SELECT COUNT(*) FROM files"
+		  " WHERE PublisherUsrCod=%ld AND FileType IN (%u,%u)",
+                  UsrCod,
+                  (unsigned) Brw_IS_FILE,
+                  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of files from a user");
   }
 
 /*****************************************************************************/
@@ -11757,17 +11739,14 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
 
 unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Get current number of public files published by a user from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM files"
-			" WHERE PublisherUsrCod=%ld AND FileType IN (%u,%u)"
-			" AND Public='Y'",
-	         UsrCod,
-	         (unsigned) Brw_IS_FILE,
-	         (unsigned) Brw_IS_UNKNOWN) < 0)	// Unknown entries are counted as files
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of public files from a user");
+   DB_BuildQuery ("SELECT COUNT(*) FROM files"
+		  " WHERE PublisherUsrCod=%ld AND FileType IN (%u,%u)"
+		  " AND Public='Y'",
+	          UsrCod,
+	          (unsigned) Brw_IS_FILE,
+	          (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of public files from a user");
   }
 
 /*****************************************************************************/
