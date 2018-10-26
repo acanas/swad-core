@@ -557,7 +557,6 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
    extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_X_has_been_registered_successfully;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
-   char *Query;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
@@ -583,18 +582,16 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
       else if (strcasecmp (UsrDat->Nickname,NewNicknameWithoutArroba))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
-         if (asprintf (&Query,"SELECT COUNT(*) FROM usr_nicknames"
-			      " WHERE UsrCod=%ld AND Nickname='%s'",
-                       UsrDat->UsrCod,NewNicknameWithoutArroba) < 0)
-            Lay_NotEnoughMemoryExit ();
-         if (!DB_QueryCOUNT_free (Query,"can not check if nickname already existed"))        // No matches
+         DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames"
+			" WHERE UsrCod=%ld AND Nickname='%s'",
+                        UsrDat->UsrCod,NewNicknameWithoutArroba);
+         if (!DB_QueryCOUNT_new ("can not check if nickname already existed"))        // No matches
            {
             /***** Check if the new nickname matches any of the nicknames of other users *****/
-            if (asprintf (&Query,"SELECT COUNT(*) FROM usr_nicknames"
-				 " WHERE Nickname='%s' AND UsrCod<>%ld",
-			  NewNicknameWithoutArroba,UsrDat->UsrCod) < 0)
-              Lay_NotEnoughMemoryExit ();
-            if (DB_QueryCOUNT_free (Query,"can not check if nickname already existed"))	// A nickname of another user is the same that user's nickname
+            DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames"
+			   " WHERE Nickname='%s' AND UsrCod<>%ld",
+			   NewNicknameWithoutArroba,UsrDat->UsrCod);
+            if (DB_QueryCOUNT_new ("can not check if nickname already existed"))	// A nickname of another user is the same that user's nickname
               {
                Gbl.Alert.Type = Ale_WARNING;
                Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;

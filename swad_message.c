@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 #include <time.h>		// For time
@@ -1225,21 +1223,17 @@ void Msg_ConRecMsg (void)
 
 static void Msg_ExpandSentMsg (long MsgCod)
   {
-   char *Query;
-
    /***** Expand message in sent message table *****/
-   if (asprintf (&Query,"UPDATE msg_snt SET Expanded='Y'"
-                        " WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not expand a sent message");
+   DB_BuildQuery ("UPDATE msg_snt SET Expanded='Y'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not expand a sent message");
 
    /***** Contract all my other messages in sent message table *****/
-   if (asprintf (&Query,"UPDATE msg_snt SET Expanded='N'"
-                       " WHERE UsrCod=%ld AND MsgCod<>%ld",
-                 Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE (Query,"can not contract a sent message");
+   DB_BuildQuery ("UPDATE msg_snt SET Expanded='N'"
+		  " WHERE UsrCod=%ld AND MsgCod<>%ld",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
+   DB_QueryUPDATE_new ("can not contract a sent message");
   }
 
 /*****************************************************************************/
@@ -1248,21 +1242,17 @@ static void Msg_ExpandSentMsg (long MsgCod)
 
 static void Msg_ExpandReceivedMsg (long MsgCod)
   {
-   char *Query;
-
    /***** Expand message in received message table and mark it as read by me *****/
-   if (asprintf (&Query,"UPDATE msg_rcv SET Open='Y',Expanded='Y'"
-			" WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not expand a received message");
+   DB_BuildQuery ("UPDATE msg_rcv SET Open='Y',Expanded='Y'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not expand a received message");
 
    /***** Contract all my other messages in received message table *****/
-   if (asprintf (&Query,"UPDATE msg_rcv SET Expanded='N'"
-			" WHERE UsrCod=%ld AND MsgCod<>%ld",
-                 Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not contract a received message");
+   DB_BuildQuery ("UPDATE msg_rcv SET Expanded='N'"
+		  " WHERE UsrCod=%ld AND MsgCod<>%ld",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
+   DB_QueryUPDATE_new ("can not contract a received message");
   }
 
 /*****************************************************************************/
@@ -1271,14 +1261,11 @@ static void Msg_ExpandReceivedMsg (long MsgCod)
 
 static void Msg_ContractSentMsg (long MsgCod)
   {
-   char *Query;
-
    /***** Contract message in sent message table *****/
-   if (asprintf (&Query,"UPDATE msg_snt SET Expanded='N'"
-			" WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not contract a sent message");
+   DB_BuildQuery ("UPDATE msg_snt SET Expanded='N'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not contract a sent message");
   }
 
 /*****************************************************************************/
@@ -1287,14 +1274,11 @@ static void Msg_ContractSentMsg (long MsgCod)
 
 static void Msg_ContractReceivedMsg (long MsgCod)
   {
-   char *Query;
-
    /***** Contract message in received message table *****/
-   if (asprintf (&Query,"UPDATE msg_rcv SET Expanded='N'"
-			" WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not contract a received message");
+   DB_BuildQuery ("UPDATE msg_rcv SET Expanded='N'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not contract a received message");
   }
 
 /*****************************************************************************/
@@ -1303,14 +1287,11 @@ static void Msg_ContractReceivedMsg (long MsgCod)
 
 void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
   {
-   char *Query;
-
    /***** Mark message as read by user *****/
-   if (asprintf (&Query,"UPDATE msg_rcv SET Open='Y'"
-			" WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not mark a received message as open");
+   DB_BuildQuery ("UPDATE msg_rcv SET Open='Y'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,UsrCod);
+   DB_QueryUPDATE_new ("can not mark a received message as open");
   }
 
 /*****************************************************************************/
@@ -1321,7 +1302,6 @@ void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
                               struct Image *Image)
   {
-   char *Query;
    long MsgCod;
 
    /***** Check if image is received and processed *****/
@@ -1331,27 +1311,25 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
       Img_MoveImageToDefinitiveDirectory (Image);
 
    /***** Insert message subject and content in the database *****/
-   if (asprintf (&Query,"INSERT INTO msg_content"
-			" (Subject,Content,ImageName,ImageTitle,ImageURL)"
-			" VALUES"
-			" ('%s','%s','%s','%s','%s')",
-	         Subject,Content,
-	         Image->Name,
-	         Image->Title ? Image->Title : "",
-	         Image->URL   ? Image->URL   : "") < 0)
-      Lay_NotEnoughMemoryExit ();
-   MsgCod = DB_QueryINSERTandReturnCode_free (Query,"can not create message");
+   DB_BuildQuery ("INSERT INTO msg_content"
+		  " (Subject,Content,ImageName,ImageTitle,ImageURL)"
+		  " VALUES"
+		  " ('%s','%s','%s','%s','%s')",
+	          Subject,Content,
+	          Image->Name,
+	          Image->Title ? Image->Title : "",
+	          Image->URL   ? Image->URL   : "");
+   MsgCod = DB_QueryINSERTandReturnCode_new ("can not create message");
 
    /***** Insert message in sent messages *****/
-   if (asprintf (&Query,"INSERT INTO msg_snt"
-			" (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
-			" VALUES"
-			" (%ld,%ld,%ld,'N',NOW())",
-	         MsgCod,
-	         Gbl.CurrentCrs.Crs.CrsCod,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create message");
+   DB_BuildQuery ("INSERT INTO msg_snt"
+		  " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
+		  " VALUES"
+		  " (%ld,%ld,%ld,'N',NOW())",
+	          MsgCod,
+	          Gbl.CurrentCrs.Crs.CrsCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT_new ("can not create message");
 
    /***** Increment number of messages sent by me *****/
    Prf_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1410,36 +1388,30 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMess
 
 void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Move messages from msg_rcv to msg_rcv_deleted *****/
    /* Insert messages into msg_rcv_deleted */
-   if (asprintf (&Query,"INSERT IGNORE INTO msg_rcv_deleted"
-			" (MsgCod,UsrCod,Notified,Open,Replied)"
-			" SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv WHERE UsrCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove received messages");
+   DB_BuildQuery ("INSERT IGNORE INTO msg_rcv_deleted"
+		  " (MsgCod,UsrCod,Notified,Open,Replied)"
+		  " SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv WHERE UsrCod=%ld",
+                  UsrCod);
+   DB_QueryINSERT_new ("can not remove received messages");
 
    /* Delete messages from msg_rcv *****/
-   if (asprintf (&Query,"DELETE FROM msg_rcv WHERE UsrCod=%ld",UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove received messages");
+   DB_BuildQuery ("DELETE FROM msg_rcv WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove received messages");
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   if (asprintf (&Query,"INSERT IGNORE INTO msg_snt_deleted"
-			" (MsgCod,CrsCod,UsrCod,CreatTime)"
-			" SELECT MsgCod,CrsCod,UsrCod,CreatTime"
-			" FROM msg_snt WHERE UsrCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove sent messages");
+   DB_BuildQuery ("INSERT IGNORE INTO msg_snt_deleted"
+		  " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		  " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
+		  " FROM msg_snt WHERE UsrCod=%ld",
+                  UsrCod);
+   DB_QueryINSERT_new ("can not remove sent messages");
 
    /* Delete message from msg_snt *****/
-   if (asprintf (&Query,"DELETE FROM msg_snt WHERE UsrCod=%ld",UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove sent messages");
+   DB_BuildQuery ("DELETE FROM msg_snt WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove sent messages");
   }
 
 /*****************************************************************************/
@@ -1448,18 +1420,15 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 
 static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail)
   {
-   char *Query;
-
    /***** Insert message received in the database *****/
-   if (asprintf (&Query,"INSERT INTO msg_rcv"
-			" (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
-			" VALUES"
-			" (%ld,%ld,'%c','N','N','N')",
-	         MsgCod,UsrCod,
-	         NotifyByEmail ? 'Y' :
-			         'N') < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create received message");
+   DB_BuildQuery ("INSERT INTO msg_rcv"
+		  " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
+		  " VALUES"
+		  " (%ld,%ld,'%c','N','N','N')",
+	          MsgCod,UsrCod,
+	          NotifyByEmail ? 'Y' :
+			          'N');
+   DB_QueryINSERT_new ("can not create received message");
   }
 
 /*****************************************************************************/
@@ -1468,14 +1437,11 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEm
 
 static void Msg_SetReceivedMsgAsReplied (long MsgCod)
   {
-   char *Query;
-
    /***** Update received message by setting Replied field to true *****/
-   if (asprintf (&Query,"UPDATE msg_rcv SET Replied='Y'"
-			" WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update a received message");
+   DB_BuildQuery ("UPDATE msg_rcv SET Replied='Y'"
+		  " WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update a received message");
   }
 
 /*****************************************************************************/
@@ -1484,23 +1450,19 @@ static void Msg_SetReceivedMsgAsReplied (long MsgCod)
 
 static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
   {
-   char *Query;
-
    /***** Move message from msg_rcv to msg_rcv_deleted *****/
    /* Insert message into msg_rcv_deleted */
-   if (asprintf (&Query,"INSERT IGNORE INTO msg_rcv_deleted"
-			" (MsgCod,UsrCod,Notified,Open,Replied)"
-			" SELECT MsgCod,UsrCod,Notified,Open,Replied"
-			" FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove a received message");
+   DB_BuildQuery ("INSERT IGNORE INTO msg_rcv_deleted"
+		  " (MsgCod,UsrCod,Notified,Open,Replied)"
+		  " SELECT MsgCod,UsrCod,Notified,Open,Replied"
+		  " FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,UsrCod);
+   DB_QueryINSERT_new ("can not remove a received message");
 
    /* Delete message from msg_rcv *****/
-   if (asprintf (&Query,"DELETE FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
-                 MsgCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a received message");
+   DB_BuildQuery ("DELETE FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
+                  MsgCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove a received message");
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
    if (Msg_CheckIfSentMsgIsDeleted (MsgCod))
@@ -1517,22 +1479,18 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
 
 static void Msg_MoveSentMsgToDeleted (long MsgCod)
   {
-   char *Query;
-
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   if (asprintf (&Query,"INSERT IGNORE INTO msg_snt_deleted"
-			" (MsgCod,CrsCod,UsrCod,CreatTime)"
-			" SELECT MsgCod,CrsCod,UsrCod,CreatTime"
-			" FROM msg_snt WHERE MsgCod=%ld",
-                 MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove a sent message");
+   DB_BuildQuery ("INSERT IGNORE INTO msg_snt_deleted"
+		  " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		  " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
+		  " FROM msg_snt WHERE MsgCod=%ld",
+                  MsgCod);
+   DB_QueryINSERT_new ("can not remove a sent message");
 
    /* Delete message from msg_snt *****/
-   if (asprintf (&Query,"DELETE FROM msg_snt WHERE MsgCod=%ld",MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a sent message");
+   DB_BuildQuery ("DELETE FROM msg_snt WHERE MsgCod=%ld",MsgCod);
+   DB_QueryDELETE_new ("can not remove a sent message");
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
    if (Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
@@ -1545,25 +1503,21 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
 
 static void Msg_MoveMsgContentToDeleted (long MsgCod)
   {
-   char *Query;
-
    /***** Move message from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
-   if (asprintf (&Query,"INSERT IGNORE INTO msg_content_deleted"
-			" (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
-			" SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
-			" FROM msg_content WHERE MsgCod=%ld",
-                 MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove the content of a message");
+   DB_BuildQuery ("INSERT IGNORE INTO msg_content_deleted"
+		  " (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
+		  " SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
+		  " FROM msg_content WHERE MsgCod=%ld",
+                  MsgCod);
+   DB_QueryINSERT_new ("can not remove the content of a message");
 
    /* TODO: Messages in msg_content_deleted older than a certain time
       should be deleted to ensure the protection of personal data */
 
    /* Delete message from msg_content *****/
-   if (asprintf (&Query,"DELETE FROM msg_content WHERE MsgCod=%ld",MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not remove the content of a message");
+   DB_BuildQuery ("DELETE FROM msg_content WHERE MsgCod=%ld",MsgCod);
+   DB_QueryUPDATE_new ("can not remove the content of a message");
   }
 
 /*****************************************************************************/
@@ -1572,27 +1526,23 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
 
 void Msg_MoveUnusedMsgsContentToDeleted (void)
   {
-   char *Query;
-
    /***** Move messages from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
-   if (asprintf (&Query,"INSERT IGNORE INTO msg_content_deleted"
-			" (MsgCod,Subject,Content)"
-			" SELECT MsgCod,Subject,Content FROM msg_content"
-			" WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
-			" AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove the content of some messages");
+   DB_BuildQuery ("INSERT IGNORE INTO msg_content_deleted"
+		  " (MsgCod,Subject,Content)"
+		  " SELECT MsgCod,Subject,Content FROM msg_content"
+		  " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
+		  " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
+   DB_QueryINSERT_new ("can not remove the content of some messages");
 
    /* Messages in msg_content_deleted older than a certain time
       should be deleted to ensure the protection of personal data */
 
    /* Delete message from msg_content *****/
-   if (asprintf (&Query,"DELETE FROM msg_content"
-			" WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
-			" AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not remove the content of some messages");
+   DB_BuildQuery ("DELETE FROM msg_content"
+		  " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
+		  " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
+   DB_QueryUPDATE_new ("can not remove the content of some messages");
   }
 
 /*****************************************************************************/
@@ -1601,13 +1551,10 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
 
 static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
   {
-   char *Query;
-
    /***** Get if the message code is in table of sent messages not deleted *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM msg_snt"
-                        " WHERE MsgCod=%ld",MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if a sent message is deleted") == 0);	// The message has been deleted by its author when it is not present in table of sent messages undeleted
+   DB_BuildQuery ("SELECT COUNT(*) FROM msg_snt"
+		  " WHERE MsgCod=%ld",MsgCod);
+   return (DB_QueryCOUNT_new ("can not check if a sent message is deleted") == 0);	// The message has been deleted by its author when it is not present in table of sent messages undeleted
   }
 
 /*****************************************************************************/
@@ -1616,13 +1563,10 @@ static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
 
 static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
   {
-   char *Query;
-
    /***** Get if the message code is in table of received messages not deleted *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM msg_rcv"
-			" WHERE MsgCod=%ld",MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if a received message is deleted by all recipients") == 0);	// The message has been deleted by all its recipients when it is not present in table of received messages undeleted
+   DB_BuildQuery ("SELECT COUNT(*) FROM msg_rcv"
+		  " WHERE MsgCod=%ld",MsgCod);
+   return (DB_QueryCOUNT_new ("can not check if a received message is deleted by all recipients") == 0);	// The message has been deleted by all its recipients when it is not present in table of received messages undeleted
   }
 
 /*****************************************************************************/
@@ -1632,7 +1576,6 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery)
   {
    char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
-   char *Query;
 
    /***** Get number of unread messages from database *****/
    if (FilterCrsCod >= 0)	// If origin course selected
@@ -1670,21 +1613,15 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
      }
 
    if (Gbl.Msg.FilterContent[0])
-     {
-      if (asprintf (&Query,"SELECT COUNT(*) FROM msg_content"
-			   " WHERE MsgCod IN (%s)"
-			   " AND MATCH (Subject,Content) AGAINST ('%s')",
-                    SubQuery,
-                    Gbl.Msg.FilterContent) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("SELECT COUNT(*) FROM msg_content"
+		     " WHERE MsgCod IN (%s)"
+		     " AND MATCH (Subject,Content) AGAINST ('%s')",
+                     SubQuery,
+                     Gbl.Msg.FilterContent);
    else
-     {
-      if (asprintf (&Query,"SELECT COUNT(*) FROM (%s) AS T",
-                    SubQuery) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of unread messages");
+      DB_BuildQuery ("SELECT COUNT(*) FROM (%s) AS T",
+                     SubQuery);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of unread messages");
   }
 
 /*****************************************************************************/
@@ -1897,13 +1834,10 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
 static unsigned long Msg_GetNumUsrsBannedByMe (void)
   {
-   char *Query;
-
    /***** Get number of users I have banned *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM msg_banned WHERE ToUsrCod=%ld",
-                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get number of users you have banned");
+   DB_BuildQuery ("SELECT COUNT(*) FROM msg_banned WHERE ToUsrCod=%ld",
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+   return DB_QueryCOUNT_new ("can not get number of users you have banned");
   }
 
 /*****************************************************************************/
@@ -2074,15 +2008,12 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYT
 
 unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
   {
-   char *Query;
-
    /***** Get the number of unique messages sent by any teacher from this course *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM msg_snt,crs_usr"
-			" WHERE msg_snt.CrsCod=%ld AND crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
-			" AND msg_snt.UsrCod=crs_usr.UsrCod",
-                 CrsCod,CrsCod,(unsigned) Rol_TCH) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of messages sent by teachers");
+   DB_BuildQuery ("SELECT COUNT(*) FROM msg_snt,crs_usr"
+		  " WHERE msg_snt.CrsCod=%ld AND crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
+		  " AND msg_snt.UsrCod=crs_usr.UsrCod",
+                  CrsCod,CrsCod,(unsigned) Rol_TCH);
+   return (unsigned) DB_QueryCOUNT_new ("can not get the number of messages sent by teachers");
   }
 
 /*****************************************************************************/
@@ -2091,17 +2022,14 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
 
 unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Get the number of unique messages sent by any teacher from this course *****/
-   if (asprintf (&Query,"SELECT"
-			" (SELECT COUNT(*) FROM msg_snt WHERE UsrCod=%ld)"
-			" +"
-			" (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod=%ld)",
-                 UsrCod,
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get the number of messages sent by a user");
+   DB_BuildQuery ("SELECT"
+		  " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod=%ld)"
+		  " +"
+		  " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod=%ld)",
+                  UsrCod,
+                  UsrCod);
+   return DB_QueryCOUNT_new ("can not get the number of messages sent by a user");
   }
 
 /*****************************************************************************/
@@ -2112,7 +2040,6 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
 unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
   {
    const char *Table = "msg_snt";
-   char *Query;
 
    /***** Get the number of messages sent from this location
           (all the platform, current degree or current course) from database *****/
@@ -2129,69 +2056,63 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (asprintf (&Query,"SELECT COUNT(*) FROM %s",
-                       Table) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*) FROM %s",
+                        Table);
          break;
       case Sco_SCOPE_CTY:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM institutions,centres,degrees,courses,%s"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=%s.CrsCod",
-		       Table,
-		       Gbl.CurrentCty.Cty.CtyCod,
-		       Table) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM institutions,centres,degrees,courses,%s"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.CurrentCty.Cty.CtyCod,
+		        Table);
          break;
       case Sco_SCOPE_INS:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM centres,degrees,courses,%s"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=%s.CrsCod",
-		       Table,
-		       Gbl.CurrentIns.Ins.InsCod,
-		       Table) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM centres,degrees,courses,%s"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.CurrentIns.Ins.InsCod,
+		        Table);
          break;
       case Sco_SCOPE_CTR:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM degrees,courses,%s"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=%s.CrsCod",
-		       Table,
-		       Gbl.CurrentCtr.Ctr.CtrCod,
-		       Table) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM degrees,courses,%s"
+			" WHERE degrees.CtrCod=%ld"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.CurrentCtr.Ctr.CtrCod,
+		        Table);
          break;
       case Sco_SCOPE_DEG:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM courses,%s"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=%s.CrsCod",
-		       Table,
-		       Gbl.CurrentDeg.Deg.DegCod,
-		       Table) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM courses,%s"
+			" WHERE courses.DegCod=%ld"
+			" AND courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.CurrentDeg.Deg.DegCod,
+		        Table);
          break;
       case Sco_SCOPE_CRS:
-         if (asprintf (&Query,"SELECT COUNT(*)"
-			      " FROM %s"
-			      " WHERE CrsCod=%ld",
-		       Table,
-		       Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("SELECT COUNT(*)"
+			" FROM %s"
+			" WHERE CrsCod=%ld",
+		        Table,
+		        Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of sent messages");
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of sent messages");
   }
 
 /*****************************************************************************/
@@ -2202,7 +2123,6 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
 unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
   {
    char *Table;
-   char *Query;
 
    /***** Get the number of unique messages sent from this location
           (all the platform, current degree or current course) from database *****/
@@ -2215,69 +2135,63 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
          switch (Scope)
            {
             case Sco_SCOPE_SYS:
-               if (asprintf (&Query,"SELECT COUNT(*) FROM %s",
-        	             Table) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT COUNT(*) FROM %s",
+        	              Table);
                break;
             case Sco_SCOPE_CTY:
-               if (asprintf (&Query,"SELECT COUNT(*)"
-				    " FROM institutions,centres,degrees,courses,%s,msg_snt"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=%s.MsgCod",
-			     Table,
-			     Gbl.CurrentCty.Cty.CtyCod,
-			     Table) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT COUNT(*)"
+			      " FROM institutions,centres,degrees,courses,%s,msg_snt"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      Table);
                break;
             case Sco_SCOPE_INS:
-               if (asprintf (&Query,"SELECT COUNT(*)"
-				    " FROM centres,degrees,courses,%s,msg_snt"
-				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=%s.MsgCod",
-			     Table,
-			     Gbl.CurrentIns.Ins.InsCod,
-			     Table) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT COUNT(*)"
+			      " FROM centres,degrees,courses,%s,msg_snt"
+			      " WHERE centres.InsCod=%ld"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.CurrentIns.Ins.InsCod,
+			      Table);
                break;
             case Sco_SCOPE_CTR:
-               if (asprintf (&Query,"SELECT COUNT(*)"
-				    " FROM degrees,courses,%s,msg_snt"
-				    " WHERE degrees.CtrCod=%ld"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=%s.MsgCod",
-			     Table,
-			     Gbl.CurrentCtr.Ctr.CtrCod,
-			     Table) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT COUNT(*)"
+			      " FROM degrees,courses,%s,msg_snt"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      Table);
                break;
             case Sco_SCOPE_DEG:
-               if (asprintf (&Query,"SELECT COUNT(*)"
-				    " FROM courses,%s,msg_snt"
-				    " WHERE courses.DegCod=%ld"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=%s.MsgCod",
-			     Table,
-			     Gbl.CurrentDeg.Deg.DegCod,
-			     Table) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT COUNT(*)"
+			      " FROM courses,%s,msg_snt"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      Table);
                break;
             case Sco_SCOPE_CRS:
-               if (asprintf (&Query,"SELECT COUNT(*)"
-				    " FROM msg_snt,%s"
-				    " WHERE msg_snt.CrsCod=%ld"
-				    " AND msg_snt.MsgCod=%s.MsgCod",
-			     Table,
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Table) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT COUNT(*)"
+			      " FROM msg_snt,%s"
+			      " WHERE msg_snt.CrsCod=%ld"
+			      " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Table);
                break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -2288,43 +2202,41 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
          switch (Scope)
            {
             case Sco_SCOPE_SYS:
-               if (asprintf (&Query,"SELECT "
-				    "(SELECT COUNT(*)"
-				    " FROM msg_rcv"
-				    " WHERE Notified='Y')"
-				    " + "
-				    "(SELECT COUNT(*)"
-				    " FROM msg_rcv_deleted"
-				    " WHERE Notified='Y')") < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_rcv"
+			      " WHERE Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_rcv_deleted"
+			      " WHERE Notified='Y')");
                break;
             case Sco_SCOPE_CTY:
-               if (asprintf (&Query,"SELECT "
-				    "(SELECT COUNT(*)"
-				    " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				    " AND msg_rcv.Notified='Y')"
-				    " + "
-				    "(SELECT COUNT(*)"
-				    " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
-				    " WHERE institutions.CtyCod=%ld"
-				    " AND institutions.InsCod=centres.InsCod"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				    " AND msg_rcv_deleted.Notified='Y')",
-			     Gbl.CurrentCty.Cty.CtyCod,
-			     Gbl.CurrentCty.Cty.CtyCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
+			      " WHERE institutions.CtyCod=%ld"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      Gbl.CurrentCty.Cty.CtyCod);
                break;
             case Sco_SCOPE_INS:
-               if (asprintf (&Query,"SELECT "
+               DB_BuildQuery ("SELECT "
 				    "(SELECT COUNT(*)"
 				    " FROM centres,degrees,courses,msg_snt,msg_rcv"
 				    " WHERE centres.InsCod=%ld"
@@ -2343,65 +2255,61 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
 				    " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 				    " AND msg_rcv_deleted.Notified='Y')",
 			     Gbl.CurrentIns.Ins.InsCod,
-			     Gbl.CurrentIns.Ins.InsCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+			     Gbl.CurrentIns.Ins.InsCod);
                break;
             case Sco_SCOPE_CTR:
-               if (asprintf (&Query,"SELECT "
-				    "(SELECT COUNT(*)"
-				    " FROM degrees,courses,msg_snt,msg_rcv"
-				    " WHERE degrees.CtrCod=%ld"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				    " AND msg_rcv.Notified='Y')"
-				    " + "
-				    "(SELECT COUNT(*)"
-				    " FROM degrees,courses,msg_snt,msg_rcv_deleted"
-				    " WHERE degrees.CtrCod=%ld"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				    " AND msg_rcv_deleted.Notified='Y')",
-			     Gbl.CurrentCtr.Ctr.CtrCod,
-			     Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM degrees,courses,msg_snt,msg_rcv"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM degrees,courses,msg_snt,msg_rcv_deleted"
+			      " WHERE degrees.CtrCod=%ld"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      Gbl.CurrentCtr.Ctr.CtrCod);
                break;
             case Sco_SCOPE_DEG:
-               if (asprintf (&Query,"SELECT "
-				    "(SELECT COUNT(*)"
-				    " FROM courses,msg_snt,msg_rcv"
-				    " WHERE courses.DegCod=%ld"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				    " AND msg_rcv.Notified='Y')"
-				    " + "
-				    "(SELECT COUNT(*)"
-				    " FROM courses,msg_snt,msg_rcv_deleted"
-				    " WHERE courses.DegCod=%ld"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				    " AND msg_rcv_deleted.Notified='Y')",
-			     Gbl.CurrentDeg.Deg.DegCod,
-			     Gbl.CurrentDeg.Deg.DegCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM courses,msg_snt,msg_rcv"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM courses,msg_snt,msg_rcv_deleted"
+			      " WHERE courses.DegCod=%ld"
+			      " AND courses.CrsCod=msg_snt.CrsCod"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      Gbl.CurrentDeg.Deg.DegCod);
                break;
             case Sco_SCOPE_CRS:
-               if (asprintf (&Query,"SELECT "
-				    "(SELECT COUNT(*)"
-				    " FROM msg_snt,msg_rcv"
-				    " WHERE msg_snt.CrsCod=%ld"
-				    " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				    " AND msg_rcv.Notified='Y')"
-				    " + "
-				    "(SELECT COUNT(*)"
-				    " FROM msg_snt,msg_rcv_deleted"
-				    " WHERE msg_snt.CrsCod=%ld"
-				    " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				    " AND msg_rcv_deleted.Notified='Y')",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Gbl.CurrentCrs.Crs.CrsCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
+               DB_BuildQuery ("SELECT "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_snt,msg_rcv"
+			      " WHERE msg_snt.CrsCod=%ld"
+			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			      " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			      " FROM msg_snt,msg_rcv_deleted"
+			      " WHERE msg_snt.CrsCod=%ld"
+			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			      " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Gbl.CurrentCrs.Crs.CrsCod);
                break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -2409,7 +2317,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
            }
          break;
      }
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of received messages");
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of received messages");
   }
 
 /*****************************************************************************/
@@ -3408,7 +3316,6 @@ static void Msg_WriteMsgTo (long MsgCod)
    extern const char *Txt_and_X_other_recipients;
    extern const char *Txt_unknown_recipient;
    extern const char *Txt_unknown_recipients;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRcp;
@@ -3430,13 +3337,12 @@ static void Msg_WriteMsgTo (long MsgCod)
      };
 
    /***** Get number of recipients of a message from database *****/
-   if (asprintf (&Query,"SELECT "
-			"(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod=%ld)"
-			" + "
-			"(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod=%ld)",
-	         MsgCod,MsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRecipientsTotal = (unsigned) DB_QueryCOUNT_free (Query,"can not get number of recipients");
+   DB_BuildQuery ("SELECT "
+		  "(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod=%ld)"
+		  " + "
+		  "(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod=%ld)",
+	          MsgCod,MsgCod);
+   NumRecipientsTotal = (unsigned) DB_QueryCOUNT_new ("can not get number of recipients");
 
    /***** Get recipients of a message from database *****/
    DB_BuildQuery ("(SELECT msg_rcv.UsrCod,'N',msg_rcv.Open,"
@@ -3685,7 +3591,6 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
 void Msg_BanSenderWhenShowingMsgs (void)
   {
    extern const char *Txt_From_this_time_you_will_not_receive_messages_from_X;
-   char *Query;
 
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -3695,13 +3600,12 @@ void Msg_BanSenderWhenShowingMsgs (void)
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
-   if (asprintf (&Query,"REPLACE INTO msg_banned"
-			" (FromUsrCod,ToUsrCod)"
-			" VALUES"
-			" (%ld,%ld)",
-                 Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not ban sender");
+   DB_BuildQuery ("REPLACE INTO msg_banned"
+		  " (FromUsrCod,ToUsrCod)"
+		  " VALUES"
+		  " (%ld,%ld)",
+                  Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryREPLACE_new ("can not ban sender");
 
    /***** Show alert with the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -3746,7 +3650,6 @@ void Msg_UnbanSenderWhenListingUsrs (void)
 static void Msg_UnbanSender (void)
   {
    extern const char *Txt_From_this_time_you_can_receive_messages_from_X;
-   char *Query;
 
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -3756,11 +3659,10 @@ static void Msg_UnbanSender (void)
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
-   if (asprintf (&Query,"DELETE FROM msg_banned"
-			" WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
-                 Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not ban sender");
+   DB_BuildQuery ("DELETE FROM msg_banned"
+		  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
+                  Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryDELETE_new ("can not ban sender");
 
    /***** Show alert with the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -3775,14 +3677,11 @@ static void Msg_UnbanSender (void)
 
 static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   {
-   char *Query;
-
    /***** Get if FromUsrCod is banned by ToUsrCod *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM msg_banned"
-			" WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
-	         FromUsrCod,ToUsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if a user is banned") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM msg_banned"
+		  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
+	          FromUsrCod,ToUsrCod);
+   return (DB_QueryCOUNT_new ("can not check if a user is banned") != 0);
   }
 
 /*****************************************************************************/
@@ -3791,15 +3690,12 @@ static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
 
 void Msg_RemoveUsrFromBanned (long UsrCod)
   {
-   char *Query;
-
    /***** Remove pair (sender's code - my code)
           from table of banned senders *****/
-   if (asprintf (&Query,"DELETE FROM msg_banned"
-                        " WHERE FromUsrCod=%ld OR ToUsrCod=%ld",
-                 UsrCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user from table of banned users");
+   DB_BuildQuery ("DELETE FROM msg_banned"
+		  " WHERE FromUsrCod=%ld OR ToUsrCod=%ld",
+                  UsrCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove user from table of banned users");
   }
 
 /*****************************************************************************/

@@ -629,15 +629,12 @@ long Rec_GetFieldCod (void)
 
 unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
   {
-   char *Query;
-
    /***** Get number of cards with a given field in a course from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_records WHERE FieldCod=%ld",
-                 FieldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of cards"
-	                                       " with a given field not empty"
-	                                       " in a course");
+   DB_BuildQuery ("SELECT COUNT(*) FROM crs_records WHERE FieldCod=%ld",
+                  FieldCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of cards"
+	                                " with a given field not empty"
+	                                " in a course");
   }
 
 /*****************************************************************************/

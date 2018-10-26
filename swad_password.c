@@ -578,23 +578,20 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
   {
-   char *Query;
    bool Found;
 
    /***** Get if password is found in user's ID from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_IDs WHERE UsrID='%s'",
-                 PlainPassword) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Found = (DB_QueryCOUNT_free (Query,"can not check if a password matches a user's ID") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_IDs WHERE UsrID='%s'",
+                  PlainPassword);
+   Found = (DB_QueryCOUNT_new ("can not check if a password matches a user's ID") != 0);
 
    /***** Get if password is found in first name or surnames of anybody, from database *****/
    if (!Found)
      {
-      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
-		           " WHERE FirstName='%s' OR Surname1='%s' OR Surname2='%s'",
-	            PlainPassword,PlainPassword,PlainPassword) < 0)
-         Lay_NotEnoughMemoryExit ();
-      Found = (DB_QueryCOUNT_free (Query,"can not check if a password matches a first name or a surname") != 0);
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
+		     " WHERE FirstName='%s' OR Surname1='%s' OR Surname2='%s'",
+	             PlainPassword,PlainPassword,PlainPassword);
+      Found = (DB_QueryCOUNT_new ("can not check if a password matches a first name or a surname") != 0);
      }
 
    return Found;
@@ -606,25 +603,17 @@ static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
 
 static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPassword,long UsrCod)
   {
-   char *Query;
-
    /***** Get number of other users who use a password from database *****/
    /* Query database */
    if (UsrCod > 0)
-     {
-      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
-			   " WHERE Password='%s' AND UsrCod<>%ld",
-	            EncryptedPassword,UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
+		     " WHERE Password='%s' AND UsrCod<>%ld",
+	             EncryptedPassword,UsrCod);
    else
-     {
-      if (asprintf (&Query,"SELECT COUNT(*) FROM usr_data"
-			   " WHERE Password='%s'",
-	            EncryptedPassword) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not check if a password is trivial");
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
+		     " WHERE Password='%s'",
+	             EncryptedPassword);
+   return (unsigned) DB_QueryCOUNT_new ("can not check if a password is trivial");
   }
 
 /*****************************************************************************/

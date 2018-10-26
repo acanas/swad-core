@@ -1863,14 +1863,11 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod)
   {
-   char *Query;
-
    /***** Get number of institutions in current country with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM institutions"
-                        " WHERE CtyCod=%ld AND %s='%s' AND InsCod<>%ld",
-                 CtyCod,FieldName,Name,InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of an institution already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM institutions"
+		  " WHERE CtyCod=%ld AND %s='%s' AND InsCod<>%ld",
+                  CtyCod,FieldName,Name,InsCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of an institution already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -2447,12 +2444,9 @@ static void Ins_CreateInstitution (unsigned Status)
 
 unsigned Ins_GetNumInssTotal (void)
   {
-   char *Query;
-
    /***** Get total number of degrees from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM institutions") < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the total number of institutions");
+   DB_BuildQuery ("SELECT COUNT(*) FROM institutions");
+   return (unsigned) DB_QueryCOUNT_new ("can not get the total number of institutions");
   }
 
 /*****************************************************************************/
@@ -2461,13 +2455,9 @@ unsigned Ins_GetNumInssTotal (void)
 
 unsigned Ins_GetNumInssInCty (long CtyCod)
   {
-   char *Query;
-
    /***** Get number of degrees of a place from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM institutions WHERE CtyCod=%ld",
-                 CtyCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get the number of institutions in a country");
+   DB_BuildQuery ("SELECT COUNT(*) FROM institutions WHERE CtyCod=%ld",CtyCod);
+   return (unsigned) DB_QueryCOUNT_new ("can not get the number of institutions in a country");
   }
 
 /*****************************************************************************/
@@ -2476,15 +2466,12 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
 
 unsigned Ins_GetNumInssWithCtrs (const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of institutions with centres from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT institutions.InsCod)"
-			" FROM institutions,centres"
-			" WHERE %sinstitutions.InsCod=centres.InsCod",
-                 SubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with centres");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT institutions.InsCod)"
+		  " FROM institutions,centres"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod",
+                  SubQuery);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of institutions with centres");
   }
 
 /*****************************************************************************/
@@ -2493,16 +2480,13 @@ unsigned Ins_GetNumInssWithCtrs (const char *SubQuery)
 
 unsigned Ins_GetNumInssWithDegs (const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of institutions with degrees from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT institutions.InsCod)"
-			" FROM institutions,centres,degrees"
-			" WHERE %sinstitutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod",
-                 SubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with degrees");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT institutions.InsCod)"
+		  " FROM institutions,centres,degrees"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=degrees.CtrCod",
+                  SubQuery);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of institutions with degrees");
   }
 
 /*****************************************************************************/
@@ -2511,17 +2495,14 @@ unsigned Ins_GetNumInssWithDegs (const char *SubQuery)
 
 unsigned Ins_GetNumInssWithCrss (const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of institutions with courses from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT institutions.InsCod)"
-			" FROM institutions,centres,degrees,courses"
-			" WHERE %sinstitutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod",
-                 SubQuery) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with courses");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT institutions.InsCod)"
+		  " FROM institutions,centres,degrees,courses"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=degrees.CtrCod"
+		  " AND degrees.DegCod=courses.DegCod",
+                  SubQuery);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of institutions with courses");
   }
 
 /*****************************************************************************/
@@ -2530,19 +2511,16 @@ unsigned Ins_GetNumInssWithCrss (const char *SubQuery)
 
 unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
-   char *Query;
-
    /***** Get number of institutions with users from database *****/
-   if (asprintf (&Query,"SELECT COUNT(DISTINCT institutions.InsCod)"
-			" FROM institutions,centres,degrees,courses,crs_usr"
-			" WHERE %sinstitutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.Role=%u",
-                SubQuery,(unsigned) Role) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (unsigned) DB_QueryCOUNT_free (Query,"can not get number of institutions with users");
+   DB_BuildQuery ("SELECT COUNT(DISTINCT institutions.InsCod)"
+		  " FROM institutions,centres,degrees,courses,crs_usr"
+		  " WHERE %sinstitutions.InsCod=centres.InsCod"
+		  " AND centres.CtrCod=degrees.CtrCod"
+		  " AND degrees.DegCod=courses.DegCod"
+		  " AND courses.CrsCod=crs_usr.CrsCod"
+		  " AND crs_usr.Role=%u",
+                 SubQuery,(unsigned) Role);
+   return (unsigned) DB_QueryCOUNT_new ("can not get number of institutions with users");
   }
 
 /*****************************************************************************/

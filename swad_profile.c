@@ -679,17 +679,14 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
   {
-   char *Query;
-
    /***** Select number of rows with figure
           greater than the figure of this user *****/
-   if (asprintf (&Query,"SELECT COUNT(*)+1 FROM usr_figures"
-			" WHERE UsrCod<>%ld"	// Really not necessary here
-			" AND %s>"
-			"(SELECT %s FROM usr_figures WHERE UsrCod=%ld)",
-	         UsrCod,FieldName,FieldName,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get ranking using a figure");
+   DB_BuildQuery ("SELECT COUNT(*)+1 FROM usr_figures"
+		  " WHERE UsrCod<>%ld"	// Really not necessary here
+		  " AND %s>"
+		  "(SELECT %s FROM usr_figures WHERE UsrCod=%ld)",
+	          UsrCod,FieldName,FieldName,UsrCod);
+   return DB_QueryCOUNT_new ("can not get ranking using a figure");
   }
 
 /*****************************************************************************/
@@ -698,13 +695,9 @@ static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
 
 static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
   {
-   char *Query;
-
    /***** Select number of rows with values already calculated *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_figures WHERE %s>=0",
-                 FieldName) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get number of users with a figure");
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_figures WHERE %s>=0",FieldName);
+   return DB_QueryCOUNT_new ("can not get number of users with a figure");
   }
 
 /*****************************************************************************/
@@ -713,27 +706,24 @@ static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
 
 static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
   {
-   char *Query;
-
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
-   if (asprintf (&Query,"SELECT COUNT(*)+1 FROM"
-			" (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-			" AS NumClicksPerDay"
-			" FROM usr_figures"
-			" WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
-			" AND NumClicks>0"
-			" AND UNIX_TIMESTAMP(FirstClickTime)>0)"
-			" AS TableNumClicksPerDay"
-			" WHERE NumClicksPerDay>"
-			"(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-			" FROM usr_figures"
-			" WHERE UsrCod=%ld"
-			" AND NumClicks>0"
-			" AND UNIX_TIMESTAMP(FirstClickTime)>0)",
-	         UsrCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get ranking using number of clicks per day");
+   DB_BuildQuery ("SELECT COUNT(*)+1 FROM"
+		  " (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+		  " AS NumClicksPerDay"
+		  " FROM usr_figures"
+		  " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
+		  " AND NumClicks>0"
+		  " AND UNIX_TIMESTAMP(FirstClickTime)>0)"
+		  " AS TableNumClicksPerDay"
+		  " WHERE NumClicksPerDay>"
+		  "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+		  " FROM usr_figures"
+		  " WHERE UsrCod=%ld"
+		  " AND NumClicks>0"
+		  " AND UNIX_TIMESTAMP(FirstClickTime)>0)",
+	          UsrCod,UsrCod);
+   return DB_QueryCOUNT_new ("can not get ranking using number of clicks per day");
   }
 
 /*****************************************************************************/
@@ -742,14 +732,11 @@ static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
 
 static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
   {
-   char *Query;
-
    /***** Select number of rows with values already calculated *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_figures"
-			" WHERE NumClicks>0"
-			" AND UNIX_TIMESTAMP(FirstClickTime)>0") < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryCOUNT_free (Query,"can not get number of users with number of clicks per day");
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_figures"
+		  " WHERE NumClicks>0"
+		  " AND UNIX_TIMESTAMP(FirstClickTime)>0");
+   return DB_QueryCOUNT_new ("can not get number of users with number of clicks per day");
   }
 
 /*****************************************************************************/
@@ -900,10 +887,8 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of clicks from database *****/
-      if (asprintf (&Query,"SELECT COUNT(*) FROM log_full WHERE UsrCod=%ld",
-	            UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      UsrFigures.NumClicks = (long) DB_QueryCOUNT_free (Query,"can not get number of clicks");
+      DB_BuildQuery ("SELECT COUNT(*) FROM log_full WHERE UsrCod=%ld",UsrCod);
+      UsrFigures.NumClicks = (long) DB_QueryCOUNT_new ("can not get number of clicks");
 
       /***** Update number of clicks in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
@@ -1101,12 +1086,8 @@ void Prf_RemoveUsrFigures (long UsrCod)
 
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_figures WHERE UsrCod=%ld",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not get user's first click") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_figures WHERE UsrCod=%ld",UsrCod);
+   return (DB_QueryCOUNT_new ("can not get user's first click") != 0);
   }
 
 /*****************************************************************************/

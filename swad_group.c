@@ -3797,15 +3797,12 @@ void Grp_RecFormNewGrp (void)
 
 static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCod)
   {
-   char *Query;
-
    /***** Get number of group types with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_grp_types"
-			" WHERE CrsCod=%ld AND GrpTypName='%s'"
-			" AND GrpTypCod<>%ld",
-                 Gbl.CurrentCrs.Crs.CrsCod,GrpTypName,GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of type of group already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp_types"
+		  " WHERE CrsCod=%ld AND GrpTypName='%s'"
+		  " AND GrpTypCod<>%ld",
+                  Gbl.CurrentCrs.Crs.CrsCod,GrpTypName,GrpTypCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of type of group already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -3814,14 +3811,11 @@ static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCo
 
 static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long GrpCod)
   {
-   char *Query;
-
    /***** Get number of groups with a type and a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_grp"
-                        " WHERE GrpTypCod=%ld AND GrpName='%s' AND GrpCod<>%ld",
-                 GrpTypCod,GrpName,GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of group already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp"
+		  " WHERE GrpTypCod=%ld AND GrpName='%s' AND GrpCod<>%ld",
+                  GrpTypCod,GrpName,GrpCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of group already existed") != 0);
   }
 
 /*****************************************************************************/

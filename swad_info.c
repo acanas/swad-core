@@ -522,16 +522,13 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
 
 static bool Inf_CheckIfIHaveReadInfo (void)
   {
-   char *Query;
-
    /***** Get if info source is already stored in database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_info_read"
-                        " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
-	         Gbl.Usrs.Me.UsrDat.UsrCod,
-	         Gbl.CurrentCrs.Crs.CrsCod,
-	         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not get if I have read course info") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM crs_info_read"
+		  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.CurrentCrs.Crs.CrsCod,
+	          Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+   return (DB_QueryCOUNT_new ("can not get if I have read course info") != 0);
   }
 
 /*****************************************************************************/

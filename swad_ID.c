@@ -844,14 +844,11 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
   {
-   char *Query;
-
    /***** Get if ID is confirmed from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM usr_IDs"
-		        " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
-	         UsrCod,UsrID) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if ID is confirmed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_IDs"
+		  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
+	          UsrCod,UsrID);
+   return (DB_QueryCOUNT_new ("can not check if ID is confirmed") != 0);
   }
 
 /*****************************************************************************/

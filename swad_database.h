@@ -47,18 +47,23 @@ unsigned long DB_QueryCOUNT_new (const char *MsgError);
 unsigned long DB_QueryCOUNT_free (const char *Query,const char *MsgError);
 unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError);
 
+void DB_QueryINSERT_new (const char *MsgError);
 void DB_QueryINSERT_free (const char *Query,const char *MsgError);
 void DB_QueryINSERT (const char *Query,const char *MsgError);
 
+long DB_QueryINSERTandReturnCode_new (const char *MsgError);
 long DB_QueryINSERTandReturnCode_free (const char *Query,const char *MsgError);
 long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError);
 
+void DB_QueryREPLACE_new (const char *MsgError);
 void DB_QueryREPLACE_free (const char *Query,const char *MsgError);
 void DB_QueryREPLACE (const char *Query,const char *MsgError);
 
+void DB_QueryUPDATE_new (const char *MsgError);
 void DB_QueryUPDATE_free (const char *Query,const char *MsgError);
 void DB_QueryUPDATE (const char *Query,const char *MsgError);
 
+void DB_QueryDELETE_new (const char *MsgError);
 void DB_QueryDELETE_free (const char *Query,const char *MsgError);
 void DB_QueryDELETE (const char *Query,const char *MsgError);
 

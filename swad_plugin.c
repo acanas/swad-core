@@ -596,14 +596,11 @@ void Plg_RenamePlugin (void)
 
 static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
   {
-   char *Query;
-
    /***** Get number of plugins with a name from database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM plugins"
-	                " WHERE Name='%s' AND PlgCod<>%ld",
-                 Name,PlgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return (DB_QueryCOUNT_free (Query,"can not check if the name of a plugin already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM plugins"
+		  " WHERE Name='%s' AND PlgCod<>%ld",
+                  Name,PlgCod);
+   return (DB_QueryCOUNT_new ("can not check if the name of a plugin already existed") != 0);
   }
 
 /*****************************************************************************/
