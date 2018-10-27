@@ -537,8 +537,8 @@ void Sta_AskShowCrsHits (void)
 
          /***** Option a) Listing of clicks distributed by some metric *****/
          fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_TOP %s\">%s:</td>"
-			    "<td colspan=\"2\" class=\"LEFT_TOP\">",
+			    "<td class=\"RIGHT_MIDDLE %s\">%s:</td>"
+			    "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
 
          if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
@@ -735,10 +735,10 @@ void Sta_AskShowGblHits (void)
 
    /***** Count type for the statistic *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
+                      "<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"CountType\" class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP\">",
+                      "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
    Sta_WriteSelectorCountType ();
 
@@ -816,10 +816,10 @@ static void Sta_WriteSelectorAction (void)
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
+                      "<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"StatAct\" class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP\">"
+                      "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
                       "<select id=\"StatAct\" name=\"StatAct\""
                       " style=\"width:375px;\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Action);

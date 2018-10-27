@@ -1518,15 +1518,14 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
      }
    else		// Info is not stored in database, so insert it
      {
-      if (asprintf (&Query,"INSERT INTO crs_info_src"
-			   " (CrsCod,InfoType,InfoSrc,MustBeRead)"
-			   " VALUES"
-			   " (%ld,'%s','%s','N')",
-		    Gbl.CurrentCrs.Crs.CrsCod,
-		    Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
-		    Inf_NamesInDBForInfoSrc[InfoSrc]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not insert info source");
+      DB_BuildQuery ("INSERT INTO crs_info_src"
+		     " (CrsCod,InfoType,InfoSrc,MustBeRead)"
+		     " VALUES"
+		     " (%ld,'%s','%s','N')",
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		     Inf_NamesInDBForInfoSrc[InfoSrc]);
+      DB_QueryINSERT_new ("can not insert info source");
      }
   }
 

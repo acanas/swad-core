@@ -1193,21 +1193,18 @@ void Hld_RecFormNewHoliday2 (void)
 
 static void Hld_CreateHoliday (struct Holiday *Hld)
   {
-   char *Query;
-
    /***** Create a new holiday or no school period *****/
-   if (asprintf (&Query,"INSERT INTO holidays"
-			" (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
-			" VALUES"
-			" (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
-	         Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
-	         Hld->StartDate.Year,
-	         Hld->StartDate.Month,
-	         Hld->StartDate.Day,
-	         Hld->EndDate.Year,
-	         Hld->EndDate.Month,
-	         Hld->EndDate.Day,
-	         Hld->Name) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create holiday");
+   DB_BuildQuery ("INSERT INTO holidays"
+		  " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
+		  " VALUES"
+		  " (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
+	          Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
+	          Hld->StartDate.Year,
+	          Hld->StartDate.Month,
+	          Hld->StartDate.Day,
+	          Hld->EndDate.Year,
+	          Hld->EndDate.Month,
+	          Hld->EndDate.Day,
+	          Hld->Name);
+   DB_QueryINSERT_new ("can not create holiday");
   }

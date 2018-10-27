@@ -82,7 +82,6 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
   {
    extern const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char *Query;
    bool ItsMe;
 
    /***** Get user to be reported as possible duplicate *****/
@@ -93,14 +92,13 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
       if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
 	 /***** Insert possible duplicate into database *****/
-         if (asprintf (&Query,"REPLACE INTO usr_duplicated"
-			      " (UsrCod,InformerCod,InformTime)"
-			      " VALUES"
-			      " (%ld,%ld,NOW())",
-                       Gbl.Usrs.Other.UsrDat.UsrCod,
-                       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryINSERT_free (Query,"can not report duplicate");
+         DB_BuildQuery ("REPLACE INTO usr_duplicated"
+			" (UsrCod,InformerCod,InformTime)"
+			" VALUES"
+			" (%ld,%ld,NOW())",
+                        Gbl.Usrs.Other.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod);
+         DB_QueryINSERT_new ("can not report duplicate");
 
          /***** Show feedback message *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);

@@ -2344,7 +2344,6 @@ void Gam_RemoveGroupsOfType (long GrpTypCod)
 static void Gam_CreateGrps (long GamCod)
   {
    unsigned NumGrpSel;
-   char *Query;
 
    /***** Create groups of the game *****/
    for (NumGrpSel = 0;
@@ -2352,13 +2351,12 @@ static void Gam_CreateGrps (long GamCod)
 	NumGrpSel++)
      {
       /* Create group */
-      if (asprintf (&Query,"INSERT INTO gam_grp"
-			   " (GamCod,GrpCod)"
-			   " VALUES"
-			   " (%ld,%ld)",
-                    GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not associate a group to a game");
+      DB_BuildQuery ("INSERT INTO gam_grp"
+		     " (GamCod,GrpCod)"
+		     " VALUES"
+		     " (%ld,%ld)",
+                     GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+      DB_QueryINSERT_new ("can not associate a group to a game");
      }
   }
 
@@ -3045,7 +3043,6 @@ void Gam_AddTstQuestionsToGame (void)
    char LongStr[1 + 10 + 1];
    long QstCod;
    int MaxQstInd;
-   char *Query;
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
@@ -3080,13 +3077,12 @@ void Gam_AddTstQuestionsToGame (void)
       MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
 
       /* Insert question in the table of questions */
-      if (asprintf (&Query,"INSERT INTO gam_questions"
-			   " (GamCod,QstCod,QstInd)"
-			   " VALUES"
-			   " (%ld,%ld,%u)",
-	            Game.GamCod,QstCod,(unsigned) (MaxQstInd + 1)) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not create question");
+      DB_BuildQuery ("INSERT INTO gam_questions"
+		     " (GamCod,QstCod,QstInd)"
+		     " VALUES"
+		     " (%ld,%ld,%u)",
+	             Game.GamCod,QstCod,(unsigned) (MaxQstInd + 1));
+      DB_QueryINSERT_new ("can not create question");
      }
 
    /***** Free space for selected question codes *****/
@@ -3805,15 +3801,12 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
 
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
-   char *Query;
-
    /***** Increase number of users who have selected
           the answer AnsInd in the question QstCod *****/
-   if (asprintf (&Query,"UPDATE gam_answers SET NumUsrs=NumUsrs+1"
-                        " WHERE QstCod=%ld AND AnsInd=%u",
-                 QstCod,AnsInd) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not register your answer to the game");
+   DB_BuildQuery ("UPDATE gam_answers SET NumUsrs=NumUsrs+1"
+		  " WHERE QstCod=%ld AND AnsInd=%u",
+                  QstCod,AnsInd);
+   DB_QueryINSERT_new ("can not register your answer to the game");
   }
 
 /*****************************************************************************/
@@ -3822,15 +3815,12 @@ static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
 static void Gam_RegisterIHaveAnsweredGame (long GamCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"INSERT INTO gam_users"
-	                " (GamCod,UsrCod)"
-                        " VALUES"
-                        " (%ld,%ld)",
-                 GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not register that you have answered the game");
+   DB_BuildQuery ("INSERT INTO gam_users"
+		  " (GamCod,UsrCod)"
+		  " VALUES"
+		  " (%ld,%ld)",
+                  GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT_new ("can not register that you have answered the game");
   }
 
 /*****************************************************************************/

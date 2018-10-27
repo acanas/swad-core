@@ -855,16 +855,14 @@ void Mai_RecFormNewMailDomain (void)
 static void Mai_CreateMailDomain (struct Mail *Mai)
   {
    extern const char *Txt_Created_new_email_domain_X;
-   char *Query;
 
    /***** Create a new mail *****/
-   if (asprintf (&Query,"INSERT INTO mail_domains"
-			" (Domain,Info)"
-			" VALUES"
-			" ('%s','%s')",
-	         Mai->Domain,Mai->Info) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create mail domain");
+   DB_BuildQuery ("INSERT INTO mail_domains"
+		  " (Domain,Info)"
+		  " VALUES"
+		  " ('%s','%s')",
+	          Mai->Domain,Mai->Info);
+   DB_QueryINSERT_new ("can not create mail domain");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

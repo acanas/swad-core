@@ -851,16 +851,14 @@ void Lnk_RecFormNewLink (void)
 static void Lnk_CreateLink (struct Link *Lnk)
   {
    extern const char *Txt_Created_new_link_X;
-   char *Query;
 
    /***** Create a new link *****/
-   if (asprintf (&Query,"INSERT INTO links"
-			" (ShortName,FullName,WWW)"
-			" VALUES"
-			" ('%s','%s','%s')",
-                 Lnk->ShrtName,Lnk->FullName,Lnk->WWW) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create institutional link");
+   DB_BuildQuery ("INSERT INTO links"
+		  " (ShortName,FullName,WWW)"
+		  " VALUES"
+		  " ('%s','%s','%s')",
+                  Lnk->ShrtName,Lnk->FullName,Lnk->WWW);
+   DB_QueryINSERT_new ("can not create institutional link");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

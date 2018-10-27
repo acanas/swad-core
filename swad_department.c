@@ -1061,16 +1061,14 @@ void Dpt_RecFormNewDpt (void)
 static void Dpt_CreateDepartment (struct Department *Dpt)
   {
    extern const char *Txt_Created_new_department_X;
-   char *Query;
 
    /***** Create a new department *****/
-   if (asprintf (&Query,"INSERT INTO departments"
-			" (InsCod,ShortName,FullName,WWW)"
-			" VALUES"
-			" (%ld,'%s','%s','%s')",
-                 Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create a new department");
+   DB_BuildQuery ("INSERT INTO departments"
+		  " (InsCod,ShortName,FullName,WWW)"
+		  " VALUES"
+		  " (%ld,'%s','%s','%s')",
+                  Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
+   DB_QueryINSERT_new ("can not create a new department");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

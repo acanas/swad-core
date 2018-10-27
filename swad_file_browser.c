@@ -7879,18 +7879,16 @@ static void Brw_AddPathToClipboards (void)
   {
    long Cod = Brw_GetCodForClipboard ();
    long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
-   char *Query;
 
    /***** Add path to clipboards *****/
-   if (asprintf (&Query,"INSERT INTO clipboard"
-			" (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"
-			" VALUES"
-			" (%ld,%u,%ld,%ld,%u,'%s')",
-	         Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Gbl.FileBrowser.Type,
-	         Cod,WorksUsrCod,
-	         (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not add source of copy to clipboard");
+   DB_BuildQuery ("INSERT INTO clipboard"
+		  " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"
+		  " VALUES"
+		  " (%ld,%u,%ld,%ld,%u,'%s')",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Gbl.FileBrowser.Type,
+	          Cod,WorksUsrCod,
+	          (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree);
+   DB_QueryINSERT_new ("can not add source of copy to clipboard");
   }
 
 /*****************************************************************************/
@@ -8032,20 +8030,18 @@ static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForExpandedFolders ();
    long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
-   char *Query;
 
    /***** Update path time in table of expanded folders *****/
    // Path must be stored with final '/'
-   if (asprintf (&Query,"INSERT INTO expanded_folders"
-			" (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
-			" VALUES"
-			" (%ld,%u,%ld,%ld,'%s/',NOW())",
-	         Gbl.Usrs.Me.UsrDat.UsrCod,
-	         (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
-	         Cod,WorksUsrCod,
-	         Path) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not expand the content of a folder");
+   DB_BuildQuery ("INSERT INTO expanded_folders"
+		  " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
+		  " VALUES"
+		  " (%ld,%u,%ld,%ld,'%s/',NOW())",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
+	          Cod,WorksUsrCod,
+	          Path);
+   DB_QueryINSERT_new ("can not expand the content of a folder");
   }
 
 /*****************************************************************************/
@@ -11675,27 +11671,23 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
 
 static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
   {
-   char *Query;
-
    if (NumViews)
      {
       /* Update number of views in database */
-      if (asprintf (&Query,"UPDATE file_view SET NumViews=NumViews+1"
-		           " WHERE FilCod=%ld AND UsrCod=%ld",
-	            FilCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update number of views of a file");
+      DB_BuildQuery ("UPDATE file_view SET NumViews=NumViews+1"
+		     " WHERE FilCod=%ld AND UsrCod=%ld",
+	             FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update number of views of a file");
      }
    else	// NumViews == 0
      {
       /* Insert number of views in database */
-      if (asprintf (&Query,"INSERT INTO file_view"
-			   " (FilCod,UsrCod,NumViews)"
-			   " VALUES"
-			   " (%ld,%ld,1)",
-		    FilCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not insert number of views of a file");
+      DB_BuildQuery ("INSERT INTO file_view"
+		     " (FilCod,UsrCod,NumViews)"
+		     " VALUES"
+		     " (%ld,%ld,1)",
+		     FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryINSERT_new ("can not insert number of views of a file");
      }
   }
 

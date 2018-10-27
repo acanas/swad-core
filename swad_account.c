@@ -712,7 +712,6 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char *QueryUsrData;
    size_t CommentsLength;
-   char *QueryUsrIDs;
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
 
@@ -781,16 +780,15 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      if (asprintf (&QueryUsrIDs,"INSERT INTO usr_IDs"
-	                         " (UsrCod,UsrID,CreatTime,Confirmed)"
-		                 " VALUES"
-		                 " (%ld,'%s',NOW(),'%c')",
-		    UsrDat->UsrCod,
-		    UsrDat->IDs.List[NumID].ID,
-		    UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
-							'N') < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (QueryUsrIDs,"can not store user's ID when creating user");
+      DB_BuildQuery ("INSERT INTO usr_IDs"
+		     " (UsrCod,UsrID,CreatTime,Confirmed)"
+		     " VALUES"
+		     " (%ld,'%s',NOW(),'%c')",
+		     UsrDat->UsrCod,
+		     UsrDat->IDs.List[NumID].ID,
+		     UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
+							 'N');
+      DB_QueryINSERT_new ("can not store user's ID when creating user");
      }
 
    /***** Create directory for the user, if not exists *****/

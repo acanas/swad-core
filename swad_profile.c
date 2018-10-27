@@ -1039,7 +1039,6 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
                                   bool CreatingMyOwnAccount)
   {
-   char *Query;
    char SubQueryFirstClickTime[Prf_MAX_BYTES_SUBQUERY_FIRST_CLICK_TIME + 1];
 
    if (CreatingMyOwnAccount)
@@ -1051,18 +1050,17 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
 
    /***** Create user's figures *****/
-   if (asprintf (&Query,"INSERT INTO usr_figures"
-			" (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
-			" VALUES"
-			" (%ld,%s,%ld,%ld,%ld,%ld)",
-		 UsrCod,
-		 SubQueryFirstClickTime,
-		 UsrFigures->NumClicks,		// -1L ==> unknown number of clicks
-		 UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
-		 UsrFigures->NumForPst,		// -1L ==> unknown number of forum posts
-		 UsrFigures->NumMsgSnt) < 0)	// -1L ==> unknown number of messages sent
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create user's figures");
+   DB_BuildQuery ("INSERT INTO usr_figures"
+		  " (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+		  " VALUES"
+		  " (%ld,%s,%ld,%ld,%ld,%ld)",
+		  UsrCod,
+		  SubQueryFirstClickTime,
+		  UsrFigures->NumClicks,	// -1L ==> unknown number of clicks
+		  UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
+		  UsrFigures->NumForPst,	// -1L ==> unknown number of forum posts
+		  UsrFigures->NumMsgSnt);	// -1L ==> unknown number of messages sent
+   DB_QueryINSERT_new ("can not create user's figures");
   }
 
 /*****************************************************************************/
@@ -1096,15 +1094,12 @@ static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
 
 void Prf_IncrementNumClicksUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
-   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
-			" WHERE UsrCod=%ld AND NumClicks>=0",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not increment user's clicks");
+   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
+		  " WHERE UsrCod=%ld AND NumClicks>=0",
+	          UsrCod);
+   DB_QueryINSERT_new ("can not increment user's clicks");
   }
 
 /*****************************************************************************/
@@ -1113,15 +1108,12 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
 
 void Prf_IncrementNumFileViewsUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Increment number of file views *****/
    // If NumFileViews < 0 ==> not yet calculated, so do nothing
-   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
-			" WHERE UsrCod=%ld AND NumFileViews>=0",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not increment user's file views");
+   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
+		  " WHERE UsrCod=%ld AND NumFileViews>=0",
+	          UsrCod);
+   DB_QueryINSERT_new ("can not increment user's file views");
   }
 
 /*****************************************************************************/
@@ -1130,15 +1122,12 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod)
 
 void Prf_IncrementNumForPstUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Increment number of forum posts *****/
    // If NumForPst < 0 ==> not yet calculated, so do nothing
-   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
-			" WHERE UsrCod=%ld AND NumForPst>=0",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not increment user's forum posts");
+   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
+		  " WHERE UsrCod=%ld AND NumForPst>=0",
+	          UsrCod);
+   DB_QueryINSERT_new ("can not increment user's forum posts");
   }
 
 /*****************************************************************************/
@@ -1147,15 +1136,12 @@ void Prf_IncrementNumForPstUsr (long UsrCod)
 
 void Prf_IncrementNumMsgSntUsr (long UsrCod)
   {
-   char *Query;
-
    /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
-   if (asprintf (&Query,"UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
-			" WHERE UsrCod=%ld AND NumMsgSnt>=0",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not increment user's messages sent");
+   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
+		  " WHERE UsrCod=%ld AND NumMsgSnt>=0",
+	          UsrCod);
+   DB_QueryINSERT_new ("can not increment user's messages sent");
   }
 
 /*****************************************************************************/

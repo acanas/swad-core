@@ -1278,16 +1278,13 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 
 static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
   {
-   char *Query;
-
    /***** Register in group *****/
-   if (asprintf (&Query,"INSERT INTO crs_grp_usr"
-			" (GrpCod,UsrCod)"
-			" VALUES"
-			" (%ld,%ld)",
-                 GrpCod,UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not add a user to a group");
+   DB_BuildQuery ("INSERT INTO crs_grp_usr"
+		  " (GrpCod,UsrCod)"
+		  " VALUES"
+		  " (%ld,%ld)",
+                  GrpCod,UsrDat->UsrCod);
+   DB_QueryINSERT_new ("can not add a user to a group");
   }
 
 /*****************************************************************************/
@@ -3849,18 +3846,15 @@ static void Grp_CreateGroupType (void)
 
 static void Grp_CreateGroup (void)
   {
-   char *Query;
-
    /***** Create a new group *****/
-   if (asprintf (&Query,"INSERT INTO crs_grp"
-			" (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
-			" VALUES"
-			" (%ld,'%s',%u,'N','N')",
-	         Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
-	         Gbl.CurrentCrs.Grps.GrpName,
-	         Gbl.CurrentCrs.Grps.MaxStudents) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create group");
+   DB_BuildQuery ("INSERT INTO crs_grp"
+		  " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
+		  " VALUES"
+		  " (%ld,'%s',%u,'N','N')",
+	          Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
+	          Gbl.CurrentCrs.Grps.GrpName,
+	          Gbl.CurrentCrs.Grps.MaxStudents);
+   DB_QueryINSERT_new ("can not create group");
   }
 
 /*****************************************************************************/

@@ -512,16 +512,13 @@ void Ann_ReceiveAnnouncement (void)
 
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content)
   {
-   char *Query;
-
    /***** Select announcements not seen *****/
-   if (asprintf (&Query,"INSERT INTO announcements"
-	                " (Roles,Subject,Content)"
-                        " VALUES"
-                        " (%u,'%s','%s')",
-                 Roles,Subject,Content) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create announcement");
+   DB_BuildQuery ("INSERT INTO announcements"
+		  " (Roles,Subject,Content)"
+		  " VALUES"
+		  " (%u,'%s','%s')",
+                  Roles,Subject,Content);
+   DB_QueryINSERT_new ("can not create announcement");
   }
 
 /*****************************************************************************/

@@ -87,20 +87,17 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
 void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks)
   {
-   char *Query;
-
    /***** Add file of marks to the database *****/
-   if (asprintf (&Query,"INSERT INTO marks_properties"
-			" (FilCod,%s,%s)"
-			" VALUES"
-			" (%ld,%u,%u)",
-	         Mrk_HeadOrFootStr[Brw_HEADER],
-	         Mrk_HeadOrFootStr[Brw_FOOTER],
-	         FilCod,
-	         Marks->Header,
-	         Marks->Footer) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not add properties of marks to database");
+   DB_BuildQuery ("INSERT INTO marks_properties"
+		  " (FilCod,%s,%s)"
+		  " VALUES"
+		  " (%ld,%u,%u)",
+	          Mrk_HeadOrFootStr[Brw_HEADER],
+	          Mrk_HeadOrFootStr[Brw_FOOTER],
+	          FilCod,
+	          Marks->Header,
+	          Marks->Footer);
+   DB_QueryINSERT_new ("can not add properties of marks to database");
   }
 
 /*****************************************************************************/

@@ -544,13 +544,11 @@ static void DT_PutHeadDegreeTypesForEdition (void)
 static void DT_CreateDegreeType (struct DegreeType *DegTyp)
   {
    extern const char *Txt_Created_new_type_of_degree_X;
-   char *Query;
 
    /***** Create a new degree type *****/
-   if (asprintf (&Query,"INSERT INTO deg_types SET DegTypName='%s'",
-                 DegTyp->DegTypName) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create a new type of degree");
+   DB_BuildQuery ("INSERT INTO deg_types SET DegTypName='%s'",
+                  DegTyp->DegTypName);
+   DB_QueryINSERT_new ("can not create a new type of degree");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

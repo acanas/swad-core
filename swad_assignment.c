@@ -1612,7 +1612,6 @@ void Asg_RemoveGroupsOfType (long GrpTypCod)
 static void Asg_CreateGrps (long AsgCod)
   {
    unsigned NumGrpSel;
-   char *Query;
 
    /***** Create groups of the assignment *****/
    for (NumGrpSel = 0;
@@ -1620,13 +1619,12 @@ static void Asg_CreateGrps (long AsgCod)
 	NumGrpSel++)
      {
       /* Create group */
-      if (asprintf (&Query,"INSERT INTO asg_grp"
-	                   " (AsgCod,GrpCod)"
-	                   " VALUES"
-	                   " (%ld,%ld)",
-                    AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not associate a group to an assignment");
+      DB_BuildQuery ("INSERT INTO asg_grp"
+		     " (AsgCod,GrpCod)"
+		     " VALUES"
+		     " (%ld,%ld)",
+                     AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+      DB_QueryINSERT_new ("can not associate a group to an assignment");
      }
   }
 

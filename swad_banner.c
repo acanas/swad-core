@@ -994,16 +994,14 @@ void Ban_RecFormNewBanner (void)
 static void Ban_CreateBanner (struct Banner *Ban)
   {
    extern const char *Txt_Created_new_banner_X;
-   char *Query;
 
    /***** Create a new banner *****/
-   if (asprintf (&Query,"INSERT INTO banners"
-	                " (Hidden,ShortName,FullName,Img,WWW)"
-	                " VALUES"
-	                " ('N','%s','%s','%s','%s')",
-                 Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create banner");
+   DB_BuildQuery ("INSERT INTO banners"
+		  " (Hidden,ShortName,FullName,Img,WWW)"
+		  " VALUES"
+		  " ('N','%s','%s','%s','%s')",
+                  Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
+   DB_QueryINSERT_new ("can not create banner");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

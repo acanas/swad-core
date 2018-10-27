@@ -1010,13 +1010,12 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    else                                        // The user does not exist ==> add him/her
      {
       /* Add the user, with one access */
-      if (asprintf (&Query,"INSERT INTO clicks_without_photo"
-			   " (UsrCod,NumClicks)"
-			   " VALUES"
-			   " (%ld,1)",
-		    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not create number of clicks without photo");
+      DB_BuildQuery ("INSERT INTO clicks_without_photo"
+		     " (UsrCod,NumClicks)"
+		     " VALUES"
+		     " (%ld,1)",
+		     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryINSERT_new ("can not create number of clicks without photo");
       NumClicks = 1;
      }
 

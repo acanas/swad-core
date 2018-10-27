@@ -310,14 +310,13 @@ void Not_RemoveNotice (void)
 
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
-   if (asprintf (&Query,"INSERT IGNORE INTO notices_deleted"
-			" (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-			" SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
-			" FROM notices"
-			" WHERE NotCod=%ld AND CrsCod=%ld",
-                 NotCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not remove notice");
+   DB_BuildQuery ("INSERT IGNORE INTO notices_deleted"
+		  " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		  " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
+		  " FROM notices"
+		  " WHERE NotCod=%ld AND CrsCod=%ld",
+                  NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryINSERT_new ("can not remove notice");
 
    /* Remove notice */
    if (asprintf (&Query,"DELETE FROM notices"

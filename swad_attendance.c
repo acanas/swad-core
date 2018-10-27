@@ -1487,7 +1487,6 @@ void Att_RemoveGroupsOfType (long GrpTypCod)
 static void Att_CreateGrps (long AttCod)
   {
    unsigned NumGrpSel;
-   char *Query;
 
    /***** Create groups of the attendance event *****/
    for (NumGrpSel = 0;
@@ -1495,13 +1494,12 @@ static void Att_CreateGrps (long AttCod)
 	NumGrpSel++)
      {
       /* Create group */
-      if (asprintf (&Query,"INSERT INTO att_grp"
-	                   " (AttCod,GrpCod)"
-	                   " VALUES"
-	                   " (%ld,%ld)",
-                    AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not associate a group to an attendance event");
+      DB_BuildQuery ("INSERT INTO att_grp"
+		     " (AttCod,GrpCod)"
+		     " VALUES"
+		     " (%ld,%ld)",
+                     AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+      DB_QueryINSERT_new ("can not associate a group to an attendance event");
      }
   }
 

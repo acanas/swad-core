@@ -3354,49 +3354,45 @@ void Prj_RecFormProject (void)
 
 static void Prj_CreateProject (struct Project *Prj)
   {
-   char *Query;
-
    /***** Set dates to now *****/
    Prj->CreatTime =
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 
    /***** Create a new project *****/
-   if (asprintf (&Query,"INSERT INTO projects"
-			" (CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
-			"CreatTime,ModifTime,"
-			"Title,Description,Knowledge,Materials,URL)"
-			" VALUES"
-			" (%ld,%ld,'%c','%c',%u,'%s',"
-			"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-			"'%s','%s','%s','%s','%s')",
-	         Gbl.CurrentCrs.Crs.CrsCod,
-	         Prj->DptCod,
-	         Prj->Hidden == Prj_HIDDEN ? 'Y' :
-					     'N',
-	         Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-						       'N',
-	         Prj->NumStds,
-	         Prj_Proposal_DB[Prj->Proposal],
-	         Prj->CreatTime,
-	         Prj->ModifTime,
-	         Prj->Title,
-	         Prj->Description,
-	         Prj->Knowledge,
-	         Prj->Materials,
-	         Prj->URL) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Prj->PrjCod = DB_QueryINSERTandReturnCode_free (Query,"can not create new project");
+   DB_BuildQuery ("INSERT INTO projects"
+		  " (CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
+		  "CreatTime,ModifTime,"
+		  "Title,Description,Knowledge,Materials,URL)"
+		  " VALUES"
+		  " (%ld,%ld,'%c','%c',%u,'%s',"
+		  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+		  "'%s','%s','%s','%s','%s')",
+	          Gbl.CurrentCrs.Crs.CrsCod,
+	          Prj->DptCod,
+	          Prj->Hidden == Prj_HIDDEN ? 'Y' :
+					      'N',
+	          Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+						        'N',
+	          Prj->NumStds,
+	          Prj_Proposal_DB[Prj->Proposal],
+	          Prj->CreatTime,
+	          Prj->ModifTime,
+	          Prj->Title,
+	          Prj->Description,
+	          Prj->Knowledge,
+	          Prj->Materials,
+	          Prj->URL);
+   Prj->PrjCod = DB_QueryINSERTandReturnCode_new ("can not create new project");
 
    /***** Insert creator as first tutor *****/
-   if (asprintf (&Query,"INSERT INTO prj_usr"
-			" (PrjCod,RoleInProject,UsrCod)"
-			" VALUES"
-			" (%ld,%u,%ld)",
-	         Prj->PrjCod,
-	         (unsigned) Prj_ROLE_TUT,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not add tutor");
+   DB_BuildQuery ("INSERT INTO prj_usr"
+		  " (PrjCod,RoleInProject,UsrCod)"
+		  " VALUES"
+		  " (%ld,%u,%ld)",
+	          Prj->PrjCod,
+	          (unsigned) Prj_ROLE_TUT,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT_new ("can not add tutor");
 
    /***** Flush cache *****/
    Prj_FlushCacheMyRoleInProject ();

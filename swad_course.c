@@ -2218,14 +2218,14 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove notices in the course *****/
       /* Copy all notices from the course to table of deleted notices */
-      if (asprintf (&Query,"INSERT INTO notices_deleted"
-		           " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		           " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
-		           " FROM notices"
-		           " WHERE CrsCod=%ld",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryINSERT_free (Query,"can not remove notices in a course");
+      DB_BuildQuery ("INSERT INTO notices_deleted"
+		     " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		     " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
+		     " FROM notices"
+		     " WHERE CrsCod=%ld",
+	             CrsCod);
+      DB_QueryINSERT_new ("can not remove notices in a course");
+
       /* Remove all notices from the course */
       if (asprintf (&Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod) < 0)
          Lay_NotEnoughMemoryExit ();

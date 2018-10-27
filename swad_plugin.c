@@ -1054,19 +1054,17 @@ void Plg_RecFormNewPlg (void)
 static void Plg_CreatePlugin (struct Plugin *Plg)
   {
    extern const char *Txt_Created_new_plugin_X;
-   char *Query;
 
    /***** Create a new plugin *****/
-   if (asprintf (&Query,"INSERT INTO plugins"
-			" (Name,Description,Logo,"
-			"AppKey,URL,IP)"
-			" VALUES"
-			" ('%s','%s','%s',"
-			"'%s','%s','%s')",
-                 Plg->Name,Plg->Description,Plg->Logo,
-		 Plg->AppKey,Plg->URL,Plg->IP) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryINSERT_free (Query,"can not create plugin");
+   DB_BuildQuery ("INSERT INTO plugins"
+		  " (Name,Description,Logo,"
+		  "AppKey,URL,IP)"
+		  " VALUES"
+		  " ('%s','%s','%s',"
+		  "'%s','%s','%s')",
+                  Plg->Name,Plg->Description,Plg->Logo,
+		  Plg->AppKey,Plg->URL,Plg->IP);
+   DB_QueryINSERT_new ("can not create plugin");
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
