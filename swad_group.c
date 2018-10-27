@@ -3821,23 +3821,20 @@ static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long 
 
 static void Grp_CreateGroupType (void)
   {
-   char *Query;
-
    /***** Create a new group type *****/
-   if (asprintf (&Query,"INSERT INTO crs_grp_types"
-			" (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
-			" VALUES"
-			" (%ld,'%s','%c','%c','%c',FROM_UNIXTIME(%ld))",
-	         Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
-	         Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment ? 'Y' :
+   DB_BuildQuery ("INSERT INTO crs_grp_types"
+		  " (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
+		  " VALUES"
+		  " (%ld,'%s','%c','%c','%c',FROM_UNIXTIME(%ld))",
+	          Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
+	          Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment ? 'Y' :
+							          'N',
+	          Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment ? 'Y' :
 							         'N',
-	         Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment ? 'Y' :
-							        'N',
-	         Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
-							   'N',
-	         (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = DB_QueryINSERTandReturnCode_free (Query,"can not create type of group");
+	          Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
+							    'N',
+	          (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
+   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = DB_QueryINSERTandReturnCode_new ("can not create type of group");
   }
 
 /*****************************************************************************/

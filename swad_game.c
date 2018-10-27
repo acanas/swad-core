@@ -2195,24 +2195,22 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_game_X;
-   char *Query;
 
    /***** Create a new game *****/
-   if (asprintf (&Query,"INSERT INTO games"
-			" (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-			" VALUES"
-			" ('%s',%ld,'N',%u,%ld,"
-			"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-			"'%s','%s')",
-	         Sco_ScopeDB[Game->Scope],Game->Cod,
-	         Game->Roles,
-	         Gbl.Usrs.Me.UsrDat.UsrCod,
-	         Game->TimeUTC[Gam_START_TIME],
-	         Game->TimeUTC[Gam_END_TIME  ],
-	         Game->Title,
-	         Txt) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Game->GamCod = DB_QueryINSERTandReturnCode_free (Query,"can not create new game");
+   DB_BuildQuery ("INSERT INTO games"
+		  " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+		  " VALUES"
+		  " ('%s',%ld,'N',%u,%ld,"
+		  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+		  "'%s','%s')",
+	          Sco_ScopeDB[Game->Scope],Game->Cod,
+	          Game->Roles,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Game->TimeUTC[Gam_START_TIME],
+	          Game->TimeUTC[Gam_END_TIME  ],
+	          Game->Title,
+	          Txt);
+   Game->GamCod = DB_QueryINSERTandReturnCode_new ("can not create new game");
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)

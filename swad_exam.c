@@ -739,39 +739,37 @@ static void Exa_PutButtonToCreateNewExamAnnouncement (void)
 
 static long Exa_AddExamAnnouncementToDB (void)
   {
-   char *Query;
    long ExaCod;
 
    /***** Add exam announcement *****/
-   if (asprintf (&Query,"INSERT INTO exam_announcements "
-			"(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
-			"CallDate,ExamDate,Duration,"
-			"Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
-			" VALUES "
-			"(%ld,%u,0,'%s',%u,'%s',"
-			"NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
-			"'%s','%s','%s','%s','%s','%s')",
-	         Gbl.CurrentCrs.Crs.CrsCod,
-	         (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
-	         Gbl.ExamAnns.ExaDat.CrsFullName,
-	         Gbl.ExamAnns.ExaDat.Year,
-	         Gbl.ExamAnns.ExaDat.Session,
-	         Gbl.ExamAnns.ExaDat.ExamDate.Year,
-	         Gbl.ExamAnns.ExaDat.ExamDate.Month,
-	         Gbl.ExamAnns.ExaDat.ExamDate.Day,
-	         Gbl.ExamAnns.ExaDat.StartTime.Hour,
-	         Gbl.ExamAnns.ExaDat.StartTime.Minute,
-	         Gbl.ExamAnns.ExaDat.Duration.Hour,
-	         Gbl.ExamAnns.ExaDat.Duration.Minute,
-	         Gbl.ExamAnns.ExaDat.Place,
-	         Gbl.ExamAnns.ExaDat.Mode,
-	         Gbl.ExamAnns.ExaDat.Structure,
-	         Gbl.ExamAnns.ExaDat.DocRequired,
-	         Gbl.ExamAnns.ExaDat.MatRequired,
-	         Gbl.ExamAnns.ExaDat.MatAllowed,
-	         Gbl.ExamAnns.ExaDat.OtherInfo) < 0)
-      Lay_NotEnoughMemoryExit ();
-   ExaCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new exam announcement");
+   DB_BuildQuery ("INSERT INTO exam_announcements "
+		  "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
+		  "CallDate,ExamDate,Duration,"
+		  "Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
+		  " VALUES "
+		  "(%ld,%u,0,'%s',%u,'%s',"
+		  "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
+		  "'%s','%s','%s','%s','%s','%s')",
+	          Gbl.CurrentCrs.Crs.CrsCod,
+	          (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
+	          Gbl.ExamAnns.ExaDat.CrsFullName,
+	          Gbl.ExamAnns.ExaDat.Year,
+	          Gbl.ExamAnns.ExaDat.Session,
+	          Gbl.ExamAnns.ExaDat.ExamDate.Year,
+	          Gbl.ExamAnns.ExaDat.ExamDate.Month,
+	          Gbl.ExamAnns.ExaDat.ExamDate.Day,
+	          Gbl.ExamAnns.ExaDat.StartTime.Hour,
+	          Gbl.ExamAnns.ExaDat.StartTime.Minute,
+	          Gbl.ExamAnns.ExaDat.Duration.Hour,
+	          Gbl.ExamAnns.ExaDat.Duration.Minute,
+	          Gbl.ExamAnns.ExaDat.Place,
+	          Gbl.ExamAnns.ExaDat.Mode,
+	          Gbl.ExamAnns.ExaDat.Structure,
+	          Gbl.ExamAnns.ExaDat.DocRequired,
+	          Gbl.ExamAnns.ExaDat.MatRequired,
+	          Gbl.ExamAnns.ExaDat.MatAllowed,
+	          Gbl.ExamAnns.ExaDat.OtherInfo);
+   ExaCod = DB_QueryINSERTandReturnCode_new ("can not create a new exam announcement");
 
    return ExaCod;
   }

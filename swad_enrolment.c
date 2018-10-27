@@ -2006,7 +2006,6 @@ void Enr_SignUpInCrs (void)
    extern const char *Txt_You_were_already_enroled_as_X_in_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Rol_Role_t RoleFromForm;
@@ -2053,26 +2052,24 @@ void Enr_SignUpInCrs (void)
       /***** Request user in current course in database *****/
       if (ReqCod > 0)        // Old request exists in database
         {
-         if (asprintf (&Query,"UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
-                              " WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
-		       (unsigned) RoleFromForm,
-		       ReqCod,
-		       Gbl.CurrentCrs.Crs.CrsCod,
-		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryUPDATE_free (Query,"can not update enrolment request");
+         DB_BuildQuery ("UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
+			" WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
+		        (unsigned) RoleFromForm,
+		        ReqCod,
+		        Gbl.CurrentCrs.Crs.CrsCod,
+		        Gbl.Usrs.Me.UsrDat.UsrCod);
+         DB_QueryUPDATE_new ("can not update enrolment request");
         }
       else                // No request in database for this user in this course
         {
-         if (asprintf (&Query,"INSERT INTO crs_usr_requests"
-			      " (CrsCod,UsrCod,Role,RequestTime)"
-			      " VALUES"
-			      " (%ld,%ld,%u,NOW())",
-		       Gbl.CurrentCrs.Crs.CrsCod,
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       (unsigned) RoleFromForm) < 0)
-            Lay_NotEnoughMemoryExit ();
-         ReqCod = DB_QueryINSERTandReturnCode_free (Query,"can not save enrolment request");
+         DB_BuildQuery ("INSERT INTO crs_usr_requests"
+			" (CrsCod,UsrCod,Role,RequestTime)"
+			" VALUES"
+			" (%ld,%ld,%u,NOW())",
+		        Gbl.CurrentCrs.Crs.CrsCod,
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        (unsigned) RoleFromForm);
+         ReqCod = DB_QueryINSERTandReturnCode_new ("can not save enrolment request");
         }
 
       /***** Show confirmation message *****/

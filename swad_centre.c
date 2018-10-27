@@ -2824,24 +2824,22 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 static void Ctr_CreateCentre (unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
-   char *Query;
 
    /***** Create a new centre *****/
-   if (asprintf (&Query,"INSERT INTO centres"
-	                " (InsCod,PlcCod,Status,RequesterUsrCod,"
-                        "ShortName,FullName,WWW,PhotoAttribution)"
-                        " VALUES"
-                        " (%ld,%ld,%u,%ld,"
-                        "'%s','%s','%s','')",
-                 Gbl.Ctrs.EditingCtr.InsCod,
-                 Gbl.Ctrs.EditingCtr.PlcCod,
-                 Status,
-                 Gbl.Usrs.Me.UsrDat.UsrCod,
-                 Gbl.Ctrs.EditingCtr.ShrtName,
-                 Gbl.Ctrs.EditingCtr.FullName,
-                 Gbl.Ctrs.EditingCtr.WWW) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Gbl.Ctrs.EditingCtr.CtrCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new centre");
+   DB_BuildQuery ("INSERT INTO centres"
+		  " (InsCod,PlcCod,Status,RequesterUsrCod,"
+		  "ShortName,FullName,WWW,PhotoAttribution)"
+		  " VALUES"
+		  " (%ld,%ld,%u,%ld,"
+		  "'%s','%s','%s','')",
+                  Gbl.Ctrs.EditingCtr.InsCod,
+                  Gbl.Ctrs.EditingCtr.PlcCod,
+                  Status,
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  Gbl.Ctrs.EditingCtr.ShrtName,
+                  Gbl.Ctrs.EditingCtr.FullName,
+                  Gbl.Ctrs.EditingCtr.WWW);
+   Gbl.Ctrs.EditingCtr.CtrCod = DB_QueryINSERTandReturnCode_new ("can not create a new centre");
 
    /***** Write message to show the change made
 	  and put button to go to centre created *****/

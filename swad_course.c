@@ -1924,20 +1924,18 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 static void Crs_CreateCourse (unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
-   char *Query;
 
    /***** Insert new course into pending requests *****/
-   if (asprintf (&Query,"INSERT INTO courses"
-	                " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
-                        " VALUES"
-                        " (%ld,%u,'%s',%u,%ld,'%s','%s')",
-                 Gbl.Degs.EditingCrs.DegCod,Gbl.Degs.EditingCrs.Year,
-                 Gbl.Degs.EditingCrs.InstitutionalCrsCod,
-                 Status,
-                 Gbl.Usrs.Me.UsrDat.UsrCod,
-                 Gbl.Degs.EditingCrs.ShrtName,Gbl.Degs.EditingCrs.FullName) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Gbl.Degs.EditingCrs.CrsCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new course");
+   DB_BuildQuery ("INSERT INTO courses"
+		  " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
+		  " VALUES"
+		  " (%ld,%u,'%s',%u,%ld,'%s','%s')",
+                  Gbl.Degs.EditingCrs.DegCod,Gbl.Degs.EditingCrs.Year,
+                  Gbl.Degs.EditingCrs.InstitutionalCrsCod,
+                  Status,
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  Gbl.Degs.EditingCrs.ShrtName,Gbl.Degs.EditingCrs.FullName);
+   Gbl.Degs.EditingCrs.CrsCod = DB_QueryINSERTandReturnCode_new ("can not create a new course");
 
    /***** Create success message *****/
    Gbl.Alert.Type = Ale_SUCCESS;

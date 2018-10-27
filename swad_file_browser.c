@@ -11955,25 +11955,23 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char *Query;
 
    /***** Add path to the database *****/
-   if (asprintf (&Query,"INSERT INTO files"
-			" (FileBrowser,Cod,ZoneUsrCod,"
-			"PublisherUsrCod,FileType,Path,Hidden,Public,License)"
-			" VALUES"
-			" (%u,%ld,%ld,"
-			"%ld,%u,'%s','N','%c',%u)",
-	         (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	         Cod,ZoneUsrCod,
-	         PublisherUsrCod,
-	         (unsigned) FileType,
-	         FullPathInTree,
-	         IsPublic ? 'Y' :
-			    'N',
-	         (unsigned) License) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryINSERTandReturnCode_free (Query,"can not add path to database");
+   DB_BuildQuery ("INSERT INTO files"
+		  " (FileBrowser,Cod,ZoneUsrCod,"
+		  "PublisherUsrCod,FileType,Path,Hidden,Public,License)"
+		  " VALUES"
+		  " (%u,%ld,%ld,"
+		  "%ld,%u,'%s','N','%c',%u)",
+	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	          Cod,ZoneUsrCod,
+	          PublisherUsrCod,
+	          (unsigned) FileType,
+	          FullPathInTree,
+	          IsPublic ? 'Y' :
+			     'N',
+	          (unsigned) License);
+   return DB_QueryINSERTandReturnCode_new ("can not add path to database");
   }
 
 /*****************************************************************************/

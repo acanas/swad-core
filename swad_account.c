@@ -710,7 +710,6 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
-   char *QueryUsrData;
    size_t CommentsLength;
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
@@ -732,47 +731,46 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
       CommentsLength = strlen (UsrDat->Comments);
    else
       CommentsLength = 0;
-   if (asprintf (&QueryUsrData,"INSERT INTO usr_data"
-	                       " (EncryptedUsrCod,Password,"
-	                       "Surname1,Surname2,FirstName,Sex,"
-		               "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
-		               "PhotoVisibility,ProfileVisibility,"
-		               "CtyCod,"
-		               "LocalAddress,LocalPhone,"
-		               "FamilyAddress,FamilyPhone,"
-		               "OriginPlace,Birthday,Comments,"
-		               "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
-		               " VALUES"
-		               " ('%s','%s',"
-		               "'%s','%s','%s','%s',"
-		               "'%s','%s','%s',%u,%u,"
-		               "'%s','%s',"
-		               "%ld,"
-		               "'%s','%s',"
-		               "'%s','%s','%s',"
-		               "%s,'%s',"
-		               "%u,%u,-1,0)",
-		 UsrDat->EncryptedUsrCod,
-		 UsrDat->Password,
-		 UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
-		 Usr_StringsSexDB[UsrDat->Sex],
-		 The_ThemeId[UsrDat->Prefs.Theme],
-		 Ico_IconSetId[UsrDat->Prefs.IconSet],
-		 Txt_STR_LANG_ID[UsrDat->Prefs.Language],
-		 Cal_FIRST_DAY_OF_WEEK_DEFAULT,
-		 (unsigned) Dat_FORMAT_DEFAULT,
-		 Pri_VisibilityDB[UsrDat->PhotoVisibility],
-		 Pri_VisibilityDB[UsrDat->ProfileVisibility],
-		 UsrDat->CtyCod,
-		 UsrDat->LocalAddress ,UsrDat->LocalPhone,
-		 UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
-		 BirthdayStrDB,
-		 CommentsLength ? UsrDat->Comments :
-		                  "",
-		 (unsigned) Mnu_MENU_DEFAULT,
-		 (unsigned) Cfg_DEFAULT_COLUMNS) < 0)
-         Lay_NotEnoughMemoryExit ();
-   UsrDat->UsrCod = DB_QueryINSERTandReturnCode_free (QueryUsrData,"can not create user");
+   DB_BuildQuery ("INSERT INTO usr_data"
+		  " (EncryptedUsrCod,Password,"
+		  "Surname1,Surname2,FirstName,Sex,"
+		  "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
+		  "PhotoVisibility,ProfileVisibility,"
+		  "CtyCod,"
+		  "LocalAddress,LocalPhone,"
+		  "FamilyAddress,FamilyPhone,"
+		  "OriginPlace,Birthday,Comments,"
+		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
+		  " VALUES"
+		  " ('%s','%s',"
+		  "'%s','%s','%s','%s',"
+		  "'%s','%s','%s',%u,%u,"
+		  "'%s','%s',"
+		  "%ld,"
+		  "'%s','%s',"
+		  "'%s','%s','%s',"
+		  "%s,'%s',"
+		  "%u,%u,-1,0)",
+		  UsrDat->EncryptedUsrCod,
+		  UsrDat->Password,
+		  UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+		  Usr_StringsSexDB[UsrDat->Sex],
+		  The_ThemeId[UsrDat->Prefs.Theme],
+		  Ico_IconSetId[UsrDat->Prefs.IconSet],
+		  Txt_STR_LANG_ID[UsrDat->Prefs.Language],
+		  Cal_FIRST_DAY_OF_WEEK_DEFAULT,
+		  (unsigned) Dat_FORMAT_DEFAULT,
+		  Pri_VisibilityDB[UsrDat->PhotoVisibility],
+		  Pri_VisibilityDB[UsrDat->ProfileVisibility],
+		  UsrDat->CtyCod,
+		  UsrDat->LocalAddress ,UsrDat->LocalPhone,
+		  UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
+		  BirthdayStrDB,
+		  CommentsLength ? UsrDat->Comments :
+		                   "",
+		  (unsigned) Mnu_MENU_DEFAULT,
+		  (unsigned) Cfg_DEFAULT_COLUMNS);
+   UsrDat->UsrCod = DB_QueryINSERTandReturnCode_new ("can not create user");
 
    /* Insert user's IDs as confirmed */
    for (NumID = 0;

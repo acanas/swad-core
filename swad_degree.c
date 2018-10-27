@@ -1135,21 +1135,19 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 static void Deg_CreateDegree (unsigned Status)
   {
    extern const char *Txt_Created_new_degree_X;
-   char *Query;
 
    /***** Create a new degree *****/
-   if (asprintf (&Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
-			"RequesterUsrCod,ShortName,FullName,WWW)"
-			" VALUES (%ld,%ld,%u,%ld,'%s','%s','%s')",
-	         Gbl.Degs.EditingDeg.CtrCod,
-	         Gbl.Degs.EditingDeg.DegTypCod,
-	         Status,
-	         Gbl.Usrs.Me.UsrDat.UsrCod,
-	         Gbl.Degs.EditingDeg.ShrtName,
-	         Gbl.Degs.EditingDeg.FullName,
-	         Gbl.Degs.EditingDeg.WWW) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Gbl.Degs.EditingDeg.DegCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new degree");
+   DB_BuildQuery ("INSERT INTO degrees (CtrCod,DegTypCod,Status,"
+		  "RequesterUsrCod,ShortName,FullName,WWW)"
+		  " VALUES (%ld,%ld,%u,%ld,'%s','%s','%s')",
+	          Gbl.Degs.EditingDeg.CtrCod,
+	          Gbl.Degs.EditingDeg.DegTypCod,
+	          Status,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Degs.EditingDeg.ShrtName,
+	          Gbl.Degs.EditingDeg.FullName,
+	          Gbl.Degs.EditingDeg.WWW);
+   Gbl.Degs.EditingDeg.DegCod = DB_QueryINSERTandReturnCode_new ("can not create a new degree");
 
    /***** Write message to show the change made
           and put button to go to degree created *****/

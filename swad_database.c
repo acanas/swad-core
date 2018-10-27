@@ -3207,17 +3207,6 @@ void DB_QueryINSERT_new (const char *MsgError)
       DB_ExitOnMySQLError (MsgError);
   }
 
-void DB_QueryINSERT_free (const char *Query,const char *MsgError)
-  {
-   int Result;
-
-   /***** Query database *****/
-   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
-   if (Result)
-      DB_ExitOnMySQLError (MsgError);
-  }
-
 void DB_QueryINSERT (const char *Query,const char *MsgError)
   {
    /***** Query database *****/
@@ -3242,20 +3231,6 @@ long DB_QueryINSERTandReturnCode_new (const char *MsgError)
    Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
    free ((void *) Gbl.DB.QueryPtr);
    Gbl.DB.QueryPtr = NULL;
-   if (Result)
-      DB_ExitOnMySQLError (MsgError);
-
-   /***** Return the code of the inserted item *****/
-   return (long) mysql_insert_id (&Gbl.mysql);
-  }
-
-long DB_QueryINSERTandReturnCode_free (const char *Query,const char *MsgError)
-  {
-   int Result;
-
-   /***** Query database *****/
-   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 

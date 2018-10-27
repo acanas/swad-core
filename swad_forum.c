@@ -504,7 +504,6 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
                                 struct Image *Image)
   {
-   char *Query;
    long PstCod;
 
    /***** Check if image is received and processed *****/
@@ -514,19 +513,18 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
       Img_MoveImageToDefinitiveDirectory (Image);
 
    /***** Insert forum post in the database *****/
-   if (asprintf (&Query,"INSERT INTO forum_post"
-			" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-			"Subject,Content,ImageName,ImageTitle,ImageURL)"
-			" VALUES"
-			" (%ld,%ld,NOW(),NOW(),0,"
-			"'%s','%s','%s','%s','%s')",
-	         ThrCod,UsrCod,
-	         Subject,Content,
-	         Image->Name,
-	         Image->Title ? Image->Title : "",
-	         Image->URL   ? Image->URL   : "") < 0)
-      Lay_NotEnoughMemoryExit ();
-   PstCod = DB_QueryINSERTandReturnCode_free (Query,"can not create a new post in a forum");
+   DB_BuildQuery ("INSERT INTO forum_post"
+		  " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
+		  "Subject,Content,ImageName,ImageTitle,ImageURL)"
+		  " VALUES"
+		  " (%ld,%ld,NOW(),NOW(),0,"
+		  "'%s','%s','%s','%s','%s')",
+	          ThrCod,UsrCod,
+	          Subject,Content,
+	          Image->Name,
+	          Image->Title ? Image->Title : "",
+	          Image->URL   ? Image->URL   : "");
+   PstCod = DB_QueryINSERTandReturnCode_new ("can not create a new post in a forum");
 
    return PstCod;
   }
@@ -603,18 +601,15 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
 
 static long For_InsertForumThread (long FirstPstCod)
   {
-   char *Query;
-
    /***** Insert new thread in the database *****/
-   if (asprintf (&Query,"INSERT INTO forum_thread"
-			" (ForumType,Location,FirstPstCod,LastPstCod)"
-			" VALUES"
-			" (%u,%ld,%ld,%ld)",
-	         (unsigned) Gbl.Forum.ForumSelected.Type,
-	         Gbl.Forum.ForumSelected.Location,
-	         FirstPstCod,FirstPstCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryINSERTandReturnCode_free (Query,"can not create a new thread in a forum");
+   DB_BuildQuery ("INSERT INTO forum_thread"
+		  " (ForumType,Location,FirstPstCod,LastPstCod)"
+		  " VALUES"
+		  " (%u,%ld,%ld,%ld)",
+	          (unsigned) Gbl.Forum.ForumSelected.Type,
+	          Gbl.Forum.ForumSelected.Location,
+	          FirstPstCod,FirstPstCod);
+   return DB_QueryINSERTandReturnCode_new ("can not create a new thread in a forum");
   }
 
 /*****************************************************************************/

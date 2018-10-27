@@ -164,17 +164,14 @@ void Not_ReceiveNotice (void)
 
 static long Not_InsertNoticeInDB (const char *Content)
   {
-   char *Query;
-
    /***** Insert notice in the database *****/
-   if (asprintf (&Query,"INSERT INTO notices"
-			" (CrsCod,UsrCod,CreatTime,Content,Status)"
-			" VALUES"
-			" (%ld,%ld,NOW(),'%s',%u)",
-	         Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	         Content,(unsigned) Not_ACTIVE_NOTICE) < 0)
-      Lay_NotEnoughMemoryExit ();
-   return DB_QueryINSERTandReturnCode_free (Query,"can not create notice");
+   DB_BuildQuery ("INSERT INTO notices"
+		  " (CrsCod,UsrCod,CreatTime,Content,Status)"
+		  " VALUES"
+		  " (%ld,%ld,NOW(),'%s',%u)",
+	          Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Content,(unsigned) Not_ACTIVE_NOTICE);
+   return DB_QueryINSERTandReturnCode_new ("can not create notice");
   }
 
 /*****************************************************************************/

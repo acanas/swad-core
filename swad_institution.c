@@ -2413,21 +2413,19 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 static void Ins_CreateInstitution (unsigned Status)
   {
    extern const char *Txt_Created_new_institution_X;
-   char *Query;
 
    /***** Create a new institution *****/
-   if (asprintf (&Query,"INSERT INTO institutions"
-			" (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
-			" VALUES"
-			" (%ld,%u,%ld,'%s','%s','%s')",
-	         Gbl.Inss.EditingIns.CtyCod,
-	         Status,
-	         Gbl.Usrs.Me.UsrDat.UsrCod,
-	         Gbl.Inss.EditingIns.ShrtName,
-	         Gbl.Inss.EditingIns.FullName,
-	         Gbl.Inss.EditingIns.WWW) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Gbl.Inss.EditingIns.InsCod = DB_QueryINSERTandReturnCode_free (Query,"can not create institution");
+   DB_BuildQuery ("INSERT INTO institutions"
+		  " (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
+		  " VALUES"
+		  " (%ld,%u,%ld,'%s','%s','%s')",
+	          Gbl.Inss.EditingIns.CtyCod,
+	          Status,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Inss.EditingIns.ShrtName,
+	          Gbl.Inss.EditingIns.FullName,
+	          Gbl.Inss.EditingIns.WWW);
+   Gbl.Inss.EditingIns.InsCod = DB_QueryINSERTandReturnCode_new ("can not create institution");
 
    /***** Write message to show the change made
 	  and put button to go to institution created *****/
