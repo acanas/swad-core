@@ -145,15 +145,12 @@ bool Pwd_CheckPendingPassword (void)
 
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
   {
-   char *Query;
-
    /***** Update my current password in database *****/
-   if (asprintf (&Query,"UPDATE usr_data SET Password='%s'"
-			" WHERE UsrCod=%ld",
-	         Gbl.Usrs.Me.PendingPassword,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update your password");
+   DB_BuildQuery ("UPDATE usr_data SET Password='%s'"
+		  " WHERE UsrCod=%ld",
+	          Gbl.Usrs.Me.PendingPassword,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update your password");
 
    /***** Update my current password *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,

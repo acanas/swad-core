@@ -522,7 +522,6 @@ void Plg_RenamePlugin (void)
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
-   char *Query;
    struct Plugin *Plg;
    char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
 
@@ -563,10 +562,9 @@ void Plg_RenamePlugin (void)
          else
            {
             /* Update the table changing old name by new name */
-            if (asprintf (&Query,"UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
-                          NewPlgName,Plg->PlgCod) < 0)
-               Lay_NotEnoughMemoryExit ();
-            DB_QueryUPDATE_free (Query,"can not update the name of a plugin");
+            DB_BuildQuery ("UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
+                           NewPlgName,Plg->PlgCod);
+            DB_QueryUPDATE_new ("can not update the name of a plugin");
 
             /***** Write message to show the change made *****/
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -612,7 +610,6 @@ void Plg_ChangePlgDescription (void)
    extern const char *Txt_The_new_description_is_X;
    extern const char *Txt_You_can_not_leave_the_description_empty;
    struct Plugin *Plg;
-   char *Query;
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -629,10 +626,9 @@ void Plg_ChangePlgDescription (void)
    if (NewDescription[0])
      {
       /* Update the table changing old description by new description */
-      if (asprintf (&Query,"UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
-                    NewDescription,Plg->PlgCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the description of a plugin");
+      DB_BuildQuery ("UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
+                     NewDescription,Plg->PlgCod);
+      DB_QueryUPDATE_new ("can not update the description of a plugin");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -658,7 +654,6 @@ void Plg_ChangePlgLogo (void)
    extern const char *Txt_The_new_logo_is_X;
    extern const char *Txt_You_can_not_leave_the_logo_empty;
    struct Plugin *Plg;
-   char *Query;
    char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -675,10 +670,9 @@ void Plg_ChangePlgLogo (void)
    if (NewLogo[0])
      {
       /* Update the table changing old logo by new logo */
-      if (asprintf (&Query,"UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
-                    NewLogo,Plg->PlgCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the logo of a plugin");
+      DB_BuildQuery ("UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
+                     NewLogo,Plg->PlgCod);
+      DB_QueryUPDATE_new ("can not update the logo of a plugin");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -704,7 +698,6 @@ void Plg_ChangePlgAppKey (void)
    extern const char *Txt_The_new_logo_is_X;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    extern const char *Txt_You_can_not_leave_the_logo_empty;// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    struct Plugin *Plg;
-   char *Query;
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -721,10 +714,9 @@ void Plg_ChangePlgAppKey (void)
    if (NewAppKey[0])
      {
       /* Update the table changing old application key by new application key */
-      if (asprintf (&Query,"UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
-                    NewAppKey,Plg->PlgCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the application key of a plugin");
+      DB_BuildQuery ("UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
+                     NewAppKey,Plg->PlgCod);
+      DB_QueryUPDATE_new ("can not update the application key of a plugin");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -750,7 +742,6 @@ void Plg_ChangePlgURL (void)
    extern const char *Txt_The_new_URL_is_X;
    extern const char *Txt_You_can_not_leave_the_URL_empty;
    struct Plugin *Plg;
-   char *Query;
    char NewURL[Cns_MAX_BYTES_WWW + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -767,10 +758,9 @@ void Plg_ChangePlgURL (void)
    if (NewURL[0])
      {
       /* Update the table changing old WWW by new WWW */
-      if (asprintf (&Query,"UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
-                    NewURL,Plg->PlgCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the URL of a plugin");
+      DB_BuildQuery ("UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
+                     NewURL,Plg->PlgCod);
+      DB_QueryUPDATE_new ("can not update the URL of a plugin");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -796,7 +786,6 @@ void Plg_ChangePlgIP (void)
    extern const char *Txt_The_new_IP_address_is_X;
    extern const char *Txt_You_can_not_leave_the_IP_address_empty;
    struct Plugin *Plg;
-   char *Query;
    char NewIP[Cns_MAX_BYTES_IP + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -813,10 +802,9 @@ void Plg_ChangePlgIP (void)
    if (NewIP[0])
      {
       /* Update the table changing old IP by new IP */
-      if (asprintf (&Query,"UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
-                    NewIP,Plg->PlgCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the IP address of a plugin");
+      DB_BuildQuery ("UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
+                     NewIP,Plg->PlgCod);
+      DB_QueryUPDATE_new ("can not update the IP address of a plugin");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

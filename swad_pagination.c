@@ -800,15 +800,12 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 
 void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
-   char *Query;
-
    /***** Save last page of received/sent messages *****/
-   if (asprintf (&Query,"UPDATE sessions SET %s=%u WHERE SessionId='%s'",
-                 WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-        	                                         "LastPageMsgSnt",
-                 NumPage,Gbl.Session.Id) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update last page of messages");
+   DB_BuildQuery ("UPDATE sessions SET %s=%u WHERE SessionId='%s'",
+                  WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+        	                                          "LastPageMsgSnt",
+                  NumPage,Gbl.Session.Id);
+   DB_QueryUPDATE_new ("can not update last page of messages");
   }
 
 /*****************************************************************************/

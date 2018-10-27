@@ -332,7 +332,6 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_UpdateMFUActions (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    float Score;
@@ -380,12 +379,11 @@ void MFU_UpdateMFUActions (void)
    DB_QueryREPLACE_new ("can not update most frequently used actions");
 
    /***** Update score for other actions *****/
-   if (asprintf (&Query,"UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"
-			" WHERE UsrCod=%ld AND ActCod<>%ld",
-                 MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
-                 Gbl.Usrs.Me.UsrDat.UsrCod,ActCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update most frequently used actions");
+   DB_BuildQuery ("UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"
+		  " WHERE UsrCod=%ld AND ActCod<>%ld",
+                  MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
+                  Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
+   DB_QueryUPDATE_new ("can not update most frequently used actions");
 
    Str_SetDecimalPointToLocal ();	// Return to local system
   }

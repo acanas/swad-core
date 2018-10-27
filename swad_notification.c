@@ -953,36 +953,25 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod)
   {
-   char *Query;
-
    /***** Set notification as seen by me *****/
    if (ToUsrCod > 0)	// If the user code is specified
      {
       if (Cod > 0)		// Set only one notification for the user as seen
-        {
-         if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			      " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
-                       (unsigned) Ntf_STATUS_BIT_READ,
-                       ToUsrCod,(unsigned) NotifyEvent,Cod) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
+         DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+			" WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
+                        (unsigned) Ntf_STATUS_BIT_READ,
+                        ToUsrCod,(unsigned) NotifyEvent,Cod);
       else if (CrsCod > 0)	// Set all notifications of this type in the current course for the user as seen
-        {
-         if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			      " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
-                       (unsigned) Ntf_STATUS_BIT_READ,
-                       ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
+         DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+			" WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
+                        (unsigned) Ntf_STATUS_BIT_READ,
+                        ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod);
       else			// Set all notifications of this type for the user as seen
-        {
-         if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			      " WHERE ToUsrCod=%ld AND NotifyEvent=%u",
-                       (unsigned) Ntf_STATUS_BIT_READ,
-                       ToUsrCod,(unsigned) NotifyEvent) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
-      DB_QueryUPDATE_free (Query,"can not set notification(s) as seen");
+         DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+			" WHERE ToUsrCod=%ld AND NotifyEvent=%u",
+                        (unsigned) Ntf_STATUS_BIT_READ,
+                        ToUsrCod,(unsigned) NotifyEvent);
+      DB_QueryUPDATE_new ("can not set notification(s) as seen");
      }
   }
 
@@ -992,15 +981,12 @@ void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,lon
 
 void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
-   char *Query;
-
    /***** Set notification as removed *****/
-   if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			" WHERE NotifyEvent=%u AND Cod=%ld",
-	         (unsigned) Ntf_STATUS_BIT_REMOVED,
-	         (unsigned) NotifyEvent,Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
+   DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		  " WHERE NotifyEvent=%u AND Cod=%ld",
+	          (unsigned) Ntf_STATUS_BIT_REMOVED,
+	          (unsigned) NotifyEvent,Cod);
+   DB_QueryUPDATE_new ("can not set notification(s) as removed");
   }
 
 /*****************************************************************************/
@@ -1009,26 +995,18 @@ void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 
 void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod)
   {
-   char *Query;
-
    /***** Set notification as removed *****/
    if (Cod > 0)	// Set only one notification as removed
-     {
-      if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			   " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
-	            (unsigned) Ntf_STATUS_BIT_REMOVED,
-	            ToUsrCod,(unsigned) NotifyEvent,Cod) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		     " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
+	             (unsigned) Ntf_STATUS_BIT_REMOVED,
+	             ToUsrCod,(unsigned) NotifyEvent,Cod);
    else		// Set all notifications of this type, in the current course for the user, as removed
-     {
-      if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			   " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
-	            (unsigned) Ntf_STATUS_BIT_REMOVED,
-	            ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
-   DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
+      DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		     " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
+	             (unsigned) Ntf_STATUS_BIT_REMOVED,
+	             ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not set notification(s) as removed");
   }
 
 /*****************************************************************************/
@@ -1041,31 +1019,23 @@ void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long
 
 void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
   {
-   char *Query;
-
    /***** Set all notifications from the course as removed,
           except notifications about new messages *****/
    if (ToUsrCod > 0)	// If the user code is specified
-     {
-      if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			   " WHERE ToUsrCod=%ld"
-			   " AND CrsCod=%ld"
-			   " AND NotifyEvent<>%u",	// messages will remain available
-	            (unsigned) Ntf_STATUS_BIT_REMOVED,
-	            ToUsrCod,
-	            CrsCod,(unsigned) Ntf_EVENT_MESSAGE) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
+      DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		     " WHERE ToUsrCod=%ld"
+		     " AND CrsCod=%ld"
+		     " AND NotifyEvent<>%u",	// messages will remain available
+	             (unsigned) Ntf_STATUS_BIT_REMOVED,
+	             ToUsrCod,
+	             CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
    else			// User code not specified ==> any user
-     {
-      if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			   " WHERE CrsCod=%ld"
-			   " AND NotifyEvent<>%u",	// messages will remain available
-	            (unsigned) Ntf_STATUS_BIT_REMOVED,
-	            CrsCod,(unsigned) Ntf_EVENT_MESSAGE) < 0)
-         Lay_NotEnoughMemoryExit ();
-     }
-   DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
+      DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		     " WHERE CrsCod=%ld"
+		     " AND NotifyEvent<>%u",	// messages will remain available
+	             (unsigned) Ntf_STATUS_BIT_REMOVED,
+	             CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
+   DB_QueryUPDATE_new ("can not set notification(s) as removed");
   }
 
 /*****************************************************************************/
@@ -1132,7 +1102,6 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long Cod = Brw_GetCodForFiles ();
-   char *Query;
    Ntf_NotifyEvent_t NotifyEvent;
 
    switch (FileBrowser)
@@ -1167,17 +1136,16 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 	    default:
 	       return;
 	   }
-	 if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			      " WHERE NotifyEvent=%u AND Cod IN"
-			      " (SELECT FilCod FROM files"
-			      " WHERE FileBrowser=%u AND Cod=%ld"
-			      " AND Path LIKE '%s/%%')",
-		       (unsigned) Ntf_STATUS_BIT_REMOVED,
-		       (unsigned) NotifyEvent,
-		       (unsigned) FileBrowser,Cod,
-		       Path) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
+	 DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+			" WHERE NotifyEvent=%u AND Cod IN"
+			" (SELECT FilCod FROM files"
+			" WHERE FileBrowser=%u AND Cod=%ld"
+			" AND Path LIKE '%s/%%')",
+		        (unsigned) Ntf_STATUS_BIT_REMOVED,
+		        (unsigned) NotifyEvent,
+		        (unsigned) FileBrowser,Cod,
+		        Path);
+         DB_QueryUPDATE_new ("can not set notification(s) as removed");
          break;
       default:
 	 break;
@@ -1190,25 +1158,22 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 
 void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
   {
-   char *Query;
-
    /***** Set notifications as removed *****/
-   if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			" WHERE NotifyEvent IN (%u,%u,%u,%u) AND Cod IN"
-			" (SELECT FilCod FROM files"
-			" WHERE FileBrowser IN (%u,%u,%u,%u) AND Cod=%ld)",
-	         (unsigned) Ntf_STATUS_BIT_REMOVED,
-	         (unsigned) Ntf_EVENT_DOCUMENT_FILE,
-	         (unsigned) Ntf_EVENT_TEACHERS_FILE,
-	         (unsigned) Ntf_EVENT_SHARED_FILE,
-	         (unsigned) Ntf_EVENT_MARKS_FILE,
-	         (unsigned) Brw_ADMI_DOC_GRP,
-	         (unsigned) Brw_ADMI_TCH_GRP,
-	         (unsigned) Brw_ADMI_SHR_GRP,
-	         (unsigned) Brw_ADMI_MRK_GRP,
-	         GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
+   DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		  " WHERE NotifyEvent IN (%u,%u,%u,%u) AND Cod IN"
+		  " (SELECT FilCod FROM files"
+		  " WHERE FileBrowser IN (%u,%u,%u,%u) AND Cod=%ld)",
+	          (unsigned) Ntf_STATUS_BIT_REMOVED,
+	          (unsigned) Ntf_EVENT_DOCUMENT_FILE,
+	          (unsigned) Ntf_EVENT_TEACHERS_FILE,
+	          (unsigned) Ntf_EVENT_SHARED_FILE,
+	          (unsigned) Ntf_EVENT_MARKS_FILE,
+	          (unsigned) Brw_ADMI_DOC_GRP,
+	          (unsigned) Brw_ADMI_TCH_GRP,
+	          (unsigned) Brw_ADMI_SHR_GRP,
+	          (unsigned) Brw_ADMI_MRK_GRP,
+	          GrpCod);
+   DB_QueryUPDATE_new ("can not set notification(s) as removed");
   }
 
 /*****************************************************************************/
@@ -1528,14 +1493,11 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
 
 static void Ntf_UpdateMyLastAccessToNotifications (void)
   {
-   char *Query;
-
    /***** Reset to 0 my number of new received messages *****/
-   if (asprintf (&Query,"UPDATE usr_last SET LastAccNotif=NOW()"
-			" WHERE UsrCod=%ld",
-                 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update last access to notifications");
+   DB_BuildQuery ("UPDATE usr_last SET LastAccNotif=NOW()"
+		  " WHERE UsrCod=%ld",
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update last access to notifications");
   }
 
 /*****************************************************************************/
@@ -1620,7 +1582,6 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    extern const char *Txt_TAB_Messages_NO_HTML[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Notifications_NO_HTML[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1817,15 +1778,14 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	   }
 
 	 /***** Mark all the pending notifications of this user as 'sent' *****/
-	 if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			      " WHERE ToUsrCod=%ld"
-			      " AND (Status & %u)<>0 AND (Status & %u)=0  AND (Status & %u)=0",
-		       (unsigned) Ntf_STATUS_BIT_SENT,ToUsrDat->UsrCod,
-		       (unsigned) Ntf_STATUS_BIT_EMAIL,
-		       (unsigned) Ntf_STATUS_BIT_SENT,
-		       (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED)) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_QueryUPDATE_free (Query,"can not set pending notifications of a user as sent");
+	 DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+			" WHERE ToUsrCod=%ld"
+			" AND (Status & %u)<>0 AND (Status & %u)=0  AND (Status & %u)=0",
+		        (unsigned) Ntf_STATUS_BIT_SENT,ToUsrDat->UsrCod,
+		        (unsigned) Ntf_STATUS_BIT_EMAIL,
+		        (unsigned) Ntf_STATUS_BIT_SENT,
+		        (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+	 DB_QueryUPDATE_new ("can not set pending notifications of a user as sent");
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1913,15 +1873,12 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
 
 void Ntf_MarkAllNotifAsSeen (void)
   {
-   char *Query;
-
    /***** Set all my notifications as seen *****/
-   if (asprintf (&Query,"UPDATE notif SET Status=(Status | %u)"
-			" WHERE ToUsrCod=%ld",
-	         (unsigned) Ntf_STATUS_BIT_READ,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not set notification(s) as seen");
+   DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
+		  " WHERE ToUsrCod=%ld",
+	          (unsigned) Ntf_STATUS_BIT_READ,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not set notification(s) as seen");
 
    /***** Show my notifications again *****/
    Ntf_ShowMyNotifications ();
@@ -2042,20 +1999,18 @@ static void Ntf_GetParamsNotifyEvents (void)
 void Ntf_ChangeNotifyEvents (void)
   {
    extern const char *Txt_Your_preferences_about_notifications_have_changed;
-   char *Query;
 
    /***** Get param with whether notify me about events *****/
    Ntf_GetParamsNotifyEvents ();
 
    /***** Store preferences about notify events *****/
-   if (asprintf (&Query,"UPDATE usr_data"
-			" SET NotifNtfEvents=%u,EmailNtfEvents=%u"
-			" WHERE UsrCod=%ld",
-	         Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents,
-	         Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update user's preferences");
+   DB_BuildQuery ("UPDATE usr_data"
+		  " SET NotifNtfEvents=%u,EmailNtfEvents=%u"
+		  " WHERE UsrCod=%ld",
+	          Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents,
+	          Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update user's preferences");
 
    /***** Show message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Your_preferences_about_notifications_have_changed);

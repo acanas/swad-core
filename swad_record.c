@@ -790,7 +790,6 @@ void Rec_RenameField (void)
    extern const char *Txt_The_record_field_X_already_exists;
    extern const char *Txt_The_record_field_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_field_X_has_not_changed;
-   char *Query;
    char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1];
 
    /***** Get parameters of the form *****/
@@ -832,11 +831,10 @@ void Rec_RenameField (void)
          else
            {
             /* Update the table of fields changing then old name by the new one */
-            if (asprintf (&Query,"UPDATE crs_record_fields SET FieldName='%s'"
-				 " WHERE FieldCod=%ld",
-                          NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod) < 0)
-               Lay_NotEnoughMemoryExit ();
-            DB_QueryUPDATE_free (Query,"can not update name of field of record");
+            DB_BuildQuery ("UPDATE crs_record_fields SET FieldName='%s'"
+			   " WHERE FieldCod=%ld",
+                           NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod);
+            DB_QueryUPDATE_new ("can not update name of field of record");
 
             /***** Write message to show the change made *****/
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -868,7 +866,6 @@ void Rec_ChangeLinesField (void)
   {
    extern const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed;
    extern const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y;
-   char *Query;
    unsigned NewNumLines;
 
    /***** Get parameters of the form *****/
@@ -898,11 +895,10 @@ void Rec_ChangeLinesField (void)
    else
      {
       /***** Update of the table of fields changing the old maximum of students by the new one *****/
-      if (asprintf (&Query,"UPDATE crs_record_fields SET NumLines=%u"
-			   " WHERE FieldCod=%ld",
-                    NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the number of lines of a field of record");
+      DB_BuildQuery ("UPDATE crs_record_fields SET NumLines=%u"
+		     " WHERE FieldCod=%ld",
+                     NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod);
+      DB_QueryUPDATE_new ("can not update the number of lines of a field of record");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -924,7 +920,6 @@ void Rec_ChangeVisibilityField (void)
   {
    extern const char *Txt_The_visibility_of_the_record_field_X_has_not_changed;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY];
-   char *Query;
    Rec_VisibilityRecordFields_t NewVisibility;
 
    /***** Get parameters of the form *****/
@@ -954,11 +949,10 @@ void Rec_ChangeVisibilityField (void)
    else
      {
       /***** Update of the table of fields changing the old visibility by the new *****/
-      if (asprintf (&Query,"UPDATE crs_record_fields SET Visibility=%u"
-			   " WHERE FieldCod=%ld",
-                    (unsigned) NewVisibility,Gbl.CurrentCrs.Records.Field.FieldCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the visibility of a field of record");
+      DB_BuildQuery ("UPDATE crs_record_fields SET Visibility=%u"
+		     " WHERE FieldCod=%ld",
+                     (unsigned) NewVisibility,Gbl.CurrentCrs.Records.Field.FieldCod);
+      DB_QueryUPDATE_new ("can not update the visibility of a field of record");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1985,7 +1979,6 @@ void Rec_GetFieldsCrsRecordFromForm (void)
 void Rec_UpdateCrsRecord (long UsrCod)
   {
    unsigned NumField;
-   char *Query;
    MYSQL_RES *mysql_res;
    bool FieldAlreadyExists;
 
@@ -2002,21 +1995,20 @@ void Rec_UpdateCrsRecord (long UsrCod)
             if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
               {
                /***** Update text of the field of record course *****/
-               if (asprintf (&Query,"UPDATE crs_records SET Txt='%s'"
-				    " WHERE UsrCod=%ld AND FieldCod=%ld",
-			     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,
-			     UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
-               DB_QueryUPDATE_free (Query,"can not update field of record");
+               DB_BuildQuery ("UPDATE crs_records SET Txt='%s'"
+			      " WHERE UsrCod=%ld AND FieldCod=%ld",
+			      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,
+			      UsrCod,
+			      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+               DB_QueryUPDATE_new ("can not update field of record");
               }
             else
               {
                /***** Remove text of the field of record course *****/
-               if (asprintf (&Query,"DELETE FROM crs_records"
-				    " WHERE UsrCod=%ld AND FieldCod=%ld",
-                             UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod) < 0)
-                  Lay_NotEnoughMemoryExit ();
-               DB_QueryDELETE_free (Query,"can not remove field of record");
+               DB_BuildQuery ("DELETE FROM crs_records"
+			      " WHERE UsrCod=%ld AND FieldCod=%ld",
+                              UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+               DB_QueryDELETE_new ("can not remove field of record");
               }
            }
          else if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
@@ -4406,17 +4398,14 @@ void Rec_UpdateMyDepartment (void)
 
 void Rec_UpdateMyOffice (void)
   {
-   char *Query;
-
    /***** Get my office *****/
    Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
-   if (asprintf (&Query,"UPDATE usr_data SET Office='%s' WHERE UsrCod=%ld",
-		 Gbl.Usrs.Me.UsrDat.Tch.Office,
-		 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update office");
+   DB_BuildQuery ("UPDATE usr_data SET Office='%s' WHERE UsrCod=%ld",
+		  Gbl.Usrs.Me.UsrDat.Tch.Office,
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update office");
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4428,17 +4417,14 @@ void Rec_UpdateMyOffice (void)
 
 void Rec_UpdateMyOfficePhone (void)
   {
-   char *Query;
-
    /***** Get my office *****/
    Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
-   if (asprintf (&Query,"UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod=%ld",
-	         Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update office phone");
+   DB_BuildQuery ("UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod=%ld",
+	          Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update office phone");
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();

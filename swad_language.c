@@ -179,17 +179,15 @@ void Lan_ChangeLanguage (void)
 void Lan_UpdateMyLanguageToCurrentLanguage (void)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char *Query;
 
    /***** Set my language to the current language *****/
    Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
 
    /***** Update my language in database *****/
-   if (asprintf (&Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
+   DB_BuildQuery ("UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
 	         Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update your language");
+	         Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update your language");
   }
 
 /*****************************************************************************/

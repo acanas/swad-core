@@ -977,7 +977,6 @@ static void Pho_UpdatePhoto2 (void)
 
 unsigned Pho_UpdateMyClicksWithoutPhoto (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -999,11 +998,10 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       /* Update number of clicks */
       if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
         {
-         if (asprintf (&Query,"UPDATE clicks_without_photo"
-			      " SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryUPDATE_free (Query,"can not update number of clicks without photo");
+         DB_BuildQuery ("UPDATE clicks_without_photo"
+			" SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
+		        Gbl.Usrs.Me.UsrDat.UsrCod);
+         DB_QueryUPDATE_new ("can not update number of clicks without photo");
          NumClicks++;
         }
      }
@@ -1190,14 +1188,9 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 
 static void Pho_ClearPhotoName (long UsrCod)
   {
-   char *Query;
-
    /***** Clear photo name in user's data *****/
-   if (asprintf (&Query,"UPDATE usr_data SET Photo=''"
-			" WHERE UsrCod=%ld",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not clear the name of a user's photo");
+   DB_BuildQuery ("UPDATE usr_data SET Photo='' WHERE UsrCod=%ld",UsrCod);
+   DB_QueryUPDATE_new ("can not clear the name of a user's photo");
   }
 
 /*****************************************************************************/
@@ -1206,15 +1199,12 @@ static void Pho_ClearPhotoName (long UsrCod)
 
 void Pho_UpdatePhotoName (struct UsrData *UsrDat)
   {
-   char *Query;
    char PathPublPhoto[PATH_MAX + 1];
 
    /***** Update photo name in database *****/
-   if (asprintf (&Query,"UPDATE usr_data SET Photo='%s'"
-			" WHERE UsrCod=%ld",
-                 Gbl.UniqueNameEncrypted,UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a user's photo");
+   DB_BuildQuery ("UPDATE usr_data SET Photo='%s' WHERE UsrCod=%ld",
+                  Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
+   DB_QueryUPDATE_new ("can not update the name of a user's photo");
 
    /***** Remove the old symbolic link to photo *****/
    snprintf (PathPublPhoto,sizeof (PathPublPhoto),
@@ -1336,18 +1326,15 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 void Pho_ChangePhotoVisibility (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   char *Query;
 
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho");
 
    /***** Store public/private photo in database *****/
-   if (asprintf (&Query,"UPDATE usr_data SET PhotoVisibility='%s'"
-			" WHERE UsrCod=%ld",
-		 Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
-		 Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update your preference about photo visibility");
+   DB_BuildQuery ("UPDATE usr_data SET PhotoVisibility='%s' WHERE UsrCod=%ld",
+		  Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update your preference about photo visibility");
 
    /***** Show form again *****/
    Pre_EditPrefs ();

@@ -703,13 +703,10 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
 
 static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const char *NewMaiName)
   {
-   char *Query;
-
    /***** Update mail domain changing old name by new name */
-   if (asprintf (&Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod=%ld",
-	         FieldName,NewMaiName,MaiCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a mail domain");
+   DB_BuildQuery ("UPDATE mail_domains SET %s='%s' WHERE MaiCod=%ld",
+	          FieldName,NewMaiName,MaiCod);
+   DB_QueryUPDATE_new ("can not update the name of a mail domain");
   }
 
 /*****************************************************************************/
@@ -1861,12 +1858,11 @@ void Mai_ConfirmEmail (void)
 		      Email);
          else
            {
-	    if (asprintf (&Query,"UPDATE usr_emails SET Confirmed='Y'"
-				 " WHERE usr_emails.UsrCod=%ld"
-				 " AND usr_emails.E_mail='%s'",
-		          UsrCod,Email) < 0)
-               Lay_NotEnoughMemoryExit ();
-	    DB_QueryUPDATE_free (Query,"can not confirm email");
+	    DB_BuildQuery ("UPDATE usr_emails SET Confirmed='Y'"
+			   " WHERE usr_emails.UsrCod=%ld"
+			   " AND usr_emails.E_mail='%s'",
+		           UsrCod,Email);
+	    DB_QueryUPDATE_new ("can not confirm email");
 
 	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_email_X_has_been_confirmed,

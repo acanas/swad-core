@@ -679,7 +679,6 @@ void Hld_RemoveHoliday2 (void)
 void Hld_ChangeHolidayPlace1 (void)
   {
    extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
-   char *Query;
    struct Holiday *Hld;
    struct Place NewPlace;
 
@@ -700,10 +699,9 @@ void Hld_ChangeHolidayPlace1 (void)
    Hld_GetDataOfHolidayByCod (Hld);
 
    /***** Update the place in database *****/
-   if (asprintf (&Query,"UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
-                 NewPlace.PlcCod,Hld->HldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the place of a holiday");
+   DB_BuildQuery ("UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
+                  NewPlace.PlcCod,Hld->HldCod);
+   DB_QueryUPDATE_new ("can not update the place of a holiday");
    Hld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld->PlaceFullName,NewPlace.FullName,
              Plc_MAX_BYTES_PLACE_FULL_NAME);
@@ -731,7 +729,6 @@ void Hld_ChangeHolidayPlace2 (void)
 void Hld_ChangeHolidayType1 (void)
   {
    extern const char *Txt_The_type_of_the_holiday_X_has_changed;
-   char *Query;
    struct Holiday *Hld;
 
    Hld = &Gbl.Hlds.EditingHld;
@@ -748,11 +745,10 @@ void Hld_ChangeHolidayType1 (void)
 
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
-   if (asprintf (&Query,"UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
-		        " WHERE HldCod=%ld",
-	         (unsigned) Hld->HldTyp,Hld->HldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the type of a holiday");
+   DB_BuildQuery ("UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
+		  " WHERE HldCod=%ld",
+	          (unsigned) Hld->HldTyp,Hld->HldCod);
+   DB_QueryUPDATE_new ("can not update the type of a holiday");
 
    /***** Write message to show the change made *****/
    Gbl.Alert.Type = Ale_SUCCESS;
@@ -795,7 +791,6 @@ void Hld_ChangeEndDate1 (void)
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
   {
    extern const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y;
-   char *Query;
    struct Holiday *Hld;
    struct Date NewDate;
    struct Date *PtrDate = NULL;			// Initialized to avoid warning
@@ -845,14 +840,13 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
      }
 
    /***** Update the date in database *****/
-   if (asprintf (&Query,"UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
-	         StrStartOrEndDate,
-	         NewDate.Year,
-	         NewDate.Month,
-	         NewDate.Day,
-	         Hld->HldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the date of a holiday");
+   DB_BuildQuery ("UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
+	          StrStartOrEndDate,
+	          NewDate.Year,
+	          NewDate.Month,
+	          NewDate.Day,
+	          Hld->HldCod);
+   DB_QueryUPDATE_new ("can not update the date of a holiday");
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
@@ -885,7 +879,6 @@ void Hld_RenameHoliday1 (void)
    extern const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty;
    extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
-   char *Query;
    struct Holiday *Hld;
    char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
 
@@ -917,10 +910,9 @@ void Hld_RenameHoliday1 (void)
         {
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
-	 if (asprintf (&Query,"UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
-		       NewHldName,Hld->HldCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_QueryUPDATE_free (Query,"can not update the text of a holiday");
+	 DB_BuildQuery ("UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
+		        NewHldName,Hld->HldCod);
+	 DB_QueryUPDATE_new ("can not update the text of a holiday");
 	 Str_Copy (Hld->Name,NewHldName,
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 

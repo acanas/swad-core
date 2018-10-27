@@ -1417,13 +1417,10 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 
 static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators)
   {
-   char *Query;
-
    /***** Store number of indicators of a course in database *****/
-   if (asprintf (&Query,"UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
-                 NumIndicators,CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not store number of indicators of a course");
+   DB_BuildQuery ("UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
+                  NumIndicators,CrsCod);
+   DB_QueryUPDATE_new ("can not store number of indicators of a course");
   }
 
 /*****************************************************************************/

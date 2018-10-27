@@ -642,13 +642,10 @@ static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,lo
 
 static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName)
   {
-   char *Query;
-
    /***** Update institutional link changing old name by new name */
-   if (asprintf (&Query,"UPDATE links SET %s='%s' WHERE LnkCod=%ld",
-	         FieldName,NewLnkName,LnkCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of an institutional link");
+   DB_BuildQuery ("UPDATE links SET %s='%s' WHERE LnkCod=%ld",
+	          FieldName,NewLnkName,LnkCod);
+   DB_QueryUPDATE_new ("can not update the name of an institutional link");
   }
 
 /*****************************************************************************/
@@ -660,7 +657,6 @@ void Lnk_ChangeLinkWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Link *Lnk;
-   char *Query;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Lnk = &Gbl.Links.EditingLnk;
@@ -677,10 +673,9 @@ void Lnk_ChangeLinkWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      if (asprintf (&Query,"UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
-                    NewWWW,Lnk->LnkCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the web of an institutional link");
+      DB_BuildQuery ("UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
+                     NewWWW,Lnk->LnkCod);
+      DB_QueryUPDATE_new ("can not update the web of an institutional link");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

@@ -257,7 +257,6 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    extern const char *Txt_The_number_of_rows_is_now_X;
    char UnsignedStr[10 + 1];
    long Cod;
-   char *Query;
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
@@ -269,16 +268,15 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
      {
       /***** Update properties of marks in the database *****/
       Cod = Brw_GetCodForFiles ();
-      if (asprintf (&Query,"UPDATE marks_properties,files"
-			   " SET marks_properties.%s=%u"
-			   " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-			   " AND files.FilCod=marks_properties.FilCod",
-		    Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
-		    (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		    Cod,
-		    Gbl.FileBrowser.Priv.FullPathInTree) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update properties of marks");
+      DB_BuildQuery ("UPDATE marks_properties,files"
+		     " SET marks_properties.%s=%u"
+		     " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
+		     " AND files.FilCod=marks_properties.FilCod",
+		     Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
+		     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		     Cod,
+		     Gbl.FileBrowser.Priv.FullPathInTree);
+      DB_QueryUPDATE_new ("can not update properties of marks");
 
       /***** Write message of success *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

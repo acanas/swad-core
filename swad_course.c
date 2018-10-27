@@ -2607,14 +2607,11 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
 
 void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod)
   {
-   char *Query;
-
    /***** Update institutional course code in table of courses *****/
-   if (asprintf (&Query,"UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
-                 NewInstitutionalCrsCod,Crs->CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the institutional code"
-	                      " of the current course");
+   DB_BuildQuery ("UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
+                  NewInstitutionalCrsCod,Crs->CrsCod);
+   DB_QueryUPDATE_new ("can not update the institutional code"
+	               " of the current course");
 
    /***** Copy institutional course code *****/
    Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,

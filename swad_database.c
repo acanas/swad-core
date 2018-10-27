@@ -3300,20 +3300,6 @@ void DB_QueryUPDATE_new (const char *MsgError)
    //return (unsigned long) mysql_affected_rows (&Gbl.mysql);
   }
 
-void DB_QueryUPDATE_free (const char *Query,const char *MsgError)
-  {
-   int Result;
-
-   /***** Query database *****/
-   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
-   free ((void *) Query);
-   if (Result)
-      DB_ExitOnMySQLError (MsgError);
-
-   /***** Return number of rows updated *****/
-   //return (unsigned long) mysql_affected_rows (&Gbl.mysql);
-  }
-
 void DB_QueryUPDATE (const char *Query,const char *MsgError)
   {
    /***** Query database *****/

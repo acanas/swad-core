@@ -718,13 +718,10 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 
 static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName)
   {
-   char *Query;
-
    /***** Update place changing old name by new name */
-   if (asprintf (&Query,"UPDATE places SET %s='%s' WHERE PlcCod=%ld",
-		 FieldName,NewPlcName,PlcCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a place");
+   DB_BuildQuery ("UPDATE places SET %s='%s' WHERE PlcCod=%ld",
+		  FieldName,NewPlcName,PlcCod);
+   DB_QueryUPDATE_new ("can not update the name of a place");
   }
 
 /*****************************************************************************/

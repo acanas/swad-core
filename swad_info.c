@@ -695,16 +695,14 @@ static bool Inf_GetIfIHaveReadFromForm (void)
 
 static void Inf_SetForceReadIntoDB (bool MustBeRead)
   {
-   char *Query;
-
    /***** Insert or replace info source for a specific type of course information *****/
-   if (asprintf (&Query,"UPDATE crs_info_src SET MustBeRead='%c'"
-                        " WHERE CrsCod=%ld AND InfoType='%s'",
-                 MustBeRead ? 'Y' :
-        	              'N',
-                 Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update if info must be read");
+   DB_BuildQuery ("UPDATE crs_info_src SET MustBeRead='%c'"
+		  " WHERE CrsCod=%ld AND InfoType='%s'",
+                  MustBeRead ? 'Y' :
+        	               'N',
+                  Gbl.CurrentCrs.Crs.CrsCod,
+		  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+   DB_QueryUPDATE_new ("can not update if info must be read");
   }
 
 /*****************************************************************************/
@@ -713,31 +711,27 @@ static void Inf_SetForceReadIntoDB (bool MustBeRead)
 
 static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
   {
-   char *Query;
-
    if (IHaveRead)
      {
       /***** Insert I have read course information *****/
-      if (asprintf (&Query,"REPLACE INTO crs_info_read"
-			   " (UsrCod,CrsCod,InfoType)"
-			   " VALUES"
-			   " (%ld,%ld,'%s')",
-                    Gbl.Usrs.Me.UsrDat.UsrCod,
-                    Gbl.CurrentCrs.Crs.CrsCod,
-                    Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not set that I have read course info");
+      DB_BuildQuery ("REPLACE INTO crs_info_read"
+		     " (UsrCod,CrsCod,InfoType)"
+		     " VALUES"
+		     " (%ld,%ld,'%s')",
+                     Gbl.Usrs.Me.UsrDat.UsrCod,
+                     Gbl.CurrentCrs.Crs.CrsCod,
+                     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+      DB_QueryUPDATE_new ("can not set that I have read course info");
      }
    else
      {
       /***** Remove I have read course information *****/
-      if (asprintf (&Query,"DELETE FROM crs_info_read"
-                           " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Gbl.CurrentCrs.Crs.CrsCod,
-		   Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not set that I have not read course info");
+      DB_BuildQuery ("DELETE FROM crs_info_read"
+		     " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+      DB_QueryDELETE_new ("can not set that I have not read course info");
      }
   }
 
@@ -1486,35 +1480,26 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
 
 void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
   {
-   char *Query;
-
    /***** Get if info source is already stored in database *****/
-   if (asprintf (&Query,"SELECT COUNT(*) FROM crs_info_src"
-                       " WHERE CrsCod=%ld AND InfoType='%s'",
-	         Gbl.CurrentCrs.Crs.CrsCod,
-	         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   if (DB_QueryCOUNT (Query,"can not get if info source is already stored in database"))	// Info is already stored in database, so update it
+   DB_BuildQuery ("SELECT COUNT(*) FROM crs_info_src"
+		  " WHERE CrsCod=%ld AND InfoType='%s'",
+	          Gbl.CurrentCrs.Crs.CrsCod,
+	          Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+   if (DB_QueryCOUNT_new ("can not get if info source is already stored in database"))	// Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
-        {
-         if (asprintf (&Query,"UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
-                              " WHERE CrsCod=%ld AND InfoType='%s'",
-                       Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
-                       Gbl.CurrentCrs.Crs.CrsCod,
-                       Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
+         DB_BuildQuery ("UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
+			" WHERE CrsCod=%ld AND InfoType='%s'",
+                        Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
+                        Gbl.CurrentCrs.Crs.CrsCod,
+                        Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       else	// MustBeRead remains unchanged
-        {
-         if (asprintf (&Query,"UPDATE crs_info_src SET InfoSrc='%s'"
-                             " WHERE CrsCod=%ld AND InfoType='%s'",
-		         Inf_NamesInDBForInfoSrc[InfoSrc],
-		     Gbl.CurrentCrs.Crs.CrsCod,
-		     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) < 0)
-            Lay_NotEnoughMemoryExit ();
-        }
-      DB_QueryUPDATE_free (Query,"can not update info source");
+         DB_BuildQuery ("UPDATE crs_info_src SET InfoSrc='%s'"
+		        " WHERE CrsCod=%ld AND InfoType='%s'",
+		        Inf_NamesInDBForInfoSrc[InfoSrc],
+		        Gbl.CurrentCrs.Crs.CrsCod,
+		        Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+      DB_QueryUPDATE_new ("can not update info source");
      }
    else		// Info is not stored in database, so insert it
      {

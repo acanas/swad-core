@@ -122,8 +122,6 @@ static void Ico_PutIconsIconSet (void)
 
 void Ico_ChangeIconSet (void)
   {
-   char *Query;
-
    /***** Get param with icon set *****/
    Gbl.Prefs.IconSet = Ico_GetParamIconSet ();
    snprintf (Gbl.Prefs.PathIconSet,sizeof (Gbl.Prefs.PathIconSet),
@@ -135,11 +133,10 @@ void Ico_ChangeIconSet (void)
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      if (asprintf (&Query,"UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
-		    Ico_IconSetId[Gbl.Prefs.IconSet],
-		    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update your preference about icon set");
+      DB_BuildQuery ("UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
+		     Ico_IconSetId[Gbl.Prefs.IconSet],
+		     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update your preference about icon set");
      }
 
    /***** Set preferences from current IP *****/

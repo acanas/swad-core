@@ -352,13 +352,10 @@ void Pre_ShowRightCol (void)
 
 static void Pre_UpdateSideColsOnUsrDataTable (void)
   {
-   char *Query;
-
-   if (asprintf (&Query,"UPDATE usr_data SET SideCols=%u"
-			" WHERE UsrCod=%ld",
-		 Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update your preference about side columns");
+   DB_BuildQuery ("UPDATE usr_data SET SideCols=%u"
+		  " WHERE UsrCod=%ld",
+		  Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update your preference about side columns");
   }
 
 /*****************************************************************************/

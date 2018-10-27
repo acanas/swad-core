@@ -1876,13 +1876,10 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
   {
-   char *Query;
-
    /***** Update institution changing old name by new name */
-   if (asprintf (&Query,"UPDATE institutions SET %s='%s' WHERE InsCod=%ld",
-	         FieldName,NewInsName,InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of an institution");
+   DB_BuildQuery ("UPDATE institutions SET %s='%s' WHERE InsCod=%ld",
+	          FieldName,NewInsName,InsCod);
+   DB_QueryUPDATE_new ("can not update the name of an institution");
 
    /***** Flush caches *****/
    Ins_FlushCacheShortNameOfInstitution ();
@@ -1961,13 +1958,10 @@ void Ins_ContEditAfterChgInsInConfig (void)
 
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod)
   {
-   char *Query;
-
    /***** Update country in table of institutions *****/
-   if (asprintf (&Query,"UPDATE institutions SET CtyCod=%ld WHERE InsCod=%ld",
-                 CtyCod,InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the country of an institution");
+   DB_BuildQuery ("UPDATE institutions SET CtyCod=%ld WHERE InsCod=%ld",
+                  CtyCod,InsCod);
+   DB_QueryUPDATE_new ("can not update the country of an institution");
   }
 
 /*****************************************************************************/
@@ -2050,13 +2044,10 @@ void Ins_ChangeInsWWWInConfig (void)
 
 static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char *Query;
-
    /***** Update database changing old WWW by new WWW *****/
-   if (asprintf (&Query,"UPDATE institutions SET WWW='%s' WHERE InsCod=%ld",
-	         NewWWW,InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the web of an institution");
+   DB_BuildQuery ("UPDATE institutions SET WWW='%s' WHERE InsCod=%ld",
+	          NewWWW,InsCod);
+   DB_QueryUPDATE_new ("can not update the web of an institution");
   }
 
 /*****************************************************************************/
@@ -2066,7 +2057,6 @@ static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW 
 void Ins_ChangeInsStatus (void)
   {
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
-   char *Query;
    Ins_Status_t Status;
    Ins_StatusTxt_t StatusTxt;
 
@@ -2089,10 +2079,9 @@ void Ins_ChangeInsStatus (void)
    Ins_GetDataOfInstitutionByCod (&Gbl.Inss.EditingIns,Ins_GET_BASIC_DATA);
 
    /***** Update status in table of institutions *****/
-   if (asprintf (&Query,"UPDATE institutions SET Status=%u WHERE InsCod=%ld",
-                 (unsigned) Status,Gbl.Inss.EditingIns.InsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the status of an institution");
+   DB_BuildQuery ("UPDATE institutions SET Status=%u WHERE InsCod=%ld",
+                  (unsigned) Status,Gbl.Inss.EditingIns.InsCod);
+   DB_QueryUPDATE_new ("can not update the status of an institution");
    Gbl.Inss.EditingIns.Status = Status;
 
    /***** Write message to show the change made

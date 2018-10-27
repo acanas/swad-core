@@ -180,13 +180,10 @@ static long Not_InsertNoticeInDB (const char *Content)
 
 static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char *Query;
-
    /***** Update number of users notified *****/
-   if (asprintf (&Query,"UPDATE notices SET NumNotif=%u WHERE NotCod=%ld",
-	         NumUsrsToBeNotifiedByEMail,NotCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the number of notifications of a notice");
+   DB_BuildQuery ("UPDATE notices SET NumNotif=%u WHERE NotCod=%ld",
+	          NumUsrsToBeNotifiedByEMail,NotCod);
+   DB_QueryUPDATE_new ("can not update the number of notifications of a notice");
   }
 
 /*****************************************************************************/
@@ -224,19 +221,17 @@ void Not_ListFullNotices (void)
 
 void Not_HideActiveNotice (void)
   {
-   char *Query;
    long NotCod;
 
    /***** Get the code of the notice to hide *****/
    NotCod = Not_GetParamNotCod ();
 
    /***** Set notice as hidden *****/
-   if (asprintf (&Query,"UPDATE notices SET Status=%u"
-			" WHERE NotCod=%ld AND CrsCod=%ld",
-	         (unsigned) Not_OBSOLETE_NOTICE,
-	         NotCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide notice");
+   DB_BuildQuery ("UPDATE notices SET Status=%u"
+		  " WHERE NotCod=%ld AND CrsCod=%ld",
+	          (unsigned) Not_OBSOLETE_NOTICE,
+	          NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not hide notice");
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
@@ -248,19 +243,17 @@ void Not_HideActiveNotice (void)
 
 void Not_RevealHiddenNotice (void)
   {
-   char *Query;
    long NotCod;
 
    /***** Get the code of the notice to reveal *****/
    NotCod = Not_GetParamNotCod ();
 
    /***** Set notice as active *****/
-   if (asprintf (&Query,"UPDATE notices SET Status=%u"
-			" WHERE NotCod=%ld AND CrsCod=%ld",
-	         (unsigned) Not_ACTIVE_NOTICE,
-	         NotCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not reveal notice");
+   DB_BuildQuery ("UPDATE notices SET Status=%u"
+		  " WHERE NotCod=%ld AND CrsCod=%ld",
+	          (unsigned) Not_ACTIVE_NOTICE,
+	          NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not reveal notice");
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);

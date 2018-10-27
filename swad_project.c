@@ -2828,7 +2828,6 @@ void Prj_RemoveProject (void)
 void Prj_HideProject (void)
   {
    extern const char *Txt_Project_X_is_now_hidden;
-   char *Query;
    struct Project Prj;
 
    /***** Allocate memory for the project *****/
@@ -2845,11 +2844,10 @@ void Prj_HideProject (void)
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
       /***** Hide project *****/
-      if (asprintf (&Query,"UPDATE projects SET Hidden='Y'"
-			   " WHERE PrjCod=%ld AND CrsCod=%ld",
-	            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not hide project");
+      DB_BuildQuery ("UPDATE projects SET Hidden='Y'"
+		     " WHERE PrjCod=%ld AND CrsCod=%ld",
+	             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE_new ("can not hide project");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2874,7 +2872,6 @@ void Prj_HideProject (void)
 void Prj_ShowProject (void)
   {
    extern const char *Txt_Project_X_is_now_visible;
-   char *Query;
    struct Project Prj;
 
    /***** Allocate memory for the project *****/
@@ -2891,11 +2888,10 @@ void Prj_ShowProject (void)
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
       /***** Show project *****/
-      if (asprintf (&Query,"UPDATE projects SET Hidden='N'"
-			   " WHERE PrjCod=%ld AND CrsCod=%ld",
-	            Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not show project");
+      DB_BuildQuery ("UPDATE projects SET Hidden='N'"
+		     " WHERE PrjCod=%ld AND CrsCod=%ld",
+	             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE_new ("can not show project");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -3402,34 +3398,31 @@ static void Prj_CreateProject (struct Project *Prj)
 
 static void Prj_UpdateProject (struct Project *Prj)
   {
-   char *Query;
-
    /***** Adjust date of last edition to now *****/
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 
    /***** Update the data of the project *****/
-   if (asprintf (&Query,"UPDATE projects SET "
-			"DptCod=%ld,Hidden='%c',Preassigned='%c',NumStds=%u,Proposal='%s',"
-			"ModifTime=FROM_UNIXTIME(%ld),"
-			"Title='%s',"
-			"Description='%s',Knowledge='%s',Materials='%s',URL='%s'"
-			" WHERE PrjCod=%ld AND CrsCod=%ld",
-	         Prj->DptCod,
-	         Prj->Hidden == Prj_HIDDEN ? 'Y' :
-					     'N',
-	         Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-						       'N',
-	         Prj->NumStds,
-	         Prj_Proposal_DB[Prj->Proposal],
-	         Prj->ModifTime,
-	         Prj->Title,
-	         Prj->Description,
-	         Prj->Knowledge,
-	         Prj->Materials,
-	         Prj->URL,
-	         Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update project");
+   DB_BuildQuery ("UPDATE projects SET "
+		  "DptCod=%ld,Hidden='%c',Preassigned='%c',NumStds=%u,Proposal='%s',"
+		  "ModifTime=FROM_UNIXTIME(%ld),"
+		  "Title='%s',"
+		  "Description='%s',Knowledge='%s',Materials='%s',URL='%s'"
+		  " WHERE PrjCod=%ld AND CrsCod=%ld",
+	          Prj->DptCod,
+	          Prj->Hidden == Prj_HIDDEN ? 'Y' :
+					      'N',
+	          Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+						        'N',
+	          Prj->NumStds,
+	          Prj_Proposal_DB[Prj->Proposal],
+	          Prj->ModifTime,
+	          Prj->Title,
+	          Prj->Description,
+	          Prj->Knowledge,
+	          Prj->Materials,
+	          Prj->URL,
+	          Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not update project");
   }
 
 /*****************************************************************************/
