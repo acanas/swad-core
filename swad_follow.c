@@ -998,7 +998,6 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 void Fol_FollowUsr1 (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char *Query;
    bool CreateNotif;
    bool NotifyByEmail;
 
@@ -1012,14 +1011,13 @@ void Fol_FollowUsr1 (void)
 					Gbl.Usrs.Other.UsrDat.UsrCod))
 	   {
 	    /***** Follow user in database *****/
-	    if (asprintf (&Query,"REPLACE INTO usr_follow"
-				 " (FollowerCod,FollowedCod,FollowTime)"
-				 " VALUES"
-				 " (%ld,%ld,NOW())",
-			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
-               Lay_NotEnoughMemoryExit ();
-	    DB_QueryREPLACE_free (Query,"can not follow user");
+	    DB_BuildQuery ("REPLACE INTO usr_follow"
+			   " (FollowerCod,FollowedCod,FollowTime)"
+			   " VALUES"
+			   " (%ld,%ld,NOW())",
+			   Gbl.Usrs.Me.UsrDat.UsrCod,
+			   Gbl.Usrs.Other.UsrDat.UsrCod);
+	    DB_QueryREPLACE_new ("can not follow user");
 
 	    /***** This follow must be notified by email? *****/
             CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
@@ -1067,7 +1065,6 @@ void Fol_FollowUsr2 (void)
 void Fol_UnfollowUsr1 (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char *Query;
 
    /***** Get user to be unfollowed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -1077,12 +1074,11 @@ void Fol_UnfollowUsr1 (void)
                                     Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
 	 /***** Unfollow user in database *****/
-	 if (asprintf (&Query,"DELETE FROM usr_follow"
-	                      " WHERE FollowerCod=%ld AND FollowedCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-                       Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_QueryREPLACE_free (Query,"can not unfollow user");
+	 DB_BuildQuery ("DELETE FROM usr_follow"
+			" WHERE FollowerCod=%ld AND FollowedCod=%ld",
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Other.UsrDat.UsrCod);
+	 DB_QueryREPLACE_new ("can not unfollow user");
         }
       Gbl.Alert.Type = Ale_SUCCESS;
      }

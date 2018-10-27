@@ -1890,7 +1890,6 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     unsigned NumEvents,unsigned NumMails)
   {
-   char *Query;
    unsigned CurrentNumEvents;
    unsigned CurrentNumMails;
 
@@ -1898,15 +1897,14 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
    Ntf_GetNumNotifSent (DegCod,CrsCod,NotifyEvent,&CurrentNumEvents,&CurrentNumMails);
 
    /***** Update number of users notified *****/
-   if (asprintf (&Query,"REPLACE INTO sta_notif"
-			" (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
-			" VALUES"
-			" (%ld,%ld,%u,%u,%u)",
-	         DegCod,CrsCod,(unsigned) NotifyEvent,
-	         CurrentNumEvents + NumEvents,
-	         CurrentNumMails + NumMails) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not update the number of sent notifications");
+   DB_BuildQuery ("REPLACE INTO sta_notif"
+		  " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
+		  " VALUES"
+		  " (%ld,%ld,%u,%u,%u)",
+	          DegCod,CrsCod,(unsigned) NotifyEvent,
+	          CurrentNumEvents + NumEvents,
+	          CurrentNumMails + NumMails);
+   DB_QueryREPLACE_new ("can not update the number of sent notifications");
   }
 
 /*****************************************************************************/

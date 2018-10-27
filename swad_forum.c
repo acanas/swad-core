@@ -484,16 +484,13 @@ static void For_DeletePstFromDisabledPstTable (long PstCod)
 
 static void For_InsertPstIntoBannedPstTable (long PstCod)
   {
-   char *Query;
-
    /***** Remove post from banned posts table *****/
-   if (asprintf (&Query,"REPLACE INTO forum_disabled_post"
-			" (PstCod,UsrCod,DisableTime)"
-			" VALUES"
-			" (%ld,%ld,NOW())",
-                 PstCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not ban a post of a forum");
+   DB_BuildQuery ("REPLACE INTO forum_disabled_post"
+		  " (PstCod,UsrCod,DisableTime)"
+		  " VALUES"
+		  " (%ld,%ld,NOW())",
+                  PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryREPLACE_new ("can not ban a post of a forum");
   }
 
 /*****************************************************************************/
@@ -794,17 +791,14 @@ static long For_GetLastPstCod (long ThrCod)
 static void For_UpdateThrReadTime (long ThrCod,
                                    time_t CreatTimeUTCOfTheMostRecentPostRead)
   {
-   char *Query;
-
    /***** Insert or replace pair ThrCod-UsrCod in forum_thr_read *****/
-   if (asprintf (&Query,"REPLACE INTO forum_thr_read"
-			" (ThrCod,UsrCod,ReadTime)"
-			" VALUES"
-			" (%ld,%ld,FROM_UNIXTIME(%ld))",
-	         ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	         (long) CreatTimeUTCOfTheMostRecentPostRead) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not update the status of reading of a thread of a forum");
+   DB_BuildQuery ("REPLACE INTO forum_thr_read"
+		  " (ThrCod,UsrCod,ReadTime)"
+		  " VALUES"
+		  " (%ld,%ld,FROM_UNIXTIME(%ld))",
+	          ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	          (long) CreatTimeUTCOfTheMostRecentPostRead);
+   DB_QueryREPLACE_new ("can not update the status of reading of a thread of a forum");
   }
 
 /*****************************************************************************/
@@ -4443,19 +4437,16 @@ static void For_MoveThrToCurrentForum (long ThrCod)
 
 static void For_InsertThrInClipboard (long ThrCod)
   {
-   char *Query;
-
    /***** Remove expired thread clipboards *****/
    For_RemoveExpiredThrsClipboards ();
 
    /***** Add thread to my clipboard *****/
-   if (asprintf (&Query,"REPLACE INTO forum_thr_clip"
-			" (ThrCod,UsrCod)"
-			" VALUES"
-			" (%ld,%ld)",
-                 ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not add thread to clipboard");
+   DB_BuildQuery ("REPLACE INTO forum_thr_clip"
+		  " (ThrCod,UsrCod)"
+		  " VALUES"
+		  " (%ld,%ld)",
+                  ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryREPLACE_new ("can not add thread to clipboard");
   }
 
 /*****************************************************************************/

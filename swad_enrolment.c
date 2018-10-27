@@ -3437,7 +3437,6 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
-   char *Query;
 
    /***** Check if user was and administrator of current institution/centre/degree *****/
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
@@ -3447,13 +3446,12 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
    else        // User was not administrator of current institution/centre/degree
      {
       /***** Insert or replace administrator in current institution/centre/degree *****/
-      if (asprintf (&Query,"REPLACE INTO admin"
-	                   " (UsrCod,Scope,Cod)"
-                           " VALUES"
-                           " (%ld,'%s',%ld)",
-                    UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryREPLACE_free (Query,"can not create administrator");
+      DB_BuildQuery ("REPLACE INTO admin"
+		     " (UsrCod,Scope,Cod)"
+		     " VALUES"
+		     " (%ld,'%s',%ld)",
+                     UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
+      DB_QueryREPLACE_new ("can not create administrator");
 
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,

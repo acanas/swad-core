@@ -175,41 +175,38 @@ void Pre_SetPrefsFromIP (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   char *Query;
 
    /***** Update preferences from current IP in database *****/
-   if (asprintf (&Query,"REPLACE INTO IP_prefs"
-			" (IP,UsrCod,LastChange,"
-			"FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
-			" VALUES"
-			" ('%s',%ld,NOW(),"
-			"%u,%u,'%s','%s',%u,%u)",
-	         Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
-	         Gbl.Prefs.FirstDayOfWeek,
-	         (unsigned) Gbl.Prefs.DateFormat,
-	         The_ThemeId[Gbl.Prefs.Theme],
-	         Ico_IconSetId[Gbl.Prefs.IconSet],
-	         (unsigned) Gbl.Prefs.Menu,
-	         Gbl.Prefs.SideCols) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not store preferences from current IP address");
+   DB_BuildQuery ("REPLACE INTO IP_prefs"
+		  " (IP,UsrCod,LastChange,"
+		  "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
+		  " VALUES"
+		  " ('%s',%ld,NOW(),"
+		  "%u,%u,'%s','%s',%u,%u)",
+	          Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Prefs.FirstDayOfWeek,
+	          (unsigned) Gbl.Prefs.DateFormat,
+	          The_ThemeId[Gbl.Prefs.Theme],
+	          Ico_IconSetId[Gbl.Prefs.IconSet],
+	          (unsigned) Gbl.Prefs.Menu,
+	          Gbl.Prefs.SideCols);
+   DB_QueryREPLACE_new ("can not store preferences from current IP address");
 
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      if (asprintf (&Query,"UPDATE IP_prefs"
-			  " SET FirstDayOfWeek=%u,DateFormat=%u,"
-			  "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
-			   " WHERE UsrCod=%ld",
-		    Gbl.Prefs.FirstDayOfWeek,
-		    (unsigned) Gbl.Prefs.DateFormat,
-		    The_ThemeId[Gbl.Prefs.Theme],
-		    Ico_IconSetId[Gbl.Prefs.IconSet],
-		    (unsigned) Gbl.Prefs.Menu,
-		    Gbl.Prefs.SideCols,
-		    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update your preferences");
+      DB_BuildQuery ("UPDATE IP_prefs"
+		    " SET FirstDayOfWeek=%u,DateFormat=%u,"
+		    "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
+		     " WHERE UsrCod=%ld",
+		     Gbl.Prefs.FirstDayOfWeek,
+		     (unsigned) Gbl.Prefs.DateFormat,
+		     The_ThemeId[Gbl.Prefs.Theme],
+		     Ico_IconSetId[Gbl.Prefs.IconSet],
+		     (unsigned) Gbl.Prefs.Menu,
+		     Gbl.Prefs.SideCols,
+		     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update your preferences");
      }
   }
 

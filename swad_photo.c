@@ -2405,17 +2405,15 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhotoInMicroseconds)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   char *Query;
 
-   if (asprintf (&Query,"REPLACE INTO sta_degrees"
-			" (DegCod,Sex,NumStds,NumStdsWithPhoto,"
-			"TimeAvgPhoto,TimeToComputeAvgPhoto)"
-			" VALUES"
-			" (%ld,'%s',%u,%u,NOW(),%ld)",
-	         DegCod,Usr_StringsSexDB[Sex],NumStds,NumStdsWithPhoto,
-		 TimeToComputeAvgPhotoInMicroseconds) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not save stats of a degree");
+   DB_BuildQuery ("REPLACE INTO sta_degrees"
+		  " (DegCod,Sex,NumStds,NumStdsWithPhoto,"
+		  "TimeAvgPhoto,TimeToComputeAvgPhoto)"
+		  " VALUES"
+		  " (%ld,'%s',%u,%u,NOW(),%ld)",
+	          DegCod,Usr_StringsSexDB[Sex],NumStds,NumStdsWithPhoto,
+		  TimeToComputeAvgPhotoInMicroseconds);
+   DB_QueryREPLACE_new ("can not save stats of a degree");
   }
 
 /*****************************************************************************/

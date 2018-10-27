@@ -390,7 +390,6 @@ void Net_UpdateMyWebsAndSocialNets (void)
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
-   char *Query;
    Net_WebsAndSocialNetworks_t Web;
    char URL[Cns_MAX_BYTES_WWW + 1];
 
@@ -406,24 +405,22 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    if (URL[0])
      {
       /***** Insert or replace web / social network *****/
-      if (asprintf (&Query,"REPLACE INTO usr_webs"
-			   " (UsrCod,Web,URL)"
-			   " VALUES"
-			   " (%ld,'%s','%s')",
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Net_WebsAndSocialNetworksDB[Web],
-		    URL) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryREPLACE_free (Query,"can not update user's web / social network");
+      DB_BuildQuery ("REPLACE INTO usr_webs"
+		     " (UsrCod,Web,URL)"
+		     " VALUES"
+		     " (%ld,'%s','%s')",
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     Net_WebsAndSocialNetworksDB[Web],
+		     URL);
+      DB_QueryREPLACE_new ("can not update user's web / social network");
      }
    else
      {
       /***** Remove web / social network *****/
-      if (asprintf (&Query,"DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Net_WebsAndSocialNetworksDB[Web]) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryREPLACE_free (Query,"can not remove user's web / social network");
+      DB_BuildQuery ("DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     Net_WebsAndSocialNetworksDB[Web]);
+      DB_QueryDELETE_new ("can not remove user's web / social network");
      }
   }
 

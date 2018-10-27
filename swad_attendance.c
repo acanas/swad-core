@@ -2611,20 +2611,17 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
 static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool Present,
                                                   const char *CommentStd,const char *CommentTch)
   {
-   char *Query;
-
    /***** Register user as assistant to an event in database *****/
-   if (asprintf (&Query,"REPLACE INTO att_usr"
-	                " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
-                        " VALUES"
-                        " (%ld,%ld,'%c','%s','%s')",
-                 AttCod,UsrCod,
-                 Present ? 'Y' :
-        	           'N',
-                 CommentStd,
-                 CommentTch) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not register user in an event");
+   DB_BuildQuery ("REPLACE INTO att_usr"
+		  " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
+		  " VALUES"
+		  " (%ld,%ld,'%c','%s','%s')",
+                  AttCod,UsrCod,
+                  Present ? 'Y' :
+        	            'N',
+                  CommentStd,
+                  CommentTch);
+   DB_QueryREPLACE_new ("can not register user in an event");
   }
 
 /*****************************************************************************/
@@ -2633,14 +2630,11 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
 
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
   {
-   char *Query;
-
    /***** Remove user if there is no comment in database *****/
-   if (asprintf (&Query,"DELETE FROM att_usr"
-	                " WHERE AttCod=%ld AND UsrCod=%ld",
-                 AttCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not remove student from an event");
+   DB_BuildQuery ("DELETE FROM att_usr"
+		  " WHERE AttCod=%ld AND UsrCod=%ld",
+                  AttCod,UsrCod);
+   DB_QueryREPLACE_new ("can not remove student from an event");
   }
 
 /*****************************************************************************/

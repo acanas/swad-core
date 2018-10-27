@@ -857,14 +857,11 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
 
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
   {
-   char *Query;
-
    /***** Remove one of my user's IDs *****/
-   if (asprintf (&Query,"DELETE FROM usr_IDs"
-                        " WHERE UsrCod=%ld AND UsrID='%s'",
-                 UsrCod,UsrID) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not remove a user's ID");
+   DB_BuildQuery ("DELETE FROM usr_IDs"
+		  " WHERE UsrCod=%ld AND UsrID='%s'",
+                  UsrCod,UsrID);
+   DB_QueryREPLACE_new ("can not remove a user's ID");
   }
 
 /*****************************************************************************/

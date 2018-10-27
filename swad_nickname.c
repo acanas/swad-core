@@ -498,14 +498,11 @@ void Nck_RemoveOtherUsrNick (void)
 
 static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname)
   {
-   char *Query;
-
    /***** Remove a nickname *****/
-   if (asprintf (&Query,"DELETE FROM usr_nicknames"
-			" WHERE UsrCod=%ld AND Nickname='%s'",
-                 UsrCod,Nickname) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not remove a nickname");
+   DB_BuildQuery ("DELETE FROM usr_nicknames"
+		  " WHERE UsrCod=%ld AND Nickname='%s'",
+                  UsrCod,Nickname);
+   DB_QueryREPLACE_new ("can not remove a nickname");
   }
 
 /*****************************************************************************/
@@ -634,14 +631,11 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 
 void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname)
   {
-   char *Query;
-
    /***** Update user's nickname in database *****/
-   if (asprintf (&Query,"REPLACE INTO usr_nicknames"
-			" (UsrCod,Nickname,CreatTime)"
-			" VALUES"
-			" (%ld,'%s',NOW())",
-                 UsrCod,NewNickname) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not update nickname");
+   DB_BuildQuery ("REPLACE INTO usr_nicknames"
+		  " (UsrCod,Nickname,CreatTime)"
+		  " VALUES"
+		  " (%ld,'%s',NOW())",
+                  UsrCod,NewNickname);
+   DB_QueryREPLACE_new ("can not update nickname");
   }

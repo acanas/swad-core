@@ -599,20 +599,18 @@ void Ann_RemoveAnnouncement (void)
 
 void Ann_MarkAnnouncementAsSeen (void)
   {
-   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Mark announcement as seen *****/
-   if (asprintf (&Query,"REPLACE INTO ann_seen"
-	                " (AnnCod,UsrCod)"
-	                " VALUES"
-	                " (%ld,%ld)",
-                 AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not mark announcement as seen");
+   DB_BuildQuery ("REPLACE INTO ann_seen"
+		  " (AnnCod,UsrCod)"
+		  " VALUES"
+		  " (%ld,%ld)",
+                  AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryREPLACE_new ("can not mark announcement as seen");
 
    /***** Show other announcements again *****/
    Ann_ShowMyAnnouncementsNotMarkedAsSeen ();

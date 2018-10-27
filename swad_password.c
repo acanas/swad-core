@@ -512,26 +512,22 @@ static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSW
 
 void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
-   char *Query;
-
    /***** Encrypt my pending password *****/
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.PendingPassword);
 
    /***** Remove expired pending passwords from database *****/
-   if (asprintf (&Query,"DELETE FROM pending_passwd"
-			" WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                 Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove expired pending passwords");
+   DB_BuildQuery ("DELETE FROM pending_passwd"
+		  " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                  Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
+   DB_QueryDELETE_new ("can not remove expired pending passwords");
 
    /***** Update my current password in database *****/
-   if (asprintf (&Query,"REPLACE INTO pending_passwd"
-			" (UsrCod,PendingPassword,DateAndTime)"
-			" VALUES"
-			" (%ld,'%s',NOW())",
-                 Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not create pending password");
+   DB_BuildQuery ("REPLACE INTO pending_passwd"
+		  " (UsrCod,PendingPassword,DateAndTime)"
+		  " VALUES"
+		  " (%ld,'%s',NOW())",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
+   DB_QueryREPLACE_new ("can not create pending password");
   }
 
 /*****************************************************************************/

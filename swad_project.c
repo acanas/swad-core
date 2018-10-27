@@ -1949,7 +1949,6 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
    long PrjCod;
    struct ListUsrCods ListUsrCods;
    unsigned NumUsr;
-   char *Query;
    bool ItsMe;
 
    /***** Get project code *****/
@@ -1971,14 +1970,13 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
          Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
 	 /* Add user to project */
-	 if (asprintf (&Query,"REPLACE INTO prj_usr"
-			      " (PrjCod,RoleInProject,UsrCod)"
-			      " VALUES"
-			      " (%ld,%u,%ld)",
-		       PrjCod,(unsigned) RoleInProject,
-		       Gbl.Usrs.Other.UsrDat.UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_QueryREPLACE_free (Query,"can not add user to project");
+	 DB_BuildQuery ("REPLACE INTO prj_usr"
+			" (PrjCod,RoleInProject,UsrCod)"
+			" VALUES"
+			" (%ld,%u,%ld)",
+		        PrjCod,(unsigned) RoleInProject,
+		        Gbl.Usrs.Other.UsrDat.UsrCod);
+	 DB_QueryREPLACE_new ("can not add user to project");
 
 	 /***** Flush cache *****/
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);

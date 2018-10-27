@@ -4528,22 +4528,20 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char *Query;
 
    /***** Update size of the file browser in database *****/
-   if (asprintf (&Query,"REPLACE INTO file_browser_size"
-			" (FileBrowser,Cod,ZoneUsrCod,"
-			"NumLevels,NumFolders,NumFiles,TotalSize)"
-			" VALUES"
-			" (%u,%ld,%ld,"
-			"%u,'%lu','%lu','%llu')",
-	         (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
-	         Gbl.FileBrowser.Size.NumLevls,
-	         Gbl.FileBrowser.Size.NumFolds,
-	         Gbl.FileBrowser.Size.NumFiles,
-	         Gbl.FileBrowser.Size.TotalSiz) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not store the size of a file browser");
+   DB_BuildQuery ("REPLACE INTO file_browser_size"
+		  " (FileBrowser,Cod,ZoneUsrCod,"
+		  "NumLevels,NumFolders,NumFiles,TotalSize)"
+		  " VALUES"
+		  " (%u,%ld,%ld,"
+		  "%u,'%lu','%lu','%llu')",
+	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
+	          Gbl.FileBrowser.Size.NumLevls,
+	          Gbl.FileBrowser.Size.NumFolds,
+	          Gbl.FileBrowser.Size.NumFiles,
+	          Gbl.FileBrowser.Size.TotalSiz);
+   DB_QueryREPLACE_new ("can not store the size of a file browser");
   }
 
 /*****************************************************************************/
@@ -5552,7 +5550,6 @@ void Brw_CreateDirDownloadTmp (void)
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
   {
    long Cod;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -5630,15 +5627,14 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update date of my last access to file browser in this course *****/
-   if (asprintf (&Query,"REPLACE INTO file_browser_last"
-	                " (UsrCod,FileBrowser,Cod,LastClick)"
-		        " VALUES"
-		        " (%ld,%u,%ld,NOW())",
-	         Gbl.Usrs.Me.UsrDat.UsrCod,
-	         (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
-	         Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryREPLACE_free (Query,"can not update date of last access to a file browser");
+   DB_BuildQuery ("REPLACE INTO file_browser_last"
+		  " (UsrCod,FileBrowser,Cod,LastClick)"
+		  " VALUES"
+		  " (%ld,%u,%ld,NOW())",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
+	          Cod);
+   DB_QueryREPLACE_new ("can not update date of last access to a file browser");
   }
 
 /*****************************************************************************/
