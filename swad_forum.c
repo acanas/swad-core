@@ -729,14 +729,11 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *Forum)
 
 static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
   {
-   char *Query;
-
    /***** Update the code of the first and last posts of a thread *****/
-   if (asprintf (&Query,"UPDATE forum_thread SET FirstPstCod=%ld,LastPstCod=%ld"
-                        " WHERE ThrCod=%ld",
-                 FirstPstCod,LastPstCod,ThrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update a thread of a forum");
+   DB_BuildQuery ("UPDATE forum_thread SET FirstPstCod=%ld,LastPstCod=%ld"
+		  " WHERE ThrCod=%ld",
+                  FirstPstCod,LastPstCod,ThrCod);
+   DB_QueryUPDATE_new ("can not update a thread of a forum");
   }
 
 /*****************************************************************************/
@@ -745,14 +742,11 @@ static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long Last
 
 static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
   {
-   char *Query;
-
    /***** Update the code of the last post of a thread *****/
-   if (asprintf (&Query,"UPDATE forum_thread SET LastPstCod=%ld"
-	                " WHERE ThrCod=%ld",
-                 LastPstCod,ThrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update a thread of a forum");
+   DB_BuildQuery ("UPDATE forum_thread SET LastPstCod=%ld"
+		  " WHERE ThrCod=%ld",
+                  LastPstCod,ThrCod);
+   DB_QueryUPDATE_new ("can not update a thread of a forum");
   }
 
 /*****************************************************************************/
@@ -4027,14 +4021,11 @@ void For_ReceiveForumPost (void)
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char *Query;
-
    /***** Update number of users notified *****/
-   if (asprintf (&Query,"UPDATE forum_post SET NumNotif=NumNotif+%u"
-			" WHERE PstCod=%ld",
-                 NumUsrsToBeNotifiedByEMail,PstCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the number of notifications of a post");
+   DB_BuildQuery ("UPDATE forum_post SET NumNotif=NumNotif+%u"
+		  " WHERE PstCod=%ld",
+                  NumUsrsToBeNotifiedByEMail,PstCod);
+   DB_QueryUPDATE_new ("can not update the number of notifications of a post");
   }
 
 /*****************************************************************************/
@@ -4368,8 +4359,6 @@ static bool For_CheckIfThrBelongsToForum (long ThrCod,struct Forum *Forum)
 
 static void For_MoveThrToCurrentForum (long ThrCod)
   {
-   char *Query;
-
    /***** Move a thread to current forum *****/
    switch (Gbl.Forum.ForumSelected.Type)
      {
@@ -4377,58 +4366,53 @@ static void For_MoveThrToCurrentForum (long ThrCod)
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
-         if (asprintf (&Query,"UPDATE forum_thread"
-			      " SET ForumType=%u,Location=-1"
-			      " WHERE ThrCod=%ld",
-                       (unsigned) Gbl.Forum.ForumSelected.Type,
-                       ThrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("UPDATE forum_thread"
+			" SET ForumType=%u,Location=-1"
+			" WHERE ThrCod=%ld",
+                        (unsigned) Gbl.Forum.ForumSelected.Type,
+                        ThrCod);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         if (asprintf (&Query,"UPDATE forum_thread"
-			      " SET ForumType=%u,Location=%ld"
-			      " WHERE ThrCod=%ld",
-		       (unsigned) Gbl.Forum.ForumSelected.Type,
-		       Gbl.Forum.ForumSelected.Location,
-		       ThrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("UPDATE forum_thread"
+			" SET ForumType=%u,Location=%ld"
+			" WHERE ThrCod=%ld",
+		        (unsigned) Gbl.Forum.ForumSelected.Type,
+		        Gbl.Forum.ForumSelected.Location,
+		        ThrCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         if (asprintf (&Query,"UPDATE forum_thread"
-			      " SET ForumType=%u,Location=%ld"
-			      " WHERE ThrCod=%ld",
-                       (unsigned) Gbl.Forum.ForumSelected.Type,
-                       Gbl.Forum.ForumSelected.Location,
-                       ThrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("UPDATE forum_thread"
+			" SET ForumType=%u,Location=%ld"
+			" WHERE ThrCod=%ld",
+                        (unsigned) Gbl.Forum.ForumSelected.Type,
+                        Gbl.Forum.ForumSelected.Location,
+                        ThrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         if (asprintf (&Query,"UPDATE forum_thread"
-			      " SET ForumType=%u,Location=%ld"
-			      " WHERE ThrCod=%ld",
-		       (unsigned) Gbl.Forum.ForumSelected.Type,
-		       Gbl.Forum.ForumSelected.Location,
-		       ThrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("UPDATE forum_thread"
+			" SET ForumType=%u,Location=%ld"
+			" WHERE ThrCod=%ld",
+		        (unsigned) Gbl.Forum.ForumSelected.Type,
+		        Gbl.Forum.ForumSelected.Location,
+		        ThrCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         if (asprintf (&Query,"UPDATE forum_thread"
-			      " SET ForumType=%u,Location=%ld"
-			      " WHERE ThrCod=%ld",
-		       (unsigned) Gbl.Forum.ForumSelected.Type,
-		       Gbl.Forum.ForumSelected.Location,
-		       ThrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
+         DB_BuildQuery ("UPDATE forum_thread"
+			" SET ForumType=%u,Location=%ld"
+			" WHERE ThrCod=%ld",
+		        (unsigned) Gbl.Forum.ForumSelected.Type,
+		        Gbl.Forum.ForumSelected.Location,
+		        ThrCod);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong forum.");
 	 break;
      }
-   DB_QueryUPDATE_free (Query,"can not move a thread to current forum");
+   DB_QueryUPDATE_new ("can not move a thread to current forum");
   }
 
 /*****************************************************************************/

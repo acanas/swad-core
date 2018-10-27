@@ -1869,13 +1869,10 @@ void Ctr_ContEditAfterChgCtrInConfig (void)
 
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
   {
-   char *Query;
-
    /***** Update institution in table of centres *****/
-   if (asprintf (&Query,"UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
-                 InsCod,CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the institution of a centre");
+   DB_BuildQuery ("UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
+                  InsCod,CtrCod);
+   DB_QueryUPDATE_new ("can not update the institution of a centre");
   }
 
 /*****************************************************************************/
@@ -1936,12 +1933,9 @@ void Ctr_ChangeCtrPlcInConfig (void)
 
 static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
-	         NewPlcCod,CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the place of a centre");
+   DB_BuildQuery ("UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
+	          NewPlcCod,CtrCod);
+   DB_QueryUPDATE_new ("can not update the place of a centre");
   }
 
 /*****************************************************************************/
@@ -2078,13 +2072,10 @@ static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Nam
 
 static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName)
   {
-   char *Query;
-
    /***** Update centre changing old name by new name */
-   if (asprintf (&Query,"UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
-	         FieldName,NewCtrName,CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a centre");
+   DB_BuildQuery ("UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
+	          FieldName,NewCtrName,CtrCod);
+   DB_QueryUPDATE_new ("can not update the name of a centre");
   }
 
 /*****************************************************************************/
@@ -2167,13 +2158,10 @@ void Ctr_ChangeCtrWWWInConfig (void)
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
                                 const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char *Query;
-
    /***** Update database changing old WWW by new WWW *****/
-   if (asprintf (&Query,"UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
-	         NewWWW,CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the web of a centre");
+   DB_BuildQuery ("UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
+	          NewWWW,CtrCod);
+   DB_QueryUPDATE_new ("can not update the web of a centre");
   }
 
 /*****************************************************************************/
@@ -2183,7 +2171,6 @@ static void Ctr_UpdateCtrWWWDB (long CtrCod,
 void Ctr_ChangeCtrStatus (void)
   {
    extern const char *Txt_The_status_of_the_centre_X_has_changed;
-   char *Query;
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
@@ -2205,10 +2192,9 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Update status in table of centres *****/
-   if (asprintf (&Query,"UPDATE centres SET Status=%u WHERE CtrCod=%ld",
-	         (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the status of a centre");
+   DB_BuildQuery ("UPDATE centres SET Status=%u WHERE CtrCod=%ld",
+	         (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
+   DB_QueryUPDATE_new ("can not update the status of a centre");
    Gbl.Ctrs.EditingCtr.Status = Status;
 
    /***** Write message to show the change made
@@ -2481,7 +2467,6 @@ void Ctr_ReceivePhoto (void)
 
 void Ctr_ChangeCtrPhotoAttribution (void)
   {
-   char *Query;
    char NewPhotoAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
@@ -2489,11 +2474,10 @@ void Ctr_ChangeCtrPhotoAttribution (void)
    Par_GetParToText ("Attribution",NewPhotoAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   if (asprintf (&Query,"UPDATE centres SET PhotoAttribution='%s'"
-		        " WHERE CtrCod=%ld",
-	         NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the photo attribution of the current centre");
+   DB_BuildQuery ("UPDATE centres SET PhotoAttribution='%s'"
+		  " WHERE CtrCod=%ld",
+	          NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod);
+   DB_QueryUPDATE_new ("can not update the photo attribution of the current centre");
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();

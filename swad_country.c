@@ -1861,13 +1861,10 @@ static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Na
 
 static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName)
   {
-   char *Query;
-
    /***** Update country changing old name by new name */
-   if (asprintf (&Query,"UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
-	         FieldName,NewCtyName,CtyCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a country");
+   DB_BuildQuery ("UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
+	          FieldName,NewCtyName,CtyCod);
+   DB_QueryUPDATE_new ("can not update the name of a country");
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1881,7 +1878,6 @@ void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char *Query;
    struct Country *Cty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Txt_Language_t Language;
@@ -1901,11 +1897,10 @@ void Cty_ChangeCtyWWW (void)
    Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
 
    /***** Update the table changing old WWW by new WWW *****/
-   if (asprintf (&Query,"UPDATE countries SET WWW_%s='%s'"
-		        " WHERE CtyCod='%03ld'",
-	         Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the web of a country");
+   DB_BuildQuery ("UPDATE countries SET WWW_%s='%s'"
+		  " WHERE CtyCod='%03ld'",
+	          Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
+   DB_QueryUPDATE_new ("can not update the web of a country");
    Str_Copy (Cty->WWW[Language],NewWWW,
 	     Cns_MAX_BYTES_WWW);
 
@@ -1925,7 +1920,6 @@ void Cty_ChangeCtyWWW (void)
 
 void Cty_ChangeCtyMapAttribution (void)
   {
-   char *Query;
    char NewMapAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
@@ -1933,11 +1927,10 @@ void Cty_ChangeCtyMapAttribution (void)
    Par_GetParToText ("Attribution",NewMapAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   if (asprintf (&Query,"UPDATE countries SET MapAttribution='%s'"
-		       " WHERE CtyCod='%03ld'",
-	         NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the map attribution of a country");
+   DB_BuildQuery ("UPDATE countries SET MapAttribution='%s'"
+		  " WHERE CtyCod='%03ld'",
+	          NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod);
+   DB_QueryUPDATE_new ("can not update the map attribution of a country");
 
    /***** Show the country information again *****/
    Cty_ShowConfiguration ();

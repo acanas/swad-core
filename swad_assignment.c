@@ -1030,7 +1030,6 @@ void Asg_RemoveAssignment (void)
 void Asg_HideAssignment (void)
   {
    extern const char *Txt_Assignment_X_is_now_hidden;
-   char *Query;
    struct Assignment Asg;
 
    /***** Get assignment code *****/
@@ -1041,11 +1040,10 @@ void Asg_HideAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Hide assignment *****/
-   if (asprintf (&Query,"UPDATE assignments SET Hidden='Y'"
-                        " WHERE AsgCod=%ld AND CrsCod=%ld",
-                 Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide assignment");
+   DB_BuildQuery ("UPDATE assignments SET Hidden='Y'"
+		  " WHERE AsgCod=%ld AND CrsCod=%ld",
+                  Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not hide assignment");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1064,7 +1062,6 @@ void Asg_HideAssignment (void)
 void Asg_ShowAssignment (void)
   {
    extern const char *Txt_Assignment_X_is_now_visible;
-   char *Query;
    struct Assignment Asg;
 
    /***** Get assignment code *****/
@@ -1075,11 +1072,10 @@ void Asg_ShowAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Hide assignment *****/
-   if (asprintf (&Query,"UPDATE assignments SET Hidden='N'"
-                        " WHERE AsgCod=%ld AND CrsCod=%ld",
-                 Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not show assignment");
+   DB_BuildQuery ("UPDATE assignments SET Hidden='N'"
+		  " WHERE AsgCod=%ld AND CrsCod=%ld",
+                  Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not show assignment");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1465,14 +1461,11 @@ void Asg_RecFormAssignment (void)
 
 static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char *Query;
-
    /***** Update number of users notified *****/
-   if (asprintf (&Query,"UPDATE assignments SET NumNotif=NumNotif+%u"
-                        " WHERE AsgCod=%ld",
-                 NumUsrsToBeNotifiedByEMail,AsgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the number of notifications of an assignment");
+   DB_BuildQuery ("UPDATE assignments SET NumNotif=NumNotif+%u"
+		  " WHERE AsgCod=%ld",
+                  NumUsrsToBeNotifiedByEMail,AsgCod);
+   DB_QueryUPDATE_new ("can not update the number of notifications of an assignment");
   }
 
 /*****************************************************************************/
@@ -1507,22 +1500,19 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 
 static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   char *Query;
-
    /***** Update the data of the assignment *****/
-   if (asprintf (&Query,"UPDATE assignments SET "
-	                "StartTime=FROM_UNIXTIME(%ld),"
-	                "EndTime=FROM_UNIXTIME(%ld),"
-                        "Title='%s',Folder='%s',Txt='%s'"
-                        " WHERE AsgCod=%ld AND CrsCod=%ld",
-                 Asg->TimeUTC[Dat_START_TIME],
-                 Asg->TimeUTC[Dat_END_TIME  ],
-                 Asg->Title,
-                 Asg->Folder,
-                 Txt,
-                 Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update assignment");
+   DB_BuildQuery ("UPDATE assignments SET "
+		  "StartTime=FROM_UNIXTIME(%ld),"
+		  "EndTime=FROM_UNIXTIME(%ld),"
+		  "Title='%s',Folder='%s',Txt='%s'"
+		  " WHERE AsgCod=%ld AND CrsCod=%ld",
+                  Asg->TimeUTC[Dat_START_TIME],
+                  Asg->TimeUTC[Dat_END_TIME  ],
+                  Asg->Title,
+                  Asg->Folder,
+                  Txt,
+                  Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not update assignment");
 
    /***** Update groups *****/
    /* Remove old groups */

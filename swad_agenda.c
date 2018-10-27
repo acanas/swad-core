@@ -1359,7 +1359,6 @@ void Agd_RemoveEvent (void)
 void Agd_HideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
-   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1371,11 +1370,10 @@ void Agd_HideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event private *****/
-   if (asprintf (&Query,"UPDATE agendas SET Hidden='Y'"
-                        " WHERE AgdCod=%ld AND UsrCod=%ld",
-                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide event");
+   DB_BuildQuery ("UPDATE agendas SET Hidden='Y'"
+		  " WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent.AgdCod,AgdEvent.UsrCod);
+   DB_QueryUPDATE_new ("can not hide event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1394,7 +1392,6 @@ void Agd_HideEvent (void)
 void Agd_UnhideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
-   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1406,11 +1403,10 @@ void Agd_UnhideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event public *****/
-   if (asprintf (&Query,"UPDATE agendas SET Hidden='N'"
-                        " WHERE AgdCod=%ld AND UsrCod=%ld",
-                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not show event");
+   DB_BuildQuery ("UPDATE agendas SET Hidden='N'"
+		  " WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent.AgdCod,AgdEvent.UsrCod);
+   DB_QueryUPDATE_new ("can not show event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1429,7 +1425,6 @@ void Agd_UnhideEvent (void)
 void Agd_MakeEventPrivate (void)
   {
    extern const char *Txt_Event_X_is_now_private;
-   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1441,11 +1436,10 @@ void Agd_MakeEventPrivate (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event private *****/
-   if (asprintf (&Query,"UPDATE agendas SET Public='N'"
-                        " WHERE AgdCod=%ld AND UsrCod=%ld",
-                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not make event private");
+   DB_BuildQuery ("UPDATE agendas SET Public='N'"
+		  " WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent.AgdCod,AgdEvent.UsrCod);
+   DB_QueryUPDATE_new ("can not make event private");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1464,7 +1458,6 @@ void Agd_MakeEventPrivate (void)
 void Agd_MakeEventPublic (void)
   {
    extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
-   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1476,11 +1469,10 @@ void Agd_MakeEventPublic (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event public *****/
-   if (asprintf (&Query,"UPDATE agendas SET Public='Y'"
-                        " WHERE AgdCod=%ld AND UsrCod=%ld",
-                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not make event public");
+   DB_BuildQuery ("UPDATE agendas SET Public='Y'"
+		  " WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent.AgdCod,AgdEvent.UsrCod);
+   DB_QueryUPDATE_new ("can not make event public");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1735,20 +1727,17 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char *Query;
-
    /***** Update the data of the event *****/
-   if (asprintf (&Query,"UPDATE agendas SET "
-	                "StartTime=FROM_UNIXTIME(%ld),"
-	                "EndTime=FROM_UNIXTIME(%ld),"
-                        "Event='%s',Location='%s',Txt='%s'"
-                        " WHERE AgdCod=%ld AND UsrCod=%ld",
-                 AgdEvent->TimeUTC[Agd_START_TIME],
-                 AgdEvent->TimeUTC[Agd_END_TIME  ],
-                 AgdEvent->Event,AgdEvent->Location,Txt,
-                 AgdEvent->AgdCod,AgdEvent->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update event");
+   DB_BuildQuery ("UPDATE agendas SET "
+		  "StartTime=FROM_UNIXTIME(%ld),"
+		  "EndTime=FROM_UNIXTIME(%ld),"
+		  "Event='%s',Location='%s',Txt='%s'"
+		  " WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent->TimeUTC[Agd_START_TIME],
+                  AgdEvent->TimeUTC[Agd_END_TIME  ],
+                  AgdEvent->Event,AgdEvent->Location,Txt,
+                  AgdEvent->AgdCod,AgdEvent->UsrCod);
+   DB_QueryUPDATE_new ("can not update event");
   }
 
 /*****************************************************************************/

@@ -2030,13 +2030,10 @@ static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Nam
 
 static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName)
   {
-   char *Query;
-
    /***** Update degree changing old name by new name *****/
-   if (asprintf (&Query,"UPDATE degrees SET %s='%s' WHERE DegCod=%ld",
-	         FieldName,NewDegName,DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a degree");
+   DB_BuildQuery ("UPDATE degrees SET %s='%s' WHERE DegCod=%ld",
+	          FieldName,NewDegName,DegCod);
+   DB_QueryUPDATE_new ("can not update the name of a degree");
   }
 
 /*****************************************************************************/
@@ -2112,13 +2109,10 @@ void Deg_ContEditAfterChgDegInConfig (void)
 
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod)
   {
-   char *Query;
-
    /***** Update centre in table of degrees *****/
-   if (asprintf (&Query,"UPDATE degrees SET CtrCod=%ld WHERE DegCod=%ld",
-                 CtrCod,DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the centre of a degree");
+   DB_BuildQuery ("UPDATE degrees SET CtrCod=%ld WHERE DegCod=%ld",
+                  CtrCod,DegCod);
+   DB_QueryUPDATE_new ("can not update the centre of a degree");
   }
 
 /*****************************************************************************/
@@ -2201,13 +2195,10 @@ void Deg_ChangeDegWWWInConfig (void)
 
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char *Query;
-
    /***** Update database changing old WWW by new WWW *****/
-   if (asprintf (&Query,"UPDATE degrees SET WWW='%s' WHERE DegCod=%ld",
-	         NewWWW,DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the web of a degree");
+   DB_BuildQuery ("UPDATE degrees SET WWW='%s' WHERE DegCod=%ld",
+	          NewWWW,DegCod);
+   DB_QueryUPDATE_new ("can not update the web of a degree");
   }
 
 /*****************************************************************************/
@@ -2217,7 +2208,6 @@ static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW 
 void Deg_ChangeDegStatus (void)
   {
    extern const char *Txt_The_status_of_the_degree_X_has_changed;
-   char *Query;
    Deg_Status_t Status;
    Deg_StatusTxt_t StatusTxt;
 
@@ -2240,10 +2230,9 @@ void Deg_ChangeDegStatus (void)
    Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
 
    /***** Update status in table of degrees *****/
-   if (asprintf (&Query,"UPDATE degrees SET Status=%u WHERE DegCod=%ld",
-                 (unsigned) Status,Gbl.Degs.EditingDeg.DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the status of a degree");
+   DB_BuildQuery ("UPDATE degrees SET Status=%u WHERE DegCod=%ld",
+                  (unsigned) Status,Gbl.Degs.EditingDeg.DegCod);
+   DB_QueryUPDATE_new ("can not update the status of a degree");
 
    Gbl.Degs.EditingDeg.Status = Status;
 

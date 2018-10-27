@@ -209,8 +209,6 @@ void Enr_PutLinkToRequestSignUp (void)
 
 void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
   {
-   char *Query;
-
    /***** Check if user's role is allowed *****/
    switch (NewRole)
      {
@@ -223,11 +221,10 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   if (asprintf (&Query,"UPDATE crs_usr SET Role=%u"
-		        " WHERE CrsCod=%ld AND UsrCod=%ld",
-	         (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not modify user's role in course");
+   DB_BuildQuery ("UPDATE crs_usr SET Role=%u"
+		  " WHERE CrsCod=%ld AND UsrCod=%ld",
+	          (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+   DB_QueryUPDATE_new ("can not modify user's role in course");
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -519,7 +516,6 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
-   char *Query;
 
    /***** Check if user's code is initialized *****/
    if (UsrDat->UsrCod <= 0)
@@ -530,28 +526,27 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 
    /***** Update user's common data *****/
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-   if (asprintf (&Query,"UPDATE usr_data"
-			" SET Password='%s',"
-			"Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-			"CtyCod=%ld,"
-			"LocalAddress='%s',LocalPhone='%s',"
-			"FamilyAddress='%s',FamilyPhone='%s',"
-			"OriginPlace='%s',Birthday=%s,"
-			"Comments='%s'"
-			" WHERE UsrCod=%ld",
-	         UsrDat->Password,
-	         UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
-	         Usr_StringsSexDB[UsrDat->Sex],
-	         UsrDat->CtyCod,
-	         UsrDat->LocalAddress,UsrDat->LocalPhone,
-	         UsrDat->FamilyAddress,UsrDat->FamilyPhone,
-	         UsrDat->OriginPlace,
-	         BirthdayStrDB,
-	         UsrDat->Comments ? UsrDat->Comments :
-				    "",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update user's data");
+   DB_BuildQuery ("UPDATE usr_data"
+		  " SET Password='%s',"
+		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
+		  "CtyCod=%ld,"
+		  "LocalAddress='%s',LocalPhone='%s',"
+		  "FamilyAddress='%s',FamilyPhone='%s',"
+		  "OriginPlace='%s',Birthday=%s,"
+		  "Comments='%s'"
+		  " WHERE UsrCod=%ld",
+	          UsrDat->Password,
+	          UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+	          Usr_StringsSexDB[UsrDat->Sex],
+	          UsrDat->CtyCod,
+	          UsrDat->LocalAddress,UsrDat->LocalPhone,
+	          UsrDat->FamilyAddress,UsrDat->FamilyPhone,
+	          UsrDat->OriginPlace,
+	          BirthdayStrDB,
+	          UsrDat->Comments ? UsrDat->Comments :
+				     "",
+	          UsrDat->UsrCod);
+   DB_QueryUPDATE_new ("can not update user's data");
   }
 
 /*****************************************************************************/
@@ -574,18 +569,15 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat)
 
 void Enr_UpdateInstitutionCentreDepartment (void)
   {
-   char *Query;
-
-   if (asprintf (&Query,"UPDATE usr_data"
-			" SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
-			" WHERE UsrCod=%ld",
-	         Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	         Gbl.Usrs.Me.UsrDat.InsCod,
-	         Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
-	         Gbl.Usrs.Me.UsrDat.Tch.DptCod,
-	         Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update institution, centre and department");
+   DB_BuildQuery ("UPDATE usr_data"
+		  " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
+		  " WHERE UsrCod=%ld",
+	          Gbl.Usrs.Me.UsrDat.InsCtyCod,
+	          Gbl.Usrs.Me.UsrDat.InsCod,
+	          Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
+	          Gbl.Usrs.Me.UsrDat.Tch.DptCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update institution, centre and department");
   }
 
 /*****************************************************************************/
@@ -3031,27 +3023,23 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
 
 static void Enr_RemoveExpiredEnrolmentRequests (void)
   {
-   char *Query;
-
    /***** Mark possible notifications as removed
           Important: do this before removing the request *****/
-   if (asprintf (&Query,"UPDATE notif,crs_usr_requests"
-			" SET notif.Status=(notif.Status | %u)"
-			" WHERE notif.NotifyEvent=%u"
-			" AND notif.Cod=crs_usr_requests.ReqCod"
-			" AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-	         (unsigned) Ntf_STATUS_BIT_REMOVED,
-	         (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
-	         Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not set notification(s) as removed");
+   DB_BuildQuery ("UPDATE notif,crs_usr_requests"
+		  " SET notif.Status=(notif.Status | %u)"
+		  " WHERE notif.NotifyEvent=%u"
+		  " AND notif.Cod=crs_usr_requests.ReqCod"
+		  " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+	          (unsigned) Ntf_STATUS_BIT_REMOVED,
+	          (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
+	          Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
+   DB_QueryUPDATE_new ("can not set notification(s) as removed");
 
    /***** Remove expired requests for enrolment *****/
-   if (asprintf (&Query,"DELETE FROM crs_usr_requests"
-                        " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                 Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove expired requests for enrolment");
+   DB_BuildQuery ("DELETE FROM crs_usr_requests"
+		  " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                  Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
+   DB_QueryDELETE_new ("can not remove expired requests for enrolment");
   }
 
 /*****************************************************************************/
@@ -4102,14 +4090,11 @@ void Enr_ModifyUsr2 (void)
 
 void Enr_AcceptUsrInCrs (long UsrCod)
   {
-   char *Query;
-
    /***** Set enrolment of a user to "accepted" in the current course *****/
-   if (asprintf (&Query,"UPDATE crs_usr SET Accepted='Y'"
-                        " WHERE CrsCod=%ld AND UsrCod=%ld",
-                 Gbl.CurrentCrs.Crs.CrsCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not confirm user's enrolment");
+   DB_BuildQuery ("UPDATE crs_usr SET Accepted='Y'"
+		  " WHERE CrsCod=%ld AND UsrCod=%ld",
+                  Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+   DB_QueryUPDATE_new ("can not confirm user's enrolment");
   }
 
 /*****************************************************************************/

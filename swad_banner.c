@@ -73,7 +73,8 @@ static void Ban_ShowOrHideBanner (bool Hide);
 
 static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod);
-static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,const char *NewBanName);
+static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
+				 const char *NewBanName);
 
 static void Ban_PutFormToCreateBanner (void);
 static void Ban_PutHeadBanners (void);
@@ -562,7 +563,6 @@ static void Ban_ShowOrHideBanner (bool Hide)
   {
    extern const char *Txt_The_banner_X_is_now_hidden;
    extern const char *Txt_The_banner_X_is_now_visible;
-   char *Query;
    struct Banner Ban;
 
    /***** Get banner code *****/
@@ -575,13 +575,12 @@ static void Ban_ShowOrHideBanner (bool Hide)
    /***** Mark file as hidden/visible in database *****/
    if (Ban.Hidden != Hide)
      {
-      if (asprintf (&Query,"UPDATE banners SET Hidden='%c'"
-		           " WHERE BanCod=%ld",
-	            Hide ? 'Y' :
-		           'N',
-	            Ban.BanCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not change status of a banner in database");
+      DB_BuildQuery ("UPDATE banners SET Hidden='%c'"
+		     " WHERE BanCod=%ld",
+	             Hide ? 'Y' :
+		            'N',
+	             Ban.BanCod);
+      DB_QueryUPDATE_new ("can not change status of a banner in database");
      }
 
    /***** Write message to show the change made *****/
@@ -724,15 +723,13 @@ static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,
 /***************** Update banner name in table of banners ********************/
 /*****************************************************************************/
 
-static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,const char *NewBanName)
+static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
+				 const char *NewBanName)
   {
-   char *Query;
-
    /***** Update banner changing old name by new name *****/
-   if (asprintf (&Query,"UPDATE banners SET %s='%s' WHERE BanCod=%ld",
-	         FieldName,NewBanName,BanCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a banner");
+   DB_BuildQuery ("UPDATE banners SET %s='%s' WHERE BanCod=%ld",
+	          FieldName,NewBanName,BanCod);
+   DB_QueryUPDATE_new ("can not update the name of a banner");
   }
 
 /*****************************************************************************/
@@ -744,7 +741,6 @@ void Ban_ChangeBannerImg (void)
    extern const char *Txt_The_new_image_is_X;
    extern const char *Txt_You_can_not_leave_the_image_empty;
    struct Banner *Ban;
-   char *Query;
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
    Ban = &Gbl.Banners.EditingBan;
@@ -761,10 +757,9 @@ void Ban_ChangeBannerImg (void)
    if (NewImg[0])
      {
       /* Update the table changing old image by new image */
-      if (asprintf (&Query,"UPDATE banners SET Img='%s' WHERE BanCod=%ld",
-                    NewImg,Ban->BanCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the image of a banner");
+      DB_BuildQuery ("UPDATE banners SET Img='%s' WHERE BanCod=%ld",
+                     NewImg,Ban->BanCod);
+      DB_QueryUPDATE_new ("can not update the image of a banner");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -791,7 +786,6 @@ void Ban_ChangeBannerWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Banner *Ban;
-   char *Query;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Ban = &Gbl.Banners.EditingBan;
@@ -808,10 +802,9 @@ void Ban_ChangeBannerWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      if (asprintf (&Query,"UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
-                    NewWWW,Ban->BanCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the web of a banner");
+      DB_BuildQuery ("UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
+                     NewWWW,Ban->BanCod);
+      DB_QueryUPDATE_new ("can not update the web of a banner");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

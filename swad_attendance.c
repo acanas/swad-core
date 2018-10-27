@@ -959,7 +959,6 @@ void Att_RemoveAttEventFromDB (long AttCod)
 void Att_HideAttEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
-   char *Query;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -970,11 +969,10 @@ void Att_HideAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Hide attendance event *****/
-   if (asprintf (&Query,"UPDATE att_events SET Hidden='Y'"
-                        " WHERE AttCod=%ld AND CrsCod=%ld",
-                 Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide attendance event");
+   DB_BuildQuery ("UPDATE att_events SET Hidden='Y'"
+		  " WHERE AttCod=%ld AND CrsCod=%ld",
+                  Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not hide attendance event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -993,7 +991,6 @@ void Att_HideAttEvent (void)
 void Att_ShowAttEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
-   char *Query;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -1004,11 +1001,10 @@ void Att_ShowAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Hide attendance event *****/
-   if (asprintf (&Query,"UPDATE att_events SET Hidden='N'"
-                        " WHERE AttCod=%ld AND CrsCod=%ld",
-                 Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not show attendance event");
+   DB_BuildQuery ("UPDATE att_events SET Hidden='N'"
+		  " WHERE AttCod=%ld AND CrsCod=%ld",
+                  Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not show attendance event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1378,26 +1374,23 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
 void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char *Query;
-
    /***** Update the data of the attendance event *****/
-   if (asprintf (&Query,"UPDATE att_events SET "
-                        "Hidden='%c',"
-	                "StartTime=FROM_UNIXTIME(%ld),"
-	                "EndTime=FROM_UNIXTIME(%ld),"
-                        "CommentTchVisible='%c',Title='%s',Txt='%s'"
-                        " WHERE AttCod=%ld AND CrsCod=%ld",
-                 Att->Hidden ? 'Y' :
-        	               'N',
-                 Att->TimeUTC[Att_START_TIME],
-                 Att->TimeUTC[Att_END_TIME  ],
-                 Att->CommentTchVisible ? 'Y' :
-        	                          'N',
-                 Att->Title,
-                 Txt,
-                 Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update attendance event");
+   DB_BuildQuery ("UPDATE att_events SET "
+		  "Hidden='%c',"
+		  "StartTime=FROM_UNIXTIME(%ld),"
+		  "EndTime=FROM_UNIXTIME(%ld),"
+		  "CommentTchVisible='%c',Title='%s',Txt='%s'"
+		  " WHERE AttCod=%ld AND CrsCod=%ld",
+                  Att->Hidden ? 'Y' :
+        	                'N',
+                  Att->TimeUTC[Att_START_TIME],
+                  Att->TimeUTC[Att_END_TIME  ],
+                  Att->CommentTchVisible ? 'Y' :
+        	                           'N',
+                  Att->Title,
+                  Txt,
+                  Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not update attendance event");
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -2584,7 +2577,6 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
   {
    bool Present;
-   char *Query;
 
    /***** Check if user is already in table att_usr (present or not) *****/
    if (Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_usr
@@ -2593,11 +2585,10 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
       if (!Present)
 	{
 	 /***** Set user as present in database *****/
-	 if (asprintf (&Query,"UPDATE att_usr SET Present='Y'"
-			      " WHERE AttCod=%ld AND UsrCod=%ld",
-		       AttCod,UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryUPDATE_free (Query,"can not set user as present in an event");
+	 DB_BuildQuery ("UPDATE att_usr SET Present='Y'"
+			" WHERE AttCod=%ld AND UsrCod=%ld",
+		        AttCod,UsrCod);
+         DB_QueryUPDATE_new ("can not set user as present in an event");
 	}
      }
    else			// User is not in table att_usr

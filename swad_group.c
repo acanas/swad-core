@@ -2799,7 +2799,6 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
 void Grp_OpenGroupsAutomatically (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrpTypes;
@@ -2824,18 +2823,16 @@ void Grp_OpenGroupsAutomatically (void)
         {
          /***** Open all the closed groups in this course the must be opened
                 and with open time in the past ****/
-         if (asprintf (&Query,"UPDATE crs_grp SET Open='Y'"
-                             " WHERE GrpTypCod=%ld AND Open='N'",
-	               GrpTypCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryUPDATE_free (Query,"can not open groups");
+         DB_BuildQuery ("UPDATE crs_grp SET Open='Y'"
+		       " WHERE GrpTypCod=%ld AND Open='N'",
+	                GrpTypCod);
+         DB_QueryUPDATE_new ("can not open groups");
 
          /***** To not try to open groups again, set MustBeOpened to false *****/
-         if (asprintf (&Query,"UPDATE crs_grp_types SET MustBeOpened='N'"
-	                     " WHERE GrpTypCod=%ld",
-	               GrpTypCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-         DB_QueryUPDATE_free (Query,"can not update the opening of a type of group");
+         DB_BuildQuery ("UPDATE crs_grp_types SET MustBeOpened='N'"
+		       " WHERE GrpTypCod=%ld",
+	                GrpTypCod);
+         DB_QueryUPDATE_new ("can not update the opening of a type of group");
         }
      }
 
@@ -4039,12 +4036,11 @@ static void Grp_RemoveGroupTypeCompletely (void)
    Svy_RemoveGroupsOfType (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Change all groups of this type in course timetable *****/
-   if (asprintf (&Query,"UPDATE timetable_crs SET GrpCod=-1"
-			" WHERE GrpCod IN"
-			" (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
-                 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update all groups of a type in course timetable");
+   DB_BuildQuery ("UPDATE timetable_crs SET GrpCod=-1"
+		  " WHERE GrpCod IN"
+		  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
+                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+   DB_QueryUPDATE_new ("can not update all groups of a type in course timetable");
 
    /***** Remove all the students in groups of this type *****/
    if (asprintf (&Query,"DELETE FROM crs_grp_usr WHERE GrpCod IN"
@@ -4102,10 +4098,9 @@ static void Grp_RemoveGroupCompletely (void)
    Svy_RemoveGroup (GrpDat.GrpCod);
 
    /***** Change this group in course timetable *****/
-   if (asprintf (&Query,"UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update a group in course timetable");
+   DB_BuildQuery ("UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryUPDATE_new ("can not update a group in course timetable");
 
    /***** Remove all the students in this group *****/
    if (asprintf (&Query,"DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
@@ -4137,7 +4132,6 @@ void Grp_OpenGroup (void)
   {
    extern const char *Txt_The_group_X_is_now_open;
    struct GroupData GrpDat;
-   char *Query;
 
    /***** Get group code *****/
    if ((Gbl.CurrentCrs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
@@ -4148,10 +4142,9 @@ void Grp_OpenGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   if (asprintf (&Query,"UPDATE crs_grp SET Open='Y' WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not open a group");
+   DB_BuildQuery ("UPDATE crs_grp SET Open='Y' WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryUPDATE_new ("can not open a group");
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4172,7 +4165,6 @@ void Grp_CloseGroup (void)
   {
    extern const char *Txt_The_group_X_is_now_closed;
    struct GroupData GrpDat;
-   char *Query;
 
    /***** Get group code *****/
    if ((Gbl.CurrentCrs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
@@ -4183,10 +4175,9 @@ void Grp_CloseGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   if (asprintf (&Query,"UPDATE crs_grp SET Open='N' WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not close a group");
+   DB_BuildQuery ("UPDATE crs_grp SET Open='N' WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryUPDATE_new ("can not close a group");
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4207,7 +4198,6 @@ void Grp_EnableFileZonesGrp (void)
   {
    extern const char *Txt_File_zones_of_the_group_X_are_now_enabled;
    struct GroupData GrpDat;
-   char *Query;
 
    /***** Get group code *****/
    if ((Gbl.CurrentCrs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
@@ -4218,10 +4208,9 @@ void Grp_EnableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   if (asprintf (&Query,"UPDATE crs_grp SET FileZones='Y' WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not enable file zones of a group");
+   DB_BuildQuery ("UPDATE crs_grp SET FileZones='Y' WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryUPDATE_new ("can not enable file zones of a group");
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4242,7 +4231,6 @@ void Grp_DisableFileZonesGrp (void)
   {
    extern const char *Txt_File_zones_of_the_group_X_are_now_disabled;
    struct GroupData GrpDat;
-   char *Query;
 
    /***** Get group code *****/
    if ((Gbl.CurrentCrs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
@@ -4253,10 +4241,9 @@ void Grp_DisableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   if (asprintf (&Query,"UPDATE crs_grp SET FileZones='N' WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not disable file zones of a group");
+   DB_BuildQuery ("UPDATE crs_grp SET FileZones='N' WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryUPDATE_new ("can not disable file zones of a group");
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4279,7 +4266,6 @@ void Grp_ChangeGroupType (void)
    extern const char *Txt_The_type_of_group_of_the_group_X_has_changed;
    long NewGrpTypCod;
    struct GroupData GrpDat;
-   char *Query;
    Ale_AlertType_t AlertType;
 
    /***** Get parameters from form *****/
@@ -4306,10 +4292,9 @@ void Grp_ChangeGroupType (void)
    else	// Group is not in database
      {
       /* Update the table of groups changing old type by new type */
-      if (asprintf (&Query,"UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
-                    NewGrpTypCod,Gbl.CurrentCrs.Grps.GrpCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the type of a group");
+      DB_BuildQuery ("UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
+                     NewGrpTypCod,Gbl.CurrentCrs.Grps.GrpCod);
+      DB_QueryUPDATE_new ("can not update the type of a group");
 
       /* Create message to show the change made */
       AlertType = Ale_SUCCESS;
@@ -4333,7 +4318,6 @@ void Grp_ChangeMandatGrpTyp (void)
    extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
    extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory;
    extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary;
-   char *Query;
    bool NewMandatoryEnrolment;
    Ale_AlertType_t AlertType;
 
@@ -4360,12 +4344,11 @@ void Grp_ChangeMandatGrpTyp (void)
    else
      {
       /***** Update of the table of types of group changing the old type of enrolment by the new *****/
-      if (asprintf (&Query,"UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
-                    NewMandatoryEnrolment ? 'Y' :
-        	                            'N',
-                    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update enrolment type of a type of group");
+      DB_BuildQuery ("UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
+                     NewMandatoryEnrolment ? 'Y' :
+        	                             'N',
+                     Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+      DB_QueryUPDATE_new ("can not update enrolment type of a type of group");
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4390,7 +4373,6 @@ void Grp_ChangeMultiGrpTyp (void)
    extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
    extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
-   char *Query;
    bool NewMultipleEnrolment;
    Ale_AlertType_t AlertType;
 
@@ -4417,13 +4399,12 @@ void Grp_ChangeMultiGrpTyp (void)
    else
      {
       /***** Update of the table of types of group changing the old type of enrolment by the new *****/
-      if (asprintf (&Query,"UPDATE crs_grp_types SET Multiple='%c'"
-	                   " WHERE GrpTypCod=%ld",
-                    NewMultipleEnrolment ? 'Y' :
-        	                           'N',
-                    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update enrolment type of a type of group");
+      DB_BuildQuery ("UPDATE crs_grp_types SET Multiple='%c'"
+		     " WHERE GrpTypCod=%ld",
+                     NewMultipleEnrolment ? 'Y' :
+        	                            'N',
+                     Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+      DB_QueryUPDATE_new ("can not update enrolment type of a type of group");
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4446,7 +4427,6 @@ void Grp_ChangeMultiGrpTyp (void)
 void Grp_ChangeOpenTimeGrpTyp (void)
   {
    extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
-   char *Query;
 
    /***** Get the code of type of group *****/
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
@@ -4461,15 +4441,14 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 
    /***** Update the table of types of group
           changing the old open time of enrolment by the new *****/
-   if (asprintf (&Query,"UPDATE crs_grp_types"
-			" SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
-			" WHERE GrpTypCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
-        	                                           'N',
-                 (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
-                 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update enrolment type of a type of group");
+   DB_BuildQuery ("UPDATE crs_grp_types"
+		  " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
+		  " WHERE GrpTypCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
+        	                                            'N',
+                  (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
+                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+   DB_QueryUPDATE_new ("can not update enrolment type of a type of group");
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
@@ -4489,7 +4468,6 @@ void Grp_ChangeMaxStdsGrp (void)
    extern const char *Txt_The_group_X_now_has_no_limit_of_students;
    extern const char *Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y;
    struct GroupData GrpDat;
-   char *Query;
    unsigned NewMaxStds;
    Ale_AlertType_t AlertType;
 
@@ -4520,10 +4498,9 @@ void Grp_ChangeMaxStdsGrp (void)
    else
      {
       /***** Update the table of groups changing the old maximum of students to the new *****/
-      if (asprintf (&Query,"UPDATE crs_grp SET MaxStudents=%u WHERE GrpCod=%ld",
-                    NewMaxStds,Gbl.CurrentCrs.Grps.GrpCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the maximum number of students in a group");
+      DB_BuildQuery ("UPDATE crs_grp SET MaxStudents=%u WHERE GrpCod=%ld",
+                     NewMaxStds,Gbl.CurrentCrs.Grps.GrpCod);
+      DB_QueryUPDATE_new ("can not update the maximum number of students in a group");
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4578,7 +4555,6 @@ void Grp_RenameGroupType (void)
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_group_X_has_not_changed;
-   char *Query;
    char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
    Ale_AlertType_t AlertType;
 
@@ -4617,12 +4593,11 @@ void Grp_RenameGroupType (void)
          else
            {
             /* Update the table changing old name by new name */
-            if (asprintf (&Query,"UPDATE crs_grp_types SET GrpTypName='%s'"
-        	                 " WHERE GrpTypCod=%ld",
-                          NewNameGrpTyp,
-                          Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-               Lay_NotEnoughMemoryExit ();
-            DB_QueryUPDATE_free (Query,"can not update the type of a group");
+            DB_BuildQuery ("UPDATE crs_grp_types SET GrpTypName='%s'"
+			   " WHERE GrpTypCod=%ld",
+                           NewNameGrpTyp,
+                           Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+            DB_QueryUPDATE_new ("can not update the type of a group");
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
@@ -4658,7 +4633,6 @@ void Grp_RenameGroup (void)
    extern const char *Txt_The_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_group_X_has_not_changed;
    struct GroupData GrpDat;
-   char *Query;
    char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1];
    Ale_AlertType_t AlertType;
 
@@ -4698,10 +4672,9 @@ void Grp_RenameGroup (void)
          else
            {
             /* Update the table changing old name by new name */
-            if (asprintf (&Query,"UPDATE crs_grp SET GrpName='%s' WHERE GrpCod=%ld",
-                          NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod) < 0)
-               Lay_NotEnoughMemoryExit ();
-            DB_QueryUPDATE_free (Query,"can not update the name of a group");
+            DB_BuildQuery ("UPDATE crs_grp SET GrpName='%s' WHERE GrpCod=%ld",
+                           NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod);
+            DB_QueryUPDATE_new ("can not update the name of a group");
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;

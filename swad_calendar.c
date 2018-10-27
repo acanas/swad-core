@@ -146,20 +146,17 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 
 void Cal_ChangeFirstDayOfWeek (void)
   {
-   char *Query;
-
    /***** Get param with icon set *****/
    Gbl.Prefs.FirstDayOfWeek = Cal_GetParamFirstDayOfWeek ();
 
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      if (asprintf (&Query,"UPDATE usr_data SET FirstDayOfWeek=%u"
-	                   " WHERE UsrCod=%ld",
-                    Gbl.Prefs.FirstDayOfWeek,
-                    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update your preference about first day of week");
+      DB_BuildQuery ("UPDATE usr_data SET FirstDayOfWeek=%u"
+		     " WHERE UsrCod=%ld",
+                     Gbl.Prefs.FirstDayOfWeek,
+                     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update your preference about first day of week");
      }
 
    /***** Set preferences from current IP *****/

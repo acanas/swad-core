@@ -645,7 +645,6 @@ void Dpt_ChangeDepartIns (void)
   {
    extern const char *Txt_The_institution_of_the_department_has_changed;
    struct Department *Dpt;
-   char *Query;
 
    Dpt = &Gbl.Dpts.EditingDpt;
 
@@ -657,10 +656,9 @@ void Dpt_ChangeDepartIns (void)
    Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Update institution in table of departments *****/
-   if (asprintf (&Query,"UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
-                 Dpt->InsCod,Dpt->DptCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the institution of a department");
+   DB_BuildQuery ("UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
+                  Dpt->InsCod,Dpt->DptCod);
+   DB_QueryUPDATE_new ("can not update the institution of a department");
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_institution_of_the_department_has_changed);
@@ -799,13 +797,10 @@ static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *N
 
 static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *NewDptName)
   {
-   char *Query;
-
    /***** Update department changing old name by new name *****/
-   if (asprintf (&Query,"UPDATE departments SET %s='%s' WHERE DptCod=%ld",
-	         FieldName,NewDptName,DptCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a department");
+   DB_BuildQuery ("UPDATE departments SET %s='%s' WHERE DptCod=%ld",
+	          FieldName,NewDptName,DptCod);
+   DB_QueryUPDATE_new ("can not update the name of a department");
   }
 
 /******************************************************************************/
@@ -817,7 +812,6 @@ void Dpt_ChangeDptWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Department *Dpt;
-   char *Query;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Dpt = &Gbl.Dpts.EditingDpt;
@@ -833,10 +827,9 @@ void Dpt_ChangeDptWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      if (asprintf (&Query,"UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
-                    NewWWW,Dpt->DptCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update the web of a department");
+      DB_BuildQuery ("UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
+                     NewWWW,Dpt->DptCod);
+      DB_QueryUPDATE_new ("can not update the web of a department");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

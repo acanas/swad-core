@@ -1633,12 +1633,11 @@ void Gam_ResetGame (void)
    DB_QueryDELETE_free (Query,"can not remove users who are answered a game");
 
    /***** Reset all the answers in this game *****/
-   if (asprintf (&Query,"UPDATE gam_answers,gam_questions SET gam_answers.NumUsrs=0"
-			" WHERE gam_questions.GamCod=%ld"
-			" AND gam_questions.QstCod=gam_answers.QstCod",
-		 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not reset answers of a game");
+   DB_BuildQuery ("UPDATE gam_answers,gam_questions SET gam_answers.NumUsrs=0"
+		  " WHERE gam_questions.GamCod=%ld"
+		  " AND gam_questions.QstCod=gam_answers.QstCod",
+		  Game.GamCod);
+   DB_QueryUPDATE_new ("can not reset answers of a game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1657,7 +1656,6 @@ void Gam_ResetGame (void)
 void Gam_HideGame (void)
   {
    extern const char *Txt_Game_X_is_now_hidden;
-   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1670,10 +1668,8 @@ void Gam_HideGame (void)
       Lay_ShowErrorAndExit ("You can not hide this game.");
 
    /***** Hide game *****/
-   if (asprintf (&Query,"UPDATE games SET Hidden='Y' WHERE GamCod=%ld",
-                 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide game");
+   DB_BuildQuery ("UPDATE games SET Hidden='Y' WHERE GamCod=%ld",Game.GamCod);
+   DB_QueryUPDATE_new ("can not hide game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1692,7 +1688,6 @@ void Gam_HideGame (void)
 void Gam_UnhideGame (void)
   {
    extern const char *Txt_Game_X_is_now_visible;
-   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1705,10 +1700,8 @@ void Gam_UnhideGame (void)
       Lay_ShowErrorAndExit ("You can not unhide this game.");
 
    /***** Show game *****/
-   if (asprintf (&Query,"UPDATE games SET Hidden='N' WHERE GamCod=%ld",
-                 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not show game");
+   DB_BuildQuery ("UPDATE games SET Hidden='N' WHERE GamCod=%ld",Game.GamCod);
+   DB_QueryUPDATE_new ("can not show game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2231,24 +2224,22 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_game_has_been_modified;
-   char *Query;
 
    /***** Update the data of the game *****/
-   if (asprintf (&Query,"UPDATE games"
-			" SET Scope='%s',Cod=%ld,Roles=%u,"
-			"StartTime=FROM_UNIXTIME(%ld),"
-			"EndTime=FROM_UNIXTIME(%ld),"
-			"Title='%s',Txt='%s'"
-			" WHERE GamCod=%ld",
-	         Sco_ScopeDB[Game->Scope],Game->Cod,
-	         Game->Roles,
-	         Game->TimeUTC[Gam_START_TIME],
-	         Game->TimeUTC[Gam_END_TIME  ],
-	         Game->Title,
-	         Txt,
-	         Game->GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update game");
+   DB_BuildQuery ("UPDATE games"
+		  " SET Scope='%s',Cod=%ld,Roles=%u,"
+		  "StartTime=FROM_UNIXTIME(%ld),"
+		  "EndTime=FROM_UNIXTIME(%ld),"
+		  "Title='%s',Txt='%s'"
+		  " WHERE GamCod=%ld",
+	          Sco_ScopeDB[Game->Scope],Game->Cod,
+	          Game->Roles,
+	          Game->TimeUTC[Gam_START_TIME],
+	          Game->TimeUTC[Gam_END_TIME  ],
+	          Game->Title,
+	          Txt,
+	          Game->GamCod);
+   DB_QueryUPDATE_new ("can not update game");
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -3296,7 +3287,6 @@ void Gam_RequestRemoveQst (void)
 void Gam_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
-   char *Query;
    struct Game Game;
    long QstCod;
    unsigned QstInd;
@@ -3318,19 +3308,16 @@ void Gam_RemoveQst (void)
    Gam_RemAnswersOfAQuestion (QstCod);
 
    /* Remove the question itself */
-   if (asprintf (&Query,"DELETE FROM gam_questions WHERE QstCod=%ld",
-                 QstCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a question");
+   DB_BuildQuery ("DELETE FROM gam_questions WHERE QstCod=%ld",QstCod);
+   DB_QueryDELETE_new ("can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
    /* Change index of questions greater than this */
-   if (asprintf (&Query,"UPDATE gam_questions SET QstInd=QstInd-1"
-                        " WHERE GamCod=%ld AND QstInd>%u",
-                 Game.GamCod,QstInd) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update indexes of questions");
+   DB_BuildQuery ("UPDATE gam_questions SET QstInd=QstInd-1"
+		  " WHERE GamCod=%ld AND QstInd>%u",
+                  Game.GamCod,QstInd);
+   DB_QueryUPDATE_new ("can not update indexes of questions");
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -3475,18 +3462,17 @@ static void Gam_ExchangeQuestions (long GamCod,
    |      2 |    232 |		|      2 |    232 |	|      2 |    232 |
    +--------+--------+		+--------+--------+	+--------+--------+
  */
-   if (asprintf (&Query,"UPDATE gam_questions SET QstInd=%u"
-		        " WHERE GamCod=%ld AND QstCod=%ld",
-	         QstIndBottom,
-	         GamCod,QstCodTop) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not exchange indexes of questions");
-   if (asprintf (&Query,"UPDATE gam_questions SET QstInd=%u"
-		        " WHERE GamCod=%ld AND QstCod=%ld",
-	         QstIndTop,
-	         GamCod,QstCodBottom) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not exchange indexes of questions");
+   DB_BuildQuery ("UPDATE gam_questions SET QstInd=%u"
+		  " WHERE GamCod=%ld AND QstCod=%ld",
+	          QstIndBottom,
+	          GamCod,QstCodTop);
+   DB_QueryUPDATE_new ("can not exchange indexes of questions");
+
+   DB_BuildQuery ("UPDATE gam_questions SET QstInd=%u"
+		  " WHERE GamCod=%ld AND QstCod=%ld",
+	          QstIndTop,
+	          GamCod,QstCodBottom);
+   DB_QueryUPDATE_new ("can not exchange indexes of questions");
 
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...

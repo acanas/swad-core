@@ -2179,11 +2179,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
-      if (asprintf (&Query,"UPDATE exam_announcements SET Status=%u"
-		           " WHERE CrsCod=%ld",
-	            (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not remove exam announcements of a course");
+      DB_BuildQuery ("UPDATE exam_announcements SET Status=%u"
+		     " WHERE CrsCod=%ld",
+	             (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
+      DB_QueryUPDATE_new ("can not remove exam announcements of a course");
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
@@ -2447,13 +2446,10 @@ void Crs_ContEditAfterChgCrsInConfig (void)
 
 static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod)
   {
-   char *Query;
-
    /***** Update degree in table of courses *****/
-   if (asprintf (&Query,"UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
-	         DegCod,CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not move course to another degree");
+   DB_BuildQuery ("UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
+	          DegCod,CrsCod);
+   DB_QueryUPDATE_new ("can not move course to another degree");
   }
 
 /*****************************************************************************/
@@ -2596,13 +2592,10 @@ void Crs_ChangeCrsYear (void)
 
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
   {
-   char *Query;
-
    /***** Update year/semester in table of courses *****/
-   if (asprintf (&Query,"UPDATE courses SET Year=%u WHERE CrsCod=%ld",
-	         NewYear,Crs->CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the year of a course");
+   DB_BuildQuery ("UPDATE courses SET Year=%u WHERE CrsCod=%ld",
+	          NewYear,Crs->CrsCod);
+   DB_QueryUPDATE_new ("can not update the year of a course");
 
    /***** Copy course year/semester *****/
    Crs->Year = NewYear;
@@ -2777,13 +2770,10 @@ static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const cha
 
 static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *NewCrsName)
   {
-   char *Query;
-
    /***** Update course changing old name by new name *****/
-   if (asprintf (&Query,"UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
-	         FieldName,NewCrsName,CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the name of a course");
+   DB_BuildQuery ("UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
+	          FieldName,NewCrsName,CrsCod);
+   DB_QueryUPDATE_new ("can not update the name of a course");
   }
 
 /*****************************************************************************/
@@ -2793,7 +2783,6 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
 void Crs_ChangeCrsStatus (void)
   {
    extern const char *Txt_The_status_of_the_course_X_has_changed;
-   char *Query;
    Crs_Status_t Status;
    Crs_StatusTxt_t StatusTxt;
 
@@ -2816,10 +2805,9 @@ void Crs_ChangeCrsStatus (void)
    Crs_GetDataOfCourseByCod (&Gbl.Degs.EditingCrs);
 
    /***** Update status in table of courses *****/
-   if (asprintf (&Query,"UPDATE courses SET Status=%u WHERE CrsCod=%ld",
-                 (unsigned) Status,Gbl.Degs.EditingCrs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the status of a course");
+   DB_BuildQuery ("UPDATE courses SET Status=%u WHERE CrsCod=%ld",
+                  (unsigned) Status,Gbl.Degs.EditingCrs.CrsCod);
+   DB_QueryUPDATE_new ("can not update the status of a course");
    Gbl.Degs.EditingCrs.Status = Status;
 
    /***** Create message to show the change made *****/
@@ -3369,17 +3357,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
 void Crs_UpdateCrsLast (void)
   {
-   char *Query;
-
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
      {
       /***** Update my last access to current course *****/
-      if (asprintf (&Query,"REPLACE INTO crs_last (CrsCod,LastTime)"
-	                   " VALUES (%ld,NOW())",
-	            Gbl.CurrentCrs.Crs.CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update last access to current course");
+      DB_BuildQuery ("REPLACE INTO crs_last (CrsCod,LastTime)"
+		     " VALUES (%ld,NOW())",
+	             Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE_new ("can not update last access to current course");
      }
   }
 

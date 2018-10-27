@@ -179,20 +179,17 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
 
 void Dat_ChangeDateFormat (void)
   {
-   char *Query;
-
    /***** Get param with date format *****/
    Gbl.Prefs.DateFormat = Dat_GetParamDateFormat ();
 
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      if (asprintf (&Query,"UPDATE usr_data SET DateFormat=%u"
-	                   " WHERE UsrCod=%ld",
-                    (unsigned) Gbl.Prefs.DateFormat,
-                    Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryUPDATE_free (Query,"can not update your preference about date format");
+      DB_BuildQuery ("UPDATE usr_data SET DateFormat=%u"
+		     " WHERE UsrCod=%ld",
+                     (unsigned) Gbl.Prefs.DateFormat,
+                     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update your preference about date format");
      }
 
    /***** Set preferences from current IP *****/

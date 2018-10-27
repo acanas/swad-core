@@ -52,7 +52,6 @@ long DB_QueryINSERTandReturnCode_new (const char *MsgError);
 long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError);
 
 void DB_QueryREPLACE_new (const char *MsgError);
-void DB_QueryREPLACE_free (const char *Query,const char *MsgError);
 void DB_QueryREPLACE (const char *Query,const char *MsgError);
 
 void DB_QueryUPDATE_new (const char *MsgError);

@@ -318,14 +318,11 @@ void Exa_ReceiveExamAnnouncement2 (void)
 
 static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char *Query;
-
    /***** Update number of users notified *****/
-   if (asprintf (&Query,"UPDATE exam_announcements SET NumNotif=NumNotif+%u"
-                        " WHERE ExaCod=%ld",
-                 NumUsrsToBeNotifiedByEMail,ExaCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the number of notifications of an exam announcement");
+   DB_BuildQuery ("UPDATE exam_announcements SET NumNotif=NumNotif+%u"
+		  " WHERE ExaCod=%ld",
+                  NumUsrsToBeNotifiedByEMail,ExaCod);
+   DB_QueryUPDATE_new ("can not update the number of notifications of an exam announcement");
   }
 
 /*****************************************************************************/
@@ -387,7 +384,6 @@ void Exa_ReqRemoveExamAnnouncement (void)
 
 void Exa_RemoveExamAnnouncement1 (void)
   {
-   char *Query;
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
@@ -395,12 +391,11 @@ void Exa_RemoveExamAnnouncement1 (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as deleted in the database *****/
-   if (asprintf (&Query,"UPDATE exam_announcements SET Status=%u"
-                        " WHERE ExaCod=%ld AND CrsCod=%ld",
-                 (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,
-                 ExaCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not remove exam announcement");
+   DB_BuildQuery ("UPDATE exam_announcements SET Status=%u"
+		  " WHERE ExaCod=%ld AND CrsCod=%ld",
+                  (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,
+                  ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not remove exam announcement");
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
@@ -431,7 +426,6 @@ void Exa_RemoveExamAnnouncement2 (void)
 
 void Exa_HideExamAnnouncement1 (void)
   {
-   char *Query;
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
@@ -439,12 +433,11 @@ void Exa_HideExamAnnouncement1 (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as hidden in the database *****/
-   if (asprintf (&Query,"UPDATE exam_announcements SET Status=%u"
-                        " WHERE ExaCod=%ld AND CrsCod=%ld",
-                 (unsigned) Exa_HIDDEN_EXAM_ANNOUNCEMENT,
-                 ExaCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide exam announcement");
+   DB_BuildQuery ("UPDATE exam_announcements SET Status=%u"
+		  " WHERE ExaCod=%ld AND CrsCod=%ld",
+                  (unsigned) Exa_HIDDEN_EXAM_ANNOUNCEMENT,
+                  ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not hide exam announcement");
   }
 
 void Exa_HideExamAnnouncement2 (void)
@@ -466,7 +459,6 @@ void Exa_HideExamAnnouncement2 (void)
 
 void Exa_UnhideExamAnnouncement1 (void)
   {
-   char *Query;
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
@@ -474,12 +466,11 @@ void Exa_UnhideExamAnnouncement1 (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as visible in the database *****/
-   if (asprintf (&Query,"UPDATE exam_announcements SET Status=%u"
-                        " WHERE ExaCod=%ld AND CrsCod=%ld",
-                 (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
-                 ExaCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not unhide exam announcement");
+   DB_BuildQuery ("UPDATE exam_announcements SET Status=%u"
+		  " WHERE ExaCod=%ld AND CrsCod=%ld",
+                  (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
+                  ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not unhide exam announcement");
   }
 
 void Exa_UnhideExamAnnouncement2 (void)
@@ -780,36 +771,33 @@ static long Exa_AddExamAnnouncementToDB (void)
 
 static void Exa_ModifyExamAnnouncementInDB (void)
   {
-   char *Query;
-
    /***** Modify exam announcement *****/
-   if (asprintf (&Query,"UPDATE exam_announcements"
-			" SET CrsFullName='%s',Year=%u,ExamSession='%s',"
-			"ExamDate='%04u-%02u-%02u %02u:%02u:00',"
-			"Duration='%02u:%02u:00',"
-			"Place='%s',ExamMode='%s',Structure='%s',"
-			"DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'"
-			" WHERE ExaCod=%ld",
-	         Gbl.ExamAnns.ExaDat.CrsFullName,
-	         Gbl.ExamAnns.ExaDat.Year,
-	         Gbl.ExamAnns.ExaDat.Session,
-	         Gbl.ExamAnns.ExaDat.ExamDate.Year,
-	         Gbl.ExamAnns.ExaDat.ExamDate.Month,
-	         Gbl.ExamAnns.ExaDat.ExamDate.Day,
-	         Gbl.ExamAnns.ExaDat.StartTime.Hour,
-	         Gbl.ExamAnns.ExaDat.StartTime.Minute,
-	         Gbl.ExamAnns.ExaDat.Duration.Hour,
-	         Gbl.ExamAnns.ExaDat.Duration.Minute,
-	         Gbl.ExamAnns.ExaDat.Place,
-	         Gbl.ExamAnns.ExaDat.Mode,
-	         Gbl.ExamAnns.ExaDat.Structure,
-	         Gbl.ExamAnns.ExaDat.DocRequired,
-	         Gbl.ExamAnns.ExaDat.MatRequired,
-	         Gbl.ExamAnns.ExaDat.MatAllowed,
-	         Gbl.ExamAnns.ExaDat.OtherInfo,
-	         Gbl.ExamAnns.ExaDat.ExaCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update an exam announcement");
+   DB_BuildQuery ("UPDATE exam_announcements"
+		  " SET CrsFullName='%s',Year=%u,ExamSession='%s',"
+		  "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
+		  "Duration='%02u:%02u:00',"
+		  "Place='%s',ExamMode='%s',Structure='%s',"
+		  "DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'"
+		  " WHERE ExaCod=%ld",
+	          Gbl.ExamAnns.ExaDat.CrsFullName,
+	          Gbl.ExamAnns.ExaDat.Year,
+	          Gbl.ExamAnns.ExaDat.Session,
+	          Gbl.ExamAnns.ExaDat.ExamDate.Year,
+	          Gbl.ExamAnns.ExaDat.ExamDate.Month,
+	          Gbl.ExamAnns.ExaDat.ExamDate.Day,
+	          Gbl.ExamAnns.ExaDat.StartTime.Hour,
+	          Gbl.ExamAnns.ExaDat.StartTime.Minute,
+	          Gbl.ExamAnns.ExaDat.Duration.Hour,
+	          Gbl.ExamAnns.ExaDat.Duration.Minute,
+	          Gbl.ExamAnns.ExaDat.Place,
+	          Gbl.ExamAnns.ExaDat.Mode,
+	          Gbl.ExamAnns.ExaDat.Structure,
+	          Gbl.ExamAnns.ExaDat.DocRequired,
+	          Gbl.ExamAnns.ExaDat.MatRequired,
+	          Gbl.ExamAnns.ExaDat.MatAllowed,
+	          Gbl.ExamAnns.ExaDat.OtherInfo,
+	          Gbl.ExamAnns.ExaDat.ExaCod);
+   DB_QueryUPDATE_new ("can not update an exam announcement");
   }
 
 /*****************************************************************************/

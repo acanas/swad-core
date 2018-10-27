@@ -915,7 +915,6 @@ void DT_RenameDegreeType (void)
    extern const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed;
    struct DegreeType *DegTyp;
-   char *Query;
    char NewNameDegTyp[Deg_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
    DegTyp = &Gbl.Degs.EditingDegTyp;
@@ -955,11 +954,10 @@ void DT_RenameDegreeType (void)
          else
            {
             /* Update the table changing old name by new name */
-            if (asprintf (&Query,"UPDATE deg_types SET DegTypName='%s'"
-                                 " WHERE DegTypCod=%ld",
-                          NewNameDegTyp,DegTyp->DegTypCod) < 0)
-               Lay_NotEnoughMemoryExit ();
-            DB_QueryUPDATE_free (Query,"can not update the type of a degree");
+            DB_BuildQuery ("UPDATE deg_types SET DegTypName='%s'"
+			   " WHERE DegTypCod=%ld",
+                           NewNameDegTyp,DegTyp->DegTypCod);
+            DB_QueryUPDATE_new ("can not update the type of a degree");
 
             /* Write message to show the change made */
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1004,7 +1002,6 @@ void DT_ChangeDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
    long NewDegTypCod;
-   char *Query;
 
    /***** Get parameters from form *****/
    /* Get degree code */
@@ -1017,10 +1014,9 @@ void DT_ChangeDegreeType (void)
    Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
 
    /***** Update the table of degrees changing old type by new type *****/
-   if (asprintf (&Query,"UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
-	         NewDegTypCod,Gbl.Degs.EditingDeg.DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not update the type of a degree");
+   DB_BuildQuery ("UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
+	          NewDegTypCod,Gbl.Degs.EditingDeg.DegCod);
+   DB_QueryUPDATE_new ("can not update the type of a degree");
 
    /***** Write message to show the change made
           and put button to go to degree changed *****/

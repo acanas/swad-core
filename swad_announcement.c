@@ -527,18 +527,16 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 
 void Ann_HideActiveAnnouncement (void)
   {
-   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement to hide *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as hidden *****/
-   if (asprintf (&Query,"UPDATE announcements SET Status=%u"
-                        " WHERE AnnCod=%ld",
-                 (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not hide announcement");
+   DB_BuildQuery ("UPDATE announcements SET Status=%u"
+		  " WHERE AnnCod=%ld",
+                  (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod);
+   DB_QueryUPDATE_new ("can not hide announcement");
   }
 
 /*****************************************************************************/
@@ -547,18 +545,16 @@ void Ann_HideActiveAnnouncement (void)
 
 void Ann_RevealHiddenAnnouncement (void)
   {
-   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement to show *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as shown *****/
-   if (asprintf (&Query,"UPDATE announcements SET Status=%u"
-                        " WHERE AnnCod=%ld",
-                 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryUPDATE_free (Query,"can not reveal announcement");
+   DB_BuildQuery ("UPDATE announcements SET Status=%u"
+		  " WHERE AnnCod=%ld",
+                  (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod);
+   DB_QueryUPDATE_new ("can not reveal announcement");
   }
 
 /*****************************************************************************/
