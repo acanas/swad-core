@@ -230,12 +230,9 @@ void Ses_UpdateSessionLastRefreshInDB (void)
 
 static void Ses_RemoveSessionFromDB (void)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
-
    /***** Remove current session *****/
-   sprintf (Query,"DELETE FROM sessions WHERE SessionId='%s'",
-            Gbl.Session.Id);
-   DB_QueryDELETE (Query,"can not remove a session");
+   DB_BuildQuery ("DELETE FROM sessions WHERE SessionId='%s'",Gbl.Session.Id);
+   DB_QueryDELETE_new ("can not remove a session");
 
    /***** Clear old unused social timelines in database *****/
    // This is necessary to prevent the table growing and growing
@@ -248,22 +245,20 @@ static void Ses_RemoveSessionFromDB (void)
 
 void Ses_RemoveExpiredSessions (void)
   {
-   char Query[1024];
-
    /***** Remove expired sessions *****/
    /* A session expire
       when last click (LastTime) is too old,
       or (when there was at least one refresh (navigator supports AJAX)
           and last refresh is too old (browser probably was closed)) */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM sessions WHERE"
+   DB_BuildQuery ("DELETE LOW_PRIORITY FROM sessions WHERE"
                   " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
                   " OR "
                   "(LastRefresh>LastTime+INTERVAL 1 SECOND"
                   " AND"
                   " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu'))",
-            Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
-            Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
-   DB_QueryDELETE (Query,"can not remove expired sessions");
+                  Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
+                  Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
+   DB_QueryDELETE_new ("can not remove expired sessions");
   }
 
 /*****************************************************************************/
@@ -398,15 +393,13 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
 
 void Ses_RemoveHiddenParFromThisSession (void)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
-
    if (Gbl.Session.IsOpen &&			// There is an open session
        !Gbl.HiddenParamsInsertedIntoDB)		// No params just inserted
      {
       /***** Remove hidden parameters of this session *****/
-      sprintf (Query,"DELETE FROM hidden_params WHERE SessionId='%s'",
-               Gbl.Session.Id);
-      DB_QueryDELETE (Query,"can not remove hidden parameters of current session");
+      DB_BuildQuery ("DELETE FROM hidden_params WHERE SessionId='%s'",
+		     Gbl.Session.Id);
+      DB_QueryDELETE_new ("can not remove hidden parameters of current session");
      }
   }
 
@@ -416,12 +409,10 @@ void Ses_RemoveHiddenParFromThisSession (void)
 
 void Ses_RemoveHiddenParFromExpiredSessions (void)
   {
-   char Query[256];
-
    /***** Remove hidden parameters from expired sessions *****/
-   sprintf (Query,"DELETE FROM hidden_params"
+   DB_BuildQuery ("DELETE FROM hidden_params"
                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
-   DB_QueryDELETE (Query,"can not remove hidden parameters of expired sessions");
+   DB_QueryDELETE_new ("can not remove hidden parameters of expired sessions");
   }
 
 /*****************************************************************************/

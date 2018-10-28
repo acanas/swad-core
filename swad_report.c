@@ -1437,9 +1437,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
 
 static void Rep_RemoveUsrReportsFromDB (long UsrCod)
   {
-   char Query[128];
-
    /***** Insert a new user's usage report into database *****/
-   sprintf (Query,"DELETE FROM usr_report WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE (Query,"can not remove user's usage reports");
+   DB_BuildQuery ("DELETE FROM usr_report WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove user's usage reports");
   }

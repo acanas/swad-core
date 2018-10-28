@@ -3359,13 +3359,6 @@ void DB_Query_new (const char *MsgError)
       DB_ExitOnMySQLError (MsgError);
   }
 
-void DB_Query (const char *Query,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError (MsgError);
-  }
-
 /*****************************************************************************/
 /********** Free structure that stores the result of a SELECT query **********/
 /*****************************************************************************/
