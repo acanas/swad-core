@@ -2118,22 +2118,18 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 
 void Crs_RemoveCourseCompletely (long CrsCod)
   {
-   char *Query;
-
    if (CrsCod > 0)
      {
       /***** Empty course *****/
       Crs_EmptyCourseCompletely (CrsCod);
 
       /***** Remove course from table of last accesses to courses in database *****/
-      if (asprintf (&Query,"DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a course");
+      DB_BuildQuery ("DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove a course");
 
       /***** Remove course from table of courses in database *****/
-      if (asprintf (&Query,"DELETE FROM courses WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a course");
+      DB_BuildQuery ("DELETE FROM courses WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove a course");
      }
   }
 
@@ -2146,7 +2142,6 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 static void Crs_EmptyCourseCompletely (long CrsCod)
   {
    struct Course Crs;
-   char *Query;
    char PathRelCrs[PATH_MAX + 1];
 
    if (CrsCod > 0)
@@ -2164,18 +2159,15 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove information of the course ****/
       /* Remove timetable of the course */
-      if (asprintf (&Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove the timetable of a course");
+      DB_BuildQuery ("DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove the timetable of a course");
 
       /* Remove other information of the course */
-      if (asprintf (&Query,"DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove info sources of a course");
+      DB_BuildQuery ("DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove info sources of a course");
 
-      if (asprintf (&Query,"DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove info of a course");
+      DB_BuildQuery ("DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove info of a course");
 
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
@@ -2186,17 +2178,15 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
-      if (asprintf (&Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
-		           " WHERE crs_record_fields.CrsCod=%ld"
-		           " AND crs_record_fields.FieldCod=crs_records.FieldCod",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove content of cards in a course");
+      DB_BuildQuery ("DELETE FROM crs_records USING crs_record_fields,crs_records"
+		     " WHERE crs_record_fields.CrsCod=%ld"
+		     " AND crs_record_fields.FieldCod=crs_records.FieldCod",
+	             CrsCod);
+      DB_QueryDELETE_new ("can not remove content of cards in a course");
 
       /* Remove definition of fields in course cards */
-      if (asprintf (&Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove fields of cards in a course");
+      DB_BuildQuery ("DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove fields of cards in a course");
 
       /***** Remove information related to files in course,
              including groups and projects,
@@ -2224,9 +2214,8 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       DB_QueryINSERT_new ("can not remove notices in a course");
 
       /* Remove all notices from the course */
-      if (asprintf (&Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove notices in a course");
+      DB_BuildQuery ("DELETE FROM notices WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove notices in a course");
 
       /***** Remove all the threads and posts in forums of the course *****/
       For_RemoveForums (Sco_SCOPE_CRS,CrsCod);
@@ -2242,42 +2231,33 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove groups in the course *****/
       /* Remove all the users in groups in the course */
-      if (asprintf (&Query,"DELETE FROM crs_grp_usr"
-		           " USING crs_grp_types,crs_grp,crs_grp_usr"
-		           " WHERE crs_grp_types.CrsCod=%ld"
-		           " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		           " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove users from groups of a course");
+      DB_BuildQuery ("DELETE FROM crs_grp_usr"
+		     " USING crs_grp_types,crs_grp,crs_grp_usr"
+		     " WHERE crs_grp_types.CrsCod=%ld"
+		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
+	             CrsCod);
+      DB_QueryDELETE_new ("can not remove users from groups of a course");
 
       /* Remove all the groups in the course */
-      if (asprintf (&Query,"DELETE FROM crs_grp"
-		           " USING crs_grp_types,crs_grp"
-		           " WHERE crs_grp_types.CrsCod=%ld"
-		           " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove groups of a course");
+      DB_BuildQuery ("DELETE FROM crs_grp"
+		     " USING crs_grp_types,crs_grp"
+		     " WHERE crs_grp_types.CrsCod=%ld"
+		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
+	             CrsCod);
+      DB_QueryDELETE_new ("can not remove groups of a course");
 
       /* Remove all the group types in the course */
-      if (asprintf (&Query,"DELETE FROM crs_grp_types"
-		           " WHERE CrsCod=%ld",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove types of group of a course");
+      DB_BuildQuery ("DELETE FROM crs_grp_types WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove types of group of a course");
 
       /***** Remove users' requests for inscription in the course *****/
-      if (asprintf (&Query,"DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove requests for inscription to a course");
+      DB_BuildQuery ("DELETE FROM crs_usr_requests WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove requests for inscription to a course");
 
       /***** Remove possible users remaining in the course (teachers) *****/
-      if (asprintf (&Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
-	            CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove users from a course");
+      DB_BuildQuery ("DELETE FROM crs_usr WHERE CrsCod=%ld",CrsCod);
+      DB_QueryDELETE_new ("can not remove users from a course");
 
       /***** Remove directories of the course *****/
       snprintf (PathRelCrs,sizeof (PathRelCrs),

@@ -606,7 +606,6 @@ void Dpt_RemoveDepartment (void)
   {
    extern const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department;
    extern const char *Txt_Department_X_removed;
-   char *Query;
    struct Department Dpt;
 
    /***** Get department code *****/
@@ -621,10 +620,8 @@ void Dpt_RemoveDepartment (void)
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
-      if (asprintf (&Query,"DELETE FROM departments WHERE DptCod=%ld",
-                    Dpt.DptCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a department");
+      DB_BuildQuery ("DELETE FROM departments WHERE DptCod=%ld",Dpt.DptCod);
+      DB_QueryDELETE_new ("can not remove a department");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

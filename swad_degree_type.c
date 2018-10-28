@@ -867,7 +867,6 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 
 static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -898,10 +897,8 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove the degree type *****/
-   if (asprintf (&Query,"DELETE FROM deg_types WHERE DegTypCod=%ld",
-	         DegTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a type of degree");
+   DB_BuildQuery ("DELETE FROM deg_types WHERE DegTypCod=%ld",DegTypCod);
+   DB_QueryDELETE_new ("can not remove a type of degree");
   }
 
 /*****************************************************************************/

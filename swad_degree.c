@@ -1831,7 +1831,6 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
 void Deg_RemoveDegreeCompletely (long DegCod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -1879,16 +1878,13 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   if (asprintf (&Query,"DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
-                 Sco_ScopeDB[Sco_SCOPE_DEG],DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove administrators of a degree");
+   DB_BuildQuery ("DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
+                  Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
+   DB_QueryDELETE_new ("can not remove administrators of a degree");
 
    /***** Remove the degree *****/
-   if (asprintf (&Query,"DELETE FROM degrees WHERE DegCod=%ld",
-                 DegCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a degree");
+   DB_BuildQuery ("DELETE FROM degrees WHERE DegCod=%ld",DegCod);
+   DB_QueryDELETE_new ("can not remove a degree");
 
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
    Pho_RemoveObsoleteStatDegrees ();

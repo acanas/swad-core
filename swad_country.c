@@ -1693,7 +1693,6 @@ void Cty_RemoveCountry (void)
   {
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
-   char *Query;
    struct Country Cty;
 
    /***** Get country code *****/
@@ -1713,10 +1712,8 @@ void Cty_RemoveCountry (void)
       Svy_RemoveSurveys (Sco_SCOPE_CTY,Cty.CtyCod);
 
       /***** Remove country *****/
-      if (asprintf (&Query,"DELETE FROM countries WHERE CtyCod='%03ld'",
-	            Cty.CtyCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a country");
+      DB_BuildQuery ("DELETE FROM countries WHERE CtyCod='%03ld'",Cty.CtyCod);
+      DB_QueryDELETE_new ("can not remove a country");
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();

@@ -466,11 +466,7 @@ void Dup_RemoveUsrFromListDupUsrs (void)
 
 void Dup_RemoveUsrFromDuplicated (long UsrCod)
   {
-   char *Query;
-
    /***** Remove user from list of duplicated users *****/
-   if (asprintf (&Query,"DELETE FROM usr_duplicated WHERE UsrCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user from possible duplicates");
+   DB_BuildQuery ("DELETE FROM usr_duplicated WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove a user from possible duplicates");
   }

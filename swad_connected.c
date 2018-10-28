@@ -658,13 +658,10 @@ void Con_UpdateMeInConnectedList (void)
 
 void Con_RemoveOldConnected (void)
   {
-   char *Query;
-
    /***** Remove old users from connected list *****/
-   if (asprintf (&Query,"DELETE FROM connected WHERE UsrCod NOT IN"
-                        " (SELECT DISTINCT(UsrCod) FROM sessions)") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove old users from list of connected users");
+   DB_BuildQuery ("DELETE FROM connected WHERE UsrCod NOT IN"
+		  " (SELECT DISTINCT(UsrCod) FROM sessions)");
+   DB_QueryDELETE_new ("can not remove old users from list of connected users");
   }
 
 /*****************************************************************************/

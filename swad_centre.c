@@ -1740,7 +1740,6 @@ void Ctr_RemoveCentre (void)
   {
    extern const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre;
    extern const char *Txt_Centre_X_removed;
-   char *Query;
    struct Centre Ctr;
    char PathCtr[PATH_MAX + 1];
 
@@ -1775,10 +1774,8 @@ void Ctr_RemoveCentre (void)
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
-      if (asprintf (&Query,"DELETE FROM centres WHERE CtrCod=%ld",
-	            Ctr.CtrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a centre");
+      DB_BuildQuery ("DELETE FROM centres WHERE CtrCod=%ld",Ctr.CtrCod);
+      DB_QueryDELETE_new ("can not remove a centre");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

@@ -510,7 +510,6 @@ long Ban_GetParamBanCod (void)
 void Ban_RemoveBanner (void)
   {
    extern const char *Txt_Banner_X_removed;
-   char *Query;
    struct Banner Ban;
 
    /***** Get banner code *****/
@@ -521,9 +520,8 @@ void Ban_RemoveBanner (void)
    Ban_GetDataOfBannerByCod (&Ban);
 
    /***** Remove banner *****/
-   if (asprintf (&Query,"DELETE FROM banners WHERE BanCod=%ld",Ban.BanCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a banner");
+   DB_BuildQuery ("DELETE FROM banners WHERE BanCod=%ld",Ban.BanCod);
+   DB_QueryDELETE_new ("can not remove a banner");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

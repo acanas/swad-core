@@ -2986,7 +2986,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long ReqCod;
@@ -3010,11 +3009,10 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove enrolment request *****/
-   if (asprintf (&Query,"DELETE FROM crs_usr_requests"
-                        " WHERE CrsCod=%ld AND UsrCod=%ld",
-                 CrsCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a request for enrolment");
+   DB_BuildQuery ("DELETE FROM crs_usr_requests"
+		  " WHERE CrsCod=%ld AND UsrCod=%ld",
+                  CrsCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove a request for enrolment");
   }
 
 /*****************************************************************************/
@@ -4166,7 +4164,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char *Query;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
@@ -4198,11 +4195,10 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from the table of courses-users *****/
-      if (asprintf (&Query,"DELETE FROM crs_usr"
-                           " WHERE CrsCod=%ld AND UsrCod=%ld",
-                    Crs->CrsCod,UsrDat->UsrCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a user from a course");
+      DB_BuildQuery ("DELETE FROM crs_usr"
+		     " WHERE CrsCod=%ld AND UsrCod=%ld",
+                     Crs->CrsCod,UsrDat->UsrCod);
+      DB_QueryDELETE_new ("can not remove a user from a course");
 
       /***** Flush caches *****/
       Usr_FlushCachesUsr ();
@@ -4307,16 +4303,14 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
-   char *Query;
 
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/centre/degree
      {
       /***** Remove user from the table of admins *****/
-      if (asprintf (&Query,"DELETE FROM admin"
-                           " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-                    UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove an administrator");
+      DB_BuildQuery ("DELETE FROM admin"
+		     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
+                     UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
+      DB_QueryDELETE_new ("can not remove an administrator");
 
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
