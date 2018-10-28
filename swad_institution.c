@@ -1685,7 +1685,6 @@ void Ins_RemoveInstitution (void)
   {
    extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution;
    extern const char *Txt_Institution_X_removed;
-   char *Query;
    struct Instit Ins;
    char PathIns[PATH_MAX + 1];
 
@@ -1722,10 +1721,8 @@ void Ins_RemoveInstitution (void)
       Fil_RemoveTree (PathIns);
 
       /***** Remove institution *****/
-      if (asprintf (&Query,"DELETE FROM institutions WHERE InsCod=%ld",
-                    Ins.InsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove an institution");
+      DB_BuildQuery ("DELETE FROM institutions WHERE InsCod=%ld",Ins.InsCod);
+      DB_QueryDELETE_new ("can not remove an institution");
 
       /***** Flush caches *****/
       Ins_FlushCacheShortNameOfInstitution ();

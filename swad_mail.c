@@ -543,7 +543,6 @@ long Mai_GetParamMaiCod (void)
 void Mai_RemoveMailDomain (void)
   {
    extern const char *Txt_Email_domain_X_removed;
-   char *Query;
    struct Mail Mai;
 
    /***** Get mail code *****/
@@ -554,10 +553,8 @@ void Mai_RemoveMailDomain (void)
    Mai_GetDataOfMailDomainByCod (&Mai);
 
    /***** Remove mail *****/
-   if (asprintf (&Query,"DELETE FROM mail_domains WHERE MaiCod=%ld",
-                 Mai.MaiCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a mail domain");
+   DB_BuildQuery ("DELETE FROM mail_domains WHERE MaiCod=%ld",Mai.MaiCod);
+   DB_QueryDELETE_new ("can not remove a mail domain");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1622,8 +1619,6 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 
 bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   char *Query;
-
    /***** Check if the new email matches any of the confirmed emails of other users *****/
    DB_BuildQuery ("SELECT COUNT(*) FROM usr_emails"
 		  " WHERE E_mail='%s' AND Confirmed='Y'"
@@ -1633,18 +1628,16 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
       return false;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/
-   if (asprintf (&Query,"DELETE FROM pending_emails"
-                        " WHERE E_mail='%s' AND UsrCod<>%ld",
-	         NewEmail,UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove pending email for other users");
+   DB_BuildQuery ("DELETE FROM pending_emails"
+		  " WHERE E_mail='%s' AND UsrCod<>%ld",
+	          NewEmail,UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove pending email for other users");
 
-   if (asprintf (&Query,"DELETE FROM usr_emails"
-                        " WHERE E_mail='%s' AND Confirmed='N'"
-		        " AND UsrCod<>%ld",
-	         NewEmail,UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove not confirmed email for other users");
+   DB_BuildQuery ("DELETE FROM usr_emails"
+		  " WHERE E_mail='%s' AND Confirmed='N'"
+		  " AND UsrCod<>%ld",
+	          NewEmail,UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove not confirmed email for other users");
 
    /***** Update email in database *****/
    DB_BuildQuery ("REPLACE INTO usr_emails"
@@ -1771,14 +1764,11 @@ bool Mai_SendMailMsgToConfirmEmail (void)
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
-   char *Query;
-
    /***** Remove expired pending emails from database *****/
-   if (asprintf (&Query,"DELETE FROM pending_emails"
-                        " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                 Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove old pending mail keys");
+   DB_BuildQuery ("DELETE FROM pending_emails"
+		  " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                  Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);
+   DB_QueryDELETE_new ("can not remove old pending mail keys");
 
    /***** Insert mail key in database *****/
    DB_BuildQuery ("INSERT INTO pending_emails"
@@ -1801,7 +1791,6 @@ void Mai_ConfirmEmail (void)
    extern const char *Txt_The_email_X_has_been_confirmed;
    extern const char *Txt_The_email_address_has_not_been_confirmed;
    extern const char *Txt_Failed_email_confirmation_key;
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
@@ -1837,10 +1826,8 @@ void Mai_ConfirmEmail (void)
    if (KeyIsCorrect)
      {
       /***** Delete this key *****/
-      if (asprintf (&Query,"DELETE FROM pending_emails WHERE MailKey='%s'",
-                    MailKey) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove an email key");
+      DB_BuildQuery ("DELETE FROM pending_emails WHERE MailKey='%s'",MailKey);
+      DB_QueryDELETE_new ("can not remove an email key");
 
       /***** Check user's code and email
              and get if email is already confirmed *****/

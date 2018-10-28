@@ -487,7 +487,6 @@ long Lnk_GetParamLnkCod (void)
 void Lnk_RemoveLink (void)
   {
    extern const char *Txt_Link_X_removed;
-   char *Query;
    struct Link Lnk;
 
    /***** Get link code *****/
@@ -498,10 +497,8 @@ void Lnk_RemoveLink (void)
    Lnk_GetDataOfLinkByCod (&Lnk);
 
    /***** Remove link *****/
-   if (asprintf (&Query,"DELETE FROM links WHERE LnkCod=%ld",
-                 Lnk.LnkCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove an institutional link");
+   DB_BuildQuery ("DELETE FROM links WHERE LnkCod=%ld",Lnk.LnkCod);
+   DB_QueryDELETE_new ("can not remove an institutional link");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

@@ -292,7 +292,6 @@ void Not_RequestRemNotice (void)
 
 void Not_RemoveNotice (void)
   {
-   char *Query;
    long NotCod;
 
    /***** Get the code of the notice to remove *****/
@@ -309,11 +308,10 @@ void Not_RemoveNotice (void)
    DB_QueryINSERT_new ("can not remove notice");
 
    /* Remove notice */
-   if (asprintf (&Query,"DELETE FROM notices"
-			" WHERE NotCod=%ld AND CrsCod=%ld",
-                 NotCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove notice");
+   DB_BuildQuery ("DELETE FROM notices"
+		  " WHERE NotCod=%ld AND CrsCod=%ld",
+                  NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryDELETE_new ("can not remove notice");
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);

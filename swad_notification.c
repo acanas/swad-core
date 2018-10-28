@@ -1506,7 +1506,6 @@ static void Ntf_UpdateMyLastAccessToNotifications (void)
 
 void Ntf_SendPendingNotifByEMailToAllUsrs (void)
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -1559,11 +1558,10 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Delete old notifications ******/
-   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM notif"
-                        " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                 Cfg_TIME_TO_DELETE_OLD_NOTIF) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove old notifications");
+   DB_BuildQuery ("DELETE LOW_PRIORITY FROM notif"
+		  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                  Cfg_TIME_TO_DELETE_OLD_NOTIF);
+   DB_QueryDELETE_new ("can not remove old notifications");
   }
 
 /*****************************************************************************/
@@ -2101,12 +2099,8 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
 
 void Ntf_RemoveUsrNtfs (long ToUsrCod)
   {
-   char *Query;
-
    /***** Delete notifications of a user ******/
-   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM notif"
-	                " WHERE ToUsrCod=%ld",
-                 ToUsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove notifications of a user");
+   DB_BuildQuery ("DELETE LOW_PRIORITY FROM notif WHERE ToUsrCod=%ld",
+                  ToUsrCod);
+   DB_QueryDELETE_new ("can not remove notifications of a user");
   }

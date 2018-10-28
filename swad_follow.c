@@ -1203,11 +1203,8 @@ void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Fol_RemoveUsrFromUsrFollow (long UsrCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"DELETE FROM usr_follow"
-	                " WHERE FollowerCod=%ld OR FollowedCod=%ld",
-	         UsrCod,UsrCod) < 0)
-            Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user from followers and followed");
+   DB_BuildQuery ("DELETE FROM usr_follow"
+		  " WHERE FollowerCod=%ld OR FollowedCod=%ld",
+	          UsrCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove user from followers and followed");
   }

@@ -1057,13 +1057,9 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 
 void Prf_RemoveUsrFigures (long UsrCod)
   {
-   char *Query;
-
    /***** Remove user's figures *****/
-   if (asprintf (&Query,"DELETE FROM usr_figures WHERE UsrCod=%ld",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not delete user's figures");
+   DB_BuildQuery ("DELETE FROM usr_figures WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not delete user's figures");
   }
 
 /*****************************************************************************/

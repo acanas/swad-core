@@ -1210,18 +1210,16 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
   {
-   char *Query;
    bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from all the groups of the course *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp_usr"
-			" WHERE UsrCod=%ld AND GrpCod IN"
-			" (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-			" WHERE crs_grp_types.CrsCod=%ld"
-			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
-                 UsrCod,CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user from all groups of a course");
+   DB_BuildQuery ("DELETE FROM crs_grp_usr"
+		  " WHERE UsrCod=%ld AND GrpCod IN"
+		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+		  " WHERE crs_grp_types.CrsCod=%ld"
+		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+                  UsrCod,CrsCod);
+   DB_QueryDELETE_new ("can not remove a user from all groups of a course");
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -1235,14 +1233,11 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
 
 void Grp_RemUsrFromAllGrps (long UsrCod)
   {
-   char *Query;
    bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from all groups *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp_usr WHERE UsrCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user from the groups he/she belongs to");
+   DB_BuildQuery ("DELETE FROM crs_grp_usr WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove a user from the groups he/she belongs to");
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -1256,15 +1251,13 @@ void Grp_RemUsrFromAllGrps (long UsrCod)
 
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
   {
-   char *Query;
    bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from group *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp_usr"
-	                " WHERE GrpCod=%ld AND UsrCod=%ld",
-                 GrpCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user from a group");
+   DB_BuildQuery ("DELETE FROM crs_grp_usr"
+		  " WHERE GrpCod=%ld AND UsrCod=%ld",
+                  GrpCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove a user from a group");
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -4018,7 +4011,6 @@ void Grp_RemoveGroup (void)
 static void Grp_RemoveGroupTypeCompletely (void)
   {
    extern const char *Txt_Type_of_group_X_removed;
-   char *Query;
 
    /***** Get name and type of the group from database *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
@@ -4043,23 +4035,20 @@ static void Grp_RemoveGroupTypeCompletely (void)
    DB_QueryUPDATE_new ("can not update all groups of a type in course timetable");
 
    /***** Remove all the students in groups of this type *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp_usr WHERE GrpCod IN"
-			" (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
-                 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove users from all groups of a type");
+   DB_BuildQuery ("DELETE FROM crs_grp_usr WHERE GrpCod IN"
+		  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
+                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+   DB_QueryDELETE_new ("can not remove users from all groups of a type");
 
    /***** Remove all the groups of this type *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp WHERE GrpTypCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove groups of a type");
+   DB_BuildQuery ("DELETE FROM crs_grp WHERE GrpTypCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+   DB_QueryDELETE_new ("can not remove groups of a type");
 
    /***** Remove the group type *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp_types WHERE GrpTypCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a type of group");
+   DB_BuildQuery ("DELETE FROM crs_grp_types WHERE GrpTypCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+   DB_QueryDELETE_new ("can not remove a type of group");
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4079,7 +4068,6 @@ static void Grp_RemoveGroupCompletely (void)
   {
    extern const char *Txt_Group_X_removed;
    struct GroupData GrpDat;
-   char *Query;
 
    /***** Get name and type of the group from database *****/
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
@@ -4103,16 +4091,14 @@ static void Grp_RemoveGroupCompletely (void)
    DB_QueryUPDATE_new ("can not update a group in course timetable");
 
    /***** Remove all the students in this group *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove users from a group");
+   DB_BuildQuery ("DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryDELETE_new ("can not remove users from a group");
 
    /***** Remove the group *****/
-   if (asprintf (&Query,"DELETE FROM crs_grp WHERE GrpCod=%ld",
-                 Gbl.CurrentCrs.Grps.GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a group");
+   DB_BuildQuery ("DELETE FROM crs_grp WHERE GrpCod=%ld",
+                  Gbl.CurrentCrs.Grps.GrpCod);
+   DB_QueryDELETE_new ("can not remove a group");
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

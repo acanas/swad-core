@@ -216,14 +216,11 @@ void Pre_SetPrefsFromIP (void)
 
 void Pre_RemoveOldPrefsFromIP (void)
   {
-   char *Query;
-
    /***** Remove old preferences *****/
-   if (asprintf (&Query,"DELETE LOW_PRIORITY FROM IP_prefs"
-			" WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                 Cfg_TIME_TO_DELETE_IP_PREFS) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove old preferences");
+   DB_BuildQuery ("DELETE LOW_PRIORITY FROM IP_prefs"
+		  " WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                  Cfg_TIME_TO_DELETE_IP_PREFS);
+   DB_QueryDELETE_new ("can not remove old preferences");
   }
 
 /*****************************************************************************/

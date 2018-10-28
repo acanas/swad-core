@@ -486,7 +486,6 @@ long Plg_GetParamPlgCod (void)
 void Plg_RemovePlugin (void)
   {
    extern const char *Txt_Plugin_X_removed;
-   char *Query;
    struct Plugin Plg;
 
    /***** Get plugin code *****/
@@ -497,10 +496,8 @@ void Plg_RemovePlugin (void)
    Plg_GetDataOfPluginByCod (&Plg);
 
    /***** Remove plugin *****/
-   if (asprintf (&Query,"DELETE FROM plugins WHERE PlgCod=%ld",
-                 Plg.PlgCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a plugin");
+   DB_BuildQuery ("DELETE FROM plugins WHERE PlgCod=%ld",Plg.PlgCod);
+   DB_QueryDELETE_new ("can not remove a plugin");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

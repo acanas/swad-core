@@ -683,7 +683,6 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
 void Rec_RemoveFieldFromDB (void)
   {
    extern const char *Txt_Record_field_X_removed;
-   char *Query;
 
    /***** Get from the database the name of the field *****/
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
@@ -692,16 +691,14 @@ void Rec_RemoveFieldFromDB (void)
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Remove field from all records *****/
-   if (asprintf (&Query,"DELETE FROM crs_records WHERE FieldCod=%ld",
-                 Gbl.CurrentCrs.Records.Field.FieldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove field from all students' records");
+   DB_BuildQuery ("DELETE FROM crs_records WHERE FieldCod=%ld",
+                  Gbl.CurrentCrs.Records.Field.FieldCod);
+   DB_QueryDELETE_new ("can not remove field from all students' records");
 
    /***** Remove the field *****/
-   if (asprintf (&Query,"DELETE FROM crs_record_fields WHERE FieldCod=%ld",
-                 Gbl.CurrentCrs.Records.Field.FieldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove field of record");
+   DB_BuildQuery ("DELETE FROM crs_record_fields WHERE FieldCod=%ld",
+                  Gbl.CurrentCrs.Records.Field.FieldCod);
+   DB_QueryDELETE_new ("can not remove field of record");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2032,15 +2029,12 @@ void Rec_UpdateCrsRecord (long UsrCod)
 
 void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs)
   {
-   char *Query;
-
    /***** Remove text of the field of record course *****/
-   if (asprintf (&Query,"DELETE FROM crs_records"
-			" WHERE UsrCod=%ld AND FieldCod IN"
-			" (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
-                 UsrCod,Crs->CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's record in a course");
+   DB_BuildQuery ("DELETE FROM crs_records"
+		  " WHERE UsrCod=%ld AND FieldCod IN"
+		  " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
+                  UsrCod,Crs->CrsCod);
+   DB_QueryDELETE_new ("can not remove user's record in a course");
   }
 
 /*****************************************************************************/
@@ -2049,12 +2043,9 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs)
 
 void Rec_RemoveFieldsCrsRecordAll (long UsrCod)
   {
-   char *Query;
-
    /***** Remove text of the field of record course *****/
-   if (asprintf (&Query,"DELETE FROM crs_records WHERE UsrCod=%ld",UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's records in all courses");
+   DB_BuildQuery ("DELETE FROM crs_records WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove user's records in all courses");
   }
 
 /*****************************************************************************/

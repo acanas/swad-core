@@ -741,14 +741,11 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
 
 void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
   {
-   char *Query;
-
    /***** Remove user's status about reading of course information *****/
-   if (asprintf (&Query,"DELETE FROM crs_info_read"
-                        " WHERE UsrCod=%ld AND CrsCod=%ld",
-                 UsrCod,CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not set that I have not read course info");
+   DB_BuildQuery ("DELETE FROM crs_info_read"
+		  " WHERE UsrCod=%ld AND CrsCod=%ld",
+                  UsrCod,CrsCod);
+   DB_QueryDELETE_new ("can not set that I have not read course info");
   }
 
 /*****************************************************************************/

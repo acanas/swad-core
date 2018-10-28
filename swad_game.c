@@ -1512,7 +1512,6 @@ void Gam_AskRemGame (void)
 void Gam_RemoveGame (void)
   {
    extern const char *Txt_Game_X_removed;
-   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1525,26 +1524,19 @@ void Gam_RemoveGame (void)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Remove all the users in this game *****/
-   if (asprintf (&Query,"DELETE FROM gam_users WHERE GamCod=%ld",
-                 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove users who are answered a game");
+   DB_BuildQuery ("DELETE FROM gam_users WHERE GamCod=%ld",Game.GamCod);
+   DB_QueryDELETE_new ("can not remove users who are answered a game");
 
    /***** Remove all the questions in this game *****/
-   if (asprintf (&Query,"DELETE FROM gam_questions"
-                        " WHERE GamCod=%ld",
-                 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove questions of a game");
+   DB_BuildQuery ("DELETE FROM gam_questions WHERE GamCod=%ld",Game.GamCod);
+   DB_QueryDELETE_new ("can not remove questions of a game");
 
    /***** Remove all the groups of this game *****/
    Gam_RemoveAllTheGrpsAssociatedToAndGame (Game.GamCod);
 
    /***** Remove game *****/
-   if (asprintf (&Query,"DELETE FROM games WHERE GamCod=%ld",
-                 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove game");
+   DB_BuildQuery ("DELETE FROM games WHERE GamCod=%ld",Game.GamCod);
+   DB_QueryDELETE_new ("can not remove game");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1614,7 +1606,6 @@ static void Gam_PutButtonToResetGame (void)
 void Gam_ResetGame (void)
   {
    extern const char *Txt_Game_X_reset;
-   char *Query;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1627,10 +1618,8 @@ void Gam_ResetGame (void)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
    /***** Remove all the users in this game *****/
-   if (asprintf (&Query,"DELETE FROM gam_users WHERE GamCod=%ld",
-                 Game.GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove users who are answered a game");
+   DB_BuildQuery ("DELETE FROM gam_users WHERE GamCod=%ld",Game.GamCod);
+   DB_QueryDELETE_new ("can not remove users who are answered a game");
 
    /***** Reset all the answers in this game *****/
    DB_BuildQuery ("UPDATE gam_answers,gam_questions SET gam_answers.NumUsrs=0"
@@ -2283,13 +2272,9 @@ bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
 
 static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
   {
-   char *Query;
-
    /***** Remove groups of the game *****/
-   if (asprintf (&Query,"DELETE FROM gam_grp WHERE GamCod=%ld",
-                 GamCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove the groups associated to a game");
+   DB_BuildQuery ("DELETE FROM gam_grp WHERE GamCod=%ld",GamCod);
+   DB_QueryDELETE_new ("can not remove the groups associated to a game");
   }
 
 /*****************************************************************************/
@@ -2298,14 +2283,10 @@ static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
 
 void Gam_RemoveGroup (long GrpCod)
   {
-   char *Query;
-
    /***** Remove group from all the games *****/
-   if (asprintf (&Query,"DELETE FROM gam_grp WHERE GrpCod=%ld",
-	         GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove group"
-	                      " from the associations between games and groups");
+   DB_BuildQuery ("DELETE FROM gam_grp WHERE GrpCod=%ld",GrpCod);
+   DB_QueryDELETE_new ("can not remove group"
+	               " from the associations between games and groups");
   }
 
 /*****************************************************************************/
@@ -2314,16 +2295,13 @@ void Gam_RemoveGroup (long GrpCod)
 
 void Gam_RemoveGroupsOfType (long GrpTypCod)
   {
-   char *Query;
-
    /***** Remove group from all the games *****/
-   if (asprintf (&Query,"DELETE FROM gam_grp USING crs_grp,gam_grp"
-			" WHERE crs_grp.GrpTypCod=%ld"
-			" AND crs_grp.GrpCod=gam_grp.GrpCod",
-                 GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove groups of a type"
-	                      " from the associations between games and groups");
+   DB_BuildQuery ("DELETE FROM gam_grp USING crs_grp,gam_grp"
+		  " WHERE crs_grp.GrpTypCod=%ld"
+		  " AND crs_grp.GrpCod=gam_grp.GrpCod",
+                  GrpTypCod);
+   DB_QueryDELETE_new ("can not remove groups of a type"
+	               " from the associations between games and groups");
   }
 
 /*****************************************************************************/
@@ -2423,53 +2401,47 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
 void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char *Query;
 
    /***** Remove all the users in course games *****/
-   if (asprintf (&Query,"DELETE FROM gam_users"
-			" USING games,gam_users"
-			" WHERE games.Scope='%s' AND games.Cod=%ld"
-			" AND games.GamCod=gam_users.GamCod",
-                 Sco_ScopeDB[Scope],Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove users"
-	                      " who had answered games in a place on the hierarchy");
+   DB_BuildQuery ("DELETE FROM gam_users"
+		  " USING games,gam_users"
+		  " WHERE games.Scope='%s' AND games.Cod=%ld"
+		  " AND games.GamCod=gam_users.GamCod",
+                  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove users"
+	               " who had answered games in a place on the hierarchy");
 
    /***** Remove all the answers in course games *****/
-   if (asprintf (&Query,"DELETE FROM gam_answers"
-			" USING games,gam_questions,gam_answers"
-			" WHERE games.Scope='%s' AND games.Cod=%ld"
-			" AND games.GamCod=gam_questions.GamCod"
-			" AND gam_questions.QstCod=gam_answers.QstCod",
-                 Sco_ScopeDB[Scope],Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove answers of games in a place on the hierarchy");
+   DB_BuildQuery ("DELETE FROM gam_answers"
+		  " USING games,gam_questions,gam_answers"
+		  " WHERE games.Scope='%s' AND games.Cod=%ld"
+		  " AND games.GamCod=gam_questions.GamCod"
+		  " AND gam_questions.QstCod=gam_answers.QstCod",
+                  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove answers of games in a place on the hierarchy");
 
    /***** Remove all the questions in course games *****/
-   if (asprintf (&Query,"DELETE FROM gam_questions"
-			" USING games,gam_questions"
-			" WHERE games.Scope='%s' AND games.Cod=%ld"
-			" AND games.GamCod=gam_questions.GamCod",
-                 Sco_ScopeDB[Scope],Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove questions of games in a place on the hierarchy");
+   DB_BuildQuery ("DELETE FROM gam_questions"
+		  " USING games,gam_questions"
+		  " WHERE games.Scope='%s' AND games.Cod=%ld"
+		  " AND games.GamCod=gam_questions.GamCod",
+                  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove questions of games in a place on the hierarchy");
 
    /***** Remove groups *****/
-   if (asprintf (&Query,"DELETE FROM gam_grp"
-			" USING games,gam_grp"
-			" WHERE games.Scope='%s' AND games.Cod=%ld"
-			" AND games.GamCod=gam_grp.GamCod",
-                 Sco_ScopeDB[Scope],Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove all the groups"
-	                      " associated to games of a course");
+   DB_BuildQuery ("DELETE FROM gam_grp"
+		  " USING games,gam_grp"
+		  " WHERE games.Scope='%s' AND games.Cod=%ld"
+		  " AND games.GamCod=gam_grp.GamCod",
+                  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove all the groups"
+	               " associated to games of a course");
 
    /***** Remove course games *****/
-   if (asprintf (&Query,"DELETE FROM games"
-	                " WHERE Scope='%s' AND Cod=%ld",
-                 Sco_ScopeDB[Scope],Cod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove all the games in a place on the hierarchy");
+   DB_BuildQuery ("DELETE FROM games"
+		  " WHERE Scope='%s' AND Cod=%ld",
+                  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove all the games in a place on the hierarchy");
   }
 
 /*****************************************************************************/
@@ -2575,13 +2547,9 @@ static unsigned Gam_GetParamQstInd (void)
 
 static void Gam_RemAnswersOfAQuestion (long QstCod)
   {
-   char *Query;
-
    /***** Remove answers *****/
-   if (asprintf (&Query,"DELETE FROM gam_answers WHERE QstCod=%ld",
-                 QstCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove the answers of a question");
+   DB_BuildQuery ("DELETE FROM gam_answers WHERE QstCod=%ld",QstCod);
+   DB_QueryDELETE_new ("can not remove the answers of a question");
   }
 
 /*****************************************************************************/

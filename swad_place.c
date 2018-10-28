@@ -556,7 +556,6 @@ void Plc_RemovePlace (void)
   {
    extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place;
    extern const char *Txt_Place_X_removed;
-   char *Query;
    struct Place Plc;
 
    /***** Get place code *****/
@@ -572,10 +571,8 @@ void Plc_RemovePlace (void)
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
-      if (asprintf (&Query,"DELETE FROM places WHERE PlcCod=%ld",
-	            Plc.PlcCod) < 0)
-         Lay_NotEnoughMemoryExit ();
-      DB_QueryDELETE_free (Query,"can not remove a place");
+      DB_BuildQuery ("DELETE FROM places WHERE PlcCod=%ld",Plc.PlcCod);
+      DB_QueryDELETE_new ("can not remove a place");
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

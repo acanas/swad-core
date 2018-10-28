@@ -639,7 +639,6 @@ long Hld_GetParamHldCod (void)
 void Hld_RemoveHoliday1 (void)
   {
    extern const char *Txt_Holiday_X_removed;
-   char *Query;
    struct Holiday Hld;
 
    /***** Get holiday code *****/
@@ -650,10 +649,8 @@ void Hld_RemoveHoliday1 (void)
    Hld_GetDataOfHolidayByCod (&Hld);
 
    /***** Remove holiday *****/
-   if (asprintf (&Query,"DELETE FROM holidays WHERE HldCod=%ld",
-                 Hld.HldCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a holiday");
+   DB_BuildQuery ("DELETE FROM holidays WHERE HldCod=%ld",Hld.HldCod);
+   DB_QueryDELETE_new ("can not remove a holiday");
 
    /***** Write message to show the change made *****/
    Gbl.Alert.Type = Ale_SUCCESS;
