@@ -564,23 +564,18 @@ void Ann_RevealHiddenAnnouncement (void)
 void Ann_RemoveAnnouncement (void)
   {
    extern const char *Txt_Announcement_removed;
-   char *Query;
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Remove announcement *****/
-   if (asprintf (&Query,"DELETE FROM announcements WHERE AnnCod=%ld",
-                 AnnCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove announcement");
+   DB_BuildQuery ("DELETE FROM announcements WHERE AnnCod=%ld",AnnCod);
+   DB_QueryDELETE_new ("can not remove announcement");
 
    /***** Remove users who have seen the announcement *****/
-   if (asprintf (&Query,"DELETE FROM ann_seen WHERE AnnCod=%ld",
-                 AnnCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove announcement");
+   DB_BuildQuery ("DELETE FROM ann_seen WHERE AnnCod=%ld",AnnCod);
+   DB_QueryDELETE_new ("can not remove announcement");
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_removed);
@@ -618,11 +613,7 @@ void Ann_MarkAnnouncementAsSeen (void)
 
 void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod)
   {
-   char *Query;
-
    /***** Remove user from seen announcements *****/
-   if (asprintf (&Query,"DELETE FROM ann_seen WHERE UsrCod=%ld",
-                 UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user from seen announcements");
+   DB_BuildQuery ("DELETE FROM ann_seen WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove user from seen announcements");
   }

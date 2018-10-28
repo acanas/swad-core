@@ -1003,7 +1003,6 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    extern const char *Txt_Briefcase_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Photo_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Record_card_of_THE_USER_X_has_been_removed;
-   char *Query;
    bool PhotoRemoved = false;
 
    /***** Remove the works zones of the user in all courses *****/
@@ -1022,19 +1021,16 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Grp_RemUsrFromAllGrps (UsrDat->UsrCod);
 
    /***** Remove user's requests for inscription *****/
-   if (asprintf (&Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's requests for inscription");
+   DB_BuildQuery ("DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
+	          UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's requests for inscription");
 
    /***** Remove user from possible duplicate users *****/
    Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the table of courses and users *****/
-   if (asprintf (&Query,"DELETE FROM crs_usr WHERE UsrCod=%ld",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user from all courses");
+   DB_BuildQuery ("DELETE FROM crs_usr WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove a user from all courses");
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1045,10 +1041,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      }
 
    /***** Remove user as administrator of any degree *****/
-   if (asprintf (&Query,"DELETE FROM admin WHERE UsrCod=%ld",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user as administrator");
+   DB_BuildQuery ("DELETE FROM admin WHERE UsrCod=%ld",
+                  UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove a user as administrator");
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1102,16 +1097,12 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
    /***** Remove user from table of connected users *****/
-   if (asprintf (&Query,"DELETE FROM connected WHERE UsrCod=%ld",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove a user from table of connected users");
+   DB_BuildQuery ("DELETE FROM connected WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove a user from table of connected users");
 
    /***** Remove all sessions of this user *****/
-   if (asprintf (&Query,"DELETE FROM sessions WHERE UsrCod=%ld",
-                 UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove sessions of a user");
+   DB_BuildQuery ("DELETE FROM sessions WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove sessions of a user");
 
    /***** Remove social content associated to the user *****/
    Soc_RemoveUsrSocialContent (UsrDat->UsrCod);
@@ -1171,48 +1162,32 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
 
 static void Acc_RemoveUsr (struct UsrData *UsrDat)
   {
-   char *Query;
-
    /***** Remove user's webs / social networks *****/
-   if (asprintf (&Query,"DELETE FROM usr_webs WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's webs / social networks");
+   DB_BuildQuery ("DELETE FROM usr_webs WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's webs / social networks");
 
    /***** Remove user's nicknames *****/
-   if (asprintf (&Query,"DELETE FROM usr_nicknames WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's nicknames");
+   DB_BuildQuery ("DELETE FROM usr_nicknames WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's nicknames");
 
    /***** Remove user's emails *****/
-   if (asprintf (&Query,"DELETE FROM pending_emails WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove pending user's emails");
+   DB_BuildQuery ("DELETE FROM pending_emails WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove pending user's emails");
 
-   if (asprintf (&Query,"DELETE FROM usr_emails WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's emails");
+   DB_BuildQuery ("DELETE FROM usr_emails WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's emails");
 
    /***** Remove user's IDs *****/
-   if (asprintf (&Query,"DELETE FROM usr_IDs WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's IDs");
+   DB_BuildQuery ("DELETE FROM usr_IDs WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's IDs");
 
    /***** Remove user's last data *****/
-   if (asprintf (&Query,"DELETE FROM usr_last WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's last data");
+   DB_BuildQuery ("DELETE FROM usr_last WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's last data");
 
    /***** Remove user's data  *****/
-   if (asprintf (&Query,"DELETE FROM usr_data WHERE UsrCod=%ld",
-	         UsrDat->UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user's data");
+   DB_BuildQuery ("DELETE FROM usr_data WHERE UsrCod=%ld",UsrDat->UsrCod);
+   DB_QueryDELETE_new ("can not remove user's data");
   }
 
 /*****************************************************************************/

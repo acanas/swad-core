@@ -1431,12 +1431,9 @@ bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
 
 static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
   {
-   char *Query;
-
    /***** Remove groups of the attendance event *****/
-   if (asprintf (&Query,"DELETE FROM att_grp WHERE AttCod=%ld",AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove the groups associated to an attendance event");
+   DB_BuildQuery ("DELETE FROM att_grp WHERE AttCod=%ld",AttCod);
+   DB_QueryDELETE_new ("can not remove the groups associated to an attendance event");
   }
 
 /*****************************************************************************/
@@ -1445,12 +1442,9 @@ static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
 
 void Att_RemoveGroup (long GrpCod)
   {
-   char *Query;
-
    /***** Remove group from all the attendance events *****/
-   if (asprintf (&Query,"DELETE FROM att_grp WHERE GrpCod=%ld",GrpCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove group from the associations between attendance events and groups");
+   DB_BuildQuery ("DELETE FROM att_grp WHERE GrpCod=%ld",GrpCod);
+   DB_QueryDELETE_new ("can not remove group from the associations between attendance events and groups");
   }
 
 /*****************************************************************************/
@@ -1459,15 +1453,12 @@ void Att_RemoveGroup (long GrpCod)
 
 void Att_RemoveGroupsOfType (long GrpTypCod)
   {
-   char *Query;
-
    /***** Remove group from all the attendance events *****/
-   if (asprintf (&Query,"DELETE FROM att_grp USING crs_grp,att_grp"
-                        " WHERE crs_grp.GrpTypCod=%ld"
-                        " AND crs_grp.GrpCod=att_grp.GrpCod",
-                 GrpTypCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove groups of a type from the associations between attendance events and groups");
+   DB_BuildQuery ("DELETE FROM att_grp USING crs_grp,att_grp"
+		  " WHERE crs_grp.GrpTypCod=%ld"
+		  " AND crs_grp.GrpCod=att_grp.GrpCod",
+                  GrpTypCod);
+   DB_QueryDELETE_new ("can not remove groups of a type from the associations between attendance events and groups");
   }
 
 /*****************************************************************************/
@@ -1565,11 +1556,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 
 static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"DELETE FROM att_usr WHERE AttCod=%ld",AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove attendance event");
+   DB_BuildQuery ("DELETE FROM att_usr WHERE AttCod=%ld",AttCod);
+   DB_QueryDELETE_new ("can not remove attendance event");
   }
 
 /*****************************************************************************/
@@ -1578,12 +1566,9 @@ static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
 
 void Att_RemoveUsrFromAllAttEvents (long UsrCod)
   {
-   char *Query;
-
    /***** Remove group from all the attendance events *****/
-   if (asprintf (&Query,"DELETE FROM att_usr WHERE UsrCod=%ld",UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user from all attendance events");
+   DB_BuildQuery ("DELETE FROM att_usr WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove user from all attendance events");
   }
 
 /*****************************************************************************/
@@ -1592,16 +1577,13 @@ void Att_RemoveUsrFromAllAttEvents (long UsrCod)
 
 void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
   {
-   char *Query;
-
    /***** Remove group from all the attendance events *****/
-   if (asprintf (&Query,"DELETE FROM att_usr USING att_events,att_usr"
-                        " WHERE att_events.CrsCod=%ld"
-                        " AND att_events.AttCod=att_usr.AttCod"
-                        " AND att_usr.UsrCod=%ld",
-                 CrsCod,UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove user from attendance events of a course");
+   DB_BuildQuery ("DELETE FROM att_usr USING att_events,att_usr"
+		  " WHERE att_events.CrsCod=%ld"
+		  " AND att_events.AttCod=att_usr.AttCod"
+		  " AND att_usr.UsrCod=%ld",
+                  CrsCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove user from attendance events of a course");
   }
 
 /*****************************************************************************/
@@ -1610,13 +1592,10 @@ void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
 
 static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
   {
-   char *Query;
-
-   if (asprintf (&Query,"DELETE FROM att_events"
-                        " WHERE AttCod=%ld AND CrsCod=%ld",
-                 AttCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove attendance event");
+   DB_BuildQuery ("DELETE FROM att_events"
+		  " WHERE AttCod=%ld AND CrsCod=%ld",
+                  AttCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryDELETE_new ("can not remove attendance event");
   }
 
 /*****************************************************************************/
@@ -1625,29 +1604,23 @@ static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
 
 void Att_RemoveCrsAttEvents (long CrsCod)
   {
-   char *Query;
-
    /***** Remove students *****/
-   if (asprintf (&Query,"DELETE FROM att_usr USING att_events,att_usr"
-                        " WHERE att_events.CrsCod=%ld"
-                        " AND att_events.AttCod=att_usr.AttCod",
-                 CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove all the students registered in events of a course");
+   DB_BuildQuery ("DELETE FROM att_usr USING att_events,att_usr"
+		  " WHERE att_events.CrsCod=%ld"
+		  " AND att_events.AttCod=att_usr.AttCod",
+                  CrsCod);
+   DB_QueryDELETE_new ("can not remove all the students registered in events of a course");
 
    /***** Remove groups *****/
-   if (asprintf (&Query,"DELETE FROM att_grp USING att_events,att_grp"
-                        " WHERE att_events.CrsCod=%ld"
-                        " AND att_events.AttCod=att_grp.AttCod",
-                 CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove all the groups associated to attendance events of a course");
+   DB_BuildQuery ("DELETE FROM att_grp USING att_events,att_grp"
+		  " WHERE att_events.CrsCod=%ld"
+		  " AND att_events.AttCod=att_grp.AttCod",
+                  CrsCod);
+   DB_QueryDELETE_new ("can not remove all the groups associated to attendance events of a course");
 
    /***** Remove attendance events *****/
-   if (asprintf (&Query,"DELETE FROM att_events WHERE CrsCod=%ld",
-	         CrsCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove all the attendance events of a course");
+   DB_BuildQuery ("DELETE FROM att_events WHERE CrsCod=%ld",CrsCod);
+   DB_QueryDELETE_new ("can not remove all the attendance events of a course");
   }
 
 /*****************************************************************************/
@@ -2634,16 +2607,13 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
 
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
   {
-   char *Query;
-
    /***** Clean table att_usr *****/
-   if (asprintf (&Query,"DELETE FROM att_usr"
-		        " WHERE AttCod=%ld AND Present='N'"
-		        " AND CommentStd='' AND CommentTch=''",
-	         AttCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove users absent"
-	                      " without comments from an event");
+   DB_BuildQuery ("DELETE FROM att_usr"
+		  " WHERE AttCod=%ld AND Present='N'"
+		  " AND CommentStd='' AND CommentTch=''",
+	          AttCod);
+   DB_QueryDELETE_new ("can not remove users absent"
+	               " without comments from an event");
   }
 
 /*****************************************************************************/

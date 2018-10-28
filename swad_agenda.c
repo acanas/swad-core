@@ -1324,7 +1324,6 @@ void Agd_AskRemEvent (void)
 void Agd_RemoveEvent (void)
   {
    extern const char *Txt_Event_X_removed;
-   char *Query;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1336,11 +1335,9 @@ void Agd_RemoveEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Remove event *****/
-   if (asprintf (&Query,"DELETE FROM agendas"
-                        " WHERE AgdCod=%ld AND UsrCod=%ld",
-                 AgdEvent.AgdCod,AgdEvent.UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove event");
+   DB_BuildQuery ("DELETE FROM agendas WHERE AgdCod=%ld AND UsrCod=%ld",
+                  AgdEvent.AgdCod,AgdEvent.UsrCod);
+   DB_QueryDELETE_new ("can not remove event");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1746,13 +1743,9 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
 void Agd_RemoveUsrEvents (long UsrCod)
   {
-   char *Query;
-
    /***** Remove events *****/
-   if (asprintf (&Query,"DELETE FROM agendas WHERE UsrCod=%ld",
-	         UsrCod) < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_QueryDELETE_free (Query,"can not remove all the events of a user");
+   DB_BuildQuery ("DELETE FROM agendas WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove all the events of a user");
   }
 
 /*****************************************************************************/
