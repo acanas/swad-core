@@ -3403,14 +3403,12 @@ void Gam_MoveDownQst (void)
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom)
   {
-   char *Query;
    long QstCodTop;
    long QstCodBottom;
 
    /***** Lock table to make the inscription atomic *****/
-   if (asprintf (&Query,"LOCK TABLES gam_questions WRITE") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not lock tables to move game question");
+   DB_BuildQuery ("LOCK TABLES gam_questions WRITE");
+   DB_Query_new ("can not lock tables to move game question");
    Gbl.DB.LockedTables = true;
 
    /***** Get question code of the questions to be moved *****/
@@ -3445,9 +3443,8 @@ static void Gam_ExchangeQuestions (long GamCod,
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				// ...to not retry the unlock if error in unlocking
-   if (asprintf (&Query,"UNLOCK TABLES") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not unlock tables after moving game questions");
+   DB_BuildQuery ("UNLOCK TABLES");
+   DB_Query_new ("can not unlock tables after moving game questions");
   }
 
 /*****************************************************************************/

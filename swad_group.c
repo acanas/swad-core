@@ -957,12 +957,9 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 
 static void Grp_LockTables (void)
   {
-   char *Query;
-
-   if (asprintf (&Query,"LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
-			"crs_grp_usr WRITE,crs_usr READ") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not lock tables to change user's groups");
+   DB_BuildQuery ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
+		  "crs_grp_usr WRITE,crs_usr READ");
+   DB_Query_new ("can not lock tables to change user's groups");
    Gbl.DB.LockedTables = true;
   }
 
@@ -972,13 +969,10 @@ static void Grp_LockTables (void)
 
 static void Grp_UnlockTables (void)
   {
-   char *Query;
-
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				// ...to not retry the unlock if error in unlocking
-   if (asprintf (&Query,"UNLOCK TABLES") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not unlock tables after changing user's groups");
+   DB_BuildQuery ("UNLOCK TABLES");
+   DB_Query_new ("can not unlock tables after changing user's groups");
   }
 
 /*****************************************************************************/

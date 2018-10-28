@@ -218,7 +218,6 @@ void Mai_EditMailDomains (void)
 static void Mai_GetListMailDomainsAllowedForNotif (void)
   {
    char OrderBySubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -230,19 +229,16 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    // ...because a unique temporary table can not be used twice in the same query
 
    /***** Create temporary table with all the mail domains present in users' emails table *****/
-   if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not remove temporary tables");
+   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS T1,T2");
+   DB_Query_new ("can not remove temporary tables");
 
-   if (asprintf (&Query,"CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
-	                " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
-	                " FROM usr_emails GROUP BY Domain") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not create temporary table");
+   DB_BuildQuery ("CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
+		  " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
+		  " FROM usr_emails GROUP BY Domain");
+   DB_Query_new ("can not create temporary table");
 
-   if (asprintf (&Query,"CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not create temporary table");
+   DB_BuildQuery ("CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1");
+   DB_Query_new ("can not create temporary table");
 
    /***** Get mail domains from database *****/
    switch (Gbl.Mails.SelectedOrder)
@@ -309,9 +305,8 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Drop temporary table *****/
-   if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2") < 0)
-      Lay_NotEnoughMemoryExit ();
-   DB_Query_free (Query,"can not remove temporary tables");
+   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS T1,T2");
+   DB_Query_new ("can not remove temporary tables");
   }
 
 /*****************************************************************************/

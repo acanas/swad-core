@@ -924,7 +924,6 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
   {
    extern const char *Txt_document_in_my_courses;
    extern const char *Txt_documents_in_my_courses;
-   char *Query;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    unsigned NumDocs;
 
@@ -936,41 +935,38 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	{
 	 /***** Create temporary table with codes of files in documents and shared areas accessible by me.
 		It is necessary to speed up the second query *****/
-	 if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp") < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_Query_free (Query,"can not remove temporary table");
+	 DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
+	 DB_Query_new ("can not remove temporary table");
 
-	 if (asprintf (&Query,"CREATE TEMPORARY TABLE my_files_crs"
-			      " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
-			      " ENGINE=MEMORY"
-			      " SELECT files.FilCod FROM crs_usr,files"
-			      " WHERE crs_usr.UsrCod=%ld"
-			      " AND crs_usr.CrsCod=files.Cod"
-			      " AND files.FileBrowser IN (%u,%u,%u,%u)",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       (unsigned) Brw_ADMI_DOC_CRS,
-		       (unsigned) Brw_ADMI_TCH_CRS,
-		       (unsigned) Brw_ADMI_SHR_CRS,
-		       (unsigned) Brw_ADMI_MRK_CRS) < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_Query_free (Query,"can not create temporary table");
+	 DB_BuildQuery ("CREATE TEMPORARY TABLE my_files_crs"
+			" (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+			" ENGINE=MEMORY"
+			" SELECT files.FilCod FROM crs_usr,files"
+			" WHERE crs_usr.UsrCod=%ld"
+			" AND crs_usr.CrsCod=files.Cod"
+			" AND files.FileBrowser IN (%u,%u,%u,%u)",
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        (unsigned) Brw_ADMI_DOC_CRS,
+		        (unsigned) Brw_ADMI_TCH_CRS,
+		        (unsigned) Brw_ADMI_SHR_CRS,
+		        (unsigned) Brw_ADMI_MRK_CRS);
+	 DB_Query_new ("can not create temporary table");
 
-	 if (asprintf (&Query,"CREATE TEMPORARY TABLE my_files_grp"
-			      " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
-			      " ENGINE=MEMORY"
-			      " SELECT files.FilCod FROM crs_grp_usr,files"
-			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND crs_grp_usr.GrpCod=files.Cod"
-			      " AND files.FileBrowser IN (%u,%u,%u,%u)",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       (unsigned) Brw_ADMI_DOC_GRP,
-		       (unsigned) Brw_ADMI_TCH_GRP,
-		       (unsigned) Brw_ADMI_SHR_GRP,
-		       (unsigned) Brw_ADMI_MRK_GRP) < 0)
-            Lay_NotEnoughMemoryExit ();
+	 DB_BuildQuery ("CREATE TEMPORARY TABLE my_files_grp"
+			" (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+			" ENGINE=MEMORY"
+			" SELECT files.FilCod FROM crs_grp_usr,files"
+			" WHERE crs_grp_usr.UsrCod=%ld"
+			" AND crs_grp_usr.GrpCod=files.Cod"
+			" AND files.FileBrowser IN (%u,%u,%u,%u)",
+		        Gbl.Usrs.Me.UsrDat.UsrCod,
+		        (unsigned) Brw_ADMI_DOC_GRP,
+		        (unsigned) Brw_ADMI_TCH_GRP,
+		        (unsigned) Brw_ADMI_SHR_GRP,
+		        (unsigned) Brw_ADMI_MRK_GRP);
 	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
-	 DB_Query_free (Query,"can not create temporary table");
+	 DB_Query_new ("can not create temporary table");
 
 	 /***** Build the query *****/
 	 DB_BuildQuery ("SELECT * FROM "
@@ -1033,9 +1029,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                              Txt_documents_in_my_courses);
 
 	 /***** Drop temporary table *****/
-	 if (asprintf (&Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp") < 0)
-            Lay_NotEnoughMemoryExit ();
-	 DB_Query_free (Query,"can not remove temporary table");
+	 DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
+	 DB_Query_new ("can not remove temporary table");
 
 	 return NumDocs;
 	}
