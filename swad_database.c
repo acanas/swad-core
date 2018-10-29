@@ -3128,20 +3128,6 @@ unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
    return (unsigned long) mysql_num_rows (*mysql_res);
   }
 
-unsigned long DB_QuerySELECT (const char *Query,MYSQL_RES **mysql_res,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError (MsgError);
-
-   /***** Store query result *****/
-   if ((*mysql_res = mysql_store_result (&Gbl.mysql)) == NULL)
-      DB_ExitOnMySQLError (MsgError);
-
-   /***** Return number of rows of result *****/
-   return (unsigned long) mysql_num_rows (*mysql_res);
-  }
-
 /*****************************************************************************/
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
