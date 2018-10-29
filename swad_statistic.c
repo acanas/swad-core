@@ -281,12 +281,9 @@ void Sta_GetRemoteAddr (void)
 /**************************** Log access in database *************************/
 /*****************************************************************************/
 
-#define Sta_MAX_BYTES_QUERY_LOG (2048 - 1)
-
 void Sta_LogAccess (const char *Comments)
   {
-   char Query[Sta_MAX_BYTES_QUERY_LOG +
-              Sch_MAX_BYTES_STRING_TO_FIND + 1];
+   size_t MaxLength;
    long LogCod;
    long ActCod = Act_GetActCod (Gbl.Action.Act);
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
@@ -294,121 +291,108 @@ void Sta_LogAccess (const char *Comments)
 
    /***** Insert access into database *****/
    /* Log access in historical log (log_full) */
-   sprintf (Query,"INSERT INTO log_full "
+   DB_BuildQuery ("INSERT INTO log_full "
 	          "(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES "
                   "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
                   "%u,NOW(),%ld,%ld,'%s')",
-            ActCod,
-            Gbl.CurrentCty.Cty.CtyCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentCtr.Ctr.CtrCod,
-            Gbl.CurrentDeg.Deg.DegCod,
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            (unsigned) RoleToStore,
-            Gbl.TimeGenerationInMicroseconds,
-            Gbl.TimeSendInMicroseconds,
-            Gbl.IP);
-   if (Gbl.WebService.IsWebService)
-     {
-      if (mysql_query (&Gbl.mysql,Query))
-         Svc_Exit ("can not log access (full)");
-      LogCod = (long) mysql_insert_id (&Gbl.mysql);
-     }
-   else
-      LogCod = DB_QueryINSERTandReturnCode (Query,"can not log access (full)");
+		  ActCod,
+		  Gbl.CurrentCty.Cty.CtyCod,
+		  Gbl.CurrentIns.Ins.InsCod,
+		  Gbl.CurrentCtr.Ctr.CtrCod,
+		  Gbl.CurrentDeg.Deg.DegCod,
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) RoleToStore,
+		  Gbl.TimeGenerationInMicroseconds,
+		  Gbl.TimeSendInMicroseconds,
+		  Gbl.IP);
+   LogCod = DB_QueryINSERTandReturnCode_new ("can not log access (full)");
 
    /* Log access in recent log (log_recent) */
-   sprintf (Query,"INSERT INTO log_recent "
+   DB_BuildQuery ("INSERT INTO log_recent "
 	          "(LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES "
                   "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
                   "%u,NOW(),%ld,%ld,'%s')",
-            LogCod,ActCod,
-            Gbl.CurrentCty.Cty.CtyCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentCtr.Ctr.CtrCod,
-            Gbl.CurrentDeg.Deg.DegCod,
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            (unsigned) RoleToStore,
-            Gbl.TimeGenerationInMicroseconds,
-            Gbl.TimeSendInMicroseconds,
-            Gbl.IP);
-   if (Gbl.WebService.IsWebService)
-     {
-      if (mysql_query (&Gbl.mysql,Query))
-         Svc_Exit ("can not log access (recent)");
-     }
-   else
-      DB_QueryINSERT (Query,"can not log access (recent)");
+		  LogCod,ActCod,
+		  Gbl.CurrentCty.Cty.CtyCod,
+		  Gbl.CurrentIns.Ins.InsCod,
+		  Gbl.CurrentCtr.Ctr.CtrCod,
+		  Gbl.CurrentDeg.Deg.DegCod,
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) RoleToStore,
+		  Gbl.TimeGenerationInMicroseconds,
+		  Gbl.TimeSendInMicroseconds,
+		  Gbl.IP);
+   DB_QueryINSERT_new ("can not log access (recent)");
 
    if (Comments)
      {
-      /* Log comments */
-      sprintf (Query,"INSERT INTO log_comments"
-	             " (LogCod,Comments)"
-                     " VALUES"
-                     " (%ld,'",
-	       LogCod);
-      Str_AddStrToQuery (Query,Comments,sizeof (Query));
-      Str_Concat (Query,"')",
-                  Sta_MAX_BYTES_QUERY_LOG);
+      /* Allocate space for query */
+      MaxLength = 512 + strlen (Comments);
+      if ((Gbl.DB.QueryPtr = (char *) malloc (MaxLength + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
 
-      if (Gbl.WebService.IsWebService)
-        {
-         if (mysql_query (&Gbl.mysql,Query))
-            Svc_Exit ("can not log access (comments)");
-        }
-      else
-         DB_QueryINSERT (Query,"can not log access (comments)");
+      /* Log comments */
+      snprintf (Gbl.DB.QueryPtr,MaxLength,
+	        "INSERT INTO log_comments"
+		" (LogCod,Comments)"
+		" VALUES"
+		" (%ld,'",
+	        LogCod);
+      Str_AddStrToQuery (Gbl.DB.QueryPtr,Comments,MaxLength);
+      Str_Concat (Gbl.DB.QueryPtr,"')",
+                  MaxLength);
+
+      DB_QueryINSERT_new ("can not log access (comments)");
      }
 
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
      {
-      /* Log search string */
-      sprintf (Query,"INSERT INTO log_search"
-	             " (LogCod,SearchStr)"
-                     " VALUES"
-                     " (%ld,'",
-	       LogCod);
-      Str_AddStrToQuery (Query,Gbl.Search.Str,sizeof (Query));
-      Str_Concat (Query,"')",
-                  Sta_MAX_BYTES_QUERY_LOG);
+      /* Allocate space for query */
+      MaxLength = 512 + strlen (Gbl.Search.Str);
+      if ((Gbl.DB.QueryPtr = (char *) malloc (MaxLength + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
 
-      if (Gbl.WebService.IsWebService)
-        {
-         if (mysql_query (&Gbl.mysql,Query))
-            Svc_Exit ("can not log access (search)");
-        }
-      else
-         DB_QueryINSERT (Query,"can not log access (search)");
+      /* Log search string */
+      snprintf (Gbl.DB.QueryPtr,MaxLength,
+	        "INSERT INTO log_search"
+		" (LogCod,SearchStr)"
+		" VALUES"
+		" (%ld,'",
+	        LogCod);
+      Str_AddStrToQuery (Gbl.DB.QueryPtr,Gbl.Search.Str,MaxLength);
+      Str_Concat (Gbl.DB.QueryPtr,"')",
+                  MaxLength);
+
+      DB_QueryINSERT_new ("can not log access (search)");
      }
 
    if (Gbl.WebService.IsWebService)
      {
       /* Log web service plugin and function */
-      sprintf (Query,"INSERT INTO log_ws"
+      DB_BuildQuery ("INSERT INTO log_ws"
 	             " (LogCod,PlgCod,FunCod)"
                      " VALUES"
                      " (%ld,%ld,%u)",
-	       LogCod,Gbl.WebService.PlgCod,(unsigned) Gbl.WebService.Function);
+	             LogCod,Gbl.WebService.PlgCod,
+		     (unsigned) Gbl.WebService.Function);
 
-      if (mysql_query (&Gbl.mysql,Query))
-         Svc_Exit ("can not log access (comments)");
+      DB_QueryINSERT_new ("can not log access (comments)");
      }
    else if (Gbl.Banners.BanCodClicked > 0)
      {
       /* Log banner clicked */
-      sprintf (Query,"INSERT INTO log_banners"
+      DB_BuildQuery ("INSERT INTO log_banners"
 	             " (LogCod,BanCod)"
                      " VALUES"
                      " (%ld,%ld)",
-	       LogCod,Gbl.Banners.BanCodClicked);
-      DB_QueryINSERT (Query,"can not log banner clicked");
+	             LogCod,Gbl.Banners.BanCodClicked);
+      DB_QueryINSERT_new ("can not log banner clicked");
      }
 
    /***** Increment my number of clicks *****/

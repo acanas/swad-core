@@ -2217,7 +2217,6 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 void Tst_ReceiveConfigTst (void)
   {
    extern const char *Txt_The_test_configuration_has_been_updated;
-   char Query[512];
 
    /***** Get whether test are visible via plugins or not *****/
    Gbl.Test.Config.Pluggable = Tst_GetPluggableFromForm ();
@@ -2257,16 +2256,16 @@ void Tst_ReceiveConfigTst (void)
    Gbl.Test.Config.Feedback = Tst_GetFeedbackTypeFromForm ();
 
    /***** Update database *****/
-   sprintf (Query,"REPLACE INTO tst_config"
+   DB_BuildQuery ("REPLACE INTO tst_config"
 	          " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
                   " VALUES"
                   " (%ld,'%s',%u,%u,%u,'%lu','%s')",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Tst_PluggableDB[Gbl.Test.Config.Pluggable],
-            Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
-            Gbl.Test.Config.MinTimeNxtTstPerQst,
-            Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
-   DB_QueryREPLACE (Query,"can not save configuration of tests");
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Tst_PluggableDB[Gbl.Test.Config.Pluggable],
+		  Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
+		  Gbl.Test.Config.MinTimeNxtTstPerQst,
+		  Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
+   DB_QueryREPLACE_new ("can not save configuration of tests");
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);

@@ -3269,13 +3269,6 @@ void DB_QueryREPLACE_new (const char *MsgError)
       DB_ExitOnMySQLError (MsgError);
   }
 
-void DB_QueryREPLACE (const char *Query,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError (MsgError);
-  }
-
 /*****************************************************************************/
 /******************** Make a UPDATE query from database **********************/
 /*****************************************************************************/

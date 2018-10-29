@@ -1916,7 +1916,6 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 
 void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublishing *SocPub)
   {
-   char Query[256];
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
    switch (NoteType)
@@ -1945,12 +1944,12 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
      }
 
    /***** Store social note *****/
-   sprintf (Query,"INSERT INTO social_notes"
+   DB_BuildQuery ("INSERT INTO social_notes"
 	          " (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
                   " VALUES"
                   " (%u,%ld,%ld,%ld,'N',NOW())",
-            (unsigned) NoteType,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
-   SocPub->NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
+		  (unsigned) NoteType,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
+   SocPub->NotCod = DB_QueryINSERTandReturnCode_new ("can not create new social note");
 
    /***** Publish social note in timeline *****/
    SocPub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -2116,17 +2115,15 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
 
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
   {
-   char Query[256];
-
    /***** Publish social note in timeline *****/
-   sprintf (Query,"INSERT INTO social_pubs"
+   DB_BuildQuery ("INSERT INTO social_pubs"
 	          " (NotCod,PublisherCod,PubType,TimePublish)"
                   " VALUES"
                   " (%ld,%ld,%u,NOW())",
-            SocPub->NotCod,
-            SocPub->PublisherCod,
-            (unsigned) SocPub->PubType);
-   SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
+		  SocPub->NotCod,
+		  SocPub->PublisherCod,
+		  (unsigned) SocPub->PubType);
+   SocPub->PubCod = DB_QueryINSERTandReturnCode_new ("can not publish social note");
   }
 
 /*****************************************************************************/
@@ -2270,7 +2267,6 @@ static long Soc_ReceiveSocialPost (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
-   char *Query;
    long PstCod;
    struct SocialPublishing SocPub;
 
@@ -2290,14 +2286,6 @@ static long Soc_ReceiveSocialPost (void)
    if (Content[0] ||	// Text not empty
        Image.Name[0])	// An image is attached
      {
-      /***** Allocate space for query *****/
-      if ((Query = (char *) malloc (256 +
-			            strlen (Content) +
-			            Img_BYTES_NAME +
-			            Img_MAX_BYTES_TITLE +
-                                    Cns_MAX_BYTES_WWW)) == NULL)
-	 Lay_NotEnoughMemoryExit ();
-
       /***** Check if image is received and processed *****/
       if (Image.Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
 	  Image.Status == Img_FILE_PROCESSED)	// The new image received has been processed
@@ -2306,23 +2294,20 @@ static long Soc_ReceiveSocialPost (void)
 
       /***** Publish *****/
       /* Insert post content in the database */
-      sprintf (Query,"INSERT INTO social_posts"
+      DB_BuildQuery ("INSERT INTO social_posts"
 	             " (Content,ImageName,ImageTitle,ImageURL)"
 	             " VALUES"
 	             " ('%s','%s','%s','%s')",
-	       Content,
-	       Image.Name,
-	       (Image.Name[0] &&	// Save image title only if image attached
-		Image.Title) ? Image.Title : "",
-	       (Image.Name[0] &&	// Save image URL   only if image attached
-		Image.URL  ) ? Image.URL   : "");
-      PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
+		     Content,
+		     Image.Name,
+		     (Image.Name[0] &&	// Save image title only if image attached
+		      Image.Title) ? Image.Title : "",
+		     (Image.Name[0] &&	// Save image URL   only if image attached
+		      Image.URL  ) ? Image.URL   : "");
+      PstCod = DB_QueryINSERTandReturnCode_new ("can not create post");
 
       /* Insert post in social notes */
       Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);
-
-      /***** Free space used for query *****/
-      free ((void *) Query);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
