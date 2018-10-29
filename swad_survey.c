@@ -1526,7 +1526,6 @@ void Svy_AskRemSurvey (void)
 void Svy_RemoveSurvey (void)
   {
    extern const char *Txt_Survey_X_removed;
-   char Query[512];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1543,30 +1542,30 @@ void Svy_RemoveSurvey (void)
       Lay_ShowErrorAndExit ("You can not remove this survey.");
 
    /***** Remove all the users in this survey *****/
-   sprintf (Query,"DELETE FROM svy_users WHERE SvyCod=%ld",
-            Svy.SvyCod);
-   DB_QueryDELETE (Query,"can not remove users who are answered a survey");
+   DB_BuildQuery ("DELETE FROM svy_users WHERE SvyCod=%ld",
+		  Svy.SvyCod);
+   DB_QueryDELETE_new ("can not remove users who are answered a survey");
 
    /***** Remove all the answers in this survey *****/
-   sprintf (Query,"DELETE FROM svy_answers USING svy_questions,svy_answers"
+   DB_BuildQuery ("DELETE FROM svy_answers USING svy_questions,svy_answers"
                   " WHERE svy_questions.SvyCod=%ld"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
-            Svy.SvyCod);
-   DB_QueryDELETE (Query,"can not remove answers of a survey");
+		  Svy.SvyCod);
+   DB_QueryDELETE_new ("can not remove answers of a survey");
 
    /***** Remove all the questions in this survey *****/
-   sprintf (Query,"DELETE FROM svy_questions"
+   DB_BuildQuery ("DELETE FROM svy_questions"
                   " WHERE SvyCod=%ld",
-            Svy.SvyCod);
-   DB_QueryDELETE (Query,"can not remove questions of a survey");
+		  Svy.SvyCod);
+   DB_QueryDELETE_new ("can not remove questions of a survey");
 
    /***** Remove all the groups of this survey *****/
    Svy_RemoveAllTheGrpsAssociatedToAndSurvey (Svy.SvyCod);
 
    /***** Remove survey *****/
-   sprintf (Query,"DELETE FROM surveys WHERE SvyCod=%ld",
-            Svy.SvyCod);
-   DB_QueryDELETE (Query,"can not remove survey");
+   DB_BuildQuery ("DELETE FROM surveys WHERE SvyCod=%ld",
+		  Svy.SvyCod);
+   DB_QueryDELETE_new ("can not remove survey");
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
@@ -1643,7 +1642,6 @@ static void Svy_PutButtonToResetSurvey (void)
 void Svy_ResetSurvey (void)
   {
    extern const char *Txt_Survey_X_reset;
-   char Query[512];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1660,16 +1658,16 @@ void Svy_ResetSurvey (void)
       Lay_ShowErrorAndExit ("You can not reset this survey.");
 
    /***** Remove all the users in this survey *****/
-   sprintf (Query,"DELETE FROM svy_users WHERE SvyCod=%ld",
-            Svy.SvyCod);
-   DB_QueryDELETE (Query,"can not remove users who are answered a survey");
+   DB_BuildQuery ("DELETE FROM svy_users WHERE SvyCod=%ld",
+		  Svy.SvyCod);
+   DB_QueryDELETE_new ("can not remove users who are answered a survey");
 
    /***** Reset all the answers in this survey *****/
-   sprintf (Query,"UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs=0"
+   DB_BuildQuery ("UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs=0"
                   " WHERE svy_questions.SvyCod=%ld"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
-            Svy.SvyCod);
-   DB_QueryUPDATE (Query,"can not reset answers of a survey");
+		  Svy.SvyCod);
+   DB_QueryUPDATE_new ("can not reset answers of a survey");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2369,12 +2367,9 @@ bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod)
 
 static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
   {
-   char Query[128];
-
    /***** Remove groups of the survey *****/
-   sprintf (Query,"DELETE FROM svy_grp WHERE SvyCod=%ld",
-            SvyCod);
-   DB_QueryDELETE (Query,"can not remove the groups associated to a survey");
+   DB_BuildQuery ("DELETE FROM svy_grp WHERE SvyCod=%ld",SvyCod);
+   DB_QueryDELETE_new ("can not remove the groups associated to a survey");
   }
 
 /*****************************************************************************/
@@ -2383,13 +2378,10 @@ static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
 
 void Svy_RemoveGroup (long GrpCod)
   {
-   char Query[128];
-
    /***** Remove group from all the surveys *****/
-   sprintf (Query,"DELETE FROM svy_grp WHERE GrpCod=%ld",
-	    GrpCod);
-   DB_QueryDELETE (Query,"can not remove group"
-	                 " from the associations between surveys and groups");
+   DB_BuildQuery ("DELETE FROM svy_grp WHERE GrpCod=%ld",GrpCod);
+   DB_QueryDELETE_new ("can not remove group"
+	               " from the associations between surveys and groups");
   }
 
 /*****************************************************************************/
@@ -2398,15 +2390,13 @@ void Svy_RemoveGroup (long GrpCod)
 
 void Svy_RemoveGroupsOfType (long GrpTypCod)
   {
-   char Query[256];
-
    /***** Remove group from all the surveys *****/
-   sprintf (Query,"DELETE FROM svy_grp USING crs_grp,svy_grp"
+   DB_BuildQuery ("DELETE FROM svy_grp USING crs_grp,svy_grp"
                   " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=svy_grp.GrpCod",
-            GrpTypCod);
-   DB_QueryDELETE (Query,"can not remove groups of a type"
-	                 " from the associations between surveys and groups");
+		  GrpTypCod);
+   DB_QueryDELETE_new ("can not remove groups of a type"
+	               " from the associations between surveys and groups");
   }
 
 /*****************************************************************************/
@@ -2508,48 +2498,47 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
 void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512];
 
    /***** Remove all the users in course surveys *****/
-   sprintf (Query,"DELETE FROM svy_users"
+   DB_BuildQuery ("DELETE FROM svy_users"
 	          " USING surveys,svy_users"
                   " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_users.SvyCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove users"
-	                 " who had answered surveys in a place on the hierarchy");
+		  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove users"
+	               " who had answered surveys in a place on the hierarchy");
 
    /***** Remove all the answers in course surveys *****/
-   sprintf (Query,"DELETE FROM svy_answers"
+   DB_BuildQuery ("DELETE FROM svy_answers"
 	          " USING surveys,svy_questions,svy_answers"
                   " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_questions.SvyCod"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove answers of surveys in a place on the hierarchy");
+		  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove answers of surveys in a place on the hierarchy");
 
    /***** Remove all the questions in course surveys *****/
-   sprintf (Query,"DELETE FROM svy_questions"
+   DB_BuildQuery ("DELETE FROM svy_questions"
 	          " USING surveys,svy_questions"
                   " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_questions.SvyCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove questions of surveys in a place on the hierarchy");
+		  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove questions of surveys in a place on the hierarchy");
 
    /***** Remove groups *****/
-   sprintf (Query,"DELETE FROM svy_grp"
+   DB_BuildQuery ("DELETE FROM svy_grp"
 	          " USING surveys,svy_grp"
                   " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_grp.SvyCod",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove all the groups"
-	                 " associated to surveys of a course");
+		  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove all the groups"
+	               " associated to surveys of a course");
 
    /***** Remove course surveys *****/
-   sprintf (Query,"DELETE FROM surveys"
+   DB_BuildQuery ("DELETE FROM surveys"
 	          " WHERE Scope='%s' AND Cod=%ld",
-            Sco_ScopeDB[Scope],Cod);
-   DB_QueryDELETE (Query,"can not remove all the surveys in a place on the hierarchy");
+		  Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE_new ("can not remove all the surveys in a place on the hierarchy");
   }
 
 /*****************************************************************************/
@@ -2852,12 +2841,9 @@ static long Svy_GetParamQstCod (void)
 
 static void Svy_RemAnswersOfAQuestion (long QstCod)
   {
-   char Query[128];
-
    /***** Remove answers *****/
-   sprintf (Query,"DELETE FROM svy_answers WHERE QstCod=%ld",
-            QstCod);
-   DB_QueryDELETE (Query,"can not remove the answers of a question");
+   DB_BuildQuery ("DELETE FROM svy_answers WHERE QstCod=%ld",QstCod);
+   DB_QueryDELETE_new ("can not remove the answers of a question");
   }
 
 /*****************************************************************************/
@@ -2970,7 +2956,6 @@ void Svy_ReceiveQst (void)
    extern const char *Txt_You_must_type_at_least_the_first_two_answers;
    extern const char *Txt_The_survey_has_been_modified;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-   char Query[512 + Cns_MAX_BYTES_TEXT];
    long SvyCod;
    struct SurveyQuestion SvyQst;
    unsigned NumAns;
@@ -3064,21 +3049,22 @@ void Svy_ReceiveQst (void)
          SvyQst.QstInd = Svy_GetNextQuestionIndexInSvy (SvyCod);
 
          /* Insert question in the table of questions */
-         sprintf (Query,"INSERT INTO svy_questions"
+         DB_BuildQuery ("INSERT INTO svy_questions"
                         " (SvyCod,QstInd,AnsType,Stem)"
                         " VALUES"
                         " (%ld,%u,'%s','%s')",
-	          SvyCod,SvyQst.QstInd,Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
-         SvyQst.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
+			SvyCod,SvyQst.QstInd,
+			Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
+         SvyQst.QstCod = DB_QueryINSERTandReturnCode_new ("can not create question");
         }
       else			// It's an existing question
         {
          /* Update question */
-         sprintf (Query,"UPDATE svy_questions SET Stem='%s',AnsType='%s'"
+         DB_BuildQuery ("UPDATE svy_questions SET Stem='%s',AnsType='%s'"
                         " WHERE QstCod=%ld AND SvyCod=%ld",
-                  Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
-                  SvyQst.QstCod,SvyCod);
-         DB_QueryUPDATE (Query,"can not update question");
+			Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
+			SvyQst.QstCod,SvyCod);
+         DB_QueryUPDATE_new ("can not update question");
         }
 
       /* Insert, update or delete answers in the answers table */
@@ -3090,18 +3076,18 @@ void Svy_ReceiveQst (void)
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
               {
                /* Update answer text */
-               sprintf (Query,"UPDATE svy_answers SET Answer='%s'"
+               DB_BuildQuery ("UPDATE svy_answers SET Answer='%s'"
                               " WHERE QstCod=%ld AND AnsInd=%u",
-                        SvyQst.AnsChoice[NumAns].Text,SvyQst.QstCod,NumAns);
-               DB_QueryUPDATE (Query,"can not update answer");
+			      SvyQst.AnsChoice[NumAns].Text,SvyQst.QstCod,NumAns);
+               DB_QueryUPDATE_new ("can not update answer");
               }
             else	// Answer is empty
               {
                /* Delete answer from database */
-               sprintf (Query,"DELETE FROM svy_answers"
+               DB_BuildQuery ("DELETE FROM svy_answers"
                               " WHERE QstCod=%ld AND AnsInd=%u",
-                        SvyQst.QstCod,NumAns);
-               DB_QueryDELETE (Query,"can not delete answer");
+			      SvyQst.QstCod,NumAns);
+               DB_QueryDELETE_new ("can not delete answer");
               }
            }
          else	// If this answer does not exist...
@@ -3109,12 +3095,12 @@ void Svy_ReceiveQst (void)
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
               {
                /* Create answer into database */
-               sprintf (Query,"INSERT INTO svy_answers"
+               DB_BuildQuery ("INSERT INTO svy_answers"
         	              " (QstCod,AnsInd,NumUsrs,Answer)"
                               " VALUES"
                               " (%ld,%u,0,'%s')",
-                        SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
-               DB_QueryINSERT (Query,"can not create answer");
+			      SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
+               DB_QueryINSERT_new ("can not create answer");
               }
            }
 
@@ -3618,7 +3604,6 @@ void Svy_RequestRemoveQst (void)
 void Svy_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
-   char Query[512];
    long SvyCod;
    struct SurveyQuestion SvyQst;
 
@@ -3642,17 +3627,17 @@ void Svy_RemoveQst (void)
    Svy_RemAnswersOfAQuestion (SvyQst.QstCod);
 
    /* Remove the question itself */
-   sprintf (Query,"DELETE FROM svy_questions WHERE QstCod=%ld",
-            SvyQst.QstCod);
-   DB_QueryDELETE (Query,"can not remove a question");
+   DB_BuildQuery ("DELETE FROM svy_questions WHERE QstCod=%ld",
+		  SvyQst.QstCod);
+   DB_QueryDELETE_new ("can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
    /* Change index of questions greater than this */
-   sprintf (Query,"UPDATE svy_questions SET QstInd=QstInd-1"
+   DB_BuildQuery ("UPDATE svy_questions SET QstInd=QstInd-1"
                   " WHERE SvyCod=%ld AND QstInd>%u",
-            SvyCod,SvyQst.QstInd);
-   DB_QueryUPDATE (Query,"can not update indexes of questions");
+		  SvyCod,SvyQst.QstInd);
+   DB_QueryUPDATE_new ("can not update indexes of questions");
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);

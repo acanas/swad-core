@@ -728,21 +728,19 @@ static bool Tst_CheckIfNextTstAllowed (void)
 
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
   {
-   char Query[256 + Cns_BYTES_SESSION_ID];
-
    /***** Delete old status from expired sessions *****/
-   sprintf (Query,"DELETE FROM tst_status"
+   DB_BuildQuery ("DELETE FROM tst_status"
                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
-   DB_QueryDELETE (Query,"can not remove old status of tests");
+   DB_QueryDELETE_new ("can not remove old status of tests");
 
    /***** Update database *****/
-   sprintf (Query,"REPLACE INTO tst_status"
+   DB_BuildQuery ("REPLACE INTO tst_status"
 	          " (SessionId,CrsCod,NumTst,Status)"
 	          " VALUES"
 	          " ('%s',%ld,%u,%u)",
-            Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
-            NumTst,(unsigned) TstStatus);
-   DB_QueryREPLACE (Query,"can not update status of test");
+		  Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
+		  NumTst,(unsigned) TstStatus);
+   DB_QueryREPLACE_new ("can not update status of test");
   }
 
 /*****************************************************************************/
@@ -1549,7 +1547,6 @@ void Tst_RenameTag (void)
    extern const char *Txt_The_tag_X_has_not_changed;
    char OldTagTxt[Tst_MAX_BYTES_TAG + 1];
    char NewTagTxt[Tst_MAX_BYTES_TAG + 1];
-   char Query[1024 + 2 * Tst_MAX_BYTES_TAG];
    long ExistingTagCod;
    long OldTagCod;
    bool ComplexRenaming;
@@ -1606,56 +1603,54 @@ void Tst_RenameTag (void)
 
 	    /* Create a temporary table with all the question codes
 	       that had the new tag as one of their tags */
-	    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-	    if (mysql_query (&Gbl.mysql,Query))
-	       DB_ExitOnMySQLError ("can not remove temporary table");
-	    sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp"
+	    DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+	    DB_Query_new ("can not remove temporary table");
+
+	    DB_BuildQuery ("CREATE TEMPORARY TABLE tst_question_tags_tmp"
 		           " ENGINE=MEMORY"
 			   " SELECT QstCod FROM tst_question_tags"
 			   " WHERE TagCod=%ld",
-		     ExistingTagCod);
-	    if (mysql_query (&Gbl.mysql,Query))
-	       DB_ExitOnMySQLError ("can not create temporary table");
+			   ExistingTagCod);
+	    DB_Query_new ("can not create temporary table");
 
 	    /* Remove old tag in questions where it would be repeated */
 	    // New tag existed for a question ==> delete old tag
-	    sprintf (Query,"DELETE FROM tst_question_tags"
+	    DB_BuildQuery ("DELETE FROM tst_question_tags"
 			   " WHERE TagCod=%ld"
 			   " AND QstCod IN"
 			   " (SELECT QstCod FROM tst_question_tags_tmp)",
-		     OldTagCod);
-	    DB_QueryDELETE (Query,"can not remove a tag from some questions");
+			   OldTagCod);
+	    DB_QueryDELETE_new ("can not remove a tag from some questions");
 
 	    /* Change old tag to new tag in questions where it would not be repeated */
 	    // New tag did not exist for a question ==> change old tag to new tag
-	    sprintf (Query,"UPDATE tst_question_tags"
+	    DB_BuildQuery ("UPDATE tst_question_tags"
 			   " SET TagCod=%ld"
 			   " WHERE TagCod=%ld"
 			   " AND QstCod NOT IN"
 			   " (SELECT QstCod FROM tst_question_tags_tmp)",
-		     ExistingTagCod,
-		     OldTagCod);
-	    DB_QueryUPDATE (Query,"can not update a tag in some questions");
+			   ExistingTagCod,
+			   OldTagCod);
+	    DB_QueryUPDATE_new ("can not update a tag in some questions");
 
 	    /* Drop temporary table, no longer necessary */
-	    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-	    if (mysql_query (&Gbl.mysql,Query))
-	       DB_ExitOnMySQLError ("can not remove temporary table");
+	    DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+	    DB_Query_new ("can not remove temporary table");
 
 	    /***** Delete old tag from tst_tags
 		   because it is not longer used *****/
-	    sprintf (Query,"DELETE FROM tst_tags WHERE TagCod=%ld",
-		     OldTagCod);
-	    DB_QueryDELETE (Query,"can not remove old tag");
+	    DB_BuildQuery ("DELETE FROM tst_tags WHERE TagCod=%ld",
+			   OldTagCod);
+	    DB_QueryDELETE_new ("can not remove old tag");
 	   }
 	 else			// Renaming is easy
 	   {
 	    /***** Simple update replacing each instance of the old tag by the new tag *****/
-	    sprintf (Query,"UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
+	    DB_BuildQuery ("UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
 			   " WHERE tst_tags.CrsCod=%ld"
 			   " AND tst_tags.TagTxt='%s'",
-		     NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
-	    DB_QueryUPDATE (Query,"can not update tag");
+			   NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
+	    DB_QueryUPDATE_new ("can not update tag");
 	   }
 
 	 /***** Write message to show the change made *****/
@@ -6421,7 +6416,6 @@ static void Tst_PutParamsRemoveQst (void)
 void Tst_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
-   char Query[256];
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
@@ -6444,10 +6438,10 @@ void Tst_RemoveQst (void)
    Tst_RemoveUnusedTagsFromCurrentCrs ();
 
    /* Remove the question itself */
-   sprintf (Query,"DELETE FROM tst_questions"
+   DB_BuildQuery ("DELETE FROM tst_questions"
                   " WHERE QstCod=%ld AND CrsCod=%ld",
-            Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE (Query,"can not remove a question");
+		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryDELETE_new ("can not remove a question");
 
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist or belongs to another course.");
@@ -6754,12 +6748,10 @@ static void Tst_InsertAnswersIntoDB (void)
 
 static void Tst_RemAnsFromQst (void)
   {
-   char Query[128];
-
    /***** Remove answers *****/
-   sprintf (Query,"DELETE FROM tst_answers WHERE QstCod=%ld",
-            Gbl.Test.QstCod);
-   DB_QueryDELETE (Query,"can not remove the answers of a question");
+   DB_BuildQuery ("DELETE FROM tst_answers WHERE QstCod=%ld",
+		  Gbl.Test.QstCod);
+   DB_QueryDELETE_new ("can not remove the answers of a question");
   }
 
 /*****************************************************************************/
@@ -6768,12 +6760,10 @@ static void Tst_RemAnsFromQst (void)
 
 static void Tst_RemTagsFromQst (void)
   {
-   char Query[128];
-
    /***** Remove tags *****/
-   sprintf (Query,"DELETE FROM tst_question_tags WHERE QstCod=%ld",
-            Gbl.Test.QstCod);
-   DB_QueryDELETE (Query,"can not remove the tags of a question");
+   DB_BuildQuery ("DELETE FROM tst_question_tags WHERE QstCod=%ld",
+		  Gbl.Test.QstCod);
+   DB_QueryDELETE_new ("can not remove the tags of a question");
   }
 
 /*****************************************************************************/
@@ -6782,18 +6772,16 @@ static void Tst_RemTagsFromQst (void)
 
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
   {
-   char Query[512];
-
    /***** Remove unused tags from tst_tags *****/
-   sprintf (Query,"DELETE FROM tst_tags"
+   DB_BuildQuery ("DELETE FROM tst_tags"
 	          " WHERE CrsCod=%ld AND TagCod NOT IN"
                   " (SELECT DISTINCT tst_question_tags.TagCod"
                   " FROM tst_questions,tst_question_tags"
                   " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod=tst_question_tags.QstCod)",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE (Query,"can not remove unused tags");
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryDELETE_new ("can not remove unused tags");
   }
 
 /*****************************************************************************/
@@ -8556,20 +8544,18 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod)
 
 void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod)
   {
-   char Query[512];
-
    /***** Remove test results made by the specified user *****/
-   sprintf (Query,"DELETE FROM tst_exam_questions"
+   DB_BuildQuery ("DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.UsrCod=%ld"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
-            UsrCod);
-   DB_QueryDELETE (Query,"can not remove test results made by a user");
+		  UsrCod);
+   DB_QueryDELETE_new ("can not remove test results made by a user");
 
-   sprintf (Query,"DELETE FROM tst_exams"
+   DB_BuildQuery ("DELETE FROM tst_exams"
 	          " WHERE UsrCod=%ld",
-	    UsrCod);
-   DB_QueryDELETE (Query,"can not remove test results made by a user");
+		  UsrCod);
+   DB_QueryDELETE_new ("can not remove test results made by a user");
   }
 
 /*****************************************************************************/
@@ -8578,20 +8564,18 @@ void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod)
 
 void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
-   char Query[512];
-
    /***** Remove test results made by the specified user *****/
-   sprintf (Query,"DELETE FROM tst_exam_questions"
+   DB_BuildQuery ("DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.CrsCod=%ld AND tst_exams.UsrCod=%ld"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
-            CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove test results made by a user in a course");
+		  CrsCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove test results made by a user in a course");
 
-   sprintf (Query,"DELETE FROM tst_exams"
+   DB_BuildQuery ("DELETE FROM tst_exams"
 	          " WHERE CrsCod=%ld AND UsrCod=%ld",
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove test results made by a user in a course");
+		  CrsCod,UsrCod);
+   DB_QueryDELETE_new ("can not remove test results made by a user in a course");
   }
 
 /*****************************************************************************/
@@ -8600,20 +8584,18 @@ void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod)
 
 void Tst_RemoveCrsTestResults (long CrsCod)
   {
-   char Query[512];
-
    /***** Remove questions of test results made in the course *****/
-   sprintf (Query,"DELETE FROM tst_exam_questions"
+   DB_BuildQuery ("DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.CrsCod=%ld"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove test results made in a course");
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove test results made in a course");
 
    /***** Remove test results made in the course *****/
-   sprintf (Query,"DELETE FROM tst_exams WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove test results made in a course");
+   DB_BuildQuery ("DELETE FROM tst_exams WHERE CrsCod=%ld",
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove test results made in a course");
   }
 
 /*****************************************************************************/
@@ -8622,37 +8604,35 @@ void Tst_RemoveCrsTestResults (long CrsCod)
 
 void Tst_RemoveCrsTests (long CrsCod)
   {
-   char Query[512];
-
    /***** Remove tests status in the course *****/
-   sprintf (Query,"DELETE FROM tst_status WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE (Query,"can not remove status of tests of a course");
+   DB_BuildQuery ("DELETE FROM tst_status WHERE CrsCod=%ld",CrsCod);
+   DB_QueryDELETE_new ("can not remove status of tests of a course");
 
    /***** Remove test configuration of the course *****/
-   sprintf (Query,"DELETE FROM tst_config WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove configuration of tests of a course");
+   DB_BuildQuery ("DELETE FROM tst_config WHERE CrsCod=%ld",
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove configuration of tests of a course");
 
    /***** Remove associations between test questions
           and test tags in the course *****/
-   sprintf (Query,"DELETE FROM tst_question_tags"
+   DB_BuildQuery ("DELETE FROM tst_question_tags"
 	          " USING tst_questions,tst_question_tags"
                   " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod=tst_question_tags.QstCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove tags associated to questions of tests of a course");
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove tags associated to questions of tests of a course");
 
    /***** Remove test tags in the course *****/
-   sprintf (Query,"DELETE FROM tst_tags WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove tags of test of a course");
+   DB_BuildQuery ("DELETE FROM tst_tags WHERE CrsCod=%ld",
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove tags of test of a course");
 
    /***** Remove test answers in the course *****/
-   sprintf (Query,"DELETE FROM tst_answers USING tst_questions,tst_answers"
+   DB_BuildQuery ("DELETE FROM tst_answers USING tst_questions,tst_answers"
                   " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod=tst_answers.QstCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove answers of tests of a course");
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove answers of tests of a course");
 
    /***** Remove files with images associated
           to test questions in the course *****/
@@ -8660,7 +8640,7 @@ void Tst_RemoveCrsTests (long CrsCod)
    Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (CrsCod);
 
    /***** Remove test questions in the course *****/
-   sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod=%ld",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove test questions of a course");
+   DB_BuildQuery ("DELETE FROM tst_questions WHERE CrsCod=%ld",
+		  CrsCod);
+   DB_QueryDELETE_new ("can not remove test questions of a course");
   }

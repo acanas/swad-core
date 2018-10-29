@@ -2548,19 +2548,17 @@ static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void)
 
 static void Usr_InsertMyBirthday (void)
   {
-   char Query[256];
-
    /***** Delete old birthdays *****/
-   sprintf (Query,"DELETE FROM birthdays_today WHERE Today<>CURDATE()");
-   DB_QueryDELETE (Query,"can not delete old birthdays");
+   DB_BuildQuery ("DELETE FROM birthdays_today WHERE Today<>CURDATE()");
+   DB_QueryDELETE_new ("can not delete old birthdays");
 
    /***** Insert new birthday *****/
-   sprintf (Query,"INSERT INTO birthdays_today"
+   DB_BuildQuery ("INSERT INTO birthdays_today"
 	          " (UsrCod,Today)"
 	          " VALUES"
 	          " (%ld,CURDATE())",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT (Query,"can not insert birthday");
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT_new ("can not insert birthday");
   }
 
 /*****************************************************************************/
@@ -8960,11 +8958,8 @@ bool Usr_CheckIfUsrBanned (long UsrCod)
 
 void Usr_RemoveUsrFromUsrBanned (long UsrCod)
   {
-   char Query[128];
-
-   sprintf (Query,"DELETE FROM usr_banned WHERE UsrCod=%ld",
-	    UsrCod);
-   DB_QueryDELETE (Query,"can not remove user from users banned");
+   DB_BuildQuery ("DELETE FROM usr_banned WHERE UsrCod=%ld",UsrCod);
+   DB_QueryDELETE_new ("can not remove user from users banned");
   }
 
 /*****************************************************************************/

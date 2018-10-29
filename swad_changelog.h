@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.9 (2018-10-28)"
+#define Log_PLATFORM_VERSION	"SWAD 18.9.1 (2018-10-29)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.9.1:   Oct 29, 2018  Some sprintf for database queries changed by internal function. (236049 lines)
 	Version 18.9:     Oct 28, 2018  Some sprintf for database queries changed by internal function. (236082 lines)
 	Version 18.8.18:  Oct 28, 2018  Some asprintf for database queries changed by internal function. (236105 lines)
 	Version 18.8.17:  Oct 28, 2018  Some asprintf for database queries changed by internal function. (236116 lines)
