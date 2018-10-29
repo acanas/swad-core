@@ -991,7 +991,6 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    extern const char *Txt_courses;
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -1016,7 +1015,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	       Txt_students_ABBREVIATION);
 
       /***** Get courses of a user from database *****/
-      sprintf (Query,"SELECT crs_usr.CrsCod,log_full.CrsCod,COUNT(*) AS N"
+      DB_BuildQuery ("SELECT crs_usr.CrsCod,log_full.CrsCod,COUNT(*) AS N"
 	             " FROM crs_usr LEFT JOIN log_full ON"
 	             " (crs_usr.CrsCod=log_full.CrsCod"
 	             " AND crs_usr.UsrCod=log_full.UsrCod"
@@ -1025,10 +1024,10 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	             " AND crs_usr.Role=%u"
 	             " GROUP BY crs_usr.CrsCod"
 	             " ORDER BY N DESC,log_full.CrsCod DESC",
-	       Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
+		     Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
 
       /***** List the courses (one row per course) *****/
-      if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
+      if ((NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user")))
 	{
 	 /* Heading row */
 	 fprintf (Gbl.F.Rep,"<ol>");
@@ -1093,7 +1092,6 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
   {
    extern const char *Txt_Hits_as_a_USER;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -1101,17 +1099,17 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    long CrsCod;
 
    /***** Get historic courses of a user from log *****/
-   sprintf (Query,"SELECT CrsCod,COUNT(*) AS N"
+   DB_BuildQuery ("SELECT CrsCod,COUNT(*) AS N"
 	          " FROM log_full"
 	          " WHERE UsrCod=%ld AND Role=%u AND CrsCod>0"
                   " GROUP BY CrsCod"
 	          " HAVING N>%u"
                   " ORDER BY N DESC",
-            Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
-            Rep_MIN_CLICKS_CRS);
+		  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
+		  Rep_MIN_CLICKS_CRS);
 
    /***** List the courses (one row per course) *****/
-   if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
+   if ((NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user")))
      {
       /* Heading row */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -1216,7 +1214,6 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report)
   {
-   char Query[1024];
    char SubQueryCrs[128];
    char SubQueryRol[128];
    MYSQL_RES *mysql_res;
@@ -1238,17 +1235,17 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    else
       sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
 
-   sprintf (Query,"SELECT SQL_NO_CACHE "
+   DB_BuildQuery ("SELECT SQL_NO_CACHE "
 		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
 		  "COUNT(*) FROM log_full"
                   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 		  " AND UsrCod=%ld%s%s"
 		  " GROUP BY Year DESC",
-            (long) Report->UsrFigures.FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    SubQueryCrs,
-	    SubQueryRol);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
+		  (long) Report->UsrFigures.FirstClickTimeUTC,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  SubQueryCrs,
+		  SubQueryRol);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get clicks");
 
    /***** Initialize first year *****/
    Gbl.DateRange.DateIni.Date.Year = 1900 + Report->tm_FirstClickTime.tm_year;
@@ -1393,7 +1390,6 @@ void Rep_RemoveUsrUsageReports (long UsrCod)
 
 static void Rep_RemoveUsrReportsFiles (long UsrCod)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumReports;
@@ -1401,10 +1397,10 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
    char PathUniqueDirReport[PATH_MAX + 1];
 
    /***** Get directories for the reports *****/
-   sprintf (Query,"SELECT UniqueDirL,UniqueDirR FROM usr_report"
+   DB_BuildQuery ("SELECT UniqueDirL,UniqueDirR FROM usr_report"
 	          " WHERE UsrCod=%ld",
-	    UsrCod);
-   NumReports = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's usage reports");
+		  UsrCod);
+   NumReports = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's usage reports");
 
    /***** Remove the reports *****/
    for (NumReport = 0;

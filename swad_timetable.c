@@ -655,7 +655,6 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
 static void TT_FillTimeTableFromDB (long UsrCod)
   {
    extern const char *Txt_Incomplete_timetable_for_lack_of_space;
-   char Query[4096];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -683,7 +682,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
          switch (Gbl.CurrentCrs.Grps.WhichGrps)
            {
             case Grp_ONLY_MY_GROUPS:
-               sprintf (Query,"SELECT "
+               DB_BuildQuery ("SELECT "
                               "timetable_crs.Weekday,"
         	              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
         	              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
@@ -723,10 +722,10 @@ static void TT_FillTimeTableFromDB (long UsrCod)
                               " WHERE UsrCod=%ld"
                               " ORDER BY Weekday,S,ClassType,"
                               "GroupName,GrpCod,Place,D DESC,CrsCod",
-                        UsrCod,UsrCod,UsrCod);
+			      UsrCod,UsrCod,UsrCod);
                break;
             case Grp_ALL_GROUPS:
-               sprintf (Query,"SELECT "
+               DB_BuildQuery ("SELECT "
         	              "timetable_crs.Weekday,"
         	              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
         	              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
@@ -752,7 +751,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
                               " WHERE UsrCod=%ld"
                               " ORDER BY Weekday,S,ClassType,"
                               "GroupName,GrpCod,Place,D DESC,CrsCod",
-                        UsrCod,UsrCod);
+			      UsrCod,UsrCod);
                break;
            }
 	 break;
@@ -760,7 +759,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
          if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS ||
              Gbl.Action.Act == ActEdiCrsTT ||
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
-            sprintf (Query,"SELECT "
+            DB_BuildQuery ("SELECT "
         	           "Weekday,"
         	           "TIME_TO_SEC(StartTime) AS S,"
         	           "TIME_TO_SEC(Duration) AS D,"
@@ -772,9 +771,9 @@ static void TT_FillTimeTableFromDB (long UsrCod)
                            " WHERE CrsCod=%ld"
                            " ORDER BY Weekday,S,ClassType,"
                            "GroupName,GrpCod,Place,D DESC",
-                     Gbl.CurrentCrs.Crs.CrsCod);
+			   Gbl.CurrentCrs.Crs.CrsCod);
          else
-            sprintf (Query,"SELECT "
+            DB_BuildQuery ("SELECT "
         	           "timetable_crs.Weekday,"
         	           "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
         	           "TIME_TO_SEC(timetable_crs.Duration) AS D,"
@@ -800,11 +799,11 @@ static void TT_FillTimeTableFromDB (long UsrCod)
                            " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
                            " ORDER BY Weekday,S,ClassType,"
                            "GroupName,GrpCod,Place,D DESC",
-                     Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
-                     Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+			   Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
+			   Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
 	 break;
       case TT_TUTORING_TIMETABLE:
-         sprintf (Query,"SELECT "
+         DB_BuildQuery ("SELECT "
                         "Weekday,"
                         "TIME_TO_SEC(StartTime) AS S,"
                         "TIME_TO_SEC(Duration) AS D,"
@@ -815,7 +814,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
                   UsrCod);
          break;
      }
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get timetable");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get timetable");
 
    /***** If viewing (not editing) ==>
           calculate range of hours and resolution *****/

@@ -252,21 +252,20 @@ void Ses_RemoveExpiredSessions (void)
 
 bool Ses_GetSessionData (void)
   {
-   char Query[256 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
    bool Result = false;
 
    /***** Query data of session from database *****/
-   sprintf (Query,"SELECT UsrCod,Password,Role,"
+   DB_BuildQuery ("SELECT UsrCod,Password,Role,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 	          "WhatToSearch,SearchStr"
 	          " FROM sessions WHERE SessionId='%s'",
-	    Gbl.Session.Id);
+		  Gbl.Session.Id);
 
    /***** Check if the session existed in the database *****/
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of session"))
+   if (DB_QuerySELECT_new (&mysql_res,"can not get data of session"))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -404,7 +403,6 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
                                  const char *ParamName,char *ParamValue,
                                  size_t MaxBytes)
   {
-   char Query[512 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -416,10 +414,10 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
       /***** Get a hidden parameter from database *****/
-      sprintf (Query,"SELECT ParamValue FROM hidden_params"
+      DB_BuildQuery ("SELECT ParamValue FROM hidden_params"
                      " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
-               Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get a hidden parameter");
+		     Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get a hidden parameter");
 
       /***** Check if the parameter is found in database *****/
       if (NumRows)

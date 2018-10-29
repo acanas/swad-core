@@ -335,7 +335,6 @@ void Rol_FlushCacheRoleUsrInCrs (void)
 
 Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -354,10 +353,10 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
    Gbl.Cache.RoleUsrInCrs.UsrCod = UsrCod;
    Gbl.Cache.RoleUsrInCrs.CrsCod = CrsCod;
    Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
-   sprintf (Query,"SELECT Role FROM crs_usr"
+   DB_BuildQuery ("SELECT Role FROM crs_usr"
 		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-	    CrsCod,UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
+		  CrsCod,UsrCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
      {
       row = mysql_fetch_row (mysql_res);
       Gbl.Cache.RoleUsrInCrs.Role = Rol_ConvertUnsignedStrToRole (row[0]);
@@ -375,7 +374,6 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
 
 void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRole;
@@ -385,11 +383,11 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
    if (UsrDat->Roles.InCrss < 0)	// Not yet filled
      {
       /***** Get distinct roles in all courses of the user from database *****/
-      sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod=%ld",
-	       UsrDat->UsrCod);
-      NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,
-					    "can not get the roles of a user"
-					    " in all his/her courses");
+      DB_BuildQuery ("SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod=%ld",
+		     UsrDat->UsrCod);
+      NumRoles = (unsigned) DB_QuerySELECT_new (&mysql_res,
+						"can not get the roles of a user"
+						" in all his/her courses");
       for (NumRole = 0, UsrDat->Roles.InCrss = 0;
 	   NumRole < NumRoles;
 	   NumRole++)
@@ -585,16 +583,15 @@ unsigned Rol_GetSelectedRoles (void)
 
 Rol_Role_t Rol_GetRequestedRole (long UsrCod)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Rol_Role_t Role = Rol_UNK;
 
    /***** Get requested role from database *****/
-   sprintf (Query,"SELECT Role FROM crs_usr_requests"
+   DB_BuildQuery ("SELECT Role FROM crs_usr_requests"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get requested role"))
+		  Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get requested role"))
      {
       /***** Get role *****/
       row = mysql_fetch_row (mysql_res);

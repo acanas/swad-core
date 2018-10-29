@@ -249,7 +249,7 @@ static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom);
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom);
-static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query);
+static void Soc_ShowSharersOrFavers (unsigned NumUsrs);
 
 static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom);
@@ -794,15 +794,14 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 
 static long Soc_GetPubCodFromSession (const char *FieldName)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
 
    /***** Get last publishing code from database *****/
-   sprintf (Query,"SELECT %s FROM sessions WHERE SessionId='%s'",
-            FieldName,Gbl.Session.Id);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing code from session") != 1)
+   DB_BuildQuery ("SELECT %s FROM sessions WHERE SessionId='%s'",
+		  FieldName,Gbl.Session.Id);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get publishing code from session") != 1)
       Lay_ShowErrorAndExit ("Error when getting publishing code from session.");
 
    /***** Get last publishing code *****/
@@ -1623,7 +1622,6 @@ static void Soc_WriteDateTime (time_t TimeUTC)
 
 static void Soc_GetAndWriteSocialPost (long PstCod)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1634,10 +1632,10 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    Img_ImageConstructor (&Image);
 
    /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content,ImageName,ImageTitle,ImageURL"
+   DB_BuildQuery ("SELECT Content,ImageName,ImageTitle,ImageURL"
 	          " FROM social_posts WHERE PstCod=%ld",
-            PstCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
+		  PstCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the content of a social post");
 
    /***** Result should have a unique row *****/
    if (NumRows == 1)
@@ -2411,7 +2409,6 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 
 static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
   {
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumComments;
@@ -2419,7 +2416,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    struct SocialComment SocCom;
 
    /***** Get comments of this social note from database *****/
-   sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
+   DB_BuildQuery ("SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
 		  "social_pubs.NotCod,"
 		  "UNIX_TIMESTAMP(social_pubs.TimePublish),"
 		  "social_comments.Content,"
@@ -2431,8 +2428,8 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
                   " AND social_pubs.PubType=%u"
 		  " AND social_pubs.PubCod=social_comments.PubCod"
 		  " ORDER BY social_pubs.PubCod",
-	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+		  SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+   NumComments = DB_QuerySELECT_new (&mysql_res,"can not get social comments");
 
    /***** List comments *****/
    if (NumComments)	// Comments to this social note found
@@ -3719,14 +3716,13 @@ static void Soc_RemoveSocialNote (void)
 
 static void Soc_RemoveImgFileFromSocialPost (long PstCod)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get name of image associated to a social post from database *****/
-   sprintf (Query,"SELECT ImageName FROM social_posts WHERE PstCod=%ld",
-	    PstCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
+   DB_BuildQuery ("SELECT ImageName FROM social_posts WHERE PstCod=%ld",
+		  PstCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get image"))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -3844,15 +3840,14 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 
 static long Soc_GetNotCodOfSocialPublishing (long PubCod)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long NotCod = -1L;
 
    /***** Get code of social note from database *****/
-   sprintf (Query,"SELECT NotCod FROM social_pubs WHERE PubCod=%ld",
-	    PubCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social note") == 1)   // Result should have a unique row
+   DB_BuildQuery ("SELECT NotCod FROM social_pubs WHERE PubCod=%ld",
+		  PubCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get code of social note") == 1)   // Result should have a unique row
      {
       /* Get code of social note */
       row = mysql_fetch_row (mysql_res);
@@ -3871,16 +3866,15 @@ static long Soc_GetNotCodOfSocialPublishing (long PubCod)
 
 static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long OriginalPubCod = -1L;
 
    /***** Get code of social publishing of the original note *****/
-   sprintf (Query,"SELECT PubCod FROM social_pubs"
+   DB_BuildQuery ("SELECT PubCod FROM social_pubs"
 		  " WHERE NotCod=%ld AND PubType=%u",
-	    NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social publishing") == 1)   // Result should have a unique row
+		  NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get code of social publishing") == 1)   // Result should have a unique row
      {
       /* Get code of social publishing (row[0]) */
       row = mysql_fetch_row (mysql_res);
@@ -4064,14 +4058,13 @@ static void Soc_RemoveSocialComment (void)
 
 static void Soc_RemoveImgFileFromSocialComment (long PubCod)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get name of image associated to a social post from database *****/
-   sprintf (Query,"SELECT ImageName FROM social_comments WHERE PubCod=%ld",
-	    PubCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
+   DB_BuildQuery ("SELECT ImageName FROM social_comments WHERE PubCod=%ld",
+		  PubCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get image"))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -4308,19 +4301,17 @@ static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
 
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
   {
-   char Query[256];
-
    /***** Get users who have shared this note *****/
-   sprintf (Query,"SELECT PublisherCod FROM social_pubs"
+   DB_BuildQuery ("SELECT PublisherCod FROM social_pubs"
 		  " WHERE NotCod=%ld"
 		  " AND PublisherCod<>%ld"
 		  " AND PubType=%u"
 		  " ORDER BY PubCod LIMIT %u",
-	    SocNot->NotCod,
-	    SocNot->UsrCod,
-	    (unsigned) Soc_PUB_SHARED_NOTE,
-	    Soc_MAX_SHARERS_FAVERS_SHOWN);
-   Soc_ShowSharersOrFavers (SocNot->NumShared,Query);
+		  SocNot->NotCod,
+		  SocNot->UsrCod,
+		  (unsigned) Soc_PUB_SHARED_NOTE,
+		  Soc_MAX_SHARERS_FAVERS_SHOWN);
+   Soc_ShowSharersOrFavers (SocNot->NumShared);
   }
 
 /*****************************************************************************/
@@ -4329,17 +4320,15 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
 
 static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot)
   {
-   char Query[256];
-
    /***** Get users who have marked this note as favourite *****/
-   sprintf (Query,"SELECT UsrCod FROM social_notes_fav"
+   DB_BuildQuery ("SELECT UsrCod FROM social_notes_fav"
 		  " WHERE NotCod=%ld"
 		  " AND UsrCod<>%ld"	// Extra check
 		  " ORDER BY FavCod LIMIT %u",
-	    SocNot->NotCod,
-	    SocNot->UsrCod,
-	    Soc_MAX_SHARERS_FAVERS_SHOWN);
-   Soc_ShowSharersOrFavers (SocNot->NumFavs,Query);
+		  SocNot->NotCod,
+		  SocNot->UsrCod,
+		  Soc_MAX_SHARERS_FAVERS_SHOWN);
+   Soc_ShowSharersOrFavers (SocNot->NumFavs);
   }
 
 /*****************************************************************************/
@@ -4348,17 +4337,15 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 
 static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom)
   {
-   char Query[256];
-
    /***** Get users who have marked this comment as favourite *****/
-   sprintf (Query,"SELECT UsrCod FROM social_comments_fav"
+   DB_BuildQuery ("SELECT UsrCod FROM social_comments_fav"
 		  " WHERE PubCod=%ld"
 		  " AND UsrCod<>%ld"	// Extra check
 		  " ORDER BY FavCod LIMIT %u",
-	    SocCom->PubCod,
-	    SocCom->UsrCod,
-	    Soc_MAX_SHARERS_FAVERS_SHOWN);
-   Soc_ShowSharersOrFavers (SocCom->NumFavs,Query);
+		  SocCom->PubCod,
+		  SocCom->UsrCod,
+		  Soc_MAX_SHARERS_FAVERS_SHOWN);
+   Soc_ShowSharersOrFavers (SocCom->NumFavs);
   }
 
 /*****************************************************************************/
@@ -4366,7 +4353,7 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
+static void Soc_ShowSharersOrFavers (unsigned NumUsrs)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4384,7 +4371,7 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
    if (NumUsrs)
      {
       /***** Get list of users from database *****/
-      NumFirstUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users");
+      NumFirstUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get users");
       if (NumFirstUsrs)
 	{
 	 /***** Initialize structure with user's data *****/
@@ -4440,18 +4427,17 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
 
 static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    if (SocNot->NotCod > 0)
      {
       /***** Get data of social note from database *****/
-      sprintf (Query,"SELECT NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
+      DB_BuildQuery ("SELECT NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
 		     " FROM social_notes"
 		     " WHERE NotCod=%ld",
-	       SocNot->NotCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social note"))
+		     SocNot->NotCod);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get data of social note"))
 	{
 	 /***** Get data of social note *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -4475,14 +4461,13 @@ static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
 
 static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
   {
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    if (SocCom->PubCod > 0)
      {
       /***** Get data of social comment from database *****/
-      sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
+      DB_BuildQuery ("SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
 		     "social_pubs.NotCod,"
 		     "UNIX_TIMESTAMP(social_pubs.TimePublish),"
 		     "social_comments.Content,"
@@ -4493,8 +4478,8 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 		     " WHERE social_pubs.PubCod=%ld"
                      " AND social_pubs.PubType=%u"
 		     " AND social_pubs.PubCod=social_comments.PubCod",
-	       SocCom->PubCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
+		     SocCom->PubCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+      if (DB_QuerySELECT_new (&mysql_res,"can not get data of social comment"))
 	{
 	 /***** Get data of social comment *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -4720,7 +4705,6 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                    char **ContentStr,
                                    long PubCod,bool GetContent)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct SocialPublishing SocPub;
@@ -4735,10 +4719,10 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Content[0] = '\0';
 
    /***** Get summary and content from social post from database *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
+   DB_BuildQuery ("SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
 		  " FROM social_pubs WHERE PubCod=%ld",
-            PubCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing") == 1)   // Result should have a unique row
+		  PubCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get data of social publishing") == 1)   // Result should have a unique row
      {
       /* Get data of social publishing */
       row = mysql_fetch_row (mysql_res);
@@ -4763,10 +4747,10 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   {
 	    /***** Get content of social post from database *****/
 	    // TODO: What happens if content is empty and an image is attached?
-	    sprintf (Query,"SELECT Content FROM social_posts"
+	    DB_BuildQuery ("SELECT Content FROM social_posts"
 			   " WHERE PstCod=%ld",
-		     SocNot.Cod);
-	    if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
+			   SocNot.Cod);
+	    if (DB_QuerySELECT_new (&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
 	      {
 	       /***** Get row *****/
 	       row = mysql_fetch_row (mysql_res);
@@ -4802,10 +4786,10 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Soc_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of social post from database *****/
 	 // TODO: What happens if content is empty and an image is attached?
-	 sprintf (Query,"SELECT Content FROM social_comments"
+	 DB_BuildQuery ("SELECT Content FROM social_comments"
 			" WHERE PubCod=%ld",
-		  SocPub.PubCod);
-	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a comment to a social note") == 1)   // Result should have a unique row
+			SocPub.PubCod);
+	 if (DB_QuerySELECT_new (&mysql_res,"can not get the content of a comment to a social note") == 1)   // Result should have a unique row
 	   {
 	    /***** Get row *****/
 	    row = mysql_fetch_row (mysql_res);

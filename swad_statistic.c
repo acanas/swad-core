@@ -206,7 +206,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void);
 static void Sta_GetAndShowInssOrderedByNumCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
-static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure);
+static void Sta_GetAndShowInss (const char *TxtFigure);
 static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res);
 
 static void Sta_GetAndShowDegreeTypesStats (void);
@@ -869,7 +869,6 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
-   char Query[Sta_MAX_BYTES_QUERY_ACCESS + 1];
    char QueryAux[512];
    long LengthQuery;
    MYSQL_RES *mysql_res;
@@ -1053,118 +1052,140 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      }
 
    /***** Select clicks from the table of log *****/
+   /* Allocate memory for the query */
+   if ((Gbl.DB.QueryPtr = (char *) malloc (Sta_MAX_BYTES_QUERY_ACCESS + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
+
    /* Start the query */
    switch (Gbl.Stat.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
-   	 sprintf (Query,"SELECT SQL_NO_CACHE LogCod,UsrCod,Role,"
-   	                "UNIX_TIMESTAMP(ClickTime) AS F,ActCod FROM %s",
-                  LogTable);
+   	 snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE LogCod,UsrCod,Role,"
+   		   "UNIX_TIMESTAMP(ClickTime) AS F,ActCod FROM %s",
+                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_USR:
-	 sprintf (Query,"SELECT SQL_NO_CACHE UsrCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+	 snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE UsrCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY:
       case Sta_CLICKS_GBL_PER_DAY:
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE "
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
+                   "%s FROM %s",
+                   BrowserTimeZone,
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE "
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
+                   "%s FROM %s",
+                   BrowserTimeZone,
+                   BrowserTimeZone,
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEK:
       case Sta_CLICKS_GBL_PER_WEEK:
 	 /* With %x%v the weeks are counted from monday to sunday.
 	    With %X%V the weeks are counted from sunday to saturday. */
-	 sprintf (Query,(Gbl.Prefs.FirstDayOfWeek == 0) ?
-			"SELECT SQL_NO_CACHE "	// Weeks start on monday
-			"DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
-			"%s FROM %s" :
-			"SELECT SQL_NO_CACHE "	// Weeks start on sunday
-			"DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%X%%V') AS Week,"
-			"%s FROM %s",
-		  BrowserTimeZone,
-		  StrQueryCountType,LogTable);
+	 snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           (Gbl.Prefs.FirstDayOfWeek == 0) ?
+	           "SELECT SQL_NO_CACHE "	// Weeks start on monday
+		   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
+		   "%s FROM %s" :
+		   "SELECT SQL_NO_CACHE "	// Weeks start on sunday
+		   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%X%%V') AS Week,"
+		   "%s FROM %s",
+		   BrowserTimeZone,
+		   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTH:
       case Sta_CLICKS_GBL_PER_MONTH:
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE "
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
+                   "%s FROM %s",
+                   BrowserTimeZone,
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_YEAR:
       case Sta_CLICKS_GBL_PER_YEAR:
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y') AS Year,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE "
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y') AS Year,"
+                   "%s FROM %s",
+                   BrowserTimeZone,
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
       case Sta_CLICKS_GBL_PER_HOUR:
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE "
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
+                   "%s FROM %s",
+                   BrowserTimeZone,
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE "
+                   "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
+                   "%s FROM %s",
+                   BrowserTimeZone,
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
       case Sta_CLICKS_GBL_PER_ACTION:
-         sprintf (Query,"SELECT SQL_NO_CACHE ActCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE ActCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_PLUGIN:
-         sprintf (Query,"SELECT SQL_NO_CACHE log_ws.PlgCod,%s AS Num FROM %s,log_ws",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE log_ws.PlgCod,%s AS Num FROM %s,log_ws",
+                   StrQueryCountType,LogTable);
          break;
       case Sta_CLICKS_GBL_PER_API_FUNCTION:
-         sprintf (Query,"SELECT SQL_NO_CACHE log_ws.FunCod,%s AS Num FROM %s,log_ws",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE log_ws.FunCod,%s AS Num FROM %s,log_ws",
+                   StrQueryCountType,LogTable);
          break;
       case Sta_CLICKS_GBL_PER_BANNER:
-         sprintf (Query,"SELECT SQL_NO_CACHE log_banners.BanCod,%s AS Num FROM %s,log_banners",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE log_banners.BanCod,%s AS Num FROM %s,log_banners",
+                   StrQueryCountType,LogTable);
          break;
       case Sta_CLICKS_GBL_PER_COUNTRY:
-         sprintf (Query,"SELECT SQL_NO_CACHE CtyCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE CtyCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_INSTITUTION:
-         sprintf (Query,"SELECT SQL_NO_CACHE InsCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE InsCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_CENTRE:
-         sprintf (Query,"SELECT SQL_NO_CACHE CtrCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE CtrCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_DEGREE:
-         sprintf (Query,"SELECT SQL_NO_CACHE DegCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+         snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE DegCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_GBL_PER_COURSE:
-	 sprintf (Query,"SELECT SQL_NO_CACHE CrsCod,%s AS Num FROM %s",
-                  StrQueryCountType,LogTable);
+	 snprintf (Gbl.DB.QueryPtr,Sta_MAX_BYTES_QUERY_ACCESS + 1,
+   	           "SELECT SQL_NO_CACHE CrsCod,%s AS Num FROM %s",
+                   StrQueryCountType,LogTable);
 	 break;
      }
    sprintf (QueryAux," WHERE %s.ClickTime"
@@ -1172,7 +1193,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
             LogTable,
             (long) Gbl.DateRange.TimeUTC[0],
             (long) Gbl.DateRange.TimeUTC[1]);
-   Str_Concat (Query,QueryAux,
+   Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                Sta_MAX_BYTES_QUERY_ACCESS);
 
    switch (GlobalOrCourse)
@@ -1189,7 +1210,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.CtyCod=%ld",
 			   LogTable,Gbl.CurrentCty.Cty.CtyCod);
-		  Str_Concat (Query,QueryAux,
+		  Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
                break;
@@ -1198,7 +1219,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.InsCod=%ld",
 			   LogTable,Gbl.CurrentIns.Ins.InsCod);
-		  Str_Concat (Query,QueryAux,
+		  Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
 	       break;
@@ -1207,7 +1228,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.CtrCod=%ld",
 			   LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
-		  Str_Concat (Query,QueryAux,
+		  Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
                break;
@@ -1216,7 +1237,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.DegCod=%ld",
 			   LogTable,Gbl.CurrentDeg.Deg.DegCod);
-		  Str_Concat (Query,QueryAux,
+		  Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
 	       break;
@@ -1225,7 +1246,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.CrsCod=%ld",
 			   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
-		  Str_Concat (Query,QueryAux,
+		  Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
 	       break;
@@ -1294,7 +1315,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                         LogTable,Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	   }
-         Str_Concat (Query,StrRole,
+         Str_Concat (Gbl.DB.QueryPtr,StrRole,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 
          switch (Gbl.Stat.ClicksGroupedBy)
@@ -1303,13 +1324,13 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
             case Sta_CLICKS_GBL_PER_API_FUNCTION:
                sprintf (QueryAux," AND %s.LogCod=log_ws.LogCod",
                         LogTable);
-               Str_Concat (Query,QueryAux,
+               Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                            Sta_MAX_BYTES_QUERY_ACCESS);
                break;
             case Sta_CLICKS_GBL_PER_BANNER:
                sprintf (QueryAux," AND %s.LogCod=log_banners.LogCod",
                         LogTable);
-               Str_Concat (Query,QueryAux,
+               Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                            Sta_MAX_BYTES_QUERY_ACCESS);
                break;
             default:
@@ -1319,13 +1340,13 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (QueryAux," AND %s.CrsCod=%ld",
                   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
-	 Str_Concat (Query,QueryAux,
+	 Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 
 	 /***** Initialize data structure of the user *****/
          Usr_UsrDataConstructor (&UsrDat);
 
-	 LengthQuery = strlen (Query);
+	 LengthQuery = strlen (Gbl.DB.QueryPtr);
 	 NumUsr = 0;
 	 Ptr = Gbl.Usrs.Select[Rol_UNK];
 	 while (*Ptr)
@@ -1342,12 +1363,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                         NumUsr ? " OR %s.UsrCod=%ld" :
                                  " AND (%s.UsrCod=%ld",
                         LogTable,UsrDat.UsrCod);
-	       Str_Concat (Query,QueryAux,
+	       Str_Concat (Gbl.DB.QueryPtr,QueryAux,
 	                   Sta_MAX_BYTES_QUERY_ACCESS);
 	       NumUsr++;
 	      }
 	   }
-	 Str_Concat (Query,")",
+	 Str_Concat (Gbl.DB.QueryPtr,")",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 
 	 /***** Free memory used by the data of the user *****/
@@ -1360,7 +1381,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       sprintf (QueryAux," AND %s.ActCod=%ld",
                LogTable,Act_GetActCod (Gbl.Stat.NumAction));
-      Str_Concat (Query,QueryAux,
+      Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                   Sta_MAX_BYTES_QUERY_ACCESS);
      }
 
@@ -1368,90 +1389,90 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    switch (Gbl.Stat.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
-	 Str_Concat (Query," ORDER BY F",
+	 Str_Concat (Gbl.DB.QueryPtr," ORDER BY F",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_USR:
 	 sprintf (QueryAux," GROUP BY %s.UsrCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY:
       case Sta_CLICKS_GBL_PER_DAY:
-	 Str_Concat (Query," GROUP BY Day DESC",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Day DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-	 Str_Concat (Query," GROUP BY Day DESC,Hour",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Day DESC,Hour",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEK:
       case Sta_CLICKS_GBL_PER_WEEK:
-	 Str_Concat (Query," GROUP BY Week DESC",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Week DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTH:
       case Sta_CLICKS_GBL_PER_MONTH:
-	 Str_Concat (Query," GROUP BY Month DESC",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Month DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_YEAR:
       case Sta_CLICKS_GBL_PER_YEAR:
-	 Str_Concat (Query," GROUP BY Year DESC",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Year DESC",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
       case Sta_CLICKS_GBL_PER_HOUR:
-	 Str_Concat (Query," GROUP BY Hour",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Hour",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
-	 Str_Concat (Query," GROUP BY Minute",
+	 Str_Concat (Gbl.DB.QueryPtr," GROUP BY Minute",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
       case Sta_CLICKS_GBL_PER_ACTION:
 	 sprintf (QueryAux," GROUP BY %s.ActCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_PLUGIN:
-         Str_Concat (Query," GROUP BY log_ws.PlgCod ORDER BY Num DESC",
+         Str_Concat (Gbl.DB.QueryPtr," GROUP BY log_ws.PlgCod ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_API_FUNCTION:
-         Str_Concat (Query," GROUP BY log_ws.FunCod ORDER BY Num DESC",
+         Str_Concat (Gbl.DB.QueryPtr," GROUP BY log_ws.FunCod ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_BANNER:
-         Str_Concat (Query," GROUP BY log_banners.BanCod ORDER BY Num DESC",
+         Str_Concat (Gbl.DB.QueryPtr," GROUP BY log_banners.BanCod ORDER BY Num DESC",
                      Sta_MAX_BYTES_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_COUNTRY:
 	 sprintf (QueryAux," GROUP BY %s.CtyCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_INSTITUTION:
 	 sprintf (QueryAux," GROUP BY %s.InsCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_CENTRE:
 	 sprintf (QueryAux," GROUP BY %s.CtrCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_DEGREE:
 	 sprintf (QueryAux," GROUP BY %s.DegCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_COURSE:
 	 sprintf (QueryAux," GROUP BY %s.CrsCod ORDER BY Num DESC",LogTable);
-         Str_Concat (Query,QueryAux,
+         Str_Concat (Gbl.DB.QueryPtr,QueryAux,
                      Sta_MAX_BYTES_QUERY_ACCESS);
 	 break;
      }
@@ -1461,7 +1482,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Ale_ShowAlert (Ale_INFO,Query);
    */
    /***** Make the query *****/
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get clicks");
 
    /***** Count the number of rows in result *****/
    if (NumRows == 0)
@@ -1852,14 +1873,12 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
 static void Sta_WriteLogComments (long LogCod)
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get log comments from database *****/
-   sprintf (Query,"SELECT Comments FROM log_comments WHERE LogCod=%ld",
-            LogCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get log comments"))
+   DB_BuildQuery ("SELECT Comments FROM log_comments WHERE LogCod=%ld",LogCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get log comments"))
      {
       /***** Get and write comments *****/
       row = mysql_fetch_row (mysql_res);
@@ -5134,7 +5153,6 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
   {
    extern const char *Txt_Institutions_by_number_of_centres;
    extern const char *Txt_Centres;
-   char Query[1024];
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_centres,NULL,
@@ -5144,36 +5162,36 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
+	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
 			" FROM centres"
 			" GROUP BY InsCod"
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
-        	           " FROM institutions,centres"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-	             Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM institutions,centres"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
-			   " FROM centres"
-                           " WHERE InsCod=%ld"
-			   " GROUP BY InsCod"
-			   " ORDER BY N DESC",
-                     Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
+			" FROM centres"
+			" WHERE InsCod=%ld"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Query,Txt_Centres);
+   Sta_GetAndShowInss (Txt_Centres);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5187,7 +5205,6 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
   {
    extern const char *Txt_Institutions_by_number_of_degrees;
    extern const char *Txt_Degrees;
-   char Query[1024];
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_degrees,NULL,
@@ -5197,39 +5214,39 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
 			" FROM centres,degrees"
 	                " WHERE centres.CtrCod=degrees.CtrCod"
 			" GROUP BY InsCod"
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
-        	           " FROM institutions,centres,degrees"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-	                   " AND centres.CtrCod=degrees.CtrCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-	             Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM institutions,centres,degrees"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
-			   " FROM centres,degrees"
-                           " WHERE centres.InsCod=%ld"
-	                   " AND centres.CtrCod=degrees.CtrCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-                     Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM centres,degrees"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Query,Txt_Degrees);
+   Sta_GetAndShowInss (Txt_Degrees);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5243,7 +5260,6 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
   {
    extern const char *Txt_Institutions_by_number_of_courses;
    extern const char *Txt_Courses;
-   char Query[1024];
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_courses,NULL,
@@ -5253,7 +5269,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
 			" FROM centres,degrees,courses"
 	                " WHERE centres.CtrCod=degrees.CtrCod"
 	                " AND degrees.DegCod=courses.DegCod"
@@ -5261,34 +5277,34 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
-        	           " FROM institutions,centres,degrees,courses"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-	                   " AND centres.CtrCod=degrees.CtrCod"
-	                   " AND degrees.DegCod=courses.DegCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-	             Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM institutions,centres,degrees,courses"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
-			   " FROM centres,degrees,courses"
-                           " WHERE centres.InsCod=%ld"
-	                   " AND centres.CtrCod=degrees.CtrCod"
-	                   " AND degrees.DegCod=courses.DegCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-                     Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM centres,degrees,courses"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Query,Txt_Courses);
+   Sta_GetAndShowInss (Txt_Courses);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5302,7 +5318,6 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
   {
    extern const char *Txt_Institutions_by_number_of_users_in_courses;
    extern const char *Txt_Users;
-   char Query[1024];
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_in_courses,NULL,
@@ -5312,7 +5327,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
 			" FROM centres,degrees,courses,crs_usr"
 	                " WHERE centres.CtrCod=degrees.CtrCod"
 	                " AND degrees.DegCod=courses.DegCod"
@@ -5321,36 +5336,36 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-        	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-	                   " AND centres.CtrCod=degrees.CtrCod"
-	                   " AND degrees.DegCod=courses.DegCod"
-	                   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-	             Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
+			" FROM institutions,centres,degrees,courses,crs_usr"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			   " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod=%ld"
-	                   " AND centres.CtrCod=degrees.CtrCod"
-	                   " AND degrees.DegCod=courses.DegCod"
-	                   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " GROUP BY centres.InsCod"
-			   " ORDER BY N DESC",
-                     Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
+			" FROM centres,degrees,courses,crs_usr"
+			" WHERE centres.InsCod=%ld"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" GROUP BY centres.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Query,Txt_Users);
+   Sta_GetAndShowInss (Txt_Users);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5365,7 +5380,6 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
   {
    extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
    extern const char *Txt_Users;
-   char Query[1024];
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
@@ -5376,37 +5390,37 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
+	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
 			" FROM usr_data"
                         " WHERE InsCod>0"
 			" GROUP BY InsCod"
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT usr_data.InsCod,COUNT(*) AS N"
-        	           " FROM institutions,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=usr_data.InsCod"
-			   " GROUP BY usr_data.InsCod"
-			   " ORDER BY N DESC",
-	             Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery ("SELECT usr_data.InsCod,COUNT(*) AS N"
+			" FROM institutions,usr_data"
+			" WHERE institutions.CtyCod=%ld"
+			" AND institutions.InsCod=usr_data.InsCod"
+			" GROUP BY usr_data.InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
-			   " FROM usr_data"
-                           " WHERE InsCod=%ld"
-			   " GROUP BY InsCod"
-			   " ORDER BY N DESC",
-                     Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
+			" FROM usr_data"
+			" WHERE InsCod=%ld"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC",
+			Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Query,Txt_Users);
+   Sta_GetAndShowInss (Txt_Users);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5416,7 +5430,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 /****************** Get and show stats about institutions ********************/
 /*****************************************************************************/
 
-static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
+static void Sta_GetAndShowInss (const char *TxtFigure)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Institution;
@@ -5430,7 +5444,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
    bool TRIsOpen = false;
 
    /***** Query database *****/
-   if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
+   if ((NumInss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions")))
      {
       /* Draw the classphoto/list */
       switch (Gbl.Usrs.Me.ListType)
@@ -5863,7 +5877,6 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
                                          Brw_FileBrowser_t FileBrowser,
                                          struct Sta_SizeOfFileZones *SizeOfFileZones)
   {
-   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -5875,7 +5888,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -5904,22 +5917,22 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_TCH_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) Brw_ADMI_ASG_USR,
-			(unsigned) Brw_ADMI_WRK_USR,
-			(unsigned) Brw_ADMI_MRK_CRS,
-			(unsigned) Brw_ADMI_DOC_GRP,
-			(unsigned) Brw_ADMI_TCH_GRP,
-			(unsigned) Brw_ADMI_SHR_GRP,
-			(unsigned) Brw_ADMI_MRK_GRP);
+			      (unsigned) Brw_ADMI_DOC_CRS,
+			      (unsigned) Brw_ADMI_TCH_CRS,
+			      (unsigned) Brw_ADMI_SHR_CRS,
+			      (unsigned) Brw_ADMI_ASG_USR,
+			      (unsigned) Brw_ADMI_WRK_USR,
+			      (unsigned) Brw_ADMI_MRK_CRS,
+			      (unsigned) Brw_ADMI_DOC_GRP,
+			      (unsigned) Brw_ADMI_TCH_GRP,
+			      (unsigned) Brw_ADMI_SHR_GRP,
+			      (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       sprintf (Query,"SELECT COUNT(DISTINCT Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT Cod),"
 		              "-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -5928,13 +5941,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
 			      " WHERE FileBrowser=%u",
-			(unsigned) FileBrowser);
+			      (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -5945,11 +5958,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 	                      " AND file_browser_size.FileBrowser=%u",
-			(unsigned) FileBrowser);
+			      (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       sprintf (Query,"SELECT COUNT(DISTINCT Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
 			      "MAX(NumLevels),"
@@ -5958,10 +5971,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
 			      " WHERE FileBrowser=%u",
-			(unsigned) FileBrowser);
+			      (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       sprintf (Query,"SELECT -1,"
+	       DB_BuildQuery ("SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
 			      "MAX(NumLevels),"
@@ -5970,7 +5983,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
 			      " WHERE FileBrowser=%u",
-			(unsigned) FileBrowser);
+			      (unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -5982,7 +5995,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -6021,24 +6034,24 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			Gbl.CurrentCty.Cty.CtyCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_TCH_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) Brw_ADMI_ASG_USR,
-			(unsigned) Brw_ADMI_WRK_USR,
-			(unsigned) Brw_ADMI_MRK_CRS,
-			Gbl.CurrentCty.Cty.CtyCod,
-			(unsigned) Brw_ADMI_DOC_GRP,
-			(unsigned) Brw_ADMI_TCH_GRP,
-			(unsigned) Brw_ADMI_SHR_GRP,
-			(unsigned) Brw_ADMI_MRK_GRP);
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      (unsigned) Brw_ADMI_DOC_CRS,
+			      (unsigned) Brw_ADMI_TCH_CRS,
+			      (unsigned) Brw_ADMI_SHR_CRS,
+			      (unsigned) Brw_ADMI_ASG_USR,
+			      (unsigned) Brw_ADMI_WRK_USR,
+			      (unsigned) Brw_ADMI_MRK_CRS,
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      (unsigned) Brw_ADMI_DOC_GRP,
+			      (unsigned) Brw_ADMI_TCH_GRP,
+			      (unsigned) Brw_ADMI_SHR_GRP,
+			      (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6052,13 +6065,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 			      " and file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6074,11 +6087,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6092,10 +6105,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 	                      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       sprintf (Query,"SELECT -1,"
+	       DB_BuildQuery ("SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6110,7 +6123,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6122,7 +6135,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -6159,24 +6172,24 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			Gbl.CurrentIns.Ins.InsCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_TCH_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) Brw_ADMI_ASG_USR,
-			(unsigned) Brw_ADMI_WRK_USR,
-			(unsigned) Brw_ADMI_MRK_CRS,
-			Gbl.CurrentIns.Ins.InsCod,
-			(unsigned) Brw_ADMI_DOC_GRP,
-			(unsigned) Brw_ADMI_TCH_GRP,
-			(unsigned) Brw_ADMI_SHR_GRP,
-			(unsigned) Brw_ADMI_MRK_GRP);
+			      Gbl.CurrentIns.Ins.InsCod,
+			      (unsigned) Brw_ADMI_DOC_CRS,
+			      (unsigned) Brw_ADMI_TCH_CRS,
+			      (unsigned) Brw_ADMI_SHR_CRS,
+			      (unsigned) Brw_ADMI_ASG_USR,
+			      (unsigned) Brw_ADMI_WRK_USR,
+			      (unsigned) Brw_ADMI_MRK_CRS,
+			      Gbl.CurrentIns.Ins.InsCod,
+			      (unsigned) Brw_ADMI_DOC_GRP,
+			      (unsigned) Brw_ADMI_TCH_GRP,
+			      (unsigned) Brw_ADMI_SHR_GRP,
+			      (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6189,13 +6202,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 			      " and file_browser_size.FileBrowser=%u",
-			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6210,11 +6223,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6227,10 +6240,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 	                      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       sprintf (Query,"SELECT -1,"
+	       DB_BuildQuery ("SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6244,7 +6257,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6256,7 +6269,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -6291,24 +6304,24 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			Gbl.CurrentCtr.Ctr.CtrCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_TCH_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) Brw_ADMI_ASG_USR,
-			(unsigned) Brw_ADMI_WRK_USR,
-			(unsigned) Brw_ADMI_MRK_CRS,
-			Gbl.CurrentCtr.Ctr.CtrCod,
-			(unsigned) Brw_ADMI_DOC_GRP,
-			(unsigned) Brw_ADMI_TCH_GRP,
-			(unsigned) Brw_ADMI_SHR_GRP,
-			(unsigned) Brw_ADMI_MRK_GRP);
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      (unsigned) Brw_ADMI_DOC_CRS,
+			      (unsigned) Brw_ADMI_TCH_CRS,
+			      (unsigned) Brw_ADMI_SHR_CRS,
+			      (unsigned) Brw_ADMI_ASG_USR,
+			      (unsigned) Brw_ADMI_WRK_USR,
+			      (unsigned) Brw_ADMI_MRK_CRS,
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      (unsigned) Brw_ADMI_DOC_GRP,
+			      (unsigned) Brw_ADMI_TCH_GRP,
+			      (unsigned) Brw_ADMI_SHR_GRP,
+			      (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6320,13 +6333,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6340,11 +6353,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6356,10 +6369,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       sprintf (Query,"SELECT -1,"
+	       DB_BuildQuery ("SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6372,7 +6385,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6384,7 +6397,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -6417,24 +6430,24 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			Gbl.CurrentDeg.Deg.DegCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_TCH_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) Brw_ADMI_ASG_USR,
-			(unsigned) Brw_ADMI_WRK_USR,
-			(unsigned) Brw_ADMI_MRK_CRS,
-			Gbl.CurrentDeg.Deg.DegCod,
-			(unsigned) Brw_ADMI_DOC_GRP,
-			(unsigned) Brw_ADMI_TCH_GRP,
-			(unsigned) Brw_ADMI_SHR_GRP,
-			(unsigned) Brw_ADMI_MRK_GRP);
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      (unsigned) Brw_ADMI_DOC_CRS,
+			      (unsigned) Brw_ADMI_TCH_CRS,
+			      (unsigned) Brw_ADMI_SHR_CRS,
+			      (unsigned) Brw_ADMI_ASG_USR,
+			      (unsigned) Brw_ADMI_WRK_USR,
+			      (unsigned) Brw_ADMI_MRK_CRS,
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      (unsigned) Brw_ADMI_DOC_GRP,
+			      (unsigned) Brw_ADMI_TCH_GRP,
+			      (unsigned) Brw_ADMI_SHR_GRP,
+			      (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6445,13 +6458,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6464,11 +6477,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6479,10 +6492,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       sprintf (Query,"SELECT -1,"
+	       DB_BuildQuery ("SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6494,7 +6507,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6506,7 +6519,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -6537,24 +6550,24 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
-			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_TCH_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) Brw_ADMI_ASG_USR,
-			(unsigned) Brw_ADMI_WRK_USR,
-			(unsigned) Brw_ADMI_MRK_CRS,
-			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Brw_ADMI_DOC_GRP,
-			(unsigned) Brw_ADMI_TCH_GRP,
-			(unsigned) Brw_ADMI_SHR_GRP,
-			(unsigned) Brw_ADMI_MRK_GRP);
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      (unsigned) Brw_ADMI_DOC_CRS,
+			      (unsigned) Brw_ADMI_TCH_CRS,
+			      (unsigned) Brw_ADMI_SHR_CRS,
+			      (unsigned) Brw_ADMI_ASG_USR,
+			      (unsigned) Brw_ADMI_WRK_USR,
+			      (unsigned) Brw_ADMI_MRK_CRS,
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      (unsigned) Brw_ADMI_DOC_GRP,
+			      (unsigned) Brw_ADMI_TCH_GRP,
+			      (unsigned) Brw_ADMI_SHR_GRP,
+			      (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       sprintf (Query,"SELECT 1,"
+	       DB_BuildQuery ("SELECT 1,"
 		              "-1,"
 		              "-1,"
 			      "MAX(NumLevels),"
@@ -6563,13 +6576,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
 			      " WHERE Cod=%ld AND FileBrowser=%u",
-			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
 		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6581,11 +6594,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       sprintf (Query,"SELECT 1,"
+	       DB_BuildQuery ("SELECT 1,"
 		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
 			      "MAX(NumLevels),"
@@ -6594,10 +6607,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
 			      " WHERE Cod=%ld AND FileBrowser=%u",
-			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       sprintf (Query,"SELECT -1,"
+	       DB_BuildQuery ("SELECT -1,"
 		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
@@ -6608,7 +6621,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " WHERE crs_usr.CrsCod=%ld"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			      " AND file_browser_size.FileBrowser=%u",
-			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6619,7 +6632,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get size of a file browser");
+   DB_QuerySELECT_new (&mysql_res,"can not get size of a file browser");
 
    /* Get row */
    row = mysql_fetch_row (mysql_res);
@@ -6736,7 +6749,6 @@ static void Sta_GetAndShowOERsStats (void)
 
 static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,unsigned long NumFiles[2])
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows,NumRow;
@@ -6746,14 +6758,14 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT Public,COUNT(*)"
+         DB_BuildQuery ("SELECT Public,COUNT(*)"
                         " FROM files"
                         " WHERE License=%u"
                         " GROUP BY Public",
-                  (unsigned) License);
+			(unsigned) License);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT files.Public,COUNT(*)"
+         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
                         " FROM institutions,centres,degrees,courses,files"
                         " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
@@ -6763,13 +6775,13 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 	                " AND files.FileBrowser IN (%u,%u)"
                         " AND files.License=%u"
                         " GROUP BY files.Public",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-                  (unsigned) License);
+			Gbl.CurrentCty.Cty.CtyCod,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) License);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT files.Public,COUNT(*)"
+         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
                         " FROM centres,degrees,courses,files"
                         " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
@@ -6778,13 +6790,13 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 	                " AND files.FileBrowser IN (%u,%u)"
                         " AND files.License=%u"
                         " GROUP BY files.Public",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-                  (unsigned) License);
+			Gbl.CurrentIns.Ins.InsCod,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) License);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT files.Public,COUNT(*)"
+         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
                         " FROM degrees,courses,files"
                         " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
@@ -6792,41 +6804,41 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 	                " AND files.FileBrowser IN (%u,%u)"
                         " AND files.License=%u"
                         " GROUP BY files.Public",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-                  (unsigned) License);
+			Gbl.CurrentCtr.Ctr.CtrCod,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) License);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT files.Public,COUNT(*)"
+         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
                         " FROM courses,files"
                         " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=files.Cod"
 	                " AND files.FileBrowser IN (%u,%u)"
                         " AND files.License=%u"
                         " GROUP BY files.Public",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-                  (unsigned) License);
+			Gbl.CurrentDeg.Deg.DegCod,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) License);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT Public,COUNT(*)"
+         DB_BuildQuery ("SELECT Public,COUNT(*)"
                         " FROM files"
                         " WHERE Cod=%ld"
 	                " AND FileBrowser IN (%u,%u)"
                         " AND License=%u"
                         " GROUP BY Public",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  (unsigned) Brw_ADMI_DOC_CRS,
-		  (unsigned) Brw_ADMI_SHR_CRS,
-                  (unsigned) License);
+			Gbl.CurrentCrs.Crs.CrsCod,
+			(unsigned) Brw_ADMI_DOC_CRS,
+			(unsigned) Brw_ADMI_SHR_CRS,
+			(unsigned) License);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get number of OERs");
+   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get number of OERs");
 
    /* Reset values to zero */
    NumFiles[0] = NumFiles[1] = 0L;
@@ -7223,7 +7235,6 @@ static void Sta_GetAndShowSocialActivityStats (void)
    extern const char *Txt_No_of_posts_BR_per_user;
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
    extern const char *Txt_Total;
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Soc_NoteType_t NoteType;
@@ -7274,12 +7285,12 @@ static void Sta_GetAndShowSocialActivityStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    sprintf (Query,"SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
+	    DB_BuildQuery ("SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
 		           " FROM social_notes WHERE NoteType=%u",
-	             NoteType);
+			   NoteType);
 	    break;
 	 case Sco_SCOPE_CTY:
-	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
 			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
@@ -7288,11 +7299,11 @@ static void Sta_GetAndShowSocialActivityStats (void)
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
 			   " AND social_notes.NoteType=%u",
-		     Gbl.CurrentCty.Cty.CtyCod,
-		     (unsigned) NoteType);
+			   Gbl.CurrentCty.Cty.CtyCod,
+			   (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_INS:
-	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM centres,degrees,courses,crs_usr,social_notes"
 			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
@@ -7300,38 +7311,38 @@ static void Sta_GetAndShowSocialActivityStats (void)
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
 			   " AND social_notes.NoteType=%u",
-		     Gbl.CurrentIns.Ins.InsCod,
-		     (unsigned) NoteType);
+			   Gbl.CurrentIns.Ins.InsCod,
+			   (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_CTR:
-	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM degrees,courses,crs_usr,social_notes"
 			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
 			   " AND social_notes.NoteType=%u",
-		     Gbl.CurrentCtr.Ctr.CtrCod,
-		     (unsigned) NoteType);
+			   Gbl.CurrentCtr.Ctr.CtrCod,
+			   (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_DEG:
-	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM courses,crs_usr,social_notes"
 			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
 			   " AND social_notes.NoteType=%u",
-		     Gbl.CurrentDeg.Deg.DegCod,
-		     (unsigned) NoteType);
+			   Gbl.CurrentDeg.Deg.DegCod,
+			   (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_CRS:
-	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM crs_usr,social_notes"
 			   " WHERE crs_usr.CrsCod=%ld"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
 			   " AND social_notes.NoteType=%u",
-		     Gbl.CurrentCrs.Crs.CrsCod,
-		     (unsigned) NoteType);
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   (unsigned) NoteType);
 	    break;
 	 default:
 	    Lay_WrongScopeExit ();
@@ -7339,7 +7350,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 	}
       NumSocialNotes = 0;
       NumUsrs = 0;
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get number of social notes"))
+      if (DB_QuerySELECT_new (&mysql_res,"can not get number of social notes"))
 	{
 	 /***** Get number of social notes and number of users *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -7389,11 +7400,11 @@ static void Sta_GetAndShowSocialActivityStats (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
+	 DB_BuildQuery ("SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
 			" FROM social_notes");
 	 break;
       case Sco_SCOPE_CTY:
-	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM institutions,centres,degrees,courses,crs_usr,social_notes"
 			" WHERE institutions.CtyCod=%ld"
 			" AND institutions.InsCod=centres.InsCod"
@@ -7401,41 +7412,41 @@ static void Sta_GetAndShowSocialActivityStats (void)
 			" AND degrees.DegCod=courses.DegCod"
 			" AND courses.CrsCod=crs_usr.CrsCod"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
-		  Gbl.CurrentCty.Cty.CtyCod);
+			Gbl.CurrentCty.Cty.CtyCod);
 	 break;
       case Sco_SCOPE_INS:
-	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM centres,degrees,courses,crs_usr,social_notes"
 			" WHERE centres.InsCod=%ld"
 			" AND centres.CtrCod=degrees.CtrCod"
 			" AND degrees.DegCod=courses.DegCod"
 			" AND courses.CrsCod=crs_usr.CrsCod"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
-		  Gbl.CurrentIns.Ins.InsCod);
+			Gbl.CurrentIns.Ins.InsCod);
 	 break;
       case Sco_SCOPE_CTR:
-	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM degrees,courses,crs_usr,social_notes"
 			" WHERE degrees.CtrCod=%ld"
 			" AND degrees.DegCod=courses.DegCod"
 			" AND courses.CrsCod=crs_usr.CrsCod"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
-		  Gbl.CurrentCtr.Ctr.CtrCod);
+			Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
       case Sco_SCOPE_DEG:
-	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM courses,crs_usr,social_notes"
 			" WHERE courses.DegCod=%ld"
 			" AND courses.CrsCod=crs_usr.CrsCod"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
-		  Gbl.CurrentDeg.Deg.DegCod);
+			Gbl.CurrentDeg.Deg.DegCod);
 	 break;
       case Sco_SCOPE_CRS:
-	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM crs_usr,social_notes"
 			" WHERE crs_usr.CrsCod=%ld"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
-		  Gbl.CurrentCrs.Crs.CrsCod);
+			Gbl.CurrentCrs.Crs.CrsCod);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
@@ -7443,7 +7454,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
      }
    NumSocialNotes = 0;
    NumUsrs = 0;
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of social notes"))
+   if (DB_QuerySELECT_new (&mysql_res,"can not get number of social notes"))
      {
       /* Get number of social notes and number of users */
       row = mysql_fetch_row (mysql_res);

@@ -668,7 +668,6 @@ static bool Tst_CheckIfNextTstAllowed (void)
    extern const char *Txt_Test;
    extern const char *Txt_You_can_not_take_a_new_test_until;
    extern const char *Txt_Today;
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long NumSecondsFromNowToNextAccTst = -1L;	// Access allowed when this number <= 0
@@ -680,14 +679,14 @@ static bool Tst_CheckIfNextTstAllowed (void)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
-   sprintf (Query,"SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-UNIX_TIMESTAMP(),"
+   DB_BuildQuery ("SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-UNIX_TIMESTAMP(),"
 	          "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"
                   " FROM crs_usr"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
-            Gbl.Test.Config.MinTimeNxtTstPerQst,
-            Gbl.Test.Config.MinTimeNxtTstPerQst,
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get last access to test") == 1)
+		  Gbl.Test.Config.MinTimeNxtTstPerQst,
+		  Gbl.Test.Config.MinTimeNxtTstPerQst,
+		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get last access to test") == 1)
      {
       /* Get seconds from now to next access to test */
       row = mysql_fetch_row (mysql_res);
@@ -749,7 +748,6 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
 
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
   {
-   char Query[256 + Cns_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -757,10 +755,10 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
    Tst_Status_t TstStatus = Tst_STATUS_ERROR;
 
    /***** Get status of test from database *****/
-   sprintf (Query,"SELECT Status FROM tst_status"
+   DB_BuildQuery ("SELECT Status FROM tst_status"
                   " WHERE SessionId='%s' AND CrsCod=%ld AND NumTst=%u",
-            Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get status of test");
+		  Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get status of test");
 
    if (NumRows == 1)
      {
@@ -784,7 +782,6 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
 
 static unsigned Tst_GetNumAccessesTst (void)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -793,10 +790,10 @@ static unsigned Tst_GetNumAccessesTst (void)
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
       /***** Get number of hits to test from database *****/
-      sprintf (Query,"SELECT NumAccTst FROM crs_usr"
+      DB_BuildQuery ("SELECT NumAccTst FROM crs_usr"
 	             " WHERE CrsCod=%ld AND UsrCod=%ld",
-               Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of hits to test");
+		     Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get number of hits to test");
 
       if (NumRows == 0)
          NumAccessesTst = 0;
@@ -861,14 +858,13 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
 static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
   {
    extern const char *Txt_no_tags;
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned long NumRow;
 
    /***** Get all tags of questions in this test *****/
-   sprintf (Query,"SELECT tst_tags.TagTxt FROM"
+   DB_BuildQuery ("SELECT tst_tags.TagTxt FROM"
 	          " (SELECT DISTINCT(tst_question_tags.TagCod)"
 	          " FROM tst_question_tags,tst_exam_questions"
 	          " WHERE tst_exam_questions.TstCod=%ld"
@@ -876,8 +872,8 @@ static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
 	          " AS TagsCods,tst_tags"
 	          " WHERE TagsCods.TagCod=tst_tags.TagCod"
 	          " ORDER BY tst_tags.TagTxt",
-            TstCod);
-   if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tags present in a test result")))
+		  TstCod);
+   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get tags present in a test result")))
      {
       /***** Write the tags *****/
       fprintf (Gbl.F.Out,"<ul>");
@@ -1679,13 +1675,11 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void)
 
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
   {
-   char Query[256];
-
    /***** Get available tags from database *****/
-   sprintf (Query,"SELECT TagCod,TagTxt,TagHidden FROM tst_tags"
+   DB_BuildQuery ("SELECT TagCod,TagTxt,TagHidden FROM tst_tags"
                   " WHERE CrsCod=%ld ORDER BY TagTxt",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT (Query,mysql_res,"can not get available tags");
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   return DB_QuerySELECT_new (mysql_res,"can not get available tags");
   }
 
 /*****************************************************************************/
@@ -1695,13 +1689,11 @@ static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 
 static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
   {
-   char Query[256];
-
    /***** Get available not hidden tags from database *****/
-   sprintf (Query,"SELECT TagCod,TagTxt FROM tst_tags"
+   DB_BuildQuery ("SELECT TagCod,TagTxt FROM tst_tags"
                   " WHERE CrsCod=%ld AND TagHidden='N' ORDER BY TagTxt",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT (Query,mysql_res,"can not get available enabled tags");
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   return DB_QuerySELECT_new (mysql_res,"can not get available enabled tags");
   }
 
 /*****************************************************************************/
@@ -2070,16 +2062,15 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 
 static void Tst_GetConfigTstFromDB (void)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get configuration of test for current course from database *****/
-   sprintf (Query,"SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
+   DB_BuildQuery ("SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
                   " FROM tst_config WHERE CrsCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get configuration of test");
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get configuration of test");
 
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
    Gbl.Test.Config.MinTimeNxtTstPerQst = 0UL;
@@ -2169,16 +2160,15 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
 
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    Tst_Pluggable_t Pluggable;
 
    /***** Get pluggability of tests for current course from database *****/
-   sprintf (Query,"SELECT Pluggable FROM tst_config WHERE CrsCod=%ld",
-            Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get configuration of test");
+   DB_BuildQuery ("SELECT Pluggable FROM tst_config WHERE CrsCod=%ld",
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get configuration of test");
 
    if (NumRows == 0)
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2480,7 +2470,6 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    unsigned long NumRows;
-   char Query[Tst_MAX_BYTES_QUERY_TEST + 1];
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
@@ -2489,6 +2478,10 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
    char UnsignedStr[10 + 1];
    Tst_AnswerType_t AnsType;
    char CrsCodStr[1 + 10 + 1];
+
+   /***** Allocate space for query *****/
+   if ((Gbl.DB.QueryPtr = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Select questions *****/
    /* Start query */
@@ -2506,56 +2499,57 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
    row[10] NumHitsNotBlank
    row[11] Score
    */
-   sprintf (Query,"SELECT tst_questions.QstCod,"
-	          "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
-                  "tst_questions.AnsType,tst_questions.Shuffle,"
-                  "tst_questions.Stem,tst_questions.Feedback,"
-                  "tst_questions.ImageName,"
-                  "tst_questions.ImageTitle,"
-                  "tst_questions.ImageURL,"
-                  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
-                  "tst_questions.Score"
-                 " FROM tst_questions");
+   snprintf (Gbl.DB.QueryPtr,Tst_MAX_BYTES_QUERY_TEST + 1,
+	     "SELECT tst_questions.QstCod,"
+	     "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
+	     "tst_questions.AnsType,tst_questions.Shuffle,"
+	     "tst_questions.Stem,tst_questions.Feedback,"
+	     "tst_questions.ImageName,"
+	     "tst_questions.ImageTitle,"
+	     "tst_questions.ImageURL,"
+	     "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
+	     "tst_questions.Score"
+	     " FROM tst_questions");
    if (!Gbl.Test.Tags.All)
-      Str_Concat (Query,",tst_question_tags,tst_tags",
+      Str_Concat (Gbl.DB.QueryPtr,",tst_question_tags,tst_tags",
                   Tst_MAX_BYTES_QUERY_TEST);
 
-   Str_Concat (Query," WHERE tst_questions.CrsCod='",
+   Str_Concat (Gbl.DB.QueryPtr," WHERE tst_questions.CrsCod='",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (CrsCodStr,sizeof (CrsCodStr),
 	     "%ld",
 	     Gbl.CurrentCrs.Crs.CrsCod);
-   Str_Concat (Query,CrsCodStr,
+   Str_Concat (Gbl.DB.QueryPtr,CrsCodStr,
                Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
+   Str_Concat (Gbl.DB.QueryPtr,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),
 	     "%ld",
 	     (long) Gbl.DateRange.TimeUTC[0]);
-   Str_Concat (Query,LongStr,
+   Str_Concat (Gbl.DB.QueryPtr,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
+   Str_Concat (Gbl.DB.QueryPtr,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),
 	     "%ld",
 	     (long) Gbl.DateRange.TimeUTC[1]);
-   Str_Concat (Query,LongStr,
+   Str_Concat (Gbl.DB.QueryPtr,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Query,"')",
+   Str_Concat (Gbl.DB.QueryPtr,"')",
                Tst_MAX_BYTES_QUERY_TEST);
 
    /* Add the tags selected */
    if (!Gbl.Test.Tags.All)
      {
-      Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
+      Str_Concat (Gbl.DB.QueryPtr," AND tst_questions.QstCod=tst_question_tags.QstCod"
 	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
                         " AND tst_tags.CrsCod='",
                   Tst_MAX_BYTES_QUERY_TEST);
-      Str_Concat (Query,CrsCodStr,
+      Str_Concat (Gbl.DB.QueryPtr,CrsCodStr,
                   Tst_MAX_BYTES_QUERY_TEST);
-      Str_Concat (Query,"'",
+      Str_Concat (Gbl.DB.QueryPtr,"'",
                   Tst_MAX_BYTES_QUERY_TEST);
-      LengthQuery = strlen (Query);
+      LengthQuery = strlen (Gbl.DB.QueryPtr);
       NumItemInList = 0;
       Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
@@ -2564,24 +2558,24 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Query,
+         Str_Concat (Gbl.DB.QueryPtr,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,TagText,
+         Str_Concat (Gbl.DB.QueryPtr,TagText,
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
+         Str_Concat (Gbl.DB.QueryPtr,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
+      Str_Concat (Gbl.DB.QueryPtr,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add the types of answer selected */
    if (!Gbl.Test.AllAnsTypes)
      {
-      LengthQuery = strlen (Query);
+      LengthQuery = strlen (Gbl.DB.QueryPtr);
       NumItemInList = 0;
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
@@ -2591,56 +2585,56 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Query,
+         Str_Concat (Gbl.DB.QueryPtr,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
+         Str_Concat (Gbl.DB.QueryPtr,Tst_StrAnswerTypesDB[AnsType],
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
+         Str_Concat (Gbl.DB.QueryPtr,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
+      Str_Concat (Gbl.DB.QueryPtr,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End the query */
-   Str_Concat (Query," GROUP BY tst_questions.QstCod",
+   Str_Concat (Gbl.DB.QueryPtr," GROUP BY tst_questions.QstCod",
                Tst_MAX_BYTES_QUERY_TEST);
 
    switch (Gbl.Test.SelectedOrder)
      {
       case Tst_ORDER_STEM:
-         Str_Concat (Query," ORDER BY tst_questions.Stem",
+         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS:
-         Str_Concat (Query," ORDER BY tst_questions.NumHits DESC,"
-                           "tst_questions.Stem",
+         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.NumHits DESC,"
+				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE:
-         Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
-                           "tst_questions.NumHits DESC,"
-                           "tst_questions.Stem",
+         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
+				     "tst_questions.NumHits DESC,"
+				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS_NOT_BLANK:
-         Str_Concat (Query," ORDER BY tst_questions.NumHitsNotBlank DESC,"
-                           "tst_questions.Stem",
+         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.NumHitsNotBlank DESC,"
+				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE_NOT_BLANK:
-         Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
-                           "tst_questions.NumHitsNotBlank DESC,"
-                           "tst_questions.Stem",
+         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
+				     "tst_questions.NumHitsNotBlank DESC,"
+				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
      }
 
    /* Make the query */
-   NumRows = DB_QuerySELECT (Query,mysql_res,"can not get questions");
+   NumRows = DB_QuerySELECT_new (mysql_res,"can not get questions");
 
    if (NumRows == 0)
       Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
@@ -2654,7 +2648,6 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
   {
-   char Query[Tst_MAX_BYTES_QUERY_TEST + 1];
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
@@ -2662,6 +2655,10 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    char UnsignedStr[10 + 1];
    Tst_AnswerType_t AnsType;
    char StrNumQsts[10 + 1];
+
+   /***** Allocate space for query *****/
+   if ((Gbl.DB.QueryPtr = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
    /*
@@ -2682,33 +2679,34 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    // Reject questions with any tag hidden
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions
-   sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
-	          "UNIX_TIMESTAMP(tst_questions.EditTime),"
-		  "tst_questions.AnsType,tst_questions.Shuffle,"
-		  "tst_questions.Stem,tst_questions.Feedback,"
-		  "tst_questions.ImageName,"
-		  "tst_questions.ImageTitle,"
-		  "tst_questions.ImageURL,"
-		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
-		  "tst_questions.Score"
-		  " FROM tst_questions,tst_question_tags,tst_tags"
-		  " WHERE tst_questions.CrsCod=%ld"
-		  " AND tst_questions.QstCod NOT IN"
-		  " (SELECT tst_question_tags.QstCod"
-		  " FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
-		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod=%ld",
-	    Gbl.CurrentCrs.Crs.CrsCod,
-	    Gbl.CurrentCrs.Crs.CrsCod,
-	    Gbl.CurrentCrs.Crs.CrsCod);
+   snprintf (Gbl.DB.QueryPtr,Tst_MAX_BYTES_QUERY_TEST + 1,
+	     "SELECT DISTINCTROW tst_questions.QstCod,"
+	     "UNIX_TIMESTAMP(tst_questions.EditTime),"
+	     "tst_questions.AnsType,tst_questions.Shuffle,"
+	     "tst_questions.Stem,tst_questions.Feedback,"
+	     "tst_questions.ImageName,"
+	     "tst_questions.ImageTitle,"
+	     "tst_questions.ImageURL,"
+	     "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
+	     "tst_questions.Score"
+	     " FROM tst_questions,tst_question_tags,tst_tags"
+	     " WHERE tst_questions.CrsCod=%ld"
+	     " AND tst_questions.QstCod NOT IN"
+	     " (SELECT tst_question_tags.QstCod"
+	     " FROM tst_tags,tst_question_tags"
+	     " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
+	     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+	     " AND tst_questions.QstCod=tst_question_tags.QstCod"
+	     " AND tst_question_tags.TagCod=tst_tags.TagCod"
+	     " AND tst_tags.CrsCod=%ld",
+	     Gbl.CurrentCrs.Crs.CrsCod,
+	     Gbl.CurrentCrs.Crs.CrsCod,
+	     Gbl.CurrentCrs.Crs.CrsCod);
 
    if (!Gbl.Test.Tags.All) // User has not selected all the tags
      {
       /* Add selected tags */
-      LengthQuery = strlen (Query);
+      LengthQuery = strlen (Gbl.DB.QueryPtr);
       NumItemInList = 0;
       Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
@@ -2717,24 +2715,24 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Query,
+         Str_Concat (Gbl.DB.QueryPtr,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,TagText,
+         Str_Concat (Gbl.DB.QueryPtr,TagText,
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
+         Str_Concat (Gbl.DB.QueryPtr,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
+      Str_Concat (Gbl.DB.QueryPtr,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add answer types selected */
    if (!Gbl.Test.AllAnsTypes)
      {
-      LengthQuery = strlen (Query);
+      LengthQuery = strlen (Gbl.DB.QueryPtr);
       NumItemInList = 0;
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
@@ -2744,34 +2742,34 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Query,
+         Str_Concat (Gbl.DB.QueryPtr,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
+         Str_Concat (Gbl.DB.QueryPtr,Tst_StrAnswerTypesDB[AnsType],
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Query,"'",
+         Str_Concat (Gbl.DB.QueryPtr,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",
+      Str_Concat (Gbl.DB.QueryPtr,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End query */
-   Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",
+   Str_Concat (Gbl.DB.QueryPtr," ORDER BY RAND(NOW()) LIMIT ",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (StrNumQsts,sizeof (StrNumQsts),
 	     "%u",
 	     Gbl.Test.NumQsts);
-   Str_Concat (Query,StrNumQsts,
+   Str_Concat (Gbl.DB.QueryPtr,StrNumQsts,
                Tst_MAX_BYTES_QUERY_TEST);
 /*
    if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   return DB_QuerySELECT (Query,mysql_res,"can not get questions");
+   return DB_QuerySELECT_new (mysql_res,"can not get questions");
   }
 
 /*****************************************************************************/
@@ -2800,8 +2798,6 @@ static void Tst_ListOneQstToEdit (void)
 
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
-
    /***** Get data of a question from database *****/
    /*
    row[ 0] QstCod
@@ -2817,14 +2813,14 @@ bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
    row[10] NumHitsNotBlank
    row[11] Score
    */
-   sprintf (Query,"SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
+   DB_BuildQuery ("SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
 	          "AnsType,Shuffle,Stem,Feedback,"
 	          "ImageName,ImageTitle,ImageURL,"
 	          "NumHits,NumHitsNotBlank,Score"
                   " FROM tst_questions"
                   " WHERE QstCod=%ld",
-            QstCod);
-   return (DB_QuerySELECT (Query,mysql_res,"can not get data of a question") == 1);
+		  QstCod);
+   return (DB_QuerySELECT_new (mysql_res,"can not get data of a question") == 1);
   }
 
 /*****************************************************************************/
@@ -3310,17 +3306,16 @@ void Tst_WriteParamEditQst (void)
 
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
   {
-   char Query[512];
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
-   sprintf (Query,"SELECT AnsInd,Answer,Feedback,"
+   DB_BuildQuery ("SELECT AnsInd,Answer,Feedback,"
 	          "ImageName,ImageTitle,ImageURL,Correct"
 	          " FROM tst_answers WHERE QstCod=%ld ORDER BY %s",
-            QstCod,
-            Shuffle ? "RAND(NOW())" :
-        	      "AnsInd");
-   if (!(NumRows = DB_QuerySELECT (Query,mysql_res,"can not get answers of a question")))
+		  QstCod,
+		  Shuffle ? "RAND(NOW())" :
+			    "AnsInd");
+   if (!(NumRows = DB_QuerySELECT_new (mysql_res,"can not get answers of a question")))
       Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
@@ -4665,16 +4660,14 @@ void Tst_CheckIfNumberOfAnswersIsOne (void)
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
-
    /***** Get the tags of a question from database *****/
-   sprintf (Query,"SELECT tst_tags.TagTxt FROM tst_question_tags,tst_tags"
+   DB_BuildQuery ("SELECT tst_tags.TagTxt FROM tst_question_tags,tst_tags"
                   " WHERE tst_question_tags.QstCod=%ld"
                   " AND tst_question_tags.TagCod=tst_tags.TagCod"
                   " AND tst_tags.CrsCod=%ld"
                   " ORDER BY tst_question_tags.TagInd",
-            QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT (Query,mysql_res,"can not get the tags of a question");
+		  QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   return DB_QuerySELECT_new (mysql_res,"can not get the tags of a question");
   }
 
 /*****************************************************************************/
@@ -5536,7 +5529,6 @@ static void Tst_FreeImagesOfQuestion (void)
 static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -5545,12 +5537,12 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Get the type of answer and the stem from the database *****/
    /* Get the question from database */
-   sprintf (Query,"SELECT AnsType,Shuffle,Stem,Feedback,"
+   DB_BuildQuery ("SELECT AnsType,Shuffle,Stem,Feedback,"
 	          "ImageName,ImageTitle,ImageURL"
 		  " FROM tst_questions"
 		  " WHERE QstCod=%ld AND CrsCod=%ld",
-	    Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get a question");
+		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QuerySELECT_new (&mysql_res,"can not get a question");
 
    row = mysql_fetch_row (mysql_res);
    /*
@@ -5671,23 +5663,22 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
 static void Tst_GetImageFromDB (int NumOpt,struct Image *Image)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Build query depending on NumOpt *****/
    if (NumOpt < 0)
       // Get image associated to stem
-      sprintf (Query,"SELECT ImageName,ImageTitle,ImageURL FROM tst_questions"
+      DB_BuildQuery ("SELECT ImageName,ImageTitle,ImageURL FROM tst_questions"
 		     " WHERE QstCod=%ld AND CrsCod=%ld",
-	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);      // Get image associated to answer
+		     Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);      // Get image associated to answer
    else
-      sprintf (Query,"SELECT ImageName,ImageTitle,ImageURL FROM tst_answers"
+      DB_BuildQuery ("SELECT ImageName,ImageTitle,ImageURL FROM tst_answers"
 		     " WHERE QstCod=%ld AND AnsInd=%u",
-	       Gbl.Test.QstCod,(unsigned) NumOpt);
+		     Gbl.Test.QstCod,(unsigned) NumOpt);
 
    /***** Query database *****/
-   DB_QuerySELECT (Query,&mysql_res,"can not get image name");
+   DB_QuerySELECT_new (&mysql_res,"can not get image name");
    row = mysql_fetch_row (mysql_res);
 
    /***** Get the image name, title and URL (row[0], row[1], row[2]) *****/
@@ -6246,17 +6237,16 @@ double Tst_GetFloatAnsFromStr (char *Str)
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
   {
-   char Query[256 + Tst_MAX_BYTES_TAG];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    long TagCod = -1L;	// -1 means that the tag does not exist in database
 
    /***** Get tag code from database *****/
-   sprintf (Query,"SELECT TagCod FROM tst_tags"
+   DB_BuildQuery ("SELECT TagCod FROM tst_tags"
                   " WHERE CrsCod=%ld AND TagTxt='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tag");
+		  Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get tag");
 
    Gbl.Alert.Type = Ale_NONE;
    if (NumRows == 1)
@@ -6761,15 +6751,14 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
 
 static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   sprintf (Query,"SELECT ImageName FROM tst_questions"
+   DB_BuildQuery ("SELECT ImageName FROM tst_questions"
 		  " WHERE QstCod=%ld AND CrsCod=%ld",
-	    QstCod,CrsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
+		  QstCod,CrsCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get image"))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -6789,16 +6778,15 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
 
 static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
   {
-   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumImages;
    unsigned NumImg;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   sprintf (Query,"SELECT ImageName FROM tst_questions WHERE CrsCod=%ld",
-	    CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
+   DB_BuildQuery ("SELECT ImageName FROM tst_questions WHERE CrsCod=%ld",
+		  CrsCod);
+   NumImages = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get images");
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6822,20 +6810,19 @@ static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
 
 static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   sprintf (Query,"SELECT tst_answers.ImageName"
+   DB_BuildQuery ("SELECT tst_answers.ImageName"
 		  " FROM tst_questions,tst_answers"
 		  " WHERE tst_questions.CrsCod=%ld"	// Extra check
 		  " AND tst_questions.QstCod=%ld"	// Extra check
 		  " AND tst_questions.QstCod=tst_answers.QstCod"
 		  " AND tst_answers.QstCod=%ld"
 		  " AND tst_answers.AnsInd=%u",
-	    CrsCod,QstCod,QstCod,AnsInd);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get images"))
+		  CrsCod,QstCod,QstCod,AnsInd);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get images"))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -6854,21 +6841,20 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
 
 static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumImages;
    unsigned NumImg;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   sprintf (Query,"SELECT tst_answers.ImageName"
+   DB_BuildQuery ("SELECT tst_answers.ImageName"
 		  " FROM tst_questions,tst_answers"
 		  " WHERE tst_questions.CrsCod=%ld"	// Extra check
 		  " AND tst_questions.QstCod=%ld"	// Extra check
 		  " AND tst_questions.QstCod=tst_answers.QstCod"
 		  " AND tst_answers.QstCod=%ld",
-	    CrsCod,QstCod,QstCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
+		  CrsCod,QstCod,QstCod);
+   NumImages = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get images");
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6893,19 +6879,18 @@ static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
 
 static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumImages;
    unsigned NumImg;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   sprintf (Query,"SELECT tst_answers.ImageName"
+   DB_BuildQuery ("SELECT tst_answers.ImageName"
 		  " FROM tst_questions,tst_answers"
 		  " WHERE tst_questions.CrsCod=%ld"
 		  " AND tst_questions.QstCod=tst_answers.QstCod",
-	    CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
+		  CrsCod);
+   NumImages = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get images");
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6960,7 +6945,6 @@ void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
 
 static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
   {
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -6969,26 +6953,26 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
      {
       case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions");
          else
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions"
                            " WHERE AnsType='%s'",
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTY:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
                            " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentCty.Cty.CtyCod);
+			   Gbl.CurrentCty.Cty.CtyCod);
          else
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
                            " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
@@ -6996,81 +6980,81 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentCty.Cty.CtyCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentCty.Cty.CtyCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM centres,degrees,courses,tst_questions"
                            " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentIns.Ins.InsCod);
+			   Gbl.CurrentIns.Ins.InsCod);
          else
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM centres,degrees,courses,tst_questions"
                            " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentIns.Ins.InsCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentIns.Ins.InsCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM degrees,courses,tst_questions"
                            " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
+			   Gbl.CurrentCtr.Ctr.CtrCod);
          else
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM degrees,courses,tst_questions"
                            " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentCtr.Ctr.CtrCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM courses,tst_questions"
                            " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentDeg.Deg.DegCod);
+			   Gbl.CurrentDeg.Deg.DegCod);
          else
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM courses,tst_questions"
                            " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentDeg.Deg.DegCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentDeg.Deg.DegCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions"
                            " WHERE CrsCod=%ld",
-                     Gbl.CurrentCrs.Crs.CrsCod);
+			   Gbl.CurrentCrs.Crs.CrsCod);
          else
-            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions"
                            " WHERE CrsCod=%ld AND AnsType='%s'",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of test questions");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of test questions");
 
    /***** Get number of questions *****/
    row = mysql_fetch_row (mysql_res);
@@ -7107,7 +7091,6 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
 
 static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType)
   {
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -7117,26 +7100,26 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
      {
       case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
         	           " FROM tst_questions");
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
         	           " FROM tst_questions"
                            " WHERE AnsType='%s'",
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTY:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
                            " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentCty.Cty.CtyCod);
+			   Gbl.CurrentCty.Cty.CtyCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+           DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
                            " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
@@ -7144,82 +7127,82 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentCty.Cty.CtyCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentCty.Cty.CtyCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions"
                            " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentIns.Ins.InsCod);
+			   Gbl.CurrentIns.Ins.InsCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions"
                            " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentIns.Ins.InsCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentIns.Ins.InsCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions"
                            " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
+			   Gbl.CurrentCtr.Ctr.CtrCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions"
                            " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentCtr.Ctr.CtrCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNTDISTINCT (tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNTDISTINCT (tst_questions.CrsCod)"
         	           " FROM courses,tst_questions"
                            " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod",
-                     Gbl.CurrentDeg.Deg.DegCod);
+			   Gbl.CurrentDeg.Deg.DegCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM courses,tst_questions"
                            " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
-                     Gbl.CurrentDeg.Deg.DegCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentDeg.Deg.DegCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
         	           " FROM tst_questions"
                            " WHERE CrsCod=%ld",
-                     Gbl.CurrentCrs.Crs.CrsCod);
+			   Gbl.CurrentCrs.Crs.CrsCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
         	           " FROM tst_questions"
                            " WHERE CrsCod=%ld"
                            " AND AnsType='%s'",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     Tst_StrAnswerTypesDB[AnsType]);
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with test questions");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with test questions");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -7240,7 +7223,6 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
 
 static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType)
   {
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -7250,23 +7232,23 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
      {
       case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
                            " WHERE tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
                            " WHERE tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Tst_StrAnswerTypesDB[AnsType],
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Tst_StrAnswerTypesDB[AnsType],
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_CTY:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
                            " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
@@ -7275,10 +7257,10 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentCty.Cty.CtyCod,
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentCty.Cty.CtyCod,
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
                            " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
@@ -7288,13 +7270,13 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentCty.Cty.CtyCod,
-                     Tst_StrAnswerTypesDB[AnsType],
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentCty.Cty.CtyCod,
+			   Tst_StrAnswerTypesDB[AnsType],
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions,tst_config"
                            " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
@@ -7302,10 +7284,10 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentIns.Ins.InsCod,
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentIns.Ins.InsCod,
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions,tst_config"
                            " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
@@ -7314,23 +7296,23 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentIns.Ins.InsCod,
-                     Tst_StrAnswerTypesDB[AnsType],
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentIns.Ins.InsCod,
+			   Tst_StrAnswerTypesDB[AnsType],
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions,tst_config"
                            " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentCtr.Ctr.CtrCod,
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions,tst_config"
                            " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
@@ -7338,57 +7320,57 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,
-                     Tst_StrAnswerTypesDB[AnsType],
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentCtr.Ctr.CtrCod,
+			   Tst_StrAnswerTypesDB[AnsType],
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM courses,tst_questions,tst_config"
                            " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentDeg.Deg.DegCod,
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentDeg.Deg.DegCod,
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM courses,tst_questions,tst_config"
                            " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentDeg.Deg.DegCod,
-                     Tst_StrAnswerTypesDB[AnsType],
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentDeg.Deg.DegCod,
+			   Tst_StrAnswerTypesDB[AnsType],
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
                            " WHERE tst_questions.CrsCod=%ld"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
                            " WHERE tst_questions.CrsCod=%ld"
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     Tst_StrAnswerTypesDB[AnsType],
-                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   Tst_StrAnswerTypesDB[AnsType],
+			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with pluggable test questions");
+   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with pluggable test questions");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -7702,7 +7684,6 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
   {
    extern const char *Txt_Today;
    extern const char *Txt_View_test;
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumExams;
@@ -7723,7 +7704,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    char *ClassDat;
 
    /***** Make database query *****/
-   sprintf (Query,"SELECT TstCod,AllowTeachers,"
+   DB_BuildQuery ("SELECT TstCod,AllowTeachers,"
 	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
@@ -7731,11 +7712,11 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
                   " AND TstTime>=FROM_UNIXTIME(%ld)"
                   " AND TstTime<=FROM_UNIXTIME(%ld)"
                   " ORDER BY TstCod",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            UsrDat->UsrCod,
-            (long) Gbl.DateRange.TimeUTC[0],
-            (long) Gbl.DateRange.TimeUTC[1]);
-   NumExams = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test exams of a user");
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  UsrDat->UsrCod,
+		  (long) Gbl.DateRange.TimeUTC[0],
+		  (long) Gbl.DateRange.TimeUTC[1]);
+   NumExams = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test exams of a user");
 
    /***** Show user's data *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -8383,19 +8364,18 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
                                            unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score)
   {
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Make database query *****/
-   sprintf (Query,"SELECT UsrCod,AllowTeachers,"
+   DB_BuildQuery ("SELECT UsrCod,AllowTeachers,"
 	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
                   " WHERE TstCod=%ld AND CrsCod=%ld",
-            TstCod,
-            Gbl.CurrentCrs.Crs.CrsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a test result of a user") == 1)
+		  TstCod,
+		  Gbl.CurrentCrs.Crs.CrsCod);
+   if (DB_QuerySELECT_new (&mysql_res,"can not get data of a test result of a user") == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -8462,16 +8442,16 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
 
 static void Tst_GetTestResultQuestionsFromDB (long TstCod)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
 
    /***** Get questions of a test result from database *****/
-   sprintf (Query,"SELECT QstCod,Indexes,Answers FROM tst_exam_questions"
+   DB_BuildQuery ("SELECT QstCod,Indexes,Answers FROM tst_exam_questions"
                   " WHERE TstCod=%ld ORDER BY QstInd",
-            TstCod);
-   Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get questions of a test result");
+		  TstCod);
+   Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT_new (&mysql_res,
+						     "can not get questions of a test result");
 
    /***** Get questions codes *****/
    for (NumQst = 0;
