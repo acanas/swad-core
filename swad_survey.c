@@ -1686,7 +1686,6 @@ void Svy_ResetSurvey (void)
 void Svy_HideSurvey (void)
   {
    extern const char *Txt_Survey_X_is_now_hidden;
-   char Query[128];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1703,9 +1702,8 @@ void Svy_HideSurvey (void)
       Lay_ShowErrorAndExit ("You can not hide this survey.");
 
    /***** Hide survey *****/
-   sprintf (Query,"UPDATE surveys SET Hidden='Y' WHERE SvyCod=%ld",
-            Svy.SvyCod);
-   DB_QueryUPDATE (Query,"can not hide survey");
+   DB_BuildQuery ("UPDATE surveys SET Hidden='Y' WHERE SvyCod=%ld",Svy.SvyCod);
+   DB_QueryUPDATE_new ("can not hide survey");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1724,7 +1722,6 @@ void Svy_HideSurvey (void)
 void Svy_UnhideSurvey (void)
   {
    extern const char *Txt_Survey_X_is_now_visible;
-   char Query[128];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1741,9 +1738,8 @@ void Svy_UnhideSurvey (void)
       Lay_ShowErrorAndExit ("You can not unhide this survey.");
 
    /***** Show survey *****/
-   sprintf (Query,"UPDATE surveys SET Hidden='N' WHERE SvyCod=%ld",
-            Svy.SvyCod);
-   DB_QueryUPDATE (Query,"can not show survey");
+   DB_BuildQuery ("UPDATE surveys SET Hidden='N' WHERE SvyCod=%ld",Svy.SvyCod);
+   DB_QueryUPDATE_new ("can not show survey");
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2244,13 +2240,11 @@ void Svy_RecFormSurvey (void)
 static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char Query[256];
-
    /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE surveys SET NumNotif=NumNotif+%u"
+   DB_BuildQuery ("UPDATE surveys SET NumNotif=NumNotif+%u"
                   " WHERE SvyCod=%ld",
-            NumUsrsToBeNotifiedByEMail,SvyCod);
-   DB_QueryUPDATE (Query,"can not update the number of notifications of a survey");
+		  NumUsrsToBeNotifiedByEMail,SvyCod);
+   DB_QueryUPDATE_new ("can not update the number of notifications of a survey");
   }
 
 /*****************************************************************************/
@@ -2300,25 +2294,22 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_survey_has_been_modified;
-   char Query[1024 +
-              Svy_MAX_BYTES_SURVEY_TITLE +
-              Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the survey *****/
-   sprintf (Query,"UPDATE surveys"
+   DB_BuildQuery ("UPDATE surveys"
 	          " SET Scope='%s',Cod=%ld,Roles=%u,"
 	          "StartTime=FROM_UNIXTIME(%ld),"
 	          "EndTime=FROM_UNIXTIME(%ld),"
 	          "Title='%s',Txt='%s'"
                   " WHERE SvyCod=%ld",
-            Sco_ScopeDB[Svy->Scope],Svy->Cod,
-            Svy->Roles,
-            Svy->TimeUTC[Svy_START_TIME],
-            Svy->TimeUTC[Svy_END_TIME  ],
-            Svy->Title,
-            Txt,
-            Svy->SvyCod);
-   DB_QueryUPDATE (Query,"can not update survey");
+		  Sco_ScopeDB[Svy->Scope],Svy->Cod,
+		  Svy->Roles,
+		  Svy->TimeUTC[Svy_START_TIME],
+		  Svy->TimeUTC[Svy_END_TIME  ],
+		  Svy->Title,
+		  Txt,
+		  Svy->SvyCod);
+   DB_QueryUPDATE_new ("can not update survey");
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -3755,13 +3746,11 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 
 static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
-   char Query[256];
-
    /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
-   sprintf (Query,"UPDATE svy_answers SET NumUsrs=NumUsrs+1"
+   DB_BuildQuery ("UPDATE svy_answers SET NumUsrs=NumUsrs+1"
                   " WHERE QstCod=%ld AND AnsInd=%u",
-            QstCod,AnsInd);
-   DB_QueryUPDATE (Query,"can not register your answer to the survey");
+		  QstCod,AnsInd);
+   DB_QueryUPDATE_new ("can not register your answer to the survey");
   }
 
 /*****************************************************************************/

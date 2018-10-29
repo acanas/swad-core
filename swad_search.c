@@ -1289,29 +1289,25 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 
 static void Sch_SaveLastSearchIntoSession (void)
   {
-   char Query[256 +
-              Sch_MAX_BYTES_STRING_TO_FIND +
-              Cns_BYTES_SESSION_ID];
-
    if (Gbl.Usrs.Me.Logged)
      {
       if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
 	 Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /***** Save last search in session *****/
-      sprintf (Query,"UPDATE sessions SET WhatToSearch=%u,SearchStr='%s'"
+      DB_BuildQuery ("UPDATE sessions SET WhatToSearch=%u,SearchStr='%s'"
 		     " WHERE SessionId='%s'",
-	       (unsigned) Gbl.Search.WhatToSearch,
-	       Gbl.Search.Str,
-	       Gbl.Session.Id);
-      DB_QueryUPDATE (Query,"can not update last search in session");
+		     (unsigned) Gbl.Search.WhatToSearch,
+		     Gbl.Search.Str,
+		     Gbl.Session.Id);
+      DB_QueryUPDATE_new ("can not update last search in session");
 
       /***** Update my last type of search *****/
       // WhatToSearch is stored in usr_last for next time I log in
       // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-      sprintf (Query,"UPDATE usr_last SET WhatToSearch=%u WHERE UsrCod=%ld",
-	       (unsigned) Gbl.Search.WhatToSearch,
-	       Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update type of search in user's last data");
+      DB_BuildQuery ("UPDATE usr_last SET WhatToSearch=%u WHERE UsrCod=%ld",
+		     (unsigned) Gbl.Search.WhatToSearch,
+		     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update type of search in user's last data");
      }
   }

@@ -2705,7 +2705,6 @@ int swad__sendAttendanceUsers (struct soap *soap,
    unsigned NumCodsInList;
    char SubQuery[256];
    size_t Length = 0;	// Initialized to avoid warning
-   char *Query = NULL;	// Initialized to avoid warning
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -2757,12 +2756,12 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
       /* Start query used to mark not present users as absent */
       Length = 256 + NumCodsInList * (1 + 1 + 10 + 1) - 1;
-      if ((Query = (char *) malloc (Length + 1)) == NULL)
+      if ((Gbl.DB.QueryPtr = (char *) malloc (Length + 1)) == NULL)
 	 return soap_receiver_fault (Gbl.soap,
 	                             "Not enough memory",
 	                             "Not enough memory to store list of users");
-      sprintf (Query,"UPDATE att_usr SET Present='N'"
-		     " WHERE AttCod=%ld",
+      sprintf (Gbl.DB.QueryPtr,"UPDATE att_usr SET Present='N'"
+			       " WHERE AttCod=%ld",
 	       Att.AttCod);
      }
 
@@ -2787,7 +2786,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",%ld" :
 								       " AND UsrCod NOT IN (%ld",
 			   UsrDat.UsrCod);
-		  Str_Concat (Query,SubQuery,
+		  Str_Concat (Gbl.DB.QueryPtr,SubQuery,
 		              Length);
 		 }
 
@@ -2799,11 +2798,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
      {
       /* Mark not present users as absent in table of users */
       if (sendAttendanceUsersOut->numUsers)
-         Str_Concat (Query,")",
+         Str_Concat (Gbl.DB.QueryPtr,")",
                      Length);
 
-      DB_QueryUPDATE (Query,"can not set other users as absent");
-      free ((void *) Query);
+      DB_QueryUPDATE_new ("can not set other users as absent");
 
       /* Clean table att_usr */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
@@ -3109,7 +3107,6 @@ int swad__markNotificationsAsRead (struct soap *soap,
    unsigned NumNtf;
    unsigned NumNtfsMarkedAsRead = 0;
    long NtfCod;
-   char Query[512];
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -3143,11 +3140,11 @@ int swad__markNotificationsAsRead (struct soap *soap,
          if ((NtfCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
            {
 	    /***** Mark notification as read in the database *****/
-	    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
+	    DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
 			   " WHERE NtfCod=%ld AND ToUsrCod=%ld",
-		     (unsigned) Ntf_STATUS_BIT_READ,
-		     (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-	    DB_QueryUPDATE (Query,"can not mark notification as read");
+			   (unsigned) Ntf_STATUS_BIT_READ,
+			   (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	    DB_QueryUPDATE_new ("can not mark notification as read");
 
 	    NumNtfsMarkedAsRead++;
            }
@@ -3378,65 +3375,63 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
   {
    static bool MsgAlreadyInserted = false;
    static long NewMsgCod;
-   char Query[512 + Cns_MAX_BYTES_SUBJECT + Cns_MAX_BYTES_LONG_TEXT];
 
    /***** Create message *****/
    if (!MsgAlreadyInserted)      // The message is inserted only once in the table of messages sent
      {
       /***** Insert message subject and body in the database *****/
       /* Build query */
-      sprintf (Query,"INSERT INTO msg_content"
+      DB_BuildQuery ("INSERT INTO msg_content"
 	             " (Subject,Content,ImageName,ImageTitle,ImageURL)"
                      " VALUES"
                      " ('%s','%s','','','')",
                      Subject,Content);
-
       /* Get the code of the inserted item */
-      NewMsgCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
+      NewMsgCod = DB_QueryINSERTandReturnCode_new ("can not create message");
 
       /***** Insert message in sent messages *****/
-      sprintf (Query,"INSERT INTO msg_snt"
+      DB_BuildQuery ("INSERT INTO msg_snt"
 	             " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
                      " VALUES"
                      " (%ld,-1,%ld,'N',NOW())",
-               NewMsgCod,SenderUsrCod);
-      DB_QueryINSERT (Query,"can not create message");
+		     NewMsgCod,SenderUsrCod);
+      DB_QueryINSERT_new ("can not create message");
 
       MsgAlreadyInserted = true;
      }
 
    /***** Insert message received in the database *****/
-   sprintf (Query,"INSERT INTO msg_rcv"
+   DB_BuildQuery ("INSERT INTO msg_rcv"
 	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
                   " VALUES"
                   " (%ld,%ld,'%c','N','N','N')",
-            NewMsgCod,RecipientUsrCod,
-            NotifyByEmail ? 'Y' :
-        	            'N');
-   DB_QueryINSERT (Query,"can not create received message");
+		  NewMsgCod,RecipientUsrCod,
+		  NotifyByEmail ? 'Y' :
+				  'N');
+   DB_QueryINSERT_new ("can not create received message");
 
    /***** Create notification for this recipient.
           If this recipient wants to receive notifications by email, activate the sending of a notification *****/
-   sprintf (Query,"INSERT INTO notif"
+   DB_BuildQuery ("INSERT INTO notif"
 	          " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
                   " VALUES"
                   " (%u,%ld,%ld,-1,-1,-1,%ld,NOW(),%u)",
-            (unsigned) Ntf_EVENT_MESSAGE,
-            RecipientUsrCod,
-            SenderUsrCod,
-            NewMsgCod,
-            (unsigned) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-        	                        0));
-   DB_QueryINSERT (Query,"can not create new notification event");
+		  (unsigned) Ntf_EVENT_MESSAGE,
+		  RecipientUsrCod,
+		  SenderUsrCod,
+		  NewMsgCod,
+		  (unsigned) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+					      0));
+   DB_QueryINSERT_new ("can not create new notification event");
 
    /***** If this recipient is the original sender of a message been replied... *****/
    if (RecipientUsrCod == ReplyUsrCod)
      {
       /***** ...then update received message setting Replied field to true *****/
-      sprintf (Query,"UPDATE msg_rcv SET Replied='Y'"
+      DB_BuildQuery ("UPDATE msg_rcv SET Replied='Y'"
 	             " WHERE MsgCod=%ld AND UsrCod=%ld",
-               OriginalMsgCod,SenderUsrCod);
-      DB_QueryUPDATE (Query,"can not update a received message");
+		     OriginalMsgCod,SenderUsrCod);
+      DB_QueryUPDATE_new ("can not update a received message");
      }
 
    return SOAP_OK;

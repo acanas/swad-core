@@ -1237,23 +1237,21 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank)
   {
-   char Query[512];
-
    /***** Update number of clicks and score of the question *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    if (AnswerIsNotBlank)
-      sprintf (Query,"UPDATE tst_questions"
+      DB_BuildQuery ("UPDATE tst_questions"
 	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
 	             "Score=Score+(%lf)"
                      " WHERE QstCod=%ld",
-               ScoreThisQst,QstCod);
+		     ScoreThisQst,QstCod);
    else	// The answer is blank
-      sprintf (Query,"UPDATE tst_questions"
+      DB_BuildQuery ("UPDATE tst_questions"
 	             " SET NumHits=NumHits+1"
                      " WHERE QstCod=%ld",
-               QstCod);
+		     QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryUPDATE (Query,"can not update the score of a question");
+   DB_QueryUPDATE_new ("can not update the score of a question");
   }
 
 /*****************************************************************************/
@@ -1262,14 +1260,12 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
   {
-   char Query[256];
-
    /***** Update my number of accesses to test in this course *****/
-   sprintf (Query,"UPDATE crs_usr SET NumAccTst=%u"
+   DB_BuildQuery ("UPDATE crs_usr SET NumAccTst=%u"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
-	    NumAccessesTst,
-	    Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update the number of accesses to test");
+		  NumAccessesTst,
+		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update the number of accesses to test");
   }
 
 /*****************************************************************************/
@@ -1278,15 +1274,13 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
 
 static void Tst_UpdateLastAccTst (void)
   {
-   char Query[256];
-
    /***** Update date-time and number of questions of this test *****/
-   sprintf (Query,"UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
+   DB_BuildQuery ("UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
-            Gbl.Test.NumQsts,
-	    Gbl.CurrentCrs.Crs.CrsCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update time and number of questions of this test");
+		  Gbl.Test.NumQsts,
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update time and number of questions of this test");
   }
 
 /*****************************************************************************/
@@ -6318,15 +6312,13 @@ static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
 
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
   {
-   char Query[512];
-
    /***** Insert new tag into tst_tags table *****/
-   sprintf (Query,"UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
+   DB_BuildQuery ("UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
                   " WHERE TagCod=%ld AND CrsCod=%ld",
-            TagHidden ? 'Y' :
-        	        'N',
-            TagCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not update the visibility of a tag");
+		  TagHidden ? 'Y' :
+			      'N',
+		  TagCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not update the visibility of a tag");
   }
 
 /*****************************************************************************/
@@ -6462,7 +6454,6 @@ void Tst_ChangeShuffleQst (void)
   {
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
-   char Query[256];
    bool EditingOnlyThisQst;
    bool Shuffle;
 
@@ -6479,12 +6470,12 @@ void Tst_ChangeShuffleQst (void)
 
    /***** Remove the question from all the tables *****/
    /* Update the question changing the current shuffle */
-   sprintf (Query,"UPDATE tst_questions SET Shuffle='%c'"
+   DB_BuildQuery ("UPDATE tst_questions SET Shuffle='%c'"
                   " WHERE QstCod=%ld AND CrsCod=%ld",
-            Shuffle ? 'Y' :
-        	      'N',
-            Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not update the shuffle type of a question");
+		  Shuffle ? 'Y' :
+			    'N',
+		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE_new ("can not update the shuffle type of a question");
 
    /***** Write message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -6544,21 +6535,10 @@ void Tst_InsertOrUpdateQstTagsAnsIntoDB (void)
 
 static void Tst_InsertOrUpdateQstIntoDB (void)
   {
-   char *Query;
-
-   /***** Allocate space for query *****/
-   if ((Query = (char *) malloc (512 +
-                                 Gbl.Test.Stem.Length +
-                                 Gbl.Test.Feedback.Length +
-                                 Img_BYTES_NAME +
-                                 Img_MAX_BYTES_TITLE +
-                                 Cns_MAX_BYTES_WWW)) == NULL)
-      Lay_NotEnoughMemoryExit ();
-
    if (Gbl.Test.QstCod < 0)	// It's a new question
      {
       /***** Insert question in the table of questions *****/
-      sprintf (Query,"INSERT INTO tst_questions"
+      DB_BuildQuery ("INSERT INTO tst_questions"
 	             " (CrsCod,EditTime,AnsType,Shuffle,"
 	             "Stem,Feedback,ImageName,ImageTitle,ImageURL,"
 	             "NumHits,Score)"
@@ -6566,16 +6546,16 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
                      " (%ld,NOW(),'%s','%c',"
                      "'%s','%s','%s','%s','%s',"
                      "0,0)",
-               Gbl.CurrentCrs.Crs.CrsCod,
-               Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-               Gbl.Test.Shuffle ? 'Y' :
-        	                  'N',
-               Gbl.Test.Stem.Text,
-               Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-               Gbl.Test.Image.Name,
-               Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
-               Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "");
-      Gbl.Test.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+		     Gbl.Test.Shuffle ? 'Y' :
+					'N',
+		     Gbl.Test.Stem.Text,
+		     Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+		     Gbl.Test.Image.Name,
+		     Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
+		     Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "");
+      Gbl.Test.QstCod = DB_QueryINSERTandReturnCode_new ("can not create question");
 
       /* Update image status */
       if (Gbl.Test.Image.Name[0])
@@ -6585,21 +6565,21 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
      {
       /***** Update existing question *****/
       /* Update question in database */
-      sprintf (Query,"UPDATE tst_questions"
+      DB_BuildQuery ("UPDATE tst_questions"
 		     " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
 		     "Stem='%s',Feedback='%s',"
 		     "ImageName='%s',ImageTitle='%s',ImageURL='%s'"
 		     " WHERE QstCod=%ld AND CrsCod=%ld",
-	       Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-	       Gbl.Test.Shuffle ? 'Y' :
-				  'N',
-	       Gbl.Test.Stem.Text,
-	       Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-	       Gbl.Test.Image.Name,
-	       Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
-	       Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "",
-	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryUPDATE (Query,"can not update question");
+		     Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+		     Gbl.Test.Shuffle ? 'Y' :
+					'N',
+		     Gbl.Test.Stem.Text,
+		     Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+		     Gbl.Test.Image.Name,
+		     Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
+		     Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "",
+		     Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE_new ("can not update question");
 
       /* Update image status */
       if (Gbl.Test.Image.Name[0])
@@ -6609,9 +6589,6 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
       Tst_RemAnsFromQst ();
       Tst_RemTagsFromQst ();
      }
-
-   /***** Free space used for query *****/
-   free ((void *) Query);
   }
 
 /*****************************************************************************/
@@ -7584,17 +7561,15 @@ static long Tst_CreateTestResultInDB (void)
 static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score)
   {
-   char Query[256];
-
    /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   sprintf (Query,"UPDATE tst_exams"
+   DB_BuildQuery ("UPDATE tst_exams"
 	          " SET NumQstsNotBlank=%u,Score='%lf'"
 	          " WHERE TstCod=%ld",
-            NumQstsNotBlank,Score,
-            TstCod);
+		  NumQstsNotBlank,Score,
+		  TstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryUPDATE (Query,"can not update result of test result");
+   DB_QueryUPDATE_new ("can not update result of test result");
   }
 
 /*****************************************************************************/

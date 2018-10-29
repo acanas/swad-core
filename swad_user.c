@@ -3356,21 +3356,19 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat)
 
 void Usr_UpdateMyLastData (void)
   {
-   char Query[256];
-
    /***** Check if it exists an entry for me *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_last WHERE UsrCod=%ld",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QueryCOUNT (Query,"can not get last user's click"))
+   DB_BuildQuery ("SELECT COUNT(*) FROM usr_last WHERE UsrCod=%ld",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (DB_QueryCOUNT_new ("can not get last user's click"))
      {
       /***** Update my last accessed course, tab and time of click in database *****/
       // WhatToSearch, LastAccNotif remain unchanged
-      sprintf (Query,"UPDATE usr_last SET LastCrs=%ld,LastTab=%u,LastTime=NOW()"
+      DB_BuildQuery ("UPDATE usr_last SET LastCrs=%ld,LastTab=%u,LastTime=NOW()"
                      " WHERE UsrCod=%ld",
-               Gbl.CurrentCrs.Crs.CrsCod,
-               (unsigned) Gbl.Action.Tab,
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update last user's data");
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     (unsigned) Gbl.Action.Tab,
+		     Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update last user's data");
      }
    else
       Usr_InsertMyLastData ();
@@ -7182,14 +7180,12 @@ static void Usr_GetMyUsrListTypeFromDB (void)
 
 static void Usr_UpdateMyUsrListTypeInDB (void)
   {
-   char Query[256];
-
    /***** Update type of users listing *****/
-   sprintf (Query,"UPDATE crs_usr SET UsrListType='%s'"
+   DB_BuildQuery ("UPDATE crs_usr SET UsrListType='%s'"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
-            Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update type of listing");
+		  Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
+		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE_new ("can not update type of listing");
   }
 
 /*****************************************************************************/
@@ -7278,16 +7274,14 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
 
 static void Usr_UpdateMyColsClassPhotoInDB (void)
   {
-   char Query[256];
-
    if (Gbl.Usrs.Me.Logged && Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       /***** Update number of colums in class photo for current course *****/
-      sprintf (Query,"UPDATE crs_usr SET ColsClassPhoto=%u"
+      DB_BuildQuery ("UPDATE crs_usr SET ColsClassPhoto=%u"
                      " WHERE CrsCod=%ld AND UsrCod=%ld",
-               Gbl.Usrs.ClassPhoto.Cols,
-               Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update number of columns in class photo");
+		     Gbl.Usrs.ClassPhoto.Cols,
+		     Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update number of columns in class photo");
      }
   }
 
@@ -7380,17 +7374,15 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
 
 static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
   {
-   char Query[256];
-
    if (Gbl.Usrs.Me.Logged && Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       /***** Update number of colums in class photo for current course *****/
-      sprintf (Query,"UPDATE crs_usr SET ListWithPhotos='%c'"
+      DB_BuildQuery ("UPDATE crs_usr SET ListWithPhotos='%c'"
                      " WHERE CrsCod=%ld AND UsrCod=%ld",
-               Gbl.Usrs.Listing.WithPhotos ? 'Y' :
-        	                             'N',
-               Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preference about photos in listing");
+		     Gbl.Usrs.Listing.WithPhotos ? 'Y' :
+						   'N',
+		     Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE_new ("can not update your preference about photos in listing");
      }
   }
 

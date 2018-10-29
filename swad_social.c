@@ -838,14 +838,12 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
 
 static void Soc_UpdateLastPubCodIntoSession (void)
   {
-   char Query[256 + Cns_BYTES_SESSION_ID];
-
    /***** Update last publishing code *****/
-   sprintf (Query,"UPDATE sessions"
+   DB_BuildQuery ("UPDATE sessions"
 	          " SET LastPubCod=(SELECT IFNULL(MAX(PubCod),0) FROM social_pubs)"
 	          " WHERE SessionId='%s'",
-	    Gbl.Session.Id);
-   DB_QueryUPDATE (Query,"can not update last publishing code into session");
+		  Gbl.Session.Id);
+   DB_QueryUPDATE_new ("can not update last publishing code into session");
   }
 
 /*****************************************************************************/
@@ -854,12 +852,10 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
-
    /***** Update last publishing code *****/
-   sprintf (Query,"UPDATE sessions SET FirstPubCod=%ld WHERE SessionId='%s'",
-	    FirstPubCod,Gbl.Session.Id);
-   DB_QueryUPDATE (Query,"can not update first publishing code into session");
+   DB_BuildQuery ("UPDATE sessions SET FirstPubCod=%ld WHERE SessionId='%s'",
+		  FirstPubCod,Gbl.Session.Id);
+   DB_QueryUPDATE_new ("can not update first publishing code into session");
   }
 
 /*****************************************************************************/
@@ -1968,24 +1964,20 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
 
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod)
   {
-   char Query[256];
-
    /***** Mark the social note as unavailable *****/
-   sprintf (Query,"UPDATE social_notes SET Unavailable='Y'"
+   DB_BuildQuery ("UPDATE social_notes SET Unavailable='Y'"
 		  " WHERE NotCod=%ld",
-	    NotCod);
-   DB_QueryUPDATE (Query,"can not mark social note as unavailable");
+		  NotCod);
+   DB_QueryUPDATE_new ("can not mark social note as unavailable");
   }
 
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod)
   {
-   char Query[256];
-
    /***** Mark the social note as unavailable *****/
-   sprintf (Query,"UPDATE social_notes SET Unavailable='Y'"
+   DB_BuildQuery ("UPDATE social_notes SET Unavailable='Y'"
 		  " WHERE NoteType=%u AND Cod=%ld",
-	    (unsigned) NoteType,Cod);
-   DB_QueryUPDATE (Query,"can not mark social note as unavailable");
+		  (unsigned) NoteType,Cod);
+   DB_QueryUPDATE_new ("can not mark social note as unavailable");
   }
 
 /*****************************************************************************/
@@ -2060,7 +2052,6 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long Cod = Brw_GetCodForFiles ();
-   char Query[512];
    Soc_NoteType_t NoteType;
 
    switch (FileBrowser)
@@ -2103,15 +2094,15 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
 	    default:
 	       return;
 	   }
-         sprintf (Query,"UPDATE social_notes SET Unavailable='Y'"
+         DB_BuildQuery ("UPDATE social_notes SET Unavailable='Y'"
 		        " WHERE NoteType=%u AND Cod IN"
 	                " (SELECT FilCod FROM files"
 			" WHERE FileBrowser=%u AND Cod=%ld"
 			" AND Path LIKE '%s/%%' AND Public='Y')",	// Only public files
-	          (unsigned) NoteType,
-	          (unsigned) FileBrowser,Cod,
-	          Path);
-         DB_QueryUPDATE (Query,"can not mark social notes as unavailable");
+			(unsigned) NoteType,
+			(unsigned) FileBrowser,Cod,
+			Path);
+         DB_QueryUPDATE_new ("can not mark social notes as unavailable");
          break;
       default:
 	 break;

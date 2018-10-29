@@ -3300,16 +3300,6 @@ void DB_QueryUPDATE_new (const char *MsgError)
    //return (unsigned long) mysql_affected_rows (&Gbl.mysql);
   }
 
-void DB_QueryUPDATE (const char *Query,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError (MsgError);
-
-   /***** Return number of rows updated *****/
-   //return (unsigned long) mysql_affected_rows (&Gbl.mysql);
-  }
-
 /*****************************************************************************/
 /******************** Make a DELETE query from database **********************/
 /*****************************************************************************/
@@ -3328,13 +3318,6 @@ void DB_QueryDELETE_new (const char *MsgError)
    free ((void *) Gbl.DB.QueryPtr);
    Gbl.DB.QueryPtr = NULL;
    if (Result)
-      DB_ExitOnMySQLError (MsgError);
-  }
-
-void DB_QueryDELETE (const char *Query,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError (MsgError);
   }
 
