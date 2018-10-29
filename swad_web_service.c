@@ -447,7 +447,6 @@ static int Svc_GenerateNewWSKey (long UsrCod,
                                  char WSKey[Svc_BYTES_WS_KEY + 1])
   {
    int ReturnCode;
-   char Query[512];
 
    /***** Remove expired web service keys *****/
    if ((ReturnCode = Svc_RemoveOldWSKeys ()) != SOAP_OK)
@@ -458,20 +457,19 @@ static int Svc_GenerateNewWSKey (long UsrCod,
              Svc_BYTES_WS_KEY);
 
    /***** Check that key does not exist in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM ws_keys WHERE WSKey='%s'",
-            WSKey);
-   if (DB_QueryCOUNT (Query,"can not get existence of key"))
+   DB_BuildQuery ("SELECT COUNT(*) FROM ws_keys WHERE WSKey='%s'",WSKey);
+   if (DB_QueryCOUNT_new ("can not get existence of key"))
       return soap_receiver_fault (Gbl.soap,
 	                          "Error when generating key",
 	                          "Generated key already existed in database");
 
    /***** Insert key into database *****/
-   sprintf (Query,"INSERT INTO ws_keys"
+   DB_BuildQuery ("INSERT INTO ws_keys"
 	          " (WSKey,UsrCod,PlgCod,LastTime)"
                   " VALUES"
                   " ('%s',%ld,%ld,NOW())",
-            WSKey,UsrCod,Gbl.WebService.PlgCod);
-   DB_QueryINSERT (Query,"can not insert new key");
+		  WSKey,UsrCod,Gbl.WebService.PlgCod);
+   DB_QueryINSERT_new ("can not insert new key");
 
    return SOAP_OK;
   }
@@ -3446,7 +3444,6 @@ int swad__sendNotice (struct soap *soap,
                       struct swad__sendNoticeOutput *sendNoticeOut)	// output
   {
    int ReturnCode;
-   char Query[512 + Cns_MAX_BYTES_TEXT];
    long NotCod;
 
    /***** Initializations *****/
@@ -3486,15 +3483,15 @@ int swad__sendNotice (struct soap *soap,
 
    /***** Insert notice in the database *****/
    /* Build query */
-   sprintf (Query,"INSERT INTO notices"
+   DB_BuildQuery ("INSERT INTO notices"
 	          " (CrsCod,UsrCod,CreatTime,Content,Status)"
                   " VALUES"
                   " (%ld,%ld,NOW(),'%s',%u)",
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-            body,(unsigned) Not_ACTIVE_NOTICE);
+		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+		  body,(unsigned) Not_ACTIVE_NOTICE);
 
    /* Get the code of the inserted item */
-   NotCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
+   NotCod = DB_QueryINSERTandReturnCode_new ("can not create message");
 
    /***** Create notifications *****/
    // TODO: create notifications
@@ -4076,10 +4073,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 /*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
-	 char QueryDebug[512 * 1024];
-
-	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'degrees = %s')",degrees);
-	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
+	 DB_BuildQuery ("INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'degrees = %s')",degrees);
+	 DB_QueryINSERT_new ("Error inserting in debug table");
 	}
 */
    while (*Ptr)
@@ -4154,10 +4149,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 /*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
-	 char QueryDebug[512 * 1024];
-
-	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Una pregunta devuelta')");
-	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
+	 DB_BuildQuery ("INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Una pregunta devuelta')");
+	 DB_QueryINSERT_new ("Error inserting in debug table");
 	}
 */
       /* Get next question */

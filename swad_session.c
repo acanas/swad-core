@@ -156,31 +156,27 @@ void Ses_CloseSession (void)
 
 void Ses_InsertSessionInDB (void)
   {
-   char Query[1024 +
-              Cns_BYTES_SESSION_ID +
-              Pwd_BYTES_ENCRYPTED_PASSWORD];
-
    /***** Insert session in the database *****/
    if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
       Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
-   sprintf (Query,"INSERT INTO sessions"
+   DB_BuildQuery ("INSERT INTO sessions"
 	          " (SessionId,UsrCod,Password,Role,"
                   "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
                   " VALUES"
                   " ('%s',%ld,'%s',%u,"
                   "%ld,%ld,%ld,%ld,%ld,NOW(),NOW(),%u)",
-            Gbl.Session.Id,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.Usrs.Me.UsrDat.Password,
-            (unsigned) Gbl.Usrs.Me.Role.Logged,
-            Gbl.CurrentCty.Cty.CtyCod,
-            Gbl.CurrentIns.Ins.InsCod,
-            Gbl.CurrentCtr.Ctr.CtrCod,
-            Gbl.CurrentDeg.Deg.DegCod,
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.Search.WhatToSearch);
-   DB_QueryINSERT (Query,"can not create session");
+		  Gbl.Session.Id,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  Gbl.Usrs.Me.UsrDat.Password,
+		  (unsigned) Gbl.Usrs.Me.Role.Logged,
+		  Gbl.CurrentCty.Cty.CtyCod,
+		  Gbl.CurrentIns.Ins.InsCod,
+		  Gbl.CurrentCtr.Ctr.CtrCod,
+		  Gbl.CurrentDeg.Deg.DegCod,
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Gbl.Search.WhatToSearch);
+   DB_QueryINSERT_new ("can not create session");
   }
 
 /*****************************************************************************/
@@ -337,47 +333,27 @@ bool Ses_GetSessionData (void)
 void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
                               const char *ParamName,const char *ParamValue)
   {
-   char *Query;
-   size_t LengthParamName;
-   size_t LengthParamValue;
-   size_t MaxLength;
-
    /***** Before of inserting the first hidden parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/
    Ses_RemoveHiddenParFromThisSession ();
 
    /***** For a unique session-action-parameter, don't insert a parameter more than one time *****/
    if (ParamName)
-      if ((LengthParamName = strlen (ParamName)))
+      if (ParamName[0])
 	 if (!Ses_CheckIfHiddenParIsAlreadyInDB (NextAction,ParamName))
 	   {
-	    /***** Allocate space for query *****/
-	    if (ParamValue)
-	       LengthParamValue = strlen (ParamValue);
-	    else
-	       LengthParamValue = 0;
-	    MaxLength = 256 +
-			Cns_BYTES_SESSION_ID +
-			LengthParamName +
-			LengthParamValue;
-	    if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-	       Lay_NotEnoughMemoryExit ();
-
 	    /***** Insert parameter in the database *****/
-	    sprintf (Query,"INSERT INTO hidden_params"
+	    DB_BuildQuery ("INSERT INTO hidden_params"
 			   " (SessionId,Action,ParamName,ParamValue)"
 			   " VALUES"
 			   " ('%s',%ld,'%s','%s')",
-		     Gbl.Session.Id,
-		     Act_GetActCod (NextAction),
-		     ParamName,
-		     LengthParamValue ? ParamValue :
+			   Gbl.Session.Id,
+			   Act_GetActCod (NextAction),
+			   ParamName,
+			   ParamValue ? ParamValue :
 					"");
-	    DB_QueryINSERT (Query,"can not create hidden parameter");
+	    DB_QueryINSERT_new ("can not create hidden parameter");
 	    Gbl.HiddenParamsInsertedIntoDB = true;
-
-	    /***** Free query *****/
-	    free ((void *) Query);
 	   }
   }
 

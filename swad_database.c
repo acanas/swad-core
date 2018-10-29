@@ -3207,13 +3207,6 @@ void DB_QueryINSERT_new (const char *MsgError)
       DB_ExitOnMySQLError (MsgError);
   }
 
-void DB_QueryINSERT (const char *Query,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError (MsgError);
-  }
-
 /*****************************************************************************/
 /** Make an INSERT query in database and return code of last inserted item ***/
 /*****************************************************************************/
@@ -3232,16 +3225,6 @@ long DB_QueryINSERTandReturnCode_new (const char *MsgError)
    free ((void *) Gbl.DB.QueryPtr);
    Gbl.DB.QueryPtr = NULL;
    if (Result)
-      DB_ExitOnMySQLError (MsgError);
-
-   /***** Return the code of the inserted item *****/
-   return (long) mysql_insert_id (&Gbl.mysql);
-  }
-
-long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError)
-  {
-   /***** Query database *****/
-   if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError (MsgError);
 
    /***** Return the code of the inserted item *****/

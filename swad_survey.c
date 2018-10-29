@@ -2255,25 +2255,22 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_survey_X;
-   char Query[1024 +
-              Svy_MAX_BYTES_SURVEY_TITLE +
-              Cns_MAX_BYTES_TEXT];
 
    /***** Create a new survey *****/
-   sprintf (Query,"INSERT INTO surveys"
+   DB_BuildQuery ("INSERT INTO surveys"
 	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
                   " VALUES"
                   " ('%s',%ld,'N',%u,%ld,"
                   "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s')",
-            Sco_ScopeDB[Svy->Scope],Svy->Cod,
-            Svy->Roles,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Svy->TimeUTC[Svy_START_TIME],
-            Svy->TimeUTC[Svy_END_TIME  ],
-            Svy->Title,
-            Txt);
-   Svy->SvyCod = DB_QueryINSERTandReturnCode (Query,"can not create new survey");
+		  Sco_ScopeDB[Svy->Scope],Svy->Cod,
+		  Svy->Roles,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  Svy->TimeUTC[Svy_START_TIME],
+		  Svy->TimeUTC[Svy_END_TIME  ],
+		  Svy->Title,
+		  Txt);
+   Svy->SvyCod = DB_QueryINSERTandReturnCode_new ("can not create new survey");
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
@@ -2397,7 +2394,6 @@ void Svy_RemoveGroupsOfType (long GrpTypCod)
 static void Svy_CreateGrps (long SvyCod)
   {
    unsigned NumGrpSel;
-   char Query[256];
 
    /***** Create groups of the survey *****/
    for (NumGrpSel = 0;
@@ -2405,12 +2401,12 @@ static void Svy_CreateGrps (long SvyCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO svy_grp"
+      DB_BuildQuery ("INSERT INTO svy_grp"
 	             " (SvyCod,GrpCod)"
 	             " VALUES"
 	             " (%ld,%ld)",
-               SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT (Query,"can not associate a group to a survey");
+		     SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+      DB_QueryINSERT_new ("can not associate a group to a survey");
      }
   }
 
@@ -3759,14 +3755,12 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
 static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
   {
-   char Query[256];
-
-   sprintf (Query,"INSERT INTO svy_users"
+   DB_BuildQuery ("INSERT INTO svy_users"
 	          " (SvyCod,UsrCod)"
                   " VALUES"
                   " (%ld,%ld)",
-            SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT (Query,"can not register that you have answered the survey");
+		  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT_new ("can not register that you have answered the survey");
   }
 
 /*****************************************************************************/

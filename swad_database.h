@@ -46,10 +46,8 @@ unsigned long DB_QueryCOUNT_new (const char *MsgError);
 unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError);
 
 void DB_QueryINSERT_new (const char *MsgError);
-void DB_QueryINSERT (const char *Query,const char *MsgError);
 
 long DB_QueryINSERTandReturnCode_new (const char *MsgError);
-long DB_QueryINSERTandReturnCode (const char *Query,const char *MsgError);
 
 void DB_QueryREPLACE_new (const char *MsgError);
 

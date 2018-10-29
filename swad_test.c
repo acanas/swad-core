@@ -6294,15 +6294,13 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
   {
-   char Query[256 + Tst_MAX_BYTES_TAG];
-
    /***** Insert new tag into tst_tags table *****/
-   sprintf (Query,"INSERT INTO tst_tags"
+   DB_BuildQuery ("INSERT INTO tst_tags"
 	          " (CrsCod,ChangeTime,TagTxt,TagHidden)"
                   " VALUES"
                   " (%ld,NOW(),'%s','N')",
-            CrsCod,TagTxt);
-   return DB_QueryINSERTandReturnCode (Query,"can not create new tag");
+		  CrsCod,TagTxt);
+   return DB_QueryINSERTandReturnCode_new ("can not create new tag");
   }
 
 /*****************************************************************************/
@@ -6596,7 +6594,6 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 
 static void Tst_InsertTagsIntoDB (void)
   {
-   char Query[256];
    unsigned NumTag;
    unsigned TagIdx;
    long TagCod;
@@ -6613,12 +6610,12 @@ static void Tst_InsertTagsIntoDB (void)
             TagCod = Tst_CreateNewTag (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.Tags.Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
-         sprintf (Query,"INSERT INTO tst_question_tags"
+         DB_BuildQuery ("INSERT INTO tst_question_tags"
                         " (QstCod,TagCod,TagInd)"
                         " VALUES"
                         " (%ld,%ld,%u)",
-                  Gbl.Test.QstCod,TagCod,TagIdx);
-         DB_QueryINSERT (Query,"can not create tag");
+			Gbl.Test.QstCod,TagCod,TagIdx);
+         DB_QueryINSERT_new ("can not create tag");
 
          TagIdx++;
         }
@@ -6646,14 +6643,14 @@ static void Tst_InsertAnswersIntoDB (void)
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         sprintf (Query,"INSERT INTO tst_answers"
+         DB_BuildQuery ("INSERT INTO tst_answers"
                         " (QstCod,AnsInd,Answer,Feedback,"
                         "ImageName,ImageTitle,ImageURL,Correct)"
                         " VALUES"
                         " (%ld,0,%ld,'','','','','Y')",
-                  Gbl.Test.QstCod,
-                  Gbl.Test.Answer.Integer);
-         DB_QueryINSERT (Query,"can not create answer");
+			Gbl.Test.QstCod,
+			Gbl.Test.Answer.Integer);
+         DB_QueryINSERT_new ("can not create answer");
          break;
       case Tst_ANS_FLOAT:
 	 Str_SetDecimalPointToUS ();		// To print the floating point as a dot
@@ -6661,26 +6658,26 @@ static void Tst_InsertAnswersIntoDB (void)
    	      i < 2;
    	      i++)
            {
-            sprintf (Query,"INSERT INTO tst_answers"
+            DB_BuildQuery ("INSERT INTO tst_answers"
                            " (QstCod,AnsInd,Answer,Feedback,"
                            "ImageName,ImageTitle,ImageURL,Correct)"
                            " VALUES"
                            " (%ld,%u,'%lg','','','','','Y')",
-                     Gbl.Test.QstCod,i,
-                     Gbl.Test.Answer.FloatingPoint[i]);
-            DB_QueryINSERT (Query,"can not create answer");
+			   Gbl.Test.QstCod,i,
+			   Gbl.Test.Answer.FloatingPoint[i]);
+            DB_QueryINSERT_new ("can not create answer");
            }
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
       case Tst_ANS_TRUE_FALSE:
-         sprintf (Query,"INSERT INTO tst_answers"
+         DB_BuildQuery ("INSERT INTO tst_answers"
                         " (QstCod,AnsInd,Answer,Feedback,"
                         "ImageName,ImageTitle,ImageURL,Correct)"
                         " VALUES"
                         " (%ld,0,'%c','','','','','Y')",
-                  Gbl.Test.QstCod,
-                  Gbl.Test.Answer.TF);
-         DB_QueryINSERT (Query,"can not create answer");
+			Gbl.Test.QstCod,
+			Gbl.Test.Answer.TF);
+         DB_QueryINSERT_new ("can not create answer");
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -6690,20 +6687,20 @@ static void Tst_InsertAnswersIntoDB (void)
               NumOpt++)
             if (Gbl.Test.Answer.Options[NumOpt].Text[0])
               {
-               sprintf (Query,"INSERT INTO tst_answers"
+               DB_BuildQuery ("INSERT INTO tst_answers"
                               " (QstCod,AnsInd,Answer,Feedback,"
                               "ImageName,ImageTitle,ImageURL,Correct)"
                               " VALUES"
                               " (%ld,%u,'%s','%s','%s','%s','%s','%c')",
-                        Gbl.Test.QstCod,NumOpt,
-                        Gbl.Test.Answer.Options[NumOpt].Text,
-                        Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
-                        Gbl.Test.Answer.Options[NumOpt].Image.Name,
-                        Gbl.Test.Answer.Options[NumOpt].Image.Title ? Gbl.Test.Answer.Options[NumOpt].Image.Title : "",
-                        Gbl.Test.Answer.Options[NumOpt].Image.URL   ? Gbl.Test.Answer.Options[NumOpt].Image.URL   : "",
-                        Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
-                                                                  'N');
-               DB_QueryINSERT (Query,"can not create answer");
+			      Gbl.Test.QstCod,NumOpt,
+			      Gbl.Test.Answer.Options[NumOpt].Text,
+			      Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
+			      Gbl.Test.Answer.Options[NumOpt].Image.Name,
+			      Gbl.Test.Answer.Options[NumOpt].Image.Title ? Gbl.Test.Answer.Options[NumOpt].Image.Title : "",
+			      Gbl.Test.Answer.Options[NumOpt].Image.URL   ? Gbl.Test.Answer.Options[NumOpt].Image.URL   : "",
+			      Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
+									'N');
+               DB_QueryINSERT_new ("can not create answer");
 
                /* Update image status */
 	       if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
@@ -7538,19 +7535,17 @@ void Tst_SelDatesToSeeMyTestResults (void)
 
 static long Tst_CreateTestResultInDB (void)
   {
-   char Query[256];
-
    /***** Insert new test result into table *****/
-   sprintf (Query,"INSERT INTO tst_exams"
+   DB_BuildQuery ("INSERT INTO tst_exams"
 	          " (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
                   " VALUES"
                   " (%ld,%ld,'%c',NOW(),%u)",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Gbl.Test.AllowTeachers ? 'Y' :
-        	                     'N',
-            Gbl.Test.NumQsts);
-   return DB_QueryINSERTandReturnCode (Query,"can not create new test result");
+		  Gbl.CurrentCrs.Crs.CrsCod,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  Gbl.Test.AllowTeachers ? 'Y' :
+					   'N',
+		  Gbl.Test.NumQsts);
+   return DB_QueryINSERTandReturnCode_new ("can not create new test result");
   }
 
 /*****************************************************************************/
@@ -8440,9 +8435,6 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
 
 static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
   {
-   char Query[256 +
-              Tst_MAX_BYTES_INDEXES_ONE_QST +
-              Tst_MAX_BYTES_ANSWERS_ONE_QST];
    char Indexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
    char Answers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
@@ -8453,17 +8445,17 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
 
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   sprintf (Query,"INSERT INTO tst_exam_questions"
+   DB_BuildQuery ("INSERT INTO tst_exam_questions"
 		  " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		  " VALUES"
 		  " (%ld,%ld,%u,'%lf','%s','%s')",
-	    TstCod,QstCod,
-	    NumQst,	// 0, 1, 2, 3...
-	    Score,
-	    Indexes,
-	    Answers);
+		  TstCod,QstCod,
+		  NumQst,	// 0, 1, 2, 3...
+		  Score,
+		  Indexes,
+		  Answers);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryINSERT (Query,"can not insert a question of a test result");
+   DB_QueryINSERT_new ("can not insert a question of a test result");
   }
 
 /*****************************************************************************/
