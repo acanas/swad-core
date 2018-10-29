@@ -3166,26 +3166,6 @@ unsigned long DB_QueryCOUNT_new (const char *MsgError)
    return NumRows;
   }
 
-unsigned long DB_QueryCOUNT (const char *Query,const char *MsgError)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
-   /***** Make query "SELECT COUNT(*) FROM..." *****/
-   DB_QuerySELECT (Query,&mysql_res,MsgError);
-
-   /***** Get number of rows *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%lu",&NumRows) != 1)
-      Lay_ShowErrorAndExit ("Error when counting number of rows.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumRows;
-  }
-
 /*****************************************************************************/
 /******************** Make an INSERT query in database ***********************/
 /*****************************************************************************/

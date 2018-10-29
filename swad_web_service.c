@@ -327,7 +327,6 @@ static int Svc_CheckIdSession (const char *IdSession)
   {
    const char *Ptr;
    unsigned i;
-   char Query[128 + Cns_BYTES_SESSION_ID];
 
    /***** Check if pointer is NULL *****/
    if (IdSession == NULL)
@@ -358,9 +357,9 @@ static int Svc_CheckIdSession (const char *IdSession)
      }
 
    /***** Query if session identifier already exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",
-            IdSession);
-   if (DB_QueryCOUNT (Query,"can not get session data") != 1)
+   DB_BuildQuery ("SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",
+                  IdSession);
+   if (DB_QueryCOUNT_new ("can not get session data") != 1)
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
@@ -407,8 +406,6 @@ static int Svc_CheckWSKey (char WSKey[Svc_BYTES_WS_KEY + 1])
 
 static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
   {
-   char Query[512];
-
    /***** Check if course code is correct *****/
    if (CrsCod <= 0)
       return soap_sender_fault (Gbl.soap,
@@ -416,9 +413,8 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 	                        "Course code must be a integer greater than 0");
 
    /***** Query if course code already exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM courses WHERE CrsCod=%ld",
-            CrsCod);
-   if (DB_QueryCOUNT (Query,"can not get course") != 1)
+   DB_BuildQuery ("SELECT COUNT(*) FROM courses WHERE CrsCod=%ld",CrsCod);
+   if (DB_QueryCOUNT_new ("can not get course") != 1)
       return soap_sender_fault (Gbl.soap,
 	                        "Bad course code",
 	                        "Course code does not exist in database");
@@ -427,10 +423,12 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
    if (GrpCod > 0)	// <=0 means "the whole course"
      {
       /***** Query if group code already exists in database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM crs_grp_types,crs_grp"
-                     " WHERE crs_grp_types.CrsCod=%ld AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod AND crs_grp.GrpCod=%ld",
-               CrsCod,GrpCod);
-      if (DB_QueryCOUNT (Query,"can not get group") != 1)
+      DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp_types,crs_grp"
+                     " WHERE crs_grp_types.CrsCod=%ld"
+                     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+                     " AND crs_grp.GrpCod=%ld",
+		     CrsCod,GrpCod);
+      if (DB_QueryCOUNT_new ("can not get group") != 1)
          return soap_sender_fault (Gbl.soap,
                                    "Bad group code",
                                    "Group code does not exist in database or it's not a group of the specified course");
@@ -741,8 +739,6 @@ static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword)	// Output
   {
-   char Query[256 + Cns_MAX_CHARS_EMAIL_ADDRESS];
-
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
    Str_Copy (NewNicknameWithoutArroba,NewNicknameWithArroba,
@@ -753,9 +749,9 @@ static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
       Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
       /***** Check if the new nickname matches any of the nicknames of other users *****/
-      sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames WHERE Nickname='%s'",
-	       NewNicknameWithoutArroba);
-      if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames WHERE Nickname='%s'",
+		     NewNicknameWithoutArroba);
+      if (DB_QueryCOUNT_new ("can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
 	 return Svc_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
      }
    else        // New nickname is not valid
@@ -765,10 +761,10 @@ static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
       /***** Check if the new email matches any of the confirmed emails of other users *****/
-      sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
+      DB_BuildQuery ("SELECT COUNT(*) FROM usr_emails"
 		     " WHERE E_mail='%s' AND Confirmed='Y'",
-	       NewEmail);
-      if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
+		     NewEmail);
+      if (DB_QueryCOUNT_new ("can not check if email already existed"))	// An email of another user is the same that my email
 	 return Svc_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
      }
    else	// New email is not valid
@@ -3617,12 +3613,10 @@ static int Svc_GetTstConfig (long CrsCod)
 
 static int Svc_GetNumTestQuestionsInCrs (long CrsCod)
   {
-   char Query[512];
-
    /***** Get number of questions *****/
    // Reject questions with any tag hidden
    // Select only questions with tags
-   sprintf (Query,"SELECT COUNT(*)"
+   DB_BuildQuery ("SELECT COUNT(*)"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
 		  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod NOT IN"
@@ -3632,8 +3626,8 @@ static int Svc_GetNumTestQuestionsInCrs (long CrsCod)
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
 		  " AND tst_tags.CrsCod=%ld",
-            CrsCod,CrsCod,CrsCod);
-   return (int) DB_QueryCOUNT (Query,"can not get number of test questions");
+		  CrsCod,CrsCod,CrsCod);
+   return (int) DB_QueryCOUNT_new ("can not get number of test questions");
   }
 
 /*****************************************************************************/

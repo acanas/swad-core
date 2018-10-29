@@ -62,11 +62,9 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
 
 void Ses_GetNumSessions (void)
   {
-   char Query[128];
-
    /***** Get the number of open sessions from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM sessions");
-   Gbl.Session.NumSessions = (unsigned) DB_QueryCOUNT (Query,"can not get the number of open sessions");
+   DB_BuildQuery ("SELECT COUNT(*) FROM sessions");
+   Gbl.Session.NumSessions = (unsigned) DB_QueryCOUNT_new ("can not get the number of open sessions");
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = (unsigned long) (Gbl.Session.NumSessions/Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED) * 1000UL;
    if (Gbl.Usrs.Connected.TimeToRefreshInMs < Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS)
@@ -107,12 +105,9 @@ void Ses_CreateSession (void)
 
 bool Ses_CheckIfSessionExists (const char *IdSes)
   {
-   char Query[128 + Cns_BYTES_SESSION_ID];
-
    /***** Get if session already exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",
-            IdSes);
-   return (DB_QueryCOUNT (Query,"can not check if a session already existed") != 0);
+   DB_BuildQuery ("SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",IdSes);
+   return (DB_QueryCOUNT_new ("can not check if a session already existed") != 0);
   }
 
 /*****************************************************************************/
@@ -393,13 +388,11 @@ void Ses_RemoveHiddenParFromExpiredSessions (void)
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
                                                const char *ParamName)
   {
-   char Query[512 + Cns_BYTES_SESSION_ID];
-
    /***** Get a hidden parameter from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM hidden_params"
+   DB_BuildQuery ("SELECT COUNT(*) FROM hidden_params"
                   " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
-            Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
-   return (DB_QueryCOUNT (Query,"can not check if a hidden parameter is already in database") != 0);
+		  Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
+   return (DB_QueryCOUNT_new ("can not check if a hidden parameter is already in database") != 0);
   }
 
 /*****************************************************************************/
