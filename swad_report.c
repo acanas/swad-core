@@ -778,7 +778,6 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_Other_actions;
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -795,13 +794,13 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	    Txt_Hits_per_action);
 
    /***** Make the query *****/
-   sprintf (Query,"SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
+   DB_BuildQuery ("SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
                   " WHERE ClickTime>=FROM_UNIXTIME(%ld) AND UsrCod=%ld"
 		  " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
-            (long) Report->UsrFigures.FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Rep_MAX_ACTIONS);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
+		  (long) Report->UsrFigures.FirstClickTimeUTC,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  Rep_MAX_ACTIONS);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get clicks");
 
    /***** Compute maximum number of hits per action *****/
    Rep_ComputeMaxAndTotalHits (&Report->Hits,NumRows,mysql_res,1);
@@ -927,11 +926,10 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
 
 static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
   {
-   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   sprintf (Query,"SELECT MAX(N) FROM ("
+   DB_BuildQuery ("SELECT MAX(N) FROM ("
 		  // Clicks without course selected ---------------------------
 	          "SELECT "
 	          "-1 AS CrsCod,"
@@ -960,14 +958,14 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
 	          " GROUP BY CrsCod,Year,Role"
 		  // ----------------------------------------------------------
 	          ") AS hits_per_crs_year",
-	    (unsigned) Rol_UNK,
-            (long) Report->UsrFigures.FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    (long) Report->UsrFigures.FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    (unsigned) Rol_STD,
-	    (unsigned) Rol_TCH);
-   DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
+		  (unsigned) Rol_UNK,
+		  (long) Report->UsrFigures.FirstClickTimeUTC,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (long) Report->UsrFigures.FirstClickTimeUTC,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) Rol_STD,
+		  (unsigned) Rol_TCH);
+   DB_QuerySELECT_new (&mysql_res,"can not get last question index");
 
    /***** Get number of users *****/
    Report->MaxHitsPerYear = 0;

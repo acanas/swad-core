@@ -2512,7 +2512,7 @@ unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /*****************************************************************************/
 // Returns number of institutions found
 
-unsigned Ins_ListInssFound (const char *Query)
+unsigned Ins_ListInssFound (void)
   {
    extern const char *Txt_institution;
    extern const char *Txt_institutions;
@@ -2523,7 +2523,7 @@ unsigned Ins_ListInssFound (const char *Query)
    struct Instit Ins;
 
    /***** Query database *****/
-   if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
+   if ((NumInss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions")))
      {
       /***** Start box and table *****/
       /* Number of institutions found */

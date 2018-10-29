@@ -175,7 +175,6 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
                                      bool OnlyConfirmedIDs)
   {
    char SubQuery[256];
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t MaxLength;
@@ -191,34 +190,34 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 
       /***** Allocate memory for query string *****/
       MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
+      if ((Gbl.DB.QueryPtr = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get user's code(s) from database *****/
-      Str_Copy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
-				      " WHERE usr_IDs.UsrID IN (" :
-				      "SELECT DISTINCT(UsrCod) FROM usr_IDs"
-				      " WHERE UsrID IN (",
+      Str_Copy (Gbl.DB.QueryPtr,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
+					        " WHERE usr_IDs.UsrID IN (" :
+					        "SELECT DISTINCT(UsrCod) FROM usr_IDs"
+					        " WHERE UsrID IN (",
 		MaxLength);
       for (NumID = 0;
 	   NumID < UsrDat->IDs.Num;
 	   NumID++)
 	{
 	 if (NumID)
-	    Str_Concat (Query,",",
+	    Str_Concat (Gbl.DB.QueryPtr,",",
 	                MaxLength);
 	 sprintf (SubQuery,"'%s'",UsrDat->IDs.List[NumID].ID);
 
-	 Str_Concat (Query,SubQuery,
+	 Str_Concat (Gbl.DB.QueryPtr,SubQuery,
 	             MaxLength);
 	}
-      Str_Concat (Query,")",
+      Str_Concat (Gbl.DB.QueryPtr,")",
                   MaxLength);
 
       if (CheckPassword)
 	{
 	 if (OnlyConfirmedIDs)
-	    Str_Concat (Query," AND usr_IDs.Confirmed='Y'",
+	    Str_Concat (Gbl.DB.QueryPtr," AND usr_IDs.Confirmed='Y'",
 	                MaxLength);
 
 	 // Get user's code if I have written the correct password
@@ -226,18 +225,14 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	 sprintf (SubQuery," AND usr_IDs.UsrCod=usr_data.UsrCod"
 			   " AND (usr_data.Password='%s' OR usr_data.Password='')",
 		  EncryptedPassword);
-	 Str_Concat (Query,SubQuery,
+	 Str_Concat (Gbl.DB.QueryPtr,SubQuery,
 	             MaxLength);
 	}
       else if (OnlyConfirmedIDs)
-	 Str_Concat (Query," AND Confirmed='Y'",
+	 Str_Concat (Gbl.DB.QueryPtr," AND Confirmed='Y'",
 	             MaxLength);
 
-      ListUsrCods->NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
-
-      /***** Free memory for query string *****/
-      free ((void *) Query);
-
+      ListUsrCods->NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's codes");
       if (ListUsrCods->NumUsrs)
         {
 	 /***** Allocate space for the list of users' codes *****/

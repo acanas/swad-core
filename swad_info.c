@@ -1702,18 +1702,16 @@ static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
                                   char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
                                   char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
-   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   if (asprintf (&Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
-                        " WHERE CrsCod=%ld AND InfoType='%s'",
-                 CrsCod,Inf_NamesInDBForInfoType[InfoType]) < 0)
-      Lay_NotEnoughMemoryExit ();
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
+   DB_BuildQuery ("SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
+                  " WHERE CrsCod=%ld AND InfoType='%s'",
+                  CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get info text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)

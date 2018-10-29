@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 #include <time.h>		// For time
@@ -87,8 +89,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 static void Msg_ShowSentOrReceivedMessages (void);
 static unsigned long Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
-static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1],
-                                                          long UsrCod,
+static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (long UsrCod,
                                                           long FilterCrsCod,
                                                           const char *FilterFromToSubquery);
 
@@ -1344,16 +1345,15 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                  long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long MsgNum,NumMsgs;
    long MsgCod;
 
    /***** Get some of the messages received or sent by this user from database *****/
-   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,UsrCod,
+   Msg_ConstructQueryToSelectSentOrReceivedMsgs (UsrCod,
                                                  FilterCrsCod,FilterFromToSubquery);
-   NumMsgs = DB_QuerySELECT (Query,&mysql_res,"can not get list of messages");
+   NumMsgs = DB_QuerySELECT_new (&mysql_res,"can not get list of messages");
 
    /***** Delete each message *****/
    for (MsgNum = 0;
@@ -1668,7 +1668,6 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
-   char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1721,9 +1720,9 @@ static void Msg_ShowSentOrReceivedMessages (void)
      }
 
    /***** Get messages from database *****/
-   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,Gbl.Usrs.Me.UsrDat.UsrCod,
+   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Gbl.Usrs.Me.UsrDat.UsrCod,
                                                  Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get messages");
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get messages");
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Start box with messages *****/
@@ -1858,17 +1857,12 @@ static void Msg_PutLinkToViewBannedUsers(void)
 /********* Generate a query to select messages received or sent **************/
 /*****************************************************************************/
 
-static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1],
-                                                          long UsrCod,
+static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (long UsrCod,
                                                           long FilterCrsCod,
                                                           const char *FilterFromToSubquery)
   {
-   char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
-   char *PtrQuery;
+   char *SubQuery;
    const char *StrUnreadMsg;
-
-   PtrQuery = Gbl.Msg.FilterContent[0] ? SubQuery :
-	                                 Query;
 
    if (FilterCrsCod > 0)	// If origin course selected
       switch (Gbl.Msg.TypeOfMessages)
@@ -1877,58 +1871,70 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYT
             StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                         "");
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"(SELECT msg_rcv.MsgCod"
-        	                 " FROM msg_rcv,msg_snt,usr_data"
-                                 " WHERE msg_rcv.UsrCod=%ld%s"
-                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.CrsCod=%ld"
-                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
-                                 " UNION "
-                                 "(SELECT msg_rcv.MsgCod"
-        	                 " FROM msg_rcv,msg_snt_deleted,usr_data"
-                                 " WHERE msg_rcv.UsrCod=%ld%s"
-                                 " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
-                                 " AND msg_snt_deleted.CrsCod=%ld"
-                                 " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
-                        UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery,
-                        UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery);
+              {
+               if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
+				       " FROM msg_rcv,msg_snt,usr_data"
+				       " WHERE msg_rcv.UsrCod=%ld%s"
+				       " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				       " AND msg_snt.CrsCod=%ld"
+				       " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
+				       " UNION "
+				       "(SELECT msg_rcv.MsgCod"
+				       " FROM msg_rcv,msg_snt_deleted,usr_data"
+				       " WHERE msg_rcv.UsrCod=%ld%s"
+				       " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
+				       " AND msg_snt_deleted.CrsCod=%ld"
+				       " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
+			     UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery,
+			     UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery) < 0)
+                  Lay_NotEnoughMemoryExit ();
+              }
             else
-               sprintf (PtrQuery,"(SELECT msg_rcv.MsgCod"
-        	                 " FROM msg_rcv,msg_snt"
-                                 " WHERE msg_rcv.UsrCod=%ld%s"
-                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.CrsCod=%ld)"
-                                 " UNION "
-                                 "(SELECT msg_rcv.MsgCod"
-        	                 " FROM msg_rcv,msg_snt_deleted"
-                                 " WHERE msg_rcv.UsrCod=%ld%s"
-                                 " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
-                                 " AND msg_snt_deleted.CrsCod=%ld)",
-                        UsrCod,StrUnreadMsg,FilterCrsCod,
-                        UsrCod,StrUnreadMsg,FilterCrsCod);
+              {
+               if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
+				       " FROM msg_rcv,msg_snt"
+				       " WHERE msg_rcv.UsrCod=%ld%s"
+				       " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				       " AND msg_snt.CrsCod=%ld)"
+				       " UNION "
+				       "(SELECT msg_rcv.MsgCod"
+				       " FROM msg_rcv,msg_snt_deleted"
+				       " WHERE msg_rcv.UsrCod=%ld%s"
+				       " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
+				       " AND msg_snt_deleted.CrsCod=%ld)",
+			     UsrCod,StrUnreadMsg,FilterCrsCod,
+			     UsrCod,StrUnreadMsg,FilterCrsCod) < 0)
+                  Lay_NotEnoughMemoryExit ();
+              }
             break;
          case Msg_MESSAGES_SENT:
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"(SELECT DISTINCT msg_snt.MsgCod"
-        	                 " FROM msg_snt,msg_rcv,usr_data"
-                                 " WHERE msg_snt.UsrCod=%ld"
-                                 " AND msg_snt.CrsCod=%ld"
-                                 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
-                                 " UNION "
-                                 "(SELECT DISTINCT msg_snt.MsgCod"
-        	                 " FROM msg_snt,msg_rcv_deleted,usr_data"
-                                 " WHERE msg_snt.UsrCod=%ld"
-                                 " AND msg_snt.CrsCod=%ld"
-                                 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-                                 " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
-                        UsrCod,FilterCrsCod,FilterFromToSubquery,
-                        UsrCod,FilterCrsCod,FilterFromToSubquery);
+              {
+               if (asprintf (&SubQuery,"(SELECT DISTINCT msg_snt.MsgCod"
+				       " FROM msg_snt,msg_rcv,usr_data"
+				       " WHERE msg_snt.UsrCod=%ld"
+				       " AND msg_snt.CrsCod=%ld"
+				       " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+				       " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
+				       " UNION "
+				       "(SELECT DISTINCT msg_snt.MsgCod"
+				       " FROM msg_snt,msg_rcv_deleted,usr_data"
+				       " WHERE msg_snt.UsrCod=%ld"
+				       " AND msg_snt.CrsCod=%ld"
+				       " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+				       " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
+			     UsrCod,FilterCrsCod,FilterFromToSubquery,
+			     UsrCod,FilterCrsCod,FilterFromToSubquery) < 0)
+                  Lay_NotEnoughMemoryExit ();
+              }
             else
-               sprintf (PtrQuery,"SELECT MsgCod"
-        	                 " FROM msg_snt"
-                                 " WHERE UsrCod=%ld AND CrsCod=%ld",
-                        UsrCod,FilterCrsCod);
+              {
+               if (asprintf (&SubQuery,"SELECT MsgCod"
+				       " FROM msg_snt"
+				       " WHERE UsrCod=%ld AND CrsCod=%ld",
+			     UsrCod,FilterCrsCod) < 0)
+                  Lay_NotEnoughMemoryExit ();
+              }
             break;
          default: // Not aplicable here
             break;
@@ -1941,50 +1947,58 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYT
               {
                StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                            "");
-               sprintf (PtrQuery,"(SELECT msg_rcv.MsgCod"
-        	                 " FROM msg_rcv,msg_snt,usr_data"
-                                 " WHERE msg_rcv.UsrCod=%ld%s"
-                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
-                                 " UNION "
-                                 "(SELECT msg_rcv.MsgCod"
-        	                 " FROM msg_rcv,msg_snt_deleted,usr_data"
-                                 " WHERE msg_rcv.UsrCod=%ld%s"
-                                 " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
-                                 " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
-                        UsrCod,StrUnreadMsg,FilterFromToSubquery,
-                        UsrCod,StrUnreadMsg,FilterFromToSubquery);
+               if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
+				       " FROM msg_rcv,msg_snt,usr_data"
+				       " WHERE msg_rcv.UsrCod=%ld%s"
+				       " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				       " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
+				       " UNION "
+				       "(SELECT msg_rcv.MsgCod"
+				       " FROM msg_rcv,msg_snt_deleted,usr_data"
+				       " WHERE msg_rcv.UsrCod=%ld%s"
+				       " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
+				       " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
+			     UsrCod,StrUnreadMsg,FilterFromToSubquery,
+			     UsrCod,StrUnreadMsg,FilterFromToSubquery) < 0)
+                  Lay_NotEnoughMemoryExit ();
               }
             else
               {
                StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND Open='N'" :
         	                                            "");
-               sprintf (PtrQuery,"SELECT MsgCod"
-        	                 " FROM msg_rcv"
-                                 " WHERE UsrCod=%ld%s",
-                        UsrCod,StrUnreadMsg);
+               if (asprintf (&SubQuery,"SELECT MsgCod"
+				       " FROM msg_rcv"
+				       " WHERE UsrCod=%ld%s",
+			     UsrCod,StrUnreadMsg) < 0)
+                  Lay_NotEnoughMemoryExit ();
               }
             break;
          case Msg_MESSAGES_SENT:
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"(SELECT msg_snt.MsgCod"
-        	                 " FROM msg_snt,msg_rcv,usr_data"
-                                 " WHERE msg_snt.UsrCod=%ld"
-                                 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
-                                 " UNION "
-                                 "(SELECT msg_snt.MsgCod"
-        	                 " FROM msg_snt,msg_rcv_deleted,usr_data"
-                                 " WHERE msg_snt.UsrCod=%ld"
-                                 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-                                 " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
-                        UsrCod,FilterFromToSubquery,
-                        UsrCod,FilterFromToSubquery);
+              {
+               if (asprintf (&SubQuery,"(SELECT msg_snt.MsgCod"
+				       " FROM msg_snt,msg_rcv,usr_data"
+				       " WHERE msg_snt.UsrCod=%ld"
+				       " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+				       " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
+				       " UNION "
+				       "(SELECT msg_snt.MsgCod"
+				       " FROM msg_snt,msg_rcv_deleted,usr_data"
+				       " WHERE msg_snt.UsrCod=%ld"
+				       " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+				       " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
+			     UsrCod,FilterFromToSubquery,
+			     UsrCod,FilterFromToSubquery) < 0)
+                  Lay_NotEnoughMemoryExit ();
+              }
             else
-               sprintf (PtrQuery,"SELECT MsgCod"
-        	                 " FROM msg_snt"
-                                 " WHERE UsrCod=%ld",
-                        UsrCod);
+              {
+               if (asprintf (&SubQuery,"SELECT MsgCod"
+				       " FROM msg_snt"
+				       " WHERE UsrCod=%ld",
+                             UsrCod) < 0)
+                  Lay_NotEnoughMemoryExit ();
+              }
             break;
          default: // Not aplicable here
             break;
@@ -1992,14 +2006,19 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYT
 
    if (Gbl.Msg.FilterContent[0])
       /* Match against the content written in filter form */
-      sprintf (Query,"SELECT MsgCod"
-	             " FROM msg_content"
-                     " WHERE MsgCod IN (SELECT MsgCod FROM (%s) AS M)"
-                     " AND MATCH (Subject,Content) AGAINST ('%s')",
-               SubQuery,Gbl.Msg.FilterContent);
+      DB_BuildQuery ("SELECT MsgCod"
+		     " FROM msg_content"
+		     " WHERE MsgCod IN (SELECT MsgCod FROM (%s) AS M)"
+		     " AND MATCH (Subject,Content) AGAINST ('%s')"
+		     " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
+                     SubQuery,Gbl.Msg.FilterContent);
+   else
+      DB_BuildQuery ("%s"
+	             " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
+	             SubQuery);
 
-   /* End the query ordering the result from most recent message to oldest */
-   Str_Concat (Query," ORDER BY MsgCod DESC",Msg_MAX_BYTES_MESSAGES_QUERY);
+   /***** Free memory used for subquery *****/
+   free ((void *) SubQuery);
   }
 
 /*****************************************************************************/

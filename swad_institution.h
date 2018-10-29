@@ -139,6 +139,6 @@ unsigned Ins_GetNumInssWithDegs (const char *SubQuery);
 unsigned Ins_GetNumInssWithCrss (const char *SubQuery);
 unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-unsigned Ins_ListInssFound (const char *Query);
+unsigned Ins_ListInssFound (void);
 
 #endif

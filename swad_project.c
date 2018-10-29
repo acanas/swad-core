@@ -169,7 +169,7 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
 
 static bool Prj_CheckIfICanEditProject (long PrjCod);
 
-static void Prj_GetDataOfProject (struct Project *Prj,const char *Query);
+static void Prj_GetDataOfProject (struct Project *Prj);
 static void Prj_ResetProject (struct Project *Prj);
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod);
@@ -2508,19 +2508,16 @@ long Prj_GetCourseOfProject (long PrjCod)
 
 void Prj_GetDataOfProjectByCod (struct Project *Prj)
   {
-   char *Query;
-
    if (Prj->PrjCod > 0)
      {
       /***** Build query *****/
-      if (asprintf (&Query,"SELECT PrjCod,CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
-			   "UNIX_TIMESTAMP(CreatTime),"
-			   "UNIX_TIMESTAMP(ModifTime),"
-			   "Title,Description,Knowledge,Materials,URL"
-			   " FROM projects"
-			   " WHERE PrjCod=%ld AND CrsCod=%ld",
-	            Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod) < 0)
-         Lay_NotEnoughMemoryExit ();
+      DB_BuildQuery ("SELECT PrjCod,CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
+		     "UNIX_TIMESTAMP(CreatTime),"
+		     "UNIX_TIMESTAMP(ModifTime),"
+		     "Title,Description,Knowledge,Materials,URL"
+		     " FROM projects"
+		     " WHERE PrjCod=%ld AND CrsCod=%ld",
+	             Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
       /*
       row[ 0]: PrjCod
       row[ 1]: CrsCod
@@ -2539,7 +2536,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
       */
 
       /***** Get data of project *****/
-      Prj_GetDataOfProject (Prj,Query);
+      Prj_GetDataOfProject (Prj);
      }
    else
      {
@@ -2553,7 +2550,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 /**************************** Get project data *******************************/
 /*****************************************************************************/
 
-static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
+static void Prj_GetDataOfProject (struct Project *Prj)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2564,7 +2561,7 @@ static void Prj_GetDataOfProject (struct Project *Prj,const char *Query)
    Prj_ResetProject (Prj);
 
    /***** Get data of project from database *****/
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get project data")) // Project found...
+   if (DB_QuerySELECT_new (&mysql_res,"can not get project data")) // Project found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
