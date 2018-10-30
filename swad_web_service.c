@@ -2680,7 +2680,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    char LongStr[1 + 10 + 1];
    struct UsrData UsrDat;
    unsigned NumCodsInList;
-   char *Query;
+   char *Query = NULL;
    char SubQuery[256];
    size_t Length = 0;	// Initialized to avoid warning
 
@@ -3146,7 +3146,7 @@ int swad__sendMessage (struct soap *soap,
    int ReturnCode;
    long ReplyUsrCod = -1L;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char *Query;
+   char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;

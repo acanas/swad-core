@@ -2418,7 +2418,7 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
 
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList)
   {
-   char *Query;
+   char *Query = NULL;
    char SubQuery[1 + 1 + 10 + 1];
    unsigned NumStd;
    unsigned NumStdsInAttEvent = 0;

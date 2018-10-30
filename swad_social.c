@@ -136,14 +136,16 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod);
 
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
-static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+static void Soc_BuildQueryToGetTimeline (char **Query,
+                                         Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline);
 static long Soc_GetPubCodFromSession (const char *FieldName);
 static void Soc_UpdateLastPubCodIntoSession (void);
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
 
-static void Soc_ShowTimeline (const char *Title,long NotCodToHighlight);
+static void Soc_ShowTimeline (char **Query,
+                              const char *Title,long NotCodToHighlight);
 static void Soc_PutIconsTimeline (void);
 
 static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
@@ -154,8 +156,8 @@ static void Soc_GetParamsWhichUsrs (void);
 
 static void Soc_ShowWarningYouDontFollowAnyUser (void);
 
-static void Soc_InsertNewPubsInTimeline (void);
-static void Soc_ShowOldPubsInTimeline (void);
+static void Soc_InsertNewPubsInTimeline (char **Query);
+static void Soc_ShowOldPubsInTimeline (char **Query);
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 
@@ -360,13 +362,15 @@ void Soc_ShowTimelineGbl2 (void)
 static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
   {
    extern const char *Txt_Timeline;
+   char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,
+   Soc_BuildQueryToGetTimeline (&Query,
+	                        Soc_TIMELINE_GBL,
                                 Soc_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Txt_Timeline,NotCod);
+   Soc_ShowTimeline (&Query,Txt_Timeline,NotCod);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -384,16 +388,18 @@ void Soc_ShowTimelineUsr (void)
 static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
   {
    extern const char *Txt_Timeline_OF_A_USER;
+   char *Query = NULL;
 
    /***** Build query to show timeline with publishings of a unique user *****/
-   Soc_BuildQueryToGetTimeline (Soc_TIMELINE_USR,
+   Soc_BuildQueryToGetTimeline (&Query,
+	                        Soc_TIMELINE_USR,
                                 Soc_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Timeline_OF_A_USER,
 	     Gbl.Usrs.Other.UsrDat.FirstName);
-   Soc_ShowTimeline (Gbl.Title,NotCod);
+   Soc_ShowTimeline (&Query,Gbl.Title,NotCod);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -405,6 +411,8 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
 
 void Soc_RefreshNewTimelineGbl (void)
   {
+   char *Query = NULL;
+
    if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
      {
       /***** Send, before the HTML, the refresh time *****/
@@ -415,11 +423,12 @@ void Soc_RefreshNewTimelineGbl (void)
       Soc_GetParamsWhichUsrs ();
 
       /***** Build query to get timeline *****/
-      Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,
+      Soc_BuildQueryToGetTimeline (&Query,
+	                           Soc_TIMELINE_GBL,
 				   Soc_GET_ONLY_NEW_PUBS);
 
       /***** Show new timeline *****/
-      Soc_InsertNewPubsInTimeline ();
+      Soc_InsertNewPubsInTimeline (&Query);
 
       /***** Drop temporary tables *****/
       Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -456,12 +465,15 @@ void Soc_RefreshOldTimelineUsr (void)
 
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
+   char *Query = NULL;
+
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimeline (TimelineUsrOrGbl,
+   Soc_BuildQueryToGetTimeline (&Query,
+	                        TimelineUsrOrGbl,
                                 Soc_GET_ONLY_OLD_PUBS);
 
    /***** Show old timeline *****/
-   Soc_ShowOldPubsInTimeline ();
+   Soc_ShowOldPubsInTimeline (&Query);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -490,7 +502,8 @@ void Soc_MarkMyNotifAsSeen (void)
 
 #define Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
 
-static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+static void Soc_BuildQueryToGetTimeline (char **Query,
+                                         Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline)
   {
    char SubQueryPublishers[128];
@@ -779,10 +792,11 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    Soc_AddNotesJustRetrievedToTimelineThisSession ();
 
    /***** Build query to show timeline including the users I am following *****/
-   DB_BuildQuery ("SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
-		  " FROM social_pubs WHERE PubCod IN "
-		  "(SELECT PubCod FROM pub_codes)"
-		  " ORDER BY PubCod DESC");
+   DB_BuildQuery_old (Query,
+	              "SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
+		      " FROM social_pubs WHERE PubCod IN "
+		      "(SELECT PubCod FROM pub_codes)"
+		      " ORDER BY PubCod DESC");
   }
 
 /*****************************************************************************/
@@ -847,12 +861,9 @@ static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
 
 static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
   {
-   char Query[128];
-
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS"
+   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS"
 	          " pub_codes,not_codes,publishers,current_timeline");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary tables");
+   DB_Query_new ("can not remove temporary tables");
   }
 
 /*****************************************************************************/
@@ -887,7 +898,8 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
            |  |_____|
             \ |_____|
 */
-static void Soc_ShowTimeline (const char *Title,long NotCodToHighlight)
+static void Soc_ShowTimeline (char **Query,
+                              const char *Title,long NotCodToHighlight)
   {
    extern const char *Hlp_SOCIAL_Timeline;
    MYSQL_RES *mysql_res;
@@ -900,7 +912,7 @@ static void Soc_ShowTimeline (const char *Title,long NotCodToHighlight)
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Get publishings from database *****/
-   NumPubsGot = DB_QuerySELECT_new (&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** Start box *****/
    Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
@@ -1089,7 +1101,7 @@ static void Soc_ShowWarningYouDontFollowAnyUser (void)
 /*****************************************************************************/
 // The publishings are inserted as list elements of a hidden list
 
-static void Soc_InsertNewPubsInTimeline (void)
+static void Soc_InsertNewPubsInTimeline (char **Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1099,7 +1111,7 @@ static void Soc_InsertNewPubsInTimeline (void)
    struct SocialNote SocNot;
 
    /***** Get new publishings timeline from database *****/
-   NumPubsGot = DB_QuerySELECT_new (&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** List new publishings timeline *****/
    for (NumPub = 0;
@@ -1129,7 +1141,7 @@ static void Soc_InsertNewPubsInTimeline (void)
 /*****************************************************************************/
 // The publishings are inserted as list elements of a hidden list
 
-static void Soc_ShowOldPubsInTimeline (void)
+static void Soc_ShowOldPubsInTimeline (char **Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1139,7 +1151,7 @@ static void Soc_ShowOldPubsInTimeline (void)
    struct SocialNote SocNot;
 
    /***** Get old publishings timeline from database *****/
-   NumPubsGot = DB_QuerySELECT_new (&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** List old publishings in timeline *****/
    for (NumPub = 0;
@@ -4302,15 +4314,16 @@ static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
   {
    /***** Get users who have shared this note *****/
-   DB_BuildQuery ("SELECT PublisherCod FROM social_pubs"
-		  " WHERE NotCod=%ld"
-		  " AND PublisherCod<>%ld"
-		  " AND PubType=%u"
-		  " ORDER BY PubCod LIMIT %u",
-		  SocNot->NotCod,
-		  SocNot->UsrCod,
-		  (unsigned) Soc_PUB_SHARED_NOTE,
-		  Soc_MAX_SHARERS_FAVERS_SHOWN);
+   if (SocNot->NumShared)
+      DB_BuildQuery ("SELECT PublisherCod FROM social_pubs"
+		     " WHERE NotCod=%ld"
+		     " AND PublisherCod<>%ld"
+		     " AND PubType=%u"
+		     " ORDER BY PubCod LIMIT %u",
+		     SocNot->NotCod,
+		     SocNot->UsrCod,
+		     (unsigned) Soc_PUB_SHARED_NOTE,
+		     Soc_MAX_SHARERS_FAVERS_SHOWN);
    Soc_ShowSharersOrFavers (SocNot->NumShared);
   }
 
@@ -4321,13 +4334,14 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
 static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot)
   {
    /***** Get users who have marked this note as favourite *****/
-   DB_BuildQuery ("SELECT UsrCod FROM social_notes_fav"
-		  " WHERE NotCod=%ld"
-		  " AND UsrCod<>%ld"	// Extra check
-		  " ORDER BY FavCod LIMIT %u",
-		  SocNot->NotCod,
-		  SocNot->UsrCod,
-		  Soc_MAX_SHARERS_FAVERS_SHOWN);
+   if (SocNot->NumFavs)
+      DB_BuildQuery ("SELECT UsrCod FROM social_notes_fav"
+		     " WHERE NotCod=%ld"
+		     " AND UsrCod<>%ld"	// Extra check
+		     " ORDER BY FavCod LIMIT %u",
+		     SocNot->NotCod,
+		     SocNot->UsrCod,
+		     Soc_MAX_SHARERS_FAVERS_SHOWN);
    Soc_ShowSharersOrFavers (SocNot->NumFavs);
   }
 
@@ -4338,13 +4352,14 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom)
   {
    /***** Get users who have marked this comment as favourite *****/
-   DB_BuildQuery ("SELECT UsrCod FROM social_comments_fav"
-		  " WHERE PubCod=%ld"
-		  " AND UsrCod<>%ld"	// Extra check
-		  " ORDER BY FavCod LIMIT %u",
-		  SocCom->PubCod,
-		  SocCom->UsrCod,
-		  Soc_MAX_SHARERS_FAVERS_SHOWN);
+   if (SocCom->NumFavs)
+      DB_BuildQuery ("SELECT UsrCod FROM social_comments_fav"
+		     " WHERE PubCod=%ld"
+		     " AND UsrCod<>%ld"	// Extra check
+		     " ORDER BY FavCod LIMIT %u",
+		     SocCom->PubCod,
+		     SocCom->UsrCod,
+		     Soc_MAX_SHARERS_FAVERS_SHOWN);
    Soc_ShowSharersOrFavers (SocCom->NumFavs);
   }
 

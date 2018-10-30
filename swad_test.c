@@ -2469,7 +2469,7 @@ void Tst_ListQuestionsToSelect (void)
 static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
-   char *Query;
+   char *Query = NULL;
    unsigned long NumRows;
    long LengthQuery;
    unsigned NumItemInList;
@@ -2649,7 +2649,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
   {
-   char *Query;
+   char *Query = NULL;
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
@@ -6617,7 +6617,7 @@ static void Tst_InsertTagsIntoDB (void)
 
 static void Tst_InsertAnswersIntoDB (void)
   {
-   char *Query;
+   char *Query = NULL;
    unsigned NumOpt;
    unsigned i;
 

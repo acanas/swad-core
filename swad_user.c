@@ -4324,7 +4324,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 
 void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
   {
-   char *Query;
+   char *Query = NULL;
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
@@ -4471,7 +4471,7 @@ void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
 
 void Usr_SearchListUsrs (Rol_Role_t Role)
   {
-   char *Query;
+   char *Query = NULL;
    char SubQueryRole[64];
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
@@ -4810,7 +4810,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
    */
-   char *Query;
+   char *Query = NULL;
 
    /***** Build query *****/
    // Important: it is better to use:
@@ -4978,7 +4978,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
    */
-   char *Query;
+   char *Query = NULL;
 
    /***** Build query *****/
    switch (Scope)
@@ -5057,7 +5057,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
    */
-   char *Query;
+   char *Query = NULL;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs = 0;
 

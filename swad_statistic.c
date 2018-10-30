@@ -284,7 +284,7 @@ void Sta_GetRemoteAddr (void)
 void Sta_LogAccess (const char *Comments)
   {
    size_t MaxLength;
-   char *Query;
+   char *Query = NULL;
    long LogCod;
    long ActCod = Act_GetActCod (Gbl.Action.Act);
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
@@ -870,7 +870,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
-   char *Query;
+   char *Query = NULL;
    char QueryAux[512];
    long LengthQuery;
    MYSQL_RES *mysql_res;

@@ -1363,7 +1363,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
                                        char **ContentStr,
                                        long PstCod,bool GetContent)
   {
-   char *Query;
+   char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;

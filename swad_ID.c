@@ -174,7 +174,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
                                      struct ListUsrCods *ListUsrCods,
                                      bool OnlyConfirmedIDs)
   {
-   char *Query;
+   char *Query = NULL;
    char SubQuery[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
