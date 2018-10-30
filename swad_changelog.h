@@ -359,6 +359,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.11.3:  Oct 30, 2018  Joining building and performing query into one function. (235553 lines)
 	Version 18.11.2:  Oct 30, 2018  Joining building and performing query into one function. (235531 lines)
 	Version 18.11.1:  Oct 30, 2018  Joining building and performing query into one function. (235497 lines)
 	Version 18.11:    Oct 30, 2018  Joining building and performing query into one function. (235465 lines)

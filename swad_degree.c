@@ -145,30 +145,34 @@ void Deg_SeeDegWithPendingCrss (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_DEG_ADM:
-         DB_BuildQuery ("SELECT courses.DegCod,COUNT(*)"
-			" FROM admin,courses,degrees"
-			" WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
-			" AND admin.Cod=courses.DegCod"
-			" AND (courses.Status & %u)<>0"
-			" AND courses.DegCod=degrees.DegCod"
-			" GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
-                        (unsigned) Crs_STATUS_BIT_PENDING);
+         NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
+							 " with pending courses",
+					      "SELECT courses.DegCod,COUNT(*)"
+					      " FROM admin,courses,degrees"
+					      " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
+					      " AND admin.Cod=courses.DegCod"
+					      " AND (courses.Status & %u)<>0"
+					      " AND courses.DegCod=degrees.DegCod"
+					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
+					      Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+					      (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
-         DB_BuildQuery ("SELECT courses.DegCod,COUNT(*)"
-			" FROM courses,degrees"
-			" WHERE (courses.Status & %u)<>0"
-			" AND courses.DegCod=degrees.DegCod"
-			" GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-                        (unsigned) Crs_STATUS_BIT_PENDING);
+         NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
+							 " with pending courses",
+					      "SELECT courses.DegCod,COUNT(*)"
+					      " FROM courses,degrees"
+					      " WHERE (courses.Status & %u)<>0"
+					      " AND courses.DegCod=degrees.DegCod"
+					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
+					      (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
 	 return;
      }
 
    /***** Get degrees *****/
-   if ((NumDegs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees with pending courses")))
+   if (NumDegs)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
@@ -610,10 +614,13 @@ void Deg_WriteSelectorOfDegree (void)
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
       /***** Get degrees belonging to the current centre from database *****/
-      DB_BuildQuery ("SELECT DegCod,ShortName FROM degrees"
-		     " WHERE CtrCod=%ld ORDER BY ShortName",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
-      NumDegs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees of a centre");
+      NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
+						      " of a centre",
+					   "SELECT DegCod,ShortName"
+					   " FROM degrees"
+					   " WHERE CtrCod=%ld"
+					   " ORDER BY ShortName",
+					   Gbl.CurrentCtr.Ctr.CtrCod);
 
       /***** Get degrees of this centre *****/
       for (NumDeg = 0;
@@ -1416,16 +1423,17 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   DB_BuildQuery ("SELECT DISTINCTROW degrees.DegCod,degrees.CtrCod,"
-		  "degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
-		  "degrees.ShortName,degrees.FullName,degrees.WWW"
-		  " FROM degrees,courses,crs_usr"
-		  " WHERE degrees.DegCod=courses.DegCod"
-		  " AND courses.CrsCod=crs_usr.CrsCod"
-		  " AND crs_usr.Role=%u"
-		  " ORDER BY degrees.ShortName",
-                  (unsigned) Rol_STD);
-   Degs->Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees admin by you");
+   Degs->Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
+						     " admin by you",
+					  "SELECT DISTINCTROW degrees.DegCod,degrees.CtrCod,"
+					  "degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
+					  "degrees.ShortName,degrees.FullName,degrees.WWW"
+					  " FROM degrees,courses,crs_usr"
+					  " WHERE degrees.DegCod=courses.DegCod"
+					  " AND courses.CrsCod=crs_usr.CrsCod"
+					  " AND crs_usr.Role=%u"
+					  " ORDER BY degrees.ShortName",
+					  (unsigned) Rol_STD);
 
    if (Degs->Num) // Degrees found...
      {
@@ -1462,11 +1470,11 @@ void Deg_GetListDegsOfCurrentCtr (void)
    unsigned NumDeg;
 
    /***** Get degrees of the current centre from database *****/
-   DB_BuildQuery ("SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-		  "ShortName,FullName,WWW"
-		  " FROM degrees WHERE CtrCod=%ld ORDER BY FullName",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees of a centre");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees of a centre",
+			     "SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
+			     "ShortName,FullName,WWW"
+			     " FROM degrees WHERE CtrCod=%ld ORDER BY FullName",
+			     Gbl.CurrentCtr.Ctr.CtrCod);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Degrees found...
@@ -1679,11 +1687,11 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get data of a degree from database *****/
-      DB_BuildQuery ("SELECT DegCod,CtrCod,DegTypCod,Status,"
-		     "RequesterUsrCod,ShortName,FullName,WWW"
-		     " FROM degrees WHERE DegCod=%ld",
-	             Deg->DegCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get data of a degree")) // Degree found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a degree",
+			  "SELECT DegCod,CtrCod,DegTypCod,Status,"
+			  "RequesterUsrCod,ShortName,FullName,WWW"
+			  " FROM degrees WHERE DegCod=%ld",
+			  Deg->DegCod)) // Degree found...
 	{
 	 /***** Get data of degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1749,9 +1757,9 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get the short name of a degree from database *****/
-      DB_BuildQuery ("SELECT ShortName FROM degrees WHERE DegCod=%ld",
-	             Deg->DegCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get the short name of a degree") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get the short name of a degree",
+			  "SELECT ShortName FROM degrees WHERE DegCod=%ld",
+			  Deg->DegCod) == 1)
 	{
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1778,8 +1786,9 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
    if (DegCod > 0)
      {
       /***** Get the centre code of a degree from database *****/
-      DB_BuildQuery ("SELECT CtrCod FROM degrees WHERE DegCod=%ld",DegCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get the centre of a degree") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get the centre of a degree",
+			  "SELECT CtrCod FROM degrees WHERE DegCod=%ld",
+			  DegCod) == 1)
 	{
 	 /***** Get the centre code of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1806,11 +1815,11 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
    if (DegCod > 0)
      {
       /***** Get the institution code of a degree from database *****/
-      DB_BuildQuery ("SELECT centres.InsCod FROM degrees,centres"
-		     " WHERE degrees.DegCod=%ld"
-		     " AND degrees.CtrCod=centres.CtrCod",
-	             DegCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get the institution of a degree") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get the institution of a degree",
+			  "SELECT centres.InsCod FROM degrees,centres"
+			  " WHERE degrees.DegCod=%ld"
+			  " AND degrees.CtrCod=centres.CtrCod",
+			  DegCod) == 1)
 	{
 	 /***** Get the institution code of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1838,8 +1847,10 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    char PathDeg[PATH_MAX + 1];
 
    /***** Get courses of a degree from database *****/
-   DB_BuildQuery ("SELECT CrsCod FROM courses WHERE DegCod=%ld",DegCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get courses of a degree");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get courses of a degree",
+			     "SELECT CrsCod FROM courses"
+			     " WHERE DegCod=%ld",
+			     DegCod);
 
    /* Get courses in this degree */
    for (NumRow = 0;
@@ -2424,35 +2435,37 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    struct Degree Deg;
 
    /***** Get institutions, centres, degrees admin by user from database *****/
-   DB_BuildQuery ("(SELECT %u AS S,-1 AS Cod,'' AS FullName"
-		  " FROM admin"
-		  " WHERE UsrCod=%ld"
-		  " AND Scope='%s')"
-		  " UNION "
-		  "(SELECT %u AS S,admin.Cod,institutions.FullName"
-		  " FROM admin,institutions"
-		  " WHERE admin.UsrCod=%ld"
-		  " AND admin.Scope='%s'"
-		  " AND admin.Cod=institutions.InsCod)"
-		  " UNION "
-		  "(SELECT %u AS S,admin.Cod,centres.FullName"
-		  " FROM admin,centres"
-		  " WHERE admin.UsrCod=%ld"
-		  " AND admin.Scope='%s'"
-		  " AND admin.Cod=centres.CtrCod)"
-		  " UNION "
-		  "(SELECT %u AS S,admin.Cod,degrees.FullName"
-		  " FROM admin,degrees"
-		  " WHERE admin.UsrCod=%ld"
-		  " AND admin.Scope='%s'"
-		  " AND admin.Cod=degrees.DegCod)"
-		  " ORDER BY S,FullName",
-	          (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS],
-	          (unsigned) Sco_SCOPE_INS,UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
-	          (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
-	          (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG]);
-
-   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions, centres, degrees admin by a user")))
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions,"
+						   " centres, degrees"
+						   " admin by a user",
+				        "(SELECT %u AS S,-1 AS Cod,'' AS FullName"
+				        " FROM admin"
+				        " WHERE UsrCod=%ld"
+				        " AND Scope='%s')"
+				        " UNION "
+				        "(SELECT %u AS S,admin.Cod,institutions.FullName"
+				        " FROM admin,institutions"
+				        " WHERE admin.UsrCod=%ld"
+				        " AND admin.Scope='%s'"
+				        " AND admin.Cod=institutions.InsCod)"
+				        " UNION "
+				        "(SELECT %u AS S,admin.Cod,centres.FullName"
+				        " FROM admin,centres"
+				        " WHERE admin.UsrCod=%ld"
+				        " AND admin.Scope='%s'"
+				        " AND admin.Cod=centres.CtrCod)"
+				        " UNION "
+				        "(SELECT %u AS S,admin.Cod,degrees.FullName"
+				        " FROM admin,degrees"
+				        " WHERE admin.UsrCod=%ld"
+				        " AND admin.Scope='%s'"
+				        " AND admin.Cod=degrees.DegCod)"
+				        " ORDER BY S,FullName",
+				        (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS],
+				        (unsigned) Sco_SCOPE_INS,UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+				        (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+				        (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG]);
+   if (NumRows)
       /***** Get the list of degrees *****/
       for (NumRow = 1;
 	   NumRow <= NumRows;

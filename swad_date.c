@@ -754,9 +754,10 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
    if (BrowserTimeZone[0])
      {
       /* Try to convert a date from server time zone to browser time zone */
-      DB_BuildQuery ("SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
-                     BrowserTimeZone);
-      if (DB_QuerySELECT_new (&mysql_res,"can not check if time zone name is usable"))
+      if (DB_QuerySELECT (&mysql_res,"can not check if time zone name"
+				     " is usable",
+			  "SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
+                          BrowserTimeZone))
 	{
          row = mysql_fetch_row (mysql_res);
          if (row[0] != NULL)
