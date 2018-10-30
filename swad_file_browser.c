@@ -2964,9 +2964,11 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    bool FolderExists = false;
 
    /***** Get all the users belonging to current course from database *****/
-   DB_BuildQuery ("SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get users from current course");
+   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
+						   " from current course",
+				        "SELECT UsrCod FROM crs_usr"
+				        " WHERE CrsCod=%ld",
+					Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Check folders *****/
    for (NumUsr = 0;
@@ -3012,14 +3014,14 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
    char PathFolderAsg[PATH_MAX + 1 + PATH_MAX + 1];
 
    /***** Get assignment folders from database *****/
-   DB_BuildQuery ("SELECT Folder FROM assignments"
-		  " WHERE CrsCod=%ld AND Hidden='N' AND Folder<>''"
-		  " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
-		  " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-		  " WHERE crs_grp_usr.UsrCod=%ld"
-		  " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
-                  Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get folders of assignments");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get folders of assignments",
+			     "SELECT Folder FROM assignments"
+			     " WHERE CrsCod=%ld AND Hidden='N' AND Folder<>''"
+			     " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
+			     " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
+			     " WHERE crs_grp_usr.UsrCod=%ld"
+			     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
+			     Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod);
 
    /***** Create one folder for each assignment *****/
    for (NumRow = 0;
@@ -3068,9 +3070,11 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    unsigned NumUsrsSuccess = 0;
 
    /***** Get all the users belonging to current course from database *****/
-   DB_BuildQuery ("SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get users from current course");
+   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
+						   " from current course",
+				        "SELECT UsrCod FROM crs_usr"
+				        " WHERE CrsCod=%ld",
+					Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Check if there exist folders with the new name *****/
    for (NumUsr = 0;
@@ -3193,9 +3197,11 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
    char PathFolder[PATH_MAX * 2 + 128];
 
    /***** Get all the users belonging to current course from database *****/
-   DB_BuildQuery ("SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get users from current course");
+   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
+						   " from current course",
+				        "SELECT UsrCod FROM crs_usr"
+				        " WHERE CrsCod=%ld",
+					Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Remove folders *****/
    for (NumUsr = 0;
@@ -5518,12 +5524,14 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       default:
 	 return;
      }
-   DB_BuildQuery ("SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
-		  " WHERE UsrCod=%ld AND FileBrowser=%u AND Cod=%ld",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
-	          Cod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get date-time of last access to a file browser");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get date-time"
+					" of last access to a file browser",
+			     "SELECT UNIX_TIMESTAMP(LastClick)"
+			     " FROM file_browser_last"
+			     " WHERE UsrCod=%ld AND FileBrowser=%u AND Cod=%ld",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
+			     Cod);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialize to a big value in order to show files as old
@@ -5565,12 +5573,14 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
    long GrpCod = -1L;
 
    /***** Get the group of my last access to a common zone from database *****/
-   DB_BuildQuery ("SELECT %s FROM crs_usr"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-	          FieldNameDB,
-	          Gbl.CurrentCrs.Crs.CrsCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the group of your last access to a file browser");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get the group"
+					" of your last access"
+					" to a file browser",
+			     "SELECT %s FROM crs_usr"
+			     " WHERE CrsCod=%ld AND UsrCod=%ld",
+			     FieldNameDB,
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       GrpCod = -1L;
@@ -7672,10 +7682,12 @@ static bool Brw_GetMyClipboard (void)
    Gbl.FileBrowser.Clipboard.Level       = 0;
 
    /***** Get my current clipboard from database *****/
-   DB_BuildQuery ("SELECT FileBrowser,Cod,WorksUsrCod,FileType,Path"
-		  " FROM clipboard WHERE UsrCod=%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get source of copy from clipboard");
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get source of copy"
+						   " from clipboard",
+					"SELECT FileBrowser,Cod,WorksUsrCod,"
+					"FileType,Path"
+					" FROM clipboard WHERE UsrCod=%ld",
+					Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (NumRows == 1)
      {
@@ -9989,13 +10001,13 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
    bool IsHidden = false;
 
    /***** Get if a file or folder is hidden from database *****/
-   DB_BuildQuery ("SELECT Hidden FROM files"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		  " AND Path='%s'",
-                  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-                  Cod,ZoneUsrCod,
-                  Path);
-   if (DB_QuerySELECT_new (&mysql_res,"can not check if a file is hidden"))
+   if (DB_QuerySELECT (&mysql_res,"can not check if a file is hidden",
+		       "SELECT Hidden FROM files"
+		       " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		       " AND Path='%s'",
+		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		       Cod,ZoneUsrCod,
+		       Path))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -10992,15 +11004,15 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
    long FilCod;
 
    /***** Get code of a file from database *****/
-   DB_BuildQuery ("SELECT FilCod FROM files"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		  " AND Path='%s'%s",
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,ZoneUsrCod,
-	          Path,
-	          OnlyIfPublic ? " AND Public='Y'" :
-			         "");
-   if (DB_QuerySELECT_new (&mysql_res,"can not get file code"))
+   if (DB_QuerySELECT (&mysql_res,"can not get file code",
+		       "SELECT FilCod FROM files"
+		       " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		       " AND Path='%s'%s",
+		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		       Cod,ZoneUsrCod,
+		       Path,
+		       OnlyIfPublic ? " AND Public='Y'" :
+				      ""))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -11032,15 +11044,15 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
    unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
-   DB_BuildQuery ("SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
-		  "PublisherUsrCod,FileType,Path,Hidden,Public,License"
-		  " FROM files"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		  " AND Path='%s'",
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,ZoneUsrCod,
-	          Gbl.FileBrowser.Priv.FullPathInTree);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get file metadata"))
+   if (DB_QuerySELECT (&mysql_res,"can not get file metadata",
+		       "SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
+		       "PublisherUsrCod,FileType,Path,Hidden,Public,License"
+		       " FROM files"
+		       " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		       " AND Path='%s'",
+		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		       Cod,ZoneUsrCod,
+		       Gbl.FileBrowser.Priv.FullPathInTree))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -11164,12 +11176,12 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
    unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
-   DB_BuildQuery ("SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
-		  "PublisherUsrCod,FileType,Path,Hidden,Public,License"
-		  " FROM files"
-		  " WHERE FilCod=%ld",
-	          FileMetadata->FilCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get file metadata"))
+   if (DB_QuerySELECT (&mysql_res,"can not get file metadata",
+		       "SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
+		       "PublisherUsrCod,FileType,Path,Hidden,Public,License"
+		       " FROM files"
+		       " WHERE FilCod=%ld",
+		       FileMetadata->FilCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -11382,9 +11394,9 @@ unsigned long Brw_GetNumFileViewsUsr (long UsrCod)
    unsigned long FileViews;
 
    /***** Get number of filw views *****/
-   DB_BuildQuery ("SELECT SUM(NumViews) FROM file_view WHERE UsrCod=%ld",
-                  UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get number of file views"))
+   if (DB_QuerySELECT (&mysql_res,"can not get number of file views",
+	               "SELECT SUM(NumViews) FROM file_view WHERE UsrCod=%ld",
+                       UsrCod))
      {
       /* Get number of file views */
       row = mysql_fetch_row (mysql_res);
@@ -11419,11 +11431,12 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
    MYSQL_ROW row;
 
    /***** Get number total of views from logged users *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT UsrCod),SUM(NumViews)"
-		  " FROM file_view"
-		  " WHERE FilCod=%ld AND UsrCod>0",
-	          FileMetadata->FilCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get number of views of a file from logged users"))
+   if (DB_QuerySELECT (&mysql_res,"can not get number of views of a file"
+				  " from logged users",
+		       "SELECT COUNT(DISTINCT UsrCod),SUM(NumViews)"
+		       " FROM file_view"
+		       " WHERE FilCod=%ld AND UsrCod>0",
+		       FileMetadata->FilCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -11460,10 +11473,11 @@ static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata
    MYSQL_ROW row;
 
    /***** Get number of public views *****/
-   DB_BuildQuery ("SELECT SUM(NumViews) FROM file_view"
-		  " WHERE FilCod=%ld AND UsrCod<=0",
-	          FileMetadata->FilCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get number of public views of a file"))
+   if (DB_QuerySELECT (&mysql_res,"can not get number of public views"
+				  " of a file",
+		       "SELECT SUM(NumViews) FROM file_view"
+		       " WHERE FilCod=%ld AND UsrCod<=0",
+	               FileMetadata->FilCod))
      {
       /* Get number of public views */
       row = mysql_fetch_row (mysql_res);
@@ -11493,10 +11507,10 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
    unsigned NumMyViews;
 
    /***** Get number of my views *****/
-   DB_BuildQuery ("SELECT NumViews FROM file_view"
-		  " WHERE FilCod=%ld AND UsrCod=%ld",
-	          FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get my number of views of a file"))
+   if (DB_QuerySELECT (&mysql_res,"can not get your number of views of a file",
+		       "SELECT NumViews FROM file_view"
+		       " WHERE FilCod=%ld AND UsrCod=%ld",
+		       FilCod,Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /* Get number of my views */
       row = mysql_fetch_row (mysql_res);
@@ -12279,14 +12293,14 @@ static long Brw_GetPublisherOfSubtree (void)
 
    /***** Get all the distinct publishers of files starting by
 	  Gbl.FileBrowser.Priv.FullPathInTree from database *****/
-   DB_BuildQuery ("SELECT DISTINCT(PublisherUsrCod) FROM files"
-		  " WHERE FileBrowser=%u AND Cod=%ld"
-		  " AND (Path='%s' OR Path LIKE '%s/%%')",
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,
-	          Gbl.FileBrowser.Priv.FullPathInTree,
-	          Gbl.FileBrowser.Priv.FullPathInTree);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get publishers of files");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get publishers of files",
+			     "SELECT DISTINCT(PublisherUsrCod) FROM files"
+			     " WHERE FileBrowser=%u AND Cod=%ld"
+			     " AND (Path='%s' OR Path LIKE '%s/%%')",
+			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			     Cod,
+			     Gbl.FileBrowser.Priv.FullPathInTree,
+			     Gbl.FileBrowser.Priv.FullPathInTree);
 
    /***** Check all common files that are equal to Gbl.FileBrowser.Priv.FullPathInTree
 	  or that are under the folder Gbl.FileBrowser.Priv.FullPathInTree *****/
