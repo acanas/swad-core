@@ -1718,7 +1718,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
 static long Brw_GetPublisherOfSubtree (void);
 
-static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
+static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row);
 
 static void Brw_PutLinkToAskRemOldFiles (void);
 static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *Removed);
@@ -12493,9 +12493,9 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /*****************************************************************************/
 /**************************** List documents found ***************************/
 /*****************************************************************************/
-// Returns the number of documents found
 
-unsigned Brw_ListDocsFound (const char *TitleSingular,const char *TitlePlural)
+void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
+			const char *TitleSingular,const char *TitlePlural)
   {
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
@@ -12505,20 +12505,18 @@ unsigned Brw_ListDocsFound (const char *TitleSingular,const char *TitlePlural)
    extern const char *Txt_Document;
    extern const char *Txt_hidden_document;
    extern const char *Txt_hidden_documents;
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumDocs;
-   unsigned NumDoc;
-   unsigned NumDocsNotHidden = 0;
-   unsigned NumDocsHidden;
+   unsigned long NumDoc;
+   unsigned long NumDocsNotHidden = 0;
+   unsigned long NumDocsHidden;
 
    /***** Query database *****/
-   if ((NumDocs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get files")))
+   if (NumDocs)
      {
       /***** Start box and table *****/
       /* Number of documents found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        "%u %s",
+	        "%lu %s",
                 NumDocs,(NumDocs == 1) ? TitleSingular :
         	                         TitlePlural);
       Box_StartBoxTable (NULL,Gbl.Title,NULL,
@@ -12559,7 +12557,7 @@ unsigned Brw_ListDocsFound (const char *TitleSingular,const char *TitlePlural)
 	   NumDoc++)
 	{
 	 /* Get next course */
-	 row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Write data of this course */
 	 Brw_WriteRowDocData (&NumDocsNotHidden,row);
@@ -12574,7 +12572,7 @@ unsigned Brw_ListDocsFound (const char *TitleSingular,const char *TitlePlural)
       if (NumDocsHidden == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_hidden_document);
       else
-	 fprintf (Gbl.F.Out,"%u %s",NumDocsHidden,Txt_hidden_documents);
+	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
       fprintf (Gbl.F.Out,")"
 	                 "</th>"
 			 "</tr>");
@@ -12584,16 +12582,14 @@ unsigned Brw_ListDocsFound (const char *TitleSingular,const char *TitlePlural)
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumDocs;
+   DB_FreeMySQLResult (mysql_res);
   }
 
 /*****************************************************************************/
 /************ Write the data of a document (result of a query) ***************/
 /*****************************************************************************/
 
-static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
+static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
   {
    extern const char *Txt_Documents_area;
    extern const char *Txt_Teachers_files_area;
@@ -12666,7 +12662,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       /***** Write number of document in this search *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"DAT RIGHT_TOP %s\">"
-	                 "%u"
+	                 "%lu"
 	                 "</td>",
 	       BgColor,++(*NumDocsNotHidden));
 
