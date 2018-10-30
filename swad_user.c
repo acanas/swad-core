@@ -4177,10 +4177,6 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
       return;
      }
 
-   /***** Get list of groups types in current course *****/
-   if (!Gbl.Usrs.ClassPhoto.AllGroups)
-      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
    /***** Allocate space for query *****/
    if ((*Query = (char *) malloc (Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
@@ -4209,6 +4205,9 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
    /***** Select users in selected groups *****/
    if (!Gbl.Usrs.ClassPhoto.AllGroups)
      {
+      /***** Get list of groups types in current course *****/
+      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
       if ((AddStdsWithoutGroupOf = (bool *) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (bool))) == NULL)
          Lay_NotEnoughMemoryExit ();
