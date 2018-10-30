@@ -137,7 +137,7 @@ void Crs_ReqSelectOneOfMyCourses (void);
 
 void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
 
-unsigned Crs_ListCrssFound (void);
+void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 
 void Crs_UpdateCrsLast (void);
 

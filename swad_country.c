@@ -122,23 +122,23 @@ void Cty_SeeCtyWithPendingInss (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
-         DB_BuildQuery ("SELECT institutions.CtyCod,COUNT(*)"
-			" FROM institutions,countries"
-			" WHERE (institutions.Status & %u)<>0"
-			" AND institutions.CtyCod=countries.CtyCod"
-			" GROUP BY institutions.CtyCod"
-			" ORDER BY countries.Name_%s",
-                        (unsigned) Ins_STATUS_BIT_PENDING,
-                        Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+         NumCtys = (unsigned) DB_QuerySELECT (&mysql_res,"can not get countries"
+						         "with pending institutions",
+					      "SELECT institutions.CtyCod,COUNT(*)"
+					      " FROM institutions,countries"
+					      " WHERE (institutions.Status & %u)<>0"
+					      " AND institutions.CtyCod=countries.CtyCod"
+					      " GROUP BY institutions.CtyCod"
+					      " ORDER BY countries.Name_%s",
+					      (unsigned) Ins_STATUS_BIT_PENDING,
+					      Txt_STR_LANG_ID[Gbl.Prefs.Language]);
          break;
       default:	// Forbidden for other users
 	 return;
      }
 
    /***** Get countries *****/
-   if ((NumCtys = (unsigned) DB_QuerySELECT_new (&mysql_res,
-	                                         "can not get countries"
-	                                         "with pending institutions")))
+   if (NumCtys)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
@@ -993,10 +993,10 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char *OrderBySubQuery;
+   char *OrderBySubQuery = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned long NumRows = 0;
    unsigned NumCty;
    struct Country *Cty;
    Txt_Language_t Lan;
@@ -1005,11 +1005,11 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    switch (GetExtraData)
      {
       case Cty_GET_BASIC_DATA:
-         DB_BuildQuery ("SELECT CtyCod,Alpha2,Name_%s"
-			" FROM countries ORDER BY Name_%s",
-                        Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                        Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-         OrderBySubQuery = NULL;
+         NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
+				   "SELECT CtyCod,Alpha2,Name_%s"
+				   " FROM countries ORDER BY Name_%s",
+				   Txt_STR_LANG_ID[Gbl.Prefs.Language],
+				   Txt_STR_LANG_ID[Gbl.Prefs.Language]);
          break;
       case Cty_GET_EXTRA_DATA:
          SubQueryNam1[0] = '\0';
@@ -1056,23 +1056,23 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 	          Lay_NotEnoughMemoryExit ();
                break;
            }
-         DB_BuildQuery ("(SELECT countries.CtyCod,countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
-			" FROM countries,usr_data"
-			" WHERE countries.CtyCod=usr_data.CtyCod"
-			" GROUP BY countries.CtyCod)"
-			" UNION "
-			"(SELECT CtyCod,Alpha2,%s%s0 AS NumUsrs"
-			" FROM countries"
-			" WHERE CtyCod NOT IN"
-			" (SELECT DISTINCT CtyCod FROM usr_data))"
-			" ORDER BY %s",
-                        SubQueryNam1,SubQueryWWW1,
-                        SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
+
+         NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
+				   "(SELECT countries.CtyCod,countries.Alpha2,"
+				   "%s%sCOUNT(*) AS NumUsrs"
+				   " FROM countries,usr_data"
+				   " WHERE countries.CtyCod=usr_data.CtyCod"
+				   " GROUP BY countries.CtyCod)"
+				   " UNION "
+				   "(SELECT CtyCod,Alpha2,%s%s0 AS NumUsrs"
+				   " FROM countries"
+				   " WHERE CtyCod NOT IN"
+				   " (SELECT DISTINCT CtyCod FROM usr_data))"
+				   " ORDER BY %s",
+				   SubQueryNam1,SubQueryWWW1,
+				   SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
          break;
      }
-
-   /***** Count number of rows in result *****/
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get countries");
 
    /***** Free memory for subquery *****/
    if (OrderBySubQuery)
@@ -1190,12 +1190,12 @@ void Cty_WriteSelectorOfCountry (void)
             Txt_Country);
 
    /***** Get countries from database *****/
-   DB_BuildQuery ("SELECT DISTINCT CtyCod,Name_%s"
-		  " FROM countries"
-		  " ORDER BY countries.Name_%s",
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                  Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   NumCtys = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get countries");
+   NumCtys = (unsigned) DB_QuerySELECT (&mysql_res,"can not get countries",
+				        "SELECT DISTINCT CtyCod,Name_%s"
+					" FROM countries"
+					" ORDER BY countries.Name_%s",
+					Txt_STR_LANG_ID[Gbl.Prefs.Language],
+					Txt_STR_LANG_ID[Gbl.Prefs.Language]);
 
    /***** List countries *****/
    for (NumCty = 0;
@@ -1270,7 +1270,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned long NumRows = 0;
    Txt_Language_t Lan;
    bool CtyFound;
 
@@ -1309,12 +1309,13 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    switch (GetExtraData)
      {
       case Cty_GET_BASIC_DATA:
-         DB_BuildQuery ("SELECT Alpha2,Name_%s,WWW_%s"
-			" FROM countries"
-			" WHERE CtyCod='%03ld'",
-                        Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                        Txt_STR_LANG_ID[Gbl.Prefs.Language],
-                        Cty->CtyCod);
+         NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a country",
+				   "SELECT Alpha2,Name_%s,WWW_%s"
+				   " FROM countries"
+				   " WHERE CtyCod='%03ld'",
+				   Txt_STR_LANG_ID[Gbl.Prefs.Language],
+				   Txt_STR_LANG_ID[Gbl.Prefs.Language],
+				   Cty->CtyCod);
          break;
       case Cty_GET_EXTRA_DATA:
 	 SubQueryNam1[0] = '\0';
@@ -1347,22 +1348,21 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    Str_Concat (SubQueryWWW2,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 	   }
-	 DB_BuildQuery ("(SELECT countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
-			" FROM countries,usr_data"
-			" WHERE countries.CtyCod='%03ld'"
-			" AND countries.CtyCod=usr_data.CtyCod)"
-			" UNION "
-			"(SELECT Alpha2,%s%s0 AS NumUsrs"
-			" FROM countries"
-			" WHERE CtyCod='%03ld'"
-			" AND CtyCod NOT IN"
-			" (SELECT DISTINCT CtyCod FROM usr_data))",
-		        SubQueryNam1,SubQueryWWW1,Cty->CtyCod,
-		        SubQueryNam2,SubQueryWWW2,Cty->CtyCod);
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a country",
+				   "(SELECT countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
+				   " FROM countries,usr_data"
+				   " WHERE countries.CtyCod='%03ld'"
+				   " AND countries.CtyCod=usr_data.CtyCod)"
+				   " UNION "
+				   "(SELECT Alpha2,%s%s0 AS NumUsrs"
+				   " FROM countries"
+				   " WHERE CtyCod='%03ld'"
+				   " AND CtyCod NOT IN"
+				   " (SELECT DISTINCT CtyCod FROM usr_data))",
+				   SubQueryNam1,SubQueryWWW1,Cty->CtyCod,
+				   SubQueryNam2,SubQueryWWW2,Cty->CtyCod);
 	 break;
      }
-
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a country");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Country found...
@@ -1454,9 +1454,9 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
    /***** 3. Slow: get country name from database *****/
    Gbl.Cache.CountryName.CtyCod = CtyCod;
 
-   DB_BuildQuery ("SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
-	          Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get the name of a country")) // Country found...
+   if (DB_QuerySELECT (&mysql_res,"can not get the name of a country",
+		       "SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
+	               Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod)) // Country found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1489,9 +1489,9 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
    Cty_FreeMapAttribution (MapAttribution);
 
    /***** Get photo attribution from database *****/
-   DB_BuildQuery ("SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
-	          CtyCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get photo attribution"))
+   if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
+		       "SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
+	               CtyCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -2365,20 +2365,17 @@ unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /*****************************************************************************/
 /***************************** List countries found **************************/
 /*****************************************************************************/
-// Returns number of countries found
 
-unsigned Cty_ListCtysFound (void)
+void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
   {
    extern const char *Txt_country;
    extern const char *Txt_countries;
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumCtys;
    unsigned NumCty;
    struct Country Cty;
 
    /***** Query database *****/
-   if ((NumCtys = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get countries")))
+   if (NumCtys)
      {
       /***** Start box and table *****/
       /* Number of countries found */
@@ -2398,7 +2395,7 @@ unsigned Cty_ListCtysFound (void)
 	   NumCty++)
 	{
 	 /* Get next country */
-	 row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Get country code (row[0]) */
 	 Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -2415,7 +2412,5 @@ unsigned Cty_ListCtysFound (void)
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCtys;
+   DB_FreeMySQLResult (mysql_res);
   }

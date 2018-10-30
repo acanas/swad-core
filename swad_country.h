@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
 
 #include "swad_action.h"
@@ -116,6 +117,6 @@ unsigned Cty_GetNumCtysWithDegs (const char *SubQuery);
 unsigned Cty_GetNumCtysWithCrss (const char *SubQuery);
 unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-unsigned Cty_ListCtysFound (void);
+void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 
 #endif

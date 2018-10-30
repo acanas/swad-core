@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.11.1 (2018-10-30)"
+#define Log_PLATFORM_VERSION	"SWAD 18.11.2 (2018-10-30)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.11.2:  Oct 30, 2018  Joining building and performing query into one function. (235531 lines)
 	Version 18.11.1:  Oct 30, 2018  Joining building and performing query into one function. (235497 lines)
 	Version 18.11:    Oct 30, 2018  Joining building and performing query into one function. (235465 lines)
 	Version 18.10.2:  Oct 30, 2018  Fixed bugs in access to database. (235414 lines)

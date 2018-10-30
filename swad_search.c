@@ -617,6 +617,8 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    char FieldName[4+1+2+1];	// Example: Name_en
+   MYSQL_RES *mysql_res;
+   unsigned NumCtys;
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_INS &&
@@ -633,13 +635,15 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
 	 if (Sch_BuildSearchQuery (SearchQuery,FieldName,NULL,NULL))
 	   {
 	    /***** Query database and list institutions found *****/
-	    DB_BuildQuery ("SELECT CtyCod"
-			   " FROM countries"
-			   " WHERE %s%s"
-			   " ORDER BY Name_%s",
-		           SearchQuery,RangeQuery,
-		           Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-	    return Cty_ListCtysFound ();
+	    NumCtys = (unsigned) DB_QuerySELECT (&mysql_res,"can not get countries",
+						 "SELECT CtyCod"
+						 " FROM countries"
+						 " WHERE %s%s"
+						 " ORDER BY Name_%s",
+						 SearchQuery,RangeQuery,
+						 Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	    Cty_ListCtysFound (&mysql_res,NumCtys);
+	    return NumCtys;
 	   }
 	}
 
@@ -756,6 +760,8 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
+   MYSQL_RES *mysql_res;
+   unsigned NumCrss;
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COURSES))
@@ -763,18 +769,20 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
       if (Sch_BuildSearchQuery (SearchQuery,"courses.FullName",NULL,NULL))
 	{
 	 /***** Query database and list courses found *****/
-	 DB_BuildQuery ("SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-			"courses.Year,courses.FullName,centres.ShortName"
-			" FROM courses,degrees,centres,institutions,countries"
-			" WHERE %s"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=countries.CtyCod"
-			"%s"
-			" ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
-		        SearchQuery,RangeQuery);
-	 return Crs_ListCrssFound ();
+	 NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses",
+					      "SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
+					      "courses.Year,courses.FullName,centres.ShortName"
+					      " FROM courses,degrees,centres,institutions,countries"
+					      " WHERE %s"
+					      " AND courses.DegCod=degrees.DegCod"
+					      " AND degrees.CtrCod=centres.CtrCod"
+					      " AND centres.InsCod=institutions.InsCod"
+					      " AND institutions.CtyCod=countries.CtyCod"
+					      "%s"
+					      " ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
+					      SearchQuery,RangeQuery);
+	 Crs_ListCrssFound (&mysql_res,NumCrss);
+	 return NumCrss;
 	}
 
    return 0;

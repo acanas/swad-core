@@ -902,11 +902,12 @@ void Crs_WriteSelectorOfCourse (void)
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       /***** Get courses belonging to the current degree from database *****/
-      DB_BuildQuery ("SELECT CrsCod,ShortName FROM courses"
-		     " WHERE DegCod=%ld"
-		     " ORDER BY ShortName",
-                     Gbl.CurrentDeg.Deg.DegCod);
-      NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a degree");
+      NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
+						      " of a degree",
+					   "SELECT CrsCod,ShortName FROM courses"
+					   " WHERE DegCod=%ld"
+					   " ORDER BY ShortName",
+					   Gbl.CurrentDeg.Deg.DegCod);
 
       /***** Get courses of this degree *****/
       for (NumCrs = 0;
@@ -975,23 +976,25 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
    switch (WhatCourses)
      {
       case Crs_ACTIVE_COURSES:
-         DB_BuildQuery ("SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-			" FROM courses WHERE DegCod=%ld AND Status=0"
-			" ORDER BY Year,ShortName",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
+							 " of a degree",
+					      "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+					      " FROM courses WHERE DegCod=%ld AND Status=0"
+					      " ORDER BY Year,ShortName",
+					      Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
-         DB_BuildQuery ("SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-			" FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
-			" ORDER BY Year,ShortName",
-                        Gbl.CurrentDeg.Deg.DegCod,
-                        (unsigned) Crs_STATUS_BIT_REMOVED);
+         NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
+							 " of a degree",
+					      "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+					      " FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
+					      " ORDER BY Year,ShortName",
+					      Gbl.CurrentDeg.Deg.DegCod,
+					      (unsigned) Crs_STATUS_BIT_REMOVED);
          break;
       default:
 	 break;
      }
-   NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get the courses of a degree");
-
    if (NumCrss) // Courses found...
      {
       /***** Create list with courses in degree *****/
@@ -2011,10 +2014,10 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    if (Crs->CrsCod > 0)
      {
       /***** Get data of a course from database *****/
-      DB_BuildQuery ("SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-		     " FROM courses WHERE CrsCod=%ld",
-	             Crs->CrsCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get data of a course")) // Course found...
+      if (DB_QuerySELECT (&mysql_res,"can not get data of a course",
+			  "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+			  " FROM courses WHERE CrsCod=%ld",
+			  Crs->CrsCod)) // Course found...
 	{
 	 /***** Get data of the course *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -2091,12 +2094,12 @@ static void Crs_GetShortNamesByCod (long CrsCod,
    if (CrsCod > 0)
      {
       /***** Get the short name of a degree from database *****/
-      DB_BuildQuery ("SELECT courses.ShortName,degrees.ShortName"
-		     " FROM courses,degrees"
-		     " WHERE courses.CrsCod=%ld"
-		     " AND courses.DegCod=degrees.DegCod",
-	             CrsCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get the short name of a course") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get the short name of a course",
+			  "SELECT courses.ShortName,degrees.ShortName"
+			  " FROM courses,degrees"
+			  " WHERE courses.CrsCod=%ld"
+			  " AND courses.DegCod=degrees.DegCod",
+			  CrsCod) == 1)
 	{
 	 /***** Get the short name of this course *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -3045,16 +3048,16 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       if (asprintf (&SubQuery," AND crs_usr.Role=%u",(unsigned) Role) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
-   DB_BuildQuery ("SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-		  "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
-		  " FROM crs_usr,courses,degrees,centres"
-		  " WHERE crs_usr.UsrCod=%ld%s"
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod=degrees.DegCod"
-		  " AND degrees.CtrCod=centres.CtrCod"
-		  " ORDER BY degrees.FullName,courses.Year,courses.FullName",
-                  UsrDat->UsrCod,SubQuery);
-   NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user");
+   NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
+				        "SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
+				        "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
+				        " FROM crs_usr,courses,degrees,centres"
+				        " WHERE crs_usr.UsrCod=%ld%s"
+				        " AND crs_usr.CrsCod=courses.CrsCod"
+				        " AND courses.DegCod=degrees.DegCod"
+				        " AND degrees.CtrCod=centres.CtrCod"
+				        " ORDER BY degrees.FullName,courses.Year,courses.FullName",
+				        UsrDat->UsrCod,SubQuery);
 
    /***** Free allocated memory for subquery *****/
    free ((void *) SubQuery);
@@ -3125,7 +3128,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 /*****************************************************************************/
 // Returns number of courses found
 
-unsigned Crs_ListCrssFound (void)
+void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
   {
    extern const char *Txt_course;
    extern const char *Txt_courses;
@@ -3133,13 +3136,8 @@ unsigned Crs_ListCrssFound (void)
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumCrss;
    unsigned NumCrs;
-
-   /***** Query database *****/
-   NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses");
 
    /***** List the courses (one row per course) *****/
    if (NumCrss)
@@ -3184,7 +3182,7 @@ unsigned Crs_ListCrssFound (void)
 	   NumCrs++)
 	{
 	 /* Get next course */
-	 row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Write data of this course */
 	 Crs_WriteRowCrsData (NumCrs,row,false);
@@ -3195,9 +3193,7 @@ unsigned Crs_ListCrssFound (void)
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCrss;
+   DB_FreeMySQLResult (mysql_res);
   }
 
 /*****************************************************************************/
@@ -3446,11 +3442,12 @@ void Crs_RemoveOldCrss (void)
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old courses from database *****/
-   DB_BuildQuery ("SELECT CrsCod FROM crs_last WHERE"
-		  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-		  " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
-                  SecondsWithoutAccess);
-   if ((NumCrss = DB_QuerySELECT_new (&mysql_res,"can not get old users")))
+   NumCrss = DB_QuerySELECT (&mysql_res,"can not get old courses",
+			     "SELECT CrsCod FROM crs_last WHERE"
+			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+			     " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
+			     SecondsWithoutAccess);
+   if (NumCrss)
      {
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,
