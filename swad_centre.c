@@ -144,29 +144,32 @@ void Ctr_SeeCtrWithPendingDegs (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_CTR_ADM:
-         DB_BuildQuery ("SELECT degrees.CtrCod,COUNT(*)"
-			" FROM degrees,ctr_admin,centres"
-			" WHERE (degrees.Status & %u)<>0"
-			" AND degrees.CtrCod=ctr_admin.CtrCod"
-			" AND ctr_admin.UsrCod=%ld"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
-                        (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
+							 " with pending degrees",
+					      "SELECT degrees.CtrCod,COUNT(*)"
+					      " FROM degrees,ctr_admin,centres"
+					      " WHERE (degrees.Status & %u)<>0"
+					      " AND degrees.CtrCod=ctr_admin.CtrCod"
+					      " AND ctr_admin.UsrCod=%ld"
+					      " AND degrees.CtrCod=centres.CtrCod"
+					      " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
+					      (unsigned) Deg_STATUS_BIT_PENDING,
+					      Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Rol_SYS_ADM:
-         DB_BuildQuery ("SELECT degrees.CtrCod,COUNT(*)"
-			" FROM degrees,centres"
-			" WHERE (degrees.Status & %u)<>0"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
-                        (unsigned) Deg_STATUS_BIT_PENDING);
+         NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres"
+							 " with pending degrees",
+					      "SELECT degrees.CtrCod,COUNT(*)"
+					      " FROM degrees,centres"
+					      " WHERE (degrees.Status & %u)<>0"
+					      " AND degrees.CtrCod=centres.CtrCod"
+					      " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
+					      (unsigned) Deg_STATUS_BIT_PENDING);
          break;
       default:	// Forbidden for other users
 	 return;
      }
-
-   /***** Get centres *****/
-   if ((NumCtrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get centres with pending degrees")))
+   if (NumCtrs)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
@@ -1052,26 +1055,26 @@ void Ctr_GetListCentres (long InsCod)
 	    Lay_NotEnoughMemoryExit ();
          break;
      }
-   DB_BuildQuery ("(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
-		  "centres.Status,centres.RequesterUsrCod,"
-		  "centres.ShortName,centres.FullName,centres.WWW,"
-		  "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
-		  " FROM centres,usr_data"
-		  " WHERE centres.InsCod=%ld"
-		  " AND centres.CtrCod=usr_data.CtrCod"
-		  " GROUP BY centres.CtrCod)"
-		  " UNION "
-		  "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-		  "ShortName,FullName,WWW,0 AS NumUsrs"
-		  " FROM centres"
-		  " WHERE centres.InsCod=%ld"
-		  " AND CtrCod NOT IN"
-		  " (SELECT DISTINCT CtrCod FROM usr_data))"
-		  " ORDER BY %s",
-	          InsCod,
-	          InsCod,
-	          OrderBySubQuery);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get centres");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get centres",
+			     "(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
+			     "centres.Status,centres.RequesterUsrCod,"
+			     "centres.ShortName,centres.FullName,centres.WWW,"
+			     "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+			     " FROM centres,usr_data"
+			     " WHERE centres.InsCod=%ld"
+			     " AND centres.CtrCod=usr_data.CtrCod"
+			     " GROUP BY centres.CtrCod)"
+			     " UNION "
+			     "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
+			     "ShortName,FullName,WWW,0 AS NumUsrs"
+			     " FROM centres"
+			     " WHERE centres.InsCod=%ld"
+			     " AND CtrCod NOT IN"
+			     " (SELECT DISTINCT CtrCod FROM usr_data))"
+			     " ORDER BY %s",
+			     InsCod,
+			     InsCod,
+			     OrderBySubQuery);
    free ((void *) OrderBySubQuery);
 
    if (NumRows) // Centres found...
@@ -1151,6 +1154,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned long NumRows;
    bool CtrFound = false;
 
    /***** Clear data *****/
@@ -1170,26 +1174,27 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get data of a centre from database *****/
-      DB_BuildQuery ("(SELECT centres.InsCod,centres.PlcCod,"
-		     "centres.Status,centres.RequesterUsrCod,"
-		     "centres.ShortName,centres.FullName,centres.WWW,"
-		     "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
-		     " FROM centres,usr_data"
-		     " WHERE centres.CtrCod=%ld"
-		     " AND centres.CtrCod=usr_data.CtrCod"
-		     " GROUP BY centres.CtrCod)"
-		     " UNION "
-		     "(SELECT InsCod,PlcCod,"
-		     "Status,RequesterUsrCod,"
-		     "ShortName,FullName,WWW,"
-		     "0 AS NumUsrs"
-		     " FROM centres"
-		     " WHERE CtrCod=%ld"
-		     " AND CtrCod NOT IN"
-		     " (SELECT DISTINCT CtrCod FROM usr_data))",
-                     Ctr->CtrCod,
-                     Ctr->CtrCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get data of a centre")) // Centre found...
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a centre",
+				"(SELECT centres.InsCod,centres.PlcCod,"
+				"centres.Status,centres.RequesterUsrCod,"
+				"centres.ShortName,centres.FullName,centres.WWW,"
+				"COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+				" FROM centres,usr_data"
+				" WHERE centres.CtrCod=%ld"
+				" AND centres.CtrCod=usr_data.CtrCod"
+				" GROUP BY centres.CtrCod)"
+				" UNION "
+				"(SELECT InsCod,PlcCod,"
+				"Status,RequesterUsrCod,"
+				"ShortName,FullName,WWW,"
+				"0 AS NumUsrs"
+				" FROM centres"
+				" WHERE CtrCod=%ld"
+				" AND CtrCod NOT IN"
+				" (SELECT DISTINCT CtrCod FROM usr_data))",
+				Ctr->CtrCod,
+				Ctr->CtrCod);
+      if (NumRows) // Centre found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -1256,9 +1261,9 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Get the institution code of a centre from database *****/
-      DB_BuildQuery ("SELECT InsCod FROM centres WHERE CtrCod=%ld",
-                     CtrCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get the institution of a centre") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get the institution of a centre",
+			  "SELECT InsCod FROM centres WHERE CtrCod=%ld",
+			  CtrCod) == 1)
 	{
 	 /***** Get the institution code of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1285,10 +1290,10 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get the short name of a centre from database *****/
-      DB_BuildQuery ("SELECT ShortName FROM centres"
-		     " WHERE CtrCod=%ld",
-	             Ctr->CtrCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get the short name of a centre") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get the short name of a centre",
+			  "SELECT ShortName FROM centres"
+			  " WHERE CtrCod=%ld",
+			  Ctr->CtrCod) == 1)
 	{
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1316,10 +1321,10 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
    Ctr_FreePhotoAttribution (PhotoAttribution);
 
    /***** Get photo attribution from database *****/
-   DB_BuildQuery ("SELECT PhotoAttribution"
-		  " FROM centres WHERE CtrCod=%ld",
-	          CtrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get photo attribution"))
+   if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
+		       "SELECT PhotoAttribution"
+		       " FROM centres WHERE CtrCod=%ld",
+		       CtrCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1398,12 +1403,12 @@ void Ctr_WriteSelectorOfCentre (void)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Get centres from database *****/
-      DB_BuildQuery ("SELECT DISTINCT CtrCod,ShortName"
-		     " FROM centres"
-		     " WHERE InsCod=%ld"
-		     " ORDER BY ShortName",
-                     Gbl.CurrentIns.Ins.InsCod);
-      NumCtrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get centres");
+      NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres",
+					   "SELECT DISTINCT CtrCod,ShortName"
+					   " FROM centres"
+					   " WHERE InsCod=%ld"
+					   " ORDER BY ShortName",
+					   Gbl.CurrentIns.Ins.InsCod);
 
       /***** Get centres *****/
       for (NumCtr = 0;
@@ -2935,20 +2940,17 @@ unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /*****************************************************************************/
 /****************************** List centres found ***************************/
 /*****************************************************************************/
-// Returns number of centres found
 
-unsigned Ctr_ListCtrsFound (void)
+void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
   {
    extern const char *Txt_centre;
    extern const char *Txt_centres;
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumCtrs;
    unsigned NumCtr;
    struct Centre Ctr;
 
    /***** Query database *****/
-   if ((NumCtrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get centres")))
+   if (NumCtrs)
      {
       /***** Start box and table *****/
       /* Number of centres found */
@@ -2968,7 +2970,7 @@ unsigned Ctr_ListCtrsFound (void)
 	   NumCtr++)
 	{
 	 /* Get next centre */
-	 row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Get centre code (row[0]) */
 	 Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -2985,7 +2987,5 @@ unsigned Ctr_ListCtrsFound (void)
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumCtrs;
+   DB_FreeMySQLResult (mysql_res);
   }

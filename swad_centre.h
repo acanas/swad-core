@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
 #include "swad_action.h"
 #include "swad_constant.h"
 #include "swad_degree.h"
@@ -134,6 +136,6 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-unsigned Ctr_ListCtrsFound (void);
+void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 
 #endif

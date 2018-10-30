@@ -688,6 +688,8 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
 static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
+   MYSQL_RES *mysql_res;
+   unsigned NumCtrs;
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_DEG &&
@@ -698,15 +700,17 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
 	 if (Sch_BuildSearchQuery (SearchQuery,"centres.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list centres found *****/
-	    DB_BuildQuery ("SELECT centres.CtrCod"
-			   " FROM centres,institutions,countries"
-			   " WHERE %s"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=countries.CtyCod"
-			   "%s"
-			   " ORDER BY centres.FullName,institutions.FullName",
-		           SearchQuery,RangeQuery);
-	    return Ctr_ListCtrsFound ();
+	    NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres",
+						 "SELECT centres.CtrCod"
+						 " FROM centres,institutions,countries"
+						 " WHERE %s"
+						 " AND centres.InsCod=institutions.InsCod"
+						 " AND institutions.CtyCod=countries.CtyCod"
+						 "%s"
+						 " ORDER BY centres.FullName,institutions.FullName",
+						 SearchQuery,RangeQuery);
+	    Ctr_ListCtrsFound (&mysql_res,NumCtrs);
+	    return NumCtrs;
 	   }
 
    return 0;
