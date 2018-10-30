@@ -728,6 +728,8 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
 static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
   {
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
+   MYSQL_RES *mysql_res;
+   unsigned NumDegs;
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_CRS)
@@ -737,16 +739,18 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 	 if (Sch_BuildSearchQuery (SearchQuery,"degrees.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list degrees found *****/
-	    DB_BuildQuery ("SELECT degrees.DegCod"
-			   " FROM degrees,centres,institutions,countries"
-			   " WHERE %s"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=countries.CtyCod"
-			   "%s"
-			   " ORDER BY degrees.FullName,institutions.FullName",
-		           SearchQuery,RangeQuery);
-	    return Deg_ListDegsFound ();
+	    NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees",
+						 "SELECT degrees.DegCod"
+						 " FROM degrees,centres,institutions,countries"
+						 " WHERE %s"
+						 " AND degrees.CtrCod=centres.CtrCod"
+						 " AND centres.InsCod=institutions.InsCod"
+						 " AND institutions.CtyCod=countries.CtyCod"
+						 "%s"
+						 " ORDER BY degrees.FullName,institutions.FullName",
+						 SearchQuery,RangeQuery);
+	    Deg_ListDegsFound (&mysql_res,NumDegs);
+	    return NumDegs;
 	   }
 
    return 0;

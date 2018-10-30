@@ -145,12 +145,13 @@ void Dup_ListDuplicateUsrs (void)
    Box_StartBox (NULL,Txt_Possibly_duplicate_users,NULL,
                  Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
-   /***** Build query *****/
-   DB_BuildQuery ("SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
-		  " FROM usr_duplicated"
-		  " GROUP BY UsrCod"
-		  " ORDER BY N DESC,T DESC");
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get possibly duplicate users");
+   /***** Make query *****/
+   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get possibly"
+						   " duplicate users",
+					"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
+				        " FROM usr_duplicated"
+				        " GROUP BY UsrCod"
+				        " ORDER BY N DESC,T DESC");
 
    /***** List possible duplicated users *****/
    if (NumUsrs)
@@ -266,27 +267,26 @@ static void Dup_ListSimilarUsrs (void)
    Box_StartBox (NULL,Txt_Similar_users,NULL,
                  Hlp_USERS_Duplicates_similar_users,Box_NOT_CLOSABLE);
 
-   /***** Build query *****/
+   /***** Make query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&
        Gbl.Usrs.Other.UsrDat.FirstName[0])	// Name and surname 1 not empty
-     {
-      DB_BuildQuery ("SELECT DISTINCT UsrCod FROM"
-		     "(SELECT DISTINCT UsrCod FROM usr_IDs"
-		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)"
-		     " UNION"
-		     " SELECT UsrCod FROM usr_data"
-		     " WHERE Surname1='%s' AND Surname2='%s' AND FirstName='%s')"
-		     " AS U",
-		     Gbl.Usrs.Other.UsrDat.UsrCod,
-		     Gbl.Usrs.Other.UsrDat.Surname1,
-		     Gbl.Usrs.Other.UsrDat.Surname2,
-		     Gbl.Usrs.Other.UsrDat.FirstName);
-     }
+      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
+					   "SELECT DISTINCT UsrCod FROM"
+					   "(SELECT DISTINCT UsrCod FROM usr_IDs"
+					   " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)"
+					   " UNION"
+					   " SELECT UsrCod FROM usr_data"
+					   " WHERE Surname1='%s' AND Surname2='%s' AND FirstName='%s')"
+					   " AS U",
+					   Gbl.Usrs.Other.UsrDat.UsrCod,
+					   Gbl.Usrs.Other.UsrDat.Surname1,
+					   Gbl.Usrs.Other.UsrDat.Surname2,
+					   Gbl.Usrs.Other.UsrDat.FirstName);
    else
-      DB_BuildQuery ("SELECT DISTINCT UsrCod FROM usr_IDs"
-		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)",
-	             Gbl.Usrs.Other.UsrDat.UsrCod);
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get similar users");
+      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get similar users",
+					   "SELECT DISTINCT UsrCod FROM usr_IDs"
+					   " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)",
+					   Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** List possible similar users *****/
    if (NumUsrs)

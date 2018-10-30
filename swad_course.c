@@ -3124,9 +3124,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/****************************** List courses found ***************************/
+/**************************** List courses found *****************************/
 /*****************************************************************************/
-// Returns number of courses found
 
 void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
   {

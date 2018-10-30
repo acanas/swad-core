@@ -281,27 +281,26 @@ void Dpt_GetListDepartments (long InsCod)
 	    sprintf (OrderBySubQuery,"NumTchs DESC,FullName");
 	    break;
 	}
-      DB_BuildQuery ("(SELECT departments.DptCod,departments.InsCod,"
-		     "departments.ShortName,departments.FullName,departments.WWW,"
-		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-		     " FROM departments,usr_data,crs_usr"
-		     " WHERE departments.InsCod=%ld"
-		     " AND departments.DptCod=usr_data.DptCod"
-		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role IN (%u,%u)"
-		     " GROUP BY departments.DptCod)"
-		     " UNION "
-		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
-		     " FROM departments"
-		     " WHERE InsCod=%ld AND DptCod NOT IN"
-		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
-		     " ORDER BY %s",
-	             InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-	             InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-	             OrderBySubQuery);
-      Gbl.Dpts.Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get departments");
-
+      Gbl.Dpts.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get departments",
+						"(SELECT departments.DptCod,departments.InsCod,"
+						"departments.ShortName,departments.FullName,departments.WWW,"
+						"COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
+						" FROM departments,usr_data,crs_usr"
+						" WHERE departments.InsCod=%ld"
+						" AND departments.DptCod=usr_data.DptCod"
+						" AND usr_data.UsrCod=crs_usr.UsrCod"
+						" AND crs_usr.Role IN (%u,%u)"
+						" GROUP BY departments.DptCod)"
+						" UNION "
+						"(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
+						" FROM departments"
+						" WHERE InsCod=%ld AND DptCod NOT IN"
+						" (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
+						" WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
+						" ORDER BY %s",
+						InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+						InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+						OrderBySubQuery);
       if (Gbl.Dpts.Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
@@ -377,24 +376,23 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      DB_BuildQuery ("(SELECT departments.InsCod,departments.ShortName,departments.FullName,departments.WWW,"
-		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-		     " FROM departments,usr_data,crs_usr"
-		     " WHERE departments.DptCod=%ld"
-		     " AND departments.DptCod=usr_data.DptCod"
-		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role=%u"
-		     " GROUP BY departments.DptCod)"
-		     " UNION "
-		     "(SELECT InsCod,ShortName,FullName,WWW,0"
-		     " FROM departments"
-		     " WHERE DptCod=%ld AND DptCod NOT IN"
-		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
-		     Dpt->DptCod,(unsigned) Rol_TCH,
-		     Dpt->DptCod,(unsigned) Rol_TCH);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a department");
-
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a department",
+				"(SELECT departments.InsCod,departments.ShortName,departments.FullName,departments.WWW,"
+				"COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
+				" FROM departments,usr_data,crs_usr"
+				" WHERE departments.DptCod=%ld"
+				" AND departments.DptCod=usr_data.DptCod"
+				" AND usr_data.UsrCod=crs_usr.UsrCod"
+				" AND crs_usr.Role=%u"
+				" GROUP BY departments.DptCod)"
+				" UNION "
+				"(SELECT InsCod,ShortName,FullName,WWW,0"
+				" FROM departments"
+				" WHERE DptCod=%ld AND DptCod NOT IN"
+				" (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
+				" WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
+				Dpt->DptCod,(unsigned) Rol_TCH,
+				Dpt->DptCod,(unsigned) Rol_TCH);
       if (NumRows) // Department found...
         {
          /* Get row */

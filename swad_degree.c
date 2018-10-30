@@ -2552,22 +2552,19 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   }
 
 /*****************************************************************************/
-/****************************** List degrees found ***************************/
+/**************************** List degrees found *****************************/
 /*****************************************************************************/
-// Returns number of degrees found
 
-unsigned Deg_ListDegsFound (void)
+void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
   {
    extern const char *Txt_degree;
    extern const char *Txt_degrees;
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumDegs;
    unsigned NumDeg;
    struct Degree Deg;
 
    /***** Query database *****/
-   if ((NumDegs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get degrees")))
+   if (NumDegs)
      {
       /***** Start box and table *****/
       /* Number of degrees found */
@@ -2587,7 +2584,7 @@ unsigned Deg_ListDegsFound (void)
 	   NumDeg++)
 	{
 	 /* Get next degree */
-	 row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Get degree code (row[0]) */
 	 Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -2604,7 +2601,5 @@ unsigned Deg_ListDegsFound (void)
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumDegs;
+   DB_FreeMySQLResult (mysql_res);
   }
