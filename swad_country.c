@@ -993,7 +993,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char OrderBySubQuery[256];
+   char *OrderBySubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1009,6 +1009,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 			" FROM countries ORDER BY Name_%s",
                         Txt_STR_LANG_ID[Gbl.Prefs.Language],
                         Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+         OrderBySubQuery = NULL;
          break;
       case Cty_GET_EXTRA_DATA:
          SubQueryNam1[0] = '\0';
@@ -1045,12 +1046,14 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
          switch (Gbl.Ctys.SelectedOrder)
            {
             case Cty_ORDER_BY_COUNTRY:
-               sprintf (OrderBySubQuery,"Name_%s",
-        	        Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+               if (asprintf (&OrderBySubQuery,"Name_%s",
+        	             Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+	          Lay_NotEnoughMemoryExit ();
                break;
             case Cty_ORDER_BY_NUM_USRS:
-               sprintf (OrderBySubQuery,"NumUsrs DESC,Name_%s",
-        	        Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+               if (asprintf (&OrderBySubQuery,"NumUsrs DESC,Name_%s",
+        	             Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+	          Lay_NotEnoughMemoryExit ();
                break;
            }
          DB_BuildQuery ("(SELECT countries.CtyCod,countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
@@ -1070,6 +1073,11 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
    /***** Count number of rows in result *****/
    NumRows = DB_QuerySELECT_new (&mysql_res,"can not get countries");
+
+   /***** Free memory for subquery *****/
+   if (OrderBySubQuery)
+      free ((void *) OrderBySubQuery);
+
    if (NumRows) // Countries found...
      {
       Gbl.Ctys.Num = (unsigned) NumRows;

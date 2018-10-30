@@ -621,8 +621,8 @@ static void Asg_PutParams (void)
 
 void Asg_GetListAssignments (void)
   {
-   char HiddenSubQuery[256];
-   char OrderBySubQuery[256];
+   char *HiddenSubQuery;
+   char *OrderBySubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -639,16 +639,21 @@ void Asg_GetListAssignments (void)
          HiddenSubQuery[0] = '\0';
          break;
       default:
-         sprintf (HiddenSubQuery," AND Hidden='N'");
+         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
      }
    switch (Gbl.Asgs.SelectedOrder)
      {
       case Dat_START_TIME:
-         sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
+         if (asprintf (&OrderBySubQuery,
+                       "StartTime DESC,EndTime DESC,Title DESC") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
       case Dat_END_TIME:
-         sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
+         if (asprintf (&OrderBySubQuery,
+                       "EndTime DESC,StartTime DESC,Title DESC") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
      }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
@@ -659,8 +664,7 @@ void Asg_GetListAssignments (void)
 		     " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
 		     " WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
 		     " ORDER BY %s",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     HiddenSubQuery,
+                     Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
                      Gbl.Usrs.Me.UsrDat.UsrCod,
                      OrderBySubQuery);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
@@ -668,8 +672,13 @@ void Asg_GetListAssignments (void)
 		     " FROM assignments"
 		     " WHERE CrsCod=%ld%s"
 		     " ORDER BY %s",
-                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
+                    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+		    OrderBySubQuery);
    NumRows = DB_QuerySELECT_new (&mysql_res,"can not get assignments");
+
+   /* Free allocated memory for subqueries */
+   free ((void *) OrderBySubQuery);
+   free ((void *) HiddenSubQuery);
 
    if (NumRows) // Assignments found...
      {

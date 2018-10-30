@@ -25,9 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For fprintf, asprintf
+#include <stdio.h>		// For fprintf
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 

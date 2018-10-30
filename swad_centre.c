@@ -1033,7 +1033,7 @@ static void Ctr_PutIconToViewCentres (void)
 
 void Ctr_GetListCentres (long InsCod)
   {
-   char OrderBySubQuery[256];
+   char *OrderBySubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1044,10 +1044,12 @@ void Ctr_GetListCentres (long InsCod)
    switch (Gbl.Ctrs.SelectedOrder)
      {
       case Ctr_ORDER_BY_CENTRE:
-         sprintf (OrderBySubQuery,"FullName");
+         if (asprintf (&OrderBySubQuery,"FullName") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
       case Ctr_ORDER_BY_NUM_TCHS:
-         sprintf (OrderBySubQuery,"NumUsrs DESC,FullName");
+         if (asprintf (&OrderBySubQuery,"NumUsrs DESC,FullName") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
      }
    DB_BuildQuery ("(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
@@ -1070,6 +1072,7 @@ void Ctr_GetListCentres (long InsCod)
 	          InsCod,
 	          OrderBySubQuery);
    NumRows = DB_QuerySELECT_new (&mysql_res,"can not get centres");
+   free ((void *) OrderBySubQuery);
 
    if (NumRows) // Centres found...
      {

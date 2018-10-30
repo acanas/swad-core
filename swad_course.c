@@ -3028,17 +3028,23 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   char SubQuery[32];
+   char *SubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
 
    /***** Get courses of a user from database *****/
-   if (Role == Rol_UNK)
-      SubQuery[0] = '\0';	// Role == Rol_UNK ==> any role
+   if (Role == Rol_UNK)	// Role == Rol_UNK ==> any role
+     {
+      if (asprintf (&SubQuery,"%s","") < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
    else
-      sprintf (SubQuery," AND crs_usr.Role=%u",(unsigned) Role);
+     {
+      if (asprintf (&SubQuery," AND crs_usr.Role=%u",(unsigned) Role) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
    DB_BuildQuery ("SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
 		  "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
 		  " FROM crs_usr,courses,degrees,centres"
@@ -3048,9 +3054,13 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 		  " AND degrees.CtrCod=centres.CtrCod"
 		  " ORDER BY degrees.FullName,courses.Year,courses.FullName",
                   UsrDat->UsrCod,SubQuery);
+   NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user");
+
+   /***** Free allocated memory for subquery *****/
+   free ((void *) SubQuery);
 
    /***** List the courses (one row per course) *****/
-   if ((NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user")))
+   if (NumCrss)
      {
       /* Start box and table */
       Box_StartBoxTable ("100%",NULL,NULL,

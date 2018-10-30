@@ -604,8 +604,8 @@ static void Att_PutParams (void)
 
 static void Att_GetListAttEvents (Att_OrderTime_t Order)
   {
-   char HiddenSubQuery[256];
-   char OrderBySubQuery[256];
+   char *HiddenSubQuery;
+   char *OrderBySubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -619,25 +619,27 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-         HiddenSubQuery[0] = '\0';
+         if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
       default:
-         sprintf (HiddenSubQuery," AND Hidden='N'");
+         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
      }
    switch (Gbl.AttEvents.SelectedOrder)
      {
       case Dat_START_TIME:
-	 if (Order == Att_NEWEST_FIRST)
-            sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
-	 else
-            sprintf (OrderBySubQuery,"StartTime,EndTime,Title");
+	 if (asprintf (&OrderBySubQuery,
+		       (Order == Att_NEWEST_FIRST) ? "StartTime DESC,EndTime DESC,Title DESC" :
+						     "StartTime,EndTime,Title") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
       case Dat_END_TIME:
-	 if (Order == Att_NEWEST_FIRST)
-            sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
-	 else
-	    sprintf (OrderBySubQuery,"EndTime,StartTime,Title");
+	 if (asprintf (&OrderBySubQuery,
+		       (Order == Att_NEWEST_FIRST) ? "EndTime DESC,StartTime DESC,Title DESC" :
+						     "EndTime,StartTime,Title") < 0)
+	    Lay_NotEnoughMemoryExit ();
 	 break;
      }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
@@ -657,8 +659,13 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
 		     " WHERE CrsCod=%ld%s"
 		     " ORDER BY %s",
                      Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
+   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get attendance events");
 
-   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get attendance events"))) // Attendance events found...
+   /* Free allocated memory for subqueries */
+   free ((void *) OrderBySubQuery);
+   free ((void *) HiddenSubQuery);
+
+   if (NumRows) // Attendance events found...
      {
       Gbl.AttEvents.Num = (unsigned) NumRows;
 
@@ -2424,18 +2431,19 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
          Lay_NotEnoughMemoryExit ();
 
       /***** Count number of students registered in an event in database *****/
-      sprintf (Gbl.DB.QueryPtr,"SELECT COUNT(*) FROM att_usr"
-                               " WHERE AttCod=%ld"
-	                       " AND UsrCod IN (",
-               AttCod);
+      snprintf (Gbl.DB.QueryPtr,MaxLength + 1,
+	        "SELECT COUNT(*) FROM att_usr"
+                " WHERE AttCod=%ld"
+	        " AND UsrCod IN (",
+                AttCod);
       for (NumStd = 0;
 	   NumStd < NumStdsInList;
 	   NumStd++)
 	{
-         sprintf (SubQuery,
-                  NumStd ? ",%ld" :
-                	   "%ld",
-                  LstSelectedUsrCods[NumStd]);
+         snprintf (SubQuery,sizeof (SubQuery),
+                   NumStd ? ",%ld" :
+                	    "%ld",
+                   LstSelectedUsrCods[NumStd]);
 	 Str_Concat (Gbl.DB.QueryPtr,SubQuery,
 	             MaxLength);
 	}
