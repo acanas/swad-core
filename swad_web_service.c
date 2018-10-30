@@ -2680,6 +2680,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    char LongStr[1 + 10 + 1];
    struct UsrData UsrDat;
    unsigned NumCodsInList;
+   char *Query;
    char SubQuery[256];
    size_t Length = 0;	// Initialized to avoid warning
 
@@ -2733,12 +2734,12 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
       /* Start query used to mark not present users as absent */
       Length = 256 + NumCodsInList * (1 + 1 + 10 + 1) - 1;
-      if ((Gbl.DB.QueryPtr = (char *) malloc (Length + 1)) == NULL)
+      if ((Query = (char *) malloc (Length + 1)) == NULL)
 	 return soap_receiver_fault (Gbl.soap,
 	                             "Not enough memory",
 	                             "Not enough memory to store list of users");
-      sprintf (Gbl.DB.QueryPtr,"UPDATE att_usr SET Present='N'"
-			       " WHERE AttCod=%ld",
+      sprintf (Query,"UPDATE att_usr SET Present='N'"
+		     " WHERE AttCod=%ld",
 	       Att.AttCod);
      }
 
@@ -2763,7 +2764,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",%ld" :
 								       " AND UsrCod NOT IN (%ld",
 			   UsrDat.UsrCod);
-		  Str_Concat (Gbl.DB.QueryPtr,SubQuery,
+		  Str_Concat (Query,SubQuery,
 		              Length);
 		 }
 
@@ -2775,10 +2776,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
      {
       /* Mark not present users as absent in table of users */
       if (sendAttendanceUsersOut->numUsers)
-         Str_Concat (Gbl.DB.QueryPtr,")",
+         Str_Concat (Query,")",
                      Length);
 
-      DB_QueryUPDATE_new ("can not set other users as absent");
+      DB_QueryUPDATE (Query,"can not set other users as absent");
 
       /* Clean table att_usr */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
@@ -3145,9 +3146,11 @@ int swad__sendMessage (struct soap *soap,
    int ReturnCode;
    long ReplyUsrCod = -1L;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumRow;
+   unsigned NumRows;
    bool FirstNickname = true;
    bool ThereAreNicknames = false;
    const char *Ptr;
@@ -3229,17 +3232,17 @@ int swad__sendMessage (struct soap *soap,
      }
 
    /***** Allocate space for query *****/
-   if ((Gbl.DB.QueryPtr = (char *) malloc (Svc_MAX_BYTES_QUERY_RECIPIENTS + 1)) == NULL)
+   if ((Query = (char *) malloc (Svc_MAX_BYTES_QUERY_RECIPIENTS + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Build query for recipients from database *****/
    if (ReplyUsrCod > 0)
-      snprintf (Gbl.DB.QueryPtr,Svc_MAX_BYTES_QUERY_RECIPIENTS + 1,
+      snprintf (Query,Svc_MAX_BYTES_QUERY_RECIPIENTS + 1,
 	        "SELECT UsrCod FROM usr_data"
 	        " WHERE UsrCod=%ld",
 	        ReplyUsrCod);
    else
-      Gbl.DB.QueryPtr[0] = '\0';
+      Query[0] = '\0';
 
    /***** Loop over recipients' nicknames building query *****/
    Ptr = to;
@@ -3254,7 +3257,7 @@ int swad__sendMessage (struct soap *soap,
          Str_RemoveLeadingArrobas (Nickname);
 
 	 /* Check for overflow in query */
-	 if (strlen (Gbl.DB.QueryPtr) + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 32 >
+	 if (strlen (Query) + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 32 >
 	     Svc_MAX_BYTES_QUERY_RECIPIENTS)
 	    return soap_sender_fault (Gbl.soap,
 				      "Can not send message",
@@ -3264,25 +3267,25 @@ int swad__sendMessage (struct soap *soap,
 	 if (FirstNickname)
 	   {
 	    if (ReplyUsrCod > 0)
-	       Str_Concat (Gbl.DB.QueryPtr," UNION ",
+	       Str_Concat (Query," UNION ",
 	                   Svc_MAX_BYTES_QUERY_RECIPIENTS);
-	    Str_Concat (Gbl.DB.QueryPtr,"SELECT UsrCod FROM usr_nicknames"
+	    Str_Concat (Query,"SELECT UsrCod FROM usr_nicknames"
 			      " WHERE Nickname IN ('",
 			Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	    FirstNickname = false;
 	    ThereAreNicknames = true;
 	   }
 	 else
-	    Str_Concat (Gbl.DB.QueryPtr,",'",
+	    Str_Concat (Query,",'",
 	                Svc_MAX_BYTES_QUERY_RECIPIENTS);
-	 Str_Concat (Gbl.DB.QueryPtr,Nickname,
+	 Str_Concat (Query,Nickname,
 	             Svc_MAX_BYTES_QUERY_RECIPIENTS);
-	 Str_Concat (Gbl.DB.QueryPtr,"'",
+	 Str_Concat (Query,"'",
 	             Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	}
      }
    if (ThereAreNicknames)
-      Str_Concat (Gbl.DB.QueryPtr,")",
+      Str_Concat (Query,")",
                   Svc_MAX_BYTES_QUERY_RECIPIENTS);
 
    /***** Initialize output structure *****/
@@ -3293,7 +3296,7 @@ int swad__sendMessage (struct soap *soap,
    if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in "to"
      {
       /***** Get users *****/
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get users");
+      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get users");
 
       sendMessageOut->numUsers = (int) NumRows;
       sendMessageOut->usersArray.__size = (int) NumRows;

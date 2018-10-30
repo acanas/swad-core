@@ -38,18 +38,23 @@ void DB_OpenDBConnection (void);
 void DB_CloseDBConnection (void);
 
 void DB_BuildQuery (const char *fmt,...);
+void DB_BuildQuery_old (char **Query,const char *fmt,...);
 
 unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError);
+unsigned long DB_QuerySELECT (char **Query,MYSQL_RES **mysql_res,const char *MsgError);
 
 unsigned long DB_QueryCOUNT_new (const char *MsgError);
+unsigned long DB_QueryCOUNT (char **Query,const char *MsgError);
 
 void DB_QueryINSERT_new (const char *MsgError);
+void DB_QueryINSERT (char **Query,const char *MsgError);
 
 long DB_QueryINSERTandReturnCode_new (const char *MsgError);
 
 void DB_QueryREPLACE_new (const char *MsgError);
 
 void DB_QueryUPDATE_new (const char *MsgError);
+void DB_QueryUPDATE (char **Query,const char *MsgError);
 
 void DB_QueryDELETE_new (const char *MsgError);
 

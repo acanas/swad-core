@@ -2418,6 +2418,7 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
 
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList)
   {
+   char *Query;
    char SubQuery[1 + 1 + 10 + 1];
    unsigned NumStd;
    unsigned NumStdsInAttEvent = 0;
@@ -2427,11 +2428,11 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
      {
       /***** Allocate space for query *****/
       MaxLength = 256 + NumStdsInList * (1 + 1 + 10);
-      if ((Gbl.DB.QueryPtr = (char *) malloc (MaxLength + 1)) == NULL)
+      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Count number of students registered in an event in database *****/
-      snprintf (Gbl.DB.QueryPtr,MaxLength + 1,
+      snprintf (Query,MaxLength + 1,
 	        "SELECT COUNT(*) FROM att_usr"
                 " WHERE AttCod=%ld"
 	        " AND UsrCod IN (",
@@ -2444,11 +2445,12 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
                    NumStd ? ",%ld" :
                 	    "%ld",
                    LstSelectedUsrCods[NumStd]);
-	 Str_Concat (Gbl.DB.QueryPtr,SubQuery,
+	 Str_Concat (Query,SubQuery,
 	             MaxLength);
 	}
-      Str_Concat (Gbl.DB.QueryPtr,") AND Present='Y'",
+      Str_Concat (Query,") AND Present='Y'",
                   MaxLength);
+
 
       NumStdsInAttEvent = (unsigned) DB_QueryCOUNT_new ("can not get number of students from a list who are registered in an event");
      }

@@ -181,11 +181,11 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
 
-static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role);
+static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
-static void Usr_GetListUsrsFromQuery (Rol_Role_t Role,Sco_Scope_t Scope);
+static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit);
@@ -4130,7 +4130,7 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
 /******* Build query to get list with data of users in current course ********/
 /*****************************************************************************/
 
-static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
+static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
@@ -4173,17 +4173,21 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
    if (!Gbl.Usrs.ClassPhoto.AllGroups &&
        !Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
      {
-      Gbl.DB.QueryPtr = NULL;
+      *Query = NULL;
       return;
      }
 
+   /***** Get list of groups types in current course *****/
+   if (!Gbl.Usrs.ClassPhoto.AllGroups)
+      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+
    /***** Allocate space for query *****/
-   if ((Gbl.DB.QueryPtr = (char *) malloc (Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
+   if ((*Query = (char *) malloc (Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Create query for users in the course *****/
    if (Gbl.Action.Act == ActReqMsgUsr)        // Selecting users to write a message
-      snprintf (Gbl.DB.QueryPtr,Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
+      snprintf (*Query,Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
 	        "SELECT %s FROM crs_usr,usr_data"
 	        " WHERE crs_usr.CrsCod=%ld"
 	        " AND crs_usr.Role=%u"
@@ -4194,7 +4198,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
                 Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
                 Gbl.Usrs.Me.UsrDat.UsrCod);
    else
-      snprintf (Gbl.DB.QueryPtr,Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
+      snprintf (*Query,Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
 	        "SELECT %s FROM crs_usr,usr_data"
 	        " WHERE crs_usr.CrsCod=%ld"
 	        " AND crs_usr.Role=%u"
@@ -4205,9 +4209,6 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
    /***** Select users in selected groups *****/
    if (!Gbl.Usrs.ClassPhoto.AllGroups)
      {
-      /***** Get list of groups types in current course *****/
-      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
       if ((AddStdsWithoutGroupOf = (bool *) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (bool))) == NULL)
          Lay_NotEnoughMemoryExit ();
@@ -4240,8 +4241,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
          /* If there are positive codes, add the students who belong to groups with those codes */
          if (NumPositiveCods)
            {
-            Str_Concat (Gbl.DB.QueryPtr," AND (crs_usr.UsrCod IN"
-				        " (SELECT DISTINCT UsrCod FROM crs_grp_usr WHERE",
+            Str_Concat (*Query," AND (crs_usr.UsrCod IN"
+			       " (SELECT DISTINCT UsrCod FROM crs_grp_usr WHERE",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumPositiveCods = 0;
             for (NumGrpSel = 0;
@@ -4249,19 +4250,19 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
                  NumGrpSel++)
                if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
                  {
-                  Str_Concat (Gbl.DB.QueryPtr,NumPositiveCods ? " OR GrpCod='" :
-                					        " GrpCod='",
+                  Str_Concat (*Query,NumPositiveCods ? " OR GrpCod='" :
+                				       " GrpCod='",
                 	      Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   snprintf (LongStr,sizeof (LongStr),
                 	    "%ld",
 			    GrpCod);
-                  Str_Concat (Gbl.DB.QueryPtr,LongStr,
+                  Str_Concat (*Query,LongStr,
                               Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-                  Str_Concat (Gbl.DB.QueryPtr,"'",
+                  Str_Concat (*Query,"'",
                               Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   NumPositiveCods++;
                  }
-            Str_Concat (Gbl.DB.QueryPtr,")",
+            Str_Concat (*Query,")",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
            }
         }
@@ -4273,29 +4274,29 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
          if (AddStdsWithoutGroupOf[NumGrpTyp])
            {
             if (NumPositiveCods || NumNegativeCods)
-               Str_Concat (Gbl.DB.QueryPtr," OR ",
+               Str_Concat (*Query," OR ",
                            Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             else
-               Str_Concat (Gbl.DB.QueryPtr," AND (",
+               Str_Concat (*Query," AND (",
                            Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             /* Select all the students of the course who don't belong to any group of type GrpTypCod */
-            Str_Concat (Gbl.DB.QueryPtr,"crs_usr.UsrCod NOT IN"
-				        " (SELECT DISTINCT crs_grp_usr.UsrCod"
-				        " FROM crs_grp,crs_grp_usr"
-				        " WHERE crs_grp.GrpTypCod='",
+            Str_Concat (*Query,"crs_usr.UsrCod NOT IN"
+			       " (SELECT DISTINCT crs_grp_usr.UsrCod"
+			       " FROM crs_grp,crs_grp_usr"
+			       " WHERE crs_grp.GrpTypCod='",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             snprintf (LongStr,sizeof (LongStr),
         	      "%ld",
 		      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-            Str_Concat (Gbl.DB.QueryPtr,LongStr,
+            Str_Concat (*Query,LongStr,
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-            Str_Concat (Gbl.DB.QueryPtr,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
+            Str_Concat (*Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumNegativeCods++;
            }
       if (NumPositiveCods ||
           NumNegativeCods)
-         Str_Concat (Gbl.DB.QueryPtr,")",
+         Str_Concat (*Query,")",
                      Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
 
       /***** Free memory used by the list of booleans AddStdsWithoutGroupOf *****/
@@ -4306,11 +4307,11 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
      }
 
    /***** The last part of the query is for ordering the list *****/
-   Str_Concat (Gbl.DB.QueryPtr," ORDER BY "
-			       "usr_data.Surname1,"
-			       "usr_data.Surname2,"
-			       "usr_data.FirstName,"
-			       "usr_data.UsrCod",
+   Str_Concat (*Query," ORDER BY "
+		      "usr_data.Surname1,"
+		      "usr_data.Surname2,"
+		      "usr_data.FirstName,"
+		      "usr_data.UsrCod",
 	       Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
   }
 
@@ -4324,6 +4325,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role)
 
 void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
   {
+   char *Query;
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
@@ -4357,95 +4359,100 @@ void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
      {
       case Sco_SCOPE_SYS:
 	 /* Get users in courses from the whole platform */
-	 DB_BuildQuery ("SELECT %s"
-	                " FROM usr_data,crs_usr"
-			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role=%u"
-			" ORDER BY "
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.UsrCod",
-			QueryFields,
-			(unsigned) Role);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s"
+			    " FROM usr_data,crs_usr"
+			    " WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			    " AND crs_usr.Role=%u"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod",
+			    QueryFields,
+			    (unsigned) Role);
 	 break;
       case Sco_SCOPE_CTY:
 	 /* Get users in courses from the current country */
-	 DB_BuildQuery ("SELECT %s"
-	                " FROM usr_data,crs_usr,courses,degrees,centres,institutions"
-			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role=%u"
-			" AND crs_usr.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod=%ld"
-			" ORDER BY "
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.UsrCod",
-			QueryFields,
-			(unsigned) Role,
-			Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s"
+			    " FROM usr_data,crs_usr,courses,degrees,centres,institutions"
+			    " WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			    " AND crs_usr.Role=%u"
+			    " AND crs_usr.CrsCod=courses.CrsCod"
+			    " AND courses.DegCod=degrees.DegCod"
+			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND centres.InsCod=institutions.InsCod"
+			    " AND institutions.CtyCod=%ld"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod",
+			    QueryFields,
+			    (unsigned) Role,
+			    Gbl.CurrentCty.Cty.CtyCod);
 	 break;
       case Sco_SCOPE_INS:
 	 /* Get users in courses from the current institution */
-	 DB_BuildQuery ("SELECT %s"
-	                " FROM usr_data,crs_usr,courses,degrees,centres"
-			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role=%u"
-			" AND crs_usr.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod=%ld"
-			" ORDER BY "
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.UsrCod",
-			QueryFields,
-			(unsigned) Role,
-			Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s"
+			    " FROM usr_data,crs_usr,courses,degrees,centres"
+			    " WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			    " AND crs_usr.Role=%u"
+			    " AND crs_usr.CrsCod=courses.CrsCod"
+			    " AND courses.DegCod=degrees.DegCod"
+			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND centres.InsCod=%ld"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod",
+			    QueryFields,
+			    (unsigned) Role,
+			    Gbl.CurrentIns.Ins.InsCod);
 	 break;
       case Sco_SCOPE_CTR:
 	 /* Get users in courses from the current centre */
-	 DB_BuildQuery ("SELECT %s"
-	                " FROM usr_data,crs_usr,courses,degrees"
-			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role=%u"
-			" AND crs_usr.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod=%ld"
-			" ORDER BY "
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.UsrCod",
-			QueryFields,
-			(unsigned) Role,
-			Gbl.CurrentCtr.Ctr.CtrCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s"
+			    " FROM usr_data,crs_usr,courses,degrees"
+			    " WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			    " AND crs_usr.Role=%u"
+			    " AND crs_usr.CrsCod=courses.CrsCod"
+			    " AND courses.DegCod=degrees.DegCod"
+			    " AND degrees.CtrCod=%ld"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod",
+			    QueryFields,
+			    (unsigned) Role,
+			    Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
       case Sco_SCOPE_DEG:
 	 /* Get users in courses from the current degree */
-	 DB_BuildQuery ("SELECT %s"
-	                " FROM usr_data,crs_usr,courses"
-			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role=%u"
-			" AND crs_usr.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=%ld"
-			" ORDER BY "
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.UsrCod",
-			QueryFields,
-			(unsigned) Role,
-			Gbl.CurrentDeg.Deg.DegCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s"
+			    " FROM usr_data,crs_usr,courses"
+			    " WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			    " AND crs_usr.Role=%u"
+			    " AND crs_usr.CrsCod=courses.CrsCod"
+			    " AND courses.DegCod=%ld"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod",
+			    QueryFields,
+			    (unsigned) Role,
+			    Gbl.CurrentDeg.Deg.DegCod);
 	 break;
       case Sco_SCOPE_CRS:
 	 /* Get users from the current course */
-	 Usr_BuildQueryToGetUsrsLstCrs (Role);
+	 Usr_BuildQueryToGetUsrsLstCrs (&Query,Role);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
@@ -4456,7 +4463,7 @@ void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Role,Scope);
+   Usr_GetListUsrsFromQuery (&Query,Role,Scope);
   }
 
 /*****************************************************************************/
@@ -4465,6 +4472,7 @@ void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
 
 void Usr_SearchListUsrs (Rol_Role_t Role)
   {
+   char *Query;
    char SubQueryRole[64];
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
@@ -4511,75 +4519,81 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users from the whole platform */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,usr_data"
-			      " WHERE %s",
-			      QueryFields,OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,usr_data"
+				  " WHERE %s",
+				  QueryFields,OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      Gbl.CurrentCty.Cty.CtyCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=degrees.DegCod"
+				  " AND degrees.CtrCod=centres.CtrCod"
+				  " AND centres.InsCod=institutions.InsCod"
+				  " AND institutions.CtyCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  Gbl.CurrentCty.Cty.CtyCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      Gbl.CurrentIns.Ins.InsCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=degrees.DegCod"
+				  " AND degrees.CtrCod=centres.CtrCod"
+				  " AND centres.InsCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  Gbl.CurrentIns.Ins.InsCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,degrees,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      Gbl.CurrentCtr.Ctr.CtrCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=degrees.DegCod"
+				  " AND degrees.CtrCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  Gbl.CurrentCtr.Ctr.CtrCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  Gbl.CurrentDeg.Deg.DegCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       DB_BuildQuery ("SELECT %s,crs_usr.Role,crs_usr.Accepted"
-		              " FROM candidate_users,crs_usr,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.CrsCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      Gbl.CurrentCrs.Crs.CrsCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s,crs_usr.Role,crs_usr.Accepted"
+				  " FROM candidate_users,crs_usr,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  " AND crs_usr.CrsCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  Gbl.CurrentCrs.Crs.CrsCod,
+				  OrderQuery);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -4588,12 +4602,13 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
          break;
       case Rol_GST:	// Guests (scope is not used)
 	 /* Search users with no courses */
-	 DB_BuildQuery ("SELECT %s"
-	                " FROM candidate_users,usr_data"
-			" WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-			" AND %s",
-			QueryFields,
-			OrderQuery);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s"
+			    " FROM candidate_users,usr_data"
+			    " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			    " AND %s",
+			    QueryFields,
+			    OrderQuery);
 	 break;
       case Rol_STD:	// Student
       case Rol_NET:	// Non-editing teacher
@@ -4622,89 +4637,95 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users in courses from the whole platform */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      "%s"
-			      " AND %s",
-			      QueryFields,
-			      SubQueryRole,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  "%s"
+				  " AND %s",
+				  QueryFields,
+				  SubQueryRole,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      "%s"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      SubQueryRole,
-			      Gbl.CurrentCty.Cty.CtyCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  "%s"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=degrees.DegCod"
+				  " AND degrees.CtrCod=centres.CtrCod"
+				  " AND centres.InsCod=institutions.InsCod"
+				  " AND institutions.CtyCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  SubQueryRole,
+				  Gbl.CurrentCty.Cty.CtyCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      "%s"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      SubQueryRole,
-			      Gbl.CurrentIns.Ins.InsCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  "%s"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=degrees.DegCod"
+				  " AND degrees.CtrCod=centres.CtrCod"
+				  " AND centres.InsCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  SubQueryRole,
+				  Gbl.CurrentIns.Ins.InsCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,degrees,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      "%s"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      SubQueryRole,
-			      Gbl.CurrentCtr.Ctr.CtrCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  "%s"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=degrees.DegCod"
+				  " AND degrees.CtrCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  SubQueryRole,
+				  Gbl.CurrentCtr.Ctr.CtrCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       DB_BuildQuery ("SELECT %s"
-		              " FROM candidate_users,crs_usr,courses,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      "%s"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      SubQueryRole,
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s"
+				  " FROM candidate_users,crs_usr,courses,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  "%s"
+				  " AND crs_usr.CrsCod=courses.CrsCod"
+				  " AND courses.DegCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  SubQueryRole,
+				  Gbl.CurrentDeg.Deg.DegCod,
+				  OrderQuery);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       DB_BuildQuery ("SELECT %s,crs_usr.Role,crs_usr.Accepted"
-		              " FROM candidate_users,crs_usr,usr_data"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      "%s"
-			      " AND crs_usr.CrsCod=%ld"
-			      " AND %s",
-			      QueryFields,
-			      SubQueryRole,
-			      Gbl.CurrentCrs.Crs.CrsCod,
-			      OrderQuery);
+	       DB_BuildQuery_old (&Query,
+				  "SELECT %s,crs_usr.Role,crs_usr.Accepted"
+				  " FROM candidate_users,crs_usr,usr_data"
+				  " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				  "%s"
+				  " AND crs_usr.CrsCod=%ld"
+				  " AND %s",
+				  QueryFields,
+				  SubQueryRole,
+				  Gbl.CurrentCrs.Crs.CrsCod,
+				  OrderQuery);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -4720,7 +4741,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    //   Lay_ShowAlert (Lay_INFO,Query);
 
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Role,Gbl.Scope.Current);
+   Usr_GetListUsrsFromQuery (&Query,Role,Gbl.Scope.Current);
   }
 
 /*****************************************************************************/
@@ -4790,6 +4811,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
    */
+   char *Query;
 
    /***** Build query *****/
    // Important: it is better to use:
@@ -4799,118 +4821,123 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:	// All admins
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE UsrCod IN "
-                        "(SELECT DISTINCT UsrCod FROM admin)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields);
+         DB_BuildQuery_old (&Query,
+                            "SELECT %s FROM usr_data"
+			    " WHERE UsrCod IN "
+			    "(SELECT DISTINCT UsrCod FROM admin)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields);
          break;
       case Sco_SCOPE_CTY:	// System admins
 				// and admins of the institutions, centres and degrees in the current country
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s')"
-                        " OR UsrCod IN "
-                        "(SELECT admin.UsrCod FROM admin,institutions"
-                        " WHERE admin.Scope='%s'"
-                        " AND admin.Cod=institutions.InsCod"
-                        " AND institutions.CtyCod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT admin.UsrCod FROM admin,centres,institutions"
-                        " WHERE admin.Scope='%s'"
-                        " AND admin.Cod=centres.CtrCod"
-                        " AND centres.InsCod=institutions.InsCod"
-                        " AND institutions.CtyCod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT admin.UsrCod FROM admin,degrees,centres,institutions"
-                        " WHERE admin.Scope='%s'"
-                        " AND admin.Cod=degrees.DegCod"
-                        " AND degrees.CtrCod=centres.CtrCod"
-                        " AND centres.InsCod=institutions.InsCod"
-                        " AND institutions.CtyCod=%ld)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentCty.Cty.CtyCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCty.Cty.CtyCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCty.Cty.CtyCod);
+         DB_BuildQuery_old (&Query,
+                            "SELECT %s FROM usr_data"
+			    " WHERE UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s')"
+			    " OR UsrCod IN "
+			    "(SELECT admin.UsrCod FROM admin,institutions"
+			    " WHERE admin.Scope='%s'"
+			    " AND admin.Cod=institutions.InsCod"
+			    " AND institutions.CtyCod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT admin.UsrCod FROM admin,centres,institutions"
+			    " WHERE admin.Scope='%s'"
+			    " AND admin.Cod=centres.CtrCod"
+			    " AND centres.InsCod=institutions.InsCod"
+			    " AND institutions.CtyCod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT admin.UsrCod FROM admin,degrees,centres,institutions"
+			    " WHERE admin.Scope='%s'"
+			    " AND admin.Cod=degrees.DegCod"
+			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND centres.InsCod=institutions.InsCod"
+			    " AND institutions.CtyCod=%ld)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Sco_ScopeDB[Sco_SCOPE_SYS],
+			    Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentCty.Cty.CtyCod,
+			    Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCty.Cty.CtyCod,
+			    Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:	// System admins,
 				// admins of the current institution,
 				// and admins of the centres and degrees in the current institution
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s')"
-                        " OR UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT admin.UsrCod FROM admin,centres"
-                        " WHERE admin.Scope='%s'"
-                        " AND admin.Cod=centres.CtrCod"
-                        " AND centres.InsCod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT admin.UsrCod FROM admin,degrees,centres"
-                        " WHERE admin.Scope='%s'"
-                        " AND admin.Cod=degrees.DegCod"
-                        " AND degrees.CtrCod=centres.CtrCod"
-                        " AND centres.InsCod=%ld)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentIns.Ins.InsCod);
+         DB_BuildQuery_old (&Query,
+                            "SELECT %s FROM usr_data"
+			    " WHERE UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s')"
+			    " OR UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s' AND Cod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT admin.UsrCod FROM admin,centres"
+			    " WHERE admin.Scope='%s'"
+			    " AND admin.Cod=centres.CtrCod"
+			    " AND centres.InsCod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT admin.UsrCod FROM admin,degrees,centres"
+			    " WHERE admin.Scope='%s'"
+			    " AND admin.Cod=degrees.DegCod"
+			    " AND degrees.CtrCod=centres.CtrCod"
+			    " AND centres.InsCod=%ld)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Sco_ScopeDB[Sco_SCOPE_SYS],
+			    Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+			    Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentIns.Ins.InsCod,
+			    Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:	// System admins,
 				// admins of the current institution,
 				// admins and the current centre,
 				// and admins of the degrees in the current centre
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s')"
-                        " OR UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT admin.UsrCod FROM admin,degrees"
-                        " WHERE admin.Scope='%s'"
-                        " AND admin.Cod=degrees.DegCod"
-                        " AND degrees.CtrCod=%ld)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCtr.Ctr.CtrCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s FROM usr_data"
+			    " WHERE UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s')"
+			    " OR UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s' AND Cod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s' AND Cod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT admin.UsrCod FROM admin,degrees"
+			    " WHERE admin.Scope='%s'"
+			    " AND admin.Cod=degrees.DegCod"
+			    " AND degrees.CtrCod=%ld)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Sco_ScopeDB[Sco_SCOPE_SYS],
+			    Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+			    Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
+			    Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:	// System admins
 				// and admins of the current institution, centre or degree
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s')"
-                        " OR UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod=%ld)"
-                        " OR UsrCod IN "
-                        "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod=%ld)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod);
+         DB_BuildQuery_old (&Query,
+			    "SELECT %s FROM usr_data"
+			    " WHERE UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s')"
+			    " OR UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s' AND Cod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s' AND Cod=%ld)"
+			    " OR UsrCod IN "
+			    "(SELECT UsrCod FROM admin"
+			    " WHERE Scope='%s' AND Cod=%ld)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Sco_ScopeDB[Sco_SCOPE_SYS],
+			    Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+			    Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
+			    Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable
 	 Lay_WrongScopeExit ();
@@ -4918,7 +4945,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of administrators from database *****/
-   Usr_GetListUsrsFromQuery (Rol_DEG_ADM,Scope);
+   Usr_GetListUsrsFromQuery (&Query,Rol_DEG_ADM,Scope);
   }
 
 /*****************************************************************************/
@@ -4952,47 +4979,52 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
    */
+   char *Query;
 
    /***** Build query *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields);
+	 DB_BuildQuery_old (&Query,
+         		    "SELECT %s FROM usr_data"
+			    " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE (CtyCod=%ld OR InsCtyCod=%ld)"
-                        " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Gbl.CurrentCty.Cty.CtyCod,
-			Gbl.CurrentCty.Cty.CtyCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s FROM usr_data"
+			    " WHERE (CtyCod=%ld OR InsCtyCod=%ld)"
+			    " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Gbl.CurrentCty.Cty.CtyCod,
+			    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE InsCod=%ld"
-                        " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Gbl.CurrentIns.Ins.InsCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s FROM usr_data"
+			    " WHERE InsCod=%ld"
+			    " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT %s FROM usr_data"
-                        " WHERE CtrCod=%ld"
-                        " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
-			QueryFields,
-			Gbl.CurrentCtr.Ctr.CtrCod);
+	 DB_BuildQuery_old (&Query,
+			    "SELECT %s FROM usr_data"
+			    " WHERE CtrCod=%ld"
+			    " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			    " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+			    QueryFields,
+			    Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       default:        // not aplicable
          return;
      }
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Rol_GST,Scope);
+   Usr_GetListUsrsFromQuery (&Query,Rol_GST,Scope);
   }
 
 /*****************************************************************************/
@@ -5026,22 +5058,24 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
    */
+   char *Query;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs = 0;
 
    if (Usr_GetNumUsrsInCrssOfDeg (Rol_STD,DegCod))
      {
       /***** Get the students in a degree from database *****/
-      DB_BuildQuery ("SELECT %s FROM courses,crs_usr,usr_data"
-                     " WHERE courses.DegCod=%ld"
-                     " AND courses.CrsCod=crs_usr.CrsCod"
-                     " AND crs_usr.Role=%u"
-                     " AND crs_usr.UsrCod=usr_data.UsrCod",
-		     QueryFields,
-		     DegCod,(unsigned) Rol_STD);
+      DB_BuildQuery_old (&Query,
+	                 "SELECT %s FROM courses,crs_usr,usr_data"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.Role=%u"
+			 " AND crs_usr.UsrCod=usr_data.UsrCod",
+			 QueryFields,
+			 DegCod,(unsigned) Rol_STD);
 
       /***** Get list of students from database *****/
-      Usr_GetListUsrsFromQuery (Rol_STD,Sco_SCOPE_DEG);
+      Usr_GetListUsrsFromQuery (&Query,Rol_STD,Sco_SCOPE_DEG);
      }
   }
 
@@ -5049,7 +5083,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-static void Usr_GetListUsrsFromQuery (Rol_Role_t Role,Sco_Scope_t Scope)
+static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t Scope)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    MYSQL_RES *mysql_res;
@@ -5058,20 +5092,20 @@ static void Usr_GetListUsrsFromQuery (Rol_Role_t Role,Sco_Scope_t Scope)
    struct UsrInList *UsrInList;
    bool Abort = false;
 
-   if (Gbl.DB.QueryPtr == NULL)
+   if (*Query == NULL)
      {
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
       return;
      }
 
-   if (!Gbl.DB.QueryPtr[0])
+   if (!*Query[0])
      {
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
       return;
      }
 
    /***** Query database *****/
-   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get list of users")))
+   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get list of users")))
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {

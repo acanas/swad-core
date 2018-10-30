@@ -1022,8 +1022,6 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		        RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
-	    Lay_ShowAlert (Lay_INFO,Gbl.DB.QueryPtr); */
 	 NumDocs = Brw_ListDocsFound (Txt_document_in_my_courses,
 	                              Txt_documents_in_my_courses);
 
@@ -1178,8 +1176,6 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		        (unsigned) Brw_ADMI_BRF_USR);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
-	    Lay_ShowAlert (Lay_INFO,Gbl.DB.QueryPtr); */
 	 return Brw_ListDocsFound (Txt_document_from_me,
 	                           Txt_documents_from_me);
 	}

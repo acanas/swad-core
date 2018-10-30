@@ -2469,6 +2469,7 @@ void Tst_ListQuestionsToSelect (void)
 static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
+   char *Query;
    unsigned long NumRows;
    long LengthQuery;
    unsigned NumItemInList;
@@ -2480,7 +2481,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
    char CrsCodStr[1 + 10 + 1];
 
    /***** Allocate space for query *****/
-   if ((Gbl.DB.QueryPtr = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
+   if ((Query = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Select questions *****/
@@ -2499,7 +2500,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
    row[10] NumHitsNotBlank
    row[11] Score
    */
-   snprintf (Gbl.DB.QueryPtr,Tst_MAX_BYTES_QUERY_TEST + 1,
+   snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
 	     "SELECT tst_questions.QstCod,"
 	     "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
 	     "tst_questions.AnsType,tst_questions.Shuffle,"
@@ -2511,45 +2512,45 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 	     "tst_questions.Score"
 	     " FROM tst_questions");
    if (!Gbl.Test.Tags.All)
-      Str_Concat (Gbl.DB.QueryPtr,",tst_question_tags,tst_tags",
+      Str_Concat (Query,",tst_question_tags,tst_tags",
                   Tst_MAX_BYTES_QUERY_TEST);
 
-   Str_Concat (Gbl.DB.QueryPtr," WHERE tst_questions.CrsCod='",
+   Str_Concat (Query," WHERE tst_questions.CrsCod='",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (CrsCodStr,sizeof (CrsCodStr),
 	     "%ld",
 	     Gbl.CurrentCrs.Crs.CrsCod);
-   Str_Concat (Gbl.DB.QueryPtr,CrsCodStr,
+   Str_Concat (Query,CrsCodStr,
                Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Gbl.DB.QueryPtr,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
+   Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),
 	     "%ld",
 	     (long) Gbl.DateRange.TimeUTC[0]);
-   Str_Concat (Gbl.DB.QueryPtr,LongStr,
+   Str_Concat (Query,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Gbl.DB.QueryPtr,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
+   Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),
 	     "%ld",
 	     (long) Gbl.DateRange.TimeUTC[1]);
-   Str_Concat (Gbl.DB.QueryPtr,LongStr,
+   Str_Concat (Query,LongStr,
                Tst_MAX_BYTES_QUERY_TEST);
-   Str_Concat (Gbl.DB.QueryPtr,"')",
+   Str_Concat (Query,"')",
                Tst_MAX_BYTES_QUERY_TEST);
 
    /* Add the tags selected */
    if (!Gbl.Test.Tags.All)
      {
-      Str_Concat (Gbl.DB.QueryPtr," AND tst_questions.QstCod=tst_question_tags.QstCod"
+      Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
 	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
                         " AND tst_tags.CrsCod='",
                   Tst_MAX_BYTES_QUERY_TEST);
-      Str_Concat (Gbl.DB.QueryPtr,CrsCodStr,
+      Str_Concat (Query,CrsCodStr,
                   Tst_MAX_BYTES_QUERY_TEST);
-      Str_Concat (Gbl.DB.QueryPtr,"'",
+      Str_Concat (Query,"'",
                   Tst_MAX_BYTES_QUERY_TEST);
-      LengthQuery = strlen (Gbl.DB.QueryPtr);
+      LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
@@ -2558,24 +2559,24 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Gbl.DB.QueryPtr,
+         Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,TagText,
+         Str_Concat (Query,TagText,
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,"'",
+         Str_Concat (Query,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Gbl.DB.QueryPtr,")",
+      Str_Concat (Query,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add the types of answer selected */
    if (!Gbl.Test.AllAnsTypes)
      {
-      LengthQuery = strlen (Gbl.DB.QueryPtr);
+      LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
@@ -2585,48 +2586,48 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Gbl.DB.QueryPtr,
+         Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,Tst_StrAnswerTypesDB[AnsType],
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,"'",
+         Str_Concat (Query,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Gbl.DB.QueryPtr,")",
+      Str_Concat (Query,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End the query */
-   Str_Concat (Gbl.DB.QueryPtr," GROUP BY tst_questions.QstCod",
+   Str_Concat (Query," GROUP BY tst_questions.QstCod",
                Tst_MAX_BYTES_QUERY_TEST);
 
    switch (Gbl.Test.SelectedOrder)
      {
       case Tst_ORDER_STEM:
-         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.Stem",
+         Str_Concat (Query," ORDER BY tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS:
-         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.NumHits DESC,"
+         Str_Concat (Query," ORDER BY tst_questions.NumHits DESC,"
 				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE:
-         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
+         Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
 				     "tst_questions.NumHits DESC,"
 				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS_NOT_BLANK:
-         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.NumHitsNotBlank DESC,"
+         Str_Concat (Query," ORDER BY tst_questions.NumHitsNotBlank DESC,"
 				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE_NOT_BLANK:
-         Str_Concat (Gbl.DB.QueryPtr," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
+         Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
 				     "tst_questions.NumHitsNotBlank DESC,"
 				     "tst_questions.Stem",
                      Tst_MAX_BYTES_QUERY_TEST);
@@ -2634,7 +2635,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
      }
 
    /* Make the query */
-   NumRows = DB_QuerySELECT_new (mysql_res,"can not get questions");
+   NumRows = DB_QuerySELECT (Query,mysql_res,"can not get questions");
 
    if (NumRows == 0)
       Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
@@ -2648,6 +2649,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
   {
+   char *Query;
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
@@ -2657,7 +2659,7 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    char StrNumQsts[10 + 1];
 
    /***** Allocate space for query *****/
-   if ((Gbl.DB.QueryPtr = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
+   if ((Query = (char *) malloc (Tst_MAX_BYTES_QUERY_TEST + 1)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
@@ -2679,7 +2681,7 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    // Reject questions with any tag hidden
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions
-   snprintf (Gbl.DB.QueryPtr,Tst_MAX_BYTES_QUERY_TEST + 1,
+   snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
 	     "SELECT DISTINCTROW tst_questions.QstCod,"
 	     "UNIX_TIMESTAMP(tst_questions.EditTime),"
 	     "tst_questions.AnsType,tst_questions.Shuffle,"
@@ -2706,7 +2708,7 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    if (!Gbl.Test.Tags.All) // User has not selected all the tags
      {
       /* Add selected tags */
-      LengthQuery = strlen (Gbl.DB.QueryPtr);
+      LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
@@ -2715,24 +2717,24 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Gbl.DB.QueryPtr,
+         Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,TagText,
+         Str_Concat (Query,TagText,
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,"'",
+         Str_Concat (Query,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Gbl.DB.QueryPtr,")",
+      Str_Concat (Query,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add answer types selected */
    if (!Gbl.Test.AllAnsTypes)
      {
-      LengthQuery = strlen (Gbl.DB.QueryPtr);
+      LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
@@ -2742,34 +2744,34 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Gbl.DB.QueryPtr,
+         Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,Tst_StrAnswerTypesDB[AnsType],
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
                      Tst_MAX_BYTES_QUERY_TEST);
-         Str_Concat (Gbl.DB.QueryPtr,"'",
+         Str_Concat (Query,"'",
                      Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Gbl.DB.QueryPtr,")",
+      Str_Concat (Query,")",
                   Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End query */
-   Str_Concat (Gbl.DB.QueryPtr," ORDER BY RAND(NOW()) LIMIT ",
+   Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (StrNumQsts,sizeof (StrNumQsts),
 	     "%u",
 	     Gbl.Test.NumQsts);
-   Str_Concat (Gbl.DB.QueryPtr,StrNumQsts,
+   Str_Concat (Query,StrNumQsts,
                Tst_MAX_BYTES_QUERY_TEST);
 /*
    if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   return DB_QuerySELECT_new (mysql_res,"can not get questions");
+   return DB_QuerySELECT (Query,mysql_res,"can not get questions");
   }
 
 /*****************************************************************************/

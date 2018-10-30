@@ -3084,6 +3084,25 @@ void DB_BuildQuery (const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
   }
+
+void DB_BuildQuery_old (char **Query,const char *fmt,...)
+  {
+   int NumBytesPrinted;
+   va_list ap;
+
+   if (*Query != NULL)
+      Lay_ShowErrorAndExit ("Error building query.");
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+  }
+
 /*
 static void DB_QueryPrintf (char **strp,const char *fmt,...)
   {
@@ -3106,17 +3125,22 @@ static void DB_QueryPrintf (char **strp,const char *fmt,...)
 
 unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
   {
+   return DB_QuerySELECT (&Gbl.DB.QueryPtr,mysql_res,MsgError);
+  }
+
+unsigned long DB_QuerySELECT (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
+  {
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
-   if (Gbl.DB.QueryPtr == NULL)
+          does point to an allocated string *****/
+   if (*Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
-   free ((void *) Gbl.DB.QueryPtr);
-   Gbl.DB.QueryPtr = NULL;
+   Result = mysql_query (&Gbl.mysql,*Query);	// Returns 0 on success
+   free ((void *) *Query);
+   *Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
@@ -3134,12 +3158,17 @@ unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
 
 unsigned long DB_QueryCOUNT_new (const char *MsgError)
   {
+   return DB_QueryCOUNT (&Gbl.DB.QueryPtr,MsgError);
+  }
+
+unsigned long DB_QueryCOUNT (char **Query,const char *MsgError)
+  {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Make query "SELECT COUNT(*) FROM..." *****/
-   DB_QuerySELECT_new (&mysql_res,MsgError);
+   DB_QuerySELECT (Query,&mysql_res,MsgError);
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -3161,7 +3190,7 @@ void DB_QueryINSERT_new (const char *MsgError)
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
+          does point to an allocated string *****/
    if (Gbl.DB.QueryPtr == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
@@ -3169,6 +3198,27 @@ void DB_QueryINSERT_new (const char *MsgError)
    Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
    free ((void *) Gbl.DB.QueryPtr);
    Gbl.DB.QueryPtr = NULL;
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+  }
+
+/*****************************************************************************/
+/******************** Make an INSERT query in database ***********************/
+/*****************************************************************************/
+
+void DB_QueryINSERT (char **Query,const char *MsgError)
+  {
+   int Result;
+
+   /***** Check that query string pointer
+          does point to an allocated string *****/
+   if (*Query == NULL)
+      Lay_ShowErrorAndExit ("Wrong query string.");
+
+   /***** Query database and free query string pointer *****/
+   Result = mysql_query (&Gbl.mysql,*Query);	// Returns 0 on success
+   free ((void *) *Query);
+   *Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3182,7 +3232,7 @@ long DB_QueryINSERTandReturnCode_new (const char *MsgError)
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
+          does point to an allocated string *****/
    if (Gbl.DB.QueryPtr == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
@@ -3206,7 +3256,7 @@ void DB_QueryREPLACE_new (const char *MsgError)
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
+          does point to an allocated string *****/
    if (Gbl.DB.QueryPtr == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
@@ -3224,17 +3274,22 @@ void DB_QueryREPLACE_new (const char *MsgError)
 
 void DB_QueryUPDATE_new (const char *MsgError)
   {
+   DB_QueryUPDATE (&Gbl.DB.QueryPtr,MsgError);
+  }
+
+void DB_QueryUPDATE (char **Query,const char *MsgError)
+  {
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
-   if (Gbl.DB.QueryPtr == NULL)
+          does point to an allocated string *****/
+   if (*Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
-   free ((void *) Gbl.DB.QueryPtr);
-   Gbl.DB.QueryPtr = NULL;
+   Result = mysql_query (&Gbl.mysql,*Query);	// Returns 0 on success
+   free ((void *) *Query);
+   *Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
@@ -3251,7 +3306,7 @@ void DB_QueryDELETE_new (const char *MsgError)
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
+          does point to an allocated string *****/
    if (Gbl.DB.QueryPtr == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
@@ -3272,7 +3327,7 @@ void DB_Query_new (const char *MsgError)
    int Result;
 
    /***** Check that query string pointer
-          does not point to an allocated string *****/
+          does point to an allocated string *****/
    if (Gbl.DB.QueryPtr == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
