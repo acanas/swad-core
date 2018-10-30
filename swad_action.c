@@ -5123,10 +5123,10 @@ char *Act_GetActionTextFromDB (long ActCod,
    MYSQL_ROW row;
 
    /***** Get test for an action from database *****/
-   DB_BuildQuery ("SELECT Txt FROM actions"
-	          " WHERE ActCod=%ld AND Language='%s'",
-                  ActCod,Txt_STR_LANG_ID[Txt_LANGUAGE_ES]);	// !!! TODO: Replace Txt_LANGUAGE_ES by Gbl.Prefs.Language !!!
-   if (DB_QuerySELECT_new (&mysql_res,"can not get text for an action"))
+   if (DB_QuerySELECT (&mysql_res,"can not get text for an action",
+	               "SELECT Txt FROM actions"
+	               " WHERE ActCod=%ld AND Language='%s'",
+                       ActCod,Txt_STR_LANG_ID[Txt_LANGUAGE_ES]))	// !!! TODO: Replace Txt_LANGUAGE_ES by Gbl.Prefs.Language !!!
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);

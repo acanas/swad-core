@@ -912,7 +912,7 @@ static void Soc_ShowTimeline (char **Query,
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Get publishings from database *****/
-   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT_old (Query,&mysql_res,"can not get timeline");
 
    /***** Start box *****/
    Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
@@ -1111,7 +1111,7 @@ static void Soc_InsertNewPubsInTimeline (char **Query)
    struct SocialNote SocNot;
 
    /***** Get new publishings timeline from database *****/
-   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT_old (Query,&mysql_res,"can not get timeline");
 
    /***** List new publishings timeline *****/
    for (NumPub = 0;
@@ -1151,7 +1151,7 @@ static void Soc_ShowOldPubsInTimeline (char **Query)
    struct SocialNote SocNot;
 
    /***** Get old publishings timeline from database *****/
-   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT_old (Query,&mysql_res,"can not get timeline");
 
    /***** List old publishings in timeline *****/
    for (NumPub = 0;

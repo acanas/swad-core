@@ -96,31 +96,33 @@ void Ann_ShowAllAnnouncements (void)
    if (ICanEdit)
      {
       /* Select all announcements */
-      DB_BuildQuery ("SELECT AnnCod,Status,Roles,Subject,Content"
-		     " FROM announcements"
-		     " ORDER BY AnnCod DESC");
+      NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
+	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
+						    " FROM announcements"
+						    " ORDER BY AnnCod DESC");
      }
    else if (Gbl.Usrs.Me.Logged)
      {
       /* Select only announcements I can see */
       Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-      DB_BuildQuery ("SELECT AnnCod,Status,Roles,Subject,Content"
-		     " FROM announcements"
-		     " WHERE (Roles&%u)<>0 "
-		     " ORDER BY AnnCod DESC",
-                     (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
+      NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
+	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
+						    " FROM announcements"
+						    " WHERE (Roles&%u)<>0 "
+						    " ORDER BY AnnCod DESC",
+						    (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);	// All my roles in different courses
      }
    else // No user logged
      {
       /* Select only active announcements for unknown users */
-      DB_BuildQuery ("SELECT AnnCod,Status,Roles,Subject,Content"
-		     " FROM announcements"
-		     " WHERE Status=%u AND (Roles&%u)<>0 "
-		     " ORDER BY AnnCod DESC",
-                     (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-                     (unsigned) (1 << Rol_UNK));
+      NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
+	                                            "SELECT AnnCod,Status,Roles,Subject,Content"
+						    " FROM announcements"
+						    " WHERE Status=%u AND (Roles&%u)<>0 "
+						    " ORDER BY AnnCod DESC",
+						    (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+						    (unsigned) (1 << Rol_UNK));
      }
-   NumAnnouncements = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get announcements");
 
    /***** Start box *****/
    Box_StartBox ("550px",Txt_Announcements,
@@ -219,15 +221,15 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   DB_BuildQuery ("SELECT AnnCod,Subject,Content FROM announcements"
-		  " WHERE Status=%u AND (Roles&%u)<>0 "
-		  " AND AnnCod NOT IN"
-		  " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
-		  " ORDER BY AnnCod DESC",	// Newest first
-                  (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-                  (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumAnnouncements = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get announcements");
+   NumAnnouncements = (unsigned) DB_QuerySELECT (&mysql_res,"can not get announcements",
+	                                         "SELECT AnnCod,Subject,Content FROM announcements"
+						 " WHERE Status=%u AND (Roles&%u)<>0 "
+						 " AND AnnCod NOT IN"
+						 " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
+						 " ORDER BY AnnCod DESC",	// Newest first
+						 (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+						 (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,	// All my roles in different courses
+						 Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show the announcements *****/
    if (NumAnnouncements)

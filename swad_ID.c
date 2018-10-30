@@ -233,7 +233,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	 Str_Concat (Query," AND Confirmed='Y'",
 	             MaxLength);
 
-      ListUsrCods->NumUsrs = (unsigned) DB_QuerySELECT (&Query,&mysql_res,"can not get user's codes");
+      ListUsrCods->NumUsrs = (unsigned) DB_QuerySELECT_old (&Query,&mysql_res,"can not get user's codes");
       if (ListUsrCods->NumUsrs)
         {
 	 /***** Allocate space for the list of users' codes *****/

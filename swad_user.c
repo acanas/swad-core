@@ -5104,7 +5104,7 @@ static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t S
      }
 
    /***** Query database *****/
-   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get list of users")))
+   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned) DB_QuerySELECT_old (Query,&mysql_res,"can not get list of users")))
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {

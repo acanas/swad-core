@@ -2452,7 +2452,7 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
                   MaxLength);
 
 
-      NumStdsInAttEvent = (unsigned) DB_QueryCOUNT (&Query,"can not get number of students from a list who are registered in an event");
+      NumStdsInAttEvent = (unsigned) DB_QueryCOUNT_old (&Query,"can not get number of students from a list who are registered in an event");
      }
    return NumStdsInAttEvent;
   }

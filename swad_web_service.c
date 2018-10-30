@@ -2779,7 +2779,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
          Str_Concat (Query,")",
                      Length);
 
-      DB_QueryUPDATE (&Query,"can not set other users as absent");
+      DB_QueryUPDATE_old (&Query,"can not set other users as absent");
 
       /* Clean table att_usr */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
@@ -3296,7 +3296,7 @@ int swad__sendMessage (struct soap *soap,
    if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in "to"
      {
       /***** Get users *****/
-      NumRows = DB_QuerySELECT (&Query,&mysql_res,"can not get users");
+      NumRows = DB_QuerySELECT_old (&Query,&mysql_res,"can not get users");
 
       sendMessageOut->numUsers = (int) NumRows;
       sendMessageOut->usersArray.__size = (int) NumRows;

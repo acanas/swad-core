@@ -1105,15 +1105,15 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 	}
 
       /* Build full query */
-      DB_BuildQuery ("SELECT AgdCod FROM agendas"
-		     " WHERE %s%s%s%s"
-		     " ORDER BY %s",
-	             UsrSubQuery,
-	             Past__FutureEventsSubQuery,
-	             PrivatPublicEventsSubQuery,
-	             HiddenVisiblEventsSubQuery,
-	             OrderBySubQuery);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get agenda events");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get agenda events",
+	                        "SELECT AgdCod FROM agendas"
+				" WHERE %s%s%s%s"
+				" ORDER BY %s",
+				UsrSubQuery,
+				Past__FutureEventsSubQuery,
+				PrivatPublicEventsSubQuery,
+				HiddenVisiblEventsSubQuery,
+				OrderBySubQuery);
 
       /* Free allocated memory for subqueries */
       free ((void *) OrderBySubQuery);
@@ -1157,19 +1157,17 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Build query *****/
-   DB_BuildQuery ("SELECT AgdCod,Public,Hidden,"
-		  "UNIX_TIMESTAMP(StartTime),"
-		  "UNIX_TIMESTAMP(EndTime),"
-		  "NOW()>EndTime,"	// Past event?
-		  "NOW()<StartTime,"	// Future event?
-		  "Event,Location"
-		  " FROM agendas"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent->AgdCod,AgdEvent->UsrCod);
-
    /***** Get data of event from database *****/
-   if (DB_QuerySELECT_new (&mysql_res,"can not get agenda event data")) // Event found...
+   if (DB_QuerySELECT (&mysql_res,"can not get agenda event data",
+	               "SELECT AgdCod,Public,Hidden,"
+		       "UNIX_TIMESTAMP(StartTime),"
+		       "UNIX_TIMESTAMP(EndTime),"
+		       "NOW()>EndTime,"	// Past event?
+		       "NOW()<StartTime,"	// Future event?
+		       "Event,Location"
+		       " FROM agendas"
+		       " WHERE AgdCod=%ld AND UsrCod=%ld",
+		       AgdEvent->AgdCod,AgdEvent->UsrCod)) // Event found...
      {
       /* Get row:
       row[0] AgdCod
@@ -1257,10 +1255,10 @@ static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
    unsigned long NumRows;
 
    /***** Get text of event from database *****/
-   DB_BuildQuery ("SELECT Txt FROM agendas"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent->AgdCod,AgdEvent->UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get event text");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get event text",
+	                     "SELECT Txt FROM agendas"
+			     " WHERE AgdCod=%ld AND UsrCod=%ld",
+			     AgdEvent->AgdCod,AgdEvent->UsrCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -1782,64 +1780,69 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT UsrCod)"
-			" FROM agendas"
-			" WHERE UsrCod>0");
+         DB_QuerySELECT (&mysql_res,"can not get number of users with events",
+                         "SELECT COUNT(DISTINCT UsrCod)"
+			 " FROM agendas"
+			 " WHERE UsrCod>0");
          break;
        case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT agendas.UsrCod)"
-			" FROM institutions,centres,degrees,courses,crs_usr,agendas"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.Status=0"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-		        Gbl.CurrentCty.Cty.CtyCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of users with events",
+                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+			 " FROM institutions,centres,degrees,courses,crs_usr,agendas"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.Status=0"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+		         Gbl.CurrentCty.Cty.CtyCod);
          break;
        case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT agendas.UsrCod)"
-			" FROM centres,degrees,courses,crs_usr,agendas"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.Status=0"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentIns.Ins.InsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of users with events",
+                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+			 " FROM centres,degrees,courses,crs_usr,agendas"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.Status=0"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT agendas.UsrCod)"
-			" FROM degrees,courses,crs_usr,agendas"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.Status=0"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentCtr.Ctr.CtrCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of users with events",
+                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+			 " FROM degrees,courses,crs_usr,agendas"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.Status=0"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT agendas.UsrCod)"
-			" FROM courses,crs_usr,agendas"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.Status=0"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of users with events",
+                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+			 " FROM courses,crs_usr,agendas"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.Status=0"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT agendas.UsrCod)"
-			" FROM crs_usr,agendas"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of users with events",
+                         "SELECT COUNT(DISTINCT agendas.UsrCod)"
+			 " FROM crs_usr,agendas"
+			 " WHERE crs_usr.CrsCod=%ld"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of users with events");
 
    /***** Get number of users *****/
    row = mysql_fetch_row (mysql_res);
@@ -1867,60 +1870,65 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM agendas"
-			" WHERE UsrCod>0");
+         DB_QuerySELECT (&mysql_res,"can not get number of events",
+                         "SELECT COUNT(*)"
+			 " FROM agendas"
+			 " WHERE UsrCod>0");
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM institutions,centres,degrees,courses,crs_usr,agendas"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentCty.Cty.CtyCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of events",
+                         "SELECT COUNT(*)"
+			 " FROM institutions,centres,degrees,courses,crs_usr,agendas"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM centres,degrees,courses,crs_usr,agendas"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentIns.Ins.InsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of events",
+                         "SELECT COUNT(*)"
+			 " FROM centres,degrees,courses,crs_usr,agendas"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM degrees,courses,crs_usr,agendas"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentCtr.Ctr.CtrCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of events",
+                         "SELECT COUNT(*)"
+			 " FROM degrees,courses,crs_usr,agendas"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM courses,crs_usr,agendas"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of events",
+                         "SELECT COUNT(*)"
+			 " FROM courses,crs_usr,agendas"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=crs_usr.CrsCod"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM crs_usr,agendas"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=agendas.UsrCod",
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of events",
+                         "SELECT COUNT(*)"
+			 " FROM crs_usr,agendas"
+			 " WHERE crs_usr.CrsCod=%ld"
+			 " AND crs_usr.UsrCod=agendas.UsrCod",
+                         Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of events");
 
    /***** Get number of events *****/
    row = mysql_fetch_row (mysql_res);

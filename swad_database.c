@@ -3123,12 +3123,31 @@ static void DB_QueryPrintf (char **strp,const char *fmt,...)
 /******************** Make a SELECT query from database **********************/
 /*****************************************************************************/
 
-unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
+unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
+                              const char *fmt,...)
   {
-   return DB_QuerySELECT (&Gbl.DB.QueryPtr,mysql_res,MsgError);
+   int NumBytesPrinted;
+   va_list ap;
+   char *Query = NULL;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   return DB_QuerySELECT_old (&Query,mysql_res,MsgError);
   }
 
-unsigned long DB_QuerySELECT (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
+unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
+  {
+   return DB_QuerySELECT_old (&Gbl.DB.QueryPtr,mysql_res,MsgError);
+  }
+
+unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
   {
    int Result;
 
@@ -3158,17 +3177,17 @@ unsigned long DB_QuerySELECT (char **Query,MYSQL_RES **mysql_res,const char *Msg
 
 unsigned long DB_QueryCOUNT_new (const char *MsgError)
   {
-   return DB_QueryCOUNT (&Gbl.DB.QueryPtr,MsgError);
+   return DB_QueryCOUNT_old (&Gbl.DB.QueryPtr,MsgError);
   }
 
-unsigned long DB_QueryCOUNT (char **Query,const char *MsgError)
+unsigned long DB_QueryCOUNT_old (char **Query,const char *MsgError)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Make query "SELECT COUNT(*) FROM..." *****/
-   DB_QuerySELECT (Query,&mysql_res,MsgError);
+   DB_QuerySELECT_old (Query,&mysql_res,MsgError);
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -3206,7 +3225,7 @@ void DB_QueryINSERT_new (const char *MsgError)
 /******************** Make an INSERT query in database ***********************/
 /*****************************************************************************/
 
-void DB_QueryINSERT (char **Query,const char *MsgError)
+void DB_QueryINSERT_old (char **Query,const char *MsgError)
   {
    int Result;
 
@@ -3274,10 +3293,10 @@ void DB_QueryREPLACE_new (const char *MsgError)
 
 void DB_QueryUPDATE_new (const char *MsgError)
   {
-   DB_QueryUPDATE (&Gbl.DB.QueryPtr,MsgError);
+   DB_QueryUPDATE_old (&Gbl.DB.QueryPtr,MsgError);
   }
 
-void DB_QueryUPDATE (char **Query,const char *MsgError)
+void DB_QueryUPDATE_old (char **Query,const char *MsgError)
   {
    int Result;
 

@@ -349,7 +349,7 @@ void Sta_LogAccess (const char *Comments)
       Str_Concat (Query,"')",
                   MaxLength);
 
-      DB_QueryINSERT (&Query,"can not log access (comments)");
+      DB_QueryINSERT_old (&Query,"can not log access (comments)");
      }
 
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
@@ -370,7 +370,7 @@ void Sta_LogAccess (const char *Comments)
       Str_Concat (Query,"')",
                   MaxLength);
 
-      DB_QueryINSERT (&Query,"can not log access (search)");
+      DB_QueryINSERT_old (&Query,"can not log access (search)");
      }
 
    if (Gbl.WebService.IsWebService)
@@ -1484,7 +1484,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Ale_ShowAlert (Ale_INFO,Query);
    */
    /***** Make the query *****/
-   NumRows = DB_QuerySELECT (&Query,&mysql_res,"can not get clicks");
+   NumRows = DB_QuerySELECT_old (&Query,&mysql_res,"can not get clicks");
 
    /***** Count the number of rows in result *****/
    if (NumRows == 0)
