@@ -99,13 +99,14 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
    if (UsrDat->UsrCod > 0)
      {
       /***** Get user's IDs from database *****/
-      // First the confirmed (Confirmed == 'Y')
+      // First the confirmed  (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
-      DB_BuildQuery ("SELECT UsrID,Confirmed FROM usr_IDs"
-		     " WHERE UsrCod=%ld"
-		     " ORDER BY Confirmed DESC,UsrID",
-                     UsrDat->UsrCod);
-      if ((NumIDs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's IDs")))
+      NumIDs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's IDs",
+					  "SELECT UsrID,Confirmed FROM usr_IDs"
+					  " WHERE UsrCod=%ld"
+					  " ORDER BY Confirmed DESC,UsrID",
+					  UsrDat->UsrCod);
+      if (NumIDs)
 	{
 	 /***** Allocate space for the list *****/
          ID_ReallocateListIDs (UsrDat,NumIDs);

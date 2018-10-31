@@ -699,65 +699,83 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM connected,usr_data"
-			      " WHERE connected.UsrCod=usr_data.UsrCod");
+	       DB_QuerySELECT (&mysql_res,"can not get number"
+					  " of connected users"
+					  " who belong to this location",
+			       "SELECT COUNT(DISTINCT connected.UsrCod),"
+			       "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			       " FROM connected,usr_data"
+			       " WHERE connected.UsrCod=usr_data.UsrCod");
 	       break;
 	    case Sco_SCOPE_CTY:		// Show connected users in the current country
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=connected.UsrCod"
-			      " AND connected.UsrCod=usr_data.UsrCod",
-			      Gbl.CurrentCty.Cty.CtyCod);
+	       DB_QuerySELECT (&mysql_res,"can not get number"
+					  " of connected users"
+					  " who belong to this location",
+			       "SELECT COUNT(DISTINCT connected.UsrCod),"
+			       "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			       " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+			       " WHERE institutions.CtyCod=%ld"
+			       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=connected.UsrCod"
+			       " AND connected.UsrCod=usr_data.UsrCod",
+			       Gbl.CurrentCty.Cty.CtyCod);
 	       break;
 	    case Sco_SCOPE_INS:		// Show connected users in the current institution
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=connected.UsrCod"
-			      " AND connected.UsrCod=usr_data.UsrCod",
-			      Gbl.CurrentIns.Ins.InsCod);
+	       DB_QuerySELECT (&mysql_res,"can not get number"
+					  " of connected users"
+					  " who belong to this location",
+			       "SELECT COUNT(DISTINCT connected.UsrCod),"
+			       "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			       " FROM centres,degrees,courses,crs_usr,connected,usr_data"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=connected.UsrCod"
+			       " AND connected.UsrCod=usr_data.UsrCod",
+			       Gbl.CurrentIns.Ins.InsCod);
 	       break;
 	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=connected.UsrCod"
-			      " AND connected.UsrCod=usr_data.UsrCod",
-			      Gbl.CurrentCtr.Ctr.CtrCod);
+	       DB_QuerySELECT (&mysql_res,"can not get number"
+					  " of connected users"
+					  " who belong to this location",
+			       "SELECT COUNT(DISTINCT connected.UsrCod),"
+			       "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			       " FROM degrees,courses,crs_usr,connected,usr_data"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=connected.UsrCod"
+			       " AND connected.UsrCod=usr_data.UsrCod",
+			       Gbl.CurrentCtr.Ctr.CtrCod);
 	       break;
 	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM courses,crs_usr,connected,usr_data"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=connected.UsrCod"
-			      " AND connected.UsrCod=usr_data.UsrCod",
-			      Gbl.CurrentDeg.Deg.DegCod);
+	       DB_QuerySELECT (&mysql_res,"can not get number"
+					  " of connected users"
+					  " who belong to this location",
+			       "SELECT COUNT(DISTINCT connected.UsrCod),"
+			       "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			       " FROM courses,crs_usr,connected,usr_data"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=connected.UsrCod"
+			       " AND connected.UsrCod=usr_data.UsrCod",
+			       Gbl.CurrentDeg.Deg.DegCod);
 	       break;
 	    case Sco_SCOPE_CRS:		// Show connected users in the current course
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			      "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			      " FROM crs_usr,connected,usr_data"
-			      " WHERE crs_usr.CrsCod=%ld"
-			      " AND crs_usr.UsrCod=connected.UsrCod"
-			      " AND connected.UsrCod=usr_data.UsrCod",
-			      Gbl.CurrentCrs.Crs.CrsCod);
+	       DB_QuerySELECT (&mysql_res,"can not get number"
+					  " of connected users"
+					  " who belong to this location",
+			       "SELECT COUNT(DISTINCT connected.UsrCod),"
+			       "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			       " FROM crs_usr,connected,usr_data"
+			       " WHERE crs_usr.CrsCod=%ld"
+			       " AND crs_usr.UsrCod=connected.UsrCod"
+			       " AND connected.UsrCod=usr_data.UsrCod",
+			       Gbl.CurrentCrs.Crs.CrsCod);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -765,11 +783,14 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	   }
 	 break;
       case Rol_GST:
-	 DB_BuildQuery ("SELECT COUNT(DISTINCT connected.UsrCod),"
-			"COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-			" FROM connected,usr_data"
-			" WHERE connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-			" AND connected.UsrCod=usr_data.UsrCod");
+	 DB_QuerySELECT (&mysql_res,"can not get number"
+				    " of connected users"
+				    " who belong to this location",
+			 "SELECT COUNT(DISTINCT connected.UsrCod),"
+			 "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			 " FROM connected,usr_data"
+			 " WHERE connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			 " AND connected.UsrCod=usr_data.UsrCod");
 	 break;
       case Rol_STD:
       case Rol_NET:
