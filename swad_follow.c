@@ -69,9 +69,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
-                                        bool OnlyUsrsWithPhotos,
-                                        MYSQL_RES **mysql_res);
+static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
+					     bool OnlyUsrsWithPhotos,
+					     MYSQL_RES **mysql_res);
 
 static void Fol_PutIconsWhoToFollow (void);
 static void Fol_PutIconToUpdateWhoToFollow (void);
@@ -117,8 +117,8 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
-   unsigned NumUsr;
+   unsigned long NumUsrs;
+   unsigned long NumUsr;
    struct UsrData UsrDat;
 
    /***** Put links to request my public profile and another user's profile *****/
@@ -185,8 +185,8 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
-   unsigned NumUsr;
+   unsigned long NumUsrs;
+   unsigned long NumUsr;
    struct UsrData UsrDat;
 
    /***** Get users *****/
@@ -243,9 +243,9 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 /*************************** Get users to follow *****************************/
 /*****************************************************************************/
 
-static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
-                                        bool OnlyUsrsWithPhotos,
-                                        MYSQL_RES **mysql_res)
+static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
+					     bool OnlyUsrsWithPhotos,
+					     MYSQL_RES **mysql_res)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    char SubQuery1[256];
@@ -291,119 +291,118 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
 
    /***** Build query to get users to follow *****/
    // Get only users with surname 1 and first name
-   DB_BuildQuery ("SELECT DISTINCT UsrCod FROM"
-		  " ("
-		  /***** Likely known users *****/
-		  "(SELECT DISTINCT UsrCod FROM"
-		  " ("
-		  // Users followed by my followed whose privacy is
-		  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-		  "("
-		  "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
-		  " FROM usr_follow,"
-		  "(SELECT FollowedCod FROM usr_follow"
-		  " WHERE FollowerCod=%ld) AS my_followed,"
-		  " usr_data"
-		  " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
-		  " AND usr_follow.FollowedCod<>%ld"
-		  " AND usr_follow.FollowedCod=usr_data.UsrCod"
-		  " AND usr_data.ProfileVisibility IN ('%s','%s')"
-		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-		  " AND usr_data.FirstName<>''"	// First name not empty
-		  "%s"				// SubQuery1
-		  ")"
-		  " UNION "
-		  // Users who share any course with me
-		  // and whose privacy is Pri_VISIBILITY_COURSE,
-		  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-		  "("
-		  "SELECT DISTINCT crs_usr.UsrCod"
-		  " FROM crs_usr,"
-		  "(SELECT CrsCod FROM crs_usr"
-		  " WHERE UsrCod=%ld) AS my_crs,"
-		  " usr_data"
-		  " WHERE crs_usr.CrsCod=my_crs.CrsCod"
-		  " AND crs_usr.UsrCod<>%ld"
-		  " AND crs_usr.UsrCod=usr_data.UsrCod"
-		  " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
-		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-		  " AND usr_data.FirstName<>''"	// First name not empty
-		  "%s"				// SubQuery2
-		  ")"
-		  " UNION "
-		  // Users who share any course with me with another role
-		  // and whose privacy is Pri_VISIBILITY_USER
-		  "("
-		  "SELECT DISTINCT crs_usr.UsrCod"
-		  " FROM crs_usr,"
-		  "(SELECT CrsCod,Role FROM crs_usr"
-		  " WHERE UsrCod=%ld) AS my_crs_role,"
-		  " usr_data"
-		  " WHERE crs_usr.CrsCod=my_crs_role.CrsCod"
-		  " AND crs_usr.Role<>my_crs_role.Role"
-		  " AND crs_usr.UsrCod=usr_data.UsrCod"
-		  " AND usr_data.ProfileVisibility='%s'"
-		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
-		  " AND usr_data.FirstName<>''"	// First name not empty
-		  "%s"				// SubQuery3
-		  ")"
-		  ") AS LikelyKnownUsrsToFollow"
-		  // Do not select my followed
-		  " WHERE UsrCod NOT IN"
-		  " (SELECT FollowedCod FROM usr_follow"
-		  " WHERE FollowerCod=%ld)"
-		  // Get only MaxUsrsToShow * 2 users
-		  " ORDER BY RAND() LIMIT %u"
-		  ")"
-		  " UNION "
-		  "("
-		  /***** Likely unknown users *****/
-		  // Add some likely unknown random users with privacy
-		  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-		  "SELECT UsrCod FROM usr_data"
-		  " WHERE UsrCod<>%ld"
-		  " AND ProfileVisibility IN ('%s','%s')"
-		  " AND Surname1<>''"		// Surname 1 not empty
-		  " AND FirstName<>''"		// First name not empty
-		  "%s"				// SubQuery4
-		  // Do not select my followed
-		  " AND UsrCod NOT IN"
-		  " (SELECT FollowedCod FROM usr_follow"
-		  " WHERE FollowerCod=%ld)"
-		  // Get only MaxUsrsToShow users
-		  " ORDER BY RAND() LIMIT %u"
-		  ")"
-		  ") AS UsrsToFollow"
-		  // Get only MaxUsrsToShow users
-		  " ORDER BY RAND() LIMIT %u",
+   return DB_QuerySELECT (mysql_res,"can not get users to follow",
+			  "SELECT DISTINCT UsrCod FROM"
+			  " ("
+			  /***** Likely known users *****/
+			  "(SELECT DISTINCT UsrCod FROM"
+			  " ("
+			  // Users followed by my followed whose privacy is
+			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+			  "("
+			  "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
+			  " FROM usr_follow,"
+			  "(SELECT FollowedCod FROM usr_follow"
+			  " WHERE FollowerCod=%ld) AS my_followed,"
+			  " usr_data"
+			  " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
+			  " AND usr_follow.FollowedCod<>%ld"
+			  " AND usr_follow.FollowedCod=usr_data.UsrCod"
+			  " AND usr_data.ProfileVisibility IN ('%s','%s')"
+			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			  " AND usr_data.FirstName<>''"	// First name not empty
+			  "%s"				// SubQuery1
+			  ")"
+			  " UNION "
+			  // Users who share any course with me
+			  // and whose privacy is Pri_VISIBILITY_COURSE,
+			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+			  "("
+			  "SELECT DISTINCT crs_usr.UsrCod"
+			  " FROM crs_usr,"
+			  "(SELECT CrsCod FROM crs_usr"
+			  " WHERE UsrCod=%ld) AS my_crs,"
+			  " usr_data"
+			  " WHERE crs_usr.CrsCod=my_crs.CrsCod"
+			  " AND crs_usr.UsrCod<>%ld"
+			  " AND crs_usr.UsrCod=usr_data.UsrCod"
+			  " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
+			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			  " AND usr_data.FirstName<>''"	// First name not empty
+			  "%s"				// SubQuery2
+			  ")"
+			  " UNION "
+			  // Users who share any course with me with another role
+			  // and whose privacy is Pri_VISIBILITY_USER
+			  "("
+			  "SELECT DISTINCT crs_usr.UsrCod"
+			  " FROM crs_usr,"
+			  "(SELECT CrsCod,Role FROM crs_usr"
+			  " WHERE UsrCod=%ld) AS my_crs_role,"
+			  " usr_data"
+			  " WHERE crs_usr.CrsCod=my_crs_role.CrsCod"
+			  " AND crs_usr.Role<>my_crs_role.Role"
+			  " AND crs_usr.UsrCod=usr_data.UsrCod"
+			  " AND usr_data.ProfileVisibility='%s'"
+			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			  " AND usr_data.FirstName<>''"	// First name not empty
+			  "%s"				// SubQuery3
+			  ")"
+			  ") AS LikelyKnownUsrsToFollow"
+			  // Do not select my followed
+			  " WHERE UsrCod NOT IN"
+			  " (SELECT FollowedCod FROM usr_follow"
+			  " WHERE FollowerCod=%ld)"
+			  // Get only MaxUsrsToShow * 2 users
+			  " ORDER BY RAND() LIMIT %lu"
+			  ")"
+			  " UNION "
+			  "("
+			  /***** Likely unknown users *****/
+			  // Add some likely unknown random users with privacy
+			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+			  "SELECT UsrCod FROM usr_data"
+			  " WHERE UsrCod<>%ld"
+			  " AND ProfileVisibility IN ('%s','%s')"
+			  " AND Surname1<>''"		// Surname 1 not empty
+			  " AND FirstName<>''"		// First name not empty
+			  "%s"				// SubQuery4
+			  // Do not select my followed
+			  " AND UsrCod NOT IN"
+			  " (SELECT FollowedCod FROM usr_follow"
+			  " WHERE FollowerCod=%ld)"
+			  // Get only MaxUsrsToShow users
+			  " ORDER BY RAND() LIMIT %lu"
+			  ")"
+			  ") AS UsrsToFollow"
+			  // Get only MaxUsrsToShow users
+			  " ORDER BY RAND() LIMIT %lu",
 
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-	          Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-	          SubQuery1,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-	          Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-	          Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-	          SubQuery2,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-	          SubQuery3,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          MaxUsrsToShow * 2,		// 2/3 likely known users
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			  SubQuery1,
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			  SubQuery2,
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			  SubQuery3,
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  MaxUsrsToShow * 2,		// 2/3 likely known users
 
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-	          Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-	          SubQuery4,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          MaxUsrsToShow,		// 1/3 likely unknown users
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			  SubQuery4,
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  MaxUsrsToShow,		// 1/3 likely unknown users
 
-	          MaxUsrsToShow);
-
-   return DB_QuerySELECT_new (mysql_res,"can not get users to follow");
+			  MaxUsrsToShow);
   }
 
 /*****************************************************************************/
@@ -661,18 +660,20 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
-   unsigned NumUsr;
+   unsigned long NumUsrs;
+   unsigned long NumUsr;
    struct UsrData FollowingUsrDat;
 
    /***** Show user's profile *****/
    if (Prf_ShowUserProfile (UsrDat))
      {
       /***** Check if a user is a follower of another user *****/
-      DB_BuildQuery ("SELECT FollowedCod FROM usr_follow"
-		     " WHERE FollowerCod=%ld ORDER BY FollowTime DESC",
-	             UsrDat->UsrCod);
-      NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get followed users");
+      NumUsrs = DB_QuerySELECT (&mysql_res,"can not get followed users",
+				"SELECT FollowedCod FROM usr_follow"
+				" WHERE FollowerCod=%ld"
+				" ORDER BY FollowTime DESC",
+				UsrDat->UsrCod);
+
       if (NumUsrs)
 	{
 	 /***** Initialize structure with user's data *****/
@@ -744,8 +745,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
-   unsigned NumUsr;
+   unsigned long NumUsrs;
+   unsigned long NumUsr;
    struct UsrData FollowerUsrDat;
    bool ItsMe;
 
@@ -753,10 +754,12 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
    if (Prf_ShowUserProfile (UsrDat))
      {
       /***** Check if a user is a follower of another user *****/
-      DB_BuildQuery ("SELECT FollowerCod FROM usr_follow"
-		     " WHERE FollowedCod=%ld ORDER BY FollowTime DESC",
-	             UsrDat->UsrCod);
-      NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get followers");
+      NumUsrs = DB_QuerySELECT (&mysql_res,"can not get followers",
+				"SELECT FollowerCod FROM usr_follow"
+				" WHERE FollowedCod=%ld"
+				" ORDER BY FollowTime DESC",
+				UsrDat->UsrCod);
+
       if (NumUsrs)
 	{
 	 /***** Initialize structure with user's data *****/
