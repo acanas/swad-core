@@ -3175,6 +3175,25 @@ unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char 
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
 
+unsigned long DB_QueryCOUNT (const char *MsgError,
+                             const char *fmt,...)
+  {
+   int NumBytesPrinted;
+   va_list ap;
+   char *Query = NULL;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   return DB_QueryCOUNT_old (&Query,MsgError);
+  }
+
 unsigned long DB_QueryCOUNT_new (const char *MsgError)
   {
    return DB_QueryCOUNT_old (&Gbl.DB.QueryPtr,MsgError);

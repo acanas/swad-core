@@ -888,7 +888,7 @@ void Gam_GetListGames (void)
    char OrderBySubQuery[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumGame;
    unsigned ScopesAllowed = 0;
    unsigned HiddenAllowed = 0;
@@ -975,22 +975,21 @@ void Gam_GetListGames (void)
 	    break;
 	}
 
-      DB_BuildQuery ("SELECT GamCod FROM games"
-		     " WHERE %s%s%s%s%s%s"
-		     " ORDER BY %s",
-		     SubQuery[Sco_SCOPE_SYS],
-		     SubQuery[Sco_SCOPE_CTY],
-		     SubQuery[Sco_SCOPE_INS],
-		     SubQuery[Sco_SCOPE_CTR],
-		     SubQuery[Sco_SCOPE_DEG],
-		     SubQuery[Sco_SCOPE_CRS],
-		     OrderBySubQuery);
+      /* Make query */
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
+				"SELECT GamCod FROM games"
+				" WHERE %s%s%s%s%s%s"
+				" ORDER BY %s",
+				SubQuery[Sco_SCOPE_SYS],
+				SubQuery[Sco_SCOPE_CTY],
+				SubQuery[Sco_SCOPE_INS],
+				SubQuery[Sco_SCOPE_CTR],
+				SubQuery[Sco_SCOPE_DEG],
+				SubQuery[Sco_SCOPE_CRS],
+				OrderBySubQuery);
      }
    else
       Lay_ShowErrorAndExit ("Can not get list of games.");
-
-   /* Make query */
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get games");
 
    if (NumRows) // Games found...
      {
@@ -1197,19 +1196,16 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   /***** Build query *****/
-   DB_BuildQuery ("SELECT GamCod,Scope,Cod,Hidden,Roles,UsrCod,"
-		  "UNIX_TIMESTAMP(StartTime),"
-		  "UNIX_TIMESTAMP(EndTime),"
-		  "NOW() BETWEEN StartTime AND EndTime,"
-		  "Title"
-		  " FROM games"
-		  " WHERE GamCod=%ld",
-                  Game->GamCod);
-
    /***** Get data of game from database *****/
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get game data");
-
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
+			     "SELECT GamCod,Scope,Cod,Hidden,Roles,UsrCod,"
+			     "UNIX_TIMESTAMP(StartTime),"
+			     "UNIX_TIMESTAMP(EndTime),"
+			     "NOW() BETWEEN StartTime AND EndTime,"
+			     "Title"
+			     " FROM games"
+			     " WHERE GamCod=%ld",
+			     Game->GamCod);
    if (NumRows) // Game found...
      {
       /* Get row */
@@ -1299,71 +1295,71 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
         {
          case Rol_STD:
             Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CRS ||
-        	                           Game->Scope == Sco_SCOPE_DEG ||
-        	                           Game->Scope == Sco_SCOPE_CTR ||
-        	                           Game->Scope == Sco_SCOPE_INS ||
-        	                           Game->Scope == Sco_SCOPE_CTY ||
-        	                           Game->Scope == Sco_SCOPE_SYS) &&
-        	                          (Game->NumQsts != 0) &&
-                                           Game->Status.Visible &&
-                                           Game->Status.Open &&
-                                           Game->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                           Game->Status.IBelongToScope &&
-                                           Game->Status.IHaveAnswered;
+        	                            Game->Scope == Sco_SCOPE_DEG ||
+        	                            Game->Scope == Sco_SCOPE_CTR ||
+        	                            Game->Scope == Sco_SCOPE_INS ||
+        	                            Game->Scope == Sco_SCOPE_CTY ||
+        	                            Game->Scope == Sco_SCOPE_SYS) &&
+        	                           (Game->NumQsts != 0) &&
+                                            Game->Status.Visible &&
+                                            Game->Status.Open &&
+                                            Game->Status.IAmLoggedWithAValidRoleToAnswer &&
+                                            Game->Status.IBelongToScope &&
+                                            Game->Status.IHaveAnswered;
             Game->Status.ICanEdit         = false;
             break;
          case Rol_NET:
             Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CRS ||
-        	                           Game->Scope == Sco_SCOPE_DEG ||
-        	                           Game->Scope == Sco_SCOPE_CTR ||
-        	                           Game->Scope == Sco_SCOPE_INS ||
-        	                           Game->Scope == Sco_SCOPE_CTY ||
-        	                           Game->Scope == Sco_SCOPE_SYS) &&
-        	                           Game->NumQsts != 0 &&
-                                          !Game->Status.ICanAnswer;
+        	                            Game->Scope == Sco_SCOPE_DEG ||
+        	                            Game->Scope == Sco_SCOPE_CTR ||
+        	                            Game->Scope == Sco_SCOPE_INS ||
+        	                            Game->Scope == Sco_SCOPE_CTY ||
+        	                            Game->Scope == Sco_SCOPE_SYS) &&
+        	                            Game->NumQsts != 0 &&
+                                           !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
             Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CRS ||
-        	                           Game->Scope == Sco_SCOPE_DEG ||
-        	                           Game->Scope == Sco_SCOPE_CTR ||
-        	                           Game->Scope == Sco_SCOPE_INS ||
-        	                           Game->Scope == Sco_SCOPE_CTY ||
-        	                           Game->Scope == Sco_SCOPE_SYS) &&
-        	                           Game->NumQsts != 0 &&
-                                          !Game->Status.ICanAnswer;
+        	                            Game->Scope == Sco_SCOPE_DEG ||
+        	                            Game->Scope == Sco_SCOPE_CTR ||
+        	                            Game->Scope == Sco_SCOPE_INS ||
+        	                            Game->Scope == Sco_SCOPE_CTY ||
+        	                            Game->Scope == Sco_SCOPE_SYS) &&
+        	                            Game->NumQsts != 0 &&
+                                           !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_CRS &&
-                                           Game->Status.IBelongToScope;
+                                            Game->Status.IBelongToScope;
             break;
          case Rol_DEG_ADM:
             Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_DEG ||
-        	                           Game->Scope == Sco_SCOPE_CTR ||
-        	                           Game->Scope == Sco_SCOPE_INS ||
-        	                           Game->Scope == Sco_SCOPE_CTY ||
-        	                           Game->Scope == Sco_SCOPE_SYS) &&
-        	                          (Game->NumQsts != 0) &&
-                                          !Game->Status.ICanAnswer;
+        	                            Game->Scope == Sco_SCOPE_CTR ||
+        	                            Game->Scope == Sco_SCOPE_INS ||
+        	                            Game->Scope == Sco_SCOPE_CTY ||
+        	                            Game->Scope == Sco_SCOPE_SYS) &&
+        	                           (Game->NumQsts != 0) &&
+                                           !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_DEG &&
-                                           Game->Status.IBelongToScope;
+                                            Game->Status.IBelongToScope;
             break;
          case Rol_CTR_ADM:
             Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CTR ||
-        	                           Game->Scope == Sco_SCOPE_INS ||
-        	                           Game->Scope == Sco_SCOPE_CTY ||
-        	                           Game->Scope == Sco_SCOPE_SYS) &&
-        	                          (Game->NumQsts != 0) &&
-                                          !Game->Status.ICanAnswer;
+        	                            Game->Scope == Sco_SCOPE_INS ||
+        	                            Game->Scope == Sco_SCOPE_CTY ||
+        	                            Game->Scope == Sco_SCOPE_SYS) &&
+        	                           (Game->NumQsts != 0) &&
+                                           !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_CTR &&
-                                           Game->Status.IBelongToScope;
+                                            Game->Status.IBelongToScope;
             break;
          case Rol_INS_ADM:
             Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_INS ||
-        	                           Game->Scope == Sco_SCOPE_CTY ||
-        	                           Game->Scope == Sco_SCOPE_SYS) &&
-        	                          (Game->NumQsts != 0) &&
-                                          !Game->Status.ICanAnswer;
+        	                            Game->Scope == Sco_SCOPE_CTY ||
+        	                            Game->Scope == Sco_SCOPE_SYS) &&
+        	                           (Game->NumQsts != 0) &&
+                                           !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_INS &&
-                                           Game->Status.IBelongToScope;
+                                            Game->Status.IBelongToScope;
             break;
          case Rol_SYS_ADM:
             Game->Status.ICanViewResults = (Game->NumQsts != 0);
@@ -1428,8 +1424,9 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
    unsigned long NumRows;
 
    /***** Get text of game from database *****/
-   DB_BuildQuery ("SELECT Txt FROM games WHERE GamCod=%ld",GamCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get game text");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get game text",
+			     "SELECT Txt FROM games WHERE GamCod=%ld",
+			     GamCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -2343,14 +2340,14 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
    unsigned long NumRows;
 
    /***** Get groups associated to a game from database *****/
-   DB_BuildQuery ("SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-		  " FROM gam_grp,crs_grp,crs_grp_types"
-		  " WHERE gam_grp.GamCod=%ld"
-		  " AND gam_grp.GrpCod=crs_grp.GrpCod"
-		  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-		  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-                   Game->GamCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get groups of a game");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a game",
+			     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
+			     " FROM gam_grp,crs_grp,crs_grp_types"
+			     " WHERE gam_grp.GamCod=%ld"
+			     " AND gam_grp.GrpCod=crs_grp.GrpCod"
+			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			     Game->GamCod);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
@@ -2564,10 +2561,10 @@ static int Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
    int QstInd = -1;
 
    /***** Get number of games with a field value from database *****/
-   DB_BuildQuery ("SELECT QstInd FROM gam_questions"
-		  " WHERE GamCod=%ld AND QstCod=%ld",
-                  GamCod,QstCod);
-   if (!DB_QuerySELECT_new (&mysql_res,"can not get question index"))
+   if (!DB_QuerySELECT (&mysql_res,"can not get question index",
+			"SELECT QstInd FROM gam_questions"
+			" WHERE GamCod=%ld AND QstCod=%ld",
+			GamCod,QstCod))
       Lay_ShowErrorAndExit ("Error when getting question index.");
 
    /***** Get question index (row[0]) *****/
@@ -2593,10 +2590,10 @@ static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
    long QstCod;
 
    /***** Get question code of thw question to be moved up *****/
-   DB_BuildQuery ("SELECT QstCod FROM gam_questions"
-		  " WHERE GamCod=%ld AND QstInd=%u",
-	          GamCod,QstInd);
-   if (!DB_QuerySELECT_new (&mysql_res,"can not get question code"))
+   if (!DB_QuerySELECT (&mysql_res,"can not get question code",
+			"SELECT QstCod FROM gam_questions"
+			" WHERE GamCod=%ld AND QstInd=%u",
+			GamCod,QstInd))
       Lay_ShowErrorAndExit ("Error: wrong question code.");
 
    /***** Get question code (row[0]) *****/
@@ -2623,9 +2620,9 @@ static int Gam_GetMaxQuestionIndexInGame (long GamCod)
    int QstInd = -1;
 
    /***** Get maximum question index in a game from database *****/
-   DB_BuildQuery ("SELECT MAX(QstInd) FROM gam_questions WHERE GamCod=%ld",
-                  GamCod);
-   DB_QuerySELECT_new (&mysql_res,"can not get last question index");
+   DB_QuerySELECT (&mysql_res,"can not get last question index",
+		   "SELECT MAX(QstInd) FROM gam_questions WHERE GamCod=%ld",
+                   GamCod);
    row = mysql_fetch_row (mysql_res);
    if (row[0])	// There are questions
       if (sscanf (row[0],"%d",&QstInd) != 1)
@@ -2652,10 +2649,10 @@ static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
    /***** Get previous question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   DB_BuildQuery ("SELECT MAX(QstInd) FROM gam_questions"
-		  " WHERE GamCod=%ld AND QstInd<%u",
-                  GamCod,QstInd);
-   if (!DB_QuerySELECT_new (&mysql_res,"can not get previous question index"))
+   if (!DB_QuerySELECT (&mysql_res,"can not get previous question index",
+			"SELECT MAX(QstInd) FROM gam_questions"
+			" WHERE GamCod=%ld AND QstInd<%u",
+			GamCod,QstInd))
       Lay_ShowErrorAndExit ("Error: previous question index not found.");
 
    /***** Get previous question index (row[0]) *****/
@@ -2685,10 +2682,10 @@ static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
    // ...this implementation works even with non continuous indexes
-   DB_BuildQuery ("SELECT MIN(QstInd) FROM gam_questions"
-		  " WHERE GamCod=%ld AND QstInd>%u",
-                  GamCod,QstInd);
-   if (!DB_QuerySELECT_new (&mysql_res,"can not get next question index"))
+   if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
+			"SELECT MIN(QstInd) FROM gam_questions"
+			" WHERE GamCod=%ld AND QstInd>%u",
+			GamCod,QstInd))
       Lay_ShowErrorAndExit ("Error: next question index not found.");
 
    /***** Get next question index (row[0]) *****/
@@ -2735,19 +2732,19 @@ static void Gam_ListGameQuestions (struct Game *Game)
    row[5] ImageTitle
    row[6] ImageURL
    */
-   DB_BuildQuery ("SELECT tst_questions.QstCod,"
-		  "tst_questions.AnsType,"
-		  "tst_questions.Stem,"
-		  "tst_questions.Feedback,"
-		  "tst_questions.ImageName,"
-		  "tst_questions.ImageTitle,"
-		  "tst_questions.ImageURL"
-		  " FROM gam_questions,tst_questions"
-		  " WHERE gam_questions.GamCod=%ld"
-		  " AND gam_questions.QstCod=tst_questions.QstCod"
-		  " ORDER BY gam_questions.QstInd",
-                  Game->GamCod);
-   NumQsts = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get data of a question");
+   NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
+				        "SELECT tst_questions.QstCod,"
+					"tst_questions.AnsType,"
+					"tst_questions.Stem,"
+					"tst_questions.Feedback,"
+					"tst_questions.ImageName,"
+					"tst_questions.ImageTitle,"
+					"tst_questions.ImageURL"
+					" FROM gam_questions,tst_questions"
+					" WHERE gam_questions.GamCod=%ld"
+					" AND gam_questions.QstCod=tst_questions.QstCod"
+					" ORDER BY gam_questions.QstInd",
+					Game->GamCod);
 
    /***** Start box *****/
    Gbl.Games.CurrentGamCod = Game->GamCod;
@@ -3129,10 +3126,10 @@ static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsI
    unsigned NumUsrs = 0;	// Default returned value
 
    /***** Get answers of a question from database *****/
-   DB_BuildQuery ("SELECT NumUsrs FROM gam_answers"
-		  " WHERE GamCod=%ld AND QstCod=%ld AND AnsInd=%u",
-                  GamCod,QstCod,AnsInd);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get number of users who answered"))
+   if (DB_QuerySELECT (&mysql_res,"can not get number of users who answered",
+		       "SELECT NumUsrs FROM gam_answers"
+		       " WHERE GamCod=%ld AND QstCod=%ld AND AnsInd=%u",
+		       GamCod,QstCod,AnsInd))
      {
       row = mysql_fetch_row (mysql_res);
       if (row[0])	// There are users who selected this answer
@@ -3543,19 +3540,19 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    row[4] ImageTitle
    row[5] ImageURL
    */
-   DB_BuildQuery ("SELECT "
-		  "tst_questions.QstCod,"
-		  "tst_questions.AnsType,"
-		  "tst_questions.Stem,"
-		  "tst_questions.ImageName,"
-		  "tst_questions.ImageTitle,"
-		  "tst_questions.ImageURL"
-		  " FROM gam_questions,tst_questions"
-		  " WHERE gam_questions.GamCod=%ld"
-		  " AND gam_questions.QstInd=%u"
-		  " AND gam_questions.QstCod=tst_questions.QstCod",
-                  Game.GamCod,QstInd);
-   if (!DB_QuerySELECT_new (&mysql_res,"can not get data of a question"))
+   if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			"SELECT "
+			"tst_questions.QstCod,"
+			"tst_questions.AnsType,"
+			"tst_questions.Stem,"
+			"tst_questions.ImageName,"
+			"tst_questions.ImageTitle,"
+			"tst_questions.ImageURL"
+			" FROM gam_questions,tst_questions"
+			" WHERE gam_questions.GamCod=%ld"
+			" AND gam_questions.QstInd=%u"
+			" AND gam_questions.QstCod=tst_questions.QstCod",
+			Game.GamCod,QstInd))
       Ale_ShowAlert (Ale_WARNING,"Questions doesn't exist.");
    row = mysql_fetch_row (mysql_res);
 
@@ -3700,10 +3697,11 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    unsigned AnsInd;
 
    /***** Get questions of this game from database *****/
-   DB_BuildQuery ("SELECT QstCod FROM gam_questions"
-		  " WHERE GamCod=%ld ORDER BY QstCod",
-                  GamCod);
-   if ((NumQsts = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get questions of a game"))) // The game has questions
+   NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions of a game",
+					"SELECT QstCod FROM gam_questions"
+					" WHERE GamCod=%ld ORDER BY QstCod",
+					GamCod);
+   if (NumQsts)	// The game has questions
      {
       /***** Get questions *****/
       for (NumQst = 0;
@@ -3812,65 +3810,69 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT Cod)"
-			" FROM games"
-			" WHERE Scope='%s'",
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+			 "SELECT COUNT(DISTINCT Cod)"
+			 " FROM games"
+			 " WHERE Scope='%s'",
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT games.Cod)"
-			" FROM institutions,centres,degrees,courses,games"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-                        Gbl.CurrentIns.Ins.InsCod,
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+			 "SELECT COUNT(DISTINCT games.Cod)"
+			 " FROM institutions,centres,degrees,courses,games"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+                         Gbl.CurrentIns.Ins.InsCod,
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT games.Cod)"
-			" FROM centres,degrees,courses,games"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-		        Gbl.CurrentIns.Ins.InsCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+			 "SELECT COUNT(DISTINCT games.Cod)"
+			 " FROM centres,degrees,courses,games"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+		         Gbl.CurrentIns.Ins.InsCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT games.Cod)"
-			" FROM degrees,courses,games"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-                        Gbl.CurrentCtr.Ctr.CtrCod,
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+			 " FROM degrees,courses,games"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+                         Gbl.CurrentCtr.Ctr.CtrCod,
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT games.Cod)"
-			" FROM courses,games"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-		        Gbl.CurrentDeg.Deg.DegCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+			 "SELECT COUNT(DISTINCT games.Cod)"
+			 " FROM courses,games"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+		         Gbl.CurrentDeg.Deg.DegCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT Cod)"
-			" FROM games"
-			" WHERE Scope='%s' AND Cod=%ld",
-                        Sco_ScopeDB[Sco_SCOPE_CRS],
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
+			 "SELECT COUNT(DISTINCT Cod)"
+			 " FROM games"
+			 " WHERE Scope='%s' AND Cod=%ld",
+                         Sco_ScopeDB[Sco_SCOPE_CRS],
+                         Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with games");
 
    /***** Get number of games *****/
    row = mysql_fetch_row (mysql_res);
@@ -3899,66 +3901,71 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM games"
-			" WHERE Scope='%s'",
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of games",
+                         "SELECT COUNT(*)"
+			 " FROM games"
+			 " WHERE Scope='%s'",
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM institutions,centres,degrees,courses,games"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-		        Gbl.CurrentCty.Cty.CtyCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of games",
+                         "SELECT COUNT(*)"
+			 " FROM institutions,centres,degrees,courses,games"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+		         Gbl.CurrentCty.Cty.CtyCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM centres,degrees,courses,games"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-		        Gbl.CurrentIns.Ins.InsCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of games",
+                         "SELECT COUNT(*)"
+			 " FROM centres,degrees,courses,games"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+		         Gbl.CurrentIns.Ins.InsCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM degrees,courses,games"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-		        Gbl.CurrentCtr.Ctr.CtrCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of games",
+                         "SELECT COUNT(*)"
+			 " FROM degrees,courses,games"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+		         Gbl.CurrentCtr.Ctr.CtrCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM courses,games"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'",
-		        Gbl.CurrentDeg.Deg.DegCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of games",
+                         "SELECT COUNT(*)"
+			 " FROM courses,games"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'",
+		         Gbl.CurrentDeg.Deg.DegCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM games"
-			" WHERE games.Scope='%s'"
-			" AND CrsCod=%ld",
-                        Sco_ScopeDB[Sco_SCOPE_CRS],
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of games",
+                         "SELECT COUNT(*)"
+			 " FROM games"
+			 " WHERE games.Scope='%s'"
+			 " AND CrsCod=%ld",
+                         Sco_ScopeDB[Sco_SCOPE_CRS],
+                         Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of games");
 
    /***** Get number of games *****/
    row = mysql_fetch_row (mysql_res);
@@ -3986,82 +3993,87 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT AVG(NumQsts) FROM"
-			" (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			" FROM games,gam_questions"
-			" WHERE games.Scope='%s'"
-			" AND games.GamCod=gam_questions.GamCod"
-			" GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			 " FROM games,gam_questions"
+			 " WHERE games.Scope='%s'"
+			 " AND games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT AVG(NumQsts) FROM"
-			" (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			" FROM institutions,centres,degrees,courses,games,gam_questions"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'"
-			" AND games.GamCod=gam_questions.GamCod"
-			" GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			 " FROM institutions,centres,degrees,courses,games,gam_questions"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'"
+			 " AND games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                         Gbl.CurrentCty.Cty.CtyCod,
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT AVG(NumQsts) FROM"
-			" (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			" FROM centres,degrees,courses,games,gam_questions"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'"
-			" AND games.GamCod=gam_questions.GamCod"
-			" GROUP BY gam_questions.GamCod) AS NumQstsTable",
-		        Gbl.CurrentIns.Ins.InsCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			 " FROM centres,degrees,courses,games,gam_questions"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'"
+			 " AND games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+		         Gbl.CurrentIns.Ins.InsCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT AVG(NumQsts) FROM"
-			" (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			" FROM degrees,courses,games,gam_questions"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'"
-			" AND games.GamCod=gam_questions.GamCod"
-			" GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                        Gbl.CurrentCtr.Ctr.CtrCod,
-                        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			 " FROM degrees,courses,games,gam_questions"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'"
+			 " AND games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                         Gbl.CurrentCtr.Ctr.CtrCod,
+                         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT AVG(NumQsts) FROM"
-			" (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			" FROM courses,games,gam_questions"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=games.Cod"
-			" AND games.Scope='%s'"
-			" AND games.GamCod=gam_questions.GamCod"
-			" GROUP BY gam_questions.GamCod) AS NumQstsTable",
-		        Gbl.CurrentDeg.Deg.DegCod,
-		        Sco_ScopeDB[Sco_SCOPE_CRS]);
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			 " FROM courses,games,gam_questions"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=games.Cod"
+			 " AND games.Scope='%s'"
+			 " AND games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+		         Gbl.CurrentDeg.Deg.DegCod,
+		         Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT AVG(NumQsts) FROM"
-			" (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			" FROM games,gam_questions"
-			" WHERE games.Scope='%s' AND games.Cod=%ld"
-			" AND games.GamCod=gam_questions.GamCod"
-			" GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                        Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
+			 "SELECT AVG(NumQsts) FROM"
+			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
+			 " FROM games,gam_questions"
+			 " WHERE games.Scope='%s' AND games.Cod=%ld"
+			 " AND games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+                         Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of questions per game");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);

@@ -128,7 +128,7 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static long Grp_GetTypeOfGroupOfAGroup (long GrpCod);
-static unsigned Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
+static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 static long Grp_GetFirstCodGrpIBelongTo (long GrpTypCod);
 static bool Grp_GetIfGrpIsAvailable (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
@@ -2305,7 +2305,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	Role >= Rol_STD;
 	Role--)
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-			 "%u"
+			 "%lu"
 			 "</td>",
 	       Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
 
@@ -2674,7 +2674,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
+   unsigned long NumGrpTyp;
 
    if (++Gbl.CurrentCrs.Grps.GrpTypes.NestedCalls > 1) // If list is created yet, there's nothing to do
       return;
@@ -2688,42 +2688,47 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    switch (WhichGroupTypes)
      {
       case Grp_ONLY_GROUP_TYPES_WITH_GROUPS:
-	 DB_BuildQuery ("SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,"
-			"crs_grp_types.Mandatory,crs_grp_types.Multiple,"
-			"crs_grp_types.MustBeOpened,"
-			"UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
-			"COUNT(crs_grp.GrpCod)"
-			" FROM crs_grp_types,crs_grp"
-			" WHERE crs_grp_types.CrsCod=%ld"
-			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			" GROUP BY crs_grp_types.GrpTypCod"
-			" ORDER BY crs_grp_types.GrpTypName",
-		        Gbl.CurrentCrs.Crs.CrsCod);
+	 Gbl.CurrentCrs.Grps.GrpTypes.Num =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of group"
+					       " of a course",
+				    "SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,"
+				    "crs_grp_types.Mandatory,crs_grp_types.Multiple,"
+				    "crs_grp_types.MustBeOpened,"
+				    "UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
+				    "COUNT(crs_grp.GrpCod)"
+				    " FROM crs_grp_types,crs_grp"
+				    " WHERE crs_grp_types.CrsCod=%ld"
+				    " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+				    " GROUP BY crs_grp_types.GrpTypCod"
+				    " ORDER BY crs_grp_types.GrpTypName",
+				    Gbl.CurrentCrs.Crs.CrsCod);
 	 break;
       case Grp_ALL_GROUP_TYPES:
-	 DB_BuildQuery ("(SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName AS GrpTypName,"
-			"crs_grp_types.Mandatory,crs_grp_types.Multiple,"
-			"crs_grp_types.MustBeOpened,"
-			"UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
-			"COUNT(crs_grp.GrpCod)"
-			" FROM crs_grp_types,crs_grp"
-			" WHERE crs_grp_types.CrsCod=%ld"
-			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			" GROUP BY crs_grp_types.GrpTypCod)"
-			" UNION "
-			"(SELECT GrpTypCod,GrpTypName,"
-			"Mandatory,Multiple,"
-			"MustBeOpened,"
-			"UNIX_TIMESTAMP(OpenTime),"
-			"0"
-			" FROM crs_grp_types WHERE CrsCod=%ld"
-			" AND GrpTypCod NOT IN (SELECT GrpTypCod FROM crs_grp))"
-			" ORDER BY GrpTypName",
-		        Gbl.CurrentCrs.Crs.CrsCod,
-		        Gbl.CurrentCrs.Crs.CrsCod);
+	 Gbl.CurrentCrs.Grps.GrpTypes.Num =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of group"
+					       " of a course",
+				    "(SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName AS GrpTypName,"
+				    "crs_grp_types.Mandatory,crs_grp_types.Multiple,"
+				    "crs_grp_types.MustBeOpened,"
+				    "UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
+				    "COUNT(crs_grp.GrpCod)"
+				    " FROM crs_grp_types,crs_grp"
+				    " WHERE crs_grp_types.CrsCod=%ld"
+				    " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+				    " GROUP BY crs_grp_types.GrpTypCod)"
+				    " UNION "
+				    "(SELECT GrpTypCod,GrpTypName,"
+				    "Mandatory,Multiple,"
+				    "MustBeOpened,"
+				    "UNIX_TIMESTAMP(OpenTime),"
+				    "0"
+				    " FROM crs_grp_types WHERE CrsCod=%ld"
+				    " AND GrpTypCod NOT IN (SELECT GrpTypCod FROM crs_grp))"
+				    " ORDER BY GrpTypName",
+				    Gbl.CurrentCrs.Crs.CrsCod,
+				    Gbl.CurrentCrs.Crs.CrsCod);
 	 break;
      }
-   Gbl.CurrentCrs.Grps.GrpTypes.Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get types of group of a course");
 
    /***** Get group types *****/
    Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -2735,43 +2740,43 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get group types *****/
-      for (NumRow = 0;
-	   NumRow < Gbl.CurrentCrs.Grps.GrpTypes.Num;
-	   NumRow++)
+      for (NumGrpTyp = 0;
+	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
+	   NumGrpTyp++)
         {
          /* Get next group type */
          row = mysql_fetch_row (mysql_res);
 
          /* Get group type code (row[0]) */
-         if ((Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong type of group.");
 
          /* Get group type name (row[1]) */
-         Str_Copy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypName,row[1],
+         Str_Copy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,row[1],
                    Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Is it mandatory to register in any groups of this type? (row[2]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrolment = (row[2][0] == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment = (row[2][0] == 'Y');
 
          /* Is it possible to register in multiple groups of this type? (row[3]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MultipleEnrolment = (row[3][0] == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment = (row[3][0] == 'Y');
 
          /* Groups of this type must be opened? (row[4]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened = (row[4][0] == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened = (row[4][0] == 'Y');
 
          /* Get open time (row[5] holds the open time UTC) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened &= Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTimeUTC);
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened &= Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC);
 
          /* Number of groups of this type (row[6]) */
-         if (sscanf (row[6],"%u",&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].NumGrps) != 1)
+         if (sscanf (row[6],"%u",&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) != 1)
             Lay_ShowErrorAndExit ("Wrong number of groups of a type.");
 
          /* Add number of groups to total number of groups */
-         Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal += Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].NumGrps;
+         Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal += Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
 
 	 /* Initialize pointer to the list of groups of this type */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].LstGrps = NULL;
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps = NULL;
 
         }
      }
@@ -2793,12 +2798,14 @@ void Grp_OpenGroupsAutomatically (void)
    long GrpTypCod;
 
    /***** Find group types to be opened *****/
-   DB_BuildQuery ("SELECT GrpTypCod FROM crs_grp_types"
-		  " WHERE CrsCod=%ld AND MustBeOpened='Y'"
-		  " AND OpenTime<=NOW()",
-	          Gbl.CurrentCrs.Crs.CrsCod);
-   NumGrpTypes = (unsigned) DB_QuerySELECT_new (&mysql_res,
-	                                        "can not get the types of group to be opened");
+   NumGrpTypes =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get the types of group"
+					 " to be opened",
+			      "SELECT GrpTypCod FROM crs_grp_types"
+			      " WHERE CrsCod=%ld AND MustBeOpened='Y'"
+			      " AND OpenTime<=NOW()",
+			      Gbl.CurrentCrs.Crs.CrsCod);
+
    for (NumGrpTyp = 0;
         NumGrpTyp < NumGrpTypes;
         NumGrpTyp++)
@@ -2973,12 +2980,12 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
 unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
   {
    /***** Get groups of a type from database *****/
-   DB_BuildQuery ("SELECT GrpCod,GrpName,MaxStudents,Open,FileZones"
-		  " FROM crs_grp"
-		  " WHERE GrpTypCod=%ld"
-		  " ORDER BY GrpName",
-                  GrpTypCod);
-   return DB_QuerySELECT_new (mysql_res,"can not get groups of a type");
+   return DB_QuerySELECT (mysql_res,"can not get groups of a type",
+			  "SELECT GrpCod,GrpName,MaxStudents,Open,FileZones"
+			  " FROM crs_grp"
+			  " WHERE GrpTypCod=%ld"
+			  " ORDER BY GrpName",
+			  GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -2993,11 +3000,15 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    unsigned long NumRows;
 
    /***** Get data of a type of group from database *****/
-   DB_BuildQuery ("SELECT GrpTypName,Mandatory,Multiple,MustBeOpened,UNIX_TIMESTAMP(OpenTime)"
-		  " FROM crs_grp_types"
-		  " WHERE CrsCod=%ld AND GrpTypCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get type of group");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get type of group",
+			     "SELECT GrpTypName,"
+			     "Mandatory,"
+			     "Multiple,"
+			     "MustBeOpened,"
+			     "UNIX_TIMESTAMP(OpenTime)"
+			     " FROM crs_grp_types"
+			     " WHERE CrsCod=%ld AND GrpTypCod=%ld",
+			     Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod);
 
    /***** Count number of rows in result *****/
    if (NumRows != 1)
@@ -3027,9 +3038,11 @@ static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod)
    bool MultipleEnrolment;
 
    /***** Get data of a type of group from database *****/
-   DB_BuildQuery ("SELECT Multiple FROM crs_grp_types WHERE GrpTypCod=%ld",
-                  GrpTypCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get if type of group has multiple enrolment") != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get if type of group"
+				  " has multiple enrolment",
+		       "SELECT Multiple FROM crs_grp_types"
+		       " WHERE GrpTypCod=%ld",
+                       GrpTypCod) != 1)
       Lay_ShowErrorAndExit ("Error when getting type of group.");
 
    /***** Get multiple enrolment *****/
@@ -3066,15 +3079,19 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    if (GrpDat->GrpCod > 0)
      {
       /***** Get data of a group from database *****/
-      DB_BuildQuery ("SELECT crs_grp_types.GrpTypCod,crs_grp_types.CrsCod,"
-		     "crs_grp_types.GrpTypName,crs_grp_types.Multiple,"
-		     "crs_grp.GrpName,crs_grp.MaxStudents,"
-		     "crs_grp.Open,crs_grp.FileZones"
-		     " FROM crs_grp,crs_grp_types"
-		     " WHERE crs_grp.GrpCod=%ld"
-		     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
-	             GrpDat->GrpCod);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a group");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a group",
+				"SELECT crs_grp_types.GrpTypCod,"
+				       "crs_grp_types.CrsCod,"
+				       "crs_grp_types.GrpTypName,"
+				       "crs_grp_types.Multiple,"
+				       "crs_grp.GrpName,"
+				       "crs_grp.MaxStudents,"
+				       "crs_grp.Open,"
+				       "crs_grp.FileZones"
+				" FROM crs_grp,crs_grp_types"
+				" WHERE crs_grp.GrpCod=%ld"
+				" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
+				GrpDat->GrpCod);
 
       if (NumRows == 1)
 	{
@@ -3126,8 +3143,11 @@ static long Grp_GetTypeOfGroupOfAGroup (long GrpCod)
    long GrpTypCod;
 
    /***** Get data of a group from database *****/
-   DB_BuildQuery ("SELECT GrpTypCod FROM crs_grp WHERE GrpCod=%ld",GrpCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get the type of a group") != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get the type of a group",
+		       "SELECT GrpTypCod"
+		       " FROM crs_grp"
+		       " WHERE GrpCod=%ld",
+		       GrpCod) != 1)
       Lay_ShowErrorAndExit ("Error when getting group.");
 
    /***** Get data of group *****/
@@ -3191,34 +3211,20 @@ unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
 /*** Count # of users of current course not belonging to groups of a type ****/
 /*****************************************************************************/
 
-static unsigned Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
+static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs;
-
    /***** Get number of users not belonging to groups of a type ******/
-   DB_BuildQuery ("SELECT COUNT(UsrCod) FROM crs_usr"
-		  " WHERE CrsCod=%ld AND Role=%u"
-		  " AND UsrCod NOT IN"
-		  " (SELECT DISTINCT crs_grp_usr.UsrCod"
-		  " FROM crs_grp,crs_grp_usr"
-		  " WHERE crs_grp.GrpTypCod=%ld"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
-                  Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,GrpTypCod);
-   DB_QuerySELECT_new (&mysql_res,"can not get the number of users"
-	                          " not belonging to groups of a type");
-
-   /***** Get the number of users (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumUsrs) != 1)
-      Lay_ShowErrorAndExit ("Error when getting the number of users"
-	                    " not belonging to groups of a type.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return NumUsrs;
+   return DB_QueryCOUNT ("can not get the number of users"
+	                 " not belonging to groups of a type",
+			 "SELECT COUNT(UsrCod) FROM crs_usr"
+			 " WHERE CrsCod=%ld AND Role=%u"
+			 " AND UsrCod NOT IN"
+			 " (SELECT DISTINCT crs_grp_usr.UsrCod"
+			 " FROM crs_grp,crs_grp_usr"
+			 " WHERE crs_grp.GrpTypCod=%ld"
+			 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
+			 Gbl.CurrentCrs.Crs.CrsCod,
+			 (unsigned) Role,GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -3234,12 +3240,12 @@ static long Grp_GetFirstCodGrpIBelongTo (long GrpTypCod)
    long CodGrpIBelong;
 
    /***** Get a group which I belong to from database *****/
-   DB_BuildQuery ("SELECT crs_grp.GrpCod FROM crs_grp,crs_grp_usr"
-		  " WHERE crs_grp.GrpTypCod=%ld"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		  " AND crs_grp_usr.UsrCod=%ld",
-                  GrpTypCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not check if you belong to a group");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not check if you belong to a group",
+			     "SELECT crs_grp.GrpCod FROM crs_grp,crs_grp_usr"
+			     " WHERE crs_grp.GrpTypCod=%ld"
+			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			     " AND crs_grp_usr.UsrCod=%ld",
+			     GrpTypCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get the group *****/
    if (NumRows == 0)
@@ -3485,31 +3491,38 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
 
    /***** Get groups which a user belong to from database *****/
    if (CrsCod < 0)		// Query the groups from all the user's courses
-      DB_BuildQuery ("SELECT GrpCod"
-		     " FROM crs_grp_usr"
-		     " WHERE UsrCod=%ld",	// Groups will be unordered
-                     UsrCod);
+      LstGrps->NumGrps =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get the groups"
+					    " which a user belongs to",
+				 "SELECT GrpCod"
+				 " FROM crs_grp_usr"
+				 " WHERE UsrCod=%ld",	// Groups will be unordered
+				 UsrCod);
    else if (GrpTypCod < 0)	// Query the groups of any type in the course
-      DB_BuildQuery ("SELECT crs_grp.GrpCod"
-		     " FROM crs_grp_types,crs_grp,crs_grp_usr"
-		     " WHERE crs_grp_types.CrsCod=%ld"
-		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		     " AND crs_grp_usr.UsrCod=%ld"
-		     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-                     Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+      LstGrps->NumGrps =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get the groups"
+					    " which a user belongs to",
+				 "SELECT crs_grp.GrpCod"
+				 " FROM crs_grp_types,crs_grp,crs_grp_usr"
+				 " WHERE crs_grp_types.CrsCod=%ld"
+				 " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+				 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+				 " AND crs_grp_usr.UsrCod=%ld"
+				 " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+				 Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
    else				// Query only the groups of specified type in the course
-      DB_BuildQuery ("SELECT crs_grp.GrpCod"
-		     " FROM crs_grp_types,crs_grp,crs_grp_usr"
-		     " WHERE crs_grp_types.CrsCod=%ld"
-		     " AND crs_grp_types.GrpTypCod=%ld"
-		     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		     " AND crs_grp_usr.UsrCod=%ld"
-		     " ORDER BY crs_grp.GrpName",
-                     Gbl.CurrentCrs.Crs.CrsCod,GrpTypCod,UsrCod);
-   LstGrps->NumGrps = (unsigned) DB_QuerySELECT_new (&mysql_res,
-	                                             "can not get the groups which a user belongs to");
+      LstGrps->NumGrps =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get the groups"
+					    " which a user belongs to",
+				 "SELECT crs_grp.GrpCod"
+				 " FROM crs_grp_types,crs_grp,crs_grp_usr"
+				 " WHERE crs_grp_types.CrsCod=%ld"
+				 " AND crs_grp_types.GrpTypCod=%ld"
+				 " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+				 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+				 " AND crs_grp_usr.UsrCod=%ld"
+				 " ORDER BY crs_grp.GrpName",
+				 Gbl.CurrentCrs.Crs.CrsCod,GrpTypCod,UsrCod);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3544,16 +3557,18 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
    unsigned NumGrp;
 
    /***** Get groups which I belong to from database *****/
-   DB_BuildQuery ("SELECT crs_grp.GrpCod"
-		  " FROM crs_grp_types,crs_grp,crs_grp_usr"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND crs_grp.FileZones='Y'"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		  " AND crs_grp_usr.UsrCod=%ld"
-		  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   LstGrps->NumGrps = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get the groups which I belong to");
+   LstGrps->NumGrps =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get the groups"
+					 " which you belong to",
+			      "SELECT crs_grp.GrpCod"
+			      " FROM crs_grp_types,crs_grp,crs_grp_usr"
+			      " WHERE crs_grp_types.CrsCod=%ld"
+			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			      " AND crs_grp.FileZones='Y'"
+			      " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			      " AND crs_grp_usr.UsrCod=%ld"
+			      " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			      Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3603,16 +3618,19 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
-   size_t MaxLength = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal;
+   size_t MaxLength = (Grp_MAX_BYTES_GROUP_NAME + 2) *
+		      Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal;
 
    /***** Get the names of groups which a user belongs to, from database *****/
-   DB_BuildQuery ("SELECT crs_grp.GrpName FROM crs_grp,crs_grp_usr"
-		  " WHERE crs_grp.GrpTypCod=%ld"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		  " AND crs_grp_usr.UsrCod=%ld"
-		  " ORDER BY crs_grp.GrpName",
-                  GrpTypCod,UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the names of groups a user belongs to");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get the names of groups"
+				        " a user belongs to",
+			     "SELECT crs_grp.GrpName"
+			     " FROM crs_grp,crs_grp_usr"
+			     " WHERE crs_grp.GrpTypCod=%ld"
+			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			     " AND crs_grp_usr.UsrCod=%ld"
+			     " ORDER BY crs_grp.GrpName",
+			     GrpTypCod,UsrCod);
 
    /***** Get the groups *****/
    GroupNames[0] = '\0';
