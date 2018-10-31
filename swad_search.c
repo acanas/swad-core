@@ -659,6 +659,8 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
+   MYSQL_RES *mysql_res;
+   unsigned NumInss;
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_CTR &&
@@ -670,15 +672,17 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
 	 if (Sch_BuildSearchQuery (SearchQuery,"institutions.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list institutions found *****/
-	    DB_BuildQuery ("SELECT institutions.InsCod"
-			   " FROM institutions,countries"
-			   " WHERE %s"
-			   " AND institutions.CtyCod=countries.CtyCod"
-			   "%s"
-			   " ORDER BY institutions.FullName,countries.Name_%s",
-			   SearchQuery,RangeQuery,
-			   Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-	    return Ins_ListInssFound ();
+	    NumInss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				                 "SELECT institutions.InsCod"
+						 " FROM institutions,countries"
+						 " WHERE %s"
+						 " AND institutions.CtyCod=countries.CtyCod"
+						 "%s"
+						 " ORDER BY institutions.FullName,countries.Name_%s",
+						 SearchQuery,RangeQuery,
+						 Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	    Ins_ListInssFound (&mysql_res,NumInss);
+	    return NumInss;
 	   }
 
    return 0;

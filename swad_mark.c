@@ -195,17 +195,20 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   DB_BuildQuery ("SELECT marks_properties.%s,marks_properties.%s"
-		  " FROM files,marks_properties"
-		  " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-		  " AND files.FilCod=marks_properties.FilCod"
-		  " ORDER BY files.FilCod DESC LIMIT 1",	// On duplicate entries, get the more recent
-	          Mrk_HeadOrFootStr[Brw_HEADER],
-	          Mrk_HeadOrFootStr[Brw_FOOTER],
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,
-	          Gbl.FileBrowser.Priv.FullPathInTree);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the number of rows in header and footer");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get the number of rows"
+				        " in header and footer",
+			     "SELECT marks_properties.%s,marks_properties.%s"
+			     " FROM files,marks_properties"
+			     " WHERE files.FileBrowser=%u"
+			     " AND files.Cod=%ld"
+			     " AND files.Path='%s'"
+			     " AND files.FilCod=marks_properties.FilCod"
+			     " ORDER BY files.FilCod DESC LIMIT 1",	// On duplicate entries, get the more recent
+			     Mrk_HeadOrFootStr[Brw_HEADER],
+			     Mrk_HeadOrFootStr[Brw_FOOTER],
+			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			     Cod,
+			     Gbl.FileBrowser.Priv.FullPathInTree);
 
    /***** The result of the query must have only one row *****/
    if (NumRows == 1)
@@ -764,13 +767,14 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    ID_GetListIDsFromUsrCod (&UsrDat);
 
    /***** Get subject of message from database *****/
-   DB_BuildQuery ("SELECT files.FileBrowser,files.Cod,files.Path,"
-		  "marks_properties.Header,marks_properties.Footer"
-		  " FROM files,marks_properties"
-		  " WHERE files.FilCod=%ld"
-		  " AND files.FilCod=marks_properties.FilCod",
-	          MrkCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get the number of rows in header and footer") == 1)	// Result should have a unique row
+   if (DB_QuerySELECT (&mysql_res,"can not get the number of rows"
+				  " in header and footer",
+		       "SELECT files.FileBrowser,files.Cod,files.Path,"
+		       "marks_properties.Header,marks_properties.Footer"
+		       " FROM files,marks_properties"
+		       " WHERE files.FilCod=%ld"
+		       " AND files.FilCod=marks_properties.FilCod",
+			MrkCod) == 1)	// Result should have a unique row
      {
       /***** Get data of this file of marks *****/
       row = mysql_fetch_row (mysql_res);

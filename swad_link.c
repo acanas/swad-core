@@ -263,9 +263,9 @@ void Lnk_GetListLinks (void)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get institutional links from database *****/
-      DB_BuildQuery ("SELECT LnkCod,ShortName,FullName,WWW"
-		     " FROM links ORDER BY ShortName");
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get institutional links");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get institutional links",
+				"SELECT LnkCod,ShortName,FullName,WWW"
+			        " FROM links ORDER BY ShortName");
 
       if (NumRows) // Places found...
 	{
@@ -327,10 +327,11 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      DB_BuildQuery ("SELECT ShortName,FullName,WWW FROM links"
-		     " WHERE LnkCod=%ld",
-                     Lnk->LnkCod);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of an institutional link");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get data"
+					   " of an institutional link",
+				"SELECT ShortName,FullName,WWW FROM links"
+				" WHERE LnkCod=%ld",
+				Lnk->LnkCod);
 
       if (NumRows) // Link found...
         {

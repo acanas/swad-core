@@ -139,6 +139,6 @@ unsigned Ins_GetNumInssWithDegs (const char *SubQuery);
 unsigned Ins_GetNumInssWithCrss (const char *SubQuery);
 unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-unsigned Ins_ListInssFound (void);
+void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 
 #endif

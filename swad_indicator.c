@@ -1424,8 +1424,10 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
    int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
    /***** Get number of indicators of a course from database *****/
-   DB_BuildQuery ("SELECT NumIndicators FROM courses WHERE CrsCod=%ld",CrsCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get number of indicators"))
+   if (DB_QuerySELECT (&mysql_res,"can not get number of indicators",
+	               "SELECT NumIndicators FROM courses"
+	               " WHERE CrsCod=%ld",
+		       CrsCod))
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1537,21 +1539,21 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   DB_BuildQuery ("SELECT"
-		  " (SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld) +"
-		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
-		  " FROM crs_grp_types,crs_grp,file_browser_size"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND file_browser_size.FileBrowser=%u"
-		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
-	          (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
-	          CrsCod,
-	          CrsCod,
-	          (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
-   DB_QuerySELECT_new (&mysql_res,"can not get the number of files");
+   DB_QuerySELECT (&mysql_res,"can not get the number of files",
+		   "SELECT"
+		   " (SELECT COALESCE(SUM(NumFiles),0)"
+		   " FROM file_browser_size"
+		   " WHERE FileBrowser=%u AND Cod=%ld) +"
+		   " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
+		   " FROM crs_grp_types,crs_grp,file_browser_size"
+		   " WHERE crs_grp_types.CrsCod=%ld"
+		   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		   " AND file_browser_size.FileBrowser=%u"
+		   " AND file_browser_size.Cod=crs_grp.GrpCod)",
+		   (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
+		   CrsCod,
+		   CrsCod,
+		   (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1578,21 +1580,21 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   DB_BuildQuery ("SELECT"
-		  " (SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld) +"
-		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
-		  " FROM crs_grp_types,crs_grp,file_browser_size"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND file_browser_size.FileBrowser=%u"
-		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
-	          (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
-	          CrsCod,
-	          CrsCod,
-	          (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
-   DB_QuerySELECT_new (&mysql_res,"can not get the number of files");
+   DB_QuerySELECT (&mysql_res,"can not get the number of files",
+		   "SELECT"
+		   " (SELECT COALESCE(SUM(NumFiles),0)"
+		   " FROM file_browser_size"
+		   " WHERE FileBrowser=%u AND Cod=%ld) +"
+		   " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
+		   " FROM crs_grp_types,crs_grp,file_browser_size"
+		   " WHERE crs_grp_types.CrsCod=%ld"
+		   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		   " AND file_browser_size.FileBrowser=%u"
+		   " AND file_browser_size.Cod=crs_grp.GrpCod)",
+	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
+	           CrsCod,
+	           CrsCod,
+	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1619,12 +1621,12 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   DB_BuildQuery ("SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld",
-	          (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
-	          CrsCod);
-   DB_QuerySELECT_new (&mysql_res,"can not get the number of files");
+   DB_QuerySELECT (&mysql_res,"can not get the number of files",
+		   "SELECT COALESCE(SUM(NumFiles),0)"
+		   " FROM file_browser_size"
+		   " WHERE FileBrowser=%u AND Cod=%ld",
+	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
+	           CrsCod);
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1651,12 +1653,12 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
    unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   DB_BuildQuery ("SELECT COALESCE(SUM(NumFiles),0)"
-		  " FROM file_browser_size"
-		  " WHERE FileBrowser=%u AND Cod=%ld",
-	          (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
-	          CrsCod);
-   DB_QuerySELECT_new (&mysql_res,"can not get the number of files");
+   DB_QuerySELECT (&mysql_res,"can not get the number of files",
+		   "SELECT COALESCE(SUM(NumFiles),0)"
+		   " FROM file_browser_size"
+		   " WHERE FileBrowser=%u AND Cod=%ld",
+	           (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
+	           CrsCod);
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
