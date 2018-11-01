@@ -89,9 +89,10 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 static void Msg_ShowSentOrReceivedMessages (void);
 static unsigned long Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
-static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (long UsrCod,
-                                                          long FilterCrsCod,
-                                                          const char *FilterFromToSubquery);
+static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
+						long FilterCrsCod,
+						const char *FilterFromToSubquery,
+						MYSQL_RES **mysql_res);
 
 static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs);
 
@@ -525,9 +526,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       if (!SubjectAndContentComeFromForm)
 	{
 	 /* Get subject and content of message from database */
-	 DB_BuildQuery ("SELECT Subject,Content FROM msg_content"
-			" WHERE MsgCod=%ld",MsgCod);
-	 NumRows = DB_QuerySELECT_new (&mysql_res,"can not get message content");
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get message content",
+				   "SELECT Subject,Content FROM msg_content"
+				   " WHERE MsgCod=%ld",MsgCod);
 
 	 /* Result should have a unique row */
 	 if (NumRows != 1)
@@ -1347,13 +1348,15 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMess
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long MsgNum,NumMsgs;
+   unsigned long MsgNum;
+   unsigned long NumMsgs;
    long MsgCod;
 
    /***** Get some of the messages received or sent by this user from database *****/
-   Msg_ConstructQueryToSelectSentOrReceivedMsgs (UsrCod,
-                                                 FilterCrsCod,FilterFromToSubquery);
-   NumMsgs = DB_QuerySELECT_new (&mysql_res,"can not get list of messages");
+   NumMsgs = Msg_GetSentOrReceivedMsgs (UsrCod,
+				        FilterCrsCod,
+					FilterFromToSubquery,
+				        &mysql_res);
 
    /***** Delete each message *****/
    for (MsgNum = 0;
@@ -1720,9 +1723,10 @@ static void Msg_ShowSentOrReceivedMessages (void)
      }
 
    /***** Get messages from database *****/
-   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                 Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get messages");
+   NumRows = Msg_GetSentOrReceivedMsgs (Gbl.Usrs.Me.UsrDat.UsrCod,
+					Gbl.Msg.FilterCrsCod,
+					FilterFromToSubquery,
+				        &mysql_res);
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Start box with messages *****/
@@ -1857,12 +1861,14 @@ static void Msg_PutLinkToViewBannedUsers(void)
 /********* Generate a query to select messages received or sent **************/
 /*****************************************************************************/
 
-static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (long UsrCod,
-                                                          long FilterCrsCod,
-                                                          const char *FilterFromToSubquery)
+static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
+						long FilterCrsCod,
+						const char *FilterFromToSubquery,
+						MYSQL_RES **mysql_res)
   {
    char *SubQuery;
    const char *StrUnreadMsg;
+   unsigned long NumMsgs;
 
    if (FilterCrsCod > 0)	// If origin course selected
       switch (Gbl.Msg.TypeOfMessages)
@@ -2006,19 +2012,23 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (long UsrCod,
 
    if (Gbl.Msg.FilterContent[0])
       /* Match against the content written in filter form */
-      DB_BuildQuery ("SELECT MsgCod"
-		     " FROM msg_content"
-		     " WHERE MsgCod IN (SELECT MsgCod FROM (%s) AS M)"
-		     " AND MATCH (Subject,Content) AGAINST ('%s')"
-		     " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
-                     SubQuery,Gbl.Msg.FilterContent);
+      NumMsgs = DB_QuerySELECT (mysql_res,"can not get messages",
+				"SELECT MsgCod"
+				" FROM msg_content"
+				" WHERE MsgCod IN (SELECT MsgCod FROM (%s) AS M)"
+				" AND MATCH (Subject,Content) AGAINST ('%s')"
+				" ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
+				SubQuery,Gbl.Msg.FilterContent);
    else
-      DB_BuildQuery ("%s"
-	             " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
-	             SubQuery);
+      NumMsgs = DB_QuerySELECT (mysql_res,"can not get messages",
+				"%s"
+				" ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
+				SubQuery);
 
    /***** Free memory used for subquery *****/
    free ((void *) SubQuery);
+
+   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -2457,33 +2467,37 @@ void Msg_GetDistinctCoursesInMyMessages (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows = 0;	// Initialized to avoid warning
    struct Course Crs;
 
    /***** Get distinct courses in my messages from database *****/
    switch (Gbl.Msg.TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
-         DB_BuildQuery ("SELECT DISTINCT courses.CrsCod,courses.ShortName"
-			" FROM msg_rcv,msg_snt,courses"
-			" WHERE msg_rcv.UsrCod=%ld"
-			" AND msg_rcv.MsgCod=msg_snt.MsgCod"
-			" AND msg_snt.CrsCod=courses.CrsCod"
-			" ORDER BY courses.ShortName",
-                        Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
+					      " in your messages",""
+				   "SELECT DISTINCT courses.CrsCod,courses.ShortName"
+				   " FROM msg_rcv,msg_snt,courses"
+				   " WHERE msg_rcv.UsrCod=%ld"
+				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				   " AND msg_snt.CrsCod=courses.CrsCod"
+				   " ORDER BY courses.ShortName",
+				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Msg_MESSAGES_SENT:
-         DB_BuildQuery ("SELECT DISTINCT courses.CrsCod,courses.ShortName"
-			" FROM msg_snt,courses"
-			" WHERE msg_snt.UsrCod=%ld"
-			" AND msg_snt.CrsCod=courses.CrsCod"
-			" ORDER BY courses.ShortName",
-                        Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumRows = DB_QuerySELECT (&mysql_res,"can not get distinct courses"
+					      " in your messages",
+				   "SELECT DISTINCT courses.CrsCod,courses.ShortName"
+				   " FROM msg_snt,courses"
+				   " WHERE msg_snt.UsrCod=%ld"
+				   " AND msg_snt.CrsCod=courses.CrsCod"
+				   " ORDER BY courses.ShortName",
+				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       default: // Not aplicable here
          break;
      }
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get distinct courses in your messages");
 
    /***** Get distinct courses in messages from database *****/
    Gbl.Msg.NumCourses = 0;
