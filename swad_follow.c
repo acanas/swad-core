@@ -1115,75 +1115,91 @@ void Fol_UnfollowUsr2 (void)
 
 void Fol_GetAndShowRankingFollowers (void)
   {
+   MYSQL_RES *mysql_res;
+   unsigned NumUsrs = 0;	// Initialized to avoid warning
+
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT FollowedCod,COUNT(FollowerCod) AS N"
-			" FROM usr_follow"
-			" GROUP BY FollowedCod"
-			" ORDER BY N DESC,FollowedCod LIMIT 100");
+	 NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT FollowedCod,COUNT(FollowerCod) AS N"
+				    " FROM usr_follow"
+				    " GROUP BY FollowedCod"
+				    " ORDER BY N DESC,FollowedCod LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			" FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_follow.FollowedCod"
-			" GROUP BY usr_follow.FollowedCod"
-			" ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-                        Gbl.CurrentCty.Cty.CtyCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+				    " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+				    " GROUP BY usr_follow.FollowedCod"
+				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			" FROM centres,degrees,courses,crs_usr,usr_follow"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_follow.FollowedCod"
-			" GROUP BY usr_follow.FollowedCod"
-			" ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-                        Gbl.CurrentIns.Ins.InsCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+				    " FROM centres,degrees,courses,crs_usr,usr_follow"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+				    " GROUP BY usr_follow.FollowedCod"
+				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			" FROM degrees,courses,crs_usr,usr_follow"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_follow.FollowedCod"
-			" GROUP BY usr_follow.FollowedCod"
-			" ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-                        Gbl.CurrentCtr.Ctr.CtrCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+				    " FROM degrees,courses,crs_usr,usr_follow"
+				    " WHERE degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+				    " GROUP BY usr_follow.FollowedCod"
+				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
+				    Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			" FROM courses,crs_usr,usr_follow"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_follow.FollowedCod"
-			" GROUP BY usr_follow.FollowedCod"
-			" ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+				    " FROM courses,crs_usr,usr_follow"
+				    " WHERE courses.DegCod=%ld"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+				    " GROUP BY usr_follow.FollowedCod"
+				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
+				    Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
-			" FROM crs_usr,usr_follow"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=usr_follow.FollowedCod"
-			" GROUP BY usr_follow.FollowedCod"
-			" ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
+				    " FROM crs_usr,usr_follow"
+				    " WHERE crs_usr.CrsCod=%ld"
+				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
+				    " GROUP BY usr_follow.FollowedCod"
+				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
+				    Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();
          break;
      }
-   Prf_ShowRankingFigure ();
+
+   Prf_ShowRankingFigure (&mysql_res,NumUsrs);
   }
 
 /*****************************************************************************/

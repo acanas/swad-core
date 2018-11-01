@@ -191,9 +191,9 @@ static void Plg_GetListPlugins (void)
    struct Plugin *Plg;
 
    /***** Get plugins from database *****/
-   DB_BuildQuery ("SELECT PlgCod,Name,Description,Logo,AppKey,URL,IP"
-		  " FROM plugins ORDER BY Name");
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get plugins");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get plugins",
+			     "SELECT PlgCod,Name,Description,Logo,AppKey,URL,IP"
+			     " FROM plugins ORDER BY Name");
 
    /***** Count number of rows in result *****/
    if (NumRows) // Plugins found...
@@ -274,11 +274,11 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
    // Plg->PlgCod > 0
 
    /***** Get data of a plugin from database *****/
-   DB_BuildQuery ("SELECT Name,Description,Logo,AppKey,URL,IP"
-		  " FROM plugins"
-		  " WHERE PlgCod=%ld",
-                  Plg->PlgCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a plugin");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a plugin",
+			     "SELECT Name,Description,Logo,AppKey,URL,IP"
+			     " FROM plugins"
+			     " WHERE PlgCod=%ld",
+			     Plg->PlgCod);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Plugin found...

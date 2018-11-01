@@ -794,13 +794,15 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	    Txt_Hits_per_action);
 
    /***** Make the query *****/
-   DB_BuildQuery ("SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
-                  " WHERE ClickTime>=FROM_UNIXTIME(%ld) AND UsrCod=%ld"
-		  " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
-		  (long) Report->UsrFigures.FirstClickTimeUTC,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Rep_MAX_ACTIONS);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get clicks");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
+			     "SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N"
+			     " FROM log_full"
+			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+			     " AND UsrCod=%ld"
+			     " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
+			     (long) Report->UsrFigures.FirstClickTimeUTC,
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     Rep_MAX_ACTIONS);
 
    /***** Compute maximum number of hits per action *****/
    Rep_ComputeMaxAndTotalHits (&Report->Hits,NumRows,mysql_res,1);
@@ -929,43 +931,43 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   DB_BuildQuery ("SELECT MAX(N) FROM ("
-		  // Clicks without course selected ---------------------------
-	          "SELECT "
-	          "-1 AS CrsCod,"
-	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	          "%u AS Role,"
-	          "COUNT(*) AS N"
-	          " FROM log_full"
-	          " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	          " AND UsrCod=%ld"
-	          " AND CrsCod<=0"
-	          " GROUP BY Year"
-		  // ----------------------------------------------------------
-	          " UNION "
-		  // Clicks as student, non-editing teacher or teacher in courses
-	          "SELECT "
-	          "CrsCod,"
-	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	          "Role,"
-	          "COUNT(*) AS N"
-	          " FROM log_full"
-	          " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	          " AND UsrCod=%ld"
-	          " AND Role>=%u"	// Student
-	          " AND Role<=%u"	// Teacher
-	          " AND CrsCod>0"
-	          " GROUP BY CrsCod,Year,Role"
-		  // ----------------------------------------------------------
-	          ") AS hits_per_crs_year",
-		  (unsigned) Rol_UNK,
-		  (long) Report->UsrFigures.FirstClickTimeUTC,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (long) Report->UsrFigures.FirstClickTimeUTC,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Rol_STD,
-		  (unsigned) Rol_TCH);
-   DB_QuerySELECT_new (&mysql_res,"can not get last question index");
+   DB_QuerySELECT (&mysql_res,"can not get last question index",
+		   "SELECT MAX(N) FROM ("
+		   // Clicks without course selected --------------------------
+	           "SELECT "
+	           "-1 AS CrsCod,"
+	           "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+	           "%u AS Role,"
+	           "COUNT(*) AS N"
+	           " FROM log_full"
+	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+	           " AND UsrCod=%ld"
+	           " AND CrsCod<=0"
+	           " GROUP BY Year"
+		   // ---------------------------------------------------------
+	           " UNION "
+		   // Clicks as student, non-editing teacher or teacher in courses
+	           "SELECT "
+	           "CrsCod,"
+	           "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+	           "Role,"
+	           "COUNT(*) AS N"
+	           " FROM log_full"
+	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+	           " AND UsrCod=%ld"
+	           " AND Role>=%u"	// Student
+	           " AND Role<=%u"	// Teacher
+	           " AND CrsCod>0"
+	           " GROUP BY CrsCod,Year,Role"
+		   // ---------------------------------------------------------
+	           ") AS hits_per_crs_year",
+		   (unsigned) Rol_UNK,
+		   (long) Report->UsrFigures.FirstClickTimeUTC,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (long) Report->UsrFigures.FirstClickTimeUTC,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Rol_STD,
+		   (unsigned) Rol_TCH);
 
    /***** Get number of users *****/
    Report->MaxHitsPerYear = 0;
@@ -1015,19 +1017,21 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	       Txt_students_ABBREVIATION);
 
       /***** Get courses of a user from database *****/
-      DB_BuildQuery ("SELECT crs_usr.CrsCod,log_full.CrsCod,COUNT(*) AS N"
-	             " FROM crs_usr LEFT JOIN log_full ON"
-	             " (crs_usr.CrsCod=log_full.CrsCod"
-	             " AND crs_usr.UsrCod=log_full.UsrCod"
-	             " AND crs_usr.Role=log_full.Role)"
-	             " WHERE crs_usr.UsrCod=%ld"
-	             " AND crs_usr.Role=%u"
-	             " GROUP BY crs_usr.CrsCod"
-	             " ORDER BY N DESC,log_full.CrsCod DESC",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
+      NumCrss =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
+				 "SELECT crs_usr.CrsCod,log_full.CrsCod,COUNT(*) AS N"
+				 " FROM crs_usr LEFT JOIN log_full ON"
+				 " (crs_usr.CrsCod=log_full.CrsCod"
+				 " AND crs_usr.UsrCod=log_full.UsrCod"
+				 " AND crs_usr.Role=log_full.Role)"
+				 " WHERE crs_usr.UsrCod=%ld"
+				 " AND crs_usr.Role=%u"
+				 " GROUP BY crs_usr.CrsCod"
+				 " ORDER BY N DESC,log_full.CrsCod DESC",
+				 Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
 
       /***** List the courses (one row per course) *****/
-      if ((NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user")))
+      if (NumCrss)
 	{
 	 /* Heading row */
 	 fprintf (Gbl.F.Rep,"<ol>");
@@ -1099,17 +1103,19 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    long CrsCod;
 
    /***** Get historic courses of a user from log *****/
-   DB_BuildQuery ("SELECT CrsCod,COUNT(*) AS N"
-	          " FROM log_full"
-	          " WHERE UsrCod=%ld AND Role=%u AND CrsCod>0"
-                  " GROUP BY CrsCod"
-	          " HAVING N>%u"
-                  " ORDER BY N DESC",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
-		  Rep_MIN_CLICKS_CRS);
+   NumCrss =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses of a user",
+			      "SELECT CrsCod,COUNT(*) AS N"
+			      " FROM log_full"
+			      " WHERE UsrCod=%ld AND Role=%u AND CrsCod>0"
+			      " GROUP BY CrsCod"
+			      " HAVING N>%u"
+			      " ORDER BY N DESC",
+			      Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
+			      Rep_MIN_CLICKS_CRS);
 
    /***** List the courses (one row per course) *****/
-   if ((NumCrss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get courses of a user")))
+   if (NumCrss)
      {
       /* Heading row */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -1235,17 +1241,17 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    else
       sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
 
-   DB_BuildQuery ("SELECT SQL_NO_CACHE "
-		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-		  "COUNT(*) FROM log_full"
-                  " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-		  " AND UsrCod=%ld%s%s"
-		  " GROUP BY Year DESC",
-		  (long) Report->UsrFigures.FirstClickTimeUTC,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  SubQueryCrs,
-		  SubQueryRol);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get clicks");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
+			     "SELECT SQL_NO_CACHE "
+			     "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+			     "COUNT(*) FROM log_full"
+			     " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+			     " AND UsrCod=%ld%s%s"
+			     " GROUP BY Year DESC",
+			     (long) Report->UsrFigures.FirstClickTimeUTC,
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     SubQueryCrs,
+			     SubQueryRol);
 
    /***** Initialize first year *****/
    Gbl.DateRange.DateIni.Date.Year = 1900 + Report->tm_FirstClickTime.tm_year;
@@ -1397,10 +1403,12 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
    char PathUniqueDirReport[PATH_MAX + 1];
 
    /***** Get directories for the reports *****/
-   DB_BuildQuery ("SELECT UniqueDirL,UniqueDirR FROM usr_report"
-	          " WHERE UsrCod=%ld",
-		  UsrCod);
-   NumReports = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's usage reports");
+   NumReports =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's usage reports",
+			      "SELECT UniqueDirL,UniqueDirR"
+			      " FROM usr_report"
+			      " WHERE UsrCod=%ld",
+			      UsrCod);
 
    /***** Remove the reports *****/
    for (NumReport = 0;

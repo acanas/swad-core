@@ -77,7 +77,7 @@ void Prf_GetAndShowRankingClicks (void);
 void Prf_GetAndShowRankingFileViews (void);
 void Prf_GetAndShowRankingForPst (void);
 void Prf_GetAndShowRankingMsgSnt (void);
-void Prf_ShowRankingFigure (void);
+void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs);
 void Prf_GetAndShowRankingClicksPerDay (void);
 void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank);
 

@@ -625,12 +625,13 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
    unsigned NumRows;
 
    /***** Get user's figures from database *****/
-   DB_BuildQuery ("SELECT UNIX_TIMESTAMP(FirstClickTime),"
-		  "DATEDIFF(NOW(),FirstClickTime)+1,"
-		  "NumClicks,NumFileViews,NumForPst,NumMsgSnt"
-		  " FROM usr_figures WHERE UsrCod=%ld",
-	          UsrCod);
-   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's figures")))
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's figures",
+					"SELECT UNIX_TIMESTAMP(FirstClickTime),"
+				        "DATEDIFF(NOW(),FirstClickTime)+1,"
+				        "NumClicks,NumFileViews,NumForPst,NumMsgSnt"
+				        " FROM usr_figures WHERE UsrCod=%ld",
+				        UsrCod);
+   if (NumRows)
      {
       /***** Get user's figures *****/
       row = mysql_fetch_row (mysql_res);
@@ -838,11 +839,12 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get first click from log table *****/
-      DB_BuildQuery ("SELECT UNIX_TIMESTAMP("
-		     "(SELECT MIN(ClickTime) FROM log_full WHERE UsrCod=%ld)"
-		     ")",
-	            UsrCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get user's first click"))
+      if (DB_QuerySELECT (&mysql_res,"can not get user's first click",
+			  "SELECT UNIX_TIMESTAMP("
+			  "(SELECT MIN(ClickTime) FROM log_full"
+			  " WHERE UsrCod=%ld)"
+			  ")",
+			  UsrCod))
 	{
 	 /* Get first click */
 	 row = mysql_fetch_row (mysql_res);
@@ -1154,107 +1156,120 @@ void Prf_GetAndShowRankingMsgSnt (void)
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName)
   {
+   MYSQL_RES *mysql_res;
+   unsigned NumUsrs = 0;	// Initialized to avoid warning
+
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT UsrCod,%s"
-			" FROM usr_figures"
-			" WHERE %s>=0"
-			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY %s DESC,UsrCod LIMIT 100",
-		        FieldName,
-		        FieldName,FieldName);
+	 NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT UsrCod,%s"
+				    " FROM usr_figures"
+				    " WHERE %s>=0"
+				    " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY %s DESC,UsrCod LIMIT 100",
+				    FieldName,
+				    FieldName,FieldName);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-			" FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		        FieldName,
-		        Gbl.CurrentCty.Cty.CtyCod,
-		        FieldName,FieldName);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+				    " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+				    FieldName,
+				    Gbl.CurrentCty.Cty.CtyCod,
+				    FieldName,FieldName);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-			" FROM centres,degrees,courses,crs_usr,usr_figures"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		        FieldName,
-		        Gbl.CurrentIns.Ins.InsCod,
-		        FieldName,FieldName);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+				    " FROM centres,degrees,courses,crs_usr,usr_figures"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+				    FieldName,
+				    Gbl.CurrentIns.Ins.InsCod,
+				    FieldName,FieldName);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-			" FROM degrees,courses,crs_usr,usr_figures"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		        FieldName,
-		        Gbl.CurrentCtr.Ctr.CtrCod,
-		        FieldName,FieldName);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+				    " FROM degrees,courses,crs_usr,usr_figures"
+				    " WHERE degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+				    FieldName,
+				    Gbl.CurrentCtr.Ctr.CtrCod,
+				    FieldName,FieldName);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-			" FROM courses,crs_usr,usr_figures"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		        FieldName,
-		        Gbl.CurrentDeg.Deg.DegCod,
-		        FieldName,FieldName);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+				    " FROM courses,crs_usr,usr_figures"
+				    " WHERE courses.DegCod=%ld"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+				    FieldName,
+				    Gbl.CurrentDeg.Deg.DegCod,
+				    FieldName,FieldName);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
-			" FROM crs_usr,usr_figures"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.%s>=0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
-		        FieldName,
-		        Gbl.CurrentCrs.Crs.CrsCod,
-		        FieldName,FieldName);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
+				    " FROM crs_usr,usr_figures"
+				    " WHERE crs_usr.CrsCod=%ld"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
+				    FieldName,
+				    Gbl.CurrentCrs.Crs.CrsCod,
+				    FieldName,FieldName);
          break;
       default:
          Lay_WrongScopeExit ();
          break;
      }
-   Prf_ShowRankingFigure ();
+
+   Prf_ShowRankingFigure (&mysql_res,NumUsrs);
   }
 
-void Prf_ShowRankingFigure (void)
+void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
   {
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
    unsigned NumUsr;
    unsigned Rank;
    struct UsrData UsrDat;
    long FigureHigh = LONG_MAX;
    long Figure;
 
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get ranking");
    if (NumUsrs)
      {
       /***** Initialize structure with user's data *****/
@@ -1267,7 +1282,7 @@ void Prf_ShowRankingFigure (void)
 	   NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	{
 	 /***** Get user and number of clicks *****/
-	 row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (*mysql_res);
 
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -1302,7 +1317,7 @@ void Prf_ShowRankingFigure (void)
      }
 
    /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   DB_FreeMySQLResult (mysql_res);
   }
 
 /*****************************************************************************/
@@ -1313,7 +1328,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
+   unsigned NumUsrs = 0;	// Initialized to avoid warning
    unsigned NumUsr;
    unsigned Rank;
    struct UsrData UsrDat;
@@ -1324,94 +1339,106 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT UsrCod,"
-			"NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
-			" FROM usr_figures"
-			" WHERE NumClicks>0"
-			" AND UNIX_TIMESTAMP(FirstClickTime)>0"
-			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
+	 NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT UsrCod,"
+				    "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
+				    " FROM usr_figures"
+				    " WHERE NumClicks>0"
+				    " AND UNIX_TIMESTAMP(FirstClickTime)>0"
+				    " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,"
-			"usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			"usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			" FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                        Gbl.CurrentCty.Cty.CtyCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,"
+				    "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+				    "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+				    " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.NumClicks>0"
+				    " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,"
-			"usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			"usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			" FROM centres,degrees,courses,crs_usr,usr_figures"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                        Gbl.CurrentIns.Ins.InsCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,"
+				    "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+				    "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+				    " FROM centres,degrees,courses,crs_usr,usr_figures"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.NumClicks>0"
+				    " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,"
-			"usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			"usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			" FROM degrees,courses,crs_usr,usr_figures"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                        Gbl.CurrentCtr.Ctr.CtrCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,"
+				    "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+				    "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+				    " FROM degrees,courses,crs_usr,usr_figures"
+				    " WHERE degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.NumClicks>0"
+				    " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+				    Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,"
-			"usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			"usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			" FROM courses,crs_usr,usr_figures"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,"
+				    "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+				    "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+				    " FROM courses,crs_usr,usr_figures"
+				    " WHERE courses.DegCod=%ld"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.NumClicks>0"
+				    " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+				    Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT DISTINCTROW usr_figures.UsrCod,"
-			"usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			"usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
-			" FROM crs_usr,usr_figures"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>0"
-			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
-			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         NumUsrs =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
+				    "SELECT DISTINCTROW usr_figures.UsrCod,"
+				    "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+				    "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+				    " FROM crs_usr,usr_figures"
+				    " WHERE crs_usr.CrsCod=%ld"
+				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
+				    " AND usr_figures.NumClicks>0"
+				    " AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>0"
+				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
+				    Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();
          break;
      }
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get ranking");
+
    if (NumUsrs)
      {
       /***** Initialize structure with user's data *****/

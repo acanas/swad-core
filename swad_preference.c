@@ -129,10 +129,11 @@ void Pre_GetPrefsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      DB_BuildQuery ("SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
-		     " FROM IP_prefs WHERE IP='%s'",
-	             Gbl.IP);
-      if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get preferences")))
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get preferences",
+				"SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
+				" FROM IP_prefs WHERE IP='%s'",
+				Gbl.IP);
+      if (NumRows)
 	{
 	 if (NumRows != 1)
 	    Lay_ShowErrorAndExit ("Internal error while getting preferences.");

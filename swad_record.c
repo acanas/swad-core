@@ -231,12 +231,14 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    if (++Gbl.CurrentCrs.Records.LstFields.NestedCalls > 1) // If the list is already created, don't do anything
       return;
 
-   /***** Get fields of cards of a course from database *****/
-   DB_BuildQuery ("SELECT FieldCod,FieldName,NumLines,Visibility"
-		  " FROM crs_record_fields"
-		  " WHERE CrsCod=%ld ORDER BY FieldName",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   Gbl.CurrentCrs.Records.LstFields.Num = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get fields of cards of a course");
+   /***** Get fields of records in a course from database *****/
+   Gbl.CurrentCrs.Records.LstFields.Num =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get fields of records"
+					 " in a course",
+			      "SELECT FieldCod,FieldName,NumLines,Visibility"
+			      " FROM crs_record_fields"
+			      " WHERE CrsCod=%ld ORDER BY FieldName",
+			      Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get the fields of records *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)
@@ -557,13 +559,13 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
 
 unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
   {
-   /***** Get fields of cards of current course from database *****/
-   DB_BuildQuery ("SELECT FieldCod,FieldName,Visibility"
-		  " FROM crs_record_fields"
-		  " WHERE CrsCod=%ld ORDER BY FieldName",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT_new (mysql_res,
-                              "can not get fields of cards of a course");
+   /***** Get fields of records in current course from database *****/
+   return DB_QuerySELECT (mysql_res,"can not get fields of records"
+				    " in a course",
+			  "SELECT FieldCod,FieldName,Visibility"
+			  " FROM crs_record_fields"
+			  " WHERE CrsCod=%ld ORDER BY FieldName",
+			  Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -732,10 +734,12 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   DB_BuildQuery ("SELECT FieldName,NumLines,Visibility FROM crs_record_fields"
-		  " WHERE CrsCod=%ld AND FieldCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod,FieldCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get a field of a record in a course");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get a field of a record"
+					" in a course",
+			     "SELECT FieldName,NumLines,Visibility"
+			     " FROM crs_record_fields"
+			     " WHERE CrsCod=%ld AND FieldCod=%ld",
+			     Gbl.CurrentCrs.Crs.CrsCod,FieldCod);
 
    /***** Count number of rows in result *****/
    if (NumRows != 1)
@@ -1941,10 +1945,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res)
   {
    /***** Get the text of a field of a record from database *****/
-   DB_BuildQuery ("SELECT Txt FROM crs_records"
-		  " WHERE FieldCod=%ld AND UsrCod=%ld",
-                  FieldCod,UsrCod);
-   return DB_QuerySELECT_new (mysql_res,"can not get the text of a field of a record.");
+   return DB_QuerySELECT (mysql_res,"can not get the text"
+				    " of a field of a record",
+			  "SELECT Txt FROM crs_records"
+			  " WHERE FieldCod=%ld AND UsrCod=%ld",
+			  FieldCod,UsrCod);
   }
 
 /*****************************************************************************/

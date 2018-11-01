@@ -299,25 +299,32 @@ void Plc_GetListPlaces (void)
          sprintf (OrderBySubQuery,"NumCtrs DESC,FullName");
          break;
      }
-   DB_BuildQuery ("(SELECT places.PlcCod,places.ShortName,places.FullName,COUNT(*) AS NumCtrs"
-		  " FROM places,centres"
-		  " WHERE places.InsCod=%ld"
-		  " AND places.PlcCod=centres.PlcCod"
-		  " AND centres.InsCod=%ld"
-		  " GROUP BY places.PlcCod)"
-		  " UNION "
-		  "(SELECT PlcCod,ShortName,FullName,0 AS NumCtrs"
-		  " FROM places"
-		  " WHERE InsCod=%ld"
-		  " AND PlcCod NOT IN"
-		  " (SELECT DISTINCT PlcCod FROM centres WHERE InsCod=%ld))"
-		  " ORDER BY %s",
-	          Gbl.CurrentIns.Ins.InsCod,
-	          Gbl.CurrentIns.Ins.InsCod,
-	          Gbl.CurrentIns.Ins.InsCod,
-	          Gbl.CurrentIns.Ins.InsCod,
-	          OrderBySubQuery);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get places");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get places",
+			     "(SELECT places.PlcCod,"
+				     "places.ShortName,"
+				     "places.FullName,"
+				     "COUNT(*) AS NumCtrs"
+			     " FROM places,centres"
+			     " WHERE places.InsCod=%ld"
+			     " AND places.PlcCod=centres.PlcCod"
+			     " AND centres.InsCod=%ld"
+			     " GROUP BY places.PlcCod)"
+			     " UNION "
+			     "(SELECT PlcCod,"
+				     "ShortName,"
+				     "FullName,"
+				     "0 AS NumCtrs"
+			     " FROM places"
+			     " WHERE InsCod=%ld"
+			     " AND PlcCod NOT IN"
+			     " (SELECT DISTINCT PlcCod FROM centres"
+			     " WHERE InsCod=%ld))"
+			     " ORDER BY %s",
+			     Gbl.CurrentIns.Ins.InsCod,
+			     Gbl.CurrentIns.Ins.InsCod,
+			     Gbl.CurrentIns.Ins.InsCod,
+			     Gbl.CurrentIns.Ins.InsCod,
+			     OrderBySubQuery);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Places found...
@@ -397,22 +404,26 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      DB_BuildQuery ("(SELECT places.ShortName,places.FullName,COUNT(*)"
-		     " FROM places,centres"
-		     " WHERE places.PlcCod=%ld"
-		     " AND places.PlcCod=centres.PlcCod"
-		     " AND centres.PlcCod=%ld"
-		     " GROUP BY places.PlcCod)"
-		     " UNION "
-		     "(SELECT ShortName,FullName,0"
-		     " FROM places"
-		     " WHERE PlcCod=%ld"
-		     " AND PlcCod NOT IN"
-		     " (SELECT DISTINCT PlcCod FROM centres))",
-		     Plc->PlcCod,
-		     Plc->PlcCod,
-		     Plc->PlcCod);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a place");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a place",
+			        "(SELECT places.ShortName,"
+					"places.FullName,"
+					"COUNT(*)"
+				" FROM places,centres"
+				" WHERE places.PlcCod=%ld"
+				" AND places.PlcCod=centres.PlcCod"
+				" AND centres.PlcCod=%ld"
+				" GROUP BY places.PlcCod)"
+				" UNION "
+				"(SELECT ShortName,"
+					"FullName,"
+					"0"
+				" FROM places"
+				" WHERE PlcCod=%ld"
+				" AND PlcCod NOT IN"
+				" (SELECT DISTINCT PlcCod FROM centres))",
+				Plc->PlcCod,
+				Plc->PlcCod,
+				Plc->PlcCod);
 
       /***** Count number of rows in result *****/
       if (NumRows) // Place found...
