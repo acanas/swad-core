@@ -222,13 +222,11 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
 	NumURL++)
      {
-      /***** Get user's web / social network from database *****/
-      DB_BuildQuery ("SELECT URL FROM usr_webs"
-		     " WHERE UsrCod=%ld AND Web='%s'",
-	             UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]);
-
       /***** Check if exists the web / social network for this user *****/
-      if (DB_QuerySELECT_new (&mysql_res,"can not get user's web / social network"))
+      if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
+	                  "SELECT URL FROM usr_webs"
+			  " WHERE UsrCod=%ld AND Web='%s'",
+			  UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]))
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
@@ -301,13 +299,11 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	NumURL++)
      {
       /***** Get user's web / social network from database *****/
-      DB_BuildQuery ("SELECT URL FROM usr_webs"
-		     " WHERE UsrCod=%ld AND Web='%s'",
-	             Gbl.Usrs.Me.UsrDat.UsrCod,
-	             Net_WebsAndSocialNetworksDB[NumURL]);
-
-      /***** Check number of rows in result *****/
-      if (DB_QuerySELECT_new (&mysql_res,"can not get user's web / social network"))
+      if (DB_QuerySELECT (&mysql_res,"can not get user's web / social network",
+			  "SELECT URL FROM usr_webs"
+			  " WHERE UsrCod=%ld AND Web='%s'",
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Net_WebsAndSocialNetworksDB[NumURL]))
 	{
 	 /***** Read the data comunes a all the users *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -437,7 +433,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    extern const char *Txt_PERCENT_of_users;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
+   unsigned NumRows = 0;	// Initialized to avoid warning
    unsigned NumRow;
    Net_WebsAndSocialNetworks_t Web;
    char NetName[Net_MAX_BYTES_NETWORK_NAME + 1];
@@ -455,77 +451,93 @@ void Net_ShowWebAndSocialNetworksStats (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT Web,COUNT(*) AS N"
-			" FROM usr_webs"
-			" GROUP BY Web"
-			" ORDER BY N DESC,Web");
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
+					       " with webs / social networks",
+				    "SELECT Web,COUNT(*) AS N"
+				    " FROM usr_webs"
+				    " GROUP BY Web"
+				    " ORDER BY N DESC,Web");
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT usr_webs.Web,"
-			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			" FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_webs.UsrCod"
-			" GROUP BY usr_webs.Web"
-			" ORDER BY N DESC,usr_webs.Web",
-                        Gbl.CurrentCty.Cty.CtyCod);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
+					       " with webs / social networks",
+				    "SELECT usr_webs.Web,"
+				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+				    " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
+				    " GROUP BY usr_webs.Web"
+				    " ORDER BY N DESC,usr_webs.Web",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT usr_webs.Web,"
-			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			" FROM centres,degrees,courses,crs_usr,usr_webs"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_webs.UsrCod"
-			" GROUP BY usr_webs.Web"
-			" ORDER BY N DESC,usr_webs.Web",
-                        Gbl.CurrentIns.Ins.InsCod);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
+					       " with webs / social networks",
+				    "SELECT usr_webs.Web,"
+				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+				    " FROM centres,degrees,courses,crs_usr,usr_webs"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
+				    " GROUP BY usr_webs.Web"
+				    " ORDER BY N DESC,usr_webs.Web",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT usr_webs.Web,"
-			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			" FROM degrees,courses,crs_usr,usr_webs"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_webs.UsrCod"
-			" GROUP BY usr_webs.Web"
-			" ORDER BY N DESC,usr_webs.Web",
-                        Gbl.CurrentCtr.Ctr.CtrCod);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
+					       " with webs / social networks",
+				    "SELECT usr_webs.Web,"
+				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+				    " FROM degrees,courses,crs_usr,usr_webs"
+				    " WHERE degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
+				    " GROUP BY usr_webs.Web"
+				    " ORDER BY N DESC,usr_webs.Web",
+				    Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT usr_webs.Web,"
-			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			" FROM courses,crs_usr,usr_webs"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=usr_webs.UsrCod"
-			" GROUP BY usr_webs.Web"
-			" ORDER BY N DESC,usr_webs.Web",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
+					       " with webs / social networks",
+				    "SELECT usr_webs.Web,"
+				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+				    " FROM courses,crs_usr,usr_webs"
+				    " WHERE courses.DegCod=%ld"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
+				    " GROUP BY usr_webs.Web"
+				    " ORDER BY N DESC,usr_webs.Web",
+				    Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT usr_webs.Web,"
-			"COUNT(DISTINCT usr_webs.UsrCod) AS N"
-			" FROM crs_usr,usr_webs"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=usr_webs.UsrCod"
-			" GROUP BY usr_webs.Web"
-			" ORDER BY N DESC,usr_webs.Web",
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
+					       " with webs / social networks",
+				    "SELECT usr_webs.Web,"
+				    "COUNT(DISTINCT usr_webs.UsrCod) AS N"
+				    " FROM crs_usr,usr_webs"
+				    " WHERE crs_usr.CrsCod=%ld"
+				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
+				    " GROUP BY usr_webs.Web"
+				    " ORDER BY N DESC,usr_webs.Web",
+				    Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,
-                                            "can not get number of users with webs / social networks");
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,

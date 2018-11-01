@@ -107,10 +107,10 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
    Act_Action_t Action;
 
    /***** Get most frequently used actions *****/
-   DB_BuildQuery ("SELECT ActCod FROM actions_MFU"
-		  " WHERE UsrCod=%ld ORDER BY Score DESC,LastClick DESC",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get most frequently used actions");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
+			     "SELECT ActCod FROM actions_MFU"
+			     " WHERE UsrCod=%ld ORDER BY Score DESC,LastClick DESC",
+			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write list of frequently used actions *****/
    for (NumRow = 0, ListMFUActions->NumActions = 0;
@@ -150,11 +150,13 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
      {
       /***** Get my most frequently used actions *****/
-      DB_BuildQuery ("SELECT ActCod FROM actions_MFU"
-		     " WHERE UsrCod=%ld"
-		     " ORDER BY LastClick DESC,Score DESC",
-                     Gbl.Usrs.Me.UsrDat.UsrCod);
-      NumActions = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get most frequently used actions");
+      NumActions =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get"
+					    " most frequently used actions",
+				 "SELECT ActCod FROM actions_MFU"
+				 " WHERE UsrCod=%ld"
+				 " ORDER BY LastClick DESC,Score DESC",
+				 Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Loop over list of frequently used actions *****/
       for (NumAct = 0;
@@ -352,10 +354,10 @@ void MFU_UpdateMFUActions (void)
    Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 
    /***** Get current score *****/
-   DB_BuildQuery ("SELECT Score FROM actions_MFU"
-		  " WHERE UsrCod=%ld AND ActCod=%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get score for current action"))
+   if (DB_QuerySELECT (&mysql_res,"can not get score for current action",
+	               "SELECT Score FROM actions_MFU"
+		       " WHERE UsrCod=%ld AND ActCod=%ld",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,ActCod))
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%f",&Score) != 1)

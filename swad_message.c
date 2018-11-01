@@ -2659,18 +2659,18 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 
    /***** Get data of message from table msg_snt *****/
    *Deleted = false;
-   DB_BuildQuery ("SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
-		  " FROM msg_snt WHERE MsgCod=%ld",
-                  MsgCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a message");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a message",
+			     "SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
+			     " FROM msg_snt WHERE MsgCod=%ld",
+			     MsgCod);
 
    if (NumRows == 0)   // If not result ==> sent message is deleted
      {
       /***** Get data of message from table msg_snt_deleted *****/
-      DB_BuildQuery ("SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
-		     " FROM msg_snt_deleted WHERE MsgCod=%ld",
-                     MsgCod);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get data of a message");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a message",
+				"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
+				" FROM msg_snt_deleted WHERE MsgCod=%ld",
+				MsgCod);
 
       *Deleted = true;
      }
@@ -2708,10 +2708,10 @@ void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
    MYSQL_ROW row;
 
    /***** Get subject of message from database *****/
-   DB_BuildQuery ("SELECT Subject FROM msg_content WHERE MsgCod=%ld",MsgCod);
-
-   /***** Result should have a unique row *****/
-   if (DB_QuerySELECT_new (&mysql_res,"can not get the subject of a message") == 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get the subject of a message",
+	               "SELECT Subject FROM msg_content"
+	               " WHERE MsgCod=%ld",
+		       MsgCod) == 1)	// Result should have a unique row
      {
       /***** Get subject *****/
       row = mysql_fetch_row (mysql_res);
@@ -2737,10 +2737,10 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    unsigned long NumRows;
 
    /***** Get content of message from database *****/
-   DB_BuildQuery ("SELECT Content,ImageName,ImageTitle,ImageURL"
-		  " FROM msg_content WHERE MsgCod=%ld",
-                  MsgCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the content of a message");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get the content of a message",
+			     "SELECT Content,ImageName,ImageTitle,ImageURL"
+			     " FROM msg_content WHERE MsgCod=%ld",
+			     MsgCod);
 
    /***** Result should have a unique row *****/
    if (NumRows != 1)
@@ -2771,10 +2771,11 @@ static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded)
    unsigned long NumRows;
 
    /***** Get if sent message has been replied/expanded from database *****/
-   DB_BuildQuery ("SELECT Expanded FROM msg_snt"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get if a sent message has been replied/expanded");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get if a sent message"
+				        " has been replied/expanded",
+			     "SELECT Expanded FROM msg_snt"
+			     " WHERE MsgCod=%ld AND UsrCod=%ld",
+			     MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Result should have a unique row *****/
    if (NumRows != 1)
@@ -2801,10 +2802,11 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
    unsigned long NumRows;
 
    /***** Get if received message has been replied/expanded from database *****/
-   DB_BuildQuery ("SELECT Open,Replied,Expanded FROM msg_rcv"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get if a received message has been replied/expanded");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get if a received message"
+				        " has been replied/expanded",
+			     "SELECT Open,Replied,Expanded FROM msg_rcv"
+			     " WHERE MsgCod=%ld AND UsrCod=%ld",
+			     MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Result should have a unique row *****/
    if (NumRows != 1)
@@ -3021,11 +3023,11 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    // This function may be called inside a web service, so don't report error
 
    /***** Get subject of message from database *****/
-   DB_BuildQuery ("SELECT Subject,Content FROM msg_content"
-		  " WHERE MsgCod=%ld",
-                  MsgCod);
-
-   if (DB_QuerySELECT_new (&mysql_res,"can not get subject and content of a message") == 1)	// Result should have a unique row
+   if (DB_QuerySELECT (&mysql_res,"can not get subject and content"
+				  " of a message",
+		       "SELECT Subject,Content FROM msg_content"
+		       " WHERE MsgCod=%ld",
+		       MsgCod) == 1)	// Result should have a unique row
      {
       /***** Get subject and content of the message *****/
       row = mysql_fetch_row (mysql_res);
@@ -3378,18 +3380,29 @@ static void Msg_WriteMsgTo (long MsgCod)
    NumRecipientsTotal = (unsigned) DB_QueryCOUNT_new ("can not get number of recipients");
 
    /***** Get recipients of a message from database *****/
-   DB_BuildQuery ("(SELECT msg_rcv.UsrCod,'N',msg_rcv.Open,"
-		  "usr_data.Surname1 AS S1,usr_data.Surname2 AS S2,usr_data.FirstName AS FN"
-		  " FROM msg_rcv,usr_data"
-		  " WHERE msg_rcv.MsgCod=%ld AND msg_rcv.UsrCod=usr_data.UsrCod)"
-		  " UNION "
-		  "(SELECT msg_rcv_deleted.UsrCod,'Y',msg_rcv_deleted.Open,"
-		  "usr_data.Surname1 AS S1,usr_data.Surname2 AS S2,usr_data.FirstName AS FN"
-		  " FROM msg_rcv_deleted,usr_data"
-		  " WHERE msg_rcv_deleted.MsgCod=%ld AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
-		  " ORDER BY S1,S2,FN",
-	          MsgCod,MsgCod);
-   NumRecipientsKnown = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get recipients of a message");
+   NumRecipientsKnown =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get recipients of a message",
+			      "(SELECT msg_rcv.UsrCod,"
+				      "'N',"
+				      "msg_rcv.Open,"
+				      "usr_data.Surname1 AS S1,"
+				      "usr_data.Surname2 AS S2,"
+				      "usr_data.FirstName AS FN"
+			      " FROM msg_rcv,usr_data"
+			      " WHERE msg_rcv.MsgCod=%ld"
+			      " AND msg_rcv.UsrCod=usr_data.UsrCod)"
+			      " UNION "
+			      "(SELECT msg_rcv_deleted.UsrCod,"
+				      "'Y',"
+				      "msg_rcv_deleted.Open,"
+				      "usr_data.Surname1 AS S1,"
+				      "usr_data.Surname2 AS S2,"
+				      "usr_data.FirstName AS FN"
+			      " FROM msg_rcv_deleted,usr_data"
+			      " WHERE msg_rcv_deleted.MsgCod=%ld"
+			      " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
+			      " ORDER BY S1,S2,FN",
+			      MsgCod,MsgCod);
 
    /***** Check number of recipients *****/
    if (NumRecipientsTotal)
@@ -3748,12 +3761,15 @@ void Msg_ListBannedUsrs (void)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Get my banned users *****/
-   DB_BuildQuery ("SELECT msg_banned.FromUsrCod FROM msg_banned,usr_data"
-		  " WHERE msg_banned.ToUsrCod=%ld"
-		  " AND msg_banned.FromUsrCod=usr_data.UsrCod"
-		  " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get banned users");
+   NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get banned users",
+				        "SELECT msg_banned.FromUsrCod"
+				        " FROM msg_banned,usr_data"
+				        " WHERE msg_banned.ToUsrCod=%ld"
+				        " AND msg_banned.FromUsrCod=usr_data.UsrCod"
+				        " ORDER BY usr_data.Surname1,"
+				                  "usr_data.Surname2,"
+				                  "usr_data.FirstName",
+				        Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (NumUsrs == 0)   // If not result ==> sent message is deleted
       Ale_ShowAlert (Ale_INFO,Txt_You_have_not_banned_any_sender);
