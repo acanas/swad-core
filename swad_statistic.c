@@ -206,7 +206,8 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void);
 static void Sta_GetAndShowInssOrderedByNumCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
-static void Sta_GetAndShowInss (const char *TxtFigure);
+static void Sta_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
+		          const char *TxtFigure);
 static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res);
 
 static void Sta_GetAndShowDegreeTypesStats (void);
@@ -1879,8 +1880,9 @@ static void Sta_WriteLogComments (long LogCod)
    MYSQL_ROW row;
 
    /***** Get log comments from database *****/
-   DB_BuildQuery ("SELECT Comments FROM log_comments WHERE LogCod=%ld",LogCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get log comments"))
+   if (DB_QuerySELECT (&mysql_res,"can not get log comments",
+		       "SELECT Comments FROM log_comments WHERE LogCod=%ld",
+		       LogCod))
      {
       /***** Get and write comments *****/
       row = mysql_fetch_row (mysql_res);
@@ -5155,6 +5157,8 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
   {
    extern const char *Txt_Institutions_by_number_of_centres;
    extern const char *Txt_Centres;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss = 0;
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_centres,NULL,
@@ -5164,36 +5168,47 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
-			" FROM centres"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC");
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT InsCod,COUNT(*) AS N"
+				    " FROM centres"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM institutions,centres"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentCty.Cty.CtyCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM institutions,centres"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
-			" FROM centres"
-			" WHERE InsCod=%ld"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentIns.Ins.InsCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT InsCod,COUNT(*) AS N"
+				    " FROM centres"
+				    " WHERE InsCod=%ld"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Txt_Centres);
+
+   /***** Show institutions *****/
+   Sta_ShowInss (&mysql_res,NumInss,Txt_Centres);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5207,6 +5222,8 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
   {
    extern const char *Txt_Institutions_by_number_of_degrees;
    extern const char *Txt_Degrees;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss = 0;
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_degrees,NULL,
@@ -5216,39 +5233,50 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM centres,degrees"
-	                " WHERE centres.CtrCod=degrees.CtrCod"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC");
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM centres,degrees"
+				    " WHERE centres.CtrCod=degrees.CtrCod"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM institutions,centres,degrees"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentCty.Cty.CtyCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM institutions,centres,degrees"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM centres,degrees"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentIns.Ins.InsCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM centres,degrees"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Txt_Degrees);
+
+   /***** Show institutions *****/
+   Sta_ShowInss (&mysql_res,NumInss,Txt_Degrees);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5262,6 +5290,8 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
   {
    extern const char *Txt_Institutions_by_number_of_courses;
    extern const char *Txt_Courses;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss = 0;
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_courses,NULL,
@@ -5271,42 +5301,53 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM centres,degrees,courses"
-	                " WHERE centres.CtrCod=degrees.CtrCod"
-	                " AND degrees.DegCod=courses.DegCod"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC");
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM centres,degrees,courses"
+				    " WHERE centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM institutions,centres,degrees,courses"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentCty.Cty.CtyCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM institutions,centres,degrees,courses"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(*) AS N"
-			" FROM centres,degrees,courses"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentIns.Ins.InsCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(*) AS N"
+				    " FROM centres,degrees,courses"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Txt_Courses);
+
+   /***** Show institutions *****/
+   Sta_ShowInss (&mysql_res,NumInss,Txt_Courses);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5320,6 +5361,8 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
   {
    extern const char *Txt_Institutions_by_number_of_users_in_courses;
    extern const char *Txt_Users;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss = 0;
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_in_courses,NULL,
@@ -5329,45 +5372,56 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			" FROM centres,degrees,courses,crs_usr"
-	                " WHERE centres.CtrCod=degrees.CtrCod"
-	                " AND degrees.DegCod=courses.DegCod"
-	                " AND courses.CrsCod=crs_usr.CrsCod"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC");
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
+				    " FROM centres,degrees,courses,crs_usr"
+				    " WHERE centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			" FROM institutions,centres,degrees,courses,crs_usr"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentCty.Cty.CtyCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
+				    " FROM institutions,centres,degrees,courses,crs_usr"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-	 DB_BuildQuery ("SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
-			" FROM centres,degrees,courses,crs_usr"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" GROUP BY centres.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentIns.Ins.InsCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
+				    " FROM centres,degrees,courses,crs_usr"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=crs_usr.CrsCod"
+				    " GROUP BY centres.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Txt_Users);
+
+   /***** Show institutions *****/
+   Sta_ShowInss (&mysql_res,NumInss,Txt_Users);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5382,6 +5436,8 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
   {
    extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
    extern const char *Txt_Users;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss = 0;
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
@@ -5422,7 +5478,12 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   Sta_GetAndShowInss (Txt_Users);
+
+   /***** Show institutions *****/
+   Sta_ShowInss (&mysql_res,NumInss,Txt_Users);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5432,12 +5493,11 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 /****************** Get and show stats about institutions ********************/
 /*****************************************************************************/
 
-static void Sta_GetAndShowInss (const char *TxtFigure)
+static void Sta_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
+		          const char *TxtFigure)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Institution;
-   MYSQL_RES *mysql_res;
-   unsigned NumInss;
    unsigned NumIns;
    unsigned NumOrder;
    unsigned NumberLastRow;
@@ -5446,7 +5506,7 @@ static void Sta_GetAndShowInss (const char *TxtFigure)
    bool TRIsOpen = false;
 
    /***** Query database *****/
-   if ((NumInss = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get institutions")))
+   if (NumInss)
      {
       /* Draw the classphoto/list */
       switch (Gbl.Usrs.Me.ListType)
@@ -5463,7 +5523,7 @@ static void Sta_GetAndShowInss (const char *TxtFigure)
 		 }
 
 	       /***** Get institution data and statistic *****/
-	       NumberThisRow = Sta_GetInsAndStat (&Ins,mysql_res);
+	       NumberThisRow = Sta_GetInsAndStat (&Ins,*mysql_res);
 
 	       /***** Write link to institution *****/
 	       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
@@ -5504,7 +5564,7 @@ static void Sta_GetAndShowInss (const char *TxtFigure)
 		 NumIns++)
 	      {
 	       /***** Get institution data and statistic *****/
-	       NumberThisRow = Sta_GetInsAndStat (&Ins,mysql_res);
+	       NumberThisRow = Sta_GetInsAndStat (&Ins,*mysql_res);
 
 	       /***** Number of order *****/
 	       if (NumberThisRow != NumberLastRow)
@@ -5548,9 +5608,6 @@ static void Sta_GetAndShowInss (const char *TxtFigure)
 	    break;
 	}
      }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -5890,102 +5947,107 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
-		              "COUNT(DISTINCT GrpCod)-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM "
-	                      "("
-	                      "SELECT Cod AS CrsCod,"
-	                      "-1 AS GrpCod,"
-			      "NumLevels,"
-			      "NumFolders,"
-			      "NumFiles,"
-			      "TotalSize"
-			      " FROM file_browser_size"
-			      " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-	                      " UNION "
-	                      "SELECT crs_grp_types.CrsCod,"
-	                      "file_browser_size.Cod AS GrpCod,"
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
-			      ") AS sizes",
-			      (unsigned) Brw_ADMI_DOC_CRS,
-			      (unsigned) Brw_ADMI_TCH_CRS,
-			      (unsigned) Brw_ADMI_SHR_CRS,
-			      (unsigned) Brw_ADMI_ASG_USR,
-			      (unsigned) Brw_ADMI_WRK_USR,
-			      (unsigned) Brw_ADMI_MRK_CRS,
-			      (unsigned) Brw_ADMI_DOC_GRP,
-			      (unsigned) Brw_ADMI_TCH_GRP,
-			      (unsigned) Brw_ADMI_SHR_GRP,
-			      (unsigned) Brw_ADMI_MRK_GRP);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT CrsCod),"
+				      "COUNT(DISTINCT GrpCod)-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM "
+	                       "("
+	                       "SELECT Cod AS CrsCod,"
+				      "-1 AS GrpCod,"
+				      "NumLevels,"
+				      "NumFolders,"
+				      "NumFiles,"
+				      "TotalSize"
+			       " FROM file_browser_size"
+			       " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+	                       " UNION "
+	                       "SELECT crs_grp_types.CrsCod,"
+				      "file_browser_size.Cod AS GrpCod,"
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
+			       ") AS sizes",
+			       (unsigned) Brw_ADMI_DOC_CRS,
+			       (unsigned) Brw_ADMI_TCH_CRS,
+			       (unsigned) Brw_ADMI_SHR_CRS,
+			       (unsigned) Brw_ADMI_ASG_USR,
+			       (unsigned) Brw_ADMI_WRK_USR,
+			       (unsigned) Brw_ADMI_MRK_CRS,
+			       (unsigned) Brw_ADMI_DOC_GRP,
+			       (unsigned) Brw_ADMI_TCH_GRP,
+			       (unsigned) Brw_ADMI_SHR_GRP,
+			       (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT Cod),"
-		              "-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM file_browser_size"
-			      " WHERE FileBrowser=%u",
-			      (unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT Cod),"
+				      "-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM file_browser_size"
+			       " WHERE FileBrowser=%u",
+			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
-		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-	                      " AND file_browser_size.FileBrowser=%u",
-			      (unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+				      "COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+	                       " AND file_browser_size.FileBrowser=%u",
+			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT Cod),"
-		              "-1,"
-		              "COUNT(DISTINCT ZoneUsrCod),"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM file_browser_size"
-			      " WHERE FileBrowser=%u",
-			      (unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT Cod),"
+				      "-1,"
+				      "COUNT(DISTINCT ZoneUsrCod),"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM file_browser_size"
+			       " WHERE FileBrowser=%u",
+			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       DB_BuildQuery ("SELECT -1,"
-		              "-1,"
-		              "COUNT(DISTINCT ZoneUsrCod),"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM file_browser_size"
-			      " WHERE FileBrowser=%u",
-			      (unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT -1,"
+				      "-1,"
+				      "COUNT(DISTINCT ZoneUsrCod),"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM file_browser_size"
+			       " WHERE FileBrowser=%u",
+			       (unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -5997,135 +6059,140 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
-		              "COUNT(DISTINCT GrpCod)-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM "
-	                      "("
-	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "-1 AS GrpCod,"				// Course zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM institutions,centres,degrees,courses,file_browser_size"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-	                      " UNION "
-	                      "SELECT crs_grp_types.CrsCod,"
-	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE institutions.CtyCod=%ld"
-	                      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
-			      ") AS sizes",
-			      Gbl.CurrentCty.Cty.CtyCod,
-			      (unsigned) Brw_ADMI_DOC_CRS,
-			      (unsigned) Brw_ADMI_TCH_CRS,
-			      (unsigned) Brw_ADMI_SHR_CRS,
-			      (unsigned) Brw_ADMI_ASG_USR,
-			      (unsigned) Brw_ADMI_WRK_USR,
-			      (unsigned) Brw_ADMI_MRK_CRS,
-			      Gbl.CurrentCty.Cty.CtyCod,
-			      (unsigned) Brw_ADMI_DOC_GRP,
-			      (unsigned) Brw_ADMI_TCH_GRP,
-			      (unsigned) Brw_ADMI_SHR_GRP,
-			      (unsigned) Brw_ADMI_MRK_GRP);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT CrsCod),"
+				      "COUNT(DISTINCT GrpCod)-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM "
+	                       "("
+	                       "SELECT file_browser_size.Cod AS CrsCod,"
+				      "-1 AS GrpCod,"				// Course zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM institutions,centres,degrees,courses,file_browser_size"
+			       " WHERE institutions.CtyCod=%ld"
+			       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+	                       " UNION "
+	                       "SELECT crs_grp_types.CrsCod,"
+				      "file_browser_size.Cod AS GrpCod,"	// Group zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE institutions.CtyCod=%ld"
+	                       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
+			       ") AS sizes",
+			       Gbl.CurrentCty.Cty.CtyCod,
+			       (unsigned) Brw_ADMI_DOC_CRS,
+			       (unsigned) Brw_ADMI_TCH_CRS,
+			       (unsigned) Brw_ADMI_SHR_CRS,
+			       (unsigned) Brw_ADMI_ASG_USR,
+			       (unsigned) Brw_ADMI_WRK_USR,
+			       (unsigned) Brw_ADMI_MRK_CRS,
+			       Gbl.CurrentCty.Cty.CtyCod,
+			       (unsigned) Brw_ADMI_DOC_GRP,
+			       (unsigned) Brw_ADMI_TCH_GRP,
+			       (unsigned) Brw_ADMI_SHR_GRP,
+			       (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM institutions,centres,degrees,courses,file_browser_size"
-			      " WHERE institutions.CtyCod=%ld"
-	                      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " and file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM institutions,centres,degrees,courses,file_browser_size"
+			       " WHERE institutions.CtyCod=%ld"
+	                       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " and file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
-		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE institutions.CtyCod=%ld"
-	                      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+				      "COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE institutions.CtyCod=%ld"
+	                       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM institutions,centres,degrees,courses,file_browser_size"
-			      " WHERE institutions.CtyCod=%ld"
-	                      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-	                      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM institutions,centres,degrees,courses,file_browser_size"
+			       " WHERE institutions.CtyCod=%ld"
+	                       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+	                       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       DB_BuildQuery ("SELECT -1,"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM institutions,centres,degrees,courses,crs_usr,file_browser_size"
-			      " WHERE institutions.CtyCod=%ld"
-	                      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT -1,"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM institutions,centres,degrees,courses,crs_usr,file_browser_size"
+			       " WHERE institutions.CtyCod=%ld"
+	                       " AND institutions.InsCod=centres.InsCod"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6137,129 +6204,134 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
-		              "COUNT(DISTINCT GrpCod)-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM "
-	                      "("
-	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "-1 AS GrpCod,"				// Course zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM centres,degrees,courses,file_browser_size"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-	                      " UNION "
-	                      "SELECT crs_grp_types.CrsCod,"
-	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
-			      ") AS sizes",
-			      Gbl.CurrentIns.Ins.InsCod,
-			      (unsigned) Brw_ADMI_DOC_CRS,
-			      (unsigned) Brw_ADMI_TCH_CRS,
-			      (unsigned) Brw_ADMI_SHR_CRS,
-			      (unsigned) Brw_ADMI_ASG_USR,
-			      (unsigned) Brw_ADMI_WRK_USR,
-			      (unsigned) Brw_ADMI_MRK_CRS,
-			      Gbl.CurrentIns.Ins.InsCod,
-			      (unsigned) Brw_ADMI_DOC_GRP,
-			      (unsigned) Brw_ADMI_TCH_GRP,
-			      (unsigned) Brw_ADMI_SHR_GRP,
-			      (unsigned) Brw_ADMI_MRK_GRP);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT CrsCod),"
+				      "COUNT(DISTINCT GrpCod)-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM "
+	                       "("
+	                       "SELECT file_browser_size.Cod AS CrsCod,"
+				      "-1 AS GrpCod,"				// Course zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM centres,degrees,courses,file_browser_size"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+	                       " UNION "
+	                       "SELECT crs_grp_types.CrsCod,"
+				      "file_browser_size.Cod AS GrpCod,"	// Group zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
+			       ") AS sizes",
+			       Gbl.CurrentIns.Ins.InsCod,
+			       (unsigned) Brw_ADMI_DOC_CRS,
+			       (unsigned) Brw_ADMI_TCH_CRS,
+			       (unsigned) Brw_ADMI_SHR_CRS,
+			       (unsigned) Brw_ADMI_ASG_USR,
+			       (unsigned) Brw_ADMI_WRK_USR,
+			       (unsigned) Brw_ADMI_MRK_CRS,
+			       Gbl.CurrentIns.Ins.InsCod,
+			       (unsigned) Brw_ADMI_DOC_GRP,
+			       (unsigned) Brw_ADMI_TCH_GRP,
+			       (unsigned) Brw_ADMI_SHR_GRP,
+			       (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM centres,degrees,courses,file_browser_size"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " and file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM centres,degrees,courses,file_browser_size"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " and file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
-		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+				      "COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM centres,degrees,courses,file_browser_size"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-	                      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM centres,degrees,courses,file_browser_size"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+	                       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       DB_BuildQuery ("SELECT -1,"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM centres,degrees,courses,crs_usr,file_browser_size"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT -1,"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM centres,degrees,courses,crs_usr,file_browser_size"
+			       " WHERE centres.InsCod=%ld"
+			       " AND centres.CtrCod=degrees.CtrCod"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6271,123 +6343,128 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
-		              "COUNT(DISTINCT GrpCod)-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM "
-	                      "("
-	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "-1 AS GrpCod,"				// Course zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM degrees,courses,file_browser_size"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-	                      " UNION "
-	                      "SELECT crs_grp_types.CrsCod,"
-	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
-			      ") AS sizes",
-			      Gbl.CurrentCtr.Ctr.CtrCod,
-			      (unsigned) Brw_ADMI_DOC_CRS,
-			      (unsigned) Brw_ADMI_TCH_CRS,
-			      (unsigned) Brw_ADMI_SHR_CRS,
-			      (unsigned) Brw_ADMI_ASG_USR,
-			      (unsigned) Brw_ADMI_WRK_USR,
-			      (unsigned) Brw_ADMI_MRK_CRS,
-			      Gbl.CurrentCtr.Ctr.CtrCod,
-			      (unsigned) Brw_ADMI_DOC_GRP,
-			      (unsigned) Brw_ADMI_TCH_GRP,
-			      (unsigned) Brw_ADMI_SHR_GRP,
-			      (unsigned) Brw_ADMI_MRK_GRP);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT CrsCod),"
+				      "COUNT(DISTINCT GrpCod)-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM "
+	                       "("
+	                       "SELECT file_browser_size.Cod AS CrsCod,"
+				      "-1 AS GrpCod,"				// Course zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM degrees,courses,file_browser_size"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+	                       " UNION "
+	                       "SELECT crs_grp_types.CrsCod,"
+				      "file_browser_size.Cod AS GrpCod,"	// Group zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
+			       ") AS sizes",
+			       Gbl.CurrentCtr.Ctr.CtrCod,
+			       (unsigned) Brw_ADMI_DOC_CRS,
+			       (unsigned) Brw_ADMI_TCH_CRS,
+			       (unsigned) Brw_ADMI_SHR_CRS,
+			       (unsigned) Brw_ADMI_ASG_USR,
+			       (unsigned) Brw_ADMI_WRK_USR,
+			       (unsigned) Brw_ADMI_MRK_CRS,
+			       Gbl.CurrentCtr.Ctr.CtrCod,
+			       (unsigned) Brw_ADMI_DOC_GRP,
+			       (unsigned) Brw_ADMI_TCH_GRP,
+			       (unsigned) Brw_ADMI_SHR_GRP,
+			       (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM degrees,courses,file_browser_size"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM degrees,courses,file_browser_size"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
-		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+				      "COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM degrees,courses,file_browser_size"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM degrees,courses,file_browser_size"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       DB_BuildQuery ("SELECT -1,"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM degrees,courses,crs_usr,file_browser_size"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT -1,"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM degrees,courses,crs_usr,file_browser_size"
+			       " WHERE degrees.CtrCod=%ld"
+			       " AND degrees.DegCod=courses.DegCod"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6399,117 +6476,122 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
-		              "COUNT(DISTINCT GrpCod)-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM "
-	                      "("
-	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "-1 AS GrpCod,"				// Course zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM courses,file_browser_size"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-	                      " UNION "
-	                      "SELECT crs_grp_types.CrsCod,"
-	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
-			      ") AS sizes",
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      (unsigned) Brw_ADMI_DOC_CRS,
-			      (unsigned) Brw_ADMI_TCH_CRS,
-			      (unsigned) Brw_ADMI_SHR_CRS,
-			      (unsigned) Brw_ADMI_ASG_USR,
-			      (unsigned) Brw_ADMI_WRK_USR,
-			      (unsigned) Brw_ADMI_MRK_CRS,
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      (unsigned) Brw_ADMI_DOC_GRP,
-			      (unsigned) Brw_ADMI_TCH_GRP,
-			      (unsigned) Brw_ADMI_SHR_GRP,
-			      (unsigned) Brw_ADMI_MRK_GRP);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT CrsCod),"
+				      "COUNT(DISTINCT GrpCod)-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM "
+	                       "("
+	                       "SELECT file_browser_size.Cod AS CrsCod,"
+				      "-1 AS GrpCod,"				// Course zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM courses,file_browser_size"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+	                       " UNION "
+	                       "SELECT crs_grp_types.CrsCod,"
+	                              "file_browser_size.Cod AS GrpCod,"	// Group zones
+			              "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
+			       ") AS sizes",
+			       Gbl.CurrentDeg.Deg.DegCod,
+			       (unsigned) Brw_ADMI_DOC_CRS,
+			       (unsigned) Brw_ADMI_TCH_CRS,
+			       (unsigned) Brw_ADMI_SHR_CRS,
+			       (unsigned) Brw_ADMI_ASG_USR,
+			       (unsigned) Brw_ADMI_WRK_USR,
+			       (unsigned) Brw_ADMI_MRK_CRS,
+			       Gbl.CurrentDeg.Deg.DegCod,
+			       (unsigned) Brw_ADMI_DOC_GRP,
+			       (unsigned) Brw_ADMI_TCH_GRP,
+			       (unsigned) Brw_ADMI_SHR_GRP,
+			       (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM courses,file_browser_size"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM courses,file_browser_size"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
-		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=crs_grp_types.CrsCod"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+				      "COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM courses,crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=crs_grp_types.CrsCod"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM courses,file_browser_size"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM courses,file_browser_size"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       DB_BuildQuery ("SELECT -1,"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM courses,crs_usr,file_browser_size"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT -1,"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM courses,crs_usr,file_browser_size"
+			       " WHERE courses.DegCod=%ld"
+			       " AND courses.CrsCod=crs_usr.CrsCod"
+			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6521,109 +6603,114 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod),"
-		              "COUNT(DISTINCT GrpCod)-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM "
-	                      "("
-	                      "SELECT Cod AS CrsCod,"
-	                      "-1 AS GrpCod,"				// Course zones
-			      "NumLevels,"
-			      "NumFolders,"
-			      "NumFiles,"
-			      "TotalSize"
-			      " FROM file_browser_size"
-			      " WHERE Cod=%ld"
-			      " AND FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-	                      " UNION "
-	                      "SELECT crs_grp_types.CrsCod,"
-	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
-			      "file_browser_size.NumLevels,"
-			      "file_browser_size.NumFolders,"
-			      "file_browser_size.NumFiles,"
-			      "file_browser_size.TotalSize"
-			      " FROM crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE crs_grp_types.CrsCod=%ld"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
-			      ") AS sizes",
-			      Gbl.CurrentCrs.Crs.CrsCod,
-			      (unsigned) Brw_ADMI_DOC_CRS,
-			      (unsigned) Brw_ADMI_TCH_CRS,
-			      (unsigned) Brw_ADMI_SHR_CRS,
-			      (unsigned) Brw_ADMI_ASG_USR,
-			      (unsigned) Brw_ADMI_WRK_USR,
-			      (unsigned) Brw_ADMI_MRK_CRS,
-			      Gbl.CurrentCrs.Crs.CrsCod,
-			      (unsigned) Brw_ADMI_DOC_GRP,
-			      (unsigned) Brw_ADMI_TCH_GRP,
-			      (unsigned) Brw_ADMI_SHR_GRP,
-			      (unsigned) Brw_ADMI_MRK_GRP);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT CrsCod),"
+				      "COUNT(DISTINCT GrpCod)-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM "
+	                       "("
+	                       "SELECT Cod AS CrsCod,"
+				      "-1 AS GrpCod,"				// Course zones
+				      "NumLevels,"
+				      "NumFolders,"
+				      "NumFiles,"
+				      "TotalSize"
+			       " FROM file_browser_size"
+			       " WHERE Cod=%ld"
+			       " AND FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+	                       " UNION "
+	                       "SELECT crs_grp_types.CrsCod,"
+				      "file_browser_size.Cod AS GrpCod,"	// Group zones
+				      "file_browser_size.NumLevels,"
+				      "file_browser_size.NumFolders,"
+				      "file_browser_size.NumFiles,"
+				      "file_browser_size.TotalSize"
+			       " FROM crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE crs_grp_types.CrsCod=%ld"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
+			       ") AS sizes",
+			       Gbl.CurrentCrs.Crs.CrsCod,
+			       (unsigned) Brw_ADMI_DOC_CRS,
+			       (unsigned) Brw_ADMI_TCH_CRS,
+			       (unsigned) Brw_ADMI_SHR_CRS,
+			       (unsigned) Brw_ADMI_ASG_USR,
+			       (unsigned) Brw_ADMI_WRK_USR,
+			       (unsigned) Brw_ADMI_MRK_CRS,
+			       Gbl.CurrentCrs.Crs.CrsCod,
+			       (unsigned) Brw_ADMI_DOC_GRP,
+			       (unsigned) Brw_ADMI_TCH_GRP,
+			       (unsigned) Brw_ADMI_SHR_GRP,
+			       (unsigned) Brw_ADMI_MRK_GRP);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_MRK_CRS:
-	       DB_BuildQuery ("SELECT 1,"
-		              "-1,"
-		              "-1,"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM file_browser_size"
-			      " WHERE Cod=%ld AND FileBrowser=%u",
-			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT 1,"
+				      "-1,"
+				      "-1,"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM file_browser_size"
+			       " WHERE Cod=%ld AND FileBrowser=%u",
+			       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
 	    case Brw_ADMI_SHR_GRP:
 	    case Brw_ADMI_MRK_GRP:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
-		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "-1,"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE crs_grp_types.CrsCod=%ld"
-			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
+				      "COUNT(DISTINCT file_browser_size.Cod),"
+				      "-1,"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM crs_grp_types,crs_grp,file_browser_size"
+			       " WHERE crs_grp_types.CrsCod=%ld"
+			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			       " AND crs_grp.GrpCod=file_browser_size.Cod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
-	       DB_BuildQuery ("SELECT 1,"
-		              "-1,"
-		              "COUNT(DISTINCT ZoneUsrCod),"
-			      "MAX(NumLevels),"
-			      "SUM(NumFolders),"
-			      "SUM(NumFiles),"
-			      "SUM(TotalSize)"
-			      " FROM file_browser_size"
-			      " WHERE Cod=%ld AND FileBrowser=%u",
-			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT 1,"
+				      "-1,"
+				      "COUNT(DISTINCT ZoneUsrCod),"
+				      "MAX(NumLevels),"
+				      "SUM(NumFolders),"
+				      "SUM(NumFiles),"
+				      "SUM(TotalSize)"
+			       " FROM file_browser_size"
+			       " WHERE Cod=%ld AND FileBrowser=%u",
+			       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
-	       DB_BuildQuery ("SELECT -1,"
-		              "-1,"
-		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
-			      "MAX(file_browser_size.NumLevels),"
-			      "SUM(file_browser_size.NumFolders),"
-			      "SUM(file_browser_size.NumFiles),"
-			      "SUM(file_browser_size.TotalSize)"
-			      " FROM crs_usr,file_browser_size"
-			      " WHERE crs_usr.CrsCod=%ld"
-			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser=%u",
-			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
+	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
+			       "SELECT -1,"
+				      "-1,"
+				      "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
+				      "MAX(file_browser_size.NumLevels),"
+				      "SUM(file_browser_size.NumFolders),"
+				      "SUM(file_browser_size.NumFiles),"
+				      "SUM(file_browser_size.TotalSize)"
+			       " FROM crs_usr,file_browser_size"
+			       " WHERE crs_usr.CrsCod=%ld"
+			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
+			       " AND file_browser_size.FileBrowser=%u",
+			       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -6634,7 +6721,6 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get size of a file browser");
 
    /* Get row */
    row = mysql_fetch_row (mysql_res);
@@ -6753,94 +6839,106 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows,NumRow;
+   unsigned NumRows = 0;	// Initialized to avoid warning
+   unsigned NumRow;
    unsigned Public;
 
    /***** Get the size of a file browser *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT Public,COUNT(*)"
-                        " FROM files"
-                        " WHERE License=%u"
-                        " GROUP BY Public",
-			(unsigned) License);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
+				    "SELECT Public,COUNT(*)"
+				    " FROM files"
+				    " WHERE License=%u"
+				    " GROUP BY Public",
+				    (unsigned) License);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
-                        " FROM institutions,centres,degrees,courses,files"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN (%u,%u)"
-                        " AND files.License=%u"
-                        " GROUP BY files.Public",
-			Gbl.CurrentCty.Cty.CtyCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) License);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
+				    "SELECT files.Public,COUNT(*)"
+				    " FROM institutions,centres,degrees,courses,files"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=centres.InsCod"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=files.Cod"
+				    " AND files.FileBrowser IN (%u,%u)"
+				    " AND files.License=%u"
+				    " GROUP BY files.Public",
+				    Gbl.CurrentCty.Cty.CtyCod,
+				    (unsigned) Brw_ADMI_DOC_CRS,
+				    (unsigned) Brw_ADMI_SHR_CRS,
+				    (unsigned) License);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
-                        " FROM centres,degrees,courses,files"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN (%u,%u)"
-                        " AND files.License=%u"
-                        " GROUP BY files.Public",
-			Gbl.CurrentIns.Ins.InsCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) License);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
+				    "SELECT files.Public,COUNT(*)"
+				    " FROM centres,degrees,courses,files"
+				    " WHERE centres.InsCod=%ld"
+				    " AND centres.CtrCod=degrees.CtrCod"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=files.Cod"
+				    " AND files.FileBrowser IN (%u,%u)"
+				    " AND files.License=%u"
+				    " GROUP BY files.Public",
+				    Gbl.CurrentIns.Ins.InsCod,
+				    (unsigned) Brw_ADMI_DOC_CRS,
+				    (unsigned) Brw_ADMI_SHR_CRS,
+				    (unsigned) License);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
-                        " FROM degrees,courses,files"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN (%u,%u)"
-                        " AND files.License=%u"
-                        " GROUP BY files.Public",
-			Gbl.CurrentCtr.Ctr.CtrCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) License);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
+				    "SELECT files.Public,COUNT(*)"
+				    " FROM degrees,courses,files"
+				    " WHERE degrees.CtrCod=%ld"
+				    " AND degrees.DegCod=courses.DegCod"
+				    " AND courses.CrsCod=files.Cod"
+				    " AND files.FileBrowser IN (%u,%u)"
+				    " AND files.License=%u"
+				    " GROUP BY files.Public",
+				    Gbl.CurrentCtr.Ctr.CtrCod,
+				    (unsigned) Brw_ADMI_DOC_CRS,
+				    (unsigned) Brw_ADMI_SHR_CRS,
+				    (unsigned) License);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT files.Public,COUNT(*)"
-                        " FROM courses,files"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN (%u,%u)"
-                        " AND files.License=%u"
-                        " GROUP BY files.Public",
-			Gbl.CurrentDeg.Deg.DegCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) License);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
+				    "SELECT files.Public,COUNT(*)"
+				    " FROM courses,files"
+				    " WHERE courses.DegCod=%ld"
+				    " AND courses.CrsCod=files.Cod"
+				    " AND files.FileBrowser IN (%u,%u)"
+				    " AND files.License=%u"
+				    " GROUP BY files.Public",
+				    Gbl.CurrentDeg.Deg.DegCod,
+				    (unsigned) Brw_ADMI_DOC_CRS,
+				    (unsigned) Brw_ADMI_SHR_CRS,
+				    (unsigned) License);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT Public,COUNT(*)"
-                        " FROM files"
-                        " WHERE Cod=%ld"
-	                " AND FileBrowser IN (%u,%u)"
-                        " AND License=%u"
-                        " GROUP BY Public",
-			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Brw_ADMI_DOC_CRS,
-			(unsigned) Brw_ADMI_SHR_CRS,
-			(unsigned) License);
+         NumRows =
+         (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of OERs",
+				    "SELECT Public,COUNT(*)"
+				    " FROM files"
+				    " WHERE Cod=%ld"
+				    " AND FileBrowser IN (%u,%u)"
+				    " AND License=%u"
+				    " GROUP BY Public",
+				    Gbl.CurrentCrs.Crs.CrsCod,
+				    (unsigned) Brw_ADMI_DOC_CRS,
+				    (unsigned) Brw_ADMI_SHR_CRS,
+				    (unsigned) License);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get number of OERs");
 
    /* Reset values to zero */
    NumFiles[0] = NumFiles[1] = 0L;
@@ -7241,6 +7339,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
    MYSQL_ROW row;
    Soc_NoteType_t NoteType;
    unsigned long NumSocialNotes;
+   unsigned long NumRows;
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
@@ -7287,72 +7386,86 @@ static void Sta_GetAndShowSocialActivityStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    DB_BuildQuery ("SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
-		           " FROM social_notes WHERE NoteType=%u",
-			   NoteType);
+	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				      "SELECT COUNT(*),"
+					     "COUNT(DISTINCT UsrCod)"
+				      " FROM social_notes WHERE NoteType=%u",
+				      NoteType);
 	    break;
 	 case Sco_SCOPE_CTY:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			   " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
-			   " WHERE institutions.CtyCod=%ld"
-			   " AND institutions.InsCod=centres.InsCod"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType=%u",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   (unsigned) NoteType);
+	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					     "COUNT(DISTINCT social_notes.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=social_notes.UsrCod"
+				      " AND social_notes.NoteType=%u",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_INS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			   " FROM centres,degrees,courses,crs_usr,social_notes"
-			   " WHERE centres.InsCod=%ld"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType=%u",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   (unsigned) NoteType);
+	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					     "COUNT(DISTINCT social_notes.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,social_notes"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=social_notes.UsrCod"
+				      " AND social_notes.NoteType=%u",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_CTR:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			   " FROM degrees,courses,crs_usr,social_notes"
-			   " WHERE degrees.CtrCod=%ld"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType=%u",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   (unsigned) NoteType);
+	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					     "COUNT(DISTINCT social_notes.UsrCod)"
+				      " FROM degrees,courses,crs_usr,social_notes"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=social_notes.UsrCod"
+				      " AND social_notes.NoteType=%u",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_DEG:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			   " FROM courses,crs_usr,social_notes"
-			   " WHERE courses.DegCod=%ld"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType=%u",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   (unsigned) NoteType);
+	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					     "COUNT(DISTINCT social_notes.UsrCod)"
+				      " FROM courses,crs_usr,social_notes"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=social_notes.UsrCod"
+				      " AND social_notes.NoteType=%u",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_CRS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			   " FROM crs_usr,social_notes"
-			   " WHERE crs_usr.CrsCod=%ld"
-			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType=%u",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   (unsigned) NoteType);
+	    NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				      "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					     "COUNT(DISTINCT social_notes.UsrCod)"
+				      " FROM crs_usr,social_notes"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=social_notes.UsrCod"
+				      " AND social_notes.NoteType=%u",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      (unsigned) NoteType);
 	    break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumRows = 0;	// Initialized to avoid warning
 	    break;
 	}
       NumSocialNotes = 0;
       NumUsrs = 0;
-      if (DB_QuerySELECT_new (&mysql_res,"can not get number of social notes"))
+
+      if (NumRows)
 	{
 	 /***** Get number of social notes and number of users *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -7402,61 +7515,75 @@ static void Sta_GetAndShowSocialActivityStats (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
-			" FROM social_notes");
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				   "SELECT COUNT(*),"
+					  "COUNT(DISTINCT UsrCod)"
+				   " FROM social_notes");
 	 break;
       case Sco_SCOPE_CTY:
-	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			" FROM institutions,centres,degrees,courses,crs_usr,social_notes"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=social_notes.UsrCod",
-			Gbl.CurrentCty.Cty.CtyCod);
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					  "COUNT(DISTINCT social_notes.UsrCod)"
+				   " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
+				   " WHERE institutions.CtyCod=%ld"
+				   " AND institutions.InsCod=centres.InsCod"
+				   " AND centres.CtrCod=degrees.CtrCod"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   Gbl.CurrentCty.Cty.CtyCod);
 	 break;
       case Sco_SCOPE_INS:
-	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			" FROM centres,degrees,courses,crs_usr,social_notes"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=social_notes.UsrCod",
-			Gbl.CurrentIns.Ins.InsCod);
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					  "COUNT(DISTINCT social_notes.UsrCod)"
+				   " FROM centres,degrees,courses,crs_usr,social_notes"
+				   " WHERE centres.InsCod=%ld"
+				   " AND centres.CtrCod=degrees.CtrCod"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   Gbl.CurrentIns.Ins.InsCod);
 	 break;
       case Sco_SCOPE_CTR:
-	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			" FROM degrees,courses,crs_usr,social_notes"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=social_notes.UsrCod",
-			Gbl.CurrentCtr.Ctr.CtrCod);
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					  "COUNT(DISTINCT social_notes.UsrCod)"
+				   " FROM degrees,courses,crs_usr,social_notes"
+				   " WHERE degrees.CtrCod=%ld"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
       case Sco_SCOPE_DEG:
-	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			" FROM courses,crs_usr,social_notes"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=crs_usr.CrsCod"
-			" AND crs_usr.UsrCod=social_notes.UsrCod",
-			Gbl.CurrentDeg.Deg.DegCod);
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					  "COUNT(DISTINCT social_notes.UsrCod)"
+				   " FROM courses,crs_usr,social_notes"
+				   " WHERE courses.DegCod=%ld"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   Gbl.CurrentDeg.Deg.DegCod);
 	 break;
       case Sco_SCOPE_CRS:
-	 DB_BuildQuery ("SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
-			" FROM crs_usr,social_notes"
-			" WHERE crs_usr.CrsCod=%ld"
-			" AND crs_usr.UsrCod=social_notes.UsrCod",
-			Gbl.CurrentCrs.Crs.CrsCod);
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+				   "SELECT COUNT(DISTINCT social_notes.NotCod),"
+					  "COUNT(DISTINCT social_notes.UsrCod)"
+				   " FROM crs_usr,social_notes"
+				   " WHERE crs_usr.CrsCod=%ld"
+				   " AND crs_usr.UsrCod=social_notes.UsrCod",
+				   Gbl.CurrentCrs.Crs.CrsCod);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
+	 NumRows = 0;	// Initialized to avoid warning
 	 break;
      }
    NumSocialNotes = 0;
    NumUsrs = 0;
-   if (DB_QuerySELECT_new (&mysql_res,"can not get number of social notes"))
+
+   if (NumRows)
      {
       /* Get number of social notes and number of users */
       row = mysql_fetch_row (mysql_res);
@@ -7658,88 +7785,99 @@ static void Sta_GetAndShowFollowStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    DB_BuildQuery ("SELECT AVG(N) FROM "
-			   "(SELECT COUNT(%s) AS N"
-			   " FROM usr_follow"
-			   " GROUP BY %s) AS F",
-			   FieldDB[Fol],
-			   FieldDB[1 - Fol]);
+	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
+				       " per survey",
+			    "SELECT AVG(N) FROM "
+			    "(SELECT COUNT(%s) AS N"
+			    " FROM usr_follow"
+			    " GROUP BY %s) AS F",
+			    FieldDB[Fol],
+			    FieldDB[1 - Fol]);
 	    break;
 	 case Sco_SCOPE_CTY:
-	    DB_BuildQuery ("SELECT AVG(N) FROM "
-			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			   " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE institutions.CtyCod=%ld"
-			   " AND institutions.InsCod=centres.InsCod"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s"
-			   " GROUP BY %s) AS F",
-			   FieldDB[Fol],
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   FieldDB[Fol],
-			   FieldDB[1 - Fol]);
+	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
+				       " per survey",
+			    "SELECT AVG(N) FROM "
+			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			    " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+			    " WHERE institutions.CtyCod=%ld"
+			    " AND institutions.InsCod=centres.InsCod"
+			    " AND centres.CtrCod=degrees.CtrCod"
+			    " AND degrees.DegCod=courses.DegCod"
+			    " AND courses.CrsCod=crs_usr.CrsCod"
+			    " AND crs_usr.UsrCod=usr_follow.%s"
+			    " GROUP BY %s) AS F",
+			    FieldDB[Fol],
+			    Gbl.CurrentCty.Cty.CtyCod,
+			    FieldDB[Fol],
+			    FieldDB[1 - Fol]);
 	    break;
 	 case Sco_SCOPE_INS:
-	    DB_BuildQuery ("SELECT AVG(N) FROM "
-			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			   " FROM centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE centres.InsCod=%ld"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s"
-			   " GROUP BY %s) AS F",
-			   FieldDB[Fol],
-			   Gbl.CurrentIns.Ins.InsCod,
-			   FieldDB[Fol],
-			   FieldDB[1 - Fol]);
+	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
+				       " per survey",
+			    "SELECT AVG(N) FROM "
+			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			    " FROM centres,degrees,courses,crs_usr,usr_follow"
+			    " WHERE centres.InsCod=%ld"
+			    " AND centres.CtrCod=degrees.CtrCod"
+			    " AND degrees.DegCod=courses.DegCod"
+			    " AND courses.CrsCod=crs_usr.CrsCod"
+			    " AND crs_usr.UsrCod=usr_follow.%s"
+			    " GROUP BY %s) AS F",
+			    FieldDB[Fol],
+			    Gbl.CurrentIns.Ins.InsCod,
+			    FieldDB[Fol],
+			    FieldDB[1 - Fol]);
 	    break;
 	 case Sco_SCOPE_CTR:
-	    DB_BuildQuery ("SELECT AVG(N) FROM "
-			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			   " FROM degrees,courses,crs_usr,usr_follow"
-			   " WHERE degrees.CtrCod=%ld"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s"
-			   " GROUP BY %s) AS F",
-			   FieldDB[Fol],
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   FieldDB[Fol],
-			   FieldDB[1 - Fol]);
+	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
+				       " per survey",
+			    "SELECT AVG(N) FROM "
+			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			    " FROM degrees,courses,crs_usr,usr_follow"
+			    " WHERE degrees.CtrCod=%ld"
+			    " AND degrees.DegCod=courses.DegCod"
+			    " AND courses.CrsCod=crs_usr.CrsCod"
+			    " AND crs_usr.UsrCod=usr_follow.%s"
+			    " GROUP BY %s) AS F",
+			    FieldDB[Fol],
+			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    FieldDB[Fol],
+			    FieldDB[1 - Fol]);
 	    break;
 	 case Sco_SCOPE_DEG:
-	    DB_BuildQuery ("SELECT AVG(N) FROM "
-			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			   " FROM courses,crs_usr,usr_follow"
-			   " WHERE courses.DegCod=%ld"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s"
-			   " GROUP BY %s) AS F",
-			   FieldDB[Fol],
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   FieldDB[Fol],
-			   FieldDB[1 - Fol]);
+	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
+				       " per survey",
+			    "SELECT AVG(N) FROM "
+			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			    " FROM courses,crs_usr,usr_follow"
+			    " WHERE courses.DegCod=%ld"
+			    " AND courses.CrsCod=crs_usr.CrsCod"
+			    " AND crs_usr.UsrCod=usr_follow.%s"
+			    " GROUP BY %s) AS F",
+			    FieldDB[Fol],
+			    Gbl.CurrentDeg.Deg.DegCod,
+			    FieldDB[Fol],
+			    FieldDB[1 - Fol]);
 	    break;
 	 case Sco_SCOPE_CRS:
-	    DB_BuildQuery ("SELECT AVG(N) FROM "
-			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-			   " FROM crs_usr,usr_follow"
-			   " WHERE crs_usr.CrsCod=%ld"
-			   " AND crs_usr.UsrCod=usr_follow.%s"
-			   " GROUP BY %s) AS F",
-			   FieldDB[Fol],
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   FieldDB[Fol],
-			   FieldDB[1 - Fol]);
+	    DB_QuerySELECT (&mysql_res,"can not get number of questions"
+				       " per survey",
+			    "SELECT AVG(N) FROM "
+			    "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			    " FROM crs_usr,usr_follow"
+			    " WHERE crs_usr.CrsCod=%ld"
+			    " AND crs_usr.UsrCod=usr_follow.%s"
+			    " GROUP BY %s) AS F",
+			    FieldDB[Fol],
+			    Gbl.CurrentCrs.Crs.CrsCod,
+			    FieldDB[Fol],
+			    FieldDB[1 - Fol]);
 	    break;
 	 default:
 	    Lay_WrongScopeExit ();
 	    break;
 	}
-      DB_QuerySELECT_new (&mysql_res,"can not get number of questions per survey");
 
       /***** Get average *****/
       row = mysql_fetch_row (mysql_res);
@@ -8320,57 +8458,68 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT SUM(NumEvents),SUM(NumMails)"
-                           " FROM sta_notif"
-                           " WHERE NotifyEvent=%u",
-			   (unsigned) NotifyEvent);
+            DB_QuerySELECT (&mysql_res,"can not get the number"
+        			       " of notifications by email",
+        		    "SELECT SUM(NumEvents),SUM(NumMails)"
+                            " FROM sta_notif"
+                            " WHERE NotifyEvent=%u",
+			    (unsigned) NotifyEvent);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                           " FROM institutions,centres,degrees,sta_notif"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent=%u",
-			   Gbl.CurrentCty.Cty.CtyCod,(unsigned) NotifyEvent);
+            DB_QuerySELECT (&mysql_res,"can not get the number"
+        			       " of notifications by email",
+        		    "SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
+                            " FROM institutions,centres,degrees,sta_notif"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=sta_notif.DegCod"
+                            " AND sta_notif.NotifyEvent=%u",
+			    Gbl.CurrentCty.Cty.CtyCod,(unsigned) NotifyEvent);
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                           " FROM centres,degrees,sta_notif"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent=%u",
-			   Gbl.CurrentIns.Ins.InsCod,(unsigned) NotifyEvent);
+            DB_QuerySELECT (&mysql_res,"can not get the number"
+        			       " of notifications by email",
+        		    "SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
+                            " FROM centres,degrees,sta_notif"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=sta_notif.DegCod"
+                            " AND sta_notif.NotifyEvent=%u",
+			    Gbl.CurrentIns.Ins.InsCod,(unsigned) NotifyEvent);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                           " FROM degrees,sta_notif"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent=%u",
-			   Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) NotifyEvent);
+            DB_QuerySELECT (&mysql_res,"can not get the number"
+        			       " of notifications by email",
+        		    "SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
+                            " FROM degrees,sta_notif"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=sta_notif.DegCod"
+                            " AND sta_notif.NotifyEvent=%u",
+			    Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) NotifyEvent);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT SUM(NumEvents),SUM(NumMails)"
-                           " FROM sta_notif"
-                           " WHERE DegCod=%ld"
-                           " AND NotifyEvent=%u",
-			   Gbl.CurrentDeg.Deg.DegCod,(unsigned) NotifyEvent);
+            DB_QuerySELECT (&mysql_res,"can not get the number"
+        			       " of notifications by email",
+        		    "SELECT SUM(NumEvents),SUM(NumMails)"
+                            " FROM sta_notif"
+                            " WHERE DegCod=%ld"
+                            " AND NotifyEvent=%u",
+			    Gbl.CurrentDeg.Deg.DegCod,(unsigned) NotifyEvent);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT SUM(NumEvents),SUM(NumMails)"
-                           " FROM sta_notif"
-                           " WHERE CrsCod=%ld"
-                           " AND NotifyEvent=%u",
-			   Gbl.CurrentCrs.Crs.CrsCod,(unsigned) NotifyEvent);
+            DB_QuerySELECT (&mysql_res,"can not get the number"
+        			       " of notifications by email",
+        		    "SELECT SUM(NumEvents),SUM(NumMails)"
+                            " FROM sta_notif"
+                            " WHERE CrsCod=%ld"
+                            " AND NotifyEvent=%u",
+			    Gbl.CurrentCrs.Crs.CrsCod,(unsigned) NotifyEvent);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
 	    break;
         }
-      DB_QuerySELECT_new (&mysql_res,"can not get the number of notifications by email");
 
       row = mysql_fetch_row (mysql_res);
 

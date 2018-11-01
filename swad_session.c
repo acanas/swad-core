@@ -257,15 +257,21 @@ bool Ses_GetSessionData (void)
    unsigned UnsignedNum;
    bool Result = false;
 
-   /***** Query data of session from database *****/
-   DB_BuildQuery ("SELECT UsrCod,Password,Role,"
-	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "WhatToSearch,SearchStr"
-	          " FROM sessions WHERE SessionId='%s'",
-		  Gbl.Session.Id);
-
    /***** Check if the session existed in the database *****/
-   if (DB_QuerySELECT_new (&mysql_res,"can not get data of session"))
+   if (DB_QuerySELECT (&mysql_res,"can not get data of session",
+		       "SELECT UsrCod,"		// row[0]
+			      "Password,"	// row[1]
+			      "Role,"		// row[2]
+			      "CtyCod,"		// row[3]
+			      "InsCod,"		// row[4]
+			      "CtrCod,"		// row[5]
+			      "DegCod,"		// row[6]
+			      "CrsCod,"		// row[7]
+			      "WhatToSearch,"	// row[8]
+			      "SearchStr"	// row[9]
+		       " FROM sessions"
+		       " WHERE SessionId='%s'",
+		       Gbl.Session.Id))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -414,10 +420,15 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
       /***** Get a hidden parameter from database *****/
-      DB_BuildQuery ("SELECT ParamValue FROM hidden_params"
-                     " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
-		     Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get a hidden parameter");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get a hidden parameter",
+				"SELECT ParamValue"
+				" FROM hidden_params"
+				" WHERE SessionId='%s'"
+				" AND Action=%ld"
+				" AND ParamName='%s'",
+				Gbl.Session.Id,
+				Act_GetActCod (NextAction),
+				ParamName);
 
       /***** Check if the parameter is found in database *****/
       if (NumRows)

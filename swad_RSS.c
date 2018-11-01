@@ -160,12 +160,12 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get active notices in course *****/
-   DB_BuildQuery ("SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
-		  " FROM notices"
-		  " WHERE CrsCod=%ld AND Status=%u"
-		  " ORDER BY T DESC",
-                  Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
-   NumNotices = DB_QuerySELECT_new (&mysql_res,"can not get notices from database");
+   NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
+				"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
+				" FROM notices"
+				" WHERE CrsCod=%ld AND Status=%u"
+				" ORDER BY T DESC",
+				Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
 
    /***** Write items with notices *****/
    if (NumNotices)
@@ -257,14 +257,14 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam announcements (only future exams) in current course from database *****/
-      DB_BuildQuery ("SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
-		     "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
-		     " FROM exam_announcements"
-		     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
-		     " ORDER BY T",
-	             Gbl.CurrentCrs.Crs.CrsCod,
-	             (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
-      NumExamAnnouncements = DB_QuerySELECT_new (&mysql_res,"can not get exam announcements");
+      NumExamAnnouncements = DB_QuerySELECT (&mysql_res,"can not get exam announcements",
+					     "SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
+					     "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
+					     " FROM exam_announcements"
+					     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
+					     " ORDER BY T",
+					     Gbl.CurrentCrs.Crs.CrsCod,
+					     (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
 
       /***** Write items with notices *****/
       if (NumExamAnnouncements)

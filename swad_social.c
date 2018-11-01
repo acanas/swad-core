@@ -251,7 +251,8 @@ static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom);
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom);
-static void Soc_ShowSharersOrFavers (unsigned NumUsrs);
+static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+				     unsigned NumUsrs,unsigned NumFirstUsrs);
 
 static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom);
@@ -517,6 +518,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
      } RangePubsToGet;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumPubs;
    unsigned NumPub;
    long PubCod;
    long NotCod;
@@ -726,35 +728,42 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
       switch (TimelineUsrOrGbl)
 	{
 	 case Soc_TIMELINE_USR:	// Show the timeline of a user
-	    DB_BuildQuery ("SELECT PubCod,NotCod FROM social_pubs"
-			   " WHERE %s%s%s%s"
-			   " ORDER BY PubCod DESC LIMIT 1",
-			   SubQueryRangeBottom,SubQueryRangeTop,
-			   SubQueryPublishers,
-			   SubQueryAlreadyExists);
+	    NumPubs =
+	    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
+				       "SELECT PubCod,NotCod FROM social_pubs"
+				       " WHERE %s%s%s%s"
+				       " ORDER BY PubCod DESC LIMIT 1",
+				       SubQueryRangeBottom,SubQueryRangeTop,
+				       SubQueryPublishers,
+				       SubQueryAlreadyExists);
 	    break;
 	 case Soc_TIMELINE_GBL:	// Show the global timeline
 	    switch (Gbl.Social.WhichUsrs)
 	      {
 	       case Soc_FOLLOWED:	// Show the timeline of the users I follow
-		  DB_BuildQuery ("SELECT PubCod,NotCod FROM social_pubs,publishers"
-				 " WHERE %s%s%s%s"
-				 " ORDER BY social_pubs.PubCod DESC LIMIT 1",
-				 SubQueryRangeBottom,SubQueryRangeTop,
-				 SubQueryPublishers,
-				 SubQueryAlreadyExists);
+		  NumPubs =
+		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
+				             "SELECT PubCod,NotCod FROM social_pubs,publishers"
+					     " WHERE %s%s%s%s"
+					     " ORDER BY social_pubs.PubCod DESC LIMIT 1",
+					     SubQueryRangeBottom,SubQueryRangeTop,
+					     SubQueryPublishers,
+					     SubQueryAlreadyExists);
 		  break;
 	       case Soc_ALL_USRS:	// Show the timeline of all users
-		  DB_BuildQuery ("SELECT PubCod,NotCod FROM social_pubs"
-				 " WHERE %s%s%s"
-				 " ORDER BY PubCod DESC LIMIT 1",
-				 SubQueryRangeBottom,SubQueryRangeTop,
-				 SubQueryAlreadyExists);
+		  NumPubs =
+		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
+				             "SELECT PubCod,NotCod FROM social_pubs"
+					     " WHERE %s%s%s"
+					     " ORDER BY PubCod DESC LIMIT 1",
+					     SubQueryRangeBottom,SubQueryRangeTop,
+					     SubQueryAlreadyExists);
 		  break;
 	      }
 	    break;
 	}
-      if (DB_QuerySELECT_new (&mysql_res,"can not get publishing") == 1)
+
+      if (NumPubs == 1)
 	{
 	 /* Get code of social publishing */
 	 row = mysql_fetch_row (mysql_res);
@@ -813,9 +822,9 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
    long PubCod;
 
    /***** Get last publishing code from database *****/
-   DB_BuildQuery ("SELECT %s FROM sessions WHERE SessionId='%s'",
-		  FieldName,Gbl.Session.Id);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get publishing code from session") != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get publishing code from session",
+		       "SELECT %s FROM sessions WHERE SessionId='%s'",
+		       FieldName,Gbl.Session.Id) != 1)
       Lay_ShowErrorAndExit ("Error when getting publishing code from session.");
 
    /***** Get last publishing code *****/
@@ -1644,10 +1653,11 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    Img_ImageConstructor (&Image);
 
    /***** Get social post from database *****/
-   DB_BuildQuery ("SELECT Content,ImageName,ImageTitle,ImageURL"
-	          " FROM social_posts WHERE PstCod=%ld",
-		  PstCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the content of a social post");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
+					" of a social post",
+			     "SELECT Content,ImageName,ImageTitle,ImageURL"
+			     " FROM social_posts WHERE PstCod=%ld",
+			     PstCod);
 
    /***** Result should have a unique row *****/
    if (NumRows == 1)
@@ -2428,20 +2438,22 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    struct SocialComment SocCom;
 
    /***** Get comments of this social note from database *****/
-   DB_BuildQuery ("SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
-		  "social_pubs.NotCod,"
-		  "UNIX_TIMESTAMP(social_pubs.TimePublish),"
-		  "social_comments.Content,"
-		  "social_comments.ImageName,"
-		  "social_comments.ImageTitle,"
-		  "social_comments.ImageURL"
-		  " FROM social_pubs,social_comments"
-		  " WHERE social_pubs.NotCod=%ld"
-                  " AND social_pubs.PubType=%u"
-		  " AND social_pubs.PubCod=social_comments.PubCod"
-		  " ORDER BY social_pubs.PubCod",
-		  SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   NumComments = DB_QuerySELECT_new (&mysql_res,"can not get social comments");
+   NumComments = DB_QuerySELECT (&mysql_res,"can not get social comments",
+				 "SELECT social_pubs.PubCod,"		// row[0]
+				        "social_pubs.PublisherCod,"	// row[1]
+				        "social_pubs.NotCod,"		// row[2]
+				        "UNIX_TIMESTAMP("
+				        "social_pubs.TimePublish),"	// row[3]
+					"social_comments.Content,"	// row[4]
+				        "social_comments.ImageName,"	// row[5]
+					"social_comments.ImageTitle,"	// row[6]
+				        "social_comments.ImageURL"	// row[7]
+				 " FROM social_pubs,social_comments"
+				 " WHERE social_pubs.NotCod=%ld"
+				 " AND social_pubs.PubType=%u"
+				 " AND social_pubs.PubCod=social_comments.PubCod"
+				 " ORDER BY social_pubs.PubCod",
+				 SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /***** List comments *****/
    if (NumComments)	// Comments to this social note found
@@ -3732,9 +3744,9 @@ static void Soc_RemoveImgFileFromSocialPost (long PstCod)
    MYSQL_ROW row;
 
    /***** Get name of image associated to a social post from database *****/
-   DB_BuildQuery ("SELECT ImageName FROM social_posts WHERE PstCod=%ld",
-		  PstCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get image"))
+   if (DB_QuerySELECT (&mysql_res,"can not get image",
+		       "SELECT ImageName FROM social_posts WHERE PstCod=%ld",
+		       PstCod))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -3772,10 +3784,11 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
      }
 
    /* Get comments of this social note */
-   DB_BuildQuery ("SELECT PubCod FROM social_pubs"
-	          " WHERE NotCod=%ld AND PubType=%u",
-		  SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   NumComments = DB_QuerySELECT_new (&mysql_res,"can not get social comments");
+   NumComments = DB_QuerySELECT (&mysql_res,"can not get social comments",
+				 "SELECT PubCod FROM social_pubs"
+				 " WHERE NotCod=%ld AND PubType=%u",
+				 SocNot->NotCod,
+				 (unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /* For each comment... */
    for (NumCom = 0;
@@ -3857,9 +3870,9 @@ static long Soc_GetNotCodOfSocialPublishing (long PubCod)
    long NotCod = -1L;
 
    /***** Get code of social note from database *****/
-   DB_BuildQuery ("SELECT NotCod FROM social_pubs WHERE PubCod=%ld",
-		  PubCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get code of social note") == 1)   // Result should have a unique row
+   if (DB_QuerySELECT (&mysql_res,"can not get code of social note",
+		       "SELECT NotCod FROM social_pubs WHERE PubCod=%ld",
+		       PubCod) == 1)   // Result should have a unique row
      {
       /* Get code of social note */
       row = mysql_fetch_row (mysql_res);
@@ -3883,10 +3896,10 @@ static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
    long OriginalPubCod = -1L;
 
    /***** Get code of social publishing of the original note *****/
-   DB_BuildQuery ("SELECT PubCod FROM social_pubs"
-		  " WHERE NotCod=%ld AND PubType=%u",
-		  NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get code of social publishing") == 1)   // Result should have a unique row
+   if (DB_QuerySELECT (&mysql_res,"can not get code of social publishing",
+		       "SELECT PubCod FROM social_pubs"
+		       " WHERE NotCod=%ld AND PubType=%u",
+		       NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
      {
       /* Get code of social publishing (row[0]) */
       row = mysql_fetch_row (mysql_res);
@@ -4074,9 +4087,10 @@ static void Soc_RemoveImgFileFromSocialComment (long PubCod)
    MYSQL_ROW row;
 
    /***** Get name of image associated to a social post from database *****/
-   DB_BuildQuery ("SELECT ImageName FROM social_comments WHERE PubCod=%ld",
-		  PubCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get image"))
+   if (DB_QuerySELECT (&mysql_res,"can not get image",
+		       "SELECT ImageName FROM social_comments"
+		       " WHERE PubCod=%ld",
+		       PubCod))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -4313,18 +4327,29 @@ static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
 
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
   {
+   MYSQL_RES *mysql_res;
+   unsigned NumFirstUsrs = 0;
+
    /***** Get users who have shared this note *****/
    if (SocNot->NumShared)
-      DB_BuildQuery ("SELECT PublisherCod FROM social_pubs"
-		     " WHERE NotCod=%ld"
-		     " AND PublisherCod<>%ld"
-		     " AND PubType=%u"
-		     " ORDER BY PubCod LIMIT %u",
-		     SocNot->NotCod,
-		     SocNot->UsrCod,
-		     (unsigned) Soc_PUB_SHARED_NOTE,
-		     Soc_MAX_SHARERS_FAVERS_SHOWN);
-   Soc_ShowSharersOrFavers (SocNot->NumShared);
+      NumFirstUsrs =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
+				 "SELECT PublisherCod FROM social_pubs"
+				 " WHERE NotCod=%ld"
+				 " AND PublisherCod<>%ld"
+				 " AND PubType=%u"
+				 " ORDER BY PubCod LIMIT %u",
+				 SocNot->NotCod,
+				 SocNot->UsrCod,
+				 (unsigned) Soc_PUB_SHARED_NOTE,
+				 Soc_MAX_SHARERS_FAVERS_SHOWN);
+
+   /***** Show users *****/
+   Soc_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
+
+   /***** Free structure that stores the query result *****/
+   if (SocNot->NumShared)
+      DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -4333,16 +4358,28 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
 
 static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot)
   {
+   MYSQL_RES *mysql_res;
+   unsigned NumFirstUsrs = 0;
+
    /***** Get users who have marked this note as favourite *****/
    if (SocNot->NumFavs)
-      DB_BuildQuery ("SELECT UsrCod FROM social_notes_fav"
-		     " WHERE NotCod=%ld"
-		     " AND UsrCod<>%ld"	// Extra check
-		     " ORDER BY FavCod LIMIT %u",
-		     SocNot->NotCod,
-		     SocNot->UsrCod,
-		     Soc_MAX_SHARERS_FAVERS_SHOWN);
-   Soc_ShowSharersOrFavers (SocNot->NumFavs);
+      /***** Get list of users from database *****/
+      NumFirstUsrs =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
+				 "SELECT UsrCod FROM social_notes_fav"
+				 " WHERE NotCod=%ld"
+				 " AND UsrCod<>%ld"	// Extra check
+				 " ORDER BY FavCod LIMIT %u",
+				 SocNot->NotCod,
+				 SocNot->UsrCod,
+				 Soc_MAX_SHARERS_FAVERS_SHOWN);
+
+   /***** Show users *****/
+   Soc_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
+
+   /***** Free structure that stores the query result *****/
+   if (SocNot->NumFavs)
+      DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -4351,16 +4388,28 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 
 static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom)
   {
+   MYSQL_RES *mysql_res;
+   unsigned NumFirstUsrs = 0;
+
    /***** Get users who have marked this comment as favourite *****/
    if (SocCom->NumFavs)
-      DB_BuildQuery ("SELECT UsrCod FROM social_comments_fav"
-		     " WHERE PubCod=%ld"
-		     " AND UsrCod<>%ld"	// Extra check
-		     " ORDER BY FavCod LIMIT %u",
-		     SocCom->PubCod,
-		     SocCom->UsrCod,
-		     Soc_MAX_SHARERS_FAVERS_SHOWN);
-   Soc_ShowSharersOrFavers (SocCom->NumFavs);
+      /***** Get list of users from database *****/
+      NumFirstUsrs =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get users",
+				 "SELECT UsrCod FROM social_comments_fav"
+				 " WHERE PubCod=%ld"
+				 " AND UsrCod<>%ld"	// Extra check
+				 " ORDER BY FavCod LIMIT %u",
+				 SocCom->PubCod,
+				 SocCom->UsrCod,
+				 Soc_MAX_SHARERS_FAVERS_SHOWN);
+
+   /***** Show users *****/
+   Soc_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
+
+   /***** Free structure that stores the query result *****/
+   if (SocCom->NumFavs)
+      DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -4368,11 +4417,10 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_ShowSharersOrFavers (unsigned NumUsrs)
+static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+				     unsigned NumUsrs,unsigned NumFirstUsrs)
   {
-   MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumFirstUsrs;
    unsigned NumUsr;
    unsigned NumUsrsShown = 0;
    struct UsrData UsrDat;
@@ -4385,8 +4433,7 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs)
 
    if (NumUsrs)
      {
-      /***** Get list of users from database *****/
-      NumFirstUsrs = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get users");
+      /***** A list of users has been got from database *****/
       if (NumFirstUsrs)
 	{
 	 /***** Initialize structure with user's data *****/
@@ -4398,7 +4445,7 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs)
 	      NumUsr++)
 	   {
 	    /***** Get user *****/
-	    row = mysql_fetch_row (mysql_res);
+	    row = mysql_fetch_row (*mysql_res);
 
 	    /* Get user's code (row[0]) */
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -4420,9 +4467,6 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs)
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&UsrDat);
 	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
 
       if (NumUsrs > NumUsrsShown)
 	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
@@ -4448,11 +4492,17 @@ static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
    if (SocNot->NotCod > 0)
      {
       /***** Get data of social note from database *****/
-      DB_BuildQuery ("SELECT NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
-		     " FROM social_notes"
-		     " WHERE NotCod=%ld",
-		     SocNot->NotCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get data of social note"))
+      if (DB_QuerySELECT (&mysql_res,"can not get data of social note",
+			  "SELECT NotCod,"			// row[0]
+				 "NoteType,"			// row[1]
+				 "Cod,"				// row[2]
+				 "UsrCod,"			// row[3]
+				 "HieCod,"			// row[4]
+				 "Unavailable,"			// row[5]
+				 "UNIX_TIMESTAMP(TimeNote)"	// row[6]
+			  " FROM social_notes"
+			  " WHERE NotCod=%ld",
+			  SocNot->NotCod))
 	{
 	 /***** Get data of social note *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -4482,19 +4532,20 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
    if (SocCom->PubCod > 0)
      {
       /***** Get data of social comment from database *****/
-      DB_BuildQuery ("SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
-		     "social_pubs.NotCod,"
-		     "UNIX_TIMESTAMP(social_pubs.TimePublish),"
-		     "social_comments.Content,"
-		     "social_comments.ImageName,"
-		     "social_comments.ImageTitle,"
-		     "social_comments.ImageURL"
-		     " FROM social_pubs,social_comments"
-		     " WHERE social_pubs.PubCod=%ld"
-                     " AND social_pubs.PubType=%u"
-		     " AND social_pubs.PubCod=social_comments.PubCod",
-		     SocCom->PubCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get data of social comment"))
+      if (DB_QuerySELECT (&mysql_res,"can not get data of social comment",
+			  "SELECT social_pubs.PubCod,"				// row[0]
+				 "social_pubs.PublisherCod,"			// row[1]
+				 "social_pubs.NotCod,"				// row[2]
+				 "UNIX_TIMESTAMP(social_pubs.TimePublish),"	// row[3]
+				 "social_comments.Content,"			// row[4]
+				 "social_comments.ImageName,"			// row[5]
+				 "social_comments.ImageTitle,"			// row[6]
+				 "social_comments.ImageURL"			// row[7]
+			  " FROM social_pubs,social_comments"
+			  " WHERE social_pubs.PubCod=%ld"
+			  " AND social_pubs.PubType=%u"
+			  " AND social_pubs.PubCod=social_comments.PubCod",
+			  SocCom->PubCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE))
 	{
 	 /***** Get data of social comment *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -4734,10 +4785,14 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Content[0] = '\0';
 
    /***** Get summary and content from social post from database *****/
-   DB_BuildQuery ("SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
-		  " FROM social_pubs WHERE PubCod=%ld",
-		  PubCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get data of social publishing") == 1)   // Result should have a unique row
+   if (DB_QuerySELECT (&mysql_res,"can not get data of social publishing",
+		       "SELECT PubCod,"				// row[0]
+			      "NotCod,"				// row[1]
+			      "PublisherCod,"			// row[2]
+			      "PubType,"			// row[3]
+			      "UNIX_TIMESTAMP(TimePublish)"	// row[4]
+		       " FROM social_pubs WHERE PubCod=%ld",
+		       PubCod) == 1)   // Result should have a unique row
      {
       /* Get data of social publishing */
       row = mysql_fetch_row (mysql_res);
@@ -4762,10 +4817,11 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   {
 	    /***** Get content of social post from database *****/
 	    // TODO: What happens if content is empty and an image is attached?
-	    DB_BuildQuery ("SELECT Content FROM social_posts"
-			   " WHERE PstCod=%ld",
-			   SocNot.Cod);
-	    if (DB_QuerySELECT_new (&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
+	    if (DB_QuerySELECT (&mysql_res,"can not get the content"
+					   " of a social post",
+			        "SELECT Content FROM social_posts"
+				" WHERE PstCod=%ld",
+				SocNot.Cod) == 1)   // Result should have a unique row
 	      {
 	       /***** Get row *****/
 	       row = mysql_fetch_row (mysql_res);
@@ -4801,10 +4857,11 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Soc_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of social post from database *****/
 	 // TODO: What happens if content is empty and an image is attached?
-	 DB_BuildQuery ("SELECT Content FROM social_comments"
-			" WHERE PubCod=%ld",
-			SocPub.PubCod);
-	 if (DB_QuerySELECT_new (&mysql_res,"can not get the content of a comment to a social note") == 1)   // Result should have a unique row
+	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
+				        " of a comment to a social note",
+			     "SELECT Content FROM social_comments"
+			     " WHERE PubCod=%ld",
+			     SocPub.PubCod) == 1)   // Result should have a unique row
 	   {
 	    /***** Get row *****/
 	    row = mysql_fetch_row (mysql_res);

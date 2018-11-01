@@ -353,10 +353,10 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
    Gbl.Cache.RoleUsrInCrs.UsrCod = UsrCod;
    Gbl.Cache.RoleUsrInCrs.CrsCod = CrsCod;
    Gbl.Cache.RoleUsrInCrs.Role = Rol_UNK;
-   DB_BuildQuery ("SELECT Role FROM crs_usr"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-		  CrsCod,UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
+   if (DB_QuerySELECT (&mysql_res,"can not get the role of a user in a course",
+		       "SELECT Role FROM crs_usr"
+		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		       CrsCod,UsrCod) == 1)	// User belongs to the course
      {
       row = mysql_fetch_row (mysql_res);
       Gbl.Cache.RoleUsrInCrs.Role = Rol_ConvertUnsignedStrToRole (row[0]);
@@ -383,11 +383,12 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
    if (UsrDat->Roles.InCrss < 0)	// Not yet filled
      {
       /***** Get distinct roles in all courses of the user from database *****/
-      DB_BuildQuery ("SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod=%ld",
-		     UsrDat->UsrCod);
-      NumRoles = (unsigned) DB_QuerySELECT_new (&mysql_res,
-						"can not get the roles of a user"
-						" in all his/her courses");
+      NumRoles =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get the roles of a user"
+					    " in all his/her courses",
+				 "SELECT DISTINCT(Role) FROM crs_usr"
+				 " WHERE UsrCod=%ld",
+				 UsrDat->UsrCod);
       for (NumRole = 0, UsrDat->Roles.InCrss = 0;
 	   NumRole < NumRoles;
 	   NumRole++)
@@ -588,10 +589,10 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
    Rol_Role_t Role = Rol_UNK;
 
    /***** Get requested role from database *****/
-   DB_BuildQuery ("SELECT Role FROM crs_usr_requests"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-		  Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get requested role"))
+   if (DB_QuerySELECT (&mysql_res,"can not get requested role",
+		       "SELECT Role FROM crs_usr_requests"
+		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		       Gbl.CurrentCrs.Crs.CrsCod,UsrCod))
      {
       /***** Get role *****/
       row = mysql_fetch_row (mysql_res);
