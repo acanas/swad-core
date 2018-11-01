@@ -121,7 +121,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void);
 static void Pho_GetMaxStdsPerDegree (void);
 static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static void Pho_BuildQueryOfDegrees (void);
+static unsigned long Pho_BuildQueryOfDegrees (MYSQL_RES **mysql_res);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
@@ -983,10 +983,11 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    unsigned NumClicks;
 
    /***** Get number of clicks without photo from database *****/
-   DB_BuildQuery ("SELECT NumClicks FROM clicks_without_photo"
-		  " WHERE UsrCod=%ld",
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get number of clicks without photo");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get number of clicks"
+				        " without photo",
+			     "SELECT NumClicks FROM clicks_without_photo"
+			     " WHERE UsrCod=%ld",
+			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Update the list of clicks without photo *****/
    if (NumRows)        // The user exists ==> update number of clicks without photo
@@ -1435,16 +1436,16 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    /***** 1. If a degree is not in table of computed degrees,
              choose it as least recently updated *****/
    /* Get one degree with students not yet computed */
-   DB_BuildQuery ("SELECT DISTINCT degrees.DegCod"
-		  " FROM degrees,courses,crs_usr"
-		  " WHERE degrees.DegCod=courses.DegCod"
-		  " AND courses.CrsCod=crs_usr.CrsCod"
-		  " AND crs_usr.Role=%u"
-		  " AND degrees.DegCod NOT IN"
-		  " (SELECT DISTINCT DegCod FROM sta_degrees)"
-		  " LIMIT 1",
-                  (unsigned) Rol_STD);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees",
+			     "SELECT DISTINCT degrees.DegCod"
+			     " FROM degrees,courses,crs_usr"
+			     " WHERE degrees.DegCod=courses.DegCod"
+			     " AND courses.CrsCod=crs_usr.CrsCod"
+			     " AND crs_usr.Role=%u"
+			     " AND degrees.DegCod NOT IN"
+			     " (SELECT DISTINCT DegCod FROM sta_degrees)"
+			     " LIMIT 1",
+			     (unsigned) Rol_STD);
 
    /* If number of rows is 1, then get the degree code */
    if (NumRows == 1)
@@ -1464,16 +1465,17 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
       /***** 2. If all the degrees are in table,
                 choose the least recently updated that has students *****/
       /* Get degrees from database */
-      DB_BuildQuery ("SELECT sta_degrees.DegCod"
-		     " FROM sta_degrees,courses,crs_usr"
-		     " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-		     " AND sta_degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u"
-		     " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
-		     Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
-		     (unsigned) Rol_STD);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get degrees",
+				"SELECT sta_degrees.DegCod"
+				" FROM sta_degrees,courses,crs_usr"
+				" WHERE sta_degrees.TimeAvgPhoto<"
+				"FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+				" AND sta_degrees.DegCod=courses.DegCod"
+				" AND courses.CrsCod=crs_usr.CrsCod"
+				" AND crs_usr.Role=%u"
+				" ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
+				Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
+				(unsigned) Rol_STD);
 
       /* If number of rows is 1, then get the degree code */
       if (NumRows == 1)
@@ -1516,11 +1518,11 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
    long TimeAvgPhotoWasComputed = 0L;
 
    /***** Get last time an average photo was computed from database *****/
-   DB_BuildQuery ("SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"
-		  " FROM sta_degrees WHERE DegCod=%ld",
-	          DegCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,
-	                         "can not get last time an average photo was computed");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get last time"
+					" an average photo was computed",
+			     "SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"
+			     " FROM sta_degrees WHERE DegCod=%ld",
+			     DegCod);
 
    if (NumRows == 1)
      {
@@ -1552,10 +1554,11 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
    long TotalTimeToComputeAvgPhoto = -1L;
 
    /***** Get time to compute average photo from database *****/
-   DB_BuildQuery ("SELECT TimeToComputeAvgPhoto FROM sta_degrees"
-		  " WHERE DegCod=%ld",DegCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,
-	                         "can not get time to compute average photo");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get time to compute"
+					" average photo",
+			     "SELECT TimeToComputeAvgPhoto FROM sta_degrees"
+			     " WHERE DegCod=%ld",
+			     DegCod);
 
    /***** Count number of rows in result *****/
    if (NumRows == Usr_NUM_SEXS)
@@ -2070,12 +2073,12 @@ static void Pho_GetMaxStdsPerDegree (void)
    unsigned long NumRows;
 
    /***** Get maximum number of students in a degree from database *****/
-   DB_BuildQuery ("SELECT MAX(NumStds),MAX(NumStdsWithPhoto),"
-		  "MAX(NumStdsWithPhoto/NumStds)"
-		  " FROM sta_degrees"
-		  " WHERE Sex='all' AND NumStds>0");
-   NumRows = DB_QuerySELECT_new (&mysql_res,
-	                         "can not get maximum number of students in a degree");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get maximum"
+					" number of students in a degree",
+			     "SELECT MAX(NumStds),MAX(NumStdsWithPhoto),"
+			     "MAX(NumStdsWithPhoto/NumStds)"
+			     " FROM sta_degrees"
+			     " WHERE Sex='all' AND NumStds>0");
 
    /***** Count number of rows in result *****/
    if (NumRows == 1)
@@ -2115,8 +2118,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned long NumDeg;
+   unsigned long NumDegs;
    struct Degree Deg;
    unsigned NumDegsNotEmpty;
    int NumStds;
@@ -2124,10 +2127,9 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
-   Pho_BuildQueryOfDegrees ();
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees");
+   NumDegs = Pho_BuildQueryOfDegrees (&mysql_res);
 
-   if (NumRows)	// Degrees with students found
+   if (NumDegs)	// Degrees with students found
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2135,9 +2137,9 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
       Tbl_StartTableCenter (0);
 
       /***** Get and print degrees *****/
-      for (NumRow = 0, NumDegsNotEmpty = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumDeg = 0, NumDegsNotEmpty = 0;
+	   NumDeg < NumDegs;
+	   NumDeg++)
 	{
 	 /***** Get next degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -2196,8 +2198,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned long NumDeg;
+   unsigned long NumDegs;
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
@@ -2205,10 +2207,9 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
-   Pho_BuildQueryOfDegrees ();
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get degrees");
+   NumDegs = Pho_BuildQueryOfDegrees (&mysql_res);
 
-   if (NumRows)	// Degrees with students found
+   if (NumDegs)	// Degrees with students found
      {
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2236,9 +2237,9 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"</tr>");
 
       /***** Get degrees *****/
-      for (NumRow = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
-	   NumRow < NumRows;
-	   NumRow++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+      for (NumDeg = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
+	   NumDeg < NumDegs;
+	   NumDeg++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	{
 	 /***** Get next degree *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -2302,48 +2303,57 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 /****** Build a query to get the degrees ordered by different criteria *******/
 /*****************************************************************************/
 
-static void Pho_BuildQueryOfDegrees (void)
+static unsigned long Pho_BuildQueryOfDegrees (MYSQL_RES **mysql_res)
   {
+   unsigned long NumDegs = 0;	// Initialized to avoid warning
+
    switch (Gbl.Stat.DegPhotos.HowOrderDegrees)
      {
       case Pho_NUMBER_OF_STUDENTS:
-         DB_BuildQuery ("SELECT degrees.DegCod"
-		        " FROM degrees,sta_degrees"
-		        " WHERE sta_degrees.Sex='all'"
-		        " AND sta_degrees.NumStds>0"
-		        " AND degrees.DegCod=sta_degrees.DegCod"
-		        " ORDER BY sta_degrees.NumStds DESC,"
-		        "sta_degrees.NumStdsWithPhoto DESC,"
-		        "degrees.ShortName");
+         NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
+				   "SELECT degrees.DegCod"
+				   " FROM degrees,sta_degrees"
+				   " WHERE sta_degrees.Sex='all'"
+				   " AND sta_degrees.NumStds>0"
+				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " ORDER BY sta_degrees.NumStds DESC,"
+				   "sta_degrees.NumStdsWithPhoto DESC,"
+				   "degrees.ShortName");
          break;
       case Pho_NUMBER_OF_PHOTOS:
-         DB_BuildQuery ("SELECT degrees.DegCod"
-		        " FROM degrees,sta_degrees"
-		        " WHERE sta_degrees.Sex='all'"
-		        " AND sta_degrees.NumStds>0"
-		        " AND degrees.DegCod=sta_degrees.DegCod"
-		        " ORDER BY sta_degrees.NumStdsWithPhoto DESC,"
-		        "sta_degrees.NumStds DESC,"
-		        "degrees.ShortName");
+         NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
+				   "SELECT degrees.DegCod"
+				   " FROM degrees,sta_degrees"
+				   " WHERE sta_degrees.Sex='all'"
+				   " AND sta_degrees.NumStds>0"
+				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " ORDER BY sta_degrees.NumStdsWithPhoto DESC,"
+				   "sta_degrees.NumStds DESC,"
+				   "degrees.ShortName");
          break;
       case Pho_PERCENT:
-         DB_BuildQuery ("SELECT degrees.DegCod"
-		        " FROM degrees,sta_degrees"
-		        " WHERE sta_degrees.Sex='all'"
-		        " AND sta_degrees.NumStds>0"
-		        " AND degrees.DegCod=sta_degrees.DegCod"
-		        " ORDER BY sta_degrees.NumStdsWithPhoto/sta_degrees.NumStds DESC,"
-		        "degrees.ShortName");
+         NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
+				   "SELECT degrees.DegCod"
+				   " FROM degrees,sta_degrees"
+				   " WHERE sta_degrees.Sex='all'"
+				   " AND sta_degrees.NumStds>0"
+				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " ORDER BY sta_degrees.NumStdsWithPhoto/"
+				   "sta_degrees.NumStds DESC,"
+				   "degrees.ShortName");
          break;
       case Pho_DEGREE_NAME:
-         DB_BuildQuery ("SELECT degrees.DegCod"
-		        " FROM degrees,sta_degrees"
-		        " WHERE sta_degrees.Sex='all'"
-		        " AND sta_degrees.NumStds>0"
-		        " AND degrees.DegCod=sta_degrees.DegCod"
-		        " ORDER BY degrees.ShortName");
+         NumDegs = DB_QuerySELECT (mysql_res,"can not get degrees",
+				   "SELECT degrees.DegCod"
+				   " FROM degrees,sta_degrees"
+				   " WHERE sta_degrees.Sex='all'"
+				   " AND sta_degrees.NumStds>0"
+				   " AND degrees.DegCod=sta_degrees.DegCod"
+				   " ORDER BY degrees.ShortName");
          break;
      }
+
+   return NumDegs;
   }
 
 /*****************************************************************************/
@@ -2358,10 +2368,12 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
    unsigned long NumRows;
 
    /***** Get the number of students in a degree from database *****/
-   DB_BuildQuery ("SELECT NumStds,NumStdsWithPhoto FROM sta_degrees"
-		  " WHERE DegCod=%ld AND Sex='%s'",
-		  DegCod,Usr_StringsSexDB[Sex]);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get the number of students in a degree");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get the number of students"
+				        " in a degree",
+	                     "SELECT NumStds,NumStdsWithPhoto"
+	                     " FROM sta_degrees"
+			     " WHERE DegCod=%ld AND Sex='%s'",
+			     DegCod,Usr_StringsSexDB[Sex]);
 
    if (NumRows == 0)
       *NumStds = *NumStdsWithPhoto = -1;

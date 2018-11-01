@@ -118,10 +118,10 @@ bool Pwd_CheckPendingPassword (void)
    MYSQL_ROW row;
 
    /***** Get pending password from database *****/
-   DB_BuildQuery ("SELECT PendingPassword FROM pending_passwd"
-		  " WHERE UsrCod=%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get pending password"))
+   if (DB_QuerySELECT (&mysql_res,"can not get pending password",
+		       "SELECT PendingPassword FROM pending_passwd"
+		       " WHERE UsrCod=%ld",
+		       Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /* Get encrypted pending password */
       row = mysql_fetch_row (mysql_res);

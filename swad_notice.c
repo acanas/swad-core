@@ -349,7 +349,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    char PathRelRSSFile[PATH_MAX + 1];
    long NotCod;
    unsigned long NumNot;
-   unsigned long NumNotices;
+   unsigned long NumNotices = 0;	// Initialized to avoid warning
    char Content[Cns_MAX_BYTES_TEXT + 1];
    time_t TimeUTC;
    long UsrCod;
@@ -363,22 +363,31 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       switch (TypeNoticesListing)
 	{
 	 case Not_LIST_BRIEF_NOTICES:
-	    DB_BuildQuery ("SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
-			   " FROM notices"
-			   " WHERE CrsCod=%ld AND Status=%u"
-			   " ORDER BY CreatTime DESC",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   (unsigned) Not_ACTIVE_NOTICE);
+	    NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
+					 "SELECT NotCod,"
+					        "UNIX_TIMESTAMP(CreatTime) AS F,"
+					        "UsrCod,"
+					        "Content,"
+					        "Status"
+					 " FROM notices"
+					 " WHERE CrsCod=%ld AND Status=%u"
+					 " ORDER BY CreatTime DESC",
+					 Gbl.CurrentCrs.Crs.CrsCod,
+					 (unsigned) Not_ACTIVE_NOTICE);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
-	    DB_BuildQuery ("SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
-			   " FROM notices"
-			   " WHERE CrsCod=%ld"
-			   " ORDER BY CreatTime DESC",
-		           Gbl.CurrentCrs.Crs.CrsCod);
+	    NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
+					 "SELECT NotCod,"
+					        "UNIX_TIMESTAMP(CreatTime) AS F,"
+					        "UsrCod,"
+					        "Content,"
+					        "Status"
+					 " FROM notices"
+					 " WHERE CrsCod=%ld"
+					 " ORDER BY CreatTime DESC",
+					 Gbl.CurrentCrs.Crs.CrsCod);
 	    break;
 	}
-      NumNotices = DB_QuerySELECT_new (&mysql_res,"can not get notices from database");
 
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
 	{
@@ -543,12 +552,14 @@ static void Not_GetDataAndShowNotice (long NotCod)
    Not_Status_t Status;
 
    /***** Get notice data from database *****/
-   DB_BuildQuery ("SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
-		  " FROM notices"
-		  " WHERE NotCod=%ld AND CrsCod=%ld",
-		  NotCod,
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get notice from database"))
+   if (DB_QuerySELECT (&mysql_res,"can not get notice from database",
+		       "SELECT UNIX_TIMESTAMP(CreatTime) AS F,"
+			      "UsrCod,"
+			      "Content,"
+			      "Status"
+		       " FROM notices"
+		       " WHERE NotCod=%ld AND CrsCod=%ld",
+		       NotCod,Gbl.CurrentCrs.Crs.CrsCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -756,8 +767,9 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    // This function may be called inside a web service, so don't report error
 
    /***** Get subject of message from database *****/
-   DB_BuildQuery ("SELECT Content FROM notices WHERE NotCod=%ld",NotCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get content of notice") == 1)	// Result should have a unique row
+   if (DB_QuerySELECT (&mysql_res,"can not get content of notice",
+		       "SELECT Content FROM notices WHERE NotCod=%ld",
+		       NotCod) == 1)	// Result should have a unique row
      {
       /***** Get sumary / content *****/
       row = mysql_fetch_row (mysql_res);
@@ -805,66 +817,71 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
-			" FROM notices"
-			" WHERE Status=%u",
-                        Status);
+         DB_QuerySELECT (&mysql_res,"can not get number of notices",
+			 "SELECT COUNT(*),SUM(NumNotif)"
+			 " FROM notices"
+			 " WHERE Status=%u",
+                         Status);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
-			" FROM institutions,centres,degrees,courses,notices"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=notices.CrsCod"
-			" AND notices.Status=%u",
-                        Gbl.CurrentCty.Cty.CtyCod,
-                        Status);
+         DB_QuerySELECT (&mysql_res,"can not get number of notices",
+			 "SELECT COUNT(*),SUM(notices.NumNotif)"
+			 " FROM institutions,centres,degrees,courses,notices"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=notices.CrsCod"
+			 " AND notices.Status=%u",
+                         Gbl.CurrentCty.Cty.CtyCod,
+                         Status);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
-			" FROM centres,degrees,courses,notices"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=notices.CrsCod"
-			" AND notices.Status=%u",
-                        Gbl.CurrentIns.Ins.InsCod,
-                        Status);
+         DB_QuerySELECT (&mysql_res,"can not get number of notices",
+			 "SELECT COUNT(*),SUM(notices.NumNotif)"
+			 " FROM centres,degrees,courses,notices"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=notices.CrsCod"
+			 " AND notices.Status=%u",
+                         Gbl.CurrentIns.Ins.InsCod,
+                         Status);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
-			" FROM degrees,courses,notices"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=notices.CrsCod"
-			" AND notices.Status=%u",
-                        Gbl.CurrentCtr.Ctr.CtrCod,
-                        Status);
+         DB_QuerySELECT (&mysql_res,"can not get number of notices",
+			 "SELECT COUNT(*),SUM(notices.NumNotif)"
+			 " FROM degrees,courses,notices"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=notices.CrsCod"
+			 " AND notices.Status=%u",
+                         Gbl.CurrentCtr.Ctr.CtrCod,
+                         Status);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices.NumNotif)"
-			" FROM courses,notices"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=notices.CrsCod"
-			" AND notices.Status=%u",
-                        Gbl.CurrentDeg.Deg.DegCod,
-                        Status);
+         DB_QuerySELECT (&mysql_res,"can not get number of notices",
+			 "SELECT COUNT(*),SUM(notices.NumNotif)"
+			 " FROM courses,notices"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=notices.CrsCod"
+			 " AND notices.Status=%u",
+                         Gbl.CurrentDeg.Deg.DegCod,
+                         Status);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
-			" FROM notices"
-			" WHERE CrsCod=%ld"
-			" AND Status=%u",
-                        Gbl.CurrentCrs.Crs.CrsCod,
-                        Status);
+         DB_QuerySELECT (&mysql_res,"can not get number of notices",
+			 "SELECT COUNT(*),SUM(NumNotif)"
+			 " FROM notices"
+			 " WHERE CrsCod=%ld"
+			 " AND Status=%u",
+                         Gbl.CurrentCrs.Crs.CrsCod,
+                         Status);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of notices");
 
    /***** Get number of notices *****/
    row = mysql_fetch_row (mysql_res);
@@ -902,54 +919,59 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
-			" FROM notices_deleted");
+         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
+			 "SELECT COUNT(*),SUM(NumNotif)"
+			 " FROM notices_deleted");
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			" FROM institutions,centres,degrees,courses,notices_deleted"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=notices_deleted.CrsCod",
-                        Gbl.CurrentCty.Cty.CtyCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
+			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			 " FROM institutions,centres,degrees,courses,notices_deleted"
+			 " WHERE institutions.CtyCod=%ld"
+			 " AND institutions.InsCod=centres.InsCod"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=notices_deleted.CrsCod",
+                         Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			" FROM centres,degrees,courses,notices_deleted"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=notices_deleted.CrsCod",
-                        Gbl.CurrentIns.Ins.InsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
+			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			 " FROM centres,degrees,courses,notices_deleted"
+			 " WHERE centres.InsCod=%ld"
+			 " AND centres.CtrCod=degrees.CtrCod"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=notices_deleted.CrsCod",
+                         Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			" FROM degrees,courses,notices_deleted"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=notices_deleted.CrsCod",
-                        Gbl.CurrentCtr.Ctr.CtrCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
+			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			 " FROM degrees,courses,notices_deleted"
+			 " WHERE degrees.CtrCod=%ld"
+			 " AND degrees.DegCod=courses.DegCod"
+			 " AND courses.CrsCod=notices_deleted.CrsCod",
+                         Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
-			" FROM courses,notices_deleted"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=notices_deleted.CrsCod",
-                        Gbl.CurrentDeg.Deg.DegCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
+			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+			 " FROM courses,notices_deleted"
+			 " WHERE courses.DegCod=%ld"
+			 " AND courses.CrsCod=notices_deleted.CrsCod",
+                         Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(*),SUM(NumNotif)"
-			" FROM notices_deleted"
-			" WHERE CrsCod=%ld",
-                        Gbl.CurrentCrs.Crs.CrsCod);
+         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
+			 "SELECT COUNT(*),SUM(NumNotif)"
+			 " FROM notices_deleted"
+			 " WHERE CrsCod=%ld",
+                         Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of deleted notices");
 
    /***** Get number of notices *****/
    row = mysql_fetch_row (mysql_res);

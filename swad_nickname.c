@@ -120,10 +120,10 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   DB_BuildQuery ("SELECT Nickname FROM usr_nicknames"
-		  " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
-	          UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get nickname"))
+   if (DB_QuerySELECT (&mysql_res,"can not get nickname",
+		       "SELECT Nickname FROM usr_nicknames"
+		       " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
+		       UsrCod))
      {
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
@@ -166,12 +166,12 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_nicknames is also in table usr_data */
-	 DB_BuildQuery ("SELECT usr_nicknames.UsrCod"
-			" FROM usr_nicknames,usr_data"
-			" WHERE usr_nicknames.Nickname='%s'"
-			" AND usr_nicknames.UsrCod=usr_data.UsrCod",
-		        NicknameWithoutArroba);
-	 if (DB_QuerySELECT_new (&mysql_res,"can not get user's code"))
+	 if (DB_QuerySELECT (&mysql_res,"can not get user's code",
+			     "SELECT usr_nicknames.UsrCod"
+			     " FROM usr_nicknames,usr_data"
+			     " WHERE usr_nicknames.Nickname='%s'"
+			     " AND usr_nicknames.UsrCod=usr_data.UsrCod",
+			     NicknameWithoutArroba))
 	   {
 	    /* Get row */
 	    row = mysql_fetch_row (mysql_res);
@@ -237,11 +237,12 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    Lay_StartSection (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
-   DB_BuildQuery ("SELECT Nickname FROM usr_nicknames"
-		  " WHERE UsrCod=%ld"
-		  " ORDER BY CreatTime DESC",
-                  UsrDat->UsrCod);
-   NumNicks = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get nicknames of a user");
+   NumNicks =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
+			      "SELECT Nickname FROM usr_nicknames"
+			      " WHERE UsrCod=%ld"
+			      " ORDER BY CreatTime DESC",
+			      UsrDat->UsrCod);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
