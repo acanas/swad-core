@@ -60,7 +60,7 @@ void DB_QueryUPDATE_old (char **Query,const char *MsgError);
 
 void DB_QueryDELETE (const char *MsgError,const char *fmt,...);
 
-void DB_Query_new (const char *MsgError);
+void DB_Query (const char *MsgError,const char *fmt,...);
 
 void DB_FreeMySQLResult (MYSQL_RES **mysql_res);
 void DB_ExitOnMySQLError (const char *Message);

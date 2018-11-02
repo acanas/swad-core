@@ -1018,8 +1018,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    // The temporary table achieves speedup from ~2s to few ms
 
    /***** Remove temporary table if exists *****/
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
 
    /***** Create temporary table with all user's courses as student/teacher *****/
    switch (UsrRole)
@@ -1038,14 +1038,14 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   DB_BuildQuery ("CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
-	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
-	          " ENGINE=MEMORY"
-	          " SELECT CrsCod FROM crs_usr"
-	          " WHERE UsrCod=%ld"
-	          "%s",
-		  UsrCod,SubQueryRole);
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
+	     " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
+	     " ENGINE=MEMORY"
+	     " SELECT CrsCod FROM crs_usr"
+	     " WHERE UsrCod=%ld"
+	     "%s",
+	     UsrCod,SubQueryRole);
 
    /***** Get the number of students/teachers in a course from database ******/
    switch (OthersRole)
@@ -1072,8 +1072,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    NumUsrs = (unsigned) DB_QueryCOUNT_new ("can not get the number of users");
 
    /***** Remove temporary table *****/
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
 
    return NumUsrs;
   }
@@ -1432,16 +1432,16 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    Usr_GetMyCourses ();
 
    /* Remove temporary table if exists */
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
 
    /* Create temporary table with all user's courses for a role */
-   DB_BuildQuery ("CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
-		  "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
-		  "UNIQUE INDEX(CrsCod,Role)) ENGINE=MEMORY"
-		  " SELECT CrsCod,Role FROM crs_usr WHERE UsrCod=%ld",
-	    UsrCod);
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
+	     "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
+   	     "UNIQUE INDEX(CrsCod,Role)) ENGINE=MEMORY"
+  	     " SELECT CrsCod,Role FROM crs_usr WHERE UsrCod=%ld",
+	     UsrCod);
 
    /* Get if a user shares any course with me from database */
    DB_BuildQuery ("SELECT COUNT(*) FROM my_courses_tmp,usr_courses_tmp"
@@ -1450,8 +1450,8 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    UsrSharesAnyOfMyCrsWithDifferentRole = (DB_QueryCOUNT_new ("can not check if a user shares any course with you") != 0);
 
    /* Remove temporary table if exists */
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
 
    return UsrSharesAnyOfMyCrsWithDifferentRole;
   }
@@ -1667,19 +1667,19 @@ void Usr_GetMyCourses (void)
 	 Usr_RemoveTemporaryTableMyCourses ();
 
 	 /***** Create temporary table with my courses *****/
-	 DB_BuildQuery ("CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp "
-			"(CrsCod INT NOT NULL,"
-			"Role TINYINT NOT NULL,"
-			"DegCod INT NOT NULL,"
-			"UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
-			" SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
-			" FROM crs_usr,courses,degrees"
-			" WHERE crs_usr.UsrCod=%ld"
-			" AND crs_usr.CrsCod=courses.CrsCod"
-			" AND courses.DegCod=degrees.DegCod"
-			" ORDER BY degrees.ShortName,courses.ShortName",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-	 DB_Query_new ("can not create temporary table");
+	 DB_Query ("can not create temporary table",
+	           "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp "
+		   "(CrsCod INT NOT NULL,"
+		   "Role TINYINT NOT NULL,"
+		   "DegCod INT NOT NULL,"
+		   "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
+		   " SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
+		   " FROM crs_usr,courses,degrees"
+		   " WHERE crs_usr.UsrCod=%ld"
+		   " AND crs_usr.CrsCod=courses.CrsCod"
+		   " AND courses.DegCod=degrees.DegCod"
+		   " ORDER BY degrees.ShortName,courses.ShortName",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /***** Get my courses from database *****/
 	 NumCrss =

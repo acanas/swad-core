@@ -3411,8 +3411,8 @@ static void Gam_ExchangeQuestions (long GamCod,
    long QstCodBottom;
 
    /***** Lock table to make the inscription atomic *****/
-   DB_BuildQuery ("LOCK TABLES gam_questions WRITE");
-   DB_Query_new ("can not lock tables to move game question");
+   DB_Query ("can not lock tables to move game question",
+	     "LOCK TABLES gam_questions WRITE");
    Gbl.DB.LockedTables = true;
 
    /***** Get question code of the questions to be moved *****/
@@ -3447,8 +3447,8 @@ static void Gam_ExchangeQuestions (long GamCod,
    /***** Unlock table *****/
    Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				// ...to not retry the unlock if error in unlocking
-   DB_BuildQuery ("UNLOCK TABLES");
-   DB_Query_new ("can not unlock tables after moving game questions");
+   DB_Query ("can not unlock tables after moving game questions",
+	     "UNLOCK TABLES");
   }
 
 /*****************************************************************************/

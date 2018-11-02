@@ -229,16 +229,16 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    // ...because a unique temporary table can not be used twice in the same query
 
    /***** Create temporary table with all the mail domains present in users' emails table *****/
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS T1,T2");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS T1,T2");
 
-   DB_BuildQuery ("CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
-		  " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
-		  " FROM usr_emails GROUP BY Domain");
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
+	     " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
+    	     " FROM usr_emails GROUP BY Domain");
 
-   DB_BuildQuery ("CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1");
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1");
 
    /***** Get mail domains from database *****/
    switch (Gbl.Mails.SelectedOrder)
@@ -313,8 +313,8 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Drop temporary table *****/
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS T1,T2");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS T1,T2");
   }
 
 /*****************************************************************************/

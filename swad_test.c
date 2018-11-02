@@ -1600,15 +1600,15 @@ void Tst_RenameTag (void)
 
 	    /* Create a temporary table with all the question codes
 	       that had the new tag as one of their tags */
-	    DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-	    DB_Query_new ("can not remove temporary table");
+	    DB_Query ("can not remove temporary table",
+		      "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
 
-	    DB_BuildQuery ("CREATE TEMPORARY TABLE tst_question_tags_tmp"
-		           " ENGINE=MEMORY"
-			   " SELECT QstCod FROM tst_question_tags"
-			   " WHERE TagCod=%ld",
-			   ExistingTagCod);
-	    DB_Query_new ("can not create temporary table");
+	    DB_Query ("can not create temporary table",
+		      "CREATE TEMPORARY TABLE tst_question_tags_tmp"
+		      " ENGINE=MEMORY"
+		      " SELECT QstCod FROM tst_question_tags"
+	   	      " WHERE TagCod=%ld",
+		      ExistingTagCod);
 
 	    /* Remove old tag in questions where it would be repeated */
 	    // New tag existed for a question ==> delete old tag
@@ -1631,8 +1631,8 @@ void Tst_RenameTag (void)
 	    DB_QueryUPDATE_new ("can not update a tag in some questions");
 
 	    /* Drop temporary table, no longer necessary */
-	    DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-	    DB_Query_new ("can not remove temporary table");
+	    DB_Query ("can not remove temporary table",
+		      "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
 
 	    /***** Delete old tag from tst_tags
 		   because it is not longer used *****/

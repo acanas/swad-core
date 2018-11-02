@@ -537,21 +537,21 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
    /***** Create temporary table with publishing codes *****/
-   DB_BuildQuery ("CREATE TEMPORARY TABLE pub_codes "
-	          "(PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE pub_codes "
+	     "(PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
 
    /***** Create temporary table with notes got in this execution *****/
-   DB_BuildQuery ("CREATE TEMPORARY TABLE not_codes "
-	          "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY");
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE not_codes "
+	     "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY");
 
    /***** Create temporary table with notes already present in timeline for this session *****/
-   DB_BuildQuery ("CREATE TEMPORARY TABLE current_timeline "
-		  "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY"
-		  " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
-	          Gbl.Session.Id);
-   DB_Query_new ("can not create temporary table");
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE current_timeline "
+	     "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY"
+	     " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
+	     Gbl.Session.Id);
 
    /***** Create temporary table and subquery with potential publishers *****/
    switch (TimelineUsrOrGbl)
@@ -564,15 +564,15 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	 switch (Gbl.Social.WhichUsrs)
 	   {
 	    case Soc_FOLLOWED:	// Show the timeline of the users I follow
-	       DB_BuildQuery ("CREATE TEMPORARY TABLE publishers "
-			      "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-			      " SELECT %ld AS UsrCod"
-			      " UNION"
-			      " SELECT FollowedCod AS UsrCod"
-			      " FROM usr_follow WHERE FollowerCod=%ld",
-			Gbl.Usrs.Me.UsrDat.UsrCod,
-			Gbl.Usrs.Me.UsrDat.UsrCod);
-	       DB_Query_new ("can not create temporary table");
+	       DB_Query ("can not create temporary table",
+		         "CREATE TEMPORARY TABLE publishers "
+			 "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+			 " SELECT %ld AS UsrCod"
+			 " UNION"
+			 " SELECT FollowedCod AS UsrCod"
+			 " FROM usr_follow WHERE FollowerCod=%ld",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	       sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod AND ");
 	       break;
@@ -873,9 +873,9 @@ static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
 
 static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
   {
-   DB_BuildQuery ("DROP TEMPORARY TABLE IF EXISTS"
-	          " pub_codes,not_codes,publishers,current_timeline");
-   DB_Query_new ("can not remove temporary tables");
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS"
+	     " pub_codes,not_codes,publishers,current_timeline");
   }
 
 /*****************************************************************************/
