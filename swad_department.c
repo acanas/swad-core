@@ -1051,12 +1051,12 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
    extern const char *Txt_Created_new_department_X;
 
    /***** Create a new department *****/
-   DB_BuildQuery ("INSERT INTO departments"
-		  " (InsCod,ShortName,FullName,WWW)"
-		  " VALUES"
-		  " (%ld,'%s','%s','%s')",
-                  Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
-   DB_QueryINSERT_new ("can not create a new department");
+   DB_QueryINSERT ("can not create a new department",
+		   "INSERT INTO departments"
+		   " (InsCod,ShortName,FullName,WWW)"
+		   " VALUES"
+		   " (%ld,'%s','%s','%s')",
+                   Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

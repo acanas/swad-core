@@ -856,12 +856,12 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
    extern const char *Txt_Created_new_email_domain_X;
 
    /***** Create a new mail *****/
-   DB_BuildQuery ("INSERT INTO mail_domains"
-		  " (Domain,Info)"
-		  " VALUES"
-		  " ('%s','%s')",
-	          Mai->Domain,Mai->Info);
-   DB_QueryINSERT_new ("can not create mail domain");
+   DB_QueryINSERT ("can not create mail domain",
+		   "INSERT INTO mail_domains"
+		   " (Domain,Info)"
+		   " VALUES"
+		   " ('%s','%s')",
+	           Mai->Domain,Mai->Info);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

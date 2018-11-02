@@ -2585,12 +2585,12 @@ static void Usr_InsertMyBirthday (void)
    DB_QueryDELETE_new ("can not delete old birthdays");
 
    /***** Insert new birthday *****/
-   DB_BuildQuery ("INSERT INTO birthdays_today"
-	          " (UsrCod,Today)"
-	          " VALUES"
-	          " (%ld,CURDATE())",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT_new ("can not insert birthday");
+   DB_QueryINSERT ("can not insert birthday",
+		   "INSERT INTO birthdays_today"
+	           " (UsrCod,Today)"
+	           " VALUES"
+	           " (%ld,CURDATE())",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -3413,16 +3413,16 @@ void Usr_UpdateMyLastData (void)
 static void Usr_InsertMyLastData (void)
   {
    /***** Insert my last accessed course, tab and time of click in database *****/
-   DB_BuildQuery ("INSERT INTO usr_last"
-	          " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccNotif)"
-                  " VALUES"
-                  " (%ld,%u,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Sch_SEARCH_ALL,
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  (unsigned) Gbl.Action.Tab,
-		  (long) (time_t) 0);	// The user never accessed to notifications
-   DB_QueryINSERT_new ("can not insert last user's data");
+   DB_QueryINSERT ("can not insert last user's data",
+		   "INSERT INTO usr_last"
+	           " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccNotif)"
+                   " VALUES"
+                   " (%ld,%u,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Sch_SEARCH_ALL,
+		   Gbl.CurrentCrs.Crs.CrsCod,
+		   (unsigned) Gbl.Action.Tab,
+		   (long) (time_t) 0);	// The user never accessed to notifications
   }
 
 /*****************************************************************************/

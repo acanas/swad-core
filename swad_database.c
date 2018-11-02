@@ -3154,8 +3154,7 @@ unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char 
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
 
-unsigned long DB_QueryCOUNT (const char *MsgError,
-                             const char *fmt,...)
+unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -3202,21 +3201,22 @@ unsigned long DB_QueryCOUNT_old (char **Query,const char *MsgError)
 /******************** Make an INSERT query in database ***********************/
 /*****************************************************************************/
 
-void DB_QueryINSERT_new (const char *MsgError)
+void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
   {
-   int Result;
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query = NULL;
 
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Gbl.DB.QueryPtr == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
 
-   /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
-   free ((void *) Gbl.DB.QueryPtr);
-   Gbl.DB.QueryPtr = NULL;
-   if (Result)
-      DB_ExitOnMySQLError (MsgError);
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   DB_QueryINSERT_old (&Query,MsgError);
   }
 
 /*****************************************************************************/

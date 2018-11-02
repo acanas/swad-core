@@ -583,24 +583,22 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
               Column++)
 	    if (TT_TimeTable[Weekday][Interval].Columns[Column].IntervalType == TT_FIRST_INTERVAL &&
                 TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals)
-              {
-               DB_BuildQuery ("INSERT INTO timetable_crs"
-        	              " (CrsCod,GrpCod,Weekday,StartTime,Duration,"
-        	              "ClassType,Place,GroupName)"
-                              " VALUES"
-                              " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
-                              "'%s','%s','%s')",
-			      CrsCod,
-			      TT_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
-			      Weekday,
-			      Hour,Min,
-			      TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
-			      Gbl.TimeTable.Config.SecondsPerInterval,
-			      TT_ClassTypeDB[TT_TimeTable[Weekday][Interval].Columns[Column].ClassType],
-			      TT_TimeTable[Weekday][Interval].Columns[Column].Place,
-			      TT_TimeTable[Weekday][Interval].Columns[Column].Group);
-               DB_QueryINSERT_new ("can not create course timetable");
-              }
+               DB_QueryINSERT ("can not create course timetable",
+        		       "INSERT INTO timetable_crs"
+        	               " (CrsCod,GrpCod,Weekday,StartTime,Duration,"
+        	               "ClassType,Place,GroupName)"
+                               " VALUES"
+                               " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
+                               "'%s','%s','%s')",
+			       CrsCod,
+			       TT_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
+			       Weekday,
+			       Hour,Min,
+			       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
+			       Gbl.TimeTable.Config.SecondsPerInterval,
+			       TT_ClassTypeDB[TT_TimeTable[Weekday][Interval].Columns[Column].ClassType],
+			       TT_TimeTable[Weekday][Interval].Columns[Column].Place,
+			       TT_TimeTable[Weekday][Interval].Columns[Column].Group);
   }
 
 /*****************************************************************************/
@@ -633,19 +631,17 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
               Column++)
 	    if (TT_TimeTable[Weekday][Interval].Columns[Column].IntervalType == TT_FIRST_INTERVAL &&
                 TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals)
-              {
-               DB_BuildQuery ("INSERT INTO timetable_tut"
-        	              " (UsrCod,Weekday,StartTime,Duration,Place)"
-                              " VALUES"
-                              " (%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),'%s')",
-			      UsrCod,
-			      Weekday,
-			      Hour,Min,
-			      TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
-			      Gbl.TimeTable.Config.SecondsPerInterval,
-			      TT_TimeTable[Weekday][Interval].Columns[Column].Place);
-               DB_QueryINSERT_new ("can not create office timetable");
-              }
+               DB_QueryINSERT ("can not create office timetable",
+        		       "INSERT INTO timetable_tut"
+        	               " (UsrCod,Weekday,StartTime,Duration,Place)"
+                               " VALUES"
+                               " (%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),'%s')",
+			       UsrCod,
+			       Weekday,
+			       Hour,Min,
+			       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
+			       Gbl.TimeTable.Config.SecondsPerInterval,
+			       TT_TimeTable[Weekday][Interval].Columns[Column].Place);
   }
 
 /*****************************************************************************/

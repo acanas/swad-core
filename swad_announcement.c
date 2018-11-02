@@ -512,12 +512,12 @@ void Ann_ReceiveAnnouncement (void)
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content)
   {
    /***** Select announcements not seen *****/
-   DB_BuildQuery ("INSERT INTO announcements"
-		  " (Roles,Subject,Content)"
-		  " VALUES"
-		  " (%u,'%s','%s')",
-                  Roles,Subject,Content);
-   DB_QueryINSERT_new ("can not create announcement");
+   DB_QueryINSERT ("can not create announcement",
+		   "INSERT INTO announcements"
+		   " (Roles,Subject,Content)"
+		   " VALUES"
+		   " (%u,'%s','%s')",
+                   Roles,Subject,Content);
   }
 
 /*****************************************************************************/

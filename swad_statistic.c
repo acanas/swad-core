@@ -313,24 +313,24 @@ void Sta_LogAccess (const char *Comments)
    LogCod = DB_QueryINSERTandReturnCode_new ("can not log access (full)");
 
    /* Log access in recent log (log_recent) */
-   DB_BuildQuery ("INSERT INTO log_recent "
-	          "(LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
-	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                  " VALUES "
-                  "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
-                  "%u,NOW(),%ld,%ld,'%s')",
-		  LogCod,ActCod,
-		  Gbl.CurrentCty.Cty.CtyCod,
-		  Gbl.CurrentIns.Ins.InsCod,
-		  Gbl.CurrentCtr.Ctr.CtrCod,
-		  Gbl.CurrentDeg.Deg.DegCod,
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) RoleToStore,
-		  Gbl.TimeGenerationInMicroseconds,
-		  Gbl.TimeSendInMicroseconds,
-		  Gbl.IP);
-   DB_QueryINSERT_new ("can not log access (recent)");
+   DB_QueryINSERT ("can not log access (recent)",
+		   "INSERT INTO log_recent "
+	           "(LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
+	           "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
+                   " VALUES "
+                   "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
+                   "%u,NOW(),%ld,%ld,'%s')",
+		   LogCod,ActCod,
+		   Gbl.CurrentCty.Cty.CtyCod,
+		   Gbl.CurrentIns.Ins.InsCod,
+		   Gbl.CurrentCtr.Ctr.CtrCod,
+		   Gbl.CurrentDeg.Deg.DegCod,
+		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) RoleToStore,
+		   Gbl.TimeGenerationInMicroseconds,
+		   Gbl.TimeSendInMicroseconds,
+		   Gbl.IP);
 
    if (Comments)
      {
@@ -375,27 +375,22 @@ void Sta_LogAccess (const char *Comments)
      }
 
    if (Gbl.WebService.IsWebService)
-     {
       /* Log web service plugin and function */
-      DB_BuildQuery ("INSERT INTO log_ws"
-	             " (LogCod,PlgCod,FunCod)"
-                     " VALUES"
-                     " (%ld,%ld,%u)",
-	             LogCod,Gbl.WebService.PlgCod,
-		     (unsigned) Gbl.WebService.Function);
-
-      DB_QueryINSERT_new ("can not log access (comments)");
-     }
+      DB_QueryINSERT ("can not log access (comments)",
+		      "INSERT INTO log_ws"
+	              " (LogCod,PlgCod,FunCod)"
+                      " VALUES"
+                      " (%ld,%ld,%u)",
+	              LogCod,Gbl.WebService.PlgCod,
+		      (unsigned) Gbl.WebService.Function);
    else if (Gbl.Banners.BanCodClicked > 0)
-     {
       /* Log banner clicked */
-      DB_BuildQuery ("INSERT INTO log_banners"
-	             " (LogCod,BanCod)"
-                     " VALUES"
-                     " (%ld,%ld)",
-	             LogCod,Gbl.Banners.BanCodClicked);
-      DB_QueryINSERT_new ("can not log banner clicked");
-     }
+      DB_QueryINSERT ("can not log banner clicked",
+		      "INSERT INTO log_banners"
+	              " (LogCod,BanCod)"
+                      " VALUES"
+                      " (%ld,%ld)",
+	              LogCod,Gbl.Banners.BanCodClicked);
 
    /***** Increment my number of clicks *****/
    if (Gbl.Usrs.Me.Logged)

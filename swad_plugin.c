@@ -1041,15 +1041,15 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
    extern const char *Txt_Created_new_plugin_X;
 
    /***** Create a new plugin *****/
-   DB_BuildQuery ("INSERT INTO plugins"
-		  " (Name,Description,Logo,"
-		  "AppKey,URL,IP)"
-		  " VALUES"
-		  " ('%s','%s','%s',"
-		  "'%s','%s','%s')",
-                  Plg->Name,Plg->Description,Plg->Logo,
-		  Plg->AppKey,Plg->URL,Plg->IP);
-   DB_QueryINSERT_new ("can not create plugin");
+   DB_QueryINSERT ("can not create plugin",
+		   "INSERT INTO plugins"
+		   " (Name,Description,Logo,"
+		   "AppKey,URL,IP)"
+		   " VALUES"
+		   " ('%s','%s','%s',"
+		   "'%s','%s','%s')",
+                   Plg->Name,Plg->Description,Plg->Logo,
+		   Plg->AppKey,Plg->URL,Plg->IP);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

@@ -1617,15 +1617,14 @@ static void Asg_CreateGrps (long AsgCod)
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
-     {
       /* Create group */
-      DB_BuildQuery ("INSERT INTO asg_grp"
-		     " (AsgCod,GrpCod)"
-		     " VALUES"
-		     " (%ld,%ld)",
-                     AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT_new ("can not associate a group to an assignment");
-     }
+      DB_QueryINSERT ("can not associate a group to an assignment",
+		      "INSERT INTO asg_grp"
+		      " (AsgCod,GrpCod)"
+		      " VALUES"
+		      " (%ld,%ld)",
+                      AsgCod,
+		      Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/

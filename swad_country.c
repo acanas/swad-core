@@ -2255,13 +2255,13 @@ static void Cty_CreateCountry (struct Country *Cty)
       Str_Concat (SubQueryWWW2,"'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
      }
-   DB_BuildQuery ("INSERT INTO countries"
-		  " (CtyCod,Alpha2%s%s)"
-		  " VALUES"
-		  " ('%03ld','%s'%s%s)",
-                  SubQueryNam1,SubQueryWWW1,
-                  Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
-   DB_QueryINSERT_new ("can not create country");
+   DB_QueryINSERT ("can not create country",
+		   "INSERT INTO countries"
+		   " (CtyCod,Alpha2%s%s)"
+		   " VALUES"
+		   " ('%03ld','%s'%s%s)",
+                   SubQueryNam1,SubQueryWWW1,
+                   Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

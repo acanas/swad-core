@@ -1015,14 +1015,14 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed)
   {
    /***** Update my nickname in database *****/
-   DB_BuildQuery ("INSERT INTO usr_IDs"
-		  " (UsrCod,UsrID,CreatTime,Confirmed)"
-		  " VALUES"
-		  " (%ld,'%s',NOW(),'%c')",
-	          UsrCod,NewID,
-	          Confirmed ? 'Y' :
-			      'N');
-   DB_QueryINSERT_new ("can not insert a new ID");
+   DB_QueryINSERT ("can not insert a new ID",
+		   "INSERT INTO usr_IDs"
+		   " (UsrCod,UsrID,CreatTime,Confirmed)"
+		   " VALUES"
+		   " (%ld,'%s',NOW(),'%c')",
+	           UsrCod,NewID,
+	           Confirmed ? 'Y' :
+			       'N');
   }
 
 /*****************************************************************************/
@@ -1148,8 +1148,8 @@ void ID_ConfirmOtherUsrID (void)
 void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
   {
    /***** Update database *****/
-   DB_BuildQuery ("UPDATE usr_IDs SET Confirmed='Y'"
-		  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed<>'Y'",
-                  UsrDat->UsrCod,UsrID);
-   DB_QueryINSERT_new ("can not confirm a user's ID");
+   DB_QueryINSERT ("can not confirm a user's ID",
+		   "UPDATE usr_IDs SET Confirmed='Y'"
+		   " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed<>'Y'",
+                   UsrDat->UsrCod,UsrID);
   }

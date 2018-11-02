@@ -3339,14 +3339,14 @@ static void Prj_CreateProject (struct Project *Prj)
    Prj->PrjCod = DB_QueryINSERTandReturnCode_new ("can not create new project");
 
    /***** Insert creator as first tutor *****/
-   DB_BuildQuery ("INSERT INTO prj_usr"
-		  " (PrjCod,RoleInProject,UsrCod)"
-		  " VALUES"
-		  " (%ld,%u,%ld)",
-	          Prj->PrjCod,
-	          (unsigned) Prj_ROLE_TUT,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT_new ("can not add tutor");
+   DB_QueryINSERT ("can not add tutor",
+		   "INSERT INTO prj_usr"
+		   " (PrjCod,RoleInProject,UsrCod)"
+		   " VALUES"
+		   " (%ld,%u,%ld)",
+	           Prj->PrjCod,
+	           (unsigned) Prj_ROLE_TUT,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Flush cache *****/
    Prj_FlushCacheMyRoleInProject ();

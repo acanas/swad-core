@@ -2313,15 +2313,13 @@ static void Gam_CreateGrps (long GamCod)
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
-     {
       /* Create group */
-      DB_BuildQuery ("INSERT INTO gam_grp"
-		     " (GamCod,GrpCod)"
-		     " VALUES"
-		     " (%ld,%ld)",
-                     GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT_new ("can not associate a group to a game");
-     }
+      DB_QueryINSERT ("can not associate a group to a game",
+		      "INSERT INTO gam_grp"
+		      " (GamCod,GrpCod)"
+		      " VALUES"
+		      " (%ld,%ld)",
+                      GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -3031,12 +3029,12 @@ void Gam_AddTstQuestionsToGame (void)
       MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
 
       /* Insert question in the table of questions */
-      DB_BuildQuery ("INSERT INTO gam_questions"
-		     " (GamCod,QstCod,QstInd)"
-		     " VALUES"
-		     " (%ld,%ld,%u)",
-	             Game.GamCod,QstCod,(unsigned) (MaxQstInd + 1));
-      DB_QueryINSERT_new ("can not create question");
+      DB_QueryINSERT ("can not create question",
+		      "INSERT INTO gam_questions"
+		      " (GamCod,QstCod,QstInd)"
+		      " VALUES"
+		      " (%ld,%ld,%u)",
+	              Game.GamCod,QstCod,(unsigned) (MaxQstInd + 1));
      }
 
    /***** Free space for selected question codes *****/
@@ -3750,10 +3748,10 @@ static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
    /***** Increase number of users who have selected
           the answer AnsInd in the question QstCod *****/
-   DB_BuildQuery ("UPDATE gam_answers SET NumUsrs=NumUsrs+1"
-		  " WHERE QstCod=%ld AND AnsInd=%u",
-                  QstCod,AnsInd);
-   DB_QueryINSERT_new ("can not register your answer to the game");
+   DB_QueryINSERT ("can not register your answer to the game",
+		   "UPDATE gam_answers SET NumUsrs=NumUsrs+1"
+		   " WHERE QstCod=%ld AND AnsInd=%u",
+                   QstCod,AnsInd);
   }
 
 /*****************************************************************************/
@@ -3762,12 +3760,12 @@ static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
 static void Gam_RegisterIHaveAnsweredGame (long GamCod)
   {
-   DB_BuildQuery ("INSERT INTO gam_users"
-		  " (GamCod,UsrCod)"
-		  " VALUES"
-		  " (%ld,%ld)",
-                  GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT_new ("can not register that you have answered the game");
+   DB_QueryINSERT ("can not register that you have answered the game",
+		   "INSERT INTO gam_users"
+		   " (GamCod,UsrCod)"
+		   " VALUES"
+		   " (%ld,%ld)",
+                   GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

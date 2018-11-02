@@ -986,12 +986,12 @@ static void Ban_CreateBanner (struct Banner *Ban)
    extern const char *Txt_Created_new_banner_X;
 
    /***** Create a new banner *****/
-   DB_BuildQuery ("INSERT INTO banners"
-		  " (Hidden,ShortName,FullName,Img,WWW)"
-		  " VALUES"
-		  " ('N','%s','%s','%s','%s')",
-                  Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
-   DB_QueryINSERT_new ("can not create banner");
+   DB_QueryINSERT ("can not create banner",
+		   "INSERT INTO banners"
+		   " (Hidden,ShortName,FullName,Img,WWW)"
+		   " VALUES"
+		   " ('N','%s','%s','%s','%s')",
+                   Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

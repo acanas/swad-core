@@ -427,24 +427,24 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
   {
    /***** Insert a new user's usage report into database *****/
-   DB_BuildQuery ("INSERT INTO usr_report"
-	          " (UsrCod,ReportTimeUTC,"
-	          "UniqueDirL,UniqueDirR,Filename,Permalink)"
-                  " VALUES"
-                  " (%ld,'%04d-%02d-%02d %02d:%02d:%02d',"
-                  "'%c%c','%s','%s','%s')",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  1900 + Report->tm_CurrentTime.tm_year,	// year
-		  1 +  Report->tm_CurrentTime.tm_mon,		// month
-		  Report->tm_CurrentTime.tm_mday,		// day of the month
-		  Report->tm_CurrentTime.tm_hour,		// hours
-		  Report->tm_CurrentTime.tm_min,		// minutes
-		  Report->tm_CurrentTime.tm_sec,		// seconds
-		  Gbl.UniqueNameEncrypted[0],		//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-		  Gbl.UniqueNameEncrypted[1],
-		  &Gbl.UniqueNameEncrypted[2],	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-		  Report->FilenameReport,Report->Permalink);
-   DB_QueryINSERT_new ("can not create new user's usage report");
+   DB_QueryINSERT ("can not create new user's usage report",
+		   "INSERT INTO usr_report"
+	           " (UsrCod,ReportTimeUTC,"
+	           "UniqueDirL,UniqueDirR,Filename,Permalink)"
+                   " VALUES"
+                   " (%ld,'%04d-%02d-%02d %02d:%02d:%02d',"
+                   "'%c%c','%s','%s','%s')",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   1900 + Report->tm_CurrentTime.tm_year,	// year
+		   1 +  Report->tm_CurrentTime.tm_mon,		// month
+		   Report->tm_CurrentTime.tm_mday,		// day of the month
+		   Report->tm_CurrentTime.tm_hour,		// hours
+		   Report->tm_CurrentTime.tm_min,		// minutes
+		   Report->tm_CurrentTime.tm_sec,		// seconds
+		   Gbl.UniqueNameEncrypted[0],		//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
+		   Gbl.UniqueNameEncrypted[1],
+		   &Gbl.UniqueNameEncrypted[2],		// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
+		   Report->FilenameReport,Report->Permalink);
   }
 
 /*****************************************************************************/

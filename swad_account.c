@@ -775,15 +775,15 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      DB_BuildQuery ("INSERT INTO usr_IDs"
-		     " (UsrCod,UsrID,CreatTime,Confirmed)"
-		     " VALUES"
-		     " (%ld,'%s',NOW(),'%c')",
-		     UsrDat->UsrCod,
-		     UsrDat->IDs.List[NumID].ID,
-		     UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
-							 'N');
-      DB_QueryINSERT_new ("can not store user's ID when creating user");
+      DB_QueryINSERT ("can not store user's ID when creating user",
+		      "INSERT INTO usr_IDs"
+		      " (UsrCod,UsrID,CreatTime,Confirmed)"
+		      " VALUES"
+		      " (%ld,'%s',NOW(),'%c')",
+		      UsrDat->UsrCod,
+		      UsrDat->IDs.List[NumID].ID,
+		      UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
+							  'N');
      }
 
    /***** Create directory for the user, if not exists *****/

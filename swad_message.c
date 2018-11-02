@@ -1324,14 +1324,14 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    MsgCod = DB_QueryINSERTandReturnCode_new ("can not create message");
 
    /***** Insert message in sent messages *****/
-   DB_BuildQuery ("INSERT INTO msg_snt"
-		  " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
-		  " VALUES"
-		  " (%ld,%ld,%ld,'N',NOW())",
-	          MsgCod,
-	          Gbl.CurrentCrs.Crs.CrsCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT_new ("can not create message");
+   DB_QueryINSERT ("can not create message",
+		   "INSERT INTO msg_snt"
+		   " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
+		   " VALUES"
+		   " (%ld,%ld,%ld,'N',NOW())",
+	           MsgCod,
+	           Gbl.CurrentCrs.Crs.CrsCod,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Increment number of messages sent by me *****/
    Prf_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1393,11 +1393,12 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
   {
    /***** Move messages from msg_rcv to msg_rcv_deleted *****/
    /* Insert messages into msg_rcv_deleted */
-   DB_BuildQuery ("INSERT IGNORE INTO msg_rcv_deleted"
-		  " (MsgCod,UsrCod,Notified,Open,Replied)"
-		  " SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv WHERE UsrCod=%ld",
-                  UsrCod);
-   DB_QueryINSERT_new ("can not remove received messages");
+   DB_QueryINSERT ("can not remove received messages",
+		   "INSERT IGNORE INTO msg_rcv_deleted"
+		   " (MsgCod,UsrCod,Notified,Open,Replied)"
+		   " SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv"
+		   " WHERE UsrCod=%ld",
+                   UsrCod);
 
    /* Delete messages from msg_rcv *****/
    DB_BuildQuery ("DELETE FROM msg_rcv WHERE UsrCod=%ld",UsrCod);
@@ -1405,12 +1406,12 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   DB_BuildQuery ("INSERT IGNORE INTO msg_snt_deleted"
-		  " (MsgCod,CrsCod,UsrCod,CreatTime)"
-		  " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
-		  " FROM msg_snt WHERE UsrCod=%ld",
-                  UsrCod);
-   DB_QueryINSERT_new ("can not remove sent messages");
+   DB_QueryINSERT ("can not remove sent messages",
+		   "INSERT IGNORE INTO msg_snt_deleted"
+		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		   " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
+		   " FROM msg_snt WHERE UsrCod=%ld",
+                   UsrCod);
 
    /* Delete message from msg_snt *****/
    DB_BuildQuery ("DELETE FROM msg_snt WHERE UsrCod=%ld",UsrCod);
@@ -1424,14 +1425,14 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail)
   {
    /***** Insert message received in the database *****/
-   DB_BuildQuery ("INSERT INTO msg_rcv"
-		  " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
-		  " VALUES"
-		  " (%ld,%ld,'%c','N','N','N')",
-	          MsgCod,UsrCod,
-	          NotifyByEmail ? 'Y' :
-			          'N');
-   DB_QueryINSERT_new ("can not create received message");
+   DB_QueryINSERT ("can not create received message",
+		   "INSERT INTO msg_rcv"
+		   " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
+		   " VALUES"
+		   " (%ld,%ld,'%c','N','N','N')",
+	           MsgCod,UsrCod,
+	           NotifyByEmail ? 'Y' :
+			           'N');
   }
 
 /*****************************************************************************/
@@ -1455,12 +1456,12 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
   {
    /***** Move message from msg_rcv to msg_rcv_deleted *****/
    /* Insert message into msg_rcv_deleted */
-   DB_BuildQuery ("INSERT IGNORE INTO msg_rcv_deleted"
-		  " (MsgCod,UsrCod,Notified,Open,Replied)"
-		  " SELECT MsgCod,UsrCod,Notified,Open,Replied"
-		  " FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,UsrCod);
-   DB_QueryINSERT_new ("can not remove a received message");
+   DB_QueryINSERT ("can not remove a received message",
+		   "INSERT IGNORE INTO msg_rcv_deleted"
+		   " (MsgCod,UsrCod,Notified,Open,Replied)"
+		   " SELECT MsgCod,UsrCod,Notified,Open,Replied"
+		   " FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,UsrCod);
 
    /* Delete message from msg_rcv *****/
    DB_BuildQuery ("DELETE FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
@@ -1484,12 +1485,12 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
   {
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   DB_BuildQuery ("INSERT IGNORE INTO msg_snt_deleted"
-		  " (MsgCod,CrsCod,UsrCod,CreatTime)"
-		  " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
-		  " FROM msg_snt WHERE MsgCod=%ld",
-                  MsgCod);
-   DB_QueryINSERT_new ("can not remove a sent message");
+   DB_QueryINSERT ("can not remove a sent message",
+		   "INSERT IGNORE INTO msg_snt_deleted"
+		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		   " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
+		   " FROM msg_snt WHERE MsgCod=%ld",
+                   MsgCod);
 
    /* Delete message from msg_snt *****/
    DB_BuildQuery ("DELETE FROM msg_snt WHERE MsgCod=%ld",MsgCod);
@@ -1508,12 +1509,12 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
   {
    /***** Move message from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
-   DB_BuildQuery ("INSERT IGNORE INTO msg_content_deleted"
-		  " (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
-		  " SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
-		  " FROM msg_content WHERE MsgCod=%ld",
-                  MsgCod);
-   DB_QueryINSERT_new ("can not remove the content of a message");
+   DB_QueryINSERT ("can not remove the content of a message",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
+		   " SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
+		   " FROM msg_content WHERE MsgCod=%ld",
+                   MsgCod);
 
    /* TODO: Messages in msg_content_deleted older than a certain time
       should be deleted to ensure the protection of personal data */
@@ -1531,12 +1532,12 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
   {
    /***** Move messages from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
-   DB_BuildQuery ("INSERT IGNORE INTO msg_content_deleted"
-		  " (MsgCod,Subject,Content)"
-		  " SELECT MsgCod,Subject,Content FROM msg_content"
-		  " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
-		  " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
-   DB_QueryINSERT_new ("can not remove the content of some messages");
+   DB_QueryINSERT ("can not remove the content of some messages",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content)"
+		   " SELECT MsgCod,Subject,Content FROM msg_content"
+		   " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
+		   " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
 
    /* Messages in msg_content_deleted older than a certain time
       should be deleted to ensure the protection of personal data */

@@ -2390,15 +2390,13 @@ static void Svy_CreateGrps (long SvyCod)
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
-     {
       /* Create group */
-      DB_BuildQuery ("INSERT INTO svy_grp"
-	             " (SvyCod,GrpCod)"
-	             " VALUES"
-	             " (%ld,%ld)",
-		     SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT_new ("can not associate a group to a survey");
-     }
+      DB_QueryINSERT ("can not associate a group to a survey",
+		      "INSERT INTO svy_grp"
+	              " (SvyCod,GrpCod)"
+	              " VALUES"
+	              " (%ld,%ld)",
+		      SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -3062,15 +3060,13 @@ void Svy_ReceiveQst (void)
          else	// If this answer does not exist...
            {
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-              {
                /* Create answer into database */
-               DB_BuildQuery ("INSERT INTO svy_answers"
-        	              " (QstCod,AnsInd,NumUsrs,Answer)"
-                              " VALUES"
-                              " (%ld,%u,0,'%s')",
-			      SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
-               DB_QueryINSERT_new ("can not create answer");
-              }
+               DB_QueryINSERT ("can not create answer",
+        		       "INSERT INTO svy_answers"
+        	               " (QstCod,AnsInd,NumUsrs,Answer)"
+                               " VALUES"
+                               " (%ld,%u,0,'%s')",
+			       SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
            }
 
       /***** List the questions of this survey, including the new one just inserted into the database *****/
@@ -3733,12 +3729,12 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
 static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
   {
-   DB_BuildQuery ("INSERT INTO svy_users"
-	          " (SvyCod,UsrCod)"
-                  " VALUES"
-                  " (%ld,%ld)",
-		  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryINSERT_new ("can not register that you have answered the survey");
+   DB_QueryINSERT ("can not register that you have answered the survey",
+		   "INSERT INTO svy_users"
+	           " (SvyCod,UsrCod)"
+                   " VALUES"
+                   " (%ld,%ld)",
+		   SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

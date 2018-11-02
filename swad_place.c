@@ -880,12 +880,12 @@ static void Plc_CreatePlace (struct Place *Plc)
    extern const char *Txt_Created_new_place_X;
 
    /***** Create a new place *****/
-   DB_BuildQuery ("INSERT INTO places"
-		  " (InsCod,ShortName,FullName)"
-		  " VALUES"
-		  " (%ld,'%s','%s')",
-                  Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
-   DB_QueryINSERT_new ("can not create place");
+   DB_QueryINSERT ("can not create place",
+		   "INSERT INTO places"
+		   " (InsCod,ShortName,FullName)"
+		   " VALUES"
+		   " (%ld,'%s','%s')",
+                   Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

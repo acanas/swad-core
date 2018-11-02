@@ -1494,15 +1494,16 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Store notify event *****/
-   DB_BuildQuery ("INSERT INTO notif"
-		  " (NotifyEvent,ToUsrCod,FromUsrCod,"
-		  "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
-		  " VALUES"
-		  " (%u,%ld,%ld,"
-		  "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
-	          (unsigned) NotifyEvent,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	          InsCod,CtrCod,DegCod,CrsCod,Cod,(unsigned) Status);
-   DB_QueryINSERT_new ("can not create new notification event");
+   DB_QueryINSERT ("can not create new notification event",
+		   "INSERT INTO notif"
+		   " (NotifyEvent,ToUsrCod,FromUsrCod,"
+		   "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
+		   " VALUES"
+		   " (%u,%ld,%ld,"
+		   "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
+	           (unsigned) NotifyEvent,
+		   UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	           InsCod,CtrCod,DegCod,CrsCod,Cod,(unsigned) Status);
   }
 
 /*****************************************************************************/

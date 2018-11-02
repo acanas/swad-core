@@ -1266,12 +1266,12 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
   {
    /***** Register in group *****/
-   DB_BuildQuery ("INSERT INTO crs_grp_usr"
-		  " (GrpCod,UsrCod)"
-		  " VALUES"
-		  " (%ld,%ld)",
-                  GrpCod,UsrDat->UsrCod);
-   DB_QueryINSERT_new ("can not add a user to a group");
+   DB_QueryINSERT ("can not add a user to a group",
+		   "INSERT INTO crs_grp_usr"
+		   " (GrpCod,UsrCod)"
+		   " VALUES"
+		   " (%ld,%ld)",
+                   GrpCod,UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
@@ -3846,14 +3846,14 @@ static void Grp_CreateGroupType (void)
 static void Grp_CreateGroup (void)
   {
    /***** Create a new group *****/
-   DB_BuildQuery ("INSERT INTO crs_grp"
-		  " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
-		  " VALUES"
-		  " (%ld,'%s',%u,'N','N')",
-	          Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
-	          Gbl.CurrentCrs.Grps.GrpName,
-	          Gbl.CurrentCrs.Grps.MaxStudents);
-   DB_QueryINSERT_new ("can not create group");
+   DB_QueryINSERT ("can not create group",
+		   "INSERT INTO crs_grp"
+		   " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
+		   " VALUES"
+		   " (%ld,'%s',%u,'N','N')",
+	           Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
+	           Gbl.CurrentCrs.Grps.GrpName,
+	           Gbl.CurrentCrs.Grps.MaxStudents);
   }
 
 /*****************************************************************************/

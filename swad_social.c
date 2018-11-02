@@ -777,16 +777,19 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
       if (PubCod > 0)
 	{
-	 DB_BuildQuery ("INSERT INTO pub_codes SET PubCod=%ld",PubCod);
-	 DB_QueryINSERT_new ("can not store publishing code");
+	 DB_QueryINSERT ("can not store publishing code",
+			 "INSERT INTO pub_codes SET PubCod=%ld",
+			 PubCod);
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
 
 	 /* Get social note code (row[1]) */
 	 NotCod = Str_ConvertStrCodToLongCod (row[1]);
-	 DB_BuildQuery ("INSERT INTO not_codes SET NotCod=%ld",NotCod);
-	 DB_QueryINSERT_new ("can not store note code");
-	 DB_BuildQuery ("INSERT INTO current_timeline SET NotCod=%ld",NotCod);
-	 DB_QueryINSERT_new ("can not store note code");
+	 DB_QueryINSERT ("can not store note code",
+			 "INSERT INTO not_codes SET NotCod=%ld",
+			 NotCod);
+	 DB_QueryINSERT ("can not store note code",
+			 "INSERT INTO current_timeline SET NotCod=%ld",
+			 NotCod);
 	}
       else	// Nothing got ==> abort loop
          break;	// Last publishing
@@ -2998,18 +3001,18 @@ static long Soc_ReceiveComment (void)
 	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	 /* Insert comment content in the database */
-	 DB_BuildQuery ("INSERT INTO social_comments"
-	                " (PubCod,Content,ImageName,ImageTitle,ImageURL)"
-			" VALUES"
-			" (%ld,'%s','%s','%s','%s')",
-			SocPub.PubCod,
-			Content,
-			Image.Name,
-			(Image.Name[0] &&	// Save image title only if image attached
-			 Image.Title) ? Image.Title : "",
-			(Image.Name[0] &&	// Save image URL   only if image attached
-			 Image.URL  ) ? Image.URL   : "");
-	 DB_QueryINSERT_new ("can not store comment content");
+	 DB_QueryINSERT ("can not store comment content",
+			 "INSERT INTO social_comments"
+	                 " (PubCod,Content,ImageName,ImageTitle,ImageURL)"
+			 " VALUES"
+			 " (%ld,'%s','%s','%s','%s')",
+			 SocPub.PubCod,
+			 Content,
+			 Image.Name,
+			 (Image.Name[0] &&	// Save image title only if image attached
+			  Image.Title) ? Image.Title : "",
+			 (Image.Name[0] &&	// Save image URL   only if image attached
+			  Image.URL  ) ? Image.URL   : "");
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
@@ -3168,13 +3171,13 @@ static long Soc_FavSocialNote (void)
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
 	    /***** Mark as favourite in database *****/
-	    DB_BuildQuery ("INSERT IGNORE INTO social_notes_fav"
-			   " (NotCod,UsrCod,TimeFav)"
-			   " VALUES"
-			   " (%ld,%ld,NOW())",
-			   SocNot.NotCod,
-			   Gbl.Usrs.Me.UsrDat.UsrCod);
-	    DB_QueryINSERT_new ("can not favourite social note");
+	    DB_QueryINSERT ("can not favourite social note",
+			    "INSERT IGNORE INTO social_notes_fav"
+			    " (NotCod,UsrCod,TimeFav)"
+			    " VALUES"
+			    " (%ld,%ld,NOW())",
+			    SocNot.NotCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /* Update number of times this social note is favourited */
 	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
@@ -3256,13 +3259,13 @@ static long Soc_FavSocialComment (void)
 					   Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark as favourite in database *****/
-	    DB_BuildQuery ("INSERT IGNORE INTO social_comments_fav"
-			   " (PubCod,UsrCod,TimeFav)"
-			   " VALUES"
-			   " (%ld,%ld,NOW())",
-			   SocCom.PubCod,
-			   Gbl.Usrs.Me.UsrDat.UsrCod);
-	    DB_QueryINSERT_new ("can not favourite social comment");
+	    DB_QueryINSERT ("can not favourite social comment",
+			    "INSERT IGNORE INTO social_comments_fav"
+			    " (PubCod,UsrCod,TimeFav)"
+			    " VALUES"
+			    " (%ld,%ld,NOW())",
+			    SocCom.PubCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /* Update number of times this social comment is favourited */
 	    SocCom.NumFavs = Soc_GetNumTimesACommHasBeenFav (&SocCom);
@@ -4756,11 +4759,11 @@ static void Soc_ClearTimelineThisSession (void)
 
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
-   DB_BuildQuery ("INSERT IGNORE INTO social_timelines"
-	          " (SessionId,NotCod)"
-	          " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
-		  Gbl.Session.Id);
-   DB_QueryINSERT_new ("can not insert social notes in timeline");
+   DB_QueryINSERT ("can not insert social notes in timeline",
+		   "INSERT IGNORE INTO social_timelines"
+	           " (SessionId,NotCod)"
+	           " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/

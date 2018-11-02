@@ -299,13 +299,13 @@ void Not_RemoveNotice (void)
 
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
-   DB_BuildQuery ("INSERT IGNORE INTO notices_deleted"
-		  " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		  " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
-		  " FROM notices"
-		  " WHERE NotCod=%ld AND CrsCod=%ld",
-                  NotCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryINSERT_new ("can not remove notice");
+   DB_QueryINSERT ("can not remove notice",
+		   "INSERT IGNORE INTO notices_deleted"
+		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
+		   " FROM notices"
+		   " WHERE NotCod=%ld AND CrsCod=%ld",
+                   NotCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /* Remove notice */
    DB_BuildQuery ("DELETE FROM notices"

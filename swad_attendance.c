@@ -1483,15 +1483,14 @@ static void Att_CreateGrps (long AttCod)
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
-     {
       /* Create group */
-      DB_BuildQuery ("INSERT INTO att_grp"
-		     " (AttCod,GrpCod)"
-		     " VALUES"
-		     " (%ld,%ld)",
-                     AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-      DB_QueryINSERT_new ("can not associate a group to an attendance event");
-     }
+      DB_QueryINSERT ("can not associate a group to an attendance event",
+		      "INSERT INTO att_grp"
+		      " (AttCod,GrpCod)"
+		      " VALUES"
+		      " (%ld,%ld)",
+                      AttCod,
+		      Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/

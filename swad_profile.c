@@ -1040,17 +1040,17 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
 
    /***** Create user's figures *****/
-   DB_BuildQuery ("INSERT INTO usr_figures"
-		  " (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
-		  " VALUES"
-		  " (%ld,%s,%ld,%ld,%ld,%ld)",
-		  UsrCod,
-		  SubQueryFirstClickTime,
-		  UsrFigures->NumClicks,	// -1L ==> unknown number of clicks
-		  UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
-		  UsrFigures->NumForPst,	// -1L ==> unknown number of forum posts
-		  UsrFigures->NumMsgSnt);	// -1L ==> unknown number of messages sent
-   DB_QueryINSERT_new ("can not create user's figures");
+   DB_QueryINSERT ("can not create user's figures",
+		   "INSERT INTO usr_figures"
+		   " (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+		   " VALUES"
+		   " (%ld,%s,%ld,%ld,%ld,%ld)",
+		   UsrCod,
+		   SubQueryFirstClickTime,
+		   UsrFigures->NumClicks,	// -1L ==> unknown number of clicks
+		   UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
+		   UsrFigures->NumForPst,	// -1L ==> unknown number of forum posts
+		   UsrFigures->NumMsgSnt);	// -1L ==> unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -1082,10 +1082,10 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
   {
    /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
-   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
-		  " WHERE UsrCod=%ld AND NumClicks>=0",
-	          UsrCod);
-   DB_QueryINSERT_new ("can not increment user's clicks");
+   DB_QueryINSERT ("can not increment user's clicks",
+		   "UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
+		   " WHERE UsrCod=%ld AND NumClicks>=0",
+	           UsrCod);
   }
 
 /*****************************************************************************/
@@ -1096,10 +1096,10 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod)
   {
    /***** Increment number of file views *****/
    // If NumFileViews < 0 ==> not yet calculated, so do nothing
-   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
-		  " WHERE UsrCod=%ld AND NumFileViews>=0",
-	          UsrCod);
-   DB_QueryINSERT_new ("can not increment user's file views");
+   DB_QueryINSERT ("can not increment user's file views",
+		   "UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
+		   " WHERE UsrCod=%ld AND NumFileViews>=0",
+	           UsrCod);
   }
 
 /*****************************************************************************/
@@ -1110,10 +1110,10 @@ void Prf_IncrementNumForPstUsr (long UsrCod)
   {
    /***** Increment number of forum posts *****/
    // If NumForPst < 0 ==> not yet calculated, so do nothing
-   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
-		  " WHERE UsrCod=%ld AND NumForPst>=0",
-	          UsrCod);
-   DB_QueryINSERT_new ("can not increment user's forum posts");
+   DB_QueryINSERT ("can not increment user's forum posts",
+		   "UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
+		   " WHERE UsrCod=%ld AND NumForPst>=0",
+	           UsrCod);
   }
 
 /*****************************************************************************/
@@ -1124,10 +1124,10 @@ void Prf_IncrementNumMsgSntUsr (long UsrCod)
   {
    /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
-   DB_BuildQuery ("UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
-		  " WHERE UsrCod=%ld AND NumMsgSnt>=0",
-	          UsrCod);
-   DB_QueryINSERT_new ("can not increment user's messages sent");
+   DB_QueryINSERT ("can not increment user's messages sent",
+		   "UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
+		   " WHERE UsrCod=%ld AND NumMsgSnt>=0",
+	           UsrCod);
   }
 
 /*****************************************************************************/

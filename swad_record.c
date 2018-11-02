@@ -577,15 +577,15 @@ void Rec_CreateRecordField (void)
    extern const char *Txt_Created_new_record_field_X;
 
    /***** Create the new field *****/
-   DB_BuildQuery ("INSERT INTO crs_record_fields"
-		  " (CrsCod,FieldName,NumLines,Visibility)"
-		  " VALUES"
-		  " (%ld,'%s',%u,%u)",
-	          Gbl.CurrentCrs.Crs.CrsCod,
-	          Gbl.CurrentCrs.Records.Field.Name,
-	          Gbl.CurrentCrs.Records.Field.NumLines,
-	          (unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
-   DB_QueryINSERT_new ("can not create field of record");
+   DB_QueryINSERT ("can not create field of record",
+		   "INSERT INTO crs_record_fields"
+		   " (CrsCod,FieldName,NumLines,Visibility)"
+		   " VALUES"
+		   " (%ld,'%s',%u,%u)",
+	           Gbl.CurrentCrs.Crs.CrsCod,
+	           Gbl.CurrentCrs.Records.Field.Name,
+	           Gbl.CurrentCrs.Records.Field.NumLines,
+	           (unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Write message of success *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2014,17 +2014,15 @@ void Rec_UpdateCrsRecord (long UsrCod)
               }
            }
          else if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
-	   {
 	    /***** Insert text field of record course *****/
-	    DB_BuildQuery ("INSERT INTO crs_records"
-			   " (FieldCod,UsrCod,Txt)"
-			   " VALUES"
-			   " (%ld,%ld,'%s')",
-			   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
-			   UsrCod,
-			   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
-	    DB_QueryINSERT_new ("can not create field of record");
-	   }
+	    DB_QueryINSERT ("can not create field of record",
+			    "INSERT INTO crs_records"
+			    " (FieldCod,UsrCod,Txt)"
+			    " VALUES"
+			    " (%ld,%ld,'%s')",
+			    Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
+			    UsrCod,
+			    Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
        }
   }
 

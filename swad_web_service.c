@@ -461,12 +461,12 @@ static int Svc_GenerateNewWSKey (long UsrCod,
 	                          "Generated key already existed in database");
 
    /***** Insert key into database *****/
-   DB_BuildQuery ("INSERT INTO ws_keys"
-	          " (WSKey,UsrCod,PlgCod,LastTime)"
-                  " VALUES"
-                  " ('%s',%ld,%ld,NOW())",
-		  WSKey,UsrCod,Gbl.WebService.PlgCod);
-   DB_QueryINSERT_new ("can not insert new key");
+   DB_QueryINSERT ("can not insert new key",
+		   "INSERT INTO ws_keys"
+	           " (WSKey,UsrCod,PlgCod,LastTime)"
+                   " VALUES"
+                   " ('%s',%ld,%ld,NOW())",
+		   WSKey,UsrCod,Gbl.WebService.PlgCod);
 
    return SOAP_OK;
   }
@@ -3434,39 +3434,39 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
       NewMsgCod = DB_QueryINSERTandReturnCode_new ("can not create message");
 
       /***** Insert message in sent messages *****/
-      DB_BuildQuery ("INSERT INTO msg_snt"
-	             " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
-                     " VALUES"
-                     " (%ld,-1,%ld,'N',NOW())",
-		     NewMsgCod,SenderUsrCod);
-      DB_QueryINSERT_new ("can not create message");
+      DB_QueryINSERT ("can not create message",
+		      "INSERT INTO msg_snt"
+	              " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
+                      " VALUES"
+                      " (%ld,-1,%ld,'N',NOW())",
+		      NewMsgCod,SenderUsrCod);
 
       MsgAlreadyInserted = true;
      }
 
    /***** Insert message received in the database *****/
-   DB_BuildQuery ("INSERT INTO msg_rcv"
-	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
-                  " VALUES"
-                  " (%ld,%ld,'%c','N','N','N')",
-		  NewMsgCod,RecipientUsrCod,
-		  NotifyByEmail ? 'Y' :
-				  'N');
-   DB_QueryINSERT_new ("can not create received message");
+   DB_QueryINSERT ("can not create received message",
+		   "INSERT INTO msg_rcv"
+	           " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
+                   " VALUES"
+                   " (%ld,%ld,'%c','N','N','N')",
+		   NewMsgCod,RecipientUsrCod,
+		   NotifyByEmail ? 'Y' :
+				   'N');
 
    /***** Create notification for this recipient.
           If this recipient wants to receive notifications by email, activate the sending of a notification *****/
-   DB_BuildQuery ("INSERT INTO notif"
-	          " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
-                  " VALUES"
-                  " (%u,%ld,%ld,-1,-1,-1,%ld,NOW(),%u)",
-		  (unsigned) Ntf_EVENT_MESSAGE,
-		  RecipientUsrCod,
-		  SenderUsrCod,
-		  NewMsgCod,
-		  (unsigned) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-					      0));
-   DB_QueryINSERT_new ("can not create new notification event");
+   DB_QueryINSERT ("can not create new notification event",
+		   "INSERT INTO notif"
+	           " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
+                   " VALUES"
+                   " (%u,%ld,%ld,-1,-1,-1,%ld,NOW(),%u)",
+		   (unsigned) Ntf_EVENT_MESSAGE,
+		   RecipientUsrCod,
+		   SenderUsrCod,
+		   NewMsgCod,
+		   (unsigned) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+					       0));
 
    /***** If this recipient is the original sender of a message been replied... *****/
    if (RecipientUsrCod == ReplyUsrCod)
@@ -4111,13 +4111,6 @@ int swad__getTrivialQuestion (struct soap *soap,
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
    Ptr = degrees;
-/*
-      if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
-	{
-	 DB_BuildQuery ("INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'degrees = %s')",degrees);
-	 DB_QueryINSERT_new ("Error inserting in debug table");
-	}
-*/
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
@@ -4187,13 +4180,6 @@ int swad__getTrivialQuestion (struct soap *soap,
 
    if (NumRows == 1)	// Question found
      {
-/*
-      if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
-	{
-	 DB_BuildQuery ("INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Una pregunta devuelta')");
-	 DB_QueryINSERT_new ("Error inserting in debug table");
-	}
-*/
       /* Get next question */
       row = mysql_fetch_row (mysql_res);
 

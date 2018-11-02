@@ -6615,12 +6615,12 @@ static void Tst_InsertTagsIntoDB (void)
             TagCod = Tst_CreateNewTag (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.Tags.Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
-         DB_BuildQuery ("INSERT INTO tst_question_tags"
-                        " (QstCod,TagCod,TagInd)"
-                        " VALUES"
-                        " (%ld,%ld,%u)",
-			Gbl.Test.QstCod,TagCod,TagIdx);
-         DB_QueryINSERT_new ("can not create tag");
+         DB_QueryINSERT ("can not create tag",
+			 "INSERT INTO tst_question_tags"
+                         " (QstCod,TagCod,TagInd)"
+                         " VALUES"
+                         " (%ld,%ld,%u)",
+			 Gbl.Test.QstCod,TagCod,TagIdx);
 
          TagIdx++;
         }
@@ -6648,41 +6648,39 @@ static void Tst_InsertAnswersIntoDB (void)
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         DB_BuildQuery ("INSERT INTO tst_answers"
-                        " (QstCod,AnsInd,Answer,Feedback,"
-                        "ImageName,ImageTitle,ImageURL,Correct)"
-                        " VALUES"
-                        " (%ld,0,%ld,'','','','','Y')",
-			Gbl.Test.QstCod,
-			Gbl.Test.Answer.Integer);
-         DB_QueryINSERT_new ("can not create answer");
+         DB_QueryINSERT ("can not create answer",
+			 "INSERT INTO tst_answers"
+                         " (QstCod,AnsInd,Answer,Feedback,"
+                         "ImageName,ImageTitle,ImageURL,Correct)"
+                         " VALUES"
+                         " (%ld,0,%ld,'','','','','Y')",
+			 Gbl.Test.QstCod,
+			 Gbl.Test.Answer.Integer);
          break;
       case Tst_ANS_FLOAT:
 	 Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    	 for (i = 0;
    	      i < 2;
    	      i++)
-           {
-            DB_BuildQuery ("INSERT INTO tst_answers"
-                           " (QstCod,AnsInd,Answer,Feedback,"
-                           "ImageName,ImageTitle,ImageURL,Correct)"
-                           " VALUES"
-                           " (%ld,%u,'%lg','','','','','Y')",
-			   Gbl.Test.QstCod,i,
-			   Gbl.Test.Answer.FloatingPoint[i]);
-            DB_QueryINSERT_new ("can not create answer");
-           }
+            DB_QueryINSERT ("can not create answer",
+        		    "INSERT INTO tst_answers"
+                            " (QstCod,AnsInd,Answer,Feedback,"
+                            "ImageName,ImageTitle,ImageURL,Correct)"
+                            " VALUES"
+                            " (%ld,%u,'%lg','','','','','Y')",
+			    Gbl.Test.QstCod,i,
+			    Gbl.Test.Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
       case Tst_ANS_TRUE_FALSE:
-         DB_BuildQuery ("INSERT INTO tst_answers"
-                        " (QstCod,AnsInd,Answer,Feedback,"
-                        "ImageName,ImageTitle,ImageURL,Correct)"
-                        " VALUES"
-                        " (%ld,0,'%c','','','','','Y')",
-			Gbl.Test.QstCod,
-			Gbl.Test.Answer.TF);
-         DB_QueryINSERT_new ("can not create answer");
+         DB_QueryINSERT ("can not create answer",
+			 "INSERT INTO tst_answers"
+                         " (QstCod,AnsInd,Answer,Feedback,"
+                         "ImageName,ImageTitle,ImageURL,Correct)"
+                         " VALUES"
+                         " (%ld,0,'%c','','','','','Y')",
+			 Gbl.Test.QstCod,
+			 Gbl.Test.Answer.TF);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -6692,20 +6690,20 @@ static void Tst_InsertAnswersIntoDB (void)
               NumOpt++)
             if (Gbl.Test.Answer.Options[NumOpt].Text[0])
               {
-               DB_BuildQuery ("INSERT INTO tst_answers"
-                              " (QstCod,AnsInd,Answer,Feedback,"
-                              "ImageName,ImageTitle,ImageURL,Correct)"
-                              " VALUES"
-                              " (%ld,%u,'%s','%s','%s','%s','%s','%c')",
-			      Gbl.Test.QstCod,NumOpt,
-			      Gbl.Test.Answer.Options[NumOpt].Text,
-			      Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
-			      Gbl.Test.Answer.Options[NumOpt].Image.Name,
-			      Gbl.Test.Answer.Options[NumOpt].Image.Title ? Gbl.Test.Answer.Options[NumOpt].Image.Title : "",
-			      Gbl.Test.Answer.Options[NumOpt].Image.URL   ? Gbl.Test.Answer.Options[NumOpt].Image.URL   : "",
-			      Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
-									'N');
-               DB_QueryINSERT_new ("can not create answer");
+               DB_QueryINSERT ("can not create answer",
+        		       "INSERT INTO tst_answers"
+                               " (QstCod,AnsInd,Answer,Feedback,"
+                               "ImageName,ImageTitle,ImageURL,Correct)"
+                               " VALUES"
+                               " (%ld,%u,'%s','%s','%s','%s','%s','%c')",
+			       Gbl.Test.QstCod,NumOpt,
+			       Gbl.Test.Answer.Options[NumOpt].Text,
+			       Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
+			       Gbl.Test.Answer.Options[NumOpt].Image.Name,
+			       Gbl.Test.Answer.Options[NumOpt].Image.Title ? Gbl.Test.Answer.Options[NumOpt].Image.Title : "",
+			       Gbl.Test.Answer.Options[NumOpt].Image.URL   ? Gbl.Test.Answer.Options[NumOpt].Image.URL   : "",
+			       Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
+									 'N');
 
                /* Update image status */
 	       if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
@@ -8503,17 +8501,17 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
 
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_BuildQuery ("INSERT INTO tst_exam_questions"
-		  " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
-		  " VALUES"
-		  " (%ld,%ld,%u,'%lf','%s','%s')",
-		  TstCod,QstCod,
-		  NumQst,	// 0, 1, 2, 3...
-		  Score,
-		  Indexes,
-		  Answers);
+   DB_QueryINSERT ("can not insert a question of a test result",
+		   "INSERT INTO tst_exam_questions"
+		   " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
+		   " VALUES"
+		   " (%ld,%ld,%u,'%lf','%s','%s')",
+		   TstCod,QstCod,
+		   NumQst,	// 0, 1, 2, 3...
+		   Score,
+		   Indexes,
+		   Answers);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryINSERT_new ("can not insert a question of a test result");
   }
 
 /*****************************************************************************/

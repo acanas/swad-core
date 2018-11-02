@@ -1502,16 +1502,14 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
       DB_QueryUPDATE_new ("can not update info source");
      }
    else		// Info is not stored in database, so insert it
-     {
-      DB_BuildQuery ("INSERT INTO crs_info_src"
-		     " (CrsCod,InfoType,InfoSrc,MustBeRead)"
-		     " VALUES"
-		     " (%ld,'%s','%s','N')",
-		     Gbl.CurrentCrs.Crs.CrsCod,
-		     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
-		     Inf_NamesInDBForInfoSrc[InfoSrc]);
-      DB_QueryINSERT_new ("can not insert info source");
-     }
+      DB_QueryINSERT ("can not insert info source",
+		      "INSERT INTO crs_info_src"
+		      " (CrsCod,InfoType,InfoSrc,MustBeRead)"
+		      " VALUES"
+		      " (%ld,'%s','%s','N')",
+		      Gbl.CurrentCrs.Crs.CrsCod,
+		      Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		      Inf_NamesInDBForInfoSrc[InfoSrc]);
   }
 
 
