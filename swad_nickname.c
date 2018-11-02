@@ -500,10 +500,10 @@ void Nck_RemoveOtherUsrNick (void)
 static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname)
   {
    /***** Remove a nickname *****/
-   DB_BuildQuery ("DELETE FROM usr_nicknames"
-		  " WHERE UsrCod=%ld AND Nickname='%s'",
-                  UsrCod,Nickname);
-   DB_QueryREPLACE_new ("can not remove a nickname");
+   DB_QueryREPLACE ("can not remove a nickname",
+		    "DELETE FROM usr_nicknames"
+		    " WHERE UsrCod=%ld AND Nickname='%s'",
+                    UsrCod,Nickname);
   }
 
 /*****************************************************************************/
@@ -633,10 +633,10 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname)
   {
    /***** Update user's nickname in database *****/
-   DB_BuildQuery ("REPLACE INTO usr_nicknames"
-		  " (UsrCod,Nickname,CreatTime)"
-		  " VALUES"
-		  " (%ld,'%s',NOW())",
-                  UsrCod,NewNickname);
-   DB_QueryREPLACE_new ("can not update nickname");
+   DB_QueryREPLACE ("can not update nickname",
+		    "REPLACE INTO usr_nicknames"
+		    " (UsrCod,Nickname,CreatTime)"
+		    " VALUES"
+		    " (%ld,'%s',NOW())",
+                    UsrCod,NewNickname);
   }

@@ -1496,10 +1496,10 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
 static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Remove an old email address *****/
-   DB_BuildQuery ("DELETE FROM usr_emails"
-		  " WHERE UsrCod=%ld AND E_mail='%s'",
-                  UsrCod,Email);
-   DB_QueryREPLACE_new ("can not remove an old email address");
+   DB_QueryREPLACE ("can not remove an old email address",
+		    "DELETE FROM usr_emails"
+		    " WHERE UsrCod=%ld AND E_mail='%s'",
+                    UsrCod,Email);
   }
 
 /*****************************************************************************/
@@ -1650,12 +1650,12 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
    DB_QueryDELETE_new ("can not remove not confirmed email for other users");
 
    /***** Update email in database *****/
-   DB_BuildQuery ("REPLACE INTO usr_emails"
-		  " (UsrCod,E_mail,CreatTime)"
-		  " VALUES"
-		  " (%ld,'%s',NOW())",
-                  UsrDat->UsrCod,NewEmail);
-   DB_QueryREPLACE_new ("can not update email");
+   DB_QueryREPLACE ("can not update email",
+		    "REPLACE INTO usr_emails"
+		    " (UsrCod,E_mail,CreatTime)"
+		    " VALUES"
+		    " (%ld,'%s',NOW())",
+                    UsrDat->UsrCod,NewEmail);
 
    return true;	// Successfully updated
   }
@@ -1781,14 +1781,14 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
    DB_QueryDELETE_new ("can not remove old pending mail keys");
 
    /***** Insert mail key in database *****/
-   DB_BuildQuery ("INSERT INTO pending_emails"
-		  " (UsrCod,E_mail,MailKey,DateAndTime)"
-		  " VALUES"
-		  " (%ld,'%s','%s',NOW())",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Email,
-	          MailKey);
-   DB_QueryREPLACE_new ("can not create pending password");
+   DB_QueryREPLACE ("can not create pending password",
+		    "INSERT INTO pending_emails"
+		    " (UsrCod,E_mail,MailKey,DateAndTime)"
+		    " VALUES"
+		    " (%ld,'%s','%s',NOW())",
+	            Gbl.Usrs.Me.UsrDat.UsrCod,
+	            Email,
+	            MailKey);
   }
 
 /*****************************************************************************/

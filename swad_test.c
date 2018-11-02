@@ -734,13 +734,13 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
    DB_QueryDELETE_new ("can not remove old status of tests");
 
    /***** Update database *****/
-   DB_BuildQuery ("REPLACE INTO tst_status"
-	          " (SessionId,CrsCod,NumTst,Status)"
-	          " VALUES"
-	          " ('%s',%ld,%u,%u)",
-		  Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
-		  NumTst,(unsigned) TstStatus);
-   DB_QueryREPLACE_new ("can not update status of test");
+   DB_QueryREPLACE ("can not update status of test",
+		    "REPLACE INTO tst_status"
+	            " (SessionId,CrsCod,NumTst,Status)"
+	            " VALUES"
+	            " ('%s',%ld,%u,%u)",
+		    Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
+		    NumTst,(unsigned) TstStatus);
   }
 
 /*****************************************************************************/
@@ -2257,16 +2257,16 @@ void Tst_ReceiveConfigTst (void)
    Gbl.Test.Config.Feedback = Tst_GetFeedbackTypeFromForm ();
 
    /***** Update database *****/
-   DB_BuildQuery ("REPLACE INTO tst_config"
-	          " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
-                  " VALUES"
-                  " (%ld,'%s',%u,%u,%u,'%lu','%s')",
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Tst_PluggableDB[Gbl.Test.Config.Pluggable],
-		  Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
-		  Gbl.Test.Config.MinTimeNxtTstPerQst,
-		  Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
-   DB_QueryREPLACE_new ("can not save configuration of tests");
+   DB_QueryREPLACE ("can not save configuration of tests",
+		    "REPLACE INTO tst_config"
+	            " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
+                    " VALUES"
+                    " (%ld,'%s',%u,%u,%u,'%lu','%s')",
+		    Gbl.CurrentCrs.Crs.CrsCod,
+		    Tst_PluggableDB[Gbl.Test.Config.Pluggable],
+		    Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
+		    Gbl.Test.Config.MinTimeNxtTstPerQst,
+		    Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);

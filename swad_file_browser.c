@@ -4533,18 +4533,19 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
 
    /***** Update size of the file browser in database *****/
-   DB_BuildQuery ("REPLACE INTO file_browser_size"
-		  " (FileBrowser,Cod,ZoneUsrCod,"
-		  "NumLevels,NumFolders,NumFiles,TotalSize)"
-		  " VALUES"
-		  " (%u,%ld,%ld,"
-		  "%u,'%lu','%lu','%llu')",
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
-	          Gbl.FileBrowser.Size.NumLevls,
-	          Gbl.FileBrowser.Size.NumFolds,
-	          Gbl.FileBrowser.Size.NumFiles,
-	          Gbl.FileBrowser.Size.TotalSiz);
-   DB_QueryREPLACE_new ("can not store the size of a file browser");
+   DB_QueryREPLACE ("can not store the size of a file browser",
+		    "REPLACE INTO file_browser_size"
+		    " (FileBrowser,Cod,ZoneUsrCod,"
+		    "NumLevels,NumFolders,NumFiles,TotalSize)"
+		    " VALUES"
+		    " (%u,%ld,%ld,"
+		    "%u,'%lu','%lu','%llu')",
+	            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		    Cod,ZoneUsrCod,
+	            Gbl.FileBrowser.Size.NumLevls,
+	            Gbl.FileBrowser.Size.NumFolds,
+	            Gbl.FileBrowser.Size.NumFiles,
+	            Gbl.FileBrowser.Size.TotalSiz);
   }
 
 /*****************************************************************************/
@@ -5551,14 +5552,14 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update date of my last access to file browser in this course *****/
-   DB_BuildQuery ("REPLACE INTO file_browser_last"
-		  " (UsrCod,FileBrowser,Cod,LastClick)"
-		  " VALUES"
-		  " (%ld,%u,%ld,NOW())",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
-	          Cod);
-   DB_QueryREPLACE_new ("can not update date of last access to a file browser");
+   DB_QueryREPLACE ("can not update date of last access to a file browser",
+		    "REPLACE INTO file_browser_last"
+		    " (UsrCod,FileBrowser,Cod,LastClick)"
+		    " VALUES"
+		    " (%ld,%u,%ld,NOW())",
+	            Gbl.Usrs.Me.UsrDat.UsrCod,
+	            (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
+	            Cod);
   }
 
 /*****************************************************************************/

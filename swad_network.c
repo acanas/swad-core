@@ -399,17 +399,15 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    /***** Get URL *****/
    Par_GetParToText ("URL",URL,Cns_MAX_BYTES_WWW);
    if (URL[0])
-     {
       /***** Insert or replace web / social network *****/
-      DB_BuildQuery ("REPLACE INTO usr_webs"
-		     " (UsrCod,Web,URL)"
-		     " VALUES"
-		     " (%ld,'%s','%s')",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,
-		     Net_WebsAndSocialNetworksDB[Web],
-		     URL);
-      DB_QueryREPLACE_new ("can not update user's web / social network");
-     }
+      DB_QueryREPLACE ("can not update user's web / social network",
+		       "REPLACE INTO usr_webs"
+		       " (UsrCod,Web,URL)"
+		       " VALUES"
+		       " (%ld,'%s','%s')",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       Net_WebsAndSocialNetworksDB[Web],
+		       URL);
    else
      {
       /***** Remove web / social network *****/

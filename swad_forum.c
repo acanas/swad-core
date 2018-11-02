@@ -481,12 +481,12 @@ static void For_DeletePstFromDisabledPstTable (long PstCod)
 static void For_InsertPstIntoBannedPstTable (long PstCod)
   {
    /***** Remove post from banned posts table *****/
-   DB_BuildQuery ("REPLACE INTO forum_disabled_post"
-		  " (PstCod,UsrCod,DisableTime)"
-		  " VALUES"
-		  " (%ld,%ld,NOW())",
-                  PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryREPLACE_new ("can not ban a post of a forum");
+   DB_QueryREPLACE ("can not ban a post of a forum",
+		    "REPLACE INTO forum_disabled_post"
+		    " (PstCod,UsrCod,DisableTime)"
+		    " VALUES"
+		    " (%ld,%ld,NOW())",
+                    PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -771,13 +771,14 @@ static void For_UpdateThrReadTime (long ThrCod,
                                    time_t CreatTimeUTCOfTheMostRecentPostRead)
   {
    /***** Insert or replace pair ThrCod-UsrCod in forum_thr_read *****/
-   DB_BuildQuery ("REPLACE INTO forum_thr_read"
-		  " (ThrCod,UsrCod,ReadTime)"
-		  " VALUES"
-		  " (%ld,%ld,FROM_UNIXTIME(%ld))",
-	          ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	          (long) CreatTimeUTCOfTheMostRecentPostRead);
-   DB_QueryREPLACE_new ("can not update the status of reading of a thread of a forum");
+   DB_QueryREPLACE ("can not update the status of reading"
+		    " of a thread of a forum",
+		    "REPLACE INTO forum_thr_read"
+		    " (ThrCod,UsrCod,ReadTime)"
+		    " VALUES"
+		    " (%ld,%ld,FROM_UNIXTIME(%ld))",
+	            ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	            (long) CreatTimeUTCOfTheMostRecentPostRead);
   }
 
 /*****************************************************************************/
@@ -4466,12 +4467,12 @@ static void For_InsertThrInClipboard (long ThrCod)
    For_RemoveExpiredThrsClipboards ();
 
    /***** Add thread to my clipboard *****/
-   DB_BuildQuery ("REPLACE INTO forum_thr_clip"
-		  " (ThrCod,UsrCod)"
-		  " VALUES"
-		  " (%ld,%ld)",
-                  ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryREPLACE_new ("can not add thread to clipboard");
+   DB_QueryREPLACE ("can not add thread to clipboard",
+		    "REPLACE INTO forum_thr_clip"
+		    " (ThrCod,UsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+                    ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

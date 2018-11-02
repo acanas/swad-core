@@ -595,12 +595,12 @@ void Ann_MarkAnnouncementAsSeen (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Mark announcement as seen *****/
-   DB_BuildQuery ("REPLACE INTO ann_seen"
-		  " (AnnCod,UsrCod)"
-		  " VALUES"
-		  " (%ld,%ld)",
-                  AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryREPLACE_new ("can not mark announcement as seen");
+   DB_QueryREPLACE ("can not mark announcement as seen",
+		    "REPLACE INTO ann_seen"
+		    " (AnnCod,UsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+                    AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show other announcements again *****/
    Ann_ShowMyAnnouncementsNotMarkedAsSeen ();

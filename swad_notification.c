@@ -1889,14 +1889,14 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
    Ntf_GetNumNotifSent (DegCod,CrsCod,NotifyEvent,&CurrentNumEvents,&CurrentNumMails);
 
    /***** Update number of users notified *****/
-   DB_BuildQuery ("REPLACE INTO sta_notif"
-		  " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
-		  " VALUES"
-		  " (%ld,%ld,%u,%u,%u)",
-	          DegCod,CrsCod,(unsigned) NotifyEvent,
-	          CurrentNumEvents + NumEvents,
-	          CurrentNumMails + NumMails);
-   DB_QueryREPLACE_new ("can not update the number of sent notifications");
+   DB_QueryREPLACE ("can not update the number of sent notifications",
+		    "REPLACE INTO sta_notif"
+		    " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
+		    " VALUES"
+		    " (%ld,%ld,%u,%u,%u)",
+	            DegCod,CrsCod,(unsigned) NotifyEvent,
+	            CurrentNumEvents + NumEvents,
+	            CurrentNumMails + NumMails);
   }
 
 /*****************************************************************************/

@@ -3471,12 +3471,12 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
    else        // User was not administrator of current institution/centre/degree
      {
       /***** Insert or replace administrator in current institution/centre/degree *****/
-      DB_BuildQuery ("REPLACE INTO admin"
-		     " (UsrCod,Scope,Cod)"
-		     " VALUES"
-		     " (%ld,'%s',%ld)",
-                     UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
-      DB_QueryREPLACE_new ("can not create administrator");
+      DB_QueryREPLACE ("can not create administrator",
+		       "REPLACE INTO admin"
+		       " (UsrCod,Scope,Cod)"
+		       " VALUES"
+		       " (%ld,'%s',%ld)",
+                       UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
 
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,

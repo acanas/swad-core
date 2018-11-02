@@ -2602,16 +2602,16 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
                                                   const char *CommentStd,const char *CommentTch)
   {
    /***** Register user as assistant to an event in database *****/
-   DB_BuildQuery ("REPLACE INTO att_usr"
-		  " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
-		  " VALUES"
-		  " (%ld,%ld,'%c','%s','%s')",
-                  AttCod,UsrCod,
-                  Present ? 'Y' :
-        	            'N',
-                  CommentStd,
-                  CommentTch);
-   DB_QueryREPLACE_new ("can not register user in an event");
+   DB_QueryREPLACE ("can not register user in an event",
+		    "REPLACE INTO att_usr"
+		    " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
+		    " VALUES"
+		    " (%ld,%ld,'%c','%s','%s')",
+                    AttCod,UsrCod,
+                    Present ? 'Y' :
+        	              'N',
+                    CommentStd,
+                    CommentTch);
   }
 
 /*****************************************************************************/
@@ -2624,7 +2624,7 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
    DB_BuildQuery ("DELETE FROM att_usr"
 		  " WHERE AttCod=%ld AND UsrCod=%ld",
                   AttCod,UsrCod);
-   DB_QueryREPLACE_new ("can not remove student from an event");
+   DB_QueryDELETE_new ("can not remove student from an event");
   }
 
 /*****************************************************************************/

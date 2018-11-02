@@ -1014,13 +1014,13 @@ void Fol_FollowUsr1 (void)
 					Gbl.Usrs.Other.UsrDat.UsrCod))
 	   {
 	    /***** Follow user in database *****/
-	    DB_BuildQuery ("REPLACE INTO usr_follow"
-			   " (FollowerCod,FollowedCod,FollowTime)"
-			   " VALUES"
-			   " (%ld,%ld,NOW())",
-			   Gbl.Usrs.Me.UsrDat.UsrCod,
-			   Gbl.Usrs.Other.UsrDat.UsrCod);
-	    DB_QueryREPLACE_new ("can not follow user");
+	    DB_QueryREPLACE ("can not follow user",
+			     "REPLACE INTO usr_follow"
+			     " (FollowerCod,FollowedCod,FollowTime)"
+			     " VALUES"
+			     " (%ld,%ld,NOW())",
+			     Gbl.Usrs.Me.UsrDat.UsrCod,
+			     Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	    /***** This follow must be notified by email? *****/
             CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
@@ -1075,14 +1075,12 @@ void Fol_UnfollowUsr1 (void)
       // Unfollow only if I follow him/her
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
                                     Gbl.Usrs.Other.UsrDat.UsrCod))
-	{
 	 /***** Unfollow user in database *****/
-	 DB_BuildQuery ("DELETE FROM usr_follow"
-			" WHERE FollowerCod=%ld AND FollowedCod=%ld",
-		        Gbl.Usrs.Me.UsrDat.UsrCod,
-                        Gbl.Usrs.Other.UsrDat.UsrCod);
-	 DB_QueryREPLACE_new ("can not unfollow user");
-        }
+	 DB_QueryREPLACE ("can not unfollow user",
+			  "DELETE FROM usr_follow"
+			  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
+		          Gbl.Usrs.Me.UsrDat.UsrCod,
+                          Gbl.Usrs.Other.UsrDat.UsrCod);
       Gbl.Alert.Type = Ale_SUCCESS;
      }
    else

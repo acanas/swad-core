@@ -3646,12 +3646,12 @@ void Msg_BanSenderWhenShowingMsgs (void)
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
-   DB_BuildQuery ("REPLACE INTO msg_banned"
-		  " (FromUsrCod,ToUsrCod)"
-		  " VALUES"
-		  " (%ld,%ld)",
-                  Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryREPLACE_new ("can not ban sender");
+   DB_QueryREPLACE ("can not ban sender",
+		    "REPLACE INTO msg_banned"
+		    " (FromUsrCod,ToUsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+                    Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show alert with the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

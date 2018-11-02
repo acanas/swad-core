@@ -519,12 +519,12 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
    DB_QueryDELETE_new ("can not remove expired pending passwords");
 
    /***** Update my current password in database *****/
-   DB_BuildQuery ("REPLACE INTO pending_passwd"
-		  " (UsrCod,PendingPassword,DateAndTime)"
-		  " VALUES"
-		  " (%ld,'%s',NOW())",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
-   DB_QueryREPLACE_new ("can not create pending password");
+   DB_QueryREPLACE ("can not create pending password",
+		    "REPLACE INTO pending_passwd"
+		    " (UsrCod,PendingPassword,DateAndTime)"
+		    " VALUES"
+		    " (%ld,'%s',NOW())",
+                    Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
   }
 
 /*****************************************************************************/

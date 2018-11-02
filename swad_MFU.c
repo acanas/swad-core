@@ -373,12 +373,12 @@ void MFU_UpdateMFUActions (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update score for the current action *****/
-   DB_BuildQuery ("REPLACE INTO actions_MFU"
-		  " (UsrCod,ActCod,Score,LastClick)"
-		  " VALUES"
-		  " (%ld,%ld,'%f',NOW())",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,ActCod,Score);
-   DB_QueryREPLACE_new ("can not update most frequently used actions");
+   DB_QueryREPLACE ("can not update most frequently used actions",
+		    "REPLACE INTO actions_MFU"
+		    " (UsrCod,ActCod,Score,LastClick)"
+		    " VALUES"
+		    " (%ld,%ld,'%f',NOW())",
+	            Gbl.Usrs.Me.UsrDat.UsrCod,ActCod,Score);
 
    /***** Update score for other actions *****/
    DB_BuildQuery ("UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"

@@ -642,14 +642,14 @@ void Con_UpdateMeInConnectedList (void)
   {
    /***** Update my entry in connected list.
           The role which is stored is the role of the last click *****/
-   DB_BuildQuery ("REPLACE INTO connected"
-		  " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
-		  " VALUES"
-		  " (%ld,%u,%ld,NOW())",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Gbl.Usrs.Me.Role.Logged,
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryREPLACE_new ("can not update list of connected users");
+   DB_QueryREPLACE ("can not update list of connected users",
+		    "REPLACE INTO connected"
+		    " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
+		    " VALUES"
+		    " (%ld,%u,%ld,NOW())",
+                    Gbl.Usrs.Me.UsrDat.UsrCod,
+                    (unsigned) Gbl.Usrs.Me.Role.Logged,
+                    Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/

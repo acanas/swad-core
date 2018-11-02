@@ -855,10 +855,10 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
   {
    /***** Remove one of my user's IDs *****/
-   DB_BuildQuery ("DELETE FROM usr_IDs"
-		  " WHERE UsrCod=%ld AND UsrID='%s'",
-                  UsrCod,UsrID);
-   DB_QueryREPLACE_new ("can not remove a user's ID");
+   DB_QueryREPLACE ("can not remove a user's ID",
+		    "DELETE FROM usr_IDs"
+		    " WHERE UsrCod=%ld AND UsrID='%s'",
+                    UsrCod,UsrID);
   }
 
 /*****************************************************************************/

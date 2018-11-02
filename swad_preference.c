@@ -178,20 +178,20 @@ void Pre_SetPrefsFromIP (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
 
    /***** Update preferences from current IP in database *****/
-   DB_BuildQuery ("REPLACE INTO IP_prefs"
-		  " (IP,UsrCod,LastChange,"
-		  "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
-		  " VALUES"
-		  " ('%s',%ld,NOW(),"
-		  "%u,%u,'%s','%s',%u,%u)",
-	          Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Prefs.FirstDayOfWeek,
-	          (unsigned) Gbl.Prefs.DateFormat,
-	          The_ThemeId[Gbl.Prefs.Theme],
-	          Ico_IconSetId[Gbl.Prefs.IconSet],
-	          (unsigned) Gbl.Prefs.Menu,
-	          Gbl.Prefs.SideCols);
-   DB_QueryREPLACE_new ("can not store preferences from current IP address");
+   DB_QueryREPLACE ("can not store preferences from current IP address",
+		    "REPLACE INTO IP_prefs"
+		    " (IP,UsrCod,LastChange,"
+		    "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
+		    " VALUES"
+		    " ('%s',%ld,NOW(),"
+		    "%u,%u,'%s','%s',%u,%u)",
+	            Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
+	            Gbl.Prefs.FirstDayOfWeek,
+	            (unsigned) Gbl.Prefs.DateFormat,
+	            The_ThemeId[Gbl.Prefs.Theme],
+	            Ico_IconSetId[Gbl.Prefs.IconSet],
+	            (unsigned) Gbl.Prefs.Menu,
+	            Gbl.Prefs.SideCols);
 
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)

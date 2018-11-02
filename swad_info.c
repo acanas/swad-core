@@ -1687,14 +1687,14 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
   {
    /***** Insert or replace info source for a specific type of course information *****/
-   DB_BuildQuery ("REPLACE INTO crs_info_txt"
-		  " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
-		  " VALUES"
-		  " (%ld,'%s','%s','%s')",
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
-		  InfoTxtHTML,InfoTxtMD);
-   DB_QueryREPLACE_new ("can not update info text");
+   DB_QueryREPLACE ("can not update info text",
+		    "REPLACE INTO crs_info_txt"
+		    " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
+		    " VALUES"
+		    " (%ld,'%s','%s','%s')",
+		    Gbl.CurrentCrs.Crs.CrsCod,
+		    Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		    InfoTxtHTML,InfoTxtMD);
   }
 
 /*****************************************************************************/

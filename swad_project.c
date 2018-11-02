@@ -1968,13 +1968,13 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
          Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
 	 /* Add user to project */
-	 DB_BuildQuery ("REPLACE INTO prj_usr"
-			" (PrjCod,RoleInProject,UsrCod)"
-			" VALUES"
-			" (%ld,%u,%ld)",
-		        PrjCod,(unsigned) RoleInProject,
-		        Gbl.Usrs.Other.UsrDat.UsrCod);
-	 DB_QueryREPLACE_new ("can not add user to project");
+	 DB_QueryREPLACE ("can not add user to project",
+			  "REPLACE INTO prj_usr"
+			  " (PrjCod,RoleInProject,UsrCod)"
+			  " VALUES"
+			  " (%ld,%u,%ld)",
+		          PrjCod,(unsigned) RoleInProject,
+		          Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Flush cache *****/
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);

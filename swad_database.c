@@ -3069,8 +3069,8 @@ void DB_CloseDBConnection (void)
 
 void DB_BuildQuery (const char *fmt,...)
   {
-   int NumBytesPrinted;
    va_list ap;
+   int NumBytesPrinted;
 
    if (Gbl.DB.QueryPtr != NULL)
       Lay_ShowErrorAndExit ("Error building query.");
@@ -3087,8 +3087,8 @@ void DB_BuildQuery (const char *fmt,...)
 
 void DB_BuildQuery_old (char **Query,const char *fmt,...)
   {
-   int NumBytesPrinted;
    va_list ap;
+   int NumBytesPrinted;
 
    if (*Query != NULL)
       Lay_ShowErrorAndExit ("Error building query.");
@@ -3103,22 +3103,6 @@ void DB_BuildQuery_old (char **Query,const char *fmt,...)
       Lay_NotEnoughMemoryExit ();
   }
 
-/*
-static void DB_QueryPrintf (char **strp,const char *fmt,...)
-  {
-   int NumBytesPrinted;
-   va_list ap;
-
-   va_start (ap, fmt);
-   NumBytesPrinted = vasprintf (strp, fmt, ap);
-   va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
-      Lay_NotEnoughMemoryExit ();
-  }
-*/
 /*****************************************************************************/
 /******************** Make a SELECT query from database **********************/
 /*****************************************************************************/
@@ -3126,8 +3110,8 @@ static void DB_QueryPrintf (char **strp,const char *fmt,...)
 unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
                               const char *fmt,...)
   {
-   int NumBytesPrinted;
    va_list ap;
+   int NumBytesPrinted;
    char *Query = NULL;
 
    va_start (ap,fmt);
@@ -3173,8 +3157,8 @@ unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char 
 unsigned long DB_QueryCOUNT (const char *MsgError,
                              const char *fmt,...)
   {
-   int NumBytesPrinted;
    va_list ap;
+   int NumBytesPrinted;
    char *Query = NULL;
 
    va_start (ap,fmt);
@@ -3284,19 +3268,31 @@ long DB_QueryINSERTandReturnCode_new (const char *MsgError)
 /******************** Make an REPLACE query in database **********************/
 /*****************************************************************************/
 
-void DB_QueryREPLACE_new (const char *MsgError)
+void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
   {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query = NULL;
    int Result;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
 
    /***** Check that query string pointer
           does point to an allocated string *****/
-   if (Gbl.DB.QueryPtr == NULL)
+   if (Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
-   free ((void *) Gbl.DB.QueryPtr);
-   Gbl.DB.QueryPtr = NULL;
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
