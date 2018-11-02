@@ -6974,108 +6974,119 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
      {
       case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM tst_questions");
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM tst_questions");
          else
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM tst_questions"
-                           " WHERE AnsType='%s'",
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM tst_questions"
+                            " WHERE AnsType='%s'",
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTY:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentCty.Cty.CtyCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM institutions,centres,degrees,courses,tst_questions"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentCty.Cty.CtyCod);
          else
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM institutions,centres,degrees,courses,tst_questions"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentCty.Cty.CtyCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentIns.Ins.InsCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM centres,degrees,courses,tst_questions"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentIns.Ins.InsCod);
          else
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM centres,degrees,courses,tst_questions"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentIns.Ins.InsCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentCtr.Ctr.CtrCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM degrees,courses,tst_questions"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentCtr.Ctr.CtrCod);
          else
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM degrees,courses,tst_questions"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentDeg.Deg.DegCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM courses,tst_questions"
+                            " WHERE courses.DegCod=%ld"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentDeg.Deg.DegCod);
          else
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM courses,tst_questions"
+                            " WHERE courses.DegCod=%ld"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentDeg.Deg.DegCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM tst_questions"
-                           " WHERE CrsCod=%ld",
-			   Gbl.CurrentCrs.Crs.CrsCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM tst_questions"
+                            " WHERE CrsCod=%ld",
+			    Gbl.CurrentCrs.Crs.CrsCod);
          else
-            DB_BuildQuery ("SELECT COUNT(*),SUM(NumHits),SUM(Score)"
-        	           " FROM tst_questions"
-                           " WHERE CrsCod=%ld AND AnsType='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
+        		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	            " FROM tst_questions"
+                            " WHERE CrsCod=%ld AND AnsType='%s'",
+			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of test questions");
 
    /***** Get number of questions *****/
    row = mysql_fetch_row (mysql_res);
@@ -7121,109 +7132,132 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
      {
       case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
-        	           " FROM tst_questions");
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT CrsCod)"
+        	            " FROM tst_questions");
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
-        	           " FROM tst_questions"
-                           " WHERE AnsType='%s'",
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT CrsCod)"
+        	            " FROM tst_questions"
+                            " WHERE AnsType='%s'",
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTY:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentCty.Cty.CtyCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM institutions,centres,degrees,courses,tst_questions"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentCty.Cty.CtyCod);
          else
-           DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+           DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM institutions,centres,degrees,courses,tst_questions"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentCty.Cty.CtyCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentIns.Ins.InsCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM centres,degrees,courses,tst_questions"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentIns.Ins.InsCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM centres,degrees,courses,tst_questions"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentIns.Ins.InsCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentCtr.Ctr.CtrCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM degrees,courses,tst_questions"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentCtr.Ctr.CtrCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM degrees,courses,tst_questions"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNTDISTINCT (tst_questions.CrsCod)"
-        	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=tst_questions.CrsCod",
-			   Gbl.CurrentDeg.Deg.DegCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNTDISTINCT (tst_questions.CrsCod)"
+        	            " FROM courses,tst_questions"
+                            " WHERE courses.DegCod=%ld"
+                            " AND courses.CrsCod=tst_questions.CrsCod",
+			    Gbl.CurrentDeg.Deg.DegCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM courses,tst_questions"
+                            " WHERE courses.DegCod=%ld"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'",
+			    Gbl.CurrentDeg.Deg.DegCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
-        	           " FROM tst_questions"
-                           " WHERE CrsCod=%ld",
-			   Gbl.CurrentCrs.Crs.CrsCod);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT CrsCod)"
+        	            " FROM tst_questions"
+                            " WHERE CrsCod=%ld",
+			    Gbl.CurrentCrs.Crs.CrsCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT CrsCod)"
-        	           " FROM tst_questions"
-                           " WHERE CrsCod=%ld"
-                           " AND AnsType='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   Tst_StrAnswerTypesDB[AnsType]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with test questions",
+        		    "SELECT COUNT(DISTINCT CrsCod)"
+			    " FROM tst_questions"
+			    " WHERE CrsCod=%ld"
+			    " AND AnsType='%s'",
+			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with test questions");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -7253,145 +7287,168 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
      {
       case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM tst_questions,tst_config"
-                           " WHERE tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM tst_questions,tst_config"
+                            " WHERE tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM tst_questions,tst_config"
-                           " WHERE tst_questions.AnsType='%s'"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Tst_StrAnswerTypesDB[AnsType],
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM tst_questions,tst_config"
+                            " WHERE tst_questions.AnsType='%s'"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Tst_StrAnswerTypesDB[AnsType],
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_CTY:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentCty.Cty.CtyCod,
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   Tst_StrAnswerTypesDB[AnsType],
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
+                            " WHERE institutions.CtyCod=%ld"
+                            " AND institutions.InsCod=centres.InsCod"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentCty.Cty.CtyCod,
+			    Tst_StrAnswerTypesDB[AnsType],
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM centres,degrees,courses,tst_questions,tst_config"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentIns.Ins.InsCod,
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   Tst_StrAnswerTypesDB[AnsType],
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM centres,degrees,courses,tst_questions,tst_config"
+                            " WHERE centres.InsCod=%ld"
+                            " AND centres.CtrCod=degrees.CtrCod"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentIns.Ins.InsCod,
+			    Tst_StrAnswerTypesDB[AnsType],
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM degrees,courses,tst_questions,tst_config"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM degrees,courses,tst_questions,tst_config"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM degrees,courses,tst_questions,tst_config"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   Tst_StrAnswerTypesDB[AnsType],
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM degrees,courses,tst_questions,tst_config"
+                            " WHERE degrees.CtrCod=%ld"
+                            " AND degrees.DegCod=courses.DegCod"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Tst_StrAnswerTypesDB[AnsType],
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM courses,tst_questions,tst_config"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM courses,tst_questions,tst_config"
+                            " WHERE courses.DegCod=%ld"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentDeg.Deg.DegCod,
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM courses,tst_questions,tst_config"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=tst_questions.CrsCod"
-                           " AND tst_questions.AnsType='%s'"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   Tst_StrAnswerTypesDB[AnsType],
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM courses,tst_questions,tst_config"
+                            " WHERE courses.DegCod=%ld"
+                            " AND courses.CrsCod=tst_questions.CrsCod"
+                            " AND tst_questions.AnsType='%s'"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentDeg.Deg.DegCod,
+			    Tst_StrAnswerTypesDB[AnsType],
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM tst_questions,tst_config"
-                           " WHERE tst_questions.CrsCod=%ld"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM tst_questions,tst_config"
+                            " WHERE tst_questions.CrsCod=%ld"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	           " FROM tst_questions,tst_config"
-                           " WHERE tst_questions.CrsCod=%ld"
-                           " AND tst_questions.AnsType='%s'"
-                           " AND tst_questions.CrsCod=tst_config.CrsCod"
-                           " AND tst_config.pluggable='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   Tst_StrAnswerTypesDB[AnsType],
-			   Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+            DB_QuerySELECT (&mysql_res,"can not get number of courses"
+        			       " with pluggable test questions",
+			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
+        	            " FROM tst_questions,tst_config"
+                            " WHERE tst_questions.CrsCod=%ld"
+                            " AND tst_questions.AnsType='%s'"
+                            " AND tst_questions.CrsCod=tst_config.CrsCod"
+                            " AND tst_config.pluggable='%s'",
+			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Tst_StrAnswerTypesDB[AnsType],
+			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   DB_QuerySELECT_new (&mysql_res,"can not get number of courses with pluggable test questions");
 
    /***** Get number of courses *****/
    row = mysql_fetch_row (mysql_res);
@@ -7725,19 +7782,20 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    char *ClassDat;
 
    /***** Make database query *****/
-   DB_BuildQuery ("SELECT TstCod,AllowTeachers,"
-	          "UNIX_TIMESTAMP(TstTime),"
-	          "NumQsts,NumQstsNotBlank,Score"
-	          " FROM tst_exams"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld"
-                  " AND TstTime>=FROM_UNIXTIME(%ld)"
-                  " AND TstTime<=FROM_UNIXTIME(%ld)"
-                  " ORDER BY TstCod",
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  UsrDat->UsrCod,
-		  (long) Gbl.DateRange.TimeUTC[0],
-		  (long) Gbl.DateRange.TimeUTC[1]);
-   NumExams = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test exams of a user");
+   NumExams =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
+			      "SELECT TstCod,AllowTeachers,"
+			      "UNIX_TIMESTAMP(TstTime),"
+			      "NumQsts,NumQstsNotBlank,Score"
+			      " FROM tst_exams"
+			      " WHERE CrsCod=%ld AND UsrCod=%ld"
+			      " AND TstTime>=FROM_UNIXTIME(%ld)"
+			      " AND TstTime<=FROM_UNIXTIME(%ld)"
+			      " ORDER BY TstCod",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      UsrDat->UsrCod,
+			      (long) Gbl.DateRange.TimeUTC[0],
+			      (long) Gbl.DateRange.TimeUTC[1]);
 
    /***** Show user's data *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -8389,14 +8447,15 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
    MYSQL_ROW row;
 
    /***** Make database query *****/
-   DB_BuildQuery ("SELECT UsrCod,AllowTeachers,"
-	          "UNIX_TIMESTAMP(TstTime),"
-	          "NumQsts,NumQstsNotBlank,Score"
-	          " FROM tst_exams"
-                  " WHERE TstCod=%ld AND CrsCod=%ld",
-		  TstCod,
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get data of a test result of a user") == 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get data"
+				  " of a test result of a user",
+		       "SELECT UsrCod,AllowTeachers,"
+		       "UNIX_TIMESTAMP(TstTime),"
+		       "NumQsts,NumQstsNotBlank,Score"
+		       " FROM tst_exams"
+		       " WHERE TstCod=%ld AND CrsCod=%ld",
+		       TstCod,
+		       Gbl.CurrentCrs.Crs.CrsCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -8468,11 +8527,13 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod)
    unsigned NumQst;
 
    /***** Get questions of a test result from database *****/
-   DB_BuildQuery ("SELECT QstCod,Indexes,Answers FROM tst_exam_questions"
-                  " WHERE TstCod=%ld ORDER BY QstInd",
-		  TstCod);
-   Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT_new (&mysql_res,
-						     "can not get questions of a test result");
+   Gbl.Test.NumQsts =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions"
+					 " of a test result",
+			      "SELECT QstCod,Indexes,Answers"
+			      " FROM tst_exam_questions"
+			      " WHERE TstCod=%ld ORDER BY QstInd",
+			      TstCod);
 
    /***** Get questions codes *****/
    for (NumQst = 0;

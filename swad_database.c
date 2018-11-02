@@ -3142,11 +3142,6 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
    return DB_QuerySELECT_old (&Query,mysql_res,MsgError);
   }
 
-unsigned long DB_QuerySELECT_new (MYSQL_RES **mysql_res,const char *MsgError)
-  {
-   return DB_QuerySELECT_old (&Gbl.DB.QueryPtr,mysql_res,MsgError);
-  }
-
 unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
   {
    int Result;
