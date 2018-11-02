@@ -1018,16 +1018,17 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Grp_RemUsrFromAllGrps (UsrDat->UsrCod);
 
    /***** Remove user's requests for inscription *****/
-   DB_BuildQuery ("DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
-	          UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's requests for inscription");
+   DB_QueryDELETE ("can not remove user's requests for inscription",
+		   "DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
+	           UsrDat->UsrCod);
 
    /***** Remove user from possible duplicate users *****/
    Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the table of courses and users *****/
-   DB_BuildQuery ("DELETE FROM crs_usr WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove a user from all courses");
+   DB_QueryDELETE ("can not remove a user from all courses",
+		   "DELETE FROM crs_usr WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1038,9 +1039,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      }
 
    /***** Remove user as administrator of any degree *****/
-   DB_BuildQuery ("DELETE FROM admin WHERE UsrCod=%ld",
-                  UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove a user as administrator");
+   DB_QueryDELETE ("can not remove a user as administrator",
+		   "DELETE FROM admin WHERE UsrCod=%ld",
+                   UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
@@ -1094,12 +1095,14 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
    /***** Remove user from table of connected users *****/
-   DB_BuildQuery ("DELETE FROM connected WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove a user from table of connected users");
+   DB_QueryDELETE ("can not remove a user from table of connected users",
+		   "DELETE FROM connected WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove all sessions of this user *****/
-   DB_BuildQuery ("DELETE FROM sessions WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove sessions of a user");
+   DB_QueryDELETE ("can not remove sessions of a user",
+		   "DELETE FROM sessions WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove social content associated to the user *****/
    Soc_RemoveUsrSocialContent (UsrDat->UsrCod);
@@ -1160,31 +1163,38 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
 static void Acc_RemoveUsr (struct UsrData *UsrDat)
   {
    /***** Remove user's webs / social networks *****/
-   DB_BuildQuery ("DELETE FROM usr_webs WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's webs / social networks");
+   DB_QueryDELETE ("can not remove user's webs / social networks",
+		   "DELETE FROM usr_webs WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove user's nicknames *****/
-   DB_BuildQuery ("DELETE FROM usr_nicknames WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's nicknames");
+   DB_QueryDELETE ("can not remove user's nicknames",
+		   "DELETE FROM usr_nicknames WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove user's emails *****/
-   DB_BuildQuery ("DELETE FROM pending_emails WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove pending user's emails");
+   DB_QueryDELETE ("can not remove pending user's emails",
+		   "DELETE FROM pending_emails WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
-   DB_BuildQuery ("DELETE FROM usr_emails WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's emails");
+   DB_QueryDELETE ("can not remove user's emails",
+		   "DELETE FROM usr_emails WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove user's IDs *****/
-   DB_BuildQuery ("DELETE FROM usr_IDs WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's IDs");
+   DB_QueryDELETE ("can not remove user's IDs",
+		   "DELETE FROM usr_IDs WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove user's last data *****/
-   DB_BuildQuery ("DELETE FROM usr_last WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's last data");
+   DB_QueryDELETE ("can not remove user's last data",
+		   "DELETE FROM usr_last WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
 
    /***** Remove user's data  *****/
-   DB_BuildQuery ("DELETE FROM usr_data WHERE UsrCod=%ld",UsrDat->UsrCod);
-   DB_QueryDELETE_new ("can not remove user's data");
+   DB_QueryDELETE ("can not remove user's data",
+		   "DELETE FROM usr_data WHERE UsrCod=%ld",
+		   UsrDat->UsrCod);
   }
 
 /*****************************************************************************/

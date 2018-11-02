@@ -1720,8 +1720,9 @@ void Cty_RemoveCountry (void)
       Svy_RemoveSurveys (Sco_SCOPE_CTY,Cty.CtyCod);
 
       /***** Remove country *****/
-      DB_BuildQuery ("DELETE FROM countries WHERE CtyCod='%03ld'",Cty.CtyCod);
-      DB_QueryDELETE_new ("can not remove a country");
+      DB_QueryDELETE ("can not remove a country",
+		      "DELETE FROM countries WHERE CtyCod='%03ld'",
+		      Cty.CtyCod);
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();

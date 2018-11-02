@@ -1782,8 +1782,9 @@ void Ctr_RemoveCentre (void)
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
-      DB_BuildQuery ("DELETE FROM centres WHERE CtrCod=%ld",Ctr.CtrCod);
-      DB_QueryDELETE_new ("can not remove a centre");
+      DB_QueryDELETE ("can not remove a centre",
+		      "DELETE FROM centres WHERE CtrCod=%ld",
+		      Ctr.CtrCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

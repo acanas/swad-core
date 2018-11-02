@@ -519,8 +519,9 @@ void Ban_RemoveBanner (void)
    Ban_GetDataOfBannerByCod (&Ban);
 
    /***** Remove banner *****/
-   DB_BuildQuery ("DELETE FROM banners WHERE BanCod=%ld",Ban.BanCod);
-   DB_QueryDELETE_new ("can not remove a banner");
+   DB_QueryDELETE ("can not remove a banner",
+		   "DELETE FROM banners WHERE BanCod=%ld",
+		   Ban.BanCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

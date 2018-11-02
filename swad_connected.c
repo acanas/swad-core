@@ -659,9 +659,9 @@ void Con_UpdateMeInConnectedList (void)
 void Con_RemoveOldConnected (void)
   {
    /***** Remove old users from connected list *****/
-   DB_BuildQuery ("DELETE FROM connected WHERE UsrCod NOT IN"
-		  " (SELECT DISTINCT(UsrCod) FROM sessions)");
-   DB_QueryDELETE_new ("can not remove old users from list of connected users");
+   DB_QueryDELETE ("can not remove old users from list of connected users",
+		   "DELETE FROM connected WHERE UsrCod NOT IN"
+		   " (SELECT DISTINCT(UsrCod) FROM sessions)");
   }
 
 /*****************************************************************************/

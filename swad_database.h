@@ -58,6 +58,7 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...);
 void DB_QueryUPDATE_new (const char *MsgError);
 void DB_QueryUPDATE_old (char **Query,const char *MsgError);
 
+void DB_QueryDELETE (const char *MsgError,const char *fmt,...);
 void DB_QueryDELETE_new (const char *MsgError);
 
 void DB_Query_new (const char *MsgError);

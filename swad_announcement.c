@@ -569,12 +569,14 @@ void Ann_RemoveAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Remove announcement *****/
-   DB_BuildQuery ("DELETE FROM announcements WHERE AnnCod=%ld",AnnCod);
-   DB_QueryDELETE_new ("can not remove announcement");
+   DB_QueryDELETE ("can not remove announcement",
+		   "DELETE FROM announcements WHERE AnnCod=%ld",
+		   AnnCod);
 
    /***** Remove users who have seen the announcement *****/
-   DB_BuildQuery ("DELETE FROM ann_seen WHERE AnnCod=%ld",AnnCod);
-   DB_QueryDELETE_new ("can not remove announcement");
+   DB_QueryDELETE ("can not remove announcement",
+		   "DELETE FROM ann_seen WHERE AnnCod=%ld",
+		   AnnCod);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_removed);
@@ -613,6 +615,7 @@ void Ann_MarkAnnouncementAsSeen (void)
 void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod)
   {
    /***** Remove user from seen announcements *****/
-   DB_BuildQuery ("DELETE FROM ann_seen WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove user from seen announcements");
+   DB_QueryDELETE ("can not remove user from seen announcements",
+		   "DELETE FROM ann_seen WHERE UsrCod=%ld",
+		   UsrCod);
   }

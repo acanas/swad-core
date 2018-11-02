@@ -582,8 +582,9 @@ void Plc_RemovePlace (void)
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
-      DB_BuildQuery ("DELETE FROM places WHERE PlcCod=%ld",Plc.PlcCod);
-      DB_QueryDELETE_new ("can not remove a place");
+      DB_QueryDELETE ("can not remove a place",
+		      "DELETE FROM places WHERE PlcCod=%ld",
+		      Plc.PlcCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

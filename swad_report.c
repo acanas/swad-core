@@ -1436,6 +1436,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
 static void Rep_RemoveUsrReportsFromDB (long UsrCod)
   {
    /***** Insert a new user's usage report into database *****/
-   DB_BuildQuery ("DELETE FROM usr_report WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove user's usage reports");
+   DB_QueryDELETE ("can not remove user's usage reports",
+		   "DELETE FROM usr_report WHERE UsrCod=%ld",
+		   UsrCod);
   }

@@ -1026,9 +1026,9 @@ void Asg_RemoveAssignment (void)
    Asg_RemoveAllTheGrpsAssociatedToAnAssignment (Asg.AsgCod);
 
    /***** Remove assignment *****/
-   DB_BuildQuery ("DELETE FROM assignments WHERE AsgCod=%ld AND CrsCod=%ld",
-                  Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE_new ("can not remove assignment");
+   DB_QueryDELETE ("can not remove assignment",
+		   "DELETE FROM assignments WHERE AsgCod=%ld AND CrsCod=%ld",
+                   Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
@@ -1574,8 +1574,9 @@ bool Asg_CheckIfAsgIsAssociatedToGrp (long AsgCod,long GrpCod)
 static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod)
   {
    /***** Remove groups of the assignment *****/
-   DB_BuildQuery ("DELETE FROM asg_grp WHERE AsgCod=%ld",AsgCod);
-   DB_QueryDELETE_new ("can not remove the groups associated to an assignment");
+   DB_QueryDELETE ("can not remove the groups associated to an assignment",
+		   "DELETE FROM asg_grp WHERE AsgCod=%ld",
+		   AsgCod);
   }
 
 /*****************************************************************************/
@@ -1585,9 +1586,10 @@ static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod)
 void Asg_RemoveGroup (long GrpCod)
   {
    /***** Remove group from all the assignments *****/
-   DB_BuildQuery ("DELETE FROM asg_grp WHERE GrpCod=%ld",GrpCod);
-   DB_QueryDELETE_new ("can not remove group from the associations"
-	               " between assignments and groups");
+   DB_QueryDELETE ("can not remove group from the associations"
+	           " between assignments and groups",
+		   "DELETE FROM asg_grp WHERE GrpCod=%ld",
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -1597,12 +1599,12 @@ void Asg_RemoveGroup (long GrpCod)
 void Asg_RemoveGroupsOfType (long GrpTypCod)
   {
    /***** Remove group from all the assignments *****/
-   DB_BuildQuery ("DELETE FROM asg_grp USING crs_grp,asg_grp"
-		  " WHERE crs_grp.GrpTypCod=%ld"
-		  " AND crs_grp.GrpCod=asg_grp.GrpCod",
-                  GrpTypCod);
-   DB_QueryDELETE_new ("can not remove groups of a type from the associations"
-	               " between assignments and groups");
+   DB_QueryDELETE ("can not remove groups of a type from the associations"
+	           " between assignments and groups",
+		   "DELETE FROM asg_grp USING crs_grp,asg_grp"
+		   " WHERE crs_grp.GrpTypCod=%ld"
+		   " AND crs_grp.GrpCod=asg_grp.GrpCod",
+                   GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -1700,15 +1702,17 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
 void Asg_RemoveCrsAssignments (long CrsCod)
   {
    /***** Remove groups *****/
-   DB_BuildQuery ("DELETE FROM asg_grp USING assignments,asg_grp"
-		  " WHERE assignments.CrsCod=%ld"
-		  " AND assignments.AsgCod=asg_grp.AsgCod",
-                  CrsCod);
-   DB_QueryDELETE_new ("can not remove all the groups associated to assignments of a course");
+   DB_QueryDELETE ("can not remove all the groups associated"
+		   " to assignments of a course",
+		   "DELETE FROM asg_grp USING assignments,asg_grp"
+		   " WHERE assignments.CrsCod=%ld"
+		   " AND assignments.AsgCod=asg_grp.AsgCod",
+                   CrsCod);
 
    /***** Remove assignments *****/
-   DB_BuildQuery ("DELETE FROM assignments WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE_new ("can not remove all the assignments of a course");
+   DB_QueryDELETE ("can not remove all the assignments of a course",
+		   "DELETE FROM assignments WHERE CrsCod=%ld",
+		   CrsCod);
   }
 
 /*****************************************************************************/

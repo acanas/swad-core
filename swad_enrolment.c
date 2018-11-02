@@ -3048,10 +3048,10 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove enrolment request *****/
-   DB_BuildQuery ("DELETE FROM crs_usr_requests"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-                  CrsCod,UsrCod);
-   DB_QueryDELETE_new ("can not remove a request for enrolment");
+   DB_QueryDELETE ("can not remove a request for enrolment",
+		   "DELETE FROM crs_usr_requests"
+		   " WHERE CrsCod=%ld AND UsrCod=%ld",
+                   CrsCod,UsrCod);
   }
 
 /*****************************************************************************/
@@ -3073,10 +3073,10 @@ static void Enr_RemoveExpiredEnrolmentRequests (void)
    DB_QueryUPDATE_new ("can not set notification(s) as removed");
 
    /***** Remove expired requests for enrolment *****/
-   DB_BuildQuery ("DELETE FROM crs_usr_requests"
-		  " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                  Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
-   DB_QueryDELETE_new ("can not remove expired requests for enrolment");
+   DB_QueryDELETE ("can not remove expired requests for enrolment",
+		   "DELETE FROM crs_usr_requests"
+		   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                   Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
   }
 
 /*****************************************************************************/
@@ -4234,10 +4234,10 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from the table of courses-users *****/
-      DB_BuildQuery ("DELETE FROM crs_usr"
-		     " WHERE CrsCod=%ld AND UsrCod=%ld",
-                     Crs->CrsCod,UsrDat->UsrCod);
-      DB_QueryDELETE_new ("can not remove a user from a course");
+      DB_QueryDELETE ("can not remove a user from a course",
+		      "DELETE FROM crs_usr"
+		      " WHERE CrsCod=%ld AND UsrCod=%ld",
+                      Crs->CrsCod,UsrDat->UsrCod);
 
       /***** Flush caches *****/
       Usr_FlushCachesUsr ();
@@ -4346,10 +4346,10 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/centre/degree
      {
       /***** Remove user from the table of admins *****/
-      DB_BuildQuery ("DELETE FROM admin"
-		     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-                     UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
-      DB_QueryDELETE_new ("can not remove an administrator");
+      DB_QueryDELETE ("can not remove an administrator",
+		      "DELETE FROM admin"
+		      " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
+                      UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
 
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,

@@ -3330,6 +3330,35 @@ void DB_QueryUPDATE_old (char **Query,const char *MsgError)
 /******************** Make a DELETE query from database **********************/
 /*****************************************************************************/
 
+void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query = NULL;
+   int Result;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   /***** Check that query string pointer
+          does point to an allocated string *****/
+   if (Query == NULL)
+      Lay_ShowErrorAndExit ("Wrong query string.");
+
+   /***** Query database and free query string pointer *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   Query = NULL;
+   if (Result)
+      DB_ExitOnMySQLError (MsgError);
+  }
+
 void DB_QueryDELETE_new (const char *MsgError)
   {
    int Result;

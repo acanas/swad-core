@@ -470,8 +470,9 @@ static bool For_GetIfPstIsEnabled (long PstCod)
 static void For_DeletePstFromDisabledPstTable (long PstCod)
   {
    /***** Remove post from disabled posts table *****/
-   DB_BuildQuery ("DELETE FROM forum_disabled_post WHERE PstCod=%ld",PstCod);
-   DB_QueryDELETE_new ("can not unban a post of a forum");
+   DB_QueryDELETE ("can not unban a post of a forum",
+		   "DELETE FROM forum_disabled_post WHERE PstCod=%ld",
+		   PstCod);
   }
 
 /*****************************************************************************/
@@ -543,8 +544,9 @@ static bool For_RemoveForumPst (long PstCod,struct Image *Image)
      }
 
    /***** Delete post from forum post table *****/
-   DB_BuildQuery ("DELETE FROM forum_post WHERE PstCod=%ld",PstCod);
-   DB_QueryDELETE_new ("can not remove a post from a forum");
+   DB_QueryDELETE ("can not remove a post from a forum",
+		   "DELETE FROM forum_post WHERE PstCod=%ld",
+		   PstCod);
 
    /***** Delete the post from the table of disabled forum posts *****/
    For_DeletePstFromDisabledPstTable (PstCod);
@@ -616,8 +618,9 @@ static void For_RemoveThreadOnly (long ThrCod)
    For_RemoveThrCodFromThrClipboard (ThrCod);
 
    /***** Delete thread from forum thread table *****/
-   DB_BuildQuery ("DELETE FROM forum_thread WHERE ThrCod=%ld",ThrCod);
-   DB_QueryDELETE_new ("can not remove a thread from a forum");
+   DB_QueryDELETE ("can not remove a thread from a forum",
+		   "DELETE FROM forum_thread WHERE ThrCod=%ld",
+		   ThrCod);
   }
 
 /*****************************************************************************/
@@ -627,16 +630,17 @@ static void For_RemoveThreadOnly (long ThrCod)
 static void For_RemoveThreadAndItsPsts (long ThrCod)
   {
    /***** Delete banned posts in thread *****/
-   DB_BuildQuery ("DELETE forum_disabled_post"
-		  " FROM forum_post,forum_disabled_post"
-		  " WHERE forum_post.ThrCod=%ld"
-		  " AND forum_post.PstCod=forum_disabled_post.PstCod",
-                  ThrCod);
-   DB_QueryDELETE_new ("can not unban the posts of a thread of a forum");
+   DB_QueryDELETE ("can not unban the posts of a thread of a forum",
+		   "DELETE forum_disabled_post"
+		   " FROM forum_post,forum_disabled_post"
+		   " WHERE forum_post.ThrCod=%ld"
+		   " AND forum_post.PstCod=forum_disabled_post.PstCod",
+                   ThrCod);
 
    /***** Delete thread posts *****/
-   DB_BuildQuery ("DELETE FROM forum_post WHERE ThrCod=%ld",ThrCod);
-   DB_QueryDELETE_new ("can not remove the posts of a thread of a forum");
+   DB_QueryDELETE ("can not remove the posts of a thread of a forum",
+		   "DELETE FROM forum_post WHERE ThrCod=%ld",
+		   ThrCod);
 
    /***** Delete thread from forum thread table *****/
    For_RemoveThreadOnly (ThrCod);
@@ -900,8 +904,10 @@ static time_t For_GetThrReadTime (long ThrCod)
 static void For_DeleteThrFromReadThrs (long ThrCod)
   {
    /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a thread *****/
-   DB_BuildQuery ("DELETE FROM forum_thr_read WHERE ThrCod=%ld",ThrCod);
-   DB_QueryDELETE_new ("can not remove the status of reading of a thread of a forum");
+   DB_QueryDELETE ("can not remove the status of reading"
+		   " of a thread of a forum",
+		   "DELETE FROM forum_thr_read WHERE ThrCod=%ld",
+		   ThrCod);
   }
 
 /*****************************************************************************/
@@ -911,8 +917,10 @@ static void For_DeleteThrFromReadThrs (long ThrCod)
 void For_RemoveUsrFromReadThrs (long UsrCod)
   {
    /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a user *****/
-   DB_BuildQuery ("DELETE FROM forum_thr_read WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove the status of reading by a user of all the threads of a forum");
+   DB_QueryDELETE ("can not remove the status of reading by a user"
+		   " of all the threads of a forum",
+		   "DELETE FROM forum_thr_read WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -4482,10 +4490,10 @@ static void For_InsertThrInClipboard (long ThrCod)
 static void For_RemoveExpiredThrsClipboards (void)
   {
    /***** Remove all expired clipboards *****/
-   DB_BuildQuery ("DELETE LOW_PRIORITY FROM forum_thr_clip"
-		  " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                  Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD);
-   DB_QueryDELETE_new ("can not remove old threads from clipboards");
+   DB_QueryDELETE ("can not remove old threads from clipboards",
+		   "DELETE LOW_PRIORITY FROM forum_thr_clip"
+		   " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                   Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD);
   }
 
 /*****************************************************************************/
@@ -4495,8 +4503,9 @@ static void For_RemoveExpiredThrsClipboards (void)
 static void For_RemoveThrCodFromThrClipboard (long ThrCod)
   {
    /***** Remove thread from thread clipboard *****/
-   DB_BuildQuery ("DELETE FROM forum_thr_clip WHERE ThrCod=%ld",ThrCod);
-   DB_QueryDELETE_new ("can not remove a thread from clipboard");
+   DB_QueryDELETE ("can not remove a thread from clipboard",
+		   "DELETE FROM forum_thr_clip WHERE ThrCod=%ld",
+		   ThrCod);
   }
 
 /*****************************************************************************/
@@ -4506,8 +4515,9 @@ static void For_RemoveThrCodFromThrClipboard (long ThrCod)
 void For_RemoveUsrFromThrClipboard (long UsrCod)
   {
    /***** Remove clipboard of specified user *****/
-   DB_BuildQuery ("DELETE FROM forum_thr_clip WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove a thread from the clipboard of a user");
+   DB_QueryDELETE ("can not remove a thread from the clipboard of a user",
+		   "DELETE FROM forum_thr_clip WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -4532,57 +4542,57 @@ void For_RemoveForums (Sco_Scope_t Scope,long ForumLocation)
      };
 
    /***** Remove disabled posts *****/
-   DB_BuildQuery ("DELETE FROM forum_disabled_post"
-		  " USING forum_thread,forum_post,forum_disabled_post"
-		  " WHERE"
-		  " (forum_thread.ForumType=%u"
-		  " OR"
-		  " forum_thread.ForumType=%u)"
-		  " AND forum_thread.Location=%ld"
-		  " AND forum_thread.ThrCod=forum_post.ThrCod"
-		  " AND forum_post.PstCod=forum_disabled_post.PstCod",
-	          ForumType[Scope].Usrs,
-	          ForumType[Scope].Tchs,
-	          ForumLocation);
-   DB_QueryDELETE_new ("can not remove the disabled posts in forums");
+   DB_QueryDELETE ("can not remove the disabled posts in forums",
+		   "DELETE FROM forum_disabled_post"
+		   " USING forum_thread,forum_post,forum_disabled_post"
+		   " WHERE"
+		   " (forum_thread.ForumType=%u"
+		   " OR"
+		   " forum_thread.ForumType=%u)"
+		   " AND forum_thread.Location=%ld"
+		   " AND forum_thread.ThrCod=forum_post.ThrCod"
+		   " AND forum_post.PstCod=forum_disabled_post.PstCod",
+	           ForumType[Scope].Usrs,
+	           ForumType[Scope].Tchs,
+	           ForumLocation);
 
    /***** Remove posts *****/
-   DB_BuildQuery ("DELETE FROM forum_post"
-		  " USING forum_thread,forum_post"
-		  " WHERE"
-		  " (forum_thread.ForumType=%u"
-		  " OR"
-		  " forum_thread.ForumType=%u)"
-		  " AND forum_thread.Location=%ld"
-		  " AND forum_thread.ThrCod=forum_post.ThrCod",
-	          ForumType[Scope].Usrs,
-	          ForumType[Scope].Tchs,
-	          ForumLocation);
-   DB_QueryDELETE_new ("can not remove posts in forums");
+   DB_QueryDELETE ("can not remove posts in forums",
+		   "DELETE FROM forum_post"
+		   " USING forum_thread,forum_post"
+		   " WHERE"
+		   " (forum_thread.ForumType=%u"
+		   " OR"
+		   " forum_thread.ForumType=%u)"
+		   " AND forum_thread.Location=%ld"
+		   " AND forum_thread.ThrCod=forum_post.ThrCod",
+	           ForumType[Scope].Usrs,
+	           ForumType[Scope].Tchs,
+	           ForumLocation);
 
    /***** Remove threads read *****/
-   DB_BuildQuery ("DELETE FROM forum_thr_read"
-		  " USING forum_thread,forum_thr_read"
-		  " WHERE"
-		  " (forum_thread.ForumType=%u"
-		  " OR"
-		  " forum_thread.ForumType=%u)"
-		  " AND forum_thread.Location=%ld"
-		  " AND forum_thread.ThrCod=forum_thr_read.ThrCod",
-	          ForumType[Scope].Usrs,
-	          ForumType[Scope].Tchs,
-	          ForumLocation);
-   DB_QueryDELETE_new ("can not remove read threads in forums");
+   DB_QueryDELETE ("can not remove read threads in forums",
+		   "DELETE FROM forum_thr_read"
+		   " USING forum_thread,forum_thr_read"
+		   " WHERE"
+		   " (forum_thread.ForumType=%u"
+		   " OR"
+		   " forum_thread.ForumType=%u)"
+		   " AND forum_thread.Location=%ld"
+		   " AND forum_thread.ThrCod=forum_thr_read.ThrCod",
+	           ForumType[Scope].Usrs,
+	           ForumType[Scope].Tchs,
+	           ForumLocation);
 
    /***** Remove threads *****/
-   DB_BuildQuery ("DELETE FROM forum_thread"
-		  " WHERE"
-		  " (forum_thread.ForumType=%u"
-		  " OR"
-		  " forum_thread.ForumType=%u)"
-		  " AND Location=%ld",
-	          ForumType[Scope].Usrs,
-	          ForumType[Scope].Tchs,
-	          ForumLocation);
-   DB_QueryDELETE_new ("can not remove threads in forums");
+   DB_QueryDELETE ("can not remove threads in forums",
+		   "DELETE FROM forum_thread"
+		   " WHERE"
+		   " (forum_thread.ForumType=%u"
+		   " OR"
+		   " forum_thread.ForumType=%u)"
+		   " AND Location=%ld",
+	           ForumType[Scope].Usrs,
+	           ForumType[Scope].Tchs,
+	           ForumLocation);
   }

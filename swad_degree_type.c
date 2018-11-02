@@ -902,8 +902,9 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove the degree type *****/
-   DB_BuildQuery ("DELETE FROM deg_types WHERE DegTypCod=%ld",DegTypCod);
-   DB_QueryDELETE_new ("can not remove a type of degree");
+   DB_QueryDELETE ("can not remove a type of degree",
+		   "DELETE FROM deg_types WHERE DegTypCod=%ld",
+		   DegTypCod);
   }
 
 /*****************************************************************************/

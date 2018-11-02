@@ -498,8 +498,9 @@ void Lnk_RemoveLink (void)
    Lnk_GetDataOfLinkByCod (&Lnk);
 
    /***** Remove link *****/
-   DB_BuildQuery ("DELETE FROM links WHERE LnkCod=%ld",Lnk.LnkCod);
-   DB_QueryDELETE_new ("can not remove an institutional link");
+   DB_QueryDELETE ("can not remove an institutional link",
+		   "DELETE FROM links WHERE LnkCod=%ld",
+		   Lnk.LnkCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

@@ -513,10 +513,10 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.PendingPassword);
 
    /***** Remove expired pending passwords from database *****/
-   DB_BuildQuery ("DELETE FROM pending_passwd"
-		  " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                  Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
-   DB_QueryDELETE_new ("can not remove expired pending passwords");
+   DB_QueryDELETE ("can not remove expired pending passwords",
+		   "DELETE FROM pending_passwd"
+		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                   Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
 
    /***** Update my current password in database *****/
    DB_QueryREPLACE ("can not create pending password",

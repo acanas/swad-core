@@ -2134,12 +2134,13 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
       if (Prj_CheckIfICanEditProject (Prj.PrjCod))
 	{
 	 /***** Remove user from the table of project-users *****/
-	 DB_BuildQuery ("DELETE FROM prj_usr"
-			" WHERE PrjCod=%ld AND RoleInProject=%u AND UsrCod=%ld",
-		        Prj.PrjCod,
-		        (unsigned) RoleInProject,
-		        Gbl.Usrs.Other.UsrDat.UsrCod);
-	 DB_QueryDELETE_new ("can not remove a user from a project");
+	 DB_QueryDELETE ("can not remove a user from a project",
+			 "DELETE FROM prj_usr"
+			 " WHERE PrjCod=%ld AND RoleInProject=%u"
+			 " AND UsrCod=%ld",
+		         Prj.PrjCod,
+		         (unsigned) RoleInProject,
+		         Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Flush cache *****/
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -2740,20 +2741,20 @@ void Prj_RemoveProject (void)
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
       /***** Remove users in project *****/
-      DB_BuildQuery ("DELETE FROM prj_usr USING projects,prj_usr"
-		     " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
-		     " AND projects.PrjCod=prj_usr.PrjCod",
-	             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryDELETE_new ("can not remove project");
+      DB_QueryDELETE ("can not remove project",
+		      "DELETE FROM prj_usr USING projects,prj_usr"
+		      " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
+		      " AND projects.PrjCod=prj_usr.PrjCod",
+	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Flush cache *****/
       Prj_FlushCacheMyRoleInProject ();
 
       /***** Remove project *****/
-      DB_BuildQuery ("DELETE FROM projects"
-		     " WHERE PrjCod=%ld AND CrsCod=%ld",
-	             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryDELETE_new ("can not remove project");
+      DB_QueryDELETE ("can not remove project",
+		      "DELETE FROM projects"
+		      " WHERE PrjCod=%ld AND CrsCod=%ld",
+	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Remove information related to files in project *****/
       Brw_RemovePrjFilesFromDB (Prj.PrjCod);
@@ -3392,18 +3393,19 @@ static void Prj_UpdateProject (struct Project *Prj)
 void Prj_RemoveCrsProjects (long CrsCod)
   {
    /***** Remove users in projects of the course *****/
-   DB_BuildQuery ("DELETE FROM prj_usr USING projects,prj_usr"
-		  " WHERE projects.CrsCod=%ld"
-		  " AND projects.PrjCod=prj_usr.PrjCod",
-                  CrsCod);
-   DB_QueryDELETE_new ("can not remove all the projects of a course");
+   DB_QueryDELETE ("can not remove all the projects of a course",
+		   "DELETE FROM prj_usr USING projects,prj_usr"
+		   " WHERE projects.CrsCod=%ld"
+		   " AND projects.PrjCod=prj_usr.PrjCod",
+                   CrsCod);
 
    /***** Flush cache *****/
    Prj_FlushCacheMyRoleInProject ();
 
    /***** Remove projects *****/
-   DB_BuildQuery ("DELETE FROM projects WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE_new ("can not remove all the projects of a course");
+   DB_QueryDELETE ("can not remove all the projects of a course",
+		   "DELETE FROM projects WHERE CrsCod=%ld",
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -3415,8 +3417,9 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
    bool ItsMe;
 
    /***** Remove user from projects *****/
-   DB_BuildQuery ("DELETE FROM prj_usr WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove user from projects");
+   DB_QueryDELETE ("can not remove user from projects",
+		   "DELETE FROM prj_usr WHERE UsrCod=%ld",
+		   UsrCod);
 
    /***** Flush cache *****/
    ItsMe = Usr_ItsMe (UsrCod);

@@ -1341,9 +1341,9 @@ void Agd_RemoveEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Remove event *****/
-   DB_BuildQuery ("DELETE FROM agendas WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryDELETE_new ("can not remove event");
+   DB_QueryDELETE ("can not remove event",
+		   "DELETE FROM agendas WHERE AgdCod=%ld AND UsrCod=%ld",
+                   AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1750,8 +1750,9 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 void Agd_RemoveUsrEvents (long UsrCod)
   {
    /***** Remove events *****/
-   DB_BuildQuery ("DELETE FROM agendas WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove all the events of a user");
+   DB_QueryDELETE ("can not remove all the events of a user",
+		   "DELETE FROM agendas WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/

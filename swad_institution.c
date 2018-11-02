@@ -1731,8 +1731,9 @@ void Ins_RemoveInstitution (void)
       Fil_RemoveTree (PathIns);
 
       /***** Remove institution *****/
-      DB_BuildQuery ("DELETE FROM institutions WHERE InsCod=%ld",Ins.InsCod);
-      DB_QueryDELETE_new ("can not remove an institution");
+      DB_QueryDELETE ("can not remove an institution",
+		      "DELETE FROM institutions WHERE InsCod=%ld",
+		      Ins.InsCod);
 
       /***** Flush caches *****/
       Ins_FlushCacheShortNameOfInstitution ();

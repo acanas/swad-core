@@ -1442,8 +1442,10 @@ bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
 static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
   {
    /***** Remove groups of the attendance event *****/
-   DB_BuildQuery ("DELETE FROM att_grp WHERE AttCod=%ld",AttCod);
-   DB_QueryDELETE_new ("can not remove the groups associated to an attendance event");
+   DB_QueryDELETE ("can not remove the groups"
+		   " associated to an attendance event",
+		   "DELETE FROM att_grp WHERE AttCod=%ld",
+		   AttCod);
   }
 
 /*****************************************************************************/
@@ -1453,8 +1455,10 @@ static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
 void Att_RemoveGroup (long GrpCod)
   {
    /***** Remove group from all the attendance events *****/
-   DB_BuildQuery ("DELETE FROM att_grp WHERE GrpCod=%ld",GrpCod);
-   DB_QueryDELETE_new ("can not remove group from the associations between attendance events and groups");
+   DB_QueryDELETE ("can not remove group from the associations"
+	           " between attendance events and groups",
+		   "DELETE FROM att_grp WHERE GrpCod=%ld",
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -1464,11 +1468,12 @@ void Att_RemoveGroup (long GrpCod)
 void Att_RemoveGroupsOfType (long GrpTypCod)
   {
    /***** Remove group from all the attendance events *****/
-   DB_BuildQuery ("DELETE FROM att_grp USING crs_grp,att_grp"
-		  " WHERE crs_grp.GrpTypCod=%ld"
-		  " AND crs_grp.GrpCod=att_grp.GrpCod",
-                  GrpTypCod);
-   DB_QueryDELETE_new ("can not remove groups of a type from the associations between attendance events and groups");
+   DB_QueryDELETE ("can not remove groups of a type from the associations"
+		   " between attendance events and groups",
+		   "DELETE FROM att_grp USING crs_grp,att_grp"
+		   " WHERE crs_grp.GrpTypCod=%ld"
+		   " AND crs_grp.GrpCod=att_grp.GrpCod",
+                   GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -1565,8 +1570,9 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 
 static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
   {
-   DB_BuildQuery ("DELETE FROM att_usr WHERE AttCod=%ld",AttCod);
-   DB_QueryDELETE_new ("can not remove attendance event");
+   DB_QueryDELETE ("can not remove attendance event",
+		   "DELETE FROM att_usr WHERE AttCod=%ld",
+		   AttCod);
   }
 
 /*****************************************************************************/
@@ -1576,8 +1582,9 @@ static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
 void Att_RemoveUsrFromAllAttEvents (long UsrCod)
   {
    /***** Remove group from all the attendance events *****/
-   DB_BuildQuery ("DELETE FROM att_usr WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove user from all attendance events");
+   DB_QueryDELETE ("can not remove user from all attendance events",
+		   "DELETE FROM att_usr WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1587,12 +1594,12 @@ void Att_RemoveUsrFromAllAttEvents (long UsrCod)
 void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
   {
    /***** Remove group from all the attendance events *****/
-   DB_BuildQuery ("DELETE FROM att_usr USING att_events,att_usr"
-		  " WHERE att_events.CrsCod=%ld"
-		  " AND att_events.AttCod=att_usr.AttCod"
-		  " AND att_usr.UsrCod=%ld",
-                  CrsCod,UsrCod);
-   DB_QueryDELETE_new ("can not remove user from attendance events of a course");
+   DB_QueryDELETE ("can not remove user from attendance events of a course",
+		   "DELETE FROM att_usr USING att_events,att_usr"
+		   " WHERE att_events.CrsCod=%ld"
+		   " AND att_events.AttCod=att_usr.AttCod"
+		   " AND att_usr.UsrCod=%ld",
+                   CrsCod,UsrCod);
   }
 
 /*****************************************************************************/
@@ -1601,10 +1608,10 @@ void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
 
 static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
   {
-   DB_BuildQuery ("DELETE FROM att_events"
-		  " WHERE AttCod=%ld AND CrsCod=%ld",
-                  AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE_new ("can not remove attendance event");
+   DB_QueryDELETE ("can not remove attendance event",
+		   "DELETE FROM att_events"
+		   " WHERE AttCod=%ld AND CrsCod=%ld",
+                   AttCod,Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1614,22 +1621,25 @@ static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
 void Att_RemoveCrsAttEvents (long CrsCod)
   {
    /***** Remove students *****/
-   DB_BuildQuery ("DELETE FROM att_usr USING att_events,att_usr"
-		  " WHERE att_events.CrsCod=%ld"
-		  " AND att_events.AttCod=att_usr.AttCod",
-                  CrsCod);
-   DB_QueryDELETE_new ("can not remove all the students registered in events of a course");
+   DB_QueryDELETE ("can not remove all the students registered"
+		   " in events of a course",
+		   "DELETE FROM att_usr USING att_events,att_usr"
+		   " WHERE att_events.CrsCod=%ld"
+		   " AND att_events.AttCod=att_usr.AttCod",
+                   CrsCod);
 
    /***** Remove groups *****/
-   DB_BuildQuery ("DELETE FROM att_grp USING att_events,att_grp"
-		  " WHERE att_events.CrsCod=%ld"
-		  " AND att_events.AttCod=att_grp.AttCod",
-                  CrsCod);
-   DB_QueryDELETE_new ("can not remove all the groups associated to attendance events of a course");
+   DB_QueryDELETE ("can not remove all the groups associated"
+		   " to attendance events of a course",
+		   "DELETE FROM att_grp USING att_events,att_grp"
+		   " WHERE att_events.CrsCod=%ld"
+		   " AND att_events.AttCod=att_grp.AttCod",
+                   CrsCod);
 
    /***** Remove attendance events *****/
-   DB_BuildQuery ("DELETE FROM att_events WHERE CrsCod=%ld",CrsCod);
-   DB_QueryDELETE_new ("can not remove all the attendance events of a course");
+   DB_QueryDELETE ("can not remove all the attendance events of a course",
+		   "DELETE FROM att_events WHERE CrsCod=%ld",
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -2620,10 +2630,9 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
   {
    /***** Remove user if there is no comment in database *****/
-   DB_BuildQuery ("DELETE FROM att_usr"
-		  " WHERE AttCod=%ld AND UsrCod=%ld",
-                  AttCod,UsrCod);
-   DB_QueryDELETE_new ("can not remove student from an event");
+   DB_QueryDELETE ("can not remove student from an event",
+		   "DELETE FROM att_usr WHERE AttCod=%ld AND UsrCod=%ld",
+                   AttCod,UsrCod);
   }
 
 /*****************************************************************************/
@@ -2633,12 +2642,12 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
   {
    /***** Clean table att_usr *****/
-   DB_BuildQuery ("DELETE FROM att_usr"
-		  " WHERE AttCod=%ld AND Present='N'"
-		  " AND CommentStd='' AND CommentTch=''",
-	          AttCod);
-   DB_QueryDELETE_new ("can not remove users absent"
-	               " without comments from an event");
+   DB_QueryDELETE ("can not remove users absent"
+	           " without comments from an event",
+		   "DELETE FROM att_usr"
+		   " WHERE AttCod=%ld AND Present='N'"
+		   " AND CommentStd='' AND CommentTch=''",
+	           AttCod);
   }
 
 /*****************************************************************************/

@@ -665,8 +665,9 @@ void Hld_RemoveHoliday1 (void)
    Hld_GetDataOfHolidayByCod (&Hld);
 
    /***** Remove holiday *****/
-   DB_BuildQuery ("DELETE FROM holidays WHERE HldCod=%ld",Hld.HldCod);
-   DB_QueryDELETE_new ("can not remove a holiday");
+   DB_QueryDELETE ("can not remove a holiday",
+		   "DELETE FROM holidays WHERE HldCod=%ld",
+		   Hld.HldCod);
 
    /***** Write message to show the change made *****/
    Gbl.Alert.Type = Ale_SUCCESS;

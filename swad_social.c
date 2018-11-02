@@ -3382,14 +3382,14 @@ static long Soc_UnshareSocialNote (void)
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
 	    /***** Delete social publishing from database *****/
-	    DB_BuildQuery ("DELETE FROM social_pubs"
-	                   " WHERE NotCod=%ld"
-	                   " AND PublisherCod=%ld"
-	                   " AND PubType=%u",
-			   SocNot.NotCod,
-			   Gbl.Usrs.Me.UsrDat.UsrCod,
-			   (unsigned) Soc_PUB_SHARED_NOTE);
-	    DB_QueryDELETE_new ("can not remove a social publishing");
+	    DB_QueryDELETE ("can not remove a social publishing",
+			    "DELETE FROM social_pubs"
+	                    " WHERE NotCod=%ld"
+	                    " AND PublisherCod=%ld"
+	                    " AND PubType=%u",
+			    SocNot.NotCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    (unsigned) Soc_PUB_SHARED_NOTE);
 
 	    /***** Update number of times this social note is shared *****/
 	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
@@ -3470,11 +3470,11 @@ static long Soc_UnfavSocialNote (void)
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    DB_BuildQuery ("DELETE FROM social_notes_fav"
-			   " WHERE NotCod=%ld AND UsrCod=%ld",
-			   SocNot.NotCod,
-			   Gbl.Usrs.Me.UsrDat.UsrCod);
-	    DB_QueryDELETE_new ("can not unfavourite social note");
+	    DB_QueryDELETE ("can not unfavourite social note",
+			    "DELETE FROM social_notes_fav"
+			    " WHERE NotCod=%ld AND UsrCod=%ld",
+			    SocNot.NotCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /***** Update number of times this social note is favourited *****/
 	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
@@ -3556,11 +3556,11 @@ static long Soc_UnfavSocialComment (void)
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    DB_BuildQuery ("DELETE FROM social_comments_fav"
-			   " WHERE PubCod=%ld AND UsrCod=%ld",
-			   SocCom.PubCod,
-			   Gbl.Usrs.Me.UsrDat.UsrCod);
-	    DB_QueryDELETE_new ("can not unfavourite social comment");
+	    DB_QueryDELETE ("can not unfavourite social comment",
+			    "DELETE FROM social_comments_fav"
+			    " WHERE PubCod=%ld AND UsrCod=%ld",
+			    SocCom.PubCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    /***** Update number of times this social comment is favourited *****/
 	    SocCom.NumFavs = Soc_GetNumTimesACommHasBeenFav (&SocCom);
@@ -3816,47 +3816,46 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 
    /***** Remove favs *****/
    /* Remove favs for all comments in this note */
-   DB_BuildQuery ("DELETE FROM social_comments_fav"
-                  " USING social_pubs,social_comments_fav"
-	          " WHERE social_pubs.NotCod=%ld"
-                  " AND social_pubs.PubType=%u"
-	          " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		  SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove favs for social note");
+   DB_QueryDELETE ("can not remove favs for social note",
+		   "DELETE FROM social_comments_fav"
+                   " USING social_pubs,social_comments_fav"
+	           " WHERE social_pubs.NotCod=%ld"
+                   " AND social_pubs.PubType=%u"
+	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
+		   SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /* Remove favs for this note */
-   DB_BuildQuery ("DELETE FROM social_notes_fav WHERE NotCod=%ld",
-		  SocNot->NotCod);
-   DB_QueryDELETE_new ("can not remove favs for social note");
+   DB_QueryDELETE ("can not remove favs for social note",
+		   "DELETE FROM social_notes_fav WHERE NotCod=%ld",
+		   SocNot->NotCod);
 
    /***** Remove content of the comments of this social note *****/
-   DB_BuildQuery ("DELETE FROM social_comments"
-	          " USING social_pubs,social_comments"
-	          " WHERE social_pubs.NotCod=%ld"
-                  " AND social_pubs.PubType=%u"
-	          " AND social_pubs.PubCod=social_comments.PubCod",
-		  SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove social comments");
+   DB_QueryDELETE ("can not remove social comments",
+		   "DELETE FROM social_comments"
+	           " USING social_pubs,social_comments"
+	           " WHERE social_pubs.NotCod=%ld"
+                   " AND social_pubs.PubType=%u"
+	           " AND social_pubs.PubCod=social_comments.PubCod",
+		   SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /***** Remove all the social publishings of this note *****/
-   DB_BuildQuery ("DELETE FROM social_pubs WHERE NotCod=%ld",
-		  SocNot->NotCod);
-   DB_QueryDELETE_new ("can not remove a social publishing");
+   DB_QueryDELETE ("can not remove a social publishing",
+		   "DELETE FROM social_pubs WHERE NotCod=%ld",
+		   SocNot->NotCod);
 
    /***** Remove social note *****/
-   DB_BuildQuery ("DELETE FROM social_notes"
-	          " WHERE NotCod=%ld"
-	          " AND UsrCod=%ld",		// Extra check: I am the author
-		  SocNot->NotCod,
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryDELETE_new ("can not remove a social note");
+   DB_QueryDELETE ("can not remove a social note",
+		   "DELETE FROM social_notes"
+	           " WHERE NotCod=%ld"
+	           " AND UsrCod=%ld",		// Extra check: I am the author
+		   SocNot->NotCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
-     {
       /***** Remove social post *****/
-      DB_BuildQuery ("DELETE FROM social_posts WHERE PstCod=%ld",SocNot->Cod);
-      DB_QueryDELETE_new ("can not remove a social post");
-     }
+      DB_QueryDELETE ("can not remove a social post",
+		      "DELETE FROM social_posts WHERE PstCod=%ld",
+		      SocNot->Cod);
 
    /***** Reset social note *****/
    Soc_ResetSocialNote (SocNot);
@@ -4118,24 +4117,24 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->PubCod);
 
    /***** Remove favs for this comment *****/
-   DB_BuildQuery ("DELETE FROM social_comments_fav WHERE PubCod=%ld",
-		  SocCom->PubCod);
-   DB_QueryDELETE_new ("can not remove favs for social comment");
+   DB_QueryDELETE ("can not remove favs for social comment",
+		   "DELETE FROM social_comments_fav WHERE PubCod=%ld",
+		   SocCom->PubCod);
 
    /***** Remove content of this social comment *****/
-   DB_BuildQuery ("DELETE FROM social_comments WHERE PubCod=%ld",
-		  SocCom->PubCod);
-   DB_QueryDELETE_new ("can not remove a social comment");
+   DB_QueryDELETE ("can not remove a social comment",
+		   "DELETE FROM social_comments WHERE PubCod=%ld",
+		   SocCom->PubCod);
 
    /***** Remove this social comment *****/
-   DB_BuildQuery ("DELETE FROM social_pubs"
-	          " WHERE PubCod=%ld"
-	          " AND PublisherCod=%ld"	// Extra check: I am the author
-	          " AND PubType=%u",		// Extra check: it's a comment
-		  SocCom->PubCod,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove a social comment");
+   DB_QueryDELETE ("can not remove a social comment",
+		   "DELETE FROM social_pubs"
+	           " WHERE PubCod=%ld"
+	           " AND PublisherCod=%ld"	// Extra check: I am the author
+	           " AND PubType=%u",		// Extra check: it's a comment
+		   SocCom->PubCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /***** Reset social comment *****/
    Soc_ResetSocialComment (SocCom);
@@ -4149,96 +4148,97 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
   {
    /***** Remove favs for comments *****/
    /* Remove all favs made by this user in any social comment */
-   DB_BuildQuery ("DELETE FROM social_comments_fav WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove favs");
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM social_comments_fav WHERE UsrCod=%ld",
+		   UsrCod);
 
    /* Remove all favs for all comments of this user */
-   DB_BuildQuery ("DELETE FROM social_comments_fav"
-	          " USING social_pubs,social_comments_fav"
-	          " WHERE social_pubs.PublisherCod=%ld"	// Author of the comment
-                  " AND social_pubs.PubType=%u"
-	          " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		  UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove favs");
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM social_comments_fav"
+	           " USING social_pubs,social_comments_fav"
+	           " WHERE social_pubs.PublisherCod=%ld"	// Author of the comment
+                   " AND social_pubs.PubType=%u"
+	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
+		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /* Remove all favs for all comments in all the social notes of the user */
-   DB_BuildQuery ("DELETE FROM social_comments_fav"
-	          " USING social_notes,social_pubs,social_comments_fav"
-	          " WHERE social_notes.UsrCod=%ld"	// Author of the note
-	          " AND social_notes.NotCod=social_pubs.NotCod"
-                  " AND social_pubs.PubType=%u"
-	          " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		  UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove social comments");
+   DB_QueryDELETE ("can not remove social comments",
+		   "DELETE FROM social_comments_fav"
+	           " USING social_notes,social_pubs,social_comments_fav"
+	           " WHERE social_notes.UsrCod=%ld"	// Author of the note
+	           " AND social_notes.NotCod=social_pubs.NotCod"
+                   " AND social_pubs.PubType=%u"
+	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
+		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user in any social note */
-   DB_BuildQuery ("DELETE FROM social_notes_fav WHERE UsrCod=%ld",
-		  UsrCod);
-   DB_QueryDELETE_new ("can not remove favs");
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM social_notes_fav WHERE UsrCod=%ld",
+		   UsrCod);
 
    /* Remove all favs for all notes of this user */
-   DB_BuildQuery ("DELETE FROM social_notes_fav"
-	          " USING social_notes,social_notes_fav"
-	          " WHERE social_notes.UsrCod=%ld"	// Author of the note
-	          " AND social_notes.NotCod=social_notes_fav.NotCod",
-		  UsrCod);
-   DB_QueryDELETE_new ("can not remove favs");
+   DB_QueryDELETE ("can not remove favs",
+		   "DELETE FROM social_notes_fav"
+	           " USING social_notes,social_notes_fav"
+	           " WHERE social_notes.UsrCod=%ld"	// Author of the note
+	           " AND social_notes.NotCod=social_notes_fav.NotCod",
+		   UsrCod);
 
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
-   DB_BuildQuery ("DELETE FROM social_comments"
-	          " USING social_notes,social_pubs,social_comments"
-	          " WHERE social_notes.UsrCod=%ld"
-		  " AND social_notes.NotCod=social_pubs.NotCod"
-                  " AND social_pubs.PubType=%u"
-	          " AND social_pubs.PubCod=social_comments.PubCod",
-		  UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove social comments");
+   DB_QueryDELETE ("can not remove social comments",
+		   "DELETE FROM social_comments"
+	           " USING social_notes,social_pubs,social_comments"
+	           " WHERE social_notes.UsrCod=%ld"
+		   " AND social_notes.NotCod=social_pubs.NotCod"
+                   " AND social_pubs.PubType=%u"
+	           " AND social_pubs.PubCod=social_comments.PubCod",
+		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /* Remove all the comments from any user in any social note of the user */
-   DB_BuildQuery ("DELETE FROM social_pubs"
-	          " USING social_notes,social_pubs"
-	          " WHERE social_notes.UsrCod=%ld"
-		  " AND social_notes.NotCod=social_pubs.NotCod"
-                  " AND social_pubs.PubType=%u",
-		  UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove social comments");
+   DB_QueryDELETE ("can not remove social comments",
+		   "DELETE FROM social_pubs"
+	           " USING social_notes,social_pubs"
+	           " WHERE social_notes.UsrCod=%ld"
+		   " AND social_notes.NotCod=social_pubs.NotCod"
+                   " AND social_pubs.PubType=%u",
+		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /* Remove content of all the comments of the user in any social note */
-   DB_BuildQuery ("DELETE FROM social_comments"
-	          " USING social_pubs,social_comments"
-	          " WHERE social_pubs.PublisherCod=%ld"
-	          " AND social_pubs.PubType=%u"
-	          " AND social_pubs.PubCod=social_comments.PubCod",
-		  UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   DB_QueryDELETE_new ("can not remove social comments");
+   DB_QueryDELETE ("can not remove social comments",
+		   "DELETE FROM social_comments"
+	           " USING social_pubs,social_comments"
+	           " WHERE social_pubs.PublisherCod=%ld"
+	           " AND social_pubs.PubType=%u"
+	           " AND social_pubs.PubCod=social_comments.PubCod",
+		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
    /***** Remove all the social posts of the user *****/
-   DB_BuildQuery ("DELETE FROM social_posts"
-		  " WHERE PstCod IN"
-		  " (SELECT Cod FROM social_notes"
-	          " WHERE UsrCod=%ld AND NoteType=%u)",
-		  UsrCod,(unsigned) Soc_NOTE_SOCIAL_POST);
-   DB_QueryDELETE_new ("can not remove social posts");
+   DB_QueryDELETE ("can not remove social posts",
+		   "DELETE FROM social_posts"
+		   " WHERE PstCod IN"
+		   " (SELECT Cod FROM social_notes"
+	           " WHERE UsrCod=%ld AND NoteType=%u)",
+		   UsrCod,(unsigned) Soc_NOTE_SOCIAL_POST);
 
    /***** Remove all the social publishings of any user authored by the user *****/
-   DB_BuildQuery ("DELETE FROM social_pubs"
-                  " USING social_notes,social_pubs"
-	          " WHERE social_notes.UsrCod=%ld"
-                  " AND social_notes.NotCod=social_pubs.NotCod",
-		  UsrCod);
-   DB_QueryDELETE_new ("can not remove social publishings");
+   DB_QueryDELETE ("can not remove social publishings",
+		   "DELETE FROM social_pubs"
+                   " USING social_notes,social_pubs"
+	           " WHERE social_notes.UsrCod=%ld"
+                   " AND social_notes.NotCod=social_pubs.NotCod",
+		   UsrCod);
 
    /***** Remove all the social publishings of the user *****/
-   DB_BuildQuery ("DELETE FROM social_pubs WHERE PublisherCod=%ld",
-		  UsrCod);
-   DB_QueryDELETE_new ("can not remove social publishings");
+   DB_QueryDELETE ("can not remove social publishings",
+		   "DELETE FROM social_pubs WHERE PublisherCod=%ld",
+		   UsrCod);
 
    /***** Remove all the social notes of the user *****/
-   DB_BuildQuery ("DELETE FROM social_notes WHERE UsrCod=%ld",
-		  UsrCod);
-   DB_QueryDELETE_new ("can not remove social notes");
+   DB_QueryDELETE ("can not remove social notes",
+		   "DELETE FROM social_notes WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -4736,9 +4736,9 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom)
 void Soc_ClearOldTimelinesDB (void)
   {
    /***** Remove social timelines for expired sessions *****/
-   DB_BuildQuery ("DELETE LOW_PRIORITY FROM social_timelines"
-                  " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
-   DB_QueryDELETE_new ("can not remove old social timelines");
+   DB_QueryDELETE ("can not remove old social timelines",
+		   "DELETE LOW_PRIORITY FROM social_timelines"
+                   " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
   }
 
 /*****************************************************************************/
@@ -4748,9 +4748,9 @@ void Soc_ClearOldTimelinesDB (void)
 static void Soc_ClearTimelineThisSession (void)
   {
    /***** Remove social timeline for this session *****/
-   DB_BuildQuery ("DELETE FROM social_timelines WHERE SessionId='%s'",
-		  Gbl.Session.Id);
-   DB_QueryDELETE_new ("can not remove social timeline");
+   DB_QueryDELETE ("can not remove social timeline",
+		   "DELETE FROM social_timelines WHERE SessionId='%s'",
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/

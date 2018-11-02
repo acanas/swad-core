@@ -618,8 +618,9 @@ void Dpt_RemoveDepartment (void)
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
-      DB_BuildQuery ("DELETE FROM departments WHERE DptCod=%ld",Dpt.DptCod);
-      DB_QueryDELETE_new ("can not remove a department");
+      DB_QueryDELETE ("can not remove a department",
+		      "DELETE FROM departments WHERE DptCod=%ld",
+		      Dpt.DptCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

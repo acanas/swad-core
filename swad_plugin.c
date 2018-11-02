@@ -496,8 +496,9 @@ void Plg_RemovePlugin (void)
    Plg_GetDataOfPluginByCod (&Plg);
 
    /***** Remove plugin *****/
-   DB_BuildQuery ("DELETE FROM plugins WHERE PlgCod=%ld",Plg.PlgCod);
-   DB_QueryDELETE_new ("can not remove a plugin");
+   DB_QueryDELETE ("can not remove a plugin",
+		   "DELETE FROM plugins WHERE PlgCod=%ld",
+		   Plg.PlgCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

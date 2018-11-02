@@ -693,14 +693,14 @@ void Rec_RemoveFieldFromDB (void)
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Remove field from all records *****/
-   DB_BuildQuery ("DELETE FROM crs_records WHERE FieldCod=%ld",
-                  Gbl.CurrentCrs.Records.Field.FieldCod);
-   DB_QueryDELETE_new ("can not remove field from all students' records");
+   DB_QueryDELETE ("can not remove field from all students' records",
+		   "DELETE FROM crs_records WHERE FieldCod=%ld",
+                   Gbl.CurrentCrs.Records.Field.FieldCod);
 
    /***** Remove the field *****/
-   DB_BuildQuery ("DELETE FROM crs_record_fields WHERE FieldCod=%ld",
-                  Gbl.CurrentCrs.Records.Field.FieldCod);
-   DB_QueryDELETE_new ("can not remove field of record");
+   DB_QueryDELETE ("can not remove field of record",
+		   "DELETE FROM crs_record_fields WHERE FieldCod=%ld",
+                   Gbl.CurrentCrs.Records.Field.FieldCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2005,13 +2005,12 @@ void Rec_UpdateCrsRecord (long UsrCod)
                DB_QueryUPDATE_new ("can not update field of record");
               }
             else
-              {
                /***** Remove text of the field of record course *****/
-               DB_BuildQuery ("DELETE FROM crs_records"
-			      " WHERE UsrCod=%ld AND FieldCod=%ld",
-                              UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
-               DB_QueryDELETE_new ("can not remove field of record");
-              }
+               DB_QueryDELETE ("can not remove field of record",
+        		       "DELETE FROM crs_records"
+			       " WHERE UsrCod=%ld AND FieldCod=%ld",
+                               UsrCod,
+			       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
            }
          else if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
 	    /***** Insert text field of record course *****/
@@ -2033,11 +2032,11 @@ void Rec_UpdateCrsRecord (long UsrCod)
 void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs)
   {
    /***** Remove text of the field of record course *****/
-   DB_BuildQuery ("DELETE FROM crs_records"
-		  " WHERE UsrCod=%ld AND FieldCod IN"
-		  " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
-                  UsrCod,Crs->CrsCod);
-   DB_QueryDELETE_new ("can not remove user's record in a course");
+   DB_QueryDELETE ("can not remove user's record in a course",
+		   "DELETE FROM crs_records"
+		   " WHERE UsrCod=%ld AND FieldCod IN"
+		   " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
+                   UsrCod,Crs->CrsCod);
   }
 
 /*****************************************************************************/
@@ -2047,8 +2046,9 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs)
 void Rec_RemoveFieldsCrsRecordAll (long UsrCod)
   {
    /***** Remove text of the field of record course *****/
-   DB_BuildQuery ("DELETE FROM crs_records WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove user's records in all courses");
+   DB_QueryDELETE ("can not remove user's records in all courses",
+		   "DELETE FROM crs_records WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/

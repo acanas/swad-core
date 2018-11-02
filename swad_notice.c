@@ -308,10 +308,10 @@ void Not_RemoveNotice (void)
                    NotCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /* Remove notice */
-   DB_BuildQuery ("DELETE FROM notices"
-		  " WHERE NotCod=%ld AND CrsCod=%ld",
-                  NotCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE_new ("can not remove notice");
+   DB_QueryDELETE ("can not remove notice",
+		   "DELETE FROM notices"
+		   " WHERE NotCod=%ld AND CrsCod=%ld",
+                   NotCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);

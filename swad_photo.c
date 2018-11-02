@@ -1031,8 +1031,9 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 
 void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
   {
-   DB_BuildQuery ("DELETE FROM clicks_without_photo WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove a user from the list of users without photo");
+   DB_QueryDELETE ("can not remove a user from the list of users without photo",
+		   "DELETE FROM clicks_without_photo WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1501,9 +1502,9 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 
 void Pho_RemoveObsoleteStatDegrees (void)
   {
-   DB_BuildQuery ("DELETE FROM sta_degrees"
-		  " WHERE DegCod NOT IN (SELECT DegCod FROM degrees)");
-   DB_QueryDELETE_new ("can not remove old degrees from stats");
+   DB_QueryDELETE ("can not remove old degrees from stats",
+		   "DELETE FROM sta_degrees"
+		   " WHERE DegCod NOT IN (SELECT DegCod FROM degrees)");
   }
 
 /*****************************************************************************/

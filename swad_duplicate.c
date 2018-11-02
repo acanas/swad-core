@@ -467,6 +467,6 @@ void Dup_RemoveUsrFromListDupUsrs (void)
 void Dup_RemoveUsrFromDuplicated (long UsrCod)
   {
    /***** Remove user from list of duplicated users *****/
-   DB_BuildQuery ("DELETE FROM usr_duplicated WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove a user from possible duplicates");
+   DB_QueryDELETE ("can not remove a user from possible duplicates",
+		   "DELETE FROM usr_duplicated WHERE UsrCod=%ld",UsrCod);
   }

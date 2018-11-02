@@ -1401,8 +1401,9 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
                    UsrCod);
 
    /* Delete messages from msg_rcv *****/
-   DB_BuildQuery ("DELETE FROM msg_rcv WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove received messages");
+   DB_QueryDELETE ("can not remove received messages",
+		   "DELETE FROM msg_rcv WHERE UsrCod=%ld",
+		   UsrCod);
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
@@ -1414,8 +1415,9 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
                    UsrCod);
 
    /* Delete message from msg_snt *****/
-   DB_BuildQuery ("DELETE FROM msg_snt WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove sent messages");
+   DB_QueryDELETE ("can not remove sent messages",
+		   "DELETE FROM msg_snt WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1464,9 +1466,9 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
                    MsgCod,UsrCod);
 
    /* Delete message from msg_rcv *****/
-   DB_BuildQuery ("DELETE FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,UsrCod);
-   DB_QueryDELETE_new ("can not remove a received message");
+   DB_QueryDELETE ("can not remove a received message",
+		   "DELETE FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,UsrCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
    if (Msg_CheckIfSentMsgIsDeleted (MsgCod))
@@ -1493,8 +1495,9 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
                    MsgCod);
 
    /* Delete message from msg_snt *****/
-   DB_BuildQuery ("DELETE FROM msg_snt WHERE MsgCod=%ld",MsgCod);
-   DB_QueryDELETE_new ("can not remove a sent message");
+   DB_QueryDELETE ("can not remove a sent message",
+		   "DELETE FROM msg_snt WHERE MsgCod=%ld",
+		   MsgCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
    if (Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
@@ -3706,10 +3709,10 @@ static void Msg_UnbanSender (void)
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
-   DB_BuildQuery ("DELETE FROM msg_banned"
-		  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
-                  Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryDELETE_new ("can not ban sender");
+   DB_QueryDELETE ("can not ban sender",
+		   "DELETE FROM msg_banned"
+		   " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
+                   Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show alert with the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -3739,10 +3742,10 @@ void Msg_RemoveUsrFromBanned (long UsrCod)
   {
    /***** Remove pair (sender's code - my code)
           from table of banned senders *****/
-   DB_BuildQuery ("DELETE FROM msg_banned"
-		  " WHERE FromUsrCod=%ld OR ToUsrCod=%ld",
-                  UsrCod,UsrCod);
-   DB_QueryDELETE_new ("can not remove user from table of banned users");
+   DB_QueryDELETE ("can not remove user from table of banned users",
+		   "DELETE FROM msg_banned"
+		   " WHERE FromUsrCod=%ld OR ToUsrCod=%ld",
+                   UsrCod,UsrCod);
   }
 
 /*****************************************************************************/

@@ -1889,13 +1889,14 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   DB_BuildQuery ("DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
-                  Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
-   DB_QueryDELETE_new ("can not remove administrators of a degree");
+   DB_QueryDELETE ("can not remove administrators of a degree",
+		   "DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
+                   Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
 
    /***** Remove the degree *****/
-   DB_BuildQuery ("DELETE FROM degrees WHERE DegCod=%ld",DegCod);
-   DB_QueryDELETE_new ("can not remove a degree");
+   DB_QueryDELETE ("can not remove a degree",
+		   "DELETE FROM degrees WHERE DegCod=%ld",
+		   DegCod);
 
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
    Pho_RemoveObsoleteStatDegrees ();

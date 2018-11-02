@@ -1207,13 +1207,13 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
    bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from all the groups of the course *****/
-   DB_BuildQuery ("DELETE FROM crs_grp_usr"
-		  " WHERE UsrCod=%ld AND GrpCod IN"
-		  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
-                  UsrCod,CrsCod);
-   DB_QueryDELETE_new ("can not remove a user from all groups of a course");
+   DB_QueryDELETE ("can not remove a user from all groups of a course",
+		   "DELETE FROM crs_grp_usr"
+		   " WHERE UsrCod=%ld AND GrpCod IN"
+		   " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+		   " WHERE crs_grp_types.CrsCod=%ld"
+		   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
+                   UsrCod,CrsCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -1230,8 +1230,9 @@ void Grp_RemUsrFromAllGrps (long UsrCod)
    bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from all groups *****/
-   DB_BuildQuery ("DELETE FROM crs_grp_usr WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove a user from the groups he/she belongs to");
+   DB_QueryDELETE ("can not remove a user from the groups he/she belongs to",
+		   "DELETE FROM crs_grp_usr WHERE UsrCod=%ld",
+		   UsrCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -1248,10 +1249,10 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
    bool ItsMe = Usr_ItsMe (UsrCod);
 
    /***** Remove user from group *****/
-   DB_BuildQuery ("DELETE FROM crs_grp_usr"
-		  " WHERE GrpCod=%ld AND UsrCod=%ld",
-                  GrpCod,UsrCod);
-   DB_QueryDELETE_new ("can not remove a user from a group");
+   DB_QueryDELETE ("can not remove a user from a group",
+		   "DELETE FROM crs_grp_usr"
+		   " WHERE GrpCod=%ld AND UsrCod=%ld",
+                   GrpCod,UsrCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
@@ -4047,20 +4048,20 @@ static void Grp_RemoveGroupTypeCompletely (void)
    DB_QueryUPDATE_new ("can not update all groups of a type in course timetable");
 
    /***** Remove all the students in groups of this type *****/
-   DB_BuildQuery ("DELETE FROM crs_grp_usr WHERE GrpCod IN"
-		  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
-                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   DB_QueryDELETE_new ("can not remove users from all groups of a type");
+   DB_QueryDELETE ("can not remove users from all groups of a type",
+		   "DELETE FROM crs_grp_usr WHERE GrpCod IN"
+		   " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
+                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the groups of this type *****/
-   DB_BuildQuery ("DELETE FROM crs_grp WHERE GrpTypCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   DB_QueryDELETE_new ("can not remove groups of a type");
+   DB_QueryDELETE ("can not remove groups of a type",
+		   "DELETE FROM crs_grp WHERE GrpTypCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the group type *****/
-   DB_BuildQuery ("DELETE FROM crs_grp_types WHERE GrpTypCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   DB_QueryDELETE_new ("can not remove a type of group");
+   DB_QueryDELETE ("can not remove a type of group",
+		   "DELETE FROM crs_grp_types WHERE GrpTypCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4103,14 +4104,14 @@ static void Grp_RemoveGroupCompletely (void)
    DB_QueryUPDATE_new ("can not update a group in course timetable");
 
    /***** Remove all the students in this group *****/
-   DB_BuildQuery ("DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryDELETE_new ("can not remove users from a group");
+   DB_QueryDELETE ("can not remove users from a group",
+		   "DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Remove the group *****/
-   DB_BuildQuery ("DELETE FROM crs_grp WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryDELETE_new ("can not remove a group");
+   DB_QueryDELETE ("can not remove a group",
+		   "DELETE FROM crs_grp WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

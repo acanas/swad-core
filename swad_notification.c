@@ -1582,10 +1582,10 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Delete old notifications ******/
-   DB_BuildQuery ("DELETE LOW_PRIORITY FROM notif"
-		  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-                  Cfg_TIME_TO_DELETE_OLD_NOTIF);
-   DB_QueryDELETE_new ("can not remove old notifications");
+   DB_QueryDELETE ("can not remove old notifications",
+		   "DELETE LOW_PRIORITY FROM notif"
+		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                   Cfg_TIME_TO_DELETE_OLD_NOTIF);
   }
 
 /*****************************************************************************/
@@ -2135,7 +2135,7 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
 void Ntf_RemoveUsrNtfs (long ToUsrCod)
   {
    /***** Delete notifications of a user ******/
-   DB_BuildQuery ("DELETE LOW_PRIORITY FROM notif WHERE ToUsrCod=%ld",
-                  ToUsrCod);
-   DB_QueryDELETE_new ("can not remove notifications of a user");
+   DB_QueryDELETE ("can not remove notifications of a user",
+		   "DELETE LOW_PRIORITY FROM notif WHERE ToUsrCod=%ld",
+                   ToUsrCod);
   }
