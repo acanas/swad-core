@@ -565,9 +565,9 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
    unsigned Column;
 
    /***** Remove former timetable *****/
-   DB_BuildQuery ("DELETE FROM timetable_crs WHERE CrsCod=%ld",
-		  CrsCod);
-   DB_QueryDELETE_new ("can not remove former timetable");
+   DB_QueryDELETE ("can not remove former timetable",
+		   "DELETE FROM timetable_crs WHERE CrsCod=%ld",
+		   CrsCod);
 
    /***** Go across the timetable inserting classes into database *****/
    for (Weekday = 0;
@@ -614,8 +614,9 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
    unsigned Column;
 
    /***** Remove former timetable *****/
-   DB_BuildQuery ("DELETE FROM timetable_tut WHERE UsrCod=%ld",UsrCod);
-   DB_QueryDELETE_new ("can not remove former timetable");
+   DB_QueryDELETE ("can not remove former timetable",
+		   "DELETE FROM timetable_tut WHERE UsrCod=%ld",
+		   UsrCod);
 
    /***** Loop over timetable *****/
    for (Weekday = 0;

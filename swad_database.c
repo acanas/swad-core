@@ -3359,23 +3359,6 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
       DB_ExitOnMySQLError (MsgError);
   }
 
-void DB_QueryDELETE_new (const char *MsgError)
-  {
-   int Result;
-
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Gbl.DB.QueryPtr == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
-   /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
-   free ((void *) Gbl.DB.QueryPtr);
-   Gbl.DB.QueryPtr = NULL;
-   if (Result)
-      DB_ExitOnMySQLError (MsgError);
-  }
-
 /*****************************************************************************/
 /**************** Make other kind of query from database *********************/
 /*****************************************************************************/
