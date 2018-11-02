@@ -657,8 +657,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
    extern const char *Txt_Incomplete_timetable_for_lack_of_space;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned long NumRow;
-   unsigned long NumRows;
    unsigned Weekday;
    unsigned Interval;
    unsigned i;	// To iterate through intervals
@@ -682,76 +682,73 @@ static void TT_FillTimeTableFromDB (long UsrCod)
          switch (Gbl.CurrentCrs.Grps.WhichGrps)
            {
             case Grp_ONLY_MY_GROUPS:
-               DB_BuildQuery ("SELECT "
-                              "timetable_crs.Weekday,"
-        	              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
-        	              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-        	              "timetable_crs.Place,"
-                              "timetable_crs.ClassType,"
-                              "timetable_crs.GroupName,"
-                              "timetable_crs.GrpCod,"
-                              "timetable_crs.CrsCod"
-                              " FROM timetable_crs,crs_usr"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND timetable_crs.GrpCod=-1"
-                              " AND timetable_crs.CrsCod=crs_usr.CrsCod"
-                              " UNION DISTINCT "
-                              "SELECT "
-                              "timetable_crs.Weekday,"
-                              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
-                              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-                              "timetable_crs.Place,"
-                              "timetable_crs.ClassType,"
-                              "timetable_crs.GroupName,"
-                              "timetable_crs.GrpCod,"
-                              "timetable_crs.CrsCod"
-                              " FROM timetable_crs,crs_grp_usr"
-                              " WHERE crs_grp_usr.UsrCod=%ld"
-                              " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
-                              " UNION "
-                              "SELECT "
-                              "Weekday,"
-                              "TIME_TO_SEC(StartTime) AS S,"
-                              "TIME_TO_SEC(Duration) AS D,"
-                              "Place,"
-                              "'tutoring' AS ClassType,"
-                              "'' AS GroupName,"
-                              "-1 AS GrpCod,"
-                              "-1 AS CrsCod"
-                              " FROM timetable_tut"
-                              " WHERE UsrCod=%ld"
-                              " ORDER BY Weekday,S,ClassType,"
-                              "GroupName,GrpCod,Place,D DESC,CrsCod",
-			      UsrCod,UsrCod,UsrCod);
+               NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
+					 "SELECT timetable_crs.Weekday,"
+					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
+					        "TIME_TO_SEC(timetable_crs.Duration) AS D,"
+					        "timetable_crs.Place,"
+					        "timetable_crs.ClassType,"
+					        "timetable_crs.GroupName,"
+					        "timetable_crs.GrpCod,"
+					        "timetable_crs.CrsCod"
+					 " FROM timetable_crs,crs_usr"
+					 " WHERE crs_usr.UsrCod=%ld"
+					 " AND timetable_crs.GrpCod=-1"
+					 " AND timetable_crs.CrsCod=crs_usr.CrsCod"
+					 " UNION DISTINCT "
+					 "SELECT timetable_crs.Weekday,"
+					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
+					        "TIME_TO_SEC(timetable_crs.Duration) AS D,"
+					        "timetable_crs.Place,"
+					        "timetable_crs.ClassType,"
+					        "timetable_crs.GroupName,"
+					        "timetable_crs.GrpCod,"
+					        "timetable_crs.CrsCod"
+					 " FROM timetable_crs,crs_grp_usr"
+					 " WHERE crs_grp_usr.UsrCod=%ld"
+					 " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
+					 " UNION "
+					 "SELECT Weekday,"
+					        "TIME_TO_SEC(StartTime) AS S,"
+					        "TIME_TO_SEC(Duration) AS D,"
+					        "Place,"
+					        "'tutoring' AS ClassType,"
+					        "'' AS GroupName,"
+					        "-1 AS GrpCod,"
+					        "-1 AS CrsCod"
+					 " FROM timetable_tut"
+					 " WHERE UsrCod=%ld"
+					 " ORDER BY Weekday,S,ClassType,"
+					 "GroupName,GrpCod,Place,D DESC,CrsCod",
+					 UsrCod,UsrCod,UsrCod);
                break;
             case Grp_ALL_GROUPS:
-               DB_BuildQuery ("SELECT "
-        	              "timetable_crs.Weekday,"
-        	              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
-        	              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-        	              "timetable_crs.Place,"
-                              "timetable_crs.ClassType,"
-                              "timetable_crs.GroupName,"
-                              "timetable_crs.GrpCod,"
-                              "timetable_crs.CrsCod"
-                              " FROM timetable_crs,crs_usr"
-                              " WHERE crs_usr.UsrCod=%ld"
-                              " AND timetable_crs.CrsCod=crs_usr.CrsCod"
-                              " UNION "
-                              "SELECT "
-                              "Weekday,"
-                              "TIME_TO_SEC(StartTime) AS S,"
-                              "TIME_TO_SEC(Duration) AS D,"
-                              "Place,"
-                              "'tutoring' AS ClassType,"
-                              "'' AS GroupName,"
-                              "-1 AS GrpCod,"
-                              "-1 AS CrsCod"
-                              " FROM timetable_tut"
-                              " WHERE UsrCod=%ld"
-                              " ORDER BY Weekday,S,ClassType,"
-                              "GroupName,GrpCod,Place,D DESC,CrsCod",
-			      UsrCod,UsrCod);
+               NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
+					 "SELECT timetable_crs.Weekday,"
+					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
+					        "TIME_TO_SEC(timetable_crs.Duration) AS D,"
+					        "timetable_crs.Place,"
+					        "timetable_crs.ClassType,"
+					        "timetable_crs.GroupName,"
+					        "timetable_crs.GrpCod,"
+					        "timetable_crs.CrsCod"
+					 " FROM timetable_crs,crs_usr"
+					 " WHERE crs_usr.UsrCod=%ld"
+					 " AND timetable_crs.CrsCod=crs_usr.CrsCod"
+					 " UNION "
+					 "SELECT Weekday,"
+					        "TIME_TO_SEC(StartTime) AS S,"
+					        "TIME_TO_SEC(Duration) AS D,"
+					        "Place,"
+					        "'tutoring' AS ClassType,"
+					        "'' AS GroupName,"
+					        "-1 AS GrpCod,"
+					        "-1 AS CrsCod"
+					 " FROM timetable_tut"
+					 " WHERE UsrCod=%ld"
+					 " ORDER BY Weekday,S,ClassType,"
+					 "GroupName,GrpCod,Place,D DESC,CrsCod",
+					 UsrCod,UsrCod);
                break;
            }
 	 break;
@@ -759,62 +756,61 @@ static void TT_FillTimeTableFromDB (long UsrCod)
          if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS ||
              Gbl.Action.Act == ActEdiCrsTT ||
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
-            DB_BuildQuery ("SELECT "
-        	           "Weekday,"
-        	           "TIME_TO_SEC(StartTime) AS S,"
-        	           "TIME_TO_SEC(Duration) AS D,"
-        	           "Place,"
-        	           "ClassType,"
-        	           "GroupName,"
-        	           "GrpCod"
-        	           " FROM timetable_crs"
-                           " WHERE CrsCod=%ld"
-                           " ORDER BY Weekday,S,ClassType,"
-                           "GroupName,GrpCod,Place,D DESC",
-			   Gbl.CurrentCrs.Crs.CrsCod);
+            NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
+				      "SELECT Weekday,"
+					     "TIME_TO_SEC(StartTime) AS S,"
+					     "TIME_TO_SEC(Duration) AS D,"
+					     "Place,"
+					     "ClassType,"
+					     "GroupName,"
+					     "GrpCod"
+				      " FROM timetable_crs"
+				      " WHERE CrsCod=%ld"
+				      " ORDER BY Weekday,S,ClassType,"
+				      "GroupName,GrpCod,Place,D DESC",
+				      Gbl.CurrentCrs.Crs.CrsCod);
          else
-            DB_BuildQuery ("SELECT "
-        	           "timetable_crs.Weekday,"
-        	           "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
-        	           "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-        	           "timetable_crs.Place,"
-        	           "timetable_crs.ClassType,"
-        	           "timetable_crs.GroupName,"
-        	           "timetable_crs.GrpCod"
-                           " FROM timetable_crs,crs_usr"
-                           " WHERE timetable_crs.CrsCod=%ld"
-                           " AND timetable_crs.GrpCod=-1 AND crs_usr.UsrCod=%ld"
-                           " AND timetable_crs.CrsCod=crs_usr.CrsCod"
-                           " UNION DISTINCT "
-                           "SELECT timetable_crs.Weekday,"
-                           "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
-                           "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-                           "timetable_crs.Place,"
-                           "timetable_crs.ClassType,"
-                           "timetable_crs.GroupName,"
-                           "timetable_crs.GrpCod"
-			   " FROM timetable_crs,crs_grp_usr"
-                           " WHERE timetable_crs.CrsCod=%ld"
-                           " AND crs_grp_usr.UsrCod=%ld"
-                           " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
-                           " ORDER BY Weekday,S,ClassType,"
-                           "GroupName,GrpCod,Place,D DESC",
-			   Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
-			   Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+            NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
+				      "SELECT timetable_crs.Weekday,"
+					     "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
+					     "TIME_TO_SEC(timetable_crs.Duration) AS D,"
+					     "timetable_crs.Place,"
+					     "timetable_crs.ClassType,"
+					     "timetable_crs.GroupName,"
+					     "timetable_crs.GrpCod"
+				      " FROM timetable_crs,crs_usr"
+				      " WHERE timetable_crs.CrsCod=%ld"
+				      " AND timetable_crs.GrpCod=-1 AND crs_usr.UsrCod=%ld"
+				      " AND timetable_crs.CrsCod=crs_usr.CrsCod"
+				      " UNION DISTINCT "
+				      "SELECT timetable_crs.Weekday,"
+					     "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
+					     "TIME_TO_SEC(timetable_crs.Duration) AS D,"
+					     "timetable_crs.Place,"
+					     "timetable_crs.ClassType,"
+					     "timetable_crs.GroupName,"
+					     "timetable_crs.GrpCod"
+				      " FROM timetable_crs,crs_grp_usr"
+				      " WHERE timetable_crs.CrsCod=%ld"
+				      " AND crs_grp_usr.UsrCod=%ld"
+				      " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
+				      " ORDER BY Weekday,S,ClassType,"
+				      "GroupName,GrpCod,Place,D DESC",
+				      Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
+				      Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
 	 break;
       case TT_TUTORING_TIMETABLE:
-         DB_BuildQuery ("SELECT "
-                        "Weekday,"
-                        "TIME_TO_SEC(StartTime) AS S,"
-                        "TIME_TO_SEC(Duration) AS D,"
-                        "Place"
-                        " FROM timetable_tut"
-                        " WHERE UsrCod=%ld"
-                        " ORDER BY Weekday,S,Place,D DESC",
-                  UsrCod);
+         NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
+				   "SELECT Weekday,"
+					  "TIME_TO_SEC(StartTime) AS S,"
+					  "TIME_TO_SEC(Duration) AS D,"
+					  "Place"
+				   " FROM timetable_tut"
+				   " WHERE UsrCod=%ld"
+				   " ORDER BY Weekday,S,Place,D DESC",
+				   UsrCod);
          break;
      }
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get timetable");
 
    /***** If viewing (not editing) ==>
           calculate range of hours and resolution *****/

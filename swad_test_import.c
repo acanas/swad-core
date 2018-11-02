@@ -730,12 +730,14 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
    unsigned i;
 
    /***** Check if stem exists *****/
-   DB_BuildQuery ("SELECT QstCod FROM tst_questions"
-		  " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-                 Gbl.Test.Stem.Text);
-   NumQstsWithThisStem = (unsigned) DB_QuerySELECT_new (&mysql_res_qst,"can not check if a question exists");
+   NumQstsWithThisStem =
+   (unsigned) DB_QuerySELECT (&mysql_res_qst,"can not check"
+					     " if a question exists",
+			      "SELECT QstCod FROM tst_questions"
+			      " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+			      Gbl.Test.Stem.Text);
 
    if (NumQstsWithThisStem)	// There are questions in database with the same stem that the one of this question
      {
@@ -750,10 +752,12 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
             Lay_ShowErrorAndExit ("Wrong code of question.");
 
          /* Get answers from this question */
-         DB_BuildQuery ("SELECT Answer FROM tst_answers"
-			" WHERE QstCod=%ld ORDER BY AnsInd",
-                        QstCod);
-         NumOptsExistingQstInDB = (unsigned) DB_QuerySELECT_new (&mysql_res_ans,"can not get the answer of a question");
+         NumOptsExistingQstInDB =
+         (unsigned) DB_QuerySELECT (&mysql_res_ans,"can not get the answer"
+						   " of a question",
+				    "SELECT Answer FROM tst_answers"
+				    " WHERE QstCod=%ld ORDER BY AnsInd",
+				    QstCod);
 
          switch (Gbl.Test.AnswerType)
            {

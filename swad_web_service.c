@@ -288,8 +288,9 @@ static int Svc_GetPlgCodFromAppKey (const char *appKey)
    Gbl.WebService.PlgCod = -1L;
 
    /***** Get number of plugins with a IP address *****/
-   DB_BuildQuery ("SELECT PlgCod FROM plugins WHERE AppKey='%s'",appKey);
-   if (DB_QuerySELECT_new (&mysql_res,"can not check application key"))	// Session found in table of sessions
+   if (DB_QuerySELECT (&mysql_res,"can not check application key",
+		       "SELECT PlgCod FROM plugins WHERE AppKey='%s'",
+		       appKey))	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -381,8 +382,9 @@ static int Svc_CheckWSKey (char WSKey[Svc_BYTES_WS_KEY + 1])
    Gbl.WebService.PlgCod = -1L;
 
    /***** Check that key does not exist in database *****/
-   DB_BuildQuery ("SELECT UsrCod,PlgCod FROM ws_keys WHERE WSKey='%s'",WSKey);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get existence of key"))	// Session found in table of sessions
+   if (DB_QuerySELECT (&mysql_res,"can not get existence of key",
+		       "SELECT UsrCod,PlgCod FROM ws_keys WHERE WSKey='%s'",
+		       WSKey))	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -504,9 +506,9 @@ static int Svc_GetCurrentDegCodFromCurrentCrsCod (void)
    Gbl.CurrentDeg.Deg.DegCod = -1L;
 
    /***** Check that key does not exist in database *****/
-   DB_BuildQuery ("SELECT DegCod FROM courses WHERE CrsCod=%ld",
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get the degree of a course"))	// Course found in table of courses
+   if (DB_QuerySELECT (&mysql_res,"can not get the degree of a course",
+		       "SELECT DegCod FROM courses WHERE CrsCod=%ld",
+		       Gbl.CurrentCrs.Crs.CrsCod))	// Course found in table of courses
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -534,13 +536,10 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
       return false;
 
    /***** Get some user's data *****/
-   /* Query database */
-   DB_BuildQuery ("SELECT Surname1,Surname2,FirstName,Photo,DATE_FORMAT(Birthday,'%%Y%%m%%d')"
-                  " FROM usr_data WHERE UsrCod=%ld",
-		  UsrDat->UsrCod);
-
-   /* Check number of rows in result */
-   if (DB_QuerySELECT_new (&mysql_res,"can not get user's data") != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get user's data",
+		       "SELECT Surname1,Surname2,FirstName,Photo,DATE_FORMAT(Birthday,'%%Y%%m%%d')"
+		       " FROM usr_data WHERE UsrCod=%ld",
+		       UsrDat->UsrCod) != 1)
       return false;
 
    /* Read some user's data */
@@ -575,10 +574,10 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    if (CrsCod > 0)
      {
       /* Get the role in the given course */
-      DB_BuildQuery ("SELECT Role FROM crs_usr"
-                     " WHERE CrsCod=%ld AND UsrCod=%ld",
-		     CrsCod,UsrDat->UsrCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get user's role"))	// User belongs to course
+      if (DB_QuerySELECT (&mysql_res,"can not get user's role",
+			  "SELECT Role FROM crs_usr"
+			  " WHERE CrsCod=%ld AND UsrCod=%ld",
+			  CrsCod,UsrDat->UsrCod))	// User belongs to course
 	{
 	 row = mysql_fetch_row (mysql_res);
 	 if (row[0])
@@ -606,10 +605,10 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    else
      {
       /* Get the maximum role in any course */
-      DB_BuildQuery ("SELECT MAX(Role)"
-                     " FROM crs_usr WHERE UsrCod=%ld",
-		     UsrDat->UsrCod);
-      if (DB_QuerySELECT_new (&mysql_res,"can not get user's role") == 1)
+      if (DB_QuerySELECT (&mysql_res,"can not get user's role",
+			  "SELECT MAX(Role)"
+			  " FROM crs_usr WHERE UsrCod=%ld",
+			  UsrDat->UsrCod) == 1)
 	{
 	 row = mysql_fetch_row (mysql_res);
 	 if (row[0])
@@ -827,23 +826,27 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      DB_BuildQuery ("SELECT usr_nicknames.UsrCod"
-		     " FROM usr_nicknames,usr_data"
-		     " WHERE usr_nicknames.Nickname='%s'"
-		     " AND usr_nicknames.UsrCod=usr_data.UsrCod"
-		     " AND usr_data.Password='%s'",
-		     UsrIDNickOrEmail,userPassword);
+      NumRows =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
+				 "SELECT usr_nicknames.UsrCod"
+				 " FROM usr_nicknames,usr_data"
+				 " WHERE usr_nicknames.Nickname='%s'"
+				 " AND usr_nicknames.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.Password='%s'",
+				 UsrIDNickOrEmail,userPassword);
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
       /* User has typed an email */
       // TODO: Get only if email confirmed?
-      DB_BuildQuery ("SELECT usr_emails.UsrCod"
-	             " FROM usr_emails,usr_data"
-		     " WHERE usr_emails.E_mail='%s'"
-		     " AND usr_emails.UsrCod=usr_data.UsrCod"
-		     " AND usr_data.Password='%s'",
-		     UsrIDNickOrEmail,userPassword);
+      NumRows =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
+				 "SELECT usr_emails.UsrCod"
+				 " FROM usr_emails,usr_data"
+				 " WHERE usr_emails.E_mail='%s'"
+				 " AND usr_emails.UsrCod=usr_data.UsrCod"
+				 " AND usr_data.Password='%s'",
+				 UsrIDNickOrEmail,userPassword);
      }
    else									// 3: It's not a nickname nor email
      {
@@ -854,11 +857,14 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 	{
 	 /* User has typed a valid user's ID (existing or not) */
 	 // TODO: Get only if ID confirmed?
-	 DB_BuildQuery ("SELECT usr_IDs.UsrCod FROM usr_IDs,usr_data"
-			" WHERE usr_IDs.UsrID='%s'"
-			" AND usr_IDs.UsrCod=usr_data.UsrCod"
-			" AND usr_data.Password='%s'",
-			UsrIDNickOrEmail,userPassword);
+	 NumRows =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
+				    "SELECT usr_IDs.UsrCod"
+				    " FROM usr_IDs,usr_data"
+				    " WHERE usr_IDs.UsrID='%s'"
+				    " AND usr_IDs.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.Password='%s'",
+				    UsrIDNickOrEmail,userPassword);
 	}
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (Gbl.soap,
@@ -867,7 +873,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
      }
 
    /***** Get user's data from database *****/
-   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's data")) == 1)	// User found in table of users' data
+   if (NumRows == 1)	// User found in table of users' data
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1002,10 +1008,12 @@ int swad__loginBySessionKey (struct soap *soap,
 
    // Now, we know that sessionID is a valid session identifier
    /***** Query data of the session from database *****/
-   DB_BuildQuery ("SELECT UsrCod,DegCod,CrsCod FROM sessions"
-	          " WHERE SessionId='%s'",
-		  sessionID);
-   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get session data")) == 1)	// Session found in table of sessions
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get session data",
+			      "SELECT UsrCod,DegCod,CrsCod FROM sessions"
+			      " WHERE SessionId='%s'",
+			      sessionID);
+   if (NumRows == 1)	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1116,15 +1124,21 @@ int swad__getNewPassword (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      DB_BuildQuery ("SELECT UsrCod FROM usr_nicknames WHERE Nickname='%s'",
-		     UsrIDNickOrEmail);
+      NumRows =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
+				 "SELECT UsrCod FROM usr_nicknames"
+				 " WHERE Nickname='%s'",
+				 UsrIDNickOrEmail);
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
       /* User has typed an email */
       // TODO: Get only if email confirmed?
-      DB_BuildQuery ("SELECT UsrCod FROM usr_emails WHERE E_mail='%s'",
-		     UsrIDNickOrEmail);
+      NumRows =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
+				 "SELECT UsrCod FROM usr_emails"
+				 " WHERE E_mail='%s'",
+				 UsrIDNickOrEmail);
      }
    else									// 3: It's not a nickname nor email
      {
@@ -1135,8 +1149,11 @@ int swad__getNewPassword (struct soap *soap,
 	{
 	 /* User has typed a valid user's ID (existing or not) */
 	 // TODO: Get only if ID confirmed?
-	 DB_BuildQuery ("SELECT UsrCod FROM usr_IDs WHERE UsrID='%s'",
-			UsrIDNickOrEmail);
+	 NumRows =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's data",
+				    "SELECT UsrCod FROM usr_IDs"
+				    " WHERE UsrID='%s'",
+				    UsrIDNickOrEmail);
 	}
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (Gbl.soap,
@@ -1145,7 +1162,7 @@ int swad__getNewPassword (struct soap *soap,
      }
 
    /***** Get user's data from database *****/
-   if ((NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's data")) == 1)	// One unique user found in table of users' data
+   if (NumRows == 1)	// One unique user found in table of users' data
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1204,11 +1221,17 @@ int swad__getCourses (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;
 
    /***** Query my courses from database *****/
-   DB_BuildQuery ("SELECT courses.CrsCod,courses.ShortName,courses.FullName,crs_usr.Role FROM crs_usr,courses"
-                  " WHERE crs_usr.UsrCod=%ld AND crs_usr.CrsCod=courses.CrsCod"
-                  " ORDER BY courses.FullName",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's courses");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's courses",
+			      "SELECT courses.CrsCod,"
+				     "courses.ShortName,"
+				     "courses.FullName,"
+				     "crs_usr.Role"
+			      " FROM crs_usr,courses"
+			      " WHERE crs_usr.UsrCod=%ld"
+			      " AND crs_usr.CrsCod=courses.CrsCod"
+			      " ORDER BY courses.FullName",
+			      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    getCoursesOut->numCourses = (int) NumRows;
    getCoursesOut->coursesArray.__size = (int) NumRows;
@@ -1667,12 +1690,17 @@ int swad__getGroupTypes (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Query group types in a course from database *****/
-   DB_BuildQuery ("SELECT GrpTypCod,GrpTypName,Mandatory,Multiple,UNIX_TIMESTAMP(OpenTime)"
-	          " FROM crs_grp_types"
-                  " WHERE CrsCod=%d"
-                  " ORDER BY GrpTypName",
-		  courseCode);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get group types");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get group types",
+			      "SELECT GrpTypCod,"
+			             "GrpTypName,"
+			             "Mandatory,"
+			             "Multiple,"
+			             "UNIX_TIMESTAMP(OpenTime)"
+			      " FROM crs_grp_types"
+			      " WHERE CrsCod=%d"
+			      " ORDER BY GrpTypName",
+			      courseCode);
 
    getGroupTypesOut->numGroupTypes = (int) NumRows;
    getGroupTypesOut->groupTypesArray.__size = (int) NumRows;
@@ -1775,15 +1803,21 @@ int swad__getGroups (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Query groups in a course from database *****/
-   DB_BuildQuery ("SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,"
-	          "crs_grp.GrpCod,crs_grp.GrpName,"
-	          "crs_grp.MaxStudents,crs_grp.Open,crs_grp.FileZones"
-	          " FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod=%d"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-                  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-		  courseCode);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's groups");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's groups",
+			      "SELECT crs_grp_types.GrpTypCod,"
+				     "crs_grp_types.GrpTypName,"
+				     "crs_grp.GrpCod,"
+				     "crs_grp.GrpName,"
+				     "crs_grp.MaxStudents,"
+				     "crs_grp.Open,"
+				     "crs_grp.FileZones"
+			      " FROM crs_grp_types,crs_grp"
+			      " WHERE crs_grp_types.CrsCod=%d"
+			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			      " ORDER BY crs_grp_types.GrpTypName,"
+			      "crs_grp.GrpName",
+			      courseCode);
 
    getGroupsOut->numGroups = (int) NumRows;
    getGroupsOut->groupsArray.__size = (int) NumRows;
@@ -1861,7 +1895,8 @@ int swad__sendMyGroups (struct soap *soap,
    unsigned NumGrp;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumRow;
+   unsigned NumRows;
    long GrpCod;
    unsigned MaxStudents;
 
@@ -1936,15 +1971,20 @@ int swad__sendMyGroups (struct soap *soap,
    Grp_FreeListCodGrp (&LstGrpsIWant);
 
    /***** Query groups in a course from database *****/
-   DB_BuildQuery ("SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,"
-	          "crs_grp.GrpCod,crs_grp.GrpName,"
-	          "crs_grp.MaxStudents,crs_grp.Open,crs_grp.FileZones"
-	          " FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod=%d"
-                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-                  " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-		  courseCode);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's groups");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's groups",
+			      "SELECT crs_grp_types.GrpTypCod,"
+				     "crs_grp_types.GrpTypName,"
+				     "crs_grp.GrpCod,"
+				     "crs_grp.GrpName,"
+				     "crs_grp.MaxStudents,"
+				     "crs_grp.Open,"
+				     "crs_grp.FileZones"
+			      " FROM crs_grp_types,crs_grp"
+			      " WHERE crs_grp_types.CrsCod=%d"
+			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			      " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
+			      courseCode);
 
    SendMyGroupsOut->numGroups = (int) NumRows;
    SendMyGroupsOut->groupsArray.__size = (int) NumRows;
@@ -2073,6 +2113,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumRows;
    int NumAttEvent;
    long AttCod;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -2114,16 +2155,19 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance events *****/
-   DB_BuildQuery ("SELECT AttCod,Hidden,UsrCod,"
-                  "UNIX_TIMESTAMP(StartTime) AS ST,"
-                  "UNIX_TIMESTAMP(EndTime) AS ET,"
-                  "CommentTchVisible,Title,Txt"
-	          " FROM att_events"
-                  " WHERE CrsCod=%d"
-                  " ORDER BY ST DESC,ET DESC,Title DESC",
-		  courseCode);
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get attendance events",
+			      "SELECT AttCod,Hidden,UsrCod,"
+			      "UNIX_TIMESTAMP(StartTime) AS ST,"
+			      "UNIX_TIMESTAMP(EndTime) AS ET,"
+			      "CommentTchVisible,Title,Txt"
+			      " FROM att_events"
+			      " WHERE CrsCod=%d"
+			      " ORDER BY ST DESC,ET DESC,Title DESC",
+			      courseCode);
+
    getAttendanceEventsOut->eventsArray.__size =
-   getAttendanceEventsOut->numEvents          = (int) DB_QuerySELECT_new (&mysql_res,"can not get attendance events");
+   getAttendanceEventsOut->numEvents          = (int) NumRows;
 
    if (getAttendanceEventsOut->numEvents == 0)
       getAttendanceEventsOut->eventsArray.__ptr = NULL;
@@ -2237,9 +2281,12 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
    size_t Length;
 
    /***** Get list of groups *****/
-   DB_BuildQuery ("SELECT GrpCod FROM att_grp WHERE AttCod=%ld",
-		  AttCod);
-   if ((NumGrps = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get groups of an attendance event")) == 0)
+   NumGrps =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups"
+					 " of an attendance event",
+			      "SELECT GrpCod FROM att_grp WHERE AttCod=%ld",
+			      AttCod);
+   if (NumGrps == 0)
       *ListGroups = NULL;
    else	// Events found
      {
@@ -2566,14 +2613,18 @@ int swad__getAttendanceUsers (struct soap *soap,
 	       (unsigned) Rol_STD,
 	       Att.AttCod);
    // Query: list of users in attendance list + rest of users (subquery)
-   DB_BuildQuery ("SELECT u.UsrCod,u.Present FROM "
-		  "(SELECT UsrCod,Present"
-		  " FROM att_usr WHERE AttCod=%ld"
-		  " UNION %s) AS u,usr_data"
-		  " WHERE u.UsrCod=usr_data.UsrCod"
-		  " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName",
-		  (long) attendanceEventCode,SubQuery);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get users in an attendance event");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get users"
+					 " in an attendance event",
+			      "SELECT u.UsrCod,u.Present FROM "
+			      "(SELECT UsrCod,Present"
+			      " FROM att_usr WHERE AttCod=%ld"
+			      " UNION %s) AS u,usr_data"
+			      " WHERE u.UsrCod=usr_data.UsrCod"
+			      " ORDER BY usr_data.Surname1,"
+					"usr_data.Surname2,"
+					"usr_data.FirstName",
+			      (long) attendanceEventCode,SubQuery);
 
    getAttendanceUsersOut->numUsers = (int) NumRows;
    getAttendanceUsersOut->usersArray.__size = (int) NumRows;
@@ -2853,13 +2904,23 @@ int swad__getNotifications (struct soap *soap,
       return ReturnCode;
 
    /***** Get my notifications from database *****/
-   DB_BuildQuery ("SELECT NtfCod,NotifyEvent,UNIX_TIMESTAMP(TimeNotif),"
-	          "FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod,Status"
-                  " FROM notif"
-                  " WHERE ToUsrCod=%ld AND TimeNotif>=FROM_UNIXTIME(%ld)"
-                  " ORDER BY TimeNotif DESC",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
-   NumNotifications = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get user's notifications");
+   NumNotifications =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's notifications",
+			      "SELECT NtfCod,"				// row[0]
+				     "NotifyEvent,"			// row[1]
+				     "UNIX_TIMESTAMP(TimeNotif),"	// row[2]
+				     "FromUsrCod,"			// row[3]
+				     "InsCod,"				// row[4]
+				     "CtrCod,"				// row[5]
+				     "DegCod,"				// row[6]
+				     "CrsCod,"				// row[7]
+				     "Cod,"				// row[8]
+				     "Status"				// row[9]
+			      " FROM notif"
+			      " WHERE ToUsrCod=%ld AND TimeNotif>=FROM_UNIXTIME(%ld)"
+			      " ORDER BY TimeNotif DESC",
+			      Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
+
    if (NumNotifications)	// Notifications found
      {
       getNotificationsOut->numNotifications = (int) NumNotifications;
@@ -3039,10 +3100,10 @@ static int Svc_GetMyLanguage (void)
    Txt_Language_t Lan;
 
    /***** Get user's language *****/
-   DB_BuildQuery ("SELECT Language FROM usr_data"
-	          " WHERE UsrCod=%ld",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get user's language") != 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get user's language",
+		       "SELECT Language FROM usr_data"
+		       " WHERE UsrCod=%ld",
+		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
       return soap_receiver_fault (Gbl.soap,
 	                          "Can not get user's language from database",
 	                          "User doen't exist in database");
@@ -3181,15 +3242,15 @@ int swad__sendMessage (struct soap *soap,
    if (messageCode)
      {
       /***** Check if the original message was really received by me *****/
-      DB_BuildQuery ("SELECT SUM(N) FROM"
-                     " (SELECT COUNT(*) AS N FROM msg_rcv"
-                     " WHERE UsrCod=%ld AND MsgCod=%ld"
-                     " UNION"
-                     " SELECT COUNT(*) AS N FROM msg_rcv_deleted"
-                     " WHERE UsrCod=%ld AND MsgCod=%ld) AS T",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
-		     Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode);
-      if (!DB_QuerySELECT_new (&mysql_res,"can not check original message"))
+      if (!DB_QuerySELECT (&mysql_res,"can not check original message",
+			   "SELECT SUM(N) FROM"
+			   " (SELECT COUNT(*) AS N FROM msg_rcv"
+			   " WHERE UsrCod=%ld AND MsgCod=%ld"
+			   " UNION"
+			   " SELECT COUNT(*) AS N FROM msg_rcv_deleted"
+			   " WHERE UsrCod=%ld AND MsgCod=%ld) AS T",
+			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
+			   Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode))
          return soap_sender_fault (Gbl.soap,
                                    "Can not check original message",
                                    "Error reading from database");
@@ -3210,13 +3271,15 @@ int swad__sendMessage (struct soap *soap,
                                    "Original message does not exist");
 
       /***** Get the recipient of the message *****/
-      DB_BuildQuery ("SELECT UsrCod FROM msg_snt"
-                     " WHERE MsgCod=%ld"
-                     " UNION "
-                     "SELECT UsrCod FROM msg_snt_deleted"
-                     " WHERE MsgCod=%ld",
-		     (long) messageCode,(long) messageCode);
-      if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not check original message")))	// Message found in any of the two tables of sent messages
+      NumRows =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not check original message",
+				 "SELECT UsrCod FROM msg_snt"
+				 " WHERE MsgCod=%ld"
+				 " UNION "
+				 "SELECT UsrCod FROM msg_snt_deleted"
+				 " WHERE MsgCod=%ld",
+				 (long) messageCode,(long) messageCode);
+      if (NumRows)	// Message found in any of the two tables of sent messages
         {
          row = mysql_fetch_row (mysql_res);
          ReplyUsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -3571,10 +3634,10 @@ static int Svc_GetTstConfig (long CrsCod)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   DB_BuildQuery ("SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
-                  " FROM tst_config WHERE CrsCod=%ld",
-                  CrsCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get test configuration"))
+   if (DB_QuerySELECT (&mysql_res,"can not get test configuration",
+		       "SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
+		       " FROM tst_config WHERE CrsCod=%ld",
+		       CrsCod))
      {
       /***** Get minimun, default and maximum *****/
       row = mysql_fetch_row (mysql_res);
@@ -3714,12 +3777,12 @@ static int Svc_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
    unsigned NumRows;
 
    /***** Get available tags from database *****/
-   DB_BuildQuery ("SELECT TagCod,TagTxt"
-	          " FROM tst_tags"
-                  " WHERE CrsCod=%ld AND TagHidden='N'"
-                  " ORDER BY TagTxt",
-		  CrsCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get test tags");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get test tags",
+			     "SELECT TagCod,TagTxt"
+			     " FROM tst_tags"
+			     " WHERE CrsCod=%ld AND TagHidden='N'"
+			     " ORDER BY TagTxt",
+			     CrsCod);
 
    getTestsOut->tagsArray.__size = (int) NumRows;
 
@@ -3767,29 +3830,30 @@ static int Svc_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 
    /***** Get recent test questions from database *****/
    // DISTINCTROW is necessary to not repeat questions
-   DB_BuildQuery ("SELECT DISTINCTROW tst_questions.QstCod,"
- 	          "tst_questions.AnsType,tst_questions.Shuffle,"
- 	          "tst_questions.Stem,tst_questions.Feedback"
-		  " FROM tst_questions,tst_question_tags,tst_tags"
-                  " WHERE tst_questions.CrsCod=%ld"
-                  " AND tst_questions.QstCod NOT IN"
-		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
-		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod=%ld"
-		  " AND "
-		  "("
-		  "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-                  " OR "
-                  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
-                  ")"
-                  " ORDER BY QstCod",
-		  CrsCod,CrsCod,CrsCod,
-		  BeginTime,
-		  BeginTime);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test questions");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test questions",
+			      "SELECT DISTINCTROW tst_questions.QstCod,"
+			      "tst_questions.AnsType,tst_questions.Shuffle,"
+			      "tst_questions.Stem,tst_questions.Feedback"
+			      " FROM tst_questions,tst_question_tags,tst_tags"
+			      " WHERE tst_questions.CrsCod=%ld"
+			      " AND tst_questions.QstCod NOT IN"
+			      " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
+			      " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
+			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			      " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			      " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			      " AND tst_tags.CrsCod=%ld"
+			      " AND "
+			      "("
+			      "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+			      " OR "
+			      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
+			      ")"
+			      " ORDER BY QstCod",
+			      CrsCod,CrsCod,CrsCod,
+			      BeginTime,
+			      BeginTime);
 
    getTestsOut->questionsArray.__size = (int) NumRows;
 
@@ -3851,30 +3915,31 @@ static int Svc_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
    unsigned Index;
 
    /***** Get recent test questions from database *****/
-   DB_BuildQuery ("SELECT QstCod,AnsInd,Correct,Answer,Feedback"
-                  " FROM tst_answers WHERE QstCod IN "
-                  "(SELECT tst_questions.QstCod"
-		  " FROM tst_questions,tst_question_tags,tst_tags"
-                  " WHERE tst_questions.CrsCod=%ld"
-                  " AND tst_questions.QstCod NOT IN"
-		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
-		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod=%ld"
-		  " AND "
-		  "("
-		  "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-                  " OR "
-                  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
-                  ")"
-                  ")"
-                  " ORDER BY QstCod,AnsInd",
-		  CrsCod,CrsCod,CrsCod,
-		  BeginTime,
-		  BeginTime);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test answers");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test answers",
+			      "SELECT QstCod,AnsInd,Correct,Answer,Feedback"
+			      " FROM tst_answers WHERE QstCod IN "
+			      "(SELECT tst_questions.QstCod"
+			      " FROM tst_questions,tst_question_tags,tst_tags"
+			      " WHERE tst_questions.CrsCod=%ld"
+			      " AND tst_questions.QstCod NOT IN"
+			      " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
+			      " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
+			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			      " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			      " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			      " AND tst_tags.CrsCod=%ld"
+			      " AND "
+			      "("
+			      "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+			      " OR "
+			      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
+			      ")"
+			      ")"
+			      " ORDER BY QstCod,AnsInd",
+			      CrsCod,CrsCod,CrsCod,
+			      BeginTime,
+			      BeginTime);
 
    getTestsOut->answersArray.__size = (int) NumRows;
 
@@ -3935,30 +4000,31 @@ static int Svc_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
    unsigned Index;
 
    /***** Get recent test questions from database *****/
-   DB_BuildQuery ("SELECT QstCod,TagCod,TagInd"
-                  " FROM tst_question_tags WHERE QstCod IN "
-                  "(SELECT tst_questions.QstCod"
-		  " FROM tst_questions,tst_question_tags,tst_tags"
-                  " WHERE tst_questions.CrsCod=%ld"
-                  " AND tst_questions.QstCod NOT IN"
-		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
-		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
-		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod=%ld"
-		  " AND "
-		  "("
-		  "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-                  " OR "
-                  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
-                  ")"
-                  ")"
-                  " ORDER BY QstCod,TagInd",
-		  CrsCod,CrsCod,CrsCod,
-		  BeginTime,
-		  BeginTime);
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test question tags");
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test question tags",
+			      "SELECT QstCod,TagCod,TagInd"
+			      " FROM tst_question_tags WHERE QstCod IN "
+			      "(SELECT tst_questions.QstCod"
+			      " FROM tst_questions,tst_question_tags,tst_tags"
+			      " WHERE tst_questions.CrsCod=%ld"
+			      " AND tst_questions.QstCod NOT IN"
+			      " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
+			      " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
+			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			      " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			      " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			      " AND tst_tags.CrsCod=%ld"
+			      " AND "
+			      "("
+			      "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+			      " OR "
+			      "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
+			      ")"
+			      ")"
+			      " ORDER BY QstCod,TagInd",
+			      CrsCod,CrsCod,CrsCod,
+			      BeginTime,
+			      BeginTime);
 
    getTestsOut->questionTagsArray.__size = (int) NumRows;
 
@@ -4095,29 +4161,29 @@ int swad__getTrivialQuestion (struct soap *soap,
 
    /***** Start query *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_BuildQuery ("SELECT DISTINCTROW tst_questions.QstCod,"
- 	          "tst_questions.AnsType,tst_questions.Shuffle,"
- 	          "tst_questions.Stem,tst_questions.Feedback,"
- 	          "tst_questions.Score/tst_questions.NumHits AS S"
-		  " FROM courses,tst_questions"
-                  " WHERE courses.DegCod IN (%s)"
-		  " AND courses.CrsCod=tst_questions.CrsCod"
-                  " AND tst_questions.AnsType='unique_choice'"
-                  " AND tst_questions.NumHits>0"
-                  " AND tst_questions.QstCod NOT IN"
-		  " (SELECT tst_question_tags.QstCod"
-		  " FROM courses,tst_tags,tst_question_tags"
-                  " WHERE courses.DegCod IN (%s)"
-		  " AND courses.CrsCod=tst_tags.CrsCod"
-		  " AND tst_tags.TagHidden='Y'"
-		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-                  " HAVING S>='%f' AND S<='%f'"
-                  " ORDER BY RAND(NOW()) LIMIT 1",
-		  DegreesStr,DegreesStr,
-		  lowerScore,upperScore);
+   NumRows =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test questions",
+			      "SELECT DISTINCTROW tst_questions.QstCod,"
+			      "tst_questions.AnsType,tst_questions.Shuffle,"
+			      "tst_questions.Stem,tst_questions.Feedback,"
+			      "tst_questions.Score/tst_questions.NumHits AS S"
+			      " FROM courses,tst_questions"
+			      " WHERE courses.DegCod IN (%s)"
+			      " AND courses.CrsCod=tst_questions.CrsCod"
+			      " AND tst_questions.AnsType='unique_choice'"
+			      " AND tst_questions.NumHits>0"
+			      " AND tst_questions.QstCod NOT IN"
+			      " (SELECT tst_question_tags.QstCod"
+			      " FROM courses,tst_tags,tst_question_tags"
+			      " WHERE courses.DegCod IN (%s)"
+			      " AND courses.CrsCod=tst_tags.CrsCod"
+			      " AND tst_tags.TagHidden='Y'"
+			      " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			      " HAVING S>='%f' AND S<='%f'"
+			      " ORDER BY RAND(NOW()) LIMIT 1",
+			      DegreesStr,DegreesStr,
+			      lowerScore,upperScore);
    Str_SetDecimalPointToLocal ();	// Return to local system
-
-   NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test questions");
 
    if (NumRows == 1)	// Question found
      {
@@ -4184,11 +4250,12 @@ int swad__getTrivialQuestion (struct soap *soap,
    if (QstCod > 0)
      {
       /***** Get answer from database *****/
-      DB_BuildQuery ("SELECT QstCod,AnsInd,Correct,Answer,Feedback"
-		     " FROM tst_answers WHERE QstCod=%ld"
-		     " ORDER BY AnsInd",
-		     QstCod);
-      NumRows = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get test answers");
+      NumRows =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get test answers",
+				 "SELECT QstCod,AnsInd,Correct,Answer,Feedback"
+				 " FROM tst_answers WHERE QstCod=%ld"
+				 " ORDER BY AnsInd",
+				 QstCod);
 
       getTrivialQuestionOut->answersArray.__size = (int) NumRows;
 
