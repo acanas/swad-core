@@ -679,14 +679,15 @@ static bool Tst_CheckIfNextTstAllowed (void)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
-   DB_BuildQuery ("SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-UNIX_TIMESTAMP(),"
-	          "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"
-                  " FROM crs_usr"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-		  Gbl.Test.Config.MinTimeNxtTstPerQst,
-		  Gbl.Test.Config.MinTimeNxtTstPerQst,
-		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get last access to test") == 1)
+   if (DB_QuerySELECT (&mysql_res,"can not get last access to test",
+		       "SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-"
+			      "UNIX_TIMESTAMP(),"
+			      "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"
+		       " FROM crs_usr"
+		       " WHERE CrsCod=%ld AND UsrCod=%ld",
+		       Gbl.Test.Config.MinTimeNxtTstPerQst,
+		       Gbl.Test.Config.MinTimeNxtTstPerQst,
+		       Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
      {
       /* Get seconds from now to next access to test */
       row = mysql_fetch_row (mysql_res);
@@ -755,10 +756,12 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
    Tst_Status_t TstStatus = Tst_STATUS_ERROR;
 
    /***** Get status of test from database *****/
-   DB_BuildQuery ("SELECT Status FROM tst_status"
-                  " WHERE SessionId='%s' AND CrsCod=%ld AND NumTst=%u",
-		  Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get status of test");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get status of test",
+			     "SELECT Status FROM tst_status"
+			     " WHERE SessionId='%s'"
+			     " AND CrsCod=%ld"
+			     " AND NumTst=%u",
+			     Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst);
 
    if (NumRows == 1)
      {
@@ -790,10 +793,11 @@ static unsigned Tst_GetNumAccessesTst (void)
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
       /***** Get number of hits to test from database *****/
-      DB_BuildQuery ("SELECT NumAccTst FROM crs_usr"
-	             " WHERE CrsCod=%ld AND UsrCod=%ld",
-		     Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      NumRows = DB_QuerySELECT_new (&mysql_res,"can not get number of hits to test");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get number of hits to test",
+				"SELECT NumAccTst FROM crs_usr"
+				" WHERE CrsCod=%ld AND UsrCod=%ld",
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod);
 
       if (NumRows == 0)
          NumAccessesTst = 0;
@@ -864,16 +868,18 @@ static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
    unsigned long NumRow;
 
    /***** Get all tags of questions in this test *****/
-   DB_BuildQuery ("SELECT tst_tags.TagTxt FROM"
-	          " (SELECT DISTINCT(tst_question_tags.TagCod)"
-	          " FROM tst_question_tags,tst_exam_questions"
-	          " WHERE tst_exam_questions.TstCod=%ld"
-	          " AND tst_exam_questions.QstCod=tst_question_tags.QstCod)"
-	          " AS TagsCods,tst_tags"
-	          " WHERE TagsCods.TagCod=tst_tags.TagCod"
-	          " ORDER BY tst_tags.TagTxt",
-		  TstCod);
-   if ((NumRows = DB_QuerySELECT_new (&mysql_res,"can not get tags present in a test result")))
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get tags"
+					" present in a test result",
+			     "SELECT tst_tags.TagTxt FROM"
+			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
+			     " FROM tst_question_tags,tst_exam_questions"
+			     " WHERE tst_exam_questions.TstCod=%ld"
+			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod)"
+			     " AS TagsCods,tst_tags"
+			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
+			     " ORDER BY tst_tags.TagTxt",
+			     TstCod);
+   if (NumRows)
      {
       /***** Write the tags *****/
       fprintf (Gbl.F.Out,"<ul>");
@@ -1676,10 +1682,11 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void)
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
   {
    /***** Get available tags from database *****/
-   DB_BuildQuery ("SELECT TagCod,TagTxt,TagHidden FROM tst_tags"
-                  " WHERE CrsCod=%ld ORDER BY TagTxt",
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT_new (mysql_res,"can not get available tags");
+   return DB_QuerySELECT (mysql_res,"can not get available tags",
+			  "SELECT TagCod,TagTxt,TagHidden FROM tst_tags"
+			  " WHERE CrsCod=%ld"
+			  " ORDER BY TagTxt",
+			  Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1690,10 +1697,11 @@ static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
   {
    /***** Get available not hidden tags from database *****/
-   DB_BuildQuery ("SELECT TagCod,TagTxt FROM tst_tags"
-                  " WHERE CrsCod=%ld AND TagHidden='N' ORDER BY TagTxt",
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT_new (mysql_res,"can not get available enabled tags");
+   return DB_QuerySELECT (mysql_res,"can not get available enabled tags",
+			  "SELECT TagCod,TagTxt FROM tst_tags"
+			  " WHERE CrsCod=%ld AND TagHidden='N'"
+			  " ORDER BY TagTxt",
+			  Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -2067,10 +2075,15 @@ static void Tst_GetConfigTstFromDB (void)
    unsigned long NumRows;
 
    /***** Get configuration of test for current course from database *****/
-   DB_BuildQuery ("SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
-                  " FROM tst_config WHERE CrsCod=%ld",
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get configuration of test");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get configuration of test",
+			     "SELECT Pluggable,"		// row[0]
+				    "Min,"			// row[1]
+				    "Def,"			// row[2]
+				    "Max,"			// row[3]
+				    "MinTimeNxtTstPerQst,"	// row[4]
+				    "Feedback"			// row[5]
+			     " FROM tst_config WHERE CrsCod=%ld",
+			     Gbl.CurrentCrs.Crs.CrsCod);
 
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
    Gbl.Test.Config.MinTimeNxtTstPerQst = 0UL;
@@ -2166,9 +2179,9 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
    Tst_Pluggable_t Pluggable;
 
    /***** Get pluggability of tests for current course from database *****/
-   DB_BuildQuery ("SELECT Pluggable FROM tst_config WHERE CrsCod=%ld",
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get configuration of test");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get configuration of test",
+			     "SELECT Pluggable FROM tst_config WHERE CrsCod=%ld",
+			     Gbl.CurrentCrs.Crs.CrsCod);
 
    if (NumRows == 0)
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2815,14 +2828,14 @@ bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
    row[10] NumHitsNotBlank
    row[11] Score
    */
-   DB_BuildQuery ("SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
-	          "AnsType,Shuffle,Stem,Feedback,"
-	          "ImageName,ImageTitle,ImageURL,"
-	          "NumHits,NumHitsNotBlank,Score"
-                  " FROM tst_questions"
-                  " WHERE QstCod=%ld",
-		  QstCod);
-   return (DB_QuerySELECT_new (mysql_res,"can not get data of a question") == 1);
+   return (DB_QuerySELECT (mysql_res,"can not get data of a question",
+			   "SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
+			   "AnsType,Shuffle,Stem,Feedback,"
+			   "ImageName,ImageTitle,ImageURL,"
+			   "NumHits,NumHitsNotBlank,Score"
+			   " FROM tst_questions"
+			   " WHERE QstCod=%ld",
+			   QstCod) == 1);
   }
 
 /*****************************************************************************/
@@ -3311,13 +3324,14 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
-   DB_BuildQuery ("SELECT AnsInd,Answer,Feedback,"
-	          "ImageName,ImageTitle,ImageURL,Correct"
-	          " FROM tst_answers WHERE QstCod=%ld ORDER BY %s",
-		  QstCod,
-		  Shuffle ? "RAND(NOW())" :
-			    "AnsInd");
-   if (!(NumRows = DB_QuerySELECT_new (mysql_res,"can not get answers of a question")))
+   NumRows = DB_QuerySELECT (mysql_res,"can not get answers of a question",
+			     "SELECT AnsInd,Answer,Feedback,"
+			     "ImageName,ImageTitle,ImageURL,Correct"
+			     " FROM tst_answers WHERE QstCod=%ld ORDER BY %s",
+			     QstCod,
+			     Shuffle ? "RAND(NOW())" :
+				       "AnsInd");
+   if (!NumRows)
       Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
@@ -4663,13 +4677,13 @@ void Tst_CheckIfNumberOfAnswersIsOne (void)
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
   {
    /***** Get the tags of a question from database *****/
-   DB_BuildQuery ("SELECT tst_tags.TagTxt FROM tst_question_tags,tst_tags"
-                  " WHERE tst_question_tags.QstCod=%ld"
-                  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-                  " AND tst_tags.CrsCod=%ld"
-                  " ORDER BY tst_question_tags.TagInd",
-		  QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT_new (mysql_res,"can not get the tags of a question");
+   return DB_QuerySELECT (mysql_res,"can not get the tags of a question",
+			  "SELECT tst_tags.TagTxt FROM tst_question_tags,tst_tags"
+			  " WHERE tst_question_tags.QstCod=%ld"
+			  " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			  " AND tst_tags.CrsCod=%ld"
+			  " ORDER BY tst_question_tags.TagInd",
+			  QstCod,Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -5539,12 +5553,12 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Get the type of answer and the stem from the database *****/
    /* Get the question from database */
-   DB_BuildQuery ("SELECT AnsType,Shuffle,Stem,Feedback,"
-	          "ImageName,ImageTitle,ImageURL"
-		  " FROM tst_questions"
-		  " WHERE QstCod=%ld AND CrsCod=%ld",
-		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QuerySELECT_new (&mysql_res,"can not get a question");
+   DB_QuerySELECT (&mysql_res,"can not get a question",
+		   "SELECT AnsType,Shuffle,Stem,Feedback,"
+	           "ImageName,ImageTitle,ImageURL"
+		   " FROM tst_questions"
+		   " WHERE QstCod=%ld AND CrsCod=%ld",
+		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    row = mysql_fetch_row (mysql_res);
    /*
@@ -5668,19 +5682,20 @@ static void Tst_GetImageFromDB (int NumOpt,struct Image *Image)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Build query depending on NumOpt *****/
+   /***** Query depending on NumOpt *****/
    if (NumOpt < 0)
       // Get image associated to stem
-      DB_BuildQuery ("SELECT ImageName,ImageTitle,ImageURL FROM tst_questions"
-		     " WHERE QstCod=%ld AND CrsCod=%ld",
-		     Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);      // Get image associated to answer
+      DB_QuerySELECT (&mysql_res,"can not get image name",
+		      "SELECT ImageName,ImageTitle,ImageURL FROM tst_questions"
+		      " WHERE QstCod=%ld AND CrsCod=%ld",
+		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    else
-      DB_BuildQuery ("SELECT ImageName,ImageTitle,ImageURL FROM tst_answers"
-		     " WHERE QstCod=%ld AND AnsInd=%u",
-		     Gbl.Test.QstCod,(unsigned) NumOpt);
+      // Get image associated to answer
+      DB_QuerySELECT (&mysql_res,"can not get image name",
+		      "SELECT ImageName,ImageTitle,ImageURL FROM tst_answers"
+		      " WHERE QstCod=%ld AND AnsInd=%u",
+		      Gbl.Test.QstCod,(unsigned) NumOpt);
 
-   /***** Query database *****/
-   DB_QuerySELECT_new (&mysql_res,"can not get image name");
    row = mysql_fetch_row (mysql_res);
 
    /***** Get the image name, title and URL (row[0], row[1], row[2]) *****/
@@ -6245,10 +6260,10 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
    long TagCod = -1L;	// -1 means that the tag does not exist in database
 
    /***** Get tag code from database *****/
-   DB_BuildQuery ("SELECT TagCod FROM tst_tags"
-                  " WHERE CrsCod=%ld AND TagTxt='%s'",
-		  Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
-   NumRows = DB_QuerySELECT_new (&mysql_res,"can not get tag");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get tag",
+			     "SELECT TagCod FROM tst_tags"
+			     " WHERE CrsCod=%ld AND TagTxt='%s'",
+			     Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
 
    Gbl.Alert.Type = Ale_NONE;
    if (NumRows == 1)
@@ -6757,10 +6772,10 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
    MYSQL_ROW row;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   DB_BuildQuery ("SELECT ImageName FROM tst_questions"
-		  " WHERE QstCod=%ld AND CrsCod=%ld",
-		  QstCod,CrsCod);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get image"))
+   if (DB_QuerySELECT (&mysql_res,"can not get image",
+		       "SELECT ImageName FROM tst_questions"
+		       " WHERE QstCod=%ld AND CrsCod=%ld",
+		       QstCod,CrsCod))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -6786,9 +6801,11 @@ static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
    unsigned NumImg;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   DB_BuildQuery ("SELECT ImageName FROM tst_questions WHERE CrsCod=%ld",
-		  CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get images");
+   NumImages =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get images",
+			      "SELECT ImageName FROM tst_questions"
+			      " WHERE CrsCod=%ld",
+			      CrsCod);
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6816,15 +6833,15 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
    MYSQL_ROW row;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   DB_BuildQuery ("SELECT tst_answers.ImageName"
-		  " FROM tst_questions,tst_answers"
-		  " WHERE tst_questions.CrsCod=%ld"	// Extra check
-		  " AND tst_questions.QstCod=%ld"	// Extra check
-		  " AND tst_questions.QstCod=tst_answers.QstCod"
-		  " AND tst_answers.QstCod=%ld"
-		  " AND tst_answers.AnsInd=%u",
-		  CrsCod,QstCod,QstCod,AnsInd);
-   if (DB_QuerySELECT_new (&mysql_res,"can not get images"))
+   if (DB_QuerySELECT (&mysql_res,"can not get images",
+		       "SELECT tst_answers.ImageName"
+		       " FROM tst_questions,tst_answers"
+		       " WHERE tst_questions.CrsCod=%ld"	// Extra check
+		       " AND tst_questions.QstCod=%ld"	// Extra check
+		       " AND tst_questions.QstCod=tst_answers.QstCod"
+		       " AND tst_answers.QstCod=%ld"
+		       " AND tst_answers.AnsInd=%u",
+		       CrsCod,QstCod,QstCod,AnsInd))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -6849,14 +6866,15 @@ static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
    unsigned NumImg;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   DB_BuildQuery ("SELECT tst_answers.ImageName"
-		  " FROM tst_questions,tst_answers"
-		  " WHERE tst_questions.CrsCod=%ld"	// Extra check
-		  " AND tst_questions.QstCod=%ld"	// Extra check
-		  " AND tst_questions.QstCod=tst_answers.QstCod"
-		  " AND tst_answers.QstCod=%ld",
-		  CrsCod,QstCod,QstCod);
-   NumImages = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get images");
+   NumImages =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get images",
+			      "SELECT tst_answers.ImageName"
+			      " FROM tst_questions,tst_answers"
+			      " WHERE tst_questions.CrsCod=%ld"	// Extra check
+			      " AND tst_questions.QstCod=%ld"	// Extra check
+			      " AND tst_questions.QstCod=tst_answers.QstCod"
+			      " AND tst_answers.QstCod=%ld",
+			      CrsCod,QstCod,QstCod);
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6887,12 +6905,13 @@ static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
    unsigned NumImg;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   DB_BuildQuery ("SELECT tst_answers.ImageName"
-		  " FROM tst_questions,tst_answers"
-		  " WHERE tst_questions.CrsCod=%ld"
-		  " AND tst_questions.QstCod=tst_answers.QstCod",
-		  CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT_new (&mysql_res,"can not get images");
+   NumImages =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get images",
+			      "SELECT tst_answers.ImageName"
+			      " FROM tst_questions,tst_answers"
+			      " WHERE tst_questions.CrsCod=%ld"
+			      " AND tst_questions.QstCod=tst_answers.QstCod",
+			      CrsCod);
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
