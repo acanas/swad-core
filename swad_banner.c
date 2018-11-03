@@ -572,14 +572,12 @@ static void Ban_ShowOrHideBanner (bool Hide)
 
    /***** Mark file as hidden/visible in database *****/
    if (Ban.Hidden != Hide)
-     {
-      DB_BuildQuery ("UPDATE banners SET Hidden='%c'"
-		     " WHERE BanCod=%ld",
-	             Hide ? 'Y' :
-		            'N',
-	             Ban.BanCod);
-      DB_QueryUPDATE_new ("can not change status of a banner in database");
-     }
+      DB_QueryUPDATE ("can not change status of a banner in database",
+		      "UPDATE banners SET Hidden='%c'"
+		      " WHERE BanCod=%ld",
+	              Hide ? 'Y' :
+		             'N',
+	              Ban.BanCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -725,9 +723,9 @@ static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
 				 const char *NewBanName)
   {
    /***** Update banner changing old name by new name *****/
-   DB_BuildQuery ("UPDATE banners SET %s='%s' WHERE BanCod=%ld",
-	          FieldName,NewBanName,BanCod);
-   DB_QueryUPDATE_new ("can not update the name of a banner");
+   DB_QueryUPDATE ("can not update the name of a banner",
+		   "UPDATE banners SET %s='%s' WHERE BanCod=%ld",
+	           FieldName,NewBanName,BanCod);
   }
 
 /*****************************************************************************/
@@ -755,9 +753,9 @@ void Ban_ChangeBannerImg (void)
    if (NewImg[0])
      {
       /* Update the table changing old image by new image */
-      DB_BuildQuery ("UPDATE banners SET Img='%s' WHERE BanCod=%ld",
-                     NewImg,Ban->BanCod);
-      DB_QueryUPDATE_new ("can not update the image of a banner");
+      DB_QueryUPDATE ("can not update the image of a banner",
+		      "UPDATE banners SET Img='%s' WHERE BanCod=%ld",
+                      NewImg,Ban->BanCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -800,9 +798,9 @@ void Ban_ChangeBannerWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_BuildQuery ("UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
-                     NewWWW,Ban->BanCod);
-      DB_QueryUPDATE_new ("can not update the web of a banner");
+      DB_QueryUPDATE ("can not update the web of a banner",
+		      "UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
+                      NewWWW,Ban->BanCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

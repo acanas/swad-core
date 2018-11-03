@@ -699,13 +699,13 @@ static bool Inf_GetIfIHaveReadFromForm (void)
 static void Inf_SetForceReadIntoDB (bool MustBeRead)
   {
    /***** Insert or replace info source for a specific type of course information *****/
-   DB_BuildQuery ("UPDATE crs_info_src SET MustBeRead='%c'"
-		  " WHERE CrsCod=%ld AND InfoType='%s'",
-                  MustBeRead ? 'Y' :
-        	               'N',
-                  Gbl.CurrentCrs.Crs.CrsCod,
-		  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-   DB_QueryUPDATE_new ("can not update if info must be read");
+   DB_QueryUPDATE ("can not update if info must be read",
+		   "UPDATE crs_info_src SET MustBeRead='%c'"
+		   " WHERE CrsCod=%ld AND InfoType='%s'",
+                   MustBeRead ? 'Y' :
+        	                'N',
+                   Gbl.CurrentCrs.Crs.CrsCod,
+		   Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
   }
 
 /*****************************************************************************/
@@ -715,17 +715,15 @@ static void Inf_SetForceReadIntoDB (bool MustBeRead)
 static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
   {
    if (IHaveRead)
-     {
       /***** Insert I have read course information *****/
-      DB_BuildQuery ("REPLACE INTO crs_info_read"
-		     " (UsrCod,CrsCod,InfoType)"
-		     " VALUES"
-		     " (%ld,%ld,'%s')",
-                     Gbl.Usrs.Me.UsrDat.UsrCod,
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-      DB_QueryUPDATE_new ("can not set that I have read course info");
-     }
+      DB_QueryREPLACE ("can not set that I have read course info",
+		       "REPLACE INTO crs_info_read"
+		       " (UsrCod,CrsCod,InfoType)"
+		       " VALUES"
+		       " (%ld,%ld,'%s')",
+                       Gbl.Usrs.Me.UsrDat.UsrCod,
+                       Gbl.CurrentCrs.Crs.CrsCod,
+                       Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
    else
       /***** Remove I have read course information *****/
       DB_QueryDELETE ("can not set that I have not read course info",
@@ -1486,18 +1484,19 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
    if (DB_QueryCOUNT_new ("can not get if info source is already stored in database"))	// Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
-         DB_BuildQuery ("UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
-			" WHERE CrsCod=%ld AND InfoType='%s'",
-                        Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
-                        Gbl.CurrentCrs.Crs.CrsCod,
-                        Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+         DB_QueryUPDATE ("can not update info source",
+			 "UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
+			 " WHERE CrsCod=%ld AND InfoType='%s'",
+                         Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
+                         Gbl.CurrentCrs.Crs.CrsCod,
+                         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       else	// MustBeRead remains unchanged
-         DB_BuildQuery ("UPDATE crs_info_src SET InfoSrc='%s'"
-		        " WHERE CrsCod=%ld AND InfoType='%s'",
-		        Inf_NamesInDBForInfoSrc[InfoSrc],
-		        Gbl.CurrentCrs.Crs.CrsCod,
-		        Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-      DB_QueryUPDATE_new ("can not update info source");
+         DB_QueryUPDATE ("can not update info source",
+			 "UPDATE crs_info_src SET InfoSrc='%s'"
+		         " WHERE CrsCod=%ld AND InfoType='%s'",
+		         Inf_NamesInDBForInfoSrc[InfoSrc],
+		         Gbl.CurrentCrs.Crs.CrsCod,
+		         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
      }
    else		// Info is not stored in database, so insert it
       DB_QueryINSERT ("can not insert info source",

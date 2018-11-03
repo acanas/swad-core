@@ -195,20 +195,18 @@ void Pre_SetPrefsFromIP (void)
 
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
-     {
-      DB_BuildQuery ("UPDATE IP_prefs"
-		    " SET FirstDayOfWeek=%u,DateFormat=%u,"
-		    "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
-		     " WHERE UsrCod=%ld",
-		     Gbl.Prefs.FirstDayOfWeek,
-		     (unsigned) Gbl.Prefs.DateFormat,
-		     The_ThemeId[Gbl.Prefs.Theme],
-		     Ico_IconSetId[Gbl.Prefs.IconSet],
-		     (unsigned) Gbl.Prefs.Menu,
-		     Gbl.Prefs.SideCols,
-		     Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update your preferences");
-     }
+      DB_QueryUPDATE ("can not update your preferences",
+		      "UPDATE IP_prefs"
+		      " SET FirstDayOfWeek=%u,DateFormat=%u,"
+		      "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
+		      " WHERE UsrCod=%ld",
+		      Gbl.Prefs.FirstDayOfWeek,
+		      (unsigned) Gbl.Prefs.DateFormat,
+		      The_ThemeId[Gbl.Prefs.Theme],
+		      Ico_IconSetId[Gbl.Prefs.IconSet],
+		      (unsigned) Gbl.Prefs.Menu,
+		      Gbl.Prefs.SideCols,
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -350,10 +348,10 @@ void Pre_ShowRightCol (void)
 
 static void Pre_UpdateSideColsOnUsrDataTable (void)
   {
-   DB_BuildQuery ("UPDATE usr_data SET SideCols=%u"
-		  " WHERE UsrCod=%ld",
-		  Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update your preference about side columns");
+   DB_QueryUPDATE ("can not update your preference about side columns",
+		   "UPDATE usr_data SET SideCols=%u"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

@@ -999,10 +999,10 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       /* Update number of clicks */
       if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
         {
-         DB_BuildQuery ("UPDATE clicks_without_photo"
-			" SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
-		        Gbl.Usrs.Me.UsrDat.UsrCod);
-         DB_QueryUPDATE_new ("can not update number of clicks without photo");
+         DB_QueryUPDATE ("can not update number of clicks without photo",
+			 "UPDATE clicks_without_photo"
+			 " SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
+		         Gbl.Usrs.Me.UsrDat.UsrCod);
          NumClicks++;
         }
      }
@@ -1187,8 +1187,9 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 static void Pho_ClearPhotoName (long UsrCod)
   {
    /***** Clear photo name in user's data *****/
-   DB_BuildQuery ("UPDATE usr_data SET Photo='' WHERE UsrCod=%ld",UsrCod);
-   DB_QueryUPDATE_new ("can not clear the name of a user's photo");
+   DB_QueryUPDATE ("can not clear the name of a user's photo",
+		   "UPDATE usr_data SET Photo='' WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1200,9 +1201,9 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
    char PathPublPhoto[PATH_MAX + 1];
 
    /***** Update photo name in database *****/
-   DB_BuildQuery ("UPDATE usr_data SET Photo='%s' WHERE UsrCod=%ld",
-                  Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
-   DB_QueryUPDATE_new ("can not update the name of a user's photo");
+   DB_QueryUPDATE ("can not update the name of a user's photo",
+		   "UPDATE usr_data SET Photo='%s' WHERE UsrCod=%ld",
+                   Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
 
    /***** Remove the old symbolic link to photo *****/
    snprintf (PathPublPhoto,sizeof (PathPublPhoto),
@@ -1329,10 +1330,10 @@ void Pho_ChangePhotoVisibility (void)
    Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho");
 
    /***** Store public/private photo in database *****/
-   DB_BuildQuery ("UPDATE usr_data SET PhotoVisibility='%s' WHERE UsrCod=%ld",
-		  Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update your preference about photo visibility");
+   DB_QueryUPDATE ("can not update your preference about photo visibility",
+		   "UPDATE usr_data SET PhotoVisibility='%s' WHERE UsrCod=%ld",
+		   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
    Pre_EditPrefs ();

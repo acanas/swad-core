@@ -337,11 +337,12 @@ void Prf_ChangeProfileVisibility (void)
    Gbl.Usrs.Me.UsrDat.ProfileVisibility = Pri_GetParamVisibility ("VisPrf");
 
    /***** Store public/private photo in database *****/
-   DB_BuildQuery ("UPDATE usr_data SET ProfileVisibility='%s'"
-		  " WHERE UsrCod=%ld",
-                  Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ProfileVisibility],
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update your preference about public profile visibility");
+   DB_QueryUPDATE ("can not update your preference"
+		   " about public profile visibility",
+		   "UPDATE usr_data SET ProfileVisibility='%s'"
+		   " WHERE UsrCod=%ld",
+                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ProfileVisibility],
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
    Pre_EditPrefs ();
@@ -858,13 +859,11 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update first click time in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
-	{
-	 DB_BuildQuery ("UPDATE usr_figures"
-			" SET FirstClickTime=FROM_UNIXTIME(%ld)"
-			" WHERE UsrCod=%ld",
-		        (long) UsrFigures.FirstClickTimeUTC,UsrCod);
-	 DB_QueryUPDATE_new ("can not update user's figures");
-	}
+	 DB_QueryUPDATE ("can not update user's figures",
+			 "UPDATE usr_figures"
+			 " SET FirstClickTime=FROM_UNIXTIME(%ld)"
+			 " WHERE UsrCod=%ld",
+		         (long) UsrFigures.FirstClickTimeUTC,UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -889,12 +888,10 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update number of clicks in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
-	{
-	 DB_BuildQuery ("UPDATE usr_figures SET NumClicks=%ld"
-			" WHERE UsrCod=%ld",
-		        UsrFigures.NumClicks,UsrCod);
-	 DB_QueryUPDATE_new ("can not update user's figures");
-	}
+	 DB_QueryUPDATE ("can not update user's figures",
+			 "UPDATE usr_figures SET NumClicks=%ld"
+			 " WHERE UsrCod=%ld",
+		         UsrFigures.NumClicks,UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -918,12 +915,10 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update number of file views in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
-	{
-	 DB_BuildQuery ("UPDATE usr_figures SET NumFileViews=%ld"
-			" WHERE UsrCod=%ld",
-		        UsrFigures.NumFileViews,UsrCod);
-	 DB_QueryUPDATE_new ("can not update user's figures");
-	}
+	 DB_QueryUPDATE ("can not update user's figures",
+			 "UPDATE usr_figures SET NumFileViews=%ld"
+			 " WHERE UsrCod=%ld",
+		         UsrFigures.NumFileViews,UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -947,12 +942,10 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
-	{
-	 DB_BuildQuery ("UPDATE usr_figures SET NumForPst=%ld"
-			" WHERE UsrCod=%ld",
-		        UsrFigures.NumForPst,UsrCod);
-	 DB_QueryUPDATE_new ("can not update user's figures");
-	}
+	 DB_QueryUPDATE ("can not update user's figures",
+			 "UPDATE usr_figures SET NumForPst=%ld"
+			 " WHERE UsrCod=%ld",
+		         UsrFigures.NumForPst,UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -976,12 +969,10 @@ static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update number of messages sent in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
-	{
-	 DB_BuildQuery ("UPDATE usr_figures SET NumMsgSnt=%ld"
-			" WHERE UsrCod=%ld",
-		        UsrFigures.NumMsgSnt,UsrCod);
-	 DB_QueryUPDATE_new ("can not update user's figures");
-	}
+	 DB_QueryUPDATE ("can not update user's figures",
+			 "UPDATE usr_figures SET NumMsgSnt=%ld"
+			 " WHERE UsrCod=%ld",
+		         UsrFigures.NumMsgSnt,UsrCod);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }

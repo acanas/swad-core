@@ -2818,16 +2818,16 @@ void Grp_OpenGroupsAutomatically (void)
         {
          /***** Open all the closed groups in this course the must be opened
                 and with open time in the past ****/
-         DB_BuildQuery ("UPDATE crs_grp SET Open='Y'"
-		       " WHERE GrpTypCod=%ld AND Open='N'",
-	                GrpTypCod);
-         DB_QueryUPDATE_new ("can not open groups");
+         DB_QueryUPDATE ("can not open groups",
+			 "UPDATE crs_grp SET Open='Y'"
+		         " WHERE GrpTypCod=%ld AND Open='N'",
+	                 GrpTypCod);
 
          /***** To not try to open groups again, set MustBeOpened to false *****/
-         DB_BuildQuery ("UPDATE crs_grp_types SET MustBeOpened='N'"
-		       " WHERE GrpTypCod=%ld",
-	                GrpTypCod);
-         DB_QueryUPDATE_new ("can not update the opening of a type of group");
+         DB_QueryUPDATE ("can not update the opening of a type of group",
+			 "UPDATE crs_grp_types SET MustBeOpened='N'"
+		         " WHERE GrpTypCod=%ld",
+	                 GrpTypCod);
         }
      }
 
@@ -4042,11 +4042,11 @@ static void Grp_RemoveGroupTypeCompletely (void)
    Svy_RemoveGroupsOfType (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Change all groups of this type in course timetable *****/
-   DB_BuildQuery ("UPDATE timetable_crs SET GrpCod=-1"
-		  " WHERE GrpCod IN"
-		  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
-                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   DB_QueryUPDATE_new ("can not update all groups of a type in course timetable");
+   DB_QueryUPDATE ("can not update all groups of a type in course timetable",
+		   "UPDATE timetable_crs SET GrpCod=-1"
+		   " WHERE GrpCod IN"
+		   " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
+                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the students in groups of this type *****/
    DB_QueryDELETE ("can not remove users from all groups of a type",
@@ -4100,9 +4100,9 @@ static void Grp_RemoveGroupCompletely (void)
    Svy_RemoveGroup (GrpDat.GrpCod);
 
    /***** Change this group in course timetable *****/
-   DB_BuildQuery ("UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryUPDATE_new ("can not update a group in course timetable");
+   DB_QueryUPDATE ("can not update a group in course timetable",
+		   "UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Remove all the students in this group *****/
    DB_QueryDELETE ("can not remove users from a group",
@@ -4142,9 +4142,9 @@ void Grp_OpenGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   DB_BuildQuery ("UPDATE crs_grp SET Open='Y' WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryUPDATE_new ("can not open a group");
+   DB_QueryUPDATE ("can not open a group",
+		   "UPDATE crs_grp SET Open='Y' WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4175,9 +4175,9 @@ void Grp_CloseGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   DB_BuildQuery ("UPDATE crs_grp SET Open='N' WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryUPDATE_new ("can not close a group");
+   DB_QueryUPDATE ("can not close a group",
+		   "UPDATE crs_grp SET Open='N' WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4208,9 +4208,9 @@ void Grp_EnableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   DB_BuildQuery ("UPDATE crs_grp SET FileZones='Y' WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryUPDATE_new ("can not enable file zones of a group");
+   DB_QueryUPDATE ("can not enable file zones of a group",
+		   "UPDATE crs_grp SET FileZones='Y' WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4241,9 +4241,9 @@ void Grp_DisableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   DB_BuildQuery ("UPDATE crs_grp SET FileZones='N' WHERE GrpCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpCod);
-   DB_QueryUPDATE_new ("can not disable file zones of a group");
+   DB_QueryUPDATE ("can not disable file zones of a group",
+		   "UPDATE crs_grp SET FileZones='N' WHERE GrpCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -4292,9 +4292,9 @@ void Grp_ChangeGroupType (void)
    else	// Group is not in database
      {
       /* Update the table of groups changing old type by new type */
-      DB_BuildQuery ("UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
-                     NewGrpTypCod,Gbl.CurrentCrs.Grps.GrpCod);
-      DB_QueryUPDATE_new ("can not update the type of a group");
+      DB_QueryUPDATE ("can not update the type of a group",
+		      "UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
+                      NewGrpTypCod,Gbl.CurrentCrs.Grps.GrpCod);
 
       /* Create message to show the change made */
       AlertType = Ale_SUCCESS;
@@ -4344,11 +4344,11 @@ void Grp_ChangeMandatGrpTyp (void)
    else
      {
       /***** Update of the table of types of group changing the old type of enrolment by the new *****/
-      DB_BuildQuery ("UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
-                     NewMandatoryEnrolment ? 'Y' :
-        	                             'N',
-                     Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-      DB_QueryUPDATE_new ("can not update enrolment type of a type of group");
+      DB_QueryUPDATE ("can not update enrolment type of a type of group",
+		      "UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
+                      NewMandatoryEnrolment ? 'Y' :
+        	                              'N',
+                      Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4399,12 +4399,12 @@ void Grp_ChangeMultiGrpTyp (void)
    else
      {
       /***** Update of the table of types of group changing the old type of enrolment by the new *****/
-      DB_BuildQuery ("UPDATE crs_grp_types SET Multiple='%c'"
-		     " WHERE GrpTypCod=%ld",
-                     NewMultipleEnrolment ? 'Y' :
-        	                            'N',
-                     Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-      DB_QueryUPDATE_new ("can not update enrolment type of a type of group");
+      DB_QueryUPDATE ("can not update enrolment type of a type of group",
+		      "UPDATE crs_grp_types SET Multiple='%c'"
+		      " WHERE GrpTypCod=%ld",
+                      NewMultipleEnrolment ? 'Y' :
+        	                             'N',
+                      Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4441,14 +4441,14 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 
    /***** Update the table of types of group
           changing the old open time of enrolment by the new *****/
-   DB_BuildQuery ("UPDATE crs_grp_types"
-		  " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
-		  " WHERE GrpTypCod=%ld",
-                  Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
-        	                                            'N',
-                  (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
-                  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   DB_QueryUPDATE_new ("can not update enrolment type of a type of group");
+   DB_QueryUPDATE ("can not update enrolment type of a type of group",
+		   "UPDATE crs_grp_types"
+		   " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
+		   " WHERE GrpTypCod=%ld",
+                   Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
+        	                                             'N',
+                   (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
+                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
@@ -4498,9 +4498,10 @@ void Grp_ChangeMaxStdsGrp (void)
    else
      {
       /***** Update the table of groups changing the old maximum of students to the new *****/
-      DB_BuildQuery ("UPDATE crs_grp SET MaxStudents=%u WHERE GrpCod=%ld",
-                     NewMaxStds,Gbl.CurrentCrs.Grps.GrpCod);
-      DB_QueryUPDATE_new ("can not update the maximum number of students in a group");
+      DB_QueryUPDATE ("can not update the maximum number of students"
+		      " in a group",
+		      "UPDATE crs_grp SET MaxStudents=%u WHERE GrpCod=%ld",
+                      NewMaxStds,Gbl.CurrentCrs.Grps.GrpCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4593,11 +4594,11 @@ void Grp_RenameGroupType (void)
          else
            {
             /* Update the table changing old name by new name */
-            DB_BuildQuery ("UPDATE crs_grp_types SET GrpTypName='%s'"
-			   " WHERE GrpTypCod=%ld",
-                           NewNameGrpTyp,
-                           Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-            DB_QueryUPDATE_new ("can not update the type of a group");
+            DB_QueryUPDATE ("can not update the type of a group",
+        		    "UPDATE crs_grp_types SET GrpTypName='%s'"
+			    " WHERE GrpTypCod=%ld",
+                            NewNameGrpTyp,
+                            Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
@@ -4672,9 +4673,9 @@ void Grp_RenameGroup (void)
          else
            {
             /* Update the table changing old name by new name */
-            DB_BuildQuery ("UPDATE crs_grp SET GrpName='%s' WHERE GrpCod=%ld",
-                           NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod);
-            DB_QueryUPDATE_new ("can not update the name of a group");
+            DB_QueryUPDATE ("can not update the name of a group",
+        		    "UPDATE crs_grp SET GrpName='%s' WHERE GrpCod=%ld",
+                            NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;

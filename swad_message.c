@@ -1226,16 +1226,16 @@ void Msg_ConRecMsg (void)
 static void Msg_ExpandSentMsg (long MsgCod)
   {
    /***** Expand message in sent message table *****/
-   DB_BuildQuery ("UPDATE msg_snt SET Expanded='Y'"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not expand a sent message");
+   DB_QueryUPDATE ("can not expand a sent message",
+		   "UPDATE msg_snt SET Expanded='Y'"
+		   " WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Contract all my other messages in sent message table *****/
-   DB_BuildQuery ("UPDATE msg_snt SET Expanded='N'"
-		  " WHERE UsrCod=%ld AND MsgCod<>%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
-   DB_QueryUPDATE_new ("can not contract a sent message");
+   DB_QueryUPDATE ("can not contract a sent message",
+		   "UPDATE msg_snt SET Expanded='N'"
+		   " WHERE UsrCod=%ld AND MsgCod<>%ld",
+                   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
   }
 
 /*****************************************************************************/
@@ -1245,16 +1245,16 @@ static void Msg_ExpandSentMsg (long MsgCod)
 static void Msg_ExpandReceivedMsg (long MsgCod)
   {
    /***** Expand message in received message table and mark it as read by me *****/
-   DB_BuildQuery ("UPDATE msg_rcv SET Open='Y',Expanded='Y'"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not expand a received message");
+   DB_QueryUPDATE ("can not expand a received message",
+		   "UPDATE msg_rcv SET Open='Y',Expanded='Y'"
+		   " WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Contract all my other messages in received message table *****/
-   DB_BuildQuery ("UPDATE msg_rcv SET Expanded='N'"
-		  " WHERE UsrCod=%ld AND MsgCod<>%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
-   DB_QueryUPDATE_new ("can not contract a received message");
+   DB_QueryUPDATE ("can not contract a received message",
+		   "UPDATE msg_rcv SET Expanded='N'"
+		   " WHERE UsrCod=%ld AND MsgCod<>%ld",
+                   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
   }
 
 /*****************************************************************************/
@@ -1264,10 +1264,10 @@ static void Msg_ExpandReceivedMsg (long MsgCod)
 static void Msg_ContractSentMsg (long MsgCod)
   {
    /***** Contract message in sent message table *****/
-   DB_BuildQuery ("UPDATE msg_snt SET Expanded='N'"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not contract a sent message");
+   DB_QueryUPDATE ("can not contract a sent message",
+		   "UPDATE msg_snt SET Expanded='N'"
+		   " WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1277,10 +1277,10 @@ static void Msg_ContractSentMsg (long MsgCod)
 static void Msg_ContractReceivedMsg (long MsgCod)
   {
    /***** Contract message in received message table *****/
-   DB_BuildQuery ("UPDATE msg_rcv SET Expanded='N'"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not contract a received message");
+   DB_QueryUPDATE ("can not contract a received message",
+		   "UPDATE msg_rcv SET Expanded='N'"
+		   " WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1290,10 +1290,10 @@ static void Msg_ContractReceivedMsg (long MsgCod)
 void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
   {
    /***** Mark message as read by user *****/
-   DB_BuildQuery ("UPDATE msg_rcv SET Open='Y'"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,UsrCod);
-   DB_QueryUPDATE_new ("can not mark a received message as open");
+   DB_QueryUPDATE ("can not mark a received message as open",
+		   "UPDATE msg_rcv SET Open='Y'"
+		   " WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,UsrCod);
   }
 
 /*****************************************************************************/
@@ -1445,10 +1445,10 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEm
 static void Msg_SetReceivedMsgAsReplied (long MsgCod)
   {
    /***** Update received message by setting Replied field to true *****/
-   DB_BuildQuery ("UPDATE msg_rcv SET Replied='Y'"
-		  " WHERE MsgCod=%ld AND UsrCod=%ld",
-                  MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update a received message");
+   DB_QueryUPDATE ("can not update a received message",
+		   "UPDATE msg_rcv SET Replied='Y'"
+		   " WHERE MsgCod=%ld AND UsrCod=%ld",
+                   MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1524,8 +1524,9 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
       should be deleted to ensure the protection of personal data */
 
    /* Delete message from msg_content *****/
-   DB_BuildQuery ("DELETE FROM msg_content WHERE MsgCod=%ld",MsgCod);
-   DB_QueryUPDATE_new ("can not remove the content of a message");
+   DB_QueryUPDATE ("can not remove the content of a message",
+		   "DELETE FROM msg_content WHERE MsgCod=%ld",
+		   MsgCod);
   }
 
 /*****************************************************************************/
@@ -1547,10 +1548,10 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
       should be deleted to ensure the protection of personal data */
 
    /* Delete message from msg_content *****/
-   DB_BuildQuery ("DELETE FROM msg_content"
-		  " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
-		  " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
-   DB_QueryUPDATE_new ("can not remove the content of some messages");
+   DB_QueryUPDATE ("can not remove the content of some messages",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
+		   " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
   }
 
 /*****************************************************************************/

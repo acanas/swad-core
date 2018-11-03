@@ -4262,11 +4262,11 @@ static void Brw_UpdateLastAccess (void)
 static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
   {
    /***** Update the group of my last access to a common zone *****/
-   DB_BuildQuery ("UPDATE crs_usr SET %s=%ld"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-                  FieldNameDB,GrpCod,
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update the group of the last access to a file browser");
+   DB_QueryUPDATE ("can not update the group of the last access to a file browser",
+		   "UPDATE crs_usr SET %s=%ld"
+		   " WHERE CrsCod=%ld AND UsrCod=%ld",
+                   FieldNameDB,GrpCod,
+                   Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -7831,15 +7831,15 @@ static void Brw_UpdatePathInClipboard (void)
    long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
 
    /***** Update path in my clipboard *****/
-   DB_BuildQuery ("UPDATE clipboard SET FileBrowser=%u,"
-		  "Cod=%ld,WorksUsrCod=%ld,"
-		  "FileType=%u,Path='%s'"
-		  " WHERE UsrCod=%ld",
-	          (unsigned) Gbl.FileBrowser.Type,
-	          Cod,WorksUsrCod,
-	          (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update source of copy in clipboard");
+   DB_QueryUPDATE ("can not update source of copy in clipboard",
+		   "UPDATE clipboard SET FileBrowser=%u,"
+		   "Cod=%ld,WorksUsrCod=%ld,"
+		   "FileType=%u,Path='%s'"
+		   " WHERE UsrCod=%ld",
+	           (unsigned) Gbl.FileBrowser.Type,
+	           Cod,WorksUsrCod,
+	           (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -7986,27 +7986,29 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
    if (Cod > 0)
      {
       if (WorksUsrCod > 0)
-	 DB_BuildQuery ("UPDATE expanded_folders SET ClickTime=NOW()"
-			" WHERE UsrCod=%ld AND FileBrowser=%u"
-			" AND Cod=%ld AND WorksUsrCod=%ld",
-		        Gbl.Usrs.Me.UsrDat.UsrCod,
-		        (unsigned) FileBrowserForExpandedFolders,
-		        Cod,
-		        WorksUsrCod);
+	 DB_QueryUPDATE ("can not update expanded folder",
+			 "UPDATE expanded_folders SET ClickTime=NOW()"
+			 " WHERE UsrCod=%ld AND FileBrowser=%u"
+			 " AND Cod=%ld AND WorksUsrCod=%ld",
+		         Gbl.Usrs.Me.UsrDat.UsrCod,
+		         (unsigned) FileBrowserForExpandedFolders,
+		         Cod,
+		         WorksUsrCod);
       else
-	 DB_BuildQuery ("UPDATE expanded_folders SET ClickTime=NOW()"
-			" WHERE UsrCod=%ld AND FileBrowser=%u"
-			" AND Cod=%ld",
-		        Gbl.Usrs.Me.UsrDat.UsrCod,
-		        (unsigned) FileBrowserForExpandedFolders,
-		        Cod);
+	 DB_QueryUPDATE ("can not update expanded folder",
+			 "UPDATE expanded_folders SET ClickTime=NOW()"
+			 " WHERE UsrCod=%ld AND FileBrowser=%u"
+			 " AND Cod=%ld",
+		         Gbl.Usrs.Me.UsrDat.UsrCod,
+		         (unsigned) FileBrowserForExpandedFolders,
+		         Cod);
      }
    else	// Briefcase
-      DB_BuildQuery ("UPDATE expanded_folders SET ClickTime=NOW()"
-		     " WHERE UsrCod=%ld AND FileBrowser=%u",
-	             Gbl.Usrs.Me.UsrDat.UsrCod,
-	             (unsigned) FileBrowserForExpandedFolders);
-   DB_QueryUPDATE_new ("can not update expanded folder");
+      DB_QueryUPDATE ("can not update expanded folder",
+		      "UPDATE expanded_folders SET ClickTime=NOW()"
+		      " WHERE UsrCod=%ld AND FileBrowser=%u",
+	              Gbl.Usrs.Me.UsrDat.UsrCod,
+	              (unsigned) FileBrowserForExpandedFolders);
   }
 
 /*****************************************************************************/
@@ -8104,53 +8106,57 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
       if (MyUsrCod > 0)
 	{
 	 if (WorksUsrCod > 0)
-	    DB_BuildQuery ("UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE UsrCod=%ld AND FileBrowser=%u"
-			   " AND Cod=%ld AND WorksUsrCod=%ld"
-			   " AND Path LIKE '%s/%%'",
-		           NewPath,StartFinalSubpathNotChanged,
-		           MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
-		           Cod,WorksUsrCod,
-		           OldPath);
+	    DB_QueryUPDATE ("can not update expanded folders",
+			    "UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			    " WHERE UsrCod=%ld AND FileBrowser=%u"
+			    " AND Cod=%ld AND WorksUsrCod=%ld"
+			    " AND Path LIKE '%s/%%'",
+		            NewPath,StartFinalSubpathNotChanged,
+		            MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
+		            Cod,WorksUsrCod,
+		            OldPath);
 	 else
-	    DB_BuildQuery ("UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE UsrCod=%ld AND FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND Path LIKE '%s/%%'",
-		           NewPath,StartFinalSubpathNotChanged,
-		           MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
-		           Cod,
-		           OldPath);
+	    DB_QueryUPDATE ("can not update expanded folders",
+			    "UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			    " WHERE UsrCod=%ld AND FileBrowser=%u"
+			    " AND Cod=%ld"
+			    " AND Path LIKE '%s/%%'",
+		            NewPath,StartFinalSubpathNotChanged,
+		            MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
+		            Cod,
+		            OldPath);
 	}
       else	// MyUsrCod <= 0 means expanded folders for any user
 	{
 	 if (WorksUsrCod > 0)
-	    DB_BuildQuery ("UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE FileBrowser=%u AND Cod=%ld"
-			   " AND WorksUsrCod=%ld"
-			   " AND Path LIKE '%s/%%'",
-		           NewPath,StartFinalSubpathNotChanged,
-		           (unsigned) FileBrowserForExpandedFolders,Cod,
-		           WorksUsrCod,
-		           OldPath);
+	    DB_QueryUPDATE ("can not update expanded folders",
+			    "UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			    " WHERE FileBrowser=%u AND Cod=%ld"
+			    " AND WorksUsrCod=%ld"
+			    " AND Path LIKE '%s/%%'",
+		            NewPath,StartFinalSubpathNotChanged,
+		            (unsigned) FileBrowserForExpandedFolders,Cod,
+		            WorksUsrCod,
+		            OldPath);
 	 else
-	    DB_BuildQuery ("UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE FileBrowser=%u AND Cod=%ld"
-			   " AND Path LIKE '%s/%%'",
-			   NewPath,StartFinalSubpathNotChanged,
-			   (unsigned) FileBrowserForExpandedFolders,Cod,
-			   OldPath);
+	    DB_QueryUPDATE ("can not update expanded folders",
+			    "UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			    " WHERE FileBrowser=%u AND Cod=%ld"
+			    " AND Path LIKE '%s/%%'",
+			    NewPath,StartFinalSubpathNotChanged,
+			    (unsigned) FileBrowserForExpandedFolders,Cod,
+			    OldPath);
 	}
      }
    else	// Briefcase
-      DB_BuildQuery ("UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-		     " WHERE UsrCod=%ld AND FileBrowser=%u"
-		     " AND Path LIKE '%s/%%'",
-	             NewPath,StartFinalSubpathNotChanged,
-	             MyUsrCod,
-	             (unsigned) FileBrowserForExpandedFolders,
-	             OldPath);
-   DB_QueryUPDATE_new ("can not update expanded folders");
+      DB_QueryUPDATE ("can not update expanded folders",
+		      "UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+		      " WHERE UsrCod=%ld AND FileBrowser=%u"
+		      " AND Path LIKE '%s/%%'",
+	              NewPath,StartFinalSubpathNotChanged,
+	              MyUsrCod,
+	              (unsigned) FileBrowserForExpandedFolders,
+	              OldPath);
   }
 
 /*****************************************************************************/
@@ -11552,13 +11558,11 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
 static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
   {
    if (NumViews)
-     {
       /* Update number of views in database */
-      DB_BuildQuery ("UPDATE file_view SET NumViews=NumViews+1"
-		     " WHERE FilCod=%ld AND UsrCod=%ld",
-	             FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update number of views of a file");
-     }
+      DB_QueryUPDATE ("can not update number of views of a file",
+		      "UPDATE file_view SET NumViews=NumViews+1"
+		      " WHERE FilCod=%ld AND UsrCod=%ld",
+	              FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    else	// NumViews == 0
       /* Insert number of views in database */
       DB_QueryINSERT ("can not insert number of views of a file",
@@ -11629,15 +11633,15 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
 
    /***** Mark file as hidden in database *****/
-   DB_BuildQuery ("UPDATE files SET Hidden='%c'"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		  " AND Path='%s'",
-	          IsHidden ? 'Y' :
-			     'N',
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,ZoneUsrCod,
-	          Path);
-   DB_QueryUPDATE_new ("can not change status of a file in database");
+   DB_QueryUPDATE ("can not change status of a file in database",
+		   "UPDATE files SET Hidden='%c'"
+		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		   " AND Path='%s'",
+	           IsHidden ? 'Y' :
+			      'N',
+	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           Cod,ZoneUsrCod,
+	           Path);
   }
 
 /*****************************************************************************/
@@ -11651,17 +11655,17 @@ static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
 
    /***** Change publisher, public and license of file in database *****/
-   DB_BuildQuery ("UPDATE files SET PublisherUsrCod=%ld,Public='%c',License=%u"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		  " AND Path='%s'",
-	          PublisherUsrCod,
-	          IsPublic ? 'Y' :
-			     'N',
-	          (unsigned) License,
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,ZoneUsrCod,
-	          Path);
-   DB_QueryUPDATE_new ("can not change metadata of a file in database");
+   DB_QueryUPDATE ("can not change metadata of a file in database",
+		   "UPDATE files SET PublisherUsrCod=%ld,Public='%c',License=%u"
+		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		   " AND Path='%s'",
+	           PublisherUsrCod,
+	           IsPublic ? 'Y' :
+			      'N',
+	           (unsigned) License,
+	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           Cod,ZoneUsrCod,
+	           Path);
   }
 
 /*****************************************************************************/
@@ -11948,13 +11952,13 @@ static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
 
    /***** Update file or folder in table of common files *****/
-   DB_BuildQuery ("UPDATE files SET Path='%s'"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld AND Path='%s'",
-		  NewPath,
-		  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		  Cod,ZoneUsrCod,
-		  OldPath);
-   DB_QueryUPDATE_new ("can not update folder name in a common zone");
+   DB_QueryUPDATE ("can not update folder name in a common zone",
+		   "UPDATE files SET Path='%s'"
+		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld AND Path='%s'",
+		   NewPath,
+		   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		   Cod,ZoneUsrCod,
+		   OldPath);
   }
 
 /*****************************************************************************/
@@ -11969,14 +11973,14 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
    /***** Update children of a folder in table of files *****/
-   DB_BuildQuery ("UPDATE files SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-		  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
-		  " AND Path LIKE '%s/%%'",
-	          NewPath,StartFinalSubpathNotChanged,
-	          (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	          Cod,ZoneUsrCod,
-	          OldPath);
-   DB_QueryUPDATE_new ("can not rename file or folder names in a common zone");
+   DB_QueryUPDATE ("can not rename file or folder names in a common zone",
+		   "UPDATE files SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+		   " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
+		   " AND Path LIKE '%s/%%'",
+	           NewPath,StartFinalSubpathNotChanged,
+	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           Cod,ZoneUsrCod,
+	           OldPath);
   }
 
 /*****************************************************************************/

@@ -957,10 +957,10 @@ void DT_RenameDegreeType (void)
          else
            {
             /* Update the table changing old name by new name */
-            DB_BuildQuery ("UPDATE deg_types SET DegTypName='%s'"
-			   " WHERE DegTypCod=%ld",
-                           NewNameDegTyp,DegTyp->DegTypCod);
-            DB_QueryUPDATE_new ("can not update the type of a degree");
+            DB_QueryUPDATE ("can not update the type of a degree",
+        		    "UPDATE deg_types SET DegTypName='%s'"
+			    " WHERE DegTypCod=%ld",
+                            NewNameDegTyp,DegTyp->DegTypCod);
 
             /* Write message to show the change made */
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1017,9 +1017,9 @@ void DT_ChangeDegreeType (void)
    Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
 
    /***** Update the table of degrees changing old type by new type *****/
-   DB_BuildQuery ("UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
-	          NewDegTypCod,Gbl.Degs.EditingDeg.DegCod);
-   DB_QueryUPDATE_new ("can not update the type of a degree");
+   DB_QueryUPDATE ("can not update the type of a degree",
+		   "UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
+	           NewDegTypCod,Gbl.Degs.EditingDeg.DegCod);
 
    /***** Write message to show the change made
           and put button to go to degree changed *****/

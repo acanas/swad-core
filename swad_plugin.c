@@ -560,9 +560,9 @@ void Plg_RenamePlugin (void)
          else
            {
             /* Update the table changing old name by new name */
-            DB_BuildQuery ("UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
-                           NewPlgName,Plg->PlgCod);
-            DB_QueryUPDATE_new ("can not update the name of a plugin");
+            DB_QueryUPDATE ("can not update the name of a plugin",
+        		    "UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
+                            NewPlgName,Plg->PlgCod);
 
             /***** Write message to show the change made *****/
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -624,9 +624,9 @@ void Plg_ChangePlgDescription (void)
    if (NewDescription[0])
      {
       /* Update the table changing old description by new description */
-      DB_BuildQuery ("UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
-                     NewDescription,Plg->PlgCod);
-      DB_QueryUPDATE_new ("can not update the description of a plugin");
+      DB_QueryUPDATE ("can not update the description of a plugin",
+		      "UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
+                      NewDescription,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -668,9 +668,9 @@ void Plg_ChangePlgLogo (void)
    if (NewLogo[0])
      {
       /* Update the table changing old logo by new logo */
-      DB_BuildQuery ("UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
-                     NewLogo,Plg->PlgCod);
-      DB_QueryUPDATE_new ("can not update the logo of a plugin");
+      DB_QueryUPDATE ("can not update the logo of a plugin",
+		      "UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
+                      NewLogo,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -712,9 +712,9 @@ void Plg_ChangePlgAppKey (void)
    if (NewAppKey[0])
      {
       /* Update the table changing old application key by new application key */
-      DB_BuildQuery ("UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
-                     NewAppKey,Plg->PlgCod);
-      DB_QueryUPDATE_new ("can not update the application key of a plugin");
+      DB_QueryUPDATE ("can not update the application key of a plugin",
+		      "UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
+                      NewAppKey,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -756,9 +756,9 @@ void Plg_ChangePlgURL (void)
    if (NewURL[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_BuildQuery ("UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
-                     NewURL,Plg->PlgCod);
-      DB_QueryUPDATE_new ("can not update the URL of a plugin");
+      DB_QueryUPDATE ("can not update the URL of a plugin",
+		      "UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
+                      NewURL,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -800,9 +800,9 @@ void Plg_ChangePlgIP (void)
    if (NewIP[0])
      {
       /* Update the table changing old IP by new IP */
-      DB_BuildQuery ("UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
-                     NewIP,Plg->PlgCod);
-      DB_QueryUPDATE_new ("can not update the IP address of a plugin");
+      DB_QueryUPDATE ("can not update the IP address of a plugin",
+		      "UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
+                      NewIP,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

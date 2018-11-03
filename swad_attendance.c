@@ -979,10 +979,10 @@ void Att_HideAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Hide attendance event *****/
-   DB_BuildQuery ("UPDATE att_events SET Hidden='Y'"
-		  " WHERE AttCod=%ld AND CrsCod=%ld",
-                  Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not hide attendance event");
+   DB_QueryUPDATE ("can not hide attendance event",
+		   "UPDATE att_events SET Hidden='Y'"
+		   " WHERE AttCod=%ld AND CrsCod=%ld",
+                   Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1011,10 +1011,10 @@ void Att_ShowAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
    /***** Hide attendance event *****/
-   DB_BuildQuery ("UPDATE att_events SET Hidden='N'"
-		  " WHERE AttCod=%ld AND CrsCod=%ld",
-                  Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not show attendance event");
+   DB_QueryUPDATE ("can not show attendance event",
+		   "UPDATE att_events SET Hidden='N'"
+		   " WHERE AttCod=%ld AND CrsCod=%ld",
+                   Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1386,22 +1386,22 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
    /***** Update the data of the attendance event *****/
-   DB_BuildQuery ("UPDATE att_events SET "
-		  "Hidden='%c',"
-		  "StartTime=FROM_UNIXTIME(%ld),"
-		  "EndTime=FROM_UNIXTIME(%ld),"
-		  "CommentTchVisible='%c',Title='%s',Txt='%s'"
-		  " WHERE AttCod=%ld AND CrsCod=%ld",
-                  Att->Hidden ? 'Y' :
-        	                'N',
-                  Att->TimeUTC[Att_START_TIME],
-                  Att->TimeUTC[Att_END_TIME  ],
-                  Att->CommentTchVisible ? 'Y' :
-        	                           'N',
-                  Att->Title,
-                  Txt,
-                  Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not update attendance event");
+   DB_QueryUPDATE ("can not update attendance event",
+		   "UPDATE att_events SET "
+		   "Hidden='%c',"
+		   "StartTime=FROM_UNIXTIME(%ld),"
+		   "EndTime=FROM_UNIXTIME(%ld),"
+		   "CommentTchVisible='%c',Title='%s',Txt='%s'"
+		   " WHERE AttCod=%ld AND CrsCod=%ld",
+                   Att->Hidden ? 'Y' :
+        	                 'N',
+                   Att->TimeUTC[Att_START_TIME],
+                   Att->TimeUTC[Att_END_TIME  ],
+                   Att->CommentTchVisible ? 'Y' :
+        	                            'N',
+                   Att->Title,
+                   Txt,
+                   Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -2592,13 +2592,11 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
      {
       // If already present ==> nothing to do
       if (!Present)
-	{
 	 /***** Set user as present in database *****/
-	 DB_BuildQuery ("UPDATE att_usr SET Present='Y'"
-			" WHERE AttCod=%ld AND UsrCod=%ld",
-		        AttCod,UsrCod);
-         DB_QueryUPDATE_new ("can not set user as present in an event");
-	}
+	 DB_QueryUPDATE ("can not set user as present in an event",
+			 "UPDATE att_usr SET Present='Y'"
+			 " WHERE AttCod=%ld AND UsrCod=%ld",
+		         AttCod,UsrCod);
      }
    else			// User is not in table att_usr
       Att_RegUsrInAttEventChangingComments (AttCod,UsrCod,true,"","");

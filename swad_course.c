@@ -2183,10 +2183,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
-      DB_BuildQuery ("UPDATE exam_announcements SET Status=%u"
-		     " WHERE CrsCod=%ld",
-	             (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
-      DB_QueryUPDATE_new ("can not remove exam announcements of a course");
+      DB_QueryUPDATE ("can not remove exam announcements of a course",
+		      "UPDATE exam_announcements SET Status=%u"
+		      " WHERE CrsCod=%ld",
+	              (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
@@ -2445,9 +2445,9 @@ void Crs_ContEditAfterChgCrsInConfig (void)
 static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod)
   {
    /***** Update degree in table of courses *****/
-   DB_BuildQuery ("UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
-	          DegCod,CrsCod);
-   DB_QueryUPDATE_new ("can not move course to another degree");
+   DB_QueryUPDATE ("can not move course to another degree",
+		   "UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
+	           DegCod,CrsCod);
   }
 
 /*****************************************************************************/
@@ -2591,9 +2591,9 @@ void Crs_ChangeCrsYear (void)
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
   {
    /***** Update year/semester in table of courses *****/
-   DB_BuildQuery ("UPDATE courses SET Year=%u WHERE CrsCod=%ld",
-	          NewYear,Crs->CrsCod);
-   DB_QueryUPDATE_new ("can not update the year of a course");
+   DB_QueryUPDATE ("can not update the year of a course",
+		   "UPDATE courses SET Year=%u WHERE CrsCod=%ld",
+	           NewYear,Crs->CrsCod);
 
    /***** Copy course year/semester *****/
    Crs->Year = NewYear;
@@ -2606,10 +2606,10 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
 void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod)
   {
    /***** Update institutional course code in table of courses *****/
-   DB_BuildQuery ("UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
-                  NewInstitutionalCrsCod,Crs->CrsCod);
-   DB_QueryUPDATE_new ("can not update the institutional code"
-	               " of the current course");
+   DB_QueryUPDATE ("can not update the institutional code"
+	           " of the current course",
+		   "UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
+                   NewInstitutionalCrsCod,Crs->CrsCod);
 
    /***** Copy institutional course code *****/
    Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
@@ -2766,9 +2766,9 @@ static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const cha
 static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *NewCrsName)
   {
    /***** Update course changing old name by new name *****/
-   DB_BuildQuery ("UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
-	          FieldName,NewCrsName,CrsCod);
-   DB_QueryUPDATE_new ("can not update the name of a course");
+   DB_QueryUPDATE ("can not update the name of a course",
+		   "UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
+	           FieldName,NewCrsName,CrsCod);
   }
 
 /*****************************************************************************/
@@ -2800,9 +2800,9 @@ void Crs_ChangeCrsStatus (void)
    Crs_GetDataOfCourseByCod (&Gbl.Degs.EditingCrs);
 
    /***** Update status in table of courses *****/
-   DB_BuildQuery ("UPDATE courses SET Status=%u WHERE CrsCod=%ld",
-                  (unsigned) Status,Gbl.Degs.EditingCrs.CrsCod);
-   DB_QueryUPDATE_new ("can not update the status of a course");
+   DB_QueryUPDATE ("can not update the status of a course",
+		   "UPDATE courses SET Status=%u WHERE CrsCod=%ld",
+                   (unsigned) Status,Gbl.Degs.EditingCrs.CrsCod);
    Gbl.Degs.EditingCrs.Status = Status;
 
    /***** Create message to show the change made *****/
@@ -3356,13 +3356,11 @@ void Crs_UpdateCrsLast (void)
   {
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
-     {
       /***** Update my last access to current course *****/
-      DB_BuildQuery ("REPLACE INTO crs_last (CrsCod,LastTime)"
-		     " VALUES (%ld,NOW())",
-	             Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryUPDATE_new ("can not update last access to current course");
-     }
+      DB_QueryUPDATE ("can not update last access to current course",
+		      "REPLACE INTO crs_last (CrsCod,LastTime)"
+		      " VALUES (%ld,NOW())",
+	              Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/

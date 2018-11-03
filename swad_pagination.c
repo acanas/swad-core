@@ -801,11 +801,11 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
    /***** Save last page of received/sent messages *****/
-   DB_BuildQuery ("UPDATE sessions SET %s=%u WHERE SessionId='%s'",
-                  WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-        	                                          "LastPageMsgSnt",
-                  NumPage,Gbl.Session.Id);
-   DB_QueryUPDATE_new ("can not update last page of messages");
+   DB_QueryUPDATE ("can not update last page of messages",
+		   "UPDATE sessions SET %s=%u WHERE SessionId='%s'",
+                   WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+        	                                           "LastPageMsgSnt",
+                   NumPage,Gbl.Session.Id);
   }
 
 /*****************************************************************************/

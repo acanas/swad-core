@@ -1868,9 +1868,9 @@ static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Na
 static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName)
   {
    /***** Update country changing old name by new name */
-   DB_BuildQuery ("UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
-	          FieldName,NewCtyName,CtyCod);
-   DB_QueryUPDATE_new ("can not update the name of a country");
+   DB_QueryUPDATE ("can not update the name of a country",
+		   "UPDATE countries SET %s='%s' WHERE CtyCod='%03ld'",
+	           FieldName,NewCtyName,CtyCod);
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1903,10 +1903,10 @@ void Cty_ChangeCtyWWW (void)
    Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
 
    /***** Update the table changing old WWW by new WWW *****/
-   DB_BuildQuery ("UPDATE countries SET WWW_%s='%s'"
-		  " WHERE CtyCod='%03ld'",
-	          Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
-   DB_QueryUPDATE_new ("can not update the web of a country");
+   DB_QueryUPDATE ("can not update the web of a country",
+		   "UPDATE countries SET WWW_%s='%s'"
+		   " WHERE CtyCod='%03ld'",
+	           Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
    Str_Copy (Cty->WWW[Language],NewWWW,
 	     Cns_MAX_BYTES_WWW);
 
@@ -1933,10 +1933,10 @@ void Cty_ChangeCtyMapAttribution (void)
    Par_GetParToText ("Attribution",NewMapAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   DB_BuildQuery ("UPDATE countries SET MapAttribution='%s'"
-		  " WHERE CtyCod='%03ld'",
-	          NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod);
-   DB_QueryUPDATE_new ("can not update the map attribution of a country");
+   DB_QueryUPDATE ("can not update the map attribution of a country",
+		   "UPDATE countries SET MapAttribution='%s'"
+		   " WHERE CtyCod='%03ld'",
+	           NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod);
 
    /***** Show the country information again *****/
    Cty_ShowConfiguration ();

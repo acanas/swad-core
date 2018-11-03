@@ -1876,9 +1876,9 @@ void Ctr_ContEditAfterChgCtrInConfig (void)
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
   {
    /***** Update institution in table of centres *****/
-   DB_BuildQuery ("UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
-                  InsCod,CtrCod);
-   DB_QueryUPDATE_new ("can not update the institution of a centre");
+   DB_QueryUPDATE ("can not update the institution of a centre",
+		   "UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
+                   InsCod,CtrCod);
   }
 
 /*****************************************************************************/
@@ -1939,9 +1939,9 @@ void Ctr_ChangeCtrPlcInConfig (void)
 
 static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
   {
-   DB_BuildQuery ("UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
-	          NewPlcCod,CtrCod);
-   DB_QueryUPDATE_new ("can not update the place of a centre");
+   DB_QueryUPDATE ("can not update the place of a centre",
+		   "UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
+	           NewPlcCod,CtrCod);
   }
 
 /*****************************************************************************/
@@ -2079,9 +2079,9 @@ static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Nam
 static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName)
   {
    /***** Update centre changing old name by new name */
-   DB_BuildQuery ("UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
-	          FieldName,NewCtrName,CtrCod);
-   DB_QueryUPDATE_new ("can not update the name of a centre");
+   DB_QueryUPDATE ("can not update the name of a centre",
+		   "UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
+	           FieldName,NewCtrName,CtrCod);
   }
 
 /*****************************************************************************/
@@ -2165,9 +2165,9 @@ static void Ctr_UpdateCtrWWWDB (long CtrCod,
                                 const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
-   DB_BuildQuery ("UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
-	          NewWWW,CtrCod);
-   DB_QueryUPDATE_new ("can not update the web of a centre");
+   DB_QueryUPDATE ("can not update the web of a centre",
+		   "UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
+	           NewWWW,CtrCod);
   }
 
 /*****************************************************************************/
@@ -2198,9 +2198,9 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Update status in table of centres *****/
-   DB_BuildQuery ("UPDATE centres SET Status=%u WHERE CtrCod=%ld",
-	         (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
-   DB_QueryUPDATE_new ("can not update the status of a centre");
+   DB_QueryUPDATE ("can not update the status of a centre",
+		   "UPDATE centres SET Status=%u WHERE CtrCod=%ld",
+	           (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
    Gbl.Ctrs.EditingCtr.Status = Status;
 
    /***** Write message to show the change made
@@ -2480,10 +2480,11 @@ void Ctr_ChangeCtrPhotoAttribution (void)
    Par_GetParToText ("Attribution",NewPhotoAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   DB_BuildQuery ("UPDATE centres SET PhotoAttribution='%s'"
-		  " WHERE CtrCod=%ld",
-	          NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod);
-   DB_QueryUPDATE_new ("can not update the photo attribution of the current centre");
+   DB_QueryUPDATE ("can not update the photo attribution"
+		   " of the current centre",
+		   "UPDATE centres SET PhotoAttribution='%s'"
+		   " WHERE CtrCod=%ld",
+	           NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod);
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();

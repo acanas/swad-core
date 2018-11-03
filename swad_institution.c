@@ -1885,9 +1885,9 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
   {
    /***** Update institution changing old name by new name */
-   DB_BuildQuery ("UPDATE institutions SET %s='%s' WHERE InsCod=%ld",
-	          FieldName,NewInsName,InsCod);
-   DB_QueryUPDATE_new ("can not update the name of an institution");
+   DB_QueryUPDATE ("can not update the name of an institution",
+		   "UPDATE institutions SET %s='%s' WHERE InsCod=%ld",
+	           FieldName,NewInsName,InsCod);
 
    /***** Flush caches *****/
    Ins_FlushCacheShortNameOfInstitution ();
@@ -1967,9 +1967,9 @@ void Ins_ContEditAfterChgInsInConfig (void)
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod)
   {
    /***** Update country in table of institutions *****/
-   DB_BuildQuery ("UPDATE institutions SET CtyCod=%ld WHERE InsCod=%ld",
-                  CtyCod,InsCod);
-   DB_QueryUPDATE_new ("can not update the country of an institution");
+   DB_QueryUPDATE ("can not update the country of an institution",
+		   "UPDATE institutions SET CtyCod=%ld WHERE InsCod=%ld",
+                   CtyCod,InsCod);
   }
 
 /*****************************************************************************/
@@ -2053,9 +2053,9 @@ void Ins_ChangeInsWWWInConfig (void)
 static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
-   DB_BuildQuery ("UPDATE institutions SET WWW='%s' WHERE InsCod=%ld",
-	          NewWWW,InsCod);
-   DB_QueryUPDATE_new ("can not update the web of an institution");
+   DB_QueryUPDATE ("can not update the web of an institution",
+		   "UPDATE institutions SET WWW='%s' WHERE InsCod=%ld",
+	           NewWWW,InsCod);
   }
 
 /*****************************************************************************/
@@ -2087,9 +2087,9 @@ void Ins_ChangeInsStatus (void)
    Ins_GetDataOfInstitutionByCod (&Gbl.Inss.EditingIns,Ins_GET_BASIC_DATA);
 
    /***** Update status in table of institutions *****/
-   DB_BuildQuery ("UPDATE institutions SET Status=%u WHERE InsCod=%ld",
-                  (unsigned) Status,Gbl.Inss.EditingIns.InsCod);
-   DB_QueryUPDATE_new ("can not update the status of an institution");
+   DB_QueryUPDATE ("can not update the status of an institution",
+		   "UPDATE institutions SET Status=%u WHERE InsCod=%ld",
+                   (unsigned) Status,Gbl.Inss.EditingIns.InsCod);
    Gbl.Inss.EditingIns.Status = Status;
 
    /***** Write message to show the change made

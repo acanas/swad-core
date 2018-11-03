@@ -2805,10 +2805,10 @@ void Prj_HideProject (void)
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
       /***** Hide project *****/
-      DB_BuildQuery ("UPDATE projects SET Hidden='Y'"
-		     " WHERE PrjCod=%ld AND CrsCod=%ld",
-	             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryUPDATE_new ("can not hide project");
+      DB_QueryUPDATE ("can not hide project",
+		      "UPDATE projects SET Hidden='Y'"
+		      " WHERE PrjCod=%ld AND CrsCod=%ld",
+	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2849,10 +2849,10 @@ void Prj_ShowProject (void)
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
       /***** Show project *****/
-      DB_BuildQuery ("UPDATE projects SET Hidden='N'"
-		     " WHERE PrjCod=%ld AND CrsCod=%ld",
-	             Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryUPDATE_new ("can not show project");
+      DB_QueryUPDATE ("can not show project",
+		      "UPDATE projects SET Hidden='N'"
+		      " WHERE PrjCod=%ld AND CrsCod=%ld",
+	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -3364,27 +3364,34 @@ static void Prj_UpdateProject (struct Project *Prj)
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 
    /***** Update the data of the project *****/
-   DB_BuildQuery ("UPDATE projects SET "
-		  "DptCod=%ld,Hidden='%c',Preassigned='%c',NumStds=%u,Proposal='%s',"
-		  "ModifTime=FROM_UNIXTIME(%ld),"
-		  "Title='%s',"
-		  "Description='%s',Knowledge='%s',Materials='%s',URL='%s'"
-		  " WHERE PrjCod=%ld AND CrsCod=%ld",
-	          Prj->DptCod,
-	          Prj->Hidden == Prj_HIDDEN ? 'Y' :
-					      'N',
-	          Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-						        'N',
-	          Prj->NumStds,
-	          Prj_Proposal_DB[Prj->Proposal],
-	          Prj->ModifTime,
-	          Prj->Title,
-	          Prj->Description,
-	          Prj->Knowledge,
-	          Prj->Materials,
-	          Prj->URL,
-	          Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not update project");
+   DB_QueryUPDATE ("can not update project",
+		   "UPDATE projects"
+		   " SET DptCod=%ld,"
+		        "Hidden='%c',"
+		        "Preassigned='%c',"
+		        "NumStds=%u,"
+		        "Proposal='%s',"
+		        "ModifTime=FROM_UNIXTIME(%ld),"
+		        "Title='%s',"
+		        "Description='%s',"
+		        "Knowledge='%s',"
+		        "Materials='%s',"
+		        "URL='%s'"
+		   " WHERE PrjCod=%ld AND CrsCod=%ld",
+	           Prj->DptCod,
+	           Prj->Hidden == Prj_HIDDEN ? 'Y' :
+					       'N',
+	           Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+						         'N',
+	           Prj->NumStds,
+	           Prj_Proposal_DB[Prj->Proposal],
+	           Prj->ModifTime,
+	           Prj->Title,
+	           Prj->Description,
+	           Prj->Knowledge,
+	           Prj->Materials,
+	           Prj->URL,
+	           Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/

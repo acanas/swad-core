@@ -532,10 +532,10 @@ void Ann_HideActiveAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as hidden *****/
-   DB_BuildQuery ("UPDATE announcements SET Status=%u"
-		  " WHERE AnnCod=%ld",
-                  (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod);
-   DB_QueryUPDATE_new ("can not hide announcement");
+   DB_QueryUPDATE ("can not hide announcement",
+		   "UPDATE announcements SET Status=%u"
+		   " WHERE AnnCod=%ld",
+                   (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod);
   }
 
 /*****************************************************************************/
@@ -550,10 +550,10 @@ void Ann_RevealHiddenAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as shown *****/
-   DB_BuildQuery ("UPDATE announcements SET Status=%u"
-		  " WHERE AnnCod=%ld",
-                  (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod);
-   DB_QueryUPDATE_new ("can not reveal announcement");
+   DB_QueryUPDATE ("can not reveal announcement",
+		   "UPDATE announcements SET Status=%u"
+		   " WHERE AnnCod=%ld",
+                   (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod);
   }
 
 /*****************************************************************************/

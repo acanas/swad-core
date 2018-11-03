@@ -132,12 +132,10 @@ void Ico_ChangeIconSet (void)
 
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
-     {
-      DB_BuildQuery ("UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
-		     Ico_IconSetId[Gbl.Prefs.IconSet],
-		     Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update your preference about icon set");
-     }
+      DB_QueryUPDATE ("can not update your preference about icon set",
+		      "UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
+		      Ico_IconSetId[Gbl.Prefs.IconSet],
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();

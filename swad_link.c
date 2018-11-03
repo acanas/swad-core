@@ -642,9 +642,9 @@ static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,lo
 static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName)
   {
    /***** Update institutional link changing old name by new name */
-   DB_BuildQuery ("UPDATE links SET %s='%s' WHERE LnkCod=%ld",
-	          FieldName,NewLnkName,LnkCod);
-   DB_QueryUPDATE_new ("can not update the name of an institutional link");
+   DB_QueryUPDATE ("can not update the name of an institutional link",
+		   "UPDATE links SET %s='%s' WHERE LnkCod=%ld",
+	           FieldName,NewLnkName,LnkCod);
   }
 
 /*****************************************************************************/
@@ -672,9 +672,9 @@ void Lnk_ChangeLinkWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_BuildQuery ("UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
-                     NewWWW,Lnk->LnkCod);
-      DB_QueryUPDATE_new ("can not update the web of an institutional link");
+      DB_QueryUPDATE ("can not update the web of an institutional link",
+		      "UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
+                      NewWWW,Lnk->LnkCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

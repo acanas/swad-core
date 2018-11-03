@@ -293,12 +293,10 @@ void The_ChangeTheme (void)
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
-     {
-      DB_BuildQuery ("UPDATE usr_data SET Theme='%s'"
-		     " WHERE UsrCod=%ld",
-                     The_ThemeId[Gbl.Prefs.Theme],Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update your preference about theme");
-     }
+      DB_QueryUPDATE ("can not update your preference about theme",
+		      "UPDATE usr_data SET Theme='%s'"
+		      " WHERE UsrCod=%ld",
+                      The_ThemeId[Gbl.Prefs.Theme],Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();

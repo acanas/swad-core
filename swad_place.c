@@ -728,9 +728,9 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName)
   {
    /***** Update place changing old name by new name */
-   DB_BuildQuery ("UPDATE places SET %s='%s' WHERE PlcCod=%ld",
-		  FieldName,NewPlcName,PlcCod);
-   DB_QueryUPDATE_new ("can not update the name of a place");
+   DB_QueryUPDATE ("can not update the name of a place",
+		   "UPDATE places SET %s='%s' WHERE PlcCod=%ld",
+		   FieldName,NewPlcName,PlcCod);
   }
 
 /*****************************************************************************/

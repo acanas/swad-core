@@ -3313,9 +3313,22 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
 /******************** Make a UPDATE query from database **********************/
 /*****************************************************************************/
 
-void DB_QueryUPDATE_new (const char *MsgError)
+void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
   {
-   DB_QueryUPDATE_old (&Gbl.DB.QueryPtr,MsgError);
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query = NULL;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   DB_QueryUPDATE_old (&Query,MsgError);
   }
 
 void DB_QueryUPDATE_old (char **Query,const char *MsgError)

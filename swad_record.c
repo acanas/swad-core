@@ -832,10 +832,10 @@ void Rec_RenameField (void)
          else
            {
             /* Update the table of fields changing then old name by the new one */
-            DB_BuildQuery ("UPDATE crs_record_fields SET FieldName='%s'"
-			   " WHERE FieldCod=%ld",
-                           NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod);
-            DB_QueryUPDATE_new ("can not update name of field of record");
+            DB_QueryUPDATE ("can not update name of field of record",
+        		    "UPDATE crs_record_fields SET FieldName='%s'"
+			    " WHERE FieldCod=%ld",
+                            NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod);
 
             /***** Write message to show the change made *****/
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -896,10 +896,10 @@ void Rec_ChangeLinesField (void)
    else
      {
       /***** Update of the table of fields changing the old maximum of students by the new one *****/
-      DB_BuildQuery ("UPDATE crs_record_fields SET NumLines=%u"
-		     " WHERE FieldCod=%ld",
-                     NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod);
-      DB_QueryUPDATE_new ("can not update the number of lines of a field of record");
+      DB_QueryUPDATE ("can not update the number of lines of a record field",
+		      "UPDATE crs_record_fields SET NumLines=%u"
+		      " WHERE FieldCod=%ld",
+                      NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -950,10 +950,11 @@ void Rec_ChangeVisibilityField (void)
    else
      {
       /***** Update of the table of fields changing the old visibility by the new *****/
-      DB_BuildQuery ("UPDATE crs_record_fields SET Visibility=%u"
-		     " WHERE FieldCod=%ld",
-                     (unsigned) NewVisibility,Gbl.CurrentCrs.Records.Field.FieldCod);
-      DB_QueryUPDATE_new ("can not update the visibility of a field of record");
+      DB_QueryUPDATE ("can not update the visibility of a record field",
+		      "UPDATE crs_record_fields SET Visibility=%u"
+		      " WHERE FieldCod=%ld",
+                      (unsigned) NewVisibility,
+		      Gbl.CurrentCrs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1995,15 +1996,13 @@ void Rec_UpdateCrsRecord (long UsrCod)
          if (FieldAlreadyExists)
            {
             if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
-              {
                /***** Update text of the field of record course *****/
-               DB_BuildQuery ("UPDATE crs_records SET Txt='%s'"
-			      " WHERE UsrCod=%ld AND FieldCod=%ld",
-			      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,
-			      UsrCod,
-			      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
-               DB_QueryUPDATE_new ("can not update field of record");
-              }
+               DB_QueryUPDATE ("can not update field of record",
+        		       "UPDATE crs_records SET Txt='%s'"
+			       " WHERE UsrCod=%ld AND FieldCod=%ld",
+			       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,
+			       UsrCod,
+			       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
             else
                /***** Remove text of the field of record course *****/
                DB_QueryDELETE ("can not remove field of record",
@@ -4396,10 +4395,10 @@ void Rec_UpdateMyOffice (void)
    Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
-   DB_BuildQuery ("UPDATE usr_data SET Office='%s' WHERE UsrCod=%ld",
-		  Gbl.Usrs.Me.UsrDat.Tch.Office,
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update office");
+   DB_QueryUPDATE ("can not update office",
+		   "UPDATE usr_data SET Office='%s' WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.Tch.Office,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4415,10 +4414,10 @@ void Rec_UpdateMyOfficePhone (void)
    Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
-   DB_BuildQuery ("UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod=%ld",
-	          Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update office phone");
+   DB_QueryUPDATE ("can not update office phone",
+		   "UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();

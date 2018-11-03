@@ -2040,9 +2040,9 @@ static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Nam
 static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName)
   {
    /***** Update degree changing old name by new name *****/
-   DB_BuildQuery ("UPDATE degrees SET %s='%s' WHERE DegCod=%ld",
-	          FieldName,NewDegName,DegCod);
-   DB_QueryUPDATE_new ("can not update the name of a degree");
+   DB_QueryUPDATE ("can not update the name of a degree",
+		   "UPDATE degrees SET %s='%s' WHERE DegCod=%ld",
+	           FieldName,NewDegName,DegCod);
   }
 
 /*****************************************************************************/
@@ -2119,9 +2119,9 @@ void Deg_ContEditAfterChgDegInConfig (void)
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod)
   {
    /***** Update centre in table of degrees *****/
-   DB_BuildQuery ("UPDATE degrees SET CtrCod=%ld WHERE DegCod=%ld",
-                  CtrCod,DegCod);
-   DB_QueryUPDATE_new ("can not update the centre of a degree");
+   DB_QueryUPDATE ("can not update the centre of a degree",
+		   "UPDATE degrees SET CtrCod=%ld WHERE DegCod=%ld",
+                   CtrCod,DegCod);
   }
 
 /*****************************************************************************/
@@ -2205,9 +2205,9 @@ void Deg_ChangeDegWWWInConfig (void)
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
-   DB_BuildQuery ("UPDATE degrees SET WWW='%s' WHERE DegCod=%ld",
-	          NewWWW,DegCod);
-   DB_QueryUPDATE_new ("can not update the web of a degree");
+   DB_QueryUPDATE ("can not update the web of a degree",
+		   "UPDATE degrees SET WWW='%s' WHERE DegCod=%ld",
+	           NewWWW,DegCod);
   }
 
 /*****************************************************************************/
@@ -2239,9 +2239,9 @@ void Deg_ChangeDegStatus (void)
    Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
 
    /***** Update status in table of degrees *****/
-   DB_BuildQuery ("UPDATE degrees SET Status=%u WHERE DegCod=%ld",
-                  (unsigned) Status,Gbl.Degs.EditingDeg.DegCod);
-   DB_QueryUPDATE_new ("can not update the status of a degree");
+   DB_QueryUPDATE ("can not update the status of a degree",
+		   "UPDATE degrees SET Status=%u WHERE DegCod=%ld",
+                   (unsigned) Status,Gbl.Degs.EditingDeg.DegCod);
 
    Gbl.Degs.EditingDeg.Status = Status;
 

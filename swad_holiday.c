@@ -713,9 +713,9 @@ void Hld_ChangeHolidayPlace1 (void)
    Hld_GetDataOfHolidayByCod (Hld);
 
    /***** Update the place in database *****/
-   DB_BuildQuery ("UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
-                  NewPlace.PlcCod,Hld->HldCod);
-   DB_QueryUPDATE_new ("can not update the place of a holiday");
+   DB_QueryUPDATE ("can not update the place of a holiday",
+		   "UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
+                   NewPlace.PlcCod,Hld->HldCod);
    Hld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld->PlaceFullName,NewPlace.FullName,
              Plc_MAX_BYTES_PLACE_FULL_NAME);
@@ -759,10 +759,10 @@ void Hld_ChangeHolidayType1 (void)
 
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
-   DB_BuildQuery ("UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
-		  " WHERE HldCod=%ld",
-	          (unsigned) Hld->HldTyp,Hld->HldCod);
-   DB_QueryUPDATE_new ("can not update the type of a holiday");
+   DB_QueryUPDATE ("can not update the type of a holiday",
+		   "UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
+		   " WHERE HldCod=%ld",
+	           (unsigned) Hld->HldTyp,Hld->HldCod);
 
    /***** Write message to show the change made *****/
    Gbl.Alert.Type = Ale_SUCCESS;
@@ -854,13 +854,13 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
      }
 
    /***** Update the date in database *****/
-   DB_BuildQuery ("UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
-	          StrStartOrEndDate,
-	          NewDate.Year,
-	          NewDate.Month,
-	          NewDate.Day,
-	          Hld->HldCod);
-   DB_QueryUPDATE_new ("can not update the date of a holiday");
+   DB_QueryUPDATE ("can not update the date of a holiday",
+		   "UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
+	           StrStartOrEndDate,
+	           NewDate.Year,
+	           NewDate.Month,
+	           NewDate.Day,
+	           Hld->HldCod);
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
@@ -924,9 +924,9 @@ void Hld_RenameHoliday1 (void)
         {
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
-	 DB_BuildQuery ("UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
-		        NewHldName,Hld->HldCod);
-	 DB_QueryUPDATE_new ("can not update the text of a holiday");
+	 DB_QueryUPDATE ("can not update the text of a holiday",
+			 "UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
+		         NewHldName,Hld->HldCod);
 	 Str_Copy (Hld->Name,NewHldName,
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 

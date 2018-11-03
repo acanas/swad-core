@@ -271,15 +271,15 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
      {
       /***** Update properties of marks in the database *****/
       Cod = Brw_GetCodForFiles ();
-      DB_BuildQuery ("UPDATE marks_properties,files"
-		     " SET marks_properties.%s=%u"
-		     " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
-		     " AND files.FilCod=marks_properties.FilCod",
-		     Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
-		     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		     Cod,
-		     Gbl.FileBrowser.Priv.FullPathInTree);
-      DB_QueryUPDATE_new ("can not update properties of marks");
+      DB_QueryUPDATE ("can not update properties of marks",
+		      "UPDATE marks_properties,files"
+		      " SET marks_properties.%s=%u"
+		      " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
+		      " AND files.FilCod=marks_properties.FilCod",
+		      Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
+		      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		      Cod,
+		      Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Write message of success *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

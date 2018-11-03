@@ -184,13 +184,11 @@ void Dat_ChangeDateFormat (void)
 
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
-     {
-      DB_BuildQuery ("UPDATE usr_data SET DateFormat=%u"
-		     " WHERE UsrCod=%ld",
-                     (unsigned) Gbl.Prefs.DateFormat,
-                     Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update your preference about date format");
-     }
+      DB_QueryUPDATE ("can not update your preference about date format",
+		      "UPDATE usr_data SET DateFormat=%u"
+		      " WHERE UsrCod=%ld",
+                      (unsigned) Gbl.Prefs.DateFormat,
+                      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();

@@ -1373,10 +1373,10 @@ void Agd_HideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event private *****/
-   DB_BuildQuery ("UPDATE agendas SET Hidden='Y'"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE_new ("can not hide event");
+   DB_QueryUPDATE ("can not hide event",
+		   "UPDATE agendas SET Hidden='Y'"
+		   " WHERE AgdCod=%ld AND UsrCod=%ld",
+                   AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1406,10 +1406,10 @@ void Agd_UnhideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set event public *****/
-   DB_BuildQuery ("UPDATE agendas SET Hidden='N'"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE_new ("can not show event");
+   DB_QueryUPDATE ("can not show event",
+		   "UPDATE agendas SET Hidden='N'"
+		   " WHERE AgdCod=%ld AND UsrCod=%ld",
+                   AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1439,10 +1439,10 @@ void Agd_MakeEventPrivate (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event private *****/
-   DB_BuildQuery ("UPDATE agendas SET Public='N'"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE_new ("can not make event private");
+   DB_QueryUPDATE ("can not make event private",
+		   "UPDATE agendas SET Public='N'"
+		   " WHERE AgdCod=%ld AND UsrCod=%ld",
+                   AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1472,10 +1472,10 @@ void Agd_MakeEventPublic (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Make event public *****/
-   DB_BuildQuery ("UPDATE agendas SET Public='Y'"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent.AgdCod,AgdEvent.UsrCod);
-   DB_QueryUPDATE_new ("can not make event public");
+   DB_QueryUPDATE ("can not make event public",
+		   "UPDATE agendas SET Public='Y'"
+		   " WHERE AgdCod=%ld AND UsrCod=%ld",
+                   AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1732,16 +1732,16 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
    /***** Update the data of the event *****/
-   DB_BuildQuery ("UPDATE agendas SET "
-		  "StartTime=FROM_UNIXTIME(%ld),"
-		  "EndTime=FROM_UNIXTIME(%ld),"
-		  "Event='%s',Location='%s',Txt='%s'"
-		  " WHERE AgdCod=%ld AND UsrCod=%ld",
-                  AgdEvent->TimeUTC[Agd_START_TIME],
-                  AgdEvent->TimeUTC[Agd_END_TIME  ],
-                  AgdEvent->Event,AgdEvent->Location,Txt,
-                  AgdEvent->AgdCod,AgdEvent->UsrCod);
-   DB_QueryUPDATE_new ("can not update event");
+   DB_QueryUPDATE ("can not update event",
+		   "UPDATE agendas SET "
+		   "StartTime=FROM_UNIXTIME(%ld),"
+		   "EndTime=FROM_UNIXTIME(%ld),"
+		   "Event='%s',Location='%s',Txt='%s'"
+		   " WHERE AgdCod=%ld AND UsrCod=%ld",
+                   AgdEvent->TimeUTC[Agd_START_TIME],
+                   AgdEvent->TimeUTC[Agd_END_TIME  ],
+                   AgdEvent->Event,AgdEvent->Location,Txt,
+                   AgdEvent->AgdCod,AgdEvent->UsrCod);
   }
 
 /*****************************************************************************/

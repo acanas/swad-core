@@ -221,10 +221,10 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   DB_BuildQuery ("UPDATE crs_usr SET Role=%u"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-	          (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-   DB_QueryUPDATE_new ("can not modify user's role in course");
+   DB_QueryUPDATE ("can not modify user's role in course",
+		   "UPDATE crs_usr SET Role=%u"
+		   " WHERE CrsCod=%ld AND UsrCod=%ld",
+	           (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -526,27 +526,27 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 
    /***** Update user's common data *****/
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-   DB_BuildQuery ("UPDATE usr_data"
-		  " SET Password='%s',"
-		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "CtyCod=%ld,"
-		  "LocalAddress='%s',LocalPhone='%s',"
-		  "FamilyAddress='%s',FamilyPhone='%s',"
-		  "OriginPlace='%s',Birthday=%s,"
-		  "Comments='%s'"
-		  " WHERE UsrCod=%ld",
-	          UsrDat->Password,
-	          UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
-	          Usr_StringsSexDB[UsrDat->Sex],
-	          UsrDat->CtyCod,
-	          UsrDat->LocalAddress,UsrDat->LocalPhone,
-	          UsrDat->FamilyAddress,UsrDat->FamilyPhone,
-	          UsrDat->OriginPlace,
-	          BirthdayStrDB,
-	          UsrDat->Comments ? UsrDat->Comments :
-				     "",
-	          UsrDat->UsrCod);
-   DB_QueryUPDATE_new ("can not update user's data");
+   DB_QueryUPDATE ("can not update user's data",
+		   "UPDATE usr_data"
+		   " SET Password='%s',"
+		   "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
+		   "CtyCod=%ld,"
+		   "LocalAddress='%s',LocalPhone='%s',"
+		   "FamilyAddress='%s',FamilyPhone='%s',"
+		   "OriginPlace='%s',Birthday=%s,"
+		   "Comments='%s'"
+		   " WHERE UsrCod=%ld",
+	           UsrDat->Password,
+	           UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
+	           Usr_StringsSexDB[UsrDat->Sex],
+	           UsrDat->CtyCod,
+	           UsrDat->LocalAddress,UsrDat->LocalPhone,
+	           UsrDat->FamilyAddress,UsrDat->FamilyPhone,
+	           UsrDat->OriginPlace,
+	           BirthdayStrDB,
+	           UsrDat->Comments ? UsrDat->Comments :
+				      "",
+	           UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
@@ -569,15 +569,15 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat)
 
 void Enr_UpdateInstitutionCentreDepartment (void)
   {
-   DB_BuildQuery ("UPDATE usr_data"
-		  " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
-		  " WHERE UsrCod=%ld",
-	          Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	          Gbl.Usrs.Me.UsrDat.InsCod,
-	          Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
-	          Gbl.Usrs.Me.UsrDat.Tch.DptCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update institution, centre and department");
+   DB_QueryUPDATE ("can not update institution, centre and department",
+		   "UPDATE usr_data"
+		   " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
+		   " WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
+	           Gbl.Usrs.Me.UsrDat.InsCod,
+	           Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
+	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -2044,15 +2044,13 @@ void Enr_SignUpInCrs (void)
 
       /***** Request user in current course in database *****/
       if (ReqCod > 0)        // Old request exists in database
-        {
-         DB_BuildQuery ("UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
-			" WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
-		        (unsigned) RoleFromForm,
-		        ReqCod,
-		        Gbl.CurrentCrs.Crs.CrsCod,
-		        Gbl.Usrs.Me.UsrDat.UsrCod);
-         DB_QueryUPDATE_new ("can not update enrolment request");
-        }
+         DB_QueryUPDATE ("can not update enrolment request",
+			 "UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
+			 " WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
+		         (unsigned) RoleFromForm,
+		         ReqCod,
+		         Gbl.CurrentCrs.Crs.CrsCod,
+		         Gbl.Usrs.Me.UsrDat.UsrCod);
       else                // No request in database for this user in this course
          ReqCod =
          DB_QueryINSERTandReturnCode ("can not save enrolment request",
@@ -3061,15 +3059,15 @@ static void Enr_RemoveExpiredEnrolmentRequests (void)
   {
    /***** Mark possible notifications as removed
           Important: do this before removing the request *****/
-   DB_BuildQuery ("UPDATE notif,crs_usr_requests"
-		  " SET notif.Status=(notif.Status | %u)"
-		  " WHERE notif.NotifyEvent=%u"
-		  " AND notif.Cod=crs_usr_requests.ReqCod"
-		  " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-	          (unsigned) Ntf_STATUS_BIT_REMOVED,
-	          (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
-	          Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
-   DB_QueryUPDATE_new ("can not set notification(s) as removed");
+   DB_QueryUPDATE ("can not set notification(s) as removed",
+		   "UPDATE notif,crs_usr_requests"
+		   " SET notif.Status=(notif.Status | %u)"
+		   " WHERE notif.NotifyEvent=%u"
+		   " AND notif.Cod=crs_usr_requests.ReqCod"
+		   " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+	           (unsigned) Ntf_STATUS_BIT_REMOVED,
+	           (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
+	           Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
 
    /***** Remove expired requests for enrolment *****/
    DB_QueryDELETE ("can not remove expired requests for enrolment",
@@ -4127,10 +4125,10 @@ void Enr_ModifyUsr2 (void)
 void Enr_AcceptUsrInCrs (long UsrCod)
   {
    /***** Set enrolment of a user to "accepted" in the current course *****/
-   DB_BuildQuery ("UPDATE crs_usr SET Accepted='Y'"
-		  " WHERE CrsCod=%ld AND UsrCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
-   DB_QueryUPDATE_new ("can not confirm user's enrolment");
+   DB_QueryUPDATE ("can not confirm user's enrolment",
+		   "UPDATE crs_usr SET Accepted='Y'"
+		   " WHERE CrsCod=%ld AND UsrCod=%ld",
+                   Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
   }
 
 /*****************************************************************************/

@@ -1243,18 +1243,19 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
    /***** Update number of clicks and score of the question *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    if (AnswerIsNotBlank)
-      DB_BuildQuery ("UPDATE tst_questions"
-	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
-	             "Score=Score+(%lf)"
-                     " WHERE QstCod=%ld",
-		     ScoreThisQst,QstCod);
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	              " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
+	              "Score=Score+(%lf)"
+                      " WHERE QstCod=%ld",
+		      ScoreThisQst,QstCod);
    else	// The answer is blank
-      DB_BuildQuery ("UPDATE tst_questions"
-	             " SET NumHits=NumHits+1"
-                     " WHERE QstCod=%ld",
-		     QstCod);
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	              " SET NumHits=NumHits+1"
+                      " WHERE QstCod=%ld",
+		      QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryUPDATE_new ("can not update the score of a question");
   }
 
 /*****************************************************************************/
@@ -1264,11 +1265,11 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
   {
    /***** Update my number of accesses to test in this course *****/
-   DB_BuildQuery ("UPDATE crs_usr SET NumAccTst=%u"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-		  NumAccessesTst,
-		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update the number of accesses to test");
+   DB_QueryUPDATE ("can not update the number of accesses to test",
+		   "UPDATE crs_usr SET NumAccTst=%u"
+                   " WHERE CrsCod=%ld AND UsrCod=%ld",
+		   NumAccessesTst,
+		   Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1278,12 +1279,12 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
 static void Tst_UpdateLastAccTst (void)
   {
    /***** Update date-time and number of questions of this test *****/
-   DB_BuildQuery ("UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
-                  " WHERE CrsCod=%ld AND UsrCod=%ld",
-		  Gbl.Test.NumQsts,
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update time and number of questions of this test");
+   DB_QueryUPDATE ("can not update time and number of questions of this test",
+		   "UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
+                   " WHERE CrsCod=%ld AND UsrCod=%ld",
+		   Gbl.Test.NumQsts,
+		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1621,14 +1622,14 @@ void Tst_RenameTag (void)
 
 	    /* Change old tag to new tag in questions where it would not be repeated */
 	    // New tag did not exist for a question ==> change old tag to new tag
-	    DB_BuildQuery ("UPDATE tst_question_tags"
-			   " SET TagCod=%ld"
-			   " WHERE TagCod=%ld"
-			   " AND QstCod NOT IN"
-			   " (SELECT QstCod FROM tst_question_tags_tmp)",
-			   ExistingTagCod,
-			   OldTagCod);
-	    DB_QueryUPDATE_new ("can not update a tag in some questions");
+	    DB_QueryUPDATE ("can not update a tag in some questions",
+			    "UPDATE tst_question_tags"
+			    " SET TagCod=%ld"
+			    " WHERE TagCod=%ld"
+			    " AND QstCod NOT IN"
+			    " (SELECT QstCod FROM tst_question_tags_tmp)",
+			    ExistingTagCod,
+			    OldTagCod);
 
 	    /* Drop temporary table, no longer necessary */
 	    DB_Query ("can not remove temporary table",
@@ -1643,11 +1644,11 @@ void Tst_RenameTag (void)
 	 else			// Renaming is easy
 	   {
 	    /***** Simple update replacing each instance of the old tag by the new tag *****/
-	    DB_BuildQuery ("UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
-			   " WHERE tst_tags.CrsCod=%ld"
-			   " AND tst_tags.TagTxt='%s'",
-			   NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
-	    DB_QueryUPDATE_new ("can not update tag");
+	    DB_QueryUPDATE ("can not update tag",
+			    "UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
+			    " WHERE tst_tags.CrsCod=%ld"
+			    " AND tst_tags.TagTxt='%s'",
+			    NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
 	   }
 
 	 /***** Write message to show the change made *****/
@@ -6317,12 +6318,12 @@ static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
   {
    /***** Insert new tag into tst_tags table *****/
-   DB_BuildQuery ("UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
-                  " WHERE TagCod=%ld AND CrsCod=%ld",
-		  TagHidden ? 'Y' :
-			      'N',
-		  TagCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not update the visibility of a tag");
+   DB_QueryUPDATE ("can not update the visibility of a tag",
+		   "UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
+                   " WHERE TagCod=%ld AND CrsCod=%ld",
+		   TagHidden ? 'Y' :
+			       'N',
+		   TagCod,Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -6474,12 +6475,12 @@ void Tst_ChangeShuffleQst (void)
 
    /***** Remove the question from all the tables *****/
    /* Update the question changing the current shuffle */
-   DB_BuildQuery ("UPDATE tst_questions SET Shuffle='%c'"
-                  " WHERE QstCod=%ld AND CrsCod=%ld",
-		  Shuffle ? 'Y' :
-			    'N',
-		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not update the shuffle type of a question");
+   DB_QueryUPDATE ("can not update the shuffle type of a question",
+		   "UPDATE tst_questions SET Shuffle='%c'"
+                   " WHERE QstCod=%ld AND CrsCod=%ld",
+		   Shuffle ? 'Y' :
+			     'N',
+		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -6570,21 +6571,21 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
      {
       /***** Update existing question *****/
       /* Update question in database */
-      DB_BuildQuery ("UPDATE tst_questions"
-		     " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
-		     "Stem='%s',Feedback='%s',"
-		     "ImageName='%s',ImageTitle='%s',ImageURL='%s'"
-		     " WHERE QstCod=%ld AND CrsCod=%ld",
-		     Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-		     Gbl.Test.Shuffle ? 'Y' :
-					'N',
-		     Gbl.Test.Stem.Text,
-		     Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-		     Gbl.Test.Image.Name,
-		     Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
-		     Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "",
-		     Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-      DB_QueryUPDATE_new ("can not update question");
+      DB_QueryUPDATE ("can not update question",
+		      "UPDATE tst_questions"
+		      " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
+		      "Stem='%s',Feedback='%s',"
+		      "ImageName='%s',ImageTitle='%s',ImageURL='%s'"
+		      " WHERE QstCod=%ld AND CrsCod=%ld",
+		      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+		      Gbl.Test.Shuffle ? 'Y' :
+					 'N',
+		      Gbl.Test.Stem.Text,
+		      Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+		      Gbl.Test.Image.Name,
+		      Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
+		      Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "",
+		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /* Update image status */
       if (Gbl.Test.Image.Name[0])
@@ -7617,13 +7618,13 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
   {
    /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_BuildQuery ("UPDATE tst_exams"
-	          " SET NumQstsNotBlank=%u,Score='%lf'"
-	          " WHERE TstCod=%ld",
-		  NumQstsNotBlank,Score,
-		  TstCod);
+   DB_QueryUPDATE ("can not update result of test result",
+		   "UPDATE tst_exams"
+	           " SET NumQstsNotBlank=%u,Score='%lf'"
+	           " WHERE TstCod=%ld",
+		   NumQstsNotBlank,Score,
+		   TstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryUPDATE_new ("can not update result of test result");
   }
 
 /*****************************************************************************/

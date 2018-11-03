@@ -720,10 +720,10 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *Forum)
 static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
   {
    /***** Update the code of the first and last posts of a thread *****/
-   DB_BuildQuery ("UPDATE forum_thread SET FirstPstCod=%ld,LastPstCod=%ld"
-		  " WHERE ThrCod=%ld",
-                  FirstPstCod,LastPstCod,ThrCod);
-   DB_QueryUPDATE_new ("can not update a thread of a forum");
+   DB_QueryUPDATE ("can not update a thread of a forum",
+		   "UPDATE forum_thread SET FirstPstCod=%ld,LastPstCod=%ld"
+		   " WHERE ThrCod=%ld",
+                   FirstPstCod,LastPstCod,ThrCod);
   }
 
 /*****************************************************************************/
@@ -733,10 +733,10 @@ static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long Last
 static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
   {
    /***** Update the code of the last post of a thread *****/
-   DB_BuildQuery ("UPDATE forum_thread SET LastPstCod=%ld"
-		  " WHERE ThrCod=%ld",
-                  LastPstCod,ThrCod);
-   DB_QueryUPDATE_new ("can not update a thread of a forum");
+   DB_QueryUPDATE ("can not update a thread of a forum",
+		   "UPDATE forum_thread SET LastPstCod=%ld"
+		   " WHERE ThrCod=%ld",
+                   LastPstCod,ThrCod);
   }
 
 /*****************************************************************************/
@@ -4072,10 +4072,10 @@ void For_ReceiveForumPost (void)
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
-   DB_BuildQuery ("UPDATE forum_post SET NumNotif=NumNotif+%u"
-		  " WHERE PstCod=%ld",
-                  NumUsrsToBeNotifiedByEMail,PstCod);
-   DB_QueryUPDATE_new ("can not update the number of notifications of a post");
+   DB_QueryUPDATE ("can not update the number of notifications of a post",
+		   "UPDATE forum_post SET NumNotif=NumNotif+%u"
+		   " WHERE PstCod=%ld",
+                   NumUsrsToBeNotifiedByEMail,PstCod);
   }
 
 /*****************************************************************************/
@@ -4418,53 +4418,57 @@ static void For_MoveThrToCurrentForum (long ThrCod)
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
-         DB_BuildQuery ("UPDATE forum_thread"
-			" SET ForumType=%u,Location=-1"
-			" WHERE ThrCod=%ld",
-                        (unsigned) Gbl.Forum.ForumSelected.Type,
-                        ThrCod);
+         DB_QueryUPDATE ("can not move a thread to current forum",
+			 "UPDATE forum_thread"
+			 " SET ForumType=%u,Location=-1"
+			 " WHERE ThrCod=%ld",
+                         (unsigned) Gbl.Forum.ForumSelected.Type,
+                         ThrCod);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         DB_BuildQuery ("UPDATE forum_thread"
-			" SET ForumType=%u,Location=%ld"
-			" WHERE ThrCod=%ld",
-		        (unsigned) Gbl.Forum.ForumSelected.Type,
-		        Gbl.Forum.ForumSelected.Location,
-		        ThrCod);
+         DB_QueryUPDATE ("can not move a thread to current forum",
+			 "UPDATE forum_thread"
+			 " SET ForumType=%u,Location=%ld"
+			 " WHERE ThrCod=%ld",
+		         (unsigned) Gbl.Forum.ForumSelected.Type,
+		         Gbl.Forum.ForumSelected.Location,
+		         ThrCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         DB_BuildQuery ("UPDATE forum_thread"
-			" SET ForumType=%u,Location=%ld"
-			" WHERE ThrCod=%ld",
-                        (unsigned) Gbl.Forum.ForumSelected.Type,
-                        Gbl.Forum.ForumSelected.Location,
-                        ThrCod);
+         DB_QueryUPDATE ("can not move a thread to current forum",
+			 "UPDATE forum_thread"
+			 " SET ForumType=%u,Location=%ld"
+			 " WHERE ThrCod=%ld",
+                         (unsigned) Gbl.Forum.ForumSelected.Type,
+                         Gbl.Forum.ForumSelected.Location,
+                         ThrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         DB_BuildQuery ("UPDATE forum_thread"
-			" SET ForumType=%u,Location=%ld"
-			" WHERE ThrCod=%ld",
-		        (unsigned) Gbl.Forum.ForumSelected.Type,
-		        Gbl.Forum.ForumSelected.Location,
-		        ThrCod);
+         DB_QueryUPDATE ("can not move a thread to current forum",
+			 "UPDATE forum_thread"
+			 " SET ForumType=%u,Location=%ld"
+			 " WHERE ThrCod=%ld",
+		         (unsigned) Gbl.Forum.ForumSelected.Type,
+		         Gbl.Forum.ForumSelected.Location,
+		         ThrCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         DB_BuildQuery ("UPDATE forum_thread"
-			" SET ForumType=%u,Location=%ld"
-			" WHERE ThrCod=%ld",
-		        (unsigned) Gbl.Forum.ForumSelected.Type,
-		        Gbl.Forum.ForumSelected.Location,
-		        ThrCod);
+         DB_QueryUPDATE ("can not move a thread to current forum",
+			 "UPDATE forum_thread"
+			 " SET ForumType=%u,Location=%ld"
+			 " WHERE ThrCod=%ld",
+		         (unsigned) Gbl.Forum.ForumSelected.Type,
+		         Gbl.Forum.ForumSelected.Location,
+		         ThrCod);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong forum.");
 	 break;
      }
-   DB_QueryUPDATE_new ("can not move a thread to current forum");
   }
 
 /*****************************************************************************/

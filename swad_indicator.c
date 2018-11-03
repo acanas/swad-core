@@ -1450,9 +1450,9 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators)
   {
    /***** Store number of indicators of a course in database *****/
-   DB_BuildQuery ("UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
-                  NumIndicators,CrsCod);
-   DB_QueryUPDATE_new ("can not store number of indicators of a course");
+   DB_QueryUPDATE ("can not store number of indicators of a course",
+		   "UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
+                   NumIndicators,CrsCod);
   }
 
 /*****************************************************************************/

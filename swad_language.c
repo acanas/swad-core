@@ -184,10 +184,10 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
    Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
 
    /***** Update my language in database *****/
-   DB_BuildQuery ("UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
-	         Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	         Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE_new ("can not update your language");
+   DB_QueryUPDATE ("can not update your language",
+		   "UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
+	           Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

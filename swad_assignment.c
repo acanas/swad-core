@@ -1060,10 +1060,10 @@ void Asg_HideAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Hide assignment *****/
-   DB_BuildQuery ("UPDATE assignments SET Hidden='Y'"
-		  " WHERE AsgCod=%ld AND CrsCod=%ld",
-                  Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not hide assignment");
+   DB_QueryUPDATE ("can not hide assignment",
+		   "UPDATE assignments SET Hidden='Y'"
+		   " WHERE AsgCod=%ld AND CrsCod=%ld",
+                   Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1092,10 +1092,10 @@ void Asg_ShowAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Hide assignment *****/
-   DB_BuildQuery ("UPDATE assignments SET Hidden='N'"
-		  " WHERE AsgCod=%ld AND CrsCod=%ld",
-                  Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not show assignment");
+   DB_QueryUPDATE ("can not show assignment",
+		   "UPDATE assignments SET Hidden='N'"
+		   " WHERE AsgCod=%ld AND CrsCod=%ld",
+                   Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1482,10 +1482,11 @@ void Asg_RecFormAssignment (void)
 static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
-   DB_BuildQuery ("UPDATE assignments SET NumNotif=NumNotif+%u"
-		  " WHERE AsgCod=%ld",
-                  NumUsrsToBeNotifiedByEMail,AsgCod);
-   DB_QueryUPDATE_new ("can not update the number of notifications of an assignment");
+   DB_QueryUPDATE ("can not update the number of notifications"
+		   " of an assignment",
+		   "UPDATE assignments SET NumNotif=NumNotif+%u"
+		   " WHERE AsgCod=%ld",
+                   NumUsrsToBeNotifiedByEMail,AsgCod);
   }
 
 /*****************************************************************************/
@@ -1522,18 +1523,18 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
   {
    /***** Update the data of the assignment *****/
-   DB_BuildQuery ("UPDATE assignments SET "
-		  "StartTime=FROM_UNIXTIME(%ld),"
-		  "EndTime=FROM_UNIXTIME(%ld),"
-		  "Title='%s',Folder='%s',Txt='%s'"
-		  " WHERE AsgCod=%ld AND CrsCod=%ld",
-                  Asg->TimeUTC[Dat_START_TIME],
-                  Asg->TimeUTC[Dat_END_TIME  ],
-                  Asg->Title,
-                  Asg->Folder,
-                  Txt,
-                  Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE_new ("can not update assignment");
+   DB_QueryUPDATE ("can not update assignment",
+		   "UPDATE assignments SET "
+		   "StartTime=FROM_UNIXTIME(%ld),"
+		   "EndTime=FROM_UNIXTIME(%ld),"
+		   "Title='%s',Folder='%s',Txt='%s'"
+		   " WHERE AsgCod=%ld AND CrsCod=%ld",
+                   Asg->TimeUTC[Dat_START_TIME],
+                   Asg->TimeUTC[Dat_END_TIME  ],
+                   Asg->Title,
+                   Asg->Folder,
+                   Txt,
+                   Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */

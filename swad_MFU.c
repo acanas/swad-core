@@ -381,11 +381,11 @@ void MFU_UpdateMFUActions (void)
 	            Gbl.Usrs.Me.UsrDat.UsrCod,ActCod,Score);
 
    /***** Update score for other actions *****/
-   DB_BuildQuery ("UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"
-		  " WHERE UsrCod=%ld AND ActCod<>%ld",
-                  MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
-                  Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
-   DB_QueryUPDATE_new ("can not update most frequently used actions");
+   DB_QueryUPDATE ("can not update most frequently used actions",
+		   "UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"
+		   " WHERE UsrCod=%ld AND ActCod<>%ld",
+                   MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
+                   Gbl.Usrs.Me.UsrDat.UsrCod,ActCod);
 
    Str_SetDecimalPointToLocal ();	// Return to local system
   }

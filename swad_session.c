@@ -181,20 +181,20 @@ void Ses_InsertSessionInDB (void)
 void Ses_UpdateSessionDataInDB (void)
   {
    /***** Update session in database *****/
-   DB_BuildQuery ("UPDATE sessions SET UsrCod=%ld,Password='%s',Role=%u,"
-                  "CtyCod=%ld,InsCod=%ld,CtrCod=%ld,DegCod=%ld,CrsCod=%ld,"
-                  "LastTime=NOW(),LastRefresh=NOW()"
-                  " WHERE SessionId='%s'",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Gbl.Usrs.Me.UsrDat.Password,
-		  (unsigned) Gbl.Usrs.Me.Role.Logged,
-		  Gbl.CurrentCty.Cty.CtyCod,
-		  Gbl.CurrentIns.Ins.InsCod,
-		  Gbl.CurrentCtr.Ctr.CtrCod,
-		  Gbl.CurrentDeg.Deg.DegCod,
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Gbl.Session.Id);
-   DB_QueryUPDATE_new ("can not update session");
+   DB_QueryUPDATE ("can not update session",
+		   "UPDATE sessions SET UsrCod=%ld,Password='%s',Role=%u,"
+                   "CtyCod=%ld,InsCod=%ld,CtrCod=%ld,DegCod=%ld,CrsCod=%ld,"
+                   "LastTime=NOW(),LastRefresh=NOW()"
+                   " WHERE SessionId='%s'",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Usrs.Me.UsrDat.Password,
+		   (unsigned) Gbl.Usrs.Me.Role.Logged,
+		   Gbl.CurrentCty.Cty.CtyCod,
+		   Gbl.CurrentIns.Ins.InsCod,
+		   Gbl.CurrentCtr.Ctr.CtrCod,
+		   Gbl.CurrentDeg.Deg.DegCod,
+		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -204,9 +204,9 @@ void Ses_UpdateSessionDataInDB (void)
 void Ses_UpdateSessionLastRefreshInDB (void)
   {
    /***** Update session in database *****/
-   DB_BuildQuery ("UPDATE sessions SET LastRefresh=NOW() WHERE SessionId='%s'",
-		  Gbl.Session.Id);
-   DB_QueryUPDATE_new ("can not update session");
+   DB_QueryUPDATE ("can not update session",
+		   "UPDATE sessions SET LastRefresh=NOW() WHERE SessionId='%s'",
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/

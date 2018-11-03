@@ -652,9 +652,9 @@ void Dpt_ChangeDepartIns (void)
    Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Update institution in table of departments *****/
-   DB_BuildQuery ("UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
-                  Dpt->InsCod,Dpt->DptCod);
-   DB_QueryUPDATE_new ("can not update the institution of a department");
+   DB_QueryUPDATE ("can not update the institution of a department",
+		   "UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
+                   Dpt->InsCod,Dpt->DptCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_institution_of_the_department_has_changed);
@@ -794,9 +794,9 @@ static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *N
 static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *NewDptName)
   {
    /***** Update department changing old name by new name *****/
-   DB_BuildQuery ("UPDATE departments SET %s='%s' WHERE DptCod=%ld",
-	          FieldName,NewDptName,DptCod);
-   DB_QueryUPDATE_new ("can not update the name of a department");
+   DB_QueryUPDATE ("can not update the name of a department",
+		   "UPDATE departments SET %s='%s' WHERE DptCod=%ld",
+	           FieldName,NewDptName,DptCod);
   }
 
 /******************************************************************************/
@@ -823,9 +823,9 @@ void Dpt_ChangeDptWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_BuildQuery ("UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
-                     NewWWW,Dpt->DptCod);
-      DB_QueryUPDATE_new ("can not update the web of a department");
+      DB_QueryUPDATE ("can not update the web of a department",
+		      "UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
+                      NewWWW,Dpt->DptCod);
 
       /***** Write message to show the change made *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

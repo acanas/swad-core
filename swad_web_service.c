@@ -3177,11 +3177,11 @@ int swad__markNotificationsAsRead (struct soap *soap,
          if ((NtfCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
            {
 	    /***** Mark notification as read in the database *****/
-	    DB_BuildQuery ("UPDATE notif SET Status=(Status | %u)"
-			   " WHERE NtfCod=%ld AND ToUsrCod=%ld",
-			   (unsigned) Ntf_STATUS_BIT_READ,
-			   (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-	    DB_QueryUPDATE_new ("can not mark notification as read");
+	    DB_QueryUPDATE ("can not mark notification as read",
+			    "UPDATE notif SET Status=(Status | %u)"
+			    " WHERE NtfCod=%ld AND ToUsrCod=%ld",
+			    (unsigned) Ntf_STATUS_BIT_READ,
+			    (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	    NumNtfsMarkedAsRead++;
            }
@@ -3470,13 +3470,11 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
 
    /***** If this recipient is the original sender of a message been replied... *****/
    if (RecipientUsrCod == ReplyUsrCod)
-     {
       /***** ...then update received message setting Replied field to true *****/
-      DB_BuildQuery ("UPDATE msg_rcv SET Replied='Y'"
-	             " WHERE MsgCod=%ld AND UsrCod=%ld",
-		     OriginalMsgCod,SenderUsrCod);
-      DB_QueryUPDATE_new ("can not update a received message");
-     }
+      DB_QueryUPDATE ("can not update a received message",
+		      "UPDATE msg_rcv SET Replied='Y'"
+	              " WHERE MsgCod=%ld AND UsrCod=%ld",
+		      OriginalMsgCod,SenderUsrCod);
 
    return SOAP_OK;
   }

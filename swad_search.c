@@ -1321,19 +1321,19 @@ static void Sch_SaveLastSearchIntoSession (void)
 	 Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /***** Save last search in session *****/
-      DB_BuildQuery ("UPDATE sessions SET WhatToSearch=%u,SearchStr='%s'"
-		     " WHERE SessionId='%s'",
-		     (unsigned) Gbl.Search.WhatToSearch,
-		     Gbl.Search.Str,
-		     Gbl.Session.Id);
-      DB_QueryUPDATE_new ("can not update last search in session");
+      DB_QueryUPDATE ("can not update last search in session",
+		      "UPDATE sessions SET WhatToSearch=%u,SearchStr='%s'"
+		      " WHERE SessionId='%s'",
+		      (unsigned) Gbl.Search.WhatToSearch,
+		      Gbl.Search.Str,
+		      Gbl.Session.Id);
 
       /***** Update my last type of search *****/
       // WhatToSearch is stored in usr_last for next time I log in
       // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-      DB_BuildQuery ("UPDATE usr_last SET WhatToSearch=%u WHERE UsrCod=%ld",
-		     (unsigned) Gbl.Search.WhatToSearch,
-		     Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update type of search in user's last data");
+      DB_QueryUPDATE ("can not update type of search in user's last data",
+		      "UPDATE usr_last SET WhatToSearch=%u WHERE UsrCod=%ld",
+		      (unsigned) Gbl.Search.WhatToSearch,
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
   }

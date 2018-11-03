@@ -1660,11 +1660,11 @@ void Svy_ResetSurvey (void)
 		   Svy.SvyCod);
 
    /***** Reset all the answers in this survey *****/
-   DB_BuildQuery ("UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs=0"
-                  " WHERE svy_questions.SvyCod=%ld"
-                  " AND svy_questions.QstCod=svy_answers.QstCod",
-		  Svy.SvyCod);
-   DB_QueryUPDATE_new ("can not reset answers of a survey");
+   DB_QueryUPDATE ("can not reset answers of a survey",
+		   "UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs=0"
+                   " WHERE svy_questions.SvyCod=%ld"
+                   " AND svy_questions.QstCod=svy_answers.QstCod",
+		   Svy.SvyCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1699,8 +1699,9 @@ void Svy_HideSurvey (void)
       Lay_ShowErrorAndExit ("You can not hide this survey.");
 
    /***** Hide survey *****/
-   DB_BuildQuery ("UPDATE surveys SET Hidden='Y' WHERE SvyCod=%ld",Svy.SvyCod);
-   DB_QueryUPDATE_new ("can not hide survey");
+   DB_QueryUPDATE ("can not hide survey",
+		   "UPDATE surveys SET Hidden='Y' WHERE SvyCod=%ld",
+		   Svy.SvyCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1735,8 +1736,9 @@ void Svy_UnhideSurvey (void)
       Lay_ShowErrorAndExit ("You can not unhide this survey.");
 
    /***** Show survey *****/
-   DB_BuildQuery ("UPDATE surveys SET Hidden='N' WHERE SvyCod=%ld",Svy.SvyCod);
-   DB_QueryUPDATE_new ("can not show survey");
+   DB_QueryUPDATE ("can not show survey",
+		   "UPDATE surveys SET Hidden='N' WHERE SvyCod=%ld",
+		   Svy.SvyCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2237,10 +2239,10 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
-   DB_BuildQuery ("UPDATE surveys SET NumNotif=NumNotif+%u"
-                  " WHERE SvyCod=%ld",
-		  NumUsrsToBeNotifiedByEMail,SvyCod);
-   DB_QueryUPDATE_new ("can not update the number of notifications of a survey");
+   DB_QueryUPDATE ("can not update the number of notifications of a survey",
+		   "UPDATE surveys SET NumNotif=NumNotif+%u"
+                   " WHERE SvyCod=%ld",
+		   NumUsrsToBeNotifiedByEMail,SvyCod);
   }
 
 /*****************************************************************************/
@@ -2290,20 +2292,20 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
    extern const char *Txt_The_survey_has_been_modified;
 
    /***** Update the data of the survey *****/
-   DB_BuildQuery ("UPDATE surveys"
-	          " SET Scope='%s',Cod=%ld,Roles=%u,"
-	          "StartTime=FROM_UNIXTIME(%ld),"
-	          "EndTime=FROM_UNIXTIME(%ld),"
-	          "Title='%s',Txt='%s'"
-                  " WHERE SvyCod=%ld",
-		  Sco_ScopeDB[Svy->Scope],Svy->Cod,
-		  Svy->Roles,
-		  Svy->TimeUTC[Svy_START_TIME],
-		  Svy->TimeUTC[Svy_END_TIME  ],
-		  Svy->Title,
-		  Txt,
-		  Svy->SvyCod);
-   DB_QueryUPDATE_new ("can not update survey");
+   DB_QueryUPDATE ("can not update survey",
+		   "UPDATE surveys"
+	           " SET Scope='%s',Cod=%ld,Roles=%u,"
+	           "StartTime=FROM_UNIXTIME(%ld),"
+	           "EndTime=FROM_UNIXTIME(%ld),"
+	           "Title='%s',Txt='%s'"
+                   " WHERE SvyCod=%ld",
+		   Sco_ScopeDB[Svy->Scope],Svy->Cod,
+		   Svy->Roles,
+		   Svy->TimeUTC[Svy_START_TIME],
+		   Svy->TimeUTC[Svy_END_TIME  ],
+		   Svy->Title,
+		   Txt,
+		   Svy->SvyCod);
 
    /***** Update groups *****/
    /* Remove old groups */
@@ -3033,14 +3035,12 @@ void Svy_ReceiveQst (void)
 				      Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
         }
       else			// It's an existing question
-        {
          /* Update question */
-         DB_BuildQuery ("UPDATE svy_questions SET Stem='%s',AnsType='%s'"
-                        " WHERE QstCod=%ld AND SvyCod=%ld",
-			Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
-			SvyQst.QstCod,SvyCod);
-         DB_QueryUPDATE_new ("can not update question");
-        }
+         DB_QueryUPDATE ("can not update question",
+			 "UPDATE svy_questions SET Stem='%s',AnsType='%s'"
+                         " WHERE QstCod=%ld AND SvyCod=%ld",
+			 Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
+			 SvyQst.QstCod,SvyCod);
 
       /* Insert, update or delete answers in the answers table */
       for (NumAns = 0;
@@ -3049,13 +3049,11 @@ void Svy_ReceiveQst (void)
          if (Svy_CheckIfAnswerExists (SvyQst.QstCod,NumAns))	// If this answer exists...
            {
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
-              {
                /* Update answer text */
-               DB_BuildQuery ("UPDATE svy_answers SET Answer='%s'"
-                              " WHERE QstCod=%ld AND AnsInd=%u",
-			      SvyQst.AnsChoice[NumAns].Text,SvyQst.QstCod,NumAns);
-               DB_QueryUPDATE_new ("can not update answer");
-              }
+               DB_QueryUPDATE ("can not update answer",
+        		       "UPDATE svy_answers SET Answer='%s'"
+                               " WHERE QstCod=%ld AND AnsInd=%u",
+			       SvyQst.AnsChoice[NumAns].Text,SvyQst.QstCod,NumAns);
             else	// Answer is empty
                /* Delete answer from database */
                DB_QueryDELETE ("can not delete answer",
@@ -3603,10 +3601,10 @@ void Svy_RemoveQst (void)
       Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
    /* Change index of questions greater than this */
-   DB_BuildQuery ("UPDATE svy_questions SET QstInd=QstInd-1"
-                  " WHERE SvyCod=%ld AND QstInd>%u",
-		  SvyCod,SvyQst.QstInd);
-   DB_QueryUPDATE_new ("can not update indexes of questions");
+   DB_QueryUPDATE ("can not update indexes of questions",
+		   "UPDATE svy_questions SET QstInd=QstInd-1"
+                   " WHERE SvyCod=%ld AND QstInd>%u",
+		   SvyCod,SvyQst.QstInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -3723,10 +3721,10 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
    /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
-   DB_BuildQuery ("UPDATE svy_answers SET NumUsrs=NumUsrs+1"
-                  " WHERE QstCod=%ld AND AnsInd=%u",
-		  QstCod,AnsInd);
-   DB_QueryUPDATE_new ("can not register your answer to the survey");
+   DB_QueryUPDATE ("can not register your answer to the survey",
+		   "UPDATE svy_answers SET NumUsrs=NumUsrs+1"
+                   " WHERE QstCod=%ld AND AnsInd=%u",
+		   QstCod,AnsInd);
   }
 
 /*****************************************************************************/

@@ -151,13 +151,11 @@ void Cal_ChangeFirstDayOfWeek (void)
 
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
-     {
-      DB_BuildQuery ("UPDATE usr_data SET FirstDayOfWeek=%u"
-		     " WHERE UsrCod=%ld",
-                     Gbl.Prefs.FirstDayOfWeek,
-                     Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE_new ("can not update your preference about first day of week");
-     }
+      DB_QueryUPDATE ("can not update your preference about first day of week",
+		      "UPDATE usr_data SET FirstDayOfWeek=%u"
+		      " WHERE UsrCod=%ld",
+                      Gbl.Prefs.FirstDayOfWeek,
+                      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();
