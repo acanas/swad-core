@@ -444,9 +444,12 @@ void Dpt_FreeListDepartments (void)
 unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
   {
    /***** Get number of departments in an institution from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM departments WHERE InsCod=%ld",InsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of departments"
-	                                " in an institution");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of departments"
+	                     " in an institution",
+			     "SELECT COUNT(*) FROM departments"
+			     " WHERE InsCod=%ld",
+			     InsCod);
   }
 
 /*****************************************************************************/
@@ -780,11 +783,11 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
   {
    /***** Get number of departments with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM departments"
-		  " WHERE %s='%s' AND DptCod<>%ld",
-                  FieldName,Name,DptCod);
-   return (DB_QueryCOUNT_new ("can not check if the name"
-	                      " of a department already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name"
+	                  " of a department already existed",
+			  "SELECT COUNT(*) FROM departments"
+			  " WHERE %s='%s' AND DptCod<>%ld",
+			  FieldName,Name,DptCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1073,8 +1076,9 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
 unsigned Dpt_GetTotalNumberOfDepartments (void)
   {
    /***** Get number of departments from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM departments");
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of departments");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of departments",
+			     "SELECT COUNT(*) FROM departments");
   }
 
 /*****************************************************************************/
@@ -1084,8 +1088,12 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 unsigned Dpt_GetNumDptsInIns (long InsCod)
   {
    /***** Get departments in an institution from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM departments WHERE InsCod=%ld",InsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of departments in an institution");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of departments"
+			     " in an institution",
+			     "SELECT COUNT(*) FROM departments"
+			     " WHERE InsCod=%ld",
+			     InsCod);
   }
 
 /*****************************************************************************/

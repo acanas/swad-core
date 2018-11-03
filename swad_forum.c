@@ -441,8 +441,9 @@ void For_DisablePost (void)
 static bool For_GetIfForumPstExists (long PstCod)
   {
    /***** Get if a forum post exists from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_post WHERE PstCod=%ld",PstCod);
-   return (DB_QueryCOUNT_new ("can not check if a post of a forum already existed") != 0);	// Post exists if it appears in table of forum posts
+   return (DB_QueryCOUNT ("can not check if a post of a forum already existed",
+			  "SELECT COUNT(*) FROM forum_post WHERE PstCod=%ld",
+			  PstCod) != 0);	// Post exists if it appears in table of forum posts
   }
 
 /*****************************************************************************/
@@ -452,13 +453,11 @@ static bool For_GetIfForumPstExists (long PstCod)
 static bool For_GetIfPstIsEnabled (long PstCod)
   {
    if (PstCod > 0)
-     {
       /***** Get if post is disabled from database *****/
-      DB_BuildQuery ("SELECT COUNT(*) FROM forum_disabled_post"
-		     " WHERE PstCod=%ld",
-	             PstCod);
-      return (DB_QueryCOUNT_new ("can not check if a post of a forum is disabled") == 0);	// Post is enabled if it does not appear in table of disabled posts
-     }
+      return (DB_QueryCOUNT ("can not check if a post of a forum is disabled",
+			     "SELECT COUNT(*) FROM forum_disabled_post"
+			     " WHERE PstCod=%ld",
+			     PstCod) == 0);	// Post is enabled if it does not appear in table of disabled posts
    else
       return false;
   }
@@ -794,10 +793,12 @@ static void For_UpdateThrReadTime (long ThrCod,
 static unsigned For_GetNumOfReadersOfThr (long ThrCod)
   {
    /***** Get number of distinct readers of a thread from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_thr_read WHERE ThrCod=%ld",
-                  ThrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of readers"
-	                                " of a thread of a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of readers"
+	                     " of a thread of a forum",
+			     "SELECT COUNT(*) FROM forum_thr_read"
+			     " WHERE ThrCod=%ld",
+			     ThrCod);
   }
 
 /*****************************************************************************/
@@ -837,9 +838,12 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod)
 static unsigned For_GetNumPstsInThr (long ThrCod)
   {
    /***** Get number of posts in a thread from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_post WHERE ThrCod=%ld",ThrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of posts"
-	                                " in a thread of a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of posts"
+	                     " in a thread of a forum",
+			     "SELECT COUNT(*) FROM forum_post"
+			     " WHERE ThrCod=%ld",
+			     ThrCod);
   }
 
 /*****************************************************************************/
@@ -849,11 +853,12 @@ static unsigned For_GetNumPstsInThr (long ThrCod)
 static unsigned For_GetNumMyPstInThr (long ThrCod)
   {
    /***** Get if I have write posts in a thread from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_post"
-		  " WHERE ThrCod=%ld AND UsrCod=%ld",
-                  ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not check if you have written"
-	                                " posts in a thead of a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not check if you have written"
+	                     " posts in a thead of a forum",
+			     "SELECT COUNT(*) FROM forum_post"
+			     " WHERE ThrCod=%ld AND UsrCod=%ld",
+			     ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -863,8 +868,9 @@ static unsigned For_GetNumMyPstInThr (long ThrCod)
 unsigned long For_GetNumPostsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_post WHERE UsrCod=%ld",UsrCod);
-   return DB_QueryCOUNT_new ("can not number of posts from a user");
+   return DB_QueryCOUNT ("can not number of posts from a user",
+			 "SELECT COUNT(*) FROM forum_post WHERE UsrCod=%ld",
+			 UsrCod);
   }
 
 /*****************************************************************************/
@@ -1448,12 +1454,15 @@ static void For_WriteNumberOfPosts (long UsrCod)
                Gbl.Forum.ForumSelected.Location);
    else
       SubQuery[0] = '\0';
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_post,forum_thread"
-		  " WHERE forum_post.UsrCod=%ld"
-		  " AND forum_post.ThrCod=forum_thread.ThrCod"
-		  " AND forum_thread.ForumType=%u%s",
-                  UsrCod,(unsigned) Gbl.Forum.ForumSelected.Type,SubQuery);
-   NumPsts = (unsigned) DB_QueryCOUNT_new ("can not get the number of posts of a user in a forum");
+   NumPsts =
+   (unsigned) DB_QueryCOUNT ("can not get the number of posts of a user"
+			     " in a forum",
+			     "SELECT COUNT(*) FROM forum_post,forum_thread"
+			     " WHERE forum_post.UsrCod=%ld"
+			     " AND forum_post.ThrCod=forum_thread.ThrCod"
+			     " AND forum_thread.ForumType=%u%s",
+			     UsrCod,
+			     (unsigned) Gbl.Forum.ForumSelected.Type,SubQuery);
 
    /***** Write number of threads and number of posts *****/
    if (NumPsts == 1)
@@ -2325,12 +2334,13 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (struct Forum *Forum,
       sprintf (SubQuery," AND forum_thread.Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_thread,forum_post"
-		  " WHERE forum_thread.ForumType=%u%s"
-		  " AND forum_thread.LastPstCod=forum_post.PstCod"
-		  " AND forum_post.ModifTime>'%s'",
-                  (unsigned) Forum->Type,SubQuery,Time);
-   return (unsigned) DB_QueryCOUNT_new ("can not check if there are new posts in a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not check if there are new posts in a forum",
+			     "SELECT COUNT(*) FROM forum_thread,forum_post"
+			     " WHERE forum_thread.ForumType=%u%s"
+			     " AND forum_thread.LastPstCod=forum_post.PstCod"
+			     " AND forum_post.ModifTime>'%s'",
+			     (unsigned) Forum->Type,SubQuery,Time);
   }
 
 /*****************************************************************************/

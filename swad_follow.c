@@ -445,10 +445,10 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
       return false;
 
    /***** Check if a user is a follower of another user *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_follow"
-		  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
-                  FollowerCod,FollowedCod);
-   return (DB_QueryCOUNT_new ("can not get if a user is a follower of another one") != 0);
+   return (DB_QueryCOUNT ("can not get if a user is a follower of another one",
+			  "SELECT COUNT(*) FROM usr_follow"
+			  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
+			  FollowerCod,FollowedCod) != 0);
   }
 
 /*****************************************************************************/
@@ -458,9 +458,11 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 unsigned Fol_GetNumFollowing (long UsrCod)
   {
    /***** Check if a user is a follower of another user *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_follow WHERE FollowerCod=%ld",
-                  UsrCod);
-   return DB_QueryCOUNT_new ("can not get number of followed");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of followed",
+	                     "SELECT COUNT(*) FROM usr_follow"
+	                     " WHERE FollowerCod=%ld",
+                             UsrCod);
   }
 
 /*****************************************************************************/
@@ -470,9 +472,11 @@ unsigned Fol_GetNumFollowing (long UsrCod)
 unsigned Fol_GetNumFollowers (long UsrCod)
   {
    /***** Check if a user is a follower of another user *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_follow WHERE FollowedCod=%ld",
-                  UsrCod);
-   return DB_QueryCOUNT_new ("can not get number of followers");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of followers",
+			     "SELECT COUNT(*) FROM usr_follow"
+			     " WHERE FollowedCod=%ld",
+			     UsrCod);
   }
 
 /*****************************************************************************/

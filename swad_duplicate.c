@@ -388,9 +388,11 @@ static void Dup_ListSimilarUsrs (void)
 
 static bool Dup_CheckIfUsrIsDup (long UsrCod)
   {
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod=%ld",
-	          UsrCod);
-   return (DB_QueryCOUNT_new ("can not if user is in list of possible duplicate users") != 0);
+   return (DB_QueryCOUNT ("can not if user is in list"
+			  " of possible duplicate users",
+			  "SELECT COUNT(*) FROM usr_duplicated"
+			  " WHERE UsrCod=%ld",
+			  UsrCod) != 0);
   }
 
 /*****************************************************************************/
