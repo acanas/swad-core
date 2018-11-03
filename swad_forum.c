@@ -2382,10 +2382,12 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
   {
    /***** Get the number of posts in thread with a modify time > a specified time from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_post"
-		  " WHERE ThrCod=%ld AND ModifTime>'%s'",
-                  ThrCod,Time);
-   return (unsigned) DB_QueryCOUNT_new ("can not check if there are new posts in a thread of a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not check if there are new posts"
+			     " in a thread of a forum",
+			     "SELECT COUNT(*) FROM forum_post"
+			     " WHERE ThrCod=%ld AND ModifTime>'%s'",
+			     ThrCod,Time);
   }
 
 /*****************************************************************************/
@@ -2862,6 +2864,8 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                                             long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod)
   {
+   unsigned NumThrs;
+
    /***** Get total number of threads in forums of this type from database *****/
    switch (ForumType)
      {
@@ -2870,151 +2874,210 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
          // Total number of threads in forums of this type
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM forum_thread"
-			" WHERE ForumType=%u",
-                        (unsigned) ForumType);
+         NumThrs =
+	 (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				   " in forums of a type",
+				   "SELECT COUNT(*)"
+				   " FROM forum_thread"
+				   " WHERE ForumType=%u",
+				   (unsigned) ForumType);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> Number of threads in institution forums for an institution
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u"
-			   " AND Location=%ld",
-                           (unsigned) ForumType,InsCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u"
+				      " AND Location=%ld",
+				      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in institution forums for a country
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,institutions"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
-		           (unsigned) ForumType,CtyCod);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,institutions"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=institutions.InsCod"
+				      " AND institutions.CtyCod=%ld",
+				      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in institution forums for the whole platform
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u",
-                           (unsigned) ForumType);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u",
+				      (unsigned) ForumType);
 	 break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
          if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= Number of threads in centre forums for a centre <= 1
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u"
-			   " AND Location=%ld",
-                           (unsigned) ForumType,CtrCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u"
+				      " AND Location=%ld",
+				      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in centre forums for an institution
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,centres"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
-                           (unsigned) ForumType,InsCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,centres"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=centres.CtrCod"
+				      " AND centres.InsCod=%ld",
+				      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in centre forums for a country
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,centres,institutions"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
-		           (unsigned) ForumType,CtyCod);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,centres,institutions"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=centres.CtrCod"
+				      " AND centres.InsCod=institutions.InsCod"
+				      " AND institutions.CtyCod=%ld",
+				      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in centre forums for the whole platform
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u",
-                           (unsigned) ForumType);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u",
+				      (unsigned) ForumType);
 	 break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
          if (DegCod > 0)	// DegCod > 0 ==> Number of threads in degree forums for a degree
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u"
-			   " AND Location=%ld",
-                           (unsigned) ForumType,DegCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u"
+				      " AND Location=%ld",
+				      (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of threads in degree forums for a centre
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,degrees"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=degrees.DegCod"
-			   " AND degrees.CtrCod=%ld",
-                           (unsigned) ForumType,CtrCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,degrees"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=degrees.DegCod"
+				      " AND degrees.CtrCod=%ld",
+				      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in degree forums for an institution
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,degrees,centres"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=degrees.DegCod"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
-                           (unsigned) ForumType,InsCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,degrees,centres"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=degrees.DegCod"
+				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND centres.InsCod=%ld",
+				      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in degree forums for a country
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,degrees,centres,institutions"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=degrees.DegCod"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
-		           (unsigned) ForumType,CtyCod);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,degrees,centres,institutions"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=degrees.DegCod"
+				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND centres.InsCod=institutions.InsCod"
+				      " AND institutions.CtyCod=%ld",
+				      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in degree forums for the whole platform
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u",
-                           (unsigned) ForumType);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u",
+				      (unsigned) ForumType);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= Number of threads in course forums for a course
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u"
-			   " AND Location=%ld",
-                           (unsigned) ForumType,CrsCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u"
+				      " AND Location=%ld",
+				      (unsigned) ForumType,CrsCod);
          else if (DegCod > 0)	// CrsCod <= 0 && DegCod > 0 ==> Number of threads in course forums for a degree
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,courses"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod=%ld",
-		           (unsigned) ForumType,DegCod);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,courses"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=courses.CrsCod"
+				      " AND courses.DegCod=%ld",
+				      (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of threads in course forums for a centre
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,courses,degrees"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod=%ld",
-		           (unsigned) ForumType,CtrCod);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,courses,degrees"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=courses.CrsCod"
+				      " AND courses.DegCod=degrees.DegCod"
+				      " AND degrees.CtrCod=%ld",
+				      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in course forums for an institution
-            DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,courses,degrees,centres"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=%ld",
-                           (unsigned) ForumType,InsCod);
+            NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,courses,degrees,centres"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=courses.CrsCod"
+				      " AND courses.DegCod=degrees.DegCod"
+				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND centres.InsCod=%ld",
+				      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in course forums for a country
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread,courses,degrees,centres,institutions"
-			   " WHERE forum_thread.ForumType=%u"
-			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=%ld",
-		           (unsigned) ForumType,CtyCod);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread,courses,degrees,centres,institutions"
+				      " WHERE forum_thread.ForumType=%u"
+				      " AND forum_thread.Location=courses.CrsCod"
+				      " AND courses.DegCod=degrees.DegCod"
+				      " AND degrees.CtrCod=centres.CtrCod"
+				      " AND centres.InsCod=institutions.InsCod"
+				      " AND institutions.CtyCod=%ld",
+				      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in course forums for the whole platform
-	    DB_BuildQuery ("SELECT COUNT(*)"
-			   " FROM forum_thread"
-			   " WHERE ForumType=%u",
-		           (unsigned) ForumType);
+	    NumThrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of threads"
+				      " in forums of a type",
+				      "SELECT COUNT(*)"
+				      " FROM forum_thread"
+				      " WHERE ForumType=%u",
+				      (unsigned) ForumType);
          break;
       default:
-	 return 0;
+	 NumThrs = 0;
+         break;
      }
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of threads in forums of a type");
+
+   return NumThrs;
   }
 
 /*****************************************************************************/
@@ -3030,9 +3093,11 @@ static unsigned For_GetNumThrsInForum (struct Forum *Forum)
       sprintf (SubQuery," AND Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_thread WHERE ForumType=%u%s",
-                  (unsigned) Forum->Type,SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of threads in a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of threads in a forum",
+			     "SELECT COUNT(*) FROM forum_thread"
+			     " WHERE ForumType=%u%s",
+			     (unsigned) Forum->Type,SubQuery);
   }
 
 /*****************************************************************************/
@@ -3291,11 +3356,12 @@ static unsigned For_GetNumPstsInForum (struct Forum *Forum)
       sprintf (SubQuery," AND forum_thread.Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_thread,forum_post "
-		  " WHERE forum_thread.ForumType=%u%s"
-		  " AND forum_thread.ThrCod=forum_post.ThrCod",
-                  (unsigned) Forum->Type,SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of posts in a forum");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of posts in a forum",
+			     "SELECT COUNT(*) FROM forum_thread,forum_post "
+			     " WHERE forum_thread.ForumType=%u%s"
+			     " AND forum_thread.ThrCod=forum_post.ThrCod",
+			     (unsigned) Forum->Type,SubQuery);
   }
 
 /*****************************************************************************/
@@ -4409,10 +4475,10 @@ static bool For_CheckIfThrBelongsToForum (long ThrCod,struct Forum *Forum)
       sprintf (SubQuery," AND forum_thread.Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
-   DB_BuildQuery ("SELECT COUNT(*) FROM forum_thread"
-		  " WHERE ThrCod=%ld AND ForumType=%u%s",
-                  ThrCod,(unsigned) Forum->Type,SubQuery);
-   return (DB_QueryCOUNT_new ("can not get if a thread belong to current forum") != 0);
+   return (DB_QueryCOUNT ("can not get if a thread belong to current forum",
+			  "SELECT COUNT(*) FROM forum_thread"
+			  " WHERE ThrCod=%ld AND ForumType=%u%s",
+			  ThrCod,(unsigned) Forum->Type,SubQuery) != 0);
   }
 
 /*****************************************************************************/

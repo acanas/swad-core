@@ -7689,69 +7689,87 @@ static void Sta_GetAndShowFollowStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT %s) FROM usr_follow",
-			   FieldDB[Fol]);
+	    NumUsrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the total number"
+				      " of following/followers",
+				      "SELECT COUNT(DISTINCT %s) FROM usr_follow",
+				      FieldDB[Fol]);
 	    break;
 	 case Sco_SCOPE_CTY:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE institutions.CtyCod=%ld"
-			   " AND institutions.InsCod=centres.InsCod"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   FieldDB[Fol]);
+	    NumUsrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the total number"
+				      " of following/followers",
+				      "SELECT COUNT(DISTINCT usr_follow.%s)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_follow.%s",
+				      FieldDB[Fol],
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      FieldDB[Fol]);
 	    break;
 	 case Sco_SCOPE_INS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE centres.InsCod=%ld"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.CurrentIns.Ins.InsCod,
-			   FieldDB[Fol]);
+	    NumUsrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the total number"
+				      " of following/followers",
+				      "SELECT COUNT(DISTINCT usr_follow.%s)"
+				      " FROM centres,degrees,courses,crs_usr,usr_follow"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_follow.%s",
+				      FieldDB[Fol],
+				      Gbl.CurrentIns.Ins.InsCod,
+				      FieldDB[Fol]);
 	    break;
 	 case Sco_SCOPE_CTR:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM degrees,courses,crs_usr,usr_follow"
-			   " WHERE degrees.CtrCod=%ld"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   FieldDB[Fol]);
+	    NumUsrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the total number"
+				      " of following/followers",
+				      "SELECT COUNT(DISTINCT usr_follow.%s)"
+				      " FROM degrees,courses,crs_usr,usr_follow"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_follow.%s",
+				      FieldDB[Fol],
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      FieldDB[Fol]);
 	    break;
 	 case Sco_SCOPE_DEG:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM courses,crs_usr,usr_follow"
-			   " WHERE courses.DegCod=%ld"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   FieldDB[Fol]);
+	    NumUsrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the total number"
+				      " of following/followers",
+				      "SELECT COUNT(DISTINCT usr_follow.%s)"
+				      " FROM courses,crs_usr,usr_follow"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_follow.%s",
+				      FieldDB[Fol],
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      FieldDB[Fol]);
 	    break;
 	 case Sco_SCOPE_CRS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM crs_usr,usr_follow"
-			   " WHERE crs_usr.CrsCod=%ld"
-			   " AND crs_usr.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   FieldDB[Fol]);
+	    NumUsrs =
+	    (unsigned) DB_QueryCOUNT ("can not get the total number"
+				      " of following/followers",
+				      "SELECT COUNT(DISTINCT usr_follow.%s)"
+				      " FROM crs_usr,usr_follow"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_follow.%s",
+				      FieldDB[Fol],
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      FieldDB[Fol]);
 	    break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs = 0;	// Not reached. Initialized to av oid warning
 	    break;
 	}
-      NumUsrs = (unsigned) DB_QueryCOUNT_new ("can not get the total number of following/followers");
 
       /***** Write number of followed / followers *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -8322,64 +8340,88 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-                        " WHERE EmailNtfEvents<>0");
+         NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+         (unsigned) DB_QueryCOUNT ("can not get the total number of users"
+				   " who want to be notified by email"
+				   " on some event",
+				   "SELECT COUNT(*) FROM usr_data"
+				   " WHERE EmailNtfEvents<>0");
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                        " WHERE institutions.CtyCod=%ld"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-			Gbl.CurrentCty.Cty.CtyCod);
+         NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+         (unsigned) DB_QueryCOUNT ("can not get the total number of users"
+				   " who want to be notified by email"
+				   " on some event",
+				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				   " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				   " WHERE institutions.CtyCod=%ld"
+				   " AND institutions.InsCod=centres.InsCod"
+				   " AND centres.CtrCod=degrees.CtrCod"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.EmailNtfEvents<>0",
+				   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM centres,degrees,courses,crs_usr,usr_data"
-                        " WHERE centres.InsCod=%ld"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-			Gbl.CurrentIns.Ins.InsCod);
+         NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+         (unsigned) DB_QueryCOUNT ("can not get the total number of users"
+				   " who want to be notified by email"
+				   " on some event",
+				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				   " FROM centres,degrees,courses,crs_usr,usr_data"
+				   " WHERE centres.InsCod=%ld"
+				   " AND centres.CtrCod=degrees.CtrCod"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.EmailNtfEvents<>0",
+				   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM degrees,courses,crs_usr,usr_data"
-                        " WHERE degrees.CtrCod=%ld"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-			Gbl.CurrentCtr.Ctr.CtrCod);
+         NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+         (unsigned) DB_QueryCOUNT ("can not get the total number of users"
+				   " who want to be notified by email"
+				   " on some event",
+				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				   " FROM degrees,courses,crs_usr,usr_data"
+				   " WHERE degrees.CtrCod=%ld"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.EmailNtfEvents<>0",
+				   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM courses,crs_usr,usr_data"
-                        " WHERE courses.DegCod=%ld"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-			Gbl.CurrentDeg.Deg.DegCod);
+         NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+         (unsigned) DB_QueryCOUNT ("can not get the total number of users"
+				   " who want to be notified by email"
+				   " on some event",
+				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				   " FROM courses,crs_usr,usr_data"
+				   " WHERE courses.DegCod=%ld"
+				   " AND courses.CrsCod=crs_usr.CrsCod"
+				   " AND crs_usr.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.EmailNtfEvents<>0",
+				   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM crs_usr,usr_data"
-                        " WHERE crs_usr.CrsCod=%ld"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-			Gbl.CurrentCrs.Crs.CrsCod);
+         NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+         (unsigned) DB_QueryCOUNT ("can not get the total number of users"
+				   " who want to be notified by email"
+				   " on some event",
+				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				   " FROM crs_usr,usr_data"
+				   " WHERE crs_usr.CrsCod=%ld"
+				   " AND crs_usr.UsrCod=usr_data.UsrCod"
+				   " AND usr_data.EmailNtfEvents<>0",
+				   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
+	 NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = 0;	// Not reached. Initialized to avoid warning
 	 break;
      }
-   NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = (unsigned) DB_QueryCOUNT_new ("can not get the total number of users who want to be notified by email on some event");
 
    /***** For each notify event... *****/
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
@@ -8390,65 +8432,94 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-        	           " WHERE ((EmailNtfEvents & %u)<>0)",
-			   (1 << NotifyEvent));
+            NumUsrs[NotifyEvent] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who want to be notified by email"
+        			      " on an event",
+				      "SELECT COUNT(*) FROM usr_data"
+				      " WHERE ((EmailNtfEvents & %u)<>0)",
+				      (1 << NotifyEvent));
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-			   Gbl.CurrentCty.Cty.CtyCod,(1 << NotifyEvent));
+            NumUsrs[NotifyEvent] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who want to be notified by email"
+        			      " on an event",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      (1 << NotifyEvent));
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-			   Gbl.CurrentIns.Ins.InsCod,(1 << NotifyEvent));
+            NumUsrs[NotifyEvent] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who want to be notified by email"
+        			      " on an event",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      (1 << NotifyEvent));
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-			   Gbl.CurrentCtr.Ctr.CtrCod,(1 << NotifyEvent));
+            NumUsrs[NotifyEvent] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who want to be notified by email"
+        			      " on an event",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      (1 << NotifyEvent));
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-			   Gbl.CurrentDeg.Deg.DegCod,(1 << NotifyEvent));
+            NumUsrs[NotifyEvent] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who want to be notified by email"
+        			      " on an event",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      (1 << NotifyEvent));
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-			   Gbl.CurrentCrs.Crs.CrsCod,(1 << NotifyEvent));
+            NumUsrs[NotifyEvent] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who want to be notified by email"
+        			      " on an event",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      (1 << NotifyEvent));
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[NotifyEvent] = 0;	// Not reached. Initialized to avoid warning
 	    break;
         }
-      NumUsrs[NotifyEvent] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who want to be notified by email on an event");
 
       /***** Get number of notifications by email from database *****/
       switch (Gbl.Scope.Current)
@@ -8944,76 +9015,94 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*)"
-        	           " FROM usr_data WHERE %s='%s'",
-			   FieldName,
-			   Pri_VisibilityDB[Visibility]);
+            NumUsrs[Visibility] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a privacy",
+				      "SELECT COUNT(*)"
+				      " FROM usr_data WHERE %s='%s'",
+				      FieldName,
+				      Pri_VisibilityDB[Visibility]);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.%s='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   FieldName,
-			   Pri_VisibilityDB[Visibility]);
+            NumUsrs[Visibility] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a privacy",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.%s='%s'",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      FieldName,
+				      Pri_VisibilityDB[Visibility]);
             break;
          case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.%s='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   FieldName,
-			   Pri_VisibilityDB[Visibility]);
+            NumUsrs[Visibility] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a privacy",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.%s='%s'",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      FieldName,
+				      Pri_VisibilityDB[Visibility]);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.%s='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   FieldName,
-			   Pri_VisibilityDB[Visibility]);
+            NumUsrs[Visibility] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a privacy",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.%s='%s'",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      FieldName,
+				      Pri_VisibilityDB[Visibility]);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.%s='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   FieldName,
-			   Pri_VisibilityDB[Visibility]);
+            NumUsrs[Visibility] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a privacy",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.%s='%s'",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      FieldName,
+				      Pri_VisibilityDB[Visibility]);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.%s='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   FieldName,
-			   Pri_VisibilityDB[Visibility]);
+            NumUsrs[Visibility] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a privacy",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.%s='%s'",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      FieldName,
+				      Pri_VisibilityDB[Visibility]);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[Visibility] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
         }
-      NumUsrs[Visibility] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a privacy");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Visibility];
@@ -9086,70 +9175,88 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*)"
-        	           " FROM usr_data WHERE Language='%s'",
-			   Txt_STR_LANG_ID[Lan]);
+            NumUsrs[Lan] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a language",
+				      "SELECT COUNT(*)"
+				      " FROM usr_data WHERE Language='%s'",
+				      Txt_STR_LANG_ID[Lan]);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Language='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   Txt_STR_LANG_ID[Lan]);
+            NumUsrs[Lan] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a language",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Language='%s'",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      Txt_STR_LANG_ID[Lan]);
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Language='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,
-			   Txt_STR_LANG_ID[Lan]);
+            NumUsrs[Lan] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a language",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Language='%s'",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      Txt_STR_LANG_ID[Lan]);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Language='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   Txt_STR_LANG_ID[Lan]);
+            NumUsrs[Lan] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a language",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Language='%s'",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      Txt_STR_LANG_ID[Lan]);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Language='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   Txt_STR_LANG_ID[Lan]);
+            NumUsrs[Lan] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a language",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Language='%s'",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      Txt_STR_LANG_ID[Lan]);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Language='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   Txt_STR_LANG_ID[Lan]);
+            NumUsrs[Lan] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a language",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Language='%s'",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      Txt_STR_LANG_ID[Lan]);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[Lan] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
         }
-      NumUsrs[Lan] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a language");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Lan];
@@ -9227,65 +9334,94 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:
-	       DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-			      " WHERE FirstDayOfWeek=%u",
-			      (unsigned) FirstDayOfWeek);
+	       NumUsrs[FirstDayOfWeek] =
+	       (unsigned) DB_QueryCOUNT ("can not get the number of users"
+					 " who have chosen"
+					 " a first day of week",
+					 "SELECT COUNT(*) FROM usr_data"
+					 " WHERE FirstDayOfWeek=%u",
+					 (unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_CTY:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek=%u",
-			      Gbl.CurrentCty.Cty.CtyCod,(unsigned) FirstDayOfWeek);
+	       NumUsrs[FirstDayOfWeek] =
+	       (unsigned) DB_QueryCOUNT ("can not get the number of users"
+					 " who have chosen"
+					 " a first day of week",
+					 "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+					 " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+					 " WHERE institutions.CtyCod=%ld"
+					 " AND institutions.InsCod=centres.InsCod"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=crs_usr.CrsCod"
+					 " AND crs_usr.UsrCod=usr_data.UsrCod"
+					 " AND usr_data.FirstDayOfWeek=%u",
+					 Gbl.CurrentCty.Cty.CtyCod,
+					 (unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_INS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			      " FROM centres,degrees,courses,crs_usr,usr_data"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek=%u",
-			      Gbl.CurrentIns.Ins.InsCod,(unsigned) FirstDayOfWeek);
+	       NumUsrs[FirstDayOfWeek] =
+	       (unsigned) DB_QueryCOUNT ("can not get the number of users"
+					 " who have chosen"
+					 " a first day of week",
+					 "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+					 " FROM centres,degrees,courses,crs_usr,usr_data"
+					 " WHERE centres.InsCod=%ld"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=crs_usr.CrsCod"
+					 " AND crs_usr.UsrCod=usr_data.UsrCod"
+					 " AND usr_data.FirstDayOfWeek=%u",
+					 Gbl.CurrentIns.Ins.InsCod,
+					 (unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_CTR:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			      " FROM degrees,courses,crs_usr,usr_data"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek=%u",
-			      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FirstDayOfWeek);
+	       NumUsrs[FirstDayOfWeek] =
+	       (unsigned) DB_QueryCOUNT ("can not get the number of users"
+					 " who have chosen"
+					 " a first day of week",
+					 "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+					 " FROM degrees,courses,crs_usr,usr_data"
+					 " WHERE degrees.CtrCod=%ld"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=crs_usr.CrsCod"
+					 " AND crs_usr.UsrCod=usr_data.UsrCod"
+					 " AND usr_data.FirstDayOfWeek=%u",
+					 Gbl.CurrentCtr.Ctr.CtrCod,
+					 (unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_DEG:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			      " FROM courses,crs_usr,usr_data"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek=%u",
-			      Gbl.CurrentDeg.Deg.DegCod,(unsigned) FirstDayOfWeek);
+	       NumUsrs[FirstDayOfWeek] =
+	       (unsigned) DB_QueryCOUNT ("can not get the number of users"
+					 " who have chosen"
+					 " a first day of week",
+					 "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+					 " FROM courses,crs_usr,usr_data"
+					 " WHERE courses.DegCod=%ld"
+					 " AND courses.CrsCod=crs_usr.CrsCod"
+					 " AND crs_usr.UsrCod=usr_data.UsrCod"
+					 " AND usr_data.FirstDayOfWeek=%u",
+					 Gbl.CurrentDeg.Deg.DegCod,
+					 (unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_CRS:
-	       DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			      " FROM crs_usr,usr_data"
-			      " WHERE crs_usr.CrsCod=%ld"
-			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek=%u",
-			      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FirstDayOfWeek);
+	       NumUsrs[FirstDayOfWeek] =
+	       (unsigned) DB_QueryCOUNT ("can not get the number of users"
+					 " who have chosen"
+					 " a first day of week",
+					 "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+					 " FROM crs_usr,usr_data"
+					 " WHERE crs_usr.CrsCod=%ld"
+					 " AND crs_usr.UsrCod=usr_data.UsrCod"
+					 " AND usr_data.FirstDayOfWeek=%u",
+					 Gbl.CurrentCrs.Crs.CrsCod,
+					 (unsigned) FirstDayOfWeek);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
+	       NumUsrs[FirstDayOfWeek] = 0;	// Not reached. Initialized to avoid warning.
 	       break;
 	   }
-	 NumUsrs[FirstDayOfWeek] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a first day of week");
 
 	 /* Update total number of users */
 	 NumUsrsTotal += NumUsrs[FirstDayOfWeek];
@@ -9365,65 +9501,88 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-			   " WHERE DateFormat=%u",
-			   (unsigned) Format);
+	    NumUsrs[Format] =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				      " who have chosen a date format",
+				      "SELECT COUNT(*) FROM usr_data"
+				      " WHERE DateFormat=%u",
+				      (unsigned) Format);
 	    break;
 	 case Sco_SCOPE_CTY:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			   " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-			   " WHERE institutions.CtyCod=%ld"
-			   " AND institutions.InsCod=centres.InsCod"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.DateFormat=%u",
-			   Gbl.CurrentCty.Cty.CtyCod,(unsigned) Format);
+	    NumUsrs[Format] =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				      " who have chosen a date format",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.DateFormat=%u",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      (unsigned) Format);
 	    break;
 	 case Sco_SCOPE_INS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			   " FROM centres,degrees,courses,crs_usr,usr_data"
-			   " WHERE centres.InsCod=%ld"
-			   " AND centres.CtrCod=degrees.CtrCod"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.DateFormat=%u",
-			   Gbl.CurrentIns.Ins.InsCod,(unsigned) Format);
+	    NumUsrs[Format] =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				      " who have chosen a date format",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.DateFormat=%u",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      (unsigned) Format);
 	    break;
 	 case Sco_SCOPE_CTR:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			   " FROM degrees,courses,crs_usr,usr_data"
-			   " WHERE degrees.CtrCod=%ld"
-			   " AND degrees.DegCod=courses.DegCod"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.DateFormat=%u",
-			   Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Format);
+	    NumUsrs[Format] =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				      " who have chosen a date format",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.DateFormat=%u",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      (unsigned) Format);
 	    break;
 	 case Sco_SCOPE_DEG:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			   " FROM courses,crs_usr,usr_data"
-			   " WHERE courses.DegCod=%ld"
-			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.DateFormat=%u",
-			   Gbl.CurrentDeg.Deg.DegCod,(unsigned) Format);
+	    NumUsrs[Format] =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				      " who have chosen a date format",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.DateFormat=%u",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      (unsigned) Format);
 	    break;
 	 case Sco_SCOPE_CRS:
-	    DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-			   " FROM crs_usr,usr_data"
-			   " WHERE crs_usr.CrsCod=%ld"
-			   " AND crs_usr.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.DateFormat=%u",
-			   Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Format);
+	    NumUsrs[Format] =
+	    (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				      " who have chosen a date format",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.DateFormat=%u",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      (unsigned) Format);
 	    break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[Format] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
 	}
-      NumUsrs[Format] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a date format");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Format];
@@ -9502,65 +9661,88 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-        	           " WHERE IconSet='%s'",
-			   Ico_IconSetId[IconSet]);
+            NumUsrs[IconSet] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen an icon set",
+				      "SELECT COUNT(*) FROM usr_data"
+				      " WHERE IconSet='%s'",
+				      Ico_IconSetId[IconSet]);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.IconSet='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,Ico_IconSetId[IconSet]);
+            NumUsrs[IconSet] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen an icon set",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.IconSet='%s'",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      Ico_IconSetId[IconSet]);
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.IconSet='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,Ico_IconSetId[IconSet]);
+            NumUsrs[IconSet] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen an icon set",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.IconSet='%s'",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      Ico_IconSetId[IconSet]);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.IconSet='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,Ico_IconSetId[IconSet]);
+            NumUsrs[IconSet] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen an icon set",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.IconSet='%s'",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      Ico_IconSetId[IconSet]);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.IconSet='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,Ico_IconSetId[IconSet]);
+            NumUsrs[IconSet] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen an icon set",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.IconSet='%s'",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      Ico_IconSetId[IconSet]);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.IconSet='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,Ico_IconSetId[IconSet]);
+            NumUsrs[IconSet] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen an icon set",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.IconSet='%s'",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      Ico_IconSetId[IconSet]);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[IconSet] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
         }
-      NumUsrs[IconSet] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen an icon set");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[IconSet];
@@ -9644,65 +9826,88 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-        	           " WHERE Menu=%u",
-			   (unsigned) Menu);
+            NumUsrs[Menu] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a menu",
+				      "SELECT COUNT(*) FROM usr_data"
+				      " WHERE Menu=%u",
+				      (unsigned) Menu);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu=%u",
-			   Gbl.CurrentCty.Cty.CtyCod,(unsigned) Menu);
+            NumUsrs[Menu] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a menu",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Menu=%u",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      (unsigned) Menu);
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu=%u",
-			   Gbl.CurrentIns.Ins.InsCod,(unsigned) Menu);
+            NumUsrs[Menu] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a menu",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Menu=%u",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      (unsigned) Menu);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu=%u",
-			   Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Menu);
+            NumUsrs[Menu] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a menu",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Menu=%u",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      (unsigned) Menu);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu=%u",
-			   Gbl.CurrentDeg.Deg.DegCod,(unsigned) Menu);
+            NumUsrs[Menu] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a menu",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Menu=%u",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      (unsigned) Menu);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu=%u",
-			   Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Menu);
+            NumUsrs[Menu] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a menu",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Menu=%u",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      (unsigned) Menu);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[Menu] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
         }
-      NumUsrs[Menu] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a menu");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Menu];
@@ -9783,65 +9988,88 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-        	           " WHERE Theme='%s'",
-			   The_ThemeId[Theme]);
+            NumUsrs[Theme] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a theme",
+				      "SELECT COUNT(*) FROM usr_data"
+				      " WHERE Theme='%s'",
+				      The_ThemeId[Theme]);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Theme='%s'",
-			   Gbl.CurrentCty.Cty.CtyCod,The_ThemeId[Theme]);
+            NumUsrs[Theme] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a theme",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Theme='%s'",
+				      Gbl.CurrentCty.Cty.CtyCod,
+				      The_ThemeId[Theme]);
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Theme='%s'",
-			   Gbl.CurrentIns.Ins.InsCod,The_ThemeId[Theme]);
+            NumUsrs[Theme] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a theme",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Theme='%s'",
+				      Gbl.CurrentIns.Ins.InsCod,
+				      The_ThemeId[Theme]);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Theme='%s'",
-			   Gbl.CurrentCtr.Ctr.CtrCod,The_ThemeId[Theme]);
+            NumUsrs[Theme] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a theme",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Theme='%s'",
+				      Gbl.CurrentCtr.Ctr.CtrCod,
+				      The_ThemeId[Theme]);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Theme='%s'",
-			   Gbl.CurrentDeg.Deg.DegCod,The_ThemeId[Theme]);
+            NumUsrs[Theme] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a theme",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Theme='%s'",
+				      Gbl.CurrentDeg.Deg.DegCod,
+				      The_ThemeId[Theme]);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Theme='%s'",
-			   Gbl.CurrentCrs.Crs.CrsCod,The_ThemeId[Theme]);
+            NumUsrs[Theme] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a theme",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.Theme='%s'",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      The_ThemeId[Theme]);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[Theme] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
         }
-      NumUsrs[Theme] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a theme");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[Theme];
@@ -9921,65 +10149,83 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            DB_BuildQuery ("SELECT COUNT(*) FROM usr_data"
-        	           " WHERE SideCols=%u",
-			   SideCols);
+            NumUsrs[SideCols] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a layout of columns",
+				      "SELECT COUNT(*) FROM usr_data"
+				      " WHERE SideCols=%u",
+				      SideCols);
             break;
 	 case Sco_SCOPE_CTY:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols=%u",
-			   Gbl.CurrentCty.Cty.CtyCod,SideCols);
+            NumUsrs[SideCols] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a layout of columns",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.SideCols=%u",
+				      Gbl.CurrentCty.Cty.CtyCod,SideCols);
             break;
 	 case Sco_SCOPE_INS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols=%u",
-			   Gbl.CurrentIns.Ins.InsCod,SideCols);
+            NumUsrs[SideCols] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a layout of columns",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr,usr_data"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.SideCols=%u",
+				      Gbl.CurrentIns.Ins.InsCod,SideCols);
             break;
          case Sco_SCOPE_CTR:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols=%u",
-			   Gbl.CurrentCtr.Ctr.CtrCod,SideCols);
+            NumUsrs[SideCols] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a layout of columns",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM degrees,courses,crs_usr,usr_data"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.SideCols=%u",
+				      Gbl.CurrentCtr.Ctr.CtrCod,SideCols);
             break;
          case Sco_SCOPE_DEG:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols=%u",
-			   Gbl.CurrentDeg.Deg.DegCod,SideCols);
+            NumUsrs[SideCols] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a layout of columns",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM courses,crs_usr,usr_data"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.SideCols=%u",
+				      Gbl.CurrentDeg.Deg.DegCod,SideCols);
             break;
          case Sco_SCOPE_CRS:
-            DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod=%ld"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols=%u",
-			   Gbl.CurrentCrs.Crs.CrsCod,SideCols);
+            NumUsrs[SideCols] =
+            (unsigned) DB_QueryCOUNT ("can not get the number of users"
+        			      " who have chosen a layout of columns",
+				      "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+				      " FROM crs_usr,usr_data"
+				      " WHERE crs_usr.CrsCod=%ld"
+				      " AND crs_usr.UsrCod=usr_data.UsrCod"
+				      " AND usr_data.SideCols=%u",
+				      Gbl.CurrentCrs.Crs.CrsCod,SideCols);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
+	    NumUsrs[SideCols] = 0;	// Not reached. Initialized to avoid warning.
 	    break;
         }
-      NumUsrs[SideCols] = (unsigned) DB_QueryCOUNT_new ("can not get the number of users who have chosen a layout of columns");
 
       /* Update total number of users */
       NumUsrsTotal += NumUsrs[SideCols];

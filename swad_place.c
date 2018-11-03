@@ -715,10 +715,13 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod)
   {
    /***** Get number of places with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM places"
-		  " WHERE InsCod=%ld AND %s='%s' AND PlcCod<>%ld",
-                  Gbl.CurrentIns.Ins.InsCod,FieldName,Name,PlcCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of a place already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of a place"
+			  " already existed",
+			  "SELECT COUNT(*) FROM places"
+			  " WHERE InsCod=%ld"
+			  " AND %s='%s' AND PlcCod<>%ld",
+			  Gbl.CurrentIns.Ins.InsCod,
+			  FieldName,Name,PlcCod) != 0);
   }
 
 /*****************************************************************************/

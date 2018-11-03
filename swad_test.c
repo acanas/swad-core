@@ -1671,9 +1671,9 @@ void Tst_RenameTag (void)
 static bool Tst_CheckIfCurrentCrsHasTestTags (void)
   {
    /***** Get available tags from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM tst_tags WHERE CrsCod=%ld",
-		  Gbl.CurrentCrs.Crs.CrsCod);
-   return (DB_QueryCOUNT_new ("can not check if course has tags") != 0);
+   return (DB_QueryCOUNT ("can not check if course has tags",
+			  "SELECT COUNT(*) FROM tst_tags WHERE CrsCod=%ld",
+			  Gbl.CurrentCrs.Crs.CrsCod) != 0);
   }
 
 /*****************************************************************************/

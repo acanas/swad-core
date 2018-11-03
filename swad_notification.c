@@ -2115,11 +2115,11 @@ void Ntf_WriteNumberOfNewNtfs (void)
 static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void)
   {
    /***** Get number of places with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM notif"
-		  " WHERE ToUsrCod=%ld AND (Status & %u)=0",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-	          (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
-   return DB_QueryCOUNT_new ("can not get number of unseen notifications");
+   return DB_QueryCOUNT ("can not get number of unseen notifications",
+			 "SELECT COUNT(*) FROM notif"
+			 " WHERE ToUsrCod=%ld AND (Status & %u)=0",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
   }
 
 /*****************************************************************************/
@@ -2129,13 +2129,13 @@ static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void)
 static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
   {
    /***** Get number of places with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM notif"
-		  " WHERE ToUsrCod=%ld AND (Status & %u)=0"
-		  " AND TimeNotif>FROM_UNIXTIME(%ld)",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED),
-	          Gbl.Usrs.Me.UsrLast.LastAccNotif);
-   return DB_QueryCOUNT_new ("can not get number of unseen notifications");
+   return DB_QueryCOUNT ("can not get number of unseen notifications",
+			 "SELECT COUNT(*) FROM notif"
+			 " WHERE ToUsrCod=%ld AND (Status & %u)=0"
+			 " AND TimeNotif>FROM_UNIXTIME(%ld)",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED),
+			 Gbl.Usrs.Me.UsrLast.LastAccNotif);
   }
 
 /*****************************************************************************/

@@ -148,7 +148,7 @@ void Dup_ListDuplicateUsrs (void)
    /***** Make query *****/
    NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get possibly"
 						   " duplicate users",
-					"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
+					"SELECT UsrCod,COUNT(*) AS N,UNIX_TIMESTAMP(MIN(InformTime)) AS T"
 				        " FROM usr_duplicated"
 				        " GROUP BY UsrCod"
 				        " ORDER BY N DESC,T DESC");

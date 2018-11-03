@@ -580,16 +580,15 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
       else if (strcasecmp (UsrDat->Nickname,NewNicknameWithoutArroba))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
-         DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames"
-			" WHERE UsrCod=%ld AND Nickname='%s'",
-                        UsrDat->UsrCod,NewNicknameWithoutArroba);
-         if (!DB_QueryCOUNT_new ("can not check if nickname already existed"))        // No matches
-           {
+         if (!DB_QueryCOUNT ("can not check if nickname already existed",
+			     "SELECT COUNT(*) FROM usr_nicknames"
+			     " WHERE UsrCod=%ld AND Nickname='%s'",
+			     UsrDat->UsrCod,NewNicknameWithoutArroba))	// No matches
             /***** Check if the new nickname matches any of the nicknames of other users *****/
-            DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames"
-			   " WHERE Nickname='%s' AND UsrCod<>%ld",
-			   NewNicknameWithoutArroba,UsrDat->UsrCod);
-            if (DB_QueryCOUNT_new ("can not check if nickname already existed"))	// A nickname of another user is the same that user's nickname
+            if (DB_QueryCOUNT ("can not check if nickname already existed",
+        		       "SELECT COUNT(*) FROM usr_nicknames"
+			       " WHERE Nickname='%s' AND UsrCod<>%ld",
+			       NewNicknameWithoutArroba,UsrDat->UsrCod))	// A nickname of another user is the same that user's nickname
               {
                Gbl.Alert.Type = Ale_WARNING;
                Gbl.Alert.Section = Nck_NICKNAME_SECTION_ID;
@@ -597,7 +596,6 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 	                 Txt_The_nickname_X_had_been_registered_by_another_user,
                          NewNicknameWithoutArroba);
               }
-           }
         }
       if (Gbl.Alert.Type == Ale_NONE)
         {

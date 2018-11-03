@@ -523,12 +523,12 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
 static bool Inf_CheckIfIHaveReadInfo (void)
   {
    /***** Get if info source is already stored in database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_info_read"
-		  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.CurrentCrs.Crs.CrsCod,
-	          Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-   return (DB_QueryCOUNT_new ("can not get if I have read course info") != 0);
+   return (DB_QueryCOUNT ("can not get if I have read course info",
+			  "SELECT COUNT(*) FROM crs_info_read"
+			  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Gbl.CurrentCrs.Crs.CrsCod,
+			  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) != 0);
   }
 
 /*****************************************************************************/
@@ -1477,11 +1477,12 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
 void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
   {
    /***** Get if info source is already stored in database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_info_src"
-		  " WHERE CrsCod=%ld AND InfoType='%s'",
-	          Gbl.CurrentCrs.Crs.CrsCod,
-	          Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
-   if (DB_QueryCOUNT_new ("can not get if info source is already stored in database"))	// Info is already stored in database, so update it
+   if (DB_QueryCOUNT ("can not get if info source is already stored in database",
+		      "SELECT COUNT(*) FROM crs_info_src"
+		      " WHERE CrsCod=%ld AND InfoType='%s'",
+		      Gbl.CurrentCrs.Crs.CrsCod,
+		      Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]))
+      // Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
          DB_QueryUPDATE ("can not update info source",

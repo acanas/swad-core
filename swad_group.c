@@ -2955,11 +2955,12 @@ void Grp_FreeListGrpTypesAndGrps (void)
 unsigned Grp_CountNumGrpsInCurrentCrs (void)
   {
    /***** Get number of group in current course from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of groups in this course");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of groups in this course",
+			     "SELECT COUNT(*) FROM crs_grp_types,crs_grp"
+			     " WHERE crs_grp_types.CrsCod=%ld"
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
+			     Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -2969,9 +2970,11 @@ unsigned Grp_CountNumGrpsInCurrentCrs (void)
 static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
   {
    /***** Get number of groups of a type from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp WHERE GrpTypCod=%ld",
-                  GrpTypCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of groups of a type");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of groups of a type",
+			     "SELECT COUNT(*) FROM crs_grp"
+			     " WHERE GrpTypCod=%ld",
+			     GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -3170,8 +3173,9 @@ static long Grp_GetTypeOfGroupOfAGroup (long GrpCod)
 bool Grp_CheckIfGroupExists (long GrpCod)
   {
    /***** Get if a group exists from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp WHERE GrpCod=%ld",GrpCod);
-   return (DB_QueryCOUNT_new ("can not check if a group exists") != 0);
+   return (DB_QueryCOUNT ("can not check if a group exists",
+			  "SELECT COUNT(*) FROM crs_grp WHERE GrpCod=%ld",
+			  GrpCod) != 0);
   }
 
 /*****************************************************************************/
@@ -3181,12 +3185,12 @@ bool Grp_CheckIfGroupExists (long GrpCod)
 bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod)
   {
    /***** Get if a group exists from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp,crs_grp_types"
-		  " WHERE crs_grp.GrpCod=%ld"
-		  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-		  " AND crs_grp_types.CrsCod=%ld",
-                  GrpCod,CrsCod);
-   return (DB_QueryCOUNT_new ("can not check if a group belongs to a course") != 0);
+   return (DB_QueryCOUNT ("can not check if a group belongs to a course",
+			  "SELECT COUNT(*) FROM crs_grp,crs_grp_types"
+			  " WHERE crs_grp.GrpCod=%ld"
+			  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			  " AND crs_grp_types.CrsCod=%ld",
+			  GrpCod,CrsCod) != 0);
   }
 
 /*****************************************************************************/
@@ -3196,16 +3200,17 @@ bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod)
 unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
   {
    /***** Get number of students in a group from database *****/
-   DB_BuildQuery ("SELECT COUNT(*)"
-		  " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
-		  " WHERE crs_grp_usr.GrpCod=%ld"
-		  " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-		  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-		  " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		  " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-		  " AND crs_usr.Role=%u",
-                  GrpCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of users in a group");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users in a group",
+			     "SELECT COUNT(*)"
+			     " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
+			     " WHERE crs_grp_usr.GrpCod=%ld"
+			     " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+			     " AND crs_usr.Role=%u",
+			     GrpCod,(unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -3288,12 +3293,12 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
       return Gbl.Cache.IBelongToGrp.IBelong;
 
    /***** 3. Slow check: Get if I belong to a group from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp_usr"
-		  " WHERE GrpCod=%ld AND UsrCod=%ld",
-                  GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
-   Gbl.Cache.IBelongToGrp.IBelong = (DB_QueryCOUNT_new ("can not check"
-	                                                " if you belong to a group") != 0);
+   Gbl.Cache.IBelongToGrp.IBelong =
+      (DB_QueryCOUNT ("can not check if you belong to a group",
+		      "SELECT COUNT(*) FROM crs_grp_usr"
+		      " WHERE GrpCod=%ld AND UsrCod=%ld",
+		      GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
 
@@ -3358,21 +3363,21 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
    /***** 9. Slow check: Get if user shares any group in this course with me from database *****/
    /* Check if user shares any group with me */
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp_usr"
-		  " WHERE UsrCod=%ld"
-		  " AND GrpCod IN"
-		  " (SELECT crs_grp_usr.GrpCod"
-		  " FROM crs_grp_usr,crs_grp,crs_grp_types"
-		  " WHERE crs_grp_usr.UsrCod=%ld"
-		  " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
-		  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-		  " AND crs_grp_types.CrsCod=%ld)",
-	          UsrDat->UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.CurrentCrs.Crs.CrsCod);
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = (DB_QueryCOUNT_new ("can not check"
-					                                   " if a user shares any group"
-					                                   " in the current course with you") != 0);
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares =
+      (DB_QueryCOUNT ("can not check if a user shares any group"
+		      " in the current course with you",
+		      "SELECT COUNT(*) FROM crs_grp_usr"
+		      " WHERE UsrCod=%ld"
+		      " AND GrpCod IN"
+		      " (SELECT crs_grp_usr.GrpCod"
+		      " FROM crs_grp_usr,crs_grp,crs_grp_types"
+		      " WHERE crs_grp_usr.UsrCod=%ld"
+		      " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+		      " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+		      " AND crs_grp_types.CrsCod=%ld)",
+		      UsrDat->UsrCod,
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.CurrentCrs.Crs.CrsCod) != 0);
    return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
   }
 
@@ -3388,36 +3393,37 @@ unsigned Grp_NumGrpTypesMandatIDontBelongAsStd (void)
 
    /***** Get the number of types of groups with mandatory enrolment
           which I don't belong to as student, from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT GrpTypCod) FROM"
-		  " (SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
-		  "COUNT(*) AS NumStudents,"
-		  "crs_grp.MaxStudents as MaxStudents"
-		  " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.Mandatory='Y'"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND crs_grp.Open='Y'"
-		  " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		  " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-		  " AND crs_usr.Role=%u"
-		  " GROUP BY crs_grp.GrpCod"
-		  " HAVING NumStudents<MaxStudents) AS grp_types_open_not_full"
-		  " WHERE GrpTypCod NOT IN"
-		  " (SELECT DISTINCT crs_grp_types.GrpTypCod"
-		  " FROM crs_grp_types,crs_grp,crs_grp_usr"
-		  " WHERE crs_grp_types.CrsCod=%ld"
-		  " AND crs_grp_types.Mandatory='Y'"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		  " AND crs_grp_usr.UsrCod=%ld)",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  (unsigned) Rol_STD,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumGrpTypes = DB_QueryCOUNT_new ("can not get the number of types of group"
-	                            " of mandatory registration"
-	                            " to which you don't belong to");
+   NumGrpTypes =
+   (unsigned) DB_QueryCOUNT ("can not get the number of types of group"
+	                     " of mandatory registration"
+	                     " to which you don't belong to",
+			     "SELECT COUNT(DISTINCT GrpTypCod) FROM"
+			     " (SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
+			     "COUNT(*) AS NumStudents,"
+			     "crs_grp.MaxStudents as MaxStudents"
+			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
+			     " WHERE crs_grp_types.CrsCod=%ld"
+			     " AND crs_grp_types.Mandatory='Y'"
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"
+			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+			     " AND crs_usr.Role=%u"
+			     " GROUP BY crs_grp.GrpCod"
+			     " HAVING NumStudents<MaxStudents) AS grp_types_open_not_full"
+			     " WHERE GrpTypCod NOT IN"
+			     " (SELECT DISTINCT crs_grp_types.GrpTypCod"
+			     " FROM crs_grp_types,crs_grp,crs_grp_usr"
+			     " WHERE crs_grp_types.CrsCod=%ld"
+			     " AND crs_grp_types.Mandatory='Y'"
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			     " AND crs_grp_usr.UsrCod=%ld)",
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     (unsigned) Rol_STD,
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
    return NumGrpTypes;
   }
@@ -3432,47 +3438,48 @@ static bool Grp_GetIfGrpIsAvailable (long GrpTypCod)
 
    /***** Get the number of types of group (0 or 1) of a type
           with one or more open groups with vacants, from database *****/
-   DB_BuildQuery ("SELECT COUNT(GrpTypCod) FROM "
-		  "("
-		  // Groups with students
-		  "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
-		  "COUNT(*) AS NumStudents,"
-		  "crs_grp.MaxStudents as MaxStudents"
-		  " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-		  " WHERE crs_grp_types.GrpTypCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND crs_grp.Open='Y'"
-		  " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-		  " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-		  " AND crs_usr.Role=%u"
-		  " GROUP BY crs_grp.GrpCod"
-		  " HAVING NumStudents<MaxStudents"
+   NumGrpTypes =
+   (unsigned) DB_QueryCOUNT ("can not check if a type of group has available groups",
+			     "SELECT COUNT(GrpTypCod) FROM "
+			     "("
+			     // Groups with students
+			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
+			     "COUNT(*) AS NumStudents,"
+			     "crs_grp.MaxStudents as MaxStudents"
+			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
+			     " WHERE crs_grp_types.GrpTypCod=%ld"
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"
+			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+			     " AND crs_usr.Role=%u"
+			     " GROUP BY crs_grp.GrpCod"
+			     " HAVING NumStudents<MaxStudents"
 
-		  " UNION "
+			     " UNION "
 
-		  // Groups without students
-		  "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
-		  "0 AS NumStudents,"
-		  "crs_grp.MaxStudents as MaxStudents"
-		  " FROM crs_grp_types,crs_grp"
-		  " WHERE crs_grp_types.GrpTypCod=%ld"
-		  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND crs_grp.Open='Y'"
-		  " AND crs_grp.MaxStudents > 0"
-		  " AND crs_grp.GrpCod NOT IN"
-		  " (SELECT crs_grp_usr.GrpCod"
-		  " FROM crs_grp_types,crs_usr,crs_grp_usr"
-		  " WHERE crs_grp_types.GrpTypCod=%ld"
-		  " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		  " AND crs_usr.Role=%u"
-		  " AND crs_usr.UsrCod=crs_grp_usr.UsrCod)"
+			     // Groups without students
+			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
+			     "0 AS NumStudents,"
+			     "crs_grp.MaxStudents as MaxStudents"
+			     " FROM crs_grp_types,crs_grp"
+			     " WHERE crs_grp_types.GrpTypCod=%ld"
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"
+			     " AND crs_grp.MaxStudents > 0"
+			     " AND crs_grp.GrpCod NOT IN"
+			     " (SELECT crs_grp_usr.GrpCod"
+			     " FROM crs_grp_types,crs_usr,crs_grp_usr"
+			     " WHERE crs_grp_types.GrpTypCod=%ld"
+			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+			     " AND crs_usr.Role=%u"
+			     " AND crs_usr.UsrCod=crs_grp_usr.UsrCod)"
 
-		  ") AS available_grp_types",
-                  GrpTypCod,(unsigned) Rol_STD,
-                  GrpTypCod,
-                  GrpTypCod,(unsigned) Rol_STD);
-   NumGrpTypes = DB_QueryCOUNT_new ("can not check if a type of group has available groups");
+			     ") AS available_grp_types",
+			     GrpTypCod,(unsigned) Rol_STD,
+			     GrpTypCod,
+			     GrpTypCod,(unsigned) Rol_STD);
 
    return (NumGrpTypes != 0);
   }
@@ -3798,11 +3805,12 @@ void Grp_RecFormNewGrp (void)
 static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCod)
   {
    /***** Get number of group types with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp_types"
-		  " WHERE CrsCod=%ld AND GrpTypName='%s'"
-		  " AND GrpTypCod<>%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod,GrpTypName,GrpTypCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of type of group already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of type of group"
+			  " already existed",
+			  "SELECT COUNT(*) FROM crs_grp_types"
+			  " WHERE CrsCod=%ld AND GrpTypName='%s'"
+			  " AND GrpTypCod<>%ld",
+			  Gbl.CurrentCrs.Crs.CrsCod,GrpTypName,GrpTypCod) != 0);
   }
 
 /*****************************************************************************/
@@ -3812,10 +3820,12 @@ static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCo
 static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long GrpCod)
   {
    /***** Get number of groups with a type and a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_grp"
-		  " WHERE GrpTypCod=%ld AND GrpName='%s' AND GrpCod<>%ld",
-                  GrpTypCod,GrpName,GrpCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of group already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of group already existed",
+			  "SELECT COUNT(*) FROM crs_grp"
+			  " WHERE GrpTypCod=%ld"
+			  " AND GrpName='%s'"
+			  " AND GrpCod<>%ld",
+			  GrpTypCod,GrpName,GrpCod) != 0);
   }
 
 /*****************************************************************************/

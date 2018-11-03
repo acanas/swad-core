@@ -63,8 +63,9 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
 void Ses_GetNumSessions (void)
   {
    /***** Get the number of open sessions from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM sessions");
-   Gbl.Session.NumSessions = (unsigned) DB_QueryCOUNT_new ("can not get the number of open sessions");
+   Gbl.Session.NumSessions =
+   (unsigned) DB_QueryCOUNT ("can not get the number of open sessions",
+			     "SELECT COUNT(*) FROM sessions");
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = (unsigned long) (Gbl.Session.NumSessions/Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED) * 1000UL;
    if (Gbl.Usrs.Connected.TimeToRefreshInMs < Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS)
@@ -106,8 +107,10 @@ void Ses_CreateSession (void)
 bool Ses_CheckIfSessionExists (const char *IdSes)
   {
    /***** Get if session already exists in database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",IdSes);
-   return (DB_QueryCOUNT_new ("can not check if a session already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if a session already existed",
+			  "SELECT COUNT(*) FROM sessions"
+			  " WHERE SessionId='%s'",
+			  IdSes) != 0);
   }
 
 /*****************************************************************************/
@@ -394,10 +397,13 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
                                                const char *ParamName)
   {
    /***** Get a hidden parameter from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM hidden_params"
-                  " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
-		  Gbl.Session.Id,Act_GetActCod (NextAction),ParamName);
-   return (DB_QueryCOUNT_new ("can not check if a hidden parameter is already in database") != 0);
+   return (DB_QueryCOUNT ("can not check if a hidden parameter"
+			  " is already in database",
+			  "SELECT COUNT(*) FROM hidden_params"
+			  " WHERE SessionId='%s'"
+			  " AND Action=%ld AND ParamName='%s'",
+			  Gbl.Session.Id,
+			  Act_GetActCod (NextAction),ParamName) != 0);
   }
 
 /*****************************************************************************/

@@ -2426,10 +2426,10 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
   {
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_pubs"
-	          " WHERE NotCod=%ld AND PubType=%u",
-		  NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   return DB_QueryCOUNT_new ("can not get number of comments in a social note");
+   return DB_QueryCOUNT ("can not get number of comments in a social note",
+			 "SELECT COUNT(*) FROM social_pubs"
+			 " WHERE NotCod=%ld AND PubType=%u",
+			 NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -4252,10 +4252,14 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
 static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
   {
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_pubs"
-	          " WHERE NotCod=%ld AND PublisherCod=%ld AND PubType=%u",
-		  NotCod,UsrCod,(unsigned) Soc_PUB_SHARED_NOTE);
-   return (DB_QueryCOUNT_new ("can not check if a user has shared a social note") != 0);
+   return (DB_QueryCOUNT ("can not check if a user has shared a social note",
+			  "SELECT COUNT(*) FROM social_pubs"
+			  " WHERE NotCod=%ld"
+			  " AND PublisherCod=%ld"
+			  " AND PubType=%u",
+			  NotCod,
+			  UsrCod,
+			  (unsigned) Soc_PUB_SHARED_NOTE) != 0);
   }
 
 /*****************************************************************************/
@@ -4264,10 +4268,11 @@ static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
 
 static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
   {
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_notes_fav"
-	          " WHERE NotCod=%ld AND UsrCod=%ld",
-		  NotCod,UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if a user has favourited a social note") != 0);
+   return (DB_QueryCOUNT ("can not check if a user"
+			  " has favourited a social note",
+			  "SELECT COUNT(*) FROM social_notes_fav"
+			  " WHERE NotCod=%ld AND UsrCod=%ld",
+			  NotCod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -4276,10 +4281,11 @@ static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
 
 static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
   {
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_comments_fav"
-	          " WHERE PubCod=%ld AND UsrCod=%ld",
-		  PubCod,UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if a user has favourited a social comment") != 0);
+   return (DB_QueryCOUNT ("can not check if a user"
+			  " has favourited a social comment",
+			  "SELECT COUNT(*) FROM social_comments_fav"
+			  " WHERE PubCod=%ld AND UsrCod=%ld",
+			  PubCod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -4289,14 +4295,16 @@ static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
 static unsigned Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
   {
    /***** Get number of times (users) this note has been shared *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_pubs"
-	          " WHERE NotCod=%ld"
-	          " AND PublisherCod<>%ld"
-		  " AND PubType=%u",
-		  SocNot->NotCod,
-		  SocNot->UsrCod,	// The author
-		  (unsigned) Soc_PUB_SHARED_NOTE);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of times a note has been shared");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of times"
+			     " a note has been shared",
+			     "SELECT COUNT(*) FROM social_pubs"
+			     " WHERE NotCod=%ld"
+			     " AND PublisherCod<>%ld"
+			     " AND PubType=%u",
+			     SocNot->NotCod,
+			     SocNot->UsrCod,	// The author
+			     (unsigned) Soc_PUB_SHARED_NOTE);
   }
 
 /*****************************************************************************/
@@ -4306,12 +4314,14 @@ static unsigned Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
 static unsigned Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot)
   {
    /***** Get number of times (users) this note has been favourited *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_notes_fav"
-	          " WHERE NotCod=%ld"
-	          " AND UsrCod<>%ld",	// Extra check
-		  SocNot->NotCod,
-		  SocNot->UsrCod);	// The author
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of times a note has been favourited");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of times"
+			     " a note has been favourited",
+			     "SELECT COUNT(*) FROM social_notes_fav"
+			     " WHERE NotCod=%ld"
+			     " AND UsrCod<>%ld",	// Extra check
+			     SocNot->NotCod,
+			     SocNot->UsrCod);		// The author
   }
 
 /*****************************************************************************/
@@ -4321,12 +4331,14 @@ static unsigned Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot)
 static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
   {
    /***** Get number of times (users) this comment has been favourited *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM social_comments_fav"
-	          " WHERE PubCod=%ld"
-	          " AND UsrCod<>%ld",	// Extra check
-		  SocCom->PubCod,
-		  SocCom->UsrCod);	// The author
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of times a comment has been favourited");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of times"
+			     " a comment has been favourited",
+			     "SELECT COUNT(*) FROM social_comments_fav"
+			     " WHERE PubCod=%ld"
+			     " AND UsrCod<>%ld",	// Extra check
+			     SocCom->PubCod,
+			     SocCom->UsrCod);		// The author
   }
 
 /*****************************************************************************/

@@ -1561,9 +1561,12 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
 static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
   {
    /***** Get if the message code is in table of sent messages not deleted *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM msg_snt"
-		  " WHERE MsgCod=%ld",MsgCod);
-   return (DB_QueryCOUNT_new ("can not check if a sent message is deleted") == 0);	// The message has been deleted by its author when it is not present in table of sent messages undeleted
+   return (DB_QueryCOUNT ("can not check if a sent message is deleted",
+			  "SELECT COUNT(*) FROM msg_snt"
+			  " WHERE MsgCod=%ld",
+			  MsgCod) == 0);	// The message has been deleted
+						// by its author when it is not present
+						// in table of sent messages undeleted
   }
 
 /*****************************************************************************/
@@ -1573,9 +1576,13 @@ static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
 static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
   {
    /***** Get if the message code is in table of received messages not deleted *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM msg_rcv"
-		  " WHERE MsgCod=%ld",MsgCod);
-   return (DB_QueryCOUNT_new ("can not check if a received message is deleted by all recipients") == 0);	// The message has been deleted by all its recipients when it is not present in table of received messages undeleted
+   return (DB_QueryCOUNT ("can not check if a received message"
+			  " is deleted by all recipients",
+			  "SELECT COUNT(*) FROM msg_rcv"
+			  " WHERE MsgCod=%ld",
+			  MsgCod) == 0);	// The message has been deleted
+						// by all its recipients when it is not present
+						// in table of received messages undeleted
   }
 
 /*****************************************************************************/
@@ -1585,6 +1592,7 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery)
   {
    char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   unsigned NumMsgs;
 
    /***** Get number of unread messages from database *****/
    if (FilterCrsCod >= 0)	// If origin course selected
@@ -1622,15 +1630,20 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
      }
 
    if (Gbl.Msg.FilterContent[0])
-      DB_BuildQuery ("SELECT COUNT(*) FROM msg_content"
-		     " WHERE MsgCod IN (%s)"
-		     " AND MATCH (Subject,Content) AGAINST ('%s')",
-                     SubQuery,
-                     Gbl.Msg.FilterContent);
+      NumMsgs =
+      (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
+				"SELECT COUNT(*) FROM msg_content"
+				" WHERE MsgCod IN (%s)"
+				" AND MATCH (Subject,Content) AGAINST ('%s')",
+				SubQuery,
+				Gbl.Msg.FilterContent);
    else
-      DB_BuildQuery ("SELECT COUNT(*) FROM (%s) AS T",
-                     SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of unread messages");
+      NumMsgs =
+      (unsigned) DB_QueryCOUNT ("can not get number of unread messages",
+				"SELECT COUNT(*) FROM (%s) AS T",
+				SubQuery);
+
+   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -1844,9 +1857,10 @@ static void Msg_ShowSentOrReceivedMessages (void)
 static unsigned long Msg_GetNumUsrsBannedByMe (void)
   {
    /***** Get number of users I have banned *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM msg_banned WHERE ToUsrCod=%ld",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-   return DB_QueryCOUNT_new ("can not get number of users you have banned");
+   return DB_QueryCOUNT ("can not get number of users you have banned",
+			 "SELECT COUNT(*) FROM msg_banned"
+			 " WHERE ToUsrCod=%ld",
+			 Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -2044,11 +2058,14 @@ static unsigned long Msg_GetSentOrReceivedMsgs (long UsrCod,
 unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
   {
    /***** Get the number of unique messages sent by any teacher from this course *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM msg_snt,crs_usr"
-		  " WHERE msg_snt.CrsCod=%ld AND crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
-		  " AND msg_snt.UsrCod=crs_usr.UsrCod",
-                  CrsCod,CrsCod,(unsigned) Rol_TCH);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of messages sent by teachers");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of messages"
+			     " sent by teachers",
+			     "SELECT COUNT(*) FROM msg_snt,crs_usr"
+			     " WHERE msg_snt.CrsCod=%ld"
+			     " AND crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
+			     " AND msg_snt.UsrCod=crs_usr.UsrCod",
+			     CrsCod,CrsCod,(unsigned) Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -2058,13 +2075,13 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
 unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
   {
    /***** Get the number of unique messages sent by any teacher from this course *****/
-   DB_BuildQuery ("SELECT"
-		  " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod=%ld)"
-		  " +"
-		  " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod=%ld)",
-                  UsrCod,
-                  UsrCod);
-   return DB_QueryCOUNT_new ("can not get the number of messages sent by a user");
+   return DB_QueryCOUNT ("can not get the number of messages sent by a user",
+			 "SELECT"
+			 " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod=%ld)"
+			 " +"
+			 " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod=%ld)",
+			 UsrCod,
+			 UsrCod);
   }
 
 /*****************************************************************************/
@@ -2075,6 +2092,7 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
 unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
   {
    const char *Table = "msg_snt";
+   unsigned NumMsgs = 0;	// Initialized to avoid warning
 
    /***** Get the number of messages sent from this location
           (all the platform, current degree or current course) from database *****/
@@ -2091,63 +2109,76 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         DB_BuildQuery ("SELECT COUNT(*) FROM %s",
-                        Table);
+         NumMsgs =
+         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
+				   "SELECT COUNT(*) FROM %s",
+				   Table);
          break;
       case Sco_SCOPE_CTY:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM institutions,centres,degrees,courses,%s"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=centres.InsCod"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=%s.CrsCod",
-		        Table,
-		        Gbl.CurrentCty.Cty.CtyCod,
-		        Table);
+         NumMsgs =
+         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
+				   "SELECT COUNT(*)"
+				   " FROM institutions,centres,degrees,courses,%s"
+				   " WHERE institutions.CtyCod=%ld"
+				   " AND institutions.InsCod=centres.InsCod"
+				   " AND centres.CtrCod=degrees.CtrCod"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=%s.CrsCod",
+				   Table,
+				   Gbl.CurrentCty.Cty.CtyCod,
+				   Table);
          break;
       case Sco_SCOPE_INS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM centres,degrees,courses,%s"
-			" WHERE centres.InsCod=%ld"
-			" AND centres.CtrCod=degrees.CtrCod"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=%s.CrsCod",
-		        Table,
-		        Gbl.CurrentIns.Ins.InsCod,
-		        Table);
+         NumMsgs =
+         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
+				   "SELECT COUNT(*)"
+				   " FROM centres,degrees,courses,%s"
+				   " WHERE centres.InsCod=%ld"
+				   " AND centres.CtrCod=degrees.CtrCod"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=%s.CrsCod",
+				   Table,
+				   Gbl.CurrentIns.Ins.InsCod,
+				   Table);
          break;
       case Sco_SCOPE_CTR:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM degrees,courses,%s"
-			" WHERE degrees.CtrCod=%ld"
-			" AND degrees.DegCod=courses.DegCod"
-			" AND courses.CrsCod=%s.CrsCod",
-		        Table,
-		        Gbl.CurrentCtr.Ctr.CtrCod,
-		        Table);
+         NumMsgs =
+         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
+				   "SELECT COUNT(*)"
+				   " FROM degrees,courses,%s"
+				   " WHERE degrees.CtrCod=%ld"
+				   " AND degrees.DegCod=courses.DegCod"
+				   " AND courses.CrsCod=%s.CrsCod",
+				   Table,
+				   Gbl.CurrentCtr.Ctr.CtrCod,
+				   Table);
          break;
       case Sco_SCOPE_DEG:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM courses,%s"
-			" WHERE courses.DegCod=%ld"
-			" AND courses.CrsCod=%s.CrsCod",
-		        Table,
-		        Gbl.CurrentDeg.Deg.DegCod,
-		        Table);
+         NumMsgs =
+         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
+				   "SELECT COUNT(*)"
+				   " FROM courses,%s"
+				   " WHERE courses.DegCod=%ld"
+				   " AND courses.CrsCod=%s.CrsCod",
+				   Table,
+				   Gbl.CurrentDeg.Deg.DegCod,
+				   Table);
          break;
       case Sco_SCOPE_CRS:
-         DB_BuildQuery ("SELECT COUNT(*)"
-			" FROM %s"
-			" WHERE CrsCod=%ld",
-		        Table,
-		        Gbl.CurrentCrs.Crs.CrsCod);
+         NumMsgs =
+         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
+				   "SELECT COUNT(*)"
+				   " FROM %s"
+				   " WHERE CrsCod=%ld",
+				   Table,
+				   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
 	 break;
      }
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of sent messages");
+
+   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -2158,6 +2189,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
 unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
   {
    char *Table;
+   unsigned NumMsgs = 0;	// Initialized to avoid warning
 
    /***** Get the number of unique messages sent from this location
           (all the platform, current degree or current course) from database *****/
@@ -2170,63 +2202,81 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
          switch (Scope)
            {
             case Sco_SCOPE_SYS:
-               DB_BuildQuery ("SELECT COUNT(*) FROM %s",
-        	              Table);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT COUNT(*) FROM %s",
+					 Table);
                break;
             case Sco_SCOPE_CTY:
-               DB_BuildQuery ("SELECT COUNT(*)"
-			      " FROM institutions,centres,degrees,courses,%s,msg_snt"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=%s.MsgCod",
-			      Table,
-			      Gbl.CurrentCty.Cty.CtyCod,
-			      Table);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT COUNT(*)"
+					 " FROM institutions,centres,degrees,courses,%s,msg_snt"
+					 " WHERE institutions.CtyCod=%ld"
+					 " AND institutions.InsCod=centres.InsCod"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=%s.MsgCod",
+					 Table,
+					 Gbl.CurrentCty.Cty.CtyCod,
+					 Table);
                break;
             case Sco_SCOPE_INS:
-               DB_BuildQuery ("SELECT COUNT(*)"
-			      " FROM centres,degrees,courses,%s,msg_snt"
-			      " WHERE centres.InsCod=%ld"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=%s.MsgCod",
-			      Table,
-			      Gbl.CurrentIns.Ins.InsCod,
-			      Table);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT COUNT(*)"
+					 " FROM centres,degrees,courses,%s,msg_snt"
+					 " WHERE centres.InsCod=%ld"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=%s.MsgCod",
+					 Table,
+					 Gbl.CurrentIns.Ins.InsCod,
+					 Table);
                break;
             case Sco_SCOPE_CTR:
-               DB_BuildQuery ("SELECT COUNT(*)"
-			      " FROM degrees,courses,%s,msg_snt"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=%s.MsgCod",
-			      Table,
-			      Gbl.CurrentCtr.Ctr.CtrCod,
-			      Table);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT COUNT(*)"
+					 " FROM degrees,courses,%s,msg_snt"
+					 " WHERE degrees.CtrCod=%ld"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=%s.MsgCod",
+					 Table,
+					 Gbl.CurrentCtr.Ctr.CtrCod,
+					 Table);
                break;
             case Sco_SCOPE_DEG:
-               DB_BuildQuery ("SELECT COUNT(*)"
-			      " FROM courses,%s,msg_snt"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=%s.MsgCod",
-			      Table,
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      Table);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT COUNT(*)"
+					 " FROM courses,%s,msg_snt"
+					 " WHERE courses.DegCod=%ld"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=%s.MsgCod",
+					 Table,
+					 Gbl.CurrentDeg.Deg.DegCod,
+					 Table);
                break;
             case Sco_SCOPE_CRS:
-               DB_BuildQuery ("SELECT COUNT(*)"
-			      " FROM msg_snt,%s"
-			      " WHERE msg_snt.CrsCod=%ld"
-			      " AND msg_snt.MsgCod=%s.MsgCod",
-			      Table,
-			      Gbl.CurrentCrs.Crs.CrsCod,
-			      Table);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT COUNT(*)"
+					 " FROM msg_snt,%s"
+					 " WHERE msg_snt.CrsCod=%ld"
+					 " AND msg_snt.MsgCod=%s.MsgCod",
+					 Table,
+					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Table);
                break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -2237,114 +2287,132 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
          switch (Scope)
            {
             case Sco_SCOPE_SYS:
-               DB_BuildQuery ("SELECT "
-			      "(SELECT COUNT(*)"
-			      " FROM msg_rcv"
-			      " WHERE Notified='Y')"
-			      " + "
-			      "(SELECT COUNT(*)"
-			      " FROM msg_rcv_deleted"
-			      " WHERE Notified='Y')");
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT "
+					 "(SELECT COUNT(*)"
+					 " FROM msg_rcv"
+					 " WHERE Notified='Y')"
+					 " + "
+					 "(SELECT COUNT(*)"
+					 " FROM msg_rcv_deleted"
+					 " WHERE Notified='Y')");
                break;
             case Sco_SCOPE_CTY:
-               DB_BuildQuery ("SELECT "
-			      "(SELECT COUNT(*)"
-			      " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-			      " AND msg_rcv.Notified='Y')"
-			      " + "
-			      "(SELECT COUNT(*)"
-			      " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
-			      " WHERE institutions.CtyCod=%ld"
-			      " AND institutions.InsCod=centres.InsCod"
-			      " AND centres.CtrCod=degrees.CtrCod"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-			      " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.CurrentCty.Cty.CtyCod,
-			      Gbl.CurrentCty.Cty.CtyCod);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT "
+					 "(SELECT COUNT(*)"
+					 " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
+					 " WHERE institutions.CtyCod=%ld"
+					 " AND institutions.InsCod=centres.InsCod"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+					 " AND msg_rcv.Notified='Y')"
+					 " + "
+					 "(SELECT COUNT(*)"
+					 " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
+					 " WHERE institutions.CtyCod=%ld"
+					 " AND institutions.InsCod=centres.InsCod"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+					 " AND msg_rcv_deleted.Notified='Y')",
+					 Gbl.CurrentCty.Cty.CtyCod,
+					 Gbl.CurrentCty.Cty.CtyCod);
                break;
             case Sco_SCOPE_INS:
-               DB_BuildQuery ("SELECT "
-				    "(SELECT COUNT(*)"
-				    " FROM centres,degrees,courses,msg_snt,msg_rcv"
-				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				    " AND msg_rcv.Notified='Y')"
-				    " + "
-				    "(SELECT COUNT(*)"
-				    " FROM centres,degrees,courses,msg_snt,msg_rcv_deleted"
-				    " WHERE centres.InsCod=%ld"
-				    " AND centres.CtrCod=degrees.CtrCod"
-				    " AND degrees.DegCod=courses.DegCod"
-				    " AND courses.CrsCod=msg_snt.CrsCod"
-				    " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				    " AND msg_rcv_deleted.Notified='Y')",
-			     Gbl.CurrentIns.Ins.InsCod,
-			     Gbl.CurrentIns.Ins.InsCod);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT "
+					 "(SELECT COUNT(*)"
+					 " FROM centres,degrees,courses,msg_snt,msg_rcv"
+					 " WHERE centres.InsCod=%ld"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+					 " AND msg_rcv.Notified='Y')"
+					 " + "
+					 "(SELECT COUNT(*)"
+					 " FROM centres,degrees,courses,msg_snt,msg_rcv_deleted"
+					 " WHERE centres.InsCod=%ld"
+					 " AND centres.CtrCod=degrees.CtrCod"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+					 " AND msg_rcv_deleted.Notified='Y')",
+					 Gbl.CurrentIns.Ins.InsCod,
+					 Gbl.CurrentIns.Ins.InsCod);
                break;
             case Sco_SCOPE_CTR:
-               DB_BuildQuery ("SELECT "
-			      "(SELECT COUNT(*)"
-			      " FROM degrees,courses,msg_snt,msg_rcv"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-			      " AND msg_rcv.Notified='Y')"
-			      " + "
-			      "(SELECT COUNT(*)"
-			      " FROM degrees,courses,msg_snt,msg_rcv_deleted"
-			      " WHERE degrees.CtrCod=%ld"
-			      " AND degrees.DegCod=courses.DegCod"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-			      " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.CurrentCtr.Ctr.CtrCod,
-			      Gbl.CurrentCtr.Ctr.CtrCod);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT "
+					 "(SELECT COUNT(*)"
+					 " FROM degrees,courses,msg_snt,msg_rcv"
+					 " WHERE degrees.CtrCod=%ld"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+					 " AND msg_rcv.Notified='Y')"
+					 " + "
+					 "(SELECT COUNT(*)"
+					 " FROM degrees,courses,msg_snt,msg_rcv_deleted"
+					 " WHERE degrees.CtrCod=%ld"
+					 " AND degrees.DegCod=courses.DegCod"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+					 " AND msg_rcv_deleted.Notified='Y')",
+					 Gbl.CurrentCtr.Ctr.CtrCod,
+					 Gbl.CurrentCtr.Ctr.CtrCod);
                break;
             case Sco_SCOPE_DEG:
-               DB_BuildQuery ("SELECT "
-			      "(SELECT COUNT(*)"
-			      " FROM courses,msg_snt,msg_rcv"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-			      " AND msg_rcv.Notified='Y')"
-			      " + "
-			      "(SELECT COUNT(*)"
-			      " FROM courses,msg_snt,msg_rcv_deleted"
-			      " WHERE courses.DegCod=%ld"
-			      " AND courses.CrsCod=msg_snt.CrsCod"
-			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-			      " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      Gbl.CurrentDeg.Deg.DegCod);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT "
+					 "(SELECT COUNT(*)"
+					 " FROM courses,msg_snt,msg_rcv"
+					 " WHERE courses.DegCod=%ld"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+					 " AND msg_rcv.Notified='Y')"
+					 " + "
+					 "(SELECT COUNT(*)"
+					 " FROM courses,msg_snt,msg_rcv_deleted"
+					 " WHERE courses.DegCod=%ld"
+					 " AND courses.CrsCod=msg_snt.CrsCod"
+					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+					 " AND msg_rcv_deleted.Notified='Y')",
+					 Gbl.CurrentDeg.Deg.DegCod,
+					 Gbl.CurrentDeg.Deg.DegCod);
                break;
             case Sco_SCOPE_CRS:
-               DB_BuildQuery ("SELECT "
-			      "(SELECT COUNT(*)"
-			      " FROM msg_snt,msg_rcv"
-			      " WHERE msg_snt.CrsCod=%ld"
-			      " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-			      " AND msg_rcv.Notified='Y')"
-			      " + "
-			      "(SELECT COUNT(*)"
-			      " FROM msg_snt,msg_rcv_deleted"
-			      " WHERE msg_snt.CrsCod=%ld"
-			      " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-			      " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.CurrentCrs.Crs.CrsCod,
-			      Gbl.CurrentCrs.Crs.CrsCod);
+               NumMsgs =
+               (unsigned) DB_QueryCOUNT ("can not get number"
+        				 " of received messages",
+					 "SELECT "
+					 "(SELECT COUNT(*)"
+					 " FROM msg_snt,msg_rcv"
+					 " WHERE msg_snt.CrsCod=%ld"
+					 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+					 " AND msg_rcv.Notified='Y')"
+					 " + "
+					 "(SELECT COUNT(*)"
+					 " FROM msg_snt,msg_rcv_deleted"
+					 " WHERE msg_snt.CrsCod=%ld"
+					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+					 " AND msg_rcv_deleted.Notified='Y')",
+					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.CurrentCrs.Crs.CrsCod);
                break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -2352,7 +2420,8 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
            }
          break;
      }
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of received messages");
+
+   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -3378,12 +3447,13 @@ static void Msg_WriteMsgTo (long MsgCod)
      };
 
    /***** Get number of recipients of a message from database *****/
-   DB_BuildQuery ("SELECT "
-		  "(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod=%ld)"
-		  " + "
-		  "(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod=%ld)",
-	          MsgCod,MsgCod);
-   NumRecipientsTotal = (unsigned) DB_QueryCOUNT_new ("can not get number of recipients");
+   NumRecipientsTotal =
+   (unsigned) DB_QueryCOUNT ("can not get number of recipients",
+			     "SELECT "
+			     "(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod=%ld)"
+			     " + "
+			     "(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod=%ld)",
+			     MsgCod,MsgCod);
 
    /***** Get recipients of a message from database *****/
    NumRecipientsKnown =
@@ -3730,10 +3800,10 @@ static void Msg_UnbanSender (void)
 static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   {
    /***** Get if FromUsrCod is banned by ToUsrCod *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM msg_banned"
-		  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
-	          FromUsrCod,ToUsrCod);
-   return (DB_QueryCOUNT_new ("can not check if a user is banned") != 0);
+   return (DB_QueryCOUNT ("can not check if a user is banned",
+			  "SELECT COUNT(*) FROM msg_banned"
+			  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
+			  FromUsrCod,ToUsrCod) != 0);
   }
 
 /*****************************************************************************/

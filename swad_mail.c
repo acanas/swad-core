@@ -361,9 +361,11 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_E
 static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Get number of mail_domains with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM mail_domains WHERE Domain='%s'",
-                  MailDomain);
-   return (DB_QueryCOUNT_new ("can not check if a mail domain is allowed for notifications") != 0);
+   return (DB_QueryCOUNT ("can not check if a mail domain"
+			  " is allowed for notifications",
+			  "SELECT COUNT(*) FROM mail_domains"
+			  " WHERE Domain='%s'",
+			  MailDomain) != 0);
   }
 
 /*****************************************************************************/
@@ -694,10 +696,11 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
   {
    /***** Get number of mail_domains with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM mail_domains"
-		  " WHERE %s='%s' AND MaiCod<>%ld",
-                  FieldName,Name,MaiCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of a mail domain already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name"
+			  " of a mail domain already existed",
+			  "SELECT COUNT(*) FROM mail_domains"
+			  " WHERE %s='%s' AND MaiCod<>%ld",
+			  FieldName,Name,MaiCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1631,11 +1634,11 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Check if the new email matches any of the confirmed emails of other users *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_emails"
-		  " WHERE E_mail='%s' AND Confirmed='Y'"
-		  " AND UsrCod<>%ld",
-	          NewEmail,UsrDat->UsrCod);
-   if (DB_QueryCOUNT_new ("can not check if email already existed"))	// An email of another user is the same that my email
+   if (DB_QueryCOUNT ("can not check if email already existed",
+		      "SELECT COUNT(*) FROM usr_emails"
+		      " WHERE E_mail='%s' AND Confirmed='Y'"
+		      " AND UsrCod<>%ld",
+		      NewEmail,UsrDat->UsrCod))	// An email of another user is the same that my email
       return false;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/

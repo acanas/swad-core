@@ -630,9 +630,11 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod)
   {
    /***** Get number of links with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM links WHERE %s='%s' AND LnkCod<>%ld",
-                  FieldName,Name,LnkCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of an institutional link already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of an institutional link"
+			  " already existed",
+			  "SELECT COUNT(*) FROM links"
+			  " WHERE %s='%s' AND LnkCod<>%ld",
+			  FieldName,Name,LnkCod) != 0);
   }
 
 /*****************************************************************************/

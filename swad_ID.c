@@ -842,10 +842,10 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
   {
    /***** Get if ID is confirmed from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_IDs"
-		  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
-	          UsrCod,UsrID);
-   return (DB_QueryCOUNT_new ("can not check if ID is confirmed") != 0);
+   return (DB_QueryCOUNT ("can not check if ID is confirmed",
+			  "SELECT COUNT(*) FROM usr_IDs"
+			  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
+			  UsrCod,UsrID) != 0);
   }
 
 /*****************************************************************************/

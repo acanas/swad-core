@@ -630,11 +630,12 @@ long Rec_GetFieldCod (void)
 unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
   {
    /***** Get number of cards with a given field in a course from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_records WHERE FieldCod=%ld",
-                  FieldCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of cards"
-	                                " with a given field not empty"
-	                                " in a course");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of records"
+			     " with a given field not empty in a course",
+			     "SELECT COUNT(*) FROM crs_records"
+			     " WHERE FieldCod=%ld",
+			     FieldCod);
   }
 
 /*****************************************************************************/
