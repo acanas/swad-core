@@ -674,9 +674,11 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
       return 0;
 
    /***** Get number of connected users with a role from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM connected WHERE RoleInLastCrs=%u",
-                  (unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of connected users");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of connected users",
+			     "SELECT COUNT(*) FROM connected"
+			     " WHERE RoleInLastCrs=%u",
+			     (unsigned) Role);
   }
 
 /*****************************************************************************/

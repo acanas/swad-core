@@ -2066,10 +2066,11 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
    /***** Get number of centres with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM centres"
-		  " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
-                  InsCod,FieldName,Name,CtrCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of a centre already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of a centre"
+			  " already existed",
+			  "SELECT COUNT(*) FROM centres"
+			  " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
+			  InsCod,FieldName,Name,CtrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2849,8 +2850,8 @@ static void Ctr_CreateCentre (unsigned Status)
 unsigned Ctr_GetNumCtrsTotal (void)
   {
    /***** Get total number of centres from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM centres");
-   return (unsigned) DB_QueryCOUNT_new ("can not get total number of centres");
+   return (unsigned) DB_QueryCOUNT ("can not get total number of centres",
+				    "SELECT COUNT(*) FROM centres");
   }
 
 /*****************************************************************************/
@@ -2860,11 +2861,12 @@ unsigned Ctr_GetNumCtrsTotal (void)
 unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   {
    /***** Get number of centres of a country from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM institutions,centres"
-		  " WHERE institutions.CtyCod=%ld"
-		  " AND institutions.InsCod=centres.InsCod",
-	          CtyCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres in a country");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of centres in a country",
+			     "SELECT COUNT(*) FROM institutions,centres"
+			     " WHERE institutions.CtyCod=%ld"
+			     " AND institutions.InsCod=centres.InsCod",
+			     CtyCod);
   }
 
 /*****************************************************************************/
@@ -2874,8 +2876,11 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 unsigned Ctr_GetNumCtrsInIns (long InsCod)
   {
    /***** Get number of centres of an institution from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM centres WHERE InsCod=%ld",InsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres in an institution");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of centres in an institution",
+			     "SELECT COUNT(*) FROM centres"
+			     " WHERE InsCod=%ld",
+			     InsCod);
   }
 
 /*****************************************************************************/
@@ -2885,10 +2890,11 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
   {
    /***** Get number of centres (of the current institution) in a place *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM centres"
-		  " WHERE InsCod=%ld AND PlcCod=%ld",
-	          Gbl.CurrentIns.Ins.InsCod,PlcCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of centres in a place");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of centres in a place",
+			     "SELECT COUNT(*) FROM centres"
+			     " WHERE InsCod=%ld AND PlcCod=%ld",
+			     Gbl.CurrentIns.Ins.InsCod,PlcCod);
   }
 
 /*****************************************************************************/
@@ -2898,12 +2904,13 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
 unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery)
   {
    /***** Get number of centres with degrees from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.CtrCod)"
-		  " FROM institutions,centres,degrees"
-		  " WHERE %sinstitutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres with degrees");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of centres with degrees",
+			     "SELECT COUNT(DISTINCT centres.CtrCod)"
+			     " FROM institutions,centres,degrees"
+			     " WHERE %sinstitutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2913,13 +2920,14 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery)
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery)
   {
    /***** Get number of centres with courses from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.CtrCod)"
-		  " FROM institutions,centres,degrees,courses"
-		  " WHERE %sinstitutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod"
-		  " AND degrees.DegCod=courses.DegCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres with courses");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of centres with courses",
+			     "SELECT COUNT(DISTINCT centres.CtrCod)"
+			     " FROM institutions,centres,degrees,courses"
+			     " WHERE %sinstitutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod"
+			     " AND degrees.DegCod=courses.DegCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2929,15 +2937,16 @@ unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery)
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
    /***** Get number of centres with users from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.CtrCod)"
-		  " FROM institutions,centres,degrees,courses,crs_usr"
-		  " WHERE %sinstitutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod"
-		  " AND degrees.DegCod=courses.DegCod"
-		  " AND courses.CrsCod=crs_usr.CrsCod"
-		  " AND crs_usr.Role=%u",
-                  SubQuery,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of centres with users");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of centres with users",
+			     "SELECT COUNT(DISTINCT centres.CtrCod)"
+			     " FROM institutions,centres,degrees,courses,crs_usr"
+			     " WHERE %sinstitutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod"
+			     " AND degrees.DegCod=courses.DegCod"
+			     " AND courses.CrsCod=crs_usr.CrsCod"
+			     " AND crs_usr.Role=%u",
+			     SubQuery,(unsigned) Role);
   }
 
 /*****************************************************************************/

@@ -781,10 +781,12 @@ static void Cty_PutIconToEditCountries (void)
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
   {
    /***** Get number of users from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_data WHERE CtyCod=%ld",CtyCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of users"
-					" who claim to belong"
-					" to other countries");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users"
+			     " who claim to belong to other countries",
+			     "SELECT COUNT(*) FROM usr_data"
+			     " WHERE CtyCod=%ld",
+			     CtyCod);
   }
 
 /*****************************************************************************/
@@ -1828,9 +1830,11 @@ void Cty_RenameCountry (void)
 static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod)
   {
    /***** Get number of countries with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM countries WHERE CtyCod='%03ld'",CtyCod);
-   return (DB_QueryCOUNT_new ("can not check if the numeric code"
-	                      " of a country already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the numeric code"
+	                  " of a country already existed",
+			  "SELECT COUNT(*) FROM countries"
+			  " WHERE CtyCod='%03ld'",
+			  CtyCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1840,9 +1844,11 @@ static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod)
 static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
   {
    /***** Get number of countries with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM countries WHERE Alpha2='%s'",Alpha2);
-   return (DB_QueryCOUNT_new ("can not check if the alphabetic code"
-	                      " of a country already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the alphabetic code"
+	                  " of a country already existed",
+			  "SELECT COUNT(*) FROM countries"
+			  " WHERE Alpha2='%s'",
+			  Alpha2) != 0);
   }
 
 /*****************************************************************************/
@@ -1854,11 +1860,11 @@ static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Na
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    /***** Get number of countries with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM countries"
-		  " WHERE Name_%s='%s' AND CtyCod<>'%03ld'",
-                  Txt_STR_LANG_ID[Language],Name,CtyCod);
-   return (DB_QueryCOUNT_new ("can not check if the name"
-	                      " of a country already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name"
+	                  " of a country already existed",
+			  "SELECT COUNT(*) FROM countries"
+			  " WHERE Name_%s='%s' AND CtyCod<>'%03ld'",
+			  Txt_STR_LANG_ID[Language],Name,CtyCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2277,9 +2283,10 @@ static void Cty_CreateCountry (struct Country *Cty)
 
 unsigned Cty_GetNumCtysTotal (void)
   {
-   /***** Get total number of degrees from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM countries");
-   return (unsigned) DB_QueryCOUNT_new ("can not get the total number of countries");
+   /***** Get total number of countries from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the total number of countries",
+			     "SELECT COUNT(*) FROM countries");
   }
 
 /*****************************************************************************/
@@ -2289,11 +2296,13 @@ unsigned Cty_GetNumCtysTotal (void)
 unsigned Cty_GetNumCtysWithInss (const char *SubQuery)
   {
    /***** Get number of countries with institutions from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT countries.CtyCod)"
-		  " FROM countries,institutions"
-		  " WHERE %scountries.CtyCod=institutions.CtyCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of countries with institutions");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of countries"
+			     " with institutions",
+			     "SELECT COUNT(DISTINCT countries.CtyCod)"
+			     " FROM countries,institutions"
+			     " WHERE %scountries.CtyCod=institutions.CtyCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2303,12 +2312,13 @@ unsigned Cty_GetNumCtysWithInss (const char *SubQuery)
 unsigned Cty_GetNumCtysWithCtrs (const char *SubQuery)
   {
    /***** Get number of countries with centres from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT countries.CtyCod)"
-		  " FROM countries,institutions,centres"
-		  " WHERE %scountries.CtyCod=institutions.CtyCod"
-		  " AND institutions.InsCod=centres.InsCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of countries with centres");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of countries with centres",
+			     "SELECT COUNT(DISTINCT countries.CtyCod)"
+			     " FROM countries,institutions,centres"
+			     " WHERE %scountries.CtyCod=institutions.CtyCod"
+			     " AND institutions.InsCod=centres.InsCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2318,13 +2328,14 @@ unsigned Cty_GetNumCtysWithCtrs (const char *SubQuery)
 unsigned Cty_GetNumCtysWithDegs (const char *SubQuery)
   {
    /***** Get number of countries with degrees from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT countries.CtyCod)"
-		  " FROM countries,institutions,centres,degrees"
-		  " WHERE %scountries.CtyCod=institutions.CtyCod"
-		  " AND institutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of countries with degrees");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of countries with degrees",
+			     "SELECT COUNT(DISTINCT countries.CtyCod)"
+			     " FROM countries,institutions,centres,degrees"
+			     " WHERE %scountries.CtyCod=institutions.CtyCod"
+			     " AND institutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2334,14 +2345,15 @@ unsigned Cty_GetNumCtysWithDegs (const char *SubQuery)
 unsigned Cty_GetNumCtysWithCrss (const char *SubQuery)
   {
    /***** Get number of countries with courses from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT countries.CtyCod)"
-		  " FROM countries,institutions,centres,degrees,courses"
-		  " WHERE %scountries.CtyCod=institutions.CtyCod"
-		  " AND institutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod"
-		  " AND degrees.DegCod=courses.DegCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of countries with courses");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of countries with courses",
+			     "SELECT COUNT(DISTINCT countries.CtyCod)"
+			     " FROM countries,institutions,centres,degrees,courses"
+			     " WHERE %scountries.CtyCod=institutions.CtyCod"
+			     " AND institutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod"
+			     " AND degrees.DegCod=courses.DegCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2351,16 +2363,17 @@ unsigned Cty_GetNumCtysWithCrss (const char *SubQuery)
 unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
    /***** Get number of countries with users from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT countries.CtyCod)"
-		  " FROM countries,institutions,centres,degrees,courses,crs_usr"
-		  " WHERE %scountries.CtyCod=institutions.CtyCod"
-		  " AND institutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod"
-		  " AND degrees.DegCod=courses.DegCod"
-		  " AND courses.CrsCod=crs_usr.CrsCod"
-		  " AND crs_usr.Role=%u",
-                  SubQuery,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of countries with users");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of countries with users",
+			     "SELECT COUNT(DISTINCT countries.CtyCod)"
+			     " FROM countries,institutions,centres,degrees,courses,crs_usr"
+			     " WHERE %scountries.CtyCod=institutions.CtyCod"
+			     " AND institutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod"
+			     " AND degrees.DegCod=courses.DegCod"
+			     " AND courses.CrsCod=crs_usr.CrsCod"
+			     " AND crs_usr.Role=%u",
+			     SubQuery,(unsigned) Role);
   }
 
 /*****************************************************************************/

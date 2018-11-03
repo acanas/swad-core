@@ -630,10 +630,11 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
-      DB_BuildQuery ("SELECT COUNT(*) FROM usr_nicknames"
-		     " WHERE Nickname='%s' AND UsrCod<>%ld",
-	             NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (DB_QueryCOUNT_new ("can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
+      if (DB_QueryCOUNT ("can not check if nickname already existed",
+			 "SELECT COUNT(*) FROM usr_nicknames"
+			 " WHERE Nickname='%s' AND UsrCod<>%ld",
+			 NewNicknameWithoutArroba,
+			 Gbl.Usrs.Me.UsrDat.UsrCod))	// A nickname of another user is the same that this nickname
 	{
 	 Error = true;
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -660,10 +661,10 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      {
       /* Check if the new email matches
          any of the confirmed emails of other users */
-      DB_BuildQuery ("SELECT COUNT(*) FROM usr_emails"
-		     " WHERE E_mail='%s' AND Confirmed='Y'",
-	             NewEmail);
-      if (DB_QueryCOUNT_new ("can not check if email already existed"))	// An email of another user is the same that my email
+      if (DB_QueryCOUNT ("can not check if email already existed",
+			 "SELECT COUNT(*) FROM usr_emails"
+		         " WHERE E_mail='%s' AND Confirmed='Y'",
+	                 NewEmail))	// An email of another user is the same that my email
 	{
 	 Error = true;
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

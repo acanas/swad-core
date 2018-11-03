@@ -1032,11 +1032,14 @@ void Att_ShowAttEvent (void)
 
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
   {
-   /***** Get number of attendance events with a field value from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM att_events"
-		  " WHERE CrsCod=%ld AND %s='%s' AND AttCod<>%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AttCod);
-   return (DB_QueryCOUNT_new ("can not get similar attendance events") != 0);
+   /***** Get number of attendance events
+          with a field value from database *****/
+   return (DB_QueryCOUNT ("can not get similar attendance events",
+			  "SELECT COUNT(*) FROM att_events"
+			  " WHERE CrsCod=%ld"
+			  " AND %s='%s' AND AttCod<>%ld",
+			  Gbl.CurrentCrs.Crs.CrsCod,
+			  Field,Value,AttCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1419,8 +1422,10 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
   {
    /***** Get if an attendance event is associated to a group from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",AttCod);
-   return (DB_QueryCOUNT_new ("can not check if an attendance event is associated to groups") != 0);
+   return (DB_QueryCOUNT ("can not check if an attendance event"
+			  " is associated to groups",
+		          "SELECT COUNT(*) FROM att_grp WHERE AttCod=%ld",
+			  AttCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1430,10 +1435,11 @@ bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod)
 bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
   {
    /***** Get if an attendance event is associated to a group from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM att_grp"
-		  " WHERE AttCod=%ld AND GrpCod=%ld",
-                  AttCod,GrpCod);
-   return (DB_QueryCOUNT_new ("can not check if an attendance event is associated to a group") != 0);
+   return (DB_QueryCOUNT ("can not check if an attendance event"
+			  " is associated to a group",
+			  "SELECT COUNT(*) FROM att_grp"
+			  " WHERE AttCod=%ld AND GrpCod=%ld",
+			  AttCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1650,8 +1656,12 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 unsigned Att_GetNumAttEventsInCrs (long CrsCod)
   {
    /***** Get number of attendance events in a course from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM att_events WHERE CrsCod=%ld",CrsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of attendance events in course");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of attendance events"
+			     " in course",
+			     "SELECT COUNT(*) FROM att_events"
+			     " WHERE CrsCod=%ld",
+			     CrsCod);
   }
 
 /*****************************************************************************/
@@ -2425,10 +2435,12 @@ void Att_RegisterStudentsInAttEvent (void)
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
   {
    /***** Count number of students registered in an event in database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM att_usr"
-		  " WHERE AttCod=%ld AND Present='Y'",
-                  Att->AttCod);
-   Att->NumStdsTotal = (unsigned) DB_QueryCOUNT_new ("can not get number of students who are registered in an event");
+   Att->NumStdsTotal =
+   (unsigned) DB_QueryCOUNT ("can not get number of students"
+			     " who are registered in an event",
+			     "SELECT COUNT(*) FROM att_usr"
+			     " WHERE AttCod=%ld AND Present='Y'",
+			     Att->AttCod);
   }
 
 /*****************************************************************************/

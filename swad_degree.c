@@ -2027,10 +2027,11 @@ static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Nam
                                            long DegCod,long CtrCod)
   {
    /***** Get number of degrees with a type and a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM degrees"
-		  " WHERE CtrCod=%ld AND %s='%s' AND DegCod<>%ld",
-                  CtrCod,FieldName,Name,DegCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of a degree already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of a degree"
+			  " already existed",
+			  "SELECT COUNT(*) FROM degrees"
+			  " WHERE CtrCod=%ld AND %s='%s' AND DegCod<>%ld",
+			  CtrCod,FieldName,Name,DegCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2337,8 +2338,9 @@ void Deg_RemoveLogo (void)
 unsigned Deg_GetNumDegsTotal (void)
   {
    /***** Get total number of degrees from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM degrees");
-   return (unsigned) DB_QueryCOUNT_new ("can not get the total number of degrees");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the total number of degrees",
+			     "SELECT COUNT(*) FROM degrees");
   }
 
 /*****************************************************************************/
@@ -2348,13 +2350,13 @@ unsigned Deg_GetNumDegsTotal (void)
 unsigned Deg_GetNumDegsInCty (long InsCod)
   {
    /***** Get number of degrees in a country from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM institutions,centres,degrees"
-		  " WHERE institutions.CtyCod=%ld"
-		  " AND institutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod",
-	          InsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of degrees"
-	                                " in a country");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a country",
+			     "SELECT COUNT(*) FROM institutions,centres,degrees"
+			     " WHERE institutions.CtyCod=%ld"
+			     " AND institutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod",
+			     InsCod);
   }
 
 /*****************************************************************************/
@@ -2364,12 +2366,13 @@ unsigned Deg_GetNumDegsInCty (long InsCod)
 unsigned Deg_GetNumDegsInIns (long InsCod)
   {
    /***** Get number of degrees in an institution from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM centres,degrees"
-		  " WHERE centres.InsCod=%ld"
-		  " AND centres.CtrCod=degrees.CtrCod",
-	          InsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of degrees"
-	                                " in an institution");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of degrees"
+	                     " in an institution",
+			     "SELECT COUNT(*) FROM centres,degrees"
+			     " WHERE centres.InsCod=%ld"
+			     " AND centres.CtrCod=degrees.CtrCod",
+			     InsCod);
   }
 
 /*****************************************************************************/
@@ -2379,9 +2382,11 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 unsigned Deg_GetNumDegsInCtr (long CtrCod)
   {
    /***** Get number of degrees in a centre from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM degrees WHERE CtrCod=%ld",CtrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of degrees"
-	                                " in a centre");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of degrees in a centre",
+			     "SELECT COUNT(*) FROM degrees"
+			     " WHERE CtrCod=%ld",
+			     CtrCod);
   }
 
 /*****************************************************************************/
@@ -2391,14 +2396,14 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
 unsigned Deg_GetNumDegsWithCrss (const char *SubQuery)
   {
    /***** Get number of degrees with courses from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT degrees.DegCod)"
-		  " FROM institutions,centres,degrees,courses"
-		  " WHERE %sinstitutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod"
-		  " AND degrees.DegCod=courses.DegCod",
-                  SubQuery);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of degrees"
-	                                " with courses");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of degrees with courses",
+			     "SELECT COUNT(DISTINCT degrees.DegCod)"
+			     " FROM institutions,centres,degrees,courses"
+			     " WHERE %sinstitutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod"
+			     " AND degrees.DegCod=courses.DegCod",
+			     SubQuery);
   }
 
 /*****************************************************************************/
@@ -2408,16 +2413,16 @@ unsigned Deg_GetNumDegsWithCrss (const char *SubQuery)
 unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
    /***** Get number of degrees with users from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT degrees.DegCod)"
-		  " FROM institutions,centres,degrees,courses,crs_usr"
-		  " WHERE %sinstitutions.InsCod=centres.InsCod"
-		  " AND centres.CtrCod=degrees.CtrCod"
-		  " AND degrees.DegCod=courses.DegCod"
-		  " AND courses.CrsCod=crs_usr.CrsCod"
-		  " AND crs_usr.Role=%u",
-                  SubQuery,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of degrees"
-	                                " with users");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of degrees with users",
+			     "SELECT COUNT(DISTINCT degrees.DegCod)"
+			     " FROM institutions,centres,degrees,courses,crs_usr"
+			     " WHERE %sinstitutions.InsCod=centres.InsCod"
+			     " AND centres.CtrCod=degrees.CtrCod"
+			     " AND degrees.DegCod=courses.DegCod"
+			     " AND courses.CrsCod=crs_usr.CrsCod"
+			     " AND crs_usr.Role=%u",
+			     SubQuery,(unsigned) Role);
   }
 
 /*****************************************************************************/

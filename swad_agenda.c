@@ -1763,8 +1763,10 @@ void Agd_RemoveUsrEvents (long UsrCod)
 unsigned Agd_GetNumEventsFromUsr (long UsrCod)
   {
    /***** Get number of events in a course from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM agendas WHERE UsrCod=%ld",UsrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of events from user");
+   return (unsigned) DB_QueryCOUNT ("can not get number of events from user",
+				    "SELECT COUNT(*) FROM agendas"
+				    " WHERE UsrCod=%ld",
+				    UsrCod);
   }
 
 /*****************************************************************************/

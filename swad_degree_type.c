@@ -808,8 +808,11 @@ long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
 static unsigned DT_CountNumDegsOfType (long DegTypCod)
   {
    /***** Get number of degrees of a type from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM degrees WHERE DegTypCod=%ld",DegTypCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of degrees of a type");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of degrees of a type",
+			     "SELECT COUNT(*) FROM degrees"
+			     " WHERE DegTypCod=%ld",
+			     DegTypCod);
   }
 
 /*****************************************************************************/
@@ -991,10 +994,11 @@ void DT_RenameDegreeType (void)
 static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
   {
    /***** Get number of degree types with a name from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM deg_types"
-                  " WHERE DegTypName='%s' AND DegTypCod<>%ld",
-                  DegTypName,DegTypCod);
-   return (DB_QueryCOUNT_new ("can not check if the name of a type of degree already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if the name of a type of degree"
+			  " already existed",
+			  "SELECT COUNT(*) FROM deg_types"
+			  " WHERE DegTypName='%s' AND DegTypCod<>%ld",
+			  DegTypName,DegTypCod) != 0);
   }
 
 /*****************************************************************************/
