@@ -3067,24 +3067,6 @@ void DB_CloseDBConnection (void)
      }
   }
 
-void DB_BuildQuery (const char *fmt,...)
-  {
-   va_list ap;
-   int NumBytesPrinted;
-
-   if (Gbl.DB.QueryPtr != NULL)
-      Lay_ShowErrorAndExit ("Error building query.");
-
-   va_start (ap,fmt);
-   NumBytesPrinted = vasprintf (&Gbl.DB.QueryPtr,fmt,ap);
-   va_end (ap);
-
-   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				// or some other error occurs,
-				// vasprintf will return -1
-      Lay_NotEnoughMemoryExit ();
-  }
-
 void DB_BuildQuery_old (char **Query,const char *fmt,...)
   {
    va_list ap;
@@ -3170,11 +3152,6 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
       Lay_NotEnoughMemoryExit ();
 
    return DB_QueryCOUNT_old (&Query,MsgError);
-  }
-
-unsigned long DB_QueryCOUNT_new (const char *MsgError)
-  {
-   return DB_QueryCOUNT_old (&Gbl.DB.QueryPtr,MsgError);
   }
 
 unsigned long DB_QueryCOUNT_old (char **Query,const char *MsgError)

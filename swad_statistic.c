@@ -5436,7 +5436,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
    extern const char *Txt_Users;
    MYSQL_RES *mysql_res;
-   unsigned NumInss = 0;
+   unsigned NumInss;
 
    /***** Start box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
@@ -5447,34 +5447,41 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
-			" FROM usr_data"
-                        " WHERE InsCod>0"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC");
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT InsCod,COUNT(*) AS N"
+				    " FROM usr_data"
+				    " WHERE InsCod>0"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-	 DB_BuildQuery ("SELECT usr_data.InsCod,COUNT(*) AS N"
-			" FROM institutions,usr_data"
-			" WHERE institutions.CtyCod=%ld"
-			" AND institutions.InsCod=usr_data.InsCod"
-			" GROUP BY usr_data.InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentCty.Cty.CtyCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT usr_data.InsCod,COUNT(*) AS N"
+				    " FROM institutions,usr_data"
+				    " WHERE institutions.CtyCod=%ld"
+				    " AND institutions.InsCod=usr_data.InsCod"
+				    " GROUP BY usr_data.InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-	 DB_BuildQuery ("SELECT InsCod,COUNT(*) AS N"
-			" FROM usr_data"
-			" WHERE InsCod=%ld"
-			" GROUP BY InsCod"
-			" ORDER BY N DESC",
-			Gbl.CurrentIns.Ins.InsCod);
+	 NumInss =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get institutions",
+				    "SELECT InsCod,COUNT(*) AS N"
+				    " FROM usr_data"
+				    " WHERE InsCod=%ld"
+				    " GROUP BY InsCod"
+				    " ORDER BY N DESC",
+				    Gbl.CurrentIns.Ins.InsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
+	 NumInss = 0;	// Not reached. Initialized to avoid warning.
 	 break;
      }
 
@@ -9470,7 +9477,7 @@ unsigned Sta_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
       case Sco_SCOPE_SYS:
 	 NumUsrs =
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				   " who have chosen a privacy",
+				   " who have chosen an option",
 				   "SELECT COUNT(*)"
 				   " FROM usr_data WHERE %s",
 				   SubQuery);
@@ -9478,7 +9485,7 @@ unsigned Sta_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
       case Sco_SCOPE_CTY:
 	 NumUsrs =
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				   " who have chosen a privacy",
+				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
 				   " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
 				   " WHERE institutions.CtyCod=%ld"
@@ -9493,7 +9500,7 @@ unsigned Sta_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
       case Sco_SCOPE_INS:
 	 NumUsrs =
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				   " who have chosen a privacy",
+				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
 				   " FROM centres,degrees,courses,crs_usr,usr_data"
 				   " WHERE centres.InsCod=%ld"
@@ -9507,7 +9514,7 @@ unsigned Sta_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
       case Sco_SCOPE_CTR:
 	 NumUsrs =
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				   " who have chosen a privacy",
+				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
 				   " FROM degrees,courses,crs_usr,usr_data"
 				   " WHERE degrees.CtrCod=%ld"
@@ -9520,7 +9527,7 @@ unsigned Sta_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
       case Sco_SCOPE_DEG:
 	 NumUsrs =
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				   " who have chosen a privacy",
+				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
 				   " FROM courses,crs_usr,usr_data"
 				   " WHERE courses.DegCod=%ld"
@@ -9532,7 +9539,7 @@ unsigned Sta_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
       case Sco_SCOPE_CRS:
 	 NumUsrs =
 	 (unsigned) DB_QueryCOUNT ("can not get the number of users"
-				   " who have chosen a privacy",
+				   " who have chosen an option",
 				   "SELECT COUNT(DISTINCT usr_data.UsrCod)"
 				   " FROM crs_usr,usr_data"
 				   " WHERE crs_usr.CrsCod=%ld"

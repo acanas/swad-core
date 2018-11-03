@@ -1759,12 +1759,12 @@ static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
 
    /***** Get number of surveys with a field value from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM surveys"
-                  " WHERE Scope='%s' AND Cod=%ld"
-                  " AND Title='%s' AND SvyCod<>%ld",
-		  Sco_ScopeDB[Svy->Scope],Svy->Cod,
-		  Svy->Title,Svy->SvyCod);
-   return (DB_QueryCOUNT_new ("can not get similar surveys") != 0);
+   return (DB_QueryCOUNT ("can not get similar surveys",
+			  "SELECT COUNT(*) FROM surveys"
+			  " WHERE Scope='%s' AND Cod=%ld"
+			  " AND Title='%s' AND SvyCod<>%ld",
+			  Sco_ScopeDB[Svy->Scope],Svy->Cod,
+			  Svy->Title,Svy->SvyCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2326,8 +2326,9 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
 static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
   {
    /***** Get if a survey is associated to a group from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM svy_grp WHERE SvyCod=%ld",SvyCod);
-   return (DB_QueryCOUNT_new ("can not check if a survey is associated to groups") != 0);
+   return (DB_QueryCOUNT ("can not check if a survey is associated to groups",
+			  "SELECT COUNT(*) FROM svy_grp WHERE SvyCod=%ld",
+			  SvyCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2337,10 +2338,10 @@ static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
 bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod)
   {
    /***** Get if a survey is associated to a group from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM svy_grp"
-	          " WHERE SvyCod=%ld AND GrpCod=%ld",
-		  SvyCod,GrpCod);
-   return (DB_QueryCOUNT_new ("can not check if a survey is associated to a group") != 0);
+   return (DB_QueryCOUNT ("can not check if a survey is associated to a group",
+			  "SELECT COUNT(*) FROM svy_grp"
+			  " WHERE SvyCod=%ld AND GrpCod=%ld",
+			  SvyCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2532,14 +2533,14 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
 static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
   {
    /***** Get if I can do a survey from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM surveys"
-                  " WHERE SvyCod=%ld"
-                  " AND (SvyCod NOT IN (SELECT SvyCod FROM svy_grp) OR"
-                  " SvyCod IN (SELECT svy_grp.SvyCod FROM svy_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod=%ld"
-                  " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))",
-		  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if I can do a survey") != 0);
+   return (DB_QueryCOUNT ("can not check if I can do a survey",
+			  "SELECT COUNT(*) FROM surveys"
+			  " WHERE SvyCod=%ld"
+			  " AND (SvyCod NOT IN (SELECT SvyCod FROM svy_grp) OR"
+			  " SvyCod IN (SELECT svy_grp.SvyCod FROM svy_grp,crs_grp_usr"
+			  " WHERE crs_grp_usr.UsrCod=%ld"
+			  " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))",
+			  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2549,8 +2550,11 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 static unsigned Svy_GetNumQstsSvy (long SvyCod)
   {
    /***** Get data of questions from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM svy_questions WHERE SvyCod=%ld",SvyCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of questions of a survey");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of questions of a survey",
+			     "SELECT COUNT(*) FROM svy_questions"
+			     " WHERE SvyCod=%ld",
+			     SvyCod);
   }
 
 /*****************************************************************************/
@@ -2849,10 +2853,10 @@ static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
 static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
   {
    /***** Get answers of a question from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM svy_answers"
-                  " WHERE QstCod=%ld AND AnsInd=%u",
-		  QstCod,AnsInd);
-   return (DB_QueryCOUNT_new ("can not check if an answer exists") != 0);
+   return (DB_QueryCOUNT ("can not check if an answer exists",
+			  "SELECT COUNT(*) FROM svy_answers"
+			  " WHERE QstCod=%ld AND AnsInd=%u",
+			  QstCod,AnsInd) != 0);
   }
 
 /*****************************************************************************/
@@ -3748,10 +3752,10 @@ static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
 static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
   {
    /***** Get number of surveys with a field value from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM svy_users"
-                  " WHERE SvyCod=%ld AND UsrCod=%ld",
-		  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if you have answered a survey") != 0);
+   return (DB_QueryCOUNT ("can not check if you have answered a survey",
+			  "SELECT COUNT(*) FROM svy_users"
+			  " WHERE SvyCod=%ld AND UsrCod=%ld",
+			  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -3761,8 +3765,12 @@ static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
 static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
   {
    /***** Get number of surveys with a field value from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM svy_users WHERE SvyCod=%ld",SvyCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of users who have answered a survey");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users"
+			     " who have answered a survey",
+			     "SELECT COUNT(*) FROM svy_users"
+			     " WHERE SvyCod=%ld",
+			     SvyCod);
   }
 
 /*****************************************************************************/

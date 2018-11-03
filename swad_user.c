@@ -838,10 +838,10 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
    if (Sco_ScopeDB[Scope])
      {
       /***** Get if a user is administrator of a degree from database *****/
-      DB_BuildQuery ("SELECT COUNT(*) FROM admin"
-		     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-		     UsrCod,Sco_ScopeDB[Scope],Cod);
-      return (DB_QueryCOUNT_new ("can not check if a user is administrator") != 0);
+      return (DB_QueryCOUNT ("can not check if a user is administrator",
+			     "SELECT COUNT(*) FROM admin"
+			     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
+			     UsrCod,Sco_ScopeDB[Scope],Cod) != 0);
      }
    return false;
   }
@@ -869,11 +869,12 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
       return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
 
    /***** 3. Slow check: If not cached, get if a user is superuser from database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM admin"
-		  " WHERE UsrCod=%ld AND Scope='%s'",
-		  UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
    Gbl.Cache.UsrIsSuperuser.UsrCod = UsrCod;
-   Gbl.Cache.UsrIsSuperuser.IsSuperuser = (DB_QueryCOUNT_new ("can not check if a user is superuser") != 0);
+   Gbl.Cache.UsrIsSuperuser.IsSuperuser =
+      (DB_QueryCOUNT ("can not check if a user is superuser",
+		      "SELECT COUNT(*) FROM admin"
+		      " WHERE UsrCod=%ld AND Scope='%s'",
+		      UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]) != 0);
    return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 
@@ -962,8 +963,10 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
 unsigned Usr_GetNumCrssOfUsr (long UsrCod)
   {
    /***** Get the number of courses of a user from database ******/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr WHERE UsrCod=%ld",UsrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of courses of a user");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of courses of a user",
+			     "SELECT COUNT(*) FROM crs_usr WHERE UsrCod=%ld",
+			     UsrCod);
   }
 
 /*****************************************************************************/
@@ -973,10 +976,11 @@ unsigned Usr_GetNumCrssOfUsr (long UsrCod)
 unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod)
   {
    /***** Get the number of courses of a user not accepted from database ******/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr"
-	          " WHERE UsrCod=%ld AND Accepted='N'",
-		  UsrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of courses of a user");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of courses of a user",
+			     "SELECT COUNT(*) FROM crs_usr"
+			     " WHERE UsrCod=%ld AND Accepted='N'",
+			     UsrCod);
   }
 
 /*****************************************************************************/
@@ -986,10 +990,12 @@ unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod)
 unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
   {
    /***** Get the number of courses of a user with a role from database ******/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr"
-                  " WHERE UsrCod=%ld AND Role=%u",
-		  UsrCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of courses of a user with a role");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of courses of a user"
+			     " with a role",
+			     "SELECT COUNT(*) FROM crs_usr"
+			     " WHERE UsrCod=%ld AND Role=%u",
+			     UsrCod,(unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -999,10 +1005,12 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
 unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
   {
    /***** Get the number of courses of a user with a role from database ******/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr"
-                  " WHERE UsrCod=%ld AND Role=%u AND Accepted='N'",
-		  UsrCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of courses of a user with a role");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of courses of a user"
+			     " with a role",
+			     "SELECT COUNT(*) FROM crs_usr"
+			     " WHERE UsrCod=%ld AND Role=%u AND Accepted='N'",
+			     UsrCod,(unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -1064,12 +1072,13 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-	          " FROM crs_usr,usr_courses_tmp"
-                  " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
-                  "%s",
-		  SubQueryRole);
-   NumUsrs = (unsigned) DB_QueryCOUNT_new ("can not get the number of users");
+   NumUsrs =
+   (unsigned) DB_QueryCOUNT ("can not get the number of users",
+			     "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+			     " FROM crs_usr,usr_courses_tmp"
+			     " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
+			     "%s",
+			     SubQueryRole);
 
    /***** Remove temporary table *****/
    DB_Query ("can not remove temporary tables",
@@ -1405,12 +1414,13 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
    Usr_GetMyCourses ();
 
    /* Check if user shares any course with me */
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr"
-	          " WHERE UsrCod=%ld"
-	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
-		  UsrDat->UsrCod);
-   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = DB_QueryCOUNT_new ("can not check if a user shares any course with you") != 0;
    Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs =
+      (DB_QueryCOUNT ("can not check if a user shares any course with you",
+		      "SELECT COUNT(*) FROM crs_usr"
+		      " WHERE UsrCod=%ld"
+		      " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
+		      UsrDat->UsrCod) != 0);
    return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
   }
 
@@ -1444,10 +1454,11 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 	     UsrCod);
 
    /* Get if a user shares any course with me from database */
-   DB_BuildQuery ("SELECT COUNT(*) FROM my_courses_tmp,usr_courses_tmp"
-                  " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
-                  " AND my_courses_tmp.Role<>usr_courses_tmp.Role");
-   UsrSharesAnyOfMyCrsWithDifferentRole = (DB_QueryCOUNT_new ("can not check if a user shares any course with you") != 0);
+   UsrSharesAnyOfMyCrsWithDifferentRole =
+      (DB_QueryCOUNT ("can not check if a user shares any course with you",
+		      "SELECT COUNT(*) FROM my_courses_tmp,usr_courses_tmp"
+                      " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
+                      " AND my_courses_tmp.Role<>usr_courses_tmp.Role") != 0);
 
    /* Remove temporary table if exists */
    DB_Query ("can not remove temporary tables",
@@ -1827,18 +1838,19 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
       return Gbl.Cache.UsrBelongsToIns.Belongs;
 
    /***** 3. Slow check: Get is user belongs to institution from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT centres.InsCod)"
-		  " FROM crs_usr,courses,degrees,centres"
-		  " WHERE crs_usr.UsrCod=%ld"
-		  " AND crs_usr.Accepted='Y'"
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod=degrees.DegCod"
-		  " AND degrees.CtrCod=centres.CtrCod"
-		  " AND centres.InsCod=%ld",
-		  UsrCod,InsCod);
    Gbl.Cache.UsrBelongsToIns.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
-   Gbl.Cache.UsrBelongsToIns.Belongs = (DB_QueryCOUNT_new ("can not check if a user belongs to an institution") != 0);
+   Gbl.Cache.UsrBelongsToIns.Belongs =
+      (DB_QueryCOUNT ("can not check if a user belongs to an institution",
+		      "SELECT COUNT(DISTINCT centres.InsCod)"
+		      " FROM crs_usr,courses,degrees,centres"
+		      " WHERE crs_usr.UsrCod=%ld"
+		      " AND crs_usr.Accepted='Y'"
+		      " AND crs_usr.CrsCod=courses.CrsCod"
+		      " AND courses.DegCod=degrees.DegCod"
+		      " AND degrees.CtrCod=centres.CtrCod"
+		      " AND centres.InsCod=%ld",
+		      UsrCod,InsCod) != 0);
    return Gbl.Cache.UsrBelongsToIns.Belongs;
   }
 
@@ -1866,17 +1878,18 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
       return Gbl.Cache.UsrBelongsToCtr.Belongs;
 
    /***** 3. Slow check: Get is user belongs to centre from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT degrees.CtrCod)"
-		  " FROM crs_usr,courses,degrees"
-		  " WHERE crs_usr.UsrCod=%ld"
-		  " AND crs_usr.Accepted='Y'"	// Only if user accepted
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod=degrees.DegCod"
-		  " AND degrees.CtrCod=%ld",
-		  UsrCod,CtrCod);
    Gbl.Cache.UsrBelongsToCtr.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToCtr.CtrCod = CtrCod;
-   Gbl.Cache.UsrBelongsToCtr.Belongs = (DB_QueryCOUNT_new ("can not check if a user belongs to a centre") != 0);
+   Gbl.Cache.UsrBelongsToCtr.Belongs =
+      (DB_QueryCOUNT ("can not check if a user belongs to a centre",
+		      "SELECT COUNT(DISTINCT degrees.CtrCod)"
+		      " FROM crs_usr,courses,degrees"
+		      " WHERE crs_usr.UsrCod=%ld"
+		      " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		      " AND crs_usr.CrsCod=courses.CrsCod"
+		      " AND courses.DegCod=degrees.DegCod"
+		      " AND degrees.CtrCod=%ld",
+		      UsrCod,CtrCod) != 0);
    return Gbl.Cache.UsrBelongsToCtr.Belongs;
   }
 
@@ -1904,16 +1917,17 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
       return Gbl.Cache.UsrBelongsToDeg.Belongs;
 
    /***** 3. Slow check: Get if user belongs to degree from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT courses.DegCod)"
-		  " FROM crs_usr,courses"
-		  " WHERE crs_usr.UsrCod=%ld"
-		  " AND crs_usr.Accepted='Y'"	// Only if user accepted
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod=%ld",
-		  UsrCod,DegCod);
    Gbl.Cache.UsrBelongsToDeg.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToDeg.DegCod = DegCod;
-   Gbl.Cache.UsrBelongsToDeg.Belongs = (DB_QueryCOUNT_new ("can not check if a user belongs to a degree") != 0);
+   Gbl.Cache.UsrBelongsToDeg.Belongs =
+      (DB_QueryCOUNT ("can not check if a user belongs to a degree",
+		      "SELECT COUNT(DISTINCT courses.DegCod)"
+		      " FROM crs_usr,courses"
+		      " WHERE crs_usr.UsrCod=%ld"
+		      " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		      " AND crs_usr.CrsCod=courses.CrsCod"
+		      " AND courses.DegCod=%ld",
+		      UsrCod,DegCod) != 0);
    return Gbl.Cache.UsrBelongsToDeg.Belongs;
   }
 
@@ -1948,13 +1962,14 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
    /***** 3. Slow check: Get if user belongs to course from database *****/
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
 	                                  "");
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr"
-	          " WHERE CrsCod=%ld AND UsrCod=%ld%s",
-		  CrsCod,UsrCod,SubQuery);
    Gbl.Cache.UsrBelongsToCrs.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToCrs.CrsCod = CrsCod;
    Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
-   Gbl.Cache.UsrBelongsToCrs.Belongs = (DB_QueryCOUNT_new ("can not check if a user belongs to a course") != 0);
+   Gbl.Cache.UsrBelongsToCrs.Belongs =
+      (DB_QueryCOUNT ("can not check if a user belongs to a course",
+		      "SELECT COUNT(*) FROM crs_usr"
+		      " WHERE CrsCod=%ld AND UsrCod=%ld%s",
+		      CrsCod,UsrCod,SubQuery) != 0);
    return Gbl.Cache.UsrBelongsToCrs.Belongs;
   }
 
@@ -2334,9 +2349,11 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
 bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64])
   {
    /***** Get if an encrypted user's code already existed in database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_data WHERE EncryptedUsrCod='%s'",
-		  EncryptedUsrCod);
-   return (DB_QueryCOUNT_new ("can not check if an encrypted user's code already existed") != 0);
+   return (DB_QueryCOUNT ("can not check if an encrypted user's code"
+			  " already existed",
+			  "SELECT COUNT(*) FROM usr_data"
+			  " WHERE EncryptedUsrCod='%s'",
+			  EncryptedUsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2569,9 +2586,10 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void)
   {
    /***** Delete old birthdays *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM birthdays_today WHERE UsrCod=%ld",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if my birthday has been congratulated") == 0);
+   return (DB_QueryCOUNT ("can not check if my birthday has been congratulated",
+			  "SELECT COUNT(*) FROM birthdays_today"
+			  " WHERE UsrCod=%ld",
+			  Gbl.Usrs.Me.UsrDat.UsrCod) == 0);
   }
 
 /*****************************************************************************/
@@ -3389,9 +3407,9 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat)
 void Usr_UpdateMyLastData (void)
   {
    /***** Check if it exists an entry for me *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_last WHERE UsrCod=%ld",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (DB_QueryCOUNT_new ("can not get last user's click"))
+   if (DB_QueryCOUNT ("can not get last user's click",
+		      "SELECT COUNT(*) FROM usr_last WHERE UsrCod=%ld",
+		      Gbl.Usrs.Me.UsrDat.UsrCod))
       /***** Update my last accessed course, tab and time of click in database *****/
       // WhatToSearch, LastAccNotif remain unchanged
       DB_QueryUPDATE ("can not update last user's data",
@@ -3966,10 +3984,11 @@ static void Usr_WriteUsrData (const char *BgColor,
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
   {
    /***** Get the number of teachers in a course from database ******/
-   DB_BuildQuery ("SELECT COUNT(*) FROM crs_usr"
-	          " WHERE CrsCod=%ld AND Role=%u",
-		  CrsCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in a course");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of users in a course",
+			     "SELECT COUNT(*) FROM crs_usr"
+			     " WHERE CrsCod=%ld AND Role=%u",
+			     CrsCod,(unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -3979,13 +3998,15 @@ unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
   {
    /***** Get the number of users in courses of a degree from database ******/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-	          " FROM courses,crs_usr"
-                  " WHERE courses.DegCod=%ld"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role=%u",
-		  DegCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in courses of a degree");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of users"
+			     " in courses of a degree",
+			     "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+			     " FROM courses,crs_usr"
+			     " WHERE courses.DegCod=%ld"
+			     " AND courses.CrsCod=crs_usr.CrsCod"
+			     " AND crs_usr.Role=%u",
+			     DegCod,(unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -3995,25 +4016,33 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
   {
+   unsigned NumUsrs;
+
    /***** Get the number of users in courses of a centre from database ******/
    if (Role == Rol_UNK)	// Any user
-      DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-		     " FROM degrees,courses,crs_usr"
-		     " WHERE degrees.CtrCod=%ld"
-		     " AND degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod",
-		     CtrCod);
+      NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of a centre",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM degrees,courses,crs_usr"
+				" WHERE degrees.CtrCod=%ld"
+				" AND degrees.DegCod=courses.DegCod"
+				" AND courses.CrsCod=crs_usr.CrsCod",
+				CtrCod);
    else
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of centres
-      DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-		     " FROM degrees,courses,crs_usr"
-		     " WHERE degrees.CtrCod=%ld"
-		     " AND degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
-		     CtrCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in courses of a centre");
+      NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of a centre",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM degrees,courses,crs_usr"
+				" WHERE degrees.CtrCod=%ld"
+				" AND degrees.DegCod=courses.DegCod"
+				" AND courses.CrsCod=crs_usr.CrsCod"
+				" AND crs_usr.Role=%u",
+				CtrCod,(unsigned) Role);
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -4023,27 +4052,35 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
 
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
   {
+   unsigned NumUsrs;
+
    /***** Get the number of users in courses of an institution from database ******/
    if (Role == Rol_UNK)	// Any user
-      DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-		     " FROM centres,degrees,courses,crs_usr"
-		     " WHERE centres.InsCod=%ld"
-		     " AND centres.CtrCod=degrees.CtrCod"
-		     " AND degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod",
-		     InsCod);
+      NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of an institution",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM centres,degrees,courses,crs_usr"
+				" WHERE centres.InsCod=%ld"
+				" AND centres.CtrCod=degrees.CtrCod"
+				" AND degrees.DegCod=courses.DegCod"
+				" AND courses.CrsCod=crs_usr.CrsCod",
+				InsCod);
    else
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of institutions
-      DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-		     " FROM centres,degrees,courses,crs_usr"
-		     " WHERE centres.InsCod=%ld"
-		     " AND centres.CtrCod=degrees.CtrCod"
-		     " AND degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
-		     InsCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in courses of an institution");
+      NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of an institution",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM centres,degrees,courses,crs_usr"
+				" WHERE centres.InsCod=%ld"
+				" AND centres.CtrCod=degrees.CtrCod"
+				" AND degrees.DegCod=courses.DegCod"
+				" AND courses.CrsCod=crs_usr.CrsCod"
+				" AND crs_usr.Role=%u",
+				InsCod,(unsigned) Role);
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -4053,29 +4090,37 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
 
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
   {
+   unsigned NumUsrs;
+
    /***** Get the number of users in courses of a country from database ******/
    if (Role == Rol_UNK)	// Any user
-      DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-		     " FROM institutions,centres,degrees,courses,crs_usr"
-		     " WHERE institutions.CtyCod=%ld"
-		     " AND institutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=degrees.CtrCod"
-		     " AND degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod",
-		     CtyCod);
+      NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of a country",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+			        " FROM institutions,centres,degrees,courses,crs_usr"
+			        " WHERE institutions.CtyCod=%ld"
+			        " AND institutions.InsCod=centres.InsCod"
+			        " AND centres.CtrCod=degrees.CtrCod"
+			        " AND degrees.DegCod=courses.DegCod"
+			        " AND courses.CrsCod=crs_usr.CrsCod",
+			        CtyCod);
    else
       // This query is very slow.
       // It's a bad idea to get number of teachers or students for a big list of countries
-      DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-		     " FROM institutions,centres,degrees,courses,crs_usr"
-		     " WHERE institutions.CtyCod=%ld"
-		     " AND institutions.InsCod=centres.InsCod"
-		     " AND centres.CtrCod=degrees.CtrCod"
-		     " AND degrees.DegCod=courses.DegCod"
-		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role=%u",
-		     CtyCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in courses of a country");
+      NumUsrs =
+      (unsigned) DB_QueryCOUNT ("can not get the number of users"
+				" in courses of a country",
+				"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				" FROM institutions,centres,degrees,courses,crs_usr"
+				" WHERE institutions.CtyCod=%ld"
+				" AND institutions.InsCod=centres.InsCod"
+				" AND centres.CtrCod=degrees.CtrCod"
+				" AND degrees.DegCod=courses.DegCod"
+				" AND courses.CrsCod=crs_usr.CrsCod"
+				" AND crs_usr.Role=%u",
+				CtyCod,(unsigned) Role);
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -4146,14 +4191,17 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
   {
    /***** Get the number of teachers
           from the current institution in a department *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-	          " FROM usr_data,crs_usr"
-                  " WHERE usr_data.InsCod=%ld AND usr_data.DptCod=%ld"
-                  " AND usr_data.UsrCod=crs_usr.UsrCod"
-                  " AND crs_usr.Role IN (%u,%u)",
-		  Gbl.CurrentIns.Ins.InsCod,DptCod,
-		  (unsigned) Rol_NET,(unsigned) Rol_TCH);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of teachers in a department");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of teachers"
+			     " in a department",
+			     "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			     " FROM usr_data,crs_usr"
+			     " WHERE usr_data.InsCod=%ld"
+			     " AND usr_data.DptCod=%ld"
+			     " AND usr_data.UsrCod=crs_usr.UsrCod"
+			     " AND crs_usr.Role IN (%u,%u)",
+			     Gbl.CurrentIns.Ins.InsCod,DptCod,
+			     (unsigned) Rol_NET,(unsigned) Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -4163,8 +4211,11 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
   {
    /***** Get the number of users in a country from database *****/
-   DB_BuildQuery ("SELECT COUNT(UsrCod) FROM usr_data WHERE CtyCod=%ld",CtyCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in a country");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of users in a country",
+			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     " WHERE CtyCod=%ld",
+			     CtyCod);
   }
 
 /*****************************************************************************/
@@ -4174,8 +4225,12 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
 unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
   {
    /***** Get the number of users in an institution from database *****/
-   DB_BuildQuery ("SELECT COUNT(UsrCod) FROM usr_data WHERE InsCod=%ld",InsCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in an institution");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of users"
+			     " in an institution",
+			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     " WHERE InsCod=%ld",
+			     InsCod);
   }
 
 /*****************************************************************************/
@@ -4185,8 +4240,11 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
   {
    /***** Get the number of users in a centre from database *****/
-   DB_BuildQuery ("SELECT COUNT(UsrCod) FROM usr_data WHERE CtrCod=%ld",CtrCod);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of users in a centre");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of users in a centre",
+			     "SELECT COUNT(UsrCod) FROM usr_data"
+			     " WHERE CtrCod=%ld",
+			     CtrCod);
   }
 
 /*****************************************************************************/
@@ -4196,12 +4254,14 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
   {
    /***** Get the number of teachers in a centre from database *****/
-   DB_BuildQuery ("SELECT COUNT(DISTINCT usr_data.UsrCod)"
-	          " FROM usr_data,crs_usr"
-                  " WHERE usr_data.CtrCod=%ld"
-                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role=%u",
-		  CtrCod,(unsigned) Rol_TCH);
-   return (unsigned) DB_QueryCOUNT_new ("can not get the number of teachers in a centre");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get the number of teachers in a centre",
+			     "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			     " FROM usr_data,crs_usr"
+			     " WHERE usr_data.CtrCod=%ld"
+			     " AND usr_data.UsrCod=crs_usr.UsrCod"
+			     " AND crs_usr.Role=%u",
+			     CtrCod,(unsigned) Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -8437,8 +8497,10 @@ bool Usr_ChkIfUsrCodExists (long UsrCod)
       return false;
 
    /***** Get if a user exists in database *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_data WHERE UsrCod=%ld",UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if a user exists") != 0);
+   return (DB_QueryCOUNT ("can not check if a user exists",
+			  "SELECT COUNT(*) FROM usr_data"
+			  " WHERE UsrCod=%ld",
+			  UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -8480,8 +8542,9 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 unsigned Usr_GetTotalNumberOfUsersInPlatform (void)
   {
    /***** Get number of users from database *****/
-   DB_BuildQuery ("SELECT COUNT(UsrCod) FROM usr_data");
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of users");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users",
+			     "SELECT COUNT(UsrCod) FROM usr_data");
   }
 
 /*****************************************************************************/
@@ -8499,6 +8562,7 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
    Rol_Role_t FirstRoleRequested;
    bool MoreThanOneRole;
    bool FirstRole;
+   unsigned NumUsrs;
 
    /***** Reset roles that can not belong to courses.
           Only
@@ -8570,102 +8634,128 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
      {
       case Sco_SCOPE_SYS:
          if (AnyUserInCourses)	// Any user
-            DB_BuildQuery ("SELECT COUNT(DISTINCT UsrCod)"
-        	           " FROM crs_usr");
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT UsrCod)"
+        			      " FROM crs_usr");
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT UsrCod)"
-        	           " FROM crs_usr WHERE Role%s",
-			   SubQueryRoles);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT UsrCod)"
+        			      " FROM crs_usr WHERE Role%s",
+				      SubQueryRoles);
          break;
       case Sco_SCOPE_CTY:
          if (AnyUserInCourses)	// Any user
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-			   Gbl.CurrentCty.Cty.CtyCod);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod",
+				      Gbl.CurrentCty.Cty.CtyCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role%s",
-			   Gbl.CurrentCty.Cty.CtyCod,SubQueryRoles);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM institutions,centres,degrees,courses,crs_usr"
+				      " WHERE institutions.CtyCod=%ld"
+				      " AND institutions.InsCod=centres.InsCod"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.Role%s",
+				      Gbl.CurrentCty.Cty.CtyCod,SubQueryRoles);
          break;
       case Sco_SCOPE_INS:
          if (AnyUserInCourses)	// Any user
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-			   Gbl.CurrentIns.Ins.InsCod);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod",
+				      Gbl.CurrentIns.Ins.InsCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role%s",
-			   Gbl.CurrentIns.Ins.InsCod,SubQueryRoles);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM centres,degrees,courses,crs_usr"
+				      " WHERE centres.InsCod=%ld"
+				      " AND centres.CtrCod=degrees.CtrCod"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.Role%s",
+				      Gbl.CurrentIns.Ins.InsCod,SubQueryRoles);
          break;
       case Sco_SCOPE_CTR:
          if (AnyUserInCourses)	// Any user
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM degrees,courses,crs_usr"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-			   Gbl.CurrentCtr.Ctr.CtrCod);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM degrees,courses,crs_usr"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod",
+				      Gbl.CurrentCtr.Ctr.CtrCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM degrees,courses,crs_usr"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role%s",
-			   Gbl.CurrentCtr.Ctr.CtrCod,SubQueryRoles);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM degrees,courses,crs_usr"
+				      " WHERE degrees.CtrCod=%ld"
+				      " AND degrees.DegCod=courses.DegCod"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.Role%s",
+				      Gbl.CurrentCtr.Ctr.CtrCod,SubQueryRoles);
          break;
       case Sco_SCOPE_DEG:
          if (AnyUserInCourses)	// Any user
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM courses,crs_usr"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-			   Gbl.CurrentDeg.Deg.DegCod);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM courses,crs_usr"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod",
+				      Gbl.CurrentDeg.Deg.DegCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM courses,crs_usr"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role%s",
-			   Gbl.CurrentDeg.Deg.DegCod,SubQueryRoles);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+				      " FROM courses,crs_usr"
+				      " WHERE courses.DegCod=%ld"
+				      " AND courses.CrsCod=crs_usr.CrsCod"
+				      " AND crs_usr.Role%s",
+				      Gbl.CurrentDeg.Deg.DegCod,SubQueryRoles);
          break;
       case Sco_SCOPE_CRS:
          if (AnyUserInCourses)	// Any user
-            DB_BuildQuery ("SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                           " WHERE CrsCod=%ld",
-			   Gbl.CurrentCrs.Crs.CrsCod);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
+				      " WHERE CrsCod=%ld",
+				      Gbl.CurrentCrs.Crs.CrsCod);
          else
-            DB_BuildQuery ("SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                           " WHERE CrsCod=%ld"
-                           " AND Role%s",
-			   Gbl.CurrentCrs.Crs.CrsCod,SubQueryRoles);
+            NumUsrs =
+            (unsigned) DB_QueryCOUNT ("can not get number of users",
+        			      "SELECT COUNT(DISTINCT UsrCod)"
+        			      " FROM crs_usr"
+				      " WHERE CrsCod=%ld"
+				      " AND Role%s",
+				      Gbl.CurrentCrs.Crs.CrsCod,SubQueryRoles);
          break;
       default:
 	 Lay_WrongScopeExit ();
+	 NumUsrs = 0;	// Not reached. Initialized to avoid warning.
 	 break;
      }
 
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of users");
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -8675,9 +8765,11 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
 unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
   {
    /***** Get number of users who are in table of users but not in table courses-users *****/
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_data WHERE UsrCod NOT IN"
-                  " (SELECT DISTINCT(UsrCod) FROM crs_usr)");
-   return (unsigned) DB_QueryCOUNT_new ("can not get number of users who do not belong to any course");
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users"
+			     " who do not belong to any course",
+			     "SELECT COUNT(*) FROM usr_data WHERE UsrCod NOT IN"
+			     " (SELECT DISTINCT(UsrCod) FROM crs_usr)");
   }
 
 /*****************************************************************************/
@@ -8990,8 +9082,9 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 
 bool Usr_CheckIfUsrBanned (long UsrCod)
   {
-   DB_BuildQuery ("SELECT COUNT(*) FROM usr_banned WHERE UsrCod=%ld",UsrCod);
-   return (DB_QueryCOUNT_new ("can not check if user is banned") != 0);
+   return (DB_QueryCOUNT ("can not check if user is banned",
+			  "SELECT COUNT(*) FROM usr_banned WHERE UsrCod=%ld",
+			  UsrCod) != 0);
   }
 
 /*****************************************************************************/
