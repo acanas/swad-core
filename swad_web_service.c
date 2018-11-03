@@ -3424,16 +3424,16 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
    if (!MsgAlreadyInserted)      // The message is inserted only once in the table of messages sent
      {
       /***** Insert message subject and body in the database *****/
-      /* Build query */
-      DB_BuildQuery ("INSERT INTO msg_content"
-	             " (Subject,Content,ImageName,ImageTitle,ImageURL)"
-                     " VALUES"
-                     " ('%s','%s','','','')",
-                     Subject,Content);
       /* Get the code of the inserted item */
-      NewMsgCod = DB_QueryINSERTandReturnCode_new ("can not create message");
+      NewMsgCod =
+      DB_QueryINSERTandReturnCode ("can not create message",
+				   "INSERT INTO msg_content"
+				   " (Subject,Content,ImageName,ImageTitle,ImageURL)"
+				   " VALUES"
+				   " ('%s','%s','','','')",
+				   Subject,Content);
 
-      /***** Insert message in sent messages *****/
+      /* Insert message in sent messages */
       DB_QueryINSERT ("can not create message",
 		      "INSERT INTO msg_snt"
 	              " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
@@ -3528,16 +3528,15 @@ int swad__sendNotice (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Insert notice in the database *****/
-   /* Build query */
-   DB_BuildQuery ("INSERT INTO notices"
-	          " (CrsCod,UsrCod,CreatTime,Content,Status)"
-                  " VALUES"
-                  " (%ld,%ld,NOW(),'%s',%u)",
-		  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-		  body,(unsigned) Not_ACTIVE_NOTICE);
-
    /* Get the code of the inserted item */
-   NotCod = DB_QueryINSERTandReturnCode_new ("can not create message");
+   NotCod =
+   DB_QueryINSERTandReturnCode ("can not create message",
+				"INSERT INTO notices"
+				" (CrsCod,UsrCod,CreatTime,Content,Status)"
+				" VALUES"
+				" (%ld,%ld,NOW(),'%s',%u)",
+				Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+				body,(unsigned) Not_ACTIVE_NOTICE);
 
    /***** Create notifications *****/
    // TODO: create notifications

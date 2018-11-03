@@ -51,7 +51,7 @@ unsigned long DB_QueryCOUNT_old (char **Query,const char *MsgError);
 void DB_QueryINSERT (const char *MsgError,const char *fmt,...);
 void DB_QueryINSERT_old (char **Query,const char *MsgError);
 
-long DB_QueryINSERTandReturnCode_new (const char *MsgError);
+long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...);
 
 void DB_QueryREPLACE (const char *MsgError,const char *fmt,...);
 

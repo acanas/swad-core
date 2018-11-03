@@ -1950,12 +1950,14 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
      }
 
    /***** Store social note *****/
-   DB_BuildQuery ("INSERT INTO social_notes"
-	          " (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
-                  " VALUES"
-                  " (%u,%ld,%ld,%ld,'N',NOW())",
-		  (unsigned) NoteType,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
-   SocPub->NotCod = DB_QueryINSERTandReturnCode_new ("can not create new social note");
+   SocPub->NotCod =
+   DB_QueryINSERTandReturnCode ("can not create new social note",
+				"INSERT INTO social_notes"
+				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
+				" VALUES"
+				" (%u,%ld,%ld,%ld,'N',NOW())",
+				(unsigned) NoteType,
+				Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
 
    /***** Publish social note in timeline *****/
    SocPub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -2122,14 +2124,15 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
   {
    /***** Publish social note in timeline *****/
-   DB_BuildQuery ("INSERT INTO social_pubs"
-	          " (NotCod,PublisherCod,PubType,TimePublish)"
-                  " VALUES"
-                  " (%ld,%ld,%u,NOW())",
-		  SocPub->NotCod,
-		  SocPub->PublisherCod,
-		  (unsigned) SocPub->PubType);
-   SocPub->PubCod = DB_QueryINSERTandReturnCode_new ("can not publish social note");
+   SocPub->PubCod =
+   DB_QueryINSERTandReturnCode ("can not publish social note",
+				"INSERT INTO social_pubs"
+				" (NotCod,PublisherCod,PubType,TimePublish)"
+				" VALUES"
+				" (%ld,%ld,%u,NOW())",
+				SocPub->NotCod,
+				SocPub->PublisherCod,
+				(unsigned) SocPub->PubType);
   }
 
 /*****************************************************************************/
@@ -2300,17 +2303,18 @@ static long Soc_ReceiveSocialPost (void)
 
       /***** Publish *****/
       /* Insert post content in the database */
-      DB_BuildQuery ("INSERT INTO social_posts"
-	             " (Content,ImageName,ImageTitle,ImageURL)"
-	             " VALUES"
-	             " ('%s','%s','%s','%s')",
-		     Content,
-		     Image.Name,
-		     (Image.Name[0] &&	// Save image title only if image attached
-		      Image.Title) ? Image.Title : "",
-		     (Image.Name[0] &&	// Save image URL   only if image attached
-		      Image.URL  ) ? Image.URL   : "");
-      PstCod = DB_QueryINSERTandReturnCode_new ("can not create post");
+      PstCod =
+      DB_QueryINSERTandReturnCode ("can not create post",
+				   "INSERT INTO social_posts"
+				   " (Content,ImageName,ImageTitle,ImageURL)"
+				   " VALUES"
+				   " ('%s','%s','%s','%s')",
+				   Content,
+				   Image.Name,
+				   (Image.Name[0] &&	// Save image title only if image attached
+				    Image.Title) ? Image.Title : "",
+				   (Image.Name[0] &&	// Save image URL   only if image attached
+				    Image.URL  ) ? Image.URL   : "");
 
       /* Insert post in social notes */
       Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);

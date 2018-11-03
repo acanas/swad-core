@@ -1710,18 +1710,19 @@ void Agd_RecFormEvent (void)
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
    /***** Create a new event *****/
-   DB_BuildQuery ("INSERT INTO agendas"
-		  " (UsrCod,StartTime,EndTime,Event,Location,Txt)"
-		  " VALUES"
-		  " (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-		  "'%s','%s','%s')",
-		  AgdEvent->UsrCod,
-		  AgdEvent->TimeUTC[Agd_START_TIME],
-		  AgdEvent->TimeUTC[Agd_END_TIME  ],
-		  AgdEvent->Event,
-		  AgdEvent->Location,
-		  Txt);
-   AgdEvent->AgdCod = DB_QueryINSERTandReturnCode_new ("can not create new event");
+   AgdEvent->AgdCod =
+   DB_QueryINSERTandReturnCode ("can not create new event",
+				"INSERT INTO agendas"
+				" (UsrCod,StartTime,EndTime,Event,Location,Txt)"
+				" VALUES"
+				" (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				"'%s','%s','%s')",
+				AgdEvent->UsrCod,
+				AgdEvent->TimeUTC[Agd_START_TIME],
+				AgdEvent->TimeUTC[Agd_END_TIME  ],
+				AgdEvent->Event,
+				AgdEvent->Location,
+				Txt);
   }
 
 /*****************************************************************************/

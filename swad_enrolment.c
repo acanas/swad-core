@@ -2054,16 +2054,15 @@ void Enr_SignUpInCrs (void)
          DB_QueryUPDATE_new ("can not update enrolment request");
         }
       else                // No request in database for this user in this course
-        {
-         DB_BuildQuery ("INSERT INTO crs_usr_requests"
-			" (CrsCod,UsrCod,Role,RequestTime)"
-			" VALUES"
-			" (%ld,%ld,%u,NOW())",
-		        Gbl.CurrentCrs.Crs.CrsCod,
-		        Gbl.Usrs.Me.UsrDat.UsrCod,
-		        (unsigned) RoleFromForm);
-         ReqCod = DB_QueryINSERTandReturnCode_new ("can not save enrolment request");
-        }
+         ReqCod =
+         DB_QueryINSERTandReturnCode ("can not save enrolment request",
+				      "INSERT INTO crs_usr_requests"
+				      " (CrsCod,UsrCod,Role,RequestTime)"
+				      " VALUES"
+				      " (%ld,%ld,%u,NOW())",
+				      Gbl.CurrentCrs.Crs.CrsCod,
+				      Gbl.Usrs.Me.UsrDat.UsrCod,
+				      (unsigned) RoleFromForm);
 
       /***** Show confirmation message *****/
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

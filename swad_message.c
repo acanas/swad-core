@@ -1313,15 +1313,16 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
       Img_MoveImageToDefinitiveDirectory (Image);
 
    /***** Insert message subject and content in the database *****/
-   DB_BuildQuery ("INSERT INTO msg_content"
-		  " (Subject,Content,ImageName,ImageTitle,ImageURL)"
-		  " VALUES"
-		  " ('%s','%s','%s','%s','%s')",
-	          Subject,Content,
-	          Image->Name,
-	          Image->Title ? Image->Title : "",
-	          Image->URL   ? Image->URL   : "");
-   MsgCod = DB_QueryINSERTandReturnCode_new ("can not create message");
+   MsgCod =
+   DB_QueryINSERTandReturnCode ("can not create message",
+				"INSERT INTO msg_content"
+				" (Subject,Content,ImageName,ImageTitle,ImageURL)"
+				" VALUES"
+				" ('%s','%s','%s','%s','%s')",
+				Subject,Content,
+				Image->Name,
+				Image->Title ? Image->Title : "",
+				Image->URL   ? Image->URL   : "");
 
    /***** Insert message in sent messages *****/
    DB_QueryINSERT ("can not create message",

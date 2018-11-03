@@ -293,24 +293,25 @@ void Sta_LogAccess (const char *Comments)
 
    /***** Insert access into database *****/
    /* Log access in historical log (log_full) */
-   DB_BuildQuery ("INSERT INTO log_full "
-	          "(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
-	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                  " VALUES "
-                  "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
-                  "%u,NOW(),%ld,%ld,'%s')",
-		  ActCod,
-		  Gbl.CurrentCty.Cty.CtyCod,
-		  Gbl.CurrentIns.Ins.InsCod,
-		  Gbl.CurrentCtr.Ctr.CtrCod,
-		  Gbl.CurrentDeg.Deg.DegCod,
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) RoleToStore,
-		  Gbl.TimeGenerationInMicroseconds,
-		  Gbl.TimeSendInMicroseconds,
-		  Gbl.IP);
-   LogCod = DB_QueryINSERTandReturnCode_new ("can not log access (full)");
+   LogCod =
+   DB_QueryINSERTandReturnCode ("can not log access (full)",
+				"INSERT INTO log_full "
+				"(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
+				"Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
+				" VALUES "
+				"(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
+				"%u,NOW(),%ld,%ld,'%s')",
+				ActCod,
+				Gbl.CurrentCty.Cty.CtyCod,
+				Gbl.CurrentIns.Ins.InsCod,
+				Gbl.CurrentCtr.Ctr.CtrCod,
+				Gbl.CurrentDeg.Deg.DegCod,
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				(unsigned) RoleToStore,
+				Gbl.TimeGenerationInMicroseconds,
+				Gbl.TimeSendInMicroseconds,
+				Gbl.IP);
 
    /* Log access in recent log (log_recent) */
    DB_QueryINSERT ("can not log access (recent)",

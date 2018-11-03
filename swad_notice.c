@@ -165,13 +165,15 @@ void Not_ReceiveNotice (void)
 static long Not_InsertNoticeInDB (const char *Content)
   {
    /***** Insert notice in the database *****/
-   DB_BuildQuery ("INSERT INTO notices"
-		  " (CrsCod,UsrCod,CreatTime,Content,Status)"
-		  " VALUES"
-		  " (%ld,%ld,NOW(),'%s',%u)",
-	          Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Content,(unsigned) Not_ACTIVE_NOTICE);
-   return DB_QueryINSERTandReturnCode_new ("can not create notice");
+   return
+   DB_QueryINSERTandReturnCode ("can not create notice",
+				"INSERT INTO notices"
+				" (CrsCod,UsrCod,CreatTime,Content,Status)"
+				" VALUES"
+				" (%ld,%ld,NOW(),'%s',%u)",
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Content,(unsigned) Not_ACTIVE_NOTICE);
   }
 
 /*****************************************************************************/

@@ -1355,23 +1355,24 @@ void Att_RecFormAttEvent (void)
 void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
    /***** Create a new attendance event *****/
-   DB_BuildQuery ("INSERT INTO att_events"
-		  " (CrsCod,Hidden,UsrCod,"
-		  "StartTime,EndTime,CommentTchVisible,Title,Txt)"
-		  " VALUES"
-		  " (%ld,'%c',%ld,"
-		  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Att->Hidden ? 'Y' :
-        	                'N',
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  Att->TimeUTC[Att_START_TIME],
-                  Att->TimeUTC[Att_END_TIME  ],
-                  Att->CommentTchVisible ? 'Y' :
-        	                           'N',
-                  Att->Title,
-                  Txt);
-   Att->AttCod = DB_QueryINSERTandReturnCode_new ("can not create new attendance event");
+   Att->AttCod =
+   DB_QueryINSERTandReturnCode ("can not create new attendance event",
+				"INSERT INTO att_events"
+				" (CrsCod,Hidden,UsrCod,"
+				"StartTime,EndTime,CommentTchVisible,Title,Txt)"
+				" VALUES"
+				" (%ld,'%c',%ld,"
+				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Att->Hidden ? 'Y' :
+					      'N',
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Att->TimeUTC[Att_START_TIME],
+				Att->TimeUTC[Att_END_TIME  ],
+				Att->CommentTchVisible ? 'Y' :
+							 'N',
+				Att->Title,
+				Txt);
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)

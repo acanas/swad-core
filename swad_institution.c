@@ -2412,17 +2412,18 @@ static void Ins_CreateInstitution (unsigned Status)
    extern const char *Txt_Created_new_institution_X;
 
    /***** Create a new institution *****/
-   DB_BuildQuery ("INSERT INTO institutions"
-		  " (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
-		  " VALUES"
-		  " (%ld,%u,%ld,'%s','%s','%s')",
-	          Gbl.Inss.EditingIns.CtyCod,
-	          Status,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Inss.EditingIns.ShrtName,
-	          Gbl.Inss.EditingIns.FullName,
-	          Gbl.Inss.EditingIns.WWW);
-   Gbl.Inss.EditingIns.InsCod = DB_QueryINSERTandReturnCode_new ("can not create institution");
+   Gbl.Inss.EditingIns.InsCod =
+   DB_QueryINSERTandReturnCode ("can not create institution",
+				"INSERT INTO institutions"
+				" (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
+				" VALUES"
+				" (%ld,%u,%ld,'%s','%s','%s')",
+				Gbl.Inss.EditingIns.CtyCod,
+				Status,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Gbl.Inss.EditingIns.ShrtName,
+				Gbl.Inss.EditingIns.FullName,
+				Gbl.Inss.EditingIns.WWW);
 
    /***** Write message to show the change made
 	  and put button to go to institution created *****/

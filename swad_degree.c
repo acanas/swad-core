@@ -1144,17 +1144,18 @@ static void Deg_CreateDegree (unsigned Status)
    extern const char *Txt_Created_new_degree_X;
 
    /***** Create a new degree *****/
-   DB_BuildQuery ("INSERT INTO degrees (CtrCod,DegTypCod,Status,"
-		  "RequesterUsrCod,ShortName,FullName,WWW)"
-		  " VALUES (%ld,%ld,%u,%ld,'%s','%s','%s')",
-	          Gbl.Degs.EditingDeg.CtrCod,
-	          Gbl.Degs.EditingDeg.DegTypCod,
-	          Status,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Degs.EditingDeg.ShrtName,
-	          Gbl.Degs.EditingDeg.FullName,
-	          Gbl.Degs.EditingDeg.WWW);
-   Gbl.Degs.EditingDeg.DegCod = DB_QueryINSERTandReturnCode_new ("can not create a new degree");
+   Gbl.Degs.EditingDeg.DegCod =
+   DB_QueryINSERTandReturnCode ("can not create a new degree",
+				"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
+				"RequesterUsrCod,ShortName,FullName,WWW)"
+				" VALUES (%ld,%ld,%u,%ld,'%s','%s','%s')",
+				Gbl.Degs.EditingDeg.CtrCod,
+				Gbl.Degs.EditingDeg.DegTypCod,
+				Status,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Gbl.Degs.EditingDeg.ShrtName,
+				Gbl.Degs.EditingDeg.FullName,
+				Gbl.Degs.EditingDeg.WWW);
 
    /***** Write message to show the change made
           and put button to go to degree created *****/

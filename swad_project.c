@@ -3314,30 +3314,31 @@ static void Prj_CreateProject (struct Project *Prj)
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 
    /***** Create a new project *****/
-   DB_BuildQuery ("INSERT INTO projects"
-		  " (CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
-		  "CreatTime,ModifTime,"
-		  "Title,Description,Knowledge,Materials,URL)"
-		  " VALUES"
-		  " (%ld,%ld,'%c','%c',%u,'%s',"
-		  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-		  "'%s','%s','%s','%s','%s')",
-	          Gbl.CurrentCrs.Crs.CrsCod,
-	          Prj->DptCod,
-	          Prj->Hidden == Prj_HIDDEN ? 'Y' :
-					      'N',
-	          Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
-						        'N',
-	          Prj->NumStds,
-	          Prj_Proposal_DB[Prj->Proposal],
-	          Prj->CreatTime,
-	          Prj->ModifTime,
-	          Prj->Title,
-	          Prj->Description,
-	          Prj->Knowledge,
-	          Prj->Materials,
-	          Prj->URL);
-   Prj->PrjCod = DB_QueryINSERTandReturnCode_new ("can not create new project");
+   Prj->PrjCod =
+   DB_QueryINSERTandReturnCode ("can not create new project",
+				"INSERT INTO projects"
+				" (CrsCod,DptCod,Hidden,Preassigned,NumStds,Proposal,"
+				"CreatTime,ModifTime,"
+				"Title,Description,Knowledge,Materials,URL)"
+				" VALUES"
+				" (%ld,%ld,'%c','%c',%u,'%s',"
+				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				"'%s','%s','%s','%s','%s')",
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Prj->DptCod,
+				Prj->Hidden == Prj_HIDDEN ? 'Y' :
+							    'N',
+				Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+								      'N',
+				Prj->NumStds,
+				Prj_Proposal_DB[Prj->Proposal],
+				Prj->CreatTime,
+				Prj->ModifTime,
+				Prj->Title,
+				Prj->Description,
+				Prj->Knowledge,
+				Prj->Materials,
+				Prj->URL);
 
    /***** Insert creator as first tutor *****/
    DB_QueryINSERT ("can not add tutor",

@@ -1929,16 +1929,20 @@ static void Crs_CreateCourse (unsigned Status)
    extern const char *Txt_Created_new_course_X;
 
    /***** Insert new course into pending requests *****/
-   DB_BuildQuery ("INSERT INTO courses"
-		  " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
-		  " VALUES"
-		  " (%ld,%u,'%s',%u,%ld,'%s','%s')",
-                  Gbl.Degs.EditingCrs.DegCod,Gbl.Degs.EditingCrs.Year,
-                  Gbl.Degs.EditingCrs.InstitutionalCrsCod,
-                  Status,
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  Gbl.Degs.EditingCrs.ShrtName,Gbl.Degs.EditingCrs.FullName);
-   Gbl.Degs.EditingCrs.CrsCod = DB_QueryINSERTandReturnCode_new ("can not create a new course");
+   Gbl.Degs.EditingCrs.CrsCod =
+   DB_QueryINSERTandReturnCode ("can not create a new course",
+				"INSERT INTO courses"
+				" (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,"
+				"ShortName,FullName)"
+				" VALUES"
+				" (%ld,%u,'%s',%u,%ld,"
+				"'%s','%s')",
+				Gbl.Degs.EditingCrs.DegCod,Gbl.Degs.EditingCrs.Year,
+				Gbl.Degs.EditingCrs.InstitutionalCrsCod,
+				Status,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Gbl.Degs.EditingCrs.ShrtName,
+				Gbl.Degs.EditingCrs.FullName);
 
    /***** Create success message *****/
    Gbl.Alert.Type = Ale_SUCCESS;

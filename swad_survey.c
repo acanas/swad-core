@@ -2253,20 +2253,21 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
    extern const char *Txt_Created_new_survey_X;
 
    /***** Create a new survey *****/
-   DB_BuildQuery ("INSERT INTO surveys"
-	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-                  " VALUES"
-                  " ('%s',%ld,'N',%u,%ld,"
-                  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-                  "'%s','%s')",
-		  Sco_ScopeDB[Svy->Scope],Svy->Cod,
-		  Svy->Roles,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Svy->TimeUTC[Svy_START_TIME],
-		  Svy->TimeUTC[Svy_END_TIME  ],
-		  Svy->Title,
-		  Txt);
-   Svy->SvyCod = DB_QueryINSERTandReturnCode_new ("can not create new survey");
+   Svy->SvyCod =
+   DB_QueryINSERTandReturnCode ("can not create new survey",
+				"INSERT INTO surveys"
+				" (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+				" VALUES"
+				" ('%s',%ld,'N',%u,%ld,"
+				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				"'%s','%s')",
+				Sco_ScopeDB[Svy->Scope],Svy->Cod,
+				Svy->Roles,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Svy->TimeUTC[Svy_START_TIME],
+				Svy->TimeUTC[Svy_END_TIME  ],
+				Svy->Title,
+				Txt);
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
@@ -3022,13 +3023,14 @@ void Svy_ReceiveQst (void)
          SvyQst.QstInd = Svy_GetNextQuestionIndexInSvy (SvyCod);
 
          /* Insert question in the table of questions */
-         DB_BuildQuery ("INSERT INTO svy_questions"
-                        " (SvyCod,QstInd,AnsType,Stem)"
-                        " VALUES"
-                        " (%ld,%u,'%s','%s')",
-			SvyCod,SvyQst.QstInd,
-			Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
-         SvyQst.QstCod = DB_QueryINSERTandReturnCode_new ("can not create question");
+         SvyQst.QstCod =
+         DB_QueryINSERTandReturnCode ("can not create question",
+				      "INSERT INTO svy_questions"
+				      " (SvyCod,QstInd,AnsType,Stem)"
+				      " VALUES"
+				      " (%ld,%u,'%s','%s')",
+				      SvyCod,SvyQst.QstInd,
+				      Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
         }
       else			// It's an existing question
         {

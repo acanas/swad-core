@@ -507,18 +507,19 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
       Img_MoveImageToDefinitiveDirectory (Image);
 
    /***** Insert forum post in the database *****/
-   DB_BuildQuery ("INSERT INTO forum_post"
-		  " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-		  "Subject,Content,ImageName,ImageTitle,ImageURL)"
-		  " VALUES"
-		  " (%ld,%ld,NOW(),NOW(),0,"
-		  "'%s','%s','%s','%s','%s')",
-	          ThrCod,UsrCod,
-	          Subject,Content,
-	          Image->Name,
-	          Image->Title ? Image->Title : "",
-	          Image->URL   ? Image->URL   : "");
-   PstCod = DB_QueryINSERTandReturnCode_new ("can not create a new post in a forum");
+   PstCod =
+   DB_QueryINSERTandReturnCode ("can not create a new post in a forum",
+				"INSERT INTO forum_post"
+				" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
+				"Subject,Content,ImageName,ImageTitle,ImageURL)"
+				" VALUES"
+				" (%ld,%ld,NOW(),NOW(),0,"
+				"'%s','%s','%s','%s','%s')",
+				ThrCod,UsrCod,
+				Subject,Content,
+				Image->Name,
+				Image->Title ? Image->Title : "",
+				Image->URL   ? Image->URL   : "");
 
    return PstCod;
   }
@@ -595,14 +596,15 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
 static long For_InsertForumThread (long FirstPstCod)
   {
    /***** Insert new thread in the database *****/
-   DB_BuildQuery ("INSERT INTO forum_thread"
-		  " (ForumType,Location,FirstPstCod,LastPstCod)"
-		  " VALUES"
-		  " (%u,%ld,%ld,%ld)",
-	          (unsigned) Gbl.Forum.ForumSelected.Type,
-	          Gbl.Forum.ForumSelected.Location,
-	          FirstPstCod,FirstPstCod);
-   return DB_QueryINSERTandReturnCode_new ("can not create a new thread in a forum");
+   return
+   DB_QueryINSERTandReturnCode ("can not create a new thread in a forum",
+				"INSERT INTO forum_thread"
+				" (ForumType,Location,FirstPstCod,LastPstCod)"
+				" VALUES"
+				" (%u,%ld,%ld,%ld)",
+				(unsigned) Gbl.Forum.ForumSelected.Type,
+				Gbl.Forum.ForumSelected.Location,
+				FirstPstCod,FirstPstCod);
   }
 
 /*****************************************************************************/

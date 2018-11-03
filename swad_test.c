@@ -6301,12 +6301,13 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
   {
    /***** Insert new tag into tst_tags table *****/
-   DB_BuildQuery ("INSERT INTO tst_tags"
-	          " (CrsCod,ChangeTime,TagTxt,TagHidden)"
-                  " VALUES"
-                  " (%ld,NOW(),'%s','N')",
-		  CrsCod,TagTxt);
-   return DB_QueryINSERTandReturnCode_new ("can not create new tag");
+   return
+   DB_QueryINSERTandReturnCode ("can not create new tag",
+				"INSERT INTO tst_tags"
+				" (CrsCod,ChangeTime,TagTxt,TagHidden)"
+				" VALUES"
+				" (%ld,NOW(),'%s','N')",
+				CrsCod,TagTxt);
   }
 
 /*****************************************************************************/
@@ -6541,24 +6542,25 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    if (Gbl.Test.QstCod < 0)	// It's a new question
      {
       /***** Insert question in the table of questions *****/
-      DB_BuildQuery ("INSERT INTO tst_questions"
-	             " (CrsCod,EditTime,AnsType,Shuffle,"
-	             "Stem,Feedback,ImageName,ImageTitle,ImageURL,"
-	             "NumHits,Score)"
-                     " VALUES"
-                     " (%ld,NOW(),'%s','%c',"
-                     "'%s','%s','%s','%s','%s',"
-                     "0,0)",
-		     Gbl.CurrentCrs.Crs.CrsCod,
-		     Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-		     Gbl.Test.Shuffle ? 'Y' :
-					'N',
-		     Gbl.Test.Stem.Text,
-		     Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-		     Gbl.Test.Image.Name,
-		     Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
-		     Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "");
-      Gbl.Test.QstCod = DB_QueryINSERTandReturnCode_new ("can not create question");
+      Gbl.Test.QstCod =
+      DB_QueryINSERTandReturnCode ("can not create question",
+				   "INSERT INTO tst_questions"
+				   " (CrsCod,EditTime,AnsType,Shuffle,"
+				   "Stem,Feedback,ImageName,ImageTitle,ImageURL,"
+				   "NumHits,Score)"
+				   " VALUES"
+				   " (%ld,NOW(),'%s','%c',"
+				   "'%s','%s','%s','%s','%s',"
+				   "0,0)",
+				   Gbl.CurrentCrs.Crs.CrsCod,
+				   Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+				   Gbl.Test.Shuffle ? 'Y' :
+						      'N',
+				   Gbl.Test.Stem.Text,
+				   Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+				   Gbl.Test.Image.Name,
+				   Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
+				   Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "");
 
       /* Update image status */
       if (Gbl.Test.Image.Name[0])
@@ -7593,16 +7595,17 @@ void Tst_SelDatesToSeeMyTestResults (void)
 static long Tst_CreateTestResultInDB (void)
   {
    /***** Insert new test result into table *****/
-   DB_BuildQuery ("INSERT INTO tst_exams"
-	          " (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
-                  " VALUES"
-                  " (%ld,%ld,'%c',NOW(),%u)",
-		  Gbl.CurrentCrs.Crs.CrsCod,
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Gbl.Test.AllowTeachers ? 'Y' :
-					   'N',
-		  Gbl.Test.NumQsts);
-   return DB_QueryINSERTandReturnCode_new ("can not create new test result");
+   return
+   DB_QueryINSERTandReturnCode ("can not create new test result",
+				"INSERT INTO tst_exams"
+				" (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
+				" VALUES"
+				" (%ld,%ld,'%c',NOW(),%u)",
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Gbl.Test.AllowTeachers ? 'Y' :
+							 'N',
+				Gbl.Test.NumQsts);
   }
 
 /*****************************************************************************/

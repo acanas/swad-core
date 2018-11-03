@@ -2180,20 +2180,21 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    extern const char *Txt_Created_new_game_X;
 
    /***** Create a new game *****/
-   DB_BuildQuery ("INSERT INTO games"
-		  " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-		  " VALUES"
-		  " ('%s',%ld,'N',%u,%ld,"
-		  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-		  "'%s','%s')",
-	          Sco_ScopeDB[Game->Scope],Game->Cod,
-	          Game->Roles,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Game->TimeUTC[Gam_START_TIME],
-	          Game->TimeUTC[Gam_END_TIME  ],
-	          Game->Title,
-	          Txt);
-   Game->GamCod = DB_QueryINSERTandReturnCode_new ("can not create new game");
+   Game->GamCod =
+   DB_QueryINSERTandReturnCode ("can not create new game",
+				"INSERT INTO games"
+				" (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+				" VALUES"
+				" ('%s',%ld,'N',%u,%ld,"
+				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				"'%s','%s')",
+				Sco_ScopeDB[Game->Scope],Game->Cod,
+				Game->Roles,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Game->TimeUTC[Gam_START_TIME],
+				Game->TimeUTC[Gam_END_TIME  ],
+				Game->Title,
+				Txt);
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)

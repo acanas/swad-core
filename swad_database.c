@@ -3244,19 +3244,31 @@ void DB_QueryINSERT_old (char **Query,const char *MsgError)
 /** Make an INSERT query in database and return code of last inserted item ***/
 /*****************************************************************************/
 
-long DB_QueryINSERTandReturnCode_new (const char *MsgError)
+long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
   {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query = NULL;
    int Result;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
 
    /***** Check that query string pointer
           does point to an allocated string *****/
-   if (Gbl.DB.QueryPtr == NULL)
+   if (Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,Gbl.DB.QueryPtr);	// Returns 0 on success
-   free ((void *) Gbl.DB.QueryPtr);
-   Gbl.DB.QueryPtr = NULL;
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 

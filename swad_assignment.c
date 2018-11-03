@@ -1495,19 +1495,20 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
 static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
   {
    /***** Create a new assignment *****/
-   DB_BuildQuery ("INSERT INTO assignments"
-		  " (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
-		  " VALUES"
-		  " (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-		  "'%s','%s','%s')",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  Asg->TimeUTC[Dat_START_TIME],
-                  Asg->TimeUTC[Dat_END_TIME  ],
-                  Asg->Title,
-                  Asg->Folder,
-                  Txt);
-   Asg->AsgCod = DB_QueryINSERTandReturnCode_new ("can not create new assignment");
+   Asg->AsgCod =
+   DB_QueryINSERTandReturnCode ("can not create new assignment",
+				"INSERT INTO assignments"
+				" (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
+				" VALUES"
+				" (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				"'%s','%s','%s')",
+				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Asg->TimeUTC[Dat_START_TIME],
+				Asg->TimeUTC[Dat_END_TIME  ],
+				Asg->Title,
+				Asg->Folder,
+				Txt);
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
