@@ -2845,6 +2845,9 @@ int swad__sendAttendanceUsers (struct soap *soap,
 		     " WHERE AttCod=%ld%s",
 		     Att.AttCod,SubQueryAllUsrs);
 
+      /* Free memory for subquery string */
+      free ((void *) SubQueryAllUsrs);
+
       /* Clean table att_usr */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
      }

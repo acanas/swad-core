@@ -175,8 +175,8 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
                                      struct ListUsrCods *ListUsrCods,
                                      bool OnlyConfirmedIDs)
   {
-   char *Query = NULL;
-   char SubQuery[256];
+   char *SubQueryAllUsrs = NULL;
+   char SubQueryOneUsr[1 + ID_MAX_BYTES_USR_ID + 1 + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t MaxLength;
@@ -190,53 +190,54 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	 if (EncryptedPassword[0])
 	    CheckPassword = true;
 
-      /***** Allocate memory for query string *****/
+      /***** Allocate memory for subquery string *****/
       MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
+      if ((SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
+      SubQueryAllUsrs[0] = '\0';
 
       /***** Get user's code(s) from database *****/
-      Str_Copy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
-				      " WHERE usr_IDs.UsrID IN (" :
-				      "SELECT DISTINCT(UsrCod) FROM usr_IDs"
-				      " WHERE UsrID IN (",
-		MaxLength);
       for (NumID = 0;
 	   NumID < UsrDat->IDs.Num;
 	   NumID++)
 	{
 	 if (NumID)
-	    Str_Concat (Query,",",
+	    Str_Concat (SubQueryAllUsrs,",",
 	                MaxLength);
-	 sprintf (SubQuery,"'%s'",UsrDat->IDs.List[NumID].ID);
+	 sprintf (SubQueryOneUsr,"'%s'",UsrDat->IDs.List[NumID].ID);
 
-	 Str_Concat (Query,SubQuery,
+	 Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,
 	             MaxLength);
 	}
-      Str_Concat (Query,")",
-                  MaxLength);
 
       if (CheckPassword)
-	{
-	 if (OnlyConfirmedIDs)
-	    Str_Concat (Query," AND usr_IDs.Confirmed='Y'",
-	                MaxLength);
-
+        {
 	 // Get user's code if I have written the correct password
 	 // or if password in database is empty (new user)
-	 sprintf (SubQuery," AND usr_IDs.UsrCod=usr_data.UsrCod"
-			   " AND (usr_data.Password='%s' OR usr_data.Password='')",
-		  EncryptedPassword);
-	 Str_Concat (Query,SubQuery,
-	             MaxLength);
-	}
-      else if (OnlyConfirmedIDs)
-	 Str_Concat (Query," AND Confirmed='Y'",
-	             MaxLength);
+	 ListUsrCods->NumUsrs =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
+				    "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
+				    " WHERE usr_IDs.UsrID IN (%s)"
+				    "%s"
+				    " AND usr_IDs.UsrCod=usr_data.UsrCod"
+				    " AND (usr_data.Password='%s' OR usr_data.Password='')",
+				    SubQueryAllUsrs,
+	                            OnlyConfirmedIDs ? " AND usr_IDs.Confirmed='Y'" :
+	                        	               "",
+				    EncryptedPassword);
+        }
+      else
+	 ListUsrCods->NumUsrs =
+	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
+				    "SELECT DISTINCT(UsrCod) FROM usr_IDs"
+				    " WHERE UsrID IN (%s)"
+				    "%s",
+				    SubQueryAllUsrs,
+				    OnlyConfirmedIDs ? " AND Confirmed='Y'" :
+	                        	               "");
 
-      ListUsrCods->NumUsrs =
-      (unsigned) DB_QuerySELECTusingQueryStr (&Query,&mysql_res,
-					      "can not get user's codes");
+      /***** Free memory for subquery string *****/
+      free ((void *) SubQueryAllUsrs);
 
       if (ListUsrCods->NumUsrs)
         {

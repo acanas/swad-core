@@ -2487,6 +2487,9 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
 				" WHERE AttCod=%ld"
 				" AND UsrCod IN (%s) AND Present='Y'",
 				AttCod,SubQueryAllUsrs);
+
+      /***** Free memory for subquery string *****/
+      free ((void *) SubQueryAllUsrs);
      }
    return NumStdsInAttEvent;
   }
