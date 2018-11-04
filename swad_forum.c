@@ -869,7 +869,8 @@ unsigned long For_GetNumPostsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
    return DB_QueryCOUNT ("can not number of posts from a user",
-			 "SELECT COUNT(*) FROM forum_post WHERE UsrCod=%ld",
+			 "SELECT COUNT(*) FROM forum_post"
+			 " WHERE UsrCod=%ld",
 			 UsrCod);
   }
 

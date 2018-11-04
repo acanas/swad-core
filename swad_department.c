@@ -1076,9 +1076,7 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
 unsigned Dpt_GetTotalNumberOfDepartments (void)
   {
    /***** Get number of departments from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of departments",
-			     "SELECT COUNT(*) FROM departments");
+   return (unsigned) DB_GetNumRowsTable ("departments");
   }
 
 /*****************************************************************************/

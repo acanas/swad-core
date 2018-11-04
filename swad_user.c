@@ -965,7 +965,8 @@ unsigned Usr_GetNumCrssOfUsr (long UsrCod)
    /***** Get the number of courses of a user from database ******/
    return
    (unsigned) DB_QueryCOUNT ("can not get the number of courses of a user",
-			     "SELECT COUNT(*) FROM crs_usr WHERE UsrCod=%ld",
+			     "SELECT COUNT(*) FROM crs_usr"
+			     " WHERE UsrCod=%ld",
 			     UsrCod);
   }
 
@@ -5242,7 +5243,9 @@ static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t S
      }
 
    /***** Query database *****/
-   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned) DB_QuerySELECT_old (Query,&mysql_res,"can not get list of users")))
+   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs =
+   (unsigned) DB_QuerySELECTusingQueryStr (Query,&mysql_res,
+					   "can not get list of users")))
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {
@@ -9083,7 +9086,8 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 bool Usr_CheckIfUsrBanned (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if user is banned",
-			  "SELECT COUNT(*) FROM usr_banned WHERE UsrCod=%ld",
+			  "SELECT COUNT(*) FROM usr_banned"
+			  " WHERE UsrCod=%ld",
 			  UsrCod) != 0);
   }
 
@@ -9094,7 +9098,8 @@ bool Usr_CheckIfUsrBanned (long UsrCod)
 void Usr_RemoveUsrFromUsrBanned (long UsrCod)
   {
    DB_QueryDELETE ("can not remove user from users banned",
-		   "DELETE FROM usr_banned WHERE UsrCod=%ld",
+		   "DELETE FROM usr_banned"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 

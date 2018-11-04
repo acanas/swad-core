@@ -2850,8 +2850,7 @@ static void Ctr_CreateCentre (unsigned Status)
 unsigned Ctr_GetNumCtrsTotal (void)
   {
    /***** Get total number of centres from database *****/
-   return (unsigned) DB_QueryCOUNT ("can not get total number of centres",
-				    "SELECT COUNT(*) FROM centres");
+   return (unsigned) DB_GetNumRowsTable ("centres");
   }
 
 /*****************************************************************************/

@@ -358,7 +358,8 @@ static int Svc_CheckIdSession (const char *IdSession)
 
    /***** Query if session identifier already exists in database *****/
    if (DB_QueryCOUNT ("can not get session data",
-		      "SELECT COUNT(*) FROM sessions WHERE SessionId='%s'",
+		      "SELECT COUNT(*) FROM sessions"
+		      " WHERE SessionId='%s'",
                       IdSession) != 1)
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad session identifier",
@@ -413,7 +414,8 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 
    /***** Query if course code already exists in database *****/
    if (DB_QueryCOUNT ("can not get course",
-		      "SELECT COUNT(*) FROM courses WHERE CrsCod=%ld",
+		      "SELECT COUNT(*) FROM courses"
+		      " WHERE CrsCod=%ld",
 		      CrsCod) != 1)
       return soap_sender_fault (Gbl.soap,
 	                        "Bad course code",
@@ -456,7 +458,8 @@ static int Svc_GenerateNewWSKey (long UsrCod,
 
    /***** Check that key does not exist in database *****/
    if (DB_QueryCOUNT ("can not get existence of key",
-		      "SELECT COUNT(*) FROM ws_keys WHERE WSKey='%s'",
+		      "SELECT COUNT(*) FROM ws_keys"
+		      " WHERE WSKey='%s'",
 		      WSKey))
       return soap_receiver_fault (Gbl.soap,
 	                          "Error when generating key",
@@ -2734,8 +2737,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
    char LongStr[1 + 10 + 1];
    struct UsrData UsrDat;
    unsigned NumCodsInList;
-   char *Query = NULL;
-   char SubQuery[256];
+   char *SubQueryAllUsrs = NULL;
+   char SubQueryOneUsr[1 + 1 + 10 + 1];
    size_t Length = 0;	// Initialized to avoid warning
 
    /***** Initializations *****/
@@ -2786,15 +2789,13 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
 	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
 
-      /* Start query used to mark not present users as absent */
+      /* Allocate subquery used to mark not present users as absent */
       Length = 256 + NumCodsInList * (1 + 1 + 10 + 1) - 1;
-      if ((Query = (char *) malloc (Length + 1)) == NULL)
+      if ((SubQueryAllUsrs = (char *) malloc (Length + 1)) == NULL)
 	 return soap_receiver_fault (Gbl.soap,
 	                             "Not enough memory",
 	                             "Not enough memory to store list of users");
-      sprintf (Query,"UPDATE att_usr SET Present='N'"
-		     " WHERE AttCod=%ld",
-	       Att.AttCod);
+      SubQueryAllUsrs[0] = '\0';
      }
 
    for (Ptr = users;
@@ -2815,11 +2816,17 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	       /* Add this user to query used to mark not present users as absent */
 	       if (setOthersAsAbsent)
 		 {
-		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",%ld" :
-								       " AND UsrCod NOT IN (%ld",
-			   UsrDat.UsrCod);
-		  Str_Concat (Query,SubQuery,
-		              Length);
+		  if (sendAttendanceUsersOut->numUsers)
+		    {
+		     snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
+			       ",%ld",UsrDat.UsrCod);
+		     Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,
+		                 Length);
+		    }
+		  else
+		     snprintf (SubQueryAllUsrs,Length,
+			       " AND UsrCod NOT IN (%ld",
+			       UsrDat.UsrCod);
 		 }
 
 	       sendAttendanceUsersOut->numUsers++;
@@ -2830,10 +2837,13 @@ int swad__sendAttendanceUsers (struct soap *soap,
      {
       /* Mark not present users as absent in table of users */
       if (sendAttendanceUsersOut->numUsers)
-         Str_Concat (Query,")",
+         Str_Concat (SubQueryAllUsrs,")",
                      Length);
 
-      DB_QueryUPDATE_old (&Query,"can not set other users as absent");
+      DB_QueryUPDATE ("can not set other users as absent",
+      		     "UPDATE att_usr SET Present='N'"
+		     " WHERE AttCod=%ld%s",
+		     Att.AttCod,SubQueryAllUsrs);
 
       /* Clean table att_usr */
       Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Att.AttCod);
@@ -3362,7 +3372,8 @@ int swad__sendMessage (struct soap *soap,
    if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in "to"
      {
       /***** Get users *****/
-      NumRows = DB_QuerySELECT_old (&Query,&mysql_res,"can not get users");
+      NumRows = DB_QuerySELECTusingQueryStr (&Query,&mysql_res,
+					     "can not get users");
 
       sendMessageOut->numUsers = (int) NumRows;
       sendMessageOut->usersArray.__size = (int) NumRows;

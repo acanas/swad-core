@@ -2449,41 +2449,44 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
 
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList)
   {
-   char *Query = NULL;
-   char SubQuery[1 + 1 + 10 + 1];
+   char *SubQueryAllUsrs = NULL;
+   char SubQueryOneUsr[1 + 1 + 10 + 1];
    unsigned NumStd;
    unsigned NumStdsInAttEvent = 0;
    size_t MaxLength;
 
    if (NumStdsInList)
      {
-      /***** Allocate space for query *****/
+      /***** Allocate space for subquery *****/
       MaxLength = 256 + NumStdsInList * (1 + 1 + 10);
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
+      if ((SubQueryAllUsrs = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
+      SubQueryAllUsrs[0] = '\0';
 
       /***** Count number of students registered in an event in database *****/
-      snprintf (Query,MaxLength + 1,
-	        "SELECT COUNT(*) FROM att_usr"
-                " WHERE AttCod=%ld"
-	        " AND UsrCod IN (",
-                AttCod);
       for (NumStd = 0;
 	   NumStd < NumStdsInList;
 	   NumStd++)
-	{
-         snprintf (SubQuery,sizeof (SubQuery),
-                   NumStd ? ",%ld" :
-                	    "%ld",
-                   LstSelectedUsrCods[NumStd]);
-	 Str_Concat (Query,SubQuery,
-	             MaxLength);
-	}
-      Str_Concat (Query,") AND Present='Y'",
-                  MaxLength);
+	 if (NumStd)
+	   {
+	    snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),
+		      ",%ld",
+		      LstSelectedUsrCods[NumStd]);
+	    Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,
+			MaxLength);
+	   }
+	 else
+	    snprintf (SubQueryAllUsrs,sizeof (SubQueryOneUsr),
+		      "%ld",
+		      LstSelectedUsrCods[NumStd]);
 
-
-      NumStdsInAttEvent = (unsigned) DB_QueryCOUNT_old (&Query,"can not get number of students from a list who are registered in an event");
+      NumStdsInAttEvent =
+      (unsigned) DB_QueryCOUNT ("can not get number of students"
+			        " from a list who are registered in an event",
+				"SELECT COUNT(*) FROM att_usr"
+				" WHERE AttCod=%ld"
+				" AND UsrCod IN (%s) AND Present='Y'",
+				AttCod,SubQueryAllUsrs);
      }
    return NumStdsInAttEvent;
   }

@@ -2077,9 +2077,11 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
    /***** Get the number of unique messages sent by any teacher from this course *****/
    return DB_QueryCOUNT ("can not get the number of messages sent by a user",
 			 "SELECT"
-			 " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod=%ld)"
+			 " (SELECT COUNT(*) FROM msg_snt"
+			 " WHERE UsrCod=%ld)"
 			 " +"
-			 " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod=%ld)",
+			 " (SELECT COUNT(*) FROM msg_snt_deleted"
+			 " WHERE UsrCod=%ld)",
 			 UsrCod,
 			 UsrCod);
   }
@@ -2109,10 +2111,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         NumMsgs =
-         (unsigned) DB_QueryCOUNT ("can not get number of sent messages",
-				   "SELECT COUNT(*) FROM %s",
-				   Table);
+	 NumMsgs = (unsigned) DB_GetNumRowsTable (Table);
          break;
       case Sco_SCOPE_CTY:
          NumMsgs =
@@ -2202,11 +2201,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
          switch (Scope)
            {
             case Sco_SCOPE_SYS:
-               NumMsgs =
-               (unsigned) DB_QueryCOUNT ("can not get number"
-        				 " of received messages",
-					 "SELECT COUNT(*) FROM %s",
-					 Table);
+               NumMsgs = (unsigned) DB_GetNumRowsTable (Table);
                break;
             case Sco_SCOPE_CTY:
                NumMsgs =
@@ -3450,9 +3445,11 @@ static void Msg_WriteMsgTo (long MsgCod)
    NumRecipientsTotal =
    (unsigned) DB_QueryCOUNT ("can not get number of recipients",
 			     "SELECT "
-			     "(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod=%ld)"
+			     "(SELECT COUNT(*) FROM msg_rcv"
+			     " WHERE MsgCod=%ld)"
 			     " + "
-			     "(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod=%ld)",
+			     "(SELECT COUNT(*) FROM msg_rcv_deleted"
+			     " WHERE MsgCod=%ld)",
 			     MsgCod,MsgCod);
 
    /***** Get recipients of a message from database *****/

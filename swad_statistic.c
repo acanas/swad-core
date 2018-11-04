@@ -287,8 +287,6 @@ void Sta_GetRemoteAddr (void)
 
 void Sta_LogAccess (const char *Comments)
   {
-   size_t MaxLength;
-   char *Query = NULL;
    long LogCod;
    long ActCod = Act_GetActCod (Gbl.Action.Act);
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.Role.LoggedBeforeCloseSession :
@@ -336,47 +334,23 @@ void Sta_LogAccess (const char *Comments)
 		   Gbl.TimeSendInMicroseconds,
 		   Gbl.IP);
 
+   /* Log comments */
    if (Comments)
-     {
-      /* Allocate space for query */
-      MaxLength = 512 + strlen (Comments);
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
+      DB_QueryINSERT ("can not log access (comments)",
+		      "INSERT INTO log_comments"
+		      " (LogCod,Comments)"
+		      " VALUES"
+		      " (%ld,'%s')",
+		      Comments);
 
-      /* Log comments */
-      snprintf (Query,MaxLength,
-	        "INSERT INTO log_comments"
-		" (LogCod,Comments)"
-		" VALUES"
-		" (%ld,'",
-	        LogCod);
-      Str_AddStrToQuery (Query,Comments,MaxLength);
-      Str_Concat (Query,"')",
-                  MaxLength);
-
-      DB_QueryINSERT_old (&Query,"can not log access (comments)");
-     }
-
+   /* Log search string */
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
-     {
-      /* Allocate space for query */
-      MaxLength = 512 + strlen (Gbl.Search.Str);
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_NotEnoughMemoryExit ();
-
-      /* Log search string */
-      snprintf (Query,MaxLength,
-	        "INSERT INTO log_search"
-		" (LogCod,SearchStr)"
-		" VALUES"
-		" (%ld,'",
-	        LogCod);
-      Str_AddStrToQuery (Query,Gbl.Search.Str,MaxLength);
-      Str_Concat (Query,"')",
-                  MaxLength);
-
-      DB_QueryINSERT_old (&Query,"can not log access (search)");
-     }
+      DB_QueryINSERT ("can not log access (search)",
+		      "INSERT INTO log_search"
+		      " (LogCod,SearchStr)"
+		      " VALUES"
+		      " (%ld,'%s')",
+		      Gbl.Search.Str);
 
    if (Gbl.WebService.IsWebService)
       /* Log web service plugin and function */
@@ -1484,7 +1458,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Ale_ShowAlert (Ale_INFO,Query);
    */
    /***** Make the query *****/
-   NumRows = DB_QuerySELECT_old (&Query,&mysql_res,"can not get clicks");
+   NumRows = DB_QuerySELECTusingQueryStr (&Query,&mysql_res,
+					  "can not get clicks");
 
    /***** Count the number of rows in result *****/
    if (NumRows == 0)

@@ -2442,9 +2442,7 @@ static void Ins_CreateInstitution (unsigned Status)
 unsigned Ins_GetNumInssTotal (void)
   {
    /***** Get total number of degrees from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the total number of institutions",
-			     "SELECT COUNT(*) FROM institutions");
+   return (unsigned) DB_GetNumRowsTable ("institutions");
   }
 
 /*****************************************************************************/

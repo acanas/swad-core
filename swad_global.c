@@ -126,7 +126,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;
-   Gbl.DB.QueryPtr = NULL;
 
    Gbl.HiddenParamsInsertedIntoDB = false;
 

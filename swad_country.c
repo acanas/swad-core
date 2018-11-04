@@ -2284,9 +2284,7 @@ static void Cty_CreateCountry (struct Country *Cty)
 unsigned Cty_GetNumCtysTotal (void)
   {
    /***** Get total number of countries from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the total number of countries",
-			     "SELECT COUNT(*) FROM countries");
+   return (unsigned) DB_GetNumRowsTable ("countries");
   }
 
 /*****************************************************************************/

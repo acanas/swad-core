@@ -41,20 +41,18 @@ void DB_BuildQuery_old (char **Query,const char *fmt,...);
 
 unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
                               const char *fmt,...);
-unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char *MsgError);
+unsigned long DB_QuerySELECTusingQueryStr (char **Query,MYSQL_RES **mysql_res,const char *MsgError);
 
+unsigned long DB_GetNumRowsTable (const char *Table);
 unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...);
-unsigned long DB_QueryCOUNT_old (char **Query,const char *MsgError);
 
 void DB_QueryINSERT (const char *MsgError,const char *fmt,...);
-void DB_QueryINSERT_old (char **Query,const char *MsgError);
 
 long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...);
 
 void DB_QueryREPLACE (const char *MsgError,const char *fmt,...);
 
 void DB_QueryUPDATE (const char *MsgError,const char *fmt,...);
-void DB_QueryUPDATE_old (char **Query,const char *MsgError);
 
 void DB_QueryDELETE (const char *MsgError,const char *fmt,...);
 

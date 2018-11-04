@@ -2327,7 +2327,8 @@ static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
   {
    /***** Get if a survey is associated to a group from database *****/
    return (DB_QueryCOUNT ("can not check if a survey is associated to groups",
-			  "SELECT COUNT(*) FROM svy_grp WHERE SvyCod=%ld",
+			  "SELECT COUNT(*) FROM svy_grp"
+			  " WHERE SvyCod=%ld",
 			  SvyCod) != 0);
   }
 

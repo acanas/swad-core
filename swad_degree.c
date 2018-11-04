@@ -2338,9 +2338,7 @@ void Deg_RemoveLogo (void)
 unsigned Deg_GetNumDegsTotal (void)
   {
    /***** Get total number of degrees from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get the total number of degrees",
-			     "SELECT COUNT(*) FROM degrees");
+   return (unsigned) DB_GetNumRowsTable ("degrees");
   }
 
 /*****************************************************************************/

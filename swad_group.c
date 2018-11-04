@@ -3174,7 +3174,8 @@ bool Grp_CheckIfGroupExists (long GrpCod)
   {
    /***** Get if a group exists from database *****/
    return (DB_QueryCOUNT ("can not check if a group exists",
-			  "SELECT COUNT(*) FROM crs_grp WHERE GrpCod=%ld",
+			  "SELECT COUNT(*) FROM crs_grp"
+			  " WHERE GrpCod=%ld",
 			  GrpCod) != 0);
   }
 

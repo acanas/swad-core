@@ -1672,7 +1672,8 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void)
   {
    /***** Get available tags from database *****/
    return (DB_QueryCOUNT ("can not check if course has tags",
-			  "SELECT COUNT(*) FROM tst_tags WHERE CrsCod=%ld",
+			  "SELECT COUNT(*) FROM tst_tags"
+			  " WHERE CrsCod=%ld",
 			  Gbl.CurrentCrs.Crs.CrsCod) != 0);
   }
 
@@ -2650,7 +2651,8 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
      }
 
    /* Make the query */
-   NumRows = DB_QuerySELECT_old (&Query,mysql_res,"can not get questions");
+   NumRows = DB_QuerySELECTusingQueryStr (&Query,mysql_res,
+					  "can not get questions");
 
    if (NumRows == 0)
       Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
@@ -2786,7 +2788,8 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   return DB_QuerySELECT_old (&Query,mysql_res,"can not get questions");
+   return DB_QuerySELECTusingQueryStr (&Query,mysql_res,
+				       "can not get questions");
   }
 
 /*****************************************************************************/

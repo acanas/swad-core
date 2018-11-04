@@ -697,7 +697,8 @@ static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
   {
    /***** Select number of rows with values already calculated *****/
    return DB_QueryCOUNT ("can not get number of users with a figure",
-			 "SELECT COUNT(*) FROM usr_figures WHERE %s>=0",
+			 "SELECT COUNT(*) FROM usr_figures"
+			 " WHERE %s>=0",
 			 FieldName);
   }
 
@@ -887,7 +888,8 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       /***** Get number of clicks from database *****/
       UsrFigures.NumClicks =
       (long) DB_QueryCOUNT ("can not get number of clicks",
-			    "SELECT COUNT(*) FROM log_full WHERE UsrCod=%ld",
+			    "SELECT COUNT(*) FROM log_full"
+			    " WHERE UsrCod=%ld",
 			    UsrCod);
 
       /***** Update number of clicks in user's figures *****/
@@ -1067,7 +1069,8 @@ void Prf_RemoveUsrFigures (long UsrCod)
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not get user's first click",
-			  "SELECT COUNT(*) FROM usr_figures WHERE UsrCod=%ld",
+			  "SELECT COUNT(*) FROM usr_figures"
+			  " WHERE UsrCod=%ld",
 			  UsrCod) != 0);
   }
 

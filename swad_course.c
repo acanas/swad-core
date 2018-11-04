@@ -794,8 +794,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 unsigned Crs_GetNumCrssTotal (void)
   {
    /***** Get total number of courses from database *****/
-   return (unsigned) DB_QueryCOUNT ("can not get the total number of courses",
-				    "SELECT COUNT(*) FROM courses");
+   return (unsigned) DB_GetNumRowsTable ("courses");
   }
 
 /*****************************************************************************/

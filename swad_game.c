@@ -2255,7 +2255,8 @@ static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
   {
    /***** Get if a game is associated to a group from database *****/
    return (DB_QueryCOUNT ("can not check if a game is associated to groups",
-			  "SELECT COUNT(*) FROM gam_grp WHERE GamCod=%ld",
+			  "SELECT COUNT(*) FROM gam_grp"
+			  " WHERE GamCod=%ld",
 			  GamCod) != 0);
   }
 

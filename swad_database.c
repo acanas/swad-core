@@ -3105,10 +3105,10 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   return DB_QuerySELECT_old (&Query,mysql_res,MsgError);
+   return DB_QuerySELECTusingQueryStr (&Query,mysql_res,MsgError);
   }
 
-unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
+unsigned long DB_QuerySELECTusingQueryStr (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
   {
    int Result;
 
@@ -3136,11 +3136,22 @@ unsigned long DB_QuerySELECT_old (char **Query,MYSQL_RES **mysql_res,const char 
 /**************** Make a SELECT COUNT query from database ********************/
 /*****************************************************************************/
 
+unsigned long DB_GetNumRowsTable (const char *Table)
+  {
+   /***** Get total number of centres from database *****/
+   return DB_QueryCOUNT ("can not get number of rows in table",
+			 "SELECT COUNT(*) FROM %s",
+			 Table);
+  }
+
 unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
    char *Query = NULL;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
@@ -3151,17 +3162,8 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   return DB_QueryCOUNT_old (&Query,MsgError);
-  }
-
-unsigned long DB_QueryCOUNT_old (char **Query,const char *MsgError)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
    /***** Make query "SELECT COUNT(*) FROM..." *****/
-   DB_QuerySELECT_old (Query,&mysql_res,MsgError);
+   DB_QuerySELECTusingQueryStr (&Query,&mysql_res,MsgError);
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
@@ -3183,6 +3185,7 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
    va_list ap;
    int NumBytesPrinted;
    char *Query = NULL;
+   int Result;
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
@@ -3193,26 +3196,15 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   DB_QueryINSERT_old (&Query,MsgError);
-  }
-
-/*****************************************************************************/
-/******************** Make an INSERT query in database ***********************/
-/*****************************************************************************/
-
-void DB_QueryINSERT_old (char **Query,const char *MsgError)
-  {
-   int Result;
-
    /***** Check that query string pointer
           does point to an allocated string *****/
-   if (*Query == NULL)
+   if (Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,*Query);	// Returns 0 on success
-   free ((void *) *Query);
-   *Query = NULL;
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3295,6 +3287,7 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
    va_list ap;
    int NumBytesPrinted;
    char *Query = NULL;
+   int Result;
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
@@ -3305,28 +3298,22 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   DB_QueryUPDATE_old (&Query,MsgError);
-  }
-
-void DB_QueryUPDATE_old (char **Query,const char *MsgError)
-  {
-   int Result;
 
    /***** Check that query string pointer
           does point to an allocated string *****/
-   if (*Query == NULL)
+   if (Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,*Query);	// Returns 0 on success
-   free ((void *) *Query);
-   *Query = NULL;
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
+   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
    /***** Return number of rows updated *****/
    //return (unsigned long) mysql_affected_rows (&Gbl.mysql);
-  }
+   }
 
 /*****************************************************************************/
 /******************** Make a DELETE query from database **********************/

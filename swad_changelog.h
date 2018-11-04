@@ -355,10 +355,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.13 (2018-11-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.13.2 (2018-11-04)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.13.2:  Nov 04, 2018  Code refactoring related to databse queries. (236555 lines)
+	Version 18.13.1:  Nov 04, 2018  New database funtion to get number of rows in a table. (236572 lines)
 	Version 18.13:    Nov 03, 2018  Joining building and performing query into one function. (236563 lines)
 	Version 18.12:    Nov 03, 2018  Code refactoring in statistics. (236471 lines)
 	Version 18.11.27: Nov 03, 2018  Joining building and performing query into one function.
