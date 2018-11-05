@@ -341,7 +341,7 @@ void Sta_LogAccess (const char *Comments)
 		      " (LogCod,Comments)"
 		      " VALUES"
 		      " (%ld,'%s')",
-		      Comments);
+		      LogCod,Comments);
 
    /* Log search string */
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])

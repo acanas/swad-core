@@ -3094,7 +3094,7 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
 
    va_start (ap,fmt);
    NumBytesPrinted = vasprintf (&Query,fmt,ap);
@@ -3108,7 +3108,8 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
    return DB_QuerySELECTusingQueryStr (&Query,mysql_res,MsgError);
   }
 
-unsigned long DB_QuerySELECTusingQueryStr (char **Query,MYSQL_RES **mysql_res,const char *MsgError)
+unsigned long DB_QuerySELECTusingQueryStr (char **Query,
+					   MYSQL_RES **mysql_res,const char *MsgError)
   {
    int Result;
 
@@ -3148,7 +3149,7 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -3184,7 +3185,7 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    int Result;
 
    va_start (ap,fmt);
@@ -3196,15 +3197,9 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
    free ((void *) Query);
-   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3217,7 +3212,7 @@ long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    int Result;
 
    va_start (ap,fmt);
@@ -3229,15 +3224,9 @@ long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
    free ((void *) Query);
-   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
@@ -3253,7 +3242,7 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    int Result;
 
    va_start (ap,fmt);
@@ -3265,15 +3254,9 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
    free ((void *) Query);
-   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3286,7 +3269,7 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    int Result;
 
    va_start (ap,fmt);
@@ -3298,21 +3281,11 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
    free ((void *) Query);
-   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
-
-   /***** Return number of rows updated *****/
-   //return (unsigned long) mysql_affected_rows (&Gbl.mysql);
    }
 
 /*****************************************************************************/
@@ -3323,7 +3296,7 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    int Result;
 
    va_start (ap,fmt);
@@ -3335,15 +3308,9 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
    free ((void *) Query);
-   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }
@@ -3356,7 +3323,7 @@ void DB_Query (const char *MsgError,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Query = NULL;
+   char *Query;
    int Result;
 
    va_start (ap,fmt);
@@ -3368,15 +3335,9 @@ void DB_Query (const char *MsgError,const char *fmt,...)
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   /***** Check that query string pointer
-          does point to an allocated string *****/
-   if (Query == NULL)
-      Lay_ShowErrorAndExit ("Wrong query string.");
-
    /***** Query database and free query string pointer *****/
    Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
    free ((void *) Query);
-   Query = NULL;
    if (Result)
       DB_ExitOnMySQLError (MsgError);
   }

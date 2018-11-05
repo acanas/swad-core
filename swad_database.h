@@ -41,7 +41,8 @@ void DB_BuildQuery_old (char **Query,const char *fmt,...);
 
 unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
                               const char *fmt,...);
-unsigned long DB_QuerySELECTusingQueryStr (char **Query,MYSQL_RES **mysql_res,const char *MsgError);
+unsigned long DB_QuerySELECTusingQueryStr (char **Query,
+					   MYSQL_RES **mysql_res,const char *MsgError);
 
 unsigned long DB_GetNumRowsTable (const char *Table);
 unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...);
