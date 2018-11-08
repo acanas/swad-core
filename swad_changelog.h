@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.13.4 (2018-11-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.13.5 (2018-11-08)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.13.5:  Nov 08, 2018  New file extension allowed, requested by Javier Fernández Baldomero: .gdb (GNU Debugger Script). (? lines)
 	Version 18.13.4:  Nov 05, 2018  Fixed bug in listing of users.
 					Fixed bug when logging comments.
 					Code refactoring in queries. (236535 lines)

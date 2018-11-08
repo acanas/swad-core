@@ -1227,6 +1227,7 @@ const char *Brw_FileExtensionsAllowed[] =
    "eps"  ,
    "fdf"  ,
    "flv"  ,
+   "gdb"  ,	// GNU Debugger Script
    "ggb"  ,
    "ggt"  ,
    "gif"  ,
