@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.13.5 (2018-11-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.13.6 (2018-11-09)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.13.6:  Nov 09, 2018  Fixed bug in file browser links, reported by Alberto Prieto Espinosa. (236549 lines)
 	Version 18.13.5:  Nov 08, 2018  New file extension allowed, requested by Javier Fernández Baldomero: .gdb (GNU Debugger Script). (236540 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/filext16x16/gdb16x16.gif /var/www/html/swad/icon/filext16x16/

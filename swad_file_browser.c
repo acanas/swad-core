@@ -2637,9 +2637,14 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
    const char *Ptr;
    unsigned i;
    Brw_FileType_t FileType;
+   char FileNameToShow[NAME_MAX + 1];
 
-   /***** Get the path inside the tree (this path does not include the name of the file or folder at the end) *****/
+   /***** Get the path inside the tree
+          (this path does not include
+           the name of the file or folder at the end) *****/
    Par_GetParToText ("Path",Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,PATH_MAX);
+
+   /* Check if path contains ".." */
    if (strstr (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,".."))	// ".." is not allowed in the path
       Lay_ShowErrorAndExit ("Wrong path.");
 
@@ -2653,7 +2658,11 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
                                      Gbl.FileBrowser.FilFolLnkName,
                                      NAME_MAX,Str_TO_TEXT,false))
 	{
-	 if (strstr (Gbl.FileBrowser.FilFolLnkName,".."))	// ".." is not allowed in the path
+	 /* Check if filename contains ".." */
+	 Brw_GetFileNameToShow (FileType,
+	                        Gbl.FileBrowser.FilFolLnkName,
+                                FileNameToShow);
+	 if (strstr (FileNameToShow,".."))	// ".." is not allowed in the path
 	    Lay_ShowErrorAndExit ("Wrong path.");
 	 Gbl.FileBrowser.FileType = FileType;
 	 break;
