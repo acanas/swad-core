@@ -30,6 +30,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_language.h"
 #include "swad_preference.h"
@@ -99,7 +100,7 @@ void Lan_PutSelectorToSelectLanguage (void)
    extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
    Txt_Language_t Lan;
 
-   Act_StartForm (ActReqChgLan);
+   Frm_StartForm (ActReqChgLan);
    fprintf (Gbl.F.Out,"<select name=\"Lan\""
 	              " style=\"width:112px; margin:0;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
@@ -114,7 +115,7 @@ void Lan_PutSelectorToSelectLanguage (void)
       fprintf (Gbl.F.Out,">%s</option>",Txt_STR_LANG_NAME[Lan]);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

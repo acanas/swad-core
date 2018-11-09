@@ -41,6 +41,7 @@
 #include "swad_enrolment.h"
 #include "swad_exam.h"
 #include "swad_follow.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_mark.h"
 #include "swad_notice.h"
@@ -515,7 +516,7 @@ void Ntf_ShowMyNotifications (void)
 		     Ntf_Icons[NotifyEvent],
 		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
 		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-	    Act_EndForm ();
+	    Frm_EndForm ();
            }
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
@@ -535,10 +536,10 @@ void Ntf_ShowMyNotifications (void)
 
          if (PutLink)
            {
-            Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
+            Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             fprintf (Gbl.F.Out,"%s</a>",
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-            Act_EndForm ();
+            Frm_EndForm ();
            }
          else
             fprintf (Gbl.F.Out,"<span class=\"%s\">%s</span>",
@@ -560,14 +561,14 @@ void Ntf_ShowMyNotifications (void)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
-               Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
+               Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
             if (PutLink)
               {
                fprintf (Gbl.F.Out,"</a>");
-               Act_EndForm ();
+               Frm_EndForm ();
               }
             else
                fprintf (Gbl.F.Out,"</span>");
@@ -578,7 +579,7 @@ void Ntf_ShowMyNotifications (void)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
-               Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
+               Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
 
@@ -596,7 +597,7 @@ void Ntf_ShowMyNotifications (void)
             if (PutLink)
               {
                fprintf (Gbl.F.Out,"</a>");
-               Act_EndForm ();
+               Frm_EndForm ();
               }
             else
                fprintf (Gbl.F.Out,"</span>");
@@ -750,7 +751,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	       default:	// Not aplicable here
 		  break;
 	      }
-	    Act_StartForm (Action);
+	    Frm_StartForm (Action);
 	    if (GrpCod > 0)
 	       Grp_PutParamGrpCod (GrpCod);
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
@@ -761,7 +762,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TIMELINE_SHARE:
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
-         Act_StartForm (ActSeeSocTmlGbl);
+         Frm_StartForm (ActSeeSocTmlGbl);
 	 Soc_PutHiddenParamPubCod (Cod);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
          Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
@@ -770,16 +771,16 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
          if (UsrDat->EncryptedUsrCod[0])	// User's code found ==>
 					// go to user's public profile
            {
-            Act_StartForm (ActSeeOthPubPrf);
+            Frm_StartForm (ActSeeOthPubPrf);
             /* Put param to go to follower's profile */
             Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
            }
          else	// No user's code found ==> go to see my followers
-            Act_StartForm (ActSeeFlr);
+            Frm_StartForm (ActSeeFlr);
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-	 Act_StartForm (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
+	 Frm_StartForm (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
 	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                       1,	// Page of posts   = first
                                       Gbl.Forum.ForumSet,
@@ -789,15 +790,15 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 				      -1L);
 	 break;
       case Ntf_EVENT_NOTICE:
-         Act_StartForm (ActSeeOneNot);
+         Frm_StartForm (ActSeeOneNot);
 	 Not_PutHiddenParamNotCod (Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:
-         Act_StartForm (ActExpRcvMsg);
+         Frm_StartForm (ActExpRcvMsg);
 	 Msg_PutHiddenParamMsgCod (Cod);
 	 break;
       default:
-         Act_StartForm (Ntf_DefaultActions[NotifyEvent]);
+         Frm_StartForm (Ntf_DefaultActions[NotifyEvent]);
 	 break;
      }
 
@@ -1947,7 +1948,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
                  Hlp_PROFILE_Preferences_notifications,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_StartForm (ActChgNtfPrf);
+   Frm_StartForm (ActChgNtfPrf);
 
    /***** Warning if I can not receive email notifications *****/
    if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
@@ -2002,7 +2003,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Btn_PutConfirmButton (Txt_Save_changes);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -2080,8 +2081,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
       NumNewNtfs = Ntf_GetNumberOfMyNewUnseenNtfs ();
 
    /***** Start form *****/
-   Act_StartFormId (ActSeeNewNtf,"form_ntf");
-   Act_LinkFormSubmitId (Txt_See_notifications,
+   Frm_StartFormId (ActSeeNewNtf,"form_ntf");
+   Frm_LinkFormSubmitId (Txt_See_notifications,
 			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf",NULL);
 
    /***** Number of unseen notifications *****/
@@ -2105,7 +2106,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</a>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

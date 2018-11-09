@@ -39,6 +39,7 @@
 #include "swad_database.h"
 #include "swad_enrolment.h"
 #include "swad_follow.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -302,15 +303,15 @@ void Rec_ListFieldsRecordsForEdition (void)
 
       /* Write icon to remove the field */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
-      Act_StartForm (ActReqRemFie);
+      Frm_StartForm (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       Ico_PutIconRemove ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Name of the field */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-      Act_StartForm (ActRenFie);
+      Frm_StartForm (ActRenFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
 	                 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
@@ -318,24 +319,24 @@ void Rec_ListFieldsRecordsForEdition (void)
                Rec_MAX_CHARS_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
                Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of lines in the form */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActChgRowFie);
+      Frm_StartForm (ActChgRowFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
 	                 " size=\"2\" maxlength=\"2\" value=\"%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines,
                Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Visibility of a field */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActChgVisFie);
+      Frm_StartForm (ActChgVisFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
                          " onchange=\"document.getElementById('%s').submit();\">",
@@ -351,7 +352,7 @@ void Rec_ListFieldsRecordsForEdition (void)
                   Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
         }
       fprintf (Gbl.F.Out,"</select>");
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -370,7 +371,7 @@ void Rec_ShowFormCreateRecordField (void)
    Rec_VisibilityRecordFields_t Vis;
 
    /***** Start form *****/
-   Act_StartForm (ActNewFie);
+   Frm_StartForm (ActNewFie);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_record_field,NULL,
@@ -423,7 +424,7 @@ void Rec_ShowFormCreateRecordField (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1046,10 +1047,10 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
-      Act_StartForm (ActPrnRecSevGst);
+      Frm_StartForm (ActPrnRecSevGst);
       Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Select[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1142,10 +1143,10 @@ static void Rec_ShowRecordOneStdCrs (void)
       Rec_PutLinkToEditRecordFields ();
 
    /* Link to print view */
-   Act_StartForm (ActPrnRecSevStd);
+   Frm_StartForm (ActPrnRecSevStd);
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Rec_ShowLinkToPrintPreviewOfRecords ();
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1251,10 +1252,10 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
          Rec_PutLinkToEditRecordFields ();
 
       /* Link to print view */
-      Act_StartForm (ActPrnRecSevStd);
+      Frm_StartForm (ActPrnRecSevStd);
       Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Select[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1377,12 +1378,12 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
 
    /* Link to print view */
-   Act_StartForm (ActPrnRecSevTch);
+   Frm_StartForm (ActPrnRecSevTch);
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
    Par_PutHiddenParamChar ("ShowOfficeHours",'Y');
    Rec_ShowLinkToPrintPreviewOfRecords ();
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1472,14 +1473,14 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
 
       /* Link to print view */
-      Act_StartForm (ActPrnRecSevTch);
+      Frm_StartForm (ActPrnRecSevTch);
       Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Select[Rol_UNK]);
       Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
       Par_PutHiddenParamChar ("ShowOfficeHours",
                               ShowOfficeHours ? 'Y' :
                         	                'N');
       Rec_ShowLinkToPrintPreviewOfRecords ();
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -1560,7 +1561,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
                       "<label class=\"%s\">"
@@ -1786,7 +1787,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
 		    {
 		     ICanEdit = true;
-		     Act_StartForm (ActRcvRecCrs);
+		     Frm_StartForm (ActRcvRecCrs);
 		     break;
 		    }
 	   }
@@ -1801,7 +1802,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	     TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 	   {
 	    ICanEdit = true;
-	    Act_StartFormAnchor (ActRcvRecOthUsr,Anchor);
+	    Frm_StartFormAnchor (ActRcvRecOthUsr,Anchor);
 	    Par_PutHiddenParamLong ("OriginalActCod",
 				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -1933,7 +1934,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
       /* End form */
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
       /* End table and box */
@@ -2369,10 +2370,10 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       switch (TypeOfView)
         {
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-            Act_StartForm (ActSignUp);
+            Frm_StartForm (ActSignUp);
             break;
 	 case Rec_SHA_MY_RECORD_FORM:
-	    Act_StartForm (ActChgMyData);
+	    Frm_StartForm (ActChgMyData);
             break;
          case Rec_SHA_OTHER_EXISTING_USR_FORM:
             switch (Gbl.Action.Act)
@@ -2390,7 +2391,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  NextAction = ActUpdOth;
 		  break;
 	      }
-	    Act_StartForm (NextAction);
+	    Frm_StartForm (NextAction);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
@@ -2409,7 +2410,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  NextAction = ActCreOth;
 		  break;
 	      }
-	    Act_StartForm (NextAction);
+	    Frm_StartForm (NextAction);
 	    ID_PutParamOtherUsrIDPlain ();				// New user
 	    break;
          default:
@@ -2469,17 +2470,17 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
         {
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
 	    Btn_PutConfirmButton (Txt_Sign_up);
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	    break;
 	 case Rec_SHA_MY_RECORD_FORM:
 	    Btn_PutConfirmButton (Txt_Save_changes);
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
 	    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
 	       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 	    Btn_PutConfirmButton (Txt_Register);
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:
 	    /***** Show list of groups to register/remove me/user *****/
@@ -2499,7 +2500,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	    if (Enr_PutActionsRegRemOneUsr (ItsMe))
 	       Btn_PutConfirmButton (Txt_Confirm);
 
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	    break;
 	 default:
 	    break;
@@ -2743,16 +2744,16 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
       /* Form to go to the institution */
       if (PutFormLinks)
 	{
-	 Act_StartFormGoTo (ActSeeInsInf);
+	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 Act_LinkFormSubmit (Ins->FullName,NULL,NULL);
+	 Frm_LinkFormSubmit (Ins->FullName,NULL,NULL);
 	}
       Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       if (PutFormLinks)
 	{
          fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
      }
    fprintf (Gbl.F.Out,"</td>");
@@ -2764,15 +2765,15 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
       /* Form to go to the institution */
       if (PutFormLinks)
 	{
-	 Act_StartFormGoTo (ActSeeInsInf);
+	 Frm_StartFormGoTo (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 Act_LinkFormSubmit (Ins->FullName,"REC_HEAD",NULL);
+	 Frm_LinkFormSubmit (Ins->FullName,"REC_HEAD",NULL);
 	}
       fprintf (Gbl.F.Out,"%s",Ins->FullName);
       if (PutFormLinks)
 	{
          fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
      }
    fprintf (Gbl.F.Out,"</td>");
@@ -2835,9 +2836,9 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	{
 	 /* Put form to go to public profile */
          ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-	 Act_StartForm (ActSeeOthPubPrf);
+	 Frm_StartForm (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (ItsMe ? Txt_My_public_profile :
+	 Frm_LinkFormSubmit (ItsMe ? Txt_My_public_profile :
 			             Txt_Another_user_s_profile,
 			     "REC_NICK",NULL);
 	}
@@ -2845,7 +2846,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
       if (PutFormLinks)
 	{
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
      }
    fprintf (Gbl.F.Out,"</div>"
@@ -4067,7 +4068,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
      }
 
    /* Start form to select the country of my institution */
-   Act_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
+   Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
@@ -4088,7 +4089,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -4106,7 +4107,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_BASIC_DATA);
 
    /* Start form to select institution */
-   Act_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
+   Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
@@ -4132,7 +4133,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Gbl.Inss.Lst[NumIns].FullName);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -4152,7 +4153,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	 Ctr_GetListCentres (Gbl.Usrs.Me.UsrDat.InsCod);
 
       /* Start form to select centre */
-      Act_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
+      Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 		         " class=\"REC_C2_BOT_INPUT\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
@@ -4178,7 +4179,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Gbl.Ctrs.Lst[NumCtr].FullName);
 	}
       fprintf (Gbl.F.Out,"</select>");
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
@@ -4189,14 +4190,14 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			 "</td>"
 			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
 	       Dpt_PARAM_DPT_COD_NAME,ClassForm,Txt_Department);
-      Act_StartFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
+      Frm_StartFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
       Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 				   Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
 	                           "REC_C2_BOT_INPUT",			// Selector class
 				   -1L,					// First option
 				   "",					// Text when no department selected
 				   true);				// Submit on change
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
@@ -4209,7 +4210,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	                 "</td>"
                          "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
                ClassForm,Txt_Office);
-      Act_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
+      Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Office\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
 		         " class=\"REC_C2_BOT_INPUT\""
@@ -4217,7 +4218,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
                Usr_MAX_CHARS_ADDRESS,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
 	       Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -4230,7 +4231,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	                 "</td>"
 	                 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
                ClassForm,Txt_Phone);
-      Act_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
+      Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<input type=\"tel\""
 	                 " id=\"OfficePhone\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -4239,7 +4240,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Usr_MAX_CHARS_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	       Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }

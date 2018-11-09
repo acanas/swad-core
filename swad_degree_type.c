@@ -39,6 +39,7 @@
 #include "swad_database.h"
 #include "swad_degree.h"
 #include "swad_degree_type.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_table.h"
@@ -240,10 +241,10 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    /***** Button to create degree type  *****/
    if (DT_CheckIfICanCreateDegreeTypes ())
      {
-      Act_StartForm (ActEdiDegTyp);
+      Frm_StartForm (ActEdiDegTyp);
       Btn_PutConfirmButton (Gbl.Degs.DegTypes.Num ? Txt_Create_another_type_of_degree :
 	                                            Txt_Create_type_of_degree);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
 
    /***** End box *****/
@@ -374,10 +375,10 @@ static void DT_ListDegreeTypesForEdition (void)
          Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_StartForm (ActRemDegTyp);
+         Frm_StartForm (ActRemDegTyp);
          DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
          Ico_PutIconRemove ();
-         Act_EndForm ();
+         Frm_EndForm ();
         }
 
       /* Degree type code */
@@ -389,7 +390,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
       /* Name of degree type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-      Act_StartForm (ActRenDegTyp);
+      Frm_StartForm (ActRenDegTyp);
       DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
 	                 " size=\"25\" maxlength=\"%u\" value=\"%s\""
@@ -397,7 +398,7 @@ static void DT_ListDegreeTypesForEdition (void)
                Deg_MAX_CHARS_DEGREE_TYPE_NAME,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of degrees of this type */
@@ -431,7 +432,7 @@ void DT_PutFormToCreateDegreeType (void)
    extern const char *Txt_Create_type_of_degree;
 
    /***** Start form *****/
-   Act_StartForm (ActNewDegTyp);
+   Frm_StartForm (ActNewDegTyp);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_degree,NULL,
@@ -465,7 +466,7 @@ void DT_PutFormToCreateDegreeType (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -489,13 +490,13 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
         	                                  "RIGHT_MIDDLE");
 
       /* Start form to change order */
-      Act_StartForm (NextAction);
+      Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
          Sta_PutHiddenParamFigures ();
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 
       /* Link with the head of this column */
-      Act_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
+      Frm_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_DEGREE_TYPES_ORDER[Order]);
@@ -504,7 +505,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       fprintf (Gbl.F.Out,"</a>");
 
       /* End form */
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</th>");
      }

@@ -35,6 +35,7 @@
 #include "swad_assignment.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_notification.h"
@@ -207,11 +208,11 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 
       if (!PrintView)
 	{
-	 Act_StartForm (ActSeeAsg);
+	 Frm_StartForm (ActSeeAsg);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
@@ -221,7 +222,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
 
       fprintf (Gbl.F.Out,"</th>");
@@ -291,10 +292,10 @@ static void Asg_PutButtonToCreateNewAsg (void)
    extern const char *Txt_New_assignment;
 
    Gbl.Asgs.AsgCodToEdit = -1L;
-   Act_StartForm (ActFrmNewAsg);
+   Frm_StartForm (ActFrmNewAsg);
    Asg_PutParams ();
    Btn_PutConfirmButton (Txt_New_assignment);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -519,7 +520,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
        ICanSendFiles)	// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
-      Act_StartForm (ActFrmCreAsgUsr);
+      Frm_StartForm (ActFrmCreAsgUsr);
       Brw_PutParamsFileBrowser (ActUnk,
 				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Asg->Folder,
@@ -533,7 +534,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	       Gbl.Prefs.IconsURL,
 	       Gbl.Title,
 	       Gbl.Title);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else				// I can't send files to this assignment folder
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
@@ -638,7 +639,8 @@ void Asg_GetListAssignments (void)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-         HiddenSubQuery[0] = '\0';
+         if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
       default:
          if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
@@ -1176,12 +1178,12 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Start form *****/
    if (ItsANewAssignment)
      {
-      Act_StartForm (ActNewAsg);
+      Frm_StartForm (ActNewAsg);
       Gbl.Asgs.AsgCodToEdit = -1L;
      }
    else
      {
-      Act_StartForm (ActChgAsg);
+      Frm_StartForm (ActChgAsg);
       Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
      }
    Asg_PutParams ();
@@ -1257,7 +1259,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show current assignments, if any *****/
    Asg_ShowAllAssignments ();

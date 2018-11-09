@@ -34,7 +34,7 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_database.o swad_date.o swad_degree.o swad_degree_type.o \
        swad_department.o swad_duplicate.o \
        swad_enrolment.o swad_exam.o \
-       swad_file.o swad_file_browser.o swad_follow.o swad_forum.o \
+       swad_file.o swad_file_browser.o swad_follow.o swad_form.o swad_forum.o \
        swad_game.o swad_global.o swad_group.o \
        swad_help.o swad_hierarchy.o swad_holiday.o \
        swad_icon.o swad_ID.o swad_image.o swad_indicator.o swad_info.o \
@@ -66,7 +66,7 @@ CC = gcc
 # LIBS when using MariaDB (also valid with MySQL):
 LIBS = -lssl -lcrypto -lpthread -lrt -lmysqlclient -lz -L/usr/lib64/mysql -lm -lgsoap
 
-CFLAGS = -Wall -Wextra -mtune=native -O2 -s
+CFLAGS = -Wall -Wextra -mtune=native -Os -s
 
 all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt
 

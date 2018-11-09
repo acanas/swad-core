@@ -34,6 +34,7 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -380,7 +381,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
-      Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+      Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
       Usr_PutParamsPrefsAboutUsrList ();
 
       /***** Put parameters needed depending on the action *****/
@@ -408,7 +409,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
       /***** Submit button *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 			 " style=\"padding-top:12px;\">");
-      Act_LinkFormSubmitAnimated (Txt_Update_users_according_to_selected_groups,
+      Frm_LinkFormSubmitAnimated (Txt_Update_users_according_to_selected_groups,
 				  The_ClassFormBold[Gbl.Prefs.Theme],
 				  "CopyMessageToHiddenFields()");
       Ico_PutCalculateIconWithText (Txt_Update_users_according_to_selected_groups,
@@ -416,7 +417,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
       fprintf (Gbl.F.Out,"</div>");
 
       /***** End form *****/
-      Act_EndForm ();
+      Frm_EndForm ();
 
       /***** End box *****/
       Box_EndBox ();
@@ -1304,15 +1305,15 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Put icon to remove group type */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Act_StartFormAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      Frm_StartFormAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Ico_PutIconRemove ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Name of group type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-      Act_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
@@ -1320,12 +1321,12 @@ static void Grp_ListGroupTypesForEdition (void)
                Grp_MAX_CHARS_GROUP_TYPE_NAME,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Is it mandatory to register in any group? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      Frm_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
 	                 " style=\"width:150px;\""
@@ -1342,12 +1343,12 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "</select>",
                Txt_It_is_mandatory_to_choose_a_group);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Is it possible to register in multiple groups? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      Frm_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
 	                 " style=\"width:150px;\""
@@ -1364,12 +1365,12 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "</select>",
                Txt_A_student_can_belong_to_several_groups);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Open time */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-      Act_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      Frm_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Tbl_StartTableCenter (2);
       fprintf (Gbl.F.Out,"<tr>"
@@ -1400,7 +1401,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
       Tbl_EndTable ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of groups of this type */
@@ -1519,15 +1520,15 @@ static void Grp_ListGroupsForEdition (void)
          /* Write icon to remove group */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"BM\">");
-         Act_StartFormAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
+         Frm_StartFormAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          Ico_PutIconRemove ();
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write icon to open/close group */
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
-         Act_StartFormAnchor (Grp->Open ? ActCloGrp :
+         Frm_StartFormAnchor (Grp->Open ? ActCloGrp :
                                           ActOpeGrp,
                               Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
@@ -1543,12 +1544,12 @@ static void Grp_ListGroupsForEdition (void)
                 	      "lock",
                   Gbl.Title,
                   Gbl.Title);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write icon to activate file zones for this group */
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
-         Act_StartFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
+         Frm_StartFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
                                                ActEnaFilZonGrp,
                               Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
@@ -1564,12 +1565,12 @@ static void Grp_ListGroupsForEdition (void)
                 	           "folder-no",
                   Gbl.Title,
                   Gbl.Title);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
          /* Group type */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
+         Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:150px;\""
                             " onchange=\"document.getElementById('%s').submit();\">",
@@ -1585,18 +1586,18 @@ static void Grp_ListGroupsForEdition (void)
             fprintf (Gbl.F.Out,">%s</option>",GrpTypAux->GrpTypName);
            }
          fprintf (Gbl.F.Out,"</select>");
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
          /* Group name */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
+         Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
                             " size=\"40\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
          /* Current number of users in this group */
@@ -1610,14 +1611,14 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Maximum number of students of the group (row[3]) */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
+         Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
                             " size=\"3\" maxlength=\"10\" value=\"");
          Grp_WriteMaxStdsGrp (Grp->MaxStudents);
          fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
@@ -1791,7 +1792,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      {
       /***** Start form *****/
       if (PutFormToChangeGrps)
-	 Act_StartForm (ActChgGrp);
+	 Frm_StartForm (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
       Tbl_StartTableWide (2);
@@ -1812,7 +1813,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 if (ICanChangeMyGrps)
 	    Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
 						   Txt_Enrol_in_groups);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
      }
    else	// This course has no groups
@@ -1825,9 +1826,9 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       /***** Button to create group *****/
       if (ICanEdit)
 	{
-	 Act_StartForm (ActReqEdiGrp);
+	 Frm_StartForm (ActReqEdiGrp);
 	 Btn_PutConfirmButton (Txt_Create_group);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
      }
 
@@ -2474,7 +2475,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Start form *****/
    Lay_StartSection (Grp_NEW_GROUP_TYPE_SECTION_ID);
-   Act_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+   Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Start box *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
@@ -2569,7 +2570,7 @@ static void Grp_PutFormToCreateGroupType (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
    Lay_EndSection ();
   }
 
@@ -2588,7 +2589,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Start form *****/
    Lay_StartSection (Grp_NEW_GROUP_SECTION_ID);
-   Act_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
+   Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_group,NULL,
@@ -2663,7 +2664,7 @@ static void Grp_PutFormToCreateGroup (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_group);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
    Lay_EndSection ();
   }
 
@@ -4884,7 +4885,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps ? "PREF_ON" :
 							    "PREF_OFF");
-      Act_StartForm (Action);
+      Frm_StartForm (Action);
       Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
@@ -4896,7 +4897,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
 		                                 "hierarchy64x64.png",
 	       Txt_GROUP_WHICH_GROUPS[WhichGrps],
 	       Txt_GROUP_WHICH_GROUPS[WhichGrps]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

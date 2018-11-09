@@ -35,6 +35,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_password.h"
@@ -287,7 +288,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
    /***** Start form *****/
-   Act_StartFormAnchor (ActSndNewPwd,Pwd_PASSWORD_SECTION_ID);
+   Frm_StartFormAnchor (ActSndNewPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Forgotten_password,NULL,
@@ -309,7 +310,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -697,7 +698,7 @@ void Pwd_ShowFormChgMyPwd (void)
    Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
    /***** Start form *****/
-   Act_StartFormAnchor (ActChgPwd,Pwd_PASSWORD_SECTION_ID);
+   Frm_StartFormAnchor (ActChgPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -760,7 +761,7 @@ void Pwd_ShowFormChgMyPwd (void)
 						   Txt_Set_password);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -875,7 +876,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 NextAction = ActChgPwdOth;
 	 break;
      }
-   Act_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
+   Frm_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
    Usr_PutParamOtherUsrCodEncrypted ();
 
    /* New password */
@@ -885,7 +886,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
    /* End form */
    Btn_PutConfirmButton (Txt_Change_password);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();

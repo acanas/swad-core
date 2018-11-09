@@ -36,6 +36,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_language.h"
 #include "swad_layout.h"
@@ -243,7 +244,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
         	                                "PREF_OFF");
-      Act_StartForm (ActChgCol);
+      Frm_StartForm (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x25\" />",
@@ -251,7 +252,7 @@ static void Pre_PutIconsToSelectSideCols (void)
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

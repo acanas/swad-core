@@ -36,6 +36,7 @@
 #include "swad_constant.h"
 #include "swad_country.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_institution.h"
@@ -287,7 +288,7 @@ static void Cty_Configuration (bool PrintView)
 	 if (!PrintView && Cty_CheckIfICanEditCountries ())
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	    Act_StartForm (ActChgCtyMapAtt);
+	    Frm_StartForm (ActChgCtyMapAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\""
 		               " cols=\"50\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
@@ -295,7 +296,7 @@ static void Cty_Configuration (bool PrintView)
             if (MapAttribution)
 	       fprintf (Gbl.F.Out,"%s",MapAttribution);
 	    fprintf (Gbl.F.Out,"</textarea>");
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	    fprintf (Gbl.F.Out,"</div>");
            }
 	 else if (MapAttribution)
@@ -386,15 +387,15 @@ static void Cty_Configuration (bool PrintView)
 		  Txt_Institutions);
 
 	 /* Form to go to see institutions of this country */
-	 Act_StartFormGoTo (ActSeeIns);
+	 Frm_StartFormGoTo (ActSeeIns);
 	 Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Institutions_of_COUNTRY_X,
 	           Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod));
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -645,9 +646,9 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
         	                               "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
-	 Act_StartForm (ActSeeCty);
+	 Frm_StartForm (ActSeeCty);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Frm_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
@@ -657,7 +658,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	 if (Order == Gbl.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
@@ -802,7 +803,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    char CountryName[Cty_MAX_BYTES_NAME + 1];
 
    /***** Start form *****/
-   Act_StartFormGoTo (Action);
+   Frm_StartFormGoTo (Action);
    Cty_PutParamCtyCod (Cty->CtyCod);
    fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
 
@@ -810,7 +811,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Go_to_X,
 	     Cty->Name[Gbl.Prefs.Language]);
-   Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
+   Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw country map *****/
    Cty_DrawCountryMap (Cty,ClassMap);
@@ -825,7 +826,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
 	    Cty->Alpha2);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1181,7 +1182,7 @@ void Cty_WriteSelectorOfCountry (void)
    long CtyCod;
 
    /***** Start form *****/
-   Act_StartFormGoTo (ActSeeIns);
+   Frm_StartFormGoTo (ActSeeIns);
    fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" style=\"width:175px;\""
                       " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
@@ -1223,7 +1224,7 @@ void Cty_WriteSelectorOfCountry (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1245,12 +1246,12 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
    if (PutForm)
      {
       /***** Write country name with link to country information *****/
-      Act_StartForm (ActSeeCtyInf);
+      Frm_StartForm (ActSeeCtyInf);
       Cty_PutParamCtyCod (CtyCod);
-      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
+      Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 		          ClassLink,NULL);
       fprintf (Gbl.F.Out,"%s</a>",CtyName);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
       /***** Write country name without link *****/
@@ -1574,10 +1575,10 @@ static void Cty_ListCountriesForEdition (void)
 	 Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_StartForm (ActRemCty);
+         Frm_StartForm (ActRemCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Ico_PutIconRemove ();
-         Act_EndForm ();
+         Frm_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1624,7 +1625,7 @@ static void Cty_ListCountriesForEdition (void)
 
          /* Name */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
-         Act_StartForm (ActRenCty);
+         Frm_StartForm (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
@@ -1632,12 +1633,12 @@ static void Cty_ListCountriesForEdition (void)
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Cty_MAX_CHARS_NAME,
                   Cty->Name[Lan],Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
          /* WWW */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
-         Act_StartForm (ActChgCtyWWW);
+         Frm_StartForm (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -1646,7 +1647,7 @@ static void Cty_ListCountriesForEdition (void)
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Cns_MAX_CHARS_WWW,
                   Cty->WWW[Lan],Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
@@ -1965,7 +1966,7 @@ static void Cty_PutFormToCreateCountry (void)
    Cty = &Gbl.Ctys.EditingCty;
 
    /***** Start form *****/
-   Act_StartForm (ActNewCty);
+   Frm_StartForm (ActNewCty);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_country,NULL,
@@ -2052,7 +2053,7 @@ static void Cty_PutFormToCreateCountry (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_country);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

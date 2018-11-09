@@ -42,6 +42,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_file_browser.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -3433,7 +3434,7 @@ void Brw_AskEditWorksCrs (void)
 	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
          /* Start form */
-         Act_StartForm (ActAdmAsgWrkCrs);
+         Frm_StartForm (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
          Gbl.FileBrowser.FullTree = true;	// By default, show all files
          Brw_PutHiddenParamFullTreeIfSelected ();
@@ -3449,7 +3450,7 @@ void Brw_AskEditWorksCrs (void)
 	 Btn_PutConfirmButton (Txt_View_homework);
 
          /* End form */
-         Act_EndForm ();
+         Frm_EndForm ();
         }
      }
    else	// NumTotalUsrs == 0
@@ -3664,7 +3665,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
    /***** Start form *****/
-   Act_StartForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
    Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** List start *****/
@@ -3727,7 +3728,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
    /***** End list and form *****/
    fprintf (Gbl.F.Out,"</ul>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3796,7 +3797,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   Act_StartForm (NextAction);
+   Frm_StartForm (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    /***** Show user's ID *****/
@@ -3804,7 +3805,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />");
-   Act_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
+   Frm_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
@@ -3818,7 +3819,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	                 "<a href=\"mailto:%s\" target=\"_blank\""
 	                 " class=\"AUTHOR_TXT\">%s</a>",
 	      UsrDat->Email,UsrDat->Email);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -4138,19 +4139,19 @@ static void Brw_PutButtonToShowEdit (void)
       case Brw_ICON_VIEW:
          if (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type] != ActUnk)
            {
-	    Act_StartForm (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
+	    Frm_StartForm (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
 	    Brw_PutHiddenParamFullTreeIfSelected ();
 	    Btn_PutConfirmButton (Txt_View);
-            Act_EndForm ();
+            Frm_EndForm ();
            }
 	 break;
       case Brw_ICON_EDIT:
          if (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type] != ActUnk)
            {
-	    Act_StartForm (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
+	    Frm_StartForm (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
 	    Brw_PutHiddenParamFullTreeIfSelected ();
 	    Btn_PutConfirmButton (Txt_Edit);
-            Act_EndForm ();
+            Frm_EndForm ();
            }
 	 break;
      }
@@ -6068,15 +6069,21 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 // then Gbl.FileBrowser.Priv.FullPathInTree will be "descarga/teoria/tema1.pdf"
 // If FilFolLnkName is ".", then Gbl.FileBrowser.Priv.FullPathInTree will be equal to PathInTreeUntilFileOrFolder
 
-void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *FilFolLnkName)
+void Brw_SetFullPathInTree (const char PathInTreeUntilFileOrFolder[PATH_MAX + 1],
+			    const char FilFolLnkName[NAME_MAX + 1])
   {
+   char FullPath[PATH_MAX + 1 + NAME_MAX + 1];
+
    if (!PathInTreeUntilFileOrFolder[0])
       Gbl.FileBrowser.Priv.FullPathInTree[0] = '\0';
    else if (strcmp (FilFolLnkName,"."))
-      snprintf (Gbl.FileBrowser.Priv.FullPathInTree,
-	        sizeof (Gbl.FileBrowser.Priv.FullPathInTree),
+     {
+      snprintf (FullPath,sizeof (FullPath),
 	        "%s/%s",
 	        PathInTreeUntilFileOrFolder,FilFolLnkName);
+      Str_Copy (Gbl.FileBrowser.Priv.FullPathInTree,FullPath,
+	        PATH_MAX);
+     }
    else	// It's the root folder
       Str_Copy (Gbl.FileBrowser.Priv.FullPathInTree,PathInTreeUntilFileOrFolder,
 	        PATH_MAX);
@@ -6188,7 +6195,7 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
    if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this file?
      {
       /***** Form to remove a file *****/
-      Act_StartForm (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
+      Frm_StartForm (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
       Brw_PutParamsFileBrowser (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
                                 PathInTree,FileName,
                                 Gbl.FileBrowser.FileType,-1L);
@@ -6201,7 +6208,7 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
       // Ico_PutIconBRemovalNotAllowed ();
@@ -6223,7 +6230,7 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
    if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this folder?
      {
       /***** Form to remove a folder *****/
-      Act_StartForm (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
+      Frm_StartForm (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
       Brw_PutParamsFileBrowser (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
                                 PathInTree,FileName,
                                 Brw_IS_FOLDER,-1L);
@@ -6236,7 +6243,7 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
       // Ico_PutIconBRemovalNotAllowed ();
@@ -6256,7 +6263,7 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    /***** Form to copy into the clipboard *****/
-   Act_StartForm (Brw_ActCopy[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActCopy[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActCopy[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Gbl.FileBrowser.FileType,-1L);
@@ -6269,7 +6276,7 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
 	    Gbl.Prefs.IconsURL,
 	    Gbl.Title,
 	    Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -6286,7 +6293,7 @@ static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    /***** Form to paste the content of the clipboard *****/
-   Act_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
@@ -6299,7 +6306,7 @@ static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -6420,7 +6427,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    snprintf (JavaScriptFuncToExpandFolder,sizeof (JavaScriptFuncToExpandFolder),
 	     "ExpandFolder('%s_%s')",
 	     FileBrowserId,RowId);
-   Act_StartFormAnchorOnSubmit (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
+   Frm_StartFormAnchorOnSubmit (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
    Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
@@ -6435,7 +6442,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 	    Gbl.Prefs.IconsURL,
 	    Gbl.Title,
 	    Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -6465,7 +6472,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    snprintf (JavaScriptFuncToContractFolder,sizeof (JavaScriptFuncToContractFolder),
 	     "ContractFolder('%s_%s')",
 	     FileBrowserId,RowId);
-   Act_StartFormAnchorOnSubmit (Brw_ActContractFolder[Gbl.FileBrowser.Type],
+   Frm_StartFormAnchorOnSubmit (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
    Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type],
@@ -6480,7 +6487,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 	    Gbl.Prefs.IconsURL,
 	    Gbl.Title,
 	    Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -6495,7 +6502,7 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
    extern const char *Txt_Show_FOLDER_FILE_OR_LINK_X;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-   Act_StartForm (Brw_ActShow[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActShow[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (ActUnk,
                              PathInTree,FileName,
                              Gbl.FileBrowser.FileType,-1L);
@@ -6510,7 +6517,7 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
         	                                       "on",
             Gbl.Title,
             Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -6523,7 +6530,7 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
    extern const char *Txt_Hide_FOLDER_FILE_OR_LINK_X;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-   Act_StartForm (Brw_ActHide[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActHide[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (ActUnk,
                              PathInTree,FileName,
                              Gbl.FileBrowser.FileType,-1L);
@@ -6538,7 +6545,7 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
         	                                       "on",
             Gbl.Title,
             Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -6694,7 +6701,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
    fprintf (Gbl.F.Out,">");
 
    /***** Form and icon *****/
-   Act_StartForm (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
@@ -6710,7 +6717,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 		   "closed",
 	    Gbl.Title,
 	    Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -6746,7 +6753,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
   {
    extern const char *Txt_View_data_of_FILE_OR_LINK_X;
 
-   Act_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActReqDatFile[Gbl.FileBrowser.Type],
                              NULL,NULL,
                              Brw_IS_UNKNOWN,	// Not used
@@ -6758,14 +6765,14 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 	     FileNameToShow);
 
    /* Link to the form and to the file */
-   Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
+   Frm_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
 
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
    /* End link and form */
    fprintf (Gbl.F.Out,"</a>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -6835,7 +6842,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       /***** Form to rename folder *****/
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
-         Act_StartForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
+         Frm_StartForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
          Brw_PutParamsFileBrowser (Brw_ActRenameFolder[Gbl.FileBrowser.Type],
                                    PathInTree,FileName,
                                    Brw_IS_FOLDER,-1L);
@@ -6854,7 +6861,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                   Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
                 	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
         }
       else
         {
@@ -6885,7 +6892,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
       fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
 
-      Act_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
+      Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       Brw_PutParamsFileBrowser (Brw_ActDowFile[Gbl.FileBrowser.Type],
                                 PathInTree,FileName,
                                 Gbl.FileBrowser.FileType,-1L);
@@ -6896,10 +6903,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 	         Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_file_X :
 	                	                             Txt_Download_FILE_OR_LINK_X,
 	        FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
+      Frm_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
 	       FileNameToShow);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       /* Put icon to make public/private file */
       if (IsPublic)
@@ -8970,7 +8977,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    extern const char *Txt_Folder;
 
    /***** Start form *****/
-   Act_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActCreateFolder[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
@@ -8998,7 +9005,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_folder);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -9050,7 +9057,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
             Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
 
    /***** Put button to refresh file browser after upload *****/
-   Act_StartForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type],
                              NULL,NULL,
                              Brw_IS_UNKNOWN,	// Not used
@@ -9060,7 +9067,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Btn_PutConfirmButton (Txt_Done);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -9088,7 +9095,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Form to upload one files using the classic way *****/
-   Act_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
@@ -9098,7 +9105,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /* Button to send */
    Btn_PutCreateButton (Txt_Upload_file);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -9115,7 +9122,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    extern const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X;
 
    /***** Start form *****/
-   Act_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
@@ -9135,7 +9142,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Paste);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -9152,7 +9159,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_optional;
 
    /***** Start form *****/
-   Act_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
+   Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActCreateLink[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
@@ -9207,7 +9214,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -10234,7 +10241,7 @@ void Brw_ShowFileMetadata (void)
 		  break;
 	      }
 
-	    Act_StartForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
+	    Frm_StartForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
             Brw_PutParamsFileBrowser (Brw_ActRecDatFile[Gbl.FileBrowser.Type],
                                       FileMetadata.PathInTreeUntilFilFolLnk,
 				      FileMetadata.FilFolLnkName,
@@ -10429,7 +10436,7 @@ void Brw_ShowFileMetadata (void)
 	    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
 
 	    /* End form */
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	   }
 	 else
             /* End table and box */
@@ -10751,7 +10758,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
        Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
      {
       /* Form to see marks */
-      Act_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
+      Frm_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								  ActSeeMyMrkGrp);
       Brw_PutParamsFileBrowser (ActUnk,
                                 FileMetadata->PathInTreeUntilFilFolLnk,
@@ -10762,7 +10769,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Check_marks_in_file_X,
 		FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,"FILENAME_TXT",NULL);
+      Frm_LinkFormSubmit (Gbl.Title,"FILENAME_TXT",NULL);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
       /* Name of the file of marks, link end and form end */
@@ -10773,7 +10780,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 "</a>",
 	       FileNameToShow,Gbl.Prefs.IconsURL,
 	       Gbl.Title,Gbl.Title);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
      {
@@ -10809,7 +10816,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
        Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
      {
       /* Form to see marks */
-      Act_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
+      Frm_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								  ActSeeMyMrkGrp);
       Brw_PutParamsFileBrowser (ActUnk,
                                 Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
@@ -10820,11 +10827,11 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Check_marks_in_file_X,
 		FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"%s</a>",FileNameToShow);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
       /* Put anchor and filename */
@@ -12713,15 +12720,15 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	       BgColor);
       if (InsCod > 0)
 	{
-         Act_StartFormGoTo (ActSeeInsInf);
+         Frm_StartFormGoTo (ActSeeInsInf);
          Deg_PutParamDegCod (InsCod);
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   InsShortName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+         Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Sco_SCOPE_INS,InsCod,InsShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -12730,15 +12737,15 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	       BgColor);
       if (CtrCod > 0)
 	{
-         Act_StartFormGoTo (ActSeeCtrInf);
+         Frm_StartFormGoTo (ActSeeCtrInf);
          Deg_PutParamDegCod (CtrCod);
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   CtrShortName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+         Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Sco_SCOPE_CTR,CtrCod,CtrShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -12747,15 +12754,15 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	       BgColor);
       if (DegCod > 0)
 	{
-         Act_StartFormGoTo (ActSeeDegInf);
+         Frm_StartFormGoTo (ActSeeDegInf);
          Deg_PutParamDegCod (DegCod);
          snprintf (Gbl.Title,sizeof (Gbl.Title),
                    Txt_Go_to_X,
 		   DegShortName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+         Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Sco_SCOPE_DEG,DegCod,DegShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -12764,14 +12771,14 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	       BgColor);
       if (CrsCod > 0)
 	{
-	 Act_StartFormGoTo (ActSeeCrsInf);
+	 Frm_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (CrsCod);
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Go_to_X,
 		   CrsShortName);
-	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%s</a>",CrsShortName);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -12838,26 +12845,26 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 
       if (CrsCod > 0 && CrsCod != Gbl.CurrentCrs.Crs.CrsCod)		// Not the current course
 	{
-         Act_StartFormGoTo (Action);
+         Frm_StartFormGoTo (Action);
 	 Crs_PutParamCrsCod (CrsCod);	// Go to another course
 	}
       else if (DegCod > 0 && DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
 	{
-         Act_StartFormGoTo (Action);
+         Frm_StartFormGoTo (Action);
 	 Deg_PutParamDegCod (DegCod);	// Go to another degree
 	}
       else if (CtrCod > 0 && CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
 	{
-         Act_StartFormGoTo (Action);
+         Frm_StartFormGoTo (Action);
 	 Ctr_PutParamCtrCod (CtrCod);	// Go to another centre
 	}
       else if (InsCod > 0 && InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
 	{
-         Act_StartFormGoTo (Action);
+         Frm_StartFormGoTo (Action);
 	 Ins_PutParamInsCod (InsCod);	// Go to another institution
 	}
       else
-         Act_StartForm (Action);
+         Frm_StartForm (Action);
       if (GrpCod > 0)
 	 Grp_PutParamGrpCod (GrpCod);
 
@@ -12872,7 +12879,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 									 FileMetadata.FilCod);
 
       /* File or folder icon */
-      Act_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
+      Frm_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
       if (FileMetadata.FileType == Brw_IS_FOLDER)
 	 /* Icon with folder */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
@@ -12888,7 +12895,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	       FileNameToShow);
 
       /* End form */
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -12929,7 +12936,7 @@ void Brw_AskRemoveOldFiles (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Start form *****/
-   Act_StartForm (ActRemOldBrf);
+   Frm_StartForm (ActRemOldBrf);
    Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** Start box *****/
@@ -12959,7 +12966,7 @@ void Brw_AskRemoveOldFiles (void)
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();

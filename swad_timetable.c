@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_text.h"
@@ -1500,9 +1501,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
    /***** Form to modify this cell *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT)
-      Act_StartForm (ActChgCrsTT);
+      Frm_StartForm (ActChgCrsTT);
    else if (Gbl.TimeTable.View == TT_TUT_EDIT)
-      Act_StartForm (ActChgTut);
+      Frm_StartForm (ActChgTut);
 
    /***** Draw cell depending on type of view *****/
    switch (Gbl.TimeTable.View)
@@ -1685,7 +1686,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    /***** End form *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT ||
        Gbl.TimeTable.View == TT_TUT_EDIT)
-      Act_EndForm ();
+      Frm_EndForm ();
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");

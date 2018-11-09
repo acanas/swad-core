@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
@@ -439,7 +440,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
-   Act_StartForm (ActChgMyRol);
+   Frm_StartForm (ActChgMyRol);
    fprintf (Gbl.F.Out,"<select name=\"MyRole\"");
    if (ClassSelect)
       if (ClassSelect[0])
@@ -458,7 +459,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
                   Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

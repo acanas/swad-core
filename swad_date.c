@@ -35,6 +35,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
@@ -109,7 +110,7 @@ void Dat_PutBoxToSelectDateFormat (void)
                  Hlp_PROFILE_Preferences_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
-   Act_StartForm (ActChgDatFmt);
+   Frm_StartForm (ActChgDatFmt);
 
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (Format = (Dat_Format_t) 0;
@@ -136,7 +137,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -314,27 +315,27 @@ void Dat_ShowClientLocalTime (void)
 
    /* Month with link to calendar */
    fprintf (Gbl.F.Out,"<div id=\"current_month\">");
-   Act_StartForm (Cal_GetActionToSeeCalendar ());
-   Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
+   Frm_StartForm (Cal_GetActionToSeeCalendar ());
+   Frm_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
    fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
                       "</span>"
                       "</a>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    /* Day with link to agenda (if I am logged) */
    fprintf (Gbl.F.Out,"<div id=\"current_day\">");
    if (Gbl.Usrs.Me.Logged)
      {
-      Act_StartForm (ActSeeMyAgd);
-      Act_LinkFormSubmit (Txt_Show_agenda,"CURRENT_DAY",NULL);
+      Frm_StartForm (ActSeeMyAgd);
+      Frm_LinkFormSubmit (Txt_Show_agenda,"CURRENT_DAY",NULL);
      }
    fprintf (Gbl.F.Out,"<span id=\"current_day_txt\">"	// JavaScript will write HTML here
 		      "</span>");
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    fprintf (Gbl.F.Out,"</div>");
 

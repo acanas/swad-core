@@ -42,6 +42,7 @@
 #include "swad_enrolment.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -312,7 +313,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
    /***** Start form *****/
    if (ItsMe)
-      Act_StartForm (ActDetMyPho);
+      Frm_StartForm (ActDetMyPho);
    else
      {
       switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
@@ -328,7 +329,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 	    NextAction = ActDetOthPho;
 	    break;
 	}
-      Act_StartForm (NextAction);
+      Frm_StartForm (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
 
@@ -347,7 +348,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
             Gbl.Form.Id);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -709,7 +710,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
               {
                NumFacesGreen++;
                if (ItsMe)
-        	  Act_StartForm (ActUpdMyPho);
+        	  Frm_StartForm (ActUpdMyPho);
                else
         	 {
                	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
@@ -725,11 +726,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 			NextAction = ActUpdOthPho;
 			break;
 		    }
-		  Act_StartForm (NextAction);
+		  Frm_StartForm (NextAction);
                   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
         	 }
                Par_PutHiddenParamString ("FileName",StrFileName);
-               Act_EndForm ();
+               Frm_EndForm ();
               }
             else
                NumFacesRed++;
@@ -1230,29 +1231,29 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                                  BrowserTabIs1stTab;	// Only in main browser tab
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab
-   char IdCaption[Act_MAX_BYTES_ID + 1];
+   char IdCaption[Frm_MAX_BYTES_ID + 1];
 
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
       if (FormUnique)
 	{
-	 Act_StartFormUnique (ActSeeOthPubPrf);
+	 Frm_StartFormUnique (ActSeeOthPubPrf);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-         Act_LinkFormSubmitUnique (NULL,NULL);
+         Frm_LinkFormSubmitUnique (NULL,NULL);
         }
       else
 	{
-	 Act_StartForm (ActSeeOthPubPrf);
+	 Frm_StartForm (ActSeeOthPubPrf);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-         Act_LinkFormSubmit (NULL,NULL,NULL);
+         Frm_LinkFormSubmit (NULL,NULL,NULL);
 	}
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
    if (PutZoomCode)
      {
-      Act_SetUniqueId (IdCaption);
+      Frm_SetUniqueId (IdCaption);
       fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">",
       	       IdCaption);
 
@@ -1314,7 +1315,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutLinkToPublicProfile)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_EndForm ();
+      Frm_EndForm ();
      }
   }
 
@@ -1805,7 +1806,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Average_type);
-   Act_StartForm (ActSeePhoDeg);
+   Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamsPrefsAboutUsrList ();
@@ -1822,7 +1823,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
       fprintf (Gbl.F.Out,">%s</option>",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
@@ -1866,7 +1867,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Size_of_photos);
-   Act_StartForm (ActSeePhoDeg);
+   Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamsPrefsAboutUsrList ();
@@ -1883,7 +1884,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
       fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
@@ -1927,7 +1928,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
-   Act_StartForm (ActSeePhoDeg);
+   Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Usr_PutParamsPrefsAboutUsrList ();
@@ -1944,7 +1945,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
       fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
@@ -2017,12 +2018,12 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /***** Start form *****/
-      Act_StartForm (ActCalPhoDeg);
+      Frm_StartForm (ActCalPhoDeg);
       Pho_PutHiddenParamTypeOfAvg ();
       Pho_PutHiddenParamPhotoSize ();
       Pho_PutHiddenParamOrderDegrees ();
       Usr_PutParamsPrefsAboutUsrList ();
-      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,
+      Frm_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);
       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,
@@ -2056,7 +2057,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
 
       /***** End selector, form and div *****/
       fprintf (Gbl.F.Out,"</select>");
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Free list of all the degrees with students *****/
@@ -2445,7 +2446,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    char PhotoURL[PATH_MAX + 1];
    char PhotoCaption[1024 + Hie_MAX_BYTES_SHRT_NAME];
    bool ShowDegPhoto;
-   char IdCaption[Act_MAX_BYTES_ID + 1];
+   char IdCaption[Frm_MAX_BYTES_ID + 1];
 
    /***** Initializations *****/
    PhotoURL[0] = '\0';
@@ -2458,12 +2459,12 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    /***** Put link to degree *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
-      Act_StartFormGoTo (ActSeeDegInf);
+      Frm_StartFormGoTo (ActSeeDegInf);
       Deg_PutParamDegCod (Deg->DegCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
 		Deg->FullName);
-      Act_LinkFormSubmit (Gbl.Title,NULL,NULL);
+      Frm_LinkFormSubmit (Gbl.Title,NULL,NULL);
      }
 
    /***** Check if photo of degree can be shown *****/
@@ -2499,7 +2500,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 		      NumStdsWithPhoto,Txt_photos,
 		      NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
 				    0);
-	    Act_SetUniqueId (IdCaption);
+	    Frm_SetUniqueId (IdCaption);
 	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
 	                       "<div class=\"ZOOM_TXT_LINE DAT_N\">"
 			       "%s"
@@ -2542,7 +2543,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       fprintf (Gbl.F.Out,"</a>");
-      Act_EndForm ();
+      Frm_EndForm ();
      }
   }
 

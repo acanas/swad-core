@@ -34,6 +34,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_follow.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
@@ -177,7 +178,7 @@ void Prf_RequestUserProfile (void)
      }
 
    /***** Start form *****/
-   Act_StartForm (ActSeeOthPubPrf);
+   Frm_StartForm (ActSeeOthPubPrf);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
@@ -200,7 +201,7 @@ void Prf_RequestUserProfile (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -383,7 +384,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumCrssUsrIsStudent;
    unsigned NumFiles;
    unsigned NumPublicFiles;
-   char IdFirstClickTime[Act_MAX_BYTES_ID + 1];
+   char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
@@ -450,7 +451,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    if (UsrFigures.FirstClickTimeUTC)
      {
       /* Create unique id for new comment */
-      Act_SetUniqueId (IdFirstClickTime);
+      Frm_SetUniqueId (IdFirstClickTime);
 
       fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
       if (UsrFigures.NumDays > 0)
@@ -607,12 +608,12 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Calculate;
 
-   Act_StartForm (Action);
+   Frm_StartForm (Action);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-   Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
+   Frm_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
                                NULL);
    Ico_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -757,12 +758,12 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
 	     Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs);
 
    /***** Rank in form to go to ranking *****/
-   Act_StartForm (ActSeeUseGbl);
+   Frm_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Sta_USERS_RANKING);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1524,14 +1525,14 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    /***** Put form to go to public profile *****/
    if (Visible)
      {
-      Act_StartForm (ActSeeOthPubPrf);
+      Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"<div class=\"RANK_USR\">");	// Limited width
-      Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
+      Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
 	                 "</div>");
-      Act_EndForm ();
+      Frm_EndForm ();
      }
 
    fprintf (Gbl.F.Out,"</td>");

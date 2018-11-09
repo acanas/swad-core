@@ -35,6 +35,7 @@
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
@@ -474,7 +475,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	 NextAction = ActCnfID_Oth;
 	 break;
      }
-   Act_StartFormAnchor (NextAction,Anchor);
+   Frm_StartFormAnchor (NextAction,Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
       Par_PutHiddenParamLong ("OriginalActCod",
@@ -501,7 +502,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                     The_ClassFormBold[Gbl.Prefs.Theme],NULL);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -624,7 +625,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	   {
 	    /* Form to remove user's ID */
 	    if (ItsMe)
-	       Act_StartFormAnchor (ActRemID_Me,ID_ID_SECTION_ID);
+	       Frm_StartFormAnchor (ActRemID_Me,ID_ID_SECTION_ID);
 	    else
 	      {
 	       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -640,14 +641,14 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		     NextAction = ActRemID_Oth;
 		     break;
 		 }
-	       Act_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
+	       Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\""
 			       " value=\"%s\" />",
 		     UsrDat->IDs.List[NumID].ID);
 	    Ico_PutIconRemove ();
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	   }
 	}
 
@@ -699,7 +700,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
       if (ItsMe)
-	 Act_StartFormAnchor (ActNewIDMe,ID_ID_SECTION_ID);
+	 Frm_StartFormAnchor (ActNewIDMe,ID_ID_SECTION_ID);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -715,7 +716,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	       NextAction = ActNewID_Oth;
 	       break;
 	   }
-	 Act_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
+	 Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewID\" name=\"NewID\""
@@ -725,7 +726,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "");	// Show the most recent ID
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }

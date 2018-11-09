@@ -35,6 +35,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_MFU.h"
 #include "swad_tab.h"
@@ -243,14 +244,14 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<li>");
-         Act_StartForm (Action);
-         Act_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme],NULL);
+         Frm_StartForm (Action);
+         Frm_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" />",
 		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		  Act_GetIcon (Action),
 		  MenuStr);
          fprintf (Gbl.F.Out," %s</a>",TabMenuStr);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</li>");
         }
      }
@@ -278,12 +279,12 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** Start div and link *****/
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">");
-   Act_StartForm (ActMFUAct);
-   Act_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
+   Frm_StartForm (ActMFUAct);
+   Frm_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
    fprintf (Gbl.F.Out," %s"
 	              "</a>",
 	    Txt_Frequent_ACTIONS);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Write list of frequently used actions *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -306,14 +307,14 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<li>");
-         Act_StartForm (Action);
-         Act_LinkFormSubmit (TabMenuStr,NULL,NULL);
+         Frm_StartForm (Action);
+         Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" />",
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_GetIcon (Action),
                   MenuStr);
 	 fprintf (Gbl.F.Out," %s</a>",MenuStr);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</li>");
         }
      }

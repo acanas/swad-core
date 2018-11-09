@@ -30,6 +30,7 @@
 
 #include "swad_config.h"
 #include "swad_degree.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_logo.h"
 #include "swad_table.h"
@@ -193,11 +194,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    /***** Form to go to the system *****/
    fprintf (Gbl.F.Out,"<div class=\"BC %s\">&nbsp;",ClassTxt);
 
-   Act_StartFormGoTo (ActMnu);
+   Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
-   Act_LinkFormSubmit (Txt_System,ClassTxt,NULL);
+   Frm_LinkFormSubmit (Txt_System,ClassTxt,NULL);
    fprintf (Gbl.F.Out,"%s</a>",Txt_System);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -209,11 +210,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to go to see institutions of this country *****/
-      Act_StartFormGoTo (ActSeeIns);
+      Frm_StartFormGoTo (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
-      Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassTxt,NULL);
+      Frm_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -225,10 +226,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select countries *****/
-      Act_StartFormGoTo (ActSeeCty);
-      Act_LinkFormSubmit (Txt_Country,ClassTxt,NULL);
+      Frm_StartFormGoTo (ActSeeCty);
+      Frm_LinkFormSubmit (Txt_Country,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -241,11 +242,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to see centres of this institution *****/
-      Act_StartFormGoTo (ActSeeCtr);
+      Frm_StartFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassTxt,NULL);
+      Frm_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Gbl.CurrentIns.Ins.ShrtName);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -257,10 +258,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select institutions *****/
-      Act_StartFormGoTo (ActSeeIns);
-      Act_LinkFormSubmit (Txt_Institution,ClassTxt,NULL);
+      Frm_StartFormGoTo (ActSeeIns);
+      Frm_LinkFormSubmit (Txt_Institution,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -285,11 +286,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to see degrees of this centre *****/
-      Act_StartFormGoTo (ActSeeDeg);
+      Frm_StartFormGoTo (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassTxt,NULL);
+      Frm_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Gbl.CurrentCtr.Ctr.ShrtName);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -301,10 +302,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select centres *****/
-      Act_StartFormGoTo (ActSeeCtr);
-      Act_LinkFormSubmit (Txt_Centre,ClassTxt,NULL);
+      Frm_StartFormGoTo (ActSeeCtr);
+      Frm_LinkFormSubmit (Txt_Centre,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -329,11 +330,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to go to see courses of this degree *****/
-      Act_StartFormGoTo (ActSeeCrs);
+      Frm_StartFormGoTo (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassTxt,NULL);
+      Frm_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Gbl.CurrentDeg.Deg.ShrtName);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -345,10 +346,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
       /***** Form to go to select degrees *****/
-      Act_StartFormGoTo (ActSeeDeg);
-      Act_LinkFormSubmit (Txt_Degree,ClassTxt,NULL);
+      Frm_StartFormGoTo (ActSeeDeg);
+      Frm_LinkFormSubmit (Txt_Degree,ClassTxt,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }

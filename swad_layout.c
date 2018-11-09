@@ -38,6 +38,7 @@
 #include "swad_database.h"
 #include "swad_exam.h"
 #include "swad_follow.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
@@ -862,11 +863,11 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
 
    /* Start form to go to home page */
-   Act_StartFormGoTo (ActMnu);
+   Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">");
-   Act_LinkFormSubmit (Txt_System,NULL,NULL);
+   Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
@@ -876,7 +877,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
                       "<div id=\"head_row_1_logo_big\">");
-   Act_LinkFormSubmit (Txt_System,NULL,NULL);
+   Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
@@ -886,14 +887,14 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
                       "<div id=\"head_row_1_tagline\">");
-   Act_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s"
 	              "</a>"
                       "</div>",	// head_row_1_tagline
             Txt_TAGLINE_BR);
 
    /* End form to go to home page */
-   Act_EndForm ();
+   Frm_EndForm ();
 
    Sch_PutFormToSearchInPageTopHeading ();
 
@@ -1102,7 +1103,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
 				// jumping to the next line on narrow screens
 
    /***** Start form *****/
-   Act_StartFormAnchor (NextAction,Anchor);
+   Frm_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams ();
 
@@ -1113,7 +1114,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                     OnSubmit);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Separator *****/
    if (Text)
@@ -1139,7 +1140,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				// jumping to the next line on narrow screens
 
    /***** Start form *****/
-   Act_StartForm (NextAction);
+   Frm_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
 
@@ -1172,7 +1173,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	              "</div>");
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Separator *****/
    if (Text)

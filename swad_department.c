@@ -36,6 +36,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_institution.h"
 #include "swad_parameter.h"
@@ -115,16 +116,16 @@ void Dpt_SeeDepts (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_StartForm (ActSeeDpt);
+	 Frm_StartForm (ActSeeDpt);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Dpts.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
 	 if (Order == Gbl.Dpts.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</th>");
 	}
       fprintf (Gbl.F.Out,"</tr>");
@@ -491,10 +492,10 @@ static void Dpt_ListDepartmentsForEdition (void)
          Ico_PutIconRemovalNotAllowed ();
       else
         {
-         Act_StartForm (ActRemDpt);
+         Frm_StartForm (ActRemDpt);
          Dpt_PutParamDptCod (Dpt->DptCod);
          Ico_PutIconRemove ();
-         Act_EndForm ();
+         Frm_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -506,7 +507,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Institution */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActChgDptIns);
+      Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
 	                 "onchange=\"document.getElementById('%s').submit();\">"
@@ -524,43 +525,43 @@ static void Dpt_ListDepartmentsForEdition (void)
                 	                                       "",
                   Gbl.Inss.Lst[NumIns].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActRenDptSho);
+      Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActRenDptFul);
+      Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActChgDptWWW);
+      Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Dpt->WWW,Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of teachers */
@@ -865,7 +866,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Dpt = &Gbl.Dpts.EditingDpt;
 
    /***** Start form *****/
-   Act_StartForm (ActNewDpt);
+   Frm_StartForm (ActNewDpt);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_department,NULL,
@@ -942,7 +943,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_department);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

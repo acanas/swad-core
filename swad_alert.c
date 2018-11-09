@@ -28,6 +28,7 @@
 #include <linux/stddef.h>	// For NULL
 
 #include "swad_alert.h"
+#include "swad_form.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -115,7 +116,7 @@ void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,
 void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
   {
    extern const char *Txt_Close;
-   char IdAlert[Act_MAX_BYTES_ID + 1];
+   char IdAlert[Frm_MAX_BYTES_ID + 1];
    static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
      {
       false,	// Ale_NONE
@@ -136,7 +137,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
    if (AlertClosable[AlertType])
      {
       /* Create unique id for alert */
-      Act_SetUniqueId (IdAlert);
+      Frm_SetUniqueId (IdAlert);
       fprintf (Gbl.F.Out," id=\"%s\"",IdAlert);
      }
    fprintf (Gbl.F.Out," class=\"CENTER_MIDDLE\">"
@@ -178,8 +179,8 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
       if (TxtButton[0])
 	{
          /* Start form */
-	 Act_StartFormAnchor (NextAction,Anchor);
-         Act_StartFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
+	 Frm_StartFormAnchor (NextAction,Anchor);
+         Frm_StartFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
 	 if (FuncParams)
 	    FuncParams ();
 
@@ -187,7 +188,7 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
 	 Btn_PutButton (Button,TxtButton);
 
          /* End form */
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
 
    /***** End box *****/

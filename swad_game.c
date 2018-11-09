@@ -35,6 +35,7 @@
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -238,18 +239,18 @@ static void Gam_ListAllGames (void)
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 
 	 /* Form to change order */
-	 Act_StartForm (ActSeeAllGam);
+	 Frm_StartForm (ActSeeAllGam);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</th>");
 	}
@@ -356,10 +357,10 @@ static void Gam_PutButtonToCreateNewGame (void)
   {
    extern const char *Txt_New_game;
 
-   Act_StartForm (ActFrmNewGam);
+   Frm_StartForm (ActFrmNewGam);
    Gam_PutParamsToCreateNewGame ();
    Btn_PutConfirmButton (Txt_New_game);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -511,17 +512,17 @@ static void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"\">");
 
    /* Put form to view game */
-   Act_StartForm (ActSeeOneGam);
+   Frm_StartForm (ActSeeOneGam);
    Gam_PutParamGameCod (GamCod);
    Gam_PutHiddenParamGameOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-   Act_LinkFormSubmit (Txt_View_game,
+   Frm_LinkFormSubmit (Txt_View_game,
                        Game.Status.Visible ? "ASG_TITLE" :
 	                                     "ASG_TITLE_LIGHT",NULL);
    fprintf (Gbl.F.Out,"%s</a>",
             Game.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /* Number of questions and number of distinct users who have already answered this game */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
@@ -544,13 +545,13 @@ static void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-      Act_StartForm (ActPlyGam);
+      Frm_StartForm (ActPlyGam);
       Gam_PutParamGameCod (Game.GamCod);
       Gam_PutHiddenParamGameOrder ();
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
       Btn_PutCreateButtonInline (Txt_Play);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -561,13 +562,13 @@ static void Gam_ShowOneGame (long GamCod,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Act_StartForm (ActSeeOneGam);
+	 Frm_StartForm (ActSeeOneGam);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Play);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -576,13 +577,13 @@ static void Gam_ShowOneGame (long GamCod,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Act_StartForm (ActSeeOneGam);
+	 Frm_StartForm (ActSeeOneGam);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_game_results);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -1593,10 +1594,10 @@ static void Gam_PutButtonToResetGame (void)
   {
    extern const char *Txt_Reset_game;
 
-   Act_StartForm (ActRstGam);
+   Frm_StartForm (ActRstGam);
    Gam_PutParams ();
    Btn_PutRemoveButton (Txt_Reset_game);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1790,7 +1791,7 @@ void Gam_RequestCreatOrEditGame (void)
 
    /***** Start form *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   Act_StartForm (ItsANewGame ? ActNewGam :
+   Frm_StartForm (ItsANewGame ? ActNewGam :
 	                        ActChgGam);
    Gam_PutParams ();
 
@@ -1878,7 +1879,7 @@ void Gam_RequestCreatOrEditGame (void)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show questions of the game ready to be edited *****/
    if (!ItsANewGame)
@@ -2778,7 +2779,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 	 Btn_PutConfirmButton (Txt_Done);
 
 	 /***** End form *****/
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
      }
    else	// This game has no questions
@@ -2877,11 +2878,11 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
-      Act_StartForm (ActReqRemGamQst);
+      Frm_StartForm (ActReqRemGamQst);
       Gam_PutParamGameCod (Game->GamCod);
       Gam_PutParamQstCod (QstCod);
       Ico_PutIconRemove ();
-      Act_EndForm ();
+      Frm_EndForm ();
 
       /* Put icon to move up the question */
       if (NumQst)
@@ -2994,10 +2995,10 @@ static void Gam_PutButtonToAddNewQuestions (void)
   {
    extern const char *Txt_Add_questions;
 
-   Act_StartForm (ActAddOneGamQst);
+   Frm_StartForm (ActAddOneGamQst);
    Gam_PutParams ();
    Btn_PutConfirmButton (Txt_Add_questions);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3493,19 +3494,19 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
    extern const char *Txt_Play;
 
    /***** Start form *****/
-   Act_StartForm (ActPlyGam1stQst);
+   Frm_StartForm (ActPlyGam1stQst);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
    /***** Put icon with link *****/
-   Act_LinkFormSubmit (Txt_Play,NULL,NULL);
+   Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/play64x64.png\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
             Gbl.Prefs.IconsURL,Txt_Play,Txt_Play);
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3640,12 +3641,12 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
-   Act_StartForm (NextAction);
+   Frm_StartForm (NextAction);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (QstInd);
 
    /***** Put icon with link *****/
-   Act_LinkFormSubmit (Txt_Continue,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
+   Frm_LinkFormSubmit (Txt_Continue,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/step-forward64x64.png\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
@@ -3655,7 +3656,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

@@ -44,6 +44,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_help.h"
@@ -2440,7 +2441,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
    /***** Start form *****/
-   Act_StartForm (NextAction);
+   Frm_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
 
@@ -2485,7 +2486,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Log_in);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2622,8 +2623,8 @@ void Usr_PutFormLogIn (void)
    extern const char *Txt_Log_in;
 
    /***** Link to log in form *****/
-   Act_StartForm (ActFrmLogIn);
-   Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
+   Frm_StartForm (ActFrmLogIn);
+   Frm_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
@@ -2633,7 +2634,7 @@ void Usr_PutFormLogIn (void)
             Txt_Log_in,
             Txt_Log_in,
             Txt_Log_in);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2656,11 +2657,11 @@ void Usr_WriteLoggedUsrHead (void)
    /***** User's role *****/
    if (NumAvailableRoles == 1)
      {
-      Act_StartForm (ActFrmRolSes);
-      Act_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
+      Frm_StartForm (ActFrmRolSes);
+      Frm_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"%s</a>",
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,":&nbsp;");
      }
    else
@@ -2691,8 +2692,8 @@ void Usr_PutFormLogOut (void)
    extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *Txt_Log_out;
 
-   Act_StartForm (ActLogOut);
-   Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
+   Frm_StartForm (ActLogOut);
+   Frm_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
@@ -2702,7 +2703,7 @@ void Usr_PutFormLogOut (void)
             Txt_Log_out,
             Txt_Log_out,
             Txt_Log_out);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -5905,13 +5906,13 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
-   Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Select Usr_LIST_AS_LISTING *****/
@@ -5921,12 +5922,12 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
-   Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutCheckboxListWithPhotos ();
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    fprintf (Gbl.F.Out,"</div>");
@@ -5942,14 +5943,14 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
    /***** Start form *****/
-   Act_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (ListType);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
 
    /***** Link and image *****/
-   Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
+   Frm_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
                        The_ClassFormNoWrap[Gbl.Prefs.Theme],
                        NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
                                                     NULL);
@@ -5964,7 +5965,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
             Txt_USR_LIST_TYPES[ListType]);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -7100,13 +7101,13 @@ void Usr_ListDataAdms (void)
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_StartForm (ActLstOth);
+   Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
@@ -7114,10 +7115,10 @@ void Usr_ListDataAdms (void)
       /****** Show photos? *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                 " style=\"margin-bottom:8px;\">");
-      Act_StartForm (ActLstOth);
+      Frm_StartForm (ActLstOth);
       Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
@@ -7573,13 +7574,13 @@ void Usr_SeeGuests (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActLstGst);
+      Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       fprintf (Gbl.F.Out,"</label>");
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -7606,7 +7607,7 @@ void Usr_SeeGuests (void)
 				       -1L);
 
          /* Start form */
-	 Act_StartForm (ActSeeRecSevGst);
+	 Frm_StartForm (ActSeeRecSevGst);
 
          /* Start table */
 	 Tbl_StartTableWide (0);
@@ -7632,7 +7633,7 @@ void Usr_SeeGuests (void)
 	 Btn_PutConfirmButton (Txt_Show_records);
 
          /* End form */
-         Act_EndForm ();
+         Frm_EndForm ();
 	}
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
@@ -7723,13 +7724,13 @@ void Usr_SeeStudents (void)
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	 Act_StartForm (ActLstStd);
+	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 fprintf (Gbl.F.Out,"</label>");
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
 	 break;
       default:
@@ -7770,7 +7771,7 @@ void Usr_SeeStudents (void)
          /* Start form */
          if (ICanViewRecords)
            {
-	    Act_StartForm (ActSeeRecSevStd);
+	    Frm_StartForm (ActSeeRecSevStd);
 	    Grp_PutParamsCodGrps ();
            }
 
@@ -7801,7 +7802,7 @@ void Usr_SeeStudents (void)
 	    Btn_PutConfirmButton (Txt_Show_records);
 
 	    /* End form */
-	    Act_EndForm ();
+	    Frm_EndForm ();
            }
 	}
      }
@@ -7902,13 +7903,13 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_StartForm (ActLstTch);
+   Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to select groups *****/
@@ -7941,7 +7942,7 @@ void Usr_SeeTeachers (void)
 
          /* Start form */
          if (ICanViewRecords)
-            Act_StartForm (ActSeeRecSevTch);
+            Frm_StartForm (ActSeeRecSevTch);
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -7979,7 +7980,7 @@ void Usr_SeeTeachers (void)
 	    Btn_PutConfirmButton (Txt_Show_records);
 
 	    /* End form */
-	    Act_EndForm ();
+	    Frm_EndForm ();
            }
 	}
      }

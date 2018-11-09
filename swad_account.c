@@ -35,6 +35,7 @@
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
 #include "swad_follow.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_language.h"
@@ -149,7 +150,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
 
    /***** Form to request user's ID for possible account already created *****/
-   Act_StartForm (ActChkUsrAcc);
+   Frm_StartForm (ActChkUsrAcc);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s:&nbsp;"
 		      "<input type=\"text\" name=\"ID\""
@@ -159,7 +160,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
    Btn_PutConfirmButton (Txt_Check);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -304,10 +305,10 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    /***** Button to login with this account *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   Act_StartForm (ActLogInNew);
+   Frm_StartForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -340,7 +341,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Start form to enter some data of the new user *****/
-   Act_StartForm (ActCreUsrAcc);
+   Frm_StartForm (ActCreUsrAcc);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Create_account,NULL,
@@ -395,7 +396,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_account);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -416,9 +417,9 @@ void Acc_ShowFormGoToRequestNewAccount (void)
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Button to go to request the creation of a new account *****/
-   Act_StartForm (ActFrmMyAcc);
+   Frm_StartForm (ActFrmMyAcc);
    Btn_PutCreateButton (Txt_Create_account);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -936,10 +937,10 @@ void Acc_AskIfRemoveMyAccount (void)
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
 
    /* Show form to request confirmation */
-   Act_StartForm (ActRemMyAcc);
+   Frm_StartForm (ActRemMyAcc);
    Pwd_AskForConfirmationOnDangerousAction ();
    Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
@@ -964,11 +965,11 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* Show form to request confirmation */
-      Act_StartForm (ActRemUsrGbl);
+      Frm_StartForm (ActRemUsrGbl);
       Usr_PutParamOtherUsrCodEncrypted ();
       Pwd_AskForConfirmationOnDangerousAction ();
       Btn_PutRemoveButton (Txt_Eliminate_user_account);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       /* End alert */
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);

@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_icon.h"
 #include "swad_layout.h"
@@ -88,7 +89,7 @@ void Ico_PutIconsToSelectIconSet (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
         	                              "PREF_OFF");
-      Act_StartForm (ActChgIco);
+      Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart64x64.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
@@ -98,7 +99,7 @@ void Ico_PutIconsToSelectIconSet (void)
                Cfg_ICON_ACTION,
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -258,7 +259,7 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ()
 void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
                       const char *LinkStyle,const char *OnSubmit)
   {
-   Act_LinkFormSubmit (Title,LinkStyle,OnSubmit);
+   Frm_LinkFormSubmit (Title,LinkStyle,OnSubmit);
    if (Text)
       Ico_PutIconWithText (Icon,Title,Text);
    else

@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_profile.h"
@@ -403,10 +404,10 @@ static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat)
   {
    extern const char *Txt_Similar_users;
 
-   Act_StartForm (ActLstSimUsr);
+   Frm_StartForm (ActLstSimUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutConfirmButtonInline (Txt_Similar_users);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -417,11 +418,11 @@ static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat)
   {
    extern const char *Txt_Eliminate_user_account;
 
-   Act_StartForm (ActUpdOth);
+   Frm_StartForm (ActUpdOth);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
    Btn_PutRemoveButtonInline (Txt_Eliminate_user_account);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -432,10 +433,10 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat
   {
    extern const char *Txt_Not_duplicated;
 
-   Act_StartForm (ActRemDupUsr);
+   Frm_StartForm (ActRemDupUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutConfirmButtonInline (Txt_Not_duplicated);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

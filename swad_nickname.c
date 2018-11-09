@@ -32,6 +32,7 @@
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
@@ -299,7 +300,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
 	 /* Form to remove old nickname */
 	 if (ItsMe)
-	    Act_StartFormAnchor (ActRemOldNicMe,Nck_NICKNAME_SECTION_ID);
+	    Frm_StartFormAnchor (ActRemOldNicMe,Nck_NICKNAME_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -315,14 +316,14 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 		  NextAction = ActRemOldNicOth;
 		  break;
 	      }
-	    Act_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+	    Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\""
 	                    " value=\"%s\" />",
 		  row[0]);
 	 Ico_PutIconRemove ();
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
 
       /* Nickname */
@@ -337,7 +338,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	{
          fprintf (Gbl.F.Out,"<br />");
 	 if (ItsMe)
-	    Act_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
+	    Frm_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -353,14 +354,14 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 		  NextAction = ActChgNicOth;
 		  break;
 	      }
-	    Act_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+	    Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\""
 	                    " value=\"@%s\" />",
 		  row[0]);	// Nickname
 	 Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
 
       fprintf (Gbl.F.Out,"</td>"
@@ -379,7 +380,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    if (ItsMe)
-      Act_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
+      Frm_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
    else
      {
       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -395,7 +396,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    NextAction = ActChgNicOth;
 	    break;
 	}
-      Act_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+      Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
@@ -405,7 +406,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
             Gbl.Usrs.Me.UsrDat.Nickname);
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save);		// I have no nickname yet);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

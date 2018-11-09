@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
@@ -112,7 +113,7 @@ action="https://localhost/swad/es" method="post">
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[Act_MAX_BYTES_PARAMS_STR];
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
    char Anchor1Nick[256 + 256 + 256 + Cns_BYTES_SESSION_ID + 256 + 256];
    char Anchor2Nick[256 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
    size_t TxtLength;
@@ -309,7 +310,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 			 Gbl.Form.Num);
 
 	    /* Store first part of anchor */
-	    Act_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
+	    Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
 	    snprintf (Anchor1Nick,sizeof (Anchor1Nick),
 		      "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
 		      "%s"

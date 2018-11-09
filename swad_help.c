@@ -30,6 +30,7 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_config.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_user.h"
@@ -281,9 +282,9 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
 
    /***** Button *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   Act_StartForm (Action);
+   Frm_StartForm (Action);
    Btn_PutButtonInline (Button,TxtButton);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }

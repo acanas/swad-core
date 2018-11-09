@@ -33,6 +33,8 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
+#include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_indicator.h"
 #include "swad_parameter.h"
@@ -114,7 +116,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /***** Form to update indicators *****/
    /* Start form and table */
-   Act_StartForm (ActReqStaCrs);
+   Frm_StartForm (ActReqStaCrs);
    Tbl_StartTableWide (2);
 
    /* Scope */
@@ -184,7 +186,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* End table and form */
    Tbl_EndTable ();
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show the stats of courses *****/
    for (Ind = 0, NumCrssToList = 0;
@@ -198,14 +200,14 @@ void Ind_ReqIndicatorsCourses (void)
       Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
 
       /* Button to show more details */
-      Act_StartForm (ActSeeAllStaCrs);
+      Frm_StartForm (ActSeeAllStaCrs);
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
       Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
       Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
       if (Gbl.Stat.StrIndicatorsSelected[0])
          Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
       Btn_PutConfirmButton (Txt_Show_more_details);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
 
    /***** End box *****/

@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
@@ -243,7 +244,7 @@ void The_PutIconsToSelectTheme (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
                Theme == Gbl.Prefs.Theme ? "PREF_ON" :
         	                          "PREF_OFF");
-      Act_StartForm (ActChgThe);
+      Frm_StartForm (ActChgThe);
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
@@ -253,7 +254,7 @@ void The_PutIconsToSelectTheme (void)
                The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");

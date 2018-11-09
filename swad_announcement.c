@@ -28,6 +28,7 @@
 #include "swad_announcement.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
@@ -200,9 +201,9 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
   {
    extern const char *Txt_New_announcement;
 
-   Act_StartForm (ActWriAnn);
+   Frm_StartForm (ActWriAnn);
    Btn_PutConfirmButton (Txt_New_announcement);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -411,7 +412,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Create_announcement;
 
    /***** Start form *****/
-   Act_StartForm (ActRcvAnn);
+   Frm_StartForm (ActRcvAnn);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
@@ -447,7 +448,7 @@ void Ann_ShowFormAnnouncement (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

@@ -36,6 +36,7 @@
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_mail.h"
 #include "swad_parameter.h"
@@ -128,16 +129,16 @@ void Mai_SeeMailDomains (void)
 	Order++)
      {
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-      Act_StartForm (ActSeeMai);
+      Frm_StartForm (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
+      Frm_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"</tr>");
@@ -476,10 +477,10 @@ static void Mai_ListMailDomainsForEdition (void)
       /* Put icon to remove mail */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Act_StartForm (ActRemMai);
+      Frm_StartForm (ActRemMai);
       Mai_PutParamMaiCod (Mai->MaiCod);
       Ico_PutIconRemove ();
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Mail code */
@@ -490,26 +491,26 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /* Mail domain */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActRenMaiSho);
+      Frm_StartForm (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
                Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Mail domain info */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_StartForm (ActRenMaiFul);
+      Frm_StartForm (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
 	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
                Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of users */
@@ -730,7 +731,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Mai = &Gbl.Mails.EditingMai;
 
    /***** Start form *****/
-   Act_StartForm (ActNewMai);
+   Frm_StartForm (ActNewMai);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
@@ -772,7 +773,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_email_domain);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1297,7 +1298,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 
       /* Form to remove email */
       if (ItsMe)
-	 Act_StartFormAnchor (ActRemMaiMe,Mai_EMAIL_SECTION_ID);
+	 Frm_StartFormAnchor (ActRemMaiMe,Mai_EMAIL_SECTION_ID);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -1313,14 +1314,14 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	       NextAction = ActRemMaiOth;
 	       break;
 	   }
-	 Act_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+	 Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\""
 	                 " value=\"%s\" />",
 	       row[0]);
       Ico_PutIconRemove ();
-      Act_EndForm ();
+      Frm_EndForm ();
 
       /* Email */
       fprintf (Gbl.F.Out,"%s",row[0]);
@@ -1343,7 +1344,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	{
          fprintf (Gbl.F.Out,"<br />");
 	 if (ItsMe)
-	    Act_StartFormAnchor (ActNewMaiMe,Mai_EMAIL_SECTION_ID);
+	    Frm_StartFormAnchor (ActNewMaiMe,Mai_EMAIL_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -1359,14 +1360,14 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 		  NextAction = ActNewMaiOth;
 		  break;
 	      }
-	    Act_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+	    Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
 		  row[0]);	// Email
          Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 			                                        Txt_Use_this_email);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
 
@@ -1384,7 +1385,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
             NumEmails ? Txt_New_email :	// A new email
         	        Txt_Email);	// The first email
    if (ItsMe)
-      Act_StartFormAnchor (ActNewMaiMe,Mai_EMAIL_SECTION_ID);
+      Frm_StartFormAnchor (ActNewMaiMe,Mai_EMAIL_SECTION_ID);
    else
      {
       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -1400,7 +1401,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	    NextAction = ActNewMaiOth;
 	    break;
 	}
-      Act_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+      Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
@@ -1410,7 +1411,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
             Gbl.Usrs.Me.UsrDat.Email);
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save);		// User has no email address yet
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

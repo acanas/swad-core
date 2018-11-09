@@ -39,6 +39,7 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_image.h"
@@ -341,7 +342,7 @@ void Tst_ShowFormAskTst (void)
       /***** Check if minimum date-time of next access to test is older than now *****/
       if (Tst_CheckIfNextTstAllowed ())
         {
-         Act_StartForm (ActSeeTst);
+         Frm_StartForm (ActSeeTst);
 
          Tbl_StartTable (2);
 
@@ -376,7 +377,7 @@ void Tst_ShowFormAskTst (void)
 
          /***** Send button *****/
          Btn_PutConfirmButton (Txt_Generate_test);
-         Act_EndForm ();
+         Frm_EndForm ();
         }
      }
    else
@@ -458,7 +459,7 @@ void Tst_ShowNewTest (void)
 				       Gbl.CurrentCrs.Crs.CrsCod);
 
             /***** Start form *****/
-            Act_StartForm (ActAssTst);
+            Frm_StartForm (ActAssTst);
   	    Gbl.Test.NumQsts = (unsigned) NumRows;
             Par_PutHiddenParamUnsigned ("NumTst",NumAccessesTst);
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
@@ -485,7 +486,7 @@ void Tst_ShowNewTest (void)
 
             /***** End form *****/
             Btn_PutConfirmButton (Txt_Done_assess_test);
-            Act_EndForm ();
+            Frm_EndForm ();
 
             /***** End box *****/
 	    Box_EndBox ();
@@ -1323,7 +1324,7 @@ void Tst_ShowFormAskEditTsts (void)
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Act_StartForm (ActLstTstQst);
+      Frm_StartForm (ActLstTstQst);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
 
       Tbl_StartTable (2);
@@ -1341,7 +1342,7 @@ void Tst_ShowFormAskEditTsts (void)
 
       /***** Send button *****/
       Btn_PutConfirmButton (Txt_Show_questions);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else	// No test questions
      {
@@ -1379,7 +1380,7 @@ void Tst_ShowFormAskSelectTstsForGame (long GamCod)
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      Act_StartForm (ActGamLstTstQst);
+      Frm_StartForm (ActGamLstTstQst);
       Gam_PutParamGameCod (GamCod);
 
       Tbl_StartTable (2);
@@ -1394,7 +1395,7 @@ void Tst_ShowFormAskSelectTstsForGame (long GamCod)
 
       /***** Send button *****/
       Btn_PutConfirmButton (Txt_Show_questions);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else	// No test questions
      {
@@ -1465,9 +1466,9 @@ static void Tst_PutButtonToAddQuestion (void)
   {
    extern const char *Txt_New_question;
 
-   Act_StartForm (ActEdiOneTstQst);
+   Frm_StartForm (ActEdiOneTstQst);
    Btn_PutConfirmButton (Txt_New_question);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1845,13 +1846,13 @@ static void Tst_ShowFormEditTags (void)
 
          /* Form to rename this tag */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-         Act_StartForm (ActRenTag);
+         Frm_StartForm (ActRenTag);
          Par_PutHiddenParamString ("OldTagTxt",row[1]);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Tst_MAX_CHARS_TAG,row[1],Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
@@ -1875,7 +1876,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    extern const char *Txt_Tag_X_not_allowed_Click_to_allow_it;
 
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
-   Act_StartForm (ActEnableTag);
+   Frm_StartForm (ActEnableTag);
    Par_PutHiddenParamLong ("TagCod",TagCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Tag_X_not_allowed_Click_to_allow_it,
@@ -1886,7 +1887,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -1899,7 +1900,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    extern const char *Txt_Tag_X_allowed_Click_to_disable_it;
 
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
-   Act_StartForm (ActDisableTag);
+   Frm_StartForm (ActDisableTag);
    Par_PutHiddenParamLong ("TagCod",TagCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Tag_X_allowed_Click_to_disable_it,
@@ -1910,7 +1911,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -1944,7 +1945,7 @@ static void Tst_ShowFormConfigTst (void)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_StartForm (ActRcvCfgTst);
+   Frm_StartForm (ActRcvCfgTst);
 
    /***** Tests are visible from plugins? *****/
    Tbl_StartTable (2);
@@ -2038,7 +2039,7 @@ static void Tst_ShowFormConfigTst (void)
    Btn_PutConfirmButton (Txt_Save);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -2909,11 +2910,11 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
       if (NumRows > 1)
         {
-         Act_StartForm (ActLstTstQst);
+         Frm_StartForm (ActLstTstQst);
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-         Act_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
+         Frm_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"<u>");
         }
@@ -2923,7 +2924,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
-         Act_EndForm ();
+         Frm_EndForm ();
         }
       fprintf (Gbl.F.Out,"</th>");
      }
@@ -2964,14 +2965,14 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Write icon to remove the question */
-      Act_StartForm (ActReqRemTstQst);
+      Frm_StartForm (ActReqRemTstQst);
       Tst_PutParamQstCod ();
       if (NumRows == 1)
          Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Sta_WriteParamsDatesSeeAccesses ();
       Tst_WriteParamEditQst ();
       Ico_PutIconRemove ();
-      Act_EndForm ();
+      Frm_EndForm ();
 
       /* Write icon to edit the question */
       Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
@@ -3021,7 +3022,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
         {
-         Act_StartForm (ActShfTstQst);
+         Frm_StartForm (ActShfTstQst);
          Tst_PutParamQstCod ();
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
@@ -3033,7 +3034,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
             fprintf (Gbl.F.Out," checked=\"checked\"");
          fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
-         Act_EndForm ();
+         Frm_EndForm ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -3146,7 +3147,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_StartForm (ActAddTstQstToGam);
+   Frm_StartForm (ActAddTstQstToGam);
    Gam_PutParamGameCod (GamCod);
 
    /***** Write the heading *****/
@@ -3296,7 +3297,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
    Btn_PutConfirmButton (Txt_Add_questions);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -5000,7 +5001,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                     Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_StartForm (ActRcvTstQst);
+   Frm_StartForm (ActRcvTstQst);
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
       Tst_PutParamQstCod ();
 
@@ -5347,7 +5348,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       Btn_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -7513,7 +7514,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstRes);
 
          /***** Start form *****/
-         Act_StartForm (ActSeeUsrTstRes);
+         Frm_StartForm (ActSeeUsrTstRes);
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
@@ -7542,7 +7543,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 	 Btn_PutConfirmButton (Txt_View_test_results);
 
          /***** End form *****/
-         Act_EndForm ();
+         Frm_EndForm ();
         }
      }
    else	// NumTotalUsrs == 0
@@ -7578,7 +7579,7 @@ void Tst_SelDatesToSeeMyTestResults (void)
    extern const char *Txt_View_test_results;
 
    /***** Start form *****/
-   Act_StartForm (ActSeeMyTstRes);
+   Frm_StartForm (ActSeeMyTstRes);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Test_results,NULL,
@@ -7589,7 +7590,7 @@ void Tst_SelDatesToSeeMyTestResults (void)
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_View_test_results);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -7931,7 +7932,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 		  Gbl.RowEvenOdd);
 	 if (ICanViewTest)
 	   {
-	    Act_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
+	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
 						              ActSeeOneTstResOth);
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/exam64x64.png\""
@@ -7940,7 +7941,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 		     Gbl.Prefs.IconsURL,
 		     Txt_View_test,
 		     Txt_View_test);
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	   }
 	 fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -8019,9 +8020,9 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
 	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   Act_StartForm (NextAction);
+   Frm_StartForm (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
+   Frm_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,NULL);
@@ -8034,7 +8035,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
       fprintf (Gbl.F.Out,",<br />%s",UsrDat->FirstName);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 

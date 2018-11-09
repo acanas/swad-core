@@ -29,6 +29,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_privacy.h"
@@ -161,7 +162,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
    /***** Form with list of options *****/
    if (Action != ActUnk)
-      Act_StartFormAnchor (Action,Pri_PRIVACY_ID);
+      Frm_StartFormAnchor (Action,Pri_PRIVACY_ID);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (Visibility = Pri_VISIBILITY_USER;
 	Visibility <= Pri_VISIBILITY_WORLD;
@@ -191,7 +192,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    /***** End list and form *****/
    fprintf (Gbl.F.Out,"</ul>");
    if (Action != ActUnk)
-      Act_EndForm ();
+      Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }

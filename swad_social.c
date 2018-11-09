@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_exam.h"
 #include "swad_follow.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_image.h"
 #include "swad_layout.h"
@@ -183,10 +184,10 @@ static void Soc_PutTextarea (const char *Placeholder,
 
 static long Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID + 1]);
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
 static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Act_MAX_BYTES_ID + 1]);
+                                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
@@ -725,6 +726,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	 SubQueryRangeTop[0] = '\0';
 
       /* Select the most recent publishing from social_pubs */
+      NumPubs = 0;	// Initialized to avoid warning
       switch (TimelineUsrOrGbl)
 	{
 	 case Soc_TIMELINE_USR:	// Show the timeline of a user
@@ -956,7 +958,7 @@ static void Soc_ShowTimeline (char **Query,
    /***** List recent publishings in timeline *****/
    fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
 
-   for (NumPub = 0;
+   for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
 	NumPub++)
      {
@@ -1014,12 +1016,12 @@ static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_StartFormAnchor (ActionUsr,"timeline");
+      Frm_StartFormAnchor (ActionUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
      {
-      Act_StartForm (ActionGbl);
+      Frm_StartForm (ActionGbl);
       Soc_PutParamWhichUsrs ();
      }
   }
@@ -1036,7 +1038,7 @@ static void Soc_PutFormWhichUsrs (void)
    /***** Form to select which users I want to see in timeline:
           - only the users I follow
           - all users *****/
-   Act_StartForm (ActSeeSocTmlGbl);
+   Frm_StartForm (ActSeeSocTmlGbl);
    fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
 	              "<ul>");
 
@@ -1059,7 +1061,7 @@ static void Soc_PutFormWhichUsrs (void)
      }
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show warning if I do not follow anyone *****/
    if (Gbl.Social.WhichUsrs == Soc_FOLLOWED)
@@ -1170,7 +1172,7 @@ static void Soc_ShowOldPubsInTimeline (char **Query)
 					     "can not get timeline");
 
    /***** List old publishings in timeline *****/
-   for (NumPub = 0;
+   for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
 	NumPub++)
      {
@@ -1279,7 +1281,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
-   char IdNewComment[Act_MAX_BYTES_ID + 1];
+   char IdNewComment[Frm_MAX_BYTES_ID + 1];
 
    /***** Start box ****/
    if (ShowNoteAlone)
@@ -1452,7 +1454,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_LEFT\">");
 
       /* Create unique id for new comment */
-      Act_SetUniqueId (IdNewComment);
+      Frm_SetUniqueId (IdNewComment);
 
       /* Get number of comments in this social note */
       NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
@@ -1563,13 +1565,13 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_CONTAINER SOCIAL_TOP_PUBLISHER\">");
 
 	 /***** Show user's name inside form to go to user's public profile *****/
-	 Act_StartFormUnique (ActSeeOthPubPrf);
+	 Frm_StartFormUnique (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	 Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+	 Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 					   Txt_Another_user_s_profile,
 				   "SOCIAL_TOP_PUBLISHER");
 	 fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 /***** Show action made *****/
          fprintf (Gbl.F.Out," %s:</div>",
@@ -1595,22 +1597,22 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
-   Act_StartFormUnique (ActSeeOthPubPrf);
+   Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_N_BOLD");
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
-   Act_StartFormUnique (ActSeeOthPubPrf);
+   Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1623,10 +1625,10 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
 static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
-   char IdDateTime[Act_MAX_BYTES_ID + 1];
+   char IdDateTime[Frm_MAX_BYTES_ID + 1];
 
    /***** Create unique Id *****/
-   Act_SetUniqueId (IdDateTime);
+   Frm_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\">"
@@ -1805,34 +1807,34 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	{
 	 case Soc_NOTE_INS_DOC_PUB_FILE:
 	 case Soc_NOTE_INS_SHA_PUB_FILE:
-	    Act_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
 	       Ins_PutParamInsCod (SocNot->HieCod);		// Go to another institution
 	    break;
 	 case Soc_NOTE_CTR_DOC_PUB_FILE:
 	 case Soc_NOTE_CTR_SHA_PUB_FILE:
-	    Act_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
 	       Ctr_PutParamCtrCod (SocNot->HieCod);		// Go to another centre
 	    break;
 	 case Soc_NOTE_DEG_DOC_PUB_FILE:
 	 case Soc_NOTE_DEG_SHA_PUB_FILE:
-	    Act_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
 	       Deg_PutParamDegCod (SocNot->HieCod);		// Go to another degree
 	    break;
 	 case Soc_NOTE_CRS_DOC_PUB_FILE:
 	 case Soc_NOTE_CRS_SHA_PUB_FILE:
-	    Act_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	    Act_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
 	    Exa_PutHiddenParamExaCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -1840,7 +1842,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	 case Soc_NOTE_SOCIAL_POST:	// Not applicable
 	    return;
 	 case Soc_NOTE_FORUM_POST:
-	    Act_StartFormUnique (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
+	    Frm_StartFormUnique (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
 	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                          1,	// Page of posts   = first
                                          Gbl.Forum.ForumSet,
@@ -1852,7 +1854,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case Soc_NOTE_NOTICE:
-	    Act_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -1865,7 +1867,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       snprintf (Class,sizeof (Class),
 	        "%s ICO_HIGHLIGHT",
 		The_ClassFormBold[Gbl.Prefs.Theme]);
-      Act_LinkFormSubmitUnique (Txt_SOCIAL_NOTE[SocNot->NoteType],Class);
+      Frm_LinkFormSubmitUnique (Txt_SOCIAL_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />"
@@ -1875,7 +1877,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
             Txt_SOCIAL_NOTE[SocNot->NoteType],
             Txt_SOCIAL_NOTE[SocNot->NoteType],
             Txt_SOCIAL_NOTE[SocNot->NoteType]);
-      Act_EndForm ();
+      Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -2183,7 +2185,7 @@ static void Soc_PutFormToWriteNewPost (void)
                     "SOCIAL_TEXTAREA_POST","SOCIAL_POST_IMG_TIT_URL");
 
    /* End form */
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /* End container */
    fprintf (Gbl.F.Out,"</div>");
@@ -2201,10 +2203,10 @@ static void Soc_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit)
   {
    extern const char *Txt_Post;
-   char IdDivImgButton[Act_MAX_BYTES_ID + 1];
+   char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
 
    /***** Set unique id for the hidden div *****/
-   Act_SetUniqueId (IdDivImgButton);
+   Frm_SetUniqueId (IdDivImgButton);
 
    /***** Textarea to write the content *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
@@ -2339,7 +2341,7 @@ static long Soc_ReceiveSocialPost (void)
 /****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID + 1])
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_Comment;
 
@@ -2381,7 +2383,7 @@ static void Soc_PutIconCommentDisabled (void)
 // All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Act_MAX_BYTES_ID + 1])
+                                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_New_SOCIAL_comment;
    bool ShowPhoto = false;
@@ -2414,7 +2416,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                     "SOCIAL_TEXTAREA_COMMENT","SOCIAL_COMMENT_IMG_TIT_URL");
 
    /* End form */
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /* End right container */
    fprintf (Gbl.F.Out,"</div>");
@@ -2629,22 +2631,22 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
-   Act_StartFormUnique (ActSeeOthPubPrf);
+   Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_BOLD");
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
-   Act_StartFormUnique (ActSeeOthPubPrf);
+   Frm_StartFormUnique (ActSeeOthPubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+   Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2670,7 +2672,7 @@ static void Soc_PutFormToRemoveComment (long PubCod)
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2693,7 +2695,7 @@ static void Soc_PutFormToFavSocialComment (long PubCod)
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2770,7 +2772,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Share,Txt_Share);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2793,7 +2795,7 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2816,7 +2818,7 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_SOCIAL_NOTE_Shared,Txt_SOCIAL_NOTE_Shared);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2839,7 +2841,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2862,7 +2864,7 @@ static void Soc_PutFormToUnfavSocialComment (long PubCod)
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -2886,7 +2888,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

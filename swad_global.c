@@ -152,6 +152,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Session.NumSessions = 0;
    Gbl.Session.IsOpen = false;
    Gbl.Session.HasBeenDisconnected = false;
+   Gbl.Session.Id[0] = '\0';
 
    Gbl.Usrs.Me.UsrIdLogin[0] = '\0';
    Gbl.Usrs.Me.LoginPlainPassword[0] = '\0';

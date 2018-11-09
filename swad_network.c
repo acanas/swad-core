@@ -31,6 +31,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
@@ -335,7 +336,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
-      Act_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
+      Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
       fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -344,7 +345,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       (unsigned) NumURL,
 	       Cns_MAX_CHARS_WWW,URL,
 	       Gbl.Form.Id);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }

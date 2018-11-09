@@ -30,6 +30,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_profile.h"
@@ -152,7 +153,7 @@ void Rep_ReqMyUsageReport (void)
    extern const char *Txt_Generate_report;
 
    /***** Form to show my usage report *****/
-   Act_StartForm (ActSeeMyUsgRep);
+   Frm_StartForm (ActSeeMyUsgRep);
 
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -168,7 +169,7 @@ void Rep_ReqMyUsageReport (void)
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Generate_report);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

@@ -4473,8 +4473,8 @@ static void Svc_ListDir (unsigned Level,const char *Path,const char *PathInTree)
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX + 1];
-   char PathFileInExplTree[PATH_MAX + 1];
+   char PathFileRel[PATH_MAX + 1 + NAME_MAX + 1];
+   char PathFileInExplTree[PATH_MAX + 1 + NAME_MAX + 1];
    struct stat FileStatus;
 
    /***** Scan directory *****/

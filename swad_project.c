@@ -34,6 +34,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_notification.h"
@@ -370,7 +371,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       (Gbl.Prjs.Filter.My_All == My_All) ? "PREF_ON" :
 					            "PREF_OFF");
-      Act_StartForm (ActSeePrj);
+      Frm_StartForm (ActSeePrj);
       Filter.My_All = My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
       Filter.HidVis = Gbl.Prjs.Filter.HidVis;
@@ -385,7 +386,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
 	       Gbl.Prefs.IconsURL,WhoseProjectsImage[My_All],
 	       Txt_PROJECT_MY_ALL_PROJECTS[My_All],
 	       Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -409,7 +410,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       (Gbl.Prjs.Filter.PreNon & (1 << PreNon)) ? "PREF_ON" :
 						          "PREF_OFF");
-      Act_StartForm (ActSeePrj);
+      Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon ^ (1 << PreNon);	// Toggle
       Filter.HidVis = Gbl.Prjs.Filter.HidVis;
@@ -424,7 +425,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
 	       Gbl.Prefs.IconsURL,PreassignedNonpreassigImage[PreNon],
 	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon],
 	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -453,7 +454,7 @@ static void Prj_ShowFormToFilterByHidden (void)
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       (Gbl.Prjs.Filter.HidVis & (1 << HidVis)) ? "PREF_ON" :
 						          "PREF_OFF");
-      Act_StartForm (ActSeePrj);
+      Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
       Filter.HidVis = Gbl.Prjs.Filter.HidVis ^ (1 << HidVis);	// Toggle
@@ -469,7 +470,7 @@ static void Prj_ShowFormToFilterByHidden (void)
 	       HiddenVisiblImage[HidVis],
 	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis],
 	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
-      Act_EndForm ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -486,7 +487,7 @@ static void Prj_ShowFormToFilterByDpt (void)
 
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div>");
-   Act_StartForm (ActSeePrj);
+   Frm_StartForm (ActSeePrj);
    Filter.My_All = Gbl.Prjs.Filter.My_All;
    Filter.PreNon = Gbl.Prjs.Filter.PreNon;
    Filter.HidVis = Gbl.Prjs.Filter.HidVis;
@@ -505,7 +506,7 @@ static void Prj_ShowFormToFilterByDpt (void)
                                 true);				// Submit on change
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -698,19 +699,19 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
 	 case Prj_FILE_BROWSER_PROJECT:
-	    Act_StartForm (ActSeePrj);
+	    Frm_StartForm (ActSeePrj);
 	    Prj_PutParams (&Gbl.Prjs.Filter,
 			   Order,
 			   Gbl.Prjs.CurrentPage,
 			   -1L);
-	    Act_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
+	    Frm_LinkFormSubmit (Txt_PROJECT_ORDER_HELP[Order],"TIT_TBL",NULL);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       fprintf (Gbl.F.Out,"<u>");
             fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       fprintf (Gbl.F.Out,"</u>");
 	    fprintf (Gbl.F.Out,"</a>");
-	    Act_EndForm ();
+	    Frm_EndForm ();
 	    break;
 	 default:
             fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
@@ -834,10 +835,10 @@ static void Prj_PutButtonToCreateNewPrj (void)
    extern const char *Txt_New_project;
 
    Gbl.Prjs.PrjCod = -1L;
-   Act_StartForm (ActFrmNewPrj);
+   Frm_StartForm (ActFrmNewPrj);
    Prj_PutCurrentParams ();
    Btn_PutConfirmButton (Txt_New_project);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1012,14 +1013,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    fprintf (Gbl.F.Out,"\">");
    if (ICanViewProjectFiles)
      {
-      Act_StartForm (ActAdmDocPrj);
+      Frm_StartForm (ActAdmDocPrj);
       Prj_PutCurrentParams ();
-      Act_LinkFormSubmit (Txt_Project_files,
+      Frm_LinkFormSubmit (Txt_Project_files,
                           Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
         	                                      "ASG_TITLE",
         	          NULL);
       fprintf (Gbl.F.Out,"%s</a>",Prj->Title);
-      Act_EndForm ();
+      Frm_EndForm ();
      }
    else
       fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
@@ -2067,12 +2068,12 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	 /* Show form to request confirmation */
-	 Act_StartForm (ActionRemUsr[RoleInProject]);
+	 Frm_StartForm (ActionRemUsr[RoleInProject]);
 	 Gbl.Prjs.PrjCod = Prj.PrjCod;
 	 Prj_PutCurrentParams ();
 	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_project :
 				      Txt_Remove_user_from_this_project);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 /* End alert */
 	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
@@ -2986,7 +2987,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /***** 2. Project data *****/
    /* Start data form */
-   Act_StartForm (ItsANewProject ? ActNewPrj :
+   Frm_StartForm (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
    Prj_PutCurrentParams ();
 
@@ -3119,7 +3120,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
       Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
 
    /* End data form */
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End project box *****/
    Box_EndBox ();

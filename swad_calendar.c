@@ -33,6 +33,7 @@
 #include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
@@ -123,7 +124,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
          fprintf (Gbl.F.Out,"<div class=\"%s\">",
 		  FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
 							       "PREF_OFF");
-	 Act_StartForm (Action);
+	 Frm_StartForm (Action);
 	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams ();
@@ -134,7 +135,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 		  Txt_DAYS_SMALL[FirstDayOfWeek],
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
 		  ClassIcon);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
         }
    fprintf (Gbl.F.Out,"</div>");
@@ -202,7 +203,7 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
 void Cal_DrawCurrentMonth (void)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[Act_MAX_BYTES_PARAMS_STR];
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -225,9 +226,9 @@ void Cal_DrawCurrentMonth (void)
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Act_SetParamsForm (ParamsStr,Cal_GetActionToSeeCalendar (),true);
+   Frm_SetParamsForm (ParamsStr,Cal_GetActionToSeeCalendar (),true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
-   Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
+   Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",ParamsStr);
   }
@@ -302,7 +303,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
   {
    extern const char *Hlp_Calendar;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[Act_MAX_BYTES_PARAMS_STR];
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -340,10 +341,10 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 		        "false",
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Act_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
+   Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
    fprintf (Gbl.F.Out,"'%s',",
             ParamsStr);
-   Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
+   Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",
 	    ParamsStr);

@@ -37,6 +37,7 @@
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
@@ -140,7 +141,7 @@ void Syl_PutFormWhichSyllabus (void)
 
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
-   Act_StartForm (ActSeeSyl);
+   Frm_StartForm (ActSeeSyl);
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<ul class=\"LIST_LEFT\" style=\"margin:12px;\">");
 
@@ -163,7 +164,7 @@ void Syl_PutFormWhichSyllabus (void)
      }
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -247,9 +248,9 @@ bool Syl_CheckAndEditSyllabus (void)
       if (Gbl.Syllabus.EditionIsActive)
 	{
 	 /***** Button to view *****/
-         Act_StartForm (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type]);
+         Frm_StartForm (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type]);
 	 Btn_PutConfirmButton (Txt_Done);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	}
 
       /***** End box *****/
@@ -610,11 +611,11 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
             Ico_PutIconRemovalNotAllowed ();
 	 else
 	   {
-	    Act_StartForm (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
+	    Frm_StartForm (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 		                                                      ActDelItmSylPra);
 	    Syl_PutParamNumItem ();
             Ico_PutIconRemove ();
-            Act_EndForm ();
+            Frm_EndForm ();
 	   }
          fprintf (Gbl.F.Out,"</td>");
 
@@ -912,7 +913,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
    /***** Text of the item *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"LEFT_MIDDLE COLOR%u\">",
             LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
-   Act_StartForm (NewItem ? (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
+   Frm_StartForm (NewItem ? (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
 	                                                                ActInsIteSylPra) :
                             (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                        ActModIteSylPra));
@@ -927,7 +928,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
       fprintf (Gbl.F.Out," autofocus=\"autofocus\"");
    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />",
 	    Gbl.Form.Id);
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
 

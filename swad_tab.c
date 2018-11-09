@@ -25,6 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_tab.h"
@@ -131,9 +132,9 @@ void Tab_DrawTabs (void)
 	    fprintf (Gbl.F.Out," class=\"ICO_HIGHLIGHT\"");
 	 fprintf (Gbl.F.Out,">");
 
-	 Act_StartForm (ActMnu);
+	 Frm_StartForm (ActMnu);
 	 Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	 Act_LinkFormSubmit (Txt_TABS_TXT[NumTab],
+	 Frm_LinkFormSubmit (Txt_TABS_TXT[NumTab],
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" title=\"%s\""
@@ -147,7 +148,7 @@ void Tab_DrawTabs (void)
 		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 					     The_ClassTxtTabOff[Gbl.Prefs.Theme],
 		  Txt_TABS_TXT[NumTab]);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 
 	 fprintf (Gbl.F.Out,"</div>"
 			    "</li>");
@@ -243,11 +244,11 @@ static void Tab_WriteBreadcrumbHome (void)
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
    extern const char *Txt_Home_PAGE;
 
-   Act_StartForm (ActHom);
-   Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
+   Frm_StartForm (ActHom);
+   Frm_LinkFormSubmit (Txt_Home_PAGE,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s</a>",
 	    Txt_Home_PAGE);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -260,13 +261,13 @@ static void Tab_WriteBreadcrumbTab (void)
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
 
    /***** Start form *****/
-   Act_StartForm (ActMnu);
+   Frm_StartForm (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.Action.Tab);
-   Act_LinkFormSubmit (Txt_TABS_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_TABS_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end form *****/
    fprintf (Gbl.F.Out,"%s</a>",Txt_TABS_TXT[Gbl.Action.Tab]);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -279,13 +280,13 @@ static void Tab_WriteBreadcrumbAction (void)
    const char *Title = Act_GetTitleAction (Gbl.Action.Act);
 
    /***** Start form *****/
-   Act_StartForm (Act_GetSuperAction (Gbl.Action.Act));
-   Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
+   Frm_StartForm (Act_GetSuperAction (Gbl.Action.Act));
+   Frm_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end form *****/
    fprintf (Gbl.F.Out,"%s</a>",
 	    Title);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

@@ -35,6 +35,7 @@
 #include "swad_chat.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -333,9 +334,9 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
 
    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
-   Act_StartForm (ActCht);
+   Frm_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
-   Act_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
@@ -356,7 +357,7 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
    if (NumUsrsInRoom)
       fprintf (Gbl.F.Out,"</strong>");
    fprintf (Gbl.F.Out,"</a>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</li>");
   }
 

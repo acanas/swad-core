@@ -31,6 +31,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
@@ -193,7 +194,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
                  Hlp_Search,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
-   Act_StartForm (Action);
+   Frm_StartForm (Action);
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
@@ -242,7 +243,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -292,11 +293,11 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 
    /***** Put form *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
-   Act_StartForm (ActionSearch);
+   Frm_StartForm (ActionSearch);
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white64x64.png");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
   }
 

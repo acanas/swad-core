@@ -36,6 +36,7 @@
 
 #include "swad_box.h"
 #include "swad_config.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_file_browser.h"
 #include "swad_ID.h"
@@ -377,11 +378,11 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
-   Act_StartForm (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
+   Frm_StartForm (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
-   Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />"
@@ -389,7 +390,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
 	 Gbl.Prefs.IconsURL,
 	 Txt_Create_ZIP_file,
 	 Txt_Create_ZIP_file);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

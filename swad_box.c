@@ -30,6 +30,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_table.h"
@@ -114,14 +115,14 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
   {
    extern const char *Txt_Help;
    extern const char *Txt_Close;
-   char IdFrame[Act_MAX_BYTES_ID + 1];
+   char IdFrame[Frm_MAX_BYTES_ID + 1];
 
    /***** Start box container *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
-      Act_SetUniqueId (IdFrame);
+      Frm_SetUniqueId (IdFrame);
       fprintf (Gbl.F.Out," id=\"%s\"",IdFrame);
      }
    fprintf (Gbl.F.Out,">");

@@ -40,6 +40,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -720,9 +721,9 @@ static void Exa_PutButtonToCreateNewExamAnnouncement (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Act_StartForm (ActEdiExaAnn);
+   Frm_StartForm (ActEdiExaAnn);
    Btn_PutConfirmButton (Txt_New_announcement_OF_EXAM);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1064,7 +1065,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       /***** Start form *****/
-      Act_StartForm (ActRcvExaAnn);
+      Frm_StartForm (ActRcvExaAnn);
       if (Gbl.ExamAnns.ExaDat.ExaCod > 0)	// Existing announcement of exam
          Exa_PutParamExaCodToEdit ();
      }

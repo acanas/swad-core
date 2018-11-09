@@ -34,6 +34,7 @@
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_parameter.h"
@@ -132,12 +133,12 @@ static void Con_PutIconToUpdateConnected (void)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update;
 
-   Act_StartForm (ActLstCon);
+   Frm_StartForm (ActLstCon);
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
+   Frm_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
                                NULL);
    Ico_PutCalculateIcon (Txt_Update);
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -376,10 +377,10 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
-   Act_StartFormUnique (ActLstCon);	// Must be unique because
+   Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
+   Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 
    /* Write total number of sessions */
    fprintf (Gbl.F.Out,"%u %s",
@@ -388,7 +389,7 @@ void Con_ShowGlobalConnectedUsrs (void)
         	                             Txt_sessions);
    /* End link to view more details about connected users */
    fprintf (Gbl.F.Out,"</a>");
-   Act_EndForm ();
+   Frm_EndForm ();
 
    if (NumUsrsTotal)
      {
@@ -485,9 +486,9 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 	    Txt_from);
 
    /* Put form to change scope */
-   Act_StartForm (ActLstCon);
+   Frm_StartForm (ActLstCon);
    Sco_PutSelectorScope ("ScopeCon",true);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -526,17 +527,17 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
-   Act_StartFormUnique (ActLstCon);	// Must be unique because
+   Frm_StartFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
+   Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
    Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s"
 	              "</a>",
             Usrs.NumUsrs,Txt_from,CourseName);
-   Act_EndForm ();
+   Frm_EndForm ();
 
    /***** Number of teachers and students *****/
    fprintf (Gbl.F.Out,"<table class=\"CONNECTED_LIST\">");
@@ -617,17 +618,17 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td colspan=\"3\" class=\"CENTER_TOP\">");
-	 Act_StartFormUnique (ActLstCon);	// Must be unique because
+	 Frm_StartFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Sco_SCOPE_CRS);
-	 Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
+	 Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Connected_users,Txt_Connected_users);
-	 Act_EndForm ();
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -1044,11 +1045,11 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    switch (Role)
      {
       case Rol_STD:
-	 Act_StartFormUnique (ActSeeRecOneStd);
+	 Frm_StartFormUnique (ActSeeRecOneStd);
 	 break;
       case Rol_NET:
       case Rol_TCH:
-	 Act_StartFormUnique (ActSeeRecOneTch);
+	 Frm_StartFormUnique (ActSeeRecOneTch);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong role.");
@@ -1056,11 +1057,11 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
-   Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
+   Frm_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
    fprintf (Gbl.F.Out,"</a>"
                       "</div>");
-   Act_EndForm ();
+   Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write time from last access *****/
@@ -1261,11 +1262,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       switch (Role)
 		 {
 		  case Rol_STD:
-		     Act_StartForm (ActSeeRecOneStd);
+		     Frm_StartForm (ActSeeRecOneStd);
 		     break;
 		  case Rol_NET:
 		  case Rol_TCH:
-		     Act_StartForm (ActSeeRecOneTch);
+		     Frm_StartForm (ActSeeRecOneTch);
 		     break;
 		  default:
 		     Lay_ShowErrorAndExit ("Wrong role.");
@@ -1274,13 +1275,13 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	      }
             fprintf (Gbl.F.Out,"<div class=\"CON_NAME_WIDE\">");	// Limited width
 	    if (PutLinkToRecord)
-	       Act_LinkFormSubmit (UsrDat.FullName,Font,NULL);
+	       Frm_LinkFormSubmit (UsrDat.FullName,Font,NULL);
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
 	       fprintf (Gbl.F.Out,"</a>");
 	    fprintf (Gbl.F.Out,"</div>");
 	    if (PutLinkToRecord)
-	       Act_EndForm ();
+	       Frm_EndForm ();
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write time from last access *****/

@@ -29,6 +29,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_form.h"
 #include "swad_global.h"
 #include "swad_scope.h"
 #include "swad_theme.h"
@@ -286,7 +287,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
      }
 
    /***** Start form to upload logo *****/
-   Act_StartForm (ActionRec);
+   Frm_StartForm (ActionRec);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Logo,NULL,
@@ -313,7 +314,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Box_EndBox ();
 
    /***** End form *****/
-   Act_EndForm ();
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

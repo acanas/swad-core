@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
+#include "swad_form.h"
 #include "swad_image.h"
 
 /*****************************************************************************/
@@ -197,13 +198,13 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
    extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Link;
    struct ParamUploadImg ParamUploadImg;
-   char Id[Act_MAX_BYTES_ID + 1];
+   char Id[Frm_MAX_BYTES_ID + 1];
 
    /***** Set names of parameters depending on number of image in form *****/
    Img_SetParamNames (&ParamUploadImg,NumImgInForm);
 
    /***** Create unique id for this image uploader *****/
-   Act_SetUniqueId (Id);
+   Frm_SetUniqueId (Id);
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"IMG_UPLOAD_CONTAINER\">");
