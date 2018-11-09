@@ -2645,7 +2645,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
    Par_GetParToText ("Path",Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,PATH_MAX);
 
    /* Check if path contains ".." */
-   if (strstr (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,".."))	// ".." is not allowed in the path
+   if (strstr (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,".."))	// ".." is not allowed in path
       Lay_ShowErrorAndExit ("Wrong path.");
 
    /***** Get the name of the file, folder or link *****/
@@ -2658,13 +2658,14 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
                                      Gbl.FileBrowser.FilFolLnkName,
                                      NAME_MAX,Str_TO_TEXT,false))
 	{
+	 Gbl.FileBrowser.FileType = FileType;
+
 	 /* Check if filename contains ".." */
-	 Brw_GetFileNameToShow (FileType,
+	 Brw_GetFileNameToShow (Gbl.FileBrowser.FileType,
 	                        Gbl.FileBrowser.FilFolLnkName,
                                 FileNameToShow);
-	 if (strstr (FileNameToShow,".."))	// ".." is not allowed in the path
-	    Lay_ShowErrorAndExit ("Wrong path.");
-	 Gbl.FileBrowser.FileType = FileType;
+	 if (strstr (FileNameToShow,".."))	// ".." is not allowed in filename
+	    Lay_ShowErrorAndExit ("Wrong file name.");
 	 break;
 	}
 
@@ -9855,6 +9856,8 @@ void Brw_RecLinkFileBrowser (void)
 		 }
 	      }
 	   }
+	 else	// Link URL not valid
+	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
 	}
       else	// Link URL not valid
 	 Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
