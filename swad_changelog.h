@@ -355,10 +355,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.14 (2018-11-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.14.1 (2018-11-09)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.14.1:  Nov 09, 2018  Dixed several bugs when compiling with -Os. (236721 lines)
 	Version 18.14:    Nov 09, 2018  New module swad_form for forms to go to actions.
 					Fixed bug in query to get assignments. (236705 lines)
 	Version 18.13.7:  Nov 09, 2018  Fixed bug in file browser links. (236552 lines)

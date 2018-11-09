@@ -772,7 +772,10 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
       else
+        {
+	 row = NULL;
 	 PubCod = -1L;
+        }
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
@@ -785,13 +788,16 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
 
 	 /* Get social note code (row[1]) */
-	 NotCod = Str_ConvertStrCodToLongCod (row[1]);
-	 DB_QueryINSERT ("can not store note code",
-			 "INSERT INTO not_codes SET NotCod=%ld",
-			 NotCod);
-	 DB_QueryINSERT ("can not store note code",
-			 "INSERT INTO current_timeline SET NotCod=%ld",
-			 NotCod);
+	 if (row)
+	   {
+	    NotCod = Str_ConvertStrCodToLongCod (row[1]);
+	    DB_QueryINSERT ("can not store note code",
+			    "INSERT INTO not_codes SET NotCod=%ld",
+			    NotCod);
+	    DB_QueryINSERT ("can not store note code",
+			    "INSERT INTO current_timeline SET NotCod=%ld",
+			    NotCod);
+	   }
 	}
       else	// Nothing got ==> abort loop
          break;	// Last publishing

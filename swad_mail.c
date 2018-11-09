@@ -1811,7 +1811,7 @@ void Mai_ConfirmEmail (void)
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
    long UsrCod;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   bool KeyIsCorrect = false;
+   bool KeyIsCorrect;
    bool Confirmed;
 
    /***** Get parameter Key *****/
@@ -1834,6 +1834,12 @@ void Mai_ConfirmEmail (void)
 
       KeyIsCorrect = true;
      }
+   else
+     {
+      row = NULL;
+      UsrCod = -1L;
+      KeyIsCorrect = false;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1852,7 +1858,10 @@ void Mai_ConfirmEmail (void)
 			  " WHERE UsrCod=%ld AND E_mail='%s'",
 			  UsrCod,Email))
 	{
-         Confirmed = (row[0][0] == 'Y');
+	 Confirmed = false;
+	 if (row)
+            if (row[0])
+               Confirmed = (row[0][0] == 'Y');
 
          /***** Confirm email *****/
          if (Confirmed)
