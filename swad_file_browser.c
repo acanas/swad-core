@@ -91,18 +91,7 @@ const char *Brw_FileTypeParamName[Brw_NUM_FILE_TYPES] =
    "BrwFol",	// Brw_IS_FOLDER
    "BrwLnk",	// Brw_IS_LINK
   };
-/*
-const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
-  {
-   "all_rights_reserved",	// All Rights Reserved
-   "cc_by",			// CC Attribution License
-   "cc_by_sa",			// CC Attribution-ShareAlike License
-   "cc_by_nd",			// CC Attribution-NoDerivs License
-   "cc_by_nc",			// CC Attribution-NonCommercial License
-   "cc_by_nc_sa",		// CC Attribution-NonCommercial-ShareAlike License
-   "cc_by_nc_nd",		// CC Attribution-NonCommercial-NoDerivs License
-  };
-*/
+
 // Browsers types for database "files" and "file_browser_size" tables
 const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -1199,121 +1188,6 @@ const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
   };
 #define Brw_MAX_FILES_BRIEF	5000
 #define Brw_MAX_FOLDS_BRIEF	1000
-
-/* Extensions allowed for uploaded files */
-const char *Brw_FileExtensionsAllowed[] =
-  {
-   "3gp"  ,	// Video Android mobile
-   "7z"   ,
-   "asm"  ,
-   "avi"  ,
-   "bas"  ,
-   "bat"  ,
-   "bbl"  ,
-   "bib"  ,
-   "bin"  ,
-   "bmp"  ,
-   "bz2"  ,
-   "c"    ,
-   "cc"   ,
-   "cdr"  ,
-   "cpp"  ,
-   "css"  ,
-   "csv"  ,
-   "dmg"  ,
-   "doc"  ,
-   "docx" ,
-   "dotm" ,
-   "dwd"  ,
-   "eps"  ,
-   "fdf"  ,
-   "flv"  ,
-   "gdb"  ,	// GNU Debugger Script
-   "ggb"  ,
-   "ggt"  ,
-   "gif"  ,
-   "gz"   ,
-   "h"    ,
-   "hex"  ,
-   "htm"  ,
-   "html" ,
-   "img"  ,
-   "java" ,
-   "jpg"  ,
-   "jpeg" ,
-   "latex",
-   "m"    ,
-   "mdb"  ,
-   "mht"  ,
-   "mhtml",
-   "mid"  ,
-   "mov"  ,
-   "mp3"  ,
-   "mp4"  ,
-   "mpeg" ,
-   "mpg"  ,
-   "mpp"  ,
-   "mus"  ,
-   "nb"   ,
-   "odb"  ,
-   "odc"  ,
-   "odf"  ,
-   "odg"  ,
-   "odi"  ,
-   "odm"  ,
-   "odp"  ,
-   "ods"  ,
-   "odt"  ,
-   "otg"  ,
-   "otp"  ,
-   "ots"  ,
-   "ott"  ,
-   "pas"  ,
-   "pl"   ,
-   "pdf"  ,
-   "png"  ,
-   "pps"  ,
-   "ppsx" ,
-   "ppt"  ,
-   "pptx" ,
-   "ps"   ,
-   "pss"  ,
-   "qt"   ,
-   "r"    ,
-   "ram"  ,
-   "rar"  ,
-   "raw"  ,
-   "rdata",
-   "rm"   ,
-   "rp"   ,	// Axure, http://www.axure.com/
-   "rtf"  ,
-   "s"    ,
-   "sav"  ,	// SPSS Data File
-   "sbs"  ,
-   "sf3"  ,
-   "sgp"  ,
-   "spp"  ,
-   "spo"  ,
-   "sps"  ,
-   "swf"  ,
-   "sws"  ,
-   "tar"  ,
-   "tex"  ,
-   "tgz"  ,
-   "tif"  ,
-   "txt"  ,
-   "voc"  ,
-   "vp"   ,	// Justinmind, http://www.justinmind.com/
-   "wav"  ,
-   "wma"  ,
-   "wmv"  ,
-   "wxm"  ,
-   "wxmx" ,
-   "xls"  ,
-   "xlsx" ,
-   "zip"  ,
-  };
-const unsigned Brw_NUM_FILE_EXT_ALLOWED = sizeof (Brw_FileExtensionsAllowed) / sizeof (Brw_FileExtensionsAllowed[0]);
 
 /* MIME types allowed for uploades files */
 const char *Brw_MIMETypesAllowed[] =
@@ -6781,6 +6655,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 
 static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName)
   {
+   extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
+   extern const char *Ext_FileExtensionsAllowed[];
    extern const char *Txt_Link;
    extern const char *Txt_X_file;
    unsigned DocType;
@@ -6797,14 +6673,14 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
    else	// FileType == Brw_IS_FILE
      {
       for (DocType = 0, NotFound = true;
-	   DocType < Brw_NUM_FILE_EXT_ALLOWED && NotFound;
+	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
 	   DocType++)
-	 if (Str_FileIs (FileName,Brw_FileExtensionsAllowed[DocType]))
+	 if (Str_FileIs (FileName,Ext_FileExtensionsAllowed[DocType]))
 	   {
 	    fprintf (Gbl.F.Out,"%s%ux%u.gif\" alt=\"",
-		     Brw_FileExtensionsAllowed[DocType],
+		     Ext_FileExtensionsAllowed[DocType],
 		     Size,Size);
-	    fprintf (Gbl.F.Out,Txt_X_file,Brw_FileExtensionsAllowed[DocType]);
+	    fprintf (Gbl.F.Out,Txt_X_file,Ext_FileExtensionsAllowed[DocType]);
 	    fprintf (Gbl.F.Out,"\"");
 	    NotFound = false;
 	   }
@@ -9885,6 +9761,8 @@ void Brw_RecLinkFileBrowser (void)
 
 static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
   {
+   extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
+   extern const char *Ext_FileExtensionsAllowed[];
    extern const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML;
@@ -9923,9 +9801,9 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
       default:
 	 /* Check the file extension */
 	 for (Type = 0;
-	      Type < Brw_NUM_FILE_EXT_ALLOWED;
+	      Type < Ext_NUM_FILE_EXT_ALLOWED;
 	      Type++)
-	    if (Str_FileIs (Gbl.FileBrowser.NewFilFolLnkName,Brw_FileExtensionsAllowed[Type]))
+	    if (Str_FileIs (Gbl.FileBrowser.NewFilFolLnkName,Ext_FileExtensionsAllowed[Type]))
 	      {
 	       ExtensionIsAllowed = true;
 	       break;
