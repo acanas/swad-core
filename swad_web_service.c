@@ -3375,8 +3375,9 @@ int swad__sendMessage (struct soap *soap,
    if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in "to"
      {
       /***** Get users *****/
-      NumRows = DB_QuerySELECTusingQueryStr (&Query,&mysql_res,
-					     "can not get users");
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get users",
+				"%s",
+				Query);
 
       sendMessageOut->numUsers = (int) NumRows;
       sendMessageOut->usersArray.__size = (int) NumRows;

@@ -1459,8 +1459,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Ale_ShowAlert (Ale_INFO,Query);
    */
    /***** Make the query *****/
-   NumRows = DB_QuerySELECTusingQueryStr (&Query,&mysql_res,
-					  "can not get clicks");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",
+			     "%s",
+			     Query);
 
    /***** Count the number of rows in result *****/
    if (NumRows == 0)

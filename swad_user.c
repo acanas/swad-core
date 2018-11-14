@@ -186,7 +186,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
-static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t Scope);
+static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Sco_Scope_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit);
@@ -4619,7 +4619,7 @@ void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (&Query,Role,Scope);
+   Usr_GetListUsrsFromQuery (Query,Role,Scope);
   }
 
 /*****************************************************************************/
@@ -4897,7 +4897,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    //   Lay_ShowAlert (Lay_INFO,Query);
 
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (&Query,Role,Gbl.Scope.Current);
+   Usr_GetListUsrsFromQuery (Query,Role,Gbl.Scope.Current);
   }
 
 /*****************************************************************************/
@@ -5101,7 +5101,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of administrators from database *****/
-   Usr_GetListUsrsFromQuery (&Query,Rol_DEG_ADM,Scope);
+   Usr_GetListUsrsFromQuery (Query,Rol_DEG_ADM,Scope);
   }
 
 /*****************************************************************************/
@@ -5180,7 +5180,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (&Query,Rol_GST,Scope);
+   Usr_GetListUsrsFromQuery (Query,Rol_GST,Scope);
   }
 
 /*****************************************************************************/
@@ -5231,7 +5231,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 			 DegCod,(unsigned) Rol_STD);
 
       /***** Get list of students from database *****/
-      Usr_GetListUsrsFromQuery (&Query,Rol_STD,Sco_SCOPE_DEG);
+      Usr_GetListUsrsFromQuery (Query,Rol_STD,Sco_SCOPE_DEG);
      }
   }
 
@@ -5239,7 +5239,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t Scope)
+static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Sco_Scope_t Scope)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    MYSQL_RES *mysql_res;
@@ -5248,13 +5248,13 @@ static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t S
    struct UsrInList *UsrInList;
    bool Abort = false;
 
-   if (*Query == NULL)
+   if (Query == NULL)
      {
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
       return;
      }
 
-   if (!*Query[0])
+   if (!Query[0])
      {
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
       return;
@@ -5262,8 +5262,9 @@ static void Usr_GetListUsrsFromQuery (char **Query,Rol_Role_t Role,Sco_Scope_t S
 
    /***** Query database *****/
    if ((Gbl.Usrs.LstUsrs[Role].NumUsrs =
-   (unsigned) DB_QuerySELECTusingQueryStr (Query,&mysql_res,
-					   "can not get list of users")))
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of users",
+			      "%s",
+			      Query)))
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {

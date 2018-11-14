@@ -145,7 +145,7 @@ static void Soc_UpdateLastPubCodIntoSession (void);
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
 
-static void Soc_ShowTimeline (char **Query,
+static void Soc_ShowTimeline (char *Query,
                               const char *Title,long NotCodToHighlight);
 static void Soc_PutIconsTimeline (void);
 
@@ -157,8 +157,8 @@ static void Soc_GetParamsWhichUsrs (void);
 
 static void Soc_ShowWarningYouDontFollowAnyUser (void);
 
-static void Soc_InsertNewPubsInTimeline (char **Query);
-static void Soc_ShowOldPubsInTimeline (char **Query);
+static void Soc_InsertNewPubsInTimeline (char *Query);
+static void Soc_ShowOldPubsInTimeline (char *Query);
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 
@@ -372,7 +372,7 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
                                 Soc_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (&Query,Txt_Timeline,NotCod);
+   Soc_ShowTimeline (Query,Txt_Timeline,NotCod);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -401,7 +401,7 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Timeline_OF_A_USER,
 	     Gbl.Usrs.Other.UsrDat.FirstName);
-   Soc_ShowTimeline (&Query,Gbl.Title,NotCod);
+   Soc_ShowTimeline (Query,Gbl.Title,NotCod);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -430,7 +430,7 @@ void Soc_RefreshNewTimelineGbl (void)
 				   Soc_GET_ONLY_NEW_PUBS);
 
       /***** Show new timeline *****/
-      Soc_InsertNewPubsInTimeline (&Query);
+      Soc_InsertNewPubsInTimeline (Query);
 
       /***** Drop temporary tables *****/
       Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -475,7 +475,7 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
                                 Soc_GET_ONLY_OLD_PUBS);
 
    /***** Show old timeline *****/
-   Soc_ShowOldPubsInTimeline (&Query);
+   Soc_ShowOldPubsInTimeline (Query);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -919,7 +919,7 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
            |  |_____|
             \ |_____|
 */
-static void Soc_ShowTimeline (char **Query,
+static void Soc_ShowTimeline (char *Query,
                               const char *Title,long NotCodToHighlight)
   {
    extern const char *Hlp_SOCIAL_Timeline;
@@ -933,8 +933,9 @@ static void Soc_ShowTimeline (char **Query,
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Get publishings from database *****/
-   NumPubsGot = DB_QuerySELECTusingQueryStr (Query,&mysql_res,
-					     "can not get timeline");
+   NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
+				"%s",
+				Query);
 
    /***** Start box *****/
    Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
@@ -1123,7 +1124,7 @@ static void Soc_ShowWarningYouDontFollowAnyUser (void)
 /*****************************************************************************/
 // The publishings are inserted as list elements of a hidden list
 
-static void Soc_InsertNewPubsInTimeline (char **Query)
+static void Soc_InsertNewPubsInTimeline (char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1133,8 +1134,9 @@ static void Soc_InsertNewPubsInTimeline (char **Query)
    struct SocialNote SocNot;
 
    /***** Get new publishings timeline from database *****/
-   NumPubsGot = DB_QuerySELECTusingQueryStr (Query,&mysql_res,
-					     "can not get timeline");
+   NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
+				"%s",
+				Query);
 
    /***** List new publishings timeline *****/
    for (NumPub = 0;
@@ -1164,7 +1166,7 @@ static void Soc_InsertNewPubsInTimeline (char **Query)
 /*****************************************************************************/
 // The publishings are inserted as list elements of a hidden list
 
-static void Soc_ShowOldPubsInTimeline (char **Query)
+static void Soc_ShowOldPubsInTimeline (char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1174,8 +1176,9 @@ static void Soc_ShowOldPubsInTimeline (char **Query)
    struct SocialNote SocNot;
 
    /***** Get old publishings timeline from database *****/
-   NumPubsGot = DB_QuerySELECTusingQueryStr (Query,&mysql_res,
-					     "can not get timeline");
+   NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
+				"%s",
+				Query);
 
    /***** List old publishings in timeline *****/
    for (NumPub = 0, SocPub.PubCod = 0;

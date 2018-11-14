@@ -353,10 +353,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.16.3 (2018-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.17 (2018-11-14)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.17:    Nov 14, 2018  Code refactoring related to database queries. (236899 lines)
 	Version 18.16.3:  Nov 14, 2018  Fixed bug when copying-pasting on assignments/works of another user, reported by Javier Fernández Baldomero. (236890 lines)
 	Version 18.16.2:  Nov 14, 2018  Fixed bug in account, discovered by Oresti Baños. (236848 lines)
 	Version 18.16.1:  Nov 12, 2018  MOOC advertisement. (236846 lines)

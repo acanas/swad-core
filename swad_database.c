@@ -53,8 +53,9 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void DB_CreateTable (const char *Query);
-
-// static void DB_QueryPrintf (char **strp,const char *fmt,...);
+static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
+					          MYSQL_RES **mysql_res,
+						  const char *MsgError);
 
 /*****************************************************************************/
 /***************************** Database tables *******************************/
@@ -3105,23 +3106,23 @@ unsigned long DB_QuerySELECT (MYSQL_RES **mysql_res,const char *MsgError,
 				// vasprintf will return -1
       Lay_NotEnoughMemoryExit ();
 
-   return DB_QuerySELECTusingQueryStr (&Query,mysql_res,MsgError);
+   return DB_QuerySELECTusingQueryStr (Query,mysql_res,MsgError);
   }
 
-unsigned long DB_QuerySELECTusingQueryStr (char **Query,
-					   MYSQL_RES **mysql_res,const char *MsgError)
+static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
+					          MYSQL_RES **mysql_res,
+						  const char *MsgError)
   {
    int Result;
 
    /***** Check that query string pointer
           does point to an allocated string *****/
-   if (*Query == NULL)
+   if (Query == NULL)
       Lay_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&Gbl.mysql,*Query);	// Returns 0 on success
-   free ((void *) *Query);
-   *Query = NULL;
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free ((void *) Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
@@ -3164,7 +3165,7 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
       Lay_NotEnoughMemoryExit ();
 
    /***** Make query "SELECT COUNT(*) FROM..." *****/
-   DB_QuerySELECTusingQueryStr (&Query,&mysql_res,MsgError);
+   DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError);
 
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);

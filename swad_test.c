@@ -2652,8 +2652,9 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
      }
 
    /* Make the query */
-   NumRows = DB_QuerySELECTusingQueryStr (&Query,mysql_res,
-					  "can not get questions");
+   NumRows = DB_QuerySELECT (mysql_res,"can not get questions",
+			     "%s",
+			     Query);
 
    if (NumRows == 0)
       Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
@@ -2789,8 +2790,9 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /* Make the query */
-   return DB_QuerySELECTusingQueryStr (&Query,mysql_res,
-				       "can not get questions");
+   return DB_QuerySELECT (mysql_res,"can not get questions",
+			  "%s",
+			  Query);
   }
 
 /*****************************************************************************/

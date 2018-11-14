@@ -120,7 +120,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
    static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
      {
       false,	// Ale_NONE
-      false,	// Ale_CLIPBOARD
+      true,	// Ale_CLIPBOARD
       true,	// Ale_INFO
       true,	// Ale_SUCCESS
       true,	// Ale_QUESTION
