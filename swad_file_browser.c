@@ -7473,7 +7473,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Crs.CrsCod &&
 	        Gbl.FileBrowser.Clipboard.WorksUsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
                return true;		// I am in the course of the clipboard
-						// I am in the student's works of the clipboard
+					// I am in the student's works of the clipboard
 	    break;
 	 case Brw_ADMI_DOC_GRP:
 	 case Brw_ADMI_TCH_GRP:
@@ -8143,6 +8143,7 @@ static void Brw_PasteClipboard (void)
    struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
+   struct UsrData UsrDat;
    long PrjCod;
    char PathOrg[PATH_MAX + NAME_MAX + PATH_MAX + 128];
    struct Brw_NumObjects Pasted;
@@ -8231,12 +8232,18 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_WRK_CRS:
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
+              {
+               Usr_UsrDataConstructor (&UsrDat);
+	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
+	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);	// Check that user exists
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%s/%ld/%s/%02u/%ld/%s",
                          Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
-			 (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
-			 Gbl.Usrs.Other.UsrDat.UsrCod,
+			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
+			 Gbl.FileBrowser.Clipboard.WorksUsrCod,
 			 Gbl.FileBrowser.Clipboard.Path);
+	       Usr_UsrDataDestructor (&UsrDat);
+              }
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;

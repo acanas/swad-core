@@ -357,7 +357,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.16.3:  Nov 14, 2018  Fixed bug when copying-pasting on assignments/works of another user, reported by Javier Fernández Baldomero. (236862 lines)
+	Version 18.16.3:  Nov 14, 2018  Fixed bug when copying-pasting on assignments/works of another user, reported by Javier Fernández Baldomero. (236890 lines)
 	Version 18.16.2:  Nov 14, 2018  Fixed bug in account, discovered by Oresti Baños. (236848 lines)
 	Version 18.16.1:  Nov 12, 2018  MOOC advertisement. (236846 lines)
 	Version 18.16:    Nov 10, 2018  New module swad_file_MIME for allowed MIME types in files. (236831 lines)

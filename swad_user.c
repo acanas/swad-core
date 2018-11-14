@@ -491,9 +491,10 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
 
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   extern const char *The_ThemeId[The_NUM_THEMES];
+   extern const char *Txt_The_user_does_not_exist;
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -539,7 +540,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 			      " FROM usr_data WHERE UsrCod=%ld",
 			      UsrDat->UsrCod);
    if (NumRows != 1)
-      Lay_ShowErrorAndExit ("Error when getting user's data.");
+      Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
 
    /***** Read user's data *****/
    row = mysql_fetch_row (mysql_res);

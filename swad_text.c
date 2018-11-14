@@ -48375,6 +48375,27 @@ const char *Txt_The_URL_web_address_that_gives_direct_access_to_the_course_X_is 
 	" to the course <strong>%s</strong> is:";		// Necessita de tradução
 #endif
 
+const char *Txt_The_user_does_not_exist =
+#if   L==1
+	"El usuario/a no existe.";	// Necessita traduccio
+#elif L==2
+	"Die Benutzer ist nicht vorhanden.";
+#elif L==3
+	"The user does not exist.";
+#elif L==4
+	"El usuario/a no existe.";
+#elif L==5
+	"L'utilisateur n'existe pas.";
+#elif L==6
+	"El usuario/a no existe.";	// Okoteve traducción
+#elif L==7
+	"Il utente non esiste.";
+#elif L==8
+	"The user does not exist.";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"O utilizador n&atilde;o existe.";
+#endif
+
 const char *Txt_The_user_does_not_exist_or_password_is_incorrect =
 #if   L==1
 	"El usuario/a no existe"
