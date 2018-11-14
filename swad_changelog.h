@@ -292,8 +292,6 @@ Una pregunta: hay un calendario que me vendría muy bien poder colorear o remarca
 
 // TODO: Poner icono superior izquierdo de "Lugares" también en la caja de información de la institución
 
-// TODO: FIX BUG: se detiene la copia-pega desde trabajos de Torres Barrilado en "Trabajos Fin de Grado del Dpto. ATC". El error es "Can not get information about a file or folder." No debería abortarse en esta situación.
-
 // TODO: Urgente: Un profesor no puede eliminar archivos de estudiantes de la zona de actividades, ni subir nuevos, mientras está abierta la actividad, pero sí cuando está cerrada. ¿Qué sentido tiene?
 
 // TODO: Suggested by Pablo Merino Ávila: statistics on test exams grouped by tags
@@ -355,10 +353,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.16.2 (2018-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.16.3 (2018-11-14)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.16.3:  Nov 14, 2018  Fixed bug when copying-pasting on assignments/works of another user, reported by Javier Fernández Baldomero. (236862 lines)
 	Version 18.16.2:  Nov 14, 2018  Fixed bug in account, discovered by Oresti Baños. (236848 lines)
 	Version 18.16.1:  Nov 12, 2018  MOOC advertisement. (236846 lines)
 	Version 18.16:    Nov 10, 2018  New module swad_file_MIME for allowed MIME types in files. (236831 lines)

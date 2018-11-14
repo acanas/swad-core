@@ -8227,6 +8227,19 @@ static void Brw_PasteClipboard (void)
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
+         case Brw_ADMI_ASG_CRS:
+         case Brw_ADMI_WRK_CRS:
+            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Crs_GetDataOfCourseByCod (&Crs))
+	       snprintf (PathOrg,sizeof (PathOrg),
+		         "%s/%s/%ld/%s/%02u/%ld/%s",
+                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
+			 (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
+			 Gbl.Usrs.Other.UsrDat.UsrCod,
+			 Gbl.FileBrowser.Clipboard.Path);
+            else
+               Lay_ShowErrorAndExit ("The copy source does not exist.");
+            break;
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -8261,6 +8274,7 @@ static void Brw_PasteClipboard (void)
         	      Gbl.FileBrowser.Clipboard.Path);
             break;
          default:
+            Lay_ShowErrorAndExit ("Wrong file browser.");
             break;
         }
 
@@ -8389,7 +8403,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
    FileType = Brw_IS_UNKNOWN;
    if (lstat (PathOrg,&FileStatus))	// On success ==> 0 is returned
       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
-   else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+   else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
       FileType = Brw_IS_FOLDER;
    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
       FileType = Str_FileIs (FileNameOrg,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
