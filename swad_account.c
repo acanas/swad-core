@@ -201,7 +201,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (ID))
      {
-      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes"
+      NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's codes",
 					   "SELECT usr_IDs.UsrCod"
 					   " FROM usr_IDs,usr_data"
 					   " WHERE usr_IDs.UsrID='%s'"
