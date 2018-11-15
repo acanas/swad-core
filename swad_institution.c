@@ -81,6 +81,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrder (void);
 
+static void Ins_PutIconsEditingInstitutions (void);
 static void Ins_PutIconToViewInstitutions (void);
 
 static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
@@ -935,11 +936,14 @@ void Ins_EditInstitutions (void)
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
+   /***** Write menu to select country *****/
+   Hie_WriteMenuHierarchy ();
+
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
              Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Box_StartBox (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
+   Box_StartBox (NULL,Gbl.Title,Ins_PutIconsEditingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new institution *****/
@@ -957,7 +961,21 @@ void Ins_EditInstitutions (void)
   }
 
 /*****************************************************************************/
-/************* Put contextual icons in edition of institutions ***************/
+/************ Put contextual icons in edition of institutions ****************/
+/*****************************************************************************/
+
+static void Ins_PutIconsEditingInstitutions (void)
+  {
+   /***** Put icon to view institutions *****/
+   Ins_PutIconToViewInstitutions ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_INSTITS;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/*********************** Put icon to view institutions ***********************/
 /*****************************************************************************/
 
 static void Ins_PutIconToViewInstitutions (void)
