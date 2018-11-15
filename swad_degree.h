@@ -105,6 +105,8 @@ unsigned Deg_ConvStrToYear (const char *StrYear);
 
 void Deg_EditDegrees (void);
 
+void Deg_PutIconToViewDegrees (void);
+
 void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs);
 void Deg_GetListDegsOfCurrentCtr (void);
 void Deg_FreeListDegs (struct ListDegrees *Degs);

@@ -101,12 +101,11 @@ static void Deg_CreateDegree (unsigned Status);
 
 static void Deg_ListDegrees (void);
 static bool Deg_CheckIfICanCreateDegrees (void);
-static void Deg_PutIconsListDegrees (void);
+static void Deg_PutIconsListingDegrees (void);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
 static void Deg_PutIconsEditingDegrees (void);
-static void Deg_PutIconToViewDegrees (void);
 
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
@@ -1183,8 +1182,8 @@ static void Deg_ListDegrees (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
-	     Gbl.CurrentCtr.Ctr.ShrtName);
-   Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListDegrees,
+	     Gbl.CurrentCtr.Ctr.FullName);
+   Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
@@ -1231,7 +1230,7 @@ static bool Deg_CheckIfICanCreateDegrees (void)
 /***************** Put contextual icons in list of degrees *******************/
 /*****************************************************************************/
 
-static void Deg_PutIconsListDegrees (void)
+static void Deg_PutIconsListingDegrees (void)
   {
    /***** Put icon to edit degrees *****/
    if (Deg_CheckIfICanCreateDegrees ())
@@ -1360,6 +1359,9 @@ void Deg_EditDegrees (void)
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
+   /***** Write menu to select country, institution and centre *****/
+   Hie_WriteMenuHierarchy ();
+
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
@@ -1407,11 +1409,20 @@ static void Deg_PutIconsEditingDegrees (void)
 
    /***** Put icon to view types of degree *****/
    DT_PutIconToViewDegreeTypes ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
   }
 
-static void Deg_PutIconToViewDegrees (void)
+void Deg_PutIconToViewDegrees (void)
   {
-   Ico_PutContextualIconToView (ActSeeDeg,NULL);
+   extern const char *Txt_Degrees;
+
+   Lay_PutContextualLink (ActSeeDeg,NULL,NULL,
+                          "deg64x64.gif",
+                          Txt_Degrees,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

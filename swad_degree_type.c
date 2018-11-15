@@ -66,15 +66,16 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void DT_PutIconToViewDegreeTypesWhenEditing (void);
-
 static void DT_SeeDegreeTypes (Act_Action_t NextAction,Sco_Scope_t Scope,
                                DT_Order_t DefaultOrder);
 static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
+
+static void DT_PutIconsEditingDegreeTypes (void);
+
 static void DT_ListDegreeTypesForSeeing (void);
-static void DT_PutIconsListDegTypes (void);
+static void DT_PutIconsListingDegTypes (void);
 static void DT_PutIconToEditDegTypes (void);
 static void DT_ListDegreeTypesForEdition (void);
 
@@ -125,25 +126,6 @@ void DT_WriteSelectorDegreeTypes (void)
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
-  }
-
-/*****************************************************************************/
-/******************* Put link (form) to view degree types ********************/
-/*****************************************************************************/
-
-void DT_PutIconToViewDegreeTypes (void)
-  {
-   extern const char *Txt_Types_of_degree;
-
-   Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
-                          "hierarchy64x64.png",
-                          Txt_Types_of_degree,NULL,
-                          NULL);
-  }
-
-static void DT_PutIconToViewDegreeTypesWhenEditing (void)
-  {
-   Ico_PutContextualIconToView (ActSeeDegTyp,NULL);
   }
 
 /*****************************************************************************/
@@ -212,7 +194,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    switch (NextAction)
      {
       case ActSeeDegTyp:
-	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsListDegTypes,
+	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsListingDegTypes,
 		       Hlp_CENTRE_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
@@ -264,7 +246,7 @@ void DT_EditDegreeTypes (void)
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToViewDegreeTypesWhenEditing,
+   Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsEditingDegreeTypes,
                  Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new degree type *****/
@@ -279,6 +261,37 @@ void DT_EditDegreeTypes (void)
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
+  }
+
+/*****************************************************************************/
+/************ Put contextual icons when editing degree types *****************/
+/*****************************************************************************/
+
+static void DT_PutIconsEditingDegreeTypes (void)
+  {
+   /***** Put icon to viee degree types *****/
+   DT_PutIconToViewDegreeTypes ();
+
+   /***** Put icon to view degrees *****/
+   Deg_PutIconToViewDegrees ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_DEGREE_TYPES;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/******************* Put link (form) to view degree types ********************/
+/*****************************************************************************/
+
+void DT_PutIconToViewDegreeTypes (void)
+  {
+   extern const char *Txt_Types_of_degree;
+
+   Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
+                          "hierarchy64x64.png",
+                          Txt_Types_of_degree,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -327,10 +340,13 @@ static void DT_ListDegreeTypesForSeeing (void)
 /************** Put contextual icons in list of degree types *****************/
 /*****************************************************************************/
 
-static void DT_PutIconsListDegTypes (void)
+static void DT_PutIconsListingDegTypes (void)
   {
    /***** Put icon to edit degree types *****/
    DT_PutIconToEditDegTypes ();
+
+   /***** Put icon to view degrees *****/
+   Deg_PutIconToViewDegrees ();
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_DEGREE_TYPES;

@@ -60,10 +60,12 @@ typedef enum
 
 void DT_WriteSelectorDegreeTypes (void);
 
-void DT_PutIconToViewDegreeTypes (void);
 void DT_SeeDegreeTypesInDegTab (void);
 void DT_SeeDegreeTypesInStaTab (void);
 void DT_EditDegreeTypes (void);
+
+void DT_PutIconToViewDegreeTypes (void);
+
 bool DT_CheckIfICanCreateDegreeTypes (void);
 void DT_PutFormToCreateDegreeType (void);
 
