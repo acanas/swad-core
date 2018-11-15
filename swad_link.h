@@ -49,11 +49,13 @@ struct Link
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Lnk_PutLinkToViewLinks (void);
 void Lnk_SeeLinks (void);
 void Lnk_WriteMenuWithInstitutionalLinks (void);
 
 void Lnk_EditLinks (void);
+
+void Lnk_PutIconToViewLinks (void);
+
 void Lnk_GetListLinks (void);
 void Lnk_FreeListLinks (void);
 void Lnk_GetDataOfLinkByCod (struct Link *Lnk);

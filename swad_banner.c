@@ -65,9 +65,12 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ban_WriteListOfBanners (void);
-static void Ban_PutFormToEditBanners (void);
+static void Ban_PutIconsListingBanners (void);
+static void Ban_PutIconToEditBanners (void);
 static void Ban_GetListBanners (MYSQL_RES **mysql_res,unsigned long NumRows);
-static void Ban_PutIconToViewBanners (void);
+
+static void Ban_PutIconsEditingBanners (void);
+
 static void Ban_ListBannersForEdition (void);
 static void Ban_PutParamBanCod (long BanCod);
 static void Ban_ShowOrHideBanner (bool Hide);
@@ -82,20 +85,6 @@ static void Ban_PutHeadBanners (void);
 static void Ban_CreateBanner (struct Banner *Ban);
 
 /*****************************************************************************/
-/************************* Put link to view banners **************************/
-/*****************************************************************************/
-
-void Ban_PutLinkToViewBanners (void)
-  {
-   extern const char *Txt_Banners;
-
-   Lay_PutContextualLink (ActSeeBan,NULL,NULL,
-                          "picture64x64.gif",
-                          Txt_Banners,Txt_Banners,
-                          NULL);
-  }
-
-/*****************************************************************************/
 /***************************** List all banners ******************************/
 /*****************************************************************************/
 
@@ -108,14 +97,6 @@ void Ban_SeeBanners (void)
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
-   /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Put link to view links */
-   Lnk_PutLinkToViewLinks ();
-
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** Get list of banners *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
 			     "SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
@@ -125,7 +106,7 @@ void Ban_SeeBanners (void)
    Ban_GetListBanners (&mysql_res,NumRows);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Banners,Ban_PutFormToEditBanners,
+   Box_StartBox (NULL,Txt_Banners,Ban_PutIconsListingBanners,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
    /***** Write all banners *****/
@@ -184,13 +165,26 @@ static void Ban_WriteListOfBanners (void)
   }
 
 /*****************************************************************************/
-/********************* Put a banner (form) to edit banners *******************/
+/***************** Put contextual icons in list of banners *******************/
 /*****************************************************************************/
 
-static void Ban_PutFormToEditBanners (void)
+static void Ban_PutIconsListingBanners (void)
   {
+   /***** Put icon to view banners *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ico_PutContextualIconToEdit (ActEdiBan,NULL);
+      Ban_PutIconToEditBanners ();
+
+   /***** Put icon to view links *****/
+   Lnk_PutIconToViewLinks ();
+  }
+
+/*****************************************************************************/
+/************************* Put an icon to edit banners ***********************/
+/*****************************************************************************/
+
+static void Ban_PutIconToEditBanners (void)
+  {
+   Ico_PutContextualIconToEdit (ActEdiBan,NULL);
   }
 
 /*****************************************************************************/
@@ -204,14 +198,6 @@ void Ban_EditBanners (void)
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
-   /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Put link to view links */
-   Lnk_PutLinkToViewLinks ();
-
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** Get list of banners *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get banners",
 			     "SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
@@ -219,7 +205,7 @@ void Ban_EditBanners (void)
    Ban_GetListBanners (&mysql_res,NumRows);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Banners,Ban_PutIconToViewBanners,
+   Box_StartBox (NULL,Txt_Banners,Ban_PutIconsEditingBanners,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new banner *****/
@@ -368,9 +354,27 @@ void Ban_FreeListBanners (void)
 /**************** Put contextual icons in edition of banners *****************/
 /*****************************************************************************/
 
-static void Ban_PutIconToViewBanners (void)
+static void Ban_PutIconsEditingBanners (void)
   {
-   Ico_PutContextualIconToView (ActSeeBan,NULL);
+   /***** Put icon to view banners *****/
+   Ban_PutIconToViewBanners ();
+
+   /***** Put icon to view links *****/
+   Lnk_PutIconToViewLinks ();
+  }
+
+/*****************************************************************************/
+/************************* Put icon to view banners **************************/
+/*****************************************************************************/
+
+void Ban_PutIconToViewBanners (void)
+  {
+   extern const char *Txt_Banners;
+
+   Lay_PutContextualLink (ActSeeBan,NULL,NULL,
+                          "picture64x64.gif",
+                          Txt_Banners,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

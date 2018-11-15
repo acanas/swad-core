@@ -63,10 +63,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Lnk_PutIconsEditingLinks (void);
+
+static void Lnk_PutIconsListingLinks (void);
 static void Lnk_PutIconToEditLinks (void);
 static void Lnk_WriteListOfLinks (void);
 
-static void Lnk_PutIconToViewLinks (void);
+static void Lnk_PutIconsEditingLinks (void);
+
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
 
@@ -79,20 +83,6 @@ static void Lnk_PutHeadLinks (void);
 static void Lnk_CreateLink (struct Link *Lnk);
 
 /*****************************************************************************/
-/************************** Put link to view links ***************************/
-/*****************************************************************************/
-
-void Lnk_PutLinkToViewLinks (void)
-  {
-   extern const char *Txt_Links;
-
-   Lay_PutContextualLink (ActSeeLnk,NULL,NULL,
-                          "link64x64.gif",
-                          Txt_Links,Txt_Links,
-                          NULL);
-  }
-
-/*****************************************************************************/
 /*************************** List all the links ******************************/
 /*****************************************************************************/
 
@@ -103,21 +93,11 @@ void Lnk_SeeLinks (void)
    extern const char *Txt_No_links;
    extern const char *Txt_New_link;
 
-   /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Put link to view banners */
-   Ban_PutLinkToViewBanners ();
-
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Links,
-		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
-							  NULL,
+   Box_StartBox (NULL,Txt_Links,Lnk_PutIconsListingLinks,
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
    /***** Write all links *****/
@@ -139,6 +119,20 @@ void Lnk_SeeLinks (void)
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of links *********************/
+/*****************************************************************************/
+
+static void Lnk_PutIconsListingLinks (void)
+  {
+   /***** Put icon to edit links *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Lnk_PutIconToEditLinks ();
+
+   /***** Put icon to view banners *****/
+   Ban_PutIconToViewBanners ();
   }
 
 /*****************************************************************************/
@@ -220,19 +214,11 @@ void Lnk_EditLinks (void)
    extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_Links;
 
-   /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Put link to view banners */
-   Ban_PutLinkToViewBanners ();
-
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Links,Lnk_PutIconToViewLinks,
+   Box_StartBox (NULL,Txt_Links,Lnk_PutIconsEditingLinks,
                  Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new link *****/
@@ -247,6 +233,33 @@ void Lnk_EditLinks (void)
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
+  }
+
+/*****************************************************************************/
+/******************** Put contextual icons to view links *********************/
+/*****************************************************************************/
+
+static void Lnk_PutIconsEditingLinks (void)
+  {
+   /***** Put icon to view links *****/
+   Lnk_PutIconToViewLinks ();
+
+   /***** Put icon to view banners *****/
+   Ban_PutIconToViewBanners ();
+  }
+
+/*****************************************************************************/
+/************************** Put icon to view links ***************************/
+/*****************************************************************************/
+
+void Lnk_PutIconToViewLinks (void)
+  {
+   extern const char *Txt_Links;
+
+   Lay_PutContextualLink (ActSeeLnk,NULL,NULL,
+                          "link64x64.gif",
+                          Txt_Links,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -370,15 +383,6 @@ void Lnk_FreeListLinks (void)
       Gbl.Links.Lst = NULL;
       Gbl.Links.Num = 0;
      }
-  }
-
-/*****************************************************************************/
-/***************** Put contextual icons in edition of links ******************/
-/*****************************************************************************/
-
-static void Lnk_PutIconToViewLinks (void)
-  {
-   Ico_PutContextualIconToView (ActSeeLnk,NULL);
   }
 
 /*****************************************************************************/

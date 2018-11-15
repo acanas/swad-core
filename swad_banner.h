@@ -56,10 +56,12 @@ struct Banner
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Ban_PutLinkToViewBanners (void);
 void Ban_SeeBanners (void);
 void Ban_EditBanners (void);
 void Ban_FreeListBanners (void);
+
+void Ban_PutIconToViewBanners (void);
+
 void Ban_GetDataOfBannerByCod (struct Banner *Ban);
 long Ban_GetParamLnkCod (void);
 void Ban_RemoveBanner (void);

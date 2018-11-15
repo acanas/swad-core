@@ -348,10 +348,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.17.8 (2018-11-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.18 (2018-11-16)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.18:    Nov 16, 2018  Changes in contextual icons related to links and banners. (237020 lines)
 	Version 18.17.8:  Nov 15, 2018  Changes in contextual icons related to countries. (237011 lines)
 	Version 18.17.7:  Nov 15, 2018  Changes in contextual icons related to courses. (236994 lines)
 	Version 18.17.6:  Nov 15, 2018  Changes in contextual icons related to degrees. (236972 lines)
