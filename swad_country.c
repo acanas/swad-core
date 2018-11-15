@@ -77,12 +77,13 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty);
 
 static bool Cty_CheckIfICanEditCountries (void);
 
-static void Cty_PutIconsListCountries (void);
+static void Cty_PutIconsListingCountries (void);
 static void Cty_PutIconToEditCountries (void);
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 static void Cty_GetParamCtyOrder (void);
 
+static void Cty_PutIconsEditingCountries (void);
 static void Cty_PutIconToViewCountries (void);
 
 static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution);
@@ -519,7 +520,7 @@ void Cty_ListCountries2 (void)
    unsigned NumCty;
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListCountries,
+   Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListingCountries,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
@@ -755,7 +756,7 @@ static bool Cty_CheckIfICanEditCountries (void)
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsListCountries (void)
+static void Cty_PutIconsListingCountries (void)
   {
    /***** Put icon to edit countries *****/
    if (Cty_CheckIfICanEditCountries ())
@@ -767,7 +768,7 @@ static void Cty_PutIconsListCountries (void)
   }
 
 /*****************************************************************************/
-/********************* Put link (form) to edit countries *********************/
+/************************ Put icon to edit countries *************************/
 /*****************************************************************************/
 
 static void Cty_PutIconToEditCountries (void)
@@ -956,7 +957,7 @@ void Cty_EditCountries (void)
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Countries,Cty_PutIconToViewCountries,
+   Box_StartBox (NULL,Txt_Countries,Cty_PutIconsEditingCountries,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new country *****/
@@ -977,9 +978,28 @@ void Cty_EditCountries (void)
 /*************** Put contextual icons in edition of countries ****************/
 /*****************************************************************************/
 
+static void Cty_PutIconsEditingCountries (void)
+  {
+   /***** Put icon to view countries *****/
+   Cty_PutIconToViewCountries ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/************************ Put icon to view countries *************************/
+/*****************************************************************************/
+
 static void Cty_PutIconToViewCountries (void)
   {
-   Ico_PutContextualIconToView (ActSeeCty,NULL);
+   extern const char *Txt_Countries;
+
+   Lay_PutContextualLink (ActSeeCty,NULL,NULL,
+                          "cty64x64.gif",
+                          Txt_Countries,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
