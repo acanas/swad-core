@@ -611,12 +611,15 @@ static void Ins_Configuration (bool PrintView)
 
 static void Ins_PutIconsToPrintAndUpload (void)
   {
-   /***** Link to print info about institution *****/
+   /***** Icon to print info about institution *****/
    Ico_PutContextualIconToPrint (ActPrnInsInf,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-      /***** Link to upload logo of institution *****/
+      /***** Icon to upload logo of institution *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_INS);
+
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
   }
 
 /*****************************************************************************/

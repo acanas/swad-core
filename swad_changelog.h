@@ -290,8 +290,6 @@ Una pregunta: hay un calendario que me vendría muy bien poder colorear o remarca
 */
 // TODO: Check actions table. All actions must be present in table.
 
-// TODO: Poner icono superior izquierdo de "Lugares" también en la caja de información de la institución
-
 // TODO: Urgente: Un profesor no puede eliminar archivos de estudiantes de la zona de actividades, ni subir nuevos, mientras está abierta la actividad, pero sí cuando está cerrada. ¿Qué sentido tiene?
 
 // TODO: Suggested by Pablo Merino Ávila: statistics on test exams grouped by tags
@@ -325,9 +323,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Eliminar todas las preguntas de test de un golpe
 // TODO: URGENTE: Cuando se cree un descriptor nuevo TIENE QUE ESTAR INHABILITADO porque si no los alumnos pueden ver el examen (Miguel Damas)
 
-// TODO: URGENTE: No se puede eliminar ni ocultar el enlace "Preparacion terreno_ hoyos._." de la asignatura PLANTACIÓN Y SIEMBRA (código 2165) de OpenSWAD.
-
-
 // TODO: Que la opción por defecto en "Permitir que los profesores vean este examen" la configuren los profesores en cada asignatura"
 // TODO: URGENTE: Bego del Pino, una columna en resultados de test que indique los descriptores de ese examen
 
@@ -353,10 +348,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.17 (2018-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.17.1 (2018-11-15)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.17.1:  Nov 15, 2018  Icon to view places in box with info about institution. (236900 lines)
 	Version 18.17:    Nov 14, 2018  Code refactoring related to database queries. (236899 lines)
 	Version 18.16.3:  Nov 14, 2018  Fixed bug when copying-pasting on assignments/works of another user, reported by Javier Fernández Baldomero. (236890 lines)
 	Version 18.16.2:  Nov 14, 2018  Fixed bug in account, discovered by Oresti Baños. (236848 lines)
@@ -367,7 +363,7 @@ ps2pdf source.ps destination.pdf
 	Version 18.14:    Nov 09, 2018  New module swad_form for forms to go to actions.
 					Fixed bug in query to get assignments. (236705 lines)
 	Version 18.13.7:  Nov 09, 2018  Fixed bug in file browser links. (236552 lines)
-	Version 18.13.6:  Nov 09, 2018  Fixed bug in file browser links, reported by Alberto Prieto Espinosa. (236549 lines)
+	Version 18.13.6:  Nov 09, 2018  Fixed bug in file browser links, reported by Pilar Ossorio Castellanos and Alberto Prieto Espinosa. (236549 lines)
 	Version 18.13.5:  Nov 08, 2018  New file extension allowed, requested by Javier Fernández Baldomero: .gdb (GNU Debugger Script). (236540 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/filext16x16/gdb16x16.gif /var/www/html/swad/icon/filext16x16/
