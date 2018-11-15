@@ -94,7 +94,6 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrder (void);
 
 static void Ctr_PutIconsEditingCentres (void);
-static void Ctr_PutIconToViewCentres (void);
 
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
@@ -1024,9 +1023,15 @@ static void Ctr_PutIconsEditingCentres (void)
    Plc_PutIconToViewPlaces ();
   }
 
-static void Ctr_PutIconToViewCentres (void)
+void Ctr_PutIconToViewCentres (void)
   {
-   Ico_PutContextualIconToView (ActSeeCtr,NULL);
+   // Ico_PutContextualIconToView (ActSeeCtr,NULL);
+   extern const char *Txt_Centres;
+
+   Lay_PutContextualLink (ActSeeCtr,NULL,NULL,
+                          "ctr64x64.gif",
+                          Txt_Centres,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

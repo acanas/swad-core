@@ -64,8 +64,11 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Plc_GetParamPlcOrder (void);
+
+static void Plc_PutIconsListingPlaces (void);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_PutIconToViewPlacesWhenEditing (void);
+
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
 
@@ -78,7 +81,7 @@ static void Plc_PutHeadPlaces (void);
 static void Plc_CreatePlace (struct Place *Plc);
 
 /*****************************************************************************/
-/********************** Put link (form) to view places ***********************/
+/************************** Put icon to view places **************************/
 /*****************************************************************************/
 
 void Plc_PutIconToViewPlaces (void)
@@ -121,7 +124,7 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Box_StartBox (NULL,Txt_Places,ICanEdit ? Plc_PutIconToEditPlaces :
+      Box_StartBox (NULL,Txt_Places,ICanEdit ? Plc_PutIconsListingPlaces :
                         	               NULL,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       Tbl_StartTableWideMargin (2);
@@ -227,6 +230,19 @@ static void Plc_GetParamPlcOrder (void)
                                                       0,
                                                       Plc_NUM_ORDERS - 1,
                                                       (unsigned long) Plc_ORDER_DEFAULT);
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of centres *****************/
+/*****************************************************************************/
+
+static void Plc_PutIconsListingPlaces (void)
+  {
+   /***** Put icon to edit places *****/
+   Plc_PutIconToEditPlaces ();
+
+   /***** Put icon to view centres *****/
+   Ctr_PutIconToViewCentres ();
   }
 
 /*****************************************************************************/
