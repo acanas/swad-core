@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Plc_GetParamPlcOrder (void);
-
+static bool Plc_CheckIfICanCreatePlaces (void);
 static void Plc_PutIconsListingPlaces (void);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_PutIconToViewPlacesWhenEditing (void);
@@ -111,12 +111,9 @@ void Plc_SeePlaces (void)
    unsigned NumPlc;
    unsigned NumCtrsWithPlc = 0;
    unsigned NumCtrsInOtherPlcs;
-   bool ICanEdit;
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      ICanEdit = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
-
       /***** Get parameter with the type of order in the list of places *****/
       Plc_GetParamPlcOrder ();
 
@@ -124,8 +121,7 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Box_StartBox (NULL,Txt_Places,ICanEdit ? Plc_PutIconsListingPlaces :
-                        	               NULL,
+      Box_StartBox (NULL,Txt_Places,Plc_PutIconsListingPlaces,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
@@ -204,7 +200,7 @@ void Plc_SeePlaces (void)
       Tbl_EndTable ();
 
       /***** Button to create place *****/
-      if (ICanEdit)
+      if (Plc_CheckIfICanCreatePlaces ())
 	{
 	 Frm_StartForm (ActEdiPlc);
 	 Btn_PutConfirmButton (Txt_New_place);
@@ -233,13 +229,23 @@ static void Plc_GetParamPlcOrder (void)
   }
 
 /*****************************************************************************/
-/**************** Put contextual icons in edition of centres *****************/
+/********************** Check if I can create places *************************/
+/*****************************************************************************/
+
+static bool Plc_CheckIfICanCreatePlaces (void)
+  {
+   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
+  }
+
+/*****************************************************************************/
+/****************** Put contextual icons in list of places *******************/
 /*****************************************************************************/
 
 static void Plc_PutIconsListingPlaces (void)
   {
    /***** Put icon to edit places *****/
-   Plc_PutIconToEditPlaces ();
+   if (Plc_CheckIfICanCreatePlaces ())
+      Plc_PutIconToEditPlaces ();
 
    /***** Put icon to view centres *****/
    Ctr_PutIconToViewCentres ();

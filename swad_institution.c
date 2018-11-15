@@ -75,7 +75,7 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role);
 
 static void Ins_ListInstitutions (void);
 static bool Ins_CheckIfICanCreateInstitutions (void);
-static void Ins_PutIconsListInstitutions (void);
+static void Ins_PutIconsListingInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
@@ -688,7 +688,7 @@ static void Ins_ListInstitutions (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
 	     Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListInstitutions,
+   Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
@@ -734,7 +734,7 @@ static bool Ins_CheckIfICanCreateInstitutions (void)
 /*************** Put contextual icons in list of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsListInstitutions (void)
+static void Ins_PutIconsListingInstitutions (void)
   {
    /***** Put icon to edit institutions *****/
    if (Ins_CheckIfICanCreateInstitutions ())
@@ -962,7 +962,13 @@ void Ins_EditInstitutions (void)
 
 static void Ins_PutIconToViewInstitutions (void)
   {
-   Ico_PutContextualIconToView (ActSeeIns,NULL);
+   //Ico_PutContextualIconToView (ActSeeIns,NULL);
+   extern const char *Txt_Institutions;
+
+   Lay_PutContextualLink (ActSeeIns,NULL,NULL,
+                          "ins64x64.gif",
+                          Txt_Institutions,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

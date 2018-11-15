@@ -88,7 +88,7 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role);
 
 static void Ctr_ListCentres (void);
 static bool Ctr_CheckIfICanCreateCentres (void);
-static void Ctr_PutIconsListCentres (void);
+static void Ctr_PutIconsListingCentres (void);
 static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrder (void);
@@ -795,7 +795,7 @@ static void Ctr_ListCentres (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
 	     Gbl.CurrentIns.Ins.FullName);
-   Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListCentres,
+   Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
@@ -842,7 +842,7 @@ static bool Ctr_CheckIfICanCreateCentres (void)
 /***************** Put contextual icons in list of centres *******************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsListCentres (void)
+static void Ctr_PutIconsListingCentres (void)
   {
    /***** Put icon to edit centres *****/
    if (Ctr_CheckIfICanCreateCentres ())
@@ -986,6 +986,9 @@ void Ctr_EditCentres (void)
    Gbl.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
+   /***** Write menu to select country and institution *****/
+   Hie_WriteMenuHierarchy ();
+
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
@@ -1021,6 +1024,10 @@ static void Ctr_PutIconsEditingCentres (void)
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
   }
 
 void Ctr_PutIconToViewCentres (void)

@@ -348,10 +348,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.17.2 (2018-11-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.17.3 (2018-11-15)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.17.3:  Nov 15, 2018  Changes in contextual icons related to centres. (236934 lines)
 	Version 18.17.2:  Nov 15, 2018  Icon to view centres in box with info about places. (236917 lines)
 	Version 18.17.1:  Nov 15, 2018  Icon to view places in box with info about institution. (236900 lines)
 	Version 18.17:    Nov 14, 2018  Code refactoring related to database queries. (236899 lines)
