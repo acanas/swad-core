@@ -962,7 +962,6 @@ void Ins_EditInstitutions (void)
 
 static void Ins_PutIconToViewInstitutions (void)
   {
-   //Ico_PutContextualIconToView (ActSeeIns,NULL);
    extern const char *Txt_Institutions;
 
    Lay_PutContextualLink (ActSeeIns,NULL,NULL,

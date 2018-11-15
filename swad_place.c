@@ -67,7 +67,7 @@ static void Plc_GetParamPlcOrder (void);
 static bool Plc_CheckIfICanCreatePlaces (void);
 static void Plc_PutIconsListingPlaces (void);
 static void Plc_PutIconToEditPlaces (void);
-static void Plc_PutIconToViewPlacesWhenEditing (void);
+static void Plc_PutIconsEditingPlaces (void);
 
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
@@ -79,20 +79,6 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
 static void Plc_CreatePlace (struct Place *Plc);
-
-/*****************************************************************************/
-/************************** Put icon to view places **************************/
-/*****************************************************************************/
-
-void Plc_PutIconToViewPlaces (void)
-  {
-   extern const char *Txt_Places;
-
-   Lay_PutContextualLink (ActSeePlc,NULL,NULL,
-                          "mapmarker64x64.png",
-                          Txt_Places,NULL,
-                          NULL);
-  }
 
 /*****************************************************************************/
 /*************************** List all the places *****************************/
@@ -273,7 +259,7 @@ void Plc_EditPlaces (void)
    Plc_GetListPlaces ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Places,Plc_PutIconToViewPlacesWhenEditing,
+   Box_StartBox (NULL,Txt_Places,Plc_PutIconsEditingPlaces,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new place *****/
@@ -290,13 +276,33 @@ void Plc_EditPlaces (void)
    Plc_FreeListPlaces ();
   }
 
+
 /*****************************************************************************/
 /**************** Put contextual icons in edition of places *****************/
 /*****************************************************************************/
 
-static void Plc_PutIconToViewPlacesWhenEditing (void)
+static void Plc_PutIconsEditingPlaces (void)
   {
-   Ico_PutContextualIconToView (ActSeePlc,NULL);
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
+
+   /***** Put icon to view centres *****/
+   Ctr_PutIconToViewCentres ();
+  }
+
+
+/*****************************************************************************/
+/************************** Put icon to view places **************************/
+/*****************************************************************************/
+
+void Plc_PutIconToViewPlaces (void)
+  {
+   extern const char *Txt_Places;
+
+   Lay_PutContextualLink (ActSeePlc,NULL,NULL,
+                          "mapmarker64x64.png",
+                          Txt_Places,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

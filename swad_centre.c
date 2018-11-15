@@ -1032,7 +1032,6 @@ static void Ctr_PutIconsEditingCentres (void)
 
 void Ctr_PutIconToViewCentres (void)
   {
-   // Ico_PutContextualIconToView (ActSeeCtr,NULL);
    extern const char *Txt_Centres;
 
    Lay_PutContextualLink (ActSeeCtr,NULL,NULL,
