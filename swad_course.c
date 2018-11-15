@@ -90,6 +90,7 @@ static void Crs_PutIconsListCourses (void);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
+static void Crs_PutIconsEditingCourses (void);
 static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
@@ -1203,7 +1204,7 @@ static void Crs_PutIconsListCourses (void)
   }
 
 /*****************************************************************************/
-/********************** Put link (form) to edit courses **********************/
+/************************* Put icon to edit courses **************************/
 /*****************************************************************************/
 
 static void Crs_PutIconToEditCourses (void)
@@ -1343,11 +1344,14 @@ void Crs_EditCourses (void)
    /***** Get list of degrees in this centre *****/
    Deg_GetListDegsOfCurrentCtr ();
 
+   /***** Write menu to select country, institution, centre and degree *****/
+   Hie_WriteMenuHierarchy ();
+
    /***** Start box *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Courses_of_DEGREE_X,
 	     Gbl.CurrentDeg.Deg.ShrtName);
-   Box_StartBox (NULL,Gbl.Alert.Txt,Crs_PutIconToViewCourses,
+   Box_StartBox (NULL,Gbl.Alert.Txt,Crs_PutIconsEditingCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
 
    /***** Put a form to create or request a new course *****/
@@ -1371,9 +1375,28 @@ void Crs_EditCourses (void)
 /**************** Put contextual icons in edition of courses *****************/
 /*****************************************************************************/
 
+static void Crs_PutIconsEditingCourses (void)
+  {
+   /***** Put icon to view degrees *****/
+   Crs_PutIconToViewCourses ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/************************* Put icon to view courses **************************/
+/*****************************************************************************/
+
 static void Crs_PutIconToViewCourses (void)
   {
-   Ico_PutContextualIconToView (ActSeeCrs,NULL);
+   extern const char *Txt_Courses;
+
+   Lay_PutContextualLink (ActSeeCrs,NULL,NULL,
+                          "crs64x64.gif",
+                          Txt_Courses,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

@@ -1182,7 +1182,7 @@ static void Deg_ListDegrees (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
-	     Gbl.CurrentCtr.Ctr.FullName);
+	     Gbl.CurrentCtr.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
@@ -1365,7 +1365,7 @@ void Deg_EditDegrees (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
-             Gbl.CurrentCtr.Ctr.FullName);
+             Gbl.CurrentCtr.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
@@ -1414,6 +1414,10 @@ static void Deg_PutIconsEditingDegrees (void)
    Gbl.Stat.FigureType = Sta_HIERARCHY;
    Sta_PutIconToShowFigure ();
   }
+
+/*****************************************************************************/
+/*********************** Put icon to view degrees ****************************/
+/*****************************************************************************/
 
 void Deg_PutIconToViewDegrees (void)
   {
