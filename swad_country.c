@@ -519,6 +519,9 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
 
+   /***** Write menu to select country *****/
+   Hie_WriteMenuHierarchy ();
+
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListingCountries,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
@@ -955,6 +958,9 @@ void Cty_EditCountries (void)
    /***** Get list of countries *****/
    Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
+
+   /***** Write menu to select country *****/
+   Hie_WriteMenuHierarchy ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Countries,Cty_PutIconsEditingCountries,
