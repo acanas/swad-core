@@ -348,10 +348,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.18.2 (2018-11-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.18.3 (2018-11-20)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.18.3:  Nov 20, 2018  Fixed bug in user's public profile. (? lines)
 	Version 18.18.2:  Nov 16, 2018  Hierarchy menu shown in list of countries. (237028 lines)
 	Version 18.18.1:  Nov 16, 2018  Changes in icons related to courses. (237023 lines)
 Copy the following icon to icon public directory:

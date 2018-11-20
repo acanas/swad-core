@@ -529,7 +529,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 
    /* I follow user? */
    fprintf (Gbl.F.Out,"<div id=\"follow_usr\">");
-   if (!ItsMe)	// Not me
+   if (Gbl.Usrs.Me.Logged &&	// Logged
+       !ItsMe)			// Not me!
      {
       if (IFollowUsr)	// I follow this user
 	{
