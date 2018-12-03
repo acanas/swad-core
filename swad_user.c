@@ -2542,6 +2542,7 @@ void Usr_WelcomeUsr (void)
             Ale_ShowAlert (Ale_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
          /***** Institutional video *****/
+         /*
          Ale_ShowAlert (Ale_INFO,
 			"<a href=\"https://abierta.ugr.es/creative_commons/\" target=\"_blank\">"
 			"Curso MOOC LICENCIAS CREATIVE COMMONS Y OER</a><br />"
@@ -2556,6 +2557,7 @@ void Usr_WelcomeUsr (void)
 	                " class=\"img-responsive\""
 	                " alt=\"Responsive image\">"
 	                "</video>");
+	 */
 
          /***** Warning to confirm my email address *****/
          if (Gbl.Usrs.Me.UsrDat.Email[0] &&
