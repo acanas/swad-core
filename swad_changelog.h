@@ -329,7 +329,7 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
 
-// TODO: Al listar asistencia de un estudiante, en los números de cada una de las actividades, poner un enlace a dicha actividad.
+// TODO: No se puede pulsar sobre la foto de un remitente de un mensaje recibido.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -350,10 +350,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.18.4 (2018-12-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.19 (2018-12-03)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.19:    Dec 03, 2018  Links to attendance events in attendance list. (237054 lines)
 	Version 18.18.4:  Dec 03, 2018  Removed MOOC advertisement. (237034 lines)
 	Version 18.18.3:  Nov 20, 2018  Fixed bug in user's public profile. (237031 lines)
 	Version 18.18.2:  Nov 16, 2018  Hierarchy menu shown in list of countries. (237028 lines)

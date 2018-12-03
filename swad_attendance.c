@@ -113,6 +113,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att);
 static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
                                           struct UsrData *UsrDat,
                                           struct AttendanceEvent *Att);
+static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
+				 const char *Title,const char *Txt,
+				 const char *LinkStyle);
 static void Att_PutParamsCodGrps (long AttCod);
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att);
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList);
@@ -441,15 +444,9 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-
-   /* Put form to view attendance event */
-   Frm_StartForm (ActSeeOneAtt);
-   Att_PutParamAttCod (Att->AttCod);
-   Att_PutParamsCodGrps (Att->AttCod);
-   Frm_LinkFormSubmit (Txt_View_event,Att->Hidden ? "ASG_TITLE_LIGHT" :
-	                                            "ASG_TITLE",NULL);
-   fprintf (Gbl.F.Out,"%s</a>",Att->Title);
-   Frm_EndForm ();
+   Att_PutLinkAttEvent (Att,Txt_View_event,Att->Title,
+	                Att->Hidden ? "ASG_TITLE_LIGHT" :
+	                              "ASG_TITLE");
    fprintf (Gbl.F.Out,"</td>");
 
    /* Number of students in this event */
@@ -2197,6 +2194,22 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
   }
 
 /*****************************************************************************/
+/**************** Put link to view one attendance event **********************/
+/*****************************************************************************/
+
+static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
+				 const char *Title,const char *Txt,
+				 const char *LinkStyle)
+  {
+   Frm_StartForm (ActSeeOneAtt);
+   Att_PutParamAttCod (AttEvent->AttCod);
+   Att_PutParamsCodGrps (AttEvent->AttCod);
+   Frm_LinkFormSubmit (Title,LinkStyle,NULL);
+   fprintf (Gbl.F.Out,"%s</a>",Txt);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
 /****** Put parameters with the default groups in an attendance event ********/
 /*****************************************************************************/
 
@@ -3372,6 +3385,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Attendance;
    unsigned NumAttEvent;
+   char StrNumAttEvent[10 + 1];
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"%u\" class=\"LEFT_MIDDLE\">"
@@ -3389,11 +3403,17 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 /***** Get data of this attendance event *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
 
-	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\" title=\"%s\">"
-			    "%u"
-			    "</th>",
-		  Gbl.AttEvents.Lst[NumAttEvent].Title,
-		  NumAttEvent + 1);
+	 /***** Put link to this attendance event *****/
+	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\" title=\"%s\">",
+		  Gbl.AttEvents.Lst[NumAttEvent].Title);
+	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),
+		   "%u",
+		   NumAttEvent + 1);
+	 Att_PutLinkAttEvent (&Gbl.AttEvents.Lst[NumAttEvent],
+			      Gbl.AttEvents.Lst[NumAttEvent].Title,
+			      StrNumAttEvent,
+			      NULL);
+	 fprintf (Gbl.F.Out,"</th>");
 	}
 
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
