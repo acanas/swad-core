@@ -360,14 +360,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.21 (2018-12-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.21.1 (2018-12-08)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.21.1:  Dec 08, 2018  Some messages translated to Portuguese (still 464 messages to be translated). (237046 lines)
 	Version 18.21:    Dec 08, 2018  Code refactoring related to languages. (237098 lines)
-	Version 18.20.1:  Dec 08, 2018  Some messages translated to portuguese. (237125 lines)
+	Version 18.20.1:  Dec 08, 2018  Some messages translated to Portuguese. (237125 lines)
 	Version 18.20:    Dec 08, 2018  New module swad_text_no_html for messages without HTML entities.
-					Changed translation of degree in portuguese. (237124 lines)
+					Changed translation of degree in Portuguese. (237124 lines)
 	Version 18.19:    Dec 03, 2018  Links to attendance events in attendance list. (237054 lines)
 	Version 18.18.4:  Dec 03, 2018  Removed MOOC advertisement. (237034 lines)
 	Version 18.18.3:  Nov 20, 2018  Fixed bug in user's public profile. (237031 lines)
@@ -6837,7 +6838,7 @@ ALTER TABLE tst_answers ADD COLUMN Feedback TEXT NOT NULL AFTER Answer;
 ALTER TABLE log_recent CHANGE DNI UsrID CHAR(16) NOT NULL;
 ALTER TABLE log CHANGE DNI UsrID CHAR(16) NOT NULL;
 
-	Version 12.32.2: Dec 29, 2012	Several messages translated to french. (143895 lines)
+	Version 12.32.2: Dec 29, 2012	Several messages translated to French. (143895 lines)
 	Version 12.32.1: Dec 29, 2012	Changed DNI to UsrID in tables usr_data and imported_students. (144051 lines)
 					2 changes necessary in database:
 ALTER TABLE imported_students CHANGE DNI UsrID CHAR(16) NOT NULL;

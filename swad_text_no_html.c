@@ -111,7 +111,7 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 #elif L==8
 	"Confirmation of your email";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"Confirmation of your email";			// Necessita de tradução
+	"Confirmação do seu email.";
 #endif
 
 // The following variables are compilated together in all languages because they are used in emails...
@@ -303,14 +303,13 @@ const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_H
 	" In this case, we recommend that you check in %s"
 	" if you have confirmed your email address.\n\n";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"If you just request from %s"
-	" the confirmation of your email %s,"
-	" click on the following link"
-	" to confirm that direction:"
+	"Se você acabou de solicitar de %s"
+	" a confirmação do seu email %s,"
+	" clique no seguinte link para confirmar a direção:"
 	" %s/?act=%ld&key=%s\n\n"
-	"If it was not you, do not click on the link above!"
-	" In this case, we recommend that you check in %s"
-	" if you have confirmed your email address.\n\n";	// Necessita de tradução
+	"Se não foi você, não clique no link acima!"
+	" Nesse caso, recomendamos que você verifique em %s"
+	" se você confirmou seu endereço de e-mail.\n\n";
 #endif
 
 const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -770,7 +769,8 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" the old password will remain valid.\n"
 	"If you have received this message without having requested it,"
 	" is that someone who knows your ID, nickname or email has requested a new password sent to you.\n"
-	"This new password has been sent only to the email address %s, which is on your record card.\n\n";	// Need Übersetzung
+	"This new password has been sent only to the email address %s,"
+	" which is on your record card.\n\n";	// Need Übersetzung
 #elif L==3
 	"The following password has been assigned to you to log in %s: %s\n"
 	"If you want to activate the new password,"
@@ -781,7 +781,8 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" the old password will remain valid.\n"
 	"If you have received this message without having requested it,"
 	" is that someone who knows your ID, nickname or email has requested a new password sent to you.\n"
-	"This new password has been sent only to the email address %s, which is on your record card.\n\n";
+	"This new password has been sent only to the email address %s,"
+	" which is on your record card.\n\n";
 #elif L==4
 	"Se le ha asignado la siguiente contraseña para entrar en %s: %s\n"
 	"Si desea activar esta nueva contraseña,"
@@ -805,7 +806,8 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" the old password will remain valid.\n"
 	"If you have received this message without having requested it,"
 	" is that someone who knows your ID, nickname or email has requested a new password sent to you.\n"
-	"This new password has been sent only to the email address %s, which is on your record card.\n\n";	// Besoin de traduction
+	"This new password has been sent only to the email address %s,"
+	" which is on your record card.\n\n";	// Besoin de traduction
 #elif L==6
 	"Se le ha asignado la siguiente contraseña para entrar en %s: %s\n"
 	"Si desea activar esta nueva contraseña,"
@@ -829,7 +831,8 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" rimarrà valida la vecchia password.\n"
 	"Se hai ricevuto questo messaggio senza averlo richiesto,"
 	" è perchè qualcuno che sa il tuo ID, nome utente o email ha richiesto una nuova password da inviarti.\n"
-	"Questa nuova password è stata inviata solo all'indirizzo email %s, che è presente sulla tua scheda.\n\n";
+	"Questa nuova password è stata inviata solo all'indirizzo email %s,"
+	" che è presente sulla tua scheda.\n\n";
 #elif L==8
 	"The following password has been assigned to you to log in %s: %s\n"
 	"If you want to activate the new password,"
@@ -840,18 +843,20 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" the old password will remain valid.\n"
 	"If you have received this message without having requested it,"
 	" is that someone who knows your ID, nickname or email has requested a new password sent to you.\n"
-	"This new password has been sent only to the email address %s, which is on your record card.\n\n";	// Potrzebujesz tlumaczenie
+	"This new password has been sent only to the email address %s,"
+	" which is on your record card.\n\n";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"The following password has been assigned to you to log in %s: %s\n"
-	"If you want to activate the new password,"
-	" you must enter %s with your ID/nickname/email"
-	" and this new password before %u days."
-	" Once you have logged in, you can change your password.\n"
-	"If you do not log in with this new password,"
-	" the old password will remain valid.\n"
-	"If you have received this message without having requested it,"
-	" is that someone who knows your ID, nickname or email has requested a new password sent to you.\n"
-	"This new password has been sent only to the email address %s, which is on your record card.\n\n";	// Necessita de tradução
+	"A seguinte senha foi atribuída a você para efetuar login em %s: %s\n"
+	"Se você quiser ativar a nova senha,"
+	" você deve digitar %s com seu ID/alcunha/e-mail"
+	" e esta nova senha antes de %u dias."
+	" Depois de ter logado, você pode alterar sua senha.\n"
+	"Se você não fizer login com essa nova senha,"
+	" a senha antiga permanecerá válida.\n"
+	"Se você recebeu esta mensagem sem solicitá-la,"
+	" alguém que conhece seu ID, alcunha ou e-mail solicitou uma nova senha enviada para você.\n"
+	"Esta nova senha foi enviada apenas para o endereço de e-mail %s,"
+	" que está no seu cartão de registro.\n\n";
 #endif
 
 const char *Txt_Unknown_or_without_photo =
@@ -872,7 +877,7 @@ const char *Txt_Unknown_or_without_photo =
 #elif L==8
 	"Unknown or without photo";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"Unknown or without photo";			// Necessita de tradução
+	"Desconhecido/a ou sem foto";
 #endif
 
 const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -914,7 +919,7 @@ const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
 #elif L==8
 	"You can not create files here.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"You can not create files here.";	// Necessita de tradução
+	"Você não pode criar arquivos aqui.";
 #endif
 
 const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
@@ -956,7 +961,7 @@ const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is 
 #elif L==8
 	"%s: extension not allowed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"%s: extension not allowed.";		// Necessita de tradução
+	"%s: extensão não permitida.";
 #endif
 
 const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -977,7 +982,7 @@ const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is ve
 #elif L==8
 	"%s: file already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"%s: file already exists.";	// Necessita de tradução
+	"%s: o arquivo já existe.";
 #endif
 
 const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
@@ -1028,7 +1033,7 @@ const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very import
 #elif L==8
 	"Invalid name.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"Invalid name.";	// Necessita de tradução
+	"Nome inválido.";
 #endif
 
 const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1049,7 +1054,7 @@ const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very impo
 #elif L==8
 	"%s: invalid name.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"%s: invalid name.";		// Necessita de tradução
+	"%s: nome inválido.";
 #endif
 
 const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it is very important to include two %s in the following sentences
@@ -1070,28 +1075,28 @@ const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it i
 #elif L==8
 	"%s: MIME type %s not allowed.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"%s: MIME type %s not allowed.";	// Necessita de tradução
+	"%s: Tipo MIME %s não permitido.";
 #endif
 
 const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s: no HTML";		// Necessita traduccio
+	"%s: no HTML.";		// Necessita traduccio
 #elif L==2
-	"%s: not HTML";		// Need Übersetzung
+	"%s: not HTML.";	// Need Übersetzung
 #elif L==3
-	"%s: not HTML";
+	"%s: not HTML.";
 #elif L==4
-	"%s: no HTML";		// Bisogno di traduzione
+	"%s: no HTML.";		// Bisogno di traduzione
 #elif L==5
-	"%s: not HTML";		// Besoin de traduction
+	"%s: not HTML.";	// Besoin de traduction
 #elif L==6
-	"%s: no HTML";		// Okoteve traducción
+	"%s: no HTML.";		// Okoteve traducción
 #elif L==7
-	"%s: not HTML";
+	"%s: not HTML.";
 #elif L==8
-	"%s: not HTML";		// Potrzebujesz tlumaczenie
+	"%s: not HTML.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"%s: not HTML";		// Necessita de tradução
+	"%s: não HTML.";
 #endif
 
 const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very important to include %s in the following sentences
