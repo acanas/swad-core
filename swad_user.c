@@ -2542,11 +2542,11 @@ void Usr_WelcomeUsr (void)
             Ale_ShowAlert (Ale_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
          /***** Institutional video *****/
-         /*
          Ale_ShowAlert (Ale_INFO,
 			"<a href=\"https://abierta.ugr.es/creative_commons/\" target=\"_blank\">"
 			"Curso MOOC LICENCIAS CREATIVE COMMONS Y OER</a><br />"
-			// "Reconocimiento de 1 cr&eacute;dito por actividades universitarias<br />"
+			"Reconocimiento de 1 cr&eacute;dito por actividades universitarias<br />"
+			"&iexcl;&Uacute;ltimos d&iacute;as!<br />"
 			"<br />"
 			"<video style=\"width:480px; height:270px;\""
 			" poster=\"/img/abierta-ugr-creative-commons1280x720.jpg\""
@@ -2557,7 +2557,6 @@ void Usr_WelcomeUsr (void)
 	                " class=\"img-responsive\""
 	                " alt=\"Responsive image\">"
 	                "</video>");
-	 */
 
          /***** Warning to confirm my email address *****/
          if (Gbl.Usrs.Me.UsrDat.Email[0] &&

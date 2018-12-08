@@ -24,6 +24,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+ Sabies que pots utilitzar SWAD en català? https://swad.ugr.es/ca
+ Wussten Sie, dass Sie verwenden können, SWAD auf Deutsch? https://swad.ugr.es/de
+ Did you know that you can use SWAD in English? https://swad.ugr.es/en
+ Saviez-vous que vous pouvez utiliser SWAD en français? https://swad.ugr.es/fr
+ Lo sapevate che è possibile utilizzare SWAD in italiano? https://swad.ugr.es/it
+ Czy wiesz, ze mozesz uzywac SWAD po polsku? https://swad.ugr.es/pl
+ Sabia que você pode usar SWAD em portugués? https://swad.ugr.es/pt
+ */
+
 /*****************************************************************************/
 /*********************************** TODO ************************************/
 /*****************************************************************************/
@@ -350,10 +360,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.19 (2018-12-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.20 (2018-12-08)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.20:    Dec 08, 2018  New module swad_text_no_html for messages without HTML entities.
+					Changed translation of degree in portuguese. (237124 lines)
 	Version 18.19:    Dec 03, 2018  Links to attendance events in attendance list. (237054 lines)
 	Version 18.18.4:  Dec 03, 2018  Removed MOOC advertisement. (237034 lines)
 	Version 18.18.3:  Nov 20, 2018  Fixed bug in user's public profile. (237031 lines)
