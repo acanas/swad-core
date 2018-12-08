@@ -360,10 +360,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.21.1 (2018-12-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.21.2 (2018-12-08)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.21.2:  Dec 08, 2018  Check icons replaced by HTML entities in listing of users. (237039 lines)
 	Version 18.21.1:  Dec 08, 2018  Some messages translated to Portuguese (still 464 messages to be translated). (237046 lines)
 	Version 18.21:    Dec 08, 2018  Code refactoring related to languages. (237098 lines)
 	Version 18.20.1:  Dec 08, 2018  Some messages translated to Portuguese. (237125 lines)

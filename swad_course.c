@@ -3307,19 +3307,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    if (WriteColumnAccepted)
      {
       Accepted = (row[7][0] == 'Y');
-      fprintf (Gbl.F.Out,"<td class=\"BT %s\">"
-	                 "<img src=\"%s/%s16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />"
+      fprintf (Gbl.F.Out,"<td class=\"BT %s\" title=\"%s\">"
+	                 "%s"
 	                 "</td>",
                BgColor,
-               Gbl.Prefs.IconsURL,
-               Accepted ? "ok_on" :
-        	          "tr",
                Accepted ? Txt_Enrolment_confirmed :
         	          Txt_Enrolment_not_confirmed,
-               Accepted ? Txt_Enrolment_confirmed :
-        	          Txt_Enrolment_not_confirmed);
+               Accepted ? "&check;" :
+        	          "&cross;");
      }
 
    /***** Write number of course in this search *****/

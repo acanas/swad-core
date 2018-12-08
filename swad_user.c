@@ -3515,18 +3515,15 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"BM_SEL");
    else
       fprintf (Gbl.F.Out,"BM%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
+   fprintf (Gbl.F.Out," %s\" title=\"%s\">"
+	              "%s"
 	              "</td>",
-            Gbl.Prefs.IconsURL,
-            UsrDat->Accepted ? "ok_on" :
-        	               "tr",
-            UsrDat->Accepted ? Txt_Enrolment_confirmed :
+            UsrDat->Accepted ? "USR_LIST_NUM_N" :
+        	               "USR_LIST_NUM",
+	    UsrDat->Accepted ? Txt_Enrolment_confirmed :
                                Txt_Enrolment_not_confirmed,
-            UsrDat->Accepted ? Txt_Enrolment_confirmed :
-                               Txt_Enrolment_not_confirmed);
+            UsrDat->Accepted ? "&check;" :
+        	               "&cross;");
 
    /***** Write number of user in the list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
