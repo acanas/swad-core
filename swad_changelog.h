@@ -360,10 +360,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.20 (2018-12-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.20.1 (2018-12-08)"
 #define CSS_FILE		"swad18.4.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.20.1:  Dec 08, 2018  Some messages translated to portuguese. (237125 lines)
 	Version 18.20:    Dec 08, 2018  New module swad_text_no_html for messages without HTML entities.
 					Changed translation of degree in portuguese. (237124 lines)
 	Version 18.19:    Dec 03, 2018  Links to attendance events in attendance list. (237054 lines)
