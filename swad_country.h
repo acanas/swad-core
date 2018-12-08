@@ -32,8 +32,8 @@
 
 #include "swad_action.h"
 #include "swad_hierarchy.h"
+#include "swad_language.h"
 #include "swad_role_type.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -48,8 +48,8 @@ struct Country
   {
    long CtyCod;
    char Alpha2[2 + 1];
-   char Name[1 + Txt_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
-   char WWW [1 + Txt_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
+   char Name[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
+   char WWW [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToCty;
    unsigned NumInss;
    unsigned NumCtrs;

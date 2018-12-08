@@ -176,7 +176,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Institutional_code;
    extern const char *Txt_Internal_code;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
@@ -413,10 +413,10 @@ static void Crs_Configuration (bool PrintView)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Shortcut,
             Cfg_URL_SWAD_CGI,
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.CurrentCrs.Crs.CrsCod,
             Cfg_URL_SWAD_CGI,
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.CurrentCrs.Crs.CrsCod);
 
    if (PrintView)

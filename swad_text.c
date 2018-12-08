@@ -71,6 +71,7 @@
 #include "swad_holiday.h"
 #include "swad_info.h"
 #include "swad_institution.h"
+#include "swad_language.h"
 #include "swad_mail.h"
 #include "swad_menu.h"
 #include "swad_notification.h"
@@ -86,7 +87,6 @@
 #include "swad_syllabus.h"
 #include "swad_tab.h"
 #include "swad_test.h"
-#include "swad_text.h"
 #include "swad_timetable.h"
 #include "swad_user.h"
 
@@ -105,23 +105,7 @@ const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n t
 // i with tilde: &#297;
 
 /***** Languages *****/
-const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES] = // ISO 639-1 language codes
-	{
-	"",	// Txt_LANGUAGE_UNKNOWN
-	"ca",	// Txt_LANGUAGE_CA
-	"de",	// Txt_LANGUAGE_DE
-	"en",	// Txt_LANGUAGE_EN
-	"es",	// Txt_LANGUAGE_ES
-	"fr",	// Txt_LANGUAGE_FR
-	"gn",	// Txt_LANGUAGE_GN
-	"it",	// Txt_LANGUAGE_IT
-	"pl",	// Txt_LANGUAGE_PL
-	"pt",	// Txt_LANGUAGE_PT
-	};
-
-const unsigned Txt_Current_CGI_SWAD_Language = (unsigned) L;
-
-const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES] =
+const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES] =
 	{
 	"",
 	"Catal&agrave;",
@@ -134,7 +118,7 @@ const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES] =
 	"Polski",
 	"Portugu&ecirc;s",
 	};
-const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
+const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	"",
 	"Voleu canviar l'idioma a catal&agrave;?",
@@ -147,7 +131,7 @@ const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Txt_NUM_LANGU
 	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	"Voc&ecirc; quer mudar o idioma para portugu&ecirc;s?",
 	};
-const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
+const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	"",
 	"Voleu canviar el seu idioma a catal&agrave;?",
@@ -160,7 +144,7 @@ const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Txt_NUM_LANG
 	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	"Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
 	};
-const char *Txt_Switch_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
+const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	"",
 	"Canviar a catal&agrave;",
@@ -173,7 +157,7 @@ const char *Txt_Switch_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
 	"Prze&lstrok;&aogon;cz na polski",
 	"Mudar para portugu&ecirc;s",
 	};
-const char *Txt_Switching_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
+const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES] =
 	{
 	"",
 	"Canviant a catal&agrave;&hellip;",

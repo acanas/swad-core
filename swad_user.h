@@ -172,7 +172,7 @@ struct UsrData
      } Tch;
    struct
      {
-      Txt_Language_t Language;
+      Lan_Language_t Language;
       unsigned FirstDayOfWeek;
       Dat_Format_t DateFormat;
       The_Theme_t Theme;

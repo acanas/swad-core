@@ -1605,21 +1605,21 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
   {
-   extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Course_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Forum_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_MSG_From_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Go_to_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_TAB_Messages_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Notifications_NO_HTML[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Course_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Forum_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_MSG_From_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Go_to_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_TAB_Messages_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Notifications_NO_HTML[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
-   Txt_Language_t ToUsrLanguage;
+   Lan_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Instit Ins;
@@ -1664,7 +1664,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	{
 	 /***** If user has no language, set it to current language *****/
 	 ToUsrLanguage = ToUsrDat->Prefs.Language;
-	 if (ToUsrLanguage == Txt_LANGUAGE_UNKNOWN)
+	 if (ToUsrLanguage == Lan_LANGUAGE_UNKNOWN)
 	    ToUsrLanguage = Gbl.Prefs.Language;
 
 	 /***** Create temporary file for mail content *****/

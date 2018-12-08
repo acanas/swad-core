@@ -43,12 +43,12 @@
 #include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_institution.h"
+#include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_string.h"
 #include "swad_table.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -295,7 +295,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Another_place;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Users_of_the_centre;
    extern const char *Txt_Place;
@@ -596,10 +596,10 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCtr.Ctr.CtrCod,
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCtr.Ctr.CtrCod);
 
       if (PrintView)

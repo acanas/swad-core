@@ -202,7 +202,7 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
 
 void Cal_DrawCurrentMonth (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
 
    /***** Get list of holidays *****/
@@ -225,7 +225,7 @@ void Cal_DrawCurrentMonth (void)
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    Cfg_URL_SWAD_CGI,
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,Cal_GetActionToSeeCalendar (),true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
    Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
@@ -302,7 +302,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               bool PrintView)
   {
    extern const char *Hlp_Calendar;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
 
    /***** Get list of holidays *****/
@@ -340,7 +340,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	    PrintView ? "true" :
 		        "false",
 	    Cfg_URL_SWAD_CGI,
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
    fprintf (Gbl.F.Out,"'%s',",
             ParamsStr);

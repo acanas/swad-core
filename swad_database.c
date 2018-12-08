@@ -36,7 +36,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
-#include "swad_text.h"
+#include "swad_language.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

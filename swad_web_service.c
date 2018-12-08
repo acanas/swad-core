@@ -3110,10 +3110,10 @@ int swad__getNotifications (struct soap *soap,
 
 static int Svc_GetMyLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
 
    /***** Get user's language *****/
    if (DB_QuerySELECT (&mysql_res,"can not get user's language",
@@ -3128,16 +3128,16 @@ static int Svc_GetMyLanguage (void)
    row = mysql_fetch_row (mysql_res);
 
    /* Get language (row[0]) */
-   Gbl.Prefs.Language = Txt_LANGUAGE_UNKNOWN;	// Language unknown
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   Gbl.Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
-      if (!strcasecmp (row[0],Txt_STR_LANG_ID[Lan]))
+      if (!strcasecmp (row[0],Lan_STR_LANG_ID[Lan]))
         {
 	 Gbl.Prefs.Language = Lan;
          break;
         }
-   if (Gbl.Prefs.Language == Txt_LANGUAGE_UNKNOWN)	// Language stored in database is unknown
+   if (Gbl.Prefs.Language == Lan_LANGUAGE_UNKNOWN)	// Language stored in database is unknown
       Gbl.Prefs.Language = Cfg_DEFAULT_LANGUAGE;
 
    /***** Free structure that stores the query result *****/
@@ -3790,7 +3790,7 @@ int swad__getTests (struct soap *soap,
 
 static int Svc_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;

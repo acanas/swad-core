@@ -31,9 +31,9 @@
 
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_language.h"
 #include "swad_string.h"
 #include "swad_tab.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

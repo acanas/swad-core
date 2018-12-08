@@ -36,6 +36,7 @@
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_language.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
@@ -46,7 +47,6 @@
 #include "swad_role.h"
 #include "swad_role_type.h"
 #include "swad_social.h"
-#include "swad_text.h"
 #include "swad_theme.h"
 #include "swad_user.h"
 
@@ -116,13 +116,13 @@ void Prf_SeeSocialProfiles (void)
 char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
                                const char *NicknameWithoutArroba)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
    snprintf (URL,Cns_MAX_BYTES_WWW + 1,
 	     "%s/%s?usr=@%s",
 	     Cfg_URL_SWAD_CGI,
-	     Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	     Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	     NicknameWithoutArroba);
 
    return URL;

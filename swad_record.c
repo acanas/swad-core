@@ -2939,7 +2939,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView,
                           const char *ClassForm)
   {
-   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+   extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
    extern const char *Txt_Role;
    extern const char *Txt_Sex;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -3172,14 +3172,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," required=\"required\" />"
-			    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
-			    "%s"
+			    "%s %s"
 			    "</label>",
-		  Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
-		  Txt_SEX_SINGULAR_Abc[Sex],
-		  Txt_SEX_SINGULAR_Abc[Sex],
-		  Txt_SEX_SINGULAR_Abc[Sex]);
+		  Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
 	}
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

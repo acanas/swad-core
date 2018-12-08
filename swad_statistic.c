@@ -8872,13 +8872,13 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
    extern const char *Hlp_ANALYTICS_Figures_language;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Language;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
    char *SubQuery;
-   unsigned NumUsrs[1 + Txt_NUM_LANGUAGES];
+   unsigned NumUsrs[1 + Lan_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
    /***** Start box and table *****/
@@ -8902,13 +8902,13 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
             Txt_PERCENT_of_users);
 
    /***** For each language... *****/
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
       /* Get the number of users who have chosen this language from database */
       if (asprintf (&SubQuery,"usr_data.Language='%s'",
-		    Txt_STR_LANG_ID[Lan]) < 0)
+		    Lan_STR_LANG_ID[Lan]) < 0)
 	 Lay_NotEnoughMemoryExit ();
       NumUsrs[Lan] = Sta_GetNumUsrsWhoChoseAnOption (SubQuery);
       free ((void *) SubQuery);
@@ -8918,8 +8918,8 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
      }
 
    /***** Write number of users who have chosen each language *****/
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT LEFT_MIDDLE\">"

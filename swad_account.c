@@ -706,7 +706,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    size_t CommentsLength;
@@ -759,7 +759,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				Usr_StringsSexDB[UsrDat->Sex],
 				The_ThemeId[UsrDat->Prefs.Theme],
 				Ico_IconSetId[UsrDat->Prefs.IconSet],
-				Txt_STR_LANG_ID[UsrDat->Prefs.Language],
+				Lan_STR_LANG_ID[UsrDat->Prefs.Language],
 				Cal_FIRST_DAY_OF_WEEK_DEFAULT,
 				(unsigned) Dat_FORMAT_DEFAULT,
 				Pri_VisibilityDB[UsrDat->PhotoVisibility],

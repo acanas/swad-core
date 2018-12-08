@@ -69,12 +69,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+const char *Usr_StringsSexIcons[Usr_NUM_SEXS] =
+  {
+   "?",		// Usr_SEX_UNKNOWN
+   "&female;",	// Usr_SEX_FEMALE
+   "&male;",	// Usr_SEX_MALE
+   "*",		// Usr_SEX_ALL
+   };
+
 const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
   {
-   "unknown",
-   "female",
-   "male",
-   "all",
+   "unknown",	// Usr_SEX_UNKNOWN
+   "female",	// Usr_SEX_FEMALE
+   "male",	// Usr_SEX_MALE
+   "all",	// Usr_SEX_ALL
    };
 
 const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
@@ -335,7 +343,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Tch.Office[0]      = '\0';
    UsrDat->Tch.OfficePhone[0] = '\0';
 
-   UsrDat->Prefs.Language       = Txt_LANGUAGE_UNKNOWN;			// Language unknown
+   UsrDat->Prefs.Language       = Lan_LANGUAGE_UNKNOWN;			// Language unknown
    UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    UsrDat->Prefs.DateFormat     = Dat_FORMAT_DEFAULT		;	// Default date format
    UsrDat->Prefs.Theme          = The_THEME_DEFAULT;
@@ -494,13 +502,13 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Txt_The_user_does_not_exist;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    The_Theme_t Theme;
    Ico_IconSet_t IconSet;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
 
    /***** Get user's data from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get user's data",
@@ -594,11 +602,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
         }
 
    /* Get language */
-   UsrDat->Prefs.Language = Txt_LANGUAGE_UNKNOWN;	// Language unknown
-   for (Lan = (Txt_Language_t) 1;
-        Lan <= Txt_NUM_LANGUAGES;
+   UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
+   for (Lan = (Lan_Language_t) 1;
+        Lan <= Lan_NUM_LANGUAGES;
         Lan++)
-      if (!strcasecmp (row[8],Txt_STR_LANG_ID[Lan]))
+      if (!strcasecmp (row[8],Lan_STR_LANG_ID[Lan]))
         {
          UsrDat->Prefs.Language = Lan;
          break;
@@ -2155,7 +2163,7 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
 
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Get the institutions a user belongs to from database *****/
    return
@@ -2176,7 +2184,7 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
 			      " AND institutions.CtyCod=countries.CtyCod"
 			      " GROUP BY countries.CtyCod"
 			      " ORDER BY countries.Name_%s",
-			      UsrCod,Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+			      UsrCod,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
 
 /*****************************************************************************/
@@ -2498,17 +2506,17 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 
 void Usr_WelcomeUsr (void)
   {
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const unsigned Lan_Current_CGI_SWAD_Language;
    extern const char *Txt_Happy_birthday;
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome[Usr_NUM_SEXS];
-   extern const char *Txt_Switching_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    bool CongratulateMyBirthday;
 
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Lan_Current_CGI_SWAD_Language)
         {
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin:12px;\">");
@@ -2542,6 +2550,7 @@ void Usr_WelcomeUsr (void)
             Ale_ShowAlert (Ale_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
          /***** Institutional video *****/
+         /*
          Ale_ShowAlert (Ale_INFO,
 			"<a href=\"https://abierta.ugr.es/creative_commons/\" target=\"_blank\">"
 			"Curso MOOC LICENCIAS CREATIVE COMMONS Y OER</a><br />"
@@ -2557,6 +2566,7 @@ void Usr_WelcomeUsr (void)
 	                " class=\"img-responsive\""
 	                " alt=\"Responsive image\">"
 	                "</video>");
+	 */
 
          /***** Warning to confirm my email address *****/
          if (Gbl.Usrs.Me.UsrDat.Email[0] &&
@@ -3276,7 +3286,7 @@ static void Usr_SetMyPrefsAndRoles (void)
    // In this point I am logged
 
    /***** Set my language if unknown *****/
-   if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_LANGUAGE_UNKNOWN)		// I have not chosen language
+   if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Lan_LANGUAGE_UNKNOWN)		// I have not chosen language
       Lan_UpdateMyLanguageToCurrentLanguage ();	// Update my language in database
 
    /***** Set preferences from my preferences *****/

@@ -40,11 +40,11 @@
 #include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_institution.h"
+#include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_table.h"
-#include "swad_text.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -307,7 +307,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
@@ -494,10 +494,10 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentIns.Ins.InsCod,
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentIns.Ins.InsCod);
 
       if (PrintView)
@@ -1297,7 +1297,7 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
 static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1328,7 +1328,7 @@ static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
 		       " FROM institutions,countries"
 		       " WHERE institutions.InsCod=%ld"
 		       " AND institutions.CtyCod=countries.CtyCod",
-		       Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) == 1)
+		       Lan_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

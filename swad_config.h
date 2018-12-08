@@ -71,7 +71,7 @@
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"				// SMTP port for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"		// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"			// Database host
-#define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES			// Default language
+#define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_ES			// Default language
 #define Cfg_LOG_START_YEAR			2012				// Year when the log started in the database
 
 // Footer of page with info about the institution where this platform is installed
@@ -112,7 +112,7 @@
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
-#define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_EN				// Default language
+#define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_EN				// Default language
 #define Cfg_LOG_START_YEAR			2012					// Year when the log started in the database
 
 // Footer of page with info about the institution where this platform is installed
@@ -170,7 +170,7 @@
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
-#define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES				// Default language
+#define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_ES				// Default language
 #define Cfg_LOG_START_YEAR			2005					// Year when the log started in the database
 
 // Footer of page with info about the institution where this platform is installed
@@ -225,7 +225,7 @@
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic emails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
-#define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES				// Default language
+#define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_ES				// Default language
 #define Cfg_LOG_START_YEAR			2016					// Year when the log started in the database
 
 // Footer of page with info about the institution where this platform is installed

@@ -8715,7 +8715,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Txt_Upload_files;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Done;
 
    /***** Start box *****/
@@ -8739,7 +8739,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                       " style=\"display:inline-block; width:100%%;"
                       " background:url('%s/upload320x320.gif') no-repeat center;\">",
             Cfg_URL_SWAD_CGI,
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Prefs.IconsURL);
    Par_PutHiddenParamLong ("act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);

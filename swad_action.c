@@ -5115,7 +5115,7 @@ const char *Act_GetSubtitleAction (Act_Action_t Action)
 char *Act_GetActionTextFromDB (long ActCod,
                                char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1])
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -5123,7 +5123,7 @@ char *Act_GetActionTextFromDB (long ActCod,
    if (DB_QuerySELECT (&mysql_res,"can not get text for an action",
 	               "SELECT Txt FROM actions"
 	               " WHERE ActCod=%ld AND Language='%s'",
-                       ActCod,Txt_STR_LANG_ID[Txt_LANGUAGE_ES]))	// !!! TODO: Replace Txt_LANGUAGE_ES by Gbl.Prefs.Language !!!
+                       ActCod,Lan_STR_LANG_ID[Lan_LANGUAGE_ES]))	// !!! TODO: Replace Lan_LANGUAGE_ES by Gbl.Prefs.Language !!!
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);

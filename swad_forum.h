@@ -124,7 +124,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
 
 void For_SetForumName (struct Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
-                       Txt_Language_t Language,bool UseHTMLEntities);
+                       Lan_Language_t Language,bool UseHTMLEntities);
 
 void For_ShowForumTheads (void);
 unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,

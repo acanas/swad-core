@@ -38,12 +38,12 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_language.h"
 #include "swad_mail.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_tab.h"
 #include "swad_table.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1914,8 +1914,8 @@ void Mai_CreateFileNameMail (void)
 
 void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
   {
-   extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
 
    fprintf (Gbl.Msg.FileMail,"%s %s:\n",
             Txt_Dear_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language],
@@ -1927,9 +1927,9 @@ void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
 /****************** Write a foot note in the automatic email *****************/
 /*****************************************************************************/
 
-void Mai_WriteFootNoteEMail (Txt_Language_t Language)
+void Mai_WriteFootNoteEMail (Lan_Language_t Language)
   {
-   extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Lan_NUM_LANGUAGES];
 
    fprintf (Gbl.Msg.FileMail,"%s\n"
                              "%s\n"

@@ -107,7 +107,7 @@ void Frm_StartFormId (Act_Action_t NextAction,const char *Id)
 static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
    if (!Gbl.Form.Inside)
@@ -115,7 +115,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       /* Start form */
       fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s",
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language]);
       if (Anchor)
 	 if (Anchor[0])
             fprintf (Gbl.F.Out,"#%s",Anchor);

@@ -157,7 +157,7 @@ struct Globals
 
    struct
      {
-      Txt_Language_t Language;
+      Lan_Language_t Language;
       unsigned FirstDayOfWeek;
       Dat_Format_t DateFormat;
       Mnu_Menu_t Menu;

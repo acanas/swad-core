@@ -615,7 +615,7 @@ static void Sch_SearchInDB (void)
 
 static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    char FieldName[4+1+2+1];	// Example: Name_en
    MYSQL_RES *mysql_res;
@@ -632,7 +632,7 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
 	 /***** Split countries string into words *****/
 	 snprintf (FieldName,sizeof (FieldName),
 	           "Name_%s",
-		   Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 if (Sch_BuildSearchQuery (SearchQuery,FieldName,NULL,NULL))
 	   {
 	    /***** Query database and list institutions found *****/
@@ -642,7 +642,7 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
 						 " WHERE %s%s"
 						 " ORDER BY Name_%s",
 						 SearchQuery,RangeQuery,
-						 Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+						 Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	    Cty_ListCtysFound (&mysql_res,NumCtys);
 	    return NumCtys;
 	   }
@@ -658,7 +658,7 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    MYSQL_RES *mysql_res;
    unsigned NumInss;
@@ -681,7 +681,7 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
 						 "%s"
 						 " ORDER BY institutions.FullName,countries.Name_%s",
 						 SearchQuery,RangeQuery,
-						 Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+						 Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	    Ins_ListInssFound (&mysql_res,NumInss);
 	    return NumInss;
 	   }

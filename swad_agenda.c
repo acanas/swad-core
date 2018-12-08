@@ -399,15 +399,15 @@ void Agd_ShowUsrAgenda (void)
 void Agd_ShowOtherAgendaAfterLogIn (void)
   {
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const unsigned Lan_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   extern const char *Txt_Switching_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    bool ItsMe;
 
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Lan_Current_CGI_SWAD_Language)
         {
 	 /***** Get user *****/
 	 /* If nickname is correct, user code is already got from nickname */
@@ -667,12 +667,12 @@ static void Agd_PutIconToViewEditMyFullAgenda (void)
 static void Agd_PutIconToShowQR (void)
   {
    char URL[Cns_MAX_BYTES_WWW + 1];
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    snprintf (URL,sizeof (URL),
 	     "%s/%s?agd=@%s",
              Cfg_URL_SWAD_CGI,
-             Txt_STR_LANG_ID[Gbl.Prefs.Language],
+             Lan_STR_LANG_ID[Gbl.Prefs.Language],
              Gbl.Usrs.Me.UsrDat.Nickname);
    Gbl.QR.Str = URL;
    QR_PutLinkToPrintQRCode (ActPrnAgdQR,QR_PutParamQRString);

@@ -444,7 +444,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
    extern const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML;
-   extern const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_New_password_NO_HTML[1 + Lan_NUM_LANGUAGES];
    char Command[2048 +
 		Cfg_MAX_BYTES_SMTP_PASSWORD +
 		Cns_MAX_BYTES_EMAIL_ADDRESS +

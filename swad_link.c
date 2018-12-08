@@ -36,10 +36,10 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_language.h"
 #include "swad_link.h"
 #include "swad_parameter.h"
 #include "swad_table.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

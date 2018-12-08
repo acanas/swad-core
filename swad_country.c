@@ -44,7 +44,6 @@
 #include "swad_preference.h"
 #include "swad_QR.h"
 #include "swad_table.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -94,7 +93,7 @@ static long Cty_GetParamOtherCtyCod (void);
 
 static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod);
 static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
-static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod);
+static bool Cty_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
 static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName);
 
 static void Cty_PutFormToCreateCountry (void);
@@ -108,7 +107,7 @@ static void Cty_CreateCountry (struct Country *Cty);
 void Cty_SeeCtyWithPendingInss (void)
   {
    extern const char *Hlp_SYSTEM_Hierarchy_pending;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
    extern const char *Txt_Institutions_ABBREVIATION;
@@ -133,7 +132,7 @@ void Cty_SeeCtyWithPendingInss (void)
 					      " GROUP BY institutions.CtyCod"
 					      " ORDER BY countries.Name_%s",
 					      (unsigned) Ins_STATUS_BIT_PENDING,
-					      Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+					      Lan_STR_LANG_ID[Gbl.Prefs.Language]);
          break;
       default:	// Forbidden for other users
 	 return;
@@ -235,7 +234,7 @@ static void Cty_Configuration (bool PrintView)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
@@ -343,10 +342,10 @@ static void Cty_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCty.Cty.CtyCod,
 	       Cfg_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCty.Cty.CtyCod);
 
       if (PrintView)
@@ -1012,11 +1011,11 @@ static void Cty_PutIconToViewCountries (void)
 /************************** List all the countries ***************************/
 /*****************************************************************************/
 
-#define Cty_MAX_BYTES_SUBQUERY_CTYS	((1 + Txt_NUM_LANGUAGES) * 32)
+#define Cty_MAX_BYTES_SUBQUERY_CTYS	((1 + Lan_NUM_LANGUAGES) * 32)
 
 void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char StrField[32];
    char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
@@ -1028,7 +1027,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    unsigned long NumRows = 0;
    unsigned NumCty;
    struct Country *Cty;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
 
    /***** Get countries from database *****/
    switch (GetExtraData)
@@ -1037,37 +1036,37 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
          NumRows = DB_QuerySELECT (&mysql_res,"can not get countries",
 				   "SELECT CtyCod,Alpha2,Name_%s"
 				   " FROM countries ORDER BY Name_%s",
-				   Txt_STR_LANG_ID[Gbl.Prefs.Language],
-				   Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+				   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+				   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
          break;
       case Cty_GET_EXTRA_DATA:
          SubQueryNam1[0] = '\0';
          SubQueryNam2[0] = '\0';
          SubQueryWWW1[0] = '\0';
          SubQueryWWW2[0] = '\0';
-         for (Lan = (Txt_Language_t) 1;
-              Lan <= Txt_NUM_LANGUAGES;
+         for (Lan = (Lan_Language_t) 1;
+              Lan <= Lan_NUM_LANGUAGES;
               Lan++)
            {
             snprintf (StrField,sizeof (StrField),
         	      "countries.Name_%s,",
-        	      Txt_STR_LANG_ID[Lan]);
+        	      Lan_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryNam1,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
             snprintf (StrField,sizeof (StrField),
         	      "Name_%s,",
-        	      Txt_STR_LANG_ID[Lan]);
+        	      Lan_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryNam2,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
 
             snprintf (StrField,sizeof (StrField),
         	      "countries.WWW_%s,",
-        	      Txt_STR_LANG_ID[Lan]);
+        	      Lan_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryWWW1,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
             snprintf (StrField,sizeof (StrField),
         	      "WWW_%s,",
-        	      Txt_STR_LANG_ID[Lan]);
+        	      Lan_STR_LANG_ID[Lan]);
             Str_Concat (SubQueryWWW2,StrField,
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
            }
@@ -1076,12 +1075,12 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
            {
             case Cty_ORDER_BY_COUNTRY:
                if (asprintf (&OrderBySubQuery,"Name_%s",
-        	             Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+        	             Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
 	          Lay_NotEnoughMemoryExit ();
                break;
             case Cty_ORDER_BY_NUM_USRS:
                if (asprintf (&OrderBySubQuery,"NumUsrs DESC,Name_%s",
-        	             Txt_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
+        	             Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
 	          Lay_NotEnoughMemoryExit ();
                break;
            }
@@ -1136,8 +1135,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
          switch (GetExtraData)
            {
             case Cty_GET_BASIC_DATA:
-               for (Lan = (Txt_Language_t) 1;
-        	    Lan <= Txt_NUM_LANGUAGES;
+               for (Lan = (Lan_Language_t) 1;
+        	    Lan <= Lan_NUM_LANGUAGES;
         	    Lan++)
         	 {
                   Cty->Name[Lan][0] = '\0';
@@ -1153,18 +1152,18 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                break;
             case Cty_GET_EXTRA_DATA:
                /* Get the name of the country in several languages */
-               for (Lan = (Txt_Language_t) 1;
-        	    Lan <= Txt_NUM_LANGUAGES;
+               for (Lan = (Lan_Language_t) 1;
+        	    Lan <= Lan_NUM_LANGUAGES;
         	    Lan++)
         	 {
                   Str_Copy (Cty->Name[Lan],row[1 + Lan],
                             Cty_MAX_BYTES_NAME);
-                  Str_Copy (Cty->WWW[Lan],row[1 + Txt_NUM_LANGUAGES + Lan],
+                  Str_Copy (Cty->WWW[Lan],row[1 + Lan_NUM_LANGUAGES + Lan],
                             Cns_MAX_BYTES_WWW);
         	 }
 
                /* Get number of users who claim to belong to this country */
-               if (sscanf (row[1 + Txt_NUM_LANGUAGES * 2 + 1],"%u",
+               if (sscanf (row[1 + Lan_NUM_LANGUAGES * 2 + 1],"%u",
                            &Cty->NumUsrsWhoClaimToBelongToCty) != 1)
                   Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
@@ -1200,7 +1199,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 void Cty_WriteSelectorOfCountry (void)
   {
    extern const char *Txt_Country;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtys;
@@ -1223,8 +1222,8 @@ void Cty_WriteSelectorOfCountry (void)
 				        "SELECT DISTINCT CtyCod,Name_%s"
 					" FROM countries"
 					" ORDER BY countries.Name_%s",
-					Txt_STR_LANG_ID[Gbl.Prefs.Language],
-					Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+					Lan_STR_LANG_ID[Gbl.Prefs.Language],
+					Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
    /***** List countries *****/
    for (NumCty = 0;
@@ -1291,7 +1290,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
 bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData)
   {
    extern const char *Txt_Another_country;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char StrField[32];
    char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
@@ -1300,15 +1299,15 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
    bool CtyFound;
 
    if (Cty->CtyCod < 0)
       return false;
 
    /***** Clear data *****/
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
       Cty->Name[Lan][0] = '\0';
@@ -1321,8 +1320,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    /***** Check if country code is correct *****/
    if (Cty->CtyCod == 0)
      {
-      for (Lan = (Txt_Language_t) 1;
-	   Lan <= Txt_NUM_LANGUAGES;
+      for (Lan = (Lan_Language_t) 1;
+	   Lan <= Lan_NUM_LANGUAGES;
 	   Lan++)
          if (Lan == Gbl.Prefs.Language)
             Str_Copy (Cty->Name[Lan],Txt_Another_country,
@@ -1342,8 +1341,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 				   "SELECT Alpha2,Name_%s,WWW_%s"
 				   " FROM countries"
 				   " WHERE CtyCod='%03ld'",
-				   Txt_STR_LANG_ID[Gbl.Prefs.Language],
-				   Txt_STR_LANG_ID[Gbl.Prefs.Language],
+				   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+				   Lan_STR_LANG_ID[Gbl.Prefs.Language],
 				   Cty->CtyCod);
          break;
       case Cty_GET_EXTRA_DATA:
@@ -1351,29 +1350,29 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	 SubQueryNam2[0] = '\0';
 	 SubQueryWWW1[0] = '\0';
 	 SubQueryWWW2[0] = '\0';
-	 for (Lan = (Txt_Language_t) 1;
-	      Lan <= Txt_NUM_LANGUAGES;
+	 for (Lan = (Lan_Language_t) 1;
+	      Lan <= Lan_NUM_LANGUAGES;
 	      Lan++)
 	   {
 	    snprintf (StrField,sizeof (StrField),
 		      "countries.Name_%s,",
-		      Txt_STR_LANG_ID[Lan]);
+		      Lan_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryNam1,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 	    snprintf (StrField,sizeof (StrField),
 		      "Name_%s,",
-		      Txt_STR_LANG_ID[Lan]);
+		      Lan_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryNam2,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 
 	    snprintf (StrField,sizeof (StrField),
 		      "countries.WWW_%s,",
-		      Txt_STR_LANG_ID[Lan]);
+		      Lan_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryWWW1,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 	    snprintf (StrField,sizeof (StrField),
 		      "WWW_%s,",
-		      Txt_STR_LANG_ID[Lan]);
+		      Lan_STR_LANG_ID[Lan]);
 	    Str_Concat (SubQueryWWW2,StrField,
 	                Cty_MAX_BYTES_SUBQUERY_CTYS);
 	   }
@@ -1416,18 +1415,18 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    break;
 	 case Cty_GET_EXTRA_DATA:
 	    /* Get name and WWW of the country in several languages */
-	    for (Lan = (Txt_Language_t) 1;
-		 Lan <= Txt_NUM_LANGUAGES;
+	    for (Lan = (Lan_Language_t) 1;
+		 Lan <= Lan_NUM_LANGUAGES;
 		 Lan++)
 	      {
 	       Str_Copy (Cty->Name[Lan],row[Lan],
 	                 Cty_MAX_BYTES_NAME);
-	       Str_Copy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES + Lan],
+	       Str_Copy (Cty->WWW[Lan],row[Lan_NUM_LANGUAGES + Lan],
 	                 Cns_MAX_BYTES_WWW);
 	      }
 
 	    /* Get number of users who claim to belong to this country */
-	    if (sscanf (row[Txt_NUM_LANGUAGES * 2 + 1],"%u",
+	    if (sscanf (row[Lan_NUM_LANGUAGES * 2 + 1],"%u",
 	                &Cty->NumUsrsWhoClaimToBelongToCty) != 1)
 	       Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
@@ -1461,7 +1460,7 @@ void Cty_FlushCacheCountryName (void)
 
 void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1485,7 +1484,7 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1])
 
    if (DB_QuerySELECT (&mysql_res,"can not get the name of a country",
 		       "SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
-	               Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod)) // Country found...
+	               Lan_STR_LANG_ID[Gbl.Prefs.Language],CtyCod)) // Country found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1575,10 +1574,10 @@ void Cty_FreeListCountries (void)
 
 static void Cty_ListCountriesForEdition (void)
   {
-   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
 
    /***** Write heading *****/
    Tbl_StartTableWide (2);
@@ -1594,7 +1593,7 @@ static void Cty_ListCountriesForEdition (void)
       /* Put icon to remove country */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td rowspan=\"%u\" class=\"BT\">",
-	       1 + Txt_NUM_LANGUAGES);
+	       1 + Lan_NUM_LANGUAGES);
       if (Cty->NumInss ||
 	  Cty->NumUsrsWhoClaimToBelongToCty ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
@@ -1612,13 +1611,13 @@ static void Cty_ListCountriesForEdition (void)
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%03ld"
 	                 "</td>",
-               1 + Txt_NUM_LANGUAGES,Cty->CtyCod);
+               1 + Lan_NUM_LANGUAGES,Cty->CtyCod);
 
       /* Alphabetic country code with 2 letters (ISO 3166-1) */
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%s"
 	                 "</td>",
-               1 + Txt_NUM_LANGUAGES,Cty->Alpha2);
+               1 + Lan_NUM_LANGUAGES,Cty->Alpha2);
 
       fprintf (Gbl.F.Out,"<td></td>"
 	                 "<td></td>"
@@ -1628,18 +1627,18 @@ static void Cty_ListCountriesForEdition (void)
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%u"
 	                 "</td>",
-               1 + Txt_NUM_LANGUAGES,Cty->NumUsrsWhoClaimToBelongToCty);
+               1 + Lan_NUM_LANGUAGES,Cty->NumUsrsWhoClaimToBelongToCty);
 
       /* Number of institutions */
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%u"
 	                 "</td>"
 	                 "</tr>",
-               1 + Txt_NUM_LANGUAGES,Cty->NumInss);
+               1 + Lan_NUM_LANGUAGES,Cty->NumInss);
 
       /* Country name in several languages */
-      for (Lan = (Txt_Language_t) 1;
-	   Lan <= Txt_NUM_LANGUAGES;
+      for (Lan = (Lan_Language_t) 1;
+	   Lan <= Lan_NUM_LANGUAGES;
 	   Lan++)
         {
 	 /* Language */
@@ -1776,11 +1775,11 @@ void Cty_RenameCountry (void)
    extern const char *Txt_You_can_not_leave_the_name_of_the_country_X_empty;
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_name_of_the_country_X_has_not_changed;
    struct Country *Cty;
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
-   Txt_Language_t Language;
+   Lan_Language_t Language;
    char FieldName[4 + 1 + 2 + 1];	// Example: "Name_en"
 
    Cty = &Gbl.Ctys.EditingCty;
@@ -1823,7 +1822,7 @@ void Cty_RenameCountry (void)
 	    /* Update the table changing old name by new name */
 	    snprintf (FieldName,sizeof (FieldName),
 		      "Name_%s",
-		      Txt_STR_LANG_ID[Language]);
+		      Lan_STR_LANG_ID[Language]);
 	    Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
 
 	    /* Write message to show the change made */
@@ -1882,16 +1881,16 @@ static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
 /******************** Check if the name of country exists ********************/
 /*****************************************************************************/
 
-static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod)
+static bool Cty_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Get number of countries with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name"
 	                  " of a country already existed",
 			  "SELECT COUNT(*) FROM countries"
 			  " WHERE Name_%s='%s' AND CtyCod<>'%03ld'",
-			  Txt_STR_LANG_ID[Language],Name,CtyCod) != 0);
+			  Lan_STR_LANG_ID[Language],Name,CtyCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1916,10 +1915,10 @@ static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *N
 void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    struct Country *Cty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
-   Txt_Language_t Language;
+   Lan_Language_t Language;
 
    Cty = &Gbl.Ctys.EditingCty;
 
@@ -1939,7 +1938,7 @@ void Cty_ChangeCtyWWW (void)
    DB_QueryUPDATE ("can not update the web of a country",
 		   "UPDATE countries SET WWW_%s='%s'"
 		   " WHERE CtyCod='%03ld'",
-	           Txt_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
+	           Lan_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
    Str_Copy (Cty->WWW[Language],NewWWW,
 	     Cns_MAX_BYTES_WWW);
 
@@ -1982,11 +1981,11 @@ void Cty_ChangeCtyMapAttribution (void)
 static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Txt_New_country;
-   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
    struct Country *Cty;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
 
    /***** Country data *****/
    Cty = &Gbl.Ctys.EditingCty;
@@ -2004,13 +2003,13 @@ static void Cty_PutFormToCreateCountry (void)
    /***** Column to remove country, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td rowspan=\"%u\" class=\"BT\"></td>",
-            1 + Txt_NUM_LANGUAGES);
+            1 + Lan_NUM_LANGUAGES);
 
    /***** Numerical country code (ISO 3166-1) *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"RIGHT_TOP\">"
                       "<input type=\"text\" name=\"OthCtyCod\""
                       " size=\"3\" maxlength=\"10\" value=\"",
-            1 + Txt_NUM_LANGUAGES);
+            1 + Lan_NUM_LANGUAGES);
    if (Cty->CtyCod > 0)
       fprintf (Gbl.F.Out,"%03ld",Cty->CtyCod);
    fprintf (Gbl.F.Out,"\" required=\"required\" />"
@@ -2022,7 +2021,7 @@ static void Cty_PutFormToCreateCountry (void)
                       " size=\"2\" maxlength=\"2\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            1 + Txt_NUM_LANGUAGES,Cty->Alpha2);
+            1 + Lan_NUM_LANGUAGES,Cty->Alpha2);
 
    fprintf (Gbl.F.Out,"<td></td>"
 		      "<td></td>"
@@ -2032,18 +2031,18 @@ static void Cty_PutFormToCreateCountry (void)
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	              "0"
 	              "</td>",
-	    1 + Txt_NUM_LANGUAGES);
+	    1 + Lan_NUM_LANGUAGES);
 
    /* Number of institutions */
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	              "0"
 	              "</td>"
 		      "</tr>",
-	    1 + Txt_NUM_LANGUAGES);
+	    1 + Lan_NUM_LANGUAGES);
 
    /***** Country name in several languages *****/
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
       /* Language */
@@ -2059,7 +2058,7 @@ static void Cty_PutFormToCreateCountry (void)
                          " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " required=\"required\" />"
                          "</td>",
-               Txt_STR_LANG_ID[Lan],
+               Lan_STR_LANG_ID[Lan],
                Cty_MAX_CHARS_NAME,
                Cty->Name[Lan]);
 
@@ -2070,7 +2069,7 @@ static void Cty_PutFormToCreateCountry (void)
                          " class=\"INPUT_WWW\" />"
 			 "</td>"
 			 "</tr>",
-	       Txt_STR_LANG_ID[Lan],
+	       Lan_STR_LANG_ID[Lan],
 	       Cns_MAX_CHARS_WWW,
 	       Cty->WWW[Lan]);
      }
@@ -2135,13 +2134,13 @@ void Cty_RecFormNewCountry (void)
    extern const char *Txt_The_numerical_code_X_already_exists;
    extern const char *Txt_The_alphabetical_code_X_is_not_correct;
    extern const char *Txt_The_alphabetical_code_X_already_exists;
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages;
    char ParamName[32];
    struct Country *Cty;
    bool CreateCountry = true;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
    unsigned i;
 
    Cty = &Gbl.Ctys.EditingCty;
@@ -2191,13 +2190,13 @@ void Cty_RecFormNewCountry (void)
          else	// Alphabetic code correct
            {
             /* Get country name and WWW in different languages */
-            for (Lan = (Txt_Language_t) 1;
-        	 Lan <= Txt_NUM_LANGUAGES;
+            for (Lan = (Lan_Language_t) 1;
+        	 Lan <= Lan_NUM_LANGUAGES;
         	 Lan++)
               {
                snprintf (ParamName,sizeof (ParamName),
         	         "Name_%s",
-			 Txt_STR_LANG_ID[Lan]);
+			 Lan_STR_LANG_ID[Lan]);
                Par_GetParToText (ParamName,Cty->Name[Lan],Cty_MAX_BYTES_NAME);
 
                if (Cty->Name[Lan][0])	// If there's a country name
@@ -2222,7 +2221,7 @@ void Cty_RecFormNewCountry (void)
 
                snprintf (ParamName,sizeof (ParamName),
         	         "WWW_%s",
-			 Txt_STR_LANG_ID[Lan]);
+			 Lan_STR_LANG_ID[Lan]);
                Par_GetParToText (ParamName,Cty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
@@ -2240,14 +2239,14 @@ void Cty_RecFormNewCountry (void)
 /**************************** Create a new country ***************************/
 /*****************************************************************************/
 
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Txt_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Txt_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
+#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
+#define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
 
 static void Cty_CreateCountry (struct Country *Cty)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Created_new_country_X;
-   Txt_Language_t Lan;
+   Lan_Language_t Lan;
    char StrField[32];
    char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
    char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS_NAME + 1];
@@ -2259,13 +2258,13 @@ static void Cty_CreateCountry (struct Country *Cty)
    SubQueryNam2[0] = '\0';
    SubQueryWWW1[0] = '\0';
    SubQueryWWW2[0] = '\0';
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
       snprintf (StrField,sizeof (StrField),
 	        ",Name_%s",
-		Txt_STR_LANG_ID[Lan]);
+		Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryNam1,StrField,
                   Cty_MAX_BYTES_SUBQUERY_CTYS);
 
@@ -2278,7 +2277,7 @@ static void Cty_CreateCountry (struct Country *Cty)
 
       snprintf (StrField,sizeof (StrField),
 	        ",WWW_%s",
-		Txt_STR_LANG_ID[Lan]);
+		Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryWWW1,StrField,
                   Cty_MAX_BYTES_SUBQUERY_CTYS);
 

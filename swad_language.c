@@ -42,6 +42,25 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
+	{
+	"",	// Lan_LANGUAGE_UNKNOWN
+	"ca",	// Lan_LANGUAGE_CA
+	"de",	// Lan_LANGUAGE_DE
+	"en",	// Lan_LANGUAGE_EN
+	"es",	// Lan_LANGUAGE_ES
+	"fr",	// Lan_LANGUAGE_FR
+	"gn",	// Lan_LANGUAGE_GN
+	"it",	// Lan_LANGUAGE_IT
+	"pl",	// Lan_LANGUAGE_PL
+	"pt",	// Lan_LANGUAGE_PT
+	};
+const unsigned Lan_Current_CGI_SWAD_Language = ((unsigned) L);
+
+/*****************************************************************************/
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
@@ -97,16 +116,16 @@ static void Lan_PutIconsLanguage (void)
 
 void Lan_PutSelectorToSelectLanguage (void)
   {
-   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
-   Txt_Language_t Lan;
+   extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
+   Lan_Language_t Lan;
 
    Frm_StartForm (ActReqChgLan);
    fprintf (Gbl.F.Out,"<select name=\"Lan\""
 	              " style=\"width:112px; margin:0;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Lan);
@@ -124,10 +143,10 @@ void Lan_PutSelectorToSelectLanguage (void)
 
 void Lan_AskChangeLanguage (void)
   {
-   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Switch_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
-   Txt_Language_t CurrentLanguage = Gbl.Prefs.Language;
+   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Switch_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   Lan_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
    /***** Get param language *****/
    Gbl.Prefs.Language = Lan_GetParamLanguage ();	// Change temporarily language to set form action
@@ -179,7 +198,7 @@ void Lan_ChangeLanguage (void)
 
 void Lan_UpdateMyLanguageToCurrentLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Set my language to the current language *****/
    Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
@@ -187,7 +206,7 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
    /***** Update my language in database *****/
    DB_QueryUPDATE ("can not update your language",
 		   "UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
-	           Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	           Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -195,13 +214,13 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
 /*************************** Get parameter language **************************/
 /*****************************************************************************/
 
-Txt_Language_t Lan_GetParamLanguage (void)
+Lan_Language_t Lan_GetParamLanguage (void)
   {
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const unsigned Lan_Current_CGI_SWAD_Language;
 
-   return (Txt_Language_t)
+   return (Lan_Language_t)
 	  Par_GetParToUnsignedLong ("Lan",
                                     1,
-                                    Txt_NUM_LANGUAGES,
-                                    (unsigned long) Txt_Current_CGI_SWAD_Language);
+                                    Lan_NUM_LANGUAGES,
+                                    (unsigned long) Lan_Current_CGI_SWAD_Language);
   }

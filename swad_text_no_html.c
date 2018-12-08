@@ -64,8 +64,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_language.h"
 #include "swad_notification.h"
-#include "swad_text.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -117,7 +117,7 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 // The following variables are compilated together in all languages because they are used in emails...
 // ...and each email is sent in the language of the recipient
 
-const char *Txt_Course_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_Course_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Assignatura",
@@ -131,7 +131,7 @@ const char *Txt_Course_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entiti
 	"Disciplina",
 	};
 
-const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
+const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 {
 	{
 	// Usr_SEX_UNKNOWN
@@ -187,7 +187,7 @@ const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES] =	// Don't use
 	}
 };
 
-const char *Txt_Forum_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
+const char *Txt_Forum_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 	{
 	"",
 	"Fòrum",
@@ -201,7 +201,7 @@ const char *Txt_Forum_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entitie
 	"Fórum",
 	};
 
-const char *Txt_General_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &eacute; here
+const char *Txt_General_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &eacute; here
 	{
 	"",
 	"General",
@@ -215,7 +215,7 @@ const char *Txt_General_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entit
 	"Geral",
 	};
 
-const char *Txt_Go_to_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &agrave; here
+const char *Txt_Go_to_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &agrave; here
 	{
 	"",
 	"Anar a",
@@ -313,7 +313,7 @@ const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_H
 	" if you have confirmed your email address.\n\n";	// Necessita de tradução
 #endif
 
-const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Si no desitgeu rebre més avisos per correu,"
@@ -357,7 +357,7 @@ const char *Txt_Institutions_NO_HTML =
 	"Instituções";
 #endif
 
-const char *Txt_MSG_From_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_MSG_From_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"De",
@@ -371,7 +371,7 @@ const char *Txt_MSG_From_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML enti
 	"De",
 	};
 
-const char *Txt_Notifications_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_Notifications_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Notificacions",
@@ -385,7 +385,7 @@ const char *Txt_Notifications_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML
 	"Notificações",
 	};
 
-const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &ntilde; here.
+const char *Txt_New_password_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &ntilde; here.
 	{
 	"",
 	"Nova contrasenya",
@@ -399,7 +399,7 @@ const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML 
 	"Nova senha",
 	};
 
-const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &uuml; here.
+const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &uuml; here.
 {
 	{
 	// Ntf_EVENT_UNKNOWN
@@ -676,7 +676,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	},
 };
 
-const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Warning: it is very important to include %s in the following sentences
 	{			// Don't use HTML entities like &uuml; here.
 	"",
 	"Hi ha un nou esdeveniment en %s",
@@ -690,7 +690,7 @@ const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Txt_NUM_LANGUAGES
 	"Existe um novo evento em %s",
 	};
 
-const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %u and %s in the following sentences
+const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Warning: it is very important to include %u and %s in the following sentences
 	{			// Don't use HTML entities like &uuml; here.
 	"",
 	"Hi ha %u nous esdeveniments en %s",
@@ -704,7 +704,7 @@ const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Txt_NUM_LANGUAG
 	"Há %u novos eventos em %s",
 	};
 
-const char *Txt_only_teachers_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
+const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 	{
 	"",
 	", professors",
@@ -718,7 +718,7 @@ const char *Txt_only_teachers_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML
 	", professores",
 	};
 
-const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Si us plau, no respongui a aquest correu generat automàticament.",
@@ -732,7 +732,7 @@ const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTM
 	"Por favor, não responda a este email gerado automaticamente.",
 	 };
 
-const char *Txt_TAB_Messages_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_TAB_Messages_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Missatges",
@@ -1136,7 +1136,7 @@ const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// 
 	"Tempo de upload muito longo (máximo %lu minutos).";
 #endif
 
-const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 {
 	{
 	// Usr_SEX_UNKNOWN

@@ -42,10 +42,10 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_plugin.h"
 #include "swad_session.h"
-#include "swad_text.h"
 #include "swad_web_service.h"
 
 /*****************************************************************************/

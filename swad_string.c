@@ -112,7 +112,7 @@ action="https://localhost/swad/es" method="post">
 
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
    char Anchor1Nick[256 + 256 + 256 + Cns_BYTES_SESSION_ID + 256 + 256];
    char Anchor2Nick[256 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
@@ -316,7 +316,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		      "%s"
 		      "<input type=\"hidden\" name=\"usr\" value=\"",
 		      Cfg_URL_SWAD_CGI,
-		      Txt_STR_LANG_ID[Gbl.Prefs.Language],
+		      Lan_STR_LANG_ID[Gbl.Prefs.Language],
 		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                   Gbl.Form.Id,
 		      ParamsStr);

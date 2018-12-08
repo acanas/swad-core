@@ -45,7 +45,6 @@
 #include "swad_parameter.h"
 #include "swad_preference.h"
 #include "swad_privacy.h"
-#include "swad_text.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/

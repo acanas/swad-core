@@ -2174,12 +2174,12 @@ static void For_WriteLinkToForum (struct Forum *Forum,
 
 void For_SetForumName (struct Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
-                       Txt_Language_t Language,bool UseHTMLEntities)
+                       Lan_Language_t Language,bool UseHTMLEntities)
   {
    extern const char *Txt_General;
-   extern const char *Txt_General_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_General_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_only_teachers;
-   extern const char *Txt_only_teachers_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Unknown_FORUM;
    struct Instit Ins;
    struct Centre Ctr;

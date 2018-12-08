@@ -108,8 +108,8 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 
 void Lay_WriteStartOfPage (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const unsigned Lan_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
    const char *LayoutMainZone[Mnu_NUM_MENUS] =
@@ -172,7 +172,7 @@ void Lay_WriteStartOfPage (void)
                       "SWADroid,"
                       "LMS,"
                       "Learning Management System\" />\n",
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Cfg_PLATFORM_SHORT_NAME);
 
    /* Viewport (used for responsive design) */
@@ -237,7 +237,7 @@ void Lay_WriteStartOfPage (void)
 
    /* Redirect to correct language */
    if (Gbl.Usrs.Me.Logged &&							// I am logged
-       Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
+       Gbl.Usrs.Me.UsrDat.Prefs.Language != Lan_Current_CGI_SWAD_Language)	// My language != current language
      {
       if (Gbl.Action.Act == ActLogIn ||		// Regular log in
 	  Gbl.Action.Act == ActLogInNew)		// Log in when checking account
@@ -441,24 +441,24 @@ static void Lay_WritePageTitle (void)
 
 static void Lay_WriteRedirToMyLangOnLogIn (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
 	    Cfg_URL_SWAD_CGI,
-	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
+	    Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
 	    Act_GetActCod (ActLogInLan),
 	    Gbl.Session.Id);
   }
 
 static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
 	    Cfg_URL_SWAD_CGI,
-	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
+	    Lan_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
 	    Act_GetActCod (ActLogInUsrAgdLan),
 	    Gbl.Session.Id,
 	    Gbl.Usrs.Other.UsrDat.Nickname);
@@ -664,7 +664,7 @@ static void Lay_WriteScriptMathJax (void)
 
 static void Lay_WriteScriptInit (void)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
@@ -678,7 +678,7 @@ static void Lay_WriteScriptInit (void)
    // Put the focus on login form
    fprintf (Gbl.F.Out,"	ActionAJAX = \"%s\";\n"
                       "	setTimeout(\"refreshConnected()\",%lu);\n",
-            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Connected.TimeToRefreshInMs);
 
    if (Gbl.Action.Act == ActLstClk)
@@ -1642,7 +1642,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 
 void Lay_StartHTMLFile (FILE *File,const char *Title)
   {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    fprintf (File,"<!DOCTYPE html>\n"
 		 "<html lang=\"%s\">\n"
@@ -1651,6 +1651,6 @@ void Lay_StartHTMLFile (FILE *File,const char *Title)
 		 " content=\"text/html;charset=windows-1252\" />\n"
 		 "<title>%s</title>\n"
 		 "</head>\n",
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language],	// Language
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],	// Language
 	    Title);					// Page title
   }

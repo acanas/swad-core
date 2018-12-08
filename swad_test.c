@@ -43,12 +43,12 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_image.h"
+#include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_test.h"
 #include "swad_test_import.h"
-#include "swad_text.h"
 #include "swad_user.h"
 #include "swad_xml.h"
 
