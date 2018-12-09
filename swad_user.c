@@ -2506,7 +2506,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 
 void Usr_WelcomeUsr (void)
   {
-   extern const unsigned Lan_Current_CGI_SWAD_Language;
+   extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Happy_birthday;
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
@@ -2516,7 +2516,7 @@ void Usr_WelcomeUsr (void)
 
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Lan_Current_CGI_SWAD_Language)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin:12px;\">");

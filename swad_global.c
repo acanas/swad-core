@@ -81,7 +81,7 @@ void Gbl_InitializeGlobals (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const unsigned Lan_Current_CGI_SWAD_Language;
+   extern const unsigned Txt_Current_CGI_SWAD_Language;
    Rol_Role_t Role;
    Lan_Language_t Lan;
 
@@ -129,7 +129,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.HiddenParamsInsertedIntoDB = false;
 
-   Gbl.Prefs.Language       = Lan_Current_CGI_SWAD_Language;
+   Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    Gbl.Prefs.DateFormat     = Dat_FORMAT_DEFAULT;		// Default date format
    Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu

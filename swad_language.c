@@ -58,7 +58,6 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
 	"pl",	// Lan_LANGUAGE_PL
 	"pt",	// Lan_LANGUAGE_PT
 	};
-const unsigned Lan_Current_CGI_SWAD_Language = ((unsigned) L);
 
 /*****************************************************************************/
 /****************************** Private constants ****************************/
@@ -216,11 +215,11 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
 
 Lan_Language_t Lan_GetParamLanguage (void)
   {
-   extern const unsigned Lan_Current_CGI_SWAD_Language;
+   extern const unsigned Txt_Current_CGI_SWAD_Language;
 
    return (Lan_Language_t)
 	  Par_GetParToUnsignedLong ("Lan",
                                     1,
                                     Lan_NUM_LANGUAGES,
-                                    (unsigned long) Lan_Current_CGI_SWAD_Language);
+                                    (unsigned long) Txt_Current_CGI_SWAD_Language);
   }
