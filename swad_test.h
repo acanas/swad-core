@@ -144,6 +144,7 @@ void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
 
 void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
+			     struct UsrData *UsrDat,
                              struct Game *Game,
                              unsigned NumQst,long QstCod,MYSQL_ROW row,
                              double *ScoreThisQst,bool *AnswerIsNotBlank);

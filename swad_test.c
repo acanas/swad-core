@@ -195,15 +195,18 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
 
 static void Tst_WriteAnswersEdit (long QstCod);
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle);
-static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
+static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
+                                        unsigned NumQst,long QstCod,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
 
 static void Tst_WriteTFAnsViewTest (unsigned NumQst);
-static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
+				      unsigned NumQst,MYSQL_RES *mysql_res,
                                       double *ScoreThisQst,bool *AnswerIsNotBlank);
 
 static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle);
-static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
+				          unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
                                         unsigned NumQst,long QstCod,
@@ -211,18 +214,21 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
                                         bool ShowResult);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
-static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
+				        unsigned NumQst,MYSQL_RES *mysql_res,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
 
 static void Tst_WriteIntAnsViewTest (unsigned NumQst);
-static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
+				       unsigned NumQst,MYSQL_RES *mysql_res,
                                        double *ScoreThisQst,bool *AnswerIsNotBlank);
 
 static void Tst_WriteFloatAnsViewTest (unsigned NumQst);
-static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
+				         unsigned NumQst,MYSQL_RES *mysql_res,
                                          double *ScoreThisQst,bool *AnswerIsNotBlank);
 
-static void Tst_WriteHeadUserCorrect (void);
+static void Tst_WriteHeadUserCorrect (struct UsrData *UsrDat);
 static void Tst_WriteScoreStart (unsigned ColSpan);
 static void Tst_WriteScoreEnd (void);
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
@@ -579,7 +585,7 @@ void Tst_AssessTest (void)
 
 	 /***** Store test result in database *****/
 	 Tst_StoreScoreOfTestResultInDB (TstCod,
-				       NumQstsNotBlank,TotalScore);
+				         NumQstsNotBlank,TotalScore);
 
          /***** Set test status *****/
          Tst_SetTstStatus (NumTst,Tst_STATUS_ASSESSED);
@@ -851,6 +857,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
+			      &Gbl.Usrs.Me.UsrDat,
                               NULL,NumQst,QstCod,row,
 	                      &ScoreThisQst,		// Not used here
 	                      &AnswerIsNotBlank);	// Not used here
@@ -953,7 +960,8 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 
 	 /***** Write question and answers *****/
 	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                         NULL,NumQst,QstCod,row,
+	                         &Gbl.Usrs.Me.UsrDat,
+				 NULL,NumQst,QstCod,row,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
@@ -993,6 +1001,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 /*****************************************************************************/
 
 void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
+			     struct UsrData *UsrDat,
                              struct Game *Game,
                              unsigned NumQst,long QstCod,MYSQL_ROW row,
                              double *ScoreThisQst,bool *AnswerIsNotBlank)
@@ -1046,7 +1055,7 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
          Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
 	 break;
       case Tst_SHOW_TEST_RESULT:
-	 Tst_WriteAnswersTestResult (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
+	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
 	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
@@ -3351,7 +3360,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
 
 static void Tst_WriteAnswersEdit (long QstCod)
   {
-   extern const char *Txt_TEST_Correct_answer;
+   extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
    unsigned i;
    MYSQL_RES *mysql_res;
@@ -3448,8 +3457,8 @@ static void Tst_WriteAnswersEdit (long QstCod)
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICO20x20\" />",
                         Gbl.Prefs.IconsURL,
-                        Txt_TEST_Correct_answer,
-                        Txt_TEST_Correct_answer);
+                        Txt_TST_Answer_given_by_the_teachers,
+                        Txt_TST_Answer_given_by_the_teachers);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */
@@ -3528,8 +3537,9 @@ static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuff
 /************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
-                                          double *ScoreThisQst,bool *AnswerIsNotBlank)
+static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
+                                        unsigned NumQst,long QstCod,
+                                        double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_RES *mysql_res;
 
@@ -3548,20 +3558,21 @@ static void Tst_WriteAnswersTestResult (unsigned NumQst,long QstCod,
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteIntAnsAssessTest    (UsrDat,NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+
+	 Tst_WriteFloatAnsAssessTest  (UsrDat,NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteTFAnsAssessTest     (UsrDat,NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteChoiceAnsAssessTest (UsrDat,NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteTextAnsAssessTest   (UsrDat,NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       default:
          break;
@@ -3645,7 +3656,8 @@ void Tst_WriteAnsTF (char AnsTF)
 /************** Write false / true answer when assessing a test **************/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
+				      unsigned NumQst,MYSQL_RES *mysql_res,
                                       double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
@@ -3684,7 +3696,7 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** Header with the title of each column *****/
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_WriteHeadUserCorrect ();
+   Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write the user answer *****/
@@ -3694,12 +3706,12 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
              Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
             (AnsTF == row[1][0] ? "ANS_OK" :
         	                  "ANS_BAD") :
-            "ANS");
+            "ANS_0");
    Tst_WriteAnsTF (AnsTF);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answer *****/
-   fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_MIDDLE\">");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       Tst_WriteAnsTF (row[1][0]);
@@ -3715,7 +3727,7 @@ static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       Tst_WriteScoreStart (2);
       if (AnsTF == '\0')		// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS\">%.2lf",0.0);
+         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
       else if (AnsTF == row[1][0])	// If correct
          fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
       else				// If wrong
@@ -3807,7 +3819,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
                NumQst,NumOpt,
                NumQst,Index);
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"ANS\">"
+                         "<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">"
 	                 "%c)&nbsp;"
 	                 "</label>"
 	                 "</td>",
@@ -3816,7 +3828,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"ANS\">"
+                         "<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">"
 	                 "%s"
 	                 "</label>",
                NumQst,NumOpt,
@@ -3839,11 +3851,12 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 /******* Write single or multiple choice answer when assessing a test ********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
+				          unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
-   extern const char *Txt_TEST_User_answer;
-   extern const char *Txt_TEST_Correct_answer;
+   extern const char *Txt_TST_Answer_given_by_the_user;
+   extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
    MYSQL_ROW row;
    char StrOneIndex[10 + 1];
@@ -3851,6 +3864,11 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    int AnsUsr;
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
+   struct
+     {
+      char *Class;
+      char *Str;
+     } Ans;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
    unsigned NumAnsGood = 0;
@@ -3937,7 +3955,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** Start table *****/
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_WriteHeadUserCorrect ();
+   Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"<td></td>"
 	              "<td></td>"
 	              "</tr>");
@@ -3947,49 +3965,59 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 	NumOpt < Gbl.Test.Answer.NumOptions;
 	NumOpt++)
      {
+      fprintf (Gbl.F.Out,"<tr>");
+
       /* Draw icon depending on user's answer */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"CENTER_TOP\">");
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
-                  (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-                   Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
-                   (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct ? "ok_green" :
-                	                                               "ok_red") :
-                   "ok_on",
-                  Txt_TEST_User_answer,
-                  Txt_TEST_User_answer);
-      fprintf (Gbl.F.Out,"</td>");
+        {
+         if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+             Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+           {
+            if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+              {
+               Ans.Class = "ANS_OK";
+               Ans.Str   = "&check;";
+              }
+            else
+              {
+               Ans.Class = "ANS_BAD";
+               Ans.Str   = "&cross;";
+              }
+           }
+         else
+	   {
+	    Ans.Class = "ANS_0";
+	    Ans.Str   = "&bull;";
+	   }
+	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" title=\"%s\">%s</td>",
+			    Ans.Class,Txt_TST_Answer_given_by_the_user,Ans.Str);
+        }
+      else	// This answer has NOT been selected by the user
+	 fprintf (Gbl.F.Out,"<td></td>");
 
       /* Draw icon that indicates whether the answer is correct */
-      fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_TOP\">");
+
       if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
           Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
-            fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_TEST_Correct_answer,
-                     Txt_TEST_Correct_answer);
+	    fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\" title=\"%s\">&bull;</td>",
+		     Txt_TST_Answer_given_by_the_teachers);
+         else
+	    fprintf (Gbl.F.Out,"<td></td>");
         }
       else
-         fprintf (Gbl.F.Out,"?");
-      fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\">?</td>");
 
       /* Answer letter (a, b, c,...) */
-      fprintf (Gbl.F.Out,"<td class=\"ANS LEFT_TOP\">"
+      fprintf (Gbl.F.Out,"<td class=\"ANS_TXT LEFT_TOP\">"
 	                 "%c)&nbsp;"
 	                 "</td>",
                'a' + (char) NumOpt);
 
       /* Answer text and feedback */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-	                 "<div class=\"ANS\">"
+	                 "<div class=\"ANS_TXT\">"
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,
@@ -4062,7 +4090,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       Tst_WriteScoreStart (4);
       if (*ScoreThisQst == 0.0)
-         fprintf (Gbl.F.Out,"ANS");
+         fprintf (Gbl.F.Out,"ANS_0");
       else if (*ScoreThisQst > 0.0)
          fprintf (Gbl.F.Out,"ANS_OK");
       else
@@ -4198,7 +4226,8 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
 /***************** Write text answer when assessing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
+				        unsigned NumQst,MYSQL_RES *mysql_res,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    unsigned NumOpt;
@@ -4253,12 +4282,12 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** Header with the title of each column *****/
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_WriteHeadUserCorrect ();
+   Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"");
+	              "<td");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       /* Filter the user answer */
@@ -4287,18 +4316,17 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
             break;
            }
         }
-      fprintf (Gbl.F.Out,"%s CENTER_TOP\">"
-	                 "&nbsp;%s&nbsp;",
+      fprintf (Gbl.F.Out," class=\"%s CENTER_TOP\">"
+	                 "%s",
                (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
                 Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                 (Correct ? "ANS_OK" :
                            "ANS_BAD") :
-                "ANS",
+                "ANS_0",
                Gbl.Test.StrAnswersOneQst[NumQst]);
      }
    else						// If user has omitted the answer
-      fprintf (Gbl.F.Out,"ANS CENTER_TOP\">"
-	                 "&nbsp;");
+      fprintf (Gbl.F.Out,">");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answers *****/
@@ -4313,14 +4341,14 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 	   NumOpt++)
         {
          /* Answer letter (a, b, c,...) */
-         fprintf (Gbl.F.Out,"<td class=\"ANS LEFT_TOP\">"
+         fprintf (Gbl.F.Out,"<td class=\"ANS_0 LEFT_TOP\">"
                             "%c)&nbsp;"
                             "</td>",
                   'a' + (char) NumOpt);
 
          /* Answer text and feedback */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                            "<div class=\"ANS\">"
+                            "<div class=\"ANS_0\">"
                             "%s"
                             "</div>",
                   Gbl.Test.Answer.Options[NumOpt].Text);
@@ -4338,7 +4366,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
       Tbl_EndTable ();
      }
    else
-      fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_TOP\">"
+      fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\">"
 	                 "?");
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -4365,7 +4393,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       Tst_WriteScoreStart (4);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS\">%.2lf",0.0);
+         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
       else if (Correct)				// If correct
          fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
       else					// If wrong
@@ -4392,7 +4420,8 @@ static void Tst_WriteIntAnsViewTest (unsigned NumQst)
 /**************** Write integer answer when assessing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
+				       unsigned NumQst,MYSQL_RES *mysql_res,
                                        double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
@@ -4418,39 +4447,39 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** Header with the title of each column *****/
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_WriteHeadUserCorrect ();
+   Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"");
+	              "<td");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])		// If user has answered the question
      {
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
-         fprintf (Gbl.F.Out,"%s CENTER_MIDDLE\">"
-                            "&nbsp;%ld&nbsp;",
+         fprintf (Gbl.F.Out," class=\"%s CENTER_MIDDLE\">"
+                            "%ld",
                   (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
                 	                            "ANS_BAD") :
-                   "ANS",
+                   "ANS_0",
                   IntAnswerUsr);
       else
         {
          Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';
-         fprintf (Gbl.F.Out,"ANS CENTER_MIDDLE\">"
+         fprintf (Gbl.F.Out," class=\"ANS_0 CENTER_MIDDLE\">"
                             "?");
         }
      }
    else							// If user has omitted the answer
-      fprintf (Gbl.F.Out,"ANS CENTER_MIDDLE\">&nbsp;");
+      fprintf (Gbl.F.Out,">");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answer *****/
-   fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_MIDDLE\">");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-      fprintf (Gbl.F.Out,"&nbsp;%ld&nbsp;",IntAnswerCorr);
+      fprintf (Gbl.F.Out,"%ld",IntAnswerCorr);
    else
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</td>"
@@ -4478,7 +4507,7 @@ static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS\">%.2lf",0.0);
+         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
       else if (IntAnswerUsr == IntAnswerCorr)	// If correct
          fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
       else					// If wrong
@@ -4505,7 +4534,8 @@ static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
 /***************** Write float answer when assessing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
+				         unsigned NumQst,MYSQL_RES *mysql_res,
                                          double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
@@ -4544,36 +4574,36 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** Header with the title of each column *****/
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_WriteHeadUserCorrect ();
+   Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"");
+	              "<td");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       FloatAnsUsr = Tst_GetFloatAnsFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
-         fprintf (Gbl.F.Out,"%s CENTER_MIDDLE\">&nbsp;%lg&nbsp;",
+         fprintf (Gbl.F.Out," class=\"%s CENTER_MIDDLE\">%lg",
                   (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    ((FloatAnsUsr >= FloatAnsCorr[0] &&
                      FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
                 	                               "ANS_BAD") :
-                   "ANS",
+                   "ANS_0",
                   FloatAnsUsr);
       else				// Not a floating point number
-         fprintf (Gbl.F.Out,"ANS CENTER_MIDDLE\">?");
+         fprintf (Gbl.F.Out," class=\"ANS_0 CENTER_MIDDLE\">?");
      }
    else					// If user has omitted the answer
-      fprintf (Gbl.F.Out,"ANS CENTER_MIDDLE\">&nbsp;");
+      fprintf (Gbl.F.Out,">");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answer *****/
-   fprintf (Gbl.F.Out,"<td class=\"ANS CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_MIDDLE\">");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-      fprintf (Gbl.F.Out,"&nbsp;[%lg; %lg]&nbsp;",FloatAnsCorr[0],FloatAnsCorr[1]);
+      fprintf (Gbl.F.Out,"[%lg; %lg]",FloatAnsCorr[0],FloatAnsCorr[1]);
    else
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</td>"
@@ -4602,7 +4632,7 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       Tst_WriteScoreStart (2);
       if (!Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has omitted the answer
-         fprintf (Gbl.F.Out,"ANS\">%.2lf",0.0);
+         fprintf (Gbl.F.Out,"ANS_0\">%.2lf",0.0);
       else if (FloatAnsUsr >= FloatAnsCorr[0] &&
                FloatAnsUsr <= FloatAnsCorr[1])	// If correct (inside the interval)
          fprintf (Gbl.F.Out,"ANS_OK\">%.2lf",1.0);
@@ -4619,18 +4649,19 @@ static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 /********* one for the user's answer and other for the correct answer ********/
 /*****************************************************************************/
 
-static void Tst_WriteHeadUserCorrect (void)
+static void Tst_WriteHeadUserCorrect (struct UsrData *UsrDat)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_TST_Correct_ANSWER;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_MIDDLE\">"
-	              "&nbsp;%s&nbsp;"
+	              "%s"
 	              "</td>"
                       "<td class=\"DAT_SMALL CENTER_MIDDLE\">"
-                      "&nbsp;%s&nbsp;"
+                      "%s"
                       "</td>",
-            Txt_User[Usr_SEX_UNKNOWN],Txt_TST_Correct_ANSWER);
+            Txt_User[UsrDat->Sex],
+	    Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/
@@ -8422,7 +8453,8 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                            NULL,NumQst,QstCod,row,
+	                            &Gbl.Usrs.Other.UsrDat,
+				    NULL,NumQst,QstCod,row,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }

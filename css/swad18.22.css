@@ -2281,7 +2281,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TAG_SEL	{box-sizing:border-box; width:346px;}
 .TAG_TXT	{box-sizing:border-box; width:346px;}
 .STEM		{box-sizing:border-box; width:700px;}
-.ANS		{color:#404040; font-size:12pt;}
+.ANS_TXT	{color:#404040; font-size:12pt;}
+.ANS_0		{color:#404040; font-size:12pt; font-weight:bold;}
 .ANS_OK		{color:#008000; font-size:12pt; font-weight:bold;}
 .ANS_BAD	{color:red;     font-size:12pt; font-weight:bold;}
 .ANS_STR	{box-sizing:border-box; width:600px;}

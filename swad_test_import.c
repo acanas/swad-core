@@ -1003,7 +1003,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    extern const char *Txt_New_question;
    extern const char *Txt_no_tags;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
-   extern const char *Txt_TEST_Correct_answer;
+   extern const char *Txt_TST_Answer_given_by_the_teachers;
    static unsigned NumQst = 0;
    static unsigned NumNonExistingQst = 0;
    const char *Stem = (StemElem != NULL) ? StemElem->Content :
@@ -1095,8 +1095,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                   Gbl.Prefs.IconsURL,
                   QuestionExists ? "ok_off" :
                 	           "ok_on",
-                  Txt_TEST_Correct_answer,
-                  Txt_TEST_Correct_answer);
+                  Txt_TST_Answer_given_by_the_teachers,
+                  Txt_TST_Answer_given_by_the_teachers);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the stem and the answers *****/
@@ -1164,8 +1164,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                         Gbl.Prefs.IconsURL,
                         QuestionExists ? "ok_off" :
                                          "ok_on",
-                        Txt_TEST_Correct_answer,
-                        Txt_TEST_Correct_answer);
+                        Txt_TST_Answer_given_by_the_teachers,
+                        Txt_TST_Answer_given_by_the_teachers);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */

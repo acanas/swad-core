@@ -42771,48 +42771,6 @@ const char *Txt_Test =
 	"Teste";
 #endif
 
-const char *Txt_TEST_Correct_answer =
-#if   L==1	// ca
-	"Resposta correcta";
-#elif L==2	// de
-	"Correct answer";		// Need Übersetzung
-#elif L==3	// en
-	"Correct answer";
-#elif L==4	// es
-	"Respuesta correcta";
-#elif L==5	// fr
-	"Correct answer";		// Besoin de traduction
-#elif L==6	// gn
-	"Respuesta correcta";		// Okoteve traducción
-#elif L==7	// it
-	"Risposta corretta";
-#elif L==8	// pl
-	"Prawidlowa odpowiedz";
-#elif L==9	// pt
-	"Correct answer";		// Necessita de tradução
-#endif
-
-const char *Txt_TEST_User_answer =
-#if   L==1	// ca
-	"Resposta usuari";
-#elif L==2	// de
-	"User's answer";		// Need Übersetzung
-#elif L==3	// en
-	"User's answer";
-#elif L==4	// es
-	"Respuesta usuario";
-#elif L==5	// fr
-	"User's answer";		// Besoin de traduction
-#elif L==6	// gn
-	"Respuesta usuario";		// Okoteve traducción
-#elif L==7	// it
-	"Risposta utente";
-#elif L==8	// pl
-	"User's answer";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"User's answer";		// Necessita de tradução
-#endif
-
 const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
 	"Test n&ordm; %u que realiza usted en esta asignatura";	// Necessita traduccio
@@ -49467,25 +49425,46 @@ const char *Txt_Total_BR_score =
 	"Pontua&ccedil;&atilde;o<br />total";
 #endif
 
-const char *Txt_TST_Correct_ANSWER =
+const char *Txt_TST_Answer_given_by_the_teachers =
 #if   L==1	// ca
-	"Correcta";
+	"Resposta donada pels professors";
 #elif L==2	// de
-	"Richtige";
+	"Antwort von den Lehrern";
 #elif L==3	// en
-	"Correct";
+	"Answer given by the teachers";
 #elif L==4	// es
-	"Correcta";
+	"Respuesta dada por los profesores";
 #elif L==5	// fr
-	"Bonne";
+	"R&eacute;ponse donn&eacute;e par les professeurs";
 #elif L==6	// gn
-	"Correcta";	// Okoteve traducción
+	"Respuesta dada por los profesores";	// Okoteve traducción
 #elif L==7	// it
-	"Corretta";
+	"Risposta fornita dagli insegnanti";
 #elif L==8	// pl
-	"Poprawna";
+	"Odpowied&zacute; udzielona przez nauczycieli";
 #elif L==9	// pt
-	"Correta";
+	"Resposta dada pelos professores";
+#endif
+
+const char *Txt_TST_Answer_given_by_the_user =
+#if   L==1	// ca
+	"Resposta donada per l'usuari/a";
+#elif L==2	// de
+	"Antwort vom Benutzer";
+#elif L==3	// en
+	"Answer given by the user";
+#elif L==4	// es
+	"Respuesta dada por el usuario/a";
+#elif L==5	// fr
+	"R&eacute;ponse donn&eacute;e par l'utilisateur/se";
+#elif L==6	// gn
+	"Respuesta dada por el usuario/a";	// Okoteve traducción
+#elif L==7	// it
+	"Risposta fornita dall'utente";
+#elif L==8	// pl
+	"Odpowied&zacute; udzielona przez u&zdot;ytkownika";
+#elif L==9	// pt
+	"Resposta dada pelo usu&aacute;rio/a";
 #endif
 
 const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
