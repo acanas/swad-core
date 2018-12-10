@@ -2565,7 +2565,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_
 #elif L==8	// pl
 	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&uacute;mero<br />m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida";
+	"N&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida";
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course =
@@ -2586,7 +2586,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_
 #elif L==8	// pl
 	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"N&uacute;mero<br />m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida<br />por disciplina";
+	"N&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida<br />por disciplina";
 #endif
 
 const char *Txt_Average_number_of_users_belonging_to_a_course =
@@ -2671,7 +2671,7 @@ const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1 =
 #elif L==8	// pl
 	"Average<br />score<br />per question<br />(from 0 to 1)";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Pontua&ccedil;&atilde;o<br />m&eacute;dia<br />por pergunta<br />(de 0 a 1)";
+	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta<br />(de 0 a 1)";
 #endif
 
 const char *Txt_Average_type =
@@ -11073,7 +11073,7 @@ const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_ =	// Warning: 
 	"%u faces foram detectadas na posi&ccedil;&atilde;o frontal:<br />"
 	"%u com o fundo claro o suficiente (marcado em verde).<br />"
 	"%u com o fundo muito escuro (marcado em vermelho).<br />"
-	"Se voc&ecirc; quiser escolher um dos rostos marcados em verde, clique nele."
+	"Se voc&ecirc; quiser escolher um dos rostos marcados em verde, clique nele.";
 #endif
 
 const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
@@ -12686,7 +12686,7 @@ const char *Txt_Found_an_index_htm_file =
 #elif L==8	// pl
 	"Znaleziono <em>index.htm</em> plik.";
 #elif L==9	// pt
-	"Found an <em>index.htm</em> file.";		// Necessita de tradução
+	"Um arquivo <em>index.htm</em> foi encontrado.";
 #endif
 
 const char *Txt_Found_an_index_html_file =
@@ -12707,7 +12707,7 @@ const char *Txt_Found_an_index_html_file =
 #elif L==8	// pl
 	"Znaleziono <em>index.html</em> plik.";
 #elif L==9	// pt
-	"Found an <em>index.html</em> file.";			// Necessita de tradução
+	"Um arquivo <em>index.html</em> foi encontrado.";
 #endif
 
 const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the allocated space
@@ -12754,23 +12754,41 @@ const char *Txt_from =
 
 const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	// Warning: it is very important to include %s and %u (in this order) in the following sentences
 #if   L==1	// ca
-	"A partir de ahora el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong> es <strong>%u</strong>.";	// Necessita traduccio
+	"A partir de ahora"
+	" el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong>"
+	" es <strong>%u</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"From now on the number of editing lines of the field <strong>%s</strong> is <strong>%u</strong>.";	// Need Übersetzung
+	"From now on"
+	" the number of editing lines of the field <strong>%s</strong>"
+	" is <strong>%u</strong>.";	// Need Übersetzung
 #elif L==3	// en
-	"From now on the number of editing lines of the field <strong>%s</strong> is <strong>%u</strong>.";
+	"From now on"
+	" the number of editing lines of the field <strong>%s</strong>"
+	" is <strong>%u</strong>.";
 #elif L==4	// es
-	"A partir de ahora el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong> es <strong>%u</strong>.";
+	"A partir de ahora"
+	" el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong>"
+	" es <strong>%u</strong>.";
 #elif L==5	// fr
-	"From now on the number of editing lines of the field <strong>%s</strong> is <strong>%u</strong>.";	// Besoin de traduction
+	"From now on"
+	" the number of editing lines of the field <strong>%s</strong>"
+	" is <strong>%u</strong>.";	// Besoin de traduction
 #elif L==6	// gn
-	"A partir de ahora el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong> es <strong>%u</strong>.";	// Okoteve traducción
+	"A partir de ahora"
+	" el n&ordm; de l&iacute;neas de edici&oacute;n del campo <strong>%s</strong>"
+	" es <strong>%u</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"A partire da ora il numero di linee editate <strong>%s</strong> &egrave; <strong>%u</strong>.";
+	"A partire da ora"
+	" il numero di linee editate <strong>%s</strong>"
+	" &egrave; <strong>%u</strong>.";
 #elif L==8	// pl
-	"Od tej pory liczba linii w polu edycji <strong>%s</strong> jest <strong>%u</strong>.";
+	"Od tej pory"
+	" liczba linii w polu edycji <strong>%s</strong>"
+	" jest <strong>%u</strong>.";
 #elif L==9	// pt
-	"From now on the number of editing lines of the field <strong>%s</strong> is <strong>%u</strong>.";	// Necessita de tradução
+	"A partir de agora"
+	" o n&uacute;mero de linhas de edi&ccedil;&atilde;o no campo <strong>%s</strong>"
+	" &eacute; <strong>%u</strong>.";
 #endif
 
 const char *Txt_from_this_course =
@@ -12812,7 +12830,7 @@ const char *Txt_From_this_time_you_can_receive_messages_from_X =	// Warning: it 
 #elif L==8	// pl
 	"From this time, you can receive messages from %s.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"From this time, you can receive messages from %s.";		// Necessita de tradução
+	"A partir deste momento, voc&ecirc; pode receber mensagens de %s.";
 #endif
 
 const char *Txt_From_this_time_you_will_not_receive_messages_from_X =	// Warning: it is very important to include %s in the following sentences
@@ -12833,7 +12851,7 @@ const char *Txt_From_this_time_you_will_not_receive_messages_from_X =	// Warning
 #elif L==8	// pl
 	"From this time, you will not receive messages from %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"From this time, you will not receive messages from %s.";	// Necessita de tradução
+	"A partir deste momento, voc&ecirc; n&atilde;o receber&aacute; mensagens de %s.";
 #endif
 
 const char *Txt_Full_name =
@@ -13384,15 +13402,15 @@ const char *Txt_group =
 
 const char *Txt_Group_closed =
 #if   L==1	// ca
-	"Grupo cerrado";	// Necessita traduccio
+	"Grup tancat";
 #elif L==2	// de
-	"Group closed";		// Need Übersetzung
+	"Gruppe geschlossen";
 #elif L==3	// en
 	"Group closed";
 #elif L==4	// es
 	"Grupo cerrado";
 #elif L==5	// fr
-	"Group closed";		// Besoin de traduction
+	"Groupe ferm&eacute;";
 #elif L==6	// gn
 	"Grupo cerrado";	// Okoteve traducción
 #elif L==7	// it
@@ -13400,20 +13418,20 @@ const char *Txt_Group_closed =
 #elif L==8	// pl
 	"Grupa zamknieta";
 #elif L==9	// pt
-	"Group closed";		// Necessita de tradução
+	"Grupo fechado";
 #endif
 
 const char *Txt_Group_X_closed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Grupo %s cerrado";		// Necessita traduccio
+	"Grup %s tancat";
 #elif L==2	// de
-	"Group %s closed";		// Need Übersetzung
+	"Gruppe %s geschlossen";
 #elif L==3	// en
 	"Group %s closed";
 #elif L==4	// es
 	"Grupo %s cerrado";
 #elif L==5	// fr
-	"Group %s closed";		// Besoin de traduction
+	"Groupe %s ferm&eacute;";
 #elif L==6	// gn
 	"Grupo %s cerrado";		// Okoteve traducción
 #elif L==7	// it
@@ -13421,20 +13439,20 @@ const char *Txt_Group_X_closed =	// Warning: it is very important to include %s 
 #elif L==8	// pl
 	"Grupa %s zamknieta";
 #elif L==9	// pt
-	"Group %s closed";		// Necessita de tradução
+	"Grupo %s fechado";
 #endif
 
 const char *Txt_Group_X_closed_click_to_open_it =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Grupo %s cerrado; pulse para abrirlo";		// Necessita traduccio
+	"Grup %s tancat; feu clic per obrir-lo";
 #elif L==2	// de
-	"Group %s closed, click to open it";		// Need Übersetzung
+	"Gruppe %s geschlossen, klicke zum &Ouml;ffnen";
 #elif L==3	// en
 	"Group %s closed, click to open it";
 #elif L==4	// es
 	"Grupo %s cerrado; pulse para abrirlo";
 #elif L==5	// fr
-	"Group %s closed, click to open it";		// Besoin de traduction
+	"Groupe %s ferm&eacute;, cliquez pour l'ouvrir";
 #elif L==6	// gn
 	"Grupo %s cerrado; pulse para abrirlo";		// Okoteve traducción
 #elif L==7	// it
@@ -13442,7 +13460,7 @@ const char *Txt_Group_X_closed_click_to_open_it =	// Warning: it is very importa
 #elif L==8	// pl
 	"Grupa %s zamknieta, kliknij zeby otworzyc";
 #elif L==9	// pt
-	"Group %s closed, click to open it";		// Necessita de tradução
+	"Grupo %s fechado, clique para abri-lo";
 #endif
 
 const char *Txt_Group_name =
@@ -13468,15 +13486,15 @@ const char *Txt_Group_name =
 
 const char *Txt_Group_X_open =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Grupo %s abierto";		// Necessita traduccio
+	"Grup %s obert";
 #elif L==2	// de
-	"Group %s open";		// Need Übersetzung
+	"Gruppe %s &ouml;ffnen";
 #elif L==3	// en
 	"Group %s open";
 #elif L==4	// es
 	"Grupo %s abierto";
 #elif L==5	// fr
-	"Group %s open";		// Besoin de traduction
+	"Groupe %s ouvert";
 #elif L==6	// gn
 	"Grupo %s abierto";		// Okoteve traducción
 #elif L==7	// it
@@ -13484,20 +13502,20 @@ const char *Txt_Group_X_open =	// Warning: it is very important to include %s in
 #elif L==8	// pl
 	"Grupa %s otwarta";
 #elif L==9	// pt
-	"Group %s open";		// Necessita de tradução
+	"Grupo %s aberto";
 #endif
 
 const char *Txt_Group_X_open_click_to_close_it =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Grupo %s abierto; pulse para cerrarlo";	// Necessita traduccio
+	"Grup %s obert, feu clic per tancar-lo";
 #elif L==2	// de
-	"Group %s open, click to close it";		// Need Übersetzung
+	"Gruppe %s &ouml;ffnen, klicken Sie, um es zu schlie&szlig;en";
 #elif L==3	// en
 	"Group %s open, click to close it";
 #elif L==4	// es
 	"Grupo %s abierto; pulse para cerrarlo";
 #elif L==5	// fr
-	"Group %s open, click to close it";		// Besoin de traduction
+	"Groupe %s ouvert, cliquez pour le fermer";
 #elif L==6	// gn
 	"Grupo %s abierto; pulse para cerrarlo";	// Okoteve traducción
 #elif L==7	// it
@@ -13505,12 +13523,12 @@ const char *Txt_Group_X_open_click_to_close_it =	// Warning: it is very importan
 #elif L==8	// pl
 	"Grupa %s otwarta, kliknij zeby zamknac";
 #elif L==9	// pt
-	"Group %s open, click to close it";		// Necessita de tradução
+	"Grupo %s aberto, clique para fech&aacute;-lo";
 #endif
 
 const char *Txt_Group_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Grupo <strong>%s</strong> eliminado.";		// Necessita traduccio
+	"Grup <strong>%s</strong> eliminat.";
 #elif L==2	// de
 	"Gruppe <strong>%s</strong> entfernt.";
 #elif L==3	// en
@@ -13526,7 +13544,7 @@ const char *Txt_Group_X_removed =	// Warning: it is very important to include %s
 #elif L==8	// pl
 	"Grupa <strong>%s</strong> usunieta.";
 #elif L==9	// pt
-	"Group <strong>%s</strong> removed.";		// Necessita de tradução
+	"Grupo <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_GROUP_WHICH_GROUPS[2] =
@@ -13597,7 +13615,7 @@ const char *Txt_Groups_OF_A_USER =	// Warning: it is very important to include %
 #if   L==1	// ca
 	"Grups de %s";
 #elif L==2	// de
-	"%s groups";		// Need Übersetzung
+	"Gruppen von %s";
 #elif L==3	// en
 	"%s groups";
 #elif L==4	// es
@@ -13611,7 +13629,7 @@ const char *Txt_Groups_OF_A_USER =	// Warning: it is very important to include %
 #elif L==8	// pl
 	"%s grupy";
 #elif L==9	// pt
-	"%s groups";		// Necessita de tradução
+	"Grupos de %s";
 #endif
 
 const char *Txt_Guided_academic_assignments =
@@ -14115,7 +14133,7 @@ const char *Txt_Holiday_X_removed =	// Warning: it is very important to include 
 #elif L==8	// pl
 	"Wakacje <strong>%s</strong> usuniete.";
 #elif L==9	// pt
-	"Holiday <strong>%s</strong> removed.";		// Necessita de tradução
+	"Festividade <strong>%s</strong> eliminada.";
 #endif
 
 const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
@@ -14567,8 +14585,8 @@ const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// W
 	"If this is a new user in %s,"
 	" you should indicate her/his ID.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"If this is a new user in %s,"
-	" you should indicate her/his ID.";		// Necessita de tradução
+	"Se este for um novo usu&aacute;rio em %s,"
+	" voc&ecirc; deve indicar seu ID.";
 #endif
 
 const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them =
@@ -14820,9 +14838,9 @@ const char *Txt_Image_not_found =
 
 const char *Txt_Import_questions =
 #if   L==1	// ca
-	"Importar preguntas";	// Necessita traduccio
+	"Importa preguntes";
 #elif L==2	// de
-	"Import questions";	// Need Übersetzung
+	"Fragen importieren";
 #elif L==3	// en
 	"Import questions";
 #elif L==4	// es
@@ -14836,7 +14854,7 @@ const char *Txt_Import_questions =
 #elif L==8	// pl
 	"Import questions";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Import questions";	// Necessita de tradução
+	"Importar perguntas";
 #endif
 
 const char *Txt_Import_questions_from_XML_file =
@@ -14857,7 +14875,7 @@ const char *Txt_Import_questions_from_XML_file =
 #elif L==8	// pl
 	"Import questions from XML file";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Import questions from XML file";	// Necessita de tradução
+	"Importar perguntas de um arquivo XML";
 #endif
 
 const char *Txt_Imported_questions =
@@ -14878,7 +14896,7 @@ const char *Txt_Imported_questions =
 #elif L==8	// pl
 	"Imported questions";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Imported questions";	// Necessita de tradução
+	"Perguntas importadas";
 #endif
 
 const char *Txt_SEARCH_X_in_Y =	// Search string "in" documentos, users, etc.
@@ -14928,8 +14946,8 @@ const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_reg
 	"W rodzaju grupy z jednej rejestracji,"
 	" nie mozesz rejestrowac uczni&oacute;w w wiecej niz jednej grupy.";
 #elif L==9	// pt
-	"In a type of group with single enrolment,"
-	" students can not be registered in more than one group.";	// Necessita de tradução
+	"Em um tipo de grupo com inscri&ccedil;&atilde;o &uacute;nica,"
+	" os estudantes n&atilde;o podem ser registrados em mais de um grupo.";
 #endif
 
 const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -14958,8 +14976,8 @@ const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_
 	"W roku/semestr <strong>%s</strong> stopnia <strong>%s</strong>"
 	" istnialy juz kurs&oacute;w z nazwa <strong>%s</strong>.";
 #elif L==9	// pt
-	"In the year/semester <strong>%s</strong> of the degree <strong>%s</strong>"
-	" already existed a course with the name <strong>%s</strong>.";		// Necessita de tradução
+	"No ano/semestre <strong>%s</strong> do grau <strong>%s</strong>"
+	" j&aacute; existia uma disciplina com o nome <strong>%s</strong>.";
 #endif
 
 const char *Txt_Incomplete_timetable_for_lack_of_space =
@@ -15296,7 +15314,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 #elif L==8	// pl
 	 "Rich text"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Rich text"		// Necessita de tradução
+	 "Texto enriquecido"
 #endif
 	 ,
 #if   L==1	// ca
@@ -15523,7 +15541,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 #elif L==8	// pl
 	 "Rich text"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Rich text"		// Necessita de tradução
+	 "Texto enriquecido"
 #endif
 	 ,
 #if   L==1	// ca
@@ -15690,7 +15708,7 @@ const char *Txt_Institution_X_removed =	// Warning: it is very important to incl
 #elif L==8	// pl
 	"Instytucja <strong>%s</strong> usunieta.";
 #elif L==9	// pt
-	"Institution <strong>%s</strong> removed.";		// Necessita de tradução
+	"Institui&ccedil;&atilde;o <strong>%s</strong> removida.";
 #endif
 
 
@@ -16344,7 +16362,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==8	// pl
 	 "Wyswietl centralnej czesci tylko"
 #elif L==9	// pt
-	 "Display central area only"	// Necessita de tradução
+	 "Somente &aacute;rea central"
 #endif
 	 ,
 #if   L==1	// ca
@@ -16364,7 +16382,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==8	// pl
 	 "Wyswietl prawa kolumne"
 #elif L==9	// pt
-	 "Display right column"		// Necessita de tradução
+	 "Coluna direita vis&iacute;vel"
 #endif
 	 ,
 #if   L==1	// ca
@@ -16384,7 +16402,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==8	// pl
 	 "Wyswietl lewa kolumne"
 #elif L==9	// pt
-	 "Display left column"		// Necessita de tradução
+	 "Coluna esquerda vis&iacute;vel"
 #endif
 	 ,
 #if   L==1	// ca
@@ -16404,7 +16422,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==8	// pl
 	 "Wyswietl lewa i prawa kolumne"
 #elif L==9	// pt
-	 "Display left and right columns"		// Necessita de tradução
+	 "Colunas esquerda e direita vis&iacute;veis"
 #endif
 	};
 
@@ -16778,7 +16796,7 @@ const char *Txt_List_of_detailed_clicks =
 #elif L==8	// pl
 	"Lista szczeg&oacute;lowa klikniec";
 #elif L==9	// pt
-	"List of detailed clicks";		// Necessita de tradução
+	"Lista de cliques detalhados";
 #endif
 
 const char *Txt_List_of_nicks_emails_or_IDs =
@@ -21403,7 +21421,7 @@ const char *Txt_Message_deleted =
 #elif L==8	// pl
 	"Wiadomo&sacute;&cacute; usunieta.";
 #elif L==9	// pt
-	"Message deleted.";		// Necessita de tradução
+	"Mensagem removida.";
 #endif
 
 const char *Txt_message_not_sent_to_X =	// Warning: it is very important to include %s in the following sentences
@@ -21445,7 +21463,7 @@ const char *Txt_message_sent_to_X_not_notified_by_email =	// Warning: it is very
 #elif L==8	// pl
 	"Wiadomo&sacute;&cacute; wyslana do %s (nie zgloszonych przez email).";	//
 #elif L==9	// pt
-	"Message sent to %s (not notified by email).";	// Necessita de tradução
+	"Mensagem enviada para %s (n&atilde;o notificada por email).";
 #endif
 
 const char *Txt_message_sent_to_X_notified_by_email =	// Warning: it is very important to include %s in the following sentences
@@ -21466,7 +21484,7 @@ const char *Txt_message_sent_to_X_notified_by_email =	// Warning: it is very imp
 #elif L==8	// pl
 	"Wiadomo&sacute;&cacute; wyslana do %s (zgloszone przez email).";
 #elif L==9	// pt
-	"Message sent to %s (notified by email).";	// Necessita de tradução
+	"Mensagem enviada para %s (notificada por email).";
 #endif
 
 const char *Txt_Messages =
@@ -21529,7 +21547,7 @@ const char *Txt_X_messages_have_been_deleted =	// Warning: it is very important 
 #elif L==8	// pl
 	"wiadomosci% u zostaly usuniete.";
 #elif L==9	// pt
-	"%u messages have been deleted.";	// Necessita de tradução
+	"%u mensagens foram removidas.";
 #endif
 
 const char *Txt_Messages_of_THE_USER_X_have_been_deleted =	// Warning: it is very important to include %s in the following sentences
@@ -21550,7 +21568,7 @@ const char *Txt_Messages_of_THE_USER_X_have_been_deleted =	// Warning: it is ver
 #elif L==8	// pl
 	"Wiadomo&sacute;ci od <strong>%s</strong> zostaly usuniete.";
 #elif L==9	// pt
-	"Messages of <strong>%s</strong> have been deleted.";	// Necessita de tradução
+	"Mensagens de <strong>%s</strong> foram removidas.";
 #endif
 
 const char *Txt_message_received =
@@ -22372,7 +22390,7 @@ const char *Txt_Move_up_X =	// Warning: it is very important to include %s in th
 #elif L==8	// pl
 	"Przesun w g&oacute;re %s";
 #elif L==9	// pt
-	"Move up %s";		// Necessita de tradução
+	"Mover %s para cima";
 #endif
 
 const char *Txt_Move_up_X_and_its_subsections =	// Warning: it is very important to include %s in the following sentences
@@ -22393,7 +22411,7 @@ const char *Txt_Move_up_X_and_its_subsections =	// Warning: it is very important
 #elif L==8	// pl
 	"Przenies sie %s, a jego podrozdzialy";
 #elif L==9	// pt
-	"Move up %s and its subsections";		// Necessita de tradução
+	"Mover %s e suas subse&ccedil;&otilde;es para cima";
 #endif
 
 const char *Txt_Move_down_X =	// Warning: it is very important to include %s in the following sentences
@@ -22414,7 +22432,7 @@ const char *Txt_Move_down_X =	// Warning: it is very important to include %s in 
 #elif L==8	// pl
 	"Opuszczac %s";
 #elif L==9	// pt
-	"Move down %s";		// Necessita de tradução
+	"Mover %s para baixo";
 #endif
 
 const char *Txt_Move_down_X_and_its_subsections =	// Warning: it is very important to include %s in the following sentences
@@ -22435,7 +22453,7 @@ const char *Txt_Move_down_X_and_its_subsections =	// Warning: it is very importa
 #elif L==8	// pl
 	"Przesun w d&oacute;l %s, a jego podrozdzialy";
 #elif L==9	// pt
-	"Move down %s and its subsections";		// Necessita de tradução
+	"Mover %s e suas subse&ccedil;&otilde;es para baixo";
 #endif
 
 const char *Txt_Move_thread =
@@ -24052,7 +24070,7 @@ const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
 #elif L==8	// pl
 	"kurs nie pochodzenia";
 #elif L==9	// pt
-	"no course of origin";		// Necessita de tradução
+	"nenhuma disciplina de origem";
 #endif
 
 const char *Txt_no_course_selected =
@@ -24136,7 +24154,7 @@ const char *Txt_No_types_of_degree =
 #elif L==8	// pl
 	"No types of degree.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"No types of degree.";			// Necessita de tradução
+	"N&atilde;o h&aacute; tipos de grau.";
 #endif
 
 const char *Txt_No_degrees =
@@ -24178,7 +24196,7 @@ const char *Txt_No_enrolment_requests =
 #elif L==8	// pl
 	"No enrolment requests.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"No enrolment requests.";			// Necessita de tradução
+	"N&atilde;o h&aacute; solicita&ccedil;&otilde;es de inscri&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_No_events =
@@ -24228,8 +24246,8 @@ const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file =
 	"Nr pliku <em>indeks.html</em> / <em>indeks.htm</em> znalezionych"
 	" w <em>ZIP</em> plik.";
 #elif L==9	// pt
-	"No file <em>index.html</em> / <em>index.htm</em> found"
-	" within the <em>ZIP</em> file.";		// Necessita de tradução
+	"Um arquivo <em>index.html</em> / <em>index.htm</em> n&atilde;o foi encontrado"
+	" dentro do arquivo <em>ZIP</em>.";
 #endif
 
 const char *Txt_No_games =
@@ -24271,7 +24289,7 @@ const char *Txt_No_groups_have_been_created_in_the_course_X =	// Warning: it is 
 #elif L==8	// pl
 	"Nr grupy zostaly utworzone w ramach <strong>%s</strong>.";
 #elif L==9	// pt
-	"No groups have been created in the course <strong>%s</strong>.";	// Necessita de tradução
+	"Nenhum grupo foi criado na disciplina <strong>%s</strong>.";
 #endif
 
 const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warning: it is very important to include %s in the following sentences
@@ -24298,10 +24316,10 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 	"Dunque, gli utenti specificati saranno registrati/rimossi in/dal corso.";
 #elif L==8	// pl
 	"Nr grupy zostaly utworzone w ramach <strong>%s</strong>."
-	"Dlatego okreslonych uzytkownik&oacute;w zostanie zarejestrowany / usuniete w / z kursu.";
+	"Dlatego okreslonych uzytkownik&oacute;w zostanie zarejestrowany/usuniete w/z kursu.";
 #elif L==9	// pt
-	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enroled/removed in/from the course.";				// Necessita de tradução
+	"Nenhum grupo foi criado na disciplina <strong>%s</strong>."
+	" Portanto, os usu&aacute;rios especificados ser&atilde;o inscritos/removidos da disciplina.";
 #endif
 
 const char *Txt_No_holidays =
@@ -24322,7 +24340,7 @@ const char *Txt_No_holidays =
 #elif L==8	// pl
 	"No holidays.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"No holidays.";			// Necessita de tradução
+	"N&atilde;o h&aacute; feriados.";
 #endif
 
 const char *Txt_No_image =	// Without any image
@@ -24868,7 +24886,7 @@ const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
 #elif L==8	// pl
 	"Number of<br />times that<br />questions<br />have been<br />responded";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Number of<br />times that<br />questions<br />have been<br />responded";	// Necessita de tradução
+	"N&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
 #endif
 
 const char *Txt_No_of_users =
@@ -25078,7 +25096,7 @@ const char *Txt_No_user_has_been_eliminated =
 #elif L==8	// pl
 	"Zaden uzytkownik nie zostal wyeliminowany.";
 #elif L==9	// pt
-	"No user has been eliminated.";			// Necessita de tradução
+	"Nenhum usu&aacute;rio foi removido.";
 #endif
 
 const char *Txt_No_user_has_been_enroled =
@@ -25099,7 +25117,7 @@ const char *Txt_No_user_has_been_enroled =
 #elif L==8	// pl
 	"Zaden uzytkownik nie zostal zarejestrowany.";
 #elif L==9	// pt
-	"No user has been enroled.";			// Necessita de tradução
+	"Nenhum usu&aacute;rio se registrou.";
 #endif
 
 const char *Txt_No_user_has_been_removed =
@@ -25120,7 +25138,7 @@ const char *Txt_No_user_has_been_removed =
 #elif L==8	// pl
 	"Zaden uzytkownik nie zostal usuniety.";
 #elif L==9	// pt
-	"No user has been removed.";			// Necessita de tradução
+	"Nenhum usu&aacute;rio foi removido.";
 #endif
 
 const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
@@ -25488,28 +25506,28 @@ const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 	" Trate de copiar y pegar de nuevo.";	// Necessita traduccio
 #elif L==2	// de
 	"Es konnten keine Daten eingef&uuml;gt werden. Der Zwischenspeicher ist leer."
-	"Versuchen Sie den Kopieren-Einf&uuml;gen-Vorgang bitte erneut.";
+	" Versuchen Sie den Kopieren-Einf&uuml;gen-Vorgang bitte erneut.";
 #elif L==3	// en
 	"Nothing has been pasted because the clipboard is empty."
-	"Try copy-paste again.";
+	" Try copy-paste again.";
 #elif L==4	// es
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
 	" Trate de copiar y pegar de nuevo.";
 #elif L==5	// fr
 	"Nothing has been pasted because the clipboard is empty."
-	"Try copy-paste again.";		// Besoin de traduction
+	" Try copy-paste again.";		// Besoin de traduction
 #elif L==6	// gn
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
 	" Trate de copiar y pegar de nuevo.";	// Okoteve traducción
 #elif L==7	// it
 	"Niente &egrave; stato copiato perch&egrave; la bacheca &egrave; piena."
-	"Prova copia-incolla nuovamente.";
+	" Prova copia-incolla nuovamente.";
 #elif L==8	// pl
 	"Nic nie zostal wklejony bo schowek jest pusty."
-	"Spr&oacute;buj ponownie kopiuj-wklej.";
+	" Spr&oacute;buj ponownie kopiuj-wklej.";
 #elif L==9	// pt
-	"Nothing has been pasted because the clipboard is empty."
-	"Try copy-paste again.";		// Necessita de tradução
+	"Nada foi colado porque a &aacute;rea de transfer&ecirc;ncia est&aacute; vazia."
+	" Tente copiar e colar novamente.";
 #endif
 
 const char *Txt_NOTICE_Active_SINGULAR =
@@ -26900,7 +26918,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w<br />z eksportowane<br />pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com quest&otilde;es<br />de test<br />export&aacute;veis";
+	"N&ordm; de<br />disciplinas<br />com<br />quest&otilde;es<br />de test<br />export&aacute;veis";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
@@ -26963,7 +26981,7 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #elif L==8	// pl
 	"Liczba<br />kurs&oacute;w<br />z pyta&nacute;<br />testowych";
 #elif L==9	// pt
-	"N&ordm; de<br />disciplinas<br />com quest&otilde;es<br />de test";
+	"N&ordm; de<br />disciplinas<br />com<br />quest&otilde;es<br />de test";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
@@ -27236,7 +27254,7 @@ const char *Txt_One_message_has_been_deleted =
 #elif L==8	// pl
 	"Jedna wiadomosc zostala usunieta.";
 #elif L==9	// pt
-	"One message has been deleted.";		// Necessita de tradução
+	"Uma mensagem foi removida.";
 #endif
 
 const char *Txt_One_user_has_been_eliminated =
@@ -27257,7 +27275,7 @@ const char *Txt_One_user_has_been_eliminated =
 #elif L==8	// pl
 	"Jeden uzytkownik zostal usuniety.";
 #elif L==9	// pt
-	"One user has been eliminated.";		// Necessita de tradução
+	"Um usu&aacute;rio foi removido.";
 #endif
 
 const char *Txt_One_user_has_been_enroled =
@@ -27278,7 +27296,7 @@ const char *Txt_One_user_has_been_enroled =
 #elif L==8	// pl
 	"Jeden uzytkownik zostal zarejestrowany.";
 #elif L==9	// pt
-	"One user has been enroled.";		// Necessita de tradução
+	"Um usu&aacute;rio se registrou.";
 #endif
 
 const char *Txt_One_user_has_been_removed =
@@ -27299,7 +27317,7 @@ const char *Txt_One_user_has_been_removed =
 #elif L==8	// pl
 	"Jeden z uzytkownik&oacute;w zostaly usuniete.";
 #elif L==9	// pt
-	"One user has been removed.";		// Necessita de tradução
+	"Um usu&aacute;rio foi removido.";
 #endif
 
 const char *Txt_Online_tutoring =
@@ -27530,7 +27548,7 @@ const char *Txt_Opening_of_groups =
 #elif L==8	// pl
 	"Opening of groups";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Opening of groups";		// Necessita de tradução
+	"Abertura de grupos";
 #endif
 
 const char *Txt_Option_under_development =
@@ -28222,15 +28240,15 @@ const char *Txt_Photo =
 
 const char *Txt_Photo_has_been_updated =
 #if   L==1	// ca
-	"La fotograf&iacute;a se ha actualizado.";	// Necessita traduccio
+	"La fotografia s'ha actualitzat.";
 #elif L==2	// de
-	"Photo has been updated.";			// Need Übersetzung
+	"Foto wurde aktualisiert.";
 #elif L==3	// en
 	"Photo has been updated.";
 #elif L==4	// es
 	"La fotograf&iacute;a se ha actualizado.";
 #elif L==5	// fr
-	"Photo has been updated.";			// Besoin de traduction
+	"La photo a &eacute;t&eacute; mise &agrave; jour.";
 #elif L==6	// gn
 	"La fotograf&iacute;a se ha actualizado.";	// Okoteve traducción
 #elif L==7	// it
@@ -28238,7 +28256,7 @@ const char *Txt_Photo_has_been_updated =
 #elif L==8	// pl
 	"Zdjecie zostalo zaktualizowane.";
 #elif L==9	// pt
-	"Photo has been updated.";			// Necessita de tradução
+	"A fotografia foi atualizada.";
 #endif
 
 const char *Txt_Photo_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -28259,29 +28277,29 @@ const char *Txt_Photo_of_THE_USER_X_has_been_removed =	// Warning: it is very im
 #elif L==8	// pl
 	"Zdjecie <strong>%s</strong> zostalo usuniete.";
 #elif L==9	// pt
-	"Photo of <strong>%s</strong> has been removed.";	// Necessita de tradução
+	"A foto de <strong>%s</strong> foi removida.";
 #endif
 
 const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
    {
 #if   L==1	// ca
-	 "Rostro seleccionado"		// Necessita traduccio
+	 "Rostre seleccionat"
 #elif L==2	// de
-	 "Face selected"			// Need Übersetzung
+	 "Gesicht ausgew&auml;hlt"
 #elif L==3	// en
 	 "Face selected"
 #elif L==4	// es
 	 "Rostro seleccionado"
 #elif L==5	// fr
-	 "Face selected"			// Besoin de traduction
+	 "Visage s&eacute;lectionn&eacute;"
 #elif L==6	// gn
-	 "Rostro seleccionado"		// Okoteve traducción
+	 "Rostro seleccionado"	// Okoteve traducción
 #elif L==7	// it
 	 "Viso selezionato"
 #elif L==8	// pl
 	 "Twarze wybranych"
 #elif L==9	// pt
-	 "Face selected"			// Necessita de tradução
+	 "Rosto selecionado"
 #endif
 	 ,
 #if   L==1	// ca
@@ -28301,7 +28319,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #elif L==8	// pl
 	 "Zwiekszenie kontrastu i nasycenia"
 #elif L==9	// pt
-	 "Contrast and saturation enhanced"		// Necessita de tradução
+	 "Contraste e satura&ccedil;&atilde;o aprimorados"
 #endif
 	 ,
 #if   L==1	// ca
@@ -28321,7 +28339,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #elif L==8	// pl
 	 "Balans bieli sie"
 #elif L==9	// pt
-	 "White balance made"			// Necessita de tradução
+	 "Balan&ccedil;o de branco realizado"
 #endif
 	};
 
@@ -28343,7 +28361,7 @@ const char *Txt_Photo_removed =
 #elif L==8	// pl
 	"Zdjecie usuniete.";
 #elif L==9	// pt
-	"Photo removed.";		// Necessita de tradução
+	"Fotografia removida.";
 #endif
 
 const char *Txt_photos =
@@ -28432,7 +28450,7 @@ const char *Txt_Place_of_origin =
 
 const char *Txt_Place_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Lugar <strong>%s</strong> eliminado.";		// Necessita traduccio
+	"Lloc <strong>%s</strong> eliminat.";
 #elif L==2	// de
 	"Standort <strong>%s</strong> entfernt.";
 #elif L==3	// en
@@ -28448,7 +28466,7 @@ const char *Txt_Place_X_removed =	// Warning: it is very important to include %s
 #elif L==8	// pl
 	"Miejsce <strong>%s</strong> usuniete.";
 #elif L==9	// pt
-	"Place <strong>%s</strong> removed.";		// Necessita de tradução
+	"Lugar <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Place_unspecified =
@@ -28919,7 +28937,7 @@ const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile
 	" a las preguntas de test desde aplicaciones m&oacute;viles.";	// Necessita traduccio
 #elif L==2	// de
 	"Please specify if you allow access"
-	" to test questions from mobile applications.";	// Need Übersetzung
+	" to test questions from mobile applications.";			// Need Übersetzung
 #elif L==3	// en
 	"Please specify if you allow access"
 	" to test questions from mobile applications.";
@@ -28928,19 +28946,19 @@ const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile
 	" a las preguntas de test desde aplicaciones m&oacute;viles.";
 #elif L==5	// fr
 	"Please specify if you allow access"
-	" to test questions from mobile applications.";	// Besoin de traduction
+	" to test questions from mobile applications.";			// Besoin de traduction
 #elif L==6	// gn
 	"Por favor, especifique si permite el acceso"
 	" a las preguntas de test desde aplicaciones m&oacute;viles.";	// Okoteve traducción
 #elif L==7	// it
 	"Please specify if you allow access"
-	" to test questions from mobile applications.";	// Bisogno di traduzione
+	" to test questions from mobile applications.";			// Bisogno di traduzione
 #elif L==8	// pl
 	"Please specify if you allow access"
-	" to test questions from mobile applications.";	// Potrzebujesz tlumaczenie
+	" to test questions from mobile applications.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Please specify if you allow access"
-	" to test questions from mobile applications.";	// Necessita de tradução
+	"Por favor, especifique se voc&ecirc; permite acesso"
+	" para perguntas de teste de aplicativos para dispositivos m&oacute;veis.";
 #endif
 
 const char *Txt_Plugin =
@@ -28982,7 +29000,7 @@ const char *Txt_Plugin_X_removed =	// Warning: it is very important to include %
 #elif L==8	// pl
 	"Wtyczka <strong>%s</strong> usunieta.";
 #elif L==9	// pt
-	"Plugin <strong>%s</strong> removed.";		// Necessita de tradução
+	"Plugin <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Plugins =
@@ -29109,7 +29127,7 @@ const char *Txt_Post_X_allowed =	// Warning: it is very important to include %u 
 #elif L==8	// pl
 	"Post %u dozwolone.";
 #elif L==9	// pt
-	"Post %u allowed.";		// Necessita de tradução
+	"Post %u permitido.";
 #endif
 
 const char *Txt_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
@@ -29130,7 +29148,7 @@ const char *Txt_Post_X_allowed_Click_to_ban_it =	// Warning: it is very importan
 #elif L==8	// pl
 	"Post% u dozwolone. Kliknij, aby to zakazac.";
 #elif L==9	// pt
-	"Post %u allowed. Click to ban it.";			// Necessita de tradução
+	"Post %u permitido. Clique para censur&aacute;-lo.";
 #endif
 
 const char *Txt_Post_and_thread_removed =
@@ -29151,7 +29169,7 @@ const char *Txt_Post_and_thread_removed =
 #elif L==8	// pl
 	"Post watku usuniety.";
 #elif L==9	// pt
-	"Post and thread removed.";			// Necessita de tradução
+	"Post e discuss&atilde;o removidos.";
 #endif
 
 const char *Txt_Post_banned =
@@ -29172,7 +29190,7 @@ const char *Txt_Post_banned =
 #elif L==8	// pl
 	"Post zakazany.";
 #elif L==9	// pt
-	"Post banned.";			// Necessita de tradução
+	"Post n&atilde;o permitido.";
 #endif
 
 const char *Txt_Post_X_banned =	// Warning: it is very important to include %u in the following sentences
@@ -29193,7 +29211,7 @@ const char *Txt_Post_X_banned =	// Warning: it is very important to include %u i
 #elif L==8	// pl
 	"Post %u zakazany.";
 #elif L==9	// pt
-	"Post %u banned.";		// Necessita de tradução
+	"Post %u n&atilde;o permitido.";
 #endif
 
 const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
@@ -29214,7 +29232,7 @@ const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very importa
 #elif L==8	// pl
 	"Post %u zakazany.Kliknij, aby to odbanowac.";
 #elif L==9	// pt
-	"Post %u banned. Click to unban it.";			// Necessita de tradução
+	"Post %u n&atilde;o permitido. Clique para permiti-lo.";
 #endif
 
 const char *Txt_Post_sent =
@@ -29235,7 +29253,7 @@ const char *Txt_Post_sent =
 #elif L==8	// pl
 	"Post wyslany.";
 #elif L==9	// pt
-	"Post sent.";		// Necessita de tradução
+	"Post enviado.";
 #endif
 
 const char *Txt_Post_removed =
@@ -29277,7 +29295,7 @@ const char *Txt_Post_unbanned =
 #elif L==8	// pl
 	"Post odbanowany";
 #elif L==9	// pt
-	"Post unbanned.";		// Necessita de tradução
+	"Post permitido.";
 #endif
 
 const char *Txt_Preassigned_QUESTION =
@@ -29445,7 +29463,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==8	// pl
 	 "Visible by me and my teachers / my students"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Visible by me and my teachers / my students"			// Necessita de tradução
+	 "Vis&iacute;vel por mim e meus professores / meus estudantes"
 #endif
 	 ,	// Pri_VISIBILITY_COURSE
 #if   L==1	// ca
@@ -29465,7 +29483,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==8	// pl
 	 "Visible by users with whom I share courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Visible by users with whom I share courses"			// Necessita de tradução
+	 "Vis&iacute;vel por usu&aacute;rios com quem compartilho disciplinas"
 #endif
 	 ,	// Pri_VISIBILITY_SYSTEM
 #if   L==1	// ca
@@ -29485,7 +29503,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==8	// pl
 	 "Visible by any logged user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Visible by any logged user"			// Necessita de tradução
+	 "Vis&iacute;vel por qualquer usu&aacute;rio logado"
 #endif
 	 ,	// Pri_VISIBILITY_WORLD
 #if   L==1	// ca
@@ -29505,7 +29523,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==8	// pl
 	 "Visible by everyone"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "Visible by everyone"		// Necessita de tradução
+	 "Vis&iacute;vel em todo o mundo"
 #endif
 	};
 
@@ -30844,7 +30862,7 @@ const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is v
 #elif L==8	// pl
 	"Karta Rekord <strong>%s</strong> zostala usunieta.";
 #elif L==9	// pt
-	"Record card of <strong>%s</strong> has been removed.";	// Necessita de tradução
+	"Cart&atilde;o de registro de <strong>%s</strong> foi removido.";
 #endif
 
 const char *Txt_record_cards_per_page =
@@ -30865,7 +30883,7 @@ const char *Txt_record_cards_per_page =
 #elif L==8	// pl
 	"karty zapisu na stronie";
 #elif L==9	// pt
-	"record cards per page";		// Necessita de tradução
+	"cart&otilde;es por p&aacute;gina";
 #endif
 
 const char *Txt_Record_field_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -30886,7 +30904,7 @@ const char *Txt_Record_field_X_removed =	// Warning: it is very important to inc
 #elif L==8	// pl
 	"Pole rekordu <strong>%s</strong> usuniete.";
 #elif L==9	// pt
-	"Record field <strong>%s</strong> removed.";	// Necessita de tradução
+	"Campo de cart&atilde;o <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
@@ -31123,7 +31141,7 @@ const char *Txt_Record_fields =
 #elif L==8	// pl
 	"Rekord w dziedzinie";
 #elif L==9	// pt
-	"Record fields";	// Necessita de tradução
+	"Campos de cart&otilde;es";
 #endif
 
 const char *Txt_Recipients =
@@ -36428,7 +36446,7 @@ const char *Txt_Rooms_with_users =
 #elif L==8	// pl
 	"Rooms with users";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Rooms with users";		// Necessita de tradução
+	"Quartos com usu&aacute;rios";
 #endif
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -37610,14 +37628,14 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" o bien eliminados de la asignatura y de todos los grupos.";	// Necessita traduccio
 #elif L==2	// de
 	"Select the groups in/from which you want to register/remove users."
-	"You can only select those groups to which you belong.<br />"
+	" You can only select those groups to which you belong.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Need Übersetzung
 #elif L==3	// en
 	"Select the groups in/from which you want to register/remove users."
-	"You can only select those groups to which you belong.<br />"
+	" You can only select those groups to which you belong.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
@@ -37631,7 +37649,7 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" o bien eliminados de la asignatura y de todos los grupos.";
 #elif L==5	// fr
 	"Select the groups in/from which you want to register/remove users."
-	"You can only select those groups to which you belong.<br />"
+	" You can only select those groups to which you belong.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
@@ -37645,25 +37663,25 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" o bien eliminados de la asignatura y de todos los grupos.";	// Okoteve traducción
 #elif L==7	// it
 	"Seleziona i gruppi nel/dal quale vuoi registrare/rimuovere utenti."
-	"Puoi solo selezionare quei gruppi ai quali appartieni.<br />"
+	" Puoi solo selezionare quei gruppi ai quali appartieni.<br />"
 	"Se selezioni qualche gruppo, gli utenti saranno registrati nel corso e nel gruppo selezionato,"
 	" o rimossi dai gruppi selezionati ma non dal corso.<br />"
 	"Se non selezioni alcun gruppo, gli utenti saranno registrati nel corso ma non in gruppi specifici,"
 	" o rimossi dal corso e da tutti i gruppi.";
 #elif L==8	// pl
 	"Select the groups in/from which you want to register/remove users."
-	"You can only select those groups to which you belong.<br />"
+	" You can only select those groups to which you belong.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Select the groups in/from which you want to register/remove users."
-	"You can only select those groups to which you belong.<br />"
-	"If you select any groups, users will be enroled in the course and the selected groups,"
-	" or removed from the selected groups but not from the course.<br />"
-	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
-	" or removed from the course and from all groups.";	// Necessita de tradução
+	"Selecione os grupos em/dos quais voc&ecirc; deseja registrar/remover usu&aacute;rios."
+	" Voc&ecirc; s&oacute; pode selecionar os grupos aos quais voc&ecirc; pertence.<br />"
+	"Se voc&ecirc; selecionar grupos, os usu&aacute;rios ser&atilde;o inscritos na disciplina e nos grupos selecionados"
+	" ou removidos dos grupos selecionados, mas n&atilde;o da disciplina.<br />"
+	"Se voc&ecirc; n&atilde;o selecionar nenhum grupo, os usu&aacute;rios ser&atilde;o inscritos na disciplina, mas n&atilde;o em grupos espec&iacute;ficos,"
+	" ou ser&atilde;o removidos da disciplina e de todos os grupos.";
 #endif
 
 const char *Txt_Send =
@@ -37789,7 +37807,7 @@ const char *Txt_Sender_banned_click_to_unban_him =
 #elif L==8	// pl
 	"Sender banned; click to unban her/him";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Sender banned; click to unban her/him";		// Necessita de tradução
+	"Remetente banido; clique para desbanir ela/ele";
 #endif
 
 const char *Txt_Sender_permitted_click_to_ban_him =
@@ -37810,7 +37828,7 @@ const char *Txt_Sender_permitted_click_to_ban_him =
 #elif L==8	// pl
 	"Sender permitted; click to ban her/him";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Sender permitted; click to ban her/him";		// Necessita de tradução
+	"Remetente permitido; clique para banir ela/ele";
 #endif
 
 const char *Txt_Session =
@@ -38626,7 +38644,7 @@ const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include
 #elif L==8	// pl
 	"Show next %lu clicks";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show next %lu clicks";			// Necessita de tradução
+	"Mostrar %lu cliques subsequentes";
 #endif
 
 const char *Txt_Show_office_hours =
@@ -38668,7 +38686,7 @@ const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to inc
 #elif L==8	// pl
 	"Show previous %lu clicks";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show previous %lu clicks";		// Necessita de tradução
+	"Mostrar %lu cliques anteriores";
 #endif
 
 const char *Txt_Show_questions =
@@ -40231,7 +40249,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==8	// pl
 	 "proportional to the number of students"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "proportional to the number of students"	// Necessita de tradução
+	 "proporcional ao n&uacute;mero de estudantes"
 #endif
 	 ,
 #if   L==1	// ca
@@ -40251,7 +40269,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==8	// pl
 	 "proportional to the number of students with photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "proportional to the number of students with photo"		// Necessita de tradução
+	 "proporcional ao n&uacute;mero de estudantes com foto"
 #endif
 	 ,
 #if   L==1	// ca
@@ -40271,7 +40289,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==8	// pl
 	 "proportional to the percentage of students with photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "proportional to the percentage of students with photo"		// Necessita de tradução
+	 "proporcional ao porcentagem de estudantes com foto"
 #endif
 	 ,
 #if   L==1	// ca
@@ -40291,7 +40309,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==8	// pl
 	 "same for all degrees"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "same for all degrees"			// Necessita de tradução
+	 "mesmo para todos os graus"
 #endif
 	};
 
@@ -40354,7 +40372,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==8	// pl
 	 "percentage of students with photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "percentage of students with photo"			// Necessita de tradução
+	 "porcentagem de estudantes com foto"
 #endif
 	 ,
 #if   L==1	// ca
@@ -40374,7 +40392,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==8	// pl
 	 "degree name"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "degree name"			// Necessita de tradução
+	 "nome do grau"
 #endif
 	};
 
@@ -41166,7 +41184,7 @@ const char *Txt_Statistics_of_all_visits =
 #elif L==8	// pl
 	"Statistics of all visits";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Statistics of all visits";			// Necessita de tradução
+	"Estat&iacute;sticas de todas as visitas";
 #endif
 
 const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -41187,7 +41205,7 @@ const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very im
 #elif L==8	// pl
 	"Statistics of visits to the course <strong>%s</strong>";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Statistics of visits to the course <strong>%s</strong>";		// Necessita de tradução
+	"Estat&iacute;sticas de visitas &agrave; disciplina <strong>%s</strong>";
 #endif
 
 const char *Txt_Status =
@@ -41229,7 +41247,7 @@ const char *Txt_Stay_connected_with_SWADroid =
 #elif L==8	// pl
 	"Stay connected with <strong>SWADroid</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Stay connected with <strong>SWADroid</strong>.";		// Necessita de tradução
+	"Fique ligado/a com <strong>SWADroid</strong>.";
 #endif
 
 const char *Txt_Stem =		// Stem of a test question
@@ -41271,7 +41289,7 @@ const char *Txt_Step_1_Provide_a_list_of_users =
 #elif L==8	// pl
 	"Step 1: Provide a list of users";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Step 1: Provide a list of users";		// Necessita de tradução
+	"Etapa 1: Forne&ccedil;a uma lista de usu&aacute;rios";
 #endif
 
 const char *Txt_Step_2_Select_the_desired_action =
@@ -41292,7 +41310,7 @@ const char *Txt_Step_2_Select_the_desired_action =
 #elif L==8	// pl
 	"Step 2: Select the desired action";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Step 2: Select the desired action";				// Necessita de tradução
+	"Etapa 2: Selecione a a&ccedil;&atilde;o desejada";
 #endif
 
 const char *Txt_Step_3_Optionally_select_groups =
@@ -41313,7 +41331,7 @@ const char *Txt_Step_3_Optionally_select_groups =
 #elif L==8	// pl
 	"Step 3: Optionally, select groups";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Step 3: Optionally, select groups";		// Necessita de tradução
+	"Etapa 3: Opcionalmente, selecione grupos";
 #endif
 
 const char *Txt_Step_4_Confirm_the_enrolment_removing =
@@ -41334,7 +41352,7 @@ const char *Txt_Step_4_Confirm_the_enrolment_removing =
 #elif L==8	// pl
 	"Step 4: Confirm the enrolment / removing";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Step 4: Confirm the enrolment / removing";			// Necessita de tradução
+	"Etapa 4: Confirmar a inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Student_comment =
@@ -41397,7 +41415,7 @@ const char *Txt_Student_record_card_in_this_course_has_been_updated =
 #elif L==8	// pl
 	"Student record card in this course has been updated.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Student record card in this course has been updated.";		// Necessita de tradução
+	"O cart&atilde;o do estudante nesta disciplina foi atualizado.";
 #endif
 
 const char *Txt_Students_are_no_longer_obliged_to_read_this_information =
@@ -41418,7 +41436,7 @@ const char *Txt_Students_are_no_longer_obliged_to_read_this_information =
 #elif L==8	// pl
 	"Students are no longer obliged to read this information.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Students are no longer obliged to read this information.";			// Necessita de tradução
+	"Os estudantes n&atilde;o precisam mais ler essas informa&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_Students_now_are_required_to_read_this_information =
@@ -41439,7 +41457,7 @@ const char *Txt_Students_now_are_required_to_read_this_information =
 #elif L==8	// pl
 	"Students now are required to read this information.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Students now are required to read this information.";				// Necessita de tradução
+	"Os estudantes agora precisam ler essas informa&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_X_students_who_have_email =	// Warning: it is very important to include %u and %f in the following sentences
@@ -41646,7 +41664,7 @@ const char *Txt_SURVEY_You_have_already_answered =
 #elif L==8	// pl
 	"You have already answered";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have already answered";	// Necessita de tradução
+	"Voc&ecirc; j&aacute; respondeu";
 #endif
 
 const char *Txt_SURVEY_You_have_not_answered =
@@ -41667,7 +41685,7 @@ const char *Txt_SURVEY_You_have_not_answered =
 #elif L==8	// pl
 	"You have not answered";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have not answered";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o respondeu";
 #endif
 
 const char *Txt_SURVEY_Type_of_user_allowed =
@@ -41688,7 +41706,7 @@ const char *Txt_SURVEY_Type_of_user_allowed =
 #elif L==8	// pl
 	"Type of user allowed";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Type of user allowed";		// Necessita de tradução
+	"Tipo de usu&aacute;rio permitido";
 #endif
 
 const char *Txt_SURVEY_Type_of_user_not_allowed =
@@ -41709,7 +41727,7 @@ const char *Txt_SURVEY_Type_of_user_not_allowed =
 #elif L==8	// pl
 	"Type of user not allowed";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Type of user not allowed";		// Necessita de tradução
+	"Tipo de usu&aacute;rio n&atilde;o permitido";
 #endif
 
 const char *Txt_Survey_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
@@ -41730,7 +41748,7 @@ const char *Txt_Survey_X_is_now_hidden =	// Warning: it is very important to inc
 #elif L==8	// pl
 	"Badanie <strong>%s</strong> jest teraz ukryta.";
 #elif L==9	// pt
-	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora oculta.";
+	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora oculto.";
 #endif
 
 const char *Txt_Survey_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
@@ -42029,7 +42047,7 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 #elif L==8	// pl
 	"Table not found in the file of marks.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Table not found in the file of marks.";			// Necessita de tradução
+	"N&atilde;o h&aacute; tabela no arquivo de classifica&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
@@ -42370,7 +42388,7 @@ const char *Txt_Tag_X_allowed_Click_to_disable_it =	// Warning: it is very impor
 #elif L==8	// pl
 	"Tag %s allowed. Click to disable it.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Tag %s allowed. Click to disable it.";			// Necessita de tradução
+	"Descritor %s permitido. Clique para proibir.";
 #endif
 
 const char *Txt_Tag_not_allowed =
@@ -42412,7 +42430,7 @@ const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very imp
 #elif L==8	// pl
 	"Tag %s not allowed. Click to allow it.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Tag %s not allowed. Click to allow it.";		// Necessita de tradução
+	"Descritor %s n&atilde;o permitido. Clique para permitir.";
 #endif
 
 #if defined LOCALHOST_UBUNTU		// localhost (Ubuntu) *****************
@@ -42968,7 +42986,7 @@ const char *Txt_The_alphabetical_code_X_already_exists =	// Warning: it is very 
 #elif L==8	// pl
 	"The ISO 3166-1 alphabetical code %s already exists.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The ISO 3166-1 alphabetical code %s already exists.";		// Necessita de tradução
+	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s j&aacute; existe.";
 #endif
 
 const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very important to include %s in the following sentences
@@ -42989,7 +43007,7 @@ const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very 
 #elif L==8	// pl
 	"The ISO 3166-1 alphabetical code %s is not correct.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The ISO 3166-1 alphabetical code %s is not correct.";			// Necessita de tradução
+	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s n&atilde;o est&aacute; correto.";
 #endif
 
 const char *Txt_The_announcement_of_exam_has_been_successfully_updated =
@@ -43081,8 +43099,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	/
 	"The answers of the question with code <strong>%ld</strong>"
 	" will appear shuffled.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear shuffled.";		// Necessita de tradução
+	"As respostas da pergunta com o c&oacute;digo <strong>%ld</strong>"
+	" aparecer&atilde;o embaralhadas.";
 #endif
 
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling =	// Warning: it is very important to include %ld in the following sentences
@@ -43111,8 +43129,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuf
 	"The answers of the question with code <strong>%ld</strong>"
 	" will appear without shuffling.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear without shuffling.";	// Necessita de tradução
+	"As respostas da pergunta com o c&oacute;digo <strong>%ld</strong>"
+	" aparecer&atilde;o sem embaralhar.";
 #endif
 
 const char *Txt_The_assignment_has_been_modified =
@@ -43154,7 +43172,7 @@ const char *Txt_The_banner_X_already_exists =	// Warning: it is very important t
 #elif L==8	// pl
 	"The banner <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The banner <strong>%s</strong> already exists.";	// Necessita de tradução
+	"O banner <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43175,7 +43193,7 @@ const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==8	// pl
 	"The banner <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The banner <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Necessita de tradução
+	"O banner <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_banner_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
@@ -43238,7 +43256,7 @@ const char *Txt_The_centre_X_already_exists =	// Warning: it is very important t
 #elif L==8	// pl
 	"The centre <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The centre <strong>%s</strong> already exists.";	// Necessita de tradução
+	"O centro <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43267,8 +43285,8 @@ const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y =	// Warning: i
 	"The centre <strong>%s</strong> has been moved"
 	" to the institution <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The centre <strong>%s</strong> has been moved"
-	" to the institution <strong>%s</strong>.";		// Necessita de tradução
+	"O centro <strong>%s</strong> foi transferido"
+	" para a institui&ccedil;&atilde;o <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43289,7 +43307,7 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==8	// pl
 	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Necessita de tradução
+	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_comment_no_longer_exists =
@@ -43381,8 +43399,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_
 	"The copy has stopped when trying to paste the file <strong>%s</strong>"
 	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	" porque excederia a cota de disco.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -43411,8 +43429,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_i
 	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
 	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar a pasta <strong>%s</strong>"
+	" porque excederia a cota de disco.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -49791,7 +49809,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==8	// pl
 	"Sort by number of times the question has been answered"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Classificar por n&uacute;mero de vezes que a quest&atilde;o foi respondida"
+	"Classificar por n&ordm; de vezes que a quest&atilde;o foi respondida"
 #endif
 	,
 #if   L==1	// ca	// TST_ORDER_AVERAGE_SCORE
@@ -49838,7 +49856,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Sort by number of times the question"
 	" has been answered (excluding blank answers)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Classificar por n&uacute;mero de vezes"
+	"Classificar por n&ordm; de vezes"
 	" que a quest&atilde;o foi respondida (n&atilde;o em branco)"
 #endif
 	,
