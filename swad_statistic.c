@@ -351,7 +351,7 @@ void Sta_LogAccess (const char *Comments)
 		      " (LogCod,SearchStr)"
 		      " VALUES"
 		      " (%ld,'%s')",
-		      Gbl.Search.Str);
+		      LogCod,Gbl.Search.Str);
 
    if (Gbl.WebService.IsWebService)
       /* Log web service plugin and function */
