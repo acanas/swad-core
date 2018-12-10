@@ -283,7 +283,7 @@ const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_addre
 	" to confirm that address.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Uma mensagem foi enviada"
-	" para o endere&ccedil;o de e-mail <strong>%s</strong>"
+	" para o endere&ccedil;o de email <strong>%s</strong>"
 	" para confirmar esse endere&ccedil;o.";
 #endif
 
@@ -43400,7 +43400,7 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_
 	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
-	" porque excederia a cota de disco.";
+	" porque ele excederia a cota de disco.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -43430,7 +43430,7 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_i
 	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"A c&oacute;pia parou ao tentar colar a pasta <strong>%s</strong>"
-	" porque excederia a cota de disco.";
+	" porque ele excederia a cota de disco.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -43459,8 +43459,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_
 	"The copy has stopped when trying to paste the link <strong>%s</strong>"
 	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
+	" porque ele excederia a cota de disco.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
@@ -43489,8 +43489,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_
 	"The copy has stopped when trying to paste the file <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	" porque ele excederia o n&uacute;mero m&aacute;ximo permitido de n&iacute;veis.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
@@ -43519,8 +43519,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_i
 	"The copy has stopped when trying to paste the file <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	" porque ele excederia o n&uacute;mero m&aacute;ximo permitido de n&iacute;veis.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
@@ -43549,8 +43549,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_
 	"The copy has stopped when trying to paste the link <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
+	" porque ele excederia o n&uacute;mero m&aaxute;ximo permitido de n&iacute;veis.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
@@ -43579,8 +43579,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_the
 	"The copy has stopped when trying to paste the file <strong>%s</strong>"
 	" because there is already an object with that name.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because there is already an object with that name.";	// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	" porque j&aacute; existe um objeto com esse nome.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
@@ -43609,8 +43609,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_the
 	"The copy has stopped when trying to paste the link <strong>%s</strong>"
 	" because there is already an object with that name.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because there is already an object with that name.";	// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
+	" porque j&aacute; existe um objeto com esse nome.";
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -43639,8 +43639,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you
 	"The copy has stopped when trying to paste the file <strong>%s</strong>"
 	" because you can not paste a file here of a type other than HTML.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because you can not paste a file here of a type other than HTML.";		// Necessita de tradução
+	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	" porque voc&ecirc; n&atilde;o pode colar um arquivo aqui de um tipo diferente de HTML.";
 #endif
 
 const char *Txt_The_country_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -43661,7 +43661,7 @@ const char *Txt_The_country_X_already_exists =	// Warning: it is very important 
 #elif L==8	// pl
 	"The country <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The country <strong>%s</strong> already exists.";	// Necessita de tradução
+	"O pa&iacute;s <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43682,7 +43682,7 @@ const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very imp
 #elif L==8	// pl
 	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Necessita de tradução
+	"O pa&iacute;s <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_country_of_the_institution_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43733,7 +43733,7 @@ const char *Txt_The_course_X_already_exists =	// Warning: it is very important t
 #elif L==8	// pl
 	"The course <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The course <strong>%s</strong> already exists.";	// Necessita de tradução
+	"A disciplina <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43754,7 +43754,7 @@ const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very i
 #elif L==8	// pl
 	"The course <strong>%s</strong> already exists in year/semester %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The course <strong>%s</strong> already exists in year/semester %s.";	// Necessita de tradução
+	"A disciplina <strong>%s</strong> j&aacute; existe no ano/semestre %s.";
 #endif
 
 const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43783,8 +43783,8 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 	"The course <strong>%s</strong> has been moved"
 	" to the degree <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The course <strong>%s</strong> has been moved"
-	" to the degree <strong>%s</strong>.";		// Necessita de tradução
+	"A disciplina curso <strong>%s</strong> foi movida"
+	" para o grau <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43805,7 +43805,7 @@ const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is v
 #elif L==8	// pl
 	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Necessita de tradução
+	"A data do feriado <strong>%s</strong> mudou para <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning: it is very important to include %u in the following sentences
@@ -43826,7 +43826,7 @@ const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning
 #elif L==8	// pl
 	"The date range must be less than or equal to %u days.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The date range must be less than or equal to %u days.";	// Necessita de tradução
+	"O intervalo de datas deve ser menor ou igual a %u dias.";
 #endif
 
 const char *Txt_The_date_time_of_opening_of_groups_has_changed =
@@ -43847,7 +43847,7 @@ const char *Txt_The_date_time_of_opening_of_groups_has_changed =
 #elif L==8	// pl
 	"The date / time of opening of groups has changed.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The date / time of opening of groups has changed.";			// Necessita de tradução
+	"A data / hora de abertura dos grupos foi alterada.";
 #endif
 
 const char *Txt_The_degree_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -43868,7 +43868,7 @@ const char *Txt_The_degree_X_already_exists =	// Warning: it is very important t
 #elif L==8	// pl
 	"The degree <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The degree <strong>%s</strong> already exists.";	// Necessita de tradução
+	"O grau <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43897,8 +43897,8 @@ const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y =	// Warning: it is 
 	"The degree <strong>%s</strong> has been moved"
 	" to the centre <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The degree <strong>%s</strong> has been moved"
-	" to the centre <strong>%s</strong>.";		// Necessita de tradução
+	"O grau <strong>%s</strong> foi movido"
+	" para o centro <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -43919,7 +43919,7 @@ const char *Txt_The_department_X_already_exists =	// Warning: it is very importa
 #elif L==8	// pl
 	"The department <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The department <strong>%s</strong> already exists.";	// Necessita de tradução
+	"O departamento <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -43940,7 +43940,7 @@ const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very 
 #elif L==8	// pl
 	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Necessita de tradução
+	"O departamento <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_email_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -43961,7 +43961,7 @@ const char *Txt_The_email_X_has_been_confirmed =	// Warning: it is very importan
 #elif L==8	// pl
 	"The email <strong>%s</strong> has been confirmed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email <strong>%s</strong> has been confirmed.";	// Necessita de tradução
+	"O email <strong>%s</strong> foi confirmado.";
 #endif
 
 const char *Txt_The_email_address_entered_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
@@ -43990,8 +43990,8 @@ const char *Txt_The_email_address_entered_X_is_not_valid =	// Warning: it is ver
 	"The email address entered"
 	" <strong>%s</strong> is not valid.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email address entered"
-	" <strong>%s</strong> is not valid.";		// Necessita de tradução
+	"O endere&ccedil;o de email inserido"
+	" <strong>%s</strong> n&atilde;o &eacute; v&aacute;lido.";
 #endif
 
 const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// Warning: it is very important to include %s in the following sentences
@@ -44020,8 +44020,8 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 	"The email address <strong>%s</strong>"
 	" had been registered by another user.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email address <strong>%s</strong>"
-	" had been registered by another user.";	// Necessita de tradução
+	"O endere&ccedil;o de email <strong>%s</strong>"
+	" foi registrado por outro usu&aacute;rio.";
 #endif
 
 const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
@@ -44050,8 +44050,8 @@ const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warnin
 	"The email address <strong>%s</strong>"
 	" has been registered successfully.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email address <strong>%s</strong>"
-	" has been registered successfully.";		// Necessita de tradução
+	"O endere&ccedil;o de email <strong>%s</strong>"
+	" foi registrado com sucesso.";
 #endif
 
 const char *Txt_The_email_address_has_not_been_confirmed =
@@ -44075,7 +44075,7 @@ const char *Txt_The_email_address_has_not_been_confirmed =
 #elif L==8	// pl
 	"The email address has not been confirmed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email address has not been confirmed.";	// Necessita de tradução
+	"O endere&ccedil;o de email n&atilde;o foi confirmado.";
 #endif
 
 const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warning: it is very important to include %s in the following sentences
@@ -44104,8 +44104,8 @@ const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warni
 	"The email address <strong>%s</strong>"
 	" matches one previously registered.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email address <strong>%s</strong>"
-	" matches one previously registered.";		// Necessita de tradução
+	"O endere&ccedil;o de email <strong>%s</strong>"
+	" corresponde a um registrado anteriormente.";
 #endif
 
 const char *Txt_The_email_domain_X_already_exists =
@@ -44126,7 +44126,7 @@ const char *Txt_The_email_domain_X_already_exists =
 #elif L==8	// pl
 	"The email domain already exists.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email domain already exists.";		// Necessita de tradução
+	"O dom&iacute;nio de email j&aacute; existe.";
 #endif
 
 const char *Txt_The_email_domain_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -44147,7 +44147,7 @@ const char *Txt_The_email_domain_X_has_been_renamed_as_Y =	// Warning: it is ver
 #elif L==8	// pl
 	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Necessita de tradução
+	"O dom&iacute;nio de email <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_email_domain_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -44168,7 +44168,7 @@ const char *Txt_The_email_domain_X_has_not_changed =	// Warning: it is very impo
 #elif L==8	// pl
 	"The email domain <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The email domain <strong>%s</strong> has not changed.";		// Necessita de tradução
+	"O dom&iacute;nio de email <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
 const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
@@ -44189,7 +44189,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory
 #elif L==8	// pl
 	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";			// Necessita de tradução
+	"A inscri&ccedil;&atilde;o de alunos em grupos do tipo <strong>%s</strong> &eacute; agora obrigat&oacute;ria.";
 #endif
 
 const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
@@ -44210,7 +44210,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary
 #elif L==8	// pl
 	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Necessita de tradução
+	"A inscri&ccedil;&atilde;o de estudantes em grupos do tipo <strong>%s</strong> &eacute; agora volunt&aacute;ria.";
 #endif
 
 const char *Txt_The_event_has_been_modified =
@@ -44282,7 +44282,7 @@ const char *Txt_The_file_is_not_X =	// Warning: it is very important to include 
 #elif L==8	// pl
 	"The file is not <em>%s</em>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The file is not <em>%s</em>.";		// Necessita de tradução
+	"O arquivo n&atilde;o &eacute; <em>%s</em>.";
 #endif
 
 const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
@@ -44324,7 +44324,7 @@ const char *Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP =	// Warning: it is
 #elif L==8	// pl
 	"The file type is %s and should be <em>HTML</em> or <em>ZIP</em>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The file type is %s and should be <em>HTML</em> or <em>ZIP</em>.";	// Necessita de tradução
+	"O tipo de arquivo &eacute; %s e deve ser <em>HTML</em> ou <em>ZIP</em>.";
 #endif
 
 const char *Txt_The_file_type_should_be_HTML_or_ZIP =
@@ -44345,7 +44345,7 @@ const char *Txt_The_file_type_should_be_HTML_or_ZIP =
 #elif L==8	// pl
 	"The file type should be <em>HTML</em> or <em>ZIP</em>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The file type should be <em>HTML</em> or <em>ZIP</em>.";	// Necessita de tradução
+	"O tipo de arquivo deve ser <em>HTML</em> ou <em>ZIP</em>.";
 #endif
 
 const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -44408,7 +44408,7 @@ const char *Txt_The_folder_name_X_has_changed_to_Y =	// Warning: it is very impo
 #elif L==8	// pl
 	"The folder name <strong>%s</strong> has changed to <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The folder name <strong>%s</strong> has changed to <strong>%s</strong>.";		// Necessita de tradução
+	"O nome da pasta <strong>%s</strong> foi alterado para <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_folder_name_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -44429,7 +44429,7 @@ const char *Txt_The_folder_name_X_has_not_changed =	// Warning: it is very impor
 #elif L==8	// pl
 	"The folder name <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The folder name <strong>%s</strong> has not changed.";		// Necessita de tradução
+	"O nome da pasta <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
 const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -44458,8 +44458,8 @@ const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_fol
 	"The folder name <strong>%s</strong> has not changed"
 	" because there is already a folder or a file with the name <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The folder name <strong>%s</strong> has not changed"
-	" because there is already a folder or a file with the name <strong>%s</strong>.";	// Necessita de tradução
+	"O nome da pasta <strong>%s</strong> n&atilde;o foi alterado"
+	" porque j&aacute; existe uma pasta ou um arquivo com o nome <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_game_has_been_modified =
