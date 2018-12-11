@@ -10107,7 +10107,7 @@ const char *Txt_Email_unconfirmed =
 #elif L==8	// pl
 	"Email unconfirmed";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Email n&atilde:o confirmado";
+	"Email n&atilde;o confirmado";
 #endif
 
 const char *Txt_End_date =
@@ -47879,7 +47879,7 @@ const char *Txt_The_ZIP_file_has_been_received_successfully =
 #elif L==8	// pl
 	"The <em>ZIP</em> file has been received successfully.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The <em>ZIP</em> file has been received successfully.";	// Necessita de tradução
+	"O arquivo <em>ZIP</em> foi recebido com sucesso.";
 #endif
 
 const char *Txt_The_ZIP_file_has_been_unzipped_successfully =
@@ -47900,7 +47900,7 @@ const char *Txt_The_ZIP_file_has_been_unzipped_successfully =
 #elif L==8	// pl
 	"The <em>ZIP</em> file has been unzipped successfully.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"The <em>ZIP</em> file has been unzipped successfully.";	// Necessita de tradução
+	"O arquivo <em>ZIP</em> foi descompactado com sucesso.";
 #endif
 
 const char *Txt_Theme_SKIN =
@@ -47942,7 +47942,7 @@ const char *Txt_There_are_more_than_one_table_in_the_file_of_marks =
 #elif L==8	// pl
 	"There are more than one table in the file of marks.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are more than one table in the file of marks.";		// Necessita de tradução
+	"Existem mais de uma tabela no arquivo de notas.";
 #endif
 
 const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email =	// Warning: it is very important to include %s in the following sentences
@@ -47971,8 +47971,8 @@ const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or
 	"There are more than one user with the ID <strong>%s</strong>."
 	" Please type a @nick or email.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are more than one user with the ID <strong>%s</strong>."
-	" Please type a @nick or email.";		// Necessita de tradução
+	"H&aacute; mais de um usu&aacute;rio com o ID <strong>%s</strong>."
+	" Por favor, digite uma @alcunha ou um email.";
 #endif
 
 const char *Txt_There_are_new_posts =
@@ -48014,91 +48014,163 @@ const char *Txt_There_are_no_accesses_with_the_selected_search_criteria =
 #elif L==8	// pl
 	"There are no accesses with the selected search criteria.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no accesses with the selected search criteria.";		// Necessita de tradução
+	"N&atilde;o h&aacute; acessos com os crit&eacute;rios de pesquisa selecionados.";
 #endif
 
 const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 #if   L==1	// ca
-	"No hi ha centres amb sol&middot;licituds de titulacions pendents de confirmar.";
+	"No hi ha centres"
+	" amb sol&middot;licituds de titulacions"
+	" pendents de confirmar.";
 #elif L==2	// de
-	"There are no centres with requests for degrees to be confirmed.";		// Need Übersetzung
+	"There are no centres"
+	" with requests for degrees"
+	" to be confirmed.";		// Need Übersetzung
 #elif L==3	// en
-	"There are no centres with requests for degrees to be confirmed.";
+	"There are no centres"
+	" with requests for degrees"
+	" to be confirmed.";
 #elif L==4	// es
-	"No hay centros con solicitudes de titulaciones pendientes de confirmar.";
+	"No hay centros"
+	" con solicitudes de titulaciones"
+	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n'y a pas de centres avec demandes de degr&eacute;s &agrave; confirmer.";
+	"Il n'y a pas de centres"
+	" avec demandes de degr&eacute;s"
+	" &agrave; confirmer.";
 #elif L==6	// gn
-	"No hay centros con solicitudes de titulaciones pendientes de confirmar.";	// Okoteve traducción
+	"No hay centros"
+	" con solicitudes de titulaciones"
+	" pendientes de confirmar.";	// Okoteve traducción
 #elif L==7	// it
-	"Non ci sono centri con richieste di gradi pendenti de confermare.";
+	"Non ci sono centri"
+	" con richieste di gradi"
+	" pendenti de confermare.";
 #elif L==8	// pl
-	"There are no centres with requests for degrees to be confirmed.";		// Potrzebujesz tlumaczenie
+	"There are no centres"
+	" with requests for degrees"
+	" to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no centres with requests for degrees to be confirmed.";		// Necessita de tradução
+	"N&atilde;o h&aacute; centros"
+	" com solicita&ccedil;&otilde;es de graus"
+	" pendentes de confirma&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed =
 #if   L==1	// ca
-	"No hi ha pa&iuml;sos amb sol&middot;licituds de institucions pendents de confirmar.";
+	"No hi ha pa&iuml;sos"
+	" amb sol&middot;licituds de institucions"
+	" pendents de confirmar.";
 #elif L==2	// de
-	"There are no countries with requests for institutions to be confirmed.";		// Need Übersetzung
+	"There are no countries"
+	" with requests for institutions"
+	" to be confirmed.";		// Need Übersetzung
 #elif L==3	// en
-	"There are no countries with requests for institutions to be confirmed.";
+	"There are no countries"
+	" with requests for institutions"
+	" to be confirmed.";
 #elif L==4	// es
-	"No hay pa&iacute;ses con solicitudes de instituciones pendientes de confirmar.";
+	"No hay pa&iacute;ses"
+	" con solicitudes de instituciones"
+	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n'y a pas de pays avec demandes d'&eacute;tablissements &agrave; confirmer.";
+	"Il n'y a pas de pays"
+	" avec demandes d'&eacute;tablissements"
+	" &agrave; confirmer.";
 #elif L==6	// gn
-	"No hay pa&iacute;ses con solicitudes de instituciones pendientes de confirmar.";	// Okoteve traducción
+	"No hay pa&iacute;ses"
+	" con solicitudes de instituciones"
+	" pendientes de confirmar.";	// Okoteve traducción
 #elif L==7	// it
-	"Non ci sono paesi con richieste di istituzioni pendenti de confermare.";
+	"Non ci sono paesi"
+	" con richieste di istituzioni"
+	" pendenti de confermare.";
 #elif L==8	// pl
-	"There are no countries with requests for institutions to be confirmed.";		// Potrzebujesz tlumaczenie
+	"There are no countries"
+	" with requests for institutions"
+	" to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no countries with requests for institutions to be confirmed.";		// Necessita de tradução
+	"N&atilde;o h&aacute; pa&iacute;ses"
+	" com solicita&ccedil;&otilde;es de institui&ccedil;&otilde;es"
+	" pendentes de confirma&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 #if   L==1	// ca
-	"No hi ha titulacions amb sol&middot;licituds d'assignatures pendents de confirmar.";
+	"No hi ha titulacions"
+	" amb sol&middot;licituds d'assignatures"
+	" pendents de confirmar.";
 #elif L==2	// de
-	"There are no degrees with requests for courses to be confirmed.";		// Need Übersetzung
+	"There are no degrees"
+	" with requests for courses"
+	" to be confirmed.";		// Need Übersetzung
 #elif L==3	// en
-	"There are no degrees with requests for courses to be confirmed.";
+	"There are no degrees"
+	" with requests for courses"
+	" to be confirmed.";
 #elif L==4	// es
-	"No hay titulaciones con solicitudes de asignaturas pendientes de confirmar.";
+	"No hay titulaciones"
+	" con solicitudes de asignaturas"
+	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n'y a pas de degr&eacute;s avec demandes de cours &agrave; confirmer.";
+	"Il n'y a pas de degr&eacute;s"
+	" avec demandes de cours"
+	" &agrave; confirmer.";
 #elif L==6	// gn
-	"No hay titulaciones con solicitudes de asignaturas pendientes de confirmar.";	// Okoteve traducción
+	"No hay titulaciones"
+	" con solicitudes de asignaturas"
+	" pendientes de confirmar.";	// Okoteve traducción
 #elif L==7	// it
-	"Non ci sono gradi con richieste di corsi pendenti de confermare.";
+	"Non ci sono gradi"
+	" con richieste di corsi"
+	" pendenti de confermare.";
 #elif L==8	// pl
-	"There are no degrees with requests for courses to be confirmed.";		// Potrzebujesz tlumaczenie
+	"There are no degrees"
+	" with requests for courses"
+	" to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no degrees with requests for courses to be confirmed.";		// Necessita de tradução
+	"N&atilde;o h&aacute; graus"
+	" com solicita&ccedil;&otilde;es de disciplinas"
+	" pendentes de confirma&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed =
 #if   L==1	// ca
-	"No hi ha institucions amb sol&middot;licituds de centres pendents de confirmar.";
+	"No hi ha institucions"
+	" amb sol&middot;licituds de centres"
+	" pendents de confirmar.";
 #elif L==2	// de
-	"There are no institutions with requests for centres to be confirmed.";		// Need Übersetzung
+	"There are no institutions"
+	" with requests for centres"
+	" to be confirmed.";		// Need Übersetzung
 #elif L==3	// en
-	"There are no institutions with requests for centres to be confirmed.";
+	"There are no institutions"
+	" with requests for centres"
+	" to be confirmed.";
 #elif L==4	// es
-	"No hay instituciones con solicitudes de centros pendientes de confirmar.";
+	"No hay instituciones"
+	" con solicitudes de centros"
+	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n'y a pas d'&eacute;tablissements avec demandes de centres &agrave; confirmer.";
+	"Il n'y a pas d'&eacute;tablissements"
+	" avec demandes de centres"
+	" &agrave; confirmer.";
 #elif L==6	// gn
-	"No hay instituciones con solicitudes de centros pendientes de confirmar.";	// Okoteve traducción
+	"No hay instituciones"
+	" con solicitudes de centros"
+	" pendientes de confirmar.";	// Okoteve traducción
 #elif L==7	// it
-	"Non ci sono istituzioni con richieste di centri pendenti de confermare.";
+	"Non ci sono istituzioni"
+	" con richieste di centri"
+	" pendenti de confermare.";
 #elif L==8	// pl
-	"There are no institutions with requests for centres to be confirmed.";		// Potrzebujesz tlumaczenie
+	"There are no institutions"
+	" with requests for centres"
+	" to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no institutions with requests for centres to be confirmed.";		// Necessita de tradução
+	"N&atilde;o h&aacute; institui&ccedil;&otilde;es"
+	" com solicita&ccedil;&otilde;es de centros"
+	" pendentes de confirma&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_There_are_no_record_fields_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -48119,7 +48191,7 @@ const char *Txt_There_are_no_record_fields_in_the_course_X =	// Warning: it is v
 #elif L==8	// pl
 	"There are no record fields in the course <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no record fields in the course <strong>%s</strong>.";	// Necessita de tradução
+	"N&atilde;o h&atilde; campos de cart&atilde;o na disciplina <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_are_no_types_of_group_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -48140,7 +48212,7 @@ const char *Txt_There_are_no_types_of_group_in_the_course_X =	// Warning: it is 
 #elif L==8	// pl
 	"There are no types of group in the course <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are no types of group in the course <strong>%s</strong>.";	// Necessita de tradução
+	"N&atilde;o h&aacute; tipos de grupo na disciplina <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_are_X_users_with_the_ID_Y =	// Warning: it is very important to include %u and %s in the following sentences
@@ -48161,7 +48233,7 @@ const char *Txt_There_are_X_users_with_the_ID_Y =	// Warning: it is very importa
 #elif L==8	// pl
 	"There are %u users with the ID <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There are %u users with the ID <strong>%s</strong>.";			// Necessita de tradução
+	"Existem %u usu&aacute;rios com o ID <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_has_been_no_change_in_groups =
@@ -48182,7 +48254,7 @@ const char *Txt_There_has_been_no_change_in_groups =
 #elif L==8	// pl
 	"There has been no change in groups.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There has been no change in groups.";			// Necessita de tradução
+	"Nenhuma altera&ccedil;&atilde;o de grupo foi feita.";
 #endif
 
 const char *Txt_There_have_been_X_errors_in_sending_the_message =	// Warning: it is very important to include %u in the following sentences
@@ -48203,7 +48275,7 @@ const char *Txt_There_have_been_X_errors_in_sending_the_message =	// Warning: it
 #elif L==8	// pl
 	"There have been %u errors in sending the message.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There have been %u errors in sending the message.";	// Necessita de tradução
+	"Houve %u erros ao enviar a mensagem.";
 #endif
 
 const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very important to include %s in the following sentences
@@ -48224,7 +48296,7 @@ const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very importa
 #elif L==8	// pl
 	"There is already a file named <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There is already a file named <strong>%s</strong>.";		// Necessita de tradução
+	"J&aacute; existe um arquivo chamado <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is very important to include %s in the following sentences
@@ -48245,7 +48317,7 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 #elif L==8	// pl
 	"There is already a non-empty folder named <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There is already a non-empty folder named <strong>%s</strong>.";		// Necessita de tradução
+	"J&aacute; existe uma pasta n&atilde;o vazia chamada strong>%s</strong>.";
 #endif
 
 const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning: it is very important to include %s in the following sentences
@@ -48280,23 +48352,32 @@ const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning
 
 const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =
 #if   L==1	// ca
-	"No se puede saber cu&aacute;ntos usuarios distintos han accedido sin identificarse.";	// Necessita traduccio
+	"No se puede saber cu&aacute;ntos usuarios distintos"
+	" han accedido sin identificarse.";	// Necessita traduccio
 #elif L==2	// de
-	"There is no knowing how many users not logged have accessed.";				// Übersetzung notwendig
+	"There is no knowing how many users"
+	" not logged have accessed.";		// Übersetzung notwendig
 #elif L==3	// en
-	"There is no knowing how many users not logged have accessed.";
+	"There is no knowing how many users"
+	" not logged have accessed.";
 #elif L==4	// es
-	"No se puede saber cu&aacute;ntos usuarios distintos han accedido sin identificarse.";
+	"No se puede saber cu&aacute;ntos usuarios distintos"
+	" han accedido sin identificarse.";
 #elif L==5	// fr
-	"There is no knowing how many users not logged have accessed.";				// Besoin de traduction
+	"There is no knowing how many users"
+	" not logged have accessed.";		// Besoin de traduction
 #elif L==6	// gn
-	"No se puede saber cu&aacute;ntos usuarios distintos han accedido sin identificarse.";	// Okoteve traducción
+	"No se puede saber cu&aacute;ntos usuarios distintos"
+	" han accedido sin identificarse.";	// Okoteve traducción
 #elif L==7	// it
-	"Non si pu&ograve; sapere quanti utenti distinti hanno avuto accesso senza identificarsi.";
+	"Non si pu&ograve; sapere quanti utenti distinti"
+	" hanno avuto accesso senza identificarsi.";
 #elif L==8	// pl
-	"There is no knowing how many users not logged have accessed.";				// Potrzebujesz tlumaczenie
+	"There is no knowing how many users"
+	" not logged have accessed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There is no knowing how many users not logged have accessed.";				// Necessita de tradução
+	"N&atilde;o h&aacute; como saber quantos usu&aacute;rios distintos"
+	" n&atilde;o logados acessaram.";
 #endif
 
 const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important to include %s in the following sentences
@@ -48325,8 +48406,8 @@ const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important
 	"There is no user"
 	" with email <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There is no user"
-	" with email <strong>%s</strong>.";	// Necessita de tradução
+	"N&atilde;o h&aacute; usu&aacute;rio"
+	" com email <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is very important to include %s in the following sentences
@@ -48355,8 +48436,8 @@ const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is ver
 	"There is no user"
 	" with ID, nick or email <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There is no user"
-	" with ID, nick or email <strong>%s</strong>.";			// Necessita de tradução
+	"N&atilde;o h&aacute; usu&aacute;rio"
+	" com ID, alcunha ou email <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_is_no_user_with_nickname_X =	// Warning: it is very important to include %s in the following sentences
@@ -48385,8 +48466,8 @@ const char *Txt_There_is_no_user_with_nickname_X =	// Warning: it is very import
 	"There is no user"
 	" with nickname <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There is no user"
-	" with nickname <strong>%s</strong>.";		// Necessita de tradução
+	"N&atilde;o h&aacute; usu&aacute;rio"
+	" com alcunha <strong>%s</strong>.";
 #endif
 
 const char *Txt_There_was_a_problem_sending_an_email_automatically =
@@ -48407,7 +48488,7 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 #elif L==8	// pl
 	"There was a problem sending an email automatically.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There was a problem sending an email automatically.";			// Necessita de tradução
+	"Ocorreu um problema ao enviar um email automaticamente.";
 #endif
 
 const char *Txt_There_was_an_error_in_assessing_the_test_X =	// Warning: it is very important to include %u in the following sentences
@@ -48428,7 +48509,7 @@ const char *Txt_There_was_an_error_in_assessing_the_test_X =	// Warning: it is v
 #elif L==8	// pl
 	"There was an error in assessing the test %u.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"There was an error in assessing the test %u.";		// Necessita de tradução
+	"Houve um erro ao avaliar o teste %u.";
 #endif
 
 const char *Txt_this_field_is_filled_in_the_record_of_one_student =
@@ -48449,7 +48530,7 @@ const char *Txt_this_field_is_filled_in_the_record_of_one_student =
 #elif L==8	// pl
 	" (this field is filled in the record of one student)";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	" (this field is filled in the record of one student)";			// Necessita de tradução
+	" (este campo &eacute; preenchido no cart&atilde;o de um estudante)";
 #endif
 
 const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: it is very important to include %u in the following sentences
@@ -48470,7 +48551,7 @@ const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: 
 #elif L==8	// pl
 	" (this field is filled in the records of %u students)";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	" (this field is filled in the records of %u students)";		// Necessita de tradução
+	" (este campo &eacute; preenchido nos cart&otilde;es de %u estudantes)";
 #endif
 
 const char *Txt_This_game_has_no_questions =
@@ -48541,8 +48622,8 @@ const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_
 	"This post has been banned,"
 	" probably for not satisfy the rules of the forums.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"This post has been banned,"
-	" probably for not satisfy the rules of the forums.";			// Necessita de tradução
+	"Este post foi censurado,"
+	" provavelmente por n&atilde;o satisfazer as regras dos f&oacute;runs.";
 #endif
 
 const char *Txt_This_survey_has_no_questions =
@@ -48626,7 +48707,7 @@ const char *Txt_Thread_marked_to_be_moved =
 #elif L==8	// pl
 	"Thread marked to be moved.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread marked to be moved.";			// Necessita de tradução
+	"Discuss&atilde;o marcada para ser movida.";
 #endif
 
 const char *Txt_Thread_X_marked_to_be_moved =	// Warning: it is very important to include %s in the following sentences
@@ -48647,7 +48728,7 @@ const char *Txt_Thread_X_marked_to_be_moved =	// Warning: it is very important t
 #elif L==8	// pl
 	"Thread <strong>%s</strong> marked to be moved.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread <strong>%s</strong> marked to be moved.";		// Necessita de tradução
+	"Discuss&atilde;o <strong>%s</strong> marcada para ser movida.";
 #endif
 
 const char *Txt_Thread_moved_to_this_forum =	// Warning: it is very important to include %s in the following sentences
@@ -48668,7 +48749,7 @@ const char *Txt_Thread_moved_to_this_forum =	// Warning: it is very important to
 #elif L==8	// pl
 	"Thread moved to this forum.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread moved to this forum.";		// Necessita de tradução
+	"Discuss&atilde;o movida para este f&oacute;rum.";
 #endif
 
 const char *Txt_Thread_X_moved_to_this_forum =	// Warning: it is very important to include %s in the following sentences
@@ -48689,7 +48770,7 @@ const char *Txt_Thread_X_moved_to_this_forum =	// Warning: it is very important 
 #elif L==8	// pl
 	"Thread <strong>%s</strong> moved to this forum.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread <strong>%s</strong> moved to this forum.";		// Necessita de tradução
+	"Discuss&atilde;o <strong>%s</strong> movida para este f&oacute;rum.";
 #endif
 
 const char *Txt_Thread_removed =
@@ -48710,7 +48791,7 @@ const char *Txt_Thread_removed =
 #elif L==8	// pl
 	"Thread removed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread removed.";		// Necessita de tradução
+	"Discuss&atilde;o removida.";
 #endif
 
 const char *Txt_Thread_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -48731,7 +48812,7 @@ const char *Txt_Thread_X_removed =	// Warning: it is very important to include %
 #elif L==8	// pl
 	"Thread <strong>%s</strong> removed.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread <strong>%s</strong> removed.";			// Necessita de tradução
+	"Discuss&atilde;o <strong>%s</strong> removida.";
 #endif
 
 const char *Txt_Thread_with_posts_from_you =
@@ -48752,7 +48833,7 @@ const char *Txt_Thread_with_posts_from_you =
 #elif L==8	// pl
 	"Thread with posts from you.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Thread with posts from you.";			// Necessita de tradução
+	"Discuss&atilde;o com mensagens de voc&ecirc;.";
 #endif
 
 const char *Txt_threads =
@@ -49147,8 +49228,8 @@ const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teacher
 	"To remove a centre, you must first remove"
 	" all degrees and teachers in the centre.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove a centre, you must first remove"
-	" all degrees and teachers in the centre.";				// Necessita de tradução
+	"Para remover um centro, voc&ecirc; deve primeiro remover"
+	" todos os graus e professores no centro.";
 #endif
 
 const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course =
@@ -49177,8 +49258,8 @@ const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course
 	"To remove a course, you must first remove"
 	" all users in the course.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove a course, you must first remove"
-	" all users in the course.";				// Necessita de tradução
+	"Para remover uma disciplina, voc&ecirc; deve primeiro remover"
+	" todos os usu&aacute;rios da disciplina.";
 #endif
 
 const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree =
@@ -49207,8 +49288,8 @@ const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degr
 	"To remove a degree, you must first remove"
 	" all courses in the degree.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove a degree, you must first remove"
-	" all courses in the degree.";				// Necessita de tradução
+	"Para remover um grau, voc&ecirc; deve primeiro remover"
+	" todas as disciplinas do grau.";
 #endif
 
 const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department =
@@ -49237,8 +49318,8 @@ const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the
 	"To remove a department, you must first remove"
 	" all teachers in the department.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove a department, you must first remove"
-	" all teachers in the department.";		// Necessita de tradução
+	"Para remover um departamento, voc&ecirc; deve primeiro remover"
+	" todos os professores do departamento.";
 #endif
 
 const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place =
@@ -49267,8 +49348,8 @@ const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_plac
 	"To remove a place, you must first remove"
 	" all centres of that place.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove a place, you must first remove"
-	" all centres of that place.";			// Necessita de tradução
+	"Para remover uma localiza&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
+	" todos os centros da localiza&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type =
@@ -49297,8 +49378,8 @@ const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_
 	"To remove a type of degree, you must first remove"
 	" all degrees of that type.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove a type of degree, you must first remove"
-	" all degrees of that type.";			// Necessita de tradução
+	"Para remover um tipo de grau, voc&ecirc; deve primeiro remover"
+	" todos os graus desse tipo.";
 #endif
 
 const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution =
@@ -49327,8 +49408,8 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_u
 	"To remove an institution, you must first remove"
 	" all centres and users in the institution.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"To remove an institution, you must first remove"
-	" all centres and users in the institution.";				// Necessita de tradução
+	"Para remover uma institui&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
+	" todos os centros e usu&aacute;rios da institui&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	// Warning: it is very important to include three %s in the following sentences
@@ -50096,7 +50177,7 @@ const char *Txt_Type_of_degree_X_removed =	// Warning: it is very important to i
 #elif L==8	// pl
 	"Type of degree <strong>%s</strong> removed.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Type of degree <strong>%s</strong> removed.";			// Necessita de tradução
+	"Tipo de grau <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Type_of_group =
@@ -50159,7 +50240,7 @@ const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to in
 #elif L==8	// pl
 	"Type of group <strong>%s</strong> removed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Type of group <strong>%s</strong> removed.";	// Necessita de tradução
+	"Tipo de grupo <strong>%s</strong> removido.";
 #endif
 
 const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
