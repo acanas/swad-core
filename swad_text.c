@@ -50318,14 +50318,14 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" will be taken into account;"
 	" the rest of the text will be ignored.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Type or paste a list"
-	" of @nicks, emails or IDs."
-	" The @nicks, emails or IDs"
-	" can be separated by arbitrary strings"
-	" (eg. names, places, etc.)."
-	" Only the words that seems @nicks, emails or IDs"
-	" will be taken into account;"
-	" the rest of the text will be ignored.";		// Necessita de tradução
+	"Digite ou cole uma lista"
+	" de @alcunhas, emails ou IDs."
+	" As @alcunhas, os emails ou os IDs"
+	" podem ser separados por strings arbitr&aacute;rias"
+	" (por exemplo, nomes, lugares, etc.)."
+	" Apenas as palavras que parecem @alcunhas, emails ou IDs"
+	" ser%atilde;o levadas em conta;"
+	" o resto do texto ser&aacute; ignorado.";
 #endif
 
 const char *Txt_Types_of_degree =
@@ -50814,7 +50814,7 @@ const char *Txt_UPLOAD_FILE_Invalid_link =
 #elif L==8	// pl
 	"Invalid link.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Invalid link.";		// Necessita de tradução
+	"Link n&atilde;o v&aacute;lido.";
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_name =
@@ -50835,7 +50835,7 @@ const char *Txt_UPLOAD_FILE_Invalid_name =
 #elif L==8	// pl
 	"Invalid name.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Invalid name.";		// Necessita de tradução
+	"Nome n&atilde;o v&aacute;lido.";
 #endif
 
 const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to include %s in the following sentences
@@ -50856,7 +50856,7 @@ const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to
 #elif L==8	// pl
 	"<strong>%s</strong>: invalid name.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"<strong>%s</strong>: invalid name.";			// Necessita de tradução
+	"<strong>%s</strong>: nome n&atilde;o v&aacute;lido.";
 #endif
 
 const char *Txt_Upload_file =
@@ -51480,28 +51480,37 @@ const char *Txt_X_users_have_been_eliminated =	// Warning: it is very important 
 #elif L==8	// pl
 	"%u user(s) have been eliminated.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"%u user(s) have been eliminated.";		// Necessita de tradução
+	"%u usu&aacute;rio(s) foram eliminados.";
 #endif
 
 const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Se han inscrito %u usuarios (incluyendo posibles repeticiones).";	// Necessita traduccio
+	"Se han inscrito %u usuarios"
+	" (incluyendo posibles repeticiones).";	// Necessita traduccio
 #elif L==2	// de
-	"%u users have been enroled (including possible repetitions).";	// Need Übersetzung
+	"%u users have been enroled"
+	" (including possible repetitions).";	// Need Übersetzung
 #elif L==3	// en
-	"%u users have been enroled (including possible repetitions).";
+	"%u users have been enroled"
+	" (including possible repetitions).";
 #elif L==4	// es
-	"Se han inscrito %u usuarios (incluyendo posibles repeticiones).";
+	"Se han inscrito %u usuarios"
+	" (incluyendo posibles repeticiones).";
 #elif L==5	// fr
-	"%u users have been enroled (including possible repetitions).";	// Besoin de traduction
+	"%u users have been enroled"
+	" (including possible repetitions).";	// Besoin de traduction
 #elif L==6	// gn
-	"Se han inscrito %u usuarios (incluyendo posibles repeticiones).";	// Okoteve traducción
+	"Se han inscrito %u usuarios"
+	" (incluyendo posibles repeticiones).";	// Okoteve traducción
 #elif L==7	// it
-	"%u utenti sono stati registrati (comprese le eventuali ripetizioni).";
+	"%u utenti sono stati registrati"
+	" (comprese le eventuali ripetizioni).";
 #elif L==8	// pl
-	"%u users have been enroled (including possible repetitions).";	// Potrzebujesz tlumaczenie
+	"%u users have been enroled"
+	" (including possible repetitions).";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"%u users have been enroled (including possible repetitions).";	// Necessita de tradução
+	"%u usu&aacute;rios foram inscritos"
+	" (incluindo poss&iacute;veis repeti&ccedil;&otilde;es).";
 #endif
 
 const char *Txt_X_users_have_been_removed =	// Warning: it is very important to include %u in the following sentences
@@ -51522,7 +51531,7 @@ const char *Txt_X_users_have_been_removed =	// Warning: it is very important to 
 #elif L==8	// pl
 	"%u users have been removed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"%u users have been removed.";		// Necessita de tradução
+	"%u usu&aacute;rios foram removidos.";
 #endif
 
 const char *Txt_Users_in_courses =
@@ -53034,7 +53043,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "1st"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "1st"		// Necessita de tradução
+	 "1&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53054,7 +53063,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "2nd"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "2nd"		// Necessita de tradução
+	 "2&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53074,7 +53083,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "3rd"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "3rd"		// Necessita de tradução
+	 "3&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53094,7 +53103,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "4th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "4th"		// Necessita de tradução
+	 "4&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53114,7 +53123,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "5th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "5th"		// Necessita de tradução
+	 "5&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53134,7 +53143,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "6th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "6th"		// Necessita de tradução
+	 "6&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53154,7 +53163,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "7th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "7th"		// Necessita de tradução
+	 "7&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53174,7 +53183,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "8th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "8th"		// Necessita de tradução
+	 "8&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53194,7 +53203,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "9th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "9th"		// Necessita de tradução
+	 "9&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53214,7 +53223,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "10th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "10th"		// Necessita de tradução
+	 "10&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53234,7 +53243,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "11th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "11th"		// Necessita de tradução
+	 "11&ordm;"
 #endif
 	 ,
 #if   L==1	// ca
@@ -53254,7 +53263,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==8	// pl
 	 "12th"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	 "12th"		// Necessita de tradução
+	 "12&ordm;"
 #endif
 	};
 
@@ -53536,7 +53545,7 @@ const char *Txt_You_can_not_create_folders_files_or_links_here =
 #elif L==8	// pl
 	"You can not create folders, files or links here.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not create folders, files or links here.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode criar pastas, arquivos ou links aqui.";
 #endif
 
 const char *Txt_You_can_not_create_folders_here =
@@ -53557,7 +53566,7 @@ const char *Txt_You_can_not_create_folders_here =
 #elif L==8	// pl
 	"You can not create folders here.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not create folders here.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode criar pastas aqui.";
 #endif
 
 const char *Txt_You_can_not_create_links_here =
@@ -53578,7 +53587,7 @@ const char *Txt_You_can_not_create_links_here =
 #elif L==8	// pl
 	"You can not create links here.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not create links here.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode criar links aqui.";
 #endif
 
 const char *Txt_You_can_not_delete_your_current_nickname =
@@ -53599,7 +53608,7 @@ const char *Txt_You_can_not_delete_your_current_nickname =
 #elif L==8	// pl
 	"You can not delete your current nickname.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not delete your current nickname.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode excluir sua alcunha atual.";
 #endif
 
 const char *Txt_You_can_not_delete_this_ID =
@@ -53620,7 +53629,7 @@ const char *Txt_You_can_not_delete_this_ID =
 #elif L==8	// pl
 	"You can not delete this ID.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not delete this ID.";				// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode excluir este ID.";
 #endif
 
 const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created =
@@ -53671,7 +53680,7 @@ const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #elif L==8	// pl
 	"You can not leave empty intermediate answers.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave empty intermediate answers.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar respostas intermedi&aacute;rias vazias.";
 #endif
 
 const char *Txt_You_can_not_leave_the_description_empty =
@@ -53692,7 +53701,7 @@ const char *Txt_You_can_not_leave_the_description_empty =
 #elif L==8	// pl
 	"You can not leave the description empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the description empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar a descri&ccedil;&atilde;o vazia.";
 #endif
 
 const char *Txt_You_can_not_leave_the_image_empty =
@@ -53713,7 +53722,7 @@ const char *Txt_You_can_not_leave_the_image_empty =
 #elif L==8	// pl
 	"You can not leave the image empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the image empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar a imagem vazia.";
 #endif
 
 const char *Txt_You_can_not_leave_the_IP_address_empty =
@@ -53734,7 +53743,7 @@ const char *Txt_You_can_not_leave_the_IP_address_empty =
 #elif L==8	// pl
 	"You can not leave the IP address empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the IP address empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o endere&ccedil;o IP vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_logo_empty =
@@ -53755,7 +53764,7 @@ const char *Txt_You_can_not_leave_the_logo_empty =
 #elif L==8	// pl
 	"You can not leave the logo empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the logo empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o logotipo vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_banner_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53784,8 +53793,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_banner_X_empty =	// Warning: i
 	"You can not leave the name"
 	" of the banner <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the banner <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do banner <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53814,8 +53823,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty =	// Warning: i
 	"You can not leave the name"
 	" of the centre <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the centre <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do centro <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_course_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53844,8 +53853,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_course_X_empty =	// Warning: i
 	"You can not leave the name"
 	" of the course <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the course <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" da disciplina <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_country_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53874,8 +53883,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_country_X_empty =	// Warning: 
 	"You can not leave the name"
 	" of the country <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the country <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do pa&iacute;s <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_degree_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53904,8 +53913,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_degree_X_empty =	// Warning: i
 	"You can not leave the name"
 	" of the degree <strong>%s</strong> empty.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the degree <strong>%s</strong> empty.";			// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do grau <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_department_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53934,8 +53943,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_department_X_empty =	// Warnin
 	"You can not leave the name"
 	" of the department <strong>%s</strong> empty.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the department <strong>%s</strong> empty.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do departamento <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53964,8 +53973,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty =	// Warn
 	"You can not leave the name"
 	" of the email domain <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the email domain <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do dom&iacute;nio de email <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_field_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53994,8 +54003,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_field_X_empty =	// Warning: it
 	"You can not leave the name"
 	" of the field <strong>%s</strong> empty.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the field <strong>%s</strong> empty.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do campo <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_group_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54024,8 +54033,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_group_X_empty =	// Warning: it
 	"You can not leave the name"
 	" of the group <strong>%s</strong> empty.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the group <strong>%s</strong> empty.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do grupo <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54054,8 +54063,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty =	// Warning: 
 	"You can not leave the name"
 	" of the holiday <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the holiday <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do feriado <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_institution_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54084,8 +54093,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_institution_X_empty =	// Warni
 	"You can not leave the name"
 	" of the institution <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the institution <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" da institui&ccedil;&atilde;o <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_link_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54114,8 +54123,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_link_X_empty =	// Warning: it 
 	"You can not leave the name"
 	" of the link <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the link <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do link <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54144,8 +54153,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it
 	"You can not leave the name"
 	" of the place <strong>%s</strong> empty.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the place <strong>%s</strong> empty.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" da localiza&ccedil;&atilde;o <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_plugin_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54174,8 +54183,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_plugin_X_empty =	// Warning: i
 	"You can not leave the name"
 	" of the plugin <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the plugin <strong>%s</strong> empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do plugin <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_tag_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54204,8 +54213,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_tag_X_empty =	// Warning: it i
 	"You can not leave the name"
 	" of the tag <strong>%s</strong> empty.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the tag <strong>%s</strong> empty.";			// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do descritor <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54234,8 +54243,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty =	// Wa
 	"You can not leave the name"
 	" of the type of degree <strong>%s</strong> empty.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the type of degree <strong>%s</strong> empty.";			// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do tipo de grau <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -54264,8 +54273,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty =	// War
 	"You can not leave the name"
 	" of the type of group <strong>%s</strong> empty.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the name"
-	" of the type of group <strong>%s</strong> empty.";	// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" do tipo de grupo <strong>%s</strong> vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_URL_empty =
@@ -54286,7 +54295,7 @@ const char *Txt_You_can_not_leave_the_URL_empty =
 #elif L==8	// pl
 	"You can not leave the URL empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the URL empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o URL vazio.";
 #endif
 
 const char *Txt_You_can_not_leave_the_web_address_empty =
@@ -54307,7 +54316,7 @@ const char *Txt_You_can_not_leave_the_web_address_empty =
 #elif L==8	// pl
 	"You can not leave the web address empty.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not leave the web address empty.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode deixar o endere&ccedil;o web vazio.";
 #endif
 
 const char *Txt_You_can_not_paste_file_or_folder_here =
@@ -54328,7 +54337,7 @@ const char *Txt_You_can_not_paste_file_or_folder_here =
 #elif L==8	// pl
 	"You can not paste file or folder here.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not paste file or folder here.";			// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode colar arquivos ou pastas aqui.";
 #endif
 
 const char *Txt_You_can_not_remove_this_file_or_link =
@@ -54349,7 +54358,7 @@ const char *Txt_You_can_not_remove_this_file_or_link =
 #elif L==8	// pl
 	"You can not remove this file or link.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not remove this file or link.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode remover este arquivo ou link.";
 #endif
 
 const char *Txt_You_can_not_remove_this_folder =
@@ -54370,7 +54379,7 @@ const char *Txt_You_can_not_remove_this_folder =
 #elif L==8	// pl
 	"You can not remove this folder.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not remove this folder.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode remover esta pasta.";
 #endif
 
 const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
@@ -54391,7 +54400,7 @@ const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 #elif L==8	// pl
 	"You can not remove a country with instituciones or users.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not remove a country with instituciones or users.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode remover um pa&iacute;s com instituciones ou usu&aacute;rios.";
 #endif
 
 const char *Txt_You_can_not_rename_this_folder =
@@ -54412,7 +54421,7 @@ const char *Txt_You_can_not_rename_this_folder =
 #elif L==8	// pl
 	"You can not rename this folder.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not rename this folder.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode renomear esta pasta.";
 #endif
 
 const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
@@ -54441,8 +54450,8 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"You can not send a message to so many recipients."
 	" Better use the forums.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can not send a message to so many recipients."
-	" Better use the forums.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pode enviar uma mensagem para tantos destinat&aacute;rios."
+	" Melhor usar os f&oacute;runs.";
 #endif
 
 const char *Txt_You_can_not_take_a_new_test_until =
@@ -54492,8 +54501,8 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"You can only perform %u further actions"
 	" if you don't send your photo.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can only perform %u further actions"
-	" if you don't send your photo.";			// Necessita de tradução
+	"Voc&ecirc; s&oacute; pode executar %u a&ccedil;&otilde;es adicionais"
+	" se n&atilde;o enviar sua foto.";
 #endif
 
 const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is very important to include five %s in the following sentences
@@ -54553,7 +54562,7 @@ const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning
 #elif L==8	// pl
 	"You can register voluntarily in one group of type %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can register voluntarily in one group of type %s.";	// Necessita de tradução
+	"Voc&ecirc; pode se inscrever voluntariamente em um grupo do tipo %s.";
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -54582,8 +54591,8 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"You can register voluntarily"
 	" in one or more groups of type %s.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can register voluntarily"
-	" in one or more groups of type %s.";		// Necessita de tradução
+	"Voc&ecirc; pode se inscrever voluntariamente"
+	" em um ou mais grupos do tipo %s.";
 #endif
 
 const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them =
@@ -54642,8 +54651,8 @@ const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_back
 	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You can send a file with an image in <em>PNG</em> format,"
-	" transparent background and size %u&times;%u pixels.";			// Necessita de tradução
+	"Voc&ecirc; pode enviar um arquivo com uma imagem no formato <em>PNG</em>,"
+	" fundo transparente e tamanho %u&times;%u pixels.";
 #endif
 
 const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
@@ -54745,7 +54754,7 @@ const char *Txt_You_dont_have_permission_to_change_the_properties_of_file_X =	//
 #elif L==8	// pl
 	"You don't have permission to change the properties of file %s.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You don't have permission to change the properties of file %s.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o tem permiss&atilde;o para alterar as propriedades do arquivo %s.";
 #endif
 
 const char *Txt_You_dont_have_permission_to_edit_this_course =
@@ -54766,7 +54775,7 @@ const char *Txt_You_dont_have_permission_to_edit_this_course =
 #elif L==8	// pl
 	"You don't have permission to edit this course.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You don't have permission to edit this course.";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o tem permiss&atilde;o para editar esta disciplina.";
 #endif
 
 const char *Txt_You_dont_have_permission_to_perform_this_action =
@@ -54817,7 +54826,7 @@ const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 #elif L==8	// pl
 	"You have confirmed that you have read this information.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have confirmed that you have read this information.";	// Necessita de tradução
+	"Voc&ecirc; confirmou que leu esta informa&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -54846,8 +54855,8 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have confirmed your enrolment"
-	" in the course <strong>%s</strong>.";		// Necessita de tradução
+	"Voc&ecirc; confirmou sua inscri&ccedil;&atilde;o"
+	" na disciplina <strong>%s</strong>.";
 #endif
 
 const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information =
@@ -54876,8 +54885,8 @@ const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_inf
 	"You have eliminated the confirmation"
 	" that you have read this information.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have eliminated the confirmation"
-	" that you have read this information.";	// Necessita de tradução
+	"Voc&ecirc; eliminou a confirma&ccedil;&atilde;o"
+	" de que leu esta informa&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_have_no_notifications =
@@ -54926,21 +54935,21 @@ const char *Txt_You_have_not_banned_any_sender =
 #if   L==1	// ca
 	"No ha bloqueado ning&uacute;n remitente.";	// Necessita traduccio
 #elif L==2	// de
-	"You have not banned any sender.";			// Need Übersetzung
+	"You have not banned any sender.";		// Need Übersetzung
 #elif L==3	// en
 	"You have not banned any sender.";
 #elif L==4	// es
 	"No ha bloqueado ning&uacute;n remitente.";
 #elif L==5	// fr
-	"You have not banned any sender.";			// Besoin de traduction
+	"You have not banned any sender.";		// Besoin de traduction
 #elif L==6	// gn
 	"No ha bloqueado ning&uacute;n remitente.";	// Okoteve traducción
 #elif L==7	// it
-	"You have not banned any sender.";			// Bisogno di traduzione
+	"You have not banned any sender.";		// Bisogno di traduzione
 #elif L==8	// pl
-	"You have not banned any sender.";			// Potrzebujesz tlumaczenie
+	"You have not banned any sender.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have not banned any sender.";			// Necessita de tradução
+	"Voc&ecirc; n&atilde;o baniu nenhum remetente.";
 #endif
 
 const char *Txt_You_have_not_confirmed_the_action =
@@ -55003,7 +55012,7 @@ const char *Txt_You_have_not_written_twice_the_same_new_password =
 #elif L==8	// pl
 	"You have not written twice the same new password.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have not written twice the same new password.";			// Necessita de tradução
+	"Voc&ecirc; n&atilde;o escreveu duas vezes a mesma nova senha.";
 #endif
 
 const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -55024,7 +55033,7 @@ const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_
 #elif L==8	// pl
 	"You have to register compulsorily at least in one group of type %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have to register compulsorily at least in one group of type %s.";	// Necessita de tradução
+	"Voc&ecirc; tem que se registrar obrigatoriamente pelo menos em um grupo do tipo %s.";
 #endif
 
 const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -55045,7 +55054,7 @@ const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Wa
 #elif L==8	// pl
 	"You have to register compulsorily in one group of type %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You have to register compulsorily in one group of type %s.";	// Necessita de tradução
+	"Voc&ecirc; tem que se registrar obrigatoriamente em um grupo do tipo %s.";
 #endif
 
 const char *Txt_You_have_written_1_post_in_this_thread =
@@ -55108,7 +55117,7 @@ const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =
 #elif L==8	// pl
 	"You must enter an integer value as the correct answer.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must enter an integer value as the correct answer.";	// Necessita de tradução
+	"Voc&ecirc; deve inserir um valor inteiro como a resposta correta.";
 #endif
 
 const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer =
@@ -55129,7 +55138,7 @@ const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_ans
 #elif L==8	// pl
 	"You must enter the range of floating point values allowed as answer.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must enter the range of floating point values allowed as answer.";		// Necessita de tradução
+	"Voc&ecirc; deve inserir o intervalo de valores de ponto flutuante permitidos como resposta.";
 #endif
 
 const char *Txt_You_must_enter_your_nick_email_or_ID =
@@ -55171,7 +55180,7 @@ const char *Txt_You_must_mark_an_answer_as_correct =
 #elif L==8	// pl
 	"You must mark an answer as correct.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must mark an answer as correct.";		// Necessita de tradução
+	"Voc&ecirc; deve marcar uma resposta como correta.";
 #endif
 
 const char *Txt_You_must_select_a_T_F_answer =
@@ -55192,7 +55201,7 @@ const char *Txt_You_must_select_a_T_F_answer =
 #elif L==8	// pl
 	"You must select a T/F answer.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select a T/F answer.";		// Necessita de tradução
+	"Voc&ecirc; deve selecionar uma resposta V ou F.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_questions =
@@ -55234,7 +55243,7 @@ const char *Txt_You_must_select_one_ore_more_recipients =
 #elif L==8	// pl
 	"You must select one or more recipients.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select one or more recipients.";		// Necessita de tradução
+	"Voc&ecirc; deve selecionar um ou mais destinat&aacute;rios.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_students =
@@ -55255,7 +55264,7 @@ const char *Txt_You_must_select_one_ore_more_students =
 #elif L==8	// pl
 	"You must select one or more students.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select one or more students.";		// Necessita de tradução
+	"Voc&ecirc; deve selecionar um ou mais estudantes.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_tags =
@@ -55276,7 +55285,7 @@ const char *Txt_You_must_select_one_ore_more_tags =
 #elif L==8	// pl
 	"You must select one or more tags.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select one or more tags.";			// Necessita de tradução
+	"Voc&ecirc; deve selecionar uma ou mais descritores.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_teachers =
@@ -55297,7 +55306,7 @@ const char *Txt_You_must_select_one_ore_more_teachers =
 #elif L==8	// pl
 	"You must select one or more teachers.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select one or more teachers.";			// Necessita de tradução
+	"Voc&ecirc; deve selecionar um ou mais professores.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_types_of_answer =
@@ -55318,7 +55327,7 @@ const char *Txt_You_must_select_one_ore_more_types_of_answer =
 #elif L==8	// pl
 	"You must select one or more types of answer.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select one or more types of answer.";			// Necessita de tradução
+	"Voc&ecirc; deve selecionar um ou mais tipos de resposta.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_users =
@@ -55339,7 +55348,7 @@ const char *Txt_You_must_select_one_ore_more_users =
 #elif L==8	// pl
 	"You must select one or more users.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must select one or more users.";		// Necessita de tradução
+	"Voc&ecirc; deve selecionar um ou mais usu&acute;rios.";
 #endif
 
 const char *Txt_You_must_send_your_photo_because_ =
@@ -55376,9 +55385,9 @@ const char *Txt_You_must_send_your_photo_because_ =
 	" because you have exhausted the number of clicks"
 	" allowed without photo.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must send your photo,"
-	" because you have exhausted the number of clicks"
-	" allowed without photo.";		// Necessita de tradução
+	"Voc&ecirc; deve enviar sua foto,"
+	" porque esgotou o n&uacute;mero de cliques"
+	" permitidos sem foto.";
 #endif
 
 const char *Txt_You_must_specify_the_image_of_the_new_banner =
@@ -55407,8 +55416,8 @@ const char *Txt_You_must_specify_the_image_of_the_new_banner =
 	"You must specify the image"
 	" of the new banner.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the image"
-	" of the new banner.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar a imagem"
+	" do novo banner.";
 #endif
 
 const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin =
@@ -55437,8 +55446,8 @@ const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP
 	"You must specify the logo, the application key,"
 	" the URL and the IP address of the new plugin.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the logo, the application key,"
-	" the URL and the IP address of the new plugin.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o logotipo, a chave do aplicativo,"
+	" o URL e o endere&ccedil;o IP do novo plugin.";
 #endif
 
 const char *Txt_You_must_specify_the_numerical_code_of_the_new_country =
@@ -55459,7 +55468,7 @@ const char *Txt_You_must_specify_the_numerical_code_of_the_new_country =
 #elif L==8	// pl
 	"You must specify the ISO 3166-1 numerical code of the new country.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the ISO 3166-1 numerical code of the new country.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o c&oacute;digo num&eacute;rico ISO 3166-1 do novo pa&iacute;s.";
 #endif
 
 const char *Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin =
@@ -55480,7 +55489,7 @@ const char *Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin 
 #elif L==8	// pl
 	"You must specify the name and the description of the new plugin.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name and the description of the new plugin.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome e a descri&ccedil;&atilde;o do novo plugin.";
 #endif
 
 const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages =
@@ -55501,7 +55510,7 @@ const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages =
 #elif L==8	// pl
 	"You must specify the name of the new country in all languages.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name of the new country in all languages.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome do novo pa&iacute;s em todos os idiomas.";
 #endif
 
 const char *Txt_You_must_specify_the_name_of_the_new_group =
@@ -55522,7 +55531,7 @@ const char *Txt_You_must_specify_the_name_of_the_new_group =
 #elif L==8	// pl
 	"You must specify the name of the new group.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name of the new group.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome do novo grupo.";
 #endif
 
 const char *Txt_You_must_specify_the_name_of_the_new_holiday =
@@ -55543,7 +55552,7 @@ const char *Txt_You_must_specify_the_name_of_the_new_holiday =
 #elif L==8	// pl
 	"You must specify the name of the new holiday.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name of the new holiday.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome do novo feriado.";
 #endif
 
 const char *Txt_You_must_specify_the_name_of_the_new_record_field =
@@ -55564,7 +55573,7 @@ const char *Txt_You_must_specify_the_name_of_the_new_record_field =
 #elif L==8	// pl
 	"You must specify the name of the new record field.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name of the new record field.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome do novo campo de cart&atilde;o.";
 #endif
 
 const char *Txt_You_must_specify_the_name_of_the_new_type_of_degree =
@@ -55585,7 +55594,7 @@ const char *Txt_You_must_specify_the_name_of_the_new_type_of_degree =
 #elif L==8	// pl
 	"You must specify the name of the new type of degree.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name of the new type of degree.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome do novo tipo de grau.";
 #endif
 
 const char *Txt_You_must_specify_the_name_of_the_new_type_of_group =
@@ -55606,7 +55615,7 @@ const char *Txt_You_must_specify_the_name_of_the_new_type_of_group =
 #elif L==8	// pl
 	"You must specify the name of the new type of group.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the name of the new type of group.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome do novo tipo de grupo.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner =
@@ -55635,8 +55644,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_ban
 	"You must specify the short name and the full name"
 	" of the new banner.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new banner.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" do novo banner.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre =
@@ -55665,8 +55674,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_cen
 	"You must specify the short name and the full name"
 	" of the new centre.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new centre.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" do novo centro.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course =
@@ -55695,8 +55704,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_cou
 	"You must specify the short name and the full name"
 	" of the new course.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new course.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" da nova disciplina.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree =
@@ -55725,8 +55734,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_deg
 	"You must specify the short name and the full name"
 	" of the new degree.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new degree.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" do novo grau.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department =
@@ -55755,8 +55764,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_dep
 	"You must specify the short name and the full name"
 	" of the new department.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new department.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" do novo departamento.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution =
@@ -55785,8 +55794,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_ins
 	"You must specify the short name and the full name"
 	" of the new institution.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new institution.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" da nova institui&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link =
@@ -55815,8 +55824,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_lin
 	"You must specify the short name and the full name"
 	" of the new link.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new link.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" do novo link.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain =
@@ -55845,8 +55854,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_ema
 	"You must specify the short name and the full name"
 	" of the new email domain.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new email domain.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" do novo dom&iacute;nio de email.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place =
@@ -55875,8 +55884,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_pla
 	"You must specify the short name and the full name"
 	" of the new place.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the short name and the full name"
-	" of the new place.";		// Necessita de tradução
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" da nova localiza&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_assignment =
@@ -56002,7 +56011,7 @@ const char *Txt_You_must_specify_the_URL_of_the_new_banner =
 #elif L==8	// pl
 	"You must specify the URL of the new banner.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the URL of the new banner.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o URL do novo banner.";
 #endif
 
 const char *Txt_You_must_specify_the_URL_of_the_new_link =
@@ -56023,7 +56032,7 @@ const char *Txt_You_must_specify_the_URL_of_the_new_link =
 #elif L==8	// pl
 	"You must specify the URL of the new link.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the URL of the new link.";	// Necessita de tradução
+	"Voc&ecirc; deve especificar o URL do novo link.";
 #endif
 
 const char *Txt_You_must_specify_the_web_address_of_the_new_centre =
@@ -56052,8 +56061,8 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_centre =
 	"You must specify the web address"
 	" of the new centre.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the web address"
-	" of the new centre.";				// Necessita de tradução
+	"Voc&ecirc; deve especificar o endere&ccedil;o web"
+	" do novo centro.";
 #endif
 
 
@@ -56083,8 +56092,8 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_degree =
 	"You must specify the web address"
 	" of the new degree.";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the web address"
-	" of the new degree.";				// Necessita de tradução
+	"Voc&ecirc; deve especificar o endere&ccedil;o web"
+	" do novo grau.";
 #endif
 
 const char *Txt_You_must_specify_the_web_address_of_the_new_department =
@@ -56113,8 +56122,8 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_department =
 	"You must specify the web address"
 	" of the new department.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the web address"
-	" of the new department.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o endere&ccedil;o web"
+	" do novo departamento.";
 #endif
 
 const char *Txt_You_must_specify_the_web_address_of_the_new_institution =
@@ -56143,8 +56152,8 @@ const char *Txt_You_must_specify_the_web_address_of_the_new_institution =
 	"You must specify the web address"
 	" of the new institution.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must specify the web address"
-	" of the new institution.";			// Necessita de tradução
+	"Voc&ecirc; deve especificar o endere&ccedil;o web"
+	" da nova institui&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_must_type_at_least_one_tag_for_the_question =
@@ -56165,7 +56174,7 @@ const char *Txt_You_must_type_at_least_one_tag_for_the_question =
 #elif L==8	// pl
 	"You must type at least one tag for the question.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must type at least one tag for the question.";		// Necessita de tradução
+	"Voc&ecirc; deve digitar pelo menos um descritor para a pergunta.";
 #endif
 
 const char *Txt_You_must_type_at_least_the_first_answer =
@@ -56186,7 +56195,7 @@ const char *Txt_You_must_type_at_least_the_first_answer =
 #elif L==8	// pl
 	"You must type at least the first answer.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must type at least the first answer.";	// Necessita de tradução
+	"Voc&ecirc; deve digitar pelo menos a primeira resposta.";
 #endif
 
 const char *Txt_You_must_type_at_least_the_first_two_answers =
@@ -56207,7 +56216,7 @@ const char *Txt_You_must_type_at_least_the_first_two_answers =
 #elif L==8	// pl
 	"You must type at least the first two answers.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must type at least the first two answers.";	// Necessita de tradução
+	"Voc&ecirc; deve digitar pelo menos as duas primeiras respostas.";
 #endif
 
 const char *Txt_You_must_type_the_stem_of_the_question =
@@ -56228,7 +56237,7 @@ const char *Txt_You_must_type_the_stem_of_the_question =
 #elif L==8	// pl
 	"You must type the stem of the question.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You must type the stem of the question.";	// Necessita de tradução
+	"Voc&ecirc; deve digitar a declara&ccedil;&atilde;o da pergunta.";
 #endif
 
 const char *Txt_You_need_an_XML_file_containing_a_list_of_questions =
@@ -56257,8 +56266,8 @@ const char *Txt_You_need_an_XML_file_containing_a_list_of_questions =
 	"You need an XML file"
 	" containing a list of questions.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You need an XML file"
-	" containing a list of questions.";		// Necessita de tradução
+	"Voc&ecirc; precisa de um arquivo XML"
+	" contendo uma lista de perguntas.";
 #endif
 
 const char *Txt_You_should_read_the_following_information =
@@ -56308,8 +56317,8 @@ const char *Txt_You_were_already_enroled_as_X_in_the_course_Y =	// Warning: it i
 	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"You were already enroled as <strong>%s</strong>"
-	" in the course <strong>%s</strong>.";		// Necessita de tradução
+	"Voc&ecirc; j&aacute; estava inscrito/a como <strong>%s</strong>"
+	" na disciplina <strong>%s</strong>.";
 #endif
 
 const char *Txt_Your_comment_has_been_updated =
@@ -56351,7 +56360,7 @@ const char *Txt_Your_password_is_not_secure_enough =
 #elif L==8	// pl
 	"Your password is not secure enough.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Your password is not secure enough.";			// Necessita de tradução
+	"Sua senha n&atilde;o &eacute; segura o suficiente.";
 #endif
 
 const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_ =	// Warning: it is very important to include %u in the following sentences
@@ -56359,47 +56368,56 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
 	" Es muy importante que no use solo"
-	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido, ni una palabra conocida.";	// Necessita traduccio
+	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido,"
+	" ni una palabra conocida.";			// Necessita traduccio
 #elif L==2	// de
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
 	" It's very important not to use only"
-	" numeric digits, or a name or surname, or a known word.";				// Need Übersetzung
+	" numeric digits, or a name or surname,"
+	" or a known word.";				// Need Übersetzung
 #elif L==3	// en
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
 	" It's very important not to use only"
-	" numeric digits, or a name or surname, or a known word.";
+	" numeric digits, or a name or surname,"
+	" or a known word.";
 #elif L==4	// es
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
 	" Es muy importante que no use solo"
-	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido, ni una palabra conocida.";
+	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido,"
+	" ni una palabra conocida.";
 #elif L==5	// fr
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
 	" It's very important not to use only"
-	" numeric digits, or a name or surname, or a known word.";				// Besoin de traduction
+	" numeric digits, or a name or surname,"
+	" or a known word.";				// Besoin de traduction
 #elif L==6	// gn
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
 	" Es muy importante que no use solo"
-	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido, ni una palabra conocida.";	// Okoteve traducción
+	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido,"
+	" ni una palabra conocida.";			// Okoteve traducción
 #elif L==7	// it
 	"La tua password deve essere almeno di %u caratteri"
 	" e non pu&ograve; contenere spazi."
 	" E' molto importante non usare solo"
-	" tasti numerici, o un nome o cognome, o una parola conosciuta.";
+	" tasti numerici, o un nome o cognome,"
+	" o una parola conosciuta.";
 #elif L==8	// pl
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	"It's very important not to use only"
-	" numeric digits, or a name or surname, or a known word.";				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Your password must be at least %u characters"
-	" and can not contain spaces."
 	" It's very important not to use only"
-	" numeric digits, or a name or surname, or a known word.";				// Necessita de tradução
+	" numeric digits, or a name or surname,"
+	" or a known word.";				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Sua senha deve ter pelo menos %u caracteres"
+	" e n&atilde;o pode conter espa&ccedil;os."
+	" &Eacute; muito importante n&atilde;o usar apenas"
+	" dígitos num&eacute;ricos, nem um nome ou sobrenome,"
+	" nem uma palavra conhecida.";
 #endif
 
 const char *Txt_Your_personal_data_have_been_updated =
@@ -56420,7 +56438,7 @@ const char *Txt_Your_personal_data_have_been_updated =
 #elif L==8	// pl
 	"Your personal data have been updated.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Your personal data have been updated.";	// Necessita de tradução
+	"Seus dados pessoais foram atualizados.";
 #endif
 
 const char *Txt_Your_preferences_about_notifications_have_changed =
@@ -56441,7 +56459,7 @@ const char *Txt_Your_preferences_about_notifications_have_changed =
 #elif L==8	// pl
 	"Your preferences about notifications have changed.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Your preferences about notifications have changed.";		// Necessita de tradução
+	"Suas prefer&ecirc;ncias sobre notifica&ccedil;&otilde;es foram alteradas.";
 #endif
 
 const char *Txt_Your_record_card_in_this_course_has_been_updated =
@@ -56462,7 +56480,7 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 #elif L==8	// pl
 	"Your record card in this course has been updated:";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Your record card in this course has been updated:";	// Necessita de tradução
+	"Seu cart&atilde;o nesta disciplina foi atualizado:";
 #endif
 
 const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences

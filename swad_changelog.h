@@ -360,10 +360,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.22.7 (2018-12-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.22.8 (2018-12-12)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.22.8:  Dec 12, 2018  All messages translated to Portuguese. (237181 lines)
 	Version 18.22.7:  Dec 11, 2018  Some messages translated to Portuguese (still 114 messages to be translated). (237162 lines)
 	Version 18.22.6:  Dec 11, 2018  Some messages translated to Portuguese (still 155 messages to be translated). (237080 lines)
 	Version 18.22.5:  Dec 10, 2018  Some messages translated to Portuguese (still 216 messages to be translated). (237090 lines)
