@@ -339,7 +339,11 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
 
+// TODO: Miguel Damas Hermoso sugiere poder editar texto enriquecido (Markdown) en las preguntas de tipo test
+
 // TODO: No se puede pulsar sobre la foto de un remitente de un mensaje recibido.
+
+// TODO: Que un grupo tenga asociado un lugar, como un aula, así al hacer un evento de asistencia, podría tener por defecto el lugar asignado al grupo elegido.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -360,10 +364,24 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.22.8 (2018-12-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.23 (2018-12-27)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.23:    Dec 27, 2018  Changes in directories for icon sets.
+					Bell icon changed to SVG. (237192 lines)
+cd /var/www/html/swad/icon/iconset/
+mv awesome/action64x64/* awesome/
+mv nuvola/action64x64/* nuvola/
+rm -Rf awesome/128x128
+rm -Rf awesome/action16x16
+rm -Rf awesome/action32x32
+rm -Rf awesome/action64x64
+rm -Rf nuvola/128x128
+rm -Rf nuvola/action16x16
+rm -Rf nuvola/action32x32
+rm -Rf nuvola/action64x64
+
 	Version 18.22.8:  Dec 12, 2018  All messages translated to Portuguese. (237181 lines)
 	Version 18.22.7:  Dec 11, 2018  Some messages translated to Portuguese (still 114 messages to be translated). (237162 lines)
 	Version 18.22.6:  Dec 11, 2018  Some messages translated to Portuguese (still 155 messages to be translated). (237080 lines)

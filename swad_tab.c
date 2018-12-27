@@ -137,11 +137,11 @@ void Tab_DrawTabs (void)
 	 Frm_LinkFormSubmit (Txt_TABS_TXT[NumTab],
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" title=\"%s\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 			    " class=\"TAB_ICO\" />"
 			    "<div class=\"TAB_TXT %s\">%s</div>"
 			    "</a>",
-		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
+		  Gbl.Prefs.PathIconSet,
 		  Tab_TabIcons[NumTab],
 		  Txt_TABS_TXT[NumTab],
 		  Txt_TABS_TXT[NumTab],

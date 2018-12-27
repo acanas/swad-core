@@ -373,9 +373,9 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICO\""
-			    " style=\"background-image:url('%s/%s/%s');\">",
-	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-                  Act_GetIcon (NumAct));
+			    " style=\"background-image:url('%s/%s');\">",
+	          Gbl.Prefs.PathIconSet,
+		  Act_GetIcon (NumAct));
 
          /***** Text *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">"

@@ -975,8 +975,8 @@ static void Lay_WriteTitleAction (void)
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
-	              " style=\"background-image:url('%s/%s/%s');\">",
-	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
+	              " style=\"background-image:url('%s/%s');\">",
+	    Gbl.Prefs.PathIconSet,
 	    Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
    /***** Title *****/

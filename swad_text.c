@@ -8230,7 +8230,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac caly watek?";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover todo o thread?";
+	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: it is very important to include %s in the following sentences
@@ -8251,7 +8251,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: i
 #elif L==8	// pl
 	"Czy na pewno chcesz usunac caly watek <strong>%s</strong>?";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover todo o thread <strong>%s</strong>?";
+	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is very important to include %s in the following sentences
@@ -12513,7 +12513,7 @@ const char *Txt_Forum_threads =
 #elif L==8	// pl
 	"Watki forum";
 #elif L==9	// pt
-	"Threads de f&oacute;rum";
+	"Discuss&otilde;es de f&oacute;rum";
 #endif
 
 const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
@@ -15334,7 +15334,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 #elif L==8	// pl
 	 "Strona internetowa hostowana tutaj"
 #elif L==9	// pt
-	 "P&aacute;gina da Web hospedada aqui"
+	 "P&aacute;gina Web hospedada aqui"
 #endif
 	 ,
 #if   L==1	// ca
@@ -15354,7 +15354,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 #elif L==8	// pl
 	 "Strona internetowa umieszczona na innym serwerze"
 #elif L==9	// pt
-	 "P&aacute;gina da Web hospedada em outro servidor"
+	 "P&aacute;gina Web hospedada em outro servidor"
 #endif
 	};
 
@@ -22474,7 +22474,7 @@ const char *Txt_Move_thread =
 #elif L==8	// pl
 	"Przenies watku";
 #elif L==9	// pt
-	"Mover thread";
+	"Mover discuss&atilde;o";
 #endif
 
 const char *Txt_Movement_not_allowed =
@@ -23776,7 +23776,7 @@ const char *Txt_New_thread =
 #elif L==8	// pl
 	"Nowy temat";
 #elif L==9	// pt
-	"Novo thread";
+	"Nova discuss&atilde;o";
 #endif
 
 const char *Txt_New_type_of_degree =
@@ -24739,7 +24739,7 @@ const char *Txt_No_of_posts_BR_per_thread =
 #elif L==8	// pl
 	"Liczba wiadomosci<br />per watku";
 #elif L==9	// pt
-	"N&ordm; de posts<br />por thread";
+	"N&ordm; de posts<br />por discuss&atilde;o";
 #endif
 
 const char *Txt_No_of_private_files =
@@ -24844,7 +24844,7 @@ const char *Txt_No_of_threads =
 #elif L==8	// pl
 	"Liczba watk&oacute;w";
 #elif L==9	// pt
-	"N&ordm; de threads";
+	"N&ordm; de discuss&otilde;es";
 #endif
 
 const char *Txt_No_of_threads_BR_per_forum =
@@ -24865,7 +24865,7 @@ const char *Txt_No_of_threads_BR_per_forum =
 #elif L==8	// pl
 	"Liczba watk&oacute;w<br />per forum";
 #elif L==9	// pt
-	"N&ordm; de threads<br />por f&oacute;rum";
+	"N&ordm; de discuss&otilde;es<br />por f&oacute;rum";
 #endif
 
 const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
@@ -27836,7 +27836,7 @@ const char *Txt_Other_nicknames =
 #elif L==8	// pl
 	"Inne przydomki";
 #elif L==9	// pt
-	"Outras alcunha";
+	"Outras alcunhas";
 #endif
 
 const char *Txt_Other_places =
@@ -28130,7 +28130,7 @@ const char *Txt_Paste_thread =
 #elif L==8	// pl
 	"Wklej watku";
 #elif L==9	// pt
-	"Colar thread";
+	"Colar discuss&atilde;o";
 #endif
 
 const char *Txt_PERCENT_of_users =
@@ -32149,7 +32149,7 @@ const char *Txt_Remove_thread =
 #elif L==8	// pl
 	"Usu&nacute; watkek";
 #elif L==9	// pt
-	"Remover thread";
+	"Remover discuss&atilde;o";
 #endif
 
 const char *Txt_Remove_the_users_not_indicated_in_step_1 =
@@ -48665,7 +48665,7 @@ const char *Txt_Thread =
 #elif L==8	// pl
 	"W&aogon;tek";
 #elif L==9	// pt
-	"Thread";
+	"Discuss&atilde;o";
 #endif
 
 const char *Txt_thread =
@@ -48686,7 +48686,7 @@ const char *Txt_thread =
 #elif L==8	// pl
 	"w&aogon;tek";
 #elif L==9	// pt
-	"thread";
+	"discuss&atilde;o";
 #endif
 
 const char *Txt_Thread_marked_to_be_moved =
@@ -48854,7 +48854,7 @@ const char *Txt_threads =
 #elif L==8	// pl
 	"w&aogon;tki";
 #elif L==9	// pt
-	"threads";
+	"discuss&otilde;es";
 #endif
 
 const char *Txt_TIME_Since =
@@ -52206,7 +52206,7 @@ const char *Txt_Web_page =
 #elif L==8	// pl
 	"Strona internetowa";
 #elif L==9	// pt
-	"P&aacute;gina da Web";
+	"P&aacute;gina Web";
 #endif
 
 const char *Txt_Web_page_of_the_course =
@@ -52227,7 +52227,7 @@ const char *Txt_Web_page_of_the_course =
 #elif L==8	// pl
 	"Web page of the course";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"P&aacute;gina da Web da disciplina";
+	"P&aacute;gina Web da disciplina";
 #endif
 
 const char *Txt_Web_social_network =
@@ -55075,7 +55075,7 @@ const char *Txt_You_have_written_1_post_in_this_thread =
 #elif L==8	// pl
 	"You have written 1 post in this thread";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Voc&ecirc; escreveu 1 post neste thread";
+	"Voc&ecirc; escreveu 1 post nesta discuss&atilde;o";
 #endif
 
 const char *Txt_You_have_written_X_posts_in_this_thread =		// Warning: it is very important to include %u in the following sentences
@@ -55096,7 +55096,7 @@ const char *Txt_You_have_written_X_posts_in_this_thread =		// Warning: it is ver
 #elif L==8	// pl
 	"You have written %u posts in this thread";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Voc&ecirc; escreveu %u posts neste thread";
+	"Voc&ecirc; escreveu %u posts nesta discuss&atilde;o";
 #endif
 
 const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =
@@ -56416,7 +56416,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	"Sua senha deve ter pelo menos %u caracteres"
 	" e n&atilde;o pode conter espa&ccedil;os."
 	" &Eacute; muito importante n&atilde;o usar apenas"
-	" dígitos num&eacute;ricos, nem um nome ou sobrenome,"
+	" dígitos num&eacute;ricos, nem um nome ou apelido,"
 	" nem uma palavra conhecida.";
 #endif
 
