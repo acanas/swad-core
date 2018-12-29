@@ -17763,7 +17763,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Centros"
 #endif
 	,
-	//  3: ActSeeDpt
+	//  3: ActSeePlc
+#if   L==1	// ca
+	"Llocs"
+#elif L==2	// de
+	"Standorte"
+#elif L==3	// en
+	"Places"
+#elif L==4	// es
+	"Lugares"
+#elif L==5	// fr
+	"Emplacements"
+#elif L==6	// gn
+	"Tenda"
+#elif L==7	// it
+	"Localit&grave;"
+#elif L==8	// pl
+	"Miejsca"
+#elif L==9	// pt
+	"Localiza&ccedil;oes"
+#endif
+	,
+	//  4: ActSeeDpt
 #if   L==1	// ca
 	"Departaments"
 #elif L==2	// de
@@ -17784,7 +17805,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  4: ActSeeCalIns
+	//  5: ActSeeCalIns
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -17805,7 +17826,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -19710,7 +19730,37 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Centros"
 #endif
 	,
-	//  3: ActSeeDpt
+	//  3: ActSeePlc
+#if   L==1	// ca
+	"Llocs o seus de la instituci&oacute;"
+	" on s'ubica cada un dels centres."
+#elif L==2	// de
+	"Standorte oder Hauptsitze der Institution,"
+	" an der sich jedes Zentrum befindet."
+#elif L==3	// en
+	"Places or headquarters of the institution"
+	" where each of the centres is located."
+#elif L==4	// es
+	"Lugares o sedes de la instituci&oacute;n"
+	" donde se ubica cada uno de los centros."
+#elif L==5	// fr
+	"Emplacements ou si&egrave;ges de l'institution"
+	" o&ugrave; est situ&eacute; chacun des centres."
+#elif L==6	// gn
+	"Lugares o sedes de la instituci&oacute;n"
+	" donde se ubica cada uno de los centros."
+#elif L==7	// it
+	"Localit&grave; o sede dell'istituzione"
+	" in cui si trova ciascun centro."
+#elif L==8	// pl
+	"Miejsca lub siedziba instytucji,"
+	" w kt&oacute;rej znajduje si&eogon; ka&zdot;dy z o&sacute;rodk&oacute;w."
+#elif L==9	// pt
+	"Localiza&ccedil;oes ou sede da institui&ccedil;&atilde;o"
+	" onde cada um dos centros est&aacute; localizado."
+#endif
+	,
+	//  4: ActSeeDpt
 #if   L==1	// ca
 	"Llista de tots els departaments d'aquesta instituci&oacute;"
 #elif L==2	// de
@@ -19731,7 +19781,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  4: ActSeeCalIns
+	//  5: ActSeeCalIns
 #if   L==1	// ca
 	"Calendari acad&egrave;mic"
 #elif L==2	// de
@@ -19752,7 +19802,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8

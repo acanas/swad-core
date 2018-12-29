@@ -183,39 +183,39 @@ Institution:
 	 75. ActInsReqSch		Request search in institution tab
 	 76. ActSeeInsInf		Show information on the current institution
 	 77. ActSeeCtr			List centres
-	 78. ActSeeDpt			List departments
-	 79. ActSeeCalIns		Show the academic calendar
+	 78. ActSeePlc			List places
+	 79. ActSeeDpt			List departments
+	 80. ActSeeCalIns		Show the academic calendar
 
-	 80. ActInsSch			Search for courses, teachers, documents...
+	 81. ActInsSch			Search for courses, teachers, documents...
 
-	 81. ActPrnInsInf		Print information on the current institution
-	 82. ActChgInsCtyCfg		Change country of institution in institution configuration
-	 83. ActRenInsShoCfg		Change short name of institution in institution configuration
-	 84. ActRenInsFulCfg		Change full name of institution in institution configuration
-	 85. ActChgInsWWWCfg		Change web of institution in institution configuration
-	 86. ActReqInsLog		Show form to send the logo of the current institution
-	 87. ActRecInsLog		Receive and store the logo of the current institution
-	 88. ActRemInsLog		Remove the logo of the current institution
+	 82. ActPrnInsInf		Print information on the current institution
+	 83. ActChgInsCtyCfg		Change country of institution in institution configuration
+	 84. ActRenInsShoCfg		Change short name of institution in institution configuration
+	 85. ActRenInsFulCfg		Change full name of institution in institution configuration
+	 86. ActChgInsWWWCfg		Change web of institution in institution configuration
+	 87. ActReqInsLog		Show form to send the logo of the current institution
+	 88. ActRecInsLog		Receive and store the logo of the current institution
+	 89. ActRemInsLog		Remove the logo of the current institution
 
-	 89. ActEdiCtr			Edit centres
-	 90. ActReqCtr			Request the creation of a request for a new centre (a teacher makes the petition to an administrator)
-	 91. ActNewCtr			Request the creation of a centre
-	 92. ActRemCtr			Remove centre
-	 93. ActChgCtrPlc		Request change of the place of a centre
-	 94. ActRenCtrSho		Change short name centre
-	 95. ActRenCtrFul		Change full name centre
-	 96. ActChgCtrWWW		Change web of centre
-	 97. ActChgCtrSta		Request change of status of a centre
+	 90. ActEdiCtr			Edit centres
+	 91. ActReqCtr			Request the creation of a request for a new centre (a teacher makes the petition to an administrator)
+	 92. ActNewCtr			Request the creation of a centre
+	 93. ActRemCtr			Remove centre
+	 94. ActChgCtrPlc		Request change of the place of a centre
+	 95. ActRenCtrSho		Change short name centre
+	 96. ActRenCtrFul		Change full name centre
+	 97. ActChgCtrWWW		Change web of centre
+	 98. ActChgCtrSta		Request change of status of a centre
 
-	 98. ActEdiDpt			Edit departments
-	 99. ActNewDpt			Request the creation of a department
-	100. ActRemDpt			Remove department
-	101. ActChgDptIns		Request change of the institution of a department
-	102. ActRenDptSho		Change short name department
-	103. ActRenDptFul		Change full name department
-	104. ActChgDptWWW		Change web of department
+	 99. ActEdiDpt			Edit departments
+	100. ActNewDpt			Request the creation of a department
+	101. ActRemDpt			Remove department
+	102. ActChgDptIns		Request change of the institution of a department
+	103. ActRenDptSho		Change short name department
+	104. ActRenDptFul		Change full name department
+	105. ActChgDptWWW		Change web of department
 
-	105. ActSeePlc			List places
 	106. ActEdiPlc			Edit places
 	107. ActNewPlc			Request the creation of a place
 	108. ActRemPlc			Remove a place
@@ -1702,8 +1702,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActInsReqSch	*/{1177, 0,TabIns,ActInsReqSch		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqInsSearch		,"search64x64.gif"	},
    /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
-   /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
-   /* ActSeeCalIns	*/{1628, 4,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarIns		,"calendar64x64.png"	},
+   /* ActSeePlc		*/{ 703, 3,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"mapmarker64x64.png"	},
+   /* ActSeeDpt		*/{ 675, 4,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
+   /* ActSeeCalIns	*/{1628, 5,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarIns		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActInsSch		*/{1182,-1,TabUnk,ActInsReqSch		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
@@ -1727,12 +1728,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCtrWWW	*/{ 683,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrWWW		,NULL},
    /* ActChgCtrSta	*/{1209,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ChangeCtrStatus		,NULL},
 
-   /* ActSeePlc		*/{ 703,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,NULL},
-   /* ActEdiPlc		*/{ 704,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_EditPlaces			,NULL},
-   /* ActNewPlc		*/{ 705,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RecFormNewPlace		,NULL},
-   /* ActRemPlc		*/{ 776,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RemovePlace		,NULL},
-   /* ActRenPlcSho	*/{ 894,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RenamePlaceShort		,NULL},
-   /* ActRenPlcFul	*/{ 895,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RenamePlaceFull		,NULL},
+   /* ActEdiPlc		*/{ 704,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_EditPlaces			,NULL},
+   /* ActNewPlc		*/{ 705,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RecFormNewPlace		,NULL},
+   /* ActRemPlc		*/{ 776,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RemovePlace		,NULL},
+   /* ActRenPlcSho	*/{ 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RenamePlaceShort		,NULL},
+   /* ActRenPlcFul	*/{ 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_RenamePlaceFull		,NULL},
 
    /* ActEdiDpt		*/{ 677,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_EditDepartments		,NULL},
    /* ActNewDpt		*/{ 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_RecFormNewDpt		,NULL},

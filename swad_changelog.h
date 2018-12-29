@@ -364,10 +364,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.23 (2018-12-27)"
+#define Log_PLATFORM_VERSION	"SWAD 18.24 (2018-12-29)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.24:    Dec 29, 2018  Option for view/edit places is separated from centres. (? lines)
 	Version 18.23:    Dec 27, 2018  Changes in directories for icon sets.
 					Bell icon changed to SVG. (237192 lines)
 cd /var/www/html/swad/icon/iconset/
