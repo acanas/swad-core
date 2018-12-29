@@ -238,7 +238,8 @@ Institution:
 Centre:
 	122. ActCtrReqSch		Request search in centre tab
 	123. ActSeeCtrInf		Show information on the current centre
-	124. ActSeeDeg			List degrees of a type
+	124. ActSeeDeg			List degrees in a centre
+	NEW. ActSeeCla			List classrooms in a centre
 	125. ActSeeCalCtr		Show the academic calendar
 
 	126. ActCtrSch			Search for courses, teachers, documents...
@@ -265,6 +266,12 @@ Centre:
 	145. ActChgDegTyp		Request change of the type of a degree
 	146. ActChgDegWWW		Request change of the web of a degree
 	147. ActChgDegSta		Request change of status of a degree
+
+	NEW. ActEdiCla			Edit classrooms
+	NEW. ActNewCla			Request the creation of a classroom
+	NEW. ActRemCla			Remove a classroom
+	NEW. ActRenClaSho		Change short name of a classroom
+	NEW. ActRenClaFul		Change full name of a classroom
 
 	148. ActPrnCtrCrs		Show print view of the academic calendar
 	149. ActChgCtrCrs1stDay		Change first day of week and show academic calendar
@@ -1760,7 +1767,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqCtrSearch		,"search64x64.gif"	},
    /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowDegsOfCurrentCtr	,"deg64x64.gif"		},
-   /* ActSeeCalCtr	*/{1631, 3,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCtr		,"calendar64x64.png"	},
+   /* ActSeeCla		*/{1744, 3,TabCtr,ActSeeCla		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_SeeClassrooms		,"classroom.svg"	},
+   /* ActSeeCalCtr	*/{1631, 4,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCtr		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActCtrSch		*/{1183,-1,TabUnk,ActCtrReqSch		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
@@ -1793,6 +1801,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDegTyp	*/{ 544,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_ChangeDegreeType		,NULL},
    /* ActChgDegWWW	*/{ 554,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ChangeDegStatus		,NULL},
+
+   /* ActEdiCla		*/{1745,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_EditClassrooms		,NULL},
+   /* ActNewCla		*/{1746,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RecFormNewClassroom	,NULL},
+   /* ActRemCla		*/{1747,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RemoveClassroom		,NULL},
+   /* ActRenClaSho	*/{1748,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RenameClassroomShort	,NULL},
+   /* ActRenClaFul	*/{1749,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RenameClassroomFull	,NULL},
 
    /* ActPrnCalCtr	*/{1632,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
    /* ActChgCalCtr1stDay*/{1633,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCtr		,NULL},
@@ -4932,6 +4946,12 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgNicOth,		// #1741
 	ActChgNicStd,		// #1742
 	ActChgNicTch,		// #1743
+	ActSeeCla,		// #1744
+	ActEdiCla,		// #1745
+	ActNewCla,		// #1746
+	ActRemCla,		// #1747
+	ActRenClaSho,		// #1748
+	ActRenClaFul,		// #1749
 	};
 
 /*****************************************************************************/

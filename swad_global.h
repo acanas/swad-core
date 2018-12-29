@@ -38,6 +38,7 @@
 #include "swad_attendance.h"
 #include "swad_banner.h"
 #include "swad_centre.h"
+#include "swad_classroom.h"
 #include "swad_connected.h"
 #include "swad_config.h"
 #include "swad_country.h"
@@ -232,6 +233,13 @@ struct Globals
       struct Place EditingPlc;
       Plc_Order_t SelectedOrder;
      } Plcs;
+   struct
+     {
+      unsigned Num;		// Number of classrooms
+      struct Classroom *Lst;	// List of classrooms
+      struct Classroom EditingCla;
+      Cla_Order_t SelectedOrder;
+     } Classrooms;
    struct
      {
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?

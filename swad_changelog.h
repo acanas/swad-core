@@ -364,16 +364,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.24 (2018-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.25 (2018-12-29)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.24:    Dec 29, 2018  Option for view/edit places is separated from centres. (? lines)
+	Version 18.25:    Dec 29, 2018  New option and module to view/edit classrooms in a centre. Not finished. (238375 lines)
+	Version 18.24:    Dec 29, 2018  Option for view/edit places is separated from centres. (237242 lines)
 	Version 18.23:    Dec 27, 2018  Changes in directories for icon sets.
 					Bell icon changed to SVG. (237192 lines)
 cd /var/www/html/swad/icon/iconset/
-mv awesome/action64x64/* awesome/
-mv nuvola/action64x64/* nuvola/
+mv awesome/action64x64/<image-files> awesome/
+mv nuvola/action64x64/<image-files> nuvola/
 rm -Rf awesome/128x128
 rm -Rf awesome/action16x16
 rm -Rf awesome/action32x32

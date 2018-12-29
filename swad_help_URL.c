@@ -520,6 +520,48 @@ const char *Hlp_CENTRE_Degrees =
 	"CENTRE.Degrees.en";
 #endif
 
+const char *Hlp_CENTRE_Classrooms =
+#if   L==1
+	"CENTRE.Classrooms.es";
+#elif L==2
+	"CENTRE.Classrooms.en";
+#elif L==3
+	"CENTRE.Classrooms.en";
+#elif L==4
+	"CENTRE.Classrooms.es";
+#elif L==5
+	"CENTRE.Classrooms.en";
+#elif L==6
+	"CENTRE.Classrooms.es";
+#elif L==7
+	"CENTRE.Classrooms.en";
+#elif L==8
+	"CENTRE.Classrooms.en";
+#elif L==9
+	"CENTRE.Classrooms.en";
+#endif
+
+const char *Hlp_CENTRE_Classrooms_edit =
+#if   L==1
+	"CENTRE.Classrooms.es#editar";
+#elif L==2
+	"CENTRE.Classrooms.en#edit";
+#elif L==3
+	"CENTRE.Classrooms.en#edit";
+#elif L==4
+	"CENTRE.Classrooms.es#editar";
+#elif L==5
+	"CENTRE.Classrooms.en#edit";
+#elif L==6
+	"CENTRE.Classrooms.es#editar";
+#elif L==7
+	"CENTRE.Classrooms.en#edit";
+#elif L==8
+	"CENTRE.Classrooms.en#edit";
+#elif L==9
+	"CENTRE.Classrooms.en#edit";
+#endif
+
 /***** DEGREE tab *****/
 
 const char *Hlp_DEGREE_Information =

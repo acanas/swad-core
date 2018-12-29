@@ -59,6 +59,7 @@
 #include "swad_action.h"
 #include "swad_assignment.h"
 #include "swad_centre.h"
+#include "swad_classroom.h"
 #include "swad_config.h"
 #include "swad_country.h"
 #include "swad_course.h"
@@ -1639,6 +1640,27 @@ const char *Txt_Another_centre =
 	"Innym centrum";
 #elif L==9	// pt
 	"Outro centro";
+#endif
+
+const char *Txt_Another_classroom =
+#if   L==1	// ca
+	"Una altra aula";
+#elif L==2	// de
+	"Ein weiterer Klassenzimmer";
+#elif L==3	// en
+	"Another classroom";
+#elif L==4	// es
+	"Otra aula";
+#elif L==5	// fr
+	"Une autre salle de classe";
+#elif L==6	// gn
+	"Otra aula";	// Okoteve traducción
+#elif L==7	// it
+	"Un'altra aula";
+#elif L==8	// pl
+	"Innym klasa";
+#elif L==9	// pt
+	"Outra sala de aula";
 #endif
 
 const char *Txt_Another_country =
@@ -3840,15 +3862,143 @@ const char *Txt_Classroom =
 #elif L==4	// es
 	"Aula";
 #elif L==5	// fr
-	"Classe";
+	"Salle de classe";
 #elif L==6	// gn
-	"Aula";	// Okoteve traducción
+	"Mbo'ehakoty";
 #elif L==7	// it
 	"Aula";
 #elif L==8	// pl
 	"Klasa";
 #elif L==9	// pt
 	"Sala de aula";
+#endif
+
+const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
+   {
+#if   L==1	// ca
+	 "Ordenar por aula"	// Necessita traduccio
+#elif L==2	// de
+	 "Nach Klassenzimmer sortieren"
+#elif L==3	// en
+	 "Sort by classroom"
+#elif L==4	// es
+	 "Ordenar por aula"
+#elif L==5	// fr
+	 "Trier par salle de classe"
+#elif L==6	// gn
+	 "Ordenar por aula"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per aula"
+#elif L==8	// pl
+	 "Sortuj wedlug klasa"
+#elif L==9	// pt
+	 "Classificar por sala de aula"
+#endif
+	 ,
+#if   L==1	// ca
+	 "Ordenar per nombre d'estudiants"
+#elif L==2	// de
+	 "Nach Anzahl der Studenten sortieren"
+#elif L==3	// en
+	 "Sort by no. of students"
+#elif L==4	// es
+	 "Ordenar por n&ordm; de estudiantes"
+#elif L==5	// fr
+	 "Trier par nombre d'&eacute;tudiants"
+#elif L==6	// gn
+	 "Ordenar por n&ordm; de estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per numero di studenti"
+#elif L==8	// pl
+	 "Sortuj wedlug studenci"
+#elif L==9	// pt
+	 "Classificar por n&uacute;mero de estudantes"
+#endif
+	};
+
+const char *Txt_CLASSROOMS_ORDER[Plc_NUM_ORDERS] =
+   {
+#if   L==1	// ca
+	"Aula"
+#elif L==2	// de
+	"Klassenzimmer"
+#elif L==3	// en
+	"Classroom"
+#elif L==4	// es
+	"Aula"
+#elif L==5	// fr
+	"Salle de classe"
+#elif L==6	// gn
+	"Mbo'ehakoty"
+#elif L==7	// it
+	"Aula"
+#elif L==8	// pl
+	"Klasa"
+#elif L==9	// pt
+	"Sala de aula"
+#endif
+	 ,
+#if   L==1	// ca
+	"Estudiants"
+#elif L==2	// de
+	"Studenten"
+#elif L==3	// en
+	"Students"
+#elif L==4	// es
+	"Estudiantes"
+#elif L==5	// fr
+	"&Eacute;tudiants"
+#elif L==6	// gn
+	"Estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Studenti"
+#elif L==8	// pl
+	"Student&oacute;w"
+#elif L==9	// pt
+	"Estudantes"
+#endif
+	};
+
+const char *Txt_Classroom_unspecified =
+#if   L==1	// ca
+	"Aula sense especificar";
+#elif L==2	// de
+	"Klassenzimmer nicht spezifiziert";
+#elif L==3	// en
+	"Classroom unspecified";
+#elif L==4	// es
+	"Aula sin especificar";
+#elif L==5	// fr
+	"Salle de classe non sp&eacute;cifi&eacute;e";
+#elif L==6	// gn
+	"Aula sin especificar";	// Okoteve traducción
+#elif L==7	// it
+	"Aula non specificata";
+#elif L==8	// pl
+	"Klasa nieokreslone";
+#elif L==9	// pt
+	"Sala de aula indeterminada";
+#endif
+
+const char *Txt_Classrooms =
+#if   L==1	// ca
+	"Aules";
+#elif L==2	// de
+	"Klassenzimmer";
+#elif L==3	// en
+	"Classrooms";
+#elif L==4	// es
+	"Aulas";
+#elif L==5	// fr
+	"Salles de classe";
+#elif L==6	// gn
+	"Mbo'ehakoty";
+#elif L==7	// it
+	"Aule";
+#elif L==8	// pl
+	"Klasy";
+#elif L==9	// pt
+	"Salas de aula";
 #endif
 
 const char *Txt_Click =
@@ -5323,6 +5473,27 @@ const char *Txt_Create_centre =
 	"Tworzenie centrum";
 #elif L==9	// pt
 	"Criar centro";
+#endif
+
+const char *Txt_Create_classroom =
+#if   L==1	// ca
+	"Crear aula";
+#elif L==2	// de
+	"Klassenzimmer eingeben";
+#elif L==3	// en
+	"Create classroom";
+#elif L==4	// es
+	"Crear aula";
+#elif L==5	// fr
+	"Cr&eacute;er salle de classe";
+#elif L==6	// gn
+	"Crear aula";	// Okoteve traducción
+#elif L==7	// it
+	"Crea aula";
+#elif L==8	// pl
+	"Tworzenie klasa";
+#elif L==9	// pt
+	"Criar sala de aula";
 #endif
 
 const char *Txt_Create_country =
@@ -17899,7 +18070,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Graus"
 #endif
 	,
-	//  3: ActSeeCalCtr
+	//  3: ActSeeCla
+#if   L==1	// ca
+	"Aules"
+#elif L==2	// de
+	"Klassenzimmer"
+#elif L==3	// en
+	"Classrooms"
+#elif L==4	// es
+	"Aulas"
+#elif L==5	// fr
+	"Salles"
+#elif L==6	// gn
+	"Mbo'ehakoty"
+#elif L==7	// it
+	"Aule"
+#elif L==8	// pl
+	"Sale"
+#elif L==9	// pt
+	"Salas"
+#endif
+	,
+	//  4: ActSeeCalCtr
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -17920,7 +18112,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
@@ -19875,7 +20066,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Graus"
 #endif
 	,
-	//  3: ActSeeCalCtr
+	//  3: ActSeeCla
+#if   L==1	// ca
+	"Aules, laboratoris o altres llocs on s'imparteixen classes"
+#elif L==2	// de
+	"Klassenzimmer, Laboratorien oder andere Unterrichtsorte"
+#elif L==3	// en
+	"Classrooms, laboratories or other places where classes are taught"
+#elif L==4	// es
+	"Aulas, laboratorios u otros lugares donde se imparten clases"
+#elif L==5	// fr
+	"Salles de classe, laboratoires ou autres lieux de cours"
+#elif L==6	// gn
+	"Mbo'ehakoty"
+#elif L==7	// it
+	"Aule, laboratori o altri luoghi in cui vengono insegnate le lezioni"
+#elif L==8	// pl
+	"Klasy, laboratoria lub inne miejsca, w kt&oacute;rych odbywaj&aogon; si&eogon; zaj&eogon;cia"
+#elif L==9	// pt
+	"Salas de aula, laborat&oacute;rios ou outros locais onde as aulas s&atilde;o ministradas"
+#endif
+	,
+	//  4: ActSeeCalCtr
 #if   L==1	// ca
 	"Calendari acad&egrave;mic (els dies festius"
 	" corresponen al lloc del centre seleccionada)"
@@ -19899,7 +20111,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
@@ -23217,6 +23428,27 @@ const char *Txt_New_centre =
 	"Nowe centrum (wydzia&lstrok;, szko&lstrok;a, uczelnia, podzia&lstrok;, budowa...)";
 #elif L==9	// pt
 	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...)";
+#endif
+
+const char *Txt_New_classroom =
+#if   L==1	// ca
+	"Nova aula";
+#elif L==2	// de
+	"Neue Klassenzimmer";
+#elif L==3	// en
+	"New classroom";
+#elif L==4	// es
+	"Nueva aula";
+#elif L==5	// fr
+	"Nouvelle salle de classe";
+#elif L==6	// gn
+	"Nueva aula";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova aula";
+#elif L==8	// pl
+	"Nowe klasa";
+#elif L==9	// pt
+	"Nova sala de aula";
 #endif
 
 const char *Txt_New_country =
@@ -53876,6 +54108,36 @@ const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty =	// Warning: i
 	" do centro <strong>%s</strong> vazio.";
 #endif
 
+const char *Txt_You_can_not_leave_the_name_of_the_classroom_X_empty =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"No pot deixar el nom"
+	" de l'aula <strong>%s</strong> buit.";
+#elif L==2	// de
+	"Sie k&ouml;nnen den Namen"
+	" des Klassenzimmer <strong>%s</strong> nicht leer lassen.";
+#elif L==3	// en
+	"You can not leave the name"
+	" of the classroom <strong>%s</strong> empty.";
+#elif L==4	// es
+	"No puede dejar el nombre"
+	" del aula <strong>%s</strong> vac&iacute;o.";
+#elif L==5	// fr
+	"Vous ne pouvez pas laisser le nom"
+	" de la salle de classe <strong>%s</strong> vide.";
+#elif L==6	// gn
+	"No puede dejar el nombre"
+	" del aula <strong>%s</strong> vac&iacute;o.";	// Okoteve traducción
+#elif L==7	// it
+	"Non puoi lasciare il nome"
+	" della aula <strong>%s</strong> vuoto.";
+#elif L==8	// pl
+	"Nie mo&zdot;esz zostawi&cacute;"
+	" pustego imienia w klasie <strong>%s</strong>.";
+#elif L==9	// pt
+	"Voc&ecirc; n&atilde;o pode deixar o nome"
+	" da sala de clase <strong>%s</strong> vazio.";
+#endif
+
 const char *Txt_You_can_not_leave_the_name_of_the_course_X_empty =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"No puede dejar el nombre"
@@ -54178,11 +54440,11 @@ const char *Txt_You_can_not_leave_the_name_of_the_link_X_empty =	// Warning: it 
 
 const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No puede dejar el nombre"
-	" del lugar <strong>%s</strong> vac&iacute;o.";	// Necessita traduccio
+	"No pot deixar el nom"
+	" del lloc <strong>%s</strong> buit.";
 #elif L==2	// de
-	"You can not leave the name"
-	" of the place <strong>%s</strong> empty.";	// Need Übersetzung
+	"Sie k&ouml;nnen den Namen"
+	" des Standorte <strong>%s</strong> nicht leer lassen.";
 #elif L==3	// en
 	"You can not leave the name"
 	" of the place <strong>%s</strong> empty.";
@@ -54190,8 +54452,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it
 	"No puede dejar el nombre"
 	" del lugar <strong>%s</strong> vac&iacute;o.";
 #elif L==5	// fr
-	"You can not leave the name"
-	" of the place <strong>%s</strong> empty.";	// Besoin de traduction
+	"Vous ne pouvez pas laisser le nom"
+	" du lieu <strong>%s</strong> vide.";
 #elif L==6	// gn
 	"No puede dejar el nombre"
 	" del lugar <strong>%s</strong> vac&iacute;o.";	// Okoteve traducción
@@ -54199,8 +54461,8 @@ const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it
 	"Non puoi lasciare il nome"
 	" del luogo <strong>%s</strong> vuoto.";
 #elif L==8	// pl
-	"You can not leave the name"
-	" of the place <strong>%s</strong> empty.";	// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz zostawi&cacute; nazwy"
+	" miejsca <strong>%s</strong> pustego.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode deixar o nome"
 	" da localiza&ccedil;&atilde;o <strong>%s</strong> vazio.";

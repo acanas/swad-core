@@ -61,9 +61,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 33 + 24 + 115 + 157 + 437 + 165 + 172 + 42 + 14 + 76)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 39 + 24 + 115 + 157 + 437 + 165 + 172 + 42 + 14 + 76)
 
-#define Act_MAX_ACTION_COD 1743
+#define Act_MAX_ACTION_COD 1749
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -232,41 +232,48 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActCtrReqSch		(ActChgCalIns1stDay +  1)
 #define ActSeeCtrInf		(ActChgCalIns1stDay +  2)
 #define ActSeeDeg		(ActChgCalIns1stDay +  3)
-#define ActSeeCalCtr		(ActChgCalIns1stDay +  4)
+#define ActSeeCla		(ActChgCalIns1stDay +  4)
+#define ActSeeCalCtr		(ActChgCalIns1stDay +  5)
 
 // Secondary actions
-#define ActCtrSch		(ActChgCalIns1stDay +  5)
-#define ActPrnCtrInf		(ActChgCalIns1stDay +  6)
-#define ActChgCtrInsCfg		(ActChgCalIns1stDay +  7)
-#define ActRenCtrShoCfg		(ActChgCalIns1stDay +  8)
-#define ActRenCtrFulCfg		(ActChgCalIns1stDay +  9)
-#define ActChgCtrPlcCfg		(ActChgCalIns1stDay + 10)
-#define ActChgCtrWWWCfg		(ActChgCalIns1stDay + 11)
-#define ActReqCtrLog		(ActChgCalIns1stDay + 12)
-#define ActRecCtrLog		(ActChgCalIns1stDay + 13)
-#define ActRemCtrLog		(ActChgCalIns1stDay + 14)
-#define ActReqCtrPho		(ActChgCalIns1stDay + 15)
-#define ActRecCtrPho		(ActChgCalIns1stDay + 16)
-#define ActChgCtrPhoAtt		(ActChgCalIns1stDay + 17)
+#define ActCtrSch		(ActChgCalIns1stDay +  6)
+#define ActPrnCtrInf		(ActChgCalIns1stDay +  7)
+#define ActChgCtrInsCfg		(ActChgCalIns1stDay +  8)
+#define ActRenCtrShoCfg		(ActChgCalIns1stDay +  9)
+#define ActRenCtrFulCfg		(ActChgCalIns1stDay + 10)
+#define ActChgCtrPlcCfg		(ActChgCalIns1stDay + 11)
+#define ActChgCtrWWWCfg		(ActChgCalIns1stDay + 12)
+#define ActReqCtrLog		(ActChgCalIns1stDay + 13)
+#define ActRecCtrLog		(ActChgCalIns1stDay + 14)
+#define ActRemCtrLog		(ActChgCalIns1stDay + 15)
+#define ActReqCtrPho		(ActChgCalIns1stDay + 16)
+#define ActRecCtrPho		(ActChgCalIns1stDay + 17)
+#define ActChgCtrPhoAtt		(ActChgCalIns1stDay + 18)
 
-#define ActSeeDegTyp		(ActChgCalIns1stDay + 18)
-#define ActEdiDegTyp		(ActChgCalIns1stDay + 19)
-#define ActNewDegTyp		(ActChgCalIns1stDay + 20)
-#define ActRemDegTyp		(ActChgCalIns1stDay + 21)
-#define ActRenDegTyp		(ActChgCalIns1stDay + 22)
+#define ActSeeDegTyp		(ActChgCalIns1stDay + 19)
+#define ActEdiDegTyp		(ActChgCalIns1stDay + 20)
+#define ActNewDegTyp		(ActChgCalIns1stDay + 21)
+#define ActRemDegTyp		(ActChgCalIns1stDay + 22)
+#define ActRenDegTyp		(ActChgCalIns1stDay + 23)
 
-#define ActEdiDeg		(ActChgCalIns1stDay + 23)
-#define ActReqDeg		(ActChgCalIns1stDay + 24)
-#define ActNewDeg		(ActChgCalIns1stDay + 25)
-#define ActRemDeg		(ActChgCalIns1stDay + 26)
-#define ActRenDegSho		(ActChgCalIns1stDay + 27)
-#define ActRenDegFul		(ActChgCalIns1stDay + 28)
-#define ActChgDegTyp		(ActChgCalIns1stDay + 29)
-#define ActChgDegWWW		(ActChgCalIns1stDay + 30)
-#define ActChgDegSta		(ActChgCalIns1stDay + 31)
+#define ActEdiDeg		(ActChgCalIns1stDay + 24)
+#define ActReqDeg		(ActChgCalIns1stDay + 25)
+#define ActNewDeg		(ActChgCalIns1stDay + 26)
+#define ActRemDeg		(ActChgCalIns1stDay + 27)
+#define ActRenDegSho		(ActChgCalIns1stDay + 28)
+#define ActRenDegFul		(ActChgCalIns1stDay + 29)
+#define ActChgDegTyp		(ActChgCalIns1stDay + 30)
+#define ActChgDegWWW		(ActChgCalIns1stDay + 31)
+#define ActChgDegSta		(ActChgCalIns1stDay + 32)
 
-#define ActPrnCalCtr		(ActChgCalIns1stDay + 32)
-#define ActChgCalCtr1stDay	(ActChgCalIns1stDay + 33)
+#define ActEdiCla		(ActChgCalIns1stDay + 33)
+#define ActNewCla		(ActChgCalIns1stDay + 34)
+#define ActRemCla		(ActChgCalIns1stDay + 35)
+#define ActRenClaSho		(ActChgCalIns1stDay + 36)
+#define ActRenClaFul		(ActChgCalIns1stDay + 37)
+
+#define ActPrnCalCtr		(ActChgCalIns1stDay + 38)
+#define ActChgCalCtr1stDay	(ActChgCalIns1stDay + 39)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/
