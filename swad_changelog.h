@@ -364,10 +364,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.25.2 (2018-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 18.25.3 (2018-12-30)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.25.3:  Dec 30, 2018  Fixed bugs in classrooms. (238514 lines)
 	Version 18.25.2:  Dec 30, 2018  New database table for classrooms. (238525 lines)
 					8 changes necessary in database:
 CREATE TABLE IF NOT EXISTS classrooms (ClaCod INT NOT NULL AUTO_INCREMENT,CtrCod INT NOT NULL,ShortName VARCHAR(511) NOT NULL,FullName VARCHAR(2047) NOT NULL,NumStds INT NOT NULL,UNIQUE INDEX(ClaCod),INDEX(CtrCod),INDEX(NumStds));
