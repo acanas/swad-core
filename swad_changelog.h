@@ -364,10 +364,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.25 (2018-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.25.1 (2018-12-29)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.25.1:  Dec 29, 2018  Changes in translation related to classrooms. (238498 lines)
 	Version 18.25:    Dec 29, 2018  New option and module to view/edit classrooms in a centre. Not finished. (238375 lines)
 	Version 18.24:    Dec 29, 2018  Option for view/edit places is separated from centres. (237242 lines)
 	Version 18.23:    Dec 27, 2018  Changes in directories for icon sets.

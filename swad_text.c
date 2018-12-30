@@ -3873,6 +3873,27 @@ const char *Txt_Classroom =
 	"Sala de aula";
 #endif
 
+const char *Txt_Classroom_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Aula <strong>%s</strong> eliminada.";
+#elif L==2	// de
+	"Klassenzimmer <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Classroom <strong>%s</strong> removed.";
+#elif L==4	// es
+	"Aula <strong>%s</strong> eliminada.";
+#elif L==5	// fr
+	"Salle de classe <strong>%s</strong> supprim&eacute;e.";
+#elif L==6	// gn
+	"Aula <strong>%s</strong> eliminada.";		// Okoteve traducción
+#elif L==7	// it
+	"Aula <strong>%s</strong> rimossa.";
+#elif L==8	// pl
+	"Klasa <strong>%s</strong> usuniete.";
+#elif L==9	// pt
+	"Sala de aula <strong>%s</strong> removida.";
+#endif
+
 const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
    {
 #if   L==1	// ca
@@ -6105,6 +6126,27 @@ const char *Txt_Created_new_centre_X =	// Warning: it is very important to inclu
 	"Criado novo centro <strong>%s</strong>.";
 #endif
 
+const char *Txt_Created_new_classroom_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Creada nova aula <strong>%s</strong>.";
+#elif L==2	// de
+	"Neuer Klassenzimmer <strong>%s</strong> eingegeben.";
+#elif L==3	// en
+	"Created new classroom <strong>%s</strong>.";
+#elif L==4	// es
+	"Creada nueva aula <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute; nouvelle salle de classe <strong>%s</strong>.";
+#elif L==6	// gn
+	"Creada nueva aula <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Creata nuova aula <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono nowe klasa <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criada nova sala de aula <strong>%s</strong>.";
+#endif
+
 const char *Txt_Created_new_country_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Creado nuevo pa&iacute;s <strong>%s</strong>.";	// Necessita traduccio
@@ -6338,7 +6380,7 @@ const char *Txt_Created_new_link_X =	// Warning: it is very important to include
 
 const char *Txt_Created_new_place_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Creado nuevo lugar <strong>%s</strong>.";	// Necessita traduccio
+	"Creat nou lloc <strong>%s</strong>.";
 #elif L==2	// de
 	"Neuer Standort <strong>%s</strong> eingegeben.";
 #elif L==3	// en
@@ -43591,6 +43633,48 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
+const char *Txt_The_classroom_X_already_exists =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"L'aula <strong>%s</strong> ja existeix.";
+#elif L==2	// de
+	"Das Klassenzimmer <strong>%s</strong> wurde bereits eingegeben.";
+#elif L==3	// en
+	"The classroom <strong>%s</strong> already exists.";
+#elif L==4	// es
+	"El aula <strong>%s</strong> ya existe.";
+#elif L==5	// fr
+	"La salle de classe <strong>%s</strong> existe d&eacute;j&agrave;.";
+#elif L==6	// gn
+	"El aula <strong>%s</strong> ya existe.";		// Okoteve traducción
+#elif L==7	// it
+	"L'aula <strong>%s</strong> gi&agrave; esiste.";
+#elif L==8	// pl
+	"Klasa <strong>%s</strong> ju&zdot; istnieje.";
+#elif L==9	// pt
+	"A sala de clase <strong>%s</strong> j&aacute; existe.";
+#endif
+
+const char *Txt_The_classroom_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"L'aula <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
+#elif L==2	// de
+	"Der Standort <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
+#elif L==3	// en
+	"Das Klassenzimmer <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+#elif L==4	// es
+	"El aula <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+#elif L==5	// fr
+	"La salle de classe <strong>%s</strong> a &eacute;t&eacute; renomm&eacute;e en <strong>%s</strong>.";
+#elif L==6	// gn
+	"El aula <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"L'aula <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+#elif L==8	// pl
+	"Klasa <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
+#elif L==9	// pt
+	"A sala de clase <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
+#endif
+
 const char *Txt_The_comment_no_longer_exists =
 #if   L==1	// ca
 	"El comentari ja no existeix.";
@@ -45634,6 +45718,27 @@ const char *Txt_The_name_of_the_centre_X_has_not_changed =	// Warning: it is ver
 	"O nome do centro <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
+const char *Txt_The_name_of_the_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"El nom de l'aula <strong>%s</strong> no ha canviat.";
+#elif L==2	// de
+	"Der Name von Klassenzimmer <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+#elif L==3	// en
+	"The name of the classroom <strong>%s</strong> has not changed.";
+#elif L==4	// es
+	"El nombre del aula <strong>%s</strong> no ha cambiado.";
+#elif L==5	// fr
+	"Le nom de la salle de classe <strong>%s</strong> n'a pas chang&eacute;.";
+#elif L==6	// gn
+	"El nombre del aula <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+#elif L==7	// it
+	"Il nome  della aula <strong>%s</strong> non &egrave; cambiato.";
+#elif L==8	// pl
+	"Nazwa klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"O nome da sala de clase <strong>%s</strong> n&atilde;o foi alterado.";
+#endif
+
 const char *Txt_The_name_of_the_country_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El nombre del pa&iacute;s <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
@@ -45888,23 +45993,23 @@ const char *Txt_The_name_of_the_link_X_has_not_changed =	// Warning: it is very 
 
 const char *Txt_The_name_of_the_place_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El nombre del lugar <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
+	"El nom del lloc <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"The name of the place <strong>%s</strong> has not changed.";	// Need Übersetzung
+	"Der Name von Standort <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
 	"The name of the place <strong>%s</strong> has not changed.";
 #elif L==4	// es
 	"El nombre del lugar <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"The name of the place <strong>%s</strong> has not changed.";	// Besoin de traduction
+	"Le nom de l'emplacement <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El nombre del lugar <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il nome del luogo <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
-	"The name of the place <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
+	"Nazwa miejsca <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
-	"O nome da localiza&ccedil;&atilde;o <strong>%s</strong> n&atilde;o foi alterada.";
+	"O nome da localiza&ccedil;&atilde;o <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
 const char *Txt_The_name_of_the_plugin_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -46596,7 +46701,7 @@ const char *Txt_The_password_has_been_changed_successfully =
 
 const char *Txt_The_place_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El lugar <strong>%s</strong> ya existe.";		// Necessita traduccio
+	"El lloc <strong>%s</strong> ja existeix.";
 #elif L==2	// de
 	"Der Standort <strong>%s</strong> wurde bereits eingegeben.";
 #elif L==3	// en
@@ -46604,34 +46709,34 @@ const char *Txt_The_place_X_already_exists =	// Warning: it is very important to
 #elif L==4	// es
 	"El lugar <strong>%s</strong> ya existe.";
 #elif L==5	// fr
-	"The place <strong>%s</strong> already exists.";	// Besoin de traduction
+	"L'emplacement <strong>%s</strong> existe d&eacute;j&agrave;.";
 #elif L==6	// gn
 	"El lugar <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
 	"Il luogo <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
-	"The place <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
+	"Miejsce <strong>%s</strong> ju&zdot; istnieje.";
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> j&aacute; existe.";
 #endif
 
 const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El lugar <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El lloc <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The place <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
+	"Der Standort <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
 	"The place <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
 	"El lugar <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The place <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Besoin de traduction
+	"L'emplacement <strong>%s</strong> a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
 	"El lugar <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il luogo <strong>%s</strong> &egrave; stato rinominato come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The place <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+	"Miejsce <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #endif
@@ -54453,7 +54558,7 @@ const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it
 	" del lugar <strong>%s</strong> vac&iacute;o.";
 #elif L==5	// fr
 	"Vous ne pouvez pas laisser le nom"
-	" du lieu <strong>%s</strong> vide.";
+	" du emplacement <strong>%s</strong> vide.";
 #elif L==6	// gn
 	"No puede dejar el nombre"
 	" del lugar <strong>%s</strong> vac&iacute;o.";	// Okoteve traducción
@@ -55989,6 +56094,36 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_cen
 	" do novo centro.";
 #endif
 
+const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom =
+#if   L==1	// ca
+	"Heu d'especificar el nom curt i el nom complet"
+	" de la nova aula.";
+#elif L==2	// de
+	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
+	" des neuen Klassenzimmers angeben.";
+#elif L==3	// en
+	"You must specify the short name and the full name"
+	" of the new classroom.";
+#elif L==4	// es
+	"Debe especificar el nombre breve y el nombre completo"
+	" de la nueva aula.";
+#elif L==5	// fr
+	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet"
+	"  de la nouvelle salle de classe.";
+#elif L==6	// gn
+	"Debe especificar el nombre breve y el nombre completo"
+	" de la nueva aula.";		// Okoteve traducción
+#elif L==7	// it
+	"Devi specificare il nome breve e completo"
+	" della nuova aula.";
+#elif L==8	// pl
+	"Musisz poda&cacute; kr&oacute;tk&aogon; nazw&eogon; i pe&lstrok;n&aogon; nazw&eogon;"
+	" nowej klasy.";
+#elif L==9	// pt
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
+	" da nova sala de aula.";
+#endif
+
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course =
 #if   L==1	// ca
 	"Debe especificar el nombre breve y el nombre completo"
@@ -56171,11 +56306,11 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_ema
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place =
 #if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo lugar.";		// Necessita traduccio
+	"Heu d'especificar el nom curt i el nom complet"
+	" del nou lloc.";
 #elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new place.";		// Need Übersetzung
+	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
+	" des neuen Standortes angeben.";
 #elif L==3	// en
 	"You must specify the short name and the full name"
 	" of the new place.";
@@ -56183,8 +56318,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_pla
 	"Debe especificar el nombre breve y el nombre completo"
 	" del nuevo lugar.";
 #elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new place.";		// Besoin de traduction
+	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet"
+	" du nouvel emplacement.";
 #elif L==6	// gn
 	"Debe especificar el nombre breve y el nombre completo"
 	" del nuevo lugar.";		// Okoteve traducción
@@ -56192,8 +56327,8 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_pla
 	"Devi specificare il nome breve e completo"
 	" del nuovo luogo.";
 #elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new place.";		// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; kr&oacute;tk&aogon; nazw&eogon; i pe&lstrok;n&aogon; nazw&eogon;"
+	" nowego miejsca.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
 	" da nova localiza&ccedil;&atilde;o.";
