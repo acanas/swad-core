@@ -178,6 +178,18 @@ CREATE TABLE IF NOT EXISTS chat (
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
 --
+-- Table classrooms: stores the classrooms associated to each centre
+--
+CREATE TABLE IF NOT EXISTS classrooms (
+	ClaCod INT NOT NULL AUTO_INCREMENT,
+	CtrCod INT NOT NULL,
+	ShortName VARCHAR(511) NOT NULL,
+	FullName VARCHAR(2047) NOT NULL,
+	NumStds INT NOT NULL,
+	UNIQUE INDEX(ClaCod),
+	INDEX(CtrCod),
+	INDEX(NumStds));
+--
 -- Table clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
 --
 CREATE TABLE IF NOT EXISTS clicks_without_photo (

@@ -3937,7 +3937,7 @@ const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_CLASSROOMS_ORDER[Plc_NUM_ORDERS] =
+const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
    {
 #if   L==1	// ca
 	"Aula"

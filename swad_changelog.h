@@ -364,11 +364,24 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.25.1 (2018-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.25.2 (2018-12-30)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.25.1:  Dec 29, 2018  Changes in translation related to classrooms. (238498 lines)
+	Version 18.25.2:  Dec 30, 2018  New database table for classrooms. (238525 lines)
+					8 changes necessary in database:
+CREATE TABLE IF NOT EXISTS classrooms (ClaCod INT NOT NULL AUTO_INCREMENT,CtrCod INT NOT NULL,ShortName VARCHAR(511) NOT NULL,FullName VARCHAR(2047) NOT NULL,NumStds INT NOT NULL,UNIQUE INDEX(ClaCod),INDEX(CtrCod),INDEX(NumStds));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1744','es','N','Ver aulas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1745','es','N','Editar aulas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1746','es','N','Crear aula');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1747','es','N','Eliminar aula');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1748','es','N','Cambiar nombre breve aula');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1749','es','N','Cambiar nombre completo aula');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1750','es','N','Cambiar n&ordm; estudiantes aula');
+					Copy the following icon to icon public directory:
+sudo cp classroom.svg /var/www/html/swad/icon/
+
+	Version 18.25.1:  Dec 30, 2018  Changes in translation related to classrooms. (238498 lines)
 	Version 18.25:    Dec 29, 2018  New option and module to view/edit classrooms in a centre. Not finished. (238375 lines)
 	Version 18.24:    Dec 29, 2018  Option for view/edit places is separated from centres. (237242 lines)
 	Version 18.23:    Dec 27, 2018  Changes in directories for icon sets.

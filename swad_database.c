@@ -464,6 +464,30 @@ mysql> DESCRIBE chat;
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
 
+   /***** Table classrooms *****/
+/*
+mysql> DESCRIBE classrooms;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| ClaCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int(11)       | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| NumStds   | int(11)       | NO   | MUL | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS classrooms ("
+			"ClaCod INT NOT NULL AUTO_INCREMENT,"
+			"CtrCod INT NOT NULL,"
+			"ShortName VARCHAR(511) NOT NULL,"	// Cla_MAX_BYTES_CLASSROOM_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cla_MAX_BYTES_CLASSROOM_FULL_NAME
+			"NumStds INT NOT NULL,"
+		   "UNIQUE INDEX(ClaCod),"
+		   "INDEX(CtrCod),"
+		   "INDEX(NumStds))");
+
    /***** Table clicks_without_photo *****/
 /*
 mysql> DESCRIBE clicks_without_photo;
