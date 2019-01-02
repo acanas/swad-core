@@ -1998,7 +1998,8 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentDegName,NewDegName))	// Different names
         {
          /***** If degree was in database... *****/

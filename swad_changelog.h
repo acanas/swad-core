@@ -364,10 +364,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.25.3 (2018-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 18.26 (2019-01-02)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.26:    Jan 02, 2019  New form and action to change maximum number of students in a classroom. (? lines)
+					4 changes necessary in database:
+DROP INDEX NumStds ON classrooms;
+ALTER TABLE classrooms CHANGE COLUMN NumStds MaxStudents INT NOT NULL;
+UPDATE actions SET Txt='Cambiar m&aacute;x. estudiantes en grupo' WHERE ActCod='106' AND Language='es';
+UPDATE actions SET Txt='Cambiar m&aacute;x. estudiantes en aula' WHERE ActCod='1750' AND Language='es';
+
 	Version 18.25.3:  Dec 30, 2018  Fixed bugs in classrooms. (238514 lines)
 	Version 18.25.2:  Dec 30, 2018  New database table for classrooms. (238525 lines)
 					8 changes necessary in database:
@@ -378,7 +385,6 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1746','es','N','Crea
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1747','es','N','Eliminar aula');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1748','es','N','Cambiar nombre breve aula');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1749','es','N','Cambiar nombre completo aula');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1750','es','N','Cambiar n&ordm; estudiantes aula');
 					Copy the following icon to icon public directory:
 sudo cp classroom.svg /var/www/html/swad/icon/
 

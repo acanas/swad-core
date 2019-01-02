@@ -272,6 +272,7 @@ Centre:
 	NEW. ActRemCla			Remove a classroom
 	NEW. ActRenClaSho		Change short name of a classroom
 	NEW. ActRenClaFul		Change full name of a classroom
+	NEW. ActChgClaMaxStd		Change number of students in a classroom
 
 	148. ActPrnCtrCrs		Show print view of the academic calendar
 	149. ActChgCtrCrs1stDay		Change first day of week and show academic calendar
@@ -1807,6 +1808,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemCla		*/{1747,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RemoveClassroom		,NULL},
    /* ActRenClaSho	*/{1748,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RenameClassroomShort	,NULL},
    /* ActRenClaFul	*/{1749,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RenameClassroomFull	,NULL},
+   /* ActChgClaMaxStd	*/{1750,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_ChangeMaxStudents		,NULL},
 
    /* ActPrnCalCtr	*/{1632,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
    /* ActChgCalCtr1stDay*/{1633,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCtr		,NULL},
@@ -4952,6 +4954,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRemCla,		// #1747
 	ActRenClaSho,		// #1748
 	ActRenClaFul,		// #1749
+	ActChgClaMaxStd,	// #1750
 	};
 
 /*****************************************************************************/

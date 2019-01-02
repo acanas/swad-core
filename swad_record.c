@@ -803,7 +803,7 @@ void Rec_RenameField (void)
    /* Get the new group name */
    Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
 
-   /***** Get from the database the antiguo group name *****/
+   /***** Get from the database the old field name *****/
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
                       Gbl.CurrentCrs.Records.Field.Name,
                       &Gbl.CurrentCrs.Records.Field.NumLines,
@@ -886,7 +886,7 @@ void Rec_ChangeLinesField (void)
    /* Get from the database the number of lines of the field */
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
 
-   /***** Check if the old number of rows antiguo match the new one
+   /***** Check if the old number of rows matches the new one
           (this happens when return is pressed without changes) *****/
    if (Gbl.CurrentCrs.Records.Field.NumLines == NewNumLines)
      {
@@ -941,7 +941,7 @@ void Rec_ChangeVisibilityField (void)
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Check if the old visibility matches the new one
-          (this happens whe return is pressed without changes in the form) *****/
+          (this happens when return is pressed without changes) *****/
    if (Gbl.CurrentCrs.Records.Field.Visibility == NewVisibility)
      {
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

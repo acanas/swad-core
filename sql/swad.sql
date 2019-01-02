@@ -185,10 +185,9 @@ CREATE TABLE IF NOT EXISTS classrooms (
 	CtrCod INT NOT NULL,
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
-	NumStds INT NOT NULL,
+	MaxStudents INT NOT NULL,
 	UNIQUE INDEX(ClaCod),
-	INDEX(CtrCod),
-	INDEX(NumStds));
+	INDEX(CtrCod));
 --
 -- Table clicks_without_photo: stores the number of clicks that remains to each user before being required to submit his/her photo
 --

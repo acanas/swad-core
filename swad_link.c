@@ -590,7 +590,8 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentLnkName,NewLnkName))	// Different names
         {
          /***** If link was in database... *****/

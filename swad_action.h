@@ -61,9 +61,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 39 + 24 + 115 + 157 + 437 + 165 + 172 + 42 + 14 + 76)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 40 + 24 + 115 + 157 + 437 + 165 + 172 + 42 + 14 + 76)
 
-#define Act_MAX_ACTION_COD 1749
+#define Act_MAX_ACTION_COD 1750
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -271,9 +271,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRemCla		(ActChgCalIns1stDay + 35)
 #define ActRenClaSho		(ActChgCalIns1stDay + 36)
 #define ActRenClaFul		(ActChgCalIns1stDay + 37)
+#define ActChgClaMaxStd		(ActChgCalIns1stDay + 38)
 
-#define ActPrnCalCtr		(ActChgCalIns1stDay + 38)
-#define ActChgCalCtr1stDay	(ActChgCalIns1stDay + 39)
+#define ActPrnCalCtr		(ActChgCalIns1stDay + 39)
+#define ActChgCalCtr1stDay	(ActChgCalIns1stDay + 40)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/

@@ -148,7 +148,7 @@ static void Grp_PutParamRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
-static void Grp_WriteMaxStdsGrp (unsigned MaxStudents);
+static void Grp_WriteMaxStds (unsigned MaxStudents);
 static long Grp_GetParamGrpTypCod (void);
 static long Grp_GetParamGrpCod (void);
 static void Grp_PutParamGrpTypCod (long GrpTypCod);
@@ -1615,7 +1615,7 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
                             " size=\"3\" maxlength=\"10\" value=\"");
-         Grp_WriteMaxStdsGrp (Grp->MaxStudents);
+         Grp_WriteMaxStds (Grp->MaxStudents);
          fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
          Frm_EndForm ();
@@ -2439,7 +2439,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">");
-   Grp_WriteMaxStdsGrp (Grp->MaxStudents);
+   Grp_WriteMaxStds (Grp->MaxStudents);
    fprintf (Gbl.F.Out,"&nbsp;"
 	              "</td>");
 
@@ -2655,7 +2655,7 @@ static void Grp_PutFormToCreateGroup (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<input type=\"text\" name=\"MaxStudents\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
-   Grp_WriteMaxStdsGrp (Gbl.CurrentCrs.Grps.MaxStudents);
+   Grp_WriteMaxStds (Gbl.CurrentCrs.Grps.MaxStudents);
    fprintf (Gbl.F.Out,"\" />"
 	              "</td>"
 	              "</tr>");
@@ -4345,7 +4345,7 @@ void Grp_ChangeMandatGrpTyp (void)
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
 
    /***** Check if the old type of enrolment match the new
-          (this happens when return is pressed without changes in the form) *****/
+          (this happens when return is pressed without changes) *****/
    if (Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment == NewMandatoryEnrolment)
      {
       AlertType = Ale_INFO;
@@ -4476,9 +4476,9 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 
 void Grp_ChangeMaxStdsGrp (void)
   {
-   extern const char *Txt_The_maximum_number_of_students_in_the_group_X_has_not_changed;
-   extern const char *Txt_The_group_X_now_has_no_limit_of_students;
-   extern const char *Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y;
+   extern const char *Txt_The_maximum_number_of_students_has_not_changed;
+   extern const char *Txt_The_group_X_does_not_have_a_student_limit_now;
+   extern const char *Txt_The_maximum_number_of_students_is_now_X;
    struct GroupData GrpDat;
    unsigned NewMaxStds;
    Ale_AlertType_t AlertType;
@@ -4495,17 +4495,17 @@ void Grp_ChangeMaxStdsGrp (void)
                                           Grp_MAX_STUDENTS_IN_A_GROUP,
                                           Grp_NUM_STUDENTS_NOT_LIMITED);
 
-   /* Get from the database the type, name, and antiguo maximum of students of the group */
+   /* Get from the database the type, name, and old maximum of students of the group */
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
-   /***** Check if the old maximum of students equals the new one (this happens when user press return without change the form) *****/
+   /***** Check if the old maximum of students equals the new one
+             (this happens when return is pressed without changes) *****/
    if (GrpDat.MaxStudents == NewMaxStds)
      {
       AlertType = Ale_INFO;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_maximum_number_of_students_in_the_group_X_has_not_changed,
-                GrpDat.GrpName);
+      Str_Copy (Gbl.Alert.Txt,Txt_The_maximum_number_of_students_has_not_changed,
+		Ale_MAX_BYTES_ALERT);
      }
    else
      {
@@ -4519,12 +4519,12 @@ void Grp_ChangeMaxStdsGrp (void)
       AlertType = Ale_SUCCESS;
       if (NewMaxStds > Grp_MAX_STUDENTS_IN_A_GROUP)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_group_X_now_has_no_limit_of_students,
+	           Txt_The_group_X_does_not_have_a_student_limit_now,
                    GrpDat.GrpName);
       else
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y,
-                   GrpDat.GrpName,NewMaxStds);
+	           Txt_The_maximum_number_of_students_is_now_X,
+                   NewMaxStds);
      }
 
    /***** Show the form again *****/
@@ -4534,10 +4534,10 @@ void Grp_ChangeMaxStdsGrp (void)
   }
 
 /*****************************************************************************/
-/************ Write the number maximum of students in a group ***************/
+/************* Write the maximum number of students in a group ***************/
 /*****************************************************************************/
 
-static void Grp_WriteMaxStdsGrp (unsigned MaxStudents)
+static void Grp_WriteMaxStds (unsigned MaxStudents)
   {
    if (MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
       fprintf (Gbl.F.Out,"%u",MaxStudents);
@@ -4592,7 +4592,8 @@ void Grp_RenameGroupType (void)
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp))	// Different names
         {
          /***** If group type was in database... *****/
@@ -4671,7 +4672,8 @@ void Grp_RenameGroup (void)
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (GrpDat.GrpName,NewNameGrp))	// Different names
         {
          /***** If group was in database... *****/

@@ -39,20 +39,24 @@
 #define Cla_MAX_CHARS_CLASSROOM_FULL_NAME	(128 - 1)	// 127
 #define Cla_MAX_BYTES_CLASSROOM_FULL_NAME	((Cla_MAX_CHARS_CLASSROOM_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+#define Cla_MAX_STUDENTS_IN_A_CLASSROOM	10000	// If max of students in a classroom is greater than this, it is considered infinite
+#define Cla_NUM_STUDENTS_NOT_LIMITED  INT_MAX	// This number can be stored in database as an integer...
+						// ...and means that a classroom has no limit of students
+
 struct Classroom
   {
    long ClaCod;
    long InsCod;
    char ShrtName[Cla_MAX_BYTES_CLASSROOM_SHRT_NAME + 1];
    char FullName[Cla_MAX_BYTES_CLASSROOM_FULL_NAME + 1];
-   unsigned NumStds;
+   unsigned MaxStudents;
   };
 
 #define Cla_NUM_ORDERS 2
 typedef enum
   {
    Cla_ORDER_BY_CLASSROOM = 0,
-   Cla_ORDER_BY_NUM_STDS  = 1,
+   Cla_ORDER_BY_MAX_STDS  = 1,
   } Cla_Order_t;
 #define Cla_ORDER_DEFAULT Cla_ORDER_BY_CLASSROOM
 
@@ -70,6 +74,7 @@ long Cla_GetParamClaCod (void);
 void Cla_RemoveClassroom (void);
 void Cla_RenameClassroomShort (void);
 void Cla_RenameClassroomFull (void);
+void Cla_ChangeMaxStudents (void);
 void Cla_RecFormNewClassroom (void);
 
 #endif

@@ -1855,7 +1855,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentInsName,NewInsName))	// Different names
         {
          /***** If institution was in database... *****/

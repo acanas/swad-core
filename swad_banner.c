@@ -668,7 +668,8 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentBanName,NewBanName))	// Different names
         {
          /***** If banner was in database... *****/

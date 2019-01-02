@@ -1806,7 +1806,8 @@ void Cty_RenameCountry (void)
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (Cty->Name[Language],NewCtyName))	// Different names
 	{
 	 /***** If country was in database... *****/

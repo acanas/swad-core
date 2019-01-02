@@ -35,6 +35,7 @@
 
 #include "swad_action.h"
 #include "swad_calendar.h"
+#include "swad_classroom.h"
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_exam.h"
@@ -233,6 +234,8 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.CurrentDeg.Deg.DegCod = -1L;
    Gbl.CurrentDeg.Deg.ShrtName[0] = Gbl.CurrentDeg.Deg.FullName[0] = '\0';
+
+   Gbl.Classrooms.EditingCla.MaxStudents = Cla_NUM_STUDENTS_NOT_LIMITED;
 
    Gbl.CurrentCrs.Crs.CrsCod = -1L;
    Gbl.CurrentCrs.Crs.ShrtName[0] = Gbl.CurrentCrs.Crs.FullName[0] = '\0';

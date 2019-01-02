@@ -70,6 +70,8 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Cla_CheckIfClassroomNameExists (const char *FieldName,const char *Name,long ClaCod);
 static void Cla_UpdateClaNameDB (long ClaCod,const char *FieldName,const char *NewClaName);
 
+static void Cla_WriteMaxStds (unsigned MaxStudents);
+
 static void Cla_PutFormToCreateClassroom (void);
 static void Cla_PutHeadClassrooms (void);
 static void Cla_CreateClassroom (struct Classroom *Cla);
@@ -102,7 +104,7 @@ void Cla_SeeClassrooms (void)
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Cla_ORDER_BY_CLASSROOM;
-	   Order <= Cla_ORDER_BY_NUM_STDS;
+	   Order <= Cla_ORDER_BY_MAX_STDS;
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
@@ -120,7 +122,7 @@ void Cla_SeeClassrooms (void)
 	}
       fprintf (Gbl.F.Out,"</tr>");
 
-      /***** Write all classrooms and their nuber of students *****/
+      /***** Write all classrooms and their maximum of students *****/
       for (NumCla = 0;
 	   NumCla < Gbl.Classrooms.Num;
 	   NumCla++)
@@ -130,12 +132,11 @@ void Cla_SeeClassrooms (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%s"
 			    "</td>"
-	                    "<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "%u"
-	                    "</td>"
-			    "</tr>",
-		  Gbl.Classrooms.Lst[NumCla].FullName,
-		  Gbl.Classrooms.Lst[NumCla].NumStds);
+	                    "<td class=\"DAT RIGHT_MIDDLE\">",
+		  Gbl.Classrooms.Lst[NumCla].FullName);
+	 Cla_WriteMaxStds (Gbl.Classrooms.Lst[NumCla].MaxStudents);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 	}
 
       /***** End table *****/
@@ -164,10 +165,10 @@ void Cla_SeeClassrooms (void)
 static void Cla_GetParamClaOrder (void)
   {
    Gbl.Classrooms.SelectedOrder = (Cla_Order_t)
-	                    Par_GetParToUnsignedLong ("Order",
-                                                      0,
-                                                      Cla_NUM_ORDERS - 1,
-                                                      (unsigned long) Cla_ORDER_DEFAULT);
+	                          Par_GetParToUnsignedLong ("Order",
+                                                            0,
+                                                            Cla_NUM_ORDERS - 1,
+                                                            (unsigned long) Cla_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -273,15 +274,15 @@ void Cla_GetListClassrooms (void)
       case Cla_ORDER_BY_CLASSROOM:
          sprintf (OrderBySubQuery,"FullName");
          break;
-      case Cla_ORDER_BY_NUM_STDS:
-         sprintf (OrderBySubQuery,"NumStds DESC,FullName");
+      case Cla_ORDER_BY_MAX_STDS:
+         sprintf (OrderBySubQuery,"MaxStudents DESC,FullName");
          break;
      }
    NumRows = DB_QuerySELECT (&mysql_res,"can not get classrooms",
 			     "SELECT ClaCod,"
 				    "ShortName,"
 				    "FullName,"
-				    "NumStds"
+				    "MaxStudents"
 			     " FROM classrooms"
 			     " WHERE CtrCod=%ld"
 			     " ORDER BY %s",
@@ -319,9 +320,9 @@ void Cla_GetListClassrooms (void)
          Str_Copy (Cla->FullName,row[2],
                    Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
 
-         /* Get number of students in this classroom (row[3]) */
-         if (sscanf (row[3],"%u",&Cla->NumStds) != 1)
-            Cla->NumStds = 0;
+         /* Get maximum number of students in this classroom (row[3]) */
+         if (sscanf (row[3],"%u",&Cla->MaxStudents) != 1)
+            Cla->MaxStudents = 0;
         }
      }
    else
@@ -346,7 +347,7 @@ void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
    /***** Clear data *****/
    Cla->ShrtName[0] = '\0';
    Cla->FullName[0] = '\0';
-   Cla->NumStds = 0;
+   Cla->MaxStudents = 0;
 
    /***** Check if classroom code is correct *****/
    if (Cla->ClaCod < 0)
@@ -369,7 +370,7 @@ void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a classroom",
 			        "SELECT ShortName,"
 				       "FullName,"
-				       "NumStds"
+				       "MaxStudents"
 				" FROM classrooms"
 				" WHERE ClaCod=%ld",
 				Cla->ClaCod);
@@ -388,9 +389,9 @@ void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
          Str_Copy (Cla->FullName,row[1],
                    Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
 
-         /* Get number of students in this classroom (row[2]) */
-         if (sscanf (row[2],"%u",&Cla->NumStds) != 1)
-            Cla->NumStds = 0;
+         /* Get maximum number of students in this classroom (row[2]) */
+         if (sscanf (row[2],"%u",&Cla->MaxStudents) != 1)
+            Cla->MaxStudents = 0;
         }
 
       /***** Free structure that stores the query result *****/
@@ -436,15 +437,10 @@ static void Cla_ListClassroomsForEdition (void)
       /* Put icon to remove classroom */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Cla->NumStds)	// Classroom has students ==> deletion forbidden
-         Ico_PutIconRemovalNotAllowed ();
-      else
-        {
-         Frm_StartForm (ActRemCla);
-         Cla_PutParamClaCod (Cla->ClaCod);
-         Ico_PutIconRemove ();
-         Frm_EndForm ();
-        }
+      Frm_StartForm (ActRemCla);
+      Cla_PutParamClaCod (Cla->ClaCod);
+      Ico_PutIconRemove ();
+      Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Classroom code */
@@ -477,12 +473,18 @@ static void Cla_ListClassroomsForEdition (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Number of students */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>"
-	                 "</tr>",
-               Cla->NumStds);
+      /* Maximum number of students */
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Frm_StartForm (ActChgClaMaxStd);
+      Cla_PutParamClaCod (Cla->ClaCod);
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
+			 " size=\"3\" maxlength=\"10\" value=\"");
+      Cla_WriteMaxStds (Cla->MaxStudents);
+      fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
 
    /***** End table *****/
@@ -612,7 +614,8 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
    else
      {
-      /***** Check if old and new names are the same (this happens when user press enter with no changes in the form) *****/
+      /***** Check if old and new names are the same
+             (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If classroom was in database... *****/
@@ -679,6 +682,81 @@ static void Cla_UpdateClaNameDB (long ClaCod,const char *FieldName,const char *N
   }
 
 /*****************************************************************************/
+/************** Change maximum number of students in a classroom *************/
+/*****************************************************************************/
+
+void Cla_ChangeMaxStudents (void)
+  {
+   extern const char *Txt_The_maximum_number_of_students_has_not_changed;
+   extern const char *Txt_The_classroom_X_does_not_have_a_student_limit_now;
+   extern const char *Txt_The_maximum_number_of_students_is_now_X;
+   struct Classroom *Cla;
+   unsigned NewMaxStds;
+
+   /***** Use current editing classroom *****/
+   Cla = &Gbl.Classrooms.EditingCla;
+
+   /***** Get parameters from form *****/
+   /* Get the code of the classroom */
+   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of classroom is missing.");
+
+   /* Get the new maximum number of students of the group */
+   NewMaxStds = (unsigned)
+	        Par_GetParToUnsignedLong ("MaxStudents",
+                                          0,
+                                          Cla_MAX_STUDENTS_IN_A_CLASSROOM,
+                                          Cla_NUM_STUDENTS_NOT_LIMITED);
+
+   /***** Get data of the classroom from database *****/
+   Cla_GetDataOfClassroomByCod (Cla);
+
+   /***** Check if the old maximum of students equals the new one
+          (this happens when return is pressed without changes) *****/
+   if (Cla->MaxStudents == NewMaxStds)
+     {
+      /***** Message to show no changes made *****/
+      Gbl.Alert.Type = Ale_INFO;
+      Str_Copy (Gbl.Alert.Txt,Txt_The_maximum_number_of_students_has_not_changed,
+		Ale_MAX_BYTES_ALERT);
+     }
+   else
+     {
+      /***** Update the table of groups changing the old maximum of students to the new *****/
+      DB_QueryUPDATE ("can not update the maximum number of students"
+		      " in a classroom",
+		      "UPDATE classrooms SET MaxStudents=%u WHERE ClaCod=%ld",
+                      NewMaxStds,Cla->ClaCod);
+      Cla->MaxStudents = NewMaxStds;
+
+      /***** Message to show the change made *****/
+      Gbl.Alert.Type = Ale_SUCCESS;
+      if (NewMaxStds > Grp_MAX_STUDENTS_IN_A_GROUP)
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	           Txt_The_classroom_X_does_not_have_a_student_limit_now,
+                   Cla->FullName);
+      else
+         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	           Txt_The_maximum_number_of_students_is_now_X,
+                   NewMaxStds);
+     }
+   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+   /***** Show the form again *****/
+   Cla_EditClassrooms ();
+  }
+
+/*****************************************************************************/
+/*********** Write the maximum number of students in a classroom *************/
+/*****************************************************************************/
+
+static void Cla_WriteMaxStds (unsigned MaxStudents)
+  {
+   if (MaxStudents <= Cla_MAX_STUDENTS_IN_A_CLASSROOM)
+      fprintf (Gbl.F.Out,"%u",MaxStudents);
+  }
+
+/*****************************************************************************/
 /******************* Put a form to create a new classroom ********************/
 /*****************************************************************************/
 
@@ -727,9 +805,12 @@ static void Cla_PutFormToCreateClassroom (void)
             Cla_MAX_CHARS_CLASSROOM_FULL_NAME,Cla->FullName);
 
    /***** Number of students *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-		      "0"
-		      "</td>"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+	              "<input type=\"text\" name=\"MaxStudents\""
+	              " size=\"3\" maxlength=\"10\" value=\"");
+   Cla_WriteMaxStds (Cla->MaxStudents);
+   fprintf (Gbl.F.Out,"\" />"
+	              "</td>"
 		      "</tr>");
 
    /***** End table, send button and end box *****/
@@ -748,7 +829,7 @@ static void Cla_PutHeadClassrooms (void)
    extern const char *Txt_Code;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Max_BR_students;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -768,7 +849,7 @@ static void Cla_PutHeadClassrooms (void)
             Txt_Code,
             Txt_Short_name,
             Txt_Full_name,
-            Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+            Txt_Max_BR_students);
   }
 
 /*****************************************************************************/
@@ -789,6 +870,13 @@ void Cla_RecFormNewClassroom (void)
 
    /* Get classroom full name */
    Par_GetParToText ("FullName",Cla->FullName,Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
+
+   /* Get maximum number of students */
+   Cla->MaxStudents = (unsigned)
+	              Par_GetParToUnsignedLong ("MaxStudents",
+                                                0,
+                                                Cla_MAX_STUDENTS_IN_A_CLASSROOM,
+                                                Cla_NUM_STUDENTS_NOT_LIMITED);
 
    if (Cla->ShrtName[0] && Cla->FullName[0])	// If there's a classroom name
      {
@@ -828,11 +916,11 @@ static void Cla_CreateClassroom (struct Classroom *Cla)
    /***** Create a new classroom *****/
    DB_QueryINSERT ("can not create classroom",
 		   "INSERT INTO classrooms"
-		   " (CtrCod,ShortName,FullName,NumStds)"
+		   " (CtrCod,ShortName,FullName,MaxStudents)"
 		   " VALUES"
 		   " (%ld,'%s','%s',%u)",
                    Gbl.CurrentCtr.Ctr.CtrCod,
-		   Cla->ShrtName,Cla->FullName,Cla->NumStds);
+		   Cla->ShrtName,Cla->FullName,Cla->MaxStudents);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
