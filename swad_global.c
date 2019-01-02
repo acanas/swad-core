@@ -235,7 +235,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentDeg.Deg.DegCod = -1L;
    Gbl.CurrentDeg.Deg.ShrtName[0] = Gbl.CurrentDeg.Deg.FullName[0] = '\0';
 
-   Gbl.Classrooms.EditingCla.MaxStudents = Cla_NUM_STUDENTS_NOT_LIMITED;
+   Gbl.Classrooms.EditingCla.Capacity = Cla_UNLIMITED_CAPACITY;
 
    Gbl.CurrentCrs.Crs.CrsCod = -1L;
    Gbl.CurrentCrs.Crs.ShrtName[0] = Gbl.CurrentCrs.Crs.FullName[0] = '\0';

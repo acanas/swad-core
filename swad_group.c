@@ -4476,9 +4476,9 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 
 void Grp_ChangeMaxStdsGrp (void)
   {
-   extern const char *Txt_The_maximum_number_of_students_has_not_changed;
+   extern const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed;
    extern const char *Txt_The_group_X_does_not_have_a_student_limit_now;
-   extern const char *Txt_The_maximum_number_of_students_is_now_X;
+   extern const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y;
    struct GroupData GrpDat;
    unsigned NewMaxStds;
    Ale_AlertType_t AlertType;
@@ -4504,8 +4504,9 @@ void Grp_ChangeMaxStdsGrp (void)
    if (GrpDat.MaxStudents == NewMaxStds)
      {
       AlertType = Ale_INFO;
-      Str_Copy (Gbl.Alert.Txt,Txt_The_maximum_number_of_students_has_not_changed,
-		Ale_MAX_BYTES_ALERT);
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+		Txt_The_maximum_number_of_students_in_group_X_has_not_changed,
+		GrpDat.GrpName);
      }
    else
      {
@@ -4523,8 +4524,8 @@ void Grp_ChangeMaxStdsGrp (void)
                    GrpDat.GrpName);
       else
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_maximum_number_of_students_is_now_X,
-                   NewMaxStds);
+	           Txt_The_maximum_number_of_students_in_group_X_is_now_Y,
+                   GrpDat.GrpName,NewMaxStds);
      }
 
    /***** Show the form again *****/

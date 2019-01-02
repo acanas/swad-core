@@ -364,10 +364,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.26 (2019-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 18.26.1 (2019-01-02)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.26.1:  Jan 02, 2019  "Maximum number of students" in a classroom is changed to "(seating) capacity". (238702 lines)
+					2 changes necessary in database:
+ALTER TABLE classrooms CHANGE COLUMN MaxStudents Capacity INT NOT NULL;
+UPDATE actions SET Txt='Cambiar aforo de aula' WHERE ActCod='1750' AND Language='es';
+
 	Version 18.26:    Jan 02, 2019  New form and action to change maximum number of students in a classroom. (? lines)
 					4 changes necessary in database:
 DROP INDEX NumStds ON classrooms;

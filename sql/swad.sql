@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS classrooms (
 	CtrCod INT NOT NULL,
 	ShortName VARCHAR(511) NOT NULL,
 	FullName VARCHAR(2047) NOT NULL,
-	MaxStudents INT NOT NULL,
+	Capacity INT NOT NULL,
 	UNIQUE INDEX(ClaCod),
 	INDEX(CtrCod));
 --

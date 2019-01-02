@@ -3179,6 +3179,27 @@ const char *Txt_Can_not_rename_a_folder_of_assignment =
 	"N&atilde;o &eacute; poss&iacute;vel renomear um diret&oacute;rio de actividade.";
 #endif
 
+const char *Txt_Capacity_OF_A_CLASSROOM =
+#if   L==1	// ca
+	"Aforo";
+#elif L==2	// de
+	"Kapazit&auml;t";
+#elif L==3	// en
+	"Capacity";
+#elif L==4	// es
+	"Aforo";
+#elif L==5	// fr
+	"Capacit&eacute;";
+#elif L==6	// gn
+	"Aforo";				// Okoteve traducción
+#elif L==7	// it
+	"Capacit&agrave;";
+#elif L==8	// pl
+	"Pojemno&sacute;&cacute;";
+#elif L==9	// pt
+	"Capacidade";
+#endif
+
 const char *Txt_Centre =
 #if   L==1	// ca
 	"Centre";
@@ -3917,23 +3938,23 @@ const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
 #endif
 	 ,
 #if   L==1	// ca
-	 "Ordenar per nombre m&agrave;xim d'estudiants"
+	 "Ordenar per aforo"
 #elif L==2	// de
-	 "Sortieren nach maximaler Sch&uuml;lerzahl"
+	 "Sortieren nach Sitzplatzkapazit&auml;t"
 #elif L==3	// en
-	 "Sort by maximum number of students"
+	 "Sort by seating capacity"
 #elif L==4	// es
-	 "Ordenar por n&ordm; m&aacute;ximo de estudiantes"
+	 "Ordenar por aforo"
 #elif L==5	// fr
-	 "Trier par nombre maximum d'&eacute;tudiants"
+	 "Trier par nombre de places"
 #elif L==6	// gn
-	 "Ordenar por n&ordm; m&aacute;ximo de estudiantes"	// Okoteve traducción
+	 "Ordenar por aforo"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per numero massimo di studenti"
+	 "Ordina per capacit&agrave; di posti"
 #elif L==8	// pl
-	 "Sortuj wed&lsgtrok;ug maksymalnej liczby student&oacute;w"
+	 "Sortuj wed&lsgtrok;ug pojemno&sacute;ci miejsc"
 #elif L==9	// pt
-	 "Ordenar pelo n&uacute;mero m&aacute;ximo de estudantes"
+	 "Ordenar por capacidade"
 #endif
 	};
 
@@ -3960,23 +3981,23 @@ const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
 #endif
 	 ,
 #if   L==1	// ca
-	"M&agrave;xim<br />d'est."
+	"Aforo"
 #elif L==2	// de
-	"Max.<br />Stud."
+	"Kapazit&auml;t"
 #elif L==3	// en
-	"Max.<br />stud."
+	"Capacity"
 #elif L==4	// es
-	"M&aacute;x.<br />estu."
+	"Aforo"
 #elif L==5	// fr
-	"Max.<br />&eacute;tud."
+	"Capacit&eacute;"
 #elif L==6	// gn
-	"M&aacute;x.<br />estu."	// Okoteve traducción
+	"Aforo"				// Okoteve traducción
 #elif L==7	// it
-	"Max.<br />stud."
+	"Capacit&agrave;"
 #elif L==8	// pl
-	"Max.<br />stud."
+	"Pojemno&sacute;&cacute;"
 #elif L==9	// pt
-	"M&aacute;x.<br />estu."
+	"Capacidade"
 #endif
 	};
 
@@ -43561,6 +43582,48 @@ const char *Txt_The_banner_X_is_now_visible =	// Warning: it is very important t
 	"O banner <strong>%s</strong> &eacute; agora visible.";
 #endif
 
+const char *Txt_The_capacity_of_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"L'aforament de l'aula <strong>%s</strong> no ha canviat.";
+#elif L==2	// de
+	"Die Kapazit&auml;t des Klassenzimmers <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+#elif L==3	// en
+	"The capacity of classroom <strong>%s</strong> has not changed.";
+#elif L==4	// es
+	"El aforo del aula <strong>%s</strong> no ha cambiado.";
+#elif L==5	// fr
+	"La capacit&eacute; de la salle de classe <strong>%s</strong> n'a pas chang&eacute;.";
+#elif L==6	// gn
+	"El aforo del aula <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+#elif L==7	// it
+	"La capacit&agrave; della aula <strong>%s</strong> non &egrave; cambiata.";
+#elif L==8	// pl
+	"Pojemno&sacute;&cacute; klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"A capacidade da sala de aula <strong>%s</strong> n&atilde;o mudou.";
+#endif
+
+const char *Txt_The_capacity_of_classroom_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
+#if   L==1	// ca
+	"L'aforament de l'aula <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
+#elif L==2	// de
+	"Die Kapazit&auml;t des Klassenzimmers <strong>%s</strong> betr&auml;gt jetzt <strong>%u</strong>.";
+#elif L==3	// en
+	"The capacity of classroom <strong>%s</strong> is now <strong>%u</strong>.";
+#elif L==4	// es
+	"El aforo del aula <strong>%s</strong> ahora es <strong>%u</strong>.";
+#elif L==5	// fr
+	"La capacit&eacute; de la salle de classe <strong>%s</strong> est maintenant de <strong>%u</strong>.";
+#elif L==6	// gn
+	"El aforo del aula <strong>%s</strong> ahora es <strong>%u</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La capacit&agrave; della aula <strong>%s</strong> &egrave; ora <strong>%u</strong>.";
+#elif L==8	// pl
+	"Pojemno&sacute;&cacute; klasy <strong>%s</strong> wynosi teraz <strong>%u</strong>.";
+#elif L==9	// pt
+	"A capacidade da sala de aula <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
+#endif
+
 const char *Txt_The_centre_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El centro <strong>%s</strong> ya existe.";		// Necessita traduccio
@@ -43654,25 +43717,25 @@ const char *Txt_The_classroom_X_already_exists =	// Warning: it is very importan
 	"A sala de clase <strong>%s</strong> j&aacute; existe.";
 #endif
 
-const char *Txt_The_classroom_X_does_not_have_a_student_limit_now =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_classroom_X_does_not_have_a_limited_capacity_now =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"L'aula <strong>%s</strong> ara no t&eacute; cap l&iacute;mit d'estudiants.";
+	"L'aula <strong>%s</strong> ja no t&eacute; un aforament limitat.";
 #elif L==2	// de
-	"Das Klassenzimmer <strong>%s</strong> hat jetzt kein Studentenlimit.";
+	"Das Klassenzimmer <strong>%s</strong> hat jetzt keine begrenzte Kapazit&auml;t.";
 #elif L==3	// en
-	"The classroom <strong>%s</strong> does not have a student limit now.";
+	"The classroom <strong>%s</strong> does not have a limited capacity now.";
 #elif L==4	// es
-	"El aula <strong>%s</strong> no tiene ahora l&iacute;mite de estudiantes.";
+	"El aula <strong>%s</strong> ya no tiene un aforo limitado.";
 #elif L==5	// fr
-	"La salle de classe <strong>%s</strong> n'a plus de limite d'&eacute;tudiants.";
+	"La salle de classe <strong>%s</strong> n'a plus de capacit&eacute; limit&eacute;e.";
 #elif L==6	// gn
-	"El aula <strong>%s</strong> no tiene ahora l&iacute;mite de estudiantes.";	// Okoteve traducción
+	"El aula <strong>%s</strong> ya no tiene un aforo limitado.";	// Okoteve traducción
 #elif L==7	// it
-	"L'aula <strong>%s</strong> ora non ha limite di studenti.";
+	"L'aula <strong>%s</strong> non ha una capacit&agrave; limitata ora.";
 #elif L==8	// pl
-	"Klasa <strong>%s</strong> nie ma teraz &zdot;adnych limit&oacute;w uczni&oacute;w.";
+	"Klasa <strong>%s</strong> nie ma teraz ograniczonej pojemno&sacute;ci.";
 #elif L==9	// pt
-	"A sala de clase <strong>%s</strong> n&atilde;o tem limite de estudantes agora.";
+	"A sala de clase <strong>%s</strong> n&atilde;o tem capacidade limitada agora.";
 #endif
 
 const char *Txt_The_classroom_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -45574,55 +45637,64 @@ const char *Txt_the_marks_of_a_student_chosen_at_random_ =
 	" se voc&ecirc; vir mais de um estudante, isso significa que o n&uacute;mero de cabe&ccedil;a ou p&eacute; linhas n&atilde;o est&aacute; correto";
 #endif
 
-const char *Txt_The_maximum_number_of_students_has_not_changed =
-#if   L==1	// ca
-	"El nombre m&agrave;xim d'estudiants no ha canviat.";
-#elif L==2	// de
-	"Die maximale Anzahl von Studenten hat sich nicht ge&auml;ndert.";
-#elif L==3	// en
-	"The maximum number of students has not changed.";
-#elif L==4	// es
-	"El n&ordm; m&aacute;ximo de estudiantes no ha cambiado.";
-#elif L==5	// fr
-	"Le nombre maximum d'&eacute;tudiants n'a pas chang&eacute;.";
-#elif L==6	// gn
-	"El n&ordm; m&aacute;ximo de estudiantes no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il numero massimo di studenti non &egrave; cambiato.";
-#elif L==8	// pl
-	"Maksymalna liczba student&oacute;w nie uleg&lstrok;a zmianie.";
-#elif L==9	// pt
-	"O n&uacute;mero m&aacute;ximo de estudantes n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_maximum_number_of_students_is_now_X =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El nombre m&agrave;xim d'estudiants"
-	" ara &eacute;s <strong>%u</strong>.";
+	" del grup <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"Die maximale Anzahl von Studenten"
-	" betr&auml;gt jetzt <strong>%u</strong>.";
+	"Die maximale Anzahl der Studenten"
+	" in Gruppe <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
 	"The maximum number of students"
-	" is now <strong>%u</strong>.";
+	" in group <strong>%s</strong> has not changed.";
 #elif L==4	// es
 	"El n&ordm; m&aacute;ximo de estudiantes"
-	" ahora es <strong>%u</strong>.";
+	" del grupo <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
 	"Le nombre maximum d'&eacute;tudiants"
-	" est maintenant de <strong>%u</strong>.";
+	" du groupe <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El n&ordm; m&aacute;ximo de estudiantes"
-	" ahora es <strong>%u</strong>.";		// Okoteve traducción
+	" del grupo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il numero massimo di studenti"
-	" &egrave; ora <strong>%u</strong>.";
+	" nel gruppo <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
-	"Maksymalna liczba student&oacute;w"
-	" wynosi teraz <strong>%u</strong>.";
+	"Maksymalna liczba uczni&oacute;w"
+	" w grupie <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
 	"O n&uacute;mero m&aacute;ximo de estudantes"
-	" &eacute; agora <strong>%u</strong>.";
+	" no grupo <strong>%s</strong> n&atilde;o foi alterado.";
+#endif
+
+const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
+#if   L==1	// ca
+	"El nombre m&agrave;xim d'estudiants"
+	" del grup <strong>%s</strong> ara &eacute;s <strong>%u</strong>.";
+#elif L==2	// de
+	"Die maximale Anzahl der Studenten"
+	" in Gruppe <strong>%s</strong> betr&auml;gt jetzt <strong>%u</strong>.";
+#elif L==3	// en
+	"The maximum number of students"
+	" in group <strong>%s</strong> is now <strong>%u</strong>.";
+#elif L==4	// es
+	"El n&ordm; m&aacute;ximo de estudiantes"
+	" del grupo <strong>%s</strong> ahora es <strong>%u</strong>.";
+#elif L==5	// fr
+	"Le nombre maximum d'&eacute;tudiants"
+	" du groupe <strong>%s</strong> est maintenant de <strong>%u</strong>.";
+#elif L==6	// gn
+	"El n&ordm; m&aacute;ximo de estudiantes"
+	" del grupo <strong>%s</strong> ahora es <strong>%u</strong>.";		// Okoteve traducción
+#elif L==7	// it
+	"Il numero massimo di studenti"
+	" nel gruppo <strong>%s</strong> &egrave; ora <strong>%u</strong>.";
+#elif L==8	// pl
+	"Maksymalna liczba student&oacute;w"
+	" w grupie <strong>%s</strong> wynosi teraz <strong>%u</strong>.";
+#elif L==9	// pt
+	"O n&uacute;mero m&aacute;ximo de estudantes"
+	" no grupo <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
 #endif
 
 const char *Txt_The_message_has_not_been_sent_to_any_recipient =
