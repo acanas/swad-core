@@ -364,10 +364,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.26.1 (2019-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 18.26.2 (2019-01-02)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.26.2:  Jan 02, 2019  New field location in classrooms table. (238711 lines)
+					1 change necessary in database:
+ALTER TABLE classrooms ADD COLUMN Location VARCHAR(2047) NOT NULL AFTER Capacity;
+
 	Version 18.26.1:  Jan 02, 2019  "Maximum number of students" in a classroom is changed to "(seating) capacity". (238702 lines)
 					2 changes necessary in database:
 ALTER TABLE classrooms CHANGE COLUMN MaxStudents Capacity INT NOT NULL;

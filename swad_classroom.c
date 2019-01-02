@@ -450,7 +450,7 @@ static void Cla_ListClassroomsForEdition (void)
                Cla->ClaCod);
 
       /* Classroom short name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartForm (ActRenClaSho);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -462,7 +462,7 @@ static void Cla_ListClassroomsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Classroom full name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartForm (ActRenClaFul);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -474,7 +474,7 @@ static void Cla_ListClassroomsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Seating capacity */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartForm (ActChgClaMaxStd);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
@@ -842,7 +842,7 @@ static void Cla_PutHeadClassrooms (void)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

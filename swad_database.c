@@ -467,23 +467,25 @@ mysql> DESCRIBE chat;
    /***** Table classrooms *****/
 /*
 mysql> DESCRIBE classrooms;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| ClaCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CtrCod      | int(11)       | NO   | MUL | NULL    |                |
-| ShortName   | varchar(511)  | NO   |     | NULL    |                |
-| FullName    | varchar(2047) | NO   |     | NULL    |                |
-| MaxStudents | int(11)       | NO   |     | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| ClaCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int(11)       | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| Capacity  | int(11)       | NO   |     | NULL    |                |
+| Location  | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS classrooms ("
 			"ClaCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
 			"ShortName VARCHAR(511) NOT NULL,"	// Cla_MAX_BYTES_CLASSROOM_SHRT_NAME
 			"FullName VARCHAR(2047) NOT NULL,"	// Cla_MAX_BYTES_CLASSROOM_FULL_NAME
-			"MaxStudents INT NOT NULL,"
+			"Capacity INT NOT NULL,"
+			"Location VARCHAR(2047) NOT NULL,"	// Cla_MAX_BYTES_LOCATION
 		   "UNIQUE INDEX(ClaCod),"
 		   "INDEX(CtrCod))");
 

@@ -43,13 +43,17 @@
 #define Cla_UNLIMITED_CAPACITY		INT_MAX	// This number can be stored in database as an integer...
 						// ...and means that a classroom has no limited capacity
 
+#define Cla_MAX_CHARS_LOCATION	(128 - 1)	// 127
+#define Cla_MAX_BYTES_LOCATION	((Cla_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
 struct Classroom
   {
    long ClaCod;
    long InsCod;
    char ShrtName[Cla_MAX_BYTES_CLASSROOM_SHRT_NAME + 1];
    char FullName[Cla_MAX_BYTES_CLASSROOM_FULL_NAME + 1];
-   unsigned Capacity;	// Seating capacity (maximum number of people that fit in the room)
+   unsigned Capacity;				// Seating capacity (maximum number of people that fit in the room)
+   char Location[Cla_MAX_BYTES_LOCATION + 1];	// Examples: Ground floor, first floor, basement
   };
 
 #define Cla_NUM_ORDERS 2
