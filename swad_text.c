@@ -3895,27 +3895,47 @@ const char *Txt_Classroom_X_removed =	// Warning: it is very important to includ
 #endif
 
 const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
-   {
+   {		// Cla_ORDER_BY_SHRT_NAME
 #if   L==1	// ca
-	 "Ordenar per aula"
+	 "Ordenar per nom breu"
 #elif L==2	// de
-	 "Nach Klassenzimmer sortieren"
+	 "Nach Kurzname sortieren"
 #elif L==3	// en
-	 "Sort by classroom"
+	 "Sort by short name"
 #elif L==4	// es
-	 "Ordenar por aula"
+	 "Ordenar por nombre breve"
 #elif L==5	// fr
-	 "Trier par salle de classe"
+	 "Trier par nom abr&eacute;g&eacute;"
 #elif L==6	// gn
-	 "Ordenar por aula"	// Okoteve traducción
+	 "Ordenar por nombre breve"	// Okoteve traducción
 #elif L==7	// it
-	 "Ordina per aula"
+	 "Ordina per nome breve"
 #elif L==8	// pl
-	 "Sortuj wedlug klasa"
+	 "Sortuj wed&lstrok;ug kr&oacute;tkiej nazwy"
 #elif L==9	// pt
-	 "Classificar por sala de aula"
+	 "Classificar por nome abreviado"
 #endif
-	 ,
+	 ,	// Cla_ORDER_BY_FULL_NAME
+#if   L==1	// ca
+	 "Ordenar per nom complet"
+#elif L==2	// de
+	 "Nach vollst&auml;ndiger Name sortieren"
+#elif L==3	// en
+	 "Sort by full name"
+#elif L==4	// es
+	 "Ordenar por nombre completo"
+#elif L==5	// fr
+	 "Trier par nom complet"
+#elif L==6	// gn
+	 "Ordenar por nombre completo"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per nome completo"
+#elif L==8	// pl
+	 "Sortuj wed&lstrok;ug pe&lstrok;na nazwa"
+#elif L==9	// pt
+	 "Classificar por nome completo"
+#endif
+	 ,	// Cla_ORDER_BY_CAPACITY
 #if   L==1	// ca
 	 "Ordenar per aforo"
 #elif L==2	// de
@@ -3935,7 +3955,7 @@ const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
 #elif L==9	// pt
 	 "Ordenar por capacidade"
 #endif
-	 ,
+	 ,	// Cla_ORDER_BY_LOCATION
 #if   L==1	// ca
 	 "Ordenar per ubicaci&oacute;"
 #elif L==2	// de
@@ -3951,34 +3971,54 @@ const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
 #elif L==7	// it
 	 "Ordina per posizione"
 #elif L==8	// pl
-	 "Sortuj wedlug lokacja"
+	 "Sortuj wed&lstrok;ug lokacja"
 #elif L==9	// pt
 	 "Classificar por localiza&ccedil;&atilde;o"
 #endif
 	};
 
 const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
-   {
+   {		// Cla_ORDER_BY_SHRT_NAME
 #if   L==1	// ca
-	"Aula"
+	 "Nom breu"
 #elif L==2	// de
-	"Klassenzimmer"
+	 "Kurzname"
 #elif L==3	// en
-	"Classroom"
+	 "Short name"
 #elif L==4	// es
-	"Aula"
+	 "Nombre breve"
 #elif L==5	// fr
-	"Salle de classe"
+	 "Nom abr&eacute;g&eacute;"
 #elif L==6	// gn
-	"Mbo'ehakoty"
+	 "Nombre breve"	// Okoteve traducción
 #elif L==7	// it
-	"Aula"
+	 "Nome breve"
 #elif L==8	// pl
-	"Klasa"
+	 "Kr&oacute;tkiej nazwy"
 #elif L==9	// pt
-	"Sala de aula"
+	 "Nome abreviado"
 #endif
-	 ,
+	 ,	// Cla_ORDER_BY_FULL_NAME
+#if   L==1	// ca
+	 "Nom complet"
+#elif L==2	// de
+	 "Vollst&auml;ndiger Name"
+#elif L==3	// en
+	 "Full name"
+#elif L==4	// es
+	 "Nombre completo"
+#elif L==5	// fr
+	 "Nom complet"
+#elif L==6	// gn
+	 "Nombre completo"	// Okoteve traducción
+#elif L==7	// it
+	 "Nome completo"
+#elif L==8	// pl
+	 "Pe&lstrok;na nazwa"
+#elif L==9	// pt
+	 "Nome completo"
+#endif
+	 ,	// Cla_ORDER_BY_CAPACITY
 #if   L==1	// ca
 	"Aforo"
 #elif L==2	// de
@@ -3998,7 +4038,7 @@ const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
 #elif L==9	// pt
 	"Capacidade"
 #endif
-	 ,
+	 ,	// // Cla_ORDER_BY_LOCATION
 #if   L==1	// ca
 	"Ubicaci&oacute;"
 #elif L==2	// de
@@ -13102,7 +13142,7 @@ const char *Txt_Full_name =
 #elif L==7	// it
 	"Nome completo";
 #elif L==8	// pl
-	"Pelne imie i nazwisko";
+	"Pe&lstrok;na nazwa";
 #elif L==9	// pt
 	"Nome completo";
 #endif

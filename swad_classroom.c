@@ -132,7 +132,11 @@ void Cla_SeeClassrooms (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%s"
 			    "</td>"
+	                    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%s"
+			    "</td>"
 	                    "<td class=\"DAT RIGHT_MIDDLE\">",
+		  Gbl.Classrooms.Lst[NumCla].ShrtName,
 		  Gbl.Classrooms.Lst[NumCla].FullName);
 	 Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -267,9 +271,10 @@ void Cla_GetListClassrooms (void)
   {
    static const char *OrderBySubQuery[Cla_NUM_ORDERS] =
      {
-      "FullName",		// Cla_ORDER_BY_CLASSROOM
-      "Capacity DESC,FullName",	// Cla_ORDER_BY_CAPACITY
-      "Location,FullName",	// Cla_ORDER_BY_LOCATION
+      "ShortName",			// Cla_ORDER_BY_SHRT_NAME
+      "FullName",			// Cla_ORDER_BY_FULL_NAME
+      "Capacity DESC,ShortName",	// Cla_ORDER_BY_CAPACITY
+      "Location,ShortName",		// Cla_ORDER_BY_LOCATION
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

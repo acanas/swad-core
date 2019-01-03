@@ -56,12 +56,13 @@ struct Classroom
    char Location[Cla_MAX_BYTES_LOCATION + 1];	// Examples: Ground floor, first floor, basement
   };
 
-#define Cla_NUM_ORDERS 3
+#define Cla_NUM_ORDERS 4
 typedef enum
   {
-   Cla_ORDER_BY_CLASSROOM = 0,
-   Cla_ORDER_BY_CAPACITY  = 1,
-   Cla_ORDER_BY_LOCATION  = 2,
+   Cla_ORDER_BY_SHRT_NAME = 0,
+   Cla_ORDER_BY_FULL_NAME = 1,
+   Cla_ORDER_BY_CAPACITY  = 2,
+   Cla_ORDER_BY_LOCATION  = 3,
   } Cla_Order_t;
 #define Cla_ORDER_DEFAULT Cla_ORDER_BY_LOCATION
 
