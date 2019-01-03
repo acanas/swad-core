@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -624,8 +622,24 @@ static void Asg_PutParams (void)
 
 void Asg_GetListAssignments (void)
   {
-   char *HiddenSubQuery;
-   char *OrderBySubQuery;
+   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
+     {
+      " AND Hidden='N'",	// Rol_UNK
+      " AND Hidden='N'",	// Rol_GST
+      " AND Hidden='N'",	// Rol_USR
+      " AND Hidden='N'",	// Rol_STD
+      " AND Hidden='N'",	// Rol_NET
+      "",			// Rol_TCH
+      " AND Hidden='N'",	// Rol_DEG_ADM
+      " AND Hidden='N'",	// Rol_CTR_ADM
+      " AND Hidden='N'",	// Rol_INS_ADM
+      "",			// Rol_SYS_ADM
+     };
+   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
+     {
+      "StartTime DESC,EndTime DESC,Title DESC",	// Dat_START_TIME
+      "EndTime DESC,StartTime DESC,Title DESC",	// Dat_END_TIME
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -635,31 +649,6 @@ void Asg_GetListAssignments (void)
       Asg_FreeListAssignments ();
 
    /***** Get list of assignments from database *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      default:
-         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-     }
-   switch (Gbl.Asgs.SelectedOrder)
-     {
-      case Dat_START_TIME:
-         if (asprintf (&OrderBySubQuery,
-                       "StartTime DESC,EndTime DESC,Title DESC") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      case Dat_END_TIME:
-         if (asprintf (&OrderBySubQuery,
-                       "EndTime DESC,StartTime DESC,Title DESC") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-     }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
@@ -669,21 +658,17 @@ void Asg_GetListAssignments (void)
 				" AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
 				" ORDER BY %s",
-				Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+				Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				OrderBySubQuery);
+				OrderBySubQuery[Gbl.Asgs.SelectedOrder]);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
 				" FROM assignments"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY %s",
-				Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-				OrderBySubQuery);
-
-   /* Free allocated memory for subqueries */
-   free ((void *) OrderBySubQuery);
-   free ((void *) HiddenSubQuery);
+				Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+				OrderBySubQuery[Gbl.Asgs.SelectedOrder]);
 
    if (NumRows) // Assignments found...
      {

@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -846,8 +848,12 @@ static void Svy_PutParams (void)
 void Svy_GetListSurveys (void)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char SubQuery[Sco_NUM_SCOPES][256];
-   char OrderBySubQuery[256];
+   char *SubQuery[Sco_NUM_SCOPES];
+   static const char *OrderBySubQuery[Svy_NUM_ORDERS] =
+     {
+      "StartTime DESC,EndTime DESC,Title DESC",	// Svy_ORDER_BY_START_DATE
+      "EndTime DESC,StartTime DESC,Title DESC",	// Svy_ORDER_BY_END_DATE
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -856,7 +862,7 @@ void Svy_GetListSurveys (void)
    unsigned HiddenAllowed = 0;
    long Cods[Sco_NUM_SCOPES];
    Sco_Scope_t Scope;
-   bool SubQueryFilled;
+   bool SubQueryFilled = false;
 
    /***** Free list of surveys *****/
    if (Gbl.Svys.LstIsRead)
@@ -874,69 +880,71 @@ void Svy_GetListSurveys (void)
    Cods[Sco_SCOPE_CRS] = Gbl.CurrentCrs.Crs.CrsCod;	// Course
 
    /* Fill subqueries for system, country, institution, centre and degree */
-   for (Scope = Sco_SCOPE_SYS, SubQueryFilled = false;
+   for (Scope  = Sco_SCOPE_SYS;
 	Scope <= Sco_SCOPE_DEG;
 	Scope++)
       if (ScopesAllowed & 1 << Scope)
 	{
-	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
-	          SubQueryFilled ? " OR " :
-	        	           "",
-		  Sco_ScopeDB[Scope],Cods[Scope],
-		  (HiddenAllowed & 1 << Scope) ? "" :
-						 " AND Hidden='N'");
+	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_ScopeDB[Scope],Cods[Scope],
+		       (HiddenAllowed & 1 << Scope) ? "" :
+						      " AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
 	 SubQueryFilled = true;
 	}
       else
-	 SubQuery[Scope][0] = '\0';
+        {
+	 if (asprintf (&SubQuery[Scope],"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
 
    /* Fill subquery for course */
    if (ScopesAllowed & 1 << Sco_SCOPE_CRS)
      {
       if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s("
-	                                  "Scope='%s' AND Cod=%ld%s"
-	                                  " AND "
-	                                  "(SvyCod NOT IN"
-	                                  " (SELECT SvyCod FROM svy_grp)"
-	                                  " OR"
-                                          " SvyCod IN"
-                                          " (SELECT svy_grp.SvyCod"
-                                          " FROM svy_grp,crs_grp_usr"
-                                          " WHERE crs_grp_usr.UsrCod=%ld"
-                                          " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
-	                                  ")",
-	          SubQueryFilled ? " OR " :
-	        	           "",
-		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
-		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
-						         " AND Hidden='N'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
+        {
+	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s("
+						"Scope='%s' AND Cod=%ld%s"
+						" AND "
+						"(SvyCod NOT IN"
+						" (SELECT SvyCod FROM svy_grp)"
+						" OR"
+						" SvyCod IN"
+						" (SELECT svy_grp.SvyCod"
+						" FROM svy_grp,crs_grp_usr"
+						" WHERE crs_grp_usr.UsrCod=%ld"
+						" AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
+						")",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+							      " AND Hidden='N'",
+		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
       else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
-	          SubQueryFilled ? " OR " :
-	        	           "",
-		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
-		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
-						         " AND Hidden='N'");
+        {
+	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+							      " AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
       SubQueryFilled = true;
      }
    else
-      SubQuery[Sco_SCOPE_CRS][0] = '\0';
+     {
+      if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s","") < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
 
    /* Make query */
    if (SubQueryFilled)
-     {
-      switch (Gbl.Svys.SelectedOrder)
-	{
-	 case Svy_ORDER_BY_START_DATE:
-	    sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
-	    break;
-	 case Svy_ORDER_BY_END_DATE:
-	    sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
-	    break;
-	}
-
       NumRows = DB_QuerySELECT (&mysql_res,"can not get surveys",
 				"SELECT SvyCod FROM surveys"
 				" WHERE %s%s%s%s%s%s"
@@ -947,13 +955,18 @@ void Svy_GetListSurveys (void)
 				SubQuery[Sco_SCOPE_CTR],
 				SubQuery[Sco_SCOPE_DEG],
 				SubQuery[Sco_SCOPE_CRS],
-				OrderBySubQuery);
-     }
+				OrderBySubQuery[Gbl.Svys.SelectedOrder]);
    else
      {
       Lay_ShowErrorAndExit ("Can not get list of surveys.");
       NumRows = 0;	// Not reached. Initialized to avoid warning
      }
+
+   /* Free allocated memory for subqueries */
+   for (Scope  = Sco_SCOPE_SYS;
+	Scope <= Sco_SCOPE_CRS;
+	Scope++)
+      free ((void *) SubQuery[Scope]);
 
    if (NumRows) // Surveys found...
      {

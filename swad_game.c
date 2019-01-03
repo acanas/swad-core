@@ -885,8 +885,12 @@ static void Gam_PutParams (void)
 void Gam_GetListGames (void)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char SubQuery[Sco_NUM_SCOPES][256];
-   char OrderBySubQuery[256];
+   char *SubQuery[Sco_NUM_SCOPES];
+   static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
+     {
+      "StartTime DESC,EndTime DESC,Title DESC",	// Gam_ORDER_BY_START_DATE
+      "EndTime DESC,StartTime DESC,Title DESC",	// Gam_ORDER_BY_END_DATE
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
@@ -895,7 +899,7 @@ void Gam_GetListGames (void)
    unsigned HiddenAllowed = 0;
    long Cods[Sco_NUM_SCOPES];
    Sco_Scope_t Scope;
-   bool SubQueryFilled;
+   bool SubQueryFilled = false;
 
    /***** Free list of games *****/
    if (Gbl.Games.LstIsRead)
@@ -913,69 +917,72 @@ void Gam_GetListGames (void)
    Cods[Sco_SCOPE_CRS] = Gbl.CurrentCrs.Crs.CrsCod;	// Course
 
    /* Fill subqueries for system, country, institution, centre and degree */
-   for (Scope = Sco_SCOPE_SYS, SubQueryFilled = false;
+   for (Scope  = Sco_SCOPE_SYS;
 	Scope <= Sco_SCOPE_DEG;
 	Scope++)
       if (ScopesAllowed & 1 << Scope)
 	{
-	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
-	          SubQueryFilled ? " OR " :
-	        	           "",
-		  Sco_ScopeDB[Scope],Cods[Scope],
-		  (HiddenAllowed & 1 << Scope) ? "" :
-						 " AND Hidden='N'");
+	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
+	               SubQueryFilled ? " OR " :
+	        	                "",
+		       Sco_ScopeDB[Scope],Cods[Scope],
+		       (HiddenAllowed & 1 << Scope) ? "" :
+						      " AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
 	 SubQueryFilled = true;
 	}
       else
-	 SubQuery[Scope][0] = '\0';
+        {
+	 if (asprintf (&SubQuery[Scope],"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
 
    /* Fill subquery for course */
    if (ScopesAllowed & 1 << Sco_SCOPE_CRS)
      {
       if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s("
-	                                  "Scope='%s' AND Cod=%ld%s"
-	                                  " AND "
-	                                  "(GamCod NOT IN"
-	                                  " (SELECT GamCod FROM gam_grp)"
-	                                  " OR"
-                                          " GamCod IN"
-                                          " (SELECT gam_grp.GamCod"
-                                          " FROM gam_grp,crs_grp_usr"
-                                          " WHERE crs_grp_usr.UsrCod=%ld"
-                                          " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))"
-	                                  ")",
-	          SubQueryFilled ? " OR " :
-	        	           "",
-		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
-		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
-						         " AND Hidden='N'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
+        {
+	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s("
+						"Scope='%s' AND Cod=%ld%s"
+						" AND "
+						"(GamCod NOT IN"
+						" (SELECT GamCod FROM gam_grp)"
+						" OR"
+						" GamCod IN"
+						" (SELECT gam_grp.GamCod"
+						" FROM gam_grp,crs_grp_usr"
+						" WHERE crs_grp_usr.UsrCod=%ld"
+						" AND gam_grp.GrpCod=crs_grp_usr.GrpCod))"
+						")",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+							      " AND Hidden='N'",
+		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
       else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
-	          SubQueryFilled ? " OR " :
-	        	           "",
-		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
-		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
-						         " AND Hidden='N'");
+        {
+	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+							      " AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
       SubQueryFilled = true;
      }
    else
-      SubQuery[Sco_SCOPE_CRS][0] = '\0';
+     {
+      if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s","") < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
 
-   /* Build query */
+   /* Make query */
    if (SubQueryFilled)
      {
-      switch (Gbl.Games.SelectedOrder)
-	{
-	 case Gam_ORDER_BY_START_DATE:
-	    sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
-	    break;
-	 case Gam_ORDER_BY_END_DATE:
-	    sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
-	    break;
-	}
-
       /* Make query */
       NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
 				"SELECT GamCod FROM games"
@@ -987,10 +994,16 @@ void Gam_GetListGames (void)
 				SubQuery[Sco_SCOPE_CTR],
 				SubQuery[Sco_SCOPE_DEG],
 				SubQuery[Sco_SCOPE_CRS],
-				OrderBySubQuery);
+				OrderBySubQuery[Gbl.Games.SelectedOrder]);
      }
    else
       Lay_ShowErrorAndExit ("Can not get list of games.");
+
+   /* Free allocated memory for subqueries */
+   for (Scope  = Sco_SCOPE_SYS;
+	Scope <= Sco_SCOPE_CRS;
+	Scope++)
+      free ((void *) SubQuery[Scope]);
 
    if (NumRows) // Games found...
      {

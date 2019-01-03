@@ -45575,6 +45575,66 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 	"A lista de %u usu&aacute;rios &eacute; muito grande para ser exibida.";
 #endif
 
+const char *Txt_The_location_of_the_classroom_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"La ubicaci&oacute; de l'aula <strong>%s</strong>"
+	" ha canviat a <strong>%s</strong>.";
+#elif L==2	// de
+	"Der Standort des Klassenzimmer <strong>%s</strong>"
+	" wurde in <strong>%s</strong> ge&auml;ndert.";
+#elif L==3	// en
+	"The location of the classroom <strong>%s</strong>"
+	" has changed to <strong>%s</strong>.";
+#elif L==4	// es
+	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	" ha cambiado a <strong>%s</strong>.";
+#elif L==5	// fr
+	"L'emplacement de la salle de classe <strong>%s</strong>"
+	" a &eacute;t&eacute; remplac&eacute; par <strong>%s</strong>.";
+#elif L==6	// gn
+	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	" ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La posizione della aula <strong>%s</strong>"
+	" &egrave; cambiata in <strong>%s</strong>.";
+#elif L==8	// pl
+	"Lokalizacja klasy <strong>%s</strong>"
+	" zmieni&lstrok;a si&eogon; na <strong>%s</strong>.";
+#elif L==9	// pt
+	"A localiza&ccedil;&atilde;o da sala de clase <strong>%s</strong>"
+	" mudou para <strong>%s</strong>.";
+#endif
+
+const char *Txt_The_location_of_the_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"La ubicaci&oacute; de l'aula <strong>%s</strong>"
+	" no ha canviat.";
+#elif L==2	// de
+	"Der Standort des Klassenzimmer <strong>%s</strong>"
+	" hat sich nicht ge&auml;ndert.";
+#elif L==3	// en
+	"The location of the classroom <strong>%s</strong>"
+	" has not changed.";
+#elif L==4	// es
+	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	" no ha cambiado.";
+#elif L==5	// fr
+	"L'emplacement de la salle de classe <strong>%s</strong>"
+	" n'a pas chang&eacute;.";
+#elif L==6	// gn
+	"La ubicaci&oacute;n del aula <strong>%s</strong>"
+	" no ha cambiado.";	// Okoteve traducción
+#elif L==7	// it
+	"La posizione della aula <strong>%s</strong>"
+	" non &egrave; cambiata.";
+#elif L==8	// pl
+	"Lokalizacja klasy <strong>%s</strong>"
+	" nie uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"A localiza&ccedil;&atilde;o da sala de clase <strong>%s</strong>"
+	" n&atilde;o foi alterada.";
+#endif
+
 const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit =
 #if   L==1	// ca
 	"El l&iacute;mite inferior del intervalo de respuestas correctas"
@@ -45804,7 +45864,7 @@ const char *Txt_The_name_of_the_classroom_X_has_not_changed =	// Warning: it is 
 #if   L==1	// ca
 	"El nom de l'aula <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"Der Name von Klassenzimmer <strong>%s</strong> hat sich nicht ge&auml;ndert.";
+	"Der Name des Klassenzimmer <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
 	"The name of the classroom <strong>%s</strong> has not changed.";
 #elif L==4	// es

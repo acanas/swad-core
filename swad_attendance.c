@@ -95,7 +95,7 @@ static void Att_PutFormToListStdsParams (void);
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
 static void Att_PutParams (void);
-static void Att_GetListAttEvents (Att_OrderTime_t Order);
+static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
 static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att);
 static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
@@ -600,10 +600,32 @@ static void Att_PutParams (void)
 /********************* List all the attendance events ************************/
 /*****************************************************************************/
 
-static void Att_GetListAttEvents (Att_OrderTime_t Order)
+static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
   {
-   char *HiddenSubQuery;
-   char *OrderBySubQuery;
+   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
+     {
+      " AND Hidden='N'",	// Rol_UNK
+      " AND Hidden='N'",	// Rol_GST
+      " AND Hidden='N'",	// Rol_USR
+      " AND Hidden='N'",	// Rol_STD
+      " AND Hidden='N'",	// Rol_NET
+      "",			// Rol_TCH
+      " AND Hidden='N'",	// Rol_DEG_ADM
+      " AND Hidden='N'",	// Rol_CTR_ADM
+      " AND Hidden='N'",	// Rol_INS_ADM
+      "",			// Rol_SYS_ADM
+     };
+   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME][Att_NUM_ORDERS_NEWEST_OLDEST] =
+     {
+        {	// Dat_START_TIME
+	 "StartTime DESC,EndTime DESC,Title DESC",	// Att_NEWEST_FIRST
+	 "StartTime,EndTime,Title",			// Att_OLDEST_FIRST
+	},
+	{	// Dat_END_TIME
+	 "EndTime DESC,StartTime DESC,Title DESC",	// Att_NEWEST_FIRST
+	 "EndTime,StartTime,Title",			// Att_OLDEST_FIRST
+	}
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -613,33 +635,6 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
       Att_FreeListAttEvents ();
 
    /***** Get list of attendance events from database *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      default:
-         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-     }
-   switch (Gbl.AttEvents.SelectedOrder)
-     {
-      case Dat_START_TIME:
-	 if (asprintf (&OrderBySubQuery,
-		       (Order == Att_NEWEST_FIRST) ? "StartTime DESC,EndTime DESC,Title DESC" :
-						     "StartTime,EndTime,Title") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      case Dat_END_TIME:
-	 if (asprintf (&OrderBySubQuery,
-		       (Order == Att_NEWEST_FIRST) ? "EndTime DESC,StartTime DESC,Title DESC" :
-						     "EndTime,StartTime,Title") < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 break;
-     }
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
@@ -650,19 +645,19 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
 				" WHERE crs_grp_usr.UsrCod=%ld"
 				" AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
 				" ORDER BY %s",
-				Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
-				Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+				Gbl.CurrentCrs.Crs.CrsCod,
+				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				OrderBySubQuery[Gbl.AttEvents.SelectedOrder][OrderNewestOldest]);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
 				" FROM att_events"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY %s",
-				Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
-
-   /* Free allocated memory for subqueries */
-   free ((void *) OrderBySubQuery);
-   free ((void *) HiddenSubQuery);
+				Gbl.CurrentCrs.Crs.CrsCod,
+				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
+				OrderBySubQuery[Gbl.AttEvents.SelectedOrder][OrderNewestOldest]);
 
    if (NumRows) // Attendance events found...
      {

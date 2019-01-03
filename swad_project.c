@@ -2278,14 +2278,30 @@ static bool Prj_CheckIfICanEditProject (long PrjCod)
 /************************** List all the projects ****************************/
 /*****************************************************************************/
 
-#define Prj_MAX_BYTES_SUBQUERY 128
-
 void Prj_GetListProjects (void)
   {
-   char PreNonSubQuery[Prj_MAX_BYTES_SUBQUERY];
-   char HidVisSubQuery[Prj_MAX_BYTES_SUBQUERY];
-   char DptCodSubQuery[Prj_MAX_BYTES_SUBQUERY];
-   char OrderBySubQuery[Prj_MAX_BYTES_SUBQUERY];
+   char *PreNonSubQuery;
+   char *HidVisSubQuery;
+   char *DptCodSubQuery;
+   static const char *OrderBySubQuery[Prj_NUM_ORDERS] =
+     {
+      "projects.CreatTime DESC,"	// Prj_ORDER_START_TIME
+      "projects.ModifTime DESC,"
+      "projects.Title",
+
+      "projects.ModifTime DESC,"	// Prj_ORDER_END_TIME
+      "projects.CreatTime DESC,"
+      "projects.Title",
+
+      "projects.Title,"			// Prj_ORDER_TITLE
+      "projects.CreatTime DESC,"
+      "projects.ModifTime DESC",
+
+      "departments.FullName,"		// Prj_ORDER_DEPARTMENT
+      "projects.CreatTime DESC,"
+      "projects.ModifTime DESC,"
+      "projects.Title",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
@@ -2303,16 +2319,17 @@ void Prj_GetListProjects (void)
       /* Preassigned subquery */
       switch (Gbl.Prjs.Filter.PreNon)
 	{
-	 case (1 << Prj_PREASSIGNED):
-	    Str_Copy (PreNonSubQuery," AND projects.Preassigned='Y'",
-		      Prj_MAX_BYTES_SUBQUERY);	// Preassigned projects
+	 case (1 << Prj_PREASSIGNED):	// Preassigned projects
+	    if (asprintf (&PreNonSubQuery," AND projects.Preassigned='Y'") < 0)
+	       Lay_NotEnoughMemoryExit ();
 	    break;
-	 case (1 << Prj_NONPREASSIG):
-	    Str_Copy (PreNonSubQuery," AND projects.Preassigned='N'",
-		      Prj_MAX_BYTES_SUBQUERY);	// Non-preassigned projects
+	 case (1 << Prj_NONPREASSIG):	// Non-preassigned projects
+	    if (asprintf (&PreNonSubQuery," AND projects.Preassigned='N'") < 0)
+	       Lay_NotEnoughMemoryExit ();
 	    break;
-	 default:
-	    PreNonSubQuery[0] = '\0';		// All projects
+	 default:			// All projects
+	    if (asprintf (&PreNonSubQuery,"%s","") < 0)
+	       Lay_NotEnoughMemoryExit ();
 	    break;
 	}
 
@@ -2320,24 +2337,25 @@ void Prj_GetListProjects (void)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:	// Students can view only visible projects
-	    Str_Copy (HidVisSubQuery," AND projects.Hidden='N'",
-		      Prj_MAX_BYTES_SUBQUERY);		// Visible projects
+	    if (asprintf (&HidVisSubQuery," AND projects.Hidden='N'") < 0)
+	       Lay_NotEnoughMemoryExit ();
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    switch (Gbl.Prjs.Filter.HidVis)
 	      {
-	       case (1 << Prj_HIDDEN):
-		  Str_Copy (HidVisSubQuery," AND projects.Hidden='Y'",
-			    Prj_MAX_BYTES_SUBQUERY);	// Hidden projects
+	       case (1 << Prj_HIDDEN):	// Hidden projects
+		  if (asprintf (&HidVisSubQuery," AND projects.Hidden='Y'") < 0)
+	             Lay_NotEnoughMemoryExit ();
 		  break;
-	       case (1 << Prj_VISIBL):
-		  Str_Copy (HidVisSubQuery," AND projects.Hidden='N'",
-			    Prj_MAX_BYTES_SUBQUERY);	// Visible projects
+	       case (1 << Prj_VISIBL):	// Visible projects
+		  if (asprintf (&HidVisSubQuery," AND projects.Hidden='N'") < 0)
+	             Lay_NotEnoughMemoryExit ();
 		  break;
-	       default:
-		  HidVisSubQuery[0] = '\0';		// All projects
+	       default:			// All projects
+		  if (asprintf (&HidVisSubQuery,"%s","") < 0)
+	             Lay_NotEnoughMemoryExit ();
 		  break;
 	      }
 	    break;
@@ -2348,35 +2366,15 @@ void Prj_GetListProjects (void)
 
       /* Department subquery */
       if (Gbl.Prjs.Filter.DptCod >= 0)
-	 sprintf (DptCodSubQuery," AND projects.DptCod=%ld",
-	          Gbl.Prjs.Filter.DptCod);
+        {
+	 if (asprintf (&DptCodSubQuery," AND projects.DptCod=%ld",
+	               Gbl.Prjs.Filter.DptCod) < 0)
+	    Lay_NotEnoughMemoryExit ();
+        }
       else	// Any department
-	 DptCodSubQuery[0] = '\0';
-
-      /* Order subquery */
-      switch (Gbl.Prjs.SelectedOrder)
 	{
-	 case Prj_ORDER_START_TIME:
-	    sprintf (OrderBySubQuery,"projects.CreatTime DESC,"
-				     "projects.ModifTime DESC,"
-				     "projects.Title");
-	    break;
-	 case Prj_ORDER_END_TIME:
-	    sprintf (OrderBySubQuery,"projects.ModifTime DESC,"
-				     "projects.CreatTime DESC,"
-				     "projects.Title");
-	    break;
-	 case Prj_ORDER_TITLE:
-	    sprintf (OrderBySubQuery,"projects.Title,"
-				     "projects.CreatTime DESC,"
-				     "projects.ModifTime DESC");
-	    break;
-	 case Prj_ORDER_DEPARTMENT:
-	    sprintf (OrderBySubQuery,"departments.FullName,"
-				     "projects.CreatTime DESC,"
-				     "projects.ModifTime DESC,"
-				     "projects.Title");
-	    break;
+	 if (asprintf (&DptCodSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
 	}
 
       /* Query */
@@ -2397,7 +2395,7 @@ void Prj_GetListProjects (void)
 					 Gbl.CurrentCrs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
-					 OrderBySubQuery);
+					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
 	    case Prj_ORDER_DEPARTMENT:
 	       NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
@@ -2412,7 +2410,7 @@ void Prj_GetListProjects (void)
 					 Gbl.CurrentCrs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
-					 OrderBySubQuery);
+					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
 	   }
       else	// Gbl.Prjs.My_All == Prj_ALL_PROJECTS
@@ -2429,7 +2427,7 @@ void Prj_GetListProjects (void)
 					 " ORDER BY %s",
 					 Gbl.CurrentCrs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					 OrderBySubQuery);
+					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
 	    case Prj_ORDER_DEPARTMENT:
 	       NumRows = DB_QuerySELECT (&mysql_res,"can not get projects",
@@ -2441,9 +2439,14 @@ void Prj_GetListProjects (void)
 					 " ORDER BY %s",
 					 Gbl.CurrentCrs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
-					 OrderBySubQuery);
+					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
 	   }
+
+      /* Free allocated memory for subqueries */
+      free ((void *) PreNonSubQuery);
+      free ((void *) HidVisSubQuery);
+      free ((void *) DptCodSubQuery);
 
       if (NumRows) // Projects found...
 	{

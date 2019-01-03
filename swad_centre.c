@@ -1048,7 +1048,11 @@ void Ctr_PutIconToViewCentres (void)
 
 void Ctr_GetListCentres (long InsCod)
   {
-   char *OrderBySubQuery;
+   static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
+     {
+      "FullName",		// Ctr_ORDER_BY_CENTRE
+      "NumUsrs DESC,FullName",	// Ctr_ORDER_BY_NUM_TCHS
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1056,17 +1060,6 @@ void Ctr_GetListCentres (long InsCod)
    struct Centre *Ctr;
 
    /***** Get centres from database *****/
-   switch (Gbl.Ctrs.SelectedOrder)
-     {
-      case Ctr_ORDER_BY_CENTRE:
-         if (asprintf (&OrderBySubQuery,"FullName") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      case Ctr_ORDER_BY_NUM_TCHS:
-         if (asprintf (&OrderBySubQuery,"NumUsrs DESC,FullName") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-     }
    NumRows = DB_QuerySELECT (&mysql_res,"can not get centres",
 			     "(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
 			     "centres.Status,centres.RequesterUsrCod,"
@@ -1086,8 +1079,7 @@ void Ctr_GetListCentres (long InsCod)
 			     " ORDER BY %s",
 			     InsCod,
 			     InsCod,
-			     OrderBySubQuery);
-   free ((void *) OrderBySubQuery);
+			     OrderBySubQuery[Gbl.Ctrs.SelectedOrder]);
 
    if (NumRows) // Centres found...
      {

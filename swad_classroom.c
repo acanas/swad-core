@@ -25,9 +25,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -267,7 +265,12 @@ void Cla_PutIconToViewClassrooms (void)
 
 void Cla_GetListClassrooms (void)
   {
-   char *OrderBySubQuery;
+   static const char *OrderBySubQuery[Cla_NUM_ORDERS] =
+     {
+      "FullName",		// Cla_ORDER_BY_CLASSROOM
+      "Capacity DESC,FullName",	// Cla_ORDER_BY_CAPACITY
+      "Location,FullName",	// Cla_ORDER_BY_LOCATION
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -275,26 +278,6 @@ void Cla_GetListClassrooms (void)
    struct Classroom *Cla;
 
    /***** Get classrooms from database *****/
-   /* Build order subquery */
-   switch (Gbl.Classrooms.SelectedOrder)
-     {
-      case Cla_ORDER_BY_CLASSROOM:
-	 if (asprintf (&OrderBySubQuery,"FullName") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      case Cla_ORDER_BY_CAPACITY:
-	 if (asprintf (&OrderBySubQuery,"Capacity DESC,"
-	                                "FullName") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-      case Cla_ORDER_BY_LOCATION:
-	 if (asprintf (&OrderBySubQuery,"Location DESC,"
-	                                "FullName") < 0)
-	    Lay_NotEnoughMemoryExit ();
-         break;
-     }
-
-   /* Build query */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get classrooms",
 			     "SELECT ClaCod,"
 				    "ShortName,"
@@ -305,10 +288,7 @@ void Cla_GetListClassrooms (void)
 			     " WHERE CtrCod=%ld"
 			     " ORDER BY %s",
 			     Gbl.CurrentCtr.Ctr.CtrCod,
-			     OrderBySubQuery);
-
-   /* Free allocated memory for subquery */
-   free ((void *) OrderBySubQuery);
+			     OrderBySubQuery[Gbl.Classrooms.SelectedOrder]);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Classrooms found...
@@ -469,7 +449,7 @@ static void Cla_ListClassroomsForEdition (void)
       Frm_StartForm (ActRenClaSho);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " maxlength=\"%u\" value=\"%s\""
+	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName,Gbl.Form.Id);
@@ -481,7 +461,7 @@ static void Cla_ListClassroomsForEdition (void)
       Frm_StartForm (ActRenClaFul);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " maxlength=\"%u\" value=\"%s\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cla_MAX_CHARS_FULL_NAME,Cla->FullName,Gbl.Form.Id);
@@ -497,6 +477,18 @@ static void Cla_ListClassroomsForEdition (void)
       Cla_WriteCapacity (Cla->Capacity);
       fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
 	       Gbl.Form.Id);
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Classroom location */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Frm_StartForm (ActRenClaLoc);
+      Cla_PutParamClaCod (Cla->ClaCod);
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
+	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_FULL_NAME\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
+               Cla_MAX_CHARS_LOCATION,Cla->Location,Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
@@ -697,10 +689,10 @@ static void Cla_UpdateClaNameDB (long ClaCod,const char *FieldName,const char *N
   }
 
 /*****************************************************************************/
-/************** Change maximum number of students in a classroom *************/
+/****************** Change sitting capacity of a classroom *******************/
 /*****************************************************************************/
 
-void Cla_ChangeMaxStudents (void)
+void Cla_ChangeCapacity (void)
   {
    extern const char *Txt_The_capacity_of_classroom_X_has_not_changed;
    extern const char *Txt_The_classroom_X_does_not_have_a_limited_capacity_now;
@@ -772,6 +764,60 @@ static void Cla_WriteCapacity (unsigned Capacity)
   }
 
 /*****************************************************************************/
+/******************** Change the location of a classroom *********************/
+/*****************************************************************************/
+
+void Cla_ChangeClassroomLocation (void)
+  {
+   extern const char *Txt_The_location_of_the_classroom_X_has_changed_to_Y;
+   extern const char *Txt_The_location_of_the_classroom_X_has_not_changed;
+   struct Classroom *Cla;
+   char NewLocation[Cla_MAX_BYTES_FULL_NAME + 1];
+
+   Cla = &Gbl.Classrooms.EditingCla;
+
+   /***** Get parameters from form *****/
+   /* Get the code of the classroom */
+   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of classroom is missing.");
+
+   /* Get the new location for the classroom */
+   Par_GetParToText ("Location",NewLocation,Cla_MAX_BYTES_LOCATION);
+
+   /***** Get from the database the old location of the classroom *****/
+   Cla_GetDataOfClassroomByCod (Cla);
+
+   /***** Check if old and new locations are the same
+	  (this happens when return is pressed without changes) *****/
+   if (strcmp (Cla->Location,NewLocation))	// Different locations
+     {
+      /* Update the table changing old name by new name */
+      Cla_UpdateClaNameDB (Cla->ClaCod,"Location",NewLocation);
+      Str_Copy (Cla->Location,NewLocation,
+		Cla_MAX_BYTES_LOCATION);
+
+      /* Write message to show the change made */
+      Gbl.Alert.Type = Ale_SUCCESS;
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+		Txt_The_location_of_the_classroom_X_has_changed_to_Y,
+		Cla->FullName,NewLocation);
+     }
+   else	// The same location
+     {
+      Gbl.Alert.Type = Ale_INFO;
+      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+		Txt_The_location_of_the_classroom_X_has_not_changed,
+		Cla->FullName);
+     }
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+   /***** Show the form again *****/
+   Cla_EditClassrooms ();
+  }
+
+/*****************************************************************************/
 /******************* Put a form to create a new classroom ********************/
 /*****************************************************************************/
 
@@ -802,31 +848,39 @@ static void Cla_PutFormToCreateClassroom (void)
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Classroom short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
             Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName);
 
    /***** Classroom full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
             Cla_MAX_CHARS_FULL_NAME,Cla->FullName);
 
    /***** Seating capacity *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<input type=\"text\" name=\"Capacity\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Cla_WriteCapacity (Cla->Capacity);
    fprintf (Gbl.F.Out,"\" />"
+	              "</td>");
+
+   /***** Classroom location *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"text\" name=\"Location\""
+		      " size=\"15\" maxlength=\"%u\" value=\"%s\""
+		      " class=\"INPUT_FULL_NAME\" />"
 	              "</td>"
-		      "</tr>");
+		      "</tr>",
+	    Cla_MAX_CHARS_LOCATION,Cla->Location);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_classroom);
@@ -845,6 +899,7 @@ static void Cla_PutHeadClassrooms (void)
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_Capacity_OF_A_CLASSROOM;
+   extern const char *Txt_Location;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -860,11 +915,15 @@ static void Cla_PutHeadClassrooms (void)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "</tr>",
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+		      "</tr>",
             Txt_Code,
             Txt_Short_name,
             Txt_Full_name,
-            Txt_Capacity_OF_A_CLASSROOM);
+            Txt_Capacity_OF_A_CLASSROOM,
+            Txt_Location);
   }
 
 /*****************************************************************************/

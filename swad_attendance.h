@@ -62,11 +62,12 @@ struct AttendanceEvent
    bool Selected;		// I have selected this attendance event
   };
 
+#define Att_NUM_ORDERS_NEWEST_OLDEST 2
 typedef enum
   {
    Att_NEWEST_FIRST,
    Att_OLDEST_FIRST,
-  } Att_OrderTime_t;
+  } Att_OrderNewestOldest_t;
 
 #define Att_ORDER_DEFAULT Dat_START_TIME
 

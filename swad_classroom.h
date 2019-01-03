@@ -63,7 +63,7 @@ typedef enum
    Cla_ORDER_BY_CAPACITY  = 1,
    Cla_ORDER_BY_LOCATION  = 2,
   } Cla_Order_t;
-#define Cla_ORDER_DEFAULT Cla_ORDER_BY_CLASSROOM
+#define Cla_ORDER_DEFAULT Cla_ORDER_BY_LOCATION
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -76,10 +76,13 @@ void Cla_GetListClassrooms (void);
 void Cla_FreeListClassrooms (void);
 void Cla_GetDataOfClassroomByCod (struct Classroom *Cla);
 long Cla_GetParamClaCod (void);
+
 void Cla_RemoveClassroom (void);
 void Cla_RenameClassroomShort (void);
 void Cla_RenameClassroomFull (void);
-void Cla_ChangeMaxStudents (void);
+void Cla_ChangeCapacity (void);
+void Cla_ChangeClassroomLocation (void);
+
 void Cla_RecFormNewClassroom (void);
 
 #endif

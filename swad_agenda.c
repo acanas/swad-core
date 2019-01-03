@@ -987,7 +987,11 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    char Past__FutureEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
    char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
-   char *OrderBySubQuery;
+   static const char *OrderBySubQuery[Agd_NUM_ORDERS] =
+     {
+      "StartTime,EndTime,Event,Location",	// Agd_ORDER_BY_START_DATE
+      "EndTime,StartTime,Event,Location",	// Agd_ORDER_BY_END_DATE
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1086,26 +1090,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 
    if (DoQuery)
      {
-      /* Build order subquery */
-      switch (Gbl.Agenda.SelectedOrder)
-	{
-	 case Agd_ORDER_BY_START_DATE:
-	    if (asprintf (&OrderBySubQuery,"StartTime,"
-				           "EndTime,"
-				           "Event,"
-				           "Location") < 0)
-	       Lay_NotEnoughMemoryExit ();
-	    break;
-	 case Agd_ORDER_BY_END_DATE:
-	    if (asprintf (&OrderBySubQuery,"EndTime,"
-				           "StartTime,"
-				           "Event,"
-				           "Location") < 0)
-	       Lay_NotEnoughMemoryExit ();
-	    break;
-	}
-
-      /* Build full query */
+      /* Make query */
       NumRows = DB_QuerySELECT (&mysql_res,"can not get agenda events",
 	                        "SELECT AgdCod FROM agendas"
 				" WHERE %s%s%s%s"
@@ -1114,10 +1099,9 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 				Past__FutureEventsSubQuery,
 				PrivatPublicEventsSubQuery,
 				HiddenVisiblEventsSubQuery,
-				OrderBySubQuery);
+				OrderBySubQuery[Gbl.Agenda.SelectedOrder]);
 
-      /* Free allocated memory for subqueries */
-      free ((void *) OrderBySubQuery);
+      /* Free allocated memory for subquery */
       free ((void *) UsrSubQuery);
 
       if (NumRows) // Events found...

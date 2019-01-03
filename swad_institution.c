@@ -995,7 +995,11 @@ static void Ins_PutIconToViewInstitutions (void)
 
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
   {
-   char OrderBySubQuery[256];
+   static const char *OrderBySubQuery[Ins_NUM_ORDERS] =
+     {
+      "FullName",		// Ins_ORDER_BY_INSTITUTION
+      "NumUsrs DESC,FullName",	// Ins_ORDER_BY_NUM_USRS
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
@@ -1014,15 +1018,6 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 				   CtyCod);
          break;
       case Ins_GET_EXTRA_DATA:
-         switch (Gbl.Inss.SelectedOrder)
-           {
-            case Ins_ORDER_BY_INSTITUTION:
-               sprintf (OrderBySubQuery,"FullName");
-               break;
-            case Ins_ORDER_BY_NUM_USRS:
-               sprintf (OrderBySubQuery,"NumUsrs DESC,FullName");
-               break;
-           }
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get institutions",
 				   "(SELECT institutions.InsCod,institutions.CtyCod,"
 				   "institutions.Status,institutions.RequesterUsrCod,"
@@ -1040,7 +1035,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 				   " (SELECT DISTINCT InsCod FROM usr_data))"
 				   " ORDER BY %s",
 				   CtyCod,CtyCod,
-				   OrderBySubQuery);
+				   OrderBySubQuery[Gbl.Inss.SelectedOrder]);
          break;
      }
 

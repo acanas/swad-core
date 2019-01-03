@@ -249,7 +249,11 @@ void Hld_EditHolidays (void)
 
 void Hld_GetListHolidays (void)
   {
-   char OrderBySubQuery[256];
+   static const char *OrderBySubQuery[Hld_NUM_ORDERS] =
+     {
+      "Place,StartDate",	// Hld_ORDER_BY_PLACE
+      "StartDate,Place",	// Hld_ORDER_BY_START_DATE
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumHld;
@@ -261,15 +265,6 @@ void Hld_GetListHolidays (void)
 	 Hld_FreeListHolidays ();
 
       /***** Get holidays from database *****/
-      switch (Gbl.Hlds.SelectedOrder)
-	{
-	 case Hld_ORDER_BY_PLACE:
-	    sprintf (OrderBySubQuery,"Place,StartDate");
-	    break;
-	 case Hld_ORDER_BY_START_DATE:
-	    sprintf (OrderBySubQuery,"StartDate,Place");
-	    break;
-	}
       Gbl.Hlds.Num =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get holidays",
 				 "(SELECT holidays.HldCod,"
@@ -301,7 +296,7 @@ void Hld_GetListHolidays (void)
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentIns.Ins.InsCod,
-				 OrderBySubQuery);
+				 OrderBySubQuery[Gbl.Hlds.SelectedOrder]);
       if (Gbl.Hlds.Num) // Holidays found...
 	{
 	 /***** Create list of holidays *****/

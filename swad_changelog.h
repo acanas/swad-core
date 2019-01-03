@@ -345,8 +345,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Que un grupo tenga asociado un lugar, como un aula, así al hacer un evento de asistencia, podría tener por defecto el lugar asignado al grupo elegido.
 
-// TODO: Refactorize OrderBySubQuery
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -366,10 +364,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.26.3 (2019-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.27.1 (2019-01-03)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.27.1:  Jan 03, 2019  New field in forms of classrooms for location. (238800 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1751','es','N','Cambiar ubicaci&oacute;n aula');
+
+	Version 18.27:    Jan 03, 2019  Subqueries refactorized. (238667 lines)
 	Version 18.26.3:  Jan 03, 2019  New column location in classrooms listing. (238725 lines)
 	Version 18.26.2:  Jan 02, 2019  New column location in classrooms table. (238711 lines)
 					1 change necessary in database:
@@ -385,11 +388,11 @@ UPDATE actions SET Txt='Cambiar aforo de aula' WHERE ActCod='1750' AND Language=
 DROP INDEX NumStds ON classrooms;
 ALTER TABLE classrooms CHANGE COLUMN NumStds MaxStudents INT NOT NULL;
 UPDATE actions SET Txt='Cambiar m&aacute;x. estudiantes en grupo' WHERE ActCod='106' AND Language='es';
-UPDATE actions SET Txt='Cambiar m&aacute;x. estudiantes en aula' WHERE ActCod='1750' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1750','es','N','Cambiar m&aacute;x. estudiantes en aula');
 
 	Version 18.25.3:  Dec 30, 2018  Fixed bugs in classrooms. (238514 lines)
 	Version 18.25.2:  Dec 30, 2018  New database table for classrooms. (238525 lines)
-					8 changes necessary in database:
+					7 changes necessary in database:
 CREATE TABLE IF NOT EXISTS classrooms (ClaCod INT NOT NULL AUTO_INCREMENT,CtrCod INT NOT NULL,ShortName VARCHAR(511) NOT NULL,FullName VARCHAR(2047) NOT NULL,NumStds INT NOT NULL,UNIQUE INDEX(ClaCod),INDEX(CtrCod),INDEX(NumStds));
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1744','es','N','Ver aulas');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1745','es','N','Editar aulas');

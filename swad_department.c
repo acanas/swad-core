@@ -261,7 +261,11 @@ void Dpt_EditDepartments (void)
 
 void Dpt_GetListDepartments (long InsCod)
   {
-   char OrderBySubQuery[256];
+   static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
+     {
+      "FullName",		// Dpt_ORDER_BY_DEPARTMENT
+      "NumTchs DESC,FullName",	// Dpt_ORDER_BY_NUM_TCHS
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDpt;
@@ -273,15 +277,6 @@ void Dpt_GetListDepartments (long InsCod)
    if (InsCod > 0)	// Institution specified
      {
       /***** Get departments from database *****/
-      switch (Gbl.Dpts.SelectedOrder)
-	{
-	 case Dpt_ORDER_BY_DEPARTMENT:
-	    sprintf (OrderBySubQuery,"FullName");
-	    break;
-	 case Dpt_ORDER_BY_NUM_TCHS:
-	    sprintf (OrderBySubQuery,"NumTchs DESC,FullName");
-	    break;
-	}
       Gbl.Dpts.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get departments",
 						"(SELECT departments.DptCod,departments.InsCod,"
 						"departments.ShortName,departments.FullName,departments.WWW,"
@@ -301,7 +296,7 @@ void Dpt_GetListDepartments (long InsCod)
 						" ORDER BY %s",
 						InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 						InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-						OrderBySubQuery);
+						OrderBySubQuery[Gbl.Dpts.SelectedOrder]);
       if (Gbl.Dpts.Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/

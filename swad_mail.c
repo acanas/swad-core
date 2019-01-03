@@ -218,7 +218,12 @@ void Mai_EditMailDomains (void)
 
 static void Mai_GetListMailDomainsAllowedForNotif (void)
   {
-   char OrderBySubQuery[256];
+   static const char *OrderBySubQuery[Mai_NUM_ORDERS] =
+     {
+      "Domain,Info,N DESC",	// Mai_ORDER_BY_DOMAIN
+      "Info,Domain,N DESC",	// Mai_ORDER_BY_INFO
+      "N DESC,Info,Domain",	// Mai_ORDER_BY_USERS
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -242,18 +247,6 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 	     "CREATE TEMPORARY TABLE T2 ENGINE=MEMORY SELECT * FROM T1");
 
    /***** Get mail domains from database *****/
-   switch (Gbl.Mails.SelectedOrder)
-     {
-      case Mai_ORDER_BY_DOMAIN:
-         sprintf (OrderBySubQuery,"Domain,Info,N DESC");
-         break;
-      case Mai_ORDER_BY_INFO:
-         sprintf (OrderBySubQuery,"Info,Domain,N DESC");
-         break;
-      case Mai_ORDER_BY_USERS:
-         sprintf (OrderBySubQuery,"N DESC,Info,Domain");
-         break;
-     }
    NumRows = DB_QuerySELECT (&mysql_res,"can not get mail domains",
 			     "(SELECT mail_domains.MaiCod,"
 				     "mail_domains.Domain AS Domain,"
@@ -270,7 +263,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 			     " WHERE Domain NOT IN"
 			     " (SELECT Domain COLLATE 'latin1_bin' FROM T2))"
 			     " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
-			     OrderBySubQuery);
+			     OrderBySubQuery[Gbl.Mails.SelectedOrder]);
 
    if (NumRows) // Mail domains found...
      {

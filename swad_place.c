@@ -311,7 +311,11 @@ void Plc_PutIconToViewPlaces (void)
 
 void Plc_GetListPlaces (void)
   {
-   char OrderBySubQuery[256];
+   static const char *OrderBySubQuery[Plc_NUM_ORDERS] =
+     {
+      "FullName",		// Plc_ORDER_BY_PLACE
+      "NumCtrs DESC,FullName",	// Plc_ORDER_BY_NUM_CTRS
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -319,15 +323,6 @@ void Plc_GetListPlaces (void)
    struct Place *Plc;
 
    /***** Get places from database *****/
-   switch (Gbl.Plcs.SelectedOrder)
-     {
-      case Plc_ORDER_BY_PLACE:
-         sprintf (OrderBySubQuery,"FullName");
-         break;
-      case Plc_ORDER_BY_NUM_CTRS:
-         sprintf (OrderBySubQuery,"NumCtrs DESC,FullName");
-         break;
-     }
    NumRows = DB_QuerySELECT (&mysql_res,"can not get places",
 			     "(SELECT places.PlcCod,"
 				     "places.ShortName,"
@@ -353,7 +348,7 @@ void Plc_GetListPlaces (void)
 			     Gbl.CurrentIns.Ins.InsCod,
 			     Gbl.CurrentIns.Ins.InsCod,
 			     Gbl.CurrentIns.Ins.InsCod,
-			     OrderBySubQuery);
+			     OrderBySubQuery[Gbl.Plcs.SelectedOrder]);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Places found...
