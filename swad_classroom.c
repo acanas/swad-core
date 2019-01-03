@@ -25,7 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -84,8 +86,8 @@ void Cla_SeeClassrooms (void)
   {
    extern const char *Hlp_CENTRE_Classrooms;
    extern const char *Txt_Classrooms;
-   extern const char *Txt_CLASSROOMS_HELP_ORDER[2];
-   extern const char *Txt_CLASSROOMS_ORDER[2];
+   extern const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS];
+   extern const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS];
    extern const char *Txt_New_classroom;
    Cla_Order_t Order;
    unsigned NumCla;
@@ -103,8 +105,8 @@ void Cla_SeeClassrooms (void)
                     Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>");
-      for (Order = Cla_ORDER_BY_CLASSROOM;
-	   Order <= Cla_ORDER_BY_CAPACITY;
+      for (Order  = (Cla_Order_t) 0;
+	   Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
@@ -136,7 +138,11 @@ void Cla_SeeClassrooms (void)
 		  Gbl.Classrooms.Lst[NumCla].FullName);
 	 Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
 	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%s"
+			    "</td>"
+			    "</tr>",
+	          Gbl.Classrooms.Lst[NumCla].Location);
 	}
 
       /***** End table *****/
@@ -261,7 +267,7 @@ void Cla_PutIconToViewClassrooms (void)
 
 void Cla_GetListClassrooms (void)
   {
-   char OrderBySubQuery[256];
+   char *OrderBySubQuery;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -269,25 +275,40 @@ void Cla_GetListClassrooms (void)
    struct Classroom *Cla;
 
    /***** Get classrooms from database *****/
+   /* Build order subquery */
    switch (Gbl.Classrooms.SelectedOrder)
      {
       case Cla_ORDER_BY_CLASSROOM:
-         sprintf (OrderBySubQuery,"FullName");
+	 if (asprintf (&OrderBySubQuery,"FullName") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
       case Cla_ORDER_BY_CAPACITY:
-         sprintf (OrderBySubQuery,"Capacity DESC,FullName");
+	 if (asprintf (&OrderBySubQuery,"Capacity DESC,"
+	                                "FullName") < 0)
+	    Lay_NotEnoughMemoryExit ();
+         break;
+      case Cla_ORDER_BY_LOCATION:
+	 if (asprintf (&OrderBySubQuery,"Location DESC,"
+	                                "FullName") < 0)
+	    Lay_NotEnoughMemoryExit ();
          break;
      }
+
+   /* Build query */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get classrooms",
 			     "SELECT ClaCod,"
 				    "ShortName,"
 				    "FullName,"
-				    "Capacity"
+				    "Capacity,"
+				    "Location"
 			     " FROM classrooms"
 			     " WHERE CtrCod=%ld"
 			     " ORDER BY %s",
 			     Gbl.CurrentCtr.Ctr.CtrCod,
 			     OrderBySubQuery);
+
+   /* Free allocated memory for subquery */
+   free ((void *) OrderBySubQuery);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Classrooms found...
@@ -314,15 +335,19 @@ void Cla_GetListClassrooms (void)
 
          /* Get the short name of the classroom (row[1]) */
          Str_Copy (Cla->ShrtName,row[1],
-                   Cla_MAX_BYTES_CLASSROOM_SHRT_NAME);
+                   Cla_MAX_BYTES_SHRT_NAME);
 
          /* Get the full name of the classroom (row[2]) */
          Str_Copy (Cla->FullName,row[2],
-                   Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
+                   Cla_MAX_BYTES_FULL_NAME);
 
          /* Get seating capacity in this classroom (row[3]) */
          if (sscanf (row[3],"%u",&Cla->Capacity) != 1)
             Cla->Capacity = Cla_UNLIMITED_CAPACITY;
+
+         /* Get the full name of the classroom (row[4]) */
+         Str_Copy (Cla->Location,row[4],
+                   Cla_MAX_BYTES_LOCATION);
         }
      }
    else
@@ -338,8 +363,6 @@ void Cla_GetListClassrooms (void)
 
 void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
   {
-   extern const char *Txt_Classroom_unspecified;
-   extern const char *Txt_Another_classroom;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -348,29 +371,17 @@ void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
    Cla->ShrtName[0] = '\0';
    Cla->FullName[0] = '\0';
    Cla->Capacity = Cla_UNLIMITED_CAPACITY;
+   Cla->Location[0] = '\0';
 
    /***** Check if classroom code is correct *****/
-   if (Cla->ClaCod < 0)
-     {
-      Str_Copy (Cla->ShrtName,Txt_Classroom_unspecified,
-                Cla_MAX_BYTES_CLASSROOM_SHRT_NAME);
-      Str_Copy (Cla->FullName,Txt_Classroom_unspecified,
-                Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
-     }
-   else if (Cla->ClaCod == 0)
-     {
-      Str_Copy (Cla->ShrtName,Txt_Another_classroom,
-                Cla_MAX_BYTES_CLASSROOM_SHRT_NAME);
-      Str_Copy (Cla->FullName,Txt_Another_classroom,
-                Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
-     }
-   else if (Cla->ClaCod > 0)
+   if (Cla->ClaCod > 0)
      {
       /***** Get data of a classroom from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a classroom",
 			        "SELECT ShortName,"
 				       "FullName,"
-				       "Capacity"
+				       "Capacity,"
+				       "Location"
 				" FROM classrooms"
 				" WHERE ClaCod=%ld",
 				Cla->ClaCod);
@@ -383,15 +394,19 @@ void Cla_GetDataOfClassroomByCod (struct Classroom *Cla)
 
          /* Get the short name of the classroom (row[0]) */
          Str_Copy (Cla->ShrtName,row[0],
-                   Cla_MAX_BYTES_CLASSROOM_SHRT_NAME);
+                   Cla_MAX_BYTES_SHRT_NAME);
 
          /* Get the full name of the classroom (row[1]) */
          Str_Copy (Cla->FullName,row[1],
-                   Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
+                   Cla_MAX_BYTES_FULL_NAME);
 
          /* Get seating capacity in this classroom (row[2]) */
          if (sscanf (row[2],"%u",&Cla->Capacity) != 1)
             Cla->Capacity = Cla_UNLIMITED_CAPACITY;
+
+         /* Get the location of the classroom (row[3]) */
+         Str_Copy (Cla->Location,row[3],
+                   Cla_MAX_BYTES_LOCATION);
         }
 
       /***** Free structure that stores the query result *****/
@@ -457,7 +472,7 @@ static void Cla_ListClassroomsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cla_MAX_CHARS_CLASSROOM_SHRT_NAME,Cla->ShrtName,Gbl.Form.Id);
+               Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName,Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -469,7 +484,7 @@ static void Cla_ListClassroomsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cla_MAX_CHARS_CLASSROOM_FULL_NAME,Cla->FullName,Gbl.Form.Id);
+               Cla_MAX_CHARS_FULL_NAME,Cla->FullName,Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -574,7 +589,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentClaName = NULL;		// Initialized to avoid warning
-   char NewClaName[Cla_MAX_BYTES_CLASSROOM_FULL_NAME + 1];
+   char NewClaName[Cla_MAX_BYTES_FULL_NAME + 1];
 
    Cla = &Gbl.Classrooms.EditingCla;
    switch (ShrtOrFullName)
@@ -582,13 +597,13 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Cla_MAX_BYTES_CLASSROOM_SHRT_NAME;
+         MaxBytes = Cla_MAX_BYTES_SHRT_NAME;
          CurrentClaName = Cla->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Cla_MAX_BYTES_CLASSROOM_FULL_NAME;
+         MaxBytes = Cla_MAX_BYTES_FULL_NAME;
          CurrentClaName = Cla->FullName;
          break;
      }
@@ -705,7 +720,7 @@ void Cla_ChangeMaxStudents (void)
    NewCapacity = (unsigned)
 	        Par_GetParToUnsignedLong ("Capacity",
                                           0,
-                                          Cla_MAX_CAPACITY_OF_A_CLASSROOM,
+                                          Cla_MAX_CAPACITY,
                                           Cla_UNLIMITED_CAPACITY);
 
    /***** Get data of the classroom from database *****/
@@ -752,7 +767,7 @@ void Cla_ChangeMaxStudents (void)
 
 static void Cla_WriteCapacity (unsigned Capacity)
   {
-   if (Capacity <= Cla_MAX_CAPACITY_OF_A_CLASSROOM)
+   if (Capacity <= Cla_MAX_CAPACITY)
       fprintf (Gbl.F.Out,"%u",Capacity);
   }
 
@@ -793,7 +808,7 @@ static void Cla_PutFormToCreateClassroom (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Cla_MAX_CHARS_CLASSROOM_SHRT_NAME,Cla->ShrtName);
+            Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName);
 
    /***** Classroom full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -802,7 +817,7 @@ static void Cla_PutFormToCreateClassroom (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Cla_MAX_CHARS_CLASSROOM_FULL_NAME,Cla->FullName);
+            Cla_MAX_CHARS_FULL_NAME,Cla->FullName);
 
    /***** Seating capacity *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -866,16 +881,16 @@ void Cla_RecFormNewClassroom (void)
 
    /***** Get parameters from form *****/
    /* Get classroom short name */
-   Par_GetParToText ("ShortName",Cla->ShrtName,Cla_MAX_BYTES_CLASSROOM_SHRT_NAME);
+   Par_GetParToText ("ShortName",Cla->ShrtName,Cla_MAX_BYTES_SHRT_NAME);
 
    /* Get classroom full name */
-   Par_GetParToText ("FullName",Cla->FullName,Cla_MAX_BYTES_CLASSROOM_FULL_NAME);
+   Par_GetParToText ("FullName",Cla->FullName,Cla_MAX_BYTES_FULL_NAME);
 
    /* Get seating capacity */
    Cla->Capacity = (unsigned)
 	           Par_GetParToUnsignedLong ("Capacity",
                                              0,
-                                             Cla_MAX_CAPACITY_OF_A_CLASSROOM,
+                                             Cla_MAX_CAPACITY,
                                              Cla_UNLIMITED_CAPACITY);
 
    if (Cla->ShrtName[0] && Cla->FullName[0])	// If there's a classroom name

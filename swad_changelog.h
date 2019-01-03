@@ -345,6 +345,8 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Que un grupo tenga asociado un lugar, como un aula, así al hacer un evento de asistencia, podría tener por defecto el lugar asignado al grupo elegido.
 
+// TODO: Refactorize OrderBySubQuery
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -364,11 +366,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.26.2 (2019-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 18.26.3 (2019-01-03)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.26.2:  Jan 02, 2019  New field location in classrooms table. (238711 lines)
+	Version 18.26.3:  Jan 03, 2019  New column location in classrooms listing. (238725 lines)
+	Version 18.26.2:  Jan 02, 2019  New column location in classrooms table. (238711 lines)
 					1 change necessary in database:
 ALTER TABLE classrooms ADD COLUMN Location VARCHAR(2047) NOT NULL AFTER Capacity;
 

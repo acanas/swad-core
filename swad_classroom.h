@@ -33,15 +33,15 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Cla_MAX_CHARS_CLASSROOM_SHRT_NAME	(32 - 1)	// 31
-#define Cla_MAX_BYTES_CLASSROOM_SHRT_NAME	((Cla_MAX_CHARS_CLASSROOM_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
+#define Cla_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
+#define Cla_MAX_BYTES_SHRT_NAME	((Cla_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
-#define Cla_MAX_CHARS_CLASSROOM_FULL_NAME	(128 - 1)	// 127
-#define Cla_MAX_BYTES_CLASSROOM_FULL_NAME	((Cla_MAX_CHARS_CLASSROOM_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Cla_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
+#define Cla_MAX_BYTES_FULL_NAME	((Cla_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Cla_MAX_CAPACITY_OF_A_CLASSROOM	10000	// If capacity of a classroom is greater than this, it is considered infinite
-#define Cla_UNLIMITED_CAPACITY		INT_MAX	// This number can be stored in database as an integer...
-						// ...and means that a classroom has no limited capacity
+#define Cla_MAX_CAPACITY	10000	// If capacity of a classroom is greater than this, it is considered infinite
+#define Cla_UNLIMITED_CAPACITY	INT_MAX	// This number can be stored in database as an integer...
+					// ...and means that a classroom has no limited capacity
 
 #define Cla_MAX_CHARS_LOCATION	(128 - 1)	// 127
 #define Cla_MAX_BYTES_LOCATION	((Cla_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
@@ -50,17 +50,18 @@ struct Classroom
   {
    long ClaCod;
    long InsCod;
-   char ShrtName[Cla_MAX_BYTES_CLASSROOM_SHRT_NAME + 1];
-   char FullName[Cla_MAX_BYTES_CLASSROOM_FULL_NAME + 1];
+   char ShrtName[Cla_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cla_MAX_BYTES_FULL_NAME + 1];
    unsigned Capacity;				// Seating capacity (maximum number of people that fit in the room)
    char Location[Cla_MAX_BYTES_LOCATION + 1];	// Examples: Ground floor, first floor, basement
   };
 
-#define Cla_NUM_ORDERS 2
+#define Cla_NUM_ORDERS 3
 typedef enum
   {
    Cla_ORDER_BY_CLASSROOM = 0,
    Cla_ORDER_BY_CAPACITY  = 1,
+   Cla_ORDER_BY_LOCATION  = 2,
   } Cla_Order_t;
 #define Cla_ORDER_DEFAULT Cla_ORDER_BY_CLASSROOM
 

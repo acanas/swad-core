@@ -1642,27 +1642,6 @@ const char *Txt_Another_centre =
 	"Outro centro";
 #endif
 
-const char *Txt_Another_classroom =
-#if   L==1	// ca
-	"Una altra aula";
-#elif L==2	// de
-	"Ein weiterer Klassenzimmer";
-#elif L==3	// en
-	"Another classroom";
-#elif L==4	// es
-	"Otra aula";
-#elif L==5	// fr
-	"Une autre salle de classe";
-#elif L==6	// gn
-	"Otra aula";	// Okoteve traducción
-#elif L==7	// it
-	"Un'altra aula";
-#elif L==8	// pl
-	"Innym klasa";
-#elif L==9	// pt
-	"Outra sala de aula";
-#endif
-
 const char *Txt_Another_country =
 #if   L==1	// ca
 	"Un altre pa&iacute;s";
@@ -3918,7 +3897,7 @@ const char *Txt_Classroom_X_removed =	// Warning: it is very important to includ
 const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
    {
 #if   L==1	// ca
-	 "Ordenar por aula"	// Necessita traduccio
+	 "Ordenar per aula"
 #elif L==2	// de
 	 "Nach Klassenzimmer sortieren"
 #elif L==3	// en
@@ -3955,6 +3934,26 @@ const char *Txt_CLASSROOMS_HELP_ORDER[Cla_NUM_ORDERS] =
 	 "Sortuj wed&lsgtrok;ug pojemno&sacute;ci miejsc"
 #elif L==9	// pt
 	 "Ordenar por capacidade"
+#endif
+	 ,
+#if   L==1	// ca
+	 "Ordenar per ubicaci&oacute;"
+#elif L==2	// de
+	 "Nach Standort sortieren"
+#elif L==3	// en
+	 "Sort by location"
+#elif L==4	// es
+	 "Ordenar por ubicaci&oacute;n"
+#elif L==5	// fr
+	 "Trier par emplacement"
+#elif L==6	// gn
+	 "Ordenar por ubicaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per posizione"
+#elif L==8	// pl
+	 "Sortuj wedlug lokacja"
+#elif L==9	// pt
+	 "Classificar por localiza&ccedil;&atilde;o"
 #endif
 	};
 
@@ -3999,28 +3998,27 @@ const char *Txt_CLASSROOMS_ORDER[Cla_NUM_ORDERS] =
 #elif L==9	// pt
 	"Capacidade"
 #endif
-	};
-
-const char *Txt_Classroom_unspecified =
+	 ,
 #if   L==1	// ca
-	"Aula sense especificar";
+	"Ubicaci&oacute;"
 #elif L==2	// de
-	"Klassenzimmer nicht spezifiziert";
+	"Standort"
 #elif L==3	// en
-	"Classroom unspecified";
+	"Location"
 #elif L==4	// es
-	"Aula sin especificar";
+	"Ubicaci&oacute;n"
 #elif L==5	// fr
-	"Salle de classe non sp&eacute;cifi&eacute;e";
+	"Emplacement"
 #elif L==6	// gn
-	"Aula sin especificar";	// Okoteve traducción
+	"&Ntilde;emohenda"
 #elif L==7	// it
-	"Aula non specificata";
+	"Posizione"
 #elif L==8	// pl
-	"Klasa nieokreslone";
+	"Lokacja"
 #elif L==9	// pt
-	"Sala de aula indeterminada";
+	"Localiza&ccedil;&atilde;o"
 #endif
+	};
 
 const char *Txt_Classrooms =
 #if   L==1	// ca
@@ -17150,7 +17148,7 @@ const char *Txt_Location =
 #elif L==5	// fr
 	"Emplacement";
 #elif L==6	// gn
-	"Ubicaci&oacute;n";	// Okoteve traducción
+	"Tenda";
 #elif L==7	// it
 	"Posizione";
 #elif L==8	// pl
@@ -17171,7 +17169,7 @@ const char *Txt_Locations =
 #elif L==5	// fr
 	"Emplacements";
 #elif L==6	// gn
-	"Ubicaci&oacute;n";	// Okoteve traducción
+	"Tenda";
 #elif L==7	// it
 	"Posizioni";
 #elif L==8	// pl
