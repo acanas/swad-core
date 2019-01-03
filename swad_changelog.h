@@ -364,10 +364,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.27.2 (2019-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.27.3 (2019-01-03)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.27.3:  Jan 03, 2019  Rows in colors in listing of classrooms.
+					Fixed bugs in classrooms. (238860 lines)
 	Version 18.27.2:  Jan 03, 2019  Short name and full name in listing of classrooms. (238847 lines)
 	Version 18.27.1:  Jan 03, 2019  New field in forms of classrooms for location. (238800 lines)
 					1 change necessary in database:

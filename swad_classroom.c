@@ -89,6 +89,7 @@ void Cla_SeeClassrooms (void)
    extern const char *Txt_New_classroom;
    Cla_Order_t Order;
    unsigned NumCla;
+   unsigned RowEvenOdd;
 
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
@@ -122,29 +123,39 @@ void Cla_SeeClassrooms (void)
 	}
       fprintf (Gbl.F.Out,"</tr>");
 
-      /***** Write all classrooms and their maximum of students *****/
-      for (NumCla = 0;
+      /***** Write list of classrooms *****/
+      for (NumCla = 0, RowEvenOdd = 1;
 	   NumCla < Gbl.Classrooms.Num;
-	   NumCla++)
+	   NumCla++, RowEvenOdd = 1 - RowEvenOdd)
 	{
-	 /* Write data of this classroom */
+	 /* Short name */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "<td class=\"DAT LEFT_MIDDLE %s\">"
 			    "%s"
-			    "</td>"
-	                    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "</td>",
+		  Gbl.ColorRows[RowEvenOdd],
+		  Gbl.Classrooms.Lst[NumCla].ShrtName);
+
+	 /* Full name */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
 			    "%s"
-			    "</td>"
-	                    "<td class=\"DAT RIGHT_MIDDLE\">",
-		  Gbl.Classrooms.Lst[NumCla].ShrtName,
+			    "</td>",
+		  Gbl.ColorRows[RowEvenOdd],
 		  Gbl.Classrooms.Lst[NumCla].FullName);
+
+	 /* Capacity */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">",
+		  Gbl.ColorRows[RowEvenOdd]);
 	 Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
+	 fprintf (Gbl.F.Out,"</td>");
+
+	 /* Location */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
 			    "%s"
 			    "</td>"
 			    "</tr>",
-	          Gbl.Classrooms.Lst[NumCla].Location);
+	          Gbl.ColorRows[RowEvenOdd],
+		  Gbl.Classrooms.Lst[NumCla].Location);
 	}
 
       /***** End table *****/
@@ -185,7 +196,7 @@ static void Cla_GetParamClaOrder (void)
 
 static bool Cla_CheckIfICanCreateClassrooms (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
+   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
   }
 
 /*****************************************************************************/
@@ -529,24 +540,26 @@ long Cla_GetParamClaCod (void)
 void Cla_RemoveClassroom (void)
   {
    extern const char *Txt_Classroom_X_removed;
-   struct Classroom Cla;
+   struct Classroom *Cla;
+
+   Cla = &Gbl.Classrooms.EditingCla;
 
    /***** Get classroom code *****/
-   if ((Cla.ClaCod = Cla_GetParamClaCod ()) == -1L)
+   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of classroom is missing.");
 
    /***** Get data of the classroom from database *****/
-   Cla_GetDataOfClassroomByCod (&Cla);
+   Cla_GetDataOfClassroomByCod (Cla);
 
    /***** Remove classroom *****/
    DB_QueryDELETE ("can not remove a classroom",
 		   "DELETE FROM classrooms WHERE ClaCod=%ld",
-		   Cla.ClaCod);
+		   Cla->ClaCod);
 
    /***** Write message to show the change made *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Classroom_X_removed,
-	     Cla.FullName);
+	     Cla->FullName);
    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
@@ -957,6 +970,9 @@ void Cla_RecFormNewClassroom (void)
                                              Cla_MAX_CAPACITY,
                                              Cla_UNLIMITED_CAPACITY);
 
+   /* Get classroom location */
+   Par_GetParToText ("Location",Cla->Location,Cla_MAX_BYTES_LOCATION);
+
    if (Cla->ShrtName[0] && Cla->FullName[0])	// If there's a classroom name
      {
       /***** If name of classroom was in database... *****/
@@ -995,11 +1011,11 @@ static void Cla_CreateClassroom (struct Classroom *Cla)
    /***** Create a new classroom *****/
    DB_QueryINSERT ("can not create classroom",
 		   "INSERT INTO classrooms"
-		   " (CtrCod,ShortName,FullName,Capacity)"
+		   " (CtrCod,ShortName,FullName,Capacity,Location)"
 		   " VALUES"
-		   " (%ld,'%s','%s',%u)",
+		   " (%ld,'%s','%s',%u,'%s')",
                    Gbl.CurrentCtr.Ctr.CtrCod,
-		   Cla->ShrtName,Cla->FullName,Cla->Capacity);
+		   Cla->ShrtName,Cla->FullName,Cla->Capacity,Cla->Location);
 
    /***** Write success message *****/
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
