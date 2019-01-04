@@ -343,7 +343,7 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: No se puede pulsar sobre la foto de un remitente de un mensaje recibido.
 
-// TODO: Que un grupo tenga asociado un lugar, como un aula, así al hacer un evento de asistencia, podría tener por defecto el lugar asignado al grupo elegido.
+// TODO: Al crear un evento de asistencia, podría tener por defecto el aula asignada al grupo elegido.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -364,10 +364,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.27.5 (2019-01-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.27.6 (2019-01-04)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.27.6:  Jan 04, 2019 	Selection of classroom in form to edit group. (239099 lines)
 	Version 18.27.5:  Jan 04, 2019 	Selection of classroom in form to create group. (238964 lines)
 	Version 18.27.4:  Jan 04, 2019  New field in groups table to select a classroom. (238881 lines)
 					1 change necessary in database:

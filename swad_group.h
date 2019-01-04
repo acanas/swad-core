@@ -190,7 +190,10 @@ void Grp_OpenGroup (void);
 void Grp_CloseGroup (void);
 void Grp_EnableFileZonesGrp (void);
 void Grp_DisableFileZonesGrp (void);
+
 void Grp_ChangeGroupType (void);
+void Grp_ChangeGroupClassroom (void);
+
 void Grp_ChangeMandatGrpTyp (void);
 void Grp_ChangeMultiGrpTyp (void);
 void Grp_ChangeOpenTimeGrpTyp (void);

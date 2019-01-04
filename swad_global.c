@@ -329,6 +329,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
    Gbl.CurrentCrs.Grps.GrpCod = -1L; // -1L stands for the whole course
    Gbl.CurrentCrs.Grps.GrpName[0] = '\0';
+   Gbl.CurrentCrs.Grps.ClaCod = -1L; // -1L stands for no classroom assigned
    Gbl.CurrentCrs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
    Gbl.CurrentCrs.Grps.Open = false;
    Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods  = NULL;

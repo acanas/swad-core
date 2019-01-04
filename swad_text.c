@@ -24413,6 +24413,27 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
 #endif
 
+const char *Txt_No_assigned_classroom =
+#if   L==1	// ca
+	"Sense aula assignada";
+#elif L==2	// de
+	"Kein zugewiesenes Klassenzimmer";
+#elif L==3	// en
+	"No assigned classroom";
+#elif L==4	// es
+	"Sin aula asignada";
+#elif L==5	// fr
+	"Aucune classe assign&eacute;e";
+#elif L==6	// gn
+	"Sin aula asignada";	// Okoteve traducción
+#elif L==7	// it
+	"Nessuna aula assegnata";
+#elif L==8	// pl
+	"Brak przydzielonej sali lekcyjnej";
+#elif L==9	// pt
+	"Nenhuma sala de aula atribu&iacute;da";
+#endif
+
 const char *Txt_No_assignments =
 #if   L==1	// ca
 	"No hi ha activitats.";
@@ -43816,6 +43837,27 @@ const char *Txt_The_classroom_X_has_been_renamed_as_Y =	// Warning: it is very i
 	"Klasa <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
 	"A sala de clase <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
+#endif
+
+const char *Txt_The_classroom_assigned_to_the_group_X_has_changed =
+#if   L==1	// ca
+	"L'aula assignada al grup <strong>%s</strong> ha canviat.";
+#elif L==2	// de
+	"Das der Gruppe <strong>%s</strong> zugeordnete Klassenzimmer hat sich ge&auml;ndert.";
+#elif L==3	// en
+	"The classroom assigned to the group <strong>%s</strong> has changed.";
+#elif L==4	// es
+	"El aula asignada al grupo <strong>%s</strong> ha cambiado.";
+#elif L==5	// fr
+	"La salle de classe affect&eacute;e au groupe <strong>%s</strong> a chang&eacute;.";
+#elif L==6	// gn
+	"El aula asignada al grupo <strong>%s</strong> ha cambiado.";		// Okoteve traducción
+#elif L==7	// it
+	"L'aula assegnata al gruppo <strong>%s</strong> &egrave; cambiata.";
+#elif L==8	// pl
+	"Klasa przypisana do grupy <strong>%s</strong> uleg&lstrok;a zmianie.";
+#elif L==9	// pt
+	"A sala de aula atribu&iacute;da ao grupo <strong>%s</strong> mudou.";
 #endif
 
 const char *Txt_The_comment_no_longer_exists =

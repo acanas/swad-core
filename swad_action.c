@@ -1083,23 +1083,24 @@ Users:
 
 	891. ActChgGrp			Change my groups
 	892. ActReqEdiGrp		Request the edition of groups
-	893. ActNewGrpTyp		Request the creation of a type of group of students
-	894. ActReqRemGrpTyp		Request the removal of a type of group of students
+	893. ActNewGrpTyp		Request the creation of a type of group
+	894. ActReqRemGrpTyp		Request the removal of a type of group
 	895. ActRemGrpTyp		Remove a type of group of students
 	896. ActRenGrpTyp		Request renaming of a type of group of students
 	897. ActChgMdtGrpTyp		Request change if it is mandatory to register in groups of a type
 	898. ActChgMulGrpTyp		Request change if it is possible to register in multiple groups of a type
 	899. ActChgTimGrpTyp		Request change when the groups of a type will be open
-	900. ActNewGrp			Request the creation of a group of students
-	901. ActReqRemGrp		Request the removal of a group of students
-	902. ActRemGrp			Remove a group of students
-	903. ActOpeGrp			Abrir a group of students
-	904. ActCloGrp			Cerrar a group of students
-	905. ActEnaFilZonGrp		Enable zonas of files of a group
-	906. ActDisFilZonGrp		Disable zonas of files of a group
-	907. ActChgGrpTyp		Request change in the type of group of students
-	908. ActRenGrp			Request renaming of a group of students
-	909. ActChgMaxStdGrp		Request change in the number máximo of students of a group
+	900. ActNewGrp			Request the creation of a group
+	901. ActReqRemGrp		Request the removal of a group
+	902. ActRemGrp			Remove a group
+	903. ActOpeGrp			Open a group
+	904. ActCloGrp			Close a group
+	905. ActEnaFilZonGrp		Enable filezones of a group
+	906. ActDisFilZonGrp		Disable filezones of a group
+	907. ActChgGrpTyp		Change the type of group of a group
+	908. ActRenGrp			Rename a group
+	NEW. ActChgGrpCla		Change the classroom of a group
+	909. ActChgMaxStdGrp		Change the maximum number of students in a group
 
 	910. ActLstGst			List main data of administrators
 
@@ -2669,6 +2670,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDisFilZonGrp	*/{ 496,-1,TabUnk,ActReqSelGrp		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_DisableFileZonesGrp	,NULL},
    /* ActChgGrpTyp	*/{ 167,-1,TabUnk,ActReqSelGrp		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeGroupType		,NULL},
    /* ActRenGrp		*/{ 121,-1,TabUnk,ActReqSelGrp		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_RenameGroup		,NULL},
+   /* ActChgGrpCla	*/{1752,-1,TabUnk,ActReqSelGrp		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeGroupClassroom	,NULL},
    /* ActChgMaxStdGrp	*/{ 106,-1,TabUnk,ActReqSelGrp		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Grp_ChangeMaxStdsGrp		,NULL},
 
    /* ActLstGst		*/{ 587,-1,TabUnk,ActLstOth		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_SeeGuests			,NULL},
@@ -4958,6 +4960,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRenClaFul,		// #1749
 	ActChgClaMaxStd,	// #1750
 	ActRenClaLoc,		// #1751
+	ActChgGrpCla,		// #1752
 	};
 
 /*****************************************************************************/

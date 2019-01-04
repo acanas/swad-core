@@ -1499,9 +1499,12 @@ static void Grp_ListGroupsForEdition (void)
    extern const char *Txt_Group_X_closed_click_to_open_it;
    extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
    extern const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them;
+   extern const char *Txt_No_assigned_classroom;
+   extern const char *Txt_Another_classroom;
    unsigned NumGrpTyp;
    unsigned NumTipGrpAux;
    unsigned NumGrpThisType;
+   unsigned NumCla;
    struct GroupType *GrpTyp;
    struct GroupType *GrpTypAux;
    struct Group *Grp;
@@ -1523,7 +1526,7 @@ static void Grp_ListGroupsForEdition (void)
         {
          Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 
-         /* Write icon to remove group */
+         /***** Icon to remove group *****/
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"BM\">");
          Frm_StartFormAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
@@ -1532,7 +1535,7 @@ static void Grp_ListGroupsForEdition (void)
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
-         /* Write icon to open/close group */
+         /***** Icon to open/close group *****/
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
          Frm_StartFormAnchor (Grp->Open ? ActCloGrp :
                                           ActOpeGrp,
@@ -1553,7 +1556,7 @@ static void Grp_ListGroupsForEdition (void)
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
-         /* Write icon to activate file zones for this group */
+         /***** Icon to activate file zones for this group *****/
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
          Frm_StartFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
                                                ActEnaFilZonGrp,
@@ -1574,13 +1577,16 @@ static void Grp_ListGroupsForEdition (void)
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
-         /* Group type */
+         /***** Group type *****/
+         /* Start selector */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:100px;\""
                             " onchange=\"document.getElementById('%s').submit();\">",
                   Gbl.Form.Id);
+
+         /* Options for group types */
          for (NumTipGrpAux = 0;
               NumTipGrpAux < Gbl.CurrentCrs.Grps.GrpTypes.Num;
               NumTipGrpAux++)
@@ -1591,11 +1597,13 @@ static void Grp_ListGroupsForEdition (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
             fprintf (Gbl.F.Out,">%s</option>",GrpTypAux->GrpTypName);
            }
+
+         /* End selector */
          fprintf (Gbl.F.Out,"</select>");
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
-         /* Group name */
+         /***** Group name *****/
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
@@ -1606,7 +1614,48 @@ static void Grp_ListGroupsForEdition (void)
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
-         /* Current number of users in this group */
+	 /***** Classroom *****/
+	 /* Start selector */
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+         Frm_StartFormAnchor (ActChgGrpCla,Grp_GROUPS_SECTION_ID);
+         Grp_PutParamGrpCod (Grp->GrpCod);
+	 fprintf (Gbl.F.Out,"<select name=\"ClaCod\" style=\"width:100px;\""
+                            " onchange=\"document.getElementById('%s').submit();\">",
+                  Gbl.Form.Id);
+
+	 /* Option for no assigned classroom */
+	 fprintf (Gbl.F.Out,"<option value=\"-1\"");
+	 if (Grp->ClaCod < 0)
+	    fprintf (Gbl.F.Out," selected=\"selected\"");
+	 fprintf (Gbl.F.Out,">%s</option>",
+		  Txt_No_assigned_classroom);
+
+	 /* Option for another classroom */
+	 fprintf (Gbl.F.Out,"<option value=\"0\"");
+	 if (Grp->ClaCod == 0)
+	    fprintf (Gbl.F.Out," selected=\"selected\"");
+	 fprintf (Gbl.F.Out,">%s</option>",
+		  Txt_Another_classroom);
+
+	 /* Options for classrooms */
+	 for (NumCla = 0;
+	      NumCla < Gbl.Classrooms.Num;
+	      NumCla++)
+	   {
+	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",
+		     Gbl.Classrooms.Lst[NumCla].ClaCod);
+	    if (Gbl.Classrooms.Lst[NumCla].ClaCod == Grp->ClaCod)
+	       fprintf (Gbl.F.Out," selected=\"selected\"");
+	    fprintf (Gbl.F.Out,">%s</option>",
+		     Gbl.Classrooms.Lst[NumCla].ShrtName);
+	   }
+
+	 /* End selector */
+	 fprintf (Gbl.F.Out,"</select>");
+         Frm_EndForm ();
+	 fprintf (Gbl.F.Out,"</td>");
+
+         /***** Current number of users in this group *****/
          for (Role = Rol_TCH;
               Role >= Rol_STD;
               Role--)
@@ -1615,7 +1664,7 @@ static void Grp_ListGroupsForEdition (void)
 			       "</td>",
 		     Grp->NumUsrs[Role]);
 
-         /* Maximum number of students of the group (row[3]) */
+         /***** Maximum number of students of the group (row[3]) *****/
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
@@ -2594,6 +2643,7 @@ static void Grp_PutFormToCreateGroup (void)
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
+   extern const char *Txt_No_assigned_classroom;
    extern const char *Txt_Another_classroom;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
@@ -2632,19 +2682,25 @@ static void Grp_PutFormToCreateGroup (void)
             Txt_File_zones_disabled);
 
    /***** Group type *****/
+   /* Start selector */
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"GrpTypCod\" style=\"width:100px;\">");
+
+   /* Options for group types */
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",
 	       Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod == Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod)
+      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
+	  Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
      }
+
+   /* End selector */
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -2657,17 +2713,25 @@ static void Grp_PutFormToCreateGroup (void)
             Grp_MAX_CHARS_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
 
    /***** Classroom *****/
+   /* Start selector */
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"ClaCod\" style=\"width:100px;\">"
-		      "<option value=\"-1\"");
+                      "<select name=\"ClaCod\" style=\"width:100px;\">");
+
+   /* Option for no assigned classroom */
+   fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.CurrentCrs.Grps.ClaCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
-		      "<option value=\"0\"");
+   fprintf (Gbl.F.Out,">%s</option>",
+	    Txt_No_assigned_classroom);
+
+   /* Option for another classroom */
+   fprintf (Gbl.F.Out,"<option value=\"0\"");
    if (Gbl.CurrentCrs.Grps.ClaCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",
 	    Txt_Another_classroom);
+
+   /* Options for classrooms */
    for (NumCla = 0;
 	NumCla < Gbl.Classrooms.Num;
 	NumCla++)
@@ -2675,12 +2739,14 @@ static void Grp_PutFormToCreateGroup (void)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",
 	       Gbl.Classrooms.Lst[NumCla].ClaCod);
       if (Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.CurrentCrs.Grps.ClaCod)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Classrooms.Lst[NumCla].ShrtName);
      }
+
+   /* End selector */
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+		      "</td>");
 
    /***** Current number of users in this group *****/
    for (Role = Rol_TCH;
@@ -3030,8 +3096,8 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
    return DB_QuerySELECT (mysql_res,"can not get groups of a type",
 			  "SELECT GrpCod,"
 			         "GrpName,"
-			         "MaxStudents,"
 			         "ClaCod,"
+			         "MaxStudents,"
 			         "Open,"
 			         "FileZones"
 			  " FROM crs_grp"
@@ -3805,6 +3871,9 @@ void Grp_RecFormNewGrp (void)
       Par_GetParToText ("GrpName",Gbl.CurrentCrs.Grps.GrpName,
                         Grp_MAX_BYTES_GROUP_NAME);
 
+      /* Get classroom */
+      Gbl.CurrentCrs.Grps.ClaCod = Cla_GetParamClaCod ();
+
       /* Get maximum number of students */
       Gbl.CurrentCrs.Grps.MaxStudents = (unsigned)
 	                                Par_GetParToUnsignedLong ("MaxStudents",
@@ -3914,11 +3983,12 @@ static void Grp_CreateGroup (void)
    /***** Create a new group *****/
    DB_QueryINSERT ("can not create group",
 		   "INSERT INTO crs_grp"
-		   " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
+		   " (GrpTypCod,GrpName,ClaCod,MaxStudents,Open,FileZones)"
 		   " VALUES"
-		   " (%ld,'%s',%u,'N','N')",
+		   " (%ld,'%s',%ld,%u,'N','N')",
 	           Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
 	           Gbl.CurrentCrs.Grps.GrpName,
+	           Gbl.CurrentCrs.Grps.ClaCod,
 	           Gbl.CurrentCrs.Grps.MaxStudents);
   }
 
@@ -4369,6 +4439,46 @@ void Grp_ChangeGroupType (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = NewGrpTypCod;
+   Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
+                              AlertType,Gbl.Alert.Txt);
+  }
+
+/*****************************************************************************/
+/*********************** Change the classroom of a group *********************/
+/*****************************************************************************/
+
+void Grp_ChangeGroupClassroom (void)
+  {
+   extern const char *Txt_The_classroom_assigned_to_the_group_X_has_changed;
+   long NewClaCod;
+   struct GroupData GrpDat;
+   Ale_AlertType_t AlertType;
+
+   /***** Get parameters from form *****/
+   /* Get group code */
+   if ((Gbl.CurrentCrs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of group is missing.");
+
+   /* Get the new classroom */
+   NewClaCod = Cla_GetParamClaCod ();
+
+   /* Get from the database the name of the group */
+   GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
+   Grp_GetDataOfGroupByCod (&GrpDat);
+
+   /***** Update the table of groups changing old classroom by new classroom *****/
+   DB_QueryUPDATE ("can not update the classroom of a group",
+		   "UPDATE crs_grp SET ClaCod=%ld WHERE GrpCod=%ld",
+		   NewClaCod,Gbl.CurrentCrs.Grps.GrpCod);
+
+   /* Create message to show the change made */
+   AlertType = Ale_SUCCESS;
+   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	     Txt_The_classroom_assigned_to_the_group_X_has_changed,
+	     GrpDat.GrpName);
+
+   /***** Show the form again *****/
+   Gbl.CurrentCrs.Grps.ClaCod = NewClaCod;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,Gbl.Alert.Txt);
   }
