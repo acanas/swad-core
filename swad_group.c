@@ -1625,14 +1625,14 @@ static void Grp_ListGroupsForEdition (void)
 
 	 /* Option for no assigned classroom */
 	 fprintf (Gbl.F.Out,"<option value=\"-1\"");
-	 if (Grp->ClaCod < 0)
+	 if (Grp->Classroom.ClaCod < 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Txt_No_assigned_classroom);
 
 	 /* Option for another classroom */
 	 fprintf (Gbl.F.Out,"<option value=\"0\"");
-	 if (Grp->ClaCod == 0)
+	 if (Grp->Classroom.ClaCod == 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Txt_Another_classroom);
@@ -1644,7 +1644,7 @@ static void Grp_ListGroupsForEdition (void)
 	   {
 	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",
 		     Gbl.Classrooms.Lst[NumCla].ClaCod);
-	    if (Gbl.Classrooms.Lst[NumCla].ClaCod == Grp->ClaCod)
+	    if (Gbl.Classrooms.Lst[NumCla].ClaCod == Grp->Classroom.ClaCod)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
 	    fprintf (Gbl.F.Out,">%s</option>",
 		     Gbl.Classrooms.Lst[NumCla].ShrtName);
@@ -2362,6 +2362,10 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	              "</td>",
             -(GrpTyp->GrpTypCod),Txt_users_with_no_group);
 
+   /* Classroom */
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+	              "</td>");
+
    /* Number of students who don't belong to any group of this type */
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
@@ -2386,6 +2390,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    extern const char *Txt_Opening_of_groups;
    extern const char *Txt_Today;
    extern const char *Txt_Group;
+   extern const char *Txt_Classroom;
    extern const char *Txt_Max_BR_students;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Vacants;
@@ -2394,7 +2399,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" class=\"GRP_TITLE LEFT_MIDDLE\">"
+	              "<td colspan=\"9\" class=\"GRP_TITLE LEFT_MIDDLE\">"
 	              "<br />%s",
 	    GrpTyp->GrpTypName);
    if (GrpTyp->MustBeOpened)
@@ -2419,8 +2424,12 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                       "<th colspan=\"2\"></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
                       "</th>",
-            Txt_Group);
+           Txt_Group,
+	   Txt_Classroom);
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
@@ -2479,6 +2488,15 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	              "</td>",
 	    Grp->GrpCod,
 	    Grp->GrpName);
+
+   /***** Classroom *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE");
+   if (Highlight)
+      fprintf (Gbl.F.Out," LIGHT_BLUE");
+   fprintf (Gbl.F.Out,"\">"
+	              "%s"
+	              "</td>",
+	    Grp->Classroom.ShrtName);
 
    /***** Current number of users in this group *****/
    for (Role = Rol_TCH;
@@ -2996,7 +3014,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                          Grp_MAX_BYTES_GROUP_NAME);
 
                /* Get classroom code (row[2]) */
-               Grp->ClaCod = Str_ConvertStrCodToLongCod (row[2]);
+               Grp->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[2]);
 
                /* Get number of current users in group */
 	       for (Role = Rol_TCH;

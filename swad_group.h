@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_classroom.h"
 #include "swad_info.h"
 #include "swad_user.h"
 
@@ -74,7 +75,11 @@ struct Group
   {
    long GrpCod;					// Code of group
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];	// Name of group
-   long ClaCod;					// Classroom code
+   struct
+     {
+      long ClaCod;					// Classroom code
+      char ShrtName[Cla_MAX_BYTES_SHRT_NAME + 1];	// Classroom short name
+     } Classroom;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStudents;			// Maximum number of students in the group
    bool Open;					// Group is open?
