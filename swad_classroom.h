@@ -66,6 +66,13 @@ typedef enum
   } Cla_Order_t;
 #define Cla_ORDER_DEFAULT Cla_ORDER_BY_LOCATION
 
+/***** Get all data or only short name *****/
+typedef enum
+  {
+   Cla_ALL_DATA,
+   Cla_ONLY_SHRT_NAME,
+  } Cla_WhichData_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -73,8 +80,11 @@ typedef enum
 void Cla_SeeClassrooms (void);
 void Cla_EditClassrooms (void);
 void Cla_PutIconToViewClassrooms (void);
-void Cla_GetListClassrooms (void);
+void Cla_GetListClassrooms (Cla_WhichData_t WhichData);
 void Cla_FreeListClassrooms (void);
+
+void Cla_GetListClassroomsInThisCtr (void);
+
 void Cla_GetDataOfClassroomByCod (struct Classroom *Cla);
 long Cla_GetParamClaCod (void);
 

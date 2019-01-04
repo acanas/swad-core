@@ -1642,6 +1642,27 @@ const char *Txt_Another_centre =
 	"Outro centro";
 #endif
 
+const char *Txt_Another_classroom =
+#if   L==1	// ca
+	"Una altra aula";
+#elif L==2	// de
+	"Eine weitere Klassenzimmer";
+#elif L==3	// en
+	"Another classroom";
+#elif L==4	// es
+	"Otra aula";
+#elif L==5	// fr
+	"Un autre salle de classe";
+#elif L==6	// gn
+	"Otra aula";	// Okoteve traducción
+#elif L==7	// it
+	"Un'altra aula";
+#elif L==8	// pl
+	"Kolejna klasa";
+#elif L==9	// pt
+	"Outra sala de aula";
+#endif
+
 const char *Txt_Another_country =
 #if   L==1	// ca
 	"Un altre pa&iacute;s";
@@ -1703,6 +1724,48 @@ const char *Txt_Another_ID =
 	"Another ID";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Outro n&ordm; de identif.";
+#endif
+
+const char *Txt_Another_institution =
+#if   L==1	// ca
+	"Una altra instituci&oacute;";
+#elif L==2	// de
+	"Eine weitere Hochschule";
+#elif L==3	// en
+	"Another institution";
+#elif L==4	// es
+	"Otra instituci&oacute;n";
+#elif L==5	// fr
+	"Un autre &eacute;tablissement";
+#elif L==6	// gn
+	"Otra instituci&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Un'altra istituzione";
+#elif L==8	// pl
+	"Kolejna instytucja";
+#elif L==9	// pt
+	"Outra institui&ccedil;&atilde;o";
+#endif
+
+const char *Txt_Another_place =
+#if   L==1	// ca
+	"Un altre lloc";
+#elif L==2	// de
+	"Ein weiterer Standort";
+#elif L==3	// en
+	"Another place";
+#elif L==4	// es
+	"Otro lugar";
+#elif L==5	// fr
+	"Un autre emplacement";
+#elif L==6	// gn
+	"Otro lugar";	// Okoteve traducción
+#elif L==7	// it
+	"Un'altra localit&grave;";
+#elif L==8	// pl
+	"Innym miejscem";
+#elif L==9	// pt
+	"Outra localiza&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Another_user_s_profile =
@@ -1829,48 +1892,6 @@ const char *Txt_Announcement_removed =
 	"Og&lstrok;oszenia usuniete.";
 #elif L==9	// pt
 	"An&uacute;ncio removido.";
-#endif
-
-const char *Txt_Another_institution =
-#if   L==1	// ca
-	"Una altra instituci&oacute;";
-#elif L==2	// de
-	"Eine weitere Hochschule";
-#elif L==3	// en
-	"Another institution";
-#elif L==4	// es
-	"Otra instituci&oacute;n";
-#elif L==5	// fr
-	"Un autre &eacute;tablissement";
-#elif L==6	// gn
-	"Otra instituci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Un'altra istituzione";
-#elif L==8	// pl
-	"Kolejna instytucja";
-#elif L==9	// pt
-	"Outra institui&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Another_place =
-#if   L==1	// ca
-	"Un altre lloc";
-#elif L==2	// de
-	"Ein weiterer Standort";
-#elif L==3	// en
-	"Another place";
-#elif L==4	// es
-	"Otro lugar";
-#elif L==5	// fr
-	"Un autre emplacement";
-#elif L==6	// gn
-	"Otro lugar";	// Okoteve traducción
-#elif L==7	// it
-	"Un'altra localit&grave;";
-#elif L==8	// pl
-	"Innym miejscem";
-#elif L==9	// pt
-	"Outra localiza&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Answer_survey =
@@ -5403,7 +5424,7 @@ const char *Txt_Create_another_centre =
 #elif L==7	// it
 	"Crea un altro centro";
 #elif L==8	// pl
-	"Tworzenie inny centrum";
+	"Utw&oacute;rz inny centrum";
 #elif L==9	// pt
 	"Criar outro centro";
 #endif
@@ -5424,7 +5445,7 @@ const char *Txt_Create_another_course =
 #elif L==7	// it
 	"Crea un altro corso";
 #elif L==8	// pl
-	"Tworzenie inny kursu";
+	"Utw&oacute;rz inny kursu";
 #elif L==9	// pt
 	"Criar outra disciplina";
 #endif
@@ -5445,7 +5466,7 @@ const char *Txt_Create_another_degree =
 #elif L==7	// it
 	"Crea una altra laurea";
 #elif L==8	// pl
-	"Tworzenie inny stopnia";
+	"Utw&oacute;rz inny stopnia";
 #elif L==9	// pt
 	"Criar outro grau";
 #endif
@@ -5466,7 +5487,7 @@ const char *Txt_Create_another_institution =
 #elif L==7	// it
 	"Crea una altra istituzione";
 #elif L==8	// pl
-	"Tworzenie inny instytucji";
+	"Utw&oacute;rz inny instytucji";
 #elif L==9	// pt
 	"Criar outra institu&ccedil;&atilde;o";
 #endif
@@ -5487,7 +5508,7 @@ const char *Txt_Create_another_type_of_degree =
 #elif L==7	// it
 	"Crea un altro tipo di laurea";
 #elif L==8	// pl
-	"Tworzenie inny typu stopnia";
+	"Utw&oacute;rz inny typu stopnia";
 #elif L==9	// pt
 	"Criar outro tipo de grau";
 #endif
@@ -5550,7 +5571,7 @@ const char *Txt_Create_centre =
 #elif L==7	// it
 	"Crea centro";
 #elif L==8	// pl
-	"Tworzenie centrum";
+	"Utw&oacute;rz centrum";
 #elif L==9	// pt
 	"Criar centro";
 #endif
@@ -5571,7 +5592,7 @@ const char *Txt_Create_classroom =
 #elif L==7	// it
 	"Crea aula";
 #elif L==8	// pl
-	"Tworzenie klasa";
+	"Utw&oacute;rz klasa";
 #elif L==9	// pt
 	"Criar sala de aula";
 #endif
@@ -5592,7 +5613,7 @@ const char *Txt_Create_country =
 #elif L==7	// it
 	"Crea paese";
 #elif L==8	// pl
-	"Tworzenie kraju";
+	"Utw&oacute;rz kraju";
 #elif L==9	// pt
 	"Criar pa&iacute;s";
 #endif
@@ -5613,7 +5634,7 @@ const char *Txt_Create_course =
 #elif L==7	// it
 	"Crea corso";
 #elif L==8	// pl
-	"Tworzenie kursu";
+	"Utw&oacute;rz kursu";
 #elif L==9	// pt
 	"Criar disciplina";
 #endif
@@ -5634,7 +5655,7 @@ const char *Txt_Create_degree =
 #elif L==7	// it
 	"Crea laurea";
 #elif L==8	// pl
-	"Tworzenie stopnia";
+	"Utw&oacute;rz stopnia";
 #elif L==9	// pt
 	"Criar grau";
 #endif
@@ -5655,7 +5676,7 @@ const char *Txt_Create_department =
 #elif L==7	// it
 	"Crea dipartimento";
 #elif L==8	// pl
-	"Tworzenie dzia&lstrok;u";
+	"Utw&oacute;rz dzia&lstrok;u";
 #elif L==9	// pt
 	"Criar departamento";
 #endif
@@ -5676,7 +5697,7 @@ const char *Txt_Create_email_domain =
 #elif L==7	// it
 	"Crea campo mail";
 #elif L==8	// pl
-	"Tworzenie domeny mail";
+	"Utw&oacute;rz domeny mail";
 #elif L==9	// pt
 	"Criar dom&iacute;nio de email";
 #endif
@@ -5697,7 +5718,7 @@ const char *Txt_Create_email_message =
 #elif L==7	// it
 	"Crea messaggio email";
 #elif L==8	// pl
-	"Tworzenie wiadomosci email";
+	"Utw&oacute;rz wiadomosci email";
 #elif L==9	// pt
 	"Criar uma mensagem de email";
 #endif
@@ -5760,14 +5781,14 @@ const char *Txt_Create_game =
 #elif L==7	// it
 	"Crea gioco";
 #elif L==8	// pl
-	"Tworzenie gra";
+	"Utw&oacute;rz gra";
 #elif L==9	// pt
 	"Criar jogo";
 #endif
 
 const char *Txt_Create_group =
 #if   L==1	// ca
-	"Crear grupo";		// Necessita traduccio
+	"Crear grup";
 #elif L==2	// de
 	"Gruppe erstellen";
 #elif L==3	// en
@@ -5781,7 +5802,7 @@ const char *Txt_Create_group =
 #elif L==7	// it
 	"Crea gruppo";
 #elif L==8	// pl
-	"Create group";		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz grup&eogon;";
 #elif L==9	// pt
 	"Criar grupo";
 #endif
@@ -5802,7 +5823,7 @@ const char *Txt_Create_holiday =
 #elif L==7	// it
 	"Crea festivit&agrave;";
 #elif L==8	// pl
-	"Tworzenie wakacje";
+	"Utw&oacute;rz wakacje";
 #elif L==9	// pt
 	"Criar f&eacute;ria";
 #endif
@@ -5823,7 +5844,7 @@ const char *Txt_Create_institution =
 #elif L==7	// it
 	"Crea istituzione";
 #elif L==8	// pl
-	"Tworzenie instytucji";
+	"Utw&oacute;rz instytucji";
 #elif L==9	// pt
 	"Criar institu&ccedil;&atilde;o";
 #endif
@@ -5865,7 +5886,7 @@ const char *Txt_Create_notice =
 #elif L==7	// it
 	"Crea avviso";
 #elif L==8	// pl
-	"Stw&oacute;rz powiadomienie";
+	"Utw&oacute;rz powiadomienie";
 #elif L==9	// pt
 	"Criar aviso";
 #endif
@@ -5886,7 +5907,7 @@ const char *Txt_Create_BR_notification =
 #elif L==7	// it
 	"Crea<br />notifica";
 #elif L==8	// pl
-	"Tworzenie<br />powiadomienie";
+	"Utw&oacute;rz<br />powiadomienie";
 #elif L==9	// pt
 	"Criar<br />notifica&ccedil;&atilde;o";
 #endif
@@ -5928,7 +5949,7 @@ const char *Txt_Create_place =
 #elif L==7	// it
 	"Crea localit&grave;";
 #elif L==8	// pl
-	"Tworzenie miejsce";
+	"Utw&oacute;rz miejsce";
 #elif L==9	// pt
 	"Criar localiza&ccedil;&atilde;o";
 #endif
@@ -5949,7 +5970,7 @@ const char *Txt_Create_plugin =
 #elif L==7	// it
 	"Crea plugin";
 #elif L==8	// pl
-	"Tworzenie plugin";
+	"Utw&oacute;rz plugin";
 #elif L==9	// pt
 	"Criar plugin";
 #endif
@@ -5970,7 +5991,7 @@ const char *Txt_Create_project =
 #elif L==7	// it
 	"Crea progetto";
 #elif L==8	// pl
-	"Tworzenie projekt";
+	"Utw&oacute;rz projekt";
 #elif L==9	// pt
 	"Criar projeto";
 #endif
@@ -5991,7 +6012,7 @@ const char *Txt_Create_question =
 #elif L==7	// it
 	"Crea domanda";
 #elif L==8	// pl
-	"Tworzenie pytanie";
+	"Utw&oacute;rz pytanie";
 #elif L==9	// pt
 	"Criar quest&atilde;o";
 #endif
@@ -6033,7 +6054,7 @@ const char *Txt_Create_survey =
 #elif L==7	// it
 	"Crea sondaggio";
 #elif L==8	// pl
-	"Tworzenie ankiety";
+	"Utw&oacute;rz ankiety";
 #elif L==9	// pt
 	"Criar inqu&eacute;rito";
 #endif
@@ -6054,7 +6075,7 @@ const char *Txt_Create_type_of_degree =
 #elif L==7	// it
 	"Crea tipo di laurea";
 #elif L==8	// pl
-	"Tworzenie typu stopnia";
+	"Utw&oacute;rz typu stopnia";
 #elif L==9	// pt
 	"Criar tipo de grau";
 #endif
@@ -6075,7 +6096,7 @@ const char *Txt_Create_type_of_group =
 #elif L==7	// it
 	"Crea tipo di gruppo";
 #elif L==8	// pl
-	"Tworzenie typu grupy";
+	"Utw&oacute;rz typu grupy";
 #elif L==9	// pt
 	"Criar tipo de grupo";
 #endif
@@ -6096,7 +6117,7 @@ const char *Txt_Create_ZIP_file =
 #elif L==7	// it
 	"Crea file ZIP";
 #elif L==8	// pl
-	"Tworzenie pliku ZIP";
+	"Utw&oacute;rz pliku ZIP";
 #elif L==9	// pt
 	"Criar arquivo ZIP";
 #endif
@@ -6621,7 +6642,7 @@ const char *Txt_Creating_database_tables_if_they_do_not_exist =
 #elif L==7	// it
 	"Creazione tabelle della base di dati se non esistono&hellip;";
 #elif L==8	// pl
-	"Tworzenie tabel bazy danych, jesli ich nie ma &hellip;";
+	"Utw&oacute;rz tabel bazy danych, jesli ich nie ma &hellip;";
 #elif L==9	// pt
 	"Criando tabelas da base de dados, se elas n&atilde;o existirem&hellip;";
 #endif

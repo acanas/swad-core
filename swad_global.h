@@ -475,6 +475,7 @@ struct Globals
          struct GroupType GrpTyp;
          long GrpCod;		// Group to be edited, removed...
          char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
+         long ClaCod;
          unsigned MaxStudents;
          bool Open;
          bool FileZones;

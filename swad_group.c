@@ -232,6 +232,9 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,cons
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ALL_GROUP_TYPES);
 
+   /***** Get list of classrooms in this centre *****/
+   Cla_GetListClassrooms (Cla_ONLY_SHRT_NAME);
+
    /***** Show optional alert *****/
    if (MessageGroupTypes)
       if (MessageGroupTypes[0])
@@ -260,6 +263,9 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,const ch
 
    /***** End groups section *****/
    Lay_EndSection ();
+
+   /***** Free list of classrooms in this centre *****/
+   Cla_FreeListClassrooms ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -1572,7 +1578,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:150px;\""
+         fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:100px;\""
                             " onchange=\"document.getElementById('%s').submit();\">",
                   Gbl.Form.Id);
          for (NumTipGrpAux = 0;
@@ -1594,7 +1600,7 @@ static void Grp_ListGroupsForEdition (void)
          Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
-                            " size=\"40\" maxlength=\"%u\" value=\"%s\""
+                            " size=\"20\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
          Frm_EndForm ();
@@ -1637,6 +1643,7 @@ static void Grp_WriteHeadingGroups (void)
    extern const char *Txt_Type_BR_of_group;
    extern const char *Txt_Group_name;
    extern const char *Txt_eg_A_B;
+   extern const char *Txt_Classroom;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Max_BR_students;
    Rol_Role_t Role;
@@ -1650,9 +1657,13 @@ static void Grp_WriteHeadingGroups (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s<br />(%s)"
+                      "</th>"
+                      "<th class=\"CENTER_MIDDLE\">"
+                      "%s"
                       "</th>",
             Txt_Type_BR_of_group,
-            Txt_Group_name,Txt_eg_A_B);
+            Txt_Group_name,Txt_eg_A_B,
+	    Txt_Classroom);
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
@@ -2583,8 +2594,10 @@ static void Grp_PutFormToCreateGroup (void)
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
+   extern const char *Txt_Another_classroom;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
+   unsigned NumCla;
    Rol_Role_t Role;
 
    /***** Start form *****/
@@ -2620,7 +2633,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Group type *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"GrpTypCod\" style=\"width:150px;\">");
+                      "<select name=\"GrpTypCod\" style=\"width:100px;\">");
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
@@ -2638,10 +2651,36 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Group name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"GrpName\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\""
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\""
 	              " required=\"required\" />"
 	              "</td>",
             Grp_MAX_CHARS_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
+
+   /***** Classroom *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select name=\"ClaCod\" style=\"width:100px;\">"
+		      "<option value=\"-1\"");
+   if (Gbl.CurrentCrs.Grps.ClaCod < 0)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
+		      "<option value=\"0\"");
+   if (Gbl.CurrentCrs.Grps.ClaCod == 0)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",
+	    Txt_Another_classroom);
+   for (NumCla = 0;
+	NumCla < Gbl.Classrooms.Num;
+	NumCla++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
+	       Gbl.Classrooms.Lst[NumCla].ClaCod);
+      if (Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.CurrentCrs.Grps.ClaCod)
+         fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",
+	       Gbl.Classrooms.Lst[NumCla].ShrtName);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
 
    /***** Current number of users in this group *****/
    for (Role = Rol_TCH;

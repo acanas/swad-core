@@ -97,7 +97,7 @@ void Cla_SeeClassrooms (void)
       Cla_GetParamClaOrder ();
 
       /***** Get list of classrooms *****/
-      Cla_GetListClassrooms ();
+      Cla_GetListClassrooms (Cla_ALL_DATA);
 
       /***** Table head *****/
       Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
@@ -229,7 +229,7 @@ void Cla_EditClassrooms (void)
    extern const char *Txt_Classrooms;
 
    /***** Get list of classrooms *****/
-   Cla_GetListClassrooms ();
+   Cla_GetListClassrooms (Cla_ALL_DATA);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsEditingClassrooms,
@@ -278,7 +278,7 @@ void Cla_PutIconToViewClassrooms (void)
 /************************** List all the classrooms **************************/
 /*****************************************************************************/
 
-void Cla_GetListClassrooms (void)
+void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
   {
    static const char *OrderBySubQuery[Cla_NUM_ORDERS] =
      {
@@ -294,17 +294,32 @@ void Cla_GetListClassrooms (void)
    struct Classroom *Cla;
 
    /***** Get classrooms from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get classrooms",
-			     "SELECT ClaCod,"
-				    "ShortName,"
-				    "FullName,"
-				    "Capacity,"
-				    "Location"
-			     " FROM classrooms"
-			     " WHERE CtrCod=%ld"
-			     " ORDER BY %s",
-			     Gbl.CurrentCtr.Ctr.CtrCod,
-			     OrderBySubQuery[Gbl.Classrooms.SelectedOrder]);
+   switch (WhichData)
+     {
+      case Cla_ALL_DATA:
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get classrooms",
+				   "SELECT ClaCod,"
+					  "ShortName,"
+					  "FullName,"
+					  "Capacity,"
+					  "Location"
+				   " FROM classrooms"
+				   " WHERE CtrCod=%ld"
+				   " ORDER BY %s",
+				   Gbl.CurrentCtr.Ctr.CtrCod,
+				   OrderBySubQuery[Gbl.Classrooms.SelectedOrder]);
+	 break;
+      case Cla_ONLY_SHRT_NAME:
+      default:
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get classrooms",
+				   "SELECT ClaCod,"
+					  "ShortName"
+				   " FROM classrooms"
+				   " WHERE CtrCod=%ld"
+				   " ORDER BY ShortName",
+				   Gbl.CurrentCtr.Ctr.CtrCod);
+	 break;
+     }
 
    /***** Count number of rows in result *****/
    if (NumRows) // Classrooms found...
@@ -333,17 +348,20 @@ void Cla_GetListClassrooms (void)
          Str_Copy (Cla->ShrtName,row[1],
                    Cla_MAX_BYTES_SHRT_NAME);
 
-         /* Get the full name of the classroom (row[2]) */
-         Str_Copy (Cla->FullName,row[2],
-                   Cla_MAX_BYTES_FULL_NAME);
+         if (WhichData == Cla_ALL_DATA)
+           {
+	    /* Get the full name of the classroom (row[2]) */
+	    Str_Copy (Cla->FullName,row[2],
+		      Cla_MAX_BYTES_FULL_NAME);
 
-         /* Get seating capacity in this classroom (row[3]) */
-         if (sscanf (row[3],"%u",&Cla->Capacity) != 1)
-            Cla->Capacity = Cla_UNLIMITED_CAPACITY;
+	    /* Get seating capacity in this classroom (row[3]) */
+	    if (sscanf (row[3],"%u",&Cla->Capacity) != 1)
+	       Cla->Capacity = Cla_UNLIMITED_CAPACITY;
 
-         /* Get the full name of the classroom (row[4]) */
-         Str_Copy (Cla->Location,row[4],
-                   Cla_MAX_BYTES_LOCATION);
+	    /* Get the full name of the classroom (row[4]) */
+	    Str_Copy (Cla->Location,row[4],
+		      Cla_MAX_BYTES_LOCATION);
+           }
         }
      }
    else
