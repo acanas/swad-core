@@ -2890,8 +2890,8 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                Str_Copy (Grp->GrpName,row[1],
                          Grp_MAX_BYTES_GROUP_NAME);
 
-               /* Get max number of students of group (row[2]) */
-               Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[2]);
+               /* Get classroom code (row[2]) */
+               Grp->ClaCod = Str_ConvertStrCodToLongCod (row[2]);
 
                /* Get number of current users in group */
 	       for (Role = Rol_TCH;
@@ -2899,11 +2899,14 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 		    Role--)
                   Grp->NumUsrs[Role] = Grp_CountNumUsrsInGrp (Role,Grp->GrpCod);
 
-               /* Get whether group is open ('Y') or closed ('N') (row[3]) */
-               Grp->Open = (row[3][0] == 'Y');
+               /* Get maximum number of students in group (row[3]) */
+               Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[3]);
 
-               /* Get whether group have file zones ('Y') or not ('N') (row[4]) */
-               Grp->FileZones = (row[4][0] == 'Y');
+               /* Get whether group is open ('Y') or closed ('N') (row[4]) */
+               Grp->Open = (row[4][0] == 'Y');
+
+               /* Get whether group have file zones ('Y') or not ('N') (row[5]) */
+               Grp->FileZones = (row[5][0] == 'Y');
               }
            }
          else	// Error: groups should be found, but really they haven't be found. This never should happen.
@@ -2979,14 +2982,19 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/***************** Get current groups of a type in this course ***************/
+/******************** Get groups of a type in this course ********************/
 /*****************************************************************************/
 
 unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
   {
    /***** Get groups of a type from database *****/
    return DB_QuerySELECT (mysql_res,"can not get groups of a type",
-			  "SELECT GrpCod,GrpName,MaxStudents,Open,FileZones"
+			  "SELECT GrpCod,"
+			         "GrpName,"
+			         "MaxStudents,"
+			         "ClaCod,"
+			         "Open,"
+			         "FileZones"
 			  " FROM crs_grp"
 			  " WHERE GrpTypCod=%ld"
 			  " ORDER BY GrpName",
@@ -3007,10 +3015,10 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    /***** Get data of a type of group from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get type of group",
 			     "SELECT GrpTypName,"
-			     "Mandatory,"
-			     "Multiple,"
-			     "MustBeOpened,"
-			     "UNIX_TIMESTAMP(OpenTime)"
+				    "Mandatory,"
+				    "Multiple,"
+				    "MustBeOpened,"
+				    "UNIX_TIMESTAMP(OpenTime)"
 			     " FROM crs_grp_types"
 			     " WHERE CrsCod=%ld AND GrpTypCod=%ld",
 			     Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod);
@@ -3071,12 +3079,13 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    unsigned long NumRows;
 
    /***** Reset values *****/
-   GrpDat->GrpTypCod = -1L;
-   GrpDat->CrsCod    = -1L;
-   GrpDat->GrpTypName[0] = '\0';
-   GrpDat->GrpName[0]    = '\0';
-   GrpDat->MaxStudents = 0;
-   GrpDat->Vacant      = 0;
+   GrpDat->GrpTypCod         = -1L;
+   GrpDat->CrsCod            = -1L;
+   GrpDat->GrpTypName[0]     = '\0';
+   GrpDat->GrpName[0]        = '\0';
+   GrpDat->ClaCod            = -1L;
+   GrpDat->MaxStudents       = 0;
+   GrpDat->Vacant            = 0;
    GrpDat->Open              = false;
    GrpDat->FileZones         = false;
    GrpDat->MultipleEnrolment = false;
@@ -3090,6 +3099,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 				       "crs_grp_types.GrpTypName,"
 				       "crs_grp_types.Multiple,"
 				       "crs_grp.GrpName,"
+				       "crs_grp.ClaCod,"
 				       "crs_grp.MaxStudents,"
 				       "crs_grp.Open,"
 				       "crs_grp.FileZones"
@@ -3122,14 +3132,17 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	 Str_Copy (GrpDat->GrpName,row[4],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
-	 /* Get maximum number of students (row[5]) */
-	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[5]);
+	 /* Get the code of the course (row[5]) */
+	 GrpDat->ClaCod = Str_ConvertStrCodToLongCod (row[5]);
 
-	 /* Get whether group is open or closed (row[6]) */
-	 GrpDat->Open = (row[6][0] == 'Y');
+	 /* Get maximum number of students (row[6]) */
+	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[6]);
 
-	 /* Get whether group has file zones (row[7]) */
-	 GrpDat->FileZones = (row[7][0] == 'Y');
+	 /* Get whether group is open or closed (row[7]) */
+	 GrpDat->Open = (row[7][0] == 'Y');
+
+	 /* Get whether group has file zones (row[8]) */
+	 GrpDat->FileZones = (row[8][0] == 'Y');
 	}
 
       /***** Free structure that stores the query result *****/

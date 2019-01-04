@@ -364,10 +364,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.27.3 (2019-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.27.4 (2019-01-04)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.27.4:  Jan 04, 2019  New field in groups table to select a classroom. (238881 lines)
+					1 change necessary in database:
+ALTER TABLE crs_grp ADD COLUMN ClaCod INT NOT NULL DEFAULT -1 AFTER GrpName,ADD INDEX (ClaCod);
+
 	Version 18.27.3:  Jan 03, 2019  Rows in colors in listing of classrooms.
 					Fixed bugs in classrooms. (238860 lines)
 	Version 18.27.2:  Jan 03, 2019  Short name and full name in listing of classrooms. (238847 lines)

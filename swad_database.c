@@ -659,21 +659,24 @@ mysql> DESCRIBE crs_grp;
 | GrpCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
 | GrpTypCod   | int(11)       | NO   | MUL | NULL    |                |
 | GrpName     | varchar(2047) | NO   |     | NULL    |                |
+| ClaCod      | int(11)       | NO   | MUL | -1      |                |
 | MaxStudents | int(11)       | NO   |     | NULL    |                |
 | Open        | enum('N','Y') | NO   |     | N       |                |
 | FileZones   | enum('N','Y') | NO   |     | N       |                |
 +-------------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp ("
 			"GrpCod INT NOT NULL AUTO_INCREMENT,"
 			"GrpTypCod INT NOT NULL,"
 			"GrpName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
 			"MaxStudents INT NOT NULL,"
+			"ClaCod INT NOT NULL DEFAULT -1,"
 			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(GrpCod),"
-		   "INDEX(GrpTypCod))");
+		   "INDEX(GrpTypCod),"
+		   "INDEX(ClaCod))");
 
    /***** Table crs_grp_types *****/
 /*

@@ -57,11 +57,12 @@ typedef enum
 // Related with groups
 struct GroupData
   {
-   long GrpCod;
-   long GrpTypCod;
-   long CrsCod;
+   long GrpCod;					// Group code
+   long GrpTypCod;				// Group type code
+   long CrsCod;					// Course code
    char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
+   long ClaCod;					// Classroom code
    unsigned MaxStudents;
    int  Vacant;
    bool Open;					// Group is open?
@@ -73,8 +74,9 @@ struct Group
   {
    long GrpCod;					// Code of group
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];	// Name of group
+   long ClaCod;					// Classroom code
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
-   unsigned MaxStudents;
+   unsigned MaxStudents;			// Maximum number of students in the group
    bool Open;					// Group is open?
    bool FileZones;				// Group has file zones?
    bool ShowFileZone;				// Show file zone of this group?

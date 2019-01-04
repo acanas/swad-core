@@ -280,11 +280,13 @@ CREATE TABLE IF NOT EXISTS crs_grp (
 	GrpCod INT NOT NULL AUTO_INCREMENT,
 	GrpTypCod INT NOT NULL,
 	GrpName VARCHAR(2047) NOT NULL,
+	ClaCod INT NOT NULL DEFAULT -1,
 	MaxStudents INT NOT NULL,
 	Open ENUM('N','Y') NOT NULL DEFAULT 'N',
 	FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(GrpCod),
-	INDEX(GrpTypCod));
+	INDEX(GrpTypCod),
+	INDEX(ClaCod));
 --
 -- Table crs_grp_types: stores the types of groups in courses
 --
