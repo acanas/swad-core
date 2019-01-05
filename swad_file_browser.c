@@ -12052,7 +12052,7 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
-   struct GroupData GrpDat;
+   long GrpCod;
 
    /***** Query database *****/
    if ((NumRows = Grp_GetGrpsOfType (GrpTypCod,&mysql_res)))	// If there exists groups...
@@ -12064,14 +12064,11 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
 	 row = mysql_fetch_row (mysql_res);
 
          /* Group code is in row[0] */
-         if (sscanf (row[0],"%ld",&(GrpDat.GrpCod)) != 1)
+         if (sscanf (row[0],"%ld",&GrpCod) != 1)
             Lay_ShowErrorAndExit ("Wrong group code.");
 
-         /* Get name and type of the group from database */
-         Grp_GetDataOfGroupByCod (&GrpDat);
-
          /* Remove file zones of this group */
-         Brw_RemoveGrpZones (Gbl.CurrentCrs.Crs.CrsCod,GrpDat.GrpCod);
+         Brw_RemoveGrpZones (Gbl.CurrentCrs.Crs.CrsCod,GrpCod);
 	}
 
    /***** Free structure that stores the query result *****/

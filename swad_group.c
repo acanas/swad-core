@@ -2490,7 +2490,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Grp->GrpName);
 
    /***** Classroom *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">"
@@ -3016,23 +3016,31 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                /* Get classroom code (row[2]) */
                Grp->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[2]);
 
+               /* Get classroom short name (row[3]) */
+               if (row[3])
+		  Str_Copy (Grp->Classroom.ShrtName,row[3],
+			    Cla_MAX_BYTES_SHRT_NAME);
+               else
+        	  Grp->Classroom.ShrtName[0] = '\0';
+
                /* Get number of current users in group */
 	       for (Role = Rol_TCH;
 		    Role >= Rol_STD;
 		    Role--)
                   Grp->NumUsrs[Role] = Grp_CountNumUsrsInGrp (Role,Grp->GrpCod);
 
-               /* Get maximum number of students in group (row[3]) */
-               Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[3]);
+               /* Get maximum number of students in group (row[4]) */
+               Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
 
-               /* Get whether group is open ('Y') or closed ('N') (row[4]) */
-               Grp->Open = (row[4][0] == 'Y');
+               /* Get whether group is open ('Y') or closed ('N') (row[5]) */
+               Grp->Open = (row[5][0] == 'Y');
 
-               /* Get whether group have file zones ('Y') or not ('N') (row[5]) */
-               Grp->FileZones = (row[5][0] == 'Y');
+               /* Get whether group have file zones ('Y') or not ('N') (row[6]) */
+               Grp->FileZones = (row[6][0] == 'Y');
               }
            }
-         else	// Error: groups should be found, but really they haven't be found. This never should happen.
+         else	// Error: groups should be found, but really they haven't be found.
+		// This never should happen.
             GrpTyp->NumGrps = 0;
 
          /***** Free structure that stores the query result *****/
@@ -3111,16 +3119,19 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
 unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
   {
    /***** Get groups of a type from database *****/
+   // Don't use INNER JOIN because there are groups without assigned classroom
    return DB_QuerySELECT (mysql_res,"can not get groups of a type",
-			  "SELECT GrpCod,"
-			         "GrpName,"
-			         "ClaCod,"
-			         "MaxStudents,"
-			         "Open,"
-			         "FileZones"
-			  " FROM crs_grp"
-			  " WHERE GrpTypCod=%ld"
-			  " ORDER BY GrpName",
+			  "SELECT crs_grp.GrpCod,"
+			         "crs_grp.GrpName,"
+			         "crs_grp.ClaCod,"
+			         "classrooms.ShortName,"
+			         "crs_grp.MaxStudents,"
+			         "crs_grp.Open,"
+			         "crs_grp.FileZones"
+			  " FROM crs_grp LEFT JOIN classrooms"
+			  " ON crs_grp.ClaCod=classrooms.ClaCod"
+			  " WHERE crs_grp.GrpTypCod=%ld"
+			  " ORDER BY crs_grp.GrpName",
 			  GrpTypCod);
   }
 
