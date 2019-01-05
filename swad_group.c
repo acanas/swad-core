@@ -2490,7 +2490,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Grp->GrpName);
 
    /***** Classroom *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">"

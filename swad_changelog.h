@@ -364,10 +364,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.27.8 (2019-01-05)"
+#define Log_PLATFORM_VERSION	"SWAD 18.27.9 (2019-01-05)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.27.9:  Jan 05, 2019 	When a classroom is removed, if it is assigned to groups, remove the association in groups. (239136 lines)
 	Version 18.27.8:  Jan 05, 2019 	Get classroom short name from database in listing of groups. (239130 lines)
 	Version 18.27.7:  Jan 04, 2019 	Show classroom in listing of groups. (239121 lines)
 	Version 18.27.6:  Jan 04, 2019 	Selection of classroom in form to edit group. (239099 lines)

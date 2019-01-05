@@ -569,6 +569,12 @@ void Cla_RemoveClassroom (void)
    /***** Get data of the classroom from database *****/
    Cla_GetDataOfClassroomByCod (Cla);
 
+   /***** Update groups assigned to this classroom *****/
+   DB_QueryUPDATE ("can not update classroom in groups",
+		   "UPDATE crs_grp SET ClaCod=0"	// 0 means another classroom
+		   " WHERE ClaCod=%ld",
+		   Cla->ClaCod);
+
    /***** Remove classroom *****/
    DB_QueryDELETE ("can not remove a classroom",
 		   "DELETE FROM classrooms WHERE ClaCod=%ld",
