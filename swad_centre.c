@@ -1777,6 +1777,9 @@ void Ctr_RemoveCentre (void)
       /***** Remove information related to files in centre *****/
       Brw_RemoveCtrFilesFromDB (Ctr.CtrCod);
 
+      /***** Remove all classrooms in centre *****/
+      Cla_RemoveAllClassroomsInCtr (Ctr.CtrCod);
+
       /***** Remove directories of the centre *****/
       snprintf (PathCtr,sizeof (PathCtr),
 	        "%s/%s/%02u/%u",

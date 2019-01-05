@@ -591,6 +591,19 @@ void Cla_RemoveClassroom (void)
   }
 
 /*****************************************************************************/
+/******************** Remove all classrooms in a centre **********************/
+/*****************************************************************************/
+
+void Cla_RemoveAllClassroomsInCtr (long CtrCod)
+  {
+   /***** Remove all classrooms in centre *****/
+   DB_QueryDELETE ("can not remove classrooms",
+		   "DELETE FROM classrooms"
+                   " WHERE CtrCod=%ld",
+		   CtrCod);
+  }
+
+/*****************************************************************************/
 /******************* Change the short name of a classroom ********************/
 /*****************************************************************************/
 
