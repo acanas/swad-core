@@ -364,10 +364,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.28 (2019-01-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.28.1 (2019-01-07)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.28.1:  Jan 07, 2019 	Fixed bug in timetable related to groups. (239213 lines)
 	Version 18.28:    Jan 07, 2019 	Changes in edition of timetable related to classrooms. (239208 lines)
 					9 changes necessary in database:
 ALTER TABLE timetable_crs CHANGE COLUMN GroupName GroupName VARCHAR(2047) NOT NULL DEFAULT '';

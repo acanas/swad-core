@@ -1520,10 +1520,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
 	    /***** Group *****/
 	    if (Gbl.TimeTable.View == TT_CRS_VIEW &&
-	        GrpCod > 0)
+		GrpCod > 0)
 	      {
 	       fprintf (Gbl.F.Out,"<br />%s"
-		                  "<br />%s",
+				  "<br />%s",
 			GrpDat.GrpTypName,GrpDat.GrpName);
 	       if (GrpDat.Classroom.ClaCod > 0)
 		  fprintf (Gbl.F.Out,"<br />(%s)",
@@ -1531,8 +1531,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      }
 
 	    /***** Info *****/
-	    if (Info[0])
-	       fprintf (Gbl.F.Out,"<br />%s",Info);
+	    if (Info)
+	       if (Info[0])
+	          fprintf (Gbl.F.Out,"<br />%s",Info);
 
 	    /***** End cell *****/
             fprintf (Gbl.F.Out,"</div>");
@@ -1670,7 +1671,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 			CellStr,
 		        Txt_Info,
 			CellStr,
-			TT_MAX_CHARS_INFO,Info,
+			TT_MAX_CHARS_INFO,
+			Info ? Info :
+			       "",
 			Gbl.Form.Id);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT

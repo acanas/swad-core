@@ -3021,10 +3021,10 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                Grp->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[2]);
 
                /* Get classroom short name (row[3]) */
-               if (row[3])
+               if (row[3])	// May be NULL because of LEFT JOIN
 		  Str_Copy (Grp->Classroom.ShrtName,row[3],
 			    Cla_MAX_BYTES_SHRT_NAME);
-               else
+               else		// NULL
         	  Grp->Classroom.ShrtName[0] = '\0';
 
                /* Get number of current users in group */
@@ -3234,16 +3234,16 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
      {
       /***** Get data of a group from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a group",
-				"SELECT crs_grp.GrpTypCod,"
-				       "crs_grp_types.CrsCod,"
-				       "crs_grp_types.GrpTypName,"
-				       "crs_grp_types.Multiple,"
-				       "crs_grp.GrpName,"
-				       "crs_grp.ClaCod,"
-				       "classrooms.ShortName,"
-				       "crs_grp.MaxStudents,"
-				       "crs_grp.Open,"
-				       "crs_grp.FileZones"
+				"SELECT crs_grp.GrpTypCod,"		// row[0]
+				       "crs_grp_types.CrsCod,"		// row[1]
+				       "crs_grp_types.GrpTypName,"	// row[2]
+				       "crs_grp_types.Multiple,"	// row[3]
+				       "crs_grp.GrpName,"		// row[4]
+				       "crs_grp.ClaCod,"		// row[5]
+				       "classrooms.ShortName,"		// row[6]
+				       "crs_grp.MaxStudents,"		// row[7]
+				       "crs_grp.Open,"			// row[8]
+				       "crs_grp.FileZones"		// row[9]
 				" FROM (crs_grp,crs_grp_types)"
 				" LEFT JOIN classrooms"
 				" ON crs_grp.ClaCod=classrooms.ClaCod"
@@ -3279,8 +3279,11 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	 GrpDat->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[5]);
 
 	 /* Get the name of the classroom (row[6]) */
-	 Str_Copy (GrpDat->Classroom.ShrtName,row[6],
-	           Grp_MAX_BYTES_GROUP_NAME);
+	 if (row[6])	// May be NULL because of LEFT JOIN
+	    Str_Copy (GrpDat->Classroom.ShrtName,row[6],
+		      Cla_MAX_BYTES_SHRT_NAME);
+	 else		// NULL
+	    GrpDat->Classroom.ShrtName[0] = '\0';
 
 	 /* Get maximum number of students (row[7]) */
 	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[7]);
