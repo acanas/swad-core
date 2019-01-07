@@ -33,8 +33,11 @@
 /************************* Public constants and types ************************/
 /*****************************************************************************/
 
-#define TT_MAX_CHARS_PLACE	(32 - 1)	// 31
-#define TT_MAX_BYTES_PLACE	((TT_MAX_CHARS_PLACE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
+#define TT_MAX_CHARS_INFO	(128 - 1)	// 127
+#define TT_MAX_BYTES_INFO	((TT_MAX_CHARS_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+// #define TT_MAX_CHARS_PLACE	(32 - 1)	// 31
+// #define TT_MAX_BYTES_PLACE	((TT_MAX_CHARS_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
 typedef enum
   {

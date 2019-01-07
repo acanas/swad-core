@@ -668,8 +668,8 @@ struct Globals
       unsigned Column;
       TT_ClassType_t ClassType;
       unsigned DurationIntervals;
-      char Place[TT_MAX_BYTES_PLACE + 1];
-      char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
+      char Info[TT_MAX_BYTES_INFO + 1];
+      // char Place[TT_MAX_BYTES_PLACE + 1];
       long GrpCod;		// Group code (-1 if no group selected)
       struct
         {

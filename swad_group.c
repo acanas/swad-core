@@ -965,8 +965,12 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 static void Grp_LockTables (void)
   {
    DB_Query ("can not lock tables to change user's groups",
-	     "LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
-	     "crs_grp_usr WRITE,crs_usr READ");
+	     "LOCK TABLES "
+	     "crs_grp_types WRITE,"
+	     "crs_grp WRITE,"
+	     "crs_grp_usr WRITE,"
+	     "crs_usr READ,"
+	     "classrooms READ");
    Gbl.DB.LockedTables = true;
   }
 
@@ -3128,7 +3132,8 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
 			         "crs_grp.MaxStudents,"
 			         "crs_grp.Open,"
 			         "crs_grp.FileZones"
-			  " FROM crs_grp LEFT JOIN classrooms"
+			  " FROM crs_grp"
+			  " LEFT JOIN classrooms"
 			  " ON crs_grp.ClaCod=classrooms.ClaCod"
 			  " WHERE crs_grp.GrpTypCod=%ld"
 			  " ORDER BY crs_grp.GrpName",
@@ -3213,31 +3218,35 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    unsigned long NumRows;
 
    /***** Reset values *****/
-   GrpDat->GrpTypCod         = -1L;
-   GrpDat->CrsCod            = -1L;
-   GrpDat->GrpTypName[0]     = '\0';
-   GrpDat->GrpName[0]        = '\0';
-   GrpDat->ClaCod            = -1L;
-   GrpDat->MaxStudents       = 0;
-   GrpDat->Vacant            = 0;
-   GrpDat->Open              = false;
-   GrpDat->FileZones         = false;
-   GrpDat->MultipleEnrolment = false;
+   GrpDat->GrpTypCod             = -1L;
+   GrpDat->CrsCod                = -1L;
+   GrpDat->GrpTypName[0]         = '\0';
+   GrpDat->GrpName[0]            = '\0';
+   GrpDat->Classroom.ClaCod      = -1L;
+   GrpDat->Classroom.ShrtName[0] = '\0';
+   GrpDat->MaxStudents           = 0;
+   GrpDat->Vacant                = 0;
+   GrpDat->Open                  = false;
+   GrpDat->FileZones             = false;
+   GrpDat->MultipleEnrolment     = false;
 
    if (GrpDat->GrpCod > 0)
      {
       /***** Get data of a group from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a group",
-				"SELECT crs_grp_types.GrpTypCod,"
+				"SELECT crs_grp.GrpTypCod,"
 				       "crs_grp_types.CrsCod,"
 				       "crs_grp_types.GrpTypName,"
 				       "crs_grp_types.Multiple,"
 				       "crs_grp.GrpName,"
 				       "crs_grp.ClaCod,"
+				       "classrooms.ShortName,"
 				       "crs_grp.MaxStudents,"
 				       "crs_grp.Open,"
 				       "crs_grp.FileZones"
-				" FROM crs_grp,crs_grp_types"
+				" FROM (crs_grp,crs_grp_types)"
+				" LEFT JOIN classrooms"
+				" ON crs_grp.ClaCod=classrooms.ClaCod"
 				" WHERE crs_grp.GrpCod=%ld"
 				" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
 				GrpDat->GrpCod);
@@ -3267,16 +3276,20 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	           Grp_MAX_BYTES_GROUP_NAME);
 
 	 /* Get the code of the course (row[5]) */
-	 GrpDat->ClaCod = Str_ConvertStrCodToLongCod (row[5]);
+	 GrpDat->Classroom.ClaCod = Str_ConvertStrCodToLongCod (row[5]);
 
-	 /* Get maximum number of students (row[6]) */
-	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[6]);
+	 /* Get the name of the classroom (row[6]) */
+	 Str_Copy (GrpDat->Classroom.ShrtName,row[6],
+	           Grp_MAX_BYTES_GROUP_NAME);
 
-	 /* Get whether group is open or closed (row[7]) */
-	 GrpDat->Open = (row[7][0] == 'Y');
+	 /* Get maximum number of students (row[7]) */
+	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[7]);
 
-	 /* Get whether group has file zones (row[8]) */
-	 GrpDat->FileZones = (row[8][0] == 'Y');
+	 /* Get whether group is open or closed (row[8]) */
+	 GrpDat->Open = (row[8][0] == 'Y');
+
+	 /* Get whether group has file zones (row[9]) */
+	 GrpDat->FileZones = (row[9][0] == 'Y');
 	}
 
       /***** Free structure that stores the query result *****/

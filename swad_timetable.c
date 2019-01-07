@@ -85,8 +85,8 @@ struct TT_Column
    TT_IntervalType_t IntervalType;
    TT_ClassType_t ClassType;
    unsigned DurationIntervals;
-   char Place[TT_MAX_BYTES_PLACE + 1];
-   char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
+   char Info[TT_MAX_BYTES_INFO + 1];
+   // char Place[TT_MAX_BYTES_PLACE + 1];
   };
 
 struct TT_Cell
@@ -151,7 +151,7 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
 static void TT_DrawCellAlignTimeTable (void);
 static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_IntervalType_t IntervalType,TT_ClassType_t ClassType,
-                                  unsigned DurationNumIntervals,char *Group,long GrpCod,char *Place);
+                                  unsigned DurationNumIntervals,long GrpCod,const char *Info);
 
 /*****************************************************************************/
 /******************** Create internal timetable in memory ********************/
@@ -296,8 +296,8 @@ static void TT_GetParamsTimeTable (void)
    /***** Get group code *****/
    Gbl.TimeTable.GrpCod = Par_GetParToLong ("TTGrp");
 
-   /***** Get place *****/
-   Par_GetParToText ("TTPlc",Gbl.TimeTable.Place,TT_MAX_BYTES_PLACE);
+   /***** Get info *****/
+   Par_GetParToText ("TTInf",Gbl.TimeTable.Info,TT_MAX_BYTES_INFO);
   }
 
 /*****************************************************************************/
@@ -588,10 +588,10 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
                DB_QueryINSERT ("can not create course timetable",
         		       "INSERT INTO timetable_crs"
         	               " (CrsCod,GrpCod,Weekday,StartTime,Duration,"
-        	               "ClassType,Place,GroupName)"
+        	               "ClassType,Info)"
                                " VALUES"
                                " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
-                               "'%s','%s','%s')",
+                               "'%s','%s')",
 			       CrsCod,
 			       TT_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
 			       Weekday,
@@ -599,8 +599,7 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
 			       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
 			       Gbl.TimeTable.Config.SecondsPerInterval,
 			       TT_ClassTypeDB[TT_TimeTable[Weekday][Interval].Columns[Column].ClassType],
-			       TT_TimeTable[Weekday][Interval].Columns[Column].Place,
-			       TT_TimeTable[Weekday][Interval].Columns[Column].Group);
+			       TT_TimeTable[Weekday][Interval].Columns[Column].Info);
   }
 
 /*****************************************************************************/
@@ -636,7 +635,7 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
                 TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals)
                DB_QueryINSERT ("can not create office timetable",
         		       "INSERT INTO timetable_tut"
-        	               " (UsrCod,Weekday,StartTime,Duration,Place)"
+        	               " (UsrCod,Weekday,StartTime,Duration,Info)"
                                " VALUES"
                                " (%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),'%s')",
 			       UsrCod,
@@ -644,7 +643,7 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
 			       Hour,Min,
 			       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
 			       Gbl.TimeTable.Config.SecondsPerInterval,
-			       TT_TimeTable[Weekday][Interval].Columns[Column].Place);
+			       TT_TimeTable[Weekday][Interval].Columns[Column].Info);
   }
 
 /*****************************************************************************/
@@ -668,7 +667,6 @@ static void TT_FillTimeTableFromDB (long UsrCod)
    unsigned EndTimeSeconds;
    struct TT_Range RangeCell;
    unsigned FirstFreeColumn;
-   long GrpCod;
    TT_ClassType_t ClassType = TT_FREE;	// Initialized to avoid warning
    bool TimeTableIsIncomplete = false;
    bool TimeTableHasSpaceForThisClass;
@@ -685,9 +683,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 					 "SELECT timetable_crs.Weekday,"
 					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
 					        "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-					        "timetable_crs.Place,"
+					        "timetable_crs.Info,"
 					        "timetable_crs.ClassType,"
-					        "timetable_crs.GroupName,"
 					        "timetable_crs.GrpCod,"
 					        "timetable_crs.CrsCod"
 					 " FROM timetable_crs,crs_usr"
@@ -698,9 +695,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 					 "SELECT timetable_crs.Weekday,"
 					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
 					        "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-					        "timetable_crs.Place,"
+					        "timetable_crs.Info,"
 					        "timetable_crs.ClassType,"
-					        "timetable_crs.GroupName,"
 					        "timetable_crs.GrpCod,"
 					        "timetable_crs.CrsCod"
 					 " FROM timetable_crs,crs_grp_usr"
@@ -710,15 +706,14 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 					 "SELECT Weekday,"
 					        "TIME_TO_SEC(StartTime) AS S,"
 					        "TIME_TO_SEC(Duration) AS D,"
-					        "Place,"
+					        "Info,"
 					        "'tutoring' AS ClassType,"
-					        "'' AS GroupName,"
 					        "-1 AS GrpCod,"
 					        "-1 AS CrsCod"
 					 " FROM timetable_tut"
 					 " WHERE UsrCod=%ld"
 					 " ORDER BY Weekday,S,ClassType,"
-					 "GroupName,GrpCod,Place,D DESC,CrsCod",
+					 "GrpCod,Info,D DESC,CrsCod",
 					 UsrCod,UsrCod,UsrCod);
                break;
             case Grp_ALL_GROUPS:
@@ -726,9 +721,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 					 "SELECT timetable_crs.Weekday,"
 					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
 					        "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-					        "timetable_crs.Place,"
+					        "timetable_crs.Info,"
 					        "timetable_crs.ClassType,"
-					        "timetable_crs.GroupName,"
 					        "timetable_crs.GrpCod,"
 					        "timetable_crs.CrsCod"
 					 " FROM timetable_crs,crs_usr"
@@ -738,15 +732,14 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 					 "SELECT Weekday,"
 					        "TIME_TO_SEC(StartTime) AS S,"
 					        "TIME_TO_SEC(Duration) AS D,"
-					        "Place,"
+					        "Info,"
 					        "'tutoring' AS ClassType,"
-					        "'' AS GroupName,"
 					        "-1 AS GrpCod,"
 					        "-1 AS CrsCod"
 					 " FROM timetable_tut"
 					 " WHERE UsrCod=%ld"
 					 " ORDER BY Weekday,S,ClassType,"
-					 "GroupName,GrpCod,Place,D DESC,CrsCod",
+					 "GrpCod,Info,D DESC,CrsCod",
 					 UsrCod,UsrCod);
                break;
            }
@@ -759,23 +752,21 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 				      "SELECT Weekday,"
 					     "TIME_TO_SEC(StartTime) AS S,"
 					     "TIME_TO_SEC(Duration) AS D,"
-					     "Place,"
+					     "Info,"
 					     "ClassType,"
-					     "GroupName,"
 					     "GrpCod"
 				      " FROM timetable_crs"
 				      " WHERE CrsCod=%ld"
 				      " ORDER BY Weekday,S,ClassType,"
-				      "GroupName,GrpCod,Place,D DESC",
+				      "GrpCod,Info,D DESC",
 				      Gbl.CurrentCrs.Crs.CrsCod);
          else
             NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
 				      "SELECT timetable_crs.Weekday,"
 					     "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
 					     "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-					     "timetable_crs.Place,"
+					     "timetable_crs.Info,"
 					     "timetable_crs.ClassType,"
-					     "timetable_crs.GroupName,"
 					     "timetable_crs.GrpCod"
 				      " FROM timetable_crs,crs_usr"
 				      " WHERE timetable_crs.CrsCod=%ld"
@@ -785,16 +776,15 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 				      "SELECT timetable_crs.Weekday,"
 					     "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
 					     "TIME_TO_SEC(timetable_crs.Duration) AS D,"
-					     "timetable_crs.Place,"
+					     "timetable_crs.Info,"
 					     "timetable_crs.ClassType,"
-					     "timetable_crs.GroupName,"
 					     "timetable_crs.GrpCod"
 				      " FROM timetable_crs,crs_grp_usr"
 				      " WHERE timetable_crs.CrsCod=%ld"
 				      " AND crs_grp_usr.UsrCod=%ld"
 				      " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
 				      " ORDER BY Weekday,S,ClassType,"
-				      "GroupName,GrpCod,Place,D DESC",
+				      "GrpCod,Info,D DESC",
 				      Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
 				      Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
 	 break;
@@ -803,10 +793,10 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 				   "SELECT Weekday,"
 					  "TIME_TO_SEC(StartTime) AS S,"
 					  "TIME_TO_SEC(Duration) AS D,"
-					  "Place"
+					  "Info"
 				   " FROM timetable_tut"
 				   " WHERE UsrCod=%ld"
-				   " ORDER BY Weekday,S,Place,D DESC",
+				   " ORDER BY Weekday,S,Info,D DESC",
 				   UsrCod);
          break;
      }
@@ -873,8 +863,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 	       TT_TimeTable[Weekday][Interval].Columns[Column].IntervalType      = TT_FREE_INTERVAL;
 	       TT_TimeTable[Weekday][Interval].Columns[Column].ClassType         = TT_FREE;
 	       TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals = 0;
-	       TT_TimeTable[Weekday][Interval].Columns[Column].Group[0]          = '\0';
-	       TT_TimeTable[Weekday][Interval].Columns[Column].Place[0]          = '\0';
+	       TT_TimeTable[Weekday][Interval].Columns[Column].Info[0]          = '\0';
 	      }
 	   }
 
@@ -884,12 +873,6 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 	   NumRow++)
 	{
 	 row = mysql_fetch_row (mysql_res);
-
-	 if (Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
-	     Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
-	    /* Group code */
-	    if (sscanf (row[6],"%ld",&GrpCod) != 1)
-	       GrpCod = -1;
 
 	 /* Day of week (row[0]) */
 	 if (sscanf (row[0],"%u",&Weekday) != 1)
@@ -979,24 +962,27 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 		     TT_TimeTable[Weekday][i].NumColumns++;
 		    }
 
-		  /* Course (row[7]), group (row[5]) and place (row[3])*/
+		  /* Course (row[6]) and info (row[3])*/
 		  switch (Gbl.TimeTable.Type)
 		    {
 		     case TT_MY_TIMETABLE:
 		     case TT_COURSE_TIMETABLE:
+			/* Group code (row[5]) */
+			if (Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
+			    Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
+			   if (sscanf (row[5],"%ld",&TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod) != 1)
+			      TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod = -1;
+
+			/* Course code (row[6]) */
 			TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
-			   (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[7]) :
+			   (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
 								    Gbl.CurrentCrs.Crs.CrsCod);
-			Str_Copy (TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].Group,
-				  row[5],
-				  Grp_MAX_BYTES_GROUP_NAME);
-			TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].GrpCod = GrpCod;
 			/* falls through */
 			/* no break */
 		     case TT_TUTORING_TIMETABLE:
-			Str_Copy (TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].Place,
+			Str_Copy (TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].Info,
 				  row[3],
-				  TT_MAX_BYTES_PLACE);
+				  TT_MAX_BYTES_INFO);
 			break;
 		    }
 
@@ -1098,8 +1084,7 @@ static void TT_ModifTimeTable (void)
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].IntervalType      = TT_FREE_INTERVAL;
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].ClassType         = TT_FREE;
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].DurationIntervals = 0;
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Group[0]          = '\0';
-      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Place[0]          = '\0';
+      TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Info[0]          = '\0';
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].NumColumns--;
      }
 
@@ -1113,12 +1098,9 @@ static void TT_ModifTimeTable (void)
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].IntervalType      = TT_FIRST_INTERVAL;
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].ClassType         = Gbl.TimeTable.ClassType;
       TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].DurationIntervals = Gbl.TimeTable.DurationIntervals;
-      Str_Copy (TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Group,
-                Gbl.TimeTable.Group,
-                Grp_MAX_BYTES_GROUP_NAME);
-      Str_Copy (TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Place,
-                Gbl.TimeTable.Place,
-                TT_MAX_BYTES_PLACE);
+      Str_Copy (TT_TimeTable[Gbl.TimeTable.Weekday][Gbl.TimeTable.Interval].Columns[Gbl.TimeTable.Column].Info,
+                Gbl.TimeTable.Info,
+                TT_MAX_BYTES_INFO);
      }
   }
 
@@ -1225,7 +1207,7 @@ static void TT_DrawTimeTable (void)
                if (ContinuousFreeMinicolumns)
                  {
                   TT_TimeTableDrawCell (Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
-                                        -1L,TT_FREE_INTERVAL,TT_FREE,0,NULL,-1,NULL);
+                                        -1L,TT_FREE_INTERVAL,TT_FREE,0,-1L,NULL);
                   ContinuousFreeMinicolumns = 0;
                  }
                TT_TimeTableDrawCell (Weekday,Interval,Column,
@@ -1235,13 +1217,12 @@ static void TT_DrawTimeTable (void)
 				     TT_TimeTable[Weekday][Interval].Columns[Column].IntervalType,
 	                             TT_TimeTable[Weekday][Interval].Columns[Column].ClassType,
                                      TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals,
-	                             TT_TimeTable[Weekday][Interval].Columns[Column].Group,
 	                             TT_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
-                                     TT_TimeTable[Weekday][Interval].Columns[Column].Place);
+                                     TT_TimeTable[Weekday][Interval].Columns[Column].Info);
               }
          if (ContinuousFreeMinicolumns)
             TT_TimeTableDrawCell (Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
-                                  -1L,TT_FREE_INTERVAL,TT_FREE,0,NULL,-1L,NULL);
+                                  -1L,TT_FREE_INTERVAL,TT_FREE,0,-1L,NULL);
         }
 
       /* Empty column used to adjust height */
@@ -1434,14 +1415,13 @@ static void TT_DrawCellAlignTimeTable (void)
 
 static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_IntervalType_t IntervalType,TT_ClassType_t ClassType,
-                                  unsigned DurationNumIntervals,char *Group,long GrpCod,char *Place)
+                                  unsigned DurationNumIntervals,long GrpCod,const char *Info)
   {
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
-   extern const char *Txt_Classroom;
-   extern const char *Txt_Place;
+   extern const char *Txt_Info;
    static const char *TimeTableClasses[TT_NUM_CLASS_TYPES] =
      {
       "TT_FREE",	// TT_FREE	(free hour)
@@ -1479,13 +1459,13 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    if (RowSpan == 0)
       return;
 
-   /***** If group code > 0, a group is selected ==> get group type and name *****/
+   /***** If group code > 0, a group is selected ==> get group data *****/
    if (IntervalType == TT_FIRST_INTERVAL &&
        (Gbl.TimeTable.View == TT_CRS_VIEW ||
         Gbl.TimeTable.View == TT_CRS_EDIT) &&
        GrpCod > 0)
      {
-      /* Get group type and name */
+      /* Get group data */
       GrpDat.GrpCod = GrpCod;
       Grp_GetDataOfGroupByCod (&GrpDat);
      }
@@ -1539,21 +1519,20 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	             Gbl.TimeTable.Config.Range.MinutesPerInterval);			// Minutes
 
 	    /***** Group *****/
-	    if (Gbl.TimeTable.View == TT_CRS_VIEW)
+	    if (Gbl.TimeTable.View == TT_CRS_VIEW &&
+	        GrpCod > 0)
 	      {
-               if (GrpCod <= 0)
-                 {
-	          if (Group[0])
-		     fprintf (Gbl.F.Out,"<br />%s",Group);
-                 }
-               else
-		  fprintf (Gbl.F.Out,"<br />%s %s",
-                           GrpDat.GrpTypName,GrpDat.GrpName);
+	       fprintf (Gbl.F.Out,"<br />%s"
+		                  "<br />%s",
+			GrpDat.GrpTypName,GrpDat.GrpName);
+	       if (GrpDat.Classroom.ClaCod > 0)
+		  fprintf (Gbl.F.Out,"<br />(%s)",
+			   GrpDat.Classroom.ShrtName);
 	      }
 
-	    /***** Place *****/
-	    if (Place[0])
-	       fprintf (Gbl.F.Out,"<br />%s",Place);
+	    /***** Info *****/
+	    if (Info[0])
+	       fprintf (Gbl.F.Out,"<br />%s",Info);
 
 	    /***** End cell *****/
             fprintf (Gbl.F.Out,"</div>");
@@ -1679,36 +1658,36 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                  }
 	       fprintf (Gbl.F.Out,"</select>");
 
-	       /***** Classroom *****/
+	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label for=\"TTPlc%s\">"
+		                  "<label for=\"TTInf%s\">"
 		                  "%s"
 		                  "</label>"
-	                          "<input id=\"TTPlc%s\" name=\"TTPlc\""
+	                          "<input id=\"TTInf%s\" name=\"TTInf\""
 	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
 	                          " value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
 			CellStr,
-		        Txt_Classroom,
+		        Txt_Info,
 			CellStr,
-			TT_MAX_CHARS_PLACE,Place,
+			TT_MAX_CHARS_INFO,Info,
 			Gbl.Form.Id);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
-	       /***** Place *****/
+	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label for=\"TTPlc%s\" class=\"DAT_SMALL\">"
+		                  "<label for=\"TTInf%s\" class=\"DAT_SMALL\">"
 		                  "%s"
 		                  "</label>"
-                                  "<input id=\"TTPlc%s\" name=\"TTPlc\""
+                                  "<input id=\"TTInf%s\" name=\"TTInf\""
                                   " type=\"text\" size=\"12\" maxlength=\"%u\""
                                   " value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
 			CellStr,
-		        Txt_Place,
+		        Txt_Info,
 			CellStr,
-			TT_MAX_CHARS_PLACE,Place,
+			TT_MAX_CHARS_INFO,Info,
 			Gbl.Form.Id);
 	      }
 	   }

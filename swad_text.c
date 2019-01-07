@@ -15357,6 +15357,27 @@ const char *Txt_Indicators_of_courses =
 	"Indicadores de disciplinas";
 #endif
 
+const char *Txt_Info =
+#if   L==1	// ca
+	 "Info";
+#elif L==2	// de
+	 "Info";
+#elif L==3	// en
+	 "Info";
+#elif L==4	// es
+	 "Info";
+#elif L==5	// fr
+	 "Info";
+#elif L==6	// gn
+	 "Info";	// Okoteve traducción
+#elif L==7	// it
+	 "Informazione";
+#elif L==8	// pl
+	 "Info";
+#elif L==9	// pt
+	 "Info";
+#endif
+
 const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
    {
    // Inf_INTRODUCTION

@@ -2461,10 +2461,9 @@ mysql> DESCRIBE timetable_crs;
 | StartTime | time                               | NO   |     | NULL    |       |
 | Duration  | time                               | NO   |     | NULL    |       |
 | ClassType | enum('free','lecture','practical') | NO   |     | NULL    |       |
-| Place     | varchar(511)                       | NO   |     | NULL    |       |
-| GroupName | varchar(2047)                      | NO   |     | NULL    |       |
+| Info      | varchar(2047)                      | NO   |     |         |       |
 +-----------+------------------------------------+------+-----+---------+-------+
-8 rows in set (0,00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS timetable_crs ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
@@ -2473,30 +2472,29 @@ mysql> DESCRIBE timetable_crs;
 			"StartTime TIME NOT NULL,"
 			"Duration TIME NOT NULL,"
 			"ClassType ENUM('free','lecture','practical') NOT NULL,"
-			"Place VARCHAR(511) NOT NULL,"		// TT_MAX_BYTES_PLACE
-			"GroupName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
+			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// TT_MAX_BYTES_INFO
 		   "INDEX(CrsCod,GrpCod))");
 
    /***** Table timetable_tut *****/
 /*
 mysql> DESCRIBE timetable_tut;
-+-----------+--------------+------+-----+---------+-------+
-| Field     | Type         | Null | Key | Default | Extra |
-+-----------+--------------+------+-----+---------+-------+
-| UsrCod    | int(11)      | NO   | MUL | NULL    |       |
-| Weekday   | tinyint(4)   | NO   |     | NULL    |       |
-| StartTime | time         | NO   |     | NULL    |       |
-| Duration  | time         | NO   |     | NULL    |       |
-| Place     | varchar(511) | NO   |     | NULL    |       |
-+-----------+--------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| UsrCod    | int(11)       | NO   | MUL | NULL    |       |
+| Weekday   | tinyint(4)    | NO   |     | NULL    |       |
+| StartTime | time          | NO   |     | NULL    |       |
+| Duration  | time          | NO   |     | NULL    |       |
+| Info      | varchar(2047) | NO   |     |         |       |
++-----------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS timetable_tut ("
 			"UsrCod INT NOT NULL,"
 			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
 			"StartTime TIME NOT NULL,"
 			"Duration TIME NOT NULL,"
-			"Place VARCHAR(511) NOT NULL,"	// TT_MAX_BYTES_PLACE
+			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// TT_MAX_BYTES_INFO
 		   "INDEX(UsrCod))");
 
    /***** Table tst_answers *****/

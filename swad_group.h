@@ -63,7 +63,11 @@ struct GroupData
    long CrsCod;					// Course code
    char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-   long ClaCod;					// Classroom code
+   struct
+     {
+      long ClaCod;					// Classroom code
+      char ShrtName[Cla_MAX_BYTES_SHRT_NAME + 1];	// Classroom short name
+     } Classroom;
    unsigned MaxStudents;
    int  Vacant;
    bool Open;					// Group is open?

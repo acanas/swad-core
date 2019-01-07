@@ -1160,8 +1160,7 @@ CREATE TABLE IF NOT EXISTS timetable_crs (
 	StartTime TIME NOT NULL,
 	Duration TIME NOT NULL,
 	ClassType ENUM('free','lecture','practical') NOT NULL,
-	Place VARCHAR(511) NOT NULL,
-	GroupName VARCHAR(2047) NOT NULL,
+	Info VARCHAR(2047) NOT NULL DEFAULT '',
 	INDEX(CrsCod,GrpCod));
 --
 -- Table timetable_tut: stores the timetables of office hours of the teachers
@@ -1171,7 +1170,7 @@ CREATE TABLE IF NOT EXISTS timetable_tut (
 	Weekday TINYINT NOT NULL,
 	StartTime TIME NOT NULL,
 	Duration TIME NOT NULL,
-	Place VARCHAR(511) NOT NULL,
+	Info VARCHAR(2047) NOT NULL DEFAULT '',
 	INDEX(UsrCod));
 --
 -- Table tst_answers: stores the answers to the questions in tests
