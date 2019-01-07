@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2018 Antonio Cañas Vargas
+    Copyright (C) 1999-2019 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1515,8 +1515,12 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 
    /***** Get groups associated to an attendance event from database *****/
    NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-				        "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-					" FROM att_grp,crs_grp,crs_grp_types"
+				        "SELECT crs_grp_types.GrpTypName,"
+				               "crs_grp.GrpName,"
+				               "classrooms.ShortName"
+					" FROM (att_grp,crs_grp,crs_grp_types)"
+				        " LEFT JOIN classrooms"
+				        " ON crs_grp.ClaCod=classrooms.ClaCod"
 					" WHERE att_grp.AttCod=%ld"
 					" AND att_grp.GrpCod=crs_grp.GrpCod"
 					" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
@@ -1541,15 +1545,21 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
          /* Get next group */
          row = mysql_fetch_row (mysql_res);
 
-         /* Write group type name and group name */
+         /* Write group type name (row[0]) and group name (row[1]) */
          fprintf (Gbl.F.Out,"%s %s",row[0],row[1]);
 
+         /* Write the name of the classroom (row[2]) */
+	 if (row[2])	// May be NULL because of LEFT JOIN
+	    if (row[2][0])
+               fprintf (Gbl.F.Out," (%s)",row[2]);
+
+	 /* Write separator */
          if (NumGrps >= 2)
            {
-            if (NumGrp == NumGrps-2)
+            if (NumGrp == NumGrps - 2)
                fprintf (Gbl.F.Out," %s ",Txt_and);
             if (NumGrps >= 3)
-              if (NumGrp < NumGrps-2)
+              if (NumGrp < NumGrps - 2)
                   fprintf (Gbl.F.Out,", ");
            }
         }

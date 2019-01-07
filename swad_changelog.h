@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2018 Antonio Cañas Vargas
+    Copyright (C) 1999-2019 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -343,8 +343,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: No se puede pulsar sobre la foto de un remitente de un mensaje recibido.
 
-// TODO: Al crear un evento de asistencia, podría tener por defecto el aula asignada al grupo elegido.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -364,10 +362,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.28.1 (2019-01-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.28.2 (2019-01-07)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.28.2:  Jan 07, 2019 	Write classrooms in attendance events. (239224 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1752','es','N','Cambiar aula asignada a un grupo');
+
 	Version 18.28.1:  Jan 07, 2019 	Fixed bug in timetable related to groups. (239213 lines)
 	Version 18.28:    Jan 07, 2019 	Changes in edition of timetable related to classrooms. (239208 lines)
 					9 changes necessary in database:
