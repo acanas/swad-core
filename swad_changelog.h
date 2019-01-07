@@ -345,6 +345,9 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Al crear un evento de asistencia, podría tener por defecto el aula asignada al grupo elegido.
 
+// TODO: En la edición del horario de clases, tomar las aulas de la tabla classrooms.
+//       El actual campo Place puede dejarse sin cambiar en la base de datos y usarse para otras aclaraciones (renombrándolo simplemente).
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -364,10 +367,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.27.10 (2019-01-05)"
+#define Log_PLATFORM_VERSION	"SWAD 18.27.11 (2019-01-07)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.27.11: Jan 07, 2019 	Changes in edition of timetable related to classrooms. (239185 lines)
 	Version 18.27.10: Jan 05, 2019 	Remove all classrooms in a centre when it is removed. (239151 lines)
 	Version 18.27.9:  Jan 05, 2019 	When a classroom is removed, if it is assigned to groups, remove the association in groups. (239136 lines)
 	Version 18.27.8:  Jan 05, 2019 	Get classroom short name from database in listing of groups. (239130 lines)

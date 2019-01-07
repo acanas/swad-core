@@ -25,8 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For fprintf, etc.
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For malloc, calloc, free
 #include <string.h>		// For string functions
 
@@ -1448,6 +1449,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
       "TT_PRAC",	// TT_PRACTICAL	(practical class)
       "TT_TUTO",	// TT_TUTORING	(tutoring/office hour)
      };
+   char *CellStr;	// Unique string for this cell used in labels
    struct GroupData GrpDat;
    unsigned NumGrpTyp;
    unsigned NumGrp;
@@ -1457,6 +1459,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    unsigned RowSpan = 0;
    TT_ClassType_t CT;
    struct Course Crs;
+   struct GroupType *GrpTyp;
+   struct Group *Grp;
 
    /***** Compute row span and background color depending on hour type *****/
    switch (IntervalType)
@@ -1557,6 +1561,12 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 break;
       case TT_CRS_EDIT:
       case TT_TUT_EDIT:
+	 /***** Create unique string for this cell used in labels *****/
+	 if (asprintf (&CellStr,"%02u%02u%02u",
+		       Weekday,Interval,Column) < 0)
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Put hidden parameters *****/
          Par_PutHiddenParamUnsigned ("TTDay",Weekday);
          Par_PutHiddenParamUnsigned ("TTInt",Interval);
          Par_PutHiddenParamUnsigned ("TTCol",Column);
@@ -1629,12 +1639,16 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      {
 	       /***** Group *****/
 	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label>"
+		                  "<label for=\"TTGrp%s\">"
 		                  "%s"
-	                          "<select name=\"TTGrp\""
+		                  "</label>"
+	                          "<select id=\"TTGrp%s\" name=\"TTGrp\""
 	                          " style=\"width:110px;\""
 		                  " onchange=\"document.getElementById('%s').submit();\">",
-		        Txt_Group,Gbl.Form.Id);
+			CellStr,
+		        Txt_Group,
+			CellStr,
+			Gbl.Form.Id);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");
 	       if (GrpCod <= 0)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1642,44 +1656,66 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                for (NumGrpTyp = 0;
         	    NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
         	    NumGrpTyp++)
+                 {
+                  GrpTyp = &Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
                   for (NumGrp = 0;
-                       NumGrp < Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
+                       NumGrp < GrpTyp->NumGrps;
                        NumGrp++)
                     {
-	             fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	        	      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpCod);
-	             if (GrpCod == Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpCod)
-		        fprintf (Gbl.F.Out," selected=\"selected\"");
-	             fprintf (Gbl.F.Out,">%s %s</option>",
-	        	      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-                              Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpName);
-                    }
-	       fprintf (Gbl.F.Out,"</select>"
-		                  "</label>");
+                     Grp = &GrpTyp->LstGrps[NumGrp];
 
-	       /***** Class room *****/
+	             fprintf (Gbl.F.Out,"<option value=\"%ld\"",
+	        	      Grp->GrpCod);
+	             if (GrpCod == Grp->GrpCod)
+		        fprintf (Gbl.F.Out," selected=\"selected\"");
+	             fprintf (Gbl.F.Out,">%s %s",
+	        	      GrpTyp->GrpTypName,Grp->GrpName);
+	             if (Grp->Classroom.ClaCod > 0)
+	                fprintf (Gbl.F.Out," (%s)",
+	                         Grp->Classroom.ShrtName);
+	             fprintf (Gbl.F.Out,"</option>");
+                    }
+                 }
+	       fprintf (Gbl.F.Out,"</select>");
+
+	       /***** Classroom *****/
 	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label>"
+		                  "<label for=\"TTPlc%s\">"
 		                  "%s"
-	                          "<input type=\"text\" name=\"TTPlc\""
-	                          " size=\"1\" maxlength=\"%u\" value=\"%s\""
-		                  " onchange=\"document.getElementById('%s').submit();\" />"
-		                  "</label>",
-		        Txt_Classroom,TT_MAX_CHARS_PLACE,Place,Gbl.Form.Id);
+		                  "</label>"
+	                          "<input id=\"TTPlc%s\" name=\"TTPlc\""
+	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
+	                          " value=\"%s\""
+		                  " onchange=\"document.getElementById('%s').submit();\" />",
+			CellStr,
+		        Txt_Classroom,
+			CellStr,
+			TT_MAX_CHARS_PLACE,Place,
+			Gbl.Form.Id);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
 	       /***** Place *****/
 	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label class=\"DAT_SMALL\">"
+		                  "<label for=\"TTPlc%s\" class=\"DAT_SMALL\">"
 		                  "%s"
-                                  "<input type=\"text\" name=\"TTPlc\""
-                                  " size=\"12\" maxlength=\"%u\" value=\"%s\""
-		                  " onchange=\"document.getElementById('%s').submit();\" />"
-		                  "</label>",
-		        Txt_Place,TT_MAX_CHARS_PLACE,Place,Gbl.Form.Id);
+		                  "</label>"
+                                  "<input id=\"TTPlc%s\" name=\"TTPlc\""
+                                  " type=\"text\" size=\"12\" maxlength=\"%u\""
+                                  " value=\"%s\""
+		                  " onchange=\"document.getElementById('%s').submit();\" />",
+			CellStr,
+		        Txt_Place,
+			CellStr,
+			TT_MAX_CHARS_PLACE,Place,
+			Gbl.Form.Id);
 	      }
 	   }
+
+	 /***** Free allocated unique string for this cell used in labels *****/
+	 free ((void *) CellStr);
+
 	 break;
      }
 
