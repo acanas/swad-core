@@ -237,7 +237,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	              "</label>");
 
    /***** Magnifying glass icon *****/
-   Sch_PutMagnifyingGlassButton ("search64x64.png");
+   Sch_PutMagnifyingGlassButton ("search.svg");
 
    /***** Send button *****/
    Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
@@ -296,7 +296,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
    Frm_StartForm (ActionSearch);
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
-   Sch_PutMagnifyingGlassButton ("search-white64x64.png");
+   Sch_PutMagnifyingGlassButton ("search-white.svg");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
   }

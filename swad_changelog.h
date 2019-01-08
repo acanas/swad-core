@@ -343,6 +343,9 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: No se puede pulsar sobre la foto de un remitente de un mensaje recibido.
 
+// TODO: Un administrador de centro ahora no tiene permisos para editar horario asignatura, pero le sale el icono de editar
+//	 O le damos permisos o quitamos el icono de editar. Comprobar para admin. de titulaciones.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -362,10 +365,18 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.28.2 (2019-01-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.28.3 (2019-01-07)"
 #define CSS_FILE		"swad18.22.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.28.3:  Jan 07, 2019 	New SVG icon for search. (239242 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/iconset/awesome/bell.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/search.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/search.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/search.svg /var/www/html/swad/icon/
+sudo cp icon/search-white.svg /var/www/html/swad/icon/
+
 	Version 18.28.2:  Jan 07, 2019 	Write classrooms in attendance events. (239224 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1752','es','N','Cambiar aula asignada a un grupo');
@@ -429,8 +440,16 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1746','es','N','Crea
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1747','es','N','Eliminar aula');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1748','es','N','Cambiar nombre breve aula');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1749','es','N','Cambiar nombre completo aula');
-					Copy the following icon to icon public directory:
+					Copy the following icons to icon public directory:
 sudo cp classroom.svg /var/www/html/swad/icon/
+sudo cp iconset/awesome/classroom.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp iconset/awesome/bell.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp iconset/nuvola/classroom.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp iconset/nuvola/bell.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp theme/blue/bell.svg /var/www/html/swad/icon/theme/blue/
+sudo cp theme/grey/bell.svg /var/www/html/swad/icon/theme/grey/
+sudo cp theme/yellow/bell.svg /var/www/html/swad/icon/theme/yellow/
+sudo cp theme/white/bell.svg /var/www/html/swad/icon/theme/white/
 
 	Version 18.25.1:  Dec 30, 2018  Changes in translation related to classrooms. (238498 lines)
 	Version 18.25:    Dec 29, 2018  New option and module to view/edit classrooms in a centre. Not finished. (238375 lines)

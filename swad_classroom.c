@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
+#include <malloc.h>		// For calloc, free
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
