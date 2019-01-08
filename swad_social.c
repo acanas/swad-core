@@ -2674,9 +2674,9 @@ static void Soc_PutFormToRemoveComment (long PubCod)
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_REMOVE ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
-		      " src=\"%s/remove-on64x64.png\""
+		      " src=\"%s/trash.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
+		      " class=\"ICO16x16\" />"
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
@@ -2890,9 +2890,9 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_REMOVE ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
-		      " src=\"%s/remove-on64x64.png\""
+		      " src=\"%s/trash.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
+		      " class=\"ICO16x16\" />"
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,

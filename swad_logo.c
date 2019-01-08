@@ -280,7 +280,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
       /***** Form to remove photo *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Lay_PutContextualLink (ActionRem,NULL,NULL,
-                             "remove-on64x64.png",
+                             "trash.svg",
                              Txt_Remove_logo,Txt_Remove_logo,
                              NULL);
       fprintf (Gbl.F.Out,"</div>");

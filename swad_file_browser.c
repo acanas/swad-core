@@ -5877,9 +5877,9 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Remove_FILE_OR_LINK_X,
 		FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
+	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5912,9 +5912,9 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Remove_folder_X,
 		FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
+	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5945,9 +5945,9 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Copy_FOLDER_FILE_OR_LINK_X,
 	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
+		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
 	    Gbl.Prefs.IconsURL,
 	    Gbl.Title,
 	    Gbl.Title);
@@ -5975,9 +5975,9 @@ static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Paste_in_X,
 	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />",
+	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -5994,9 +5994,9 @@ static void Brw_PutIconPasteOff (void)
    extern const char *Txt_Copy_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
-	              "<img src=\"%s/paste_off16x16.gif\""
+	              "<img src=\"%s/paste.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
+	              " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />"
 	              "</td>",
             Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
             Txt_Copy_not_allowed,
@@ -10467,7 +10467,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 		                                         FileNameToShow);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-			 "<img src=\"%s/download64x64.png\""
+			 "<img src=\"%s/download.svg\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO40x40\" />"
 			 "</a>",
@@ -12586,7 +12586,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
 
    Lay_PutContextualLink (ActReqRemOldBrf,NULL,
                           Brw_PutHiddenParamFullTreeIfSelected,
-			  "remove-on64x64.png",
+			  "trash.svg",
 			  Txt_Remove_old_files,Txt_Remove_old_files,
                           NULL);
   }

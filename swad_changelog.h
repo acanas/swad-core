@@ -365,10 +365,19 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.28.3 (2019-01-07)"
-#define CSS_FILE		"swad18.22.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.29 (2019-01-07)"
+#define CSS_FILE		"swad18.29.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.29:    Jan 07, 2019 	Some new SVG icons. (239251 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/trash.svg /var/www/html/swad/icon/
+sudo cp icon/copy.svg /var/www/html/swad/icon/
+sudo cp icon/paste.svg /var/www/html/swad/icon/
+sudo cp icon/download.svg /var/www/html/swad/icon/
+sudo cp icon/clipboard.svg /var/www/html/swad/icon/
+sudo cp icon/close.svg /var/www/html/swad/icon/
+
 	Version 18.28.3:  Jan 07, 2019 	New SVG icon for search. (239242 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/iconset/awesome/bell.svg /var/www/html/swad/icon/iconset/awesome/

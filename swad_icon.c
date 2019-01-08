@@ -186,7 +186,7 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) (
    extern const char *Txt_Remove;
 
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "remove-on64x64.png",
+                          "trash.svg",
                           Txt_Remove,NULL,
                           NULL);
   }
@@ -262,18 +262,20 @@ void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
    if (Text)
       Ico_PutIconWithText (Icon,Title,Text);
    else
-      Ico_PutIcon (Icon,Title);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+			 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
+	       Gbl.Prefs.IconsURL,Icon,Title,Title);
    fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
-/********************** Put a icon to submit a form **************************/
+/********************** Put an inactive/disabled icon ************************/
 /*****************************************************************************/
 
-void Ico_PutIcon (const char *Icon,const char *Alt)
+void Ico_PutIconOff (const char *Icon,const char *Alt)
   {
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO20x20\" />",
+	              " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />",
             Gbl.Prefs.IconsURL,Icon,Alt,Alt);
   }
 
@@ -286,7 +288,7 @@ void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
    /***** Print icon and optional text *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />",
+	              " class=\"ICO16x16\" />",
             Gbl.Prefs.IconsURL,Icon,Alt,Text ? Text :
         	                               Alt);
    if (Text)
@@ -346,7 +348,7 @@ void Ico_PutIconRemovalNotAllowed (void)
   {
    extern const char *Txt_Removal_not_allowed;
 
-   Ico_PutIcon ("remove-off64x64.png",Txt_Removal_not_allowed);
+   Ico_PutIconOff ("trash.svg",Txt_Removal_not_allowed);
   }
 
 /*****************************************************************************/
@@ -357,11 +359,9 @@ void Ico_PutIconRemove (void)
   {
    extern const char *Txt_Remove;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-                      "<input type=\"image\" src=\"%s/remove-on64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
-		      "</div>",
+		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);

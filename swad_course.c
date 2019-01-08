@@ -3401,7 +3401,7 @@ void Crs_PutLinkToRemoveOldCrss (void)
 
    /***** Put form to remove old courses *****/
    Lay_PutContextualLink (ActReqRemOldCrs,NULL,NULL,
-                          "remove-on64x64.png",
+                          "trash.svg",
                           Txt_Eliminate_old_courses,Txt_Eliminate_old_courses,
                           NULL);
   }

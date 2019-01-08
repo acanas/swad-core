@@ -533,7 +533,7 @@ void Acc_PutLinkToRemoveMyAccount (void)
 
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_PutContextualLink (ActReqRemMyAcc,NULL,Acc_PutParamsToRemoveMyAccount,
-			     "remove-on64x64.png",
+			     "trash.svg",
 			     Txt_Remove_account,NULL,
 			     NULL);
   }

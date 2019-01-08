@@ -163,9 +163,9 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       fprintf (Gbl.F.Out,"<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
                          "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
-			 "<img src=\"%s/close64x64.png\""
+			 "<img src=\"%s/close.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
+			 " class=\"ICO16x16\" />"
                          "</div>"
 			 "</a>",
 	       IdFrame,

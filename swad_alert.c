@@ -48,7 +48,7 @@ extern struct Globals Gbl;
 static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
   {
    NULL,		// Ale_NONE
-   "copy_on16x16.gif",	// Ale_CLIPBOARD
+   "clipboard.svg",	// Ale_CLIPBOARD
    "info64x64.png",	// Ale_INFO
    "success64x64.png",	// Ale_SUCCESS
    "question64x64.gif",	// Ale_QUESTION		animated gif
@@ -148,9 +148,9 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
       fprintf (Gbl.F.Out,"<div class=\"ALERT_CLOSE\">"
 			 "<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
-			 "<img src=\"%s/close64x64.png\""
+			 "<img src=\"%s/close.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
+			 " class=\"ICO16x16\" />"
 			 "</a>"
 			 "</div>",
 	       IdAlert,

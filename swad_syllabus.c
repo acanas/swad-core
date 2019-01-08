@@ -636,7 +636,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 				   NULL);
 	   }
 	 else
-            Ico_PutIcon ("up_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("up_off16x16.gif",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to get down item *****/
@@ -656,7 +656,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 				   NULL);
 	   }
 	 else
-            Ico_PutIcon ("down_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("down_off16x16.gif",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to increase the level of an item *****/
@@ -674,7 +674,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 				   NULL);
 	   }
 	 else
-            Ico_PutIcon ("left_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("left_off16x16.gif",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to decrease level item *****/
@@ -693,7 +693,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 				   NULL);
 	   }
 	 else
-            Ico_PutIcon ("right_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("right_off16x16.gif",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 LastLevel = Level;

@@ -126,7 +126,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
 
    Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,
                           ZIP_PutLinkToCreateZIPAsgWrkParams,
-                          "download64x64.png",
+                          "download.svg",
                           Txt_Create_ZIP_file,Txt_Create_ZIP_file,
 		          NULL);
   }
@@ -383,9 +383,9 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
                              PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
    Frm_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.png\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
+	              " class=\"ICO16x16\" />"
 		      "</a>",
 	 Gbl.Prefs.IconsURL,
 	 Txt_Create_ZIP_file,
@@ -645,7 +645,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO40x40\" />"
                       "&nbsp;%s&nbsp;"
-		      "<img src=\"%s/download64x64.png\""
+		      "<img src=\"%s/download.svg\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO40x40\" />"
 		      "</a>"

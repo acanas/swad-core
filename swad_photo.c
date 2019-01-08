@@ -224,7 +224,7 @@ static void Pho_PutIconToRequestRemoveMyPhoto (void)
    /***** Link to request the removal of my photo *****/
    if (Gbl.Usrs.Me.MyPhotoExists)
       Lay_PutContextualLink (ActReqRemMyPho,NULL,NULL,
-                             "remove-on64x64.png",
+                             "trash.svg",
 			     Txt_Remove_photo,NULL,
 		             NULL);
   }
@@ -259,7 +259,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
 	}
       Lay_PutContextualLink (NextAction,NULL,
                              Usr_PutParamOtherUsrCodEncrypted,
-			     "remove-on64x64.png",
+			     "trash.svg",
 			     Txt_Remove_photo,NULL,
 		             NULL);
      }

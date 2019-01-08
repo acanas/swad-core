@@ -781,7 +781,7 @@ void Enr_PutLinkToRemOldUsrs (void)
 
    /***** Put form to remove old users *****/
    Lay_PutContextualLink (ActReqRemOldUsr,NULL,NULL,
-                          "remove-on64x64.png",
+                          "trash.svg",
                           Txt_Eliminate_old_users,Txt_Eliminate_old_users,
                           NULL);
   }
@@ -1863,7 +1863,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
 
    /***** Put form to remove all the students in the current course *****/
    Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,NULL,
-                          "remove-on64x64.png",
+                          "trash.svg",
                           Txt_Remove_all_students,Txt_Remove_all_students,
                           NULL);
   }

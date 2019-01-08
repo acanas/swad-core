@@ -1680,7 +1680,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	      {
 	       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
 	       Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutCurrentParams,
-				      "remove-on64x64.png",
+				      "trash.svg",
 				      Txt_Remove,NULL,
 				      NULL);
 	       fprintf (Gbl.F.Out,"</td>");

@@ -363,7 +363,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    else
       /***** Put form to mark announcement as seen *****/
       Lay_PutContextualLink (ActAnnSee,NULL,Ann_PutParams,
-			     "remove-on64x64.png",
+			     "trash.svg",
 			     Txt_Do_not_show_again,Txt_Do_not_show_again,
 			     NULL);
 
