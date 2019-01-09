@@ -1384,19 +1384,19 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Tbl_StartTableCenter (2);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
-                         "<img src=\"%s/%s16x16.gif\""
+                         "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
+                         "<img src=\"%s/clock.svg\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO20x20\" />"
+                         " class=\"%sICO16x16\" />"
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
                Gbl.Prefs.URLIcons,
-               Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "time" :
-        	                                                                  "time-off",
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                                                  Txt_The_groups_will_not_automatically_open);
+        	                                                                  Txt_The_groups_will_not_automatically_open,
+               Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "" :
+        	                                                                  "ICO_HIDDEN ");
       snprintf (Id,sizeof (Id),
 	        "open_time_%u",
 		UniqueId);
@@ -2616,19 +2616,19 @@ static void Grp_PutFormToCreateGroupType (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
-                      "<img src=\"%s/%s16x16.gif\""
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
+                      "<img src=\"%s/clock.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"%sICO16x16\" />"
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
             Gbl.Prefs.URLIcons,
-            Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "time" :
-        	                                      "time-off",
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                      Txt_The_groups_will_not_automatically_open);
+        	                                      Txt_The_groups_will_not_automatically_open,
+            Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "" :
+        	                                      "ICO_HIDDEN ");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
                                                 "Open",
                                                 Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,

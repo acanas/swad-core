@@ -100,7 +100,7 @@ static const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
   {
    "",				// Usr_LIST_UNKNOWN
    "classphoto16x16.gif",	// Usr_LIST_AS_CLASS_PHOTO
-   "list64x64.gif",		// Usr_LIST_AS_LISTING
+   "list-ol.svg",		// Usr_LIST_AS_LISTING
   };
 
 
@@ -2530,10 +2530,10 @@ void Usr_WelcomeUsr (void)
                if ((CongratulateMyBirthday = Usr_CheckIfMyBirthdayHasNotBeenCongratulated ()))
                  {
                   Usr_InsertMyBirthday ();
-                  fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
+                  fprintf (Gbl.F.Out,"<img src=\"%s/birthday-cake.svg\""
                 	             " alt=\"%s\" title=\"%s\""
                                      " class=\"ICO160x160\" />",
-                           Gbl.Prefs.URLIconSet,Cfg_ICON_128x128,
+                           Gbl.Prefs.URLIconSet,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
                   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),

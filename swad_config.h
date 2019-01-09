@@ -389,7 +389,6 @@
 #define Cfg_ICON_FOLDER_COUNTRIES		"country"	// Directory with icons for countries
 #define Cfg_ICON_FOLDER_FILEXT			"filext"	// Directory with icons for file extensions
 #define Cfg_ICON_FOLDER_PLUGINS			"plugin"	// Directory with icons for plugins
-#define Cfg_ICON_128x128			"128x128"	// Directory with big size icons
 
 /* Folders and file used to store syllabus */
 #define Cfg_SYLLABUS_FOLDER_LECTURES		"lec"

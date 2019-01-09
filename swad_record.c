@@ -2643,12 +2643,12 @@ static void Rec_PutIconsCommands (void)
 	      {
 	       if (ItsMe)
 		  Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
-					 "folder64x64.gif",
+					 "folder-open.svg",
 					 Txt_View_homework,NULL,
 					 NULL);
 	       else	// Not me						// I am not a student in current course
 		  Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
-					 "folder64x64.gif",
+					 "folder-open.svg",
 					 Txt_View_homework,NULL,
 					 NULL);
 	      }
@@ -2658,12 +2658,12 @@ static void Rec_PutIconsCommands (void)
 	      {
 	       if (ItsMe)
 		  Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
-					 "rollcall64x64.png",
+					 "calendar-check.svg",
 					 Txt_View_attendance,NULL,
 					 NULL);
 	       else	// Not me
 		  Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
-					 "rollcall64x64.png",
+					 "calendar-check.svg",
 					 Txt_View_attendance,NULL,
 					 NULL);
 	      }
@@ -2686,12 +2686,12 @@ static void Rec_PutIconsCommands (void)
 				       Gbl.Record.UsrDat->UsrCod))
 	    // I follow user
 	    Lay_PutContextualLink (ActUnfUsr,NULL,Rec_PutParamUsrCodEncrypted,
-				   "following64x64.png",
+				   "user-check.svg",
 				   Txt_Following_unfollow,NULL,
 				   NULL);	// Put button to unfollow, even if I can not view user's profile
 	 else if (ICanViewUsrProfile)
 	    Lay_PutContextualLink (ActFolUsr,NULL,Rec_PutParamUsrCodEncrypted,
-				   "follow64x64.png",
+				   "user-plus.svg",
 				   Txt_Follow,NULL,
 				   NULL);	// Put button to follow
 	}

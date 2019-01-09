@@ -240,7 +240,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Assessment tab */
    "desk16x16.gif",			// Ntf_EVENT_ASSIGNMENT
-   "announce64x64.gif",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "bullhorn.svg",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
    "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
@@ -249,13 +249,13 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
-   "soc64x64.png",			// Ntf_EVENT_TIMELINE_COMMENT
+   "comment-dots.svg",			// Ntf_EVENT_TIMELINE_COMMENT
    "fav64x64.png",			// Ntf_EVENT_TIMELINE_FAV
    "share64x64.png",			// Ntf_EVENT_TIMELINE_SHARE
    "at.svg",				// Ntf_EVENT_TIMELINE_MENTION
-   "follow64x64.png",			// Ntf_EVENT_FOLLOWER
-   "forum64x64.gif",			// Ntf_EVENT_FORUM_POST_COURSE
-   "forum64x64.gif",			// Ntf_EVENT_FORUM_REPLY
+   "user-plus.svg",			// Ntf_EVENT_FOLLOWER
+   "comments.svg",			// Ntf_EVENT_FORUM_POST_COURSE
+   "comments.svg",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
    "notice64x64.png",			// Ntf_EVENT_NOTICE
@@ -379,7 +379,7 @@ void Ntf_ShowMyNotifications (void)
 
    /* Put form to change notification preferences */
    Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
-                          "heart64x64.gif",
+                          "heart.svg",
 			  Txt_Change_preferences,Txt_Preferences,
                           NULL);
 

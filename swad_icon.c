@@ -128,7 +128,7 @@ void Ico_PutIconsToSelectIconSet (void)
         	                              "PREF_OFF");
       Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/heart64x64.gif\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/heart.svg\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
                Gbl.Prefs.URLIcons,
                Cfg_ICON_FOLDER_ICON_SETS,
@@ -243,7 +243,7 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams
    extern const char *Txt_Files;
 
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
-			  "folder64x64.gif",
+			  "folder-open.svg",
 			  Txt_Files,NULL,
                           NULL);
   }

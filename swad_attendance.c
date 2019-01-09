@@ -537,7 +537,7 @@ static void Att_PutFormToListMyAttendance (void)
    extern const char *Txt_Attendance_list;
 
    Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
-                          "list64x64.gif",
+                          "list-ol.svg",
                           Txt_Attendance_list,Txt_Attendance_list,
                           NULL);
   }
@@ -551,7 +551,7 @@ static void Att_PutFormToListStdsAttendance (void)
    extern const char *Txt_Attendance_list;
 
    Lay_PutContextualLink (ActReqLstStdAtt,NULL,Att_PutFormToListStdsParams,
-                          "list64x64.gif",
+                          "list-ol.svg",
                           Txt_Attendance_list,Txt_Attendance_list,
                           NULL);
   }

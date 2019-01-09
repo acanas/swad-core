@@ -346,6 +346,10 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Un administrador de centro ahora no tiene permisos para editar horario asignatura, pero le sale el icono de editar
 //	 O le damos permisos o quitamos el icono de editar. Comprobar para admin. de titulaciones.
 
+// TODO: Fix bug: un usuario no identificado no debería ver el icono para acceder a sus asignaturas en la opción de buscar.
+
+// TODO: Preferencias -> Ajustes: icono herramienta. Frecuentes: icono corazón
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -365,10 +369,60 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.30 (2019-01-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.30.1 (2019-01-09)"
 #define CSS_FILE		"swad18.30.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.30.1:  Jan 09, 2019 	Some new SVG icons. (239389 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/calendar-check.svg /var/www/html/swad/icon/
+sudo cp icon/caret-down.svg /var/www/html/swad/icon/
+sudo cp icon/caret-right.svg /var/www/html/swad/icon/
+sudo cp icon/chart-bar.svg /var/www/html/swad/icon/
+sudo cp icon/chart-pie.svg /var/www/html/swad/icon/
+sudo cp icon/bullhorn.svg /var/www/html/swad/icon/
+sudo cp icon/clock.svg /var/www/html/swad/icon/
+sudo cp icon/cog.svg /var/www/html/swad/icon/
+sudo cp icon/comment-dots.svg /var/www/html/swad/icon/
+sudo cp icon/user-check.svg /var/www/html/swad/icon/
+sudo cp icon/comments.svg /var/www/html/swad/icon/
+sudo cp icon/user-plus.svg /var/www/html/swad/icon/
+sudo cp icon/folder-open.svg /var/www/html/swad/icon/
+sudo cp icon/file-alt.svg /var/www/html/swad/icon/
+sudo cp icon/heart.svg /var/www/html/swad/icon/
+
+sudo cp icon/iconset/awesome/birthday-cake.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/bolt.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/book.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/briefcase.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/bullhorn.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/calendar-check.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/chart-bar.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/chart-pie.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/comment-dots.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/user-check.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/comments.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/folder-open.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/file-alt.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/gamepad.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/heart.svg /var/www/html/swad/icon/iconset/awesome/
+
+sudo cp icon/iconset/nuvola/birthday-cake.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/bolt.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/book.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/briefcase.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/bullhorn.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/calendar-check.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/chart-bar.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/chart-pie.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/comment-dots.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/user-check.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/comments.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/folder-open.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/file-alt.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/gamepad.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/heart.svg /var/www/html/swad/icon/iconset/nuvola/
+
 	Version 18.30:    Jan 09, 2019 	Some new SVG icons. (239341 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/question.svg /var/www/html/swad/icon/

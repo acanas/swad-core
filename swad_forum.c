@@ -2111,35 +2111,35 @@ static void For_WriteLinkToForum (struct Forum *Forum,
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_GLOBAL_TCHS:
-         fprintf (Gbl.F.Out,"<img src=\"%s/forum64x64.gif\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"ICO16x16\" />",
                   Gbl.Prefs.URLIcons,ForumName,ForumName);
          break;
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
          fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"ICO16x16\" />",
                   Gbl.Prefs.URLIcons,ForumName,ForumName);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         Log_DrawLogo (Sco_SCOPE_INS,Forum->Location,ForumName,20,NULL,true);
+         Log_DrawLogo (Sco_SCOPE_INS,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Log_DrawLogo (Sco_SCOPE_CTR,Forum->Location,ForumName,20,NULL,true);
+         Log_DrawLogo (Sco_SCOPE_CTR,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Log_DrawLogo (Sco_SCOPE_DEG,Forum->Location,ForumName,20,NULL,true);
+         Log_DrawLogo (Sco_SCOPE_DEG,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
          fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"ICO16x16\" />",
                   Gbl.Prefs.URLIcons,ForumName,ForumName);
          break;
       default:

@@ -100,7 +100,7 @@ void Fol_PutLinkWhoToFollow (void)
    extern const char *Txt_Who_to_follow;
 
    Lay_PutContextualLink (ActSeeSocPrf,NULL,NULL,
-                          "follow64x64.png",
+                          "user-plus.svg",
                           Txt_Who_to_follow,Txt_Who_to_follow,
                           NULL);
   }
@@ -539,7 +539,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 Frm_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD",NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 			    " style=\"display:inline;\" >"
-			    "<img src=\"%s/following64x64.png\""
+			    "<img src=\"%s/user-check.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO40x40\" />"
 			    "</div>"
@@ -555,7 +555,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 Frm_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD",NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 			    " style=\"display:inline;\" >"
-			    "<img src=\"%s/follow64x64.png\""
+			    "<img src=\"%s/user-plus.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO40x40\" />"
 			    "</div>"
@@ -967,9 +967,9 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Frm_LinkFormSubmit (Txt_Follow,NULL,NULL);
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
-		      "<img src=\"%s/follow64x64.png\""
+		      "<img src=\"%s/user-plus.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
+		      " class=\"ICO16x16\" />"
 		      "</div>"
 		      "</a>",
 	    Gbl.Prefs.URLIcons,
@@ -990,9 +990,9 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Frm_LinkFormSubmit (Txt_Unfollow,NULL,NULL);
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
-		      "<img src=\"%s/following64x64.png\""
+		      "<img src=\"%s/user-check.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
+		      " class=\"ICO16x16\" />"
 		      "</div>"
 		      "</a>",
 	    Gbl.Prefs.URLIcons,

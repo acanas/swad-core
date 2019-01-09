@@ -625,7 +625,7 @@ void Sta_AskShowGblHits (void)
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
-				   "stats64x64.gif",
+				   "chart-bar.svg",
 				   Txt_Visits_to_course,Txt_Visits_to_course,
 				   NULL);
 	    break;
@@ -4095,7 +4095,7 @@ void Sta_PutIconToShowFigure (void)
    extern const char *Txt_Show_statistic;
 
    Lay_PutContextualLink (ActSeeUseGbl,NULL,Sta_PutParamsToShowFigure,
-                          "pie64x64.gif",
+                          "chart-pie.svg",
                           Txt_Show_statistic,NULL,
                           NULL);
   }
@@ -7938,9 +7938,9 @@ static void Sta_GetAndShowForumStats (void)
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_TOP\" style=\"width:20px;\">"
-                      "<img src=\"%s/forum64x64.gif\""
+                      "<img src=\"%s/comments.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -8064,12 +8064,12 @@ static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
      {
       case For_FORUM_GLOBAL_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "forum64x64.gif",StatsForum,
+                                      "comments.svg",StatsForum,
                                       Txt_General,"");
          break;
       case For_FORUM_GLOBAL_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "forum64x64.gif",StatsForum,
+                                      "comments.svg",StatsForum,
                                       Txt_General,Txt_only_teachers);
          break;
       case For_FORUM__SWAD__USRS:
@@ -9166,7 +9166,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\">"
-                         "<img src=\"%s/%s/%s/heart64x64.gif\""
+                         "<img src=\"%s/%s/%s/heart.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</td>"

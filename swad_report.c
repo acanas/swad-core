@@ -276,7 +276,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CENTER_MIDDLE\">"
                       "<a href=\"%s\" class=\"FILENAME_TXT\""
 		      " title=\"%s\" target=\"_blank\">"
-                      "<img src=\"%s/report64x64.png\" alt=\"%s\""
+                      "<img src=\"%s/file-alt.svg\" alt=\"%s\""
 	              " class=\"ICO64x64\" /><br />"
                       "%s"
 		      "</a>"

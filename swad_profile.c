@@ -540,7 +540,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
       /***** Number of posts in forums *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/forum64x64.gif');\">",
+	                 " style=\"background-image:url('%s/comments.svg');\">",
 	       Txt_Forums,
 	       Gbl.Prefs.URLIcons);
       if (UsrFigures.NumForPst >= 0)

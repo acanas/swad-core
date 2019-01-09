@@ -1457,7 +1457,7 @@ static void Tst_PutIconsTests (void)
       /***** Put form to go to test configuration *****/
       if (Gbl.Action.Act != ActCfgTst)
 	 Lay_PutContextualLink (ActCfgTst,NULL,NULL,
-				"config64x64.gif",
+				"cog.svg",
 				Txt_Configure,NULL,
 				NULL);
      }
@@ -5297,8 +5297,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       if (DisplayRightColumn)	// Answer does not have content
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
       fprintf (Gbl.F.Out," onclick=\"toggleAnswer('%u'); return false;\" />"
-                         "<img src=\"%s/expand64x64.png\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+                         "<img src=\"%s/caret-right.svg\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />"
 	                 "</a>",
                NumOpt,Gbl.Prefs.URLIcons,
 	       Gbl.Title,Gbl.Title);
@@ -5311,8 +5311,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       if (!DisplayRightColumn)	// Answer does not have content
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
       fprintf (Gbl.F.Out," onclick=\"toggleAnswer(%u); return false;\" />"
-                         "<img src=\"%s/contract64x64.png\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+                         "<img src=\"%s/caret-down.svg\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />"
 	                 "</a>",
                NumOpt,Gbl.Prefs.URLIcons,
 	       Gbl.Title,Gbl.Title);

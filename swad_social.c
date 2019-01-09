@@ -1780,13 +1780,13 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       "file64x64.gif",		// Soc_NOTE_CRS_SHA_PUB_FILE
 
       /* Assessment tab */
-      "announce64x64.gif",	// Soc_NOTE_EXAM_ANNOUNCEMENT
+      "bullhorn.svg",		// Soc_NOTE_EXAM_ANNOUNCEMENT
 
       /* Users tab */
 
       /* Social tab */
       NULL,			// Soc_NOTE_SOCIAL_POST (icon not used)
-      "forum64x64.gif",		// Soc_NOTE_FORUM_POST
+      "comments.svg",		// Soc_NOTE_FORUM_POST
 
       /* Messages tab */
       "notice64x64.png",	// Soc_NOTE_NOTICE

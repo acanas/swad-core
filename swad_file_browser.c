@@ -6026,7 +6026,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
       case Brw_ICON_TREE_NOTHING:
 	 fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
 			    " alt=\"\" title=\"\""
-			    " class=\"ICO20x20\" />",
+			    " class=\"ICO16x16\" />",
 		  Gbl.Prefs.URLIcons);
 	 break;
       case Brw_ICON_TREE_EXPAND:
@@ -6073,7 +6073,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
       fprintf (Gbl.F.Out,"<td style=\"width:20px;\">"
 	                 "<img src=\"%s/tr16x16.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " class=\"ICO20x20\" />"
+	                 " class=\"ICO16x16\" />"
 	                 "</td>",
                Gbl.Prefs.URLIcons);
   }
@@ -6111,9 +6111,9 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%s %s",
 	     Txt_Expand,FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/caret-right.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
+		      " class=\"ICO16x16\" />",
 	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,
 	    Gbl.Title);
@@ -6156,9 +6156,9 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%s %s",
 	     Txt_Contract,FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/caret-down.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
+		      " class=\"ICO16x16\" />",
 	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,
 	    Gbl.Title);
