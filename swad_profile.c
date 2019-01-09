@@ -137,7 +137,7 @@ void Prf_PutLinkMyPublicProfile (void)
    extern const char *Txt_My_public_profile;
 
    Lay_PutContextualLink (ActSeeOthPubPrf,NULL,Usr_PutParamMyUsrCodEncrypted,
-                          "usr64x64.png",
+                          "user.svg",
                           Txt_My_public_profile,Txt_My_public_profile,
 		          NULL);
   }
@@ -151,7 +151,7 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
    extern const char *Txt_Another_user_s_profile;
 
    Lay_PutContextualLink (ActReqOthPubPrf,NULL,NULL,
-                          "usr64x64.png",
+                          "user.svg",
                           Txt_Another_user_s_profile,Txt_Another_user_s_profile,
 		          NULL);
   }
@@ -396,7 +396,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	              " style=\"background-image:url('%s/tch64x64.gif');\">"
 		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_TCH][UsrDat->Sex],
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    NumCrssUsrIsTeacher,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsTeacher)
@@ -413,7 +413,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	              " style=\"background-image:url('%s/std64x64.gif');\">"
 		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_STD][UsrDat->Sex],
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    NumCrssUsrIsStudent,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsStudent)
@@ -434,7 +434,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
 		      "</li>",
 	    Txt_Files_uploaded,
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
 	    NumFiles,
 	    (NumFiles == 1) ? Txt_file :
 		              Txt_files,
@@ -447,7 +447,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/clock64x64.gif');\">",
 	    Txt_TIME_Since,
-            Gbl.Prefs.IconsURL);
+            Gbl.Prefs.URLIcons);
    if (UsrFigures.FirstClickTimeUTC)
      {
       /* Create unique id for new comment */
@@ -486,7 +486,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	                 " style=\"background-image:url('%s/click64x64.gif');\">",
 	       Txt_Clicks,
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
 
       if (UsrFigures.NumClicks >= 0)
 	{
@@ -515,7 +515,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	                 " style=\"background-image:url('%s/download.svg');\">",
 	       Txt_Downloads,
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
       if (UsrFigures.NumFileViews >= 0)
 	{
 	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
@@ -542,7 +542,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	                 " style=\"background-image:url('%s/forum64x64.gif');\">",
 	       Txt_Forums,
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
       if (UsrFigures.NumForPst >= 0)
 	{
 	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
@@ -568,9 +568,9 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
       /***** Number of messages sent *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/msg64x64.gif');\">",
+	                 " style=\"background-image:url('%s/envelope.svg');\">",
 	       Txt_Messages,
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
       if (UsrFigures.NumMsgSnt >= 0)
 	{
 	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",

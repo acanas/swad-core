@@ -137,7 +137,7 @@ void Plg_ListPlugins (void)
                          "</td>"
                          "</tr>",
                URL,Plg->Name,
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,Gbl.Plugins.Lst[NumPlg].Logo,
+               Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_PLUGINS,Gbl.Plugins.Lst[NumPlg].Logo,
                Plg->Name,Plg->Name,
                URL,Plg->Name,
                Plg->Name);
@@ -383,7 +383,7 @@ static void Plg_ListPluginsForEdition (void)
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</td>",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,
+               Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_PLUGINS,
                Gbl.Plugins.Lst[NumPlg].Logo,
                Gbl.Plugins.Lst[NumPlg].Name,
                Gbl.Plugins.Lst[NumPlg].Name);

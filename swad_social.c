@@ -1256,8 +1256,8 @@ static void Soc_PutLinkToViewOldPublishings (void)
 	              "</a>"
 	              "</div>",
 	    The_ClassFormBold[Gbl.Prefs.Theme],
-	    Gbl.Prefs.IconsURL,Txt_See_more,Txt_See_more,
-	    Gbl.Prefs.IconsURL,Txt_See_more,Txt_See_more,
+	    Gbl.Prefs.URLIcons,Txt_See_more,Txt_See_more,
+	    Gbl.Prefs.URLIcons,Txt_See_more,Txt_See_more,
 	    Txt_See_more);
   }
 
@@ -1882,7 +1882,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	                 " class=\"ICO20x20\" />"
 	                 "&nbsp;%s"
 	                 "</a>",
-            Gbl.Prefs.IconsURL,Soc_Icons[SocNot->NoteType],
+            Gbl.Prefs.URLIcons,Soc_Icons[SocNot->NoteType],
             Txt_SOCIAL_NOTE[SocNot->NoteType],
             Txt_SOCIAL_NOTE[SocNot->NoteType],
             Txt_SOCIAL_NOTE[SocNot->NoteType]);
@@ -2364,7 +2364,7 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BY
                       "</a>"
                       "</div>",
             UniqueId,
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Comment,Txt_Comment);
   }
 
@@ -2382,7 +2382,7 @@ static void Soc_PutIconCommentDisabled (void)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Comment,Txt_Comment);
   }
 
@@ -2678,7 +2678,7 @@ static void Soc_PutFormToRemoveComment (long PubCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO16x16\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Remove,
 	    Txt_Remove);
    Frm_EndForm ();
@@ -2702,7 +2702,7 @@ static void Soc_PutFormToFavSocialComment (long PubCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
    Frm_EndForm ();
   }
@@ -2730,7 +2730,7 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,Gbl.Title);
   }
 
@@ -2757,7 +2757,7 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,Gbl.Title);
   }
 
@@ -2779,7 +2779,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Share,Txt_Share);
    Frm_EndForm ();
   }
@@ -2802,7 +2802,7 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
    Frm_EndForm ();
   }
@@ -2825,7 +2825,7 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_SOCIAL_NOTE_Shared,Txt_SOCIAL_NOTE_Shared);
    Frm_EndForm ();
   }
@@ -2848,7 +2848,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
    Frm_EndForm ();
   }
@@ -2871,7 +2871,7 @@ static void Soc_PutFormToUnfavSocialComment (long PubCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
    Frm_EndForm ();
   }
@@ -2894,7 +2894,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO16x16\" />"
 		      "</div>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Remove,
 	    Txt_Remove);
    Frm_EndForm ();
@@ -4508,7 +4508,7 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 			    " alt=\"%u\" title=\"%u\""
 			    " class=\"ICO20x20\" />"
 			    "</div>",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  NumUsrs - NumUsrsShown,
 		  NumUsrs - NumUsrsShown);
      }

@@ -3205,7 +3205,7 @@ static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
                       " class=\"LEFT_TOP\""
 	              " style=\"width:%upx; height:20px;\" />"
 	              "&nbsp;",
-      Gbl.Prefs.IconsURL,
+      Gbl.Prefs.URLIcons,
       Gbl.Title,
       Gbl.Title,
       BarWidth);
@@ -3515,7 +3515,7 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
    Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/play64x64.png\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
-            Gbl.Prefs.IconsURL,Txt_Play,Txt_Play);
+            Gbl.Prefs.URLIcons,Txt_Play,Txt_Play);
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
@@ -3664,7 +3664,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
 	              "%s",
-            Gbl.Prefs.IconsURL,Txt_Continue,Txt_Continue,
+            Gbl.Prefs.URLIcons,Txt_Continue,Txt_Continue,
             Txt_Continue);
    fprintf (Gbl.F.Out,"</a>");
 

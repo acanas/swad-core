@@ -138,7 +138,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	              " class=\"ICO20x20\" />"
                       " %s"
                       "</li>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Chat_rooms,
             Txt_Chat_rooms,
             Txt_Chat_rooms);
@@ -153,7 +153,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             ThisRoomFullName,
             ThisRoomFullName);
    Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
@@ -169,7 +169,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
@@ -182,7 +182,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
          break;
@@ -245,7 +245,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
                fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICO20x20\" />",
-                        Gbl.Prefs.IconsURL,
+                        Gbl.Prefs.URLIcons,
                         ThisRoomFullName,ThisRoomFullName);
                Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	      }

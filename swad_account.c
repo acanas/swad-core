@@ -98,7 +98,7 @@ void Acc_PutLinkToCreateAccount (void)
    extern const char *Txt_Create_account;
 
    Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
-                          "arroba64x64.gif",
+                          "at.svg",
                           Txt_Create_account,Txt_Create_account,
                           NULL);
   }
@@ -1214,7 +1214,7 @@ void Acc_PutIconToChangeUsrAccount (void)
    /***** Link for changing the account *****/
    if (ItsMe)
       Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
-			     "arroba64x64.gif",
+			     "at.svg",
 			     Txt_Change_account,NULL,
 			     NULL);
    else	// Not me
@@ -1234,7 +1234,7 @@ void Acc_PutIconToChangeUsrAccount (void)
 	       break;
 	   }
 	 Lay_PutContextualLink (NextAction,NULL,Rec_PutParamUsrCodEncrypted,
-	                        "arroba64x64.gif",
+	                        "at.svg",
 				Txt_Change_account,NULL,
 				NULL);
 	}

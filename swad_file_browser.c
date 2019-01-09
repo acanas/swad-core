@@ -3383,7 +3383,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :
                                                                   "BROWSER_TITLE_LIGHT",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
                 	                           "subend",
 	          GrpDat.GrpCod);
@@ -5880,7 +5880,7 @@ static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Gbl.Title,
                Gbl.Title);
       Frm_EndForm ();
@@ -5915,7 +5915,7 @@ static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Gbl.Title,
                Gbl.Title);
       Frm_EndForm ();
@@ -5948,7 +5948,7 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy.svg\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,
 	    Gbl.Title);
    Frm_EndForm ();
@@ -5978,7 +5978,7 @@ static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title);
    Frm_EndForm ();
@@ -5998,7 +5998,7 @@ static void Brw_PutIconPasteOff (void)
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />"
 	              "</td>",
-            Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
+            Gbl.RowEvenOdd,Gbl.Prefs.URLIcons,
             Txt_Copy_not_allowed,
             Txt_Copy_not_allowed);
   }
@@ -6027,7 +6027,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
 	 fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
 			    " alt=\"\" title=\"\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.IconsURL);
+		  Gbl.Prefs.URLIcons);
 	 break;
       case Brw_ICON_TREE_EXPAND:
 	 /***** Visible icon to expand folder *****/
@@ -6075,7 +6075,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	                 " alt=\"\" title=\"\""
 	                 " class=\"ICO20x20\" />"
 	                 "</td>",
-               Gbl.Prefs.IconsURL);
+               Gbl.Prefs.URLIcons);
   }
 
 /*****************************************************************************/
@@ -6114,7 +6114,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,
 	    Gbl.Title);
    Frm_EndForm ();
@@ -6159,7 +6159,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Gbl.Title,
 	    Gbl.Title);
    Frm_EndForm ();
@@ -6187,7 +6187,7 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
             Gbl.Title,
@@ -6215,7 +6215,7 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
             Gbl.Title,
@@ -6344,7 +6344,7 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
    fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  Open ? "open" :
 			 "closed",
 		  Txt_Folder,
@@ -6387,7 +6387,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 		      " src=\"%s/folder-%s-plus16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Open ? "open" :
 		   "closed",
 	    Gbl.Title,
@@ -6412,7 +6412,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />"
 	              "</td>",
-            Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
+            Gbl.RowEvenOdd,Gbl.Prefs.URLIcons,
             Txt_New_FILE_OR_FOLDER,
             Txt_New_FILE_OR_FOLDER);
   }
@@ -6465,7 +6465,7 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 
    /***** Icon depending on the file extension *****/
    fprintf (Gbl.F.Out,"<img src=\"%s/%s%ux%u/",
-            Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_FILEXT,
+            Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_FILEXT,
             Size,Size);
    if (FileType == Brw_IS_LINK)
       fprintf (Gbl.F.Out,"url%ux%u.gif\" alt=\"%s\" title=\"%s\"",
@@ -6590,7 +6590,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
          fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/unlock-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   Txt_Public_open_educational_resource_OER_for_everyone,
                   Txt_Public_open_educational_resource_OER_for_everyone);
 
@@ -6684,7 +6684,7 @@ static void Brw_WriteDatesAssignment (void)
       fprintf (Gbl.F.Out,"<img src=\"%s/arrow%s16x12.gif\""
                          " alt=\"\" title=\"\""
                          " class=\"ICO20x15\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Gbl.FileBrowser.Asg.Open ? "green" :
         	                          "red");
 
@@ -6783,7 +6783,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO15x20B\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Txt_Unknown_or_without_photo,
                Txt_Unknown_or_without_photo);
 
@@ -8740,7 +8740,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                       " background:url('%s/upload320x320.gif') no-repeat center;\">",
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Prefs.IconsURL);
+            Gbl.Prefs.URLIcons);
    Par_PutHiddenParamLong ("act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    Brw_PutParamsFileBrowser (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],
@@ -10453,7 +10453,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO40x40\" />"
 			 "</a>",
-	       FileNameToShow,Gbl.Prefs.IconsURL,
+	       FileNameToShow,Gbl.Prefs.URLIcons,
 	       Gbl.Title,Gbl.Title);
       Frm_EndForm ();
      }
@@ -10472,7 +10472,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 " class=\"ICO40x40\" />"
 			 "</a>",
 	       FileNameToShow,
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       Txt_Download,Txt_Download);
      }
   }
@@ -12557,7 +12557,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  Txt_Folder,Txt_Folder);
       else
 	 /* Icon with file type or link */

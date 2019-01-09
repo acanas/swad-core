@@ -265,7 +265,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 		      "</a>"
 		      "</div>",
 	    URL,Title,
-	    Gbl.Prefs.IconsURL,Icon,
+	    Gbl.Prefs.URLIcons,Icon,
 	    Title,Title);
   }
 
@@ -332,7 +332,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "</td>"
 			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
 	       (unsigned) NumURL,The_ClassForm[Gbl.Prefs.Theme],
-	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksIcons[NumURL],
+	       Gbl.Prefs.URLIcons,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
@@ -592,7 +592,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "%.2f%%"
 			    "</td>"
 			    "</tr>",
-		  Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksIcons[Web],
+		  Gbl.Prefs.URLIcons,Net_WebsAndSocialNetworksIcons[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],

@@ -283,7 +283,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 		      "</div>",
 	    Report->Permalink,
 	    Txt_Report,
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Report,
 	    Report->FilenameReport);
    fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s</div>",

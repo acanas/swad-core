@@ -1987,7 +1987,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
                             " class=\"LEFT_TOP\""
 	                    " style=\"width:%upx; height:10px; padding-top:4px;\" />"
 	                    "&nbsp;",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
 			                                      'r',	// Non-editing teacher or teacher
 		  BarWidth);
@@ -2478,7 +2478,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	                 "<img src=\"%s/tr1x14.gif\""
 	                 " alt=\"\" title=\"\" />"
 	                 "</td>",
-               R,G,B,Gbl.Prefs.IconsURL);
+               R,G,B,Gbl.Prefs.URLIcons);
      }
    fprintf (Gbl.F.Out,"</tr>");
    Tbl_EndTable ();
@@ -2976,7 +2976,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Orange background
 	                 " alt=\"\" title=\"\""
 	                 " style=\"width:10px; height:%upx;\" />",
-	       Gbl.Prefs.IconsURL,BarHeight);
+	       Gbl.Prefs.URLIcons,BarHeight);
      }
    else
       fprintf (Gbl.F.Out,"0%%<br />0");
@@ -3078,7 +3078,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>",
-	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       /* All the intermediate divisions */
       for (i = 0;
@@ -3090,7 +3090,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />"
 	                    "</td>",
-		  Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+		  Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,
 		  Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
@@ -3099,7 +3099,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>"
 	                 "</tr>",
-	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
 
       /***** Write again the labels of the X axis *****/
@@ -3155,7 +3155,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "00h"
 	                 "</td>",
-               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons);
    else if (Minute == (Sta_NUM_MINUTES_PER_DAY - 30))
       // If 23:30
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
@@ -3165,7 +3165,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "24h"
 	                 "</td>",
-               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons);
    else if (!(Minute % 30) && (Minute % 60))
       // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
       fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
@@ -3175,7 +3175,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "%02uh"
 	                 "</td>",
-               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,(Minute + 30) / 60);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,(Minute + 30) / 60);
 
    /***** Start cell for the graphic *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
@@ -3183,7 +3183,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	              " background-image:url('%s/malla%c48x1.gif');"
 	              " background-size:60px 1px;"
 	              " background-repeat:repeat;\">",
-	    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Gbl.Prefs.IconsURL,
+	    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Gbl.Prefs.URLIcons,
 	    (Minute % 60) == 0 ? 'v' :
 		                 'h');
 
@@ -3194,7 +3194,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   (Minute % 60) == 0 ? 'r' :	// red background
                 	               'o',	// orange background
                   BarWidth);
@@ -3995,7 +3995,7 @@ static void Sta_DrawBarNumHits (char Color,
                          " class=\"LEFT_MIDDLE\""
 	                 " style=\"width:%upx; height:10px;\" />"
                          "&nbsp;",
-	       Gbl.Prefs.IconsURL,Color,BarWidth);
+	       Gbl.Prefs.URLIcons,Color,BarWidth);
 
       /***** Write the number of hits *****/
       Str_WriteFloatNum (Gbl.F.Out,HitsNum);
@@ -4573,9 +4573,9 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
    /***** Write number of countries *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/cty64x64.gif\""
+                      "<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4603,7 +4603,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Countries,
             Txt_Countries,
             Txt_Countries,
@@ -4709,9 +4709,9 @@ static void Sta_GetAndShowNumInssInSWAD (void)
    /***** Write number of institutions *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/ins64x64.gif\""
+                      "<img src=\"%s/university.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4737,7 +4737,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Institutions,
             Txt_Institutions,
             Txt_Institutions,
@@ -4835,9 +4835,9 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
    /***** Write number of centres *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/ctr64x64.gif\""
+                      "<img src=\"%s/building.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4861,7 +4861,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Centres,
             Txt_Centres,
             Txt_Centres,
@@ -4951,9 +4951,9 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
    /***** Write number of degrees *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/deg64x64.gif\""
+                      "<img src=\"%s/graduation-cap.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4975,7 +4975,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Degrees,
             Txt_Degrees,
             Txt_Degrees,
@@ -5057,9 +5057,9 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
    /***** Write number of courses *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/crs64x64.gif\""
+                      "<img src=\"%s/list-ol.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -5079,7 +5079,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Courses,
             Txt_Courses,
             Txt_Courses,
@@ -7967,7 +7967,7 @@ static void Sta_GetAndShowForumStats (void)
                       "%s"
                       "</th>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Scope,
             Txt_Scope,
             Txt_Forums,
@@ -8084,42 +8084,42 @@ static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
          break;
       case For_FORUM_INSTIT_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "ins64x64.gif",StatsForum,
+                                      "university.svg",StatsForum,
                                       Txt_Institutions,"");
          break;
       case For_FORUM_INSTIT_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "ins64x64.gif",StatsForum,
+                                      "university.svg",StatsForum,
                                       Txt_Institutions,Txt_only_teachers);
          break;
       case For_FORUM_CENTRE_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "ctr64x64.gif",StatsForum,
+                                      "building.svg",StatsForum,
                                       Txt_Centres,"");
          break;
       case For_FORUM_CENTRE_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "ctr64x64.gif",StatsForum,
+                                      "building.svg",StatsForum,
                                       Txt_Centres,Txt_only_teachers);
          break;
       case For_FORUM_DEGREE_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "deg64x64.gif",StatsForum,
+                                      "graduation-cap.svg",StatsForum,
                                       Txt_Degrees,"");
          break;
       case For_FORUM_DEGREE_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "deg64x64.gif",StatsForum,
+                                      "graduation-cap.svg",StatsForum,
                                       Txt_Degrees,Txt_only_teachers);
          break;
       case For_FORUM_COURSE_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "crs64x64.gif",StatsForum,
+                                      "list-ol.svg",StatsForum,
                                       Txt_Courses,"");
          break;
       case For_FORUM_COURSE_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "crs64x64.gif",StatsForum,
+                                      "list-ol.svg",StatsForum,
                                       Txt_Courses,Txt_only_teachers);
          break;
       default:
@@ -8195,7 +8195,7 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
                       "%.2f"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.IconsURL,Icon,
+            Gbl.Prefs.URLIcons,Icon,
             ForumName1,ForumName2,
             ForumName1,ForumName2,
             ForumName1,ForumName2,
@@ -9015,7 +9015,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 			    "%5.2f%%"
 			    "</td>"
 			    "</tr>",
-		  Gbl.Prefs.IconsURL,FirstDayOfWeek,
+		  Gbl.Prefs.URLIcons,FirstDayOfWeek,
 		  Txt_DAYS_SMALL[FirstDayOfWeek],
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
 		  NumUsrs[FirstDayOfWeek],
@@ -9177,7 +9177,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
                Ico_IconSetNames[IconSet],
@@ -9262,7 +9262,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,Mnu_MenuIcons[Menu],
+               Gbl.Prefs.URLIcons,Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu],
                NumUsrs[Menu],
@@ -9345,7 +9345,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],
+               Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme],
                NumUsrs[Theme],
@@ -9427,7 +9427,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,
+               Gbl.Prefs.URLIcons,SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                NumUsrs[SideCols],

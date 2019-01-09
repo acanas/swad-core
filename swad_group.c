@@ -1390,7 +1390,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          " class=\"ICO20x20\" />"
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "time" :
         	                                                                  "time-off",
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
@@ -1552,7 +1552,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   Grp->Open ? "unlock" :
                 	      "lock",
                   Gbl.Title,
@@ -1573,7 +1573,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   Grp->FileZones ? "folder-yes" :
                 	           "folder-no",
                   Gbl.Title,
@@ -2476,7 +2476,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />"
 	              "</td>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Grp->Open ? "unlock" :
         	        "lock",
 	    Gbl.Title,Gbl.Title);
@@ -2622,7 +2622,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       " class=\"ICO20x20\" />"
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "time" :
         	                                      "time-off",
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
@@ -2696,10 +2696,10 @@ static void Grp_PutFormToCreateGroup (void)
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       "</td>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Group_closed,
             Txt_Group_closed,
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_File_zones_disabled,
             Txt_File_zones_disabled);
 
@@ -5102,9 +5102,9 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,
-	       WhichGrps == Grp_ONLY_MY_GROUPS ? "myhierarchy64x64.png" :
-		                                 "hierarchy64x64.png",
+	       Gbl.Prefs.URLIcons,
+	       WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :
+		                                 "sitemap.svg",
 	       Txt_GROUP_WHICH_GROUPS[WhichGrps],
 	       Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Frm_EndForm ();

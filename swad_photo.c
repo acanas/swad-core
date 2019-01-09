@@ -183,7 +183,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
       TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 			                      Txt_Upload_photo;
       Lay_PutContextualLink (ActReqMyPho,NULL,NULL,
-			     "photo64x64.gif",
+			     "camera.svg",
 			     TitleText,NULL,
 			     NULL);
      }
@@ -207,7 +207,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
 	       break;
 	   }
 	 Lay_PutContextualLink (NextAction,NULL,Rec_PutParamUsrCodEncrypted,
-	                        "photo64x64.gif",
+	                        "camera.svg",
 				TitleText,NULL,
 				NULL);
 	}
@@ -1290,7 +1290,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PhotoExists)
       fprintf (Gbl.F.Out,"%s",PhotoURL);
    else
-      fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
+      fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.URLIcons);
    fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\""
 	              " class=\"%s\"",
             UsrDat->FullName,UsrDat->FullName,
@@ -1303,7 +1303,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       if (PhotoExists)
 	 fprintf (Gbl.F.Out,"%s",PhotoURL);
       else
-	 fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
+	 fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.URLIcons);
       fprintf (Gbl.F.Out,"','%s');\" onmouseout=\"noZoom();\"",
                IdCaption);
      }
@@ -2522,7 +2522,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 		  PhotoURL,IdCaption);
      }
    else
-      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\"",Gbl.Prefs.IconsURL);
+      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\"",Gbl.Prefs.URLIcons);
    fprintf (Gbl.F.Out," alt=\"%s\""
 	              " style=\"width:%upx; height:%upx;\" />",
             Deg->ShrtName,

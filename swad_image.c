@@ -214,7 +214,7 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
 
    /***** Image file *****/
    fprintf (Gbl.F.Out,"<label class=\"IMG_UPLOAD_BUTTON\">"
-	              "<img src=\"%s/photo64x64.gif\""
+	              "<img src=\"%s/camera.svg\""
 	              " alt=\"%s\" title=\"%s (%s)\""
 	              " class=\"IMG_UPLOAD_ICO\" />"
 	              "<input type=\"file\" name=\"%s\" accept=\"image/*\""
@@ -223,7 +223,7 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
                       "<span id=\"%s_fil\" class=\"IMG_UPLOAD_FILENAME\" />"
                       "</span>"
 	              "</label>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Image,Txt_Image,Txt_optional,
             ParamUploadImg.File,
             Id,Id);

@@ -48,6 +48,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+const char *Ico_GetIcon (const char *IconWithoutExtension);
+
 void Ico_PutIconsToSelectIconSet (void);
 void Ico_ChangeIconSet (void);
 Ico_IconSet_t Ico_GetParamIconSet (void);

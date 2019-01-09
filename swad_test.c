@@ -1776,7 +1776,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
          TagHidden = (row[2][0] == 'Y');
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                             "<img src=\"%s/",
-                  Gbl.Prefs.IconsURL);
+                  Gbl.Prefs.URLIcons);
          if (TagHidden)
             fprintf (Gbl.F.Out,"eye-slash-off64x64.png\" alt=\"%s\" title=\"%s",
                      Txt_Tag_not_allowed,
@@ -1893,7 +1893,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title);
    Frm_EndForm ();
@@ -1917,7 +1917,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title);
    Frm_EndForm ();
@@ -3456,7 +3456,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICO20x20\" />",
-                        Gbl.Prefs.IconsURL,
+                        Gbl.Prefs.URLIcons,
                         Txt_TST_Answer_given_by_the_teachers,
                         Txt_TST_Answer_given_by_the_teachers);
             fprintf (Gbl.F.Out,"</td>");
@@ -5300,7 +5300,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          "<img src=\"%s/expand64x64.png\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                 "</a>",
-               NumOpt,Gbl.Prefs.IconsURL,
+               NumOpt,Gbl.Prefs.URLIcons,
 	       Gbl.Title,Gbl.Title);
 
       /* Icon to contract (hide the answer) */
@@ -5314,7 +5314,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          "<img src=\"%s/contract64x64.png\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                 "</a>",
-               NumOpt,Gbl.Prefs.IconsURL,
+               NumOpt,Gbl.Prefs.URLIcons,
 	       Gbl.Title,Gbl.Title);
 
       fprintf (Gbl.F.Out,"</td>");
@@ -7971,7 +7971,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/exam64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICO20x20\" />",
-		     Gbl.Prefs.IconsURL,
+		     Gbl.Prefs.URLIcons,
 		     Txt_View_test,
 		     Txt_View_test);
 	    Frm_EndForm ();

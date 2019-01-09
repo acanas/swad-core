@@ -842,12 +842,12 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
    fprintf (Gbl.F.Out,"<img src=\"");
    if (Cty_CheckIfCountryMapExists (Cty))
       fprintf (Gbl.F.Out,"%s/%s/%s/%s.png",
-	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
+	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty->Alpha2,
 	       Cty->Alpha2);
    else
       fprintf (Gbl.F.Out,"%s/tr16x16.gif",	// TODO: Change for a 1x1 image or a generic image
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
    fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\" class=\"%s\" />",
 	    Cty->Alpha2,
 	    Cty->Name[Gbl.Prefs.Language],
@@ -1002,7 +1002,7 @@ static void Cty_PutIconToViewCountries (void)
    extern const char *Txt_Countries;
 
    Lay_PutContextualLink (ActSeeCty,NULL,NULL,
-                          "cty64x64.gif",
+                          "globe.svg",
                           Txt_Countries,NULL,
                           NULL);
   }

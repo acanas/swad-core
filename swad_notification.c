@@ -252,14 +252,14 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "soc64x64.png",			// Ntf_EVENT_TIMELINE_COMMENT
    "fav64x64.png",			// Ntf_EVENT_TIMELINE_FAV
    "share64x64.png",			// Ntf_EVENT_TIMELINE_SHARE
-   "arroba64x64.gif",			// Ntf_EVENT_TIMELINE_MENTION
+   "at.svg",				// Ntf_EVENT_TIMELINE_MENTION
    "follow64x64.png",			// Ntf_EVENT_FOLLOWER
    "forum64x64.gif",			// Ntf_EVENT_FORUM_POST_COURSE
    "forum64x64.gif",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
    "notice64x64.png",			// Ntf_EVENT_NOTICE
-   "msg64x64.gif",			// Ntf_EVENT_MESSAGE
+   "envelope.svg",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
 
@@ -385,7 +385,7 @@ void Ntf_ShowMyNotifications (void)
 
    /* Put form to view allowed mail domains */
    Lay_PutContextualLink (ActSeeMai,NULL,NULL,
-                          "msg64x64.gif",
+                          "envelope.svg",
 			  Txt_Email_domains_allowed_for_notifications,Txt_Domains,
                           NULL);
 
@@ -512,7 +512,7 @@ void Ntf_ShowMyNotifications (void)
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICO20x20\" />",
-		     Gbl.Prefs.IconsURL,
+		     Gbl.Prefs.URLIcons,
 		     Ntf_Icons[NotifyEvent],
 		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
 		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
@@ -522,7 +522,7 @@ void Ntf_ShowMyNotifications (void)
             fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
         	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
+                     Gbl.Prefs.URLIcons,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
@@ -2097,7 +2097,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO20x20\" />"
 			 "&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
-	       Gbl.Prefs.PathTheme,
+	       Gbl.Prefs.URLTheme,
 	       Txt_Notifications,
 	       Txt_Notifications,
 	       NumNewNtfs,

@@ -3089,7 +3089,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
                         	                                             Txt_Administer_me;
 
    Lay_PutContextualLink (NextAction,NULL,NULL,
-                          "config64x64.gif",
+                          "user-cog.svg",
                           TitleText,TitleText,
                           NULL);
   }
@@ -3126,7 +3126,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 	 Lay_ShowErrorAndExit ("Wrong role.");
      }
    Lay_PutContextualLink (NextAction,NULL,NULL,
-	                  "config64x64.gif",
+	                  "users-cog.svg",
 	                  TitleText,TitleText,
                           NULL);
   }

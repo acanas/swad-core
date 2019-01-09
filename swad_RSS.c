@@ -103,7 +103,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
 
    fprintf (FileRSS,"<image>\n");
    fprintf (FileRSS,"<url>%s/swad112x32.png</url>\n",
-            Gbl.Prefs.IconsURL);
+            Gbl.Prefs.URLIcons);
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",

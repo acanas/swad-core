@@ -289,7 +289,7 @@ void DT_PutIconToViewDegreeTypes (void)
    extern const char *Txt_Types_of_degree;
 
    Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
-                          "hierarchy64x64.png",
+                          "sitemap.svg",
                           Txt_Types_of_degree,NULL,
                           NULL);
   }

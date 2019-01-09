@@ -247,7 +247,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
-		  Gbl.Prefs.PathIconSet,
+		  Gbl.Prefs.URLIconSet,
 		  Act_GetIcon (Action),
 		  MenuStr);
          fprintf (Gbl.F.Out," %s</a>",TabMenuStr);
@@ -310,7 +310,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
-                  Gbl.Prefs.PathIconSet,
+                  Gbl.Prefs.URLIconSet,
                   Act_GetIcon (Action),
                   MenuStr);
 	 fprintf (Gbl.F.Out," %s</a>",MenuStr);

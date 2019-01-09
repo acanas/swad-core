@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="128" width="128">
+<defs>
+<linearGradient id="h" gradientUnits="userSpaceOnUse" y1="86.1" x2="0" y2="42.2">
+	<stop stop-color="#fff" stop-opacity=".66" offset="0"/>
+	<stop stop-color="#ffa201" offset=".44"/>
+	<stop stop-color="#c07500" offset="1"/>
+</linearGradient>
+<radialGradient id="d" gradientUnits="userSpaceOnUse" cy="65.1" cx="33.7" r="27">
+	<stop offset="0"/>
+	<stop offset=".9"/>
+	<stop stop-color="#555" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="g" gradientUnits="userSpaceOnUse" cy="21.42" cx="70.93" gradientTransform="matrix(-1.192 0 0 -.8675 117.4 63.12)" r="22.7">
+	<stop stop-color="#fff" offset="0"/>
+	<stop stop-color="#fff5e4" offset=".3"/>
+	<stop stop-color="#ffe0b0" offset=".5"/>
+	<stop stop-color="#ffb647" offset="0.8"/>
+	<stop stop-color="#f90" stop-opacity=".5" offset="1"/>
+</radialGradient>
+<radialGradient id="e" gradientUnits="userSpaceOnUse" cy="83" cx="33" r="37">
+	<stop stop-color="#ffc76f" offset="0"/>
+	<stop stop-color="#ffa81f" offset=".5135"/>
+	<stop stop-color="#734600" offset="1"/>
+</radialGradient>
+<radialGradient id="f" gradientUnits="userSpaceOnUse" cy="109" cx="111" r="12">
+	<stop offset="0"/>
+	<stop stop-opacity=".8" offset=".9"/>
+	<stop stop-color="#555" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="c" gradientUnits="userSpaceOnUse" cy="72.4" cx="71.2" gradientTransform="matrix(.511 0 0 .494 73.6 80.6)" r="32">
+	<stop stop-color="#e6ecff" offset="0"/>
+	<stop stop-color="#a9a6ff" offset=".5"/>
+	<stop stop-color="#8a84ff" offset="1"/>
+</radialGradient>
+<radialGradient id="b" gradientUnits="userSpaceOnUse" cy="23.6" cx="70.6" gradientTransform="matrix(-.474 0 0 -.389 143 107.5)" r="22.7">
+	<stop stop-color="#fff" offset="0"/>
+	<stop stop-color="#f8f8ff" offset=".45"/>
+	<stop stop-color="#a8a5ff" offset="1"/>
+</radialGradient>
+</defs>
+<g stroke="#000">
+	<path d="m31 78 19 29m-19-29-19 29m39-57-20 28"/>
+	<path d="m97 78-19 29m19-29 19 29m-39-57 20 28"/>
+</g>
+<g transform="translate(32.1 -23.54)">
+	<circle cy="65" cx="33.7" r="27" fill="url(#d)"/>
+	<circle stroke-width="2.4" stroke="#603b00" cy="64.3" cx="32.7" r="25.1" fill="url(#e)"/>
+	<circle opacity="0.7" stroke-width="0.8" stroke="url(#h)" cy="64.3" cx="32.7" r="23.5" fill="none"/>
+	<path fill="url(#g)" d="m14.3 50.41c0.195 7.05 8.33 12.7 18.4 12.7 10 0 18.2-5.68 18.4-12.7-4.2-5.6-10.9-9.2-18.4-9.21-7.52 0-14.2 3.61-18.4 9.21z"/>
+</g>
+<g id="i">
+	<g id="a" transform="matrix(0.813 0 0 0.813 25.84 18.51)">
+		<circle cy="109" cx="111" r="12" fill="url(#f)"/>
+		<circle stroke-width="1.8" stroke="#008" cy="108" cx="110" r="11" fill="url(#c)"/>
+		<circle opacity="0.5" stroke-width="0.4" stroke="#fff" cy="108" cx="110" r="10" fill="none"/>
+		<path fill="url(#b)" d="m110 98.2c-3.22 0-6.08 1.55-7.87 3.95 0.08 3 3.57 5.46 7.87 5.46s7.8-2.44 7.88-5.46c-1.79-2.4-4.66-3.95-7.88-3.95z"/>
+	</g>
+	<use xlink:href="#a" transform="translate(-36)"/>
+	<use xlink:href="#a" transform="translate(-18 -28)"/>
+</g>
+<use xlink:href="#i" transform="translate(-66)"/>
+</svg>

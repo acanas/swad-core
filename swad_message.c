@@ -2967,7 +2967,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
         	                                                      "BG_MSG_GREEN") :
                                                               "BG_MSG_BLUE",
 
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "replied" :
         	                                                                 "open") :
                                                                       "unread") :
@@ -3237,7 +3237,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	                 " class=\"PHOTO30x40\" />"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo);
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
@@ -3364,7 +3364,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       "</td>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Deleted ? "msg-fwd-del" :
         	      "msg-fwd",
             Deleted ? Txt_MSG_Sent_and_deleted :
@@ -3524,7 +3524,7 @@ static void Msg_WriteMsgTo (long MsgCod)
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />"
                             "</td>",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   OpenByDst ? (Deleted ? "msg-open-del"   :
                 	                 "msg-open") :
                               (Deleted ? "msg-unread-del" :
@@ -3676,7 +3676,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/unlock-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
@@ -3698,7 +3698,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
@@ -3878,7 +3878,7 @@ void Msg_ListBannedUsrs (void)
         	               " src=\"%s/lock-on64x64.png\""
         	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICO20x20\" />",
-                     Gbl.Prefs.IconsURL,
+                     Gbl.Prefs.URLIcons,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);
             Frm_EndForm ();

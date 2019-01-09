@@ -2099,7 +2099,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
                       "</label>"
 	              "</td>",
             Gbl.RowEvenOdd,NumStd,
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Present ? "check" :
         	      "check-empty",
             Present ? Txt_Present :
@@ -3500,7 +3500,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	                    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                    "</td>",
 		  Gbl.RowEvenOdd,
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  Present ? "check" :
 			    "check-empty",
 		  Present ? Txt_Present :
@@ -3671,7 +3671,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	          Gbl.RowEvenOdd,
 		  NumAttEvent + 1,
 	          Gbl.RowEvenOdd,
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  Present ? "check" :
 			    "check-empty",
 		  Present ? Txt_Present :

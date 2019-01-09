@@ -374,7 +374,7 @@ void Mnu_WriteMenuThisTab (void)
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICO\""
 			    " style=\"background-image:url('%s/%s');\">",
-	          Gbl.Prefs.PathIconSet,
+	          Gbl.Prefs.URLIconSet,
 		  Act_GetIcon (NumAct));
 
          /***** Text *****/
@@ -428,7 +428,7 @@ void Mnu_PutIconsToSelectMenu (void)
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu]);

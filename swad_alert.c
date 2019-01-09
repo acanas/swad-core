@@ -154,14 +154,14 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
 			 "</a>"
 			 "</div>",
 	       IdAlert,
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       Txt_Close,Txt_Close);
 
    /***** Write message *****/
    fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\"");
    if (AlertType != Ale_NONE)
       fprintf (Gbl.F.Out," style=\"background-image:url('%s/%s');\"",
-	       Gbl.Prefs.IconsURL,Ale_AlertIcons[AlertType]);
+	       Gbl.Prefs.URLIcons,Ale_AlertIcons[AlertType]);
    fprintf (Gbl.F.Out,">");
    if (Txt)
       fprintf (Gbl.F.Out,"%s",Txt);

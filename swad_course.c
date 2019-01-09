@@ -461,7 +461,7 @@ static void Crs_Configuration (bool PrintView)
                          "<img src=\"%s/%s\" alt=\"%s\""
                          " class=\"ICO20x20\" />",
                Gbl.Title,
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green16x16.gif" :
         	                                                  "warning64x64.png",
                Gbl.Title);
@@ -569,10 +569,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    Frm_LinkFormSubmit (Txt_System,
                        Highlight ? ClassHighlight :
         	                   ClassNormal,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/sys64x64.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />&nbsp;%s</a>",
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_System,
 	    Txt_System,
 	    Txt_System);
@@ -610,7 +610,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
                          " class=\"ICO20x20\" />&nbsp;%s</a>",
-	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
+	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -753,7 +753,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			             " class=\"ICO20x20\" />"
 			             "&nbsp;%s"
 			             "</a>",
-		           Gbl.Prefs.IconsURL,
+		           Gbl.Prefs.URLIcons,
 		           Crs.ShrtName,
 		           Crs.FullName,
 		           Crs.FullName);
@@ -1264,7 +1264,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			    " class=\"ICO20x20\" />"
 			    "</td>",
 		  BgColor,
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  Crs->NumUsrs[Rol_UNK] ? "ok_green" :
 				          "tr",
 		  Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
@@ -1394,7 +1394,7 @@ static void Crs_PutIconToViewCourses (void)
    extern const char *Txt_Courses;
 
    Lay_PutContextualLink (ActSeeCrs,NULL,NULL,
-                          "crs64x64.gif",
+                          "list-ol.svg",
                           Txt_Courses,NULL,
                           NULL);
   }
@@ -3005,11 +3005,11 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
 	 /***** Put icon with link *****/
 	 Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/hierarchy64x64.png\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"BC_ICON ICO_HIGHLIGHT\" />"
 			    "</a>",
-		  Gbl.Prefs.PathTheme,
+		  Gbl.Prefs.URLTheme,
 		  Txt_My_courses,Txt_My_courses);
 
 	 /***** End form *****/
@@ -3028,7 +3028,7 @@ void Crs_PutIconToSelectMyCourses (void)
 
    /***** Put form to search / select courses *****/
    Lay_PutContextualLink (ActMyCrs,NULL,NULL,
-                          "hierarchy64x64.gif",
+                          "sitemap.svg",
                           Txt_My_courses,NULL,
                           NULL);
   }

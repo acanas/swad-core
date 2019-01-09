@@ -433,7 +433,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
                       " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
                       "<br />%s"
                       "</td>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             (Asg.SendWork == Asg_SEND_WORK) ? "file_on" :
         	                              "file_off",
             Txt_ASSIGNMENT_TYPES[Asg.SendWork],
@@ -529,7 +529,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
       fprintf (Gbl.F.Out,"<input type=\"image\""
 			 " src=\"%s/folder-open-plus16x16.gif\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       Gbl.Title,
 	       Gbl.Title);
       Frm_EndForm ();
@@ -537,7 +537,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
    else				// I can't send files to this assignment folder
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       ICanSendFiles ? "folder-open16x16.gif" :
 		               "folder-closed16x16.gif",
 	       Txt_Folder,Txt_Folder);

@@ -190,8 +190,8 @@ void Lay_WriteStartOfPage (void)
    /* Favicon */
    fprintf (Gbl.F.Out,"<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n"
                       "<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"shortcut icon\" />\n",
-	    Gbl.Prefs.IconsURL,
-	    Gbl.Prefs.IconsURL);
+	    Gbl.Prefs.URLIcons,
+	    Gbl.Prefs.URLIcons);
 
    /* Style sheet for SWAD */
    fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/%s\" type=\"text/css\" />\n",
@@ -261,7 +261,7 @@ void Lay_WriteStartOfPage (void)
                          "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
                          "</div>"
                          "</div>",
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
    else
      {
       fprintf (Gbl.F.Out,"<body>\n");
@@ -872,7 +872,7 @@ static void Lay_WritePageTopHeading (void)
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",	// head_row_1_logo_small
-            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
+            Gbl.Prefs.URLIcons,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
@@ -882,7 +882,7 @@ static void Lay_WritePageTopHeading (void)
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",	// head_row_1_logo_big
-            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_BIG_FILENAME,
+            Gbl.Prefs.URLIcons,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
@@ -976,7 +976,7 @@ static void Lay_WriteTitleAction (void)
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
 	              " style=\"background-image:url('%s/%s');\">",
-	    Gbl.Prefs.PathIconSet,
+	    Gbl.Prefs.URLIconSet,
 	    Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
    /***** Title *****/
@@ -1082,7 +1082,7 @@ static void Lay_ShowRightColumn (void)
 			 "</a>"
 			 "</div>",
 	       Txt_If_you_have_an_Android_device_try_SWADroid,
-	       Gbl.Prefs.IconsURL);
+	       Gbl.Prefs.URLIcons);
   }
 
 /*****************************************************************************/
@@ -1314,7 +1314,7 @@ static void Lay_WriteAboutZone (void)
 		      "<div>%s</div>"
 		      "</a>",
 	    Cfg_ABOUT_URL,
-	    Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
+	    Gbl.Prefs.URLIcons,Cfg_ABOUT_LOGO,
 	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
 	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
 	    Cfg_ABOUT_NAME);
@@ -1557,7 +1557,7 @@ void Lay_AdvertisementMobile (void)
 	                 "</td>"
 	                 "</tr>",
                Txt_Stay_connected_with_SWADroid,
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Txt_Stay_connected_with_SWADroid);
 
       /***** End table and box *****/
@@ -1583,7 +1583,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
       fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 	                 " alt=\"\" title=\"\""
                          " class=\"ICO25x25\" />",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  IsLastItemInLevel[i] ? "tr" :
 		                         "subleft");
 
@@ -1592,7 +1592,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
       fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 			 " alt=\"\" title=\"\""
 			 " class=\"ICO25x25\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       IsLastItemInLevel[Level] ? "subend" :
 					  "submid");
   }

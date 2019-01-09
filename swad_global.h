@@ -164,10 +164,10 @@ struct Globals
       Mnu_Menu_t Menu;
       unsigned SideCols;
       The_Theme_t Theme;
-      char PathTheme[PATH_MAX + 1];
       Ico_IconSet_t IconSet;
-      char PathIconSet[PATH_MAX + 1];
-      char IconsURL[PATH_MAX + 1];
+      char URLIcons[PATH_MAX + 1];
+      char URLTheme[PATH_MAX + 1];
+      char URLIconSet[PATH_MAX + 1];
      } Prefs;
 
    struct

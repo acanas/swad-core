@@ -43,19 +43,19 @@ extern struct Globals Gbl;
 const char *Tab_TabIcons[Tab_NUM_TABS] =
   {
    /* TabUnk */	NULL,
-   /* TabSys */	"sys64x64.gif",
-   /* TabCty */	"cty64x64.gif",
-   /* TabIns */	"ins64x64.gif",
-   /* TabCtr */	"ctr64x64.gif",
-   /* TabDeg */	"deg64x64.gif",
-   /* TabCrs */	"crs64x64.gif",
-   /* TabAss */	"ass64x64.gif",
-   /* TabFil */	"fil64x64.gif",
-   /* TabUsr */	"usr64x64.gif",
-   /* TabSoc */ "soc64x64.png",
-   /* TabMsg */	"msg64x64.gif",
-   /* TabAna */	"ana64x64.gif",
-   /* TabPrf */	"prf64x64.gif",
+   /* TabSys */	"sitemap",
+   /* TabCty */	"globe",
+   /* TabIns */	"university",
+   /* TabCtr */	"building",
+   /* TabDeg */	"graduation-cap",
+   /* TabCrs */	"list-ol",
+   /* TabAss */	"ass64x64",
+   /* TabFil */	"fil64x64",
+   /* TabUsr */	"usr64x64",
+   /* TabSoc */ "soc64x64",
+   /* TabMsg */	"envelope",
+   /* TabAna */	"ana64x64",
+   /* TabPrf */	"user",
   };
 
 /*****************************************************************************/
@@ -71,6 +71,7 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
 /*****************************************************************************/
 
 static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab);
+static const char *Tab_GetIcon (Tab_Tab_t Tab);
 
 static void Tab_WriteBreadcrumbHome (void);
 static void Tab_WriteBreadcrumbTab (void);
@@ -141,8 +142,8 @@ void Tab_DrawTabs (void)
 			    " class=\"TAB_ICO\" />"
 			    "<div class=\"TAB_TXT %s\">%s</div>"
 			    "</a>",
-		  Gbl.Prefs.PathIconSet,
-		  Tab_TabIcons[NumTab],
+		  Gbl.Prefs.URLIconSet,
+		  Tab_GetIcon (NumTab),
 		  Txt_TABS_TXT[NumTab],
 		  Txt_TABS_TXT[NumTab],
 		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
@@ -198,6 +199,17 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
      }
   }
 
+/*****************************************************************************/
+/********************** Get icon associated to an action *********************/
+/*****************************************************************************/
+
+static const char *Tab_GetIcon (Tab_Tab_t NumTab)
+  {
+   if (NumTab < (Tab_Tab_t) 1 || NumTab >= Tab_NUM_TABS)
+      return NULL;
+
+   return Ico_GetIcon (Tab_TabIcons[NumTab]);
+  }
 
 /*****************************************************************************/
 /********************* Draw breadcrumb with tab and action *******************/

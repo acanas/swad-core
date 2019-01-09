@@ -247,7 +247,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x25\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);

@@ -996,7 +996,7 @@ void Rec_PutLinkToEditRecordFields (void)
 
    /***** Link to edit record fields *****/
    Lay_PutContextualLink (ActEdiRecFie,NULL,NULL,
-                          "edit64x64.png",
+                          "pen.svg",
                           Txt_Edit_record_fields,Txt_Edit_record_fields,
 		          NULL);
   }
@@ -2550,14 +2550,14 @@ static void Rec_PutIconsCommands (void)
       if (ItsMe)
          /***** Button to edit my record card *****/
 	 Lay_PutContextualLink (ActReqEdiRecSha,NULL,NULL,
-	                        "edit64x64.png",
+	                        "pen.svg",
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
       if (ICanViewUsrProfile)
          /***** Button to view user's profile *****/
          Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
 			        Rec_PutParamUsrCodEncrypted,
-				"usr64x64.png",
+				"user.svg",
 				ItsMe ? Txt_My_public_profile :
 			                Txt_Another_user_s_profile,NULL,
 				NULL);
@@ -2567,25 +2567,25 @@ static void Rec_PutIconsCommands (void)
 	 /* View student's records: common record card and course record card */
          Lay_PutContextualLink (ActSeeRecOneStd,NULL,
 			        Rec_PutParamUsrCodEncrypted,
-				"card64x64.gif",
+				"card.svg",
 				Txt_View_record_for_this_course,NULL,
 				NULL);
       else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
 	 Lay_PutContextualLink (ActSeeRecOneTch,NULL,
 				Rec_PutParamUsrCodEncrypted,
-				"card64x64.gif",
+				"card.svg",
 				Txt_View_record_and_office_hours,NULL,
 				NULL);
 
       /***** Button to view user's agenda *****/
       if (ItsMe)
 	 Lay_PutContextualLink (ActSeeMyAgd,NULL,NULL,
-				"calendar64x64.png",
+				"calendar.svg",
 				Txt_Show_agenda,NULL,
 				NULL);
       else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
 	 Lay_PutContextualLink (ActSeeUsrAgd,NULL,Rec_PutParamUsrCodEncrypted,
-				"calendar64x64.png",
+				"calendar.svg",
 				Txt_Show_agenda,NULL,
 				NULL);
 
@@ -2614,7 +2614,7 @@ static void Rec_PutIconsCommands (void)
 	   }
 	 Lay_PutContextualLink (NextAction,NULL,
 	                        Rec_PutParamUsrCodEncrypted,
-				"config64x64.gif",
+				"user-cog.svg",
 			        Txt_Administer_user,NULL,
 		                NULL);
 	}
@@ -2675,7 +2675,7 @@ static void Rec_PutIconsCommands (void)
 
       /***** Button to send a message *****/
       Lay_PutContextualLink (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
-			     "msg64x64.gif",
+			     "envelope.svg",
 			     Txt_Write_a_message,NULL,
 		             NULL);
 

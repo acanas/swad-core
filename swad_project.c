@@ -359,8 +359,8 @@ static void Prj_ShowFormToFilterByMy_All (void)
    Prj_WhoseProjects_t My_All;
    static const char *WhoseProjectsImage[Prj_NUM_WHOSE_PROJECTS] =
      {
-      "myhierarchy64x64.png",	// Prj_MY__PROJECTS
-      "hierarchy64x64.png",	// Prj_ALL_PROJECTS
+      "mysitemap.png",	// Prj_MY__PROJECTS
+      "sitemap.svg",	// Prj_ALL_PROJECTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -383,7 +383,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,WhoseProjectsImage[My_All],
+	       Gbl.Prefs.URLIcons,WhoseProjectsImage[My_All],
 	       Txt_PROJECT_MY_ALL_PROJECTS[My_All],
 	       Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
       Frm_EndForm ();
@@ -422,7 +422,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,PreassignedNonpreassigImage[PreNon],
+	       Gbl.Prefs.URLIcons,PreassignedNonpreassigImage[PreNon],
 	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon],
 	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon]);
       Frm_EndForm ();
@@ -466,7 +466,7 @@ static void Prj_ShowFormToFilterByHidden (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       HiddenVisiblImage[HidVis],
 	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis],
 	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
@@ -1070,7 +1070,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
         	                        "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No,
-	    Gbl.Prefs.IconsURL,PreassignedNonpreassigImage[Prj->Preassigned],
+	    Gbl.Prefs.URLIcons,PreassignedNonpreassigImage[Prj->Preassigned],
 	    Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned],
 	    Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
 

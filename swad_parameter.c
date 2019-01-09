@@ -798,16 +798,16 @@ void Par_GetMainParameters (void)
       /***** Set path of theme *****/
       snprintf (Path,sizeof (Path),
 	        "%s/%s/%s",
-                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
-      Str_Copy (Gbl.Prefs.PathTheme,Path,
+                Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
+      Str_Copy (Gbl.Prefs.URLTheme,Path,
                 PATH_MAX);
 
       /***** Set path of icon set *****/
       snprintf (Path,sizeof (Path),
 	        "%s/%s/%s",
-                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
+                Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_ICON_SETS,
                 Ico_IconSetId[Gbl.Prefs.IconSet]);
-      Str_Copy (Gbl.Prefs.PathIconSet,Path,
+      Str_Copy (Gbl.Prefs.URLIconSet,Path,
                 PATH_MAX);
      }
 

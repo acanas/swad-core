@@ -417,7 +417,7 @@ static void Ban_ListBannersForEdition (void)
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Ban->Hidden ? "eye-slash-on64x64.png" :
         	             "eye-on64x64.png",
                Ban->Hidden ? Txt_Show :

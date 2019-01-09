@@ -249,7 +249,7 @@ void The_PutIconsToSelectTheme (void)
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
 	                 " title=\"%s\" class=\"ICO40x25\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Cfg_ICON_FOLDER_THEMES,
                The_ThemeId[Theme],
                The_ThemeNames[Theme],
@@ -286,10 +286,10 @@ void The_ChangeTheme (void)
    Gbl.Prefs.Theme = The_GetParamTheme ();
    snprintf (Path,sizeof (Path),
 	     "%s/%s/%s",
-             Gbl.Prefs.IconsURL,
+             Gbl.Prefs.URLIcons,
              Cfg_ICON_FOLDER_THEMES,
              The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.PathTheme,Path,
+   Str_Copy (Gbl.Prefs.URLTheme,Path,
              PATH_MAX);
 
    /***** Store theme in database *****/

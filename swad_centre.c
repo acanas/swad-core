@@ -723,7 +723,7 @@ static void Ctr_PutIconToChangePhoto (void)
 	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
    Lay_PutContextualLink (ActReqCtrPho,NULL,NULL,
-			  "photo64x64.gif",
+			  "camera.svg",
 			  PhotoExists ? Txt_Change_photo :
 				        Txt_Upload_photo,NULL,
                           NULL);
@@ -1035,7 +1035,7 @@ void Ctr_PutIconToViewCentres (void)
    extern const char *Txt_Centres;
 
    Lay_PutContextualLink (ActSeeCtr,NULL,NULL,
-                          "ctr64x64.gif",
+                          "building.svg",
                           Txt_Centres,NULL,
                           NULL);
   }

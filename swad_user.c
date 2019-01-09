@@ -2469,7 +2469,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
                       " autofocus=\"autofocus\" required=\"required\" />"
 	              "</label>"
 	              "</div>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_User[Usr_SEX_UNKNOWN],
             Txt_User[Usr_SEX_UNKNOWN],
             Cns_MAX_CHARS_EMAIL_ADDRESS,
@@ -2485,7 +2485,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
 	              "</label>"
 	              "</div>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Password,
             Txt_Password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
@@ -2533,7 +2533,7 @@ void Usr_WelcomeUsr (void)
                   fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
                 	             " alt=\"%s\" title=\"%s\""
                                      " class=\"ICO160x160\" />",
-                           Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
+                           Gbl.Prefs.URLIconSet,Cfg_ICON_128x128,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
                   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -2658,7 +2658,7 @@ void Usr_PutFormLogIn (void)
                       " class=\"ICO20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Log_in,
             Txt_Log_in,
             Txt_Log_in);
@@ -2727,7 +2727,7 @@ void Usr_PutFormLogOut (void)
                       " class=\"ICO20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Txt_Log_out,
             Txt_Log_out,
             Txt_Log_out);
@@ -3298,17 +3298,17 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
    snprintf (Path,sizeof (Path),
 	     "%s/%s/%s",
-	     Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,
+	     Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_THEMES,
 	     The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.PathTheme,Path,
+   Str_Copy (Gbl.Prefs.URLTheme,Path,
              PATH_MAX);
 
    Gbl.Prefs.IconSet = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
    snprintf (Path,sizeof (Path),
 	     "%s/%s/%s",
-	     Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
+	     Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_ICON_SETS,
 	     Ico_IconSetId[Gbl.Prefs.IconSet]);
-   Str_Copy (Gbl.Prefs.PathIconSet,Path,
+   Str_Copy (Gbl.Prefs.URLIconSet,Path,
              PATH_MAX);
 
    /***** Construct the path to my directory *****/
@@ -5984,7 +5984,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       " %s</a>",
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             Usr_IconsClassPhotoOrList[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType],

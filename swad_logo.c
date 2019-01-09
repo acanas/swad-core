@@ -69,13 +69,13 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
   {
    static const char *Icon[Sco_NUM_SCOPES] =
      {
-      NULL,		// Sco_SCOPE_UNK
-      NULL,		// Sco_SCOPE_SYS
-      NULL,		// Sco_SCOPE_CTY
-      Cfg_FOLDER_INS,	// Sco_SCOPE_INS
-      Cfg_FOLDER_CTR,	// Sco_SCOPE_CTR
-      Cfg_FOLDER_DEG,	// Sco_SCOPE_DEG
-      NULL,		// Sco_SCOPE_CRS
+      NULL,			// Sco_SCOPE_UNK
+      NULL,			// Sco_SCOPE_SYS
+      NULL,			// Sco_SCOPE_CTY
+      "university.svg",		// Sco_SCOPE_INS
+      "building.svg",		// Sco_SCOPE_CTR
+      "graduation-cap.svg",	// Sco_SCOPE_DEG
+      NULL,			// Sco_SCOPE_CRS
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
@@ -156,8 +156,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 			(unsigned) Cod,
 			(unsigned) Cod);
 	    else if (Icon[Scope])
-	       fprintf (Gbl.F.Out,"%s/%s64x64.gif",
-			Gbl.Prefs.IconsURL,Icon[Scope]);
+	       fprintf (Gbl.F.Out,"%s/%s",
+			Gbl.Prefs.URLIcons,Icon[Scope]);
 	    fprintf (Gbl.F.Out,"\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICO%ux%u",

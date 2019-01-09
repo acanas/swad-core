@@ -466,7 +466,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 			       " class=\"ICO20x20\" />"
 			       "</a>"
 			       "</div>",
-		     Gbl.Prefs.IconsURL);
+		     Gbl.Prefs.URLIcons);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
 	    /***** Button to add new notice *****/
@@ -679,7 +679,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                                   " class=\"ICO20x20\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
-                        Gbl.Prefs.IconsURL,
+                        Gbl.Prefs.URLIcons,
                         Txt_NOTICE_Active_SINGULAR,
                         Txt_NOTICE_Active_SINGULAR);
                break;
@@ -690,7 +690,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                                   " class=\"ICO20x20\" />"
                                   "</span>",
                         Txt_NOTICE_Obsolete_SINGULAR,
-                        Gbl.Prefs.IconsURL,
+                        Gbl.Prefs.URLIcons,
                         Txt_NOTICE_Obsolete_SINGULAR,
                         Txt_NOTICE_Obsolete_SINGULAR);
                break;

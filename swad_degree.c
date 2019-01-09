@@ -1298,7 +1298,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      " class=\"ICO20x20\" />"
 		      "</td>",
 	    BgColor,
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    NumCrss ? "ok_green" :
 		      "tr",
 	    NumCrss ? Txt_DEGREE_With_courses :
@@ -1424,7 +1424,7 @@ void Deg_PutIconToViewDegrees (void)
    extern const char *Txt_Degrees;
 
    Lay_PutContextualLink (ActSeeDeg,NULL,NULL,
-                          "deg64x64.gif",
+                          "graduation-cap.svg",
                           Txt_Degrees,NULL,
                           NULL);
   }
@@ -2500,7 +2500,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\" />"
                             "</td>",
-                  Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
+                  Gbl.RowEvenOdd,Gbl.Prefs.URLIcons,
                   NumRow == NumRows ? "subend" :
                 	              "submid");
 
@@ -2520,7 +2520,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
         	                  " alt=\"%s\" title=\"%s\""
                                   " class=\"ICO20x20\" />"
                                   "&nbsp;%s",
-                     Gbl.Prefs.IconsURL,
+                     Gbl.Prefs.URLIcons,
                      Txt_all_degrees,
                      Txt_all_degrees,
                      Txt_all_degrees);

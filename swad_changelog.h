@@ -365,11 +365,60 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.29 (2019-01-07)"
-#define CSS_FILE		"swad18.29.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.30 (2019-01-09)"
+#define CSS_FILE		"swad18.30.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.29:    Jan 07, 2019 	Some new SVG icons. (239251 lines)
+	Version 18.30:    Jan 09, 2019 	Some new SVG icons. (239341 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/question.svg /var/www/html/swad/icon/
+sudo cp icon/pen.svg /var/www/html/swad/icon/
+sudo cp icon/user.svg /var/www/html/swad/icon/
+sudo cp icon/card.svg /var/www/html/swad/icon/
+sudo cp icon/calendar.svg /var/www/html/swad/icon/
+sudo cp icon/user-cog.svg /var/www/html/swad/icon/
+sudo cp icon/users-cog.svg /var/www/html/swad/icon/
+sudo cp icon/qrcode.svg /var/www/html/swad/icon/
+sudo cp icon/envelope.svg /var/www/html/swad/icon/
+sudo cp icon/camera.svg /var/www/html/swad/icon/
+sudo cp icon/at.svg /var/www/html/swad/icon/
+sudo cp icon/university.svg /var/www/html/swad/icon/
+sudo cp icon/sitemap.svg /var/www/html/swad/icon/
+sudo cp icon/theme/blue/sitemap.svg /var/www/html/swad/icon/theme/blue/
+sudo cp icon/theme/grey/sitemap.svg /var/www/html/swad/icon/theme/grey/
+sudo cp icon/theme/white/sitemap.svg /var/www/html/swad/icon/theme/white/
+sudo cp icon/theme/yellow/sitemap.svg /var/www/html/swad/icon/theme/yellow/
+sudo cp icon/mysitemap.png /var/www/html/swad/icon/
+sudo cp icon/globe.svg /var/www/html/swad/icon/
+sudo cp icon/building.svg /var/www/html/swad/icon/
+sudo cp icon/graduation-cap.svg /var/www/html/swad/icon/
+sudo cp icon/list-ol.svg /var/www/html/swad/icon/
+
+sudo cp icon/iconset/awesome/user.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/card.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/calendar.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/envelope.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/at.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/university.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/sitemap.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/globe.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/building.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/graduation-cap.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/list-ol.svg /var/www/html/swad/icon/iconset/awesome/
+
+sudo cp icon/iconset/nuvola/user.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/card.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/calendar.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/envelope.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/at.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/university.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/sitemap.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/globe.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/building.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/graduation-cap.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/list-ol.png /var/www/html/swad/icon/iconset/nuvola/
+
+	Version 18.29:    Jan 08, 2019 	Some new SVG icons. (239251 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/trash.svg /var/www/html/swad/icon/
 sudo cp icon/copy.svg /var/www/html/swad/icon/

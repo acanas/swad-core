@@ -1032,7 +1032,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                       " class=\"ICO20x20\" />"
                       "</td>",
             Gbl.RowEvenOdd,
-            Gbl.Prefs.IconsURL,
+            Gbl.Prefs.URLIcons,
             QuestionExists ? "tr" :
         	             "ok_green",
             QuestionExists ? Txt_Existing_question :
@@ -1092,7 +1092,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
+                  Gbl.Prefs.URLIcons,
                   QuestionExists ? "ok_off" :
                 	           "ok_on",
                   Txt_TST_Answer_given_by_the_teachers,
@@ -1161,7 +1161,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICO20x20\" />",
-                        Gbl.Prefs.IconsURL,
+                        Gbl.Prefs.URLIcons,
                         QuestionExists ? "ok_off" :
                                          "ok_on",
                         Txt_TST_Answer_given_by_the_teachers,

@@ -672,7 +672,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.IconsURL,
+		  Gbl.Prefs.URLIcons,
 		  Gbl.Title,Gbl.Title);
 	}
 

@@ -203,7 +203,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       Image[PstFut],
 	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut],
 	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
@@ -245,7 +245,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       Image[PrvPub],
 	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub],
 	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
@@ -287,7 +287,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.IconsURL,
+	       Gbl.Prefs.URLIcons,
 	       Image[HidVis],
 	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis],
 	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
@@ -689,7 +689,7 @@ static void Agd_PutIconsOtherPublicAgenda (void)
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
                              Usr_PutParamOtherUsrCodEncrypted,
-			     "usr64x64.png",
+			     "user.svg",
 			     Txt_Another_user_s_profile,NULL,
 			     NULL);
 
@@ -698,13 +698,13 @@ static void Agd_PutIconsOtherPublicAgenda (void)
       /* View student's records: common record card and course record card */
       Lay_PutContextualLink (ActSeeRecOneStd,NULL,
                              Usr_PutParamOtherUsrCodEncrypted,
-			     "card64x64.gif",
+			     "card.svg",
 			     Txt_View_record_for_this_course,NULL,
 			     NULL);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLink (ActSeeRecOneTch,NULL,
 			     Usr_PutParamOtherUsrCodEncrypted,
-			     "card64x64.gif",
+			     "card.svg",
 			     Txt_View_record_and_office_hours,NULL,
 			     NULL);
   }

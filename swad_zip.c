@@ -387,7 +387,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO16x16\" />"
 		      "</a>",
-	 Gbl.Prefs.IconsURL,
+	 Gbl.Prefs.URLIcons,
 	 Txt_Create_ZIP_file,
 	 Txt_Create_ZIP_file);
    Frm_EndForm ();
@@ -652,11 +652,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "</td>"
 		      "</tr>",
             URL,FileName,
-            Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_FILEXT,
+            Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_FILEXT,
             Txt_ZIP_file,
             Txt_ZIP_file,
 	    FileName,
-	    Gbl.Prefs.IconsURL,
+	    Gbl.Prefs.URLIcons,
 	    Txt_Download,
 	    Txt_Download);
 

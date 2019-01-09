@@ -407,7 +407,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40 TOP_LOGO\" />",
-               Gbl.Prefs.IconsURL,
+               Gbl.Prefs.URLIcons,
                Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
 
    /***** Text *****/
