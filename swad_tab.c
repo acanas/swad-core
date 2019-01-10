@@ -49,12 +49,12 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
    /* TabCtr */	"building",
    /* TabDeg */	"graduation-cap",
    /* TabCrs */	"list-ol",
-   /* TabAss */	"ass64x64",
+   /* TabAss */	"check",
    /* TabFil */	"folder-open",
    /* TabUsr */	"users",
    /* TabSoc */ "comment-dots",
    /* TabMsg */	"envelope",
-   /* TabAna */	"ana64x64",
+   /* TabAna */	"poll-h",
    /* TabPrf */	"user",
   };
 

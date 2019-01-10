@@ -393,7 +393,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Number of courses in which the user is teacher *****/
    NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TCH);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/tch64x64.gif');\">"
+	              " style=\"background-image:url('%s/user-tie.svg');\">"
 		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_TCH][UsrDat->Sex],
 	    Gbl.Prefs.URLIcons,
@@ -410,7 +410,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Number of courses in which the user is student *****/
    NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STD);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/std64x64.gif');\">"
+	              " style=\"background-image:url('%s/user.svg');\">"
 		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_STD][UsrDat->Sex],
 	    Gbl.Prefs.URLIcons,
@@ -430,7 +430,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    else
       NumPublicFiles = 0;
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/file64x64.gif');\">"
+	              " style=\"background-image:url('%s/file.svg');\">"
 		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
 		      "</li>",
 	    Txt_Files_uploaded,
@@ -484,7 +484,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      {
       /* Number of clicks */
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/click64x64.gif');\">",
+	                 " style=\"background-image:url('%s/mouse-pointer.svg');\">",
 	       Txt_Clicks,
 	       Gbl.Prefs.URLIcons);
 

@@ -369,11 +369,54 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.30.2 (2019-01-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.30.3 (2019-01-10)"
 #define CSS_FILE		"swad18.30.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.30.2:  Jan 09, 2019 	Some new SVG icons. (? lines)
+	Version 18.30.3:  Jan 09, 2019 	Some new SVG icons.
+				        Code refactoring in icons to add. (239466 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/info-circle.svg /var/www/html/swad/icon/
+sudo cp icon/th.svg /var/www/html/swad/icon/
+sudo cp icon/table.svg /var/www/html/swad/icon/
+sudo cp icon/clock.svg /var/www/html/swad/icon/
+sudo cp icon/mouse-pointer.svg /var/www/html/swad/icon/
+sudo cp icon/file.svg /var/www/html/swad/icon/
+sudo cp icon/plus.svg /var/www/html/swad/icon/
+sudo cp icon/check.svg /var/www/html/swad/icon/
+sudo cp icon/tasks.svg /var/www/html/swad/icon/
+sudo cp icon/ellipsis-h.svg /var/www/html/swad/icon/
+sudo cp icon/ellipsis-v.svg /var/www/html/swad/icon/
+sudo cp icon/map-marker-alt.svg /var/www/html/swad/icon/
+sudo cp icon/arrow-up.svg /var/www/html/swad/icon/
+sudo cp icon/arrow-down.svg /var/www/html/swad/icon/
+sudo cp icon/arrow-left.svg /var/www/html/swad/icon/
+sudo cp icon/arrow-right.svg /var/www/html/swad/icon/
+sudo cp icon/expand-arrows-alt.svg /var/www/html/swad/icon/
+sudo cp icon/eye.svg /var/www/html/swad/icon/
+sudo cp icon/eye-slash.svg /var/www/html/swad/icon/
+
+sudo cp icon/iconset/awesome/info.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/question.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/check-square.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/check.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/pen.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/marker.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/clipboard-list.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/poll-h.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/map-marker-alt.svg /var/www/html/swad/icon/iconset/awesome/
+
+sudo cp icon/iconset/nuvola/info.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/question.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/check-square.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/check.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/pen.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/marker.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/clipboard-list.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/poll-h.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/map-marker-alt.png /var/www/html/swad/icon/iconset/nuvola/
+
+	Version 18.30.2:  Jan 09, 2019 	Some new SVG icons. (239435 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/cogs.svg /var/www/html/swad/icon/
 sudo cp icon/sticky-note.svg /var/www/html/swad/icon/

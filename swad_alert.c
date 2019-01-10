@@ -49,7 +49,7 @@ static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
   {
    NULL,		// Ale_NONE
    "clipboard.svg",	// Ale_CLIPBOARD
-   "info64x64.png",	// Ale_INFO
+   "info-circle.svg",	// Ale_INFO
    "success64x64.png",	// Ale_SUCCESS
    "question64x64.gif",	// Ale_QUESTION		animated gif
    "warning64x64.gif",	// Ale_WARNING		animated gif

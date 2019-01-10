@@ -141,11 +141,11 @@ void Rec_PutLinkToEditRecordFields (void);
 void Rec_ListRecordsGstsShow (void);
 void Rec_ListRecordsGstsPrint (void);
 
-void Rec_GetUsrAndShowRecordOneStdCrs (void);
+void Rec_GetUsrAndShowRecOneStdCrs (void);
 void Rec_ListRecordsStdsShow (void);
 void Rec_ListRecordsStdsPrint (void);
 
-void Rec_GetUsrAndShowRecordOneTchCrs (void);
+void Rec_GetUsrAndShowRecOneTchCrs (void);
 void Rec_ListRecordsTchsShow (void);
 void Rec_ListRecordsTchsPrint (void);
 

@@ -150,7 +150,7 @@ void Con_PutLinkToLastClicks (void)
    extern const char *Txt_Last_clicks;
 
    Lay_PutContextualLink (ActLstClk,NULL,NULL,
-                          "mouse-pointer64x64.png",
+                          "mouse-pointer.svg",
                           Txt_Last_clicks,Txt_Last_clicks,
                           NULL);
   }
@@ -623,7 +623,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Sco_SCOPE_CRS);
 	 Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
-	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis-h.svg\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
 			    "</a>",
 		  Gbl.Prefs.URLIcons,

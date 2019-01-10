@@ -337,10 +337,9 @@ static void Att_PutIconToCreateNewAttEvent (void)
    extern const char *Txt_New_event;
 
    /***** Put icon to create a new attendance event *****/
-   Lay_PutContextualLink (ActFrmNewAtt,NULL,Att_PutParamsToCreateNewAttEvent,
-                          "plus64x64.png",
-                          Txt_New_event,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
+			       Att_PutParamsToCreateNewAttEvent,
+			       Txt_New_event);
   }
 
 /*****************************************************************************/

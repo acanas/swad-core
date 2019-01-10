@@ -6184,14 +6184,14 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Show_FOLDER_FILE_OR_LINK_X,
 	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />",
+	              " class=\"ICO16x16%s\" />",
             Gbl.Prefs.URLIcons,
-            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
-        	                                       "on",
             Gbl.Title,
-            Gbl.Title);
+            Gbl.Title,
+            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? " ICO_HIDDEN" :
+        	                                       "");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -6212,14 +6212,14 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Hide_FOLDER_FILE_OR_LINK_X,
 	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />",
+	              " class=\"ICO16x16%s\" />",
             Gbl.Prefs.URLIcons,
-            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
-        	                                       "on",
             Gbl.Title,
-            Gbl.Title);
+            Gbl.Title,
+            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? " ICO_HIDDEN" :
+        	                                       "");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }

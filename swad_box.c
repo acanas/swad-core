@@ -152,7 +152,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
                          "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
 	                 "<img src=\"%s/question.svg\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO16x16\" />"
+	                 " class=\"CONTEXT_ICO\" />"
                          "</div>"
                          "</a>",
 	       Hlp_WIKI,HelpLink,
@@ -165,7 +165,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
                          "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
 			 "<img src=\"%s/close.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO16x16\" />"
+			 " class=\"CONTEXT_ICO\" />"
                          "</div>"
 			 "</a>",
 	       IdFrame,

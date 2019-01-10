@@ -285,7 +285,7 @@ static void Syl_SetSyllabusTypeFromAction (void)
      {
       case ActSeeSyl:
 	 Gbl.CurrentCrs.Info.Type = (Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
-	                                                                                     Inf_PRACTICALS);
+	                                                                          Inf_PRACTICALS);
 	 break;
       case ActSeeSylLec:
       case ActEdiSylLec:
@@ -631,12 +631,12 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
                                                                               ActUp_IteSylPra,
                                    NULL,Syl_PutParamNumItem,
-				   "up_on16x16.gif",
+				   "arrow-up.svg",
 				   Gbl.Title,NULL,
 				   NULL);
 	   }
 	 else
-            Ico_PutIconOff ("up_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to get down item *****/
@@ -651,12 +651,12 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
                                                                               ActDwnIteSylPra,
                                    NULL,Syl_PutParamNumItem,
-				   "down_on16x16.gif",
+				   "arrow-down.svg",
 				   Gbl.Title,NULL,
 				   NULL);
 	   }
 	 else
-            Ico_PutIconOff ("down_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to increase the level of an item *****/
@@ -669,12 +669,12 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
                                                                               ActRgtIteSylPra,
                                    NULL,Syl_PutParamNumItem,
-				   "left_on16x16.gif",
+				   "arrow-left.svg",
 				   Gbl.Title,NULL,
 				   NULL);
 	   }
 	 else
-            Ico_PutIconOff ("left_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to decrease level item *****/
@@ -688,12 +688,12 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    Lay_PutContextualLink (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
                                                                               ActLftIteSylPra,
                                    NULL,Syl_PutParamNumItem,
-				   "right_on16x16.gif",
+				   "arrow-right.svg",
 				   Gbl.Title,NULL,
 				   NULL);
 	   }
 	 else
-            Ico_PutIconOff ("right_off16x16.gif",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 LastLevel = Level;

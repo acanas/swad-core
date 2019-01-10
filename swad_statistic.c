@@ -8168,7 +8168,7 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
                       "<td class=\"LEFT_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "</td>"
                       "<td class=\"DAT LEFT_TOP\">"
                       "%s%s"

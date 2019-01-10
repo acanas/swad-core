@@ -1764,20 +1764,20 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       NULL,			// Soc_NOTE_UNKNOWN
 
       /* Institution tab */
-      "file64x64.gif",		// Soc_NOTE_INS_DOC_PUB_FILE
-      "file64x64.gif",		// Soc_NOTE_INS_SHA_PUB_FILE
+      "file.svg",		// Soc_NOTE_INS_DOC_PUB_FILE
+      "file.svg",		// Soc_NOTE_INS_SHA_PUB_FILE
 
       /* Centre tab */
-      "file64x64.gif",		// Soc_NOTE_CTR_DOC_PUB_FILE
-      "file64x64.gif",		// Soc_NOTE_CTR_SHA_PUB_FILE
+      "file.svg",		// Soc_NOTE_CTR_DOC_PUB_FILE
+      "file.svg",		// Soc_NOTE_CTR_SHA_PUB_FILE
 
       /* Degree tab */
-      "file64x64.gif",		// Soc_NOTE_DEG_DOC_PUB_FILE
-      "file64x64.gif",		// Soc_NOTE_DEG_SHA_PUB_FILE
+      "file.svg",		// Soc_NOTE_DEG_DOC_PUB_FILE
+      "file.svg",		// Soc_NOTE_DEG_SHA_PUB_FILE
 
       /* Course tab */
-      "file64x64.gif",		// Soc_NOTE_CRS_DOC_PUB_FILE
-      "file64x64.gif",		// Soc_NOTE_CRS_SHA_PUB_FILE
+      "file.svg",		// Soc_NOTE_CRS_DOC_PUB_FILE
+      "file.svg",		// Soc_NOTE_CRS_SHA_PUB_FILE
 
       /* Assessment tab */
       "bullhorn.svg",		// Soc_NOTE_EXAM_ANNOUNCEMENT
@@ -4504,9 +4504,9 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 
       if (NumUsrs > NumUsrsShown)
 	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
-	                    "<img src=\"%s/ellipsis32x32.gif\""
+	                    "<img src=\"%s/ellipsis-h.svg\""
 			    " alt=\"%u\" title=\"%u\""
-			    " class=\"ICO20x20\" />"
+			    " class=\"ICO16x16\" />"
 			    "</div>",
 		  Gbl.Prefs.URLIcons,
 		  NumUsrs - NumUsrsShown,

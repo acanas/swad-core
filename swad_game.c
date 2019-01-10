@@ -343,10 +343,8 @@ static void Gam_PutIconToCreateNewGame (void)
   {
    extern const char *Txt_New_game;
 
-   Lay_PutContextualLink (ActFrmNewGam,NULL,Gam_PutParamsToCreateNewGame,
-                          "plus64x64.png",
-                          Txt_New_game,NULL,
-		          NULL);
+   Ico_PutContextualIconToAdd (ActFrmNewGam,NULL,Gam_PutParamsToCreateNewGame,
+			       Txt_New_game);
   }
 
 /*****************************************************************************/
@@ -2994,10 +2992,8 @@ static void Gam_PutIconToAddNewQuestions (void)
    extern const char *Txt_Add_questions;
 
    /***** Put form to create a new question *****/
-   Lay_PutContextualLink (ActAddOneGamQst,NULL,Gam_PutParams,
-                          "plus64x64.png",
-                          Txt_Add_questions,NULL,
-		          NULL);
+   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,Gam_PutParams,
+			       Txt_Add_questions);
   }
 
 /*****************************************************************************/

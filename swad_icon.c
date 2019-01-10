@@ -215,8 +215,18 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
   }
 
 /*****************************************************************************/
-/***** Show contextual icons to remove, edit, view, hide, unhide, print ******/
+/*** Show contextual icons to add, remove, edit, view, hide, unhide, print ***/
 /*****************************************************************************/
+
+void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
+				 void (*FuncParams) (),
+				 const char *Txt)
+  {
+   Lay_PutContextualLink (NextAction,Anchor,FuncParams,
+                          "plus.svg",
+                          Txt,NULL,
+                          NULL);
+  }
 
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ())
   {
@@ -253,7 +263,7 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
    extern const char *Txt_View;
 
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
-			  "eye-on64x64.png",
+			  "eye.svg",
 			  Txt_View,NULL,
                           NULL);
   }
@@ -263,7 +273,7 @@ void Ico_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
    extern const char *Txt_Hide;
 
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "eye-on64x64.png",
+                          "eye.svg",
                           Txt_Hide,NULL,
                           NULL);
   }
@@ -273,7 +283,7 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) (
    extern const char *Txt_Show;
 
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "eye-slash-on64x64.png",
+                          "eye-slash.svg",
                           Txt_Show,NULL,
                           NULL);
   }
@@ -300,7 +310,7 @@ void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
       Ico_PutIconWithText (Icon,Title,Text);
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-			 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
+			 " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO\" />",
 	       Gbl.Prefs.URLIcons,Icon,Title,Title);
    fprintf (Gbl.F.Out,"</a>");
   }
@@ -312,7 +322,7 @@ void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
 void Ico_PutIconOff (const char *Icon,const char *Alt)
   {
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />",
+	              " class=\"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO\" />",
             Gbl.Prefs.URLIcons,Icon,Alt,Alt);
   }
 
@@ -325,7 +335,7 @@ void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
    /***** Print icon and optional text *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />",
+	              " class=\"CONTEXT_ICO\" />",
             Gbl.Prefs.URLIcons,Icon,Alt,Text ? Text :
         	                               Alt);
    if (Text)
@@ -344,10 +354,10 @@ void Ico_PutCalculateIcon (const char *Alt)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
+		      " class=\"CONTEXT_ICO\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
+		      " class=\"CONTEXT_ICO\" style=\"display:none;\" />"	// Animated icon hidden
 		      "</div>"
 		      "</a>",
 	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Alt,Alt,

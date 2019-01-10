@@ -275,10 +275,8 @@ static void Asg_PutIconToCreateNewAsg (void)
 
    /***** Put form to create a new assignment *****/
    Gbl.Asgs.AsgCodToEdit = -1L;
-   Lay_PutContextualLink (ActFrmNewAsg,NULL,Asg_PutParams,
-                          "plus64x64.png",
-                          Txt_New_assignment,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutParams,
+			       Txt_New_assignment);
   }
 
 /*****************************************************************************/

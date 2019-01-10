@@ -1118,11 +1118,10 @@ static void For_PutIconNewPost (void)
   {
    extern const char *Txt_New_post;
 
-   Lay_PutContextualLink (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
-                          For_NEW_POST_SECTION_ID,For_PutAllHiddenParamsNewPost,
-                          "plus64x64.png",
-                          Txt_New_post,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
+			       For_NEW_POST_SECTION_ID,
+			       For_PutAllHiddenParamsNewPost,
+			       Txt_New_post);
   }
 
 static void For_PutAllHiddenParamsNewPost (void)
@@ -2651,11 +2650,10 @@ static void For_PutIconNewThread (void)
   {
    extern const char *Txt_New_thread;
 
-   Lay_PutContextualLink (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
-                          For_NEW_THREAD_SECTION_ID,For_PutAllHiddenParamsNewThread,
-                          "plus64x64.png",
-                          Txt_New_thread,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+                               For_NEW_THREAD_SECTION_ID,
+			       For_PutAllHiddenParamsNewThread,
+			       Txt_New_thread);
   }
 
 static void For_PutAllHiddenParamsNewThread (void)

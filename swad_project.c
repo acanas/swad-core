@@ -442,8 +442,8 @@ static void Prj_ShowFormToFilterByHidden (void)
    Prj_HiddenVisibl_t HidVis;
    static const char *HiddenVisiblImage[Prj_NUM_HIDDEN_VISIBL] =
      {
-      "eye-slash-on64x64.png",	// Prj_HIDDEN
-      "eye-on64x64.png",	// Prj_VISIBL
+      "eye-slash.svg",	// Prj_HIDDEN
+      "eye.svg",	// Prj_VISIBL
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -820,10 +820,8 @@ static void Prj_PutIconToCreateNewPrj (void)
 
    /***** Put form to create a new project *****/
    Gbl.Prjs.PrjCod = -1L;
-   Lay_PutContextualLink (ActFrmNewPrj,NULL,Prj_PutCurrentParams,
-                          "plus64x64.png",
-                          Txt_New_project,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,Prj_PutCurrentParams,
+			       Txt_New_project);
   }
 
 /*****************************************************************************/
@@ -850,7 +848,7 @@ static void Prj_PutIconToShowAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActSeeTblAllPrj,NULL,Prj_PutCurrentParams,
-			  "table64x64.gif",
+			  "table.svg",
 			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }
@@ -1713,10 +1711,9 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Add_USER,
 		      Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
-	    Lay_PutContextualLink (ActionReqAddUsr[RoleInProject],NULL,Prj_PutCurrentParams,
-				   "plus64x64.png",
-				   Gbl.Title,NULL,
-				   NULL);
+	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
+				        Prj_PutCurrentParams,
+				        Gbl.Title);
 	    fprintf (Gbl.F.Out,"</td>"
 			       "<td style=\"width:30px;\">"	// Column for photo
 			       "</td>");

@@ -418,8 +418,8 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
                Gbl.Prefs.URLIcons,
-               Ban->Hidden ? "eye-slash-on64x64.png" :
-        	             "eye-on64x64.png",
+               Ban->Hidden ? "eye-slash.svg" :
+        	             "eye.svg",
                Ban->Hidden ? Txt_Show :
         	             Txt_Hide,
                Ban->Hidden ? Txt_Show :

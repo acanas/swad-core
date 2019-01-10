@@ -64,8 +64,8 @@ const char *Mnu_MenuNames[Mnu_NUM_MENUS] =
 
 const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
   {
-   "horizontal",
-   "vertical",
+   "ellipsis-h.svg",
+   "ellipsis-v.svg",
   };
 
 // Actions not initialized are 0 by default
@@ -426,7 +426,7 @@ void Mnu_PutIconsToSelectMenu (void)
         	                        "PREF_OFF");
       Frm_StartForm (ActChgMnu);
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
                Gbl.Prefs.URLIcons,
                Mnu_MenuIcons[Menu],

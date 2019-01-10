@@ -1685,7 +1685,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCty ******************************************************************
    // Actions in menu:
    /* ActCtyReqSch	*/{1176, 0,TabCty,ActCtyReqSch		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqCtySearch		,"search"		},
-   /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_ShowConfiguration		,"info64x64"		},
+   /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_ShowConfiguration		,"info"			},
    /* ActSeeIns		*/{ 696, 2,TabCty,ActSeeIns		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ShowInssOfCurrentCty	,"university"		},
    /* ActSeeCalCty	*/{1625, 3,TabCty,ActSeeCalCty		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCty		,"calendar"		},
 
@@ -1710,10 +1710,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabIns ******************************************************************
    // Actions in menu:
    /* ActInsReqSch	*/{1177, 0,TabIns,ActInsReqSch		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqInsSearch		,"search"		},
-   /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ShowConfiguration		,"info64x64"		},
+   /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ins_ShowConfiguration		,"info"			},
    /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowCtrsOfCurrentIns	,"building"		},
-   /* ActSeePlc		*/{ 703, 3,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"mapmarker64x64"	},
-   /* ActSeeDpt		*/{ 675, 4,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"houseteachers64x64"	},
+   /* ActSeePlc		*/{ 703, 3,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"map-marker-alt"	},
+   /* ActSeeDpt		*/{ 675, 4,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"users"		},
    /* ActSeeCalIns	*/{1628, 5,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarIns		,"calendar"		},
 
    // Actions not in menu:
@@ -1768,7 +1768,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCtr ******************************************************************
    // Actions in menu:
    /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqCtrSearch		,"search"		},
-   /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowConfiguration		,"info64x64"		},
+   /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowConfiguration		,"info"			},
    /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowDegsOfCurrentCtr	,"graduation-cap"	},
    /* ActSeeCla		*/{1744, 3,TabCtr,ActSeeCla		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_SeeClassrooms		,"classroom"		},
    /* ActSeeCalCtr	*/{1631, 4,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCtr		,"calendar"		},
@@ -1819,7 +1819,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabDeg ******************************************************************
    // Actions in menu:
    /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqDegSearch		,"search"		},
-   /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowConfiguration		,"info64x64"		},
+   /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ShowConfiguration		,"info"			},
    /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowCrssOfCurrentDeg	,"list-ol"		},
    /* ActSeeCalDeg	*/{1634, 3,TabDeg,ActSeeCalDeg		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarDeg		,"calendar"		},
 
@@ -1851,11 +1851,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCrs ******************************************************************
    // Actions in menu:
    /* ActCrsReqSch	*/{1180, 0,TabCrs,ActCrsReqSch		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqCrsSearch		,"search"		},
-   /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"info64x64"		},
+   /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ShowIntroduction		,"info"			},
    /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book-open"		},
    /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"list-ol"		},
    /* ActSeeBib		*/{  32, 4,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"book"			},
-   /* ActSeeFAQ		*/{  54, 5,TabCrs,ActSeeFAQ		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"faq64x64"		},
+   /* ActSeeFAQ		*/{  54, 5,TabCrs,ActSeeFAQ		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"question"		},
    /* ActSeeCrsLnk	*/{   9, 6,TabCrs,ActSeeCrsLnk		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"link"			},
    /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
    /* ActSeeCalCrs	*/{  16, 8,TabCrs,ActSeeCalCrs		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCrs		,"calendar"		},
@@ -1986,10 +1986,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabAss ******************************************************************
    // Actions in menu:
-   /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"infogrades64x64"	},
-   /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"desk64x64"		},
+   /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"info"			},
+   /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"edit"			},
    /* ActSeePrj		*/{1674, 2,TabAss,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeProjects		,"file-alt"		},
-   /* ActReqTst		*/{ 103, 3,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowFormAskTst		,"test64x64"		},
+   /* ActReqTst		*/{ 103, 3,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowFormAskTst		,"check"		},
    /* ActSeeAllGam	*/{1649, 4,TabAss,ActSeeAllGam		,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeAllGames		,"gamepad"		},
    /* ActSeeAllSvy	*/{ 966, 5,TabAss,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeAllSurveys		,"poll"			},
    /* ActSeeAllExaAnn	*/{  85, 6,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ListExamAnnouncementsSee	,"bullhorn"		},
@@ -2170,7 +2170,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAdmShaCrsGrp	*/{ 461, 8,TabFil,ActAdmShaCrsGrp	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"folder-open"		},
    /* ActAdmAsgWrkUsr	*/{ 792, 9,TabFil,ActAdmAsgWrkUsr	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"folder-open"		},
    /* ActReqAsgWrkCrs	*/{ 899,10,TabFil,ActReqAsgWrkCrs	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskEditWorksCrs		,"folder-open"		},
-   /* ActSeeAdmMrk	*/{  17,11,TabFil,ActSeeAdmMrk		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"grades64x64"		},
+   /* ActSeeAdmMrk	*/{  17,11,TabFil,ActSeeAdmMrk		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"clipboard-list"	},
    /* ActAdmBrf		*/{  23,12,TabFil,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,"briefcase"		},
 
    // Actions not in menu:
@@ -2682,8 +2682,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstStdAll	*/{  42,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Usr_ListAllDataStds		,NULL},
    /* ActLstTchAll	*/{ 578,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Usr_ListAllDataTchs 		,NULL},
 
-   /* ActSeeRecOneStd	*/{1174,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_GetUsrAndShowRecordOneStdCrs,NULL},
-   /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_GetUsrAndShowRecordOneTchCrs,NULL},
+   /* ActSeeRecOneStd	*/{1174,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_GetUsrAndShowRecOneStdCrs	,NULL},
+   /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_GetUsrAndShowRecOneTchCrs	,NULL},
 
    /* ActSeeRecSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ListRecordsGstsShow	,NULL},
    /* ActSeeRecSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ListRecordsStdsShow	,NULL},
@@ -3041,7 +3041,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,"bell"			},
    /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ShowAllAnnouncements	,"bullhorn"		},
    /* ActSeeAllNot	*/{ 762, 2,TabMsg,ActSeeAllNot		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_ListFullNotices		,"sticky-note"		},
-   /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_FormMsgUsrs		,"edit"			},
+   /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_FormMsgUsrs		,"marker"		},
    /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowRecMsgs		,"inbox"		},
    /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowSntMsgs		,"share"		},
    /* ActMaiStd		*/{ 100, 6,TabMsg,ActMaiStd		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ListEmails			,"envelope"		},

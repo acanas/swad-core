@@ -707,10 +707,8 @@ static void Exa_PutIconToCreateNewExamAnnouncement (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Lay_PutContextualLink (ActEdiExaAnn,NULL,NULL,
-                          "plus64x64.png",
-                          Txt_New_announcement_OF_EXAM,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActEdiExaAnn,NULL,NULL,
+			       Txt_New_announcement_OF_EXAM);
   }
 
 /*****************************************************************************/

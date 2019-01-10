@@ -521,10 +521,8 @@ static void Not_PutIconToAddNewNotice (void)
   {
    extern const char *Txt_New_notice;
 
-   Lay_PutContextualLink (ActWriNot,NULL,NULL,
-                          "plus64x64.png",
-                          Txt_New_notice,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActWriNot,NULL,NULL,
+			       Txt_New_notice);
   }
 
 /*****************************************************************************/
@@ -655,13 +653,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
            {
             case Not_ACTIVE_NOTICE:
 	       Lay_PutContextualLink (ActHidNot,NULL,Not_PutParams,
-				      "eye-on64x64.png",
+				      "eye.svg",
 				      Txt_NOTICE_Active_Mark_as_obsolete,NULL,
 				      NULL);
                break;
             case Not_OBSOLETE_NOTICE:
 	       Lay_PutContextualLink (ActRevNot,NULL,Not_PutParams,
-				      "eye-slash-on64x64.png",
+				      "eye-slash.svg",
 				      Txt_NOTICE_Obsolete_Mark_as_active,NULL,
 				      NULL);
                break;
@@ -731,7 +729,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Put form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Lay_PutContextualLink (ActSeeOneNot,NULL,Not_PutParams,
-			     "ellipsis32x32.gif",
+			     "ellipsis-h.svg",
 			     Txt_See_full_notice,NULL,
 			     NULL);
       fprintf (Gbl.F.Out,"</div>");

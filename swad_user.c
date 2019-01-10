@@ -87,9 +87,9 @@ const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
 
 const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
   {
-   "",				// Usr_LIST_UNKNOWN
-   "classphoto",		// Usr_LIST_AS_CLASS_PHOTO
-   "list",			// Usr_LIST_AS_LISTING
+   "",			// Usr_LIST_UNKNOWN
+   "classphoto",	// Usr_LIST_AS_CLASS_PHOTO
+   "list",		// Usr_LIST_AS_LISTING
   };
 
 /*****************************************************************************/
@@ -98,9 +98,9 @@ const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
 
 static const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
   {
-   "",				// Usr_LIST_UNKNOWN
-   "classphoto16x16.gif",	// Usr_LIST_AS_CLASS_PHOTO
-   "list-ol.svg",		// Usr_LIST_AS_LISTING
+   "",			// Usr_LIST_UNKNOWN
+   "th.svg",		// Usr_LIST_AS_CLASS_PHOTO
+   "list-ol.svg",	// Usr_LIST_AS_LISTING
   };
 
 
@@ -8134,7 +8134,7 @@ static void Usr_PutIconToShowGstsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
-			  "table64x64.gif",
+			  "table.svg",
 			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }
@@ -8144,7 +8144,7 @@ static void Usr_PutIconToShowStdsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
-			  "table64x64.gif",
+			  "table.svg",
 			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }
@@ -8154,7 +8154,7 @@ static void Usr_PutIconToShowTchsAllData (void)
    extern const char *Txt_Show_all_data_in_a_table;
 
    Lay_PutContextualLink (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
-			  "table64x64.gif",
+			  "table.svg",
 			  Txt_Show_all_data_in_a_table,NULL,
 		          NULL);
   }

@@ -353,10 +353,8 @@ static void Grp_PutIconToCreateNewGroup (void)
    extern const char *Txt_New_group;
 
    /***** Put form to create a new group *****/
-   Lay_PutContextualLink (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,NULL,
-                          "plus64x64.png",
-                          Txt_New_group,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,NULL,
+			       Txt_New_group);
   }
 
 /*****************************************************************************/
@@ -459,10 +457,8 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
      }
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
-		      "<label class=\"%s\">"
 		      "<input type=\"checkbox\""
-		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
-	    The_ClassForm[Gbl.Prefs.Theme]);
+		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"");
    if (ICanSelUnselGroup)
      {
       if (Gbl.Usrs.ClassPhoto.AllGroups)
@@ -472,9 +468,11 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," />"
+		      "<label for=\"AllGroups\" class=\"%s\">"
 		      "&nbsp;%s"
 		      "</label>"
 		      "</div>",
+	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_All_groups);
   }
 
@@ -1449,10 +1447,8 @@ static void Grp_PutIconToCreateNewGroupType (void)
    extern const char *Txt_New_type_of_group;
 
    /***** Put form to create a new type of group *****/
-   Lay_PutContextualLink (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,NULL,
-                          "plus64x64.png",
-                          Txt_New_type_of_group,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,NULL,
+			       Txt_New_type_of_group);
   }
 
 /*****************************************************************************/

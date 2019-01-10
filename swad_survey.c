@@ -345,10 +345,8 @@ static void Svy_PutIconToCreateNewSvy (void)
   {
    extern const char *Txt_New_survey;
 
-   Lay_PutContextualLink (ActFrmNewSvy,NULL,Svy_PutParamsToCreateNewSvy,
-                          "plus64x64.png",
-                          Txt_New_survey,NULL,
-		          NULL);
+   Ico_PutContextualIconToAdd (ActFrmNewSvy,NULL,Svy_PutParamsToCreateNewSvy,
+			       Txt_New_survey);
   }
 
 /*****************************************************************************/
@@ -3336,10 +3334,8 @@ static void Svy_PutIconToAddNewQuestion (void)
    extern const char *Txt_New_question;
 
    /***** Put form to create a new question *****/
-   Lay_PutContextualLink (ActEdiOneSvyQst,NULL,Svy_PutParams,
-                          "plus64x64.png",
-                          Txt_New_question,NULL,
-		          NULL);
+   Ico_PutContextualIconToAdd (ActEdiOneSvyQst,NULL,Svy_PutParams,
+                               Txt_New_question);
   }
 
 /*****************************************************************************/

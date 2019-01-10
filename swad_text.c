@@ -4446,11 +4446,11 @@ const char *Txt_Configure_tests =
 #elif L==3	// en
 	"Configure tests";
 #elif L==4	// es
-	"Configurar tests";
+	"Configurar test";
 #elif L==5	// fr
 	"Configurer tests";
 #elif L==6	// gn
-	"Configurar tests";	// Okoteve traducción
+	"Configurar test";	// Okoteve traducción
 #elif L==7	// it
 	"Configurare test";
 #elif L==8	// pl
@@ -18629,11 +18629,11 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==3	// en
 	"Tests"
 #elif L==4	// es
-	"Tests"
+	"Test"
 #elif L==5	// fr
 	"Tests"
 #elif L==6	// gn
-	"Tests"	// Okoteve traducción
+	"Test"	// Okoteve traducción
 #elif L==7	// it
 	"Test"
 #elif L==8	// pl
@@ -20637,11 +20637,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==3	// en
 	"Tests on the contents of this course"
 #elif L==4	// es
-	"Tests sobre los contenidos de esta asignatura"
+	"Test sobre los contenidos de esta asignatura"
 #elif L==5	// fr
 	"Tests sur le contenu de cette mati&egrave;re"
 #elif L==6	// gn
-	"Tests sobre los contenidos de esta asignatura"// Okoteve traducción
+	"Test sobre los contenidos de esta asignatura"// Okoteve traducción
 #elif L==7	// it
 	"Test sui contenuti del corso"
 #elif L==8	// pl
@@ -21369,65 +21369,65 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  3: ActReqMsgUsr
 #if   L==1	// ca
-	"Enviament d'un nou missatge privat a altres usuaris"
+	"Enviament d'un nou missatge a altres usuaris"
 #elif L==2	// de
-	"Neue Nachricht"
+	"Neue Nachricht an andere Benutzer senden"
 #elif L==3	// en
-	"New message"
+	"Sending a new message to other users"
 #elif L==4	// es
-	"Env&iacute;o de un nuevo mensaje privado a otros usuarios"
+	"Env&iacute;o de un nuevo mensaje a otros usuarios"
 #elif L==5	// fr
-	"Nouveau message"
+	"Envoi d'un nouveau message &agrave; d'autres utilisateurs"
 #elif L==6	// gn
-	"Env&iacute;o de un nuevo mensaje privado a otros usuarios"// Okoteve traducción
+	"Env&iacute;o de un nuevo mensaje a otros usuarios"// Okoteve traducción
 #elif L==7	// it
-	"Nuovo messaggio"
+	"Invio di un nuovo messaggio ad altri utenti"
 #elif L==8	// pl
-	"Nowe wiadomosci"
+	"Wysy&lstrok;anie nowej wiadomo&sacute;ci do innych u&zdot;ytkownik&oacute;w"
 #elif L==9	// pt
-	"Nova mensagem"
+	"Envio de uma nova mensagem para outros usu&aacute;rios"
 #endif
 	,
 	//  4: ActSeeRcvMsg
 #if   L==1	// ca
-	"Missatges privats rebuts d'altres usuaris"
+	"Missatges rebuts d'altres usuaris"
 #elif L==2	// de
-	"Empfangene Nachrichten"
+	"Nachrichten, die von anderen Benutzern empfangen wurden"
 #elif L==3	// en
-	"Messages received"
+	"Messages received from other users"
 #elif L==4	// es
-	"Mensajes privados recibidos de otros usuarios"
+	"Mensajes recibidos de otros usuarios"
 #elif L==5	// fr
-	"Messages re&ccedil;us"
+	"Messages re&ccedil;us d'autres utilisateurs"
 #elif L==6	// gn
-	"Mensajes privados recibidos de otros usuarios"	// Okoteve traducción
+	"Mensajes recibidos de otros usuarios"	// Okoteve traducción
 #elif L==7	// it
-	"Messaggi ricevuti"
+	"Messaggi ricevuti da altri utenti"
 #elif L==8	// pl
-	"Wiadomo&sacute;ci odebrane"
+	"Wiadomo&sacute;ci otrzymane od innych u&zdot;ytkownik&oacute;w"
 #elif L==9	// pt
-	"Mensagens recebidas"
+	"Mensagens recebidas de outros usu&aacute;rios"
 #endif
 	,
 	//  5: ActSeeSntMsg
 #if   L==1	// ca
-	"Missatges privats enviats per mi a altres usuaris"
+	"Missatges enviats per mi a altres usuaris"
 #elif L==2	// de
-	"Gesendete Nachrichten"
+	"Nachrichten, die ich an andere Benutzer gesendet habe"
 #elif L==3	// en
-	"Messages sent"
+	"Messages sent by me to other users"
 #elif L==4	// es
-	"Mensajes privados enviados por m&iacute; a otros usuarios"
+	"Mensajes enviados por m&iacute; a otros usuarios"
 #elif L==5	// fr
-	"Messages envoy&eacute;s"
+	"Messages envoy&eacute;s par moi &agrave; d'autres utilisateurs"
 #elif L==6	// gn
-	"Mensajes privados enviados por m&iacute; a otros usuarios"// Okoteve traducción
+	"Mensajes enviados por m&iacute; a otros usuarios"// Okoteve traducción
 #elif L==7	// it
-	"Messaggi inviati"
+	"Messaggi inviati da me ad altri utenti"
 #elif L==8	// pl
-	"Wiadomo&sacute;ci odebrane"
+	"Wiadomo&sacute;ci wysy&lstrok;ane przeze mnie do innych u&zdot;ytkownik&oacute;w"
 #elif L==9	// pt
-	"Mensagens enviadas"
+	"Mensagens enviadas por mim para outros usu&aacute;rios"
 #endif
 	,
 	//  6: ActMaiStd
@@ -22165,17 +22165,17 @@ const char *Txt_minimum =
 
 const char *Txt_Minimum_time_seconds_per_question_between_two_tests =
 #if   L==1	// ca
-	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos tests";	// Necessita traduccio
+	"Temps m&iacute;nim (segons)<br />per pregunta<br />entre dues tests";
 #elif L==2	// de
 	"Minimale Zeit (Sekunden)<br />pro Frage<br />zwischen zwei Tests";
 #elif L==3	// en
 	"Minimum time (seconds)<br />per question<br />between two tests";
 #elif L==4	// es
-	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos tests";
+	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos test";
 #elif L==5	// fr
 	"Minimum de temps (en secondes)<br />par question<br />entre deux tests";
 #elif L==6	// gn
-	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos tests";	// Okoteve traducción
+	"Tiempo m&iacute;nimo (segundos)<br />por pregunta<br />entre dos test";	// Okoteve traducción
 #elif L==7	// it
 	"Minimo tempo (in secondi)<br />per domanda<br />tra due test";
 #elif L==8	// pl
@@ -41236,11 +41236,11 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #elif L==3	// en
 	 "Tests"
 #elif L==4	// es
-	 "Tests"
+	 "Test"
 #elif L==5	// fr
 	 "Tests"
 #elif L==6	// gn
-	 "Tests"		// Okoteve traducción
+	 "Test"		// Okoteve traducción
 #elif L==7	// it
 	 "Test"
 #elif L==8	// pl
@@ -43295,11 +43295,11 @@ const char *Txt_Test_results =
 #elif L==3	// en
 	"Test results";
 #elif L==4	// es
-	"Resultados de tests";
+	"Resultados de los test";
 #elif L==5	// fr
 	"R&eacute;sultats des tests";
 #elif L==6	// gn
-	"Resultados de tests";	// Okoteve traducción
+	"Resultados de los test";	// Okoteve traducción
 #elif L==7	// it
 	"Risultati dei test";
 #elif L==8	// pl
@@ -47546,11 +47546,11 @@ const char *Txt_The_test_configuration_has_been_updated =
 #elif L==3	// en
 	"The test configuration has been updated.";
 #elif L==4	// es
-	"La configuraci&oacute;n de tests se ha actualizado.";
+	"La configuraci&oacute;n de los test se ha actualizado.";
 #elif L==5	// fr
 	"The test configuration has been updated.";		// Besoin de traduction
 #elif L==6	// gn
-	"La configuraci&oacute;n de tests se ha actualizado.";	// Okoteve traducción
+	"La configuraci&oacute;n de los test se ha actualizado.";	// Okoteve traducción
 #elif L==7	// it
 	"La configurazione di test &egrave; stata aggiornata.";
 #elif L==8	// pl
@@ -52659,11 +52659,11 @@ const char *Txt_View_test_results =
 #elif L==3	// en
 	"View test results";
 #elif L==4	// es
-	"Ver resultados de tests";
+	"Ver resultados de los test";
 #elif L==5	// fr
 	"Voir r&eacute;sultats de tests";
 #elif L==6	// gn
-	"Ver resultados de tests";	// Okoteve traducción
+	"Ver resultados de los test";	// Okoteve traducción
 #elif L==7	// it
 	"Vedi risultati dei test";
 #elif L==8	// pl
@@ -52764,11 +52764,11 @@ const char *Txt_Visible_tests =
 #elif L==3	// en
 	"Visible tests";
 #elif L==4	// es
-	"Tests visibles";
+	"Test visibles";
 #elif L==5	// fr
 	"Tests visibles";
 #elif L==6	// gn
-	"Tests visibles";	// Okoteve traducción
+	"Test visibles";	// Okoteve traducción
 #elif L==7	// it
 	"Test visibili";
 #elif L==8	// pl

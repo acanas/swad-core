@@ -231,42 +231,42 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 // Icons for notification events
 static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "faq16x16.gif",			// Ntf_EVENT_UNKNOWN
+   "question.svg",		// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "file64x64.gif",			// Ntf_EVENT_DOCUMENT_FILE
-   "file64x64.gif",			// Ntf_EVENT_TEACHERS_FILE
-   "file64x64.gif",			// Ntf_EVENT_SHARED_FILE
+   "file.svg",			// Ntf_EVENT_DOCUMENT_FILE
+   "file.svg",			// Ntf_EVENT_TEACHERS_FILE
+   "file.svg",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "desk16x16.gif",			// Ntf_EVENT_ASSIGNMENT
-   "bullhorn.svg",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
+   "desk16x16.gif",		// Ntf_EVENT_ASSIGNMENT
+   "bullhorn.svg",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "grades16x16.gif",		// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_STD
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_TCH
-   "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLMENT_REQUEST
+   "adduser16x16.gif",		// Ntf_EVENT_ENROLMENT_STD
+   "adduser16x16.gif",		// Ntf_EVENT_ENROLMENT_TCH
+   "enrollmentrequest16x16.gif",// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
-   "comment-dots.svg",			// Ntf_EVENT_TIMELINE_COMMENT
-   "fav64x64.png",			// Ntf_EVENT_TIMELINE_FAV
-   "share64x64.png",			// Ntf_EVENT_TIMELINE_SHARE
-   "at.svg",				// Ntf_EVENT_TIMELINE_MENTION
-   "user-plus.svg",			// Ntf_EVENT_FOLLOWER
-   "comments.svg",			// Ntf_EVENT_FORUM_POST_COURSE
-   "comments.svg",			// Ntf_EVENT_FORUM_REPLY
+   "comment-dots.svg",		// Ntf_EVENT_TIMELINE_COMMENT
+   "fav64x64.png",		// Ntf_EVENT_TIMELINE_FAV
+   "share64x64.png",		// Ntf_EVENT_TIMELINE_SHARE
+   "at.svg",			// Ntf_EVENT_TIMELINE_MENTION
+   "user-plus.svg",		// Ntf_EVENT_FOLLOWER
+   "comments.svg",		// Ntf_EVENT_FORUM_POST_COURSE
+   "comments.svg",		// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "sticky-note.svg",			// Ntf_EVENT_NOTICE
-   "envelope.svg",			// Ntf_EVENT_MESSAGE
+   "sticky-note.svg",		// Ntf_EVENT_NOTICE
+   "envelope.svg",		// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
 
    /* Profile tab */
 
-   "survey16x16.gif",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   "poll.svg",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   "adduser16x16.gif",		// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
@@ -372,7 +372,7 @@ void Ntf_ShowMyNotifications (void)
    if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
       /* Put form to change notification preferences */
       Lay_PutContextualLink (ActMrkNtfSee,NULL,NULL,
-                             "eye-on64x64.png",
+                             "eye.svg",
 			     Txt_Mark_all_notifications_as_read,
 			     Txt_Mark_all_NOTIFICATIONS_as_read,
                              NULL);

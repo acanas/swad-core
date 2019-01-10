@@ -1108,7 +1108,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 /********** Get user's data and draw record of one unique student ************/
 /*****************************************************************************/
 
-void Rec_GetUsrAndShowRecordOneStdCrs (void)
+void Rec_GetUsrAndShowRecOneStdCrs (void)
   {
    /***** Get the selected student *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1335,7 +1335,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 /********** Get user's data and draw record of one unique teacher ************/
 /*****************************************************************************/
 
-void Rec_GetUsrAndShowRecordOneTchCrs (void)
+void Rec_GetUsrAndShowRecOneTchCrs (void)
   {
    /***** Get the selected teacher *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -2628,12 +2628,12 @@ static void Rec_PutIconsCommands (void)
 	      {
 	       if (ItsMe)
 		  Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
-					 "exam64x64.png",
+					 "check.svg",
 					 Txt_View_test_results,NULL,
 					 NULL);
 	       else	// Not me
 		  Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
-					 "exam64x64.png",
+					 "check.svg",
 					 Txt_View_test_results,NULL,
 					 NULL);
 	      }

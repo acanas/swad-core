@@ -300,7 +300,7 @@ void Plc_PutIconToViewPlaces (void)
    extern const char *Txt_Places;
 
    Lay_PutContextualLink (ActSeePlc,NULL,NULL,
-                          "mapmarker64x64.png",
+                          "map-marker-alt.svg",
                           Txt_Places,NULL,
                           NULL);
   }

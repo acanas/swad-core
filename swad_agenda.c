@@ -265,8 +265,8 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
    Agd_HiddenVisiblEvents_t HidVis;
    static const char *Image[2] =
      {
-      "eye-slash-on64x64.png",	// Agd_HIDDEN_EVENTS
-      "eye-on64x64.png",	// Agd_VISIBL_EVENTS
+      "eye-slash.svg",	// Agd_HIDDEN_EVENTS
+      "eye.svg",	// Agd_VISIBL_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -653,10 +653,9 @@ static void Agd_PutIconToCreateNewEvent (void)
 
    /***** Put form to create a new event *****/
    Gbl.Agenda.AgdCodToEdit = -1L;
-   Lay_PutContextualLink (ActFrmNewEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-                          "plus64x64.png",
-                          Txt_New_event,NULL,
-                          NULL);
+   Ico_PutContextualIconToAdd (ActFrmNewEvtMyAgd,NULL,
+			       Agd_PutCurrentParamsMyAgenda,
+			       Txt_New_event);
   }
 
 static void Agd_PutIconToViewEditMyFullAgenda (void)
