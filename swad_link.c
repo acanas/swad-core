@@ -257,7 +257,7 @@ void Lnk_PutIconToViewLinks (void)
    extern const char *Txt_Links;
 
    Lay_PutContextualLink (ActSeeLnk,NULL,NULL,
-                          "link64x64.gif",
+                          "link.svg",
                           Txt_Links,NULL,
                           NULL);
   }

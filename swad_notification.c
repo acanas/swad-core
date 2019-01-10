@@ -258,7 +258,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "comments.svg",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "notice64x64.png",			// Ntf_EVENT_NOTICE
+   "sticky-note.svg",			// Ntf_EVENT_NOTICE
    "envelope.svg",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
@@ -303,7 +303,7 @@ void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_MESSAGES_Notifications;
    extern const char *Txt_Change_preferences;
-   extern const char *Txt_Preferences;
+   extern const char *Txt_Settings;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_Domains;
    extern const char *Txt_Mark_all_notifications_as_read;
@@ -379,8 +379,8 @@ void Ntf_ShowMyNotifications (void)
 
    /* Put form to change notification preferences */
    Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
-                          "heart.svg",
-			  Txt_Change_preferences,Txt_Preferences,
+                          "cog.svg",
+			  Txt_Change_preferences,Txt_Settings,
                           NULL);
 
    /* Put form to view allowed mail domains */

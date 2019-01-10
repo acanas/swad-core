@@ -1789,7 +1789,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       "comments.svg",		// Soc_NOTE_FORUM_POST
 
       /* Messages tab */
-      "notice64x64.png",	// Soc_NOTE_NOTICE
+      "sticky-note.svg",	// Soc_NOTE_NOTICE
 
       /* Statistics tab */
 

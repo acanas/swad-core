@@ -365,7 +365,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActReqMsgUsr,NULL,
                           Msg_PutParamsShowMorePotentialRecipients,
-			  "usrs64x64.gif",
+			  "users",
 			  Txt_Show_more_recipients,Txt_Show_more_recipients,
                           "CopyMessageToHiddenFields()");
    fprintf (Gbl.F.Out,"</div>");

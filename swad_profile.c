@@ -445,7 +445,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /* Time since first click */
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/clock64x64.gif');\">",
+	              " style=\"background-image:url('%s/clock.svg');\">",
 	    Txt_TIME_Since,
             Gbl.Prefs.URLIcons);
    if (UsrFigures.FirstClickTimeUTC)

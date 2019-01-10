@@ -19702,23 +19702,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  7: ActEdiPrf
 #if   L==1	// ca
-	"Prefer&egrave;ncies"
+	"Configuraci&oacute;"
 #elif L==2	// de
 	"Einstellungen"
 #elif L==3	// en
-	"Preferences"
+	"Settings"
 #elif L==4	// es
-	"Preferencias"
+	"Ajustes"
 #elif L==5	// fr
-	"Pr&eacute;f&eacute;rences"
+	"R&eacute;glages"
 #elif L==6	// gn
 	"Mbohoryha"
 #elif L==7	// it
-	"Preferenze"
+	"Impostazioni"
 #elif L==8	// pl
-	"Preferencje"
+	"Ustawienia"
 #elif L==9	// pt
-	"Prefer&ecirc;ncias"
+	"Configura&ccedil;&atilde;o"
 #endif
 	,
 	NULL,	//  8
@@ -29764,27 +29764,6 @@ const char *Txt_Preassigned_QUESTION =
 	"Pr&eacute;-atribu&iacute;do?";
 #endif
 
-const char *Txt_Preferences =
-#if   L==1	// ca
-	"Prefer&egrave;ncies";
-#elif L==2	// de
-	"Einstellungen";
-#elif L==3	// en
-	"Preferences";
-#elif L==4	// es
-	"Preferencias";
-#elif L==5	// fr
-	"Pr&eacute;f&eacute;rences";
-#elif L==6	// gn
-	"Preferencias";	// Okoteve traducción
-#elif L==7	// it
-	"Preferenze";
-#elif L==8	// pl
-	"Preferencje";
-#elif L==9	// pt
-	"Prefer&ecirc;ncias";
-#endif
-
 const char *Txt_Present =
 #if   L==1	// ca
 	"Present";
@@ -38150,27 +38129,6 @@ const char *Txt_Send =
 	"Enviar";
 #endif
 
-const char *Txt_Set_password =
-#if   L==1	// ca
-	"Establir contrasenya";
-#elif L==2	// de
-	"Passwort festlegen";
-#elif L==3	// en
-	"Set password";
-#elif L==4	// es
-	"Establecer contrase&ntilde;a";
-#elif L==5	// fr
-	"D&eacute;finir mot de passe";
-#elif L==6	// gn
-	"Establecer contrase&ntilde;a";	// Okoteve traducción
-#elif L==7	// it
-	"Impostare password";
-#elif L==8	// pl
-	"Ustaw has&lstrok;o";
-#elif L==9	// pt
-	"Definir senha";
-#endif
-
 const char *Txt_Send_message =
 #if   L==1	// ca
 	"Enviar missatge";
@@ -38337,6 +38295,48 @@ const char *Txt_sessions =
 	"sessions";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"sess&otilde;es";
+#endif
+
+const char *Txt_Set_password =
+#if   L==1	// ca
+	"Establir contrasenya";
+#elif L==2	// de
+	"Passwort festlegen";
+#elif L==3	// en
+	"Set password";
+#elif L==4	// es
+	"Establecer contrase&ntilde;a";
+#elif L==5	// fr
+	"D&eacute;finir mot de passe";
+#elif L==6	// gn
+	"Establecer contrase&ntilde;a";	// Okoteve traducción
+#elif L==7	// it
+	"Impostare password";
+#elif L==8	// pl
+	"Ustaw has&lstrok;o";
+#elif L==9	// pt
+	"Definir senha";
+#endif
+
+const char *Txt_Settings =
+#if   L==1	// ca
+	"Configuraci&oacute;";
+#elif L==2	// de
+	"Einstellungen";
+#elif L==3	// en
+	"Settings";
+#elif L==4	// es
+	"Ajustes";
+#elif L==5	// fr
+	"R&eacute;glages";
+#elif L==6	// gn
+	"Mbohoryha";
+#elif L==7	// it
+	"Impostazioni";
+#elif L==8	// pl
+	"Ustawienia";
+#elif L==9	// pt
+	"Configura&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Sex =

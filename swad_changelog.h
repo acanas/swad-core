@@ -369,10 +369,58 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.30.1 (2019-01-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.30.2 (2019-01-10)"
 #define CSS_FILE		"swad18.30.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.30.2:  Jan 09, 2019 	Some new SVG icons. (? lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/cogs.svg /var/www/html/swad/icon/
+sudo cp icon/sticky-note.svg /var/www/html/swad/icon/
+sudo cp icon/print.svg /var/www/html/swad/icon/
+sudo cp icon/users.svg /var/www/html/swad/icon/
+sudo cp icon/user-friends.svg /var/www/html/swad/icon/
+sudo cp icon/user-tie.svg /var/www/html/swad/icon/
+sudo cp icon/hand-point-up.svg /var/www/html/swad/icon/
+
+sudo cp icon/iconset/awesome/cogs.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/edit.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/sticky-note.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/puzzle-piece.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/link.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/clock.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/book-open.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/poll.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/cog.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/power-off.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/inbox.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/share.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/tasks.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/users.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/user-tie.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/user-friends.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/hand-point-up.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/user-clock.svg /var/www/html/swad/icon/iconset/awesome/
+
+sudo cp icon/iconset/nuvola/cogs.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/edit.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/sticky-note.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/puzzle-piece.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/link.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/clock.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/book-open.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/poll.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/cog.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/power-off.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/inbox.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/share.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/tasks.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/users.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/user-tie.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/user-friends.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/hand-point-up.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/user-clock.svg /var/www/html/swad/icon/iconset/nuvola/
+
 	Version 18.30.1:  Jan 09, 2019 	Some new SVG icons. (239389 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/calendar-check.svg /var/www/html/swad/icon/

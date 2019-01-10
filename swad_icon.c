@@ -128,7 +128,7 @@ void Ico_PutIconsToSelectIconSet (void)
         	                              "PREF_OFF");
       Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/heart.svg\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/cog.svg\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
                Gbl.Prefs.URLIcons,
                Cfg_ICON_FOLDER_ICON_SETS,
@@ -283,7 +283,7 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ()
    extern const char *Txt_Print;
 
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "print64x64.png",
+                          "print.svg",
                           Txt_Print,NULL,
                           NULL);
   }

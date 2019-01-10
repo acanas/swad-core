@@ -51,7 +51,7 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
    /* TabCrs */	"list-ol",
    /* TabAss */	"ass64x64",
    /* TabFil */	"folder-open",
-   /* TabUsr */	"usr64x64",
+   /* TabUsr */	"users",
    /* TabSoc */ "comment-dots",
    /* TabMsg */	"envelope",
    /* TabAna */	"ana64x64",

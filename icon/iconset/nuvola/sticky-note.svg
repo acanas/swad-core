@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.0//EN'  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg1" xmlns="http://www.w3.org/2000/svg" height="40" width="40" version="1.0" xml:space="preserve" y="0" x="0" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256 256">
+  <g id="Layer_1">
+    <g id="g104">
+      <linearGradient id="XMLID_9_" y2="206.92" gradientUnits="userSpaceOnUse" x2="197.63" y1="44.615" x1="35.325">
+        <stop id="stop108" stop-color="#ff6d00" offset="0"/>
+        <stop id="stop110" stop-color="#cf0000" offset="1"/>
+      </linearGradient>
+      <path id="path119" fill="url(#XMLID_9_)" d="m35.133 39.704c-0.756 0.633-1.223 1.546-1.293 2.53l-12.082 169.65c-0.07 0.96 0.248 1.91 0.881 2.64 0.632 0.73 1.528 1.18 2.491 1.25l143.22 10.04c0.85 0.06 1.69-0.18 2.39-0.68l49.55-35.85c0.84-0.6 1.38-1.53 1.49-2.56l13.12-123.23c0.1-0.957-0.18-1.917-0.79-2.667-0.61-0.751-1.49-1.229-2.44-1.331l-193.82-20.615c-0.979-0.105-1.96 0.194-2.717 0.827z"/>
+      <linearGradient id="XMLID_10_" y2="206.9" gradientUnits="userSpaceOnUse" x2="197.6" y1="44.625" x1="35.335">
+        <stop id="stop123" stop-color="#ffffde" offset="0"/>
+        <stop id="stop125" stop-color="#ffffd8" offset=".049944"/>
+        <stop id="stop127" stop-color="#ffffc6" offset=".11875"/>
+        <stop id="stop129" stop-color="#ffffa9" offset=".19853"/>
+        <stop id="stop131" stop-color="#ffff80" offset=".28656"/>
+        <stop id="stop133" stop-color="#ffff4c" offset=".38138"/>
+        <stop id="stop135" stop-color="#ffff0d" offset=".48043"/>
+        <stop id="stop137" stop-color="#ff0" offset=".5"/>
+        <stop id="stop139" stop-color="#ffbc50" offset="1"/>
+      </linearGradient>
+      <polygon id="polygon152" points="218.16 186.34 168.6 222.18 25.385 212.14 37.467 42.493 231.28 63.107" fill="url(#XMLID_10_)"/>
+      <linearGradient id="XMLID_11_" y2="206.88" gradientUnits="userSpaceOnUse" x2="197.61" y1="44.615" x1="35.348">
+        <stop id="stop156" stop-color="#fff" offset="0"/>
+        <stop id="stop158" stop-color="#fffff9" offset=".10480"/>
+        <stop id="stop160" stop-color="#ffffe7" offset=".24907"/>
+        <stop id="stop162" stop-color="#ffffca" offset=".41627"/>
+        <stop id="stop164" stop-color="#ffffa2" offset=".59938"/>
+        <stop id="stop166" stop-color="#ff9" offset=".63483"/>
+        <stop id="stop168" stop-color="#ffd700" offset="1"/>
+      </linearGradient>
+      <path id="path181" fill="url(#XMLID_11_)" d="m32.184 206.24c11.411 0.8 130.31 9.14 134.57 9.44 3.29-2.39 41.37-29.93 45.38-32.84 0.55-5.1 10.97-102.96 12.15-114.08-11.43-1.214-169.12-17.986-180.93-19.243-0.835 11.673-10.362 145.42-11.166 156.72z"/>
+      <polygon id="polygon183" opacity=".2" points="213.77 189.52 171.49 183.69 165.7 221.98 168.6 222.18"/>
+      <linearGradient id="XMLID_12_" y2="201.28" gradientUnits="userSpaceOnUse" x2="218.16" y1="201.28" x1="168.6">
+        <stop id="stop187" stop-color="#ffbc50" offset="0"/>
+        <stop id="stop189" stop-color="#ff9200" offset=".5"/>
+        <stop id="stop191" stop-color="#ff6d00" offset="1"/>
+      </linearGradient>
+      <polygon id="polygon204" points="218.16 186.34 174.92 180.37 168.6 222.18" fill="url(#XMLID_12_)"/>
+      <path id="path206" opacity=".2" d="m57.583 33.179c-1.453 0-2.882 0.106-4.285 0.292-1.23-0.191-2.487-0.292-3.77-0.292-13.479 0-24.445 10.967-24.445 24.446 0 1.282 0.101 2.54 0.291 3.769-0.186 1.403-0.291 2.832-0.291 4.285 0 17.921 14.579 32.5 32.5 32.5 17.92 0 32.5-14.579 32.5-32.5 0-17.92-14.58-32.5-32.5-32.5z"/>
+      <path id="path208" opacity=".2" d="m55.583 32.179c-1.453 0-2.882 0.106-4.285 0.292-1.23-0.191-2.487-0.292-3.77-0.292-13.479 0-24.445 10.967-24.445 24.446 0 1.282 0.101 2.54 0.291 3.769-0.186 1.403-0.291 2.832-0.291 4.285 0 17.921 14.579 32.5 32.5 32.5 17.92 0 32.5-14.579 32.5-32.5 0-17.92-14.58-32.5-32.5-32.5z"/>
+      <linearGradient id="XMLID_13_" y2="38.429" gradientUnits="userSpaceOnUse" x2="29.333" y1="94.682" x1="85.585">
+        <stop id="stop212" stop-color="#b30000" offset="0"/>
+        <stop id="stop214" stop-color="#ad0000" offset=".18859"/>
+        <stop id="stop216" stop-color="#9b0000" offset=".44817"/>
+        <stop id="stop218" stop-color="#7e0000" offset=".74750"/>
+        <stop id="stop220" stop-color="#600000" offset="1"/>
+      </linearGradient>
+      <path id="path229" fill="url(#XMLID_13_)" d="m53.583 30.179c-1.453 0-2.882 0.106-4.285 0.292-1.23-0.191-2.487-0.292-3.77-0.292-13.479 0-24.445 10.967-24.445 24.446 0 1.282 0.101 2.54 0.291 3.769-0.186 1.403-0.291 2.832-0.291 4.285 0 17.921 14.579 32.5 32.5 32.5 17.92 0 32.5-14.579 32.5-32.5 0-17.92-14.58-32.5-32.5-32.5z"/>
+      <radialGradient id="XMLID_14_" gradientUnits="userSpaceOnUse" cy="43.679" cx="32.582" r="56.216">
+        <stop id="stop233" stop-color="#fff" offset="0"/>
+        <stop id="stop235" stop-color="#fff9f9" offset=".062096"/>
+        <stop id="stop237" stop-color="#ffe7e7" offset=".14767"/>
+        <stop id="stop239" stop-color="#ffcaca" offset=".24691"/>
+        <stop id="stop241" stop-color="#ffa1a1" offset=".35644"/>
+        <stop id="stop243" stop-color="#ff6d6d" offset=".47440"/>
+        <stop id="stop245" stop-color="#ff2e2e" offset=".59747"/>
+        <stop id="stop247" stop-color="#f00" offset=".67978"/>
+        <stop id="stop249" stop-color="#cf0000" offset=".88202"/>
+      </radialGradient>
+      <circle id="circle262" cy="61.679" cx="52.583" r="28.5" fill="url(#XMLID_14_)"/>
+      <circle id="circle264" opacity=".2" cy="55.625" cx="46.528" r="21.445"/>
+      <circle id="circle266" opacity=".2" cy="55.113" cx="46.017" r="20.934"/>
+      <linearGradient id="XMLID_15_" y2="39.928" gradientUnits="userSpaceOnUse" x2="30.832" y1="76.178" x1="67.082">
+        <stop id="stop270" stop-color="#fff" offset="0"/>
+        <stop id="stop272" stop-color="#fff4f4" offset=".060623"/>
+        <stop id="stop274" stop-color="#ffd6d6" offset=".16817"/>
+        <stop id="stop276" stop-color="#ffa5a5" offset=".31004"/>
+        <stop id="stop278" stop-color="#ff6161" offset=".48086"/>
+        <stop id="stop280" stop-color="#ff0c0c" offset=".67436"/>
+        <stop id="stop282" stop-color="#f00" offset="0.7"/>
+        <stop id="stop284" stop-color="#900" offset="1"/>
+      </linearGradient>
+      <circle id="circle297" cy="53.625" cx="44.528" r="20.445" fill="url(#XMLID_15_)"/>
+      <linearGradient id="XMLID_16_" y2="67.274" gradientUnits="userSpaceOnUse" x2="58.177" y1="11.214" x1="2.1172">
+        <stop id="stop301" stop-color="#900" offset="0"/>
+        <stop id="stop303" stop-color="#ff2828" offset="1"/>
+      </linearGradient>
+      <path id="path312" fill="url(#XMLID_16_)" d="m25.583 52.875c0 10.033 8.162 18.195 18.195 18.195 10.034 0 18.196-8.162 18.196-18.195s-8.162-18.196-18.196-18.196c-10.033 0-18.195 8.163-18.195 18.196z"/>
+    </g>
+    <polyline id="_x3C_Slice_x3E_" points="0 256 0 0 256 0 256 256" fill="none"/>
+  </g>
+</svg>

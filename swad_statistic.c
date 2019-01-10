@@ -9166,7 +9166,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\">"
-                         "<img src=\"%s/%s/%s/heart.svg\""
+                         "<img src=\"%s/%s/%s/cog.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</td>"

@@ -1562,7 +1562,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    unsigned i;
 
    Frm_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
+   Ico_PutIconWithText ("print.svg",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
                       "<label class=\"%s\">"
                       "(<select name=\"RecsPerPag\">",

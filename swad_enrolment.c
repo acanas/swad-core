@@ -199,7 +199,7 @@ void Enr_PutLinkToRequestSignUp (void)
 
    /***** Show the form *****/
    Lay_PutContextualLink (ActReqSignUp,NULL,NULL,
-                          "enrollmentrequest64x64.gif",
+                          "hand-point-up.svg",
                           Txt_Sign_up,Txt_Sign_up,
                           NULL);
   }

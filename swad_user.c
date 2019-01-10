@@ -7531,7 +7531,7 @@ static void Usr_PutLinkToSeeAdmins (void)
 
    /***** Put form to list admins *****/
    Lay_PutContextualLink (ActLstOth,NULL,NULL,
-                          "adm16x16.gif",
+                          "user-tie.svg",
                           Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
                           Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
 		          NULL);
@@ -7547,7 +7547,7 @@ static void Usr_PutLinkToSeeGuests (void)
 
    /***** Put form to list guests *****/
    Lay_PutContextualLink (ActLstGst,NULL,NULL,
-                          "usrs64x64.gif",
+                          "users.svg",
                           Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
                           Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
 		          NULL);
