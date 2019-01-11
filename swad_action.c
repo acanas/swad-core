@@ -3093,7 +3093,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqUseGbl	*/{ 761, 0,TabAna,ActReqUseGbl		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_ReqShowFigures		,"chart-pie"		},
    /* ActSeePhoDeg	*/{ 447, 1,TabAna,ActSeePhoDeg		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ShowPhotoDegree		,"graduation-cap"	},
    /* ActReqStaCrs	*/{ 767, 2,TabAna,ActReqStaCrs		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ind_ReqIndicatorsCourses	,"tasks"		},
-   /* ActReqAccGbl	*/{ 591, 3,TabAna,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"chart-bar"		},
+   /* ActReqAccGbl	*/{ 591, 3,TabAna,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"chart-line"		},
    /* ActReqMyUsgRep	*/{1586, 4,TabAna,ActReqMyUsgRep	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rep_ReqMyUsageReport		,"file-alt"		},
    /* ActMFUAct		*/{ 993, 5,TabAna,ActMFUAct		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MFU_ShowMyMFUActions		,"heart"		},
 

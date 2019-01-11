@@ -625,7 +625,7 @@ void Sta_AskShowGblHits (void)
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
-				   "chart-bar.svg",
+				   "chart-line.svg",
 				   Txt_Visits_to_course,Txt_Visits_to_course,
 				   NULL);
 	    break;

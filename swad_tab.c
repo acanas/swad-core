@@ -54,7 +54,7 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
    /* TabUsr */	"users",
    /* TabSoc */ "comment-dots",
    /* TabMsg */	"envelope",
-   /* TabAna */	"poll-h",
+   /* TabAna */	"chart-bar",
    /* TabPrf */	"user",
   };
 

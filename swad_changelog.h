@@ -348,7 +348,7 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Fix bug: un usuario no identificado no debería ver el icono para acceder a sus asignaturas en la opción de buscar.
 
-// TODO: Preferencias -> Ajustes: icono herramienta. Frecuentes: icono corazón
+// TODO: La pestaña Evaluación debería estar visible para un usuario identificado sin asignatura seleccionada, al menos para ver las encuestas globales.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -369,10 +369,19 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.31.2 (2019-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.31.3 (2019-01-11)"
 #define CSS_FILE		"swad18.31.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.31.3:  Jan 11, 2019 	Changes in some icons. (239533 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/chart-line.svg /var/www/html/swad/icon/
+
+sudo cp icon/iconset/awesome/chart-line.svg /var/www/html/swad/icon/iconset/awesome/
+
+sudo cp icon/iconset/nuvola/chart-bar.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/chart-line.svg /var/www/html/swad/icon/iconset/nuvola/
+
 	Version 18.31.2:  Jan 11, 2019 	Changes in test import. (239527 lines)
 	Version 18.31.1:  Jan 11, 2019 	Changes in lists of degrees and courses. (239526 lines)
 	Version 18.31:    Jan 11, 2019 	Some new SVG icons.
