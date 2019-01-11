@@ -3143,13 +3143,16 @@ void Enr_ReqRegRemOth (void)
 
 void Enr_ReqRegRemStd (void)
   {
-   /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
+     {
+      /***** Put contextual links *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   /* Put link to go to admin several students */
-   Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
+      /* Put link to go to admin several students */
+      Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
 
-   fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Form to request user to be administered *****/
    Enr_ReqRegRemUsr (Rol_STD);
