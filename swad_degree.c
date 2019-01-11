@@ -1290,21 +1290,16 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
-   /***** Put green tip if degree has courses *****/
+   /***** Put tip if degree has courses *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"CENTER_MIDDLE %s\">"
-		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO16x16\" />"
+		      "<td class=\"%s CENTER_MIDDLE %s\" title=\"%s\">"
+		      "%s"
 		      "</td>",
-	    BgColor,
-	    Gbl.Prefs.URLIcons,
-	    NumCrss ? "ok_green" :
-		      "tr",
+	    TxtClassNormal,BgColor,
 	    NumCrss ? Txt_DEGREE_With_courses :
 		      Txt_DEGREE_Without_courses,
-	    NumCrss ? Txt_DEGREE_With_courses :
-		      Txt_DEGREE_Without_courses);
+	    NumCrss ? "&check;" :
+		      "&nbsp;");
 
    /***** Number of degree in this list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"

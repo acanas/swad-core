@@ -1326,9 +1326,9 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Email_X_confirmed,
 		   row[0]);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/check-circle.svg\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />",
+			    " class=\"ICO16x16\" />",
 		  Gbl.Prefs.URLIcons,
 		  Gbl.Title,Gbl.Title);
 	}

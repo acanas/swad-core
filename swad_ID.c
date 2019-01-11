@@ -657,25 +657,13 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
                 UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
                                                     Txt_ID_X_not_confirmed,
                 UsrDat->IDs.List[NumID].ID);
-      fprintf (Gbl.F.Out,"<span class=\"%s\" title=\"%s\">%s</span>",
+      fprintf (Gbl.F.Out,"<span class=\"%s\" title=\"%s\">%s%s</span>",
                UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
                                                    "USR_ID_NC",
                Gbl.Title,
-               UsrDat->IDs.List[NumID].ID);
-
-      /* ID confirmed? */
-      if (UsrDat->IDs.List[NumID].Confirmed)
-	{
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_ID_X_confirmed,
-		   UsrDat->IDs.List[NumID].ID);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.URLIcons,
-		  Gbl.Title,Gbl.Title);
-	}
-
+               UsrDat->IDs.List[NumID].ID,
+	       UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
+		                                   "");
       if (NumID == UsrDat->IDs.Num - 1)
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");

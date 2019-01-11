@@ -1258,19 +1258,14 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 /* Put green tip if course has users */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"CENTER_MIDDLE %s\">"
-			    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO16x16\" />"
+			    "<td class=\"%s CENTER_MIDDLE %s\" title=\"%s\">"
+			    "%s"
 			    "</td>",
-		  BgColor,
-		  Gbl.Prefs.URLIcons,
-		  Crs->NumUsrs[Rol_UNK] ? "ok_green" :
-				          "tr",
+		  TxtClassNormal,BgColor,
 		  Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 				          Txt_COURSE_Without_users,
-		  Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
-				          Txt_COURSE_Without_users);
+		  Crs->NumUsrs[Rol_UNK] ? "&check;" :
+				          "&nbsp;");
 
 	 /* Institutional code of the course */
 	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"

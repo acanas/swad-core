@@ -1027,14 +1027,14 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    /***** Put icon to indicate that a question does not exist in database *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%u CENTER_TOP\">"
-                      "<img src=\"%s/%s16x16.gif\""
+                      "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       "</td>",
             Gbl.RowEvenOdd,
             Gbl.Prefs.URLIcons,
-            QuestionExists ? "tr" :
-        	             "ok_green",
+            QuestionExists ? "tr16x16.gif" :
+        	             "check-circle.svg",
             QuestionExists ? Txt_Existing_question :
         	             Txt_New_question,
             QuestionExists ? Txt_Existing_question :
