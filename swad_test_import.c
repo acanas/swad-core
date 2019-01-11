@@ -1089,14 +1089,14 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
       if (Gbl.Test.Shuffle)
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"%sICO16x16\" />",
                   Gbl.Prefs.URLIcons,
-                  QuestionExists ? "ok_off" :
-                	           "ok_on",
                   Txt_TST_Answer_given_by_the_teachers,
-                  Txt_TST_Answer_given_by_the_teachers);
+                  Txt_TST_Answer_given_by_the_teachers,
+                  QuestionExists ? "ICO_HIDDEN " :
+                	           "");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the stem and the answers *****/

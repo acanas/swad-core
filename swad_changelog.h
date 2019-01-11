@@ -369,10 +369,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.31.1 (2019-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.31.2 (2019-01-11)"
 #define CSS_FILE		"swad18.31.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.31.2:  Jan 11, 2019 	Changes in test import. (239527 lines)
 	Version 18.31.1:  Jan 11, 2019 	Changes in lists of degrees and courses. (239526 lines)
 	Version 18.31:    Jan 11, 2019 	Some new SVG icons.
 				        Fixed bug in messages. (239545 lines)
