@@ -39,7 +39,6 @@
 #include "swad_hierarchy.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_role.h"
 #include "swad_string.h"
 #include "swad_table.h"
 #include "swad_user.h"
@@ -74,7 +73,6 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role);
-static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 
 /*****************************************************************************/
 /************************** Show connected users *****************************/
@@ -139,213 +137,6 @@ static void Con_PutIconToUpdateConnected (void)
                                NULL);
    Ico_PutCalculateIcon (Txt_Update);
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/*************** Put a link to show last clicks in real time *****************/
-/*****************************************************************************/
-
-void Con_PutLinkToLastClicks (void)
-  {
-   extern const char *Txt_Last_clicks;
-
-   Lay_PutContextualLink (ActLstClk,NULL,NULL,
-                          "mouse-pointer.svg",
-                          Txt_Last_clicks,Txt_Last_clicks,
-                          NULL);
-  }
-
-/*****************************************************************************/
-/****************************** Show last clicks *****************************/
-/*****************************************************************************/
-
-void Con_ShowLastClicks (void)
-  {
-   extern const char *Hlp_USERS_Connected_last_clicks;
-   extern const char *Txt_Last_clicks_in_real_time;
-
-   /***** Start box *****/
-   Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
-                 Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
-
-   /***** Get and show last clicks *****/
-   fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
-	              " class=\"CENTER_MIDDLE\">");
-   Con_GetAndShowLastClicks ();
-   fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
-
-   /***** End box *****/
-   Box_EndBox ();
-  }
-
-/*****************************************************************************/
-/**************** Get last clicks from database and show them ****************/
-/*****************************************************************************/
-
-void Con_GetAndShowLastClicks (void)
-  {
-   extern const char *Txt_Click;
-   extern const char *Txt_ELAPSED_TIME;
-   extern const char *Txt_Role;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Action;
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
-   long ActCod;
-   const char *ClassRow;
-   time_t TimeDiff;
-   struct Country Cty;
-   struct Instit Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-
-   /***** Get last clicks from database *****/
-   /* Important for maximum performance:
-      do the LIMIT in the big log table before the JOIN */
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get last clicks",
-			     "SELECT last_logs.LogCod,last_logs.ActCod,"
-			     "last_logs.Dif,last_logs.Role,"
-			     "last_logs.CtyCod,last_logs.InsCod,"
-			     "last_logs.CtrCod,last_logs.DegCod,"
-			     "actions.Txt"
-			     " FROM"
-			     " (SELECT LogCod,ActCod,"
-			     "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,"
-			     "Role,CtyCod,InsCod,CtrCod,DegCod"
-			     " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
-			     " AS last_logs,actions"
-			     " WHERE last_logs.ActCod=actions.ActCod"
-			     " AND actions.Language='es'");
-
-   /***** Write list of connected users *****/
-   Tbl_StartTableCenter (1);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:85px;\">"
-                      "%s"				// Click
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\""
-                      " style=\"width:50px;\">"
-                      "%s"				// Elapsed time
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:100px;\">"
-                      "%s"				// Role
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:100px;\">"
-                      "%s"				// Country
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:150px;\">"
-                      "%s"				// Institution
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:150px;\">"
-                      "%s"				// Centre
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:200px;\">"
-                      "%s"				// Degree
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:275px;\">"
-                      "%s"				// Action
-                      "</th>"
-                      "</tr>",
-               Txt_Click,
-               Txt_ELAPSED_TIME,
-               Txt_Role,
-               Txt_Country,
-               Txt_Institution,
-               Txt_Centre,
-               Txt_Degree,
-               Txt_Action);
-
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get action code (row[1]) */
-      ActCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Use a special color for this row depending on the action */
-      ClassRow = (Act_GetBrowserTab (Act_GetActionFromActCod (ActCod)) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
-	         (ActCod == Act_GetActCod (ActLogIn   ) ||
-	          ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
-                 (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
-                 (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
-                                                           "DAT_SMALL_GREY";
-
-      /* Compute elapsed time from last access */
-      if (sscanf (row[2],"%ld",&TimeDiff) != 1)
-         TimeDiff = (time_t) 0;
-
-      /* Get country code (row[4]) */
-      Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
-      Cty_GetCountryName (Cty.CtyCod,Cty.Name[Gbl.Prefs.Language]);
-
-      /* Get institution code (row[5]) */
-      Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
-      Ins_GetShortNameOfInstitution (&Ins);
-
-      /* Get centre code (row[6]) */
-      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
-      Ctr_GetShortNameOfCentreByCod (&Ctr);
-
-      /* Get degree code (row[7]) */
-      Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
-      Deg_GetShortNameOfDegreeByCod (&Deg);
-
-      /* Print table row */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Click
-                         "</td>"
-                         "<td class=\"%s RIGHT_MIDDLE\">"	// Elapsed time
-                         "",
-               ClassRow,row[0],
-               ClassRow);
-      Con_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-      fprintf (Gbl.F.Out,"</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Role
-                         "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Country
-                         "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Institution
-                         "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Centre
-                         "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Degree
-                         "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Action
-                         "</td>"
-			 "</tr>",
-               ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
-               ClassRow,Cty.Name[Gbl.Prefs.Language],
-               ClassRow,Ins.ShrtName,
-               ClassRow,Ctr.ShrtName,
-               ClassRow,Deg.ShrtName,
-	       ClassRow,row[8]);
-     }
-   Tbl_EndTable ();
-
-   /***** Free structure that stores the query result *****/
-   mysql_free_result (mysql_res);
   }
 
 /*****************************************************************************/
@@ -1071,7 +862,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
-   Con_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
+   Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
 
    fprintf (Gbl.F.Out,"</td>"
@@ -1288,7 +1079,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
 			       " style=\"width:48px;\">",
 		     Font,Gbl.RowEvenOdd);
-	    Con_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
@@ -1302,31 +1093,6 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********* Write time difference in seconds as hours:minutes:seconds *********/
-/*****************************************************************************/
-// TimeDiff must be in seconds
-
-static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
-  {
-   time_t Hours   = Seconds / (60 * 60);
-   time_t Minutes = (Seconds / 60) % 60;
-
-   Seconds %= 60;
-   if (Hours)
-      fprintf (Gbl.F.Out,"%ld:%02ld'%02ld&quot;",
-               (long) Hours,
-               (long) Minutes,
-               (long) Seconds);
-   else if (Minutes)
-      fprintf (Gbl.F.Out,"%ld'%02ld&quot;",
-               (long) Minutes,
-               (long) Seconds);
-   else
-      fprintf (Gbl.F.Out,"%ld&quot;",
-               (long) Seconds);
   }
 
 /*****************************************************************************/

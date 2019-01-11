@@ -188,4 +188,6 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc);
 
 void Dat_WriteScriptMonths (void);
 
+void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
+
 #endif

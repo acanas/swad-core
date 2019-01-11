@@ -1404,7 +1404,7 @@ void Lay_RefreshLastClicks (void)
       fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
 
       /***** Get and show last clicks *****/
-      Con_GetAndShowLastClicks ();
+      Sta_GetAndShowLastClicks ();
      }
 
    /***** All the output is made, so don't write anymore *****/

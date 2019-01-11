@@ -13567,6 +13567,27 @@ const char *Txt_Get_a_new_password =
 	"Obter uma nova senha";
 #endif
 
+const char *Txt_Global_visits =
+#if   L==1	// ca
+	"Accessos globals";
+#elif L==2	// de
+	"Globale Anmeldungen";
+#elif L==3	// en
+	"Global visits";
+#elif L==4	// es
+	"Accesos globales";
+#elif L==5	// fr
+	"Visites globales";
+#elif L==6	// gn
+	"Accesos globales";	// Okoteve traducción
+#elif L==7	// it
+	"Accessi globali";
+#elif L==8	// pl
+	"Globalne wizyty";
+#elif L==9	// pt
+	"Visitas globais";
+#endif
+
 const char *Txt_Go_back =
 #if   L==1	// ca
 	"Tornar enrere";
@@ -41613,23 +41634,23 @@ const char *Txt_Statistics_of_all_visits =
 
 const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Estad&iacute;stica d'accessos a l'assignatura <strong>%s</strong>";
+	"Estad&iacute;stica d'accessos a l'assignatura %s";
 #elif L==2	// de
-	"Statistics of visits to the course <strong>%s</strong>";		// Need Übersetzung
+	"Statistik der Besuche des Kurses %s";
 #elif L==3	// en
-	"Statistics of visits to the course <strong>%s</strong>";
+	"Statistics of visits to the course %s";
 #elif L==4	// es
-	"Estad&iacute;stica de accesos a la asignatura <strong>%s</strong>";
+	"Estad&iacute;stica de accesos a la asignatura %s";
 #elif L==5	// fr
-	"Statistics of visits to the course <strong>%s</strong>";		// Besoin de traduction
+	"Statistiques de visites a la mati&egrave;re %s";
 #elif L==6	// gn
-	"Estad&iacute;stica de accesos a la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Estad&iacute;stica de accesos a la asignatura %s";	// Okoteve traducción
 #elif L==7	// it
-	"Statistiche degli accessi al corso <strong>%s</strong>";
+	"Statistiche delle visite al corso %s";
 #elif L==8	// pl
-	"Statistics of visits to the course <strong>%s</strong>";		// Potrzebujesz tlumaczenie
+	"Statystyki odwiedzin kursu %s";
 #elif L==9	// pt
-	"Estat&iacute;sticas de visitas &agrave; disciplina <strong>%s</strong>";
+	"Estat&iacute;sticas de visitas &agrave; disciplina %s";
 #endif
 
 const char *Txt_Status =

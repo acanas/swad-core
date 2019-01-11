@@ -348,8 +348,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Fix bug: un usuario no identificado no debería ver el icono para acceder a sus asignaturas en la opción de buscar.
 
-// TODO: La pestaña Evaluación debería estar visible para un usuario identificado sin asignatura seleccionada, al menos para ver las encuestas globales.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -369,10 +367,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.31.3 (2019-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.31.4 (2019-01-11)"
 #define CSS_FILE		"swad18.31.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.31.4:  Jan 11, 2019 	Option for last clicks is moved to analytics tab. (239587 lines)
 	Version 18.31.3:  Jan 11, 2019 	Changes in some icons. (239533 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/chart-line.svg /var/www/html/swad/icon/

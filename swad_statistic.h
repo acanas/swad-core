@@ -191,4 +191,8 @@ void Sta_ComputeTimeToSendPage (void);
 void Sta_WriteTimeToGenerateAndSendPage (void);
 void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds);
 
+void Con_PutLinkToLastClicks (void);
+void Sta_ShowLastClicks (void);
+void Sta_GetAndShowLastClicks (void);
+
 #endif

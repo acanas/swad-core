@@ -1537,3 +1537,29 @@ void Dat_WriteScriptMonths (void)
      }
    fprintf (Gbl.F.Out,"];\n");
   }
+
+/*****************************************************************************/
+/********* Write time difference in seconds as hours:minutes:seconds *********/
+/*****************************************************************************/
+// TimeDiff must be in seconds
+
+void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
+  {
+   time_t Hours   = Seconds / (60 * 60);
+   time_t Minutes = (Seconds / 60) % 60;
+
+   Seconds %= 60;
+   if (Hours)
+      fprintf (Gbl.F.Out,"%ld:%02ld'%02ld&quot;",
+               (long) Hours,
+               (long) Minutes,
+               (long) Seconds);
+   else if (Minutes)
+      fprintf (Gbl.F.Out,"%ld'%02ld&quot;",
+               (long) Minutes,
+               (long) Seconds);
+   else
+      fprintf (Gbl.F.Out,"%ld&quot;",
+               (long) Seconds);
+  }
+

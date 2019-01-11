@@ -51,9 +51,6 @@ struct ConnectedUsrs
 /*****************************************************************************/
 
 void Con_ShowConnectedUsrs (void);
-void Con_PutLinkToLastClicks (void);
-void Con_ShowLastClicks (void);
-void Con_GetAndShowLastClicks (void);
 void Con_ShowGlobalConnectedUsrs (void);
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void);
 void Con_ShowConnectedUsrsBelongingToCurrentCrs (void);

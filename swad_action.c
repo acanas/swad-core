@@ -1257,249 +1257,250 @@ Users:
        1055. ActLstSimUsr		List users similar to a given one (possible duplicates)
        1056. ActRemDupUsr		Remove user from list of possible duplicate users
 
-       1057. ActLstClk			List last clicks in real time
-
 Social:
-       1058. ActSeeSocTmlGbl		Show social timeline (global)
-       1059. ActSeeSocPrf		Suggest list of users to follow
-       1060. ActSeeFor			Show the level superior of the forums
-       1061. ActSeeChtRms		Show the chat rooms
+       1057. ActSeeSocTmlGbl		Show social timeline (global)
+       1058. ActSeeSocPrf		Suggest list of users to follow
+       1059. ActSeeFor			Show the level superior of the forums
+       1060. ActSeeChtRms		Show the chat rooms
 
-       1062. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
-       1063. ActRcvSocComGbl		Comment a social note in the timeline (global)
-       1064. ActShaSocNotGbl		Share a social note in the timeline (global)
-       1065. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
-       1066. ActFavSocNotGbl		Favourite a social note in the timeline (global)
-       1067. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
-       1068. ActFavSocComGbl		Favourite a social comment in the timeline (global)
-       1069. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
-       1070. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
-       1071. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
-       1072. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
-       1073. ActRemSocComGbl		Remove of a comment in a social note (global)
+       1061. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
+       1062. ActRcvSocComGbl		Comment a social note in the timeline (global)
+       1063. ActShaSocNotGbl		Share a social note in the timeline (global)
+       1064. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
+       1065. ActFavSocNotGbl		Favourite a social note in the timeline (global)
+       1066. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
+       1067. ActFavSocComGbl		Favourite a social comment in the timeline (global)
+       1068. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
+       1069. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
+       1070. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
+       1071. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
+       1072. ActRemSocComGbl		Remove of a comment in a social note (global)
 
-       1074. ActReqOthPubPrf		Request @nickname to show a public user's profile
+       1073. ActReqOthPubPrf		Request @nickname to show a public user's profile
 
-       1075. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
-       1076. ActRcvSocComUsr		Comment a social note in the timeline (user)
-       1077. ActShaSocNotUsr		Share a social note in the timeline (user)
-       1078. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
-       1079. ActFavSocNotUsr		Favourite a social note in the timeline (user)
-       1080. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
-       1081. ActFavSocComUsr		Favourite a social comment in the timeline (user)
-       1082. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
-       1083. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
-       1084. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
-       1085. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
-       1086. ActRemSocComUsr		Remove of a comment in a social note (user)
+       1074. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
+       1075. ActRcvSocComUsr		Comment a social note in the timeline (user)
+       1076. ActShaSocNotUsr		Share a social note in the timeline (user)
+       1077. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
+       1078. ActFavSocNotUsr		Favourite a social note in the timeline (user)
+       1079. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
+       1080. ActFavSocComUsr		Favourite a social comment in the timeline (user)
+       1081. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
+       1082. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
+       1083. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
+       1084. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
+       1085. ActRemSocComUsr		Remove of a comment in a social note (user)
 
-       1087. ActCal1stClkTim		Calculate first click time from log and store into user's figures
-       1088. ActCalNumClk		Calculate number of clicks from log and store into user's figures
-       1089. ActCalNumFileViews		Calculate number of file views and store into user's figures
-       1090. ActCalNumForPst		Calculate number of forum posts and store into user's figures
-       1091. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
+       1086. ActCal1stClkTim		Calculate first click time from log and store into user's figures
+       1087. ActCalNumClk		Calculate number of clicks from log and store into user's figures
+       1088. ActCalNumFileViews		Calculate number of file views and store into user's figures
+       1089. ActCalNumForPst		Calculate number of forum posts and store into user's figures
+       1090. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
 
-       1092. ActFolUsr			Follow another user
-       1093. ActUnfUsr			Unfollow another user
-       1094. ActSeeFlg			Show following
-       1095. ActSeeFlr			Show followers
+       1091. ActFolUsr			Follow another user
+       1092. ActUnfUsr			Unfollow another user
+       1093. ActSeeFlg			Show following
+       1094. ActSeeFlr			Show followers
 
-       1096. ActSeeForCrsUsr		Show top level of forum of users of the course
-       1097. ActSeeForCrsTch		Show top level of forum of teachers of the course
-       1098. ActSeeForDegUsr		Show top level of forum of users of the degree
-       1099. ActSeeForDegTch		Show top level of forum of teachers of the degree
-       1100. ActSeeForCtrUsr		Show top level of forum of users of the centre
-       1101. ActSeeForCtrTch		Show top level of forum of teachers of the centre
-       1102. ActSeeForInsUsr		Show top level of forum of users of the institution
-       1103. ActSeeForInsTch		Show top level of forum of teachers of the institution
-       1104. ActSeeForGenUsr		Show top level of forum of users general
-       1105. ActSeeForGenTch		Show top level of forum of teachers general
-       1106. ActSeeForSWAUsr		Show top level of forum of users of the platform
-       1107. ActSeeForSWATch		Show top level of forum of teachers of the platform
-       1108. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
-       1109. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
-       1110. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
-       1111. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
-       1112. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
-       1113. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
-       1114. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
-       1115. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
-       1116. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
-       1117. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
-       1118. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
-       1119. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
-       1120. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
-       1121. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
-       1122. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
-       1123. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
-       1124. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
-       1125. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
-       1126. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
-       1127. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
-       1128. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
-       1129. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
-       1130. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
-       1131. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
-       1132. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
-       1133. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
-       1134. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
-       1135. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
-       1136. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
-       1137. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
-       1138. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
-       1139. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
-       1140. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
-       1141. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
-       1142. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
-       1143. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
-       1144. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
-       1145. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
-       1146. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
-       1147. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
-       1148. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
-       1149. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
-       1150. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
-       1151. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
-       1152. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
-       1153. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
-       1154. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
-       1155. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
-       1156. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
-       1157. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
-       1158. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
-       1159. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
-       1160. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
-       1161. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
-       1162. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
-       1163. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
-       1164. ActDelThrForGenUsr		Remove a thread of forum of users general
-       1165. ActDelThrForGenTch		Remove a thread of forum of teachers general
-       1166. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
-       1167. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
-       1168. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
-       1169. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
-       1170. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
-       1171. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
-       1172. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
-       1173. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
-       1174. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
-       1175. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
-       1176. ActCutThrForGenUsr		Cut a thread of forum of users general
-       1177. ActCutThrForGenTch		Cut a thread of forum of teachers general
-       1178. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
-       1179. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
-       1180. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
-       1181. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
-       1182. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
-       1183. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
-       1184. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
-       1185. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
-       1186. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
-       1187. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
-       1188. ActPasThrForGenUsr		Paste a thread of forum of users general
-       1189. ActPasThrForGenTch		Paste a thread of forum of teachers general
-       1190. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
-       1191. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
-       1192. ActDelPstForCrsUsr		Remove a message of forum of users of the course
-       1193. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
-       1194. ActDelPstForDegUsr		Remove a message of forum of users of the degree
-       1195. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
-       1196. ActDelPstForCtrUsr		Remove a message of forum of users of centre
-       1197. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
-       1198. ActDelPstForInsUsr		Remove a message of forum of users of the institution
-       1199. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
-       1200. ActDelPstForGenUsr		Remove a message of forum of users general
-       1201. ActDelPstForGenTch		Remove a message of forum of teachers general
-       1202. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
-       1203. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
-       1204. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
-       1205. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
-       1206. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
-       1207. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
-       1208. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
-       1209. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
-       1210. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
-       1211. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
-       1212. ActEnbPstForGenUsr		Enable a message of forum of users general
-       1213. ActEnbPstForGenTch		Enable a message of forum of teachers general
-       1214. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
-       1215. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
-       1216. ActDisPstForCrsUsr		Disable a message of forum of users of the course
-       1217. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
-       1218. ActDisPstForDegUsr		Disable a message of forum of users of the degree
-       1219. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
-       1220. ActDisPstForCtrUsr		Disable a message of forum of users of centre
-       1221. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
-       1222. ActDisPstForInsUsr		Disable a message of forum of users of the institution
-       1223. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
-       1224. ActDisPstForGenUsr		Disable a message of forum of users general
-       1225. ActDisPstForGenTch		Disable a message of forum of teachers general
-       1226. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
-       1227. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
+       1095. ActSeeForCrsUsr		Show top level of forum of users of the course
+       1096. ActSeeForCrsTch		Show top level of forum of teachers of the course
+       1097. ActSeeForDegUsr		Show top level of forum of users of the degree
+       1098. ActSeeForDegTch		Show top level of forum of teachers of the degree
+       1099. ActSeeForCtrUsr		Show top level of forum of users of the centre
+       1100. ActSeeForCtrTch		Show top level of forum of teachers of the centre
+       1101. ActSeeForInsUsr		Show top level of forum of users of the institution
+       1102. ActSeeForInsTch		Show top level of forum of teachers of the institution
+       1103. ActSeeForGenUsr		Show top level of forum of users general
+       1104. ActSeeForGenTch		Show top level of forum of teachers general
+       1105. ActSeeForSWAUsr		Show top level of forum of users of the platform
+       1106. ActSeeForSWATch		Show top level of forum of teachers of the platform
+       1107. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
+       1108. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
+       1109. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
+       1110. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
+       1111. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
+       1112. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
+       1113. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
+       1114. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
+       1115. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
+       1116. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
+       1117. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
+       1118. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
+       1119. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
+       1120. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
+       1121. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
+       1122. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
+       1123. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
+       1124. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
+       1125. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
+       1126. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
+       1127. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
+       1128. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
+       1129. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
+       1130. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
+       1131. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
+       1132. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
+       1133. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
+       1134. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
+       1135. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
+       1136. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
+       1137. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
+       1138. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
+       1139. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
+       1140. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
+       1141. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
+       1142. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
+       1143. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
+       1144. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
+       1145. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
+       1146. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
+       1147. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
+       1148. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
+       1149. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
+       1150. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
+       1151. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
+       1152. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
+       1153. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
+       1154. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
+       1155. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
+       1156. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
+       1157. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
+       1158. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
+       1159. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
+       1160. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
+       1161. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
+       1162. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
+       1163. ActDelThrForGenUsr		Remove a thread of forum of users general
+       1164. ActDelThrForGenTch		Remove a thread of forum of teachers general
+       1165. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
+       1166. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
+       1167. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
+       1168. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
+       1169. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
+       1170. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
+       1171. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
+       1172. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
+       1173. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
+       1174. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
+       1175. ActCutThrForGenUsr		Cut a thread of forum of users general
+       1176. ActCutThrForGenTch		Cut a thread of forum of teachers general
+       1177. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
+       1178. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
+       1179. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
+       1180. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
+       1181. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
+       1182. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
+       1183. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
+       1184. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
+       1185. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
+       1186. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
+       1187. ActPasThrForGenUsr		Paste a thread of forum of users general
+       1188. ActPasThrForGenTch		Paste a thread of forum of teachers general
+       1189. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
+       1190. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
+       1191. ActDelPstForCrsUsr		Remove a message of forum of users of the course
+       1192. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
+       1193. ActDelPstForDegUsr		Remove a message of forum of users of the degree
+       1194. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
+       1195. ActDelPstForCtrUsr		Remove a message of forum of users of centre
+       1196. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
+       1197. ActDelPstForInsUsr		Remove a message of forum of users of the institution
+       1198. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
+       1199. ActDelPstForGenUsr		Remove a message of forum of users general
+       1200. ActDelPstForGenTch		Remove a message of forum of teachers general
+       1201. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
+       1202. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
+       1203. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
+       1204. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
+       1205. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
+       1206. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
+       1207. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
+       1208. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
+       1209. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
+       1210. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
+       1211. ActEnbPstForGenUsr		Enable a message of forum of users general
+       1212. ActEnbPstForGenTch		Enable a message of forum of teachers general
+       1213. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
+       1214. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
+       1215. ActDisPstForCrsUsr		Disable a message of forum of users of the course
+       1216. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
+       1217. ActDisPstForDegUsr		Disable a message of forum of users of the degree
+       1218. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
+       1219. ActDisPstForCtrUsr		Disable a message of forum of users of centre
+       1220. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
+       1221. ActDisPstForInsUsr		Disable a message of forum of users of the institution
+       1222. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
+       1223. ActDisPstForGenUsr		Disable a message of forum of users general
+       1224. ActDisPstForGenTch		Disable a message of forum of teachers general
+       1225. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
+       1226. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
 
-       1228. ActCht			Enter in a chat room to chat
+       1227. ActCht			Enter in a chat room to chat
 
 Messages:
-       1229. ActSeeNtf			Show my recent notifications
-       1230. ActSeeAnn			Show global announcements
-       1231. ActSeeAllNot		Show all notices
-       1232. ActReqMsgUsr		Write message to several users
-       1233. ActSeeRcvMsg		Show the messages received from other users (link in menu)
-       1234. ActSeeSntMsg		Show the messages sent to other users
-       1235. ActMaiStd			Send an email to students
-       1236. ActWriAnn			Show form to create a new global announcement
-       1237. ActRcvAnn			Receive and create a new global announcement
-       1238. ActHidAnn			Hide a global announcement that was active
-       1239. ActRevAnn			Reveal a global announcement that was hidden
-       1240. ActRemAnn			Remove global announcement
-       1241. ActSeeOneNot		Show (expand) a notice
-       1242. ActWriNot			Write a new notice
-       1243. ActRcvNot			Receive and create a new notice
-       1244. ActHidNot			Hide a notice that was active
-       1245. ActRevNot			Reveal a notice that was hidden
-       1246. ActReqRemNot		Request removal of a notice
-       1247. ActRemNot			Remove a notice
+       1228. ActSeeNtf			Show my recent notifications
+       1229. ActSeeAnn			Show global announcements
+       1230. ActSeeAllNot		Show all notices
+       1231. ActReqMsgUsr		Write message to several users
+       1232. ActSeeRcvMsg		Show the messages received from other users (link in menu)
+       1233. ActSeeSntMsg		Show the messages sent to other users
+       1234. ActMaiStd			Send an email to students
+       1235. ActWriAnn			Show form to create a new global announcement
+       1236. ActRcvAnn			Receive and create a new global announcement
+       1237. ActHidAnn			Hide a global announcement that was active
+       1238. ActRevAnn			Reveal a global announcement that was hidden
+       1239. ActRemAnn			Remove global announcement
+       1240. ActSeeOneNot		Show (expand) a notice
+       1241. ActWriNot			Write a new notice
+       1242. ActRcvNot			Receive and create a new notice
+       1243. ActHidNot			Hide a notice that was active
+       1244. ActRevNot			Reveal a notice that was hidden
+       1245. ActReqRemNot		Request removal of a notice
+       1246. ActRemNot			Remove a notice
 
-       1248. ActSeeNewNtf		Show my recent notifications (link in top heading)
-       1249. ActMrkNtfSee		Mark all my notifications as seen
-       1250. ActSeeMai			See mail domains
-       1251. ActEdiMai			Edit mail domains
-       1252. ActNewMai			Request the creation of a mail domain
-       1253. ActRemMai			Request the removal of a mail domain
-       1254. ActRenMaiSho		Request the change of a mail domain
-       1255. ActRenMaiFul		Request the change of the info of a mail domain
+       1247. ActSeeNewNtf		Show my recent notifications (link in top heading)
+       1248. ActMrkNtfSee		Mark all my notifications as seen
+       1249. ActSeeMai			See mail domains
+       1250. ActEdiMai			Edit mail domains
+       1251. ActNewMai			Request the creation of a mail domain
+       1252. ActRemMai			Request the removal of a mail domain
+       1253. ActRenMaiSho		Request the change of a mail domain
+       1254. ActRenMaiFul		Request the change of the info of a mail domain
 
-       1256. ActRcvMsgUsr		Sent/Receive a message of a user
-       1257. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
-       1258. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
-       1259. ActDelAllSntMsg		Remove todos the messages sent to other users
-       1260. ActDelAllRcvMsg		Remove todos the messages received from other users
-       1261. ActDelSntMsg		Remove a message sent to other users
-       1262. ActDelRcvMsg		Remove a message received from other user
-       1263. ActExpSntMsg		See (expand) sent message
-       1264. ActExpRcvMsg		See (expand) received message
-       1265. ActConSntMsg		Hide (contract) sent message
-       1266. ActConRcvMsg		Hide (contract) received message
-       1267. ActLstBanUsr		List banned users
-       1268. ActBanUsrMsg		Ban the sender of a message when showing received messages
-       1269. ActUnbUsrMsg		Unban the sender of a message when showing received messages
-       1270. ActUnbUsrLst		Unban a user when listing banned users
+       1255. ActRcvMsgUsr		Sent/Receive a message of a user
+       1256. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
+       1257. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
+       1258. ActDelAllSntMsg		Remove todos the messages sent to other users
+       1259. ActDelAllRcvMsg		Remove todos the messages received from other users
+       1260. ActDelSntMsg		Remove a message sent to other users
+       1261. ActDelRcvMsg		Remove a message received from other user
+       1262. ActExpSntMsg		See (expand) sent message
+       1263. ActExpRcvMsg		See (expand) received message
+       1264. ActConSntMsg		Hide (contract) sent message
+       1265. ActConRcvMsg		Hide (contract) received message
+       1266. ActLstBanUsr		List banned users
+       1267. ActBanUsrMsg		Ban the sender of a message when showing received messages
+       1268. ActUnbUsrMsg		Unban the sender of a message when showing received messages
+       1269. ActUnbUsrLst		Unban a user when listing banned users
 
 Statistics:
-       1271. ActReqUseGbl		Request showing use of the platform
-       1272. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
-       1273. ActReqStaCrs		Request statistics of courses
-       1274. ActReqAccGbl		Request query of clicks to the complete platform
-       1275. ActReqMyUsgRep		Request my usage report
-       1276. ActMFUAct			Show most frequently used actions
+       1270. ActReqUseGbl		Request showing use of the platform
+       1271. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
+       1272. ActReqStaCrs		Request statistics of courses
+       1273. ActReqAccGbl		Request query of clicks to the complete platform
+       1274. ActReqMyUsgRep		Request my usage report
+       1275. ActMFUAct			Show most frequently used actions
 
-       1277. ActSeeUseGbl		Show use of the platform
-       1278. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
-       1279. ActCalPhoDeg		Compute the average photos of the students of each degree
-       1280. ActSeeAccGbl		Query clicks to the complete platform
-       1281. ActReqAccCrs		Request query of clicks in the course
-       1282. ActSeeAccCrs		Query clicks to current course
-       1283. ActSeeAllStaCrs		Show statistics of courses
+       1276. ActSeeUseGbl		Show use of the platform
+       1277. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
+       1278. ActCalPhoDeg		Compute the average photos of the students of each degree
+       1279. ActSeeAccGbl		Query clicks to the complete platform
+       1280. ActReqAccCrs		Request query of clicks in the course
+       1281. ActSeeAccCrs		Query clicks to current course
+       1282. ActSeeAllStaCrs		Show statistics of courses
+
+       1283. ActLstClk			List last clicks in real time
+
        1284. ActSeeMyUsgRep		Show my usage report
 
 Profile:
@@ -2843,8 +2844,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstSimUsr	*/{1579,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_GetUsrCodAndListSimilarUsrs,NULL},
    /* ActRemDupUsr	*/{1580,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_RemoveUsrFromListDupUsrs	,NULL},
 
-   /* ActLstClk		*/{ 989,-1,TabUnk,ActLstCon		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Con_ShowLastClicks		,NULL},
-
    // TabSoc ******************************************************************
    /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
    /* ActSeeSocPrf	*/{1520, 1,TabSoc,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
@@ -3105,6 +3104,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqAccCrs	*/{ 594,-1,TabUnk,ActReqAccGbl		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Sta_SetIniEndDates		,Sta_AskShowCrsHits		,NULL},
    /* ActSeeAccCrs	*/{ 119,-1,TabUnk,ActReqAccGbl		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_SeeCrsAccesses		,NULL},
    /* ActSeeAllStaCrs	*/{ 768,-1,TabUnk,ActReqAccGbl		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ind_ShowIndicatorsCourses	,NULL},
+
+   /* ActLstClk		*/{ 989,-1,TabUnk,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_ShowLastClicks		,NULL},
 
    /* ActSeeMyUsgRep	*/{1582,-1,TabUnk,ActReqMyUsgRep	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rep_ShowMyUsageReport		,NULL},
 

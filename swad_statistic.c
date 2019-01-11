@@ -54,6 +54,7 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_project.h"
+#include "swad_role.h"
 #include "swad_social.h"
 #include "swad_statistic.h"
 #include "swad_tab.h"
@@ -138,6 +139,9 @@ typedef enum
 /*****************************************************************************/
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
+
+static void Sta_PutLinkToCourseHits (void);
+static void Sta_PutLinkToGlobalHits (void);
 
 static void Sta_WriteSelectorCountType (void);
 static void Sta_WriteSelectorAction (void);
@@ -425,6 +429,17 @@ void Sta_AskShowCrsHits (void)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned long i;
 
+   /***** Contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put form to go to test edition and configuration */
+   Sta_PutLinkToGlobalHits ();
+
+   /* Link to show last clicks in real time */
+   Con_PutLinkToLastClicks ();
+
+   fprintf (Gbl.F.Out,"</div>");
+
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
@@ -602,7 +617,6 @@ void Sta_AskShowGblHits (void)
   {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Visits_to_course;
    extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
@@ -618,20 +632,7 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Put form to go to test edition and configuration */
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
-      switch (Gbl.Usrs.Me.Role.Logged)
-        {
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
-				   "chart-line.svg",
-				   Txt_Visits_to_course,Txt_Visits_to_course,
-				   NULL);
-	    break;
-	 default:
-	    break;
-        }
+   Sta_PutLinkToCourseHits ();
 
    /* Link to show last clicks in real time */
    Con_PutLinkToLastClicks ();
@@ -735,6 +736,44 @@ void Sta_AskShowGblHits (void)
 
    /***** End form *****/
    Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/*************** Put a link to show visits to current course *****************/
+/*****************************************************************************/
+
+static void Sta_PutLinkToCourseHits (void)
+  {
+   extern const char *Txt_Visits_to_course;
+
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+      switch (Gbl.Usrs.Me.Role.Logged)
+        {
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
+				   "chart-line.svg",
+				   Txt_Visits_to_course,Txt_Visits_to_course,
+				   NULL);
+	    break;
+	 default:
+	    break;
+        }
+  }
+
+/*****************************************************************************/
+/********************* Put a link to show global visits **********************/
+/*****************************************************************************/
+
+static void Sta_PutLinkToGlobalHits (void)
+  {
+   extern const char *Txt_Global_visits;
+
+   Lay_PutContextualLink (ActReqAccGbl,NULL,NULL,
+			  "chart-line.svg",
+			  Txt_Global_visits,Txt_Global_visits,
+			  NULL);
   }
 
 /*****************************************************************************/
@@ -9616,3 +9655,223 @@ void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds)
                 TimeInMicroseconds / (60 * 1000000L),
                 (TimeInMicroseconds / 1000000L) % 60);
   }
+
+
+/*****************************************************************************/
+/*************** Put a link to show last clicks in real time *****************/
+/*****************************************************************************/
+
+void Con_PutLinkToLastClicks (void)
+  {
+   extern const char *Txt_Last_clicks;
+
+   Lay_PutContextualLink (ActLstClk,NULL,NULL,
+                          "mouse-pointer.svg",
+                          Txt_Last_clicks,Txt_Last_clicks,
+                          NULL);
+  }
+
+/*****************************************************************************/
+/****************************** Show last clicks *****************************/
+/*****************************************************************************/
+
+void Sta_ShowLastClicks (void)
+  {
+   extern const char *Hlp_USERS_Connected_last_clicks;
+   extern const char *Txt_Last_clicks_in_real_time;
+
+   /***** Contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put form to go to test edition and configuration */
+   Sta_PutLinkToGlobalHits ();
+
+   /* Put form to go to test edition and configuration */
+   Sta_PutLinkToCourseHits ();
+
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
+                 Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
+
+   /***** Get and show last clicks *****/
+   fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
+	              " class=\"CENTER_MIDDLE\">");
+   Sta_GetAndShowLastClicks ();
+   fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
+
+   /***** End box *****/
+   Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/**************** Get last clicks from database and show them ****************/
+/*****************************************************************************/
+
+void Sta_GetAndShowLastClicks (void)
+  {
+   extern const char *Txt_Click;
+   extern const char *Txt_ELAPSED_TIME;
+   extern const char *Txt_Role;
+   extern const char *Txt_Country;
+   extern const char *Txt_Institution;
+   extern const char *Txt_Centre;
+   extern const char *Txt_Degree;
+   extern const char *Txt_Action;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRow;
+   unsigned long NumRows;
+   long ActCod;
+   const char *ClassRow;
+   time_t TimeDiff;
+   struct Country Cty;
+   struct Instit Ins;
+   struct Centre Ctr;
+   struct Degree Deg;
+
+   /***** Get last clicks from database *****/
+   /* Important for maximum performance:
+      do the LIMIT in the big log table before the JOIN */
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get last clicks",
+			     "SELECT last_logs.LogCod,last_logs.ActCod,"
+			     "last_logs.Dif,last_logs.Role,"
+			     "last_logs.CtyCod,last_logs.InsCod,"
+			     "last_logs.CtrCod,last_logs.DegCod,"
+			     "actions.Txt"
+			     " FROM"
+			     " (SELECT LogCod,ActCod,"
+			     "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,"
+			     "Role,CtyCod,InsCod,CtrCod,DegCod"
+			     " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
+			     " AS last_logs,actions"
+			     " WHERE last_logs.ActCod=actions.ActCod"
+			     " AND actions.Language='es'");
+
+   /***** Write list of connected users *****/
+   Tbl_StartTableCenter (1);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:85px;\">"
+                      "%s"				// Click
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\""
+                      " style=\"width:50px;\">"
+                      "%s"				// Elapsed time
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:100px;\">"
+                      "%s"				// Role
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:100px;\">"
+                      "%s"				// Country
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:150px;\">"
+                      "%s"				// Institution
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:150px;\">"
+                      "%s"				// Centre
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:200px;\">"
+                      "%s"				// Degree
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:275px;\">"
+                      "%s"				// Action
+                      "</th>"
+                      "</tr>",
+               Txt_Click,
+               Txt_ELAPSED_TIME,
+               Txt_Role,
+               Txt_Country,
+               Txt_Institution,
+               Txt_Centre,
+               Txt_Degree,
+               Txt_Action);
+
+   for (NumRow = 0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get action code (row[1]) */
+      ActCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /* Use a special color for this row depending on the action */
+      ClassRow = (Act_GetBrowserTab (Act_GetActionFromActCod (ActCod)) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
+	         (ActCod == Act_GetActCod (ActLogIn   ) ||
+	          ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
+                 (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
+                 (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
+                                                           "DAT_SMALL_GREY";
+
+      /* Compute elapsed time from last access */
+      if (sscanf (row[2],"%ld",&TimeDiff) != 1)
+         TimeDiff = (time_t) 0;
+
+      /* Get country code (row[4]) */
+      Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
+      Cty_GetCountryName (Cty.CtyCod,Cty.Name[Gbl.Prefs.Language]);
+
+      /* Get institution code (row[5]) */
+      Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
+      Ins_GetShortNameOfInstitution (&Ins);
+
+      /* Get centre code (row[6]) */
+      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
+      Ctr_GetShortNameOfCentreByCod (&Ctr);
+
+      /* Get degree code (row[7]) */
+      Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
+      Deg_GetShortNameOfDegreeByCod (&Deg);
+
+      /* Print table row */
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Click
+                         "</td>"
+                         "<td class=\"%s RIGHT_MIDDLE\">"	// Elapsed time
+                         "",
+               ClassRow,row[0],
+               ClassRow);
+      Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+      fprintf (Gbl.F.Out,"</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Role
+                         "</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Country
+                         "</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Institution
+                         "</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Centre
+                         "</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Degree
+                         "</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Action
+                         "</td>"
+			 "</tr>",
+               ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
+               ClassRow,Cty.Name[Gbl.Prefs.Language],
+               ClassRow,Ins.ShrtName,
+               ClassRow,Ctr.ShrtName,
+               ClassRow,Deg.ShrtName,
+	       ClassRow,row[8]);
+     }
+   Tbl_EndTable ();
+
+   /***** Free structure that stores the query result *****/
+   mysql_free_result (mysql_res);
+  }
+
