@@ -2990,26 +2990,20 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
-      /***** Fill the list with the courses I belong to, if not filled *****/
-      Usr_GetMyCourses ();
+      /***** Start form *****/
+      Frm_StartForm (ActMyCrs);
 
-      if (Gbl.Usrs.Me.MyCrss.Num)	// I am enrolled in at least one course
-	{
-	 /***** Start form *****/
-	 Frm_StartForm (ActMyCrs);
+      /***** Put icon with link *****/
+      Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
+      fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"BC_ICON ICO_HIGHLIGHT\" />"
+			 "</a>",
+	       Gbl.Prefs.URLTheme,
+	       Txt_My_courses,Txt_My_courses);
 
-	 /***** Put icon with link *****/
-	 Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"BC_ICON ICO_HIGHLIGHT\" />"
-			    "</a>",
-		  Gbl.Prefs.URLTheme,
-		  Txt_My_courses,Txt_My_courses);
-
-	 /***** End form *****/
-	 Frm_EndForm ();
-	}
+      /***** End form *****/
+      Frm_EndForm ();
      }
   }
 
@@ -3021,11 +3015,12 @@ void Crs_PutIconToSelectMyCourses (void)
   {
    extern const char *Txt_My_courses;
 
-   /***** Put form to search / select courses *****/
-   Lay_PutContextualLink (ActMyCrs,NULL,NULL,
-                          "sitemap.svg",
-                          Txt_My_courses,NULL,
-                          NULL);
+   if (Gbl.Usrs.Me.Logged)		// I am logged
+      /***** Put icon with link *****/
+      Lay_PutContextualLink (ActMyCrs,NULL,NULL,
+			     "sitemap.svg",
+			     Txt_My_courses,NULL,
+			     NULL);
   }
 
 /*****************************************************************************/
