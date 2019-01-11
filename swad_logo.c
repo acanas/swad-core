@@ -220,7 +220,7 @@ void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
 
    /***** Link for changing / uploading the logo *****/
    Lay_PutContextualLink (Action,NULL,NULL,
-                          "logo64x64.png",
+                          "shield-alt.svg",
                           LogoExists ? Txt_Change_logo :
 		                       Txt_Upload_logo,NULL,
                           NULL);

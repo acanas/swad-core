@@ -90,8 +90,8 @@ static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
 /***** Image for preassigned and non-preassigned projects *****/
 static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
   {
-   "lock-on64x64.png",		// Prj_PREASSIGNED
-   "unlock-on64x64.png",	// Prj_NONPREASSIG
+   "lock.svg",		// Prj_PREASSIGNED
+   "lock-open.svg",	// Prj_NONPREASSIG
   };
 
 /*****************************************************************************/
@@ -381,7 +381,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
                      Gbl.Prjs.CurrentPage,
                      -1L);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,WhoseProjectsImage[My_All],
 	       Txt_PROJECT_MY_ALL_PROJECTS[My_All],
@@ -420,7 +420,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
                      Gbl.Prjs.CurrentPage,
                      -1L);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,PreassignedNonpreassigImage[PreNon],
 	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon],
@@ -464,7 +464,7 @@ static void Prj_ShowFormToFilterByHidden (void)
                      Gbl.Prjs.CurrentPage,
                      -1L);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,
 	       HiddenVisiblImage[HidVis],
@@ -1119,7 +1119,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 			    "<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 		  UniqueId,
 	          Gbl.RowEvenOdd);
-	 Prj_PutIconToToggleProject (UniqueId,"more64x64.png",Txt_See_more);
+	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
@@ -1127,7 +1127,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 			    "<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 		  UniqueId,
 	          Gbl.RowEvenOdd);
-	 Prj_PutIconToToggleProject (UniqueId,"less64x64.png",Txt_See_less);
+	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	 break;
@@ -1135,14 +1135,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
 			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
 		  UniqueId);
-	 Prj_PutIconToToggleProject (UniqueId,"more64x64.png",Txt_See_more);
+	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
 			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
 		  UniqueId);
-	 Prj_PutIconToToggleProject (UniqueId,"less64x64.png",Txt_See_less);
+	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	 break;

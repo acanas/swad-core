@@ -8074,12 +8074,12 @@ static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
          break;
       case For_FORUM__SWAD__USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "swad64x64.gif",StatsForum,
+                                      "swad64x64.png",StatsForum,
                                       Cfg_PLATFORM_SHORT_NAME,"");
          break;
       case For_FORUM__SWAD__TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "swad64x64.gif",StatsForum,
+                                      "swad64x64.png",StatsForum,
                                       Cfg_PLATFORM_SHORT_NAME,Txt_only_teachers);
          break;
       case For_FORUM_INSTIT_USRS:
@@ -9004,7 +9004,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"CENTER_MIDDLE\">"
-			    "<img src=\"%s/first-day-of-week-%u-64x64.png\""
+			    "<img src=\"%s/first-day-of-week-%u.png\""
 			    " alt=\"%s\" title=\"%s: %s\""
 			    " class=\"ICO40x40\" />"
 			    "</td>"
@@ -9251,7 +9251,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 	Menu++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"CENTER_MIDDLE\">"
-                         "<img src=\"%s/%s32x32.gif\""
+                         "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</td>"

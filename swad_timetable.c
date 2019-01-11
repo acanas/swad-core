@@ -379,7 +379,7 @@ void TT_ShowClassTimeTable (void)
       /***** Show form to change first day of week *****/
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
                                        Grp_PutParamWhichGrps,
-	                               "ICO25x25");
+	                               "ICOx25");
      }
 
    /***** Show the time table *****/

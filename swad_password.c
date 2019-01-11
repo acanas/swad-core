@@ -261,7 +261,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
 
    Lay_PutContextualLink (ActReqSndNewPwd,NULL,
                           Pwd_PutLinkToSendNewPasswdParams,
-                          "key64x64.gif",
+                          "key.svg",
                           Txt_Forgotten_password,Txt_Forgotten_password,
                           NULL);
   }

@@ -461,9 +461,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 			       "<a href=\"");
 	    RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
 	    fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-			       "<img src=\"%s/rss16x16.gif\""
+			       "<img src=\"%s/rss-square.svg\""
 			       " alt=\"RSS\" title=\"RSS\""
-			       " class=\"ICO20x20\" />"
+			       " class=\"ICO16x16\" />"
 			       "</a>"
 			       "</div>",
 		     Gbl.Prefs.URLIcons);
@@ -672,9 +672,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
            {
             case Not_ACTIVE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                                  "<img src=\"%s/eye-off64x64.png\""
+                                  "<img src=\"%s/eye.svg\""
                                   " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO20x20\" />"
+                                  " class=\"ICO_HIDDEN ICO16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
                         Gbl.Prefs.URLIcons,
@@ -683,9 +683,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                break;
             case Not_OBSOLETE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                                  "<img src=\"%s/eye-slash-off64x64.png\""
+                                  "<img src=\"%s/eye-slash.svg\""
                                   " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO20x20\" />"
+                                  " class=\"ICO_HIDDEN ICO16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Obsolete_SINGULAR,
                         Gbl.Prefs.URLIcons,

@@ -372,7 +372,7 @@ void Ban_PutIconToViewBanners (void)
    extern const char *Txt_Banners;
 
    Lay_PutContextualLink (ActSeeBan,NULL,NULL,
-                          "picture64x64.gif",
+                          "flag.svg",
                           Txt_Banners,NULL,
                           NULL);
   }
@@ -416,7 +416,7 @@ static void Ban_ListBannersForEdition (void)
 	                           ActHidBan);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICO_HIGHLIGHT ICO16x16\" />",
                Gbl.Prefs.URLIcons,
                Ban->Hidden ? "eye-slash.svg" :
         	             "eye.svg",

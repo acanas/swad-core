@@ -254,7 +254,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw degree logo *****/
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShrtName,20,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg->FullName);
@@ -1295,7 +1295,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
+		      " class=\"ICO16x16\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.URLIcons,
@@ -2516,9 +2516,9 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
 	   {
 	    case Sco_SCOPE_SYS:	// System
-	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.gif\""
+	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO20x20\" />"
+                                  " class=\"ICO16x16\" />"
                                   "&nbsp;%s",
                      Gbl.Prefs.URLIcons,
                      Txt_all_degrees,

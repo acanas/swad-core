@@ -369,11 +369,52 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.30.3 (2019-01-10)"
-#define CSS_FILE		"swad18.30.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.31 (2019-01-11)"
+#define CSS_FILE		"swad18.31.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
-	Version 18.30.3:  Jan 09, 2019 	Some new SVG icons.
+	Version 18.31:  Jan 11, 2019 	Some new SVG icons.
+				        Fixed bug in messages. (239545 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/envelope-open-text.svg /var/www/html/swad/icon/
+sudo cp icon/cut.svg /var/www/html/swad/icon/
+sudo cp icon/reply.svg /var/www/html/swad/icon/
+sudo cp icon/share.svg /var/www/html/swad/icon/
+sudo cp icon/envelope-red.svg /var/www/html/swad/icon/
+sudo cp icon/envelope-open-text-red.svg /var/www/html/swad/icon/
+sudo cp icon/share-red.svg /var/www/html/swad/icon/
+sudo cp icon/edit.svg /var/www/html/swad/icon/
+sudo cp icon/star.svg /var/www/html/swad/icon/
+sudo cp icon/share-alt.svg /var/www/html/swad/icon/
+sudo cp icon/sign-out-alt-red.svg /var/www/html/swad/icon/
+sudo cp icon/sign-in-alt-green.svg /var/www/html/swad/icon/
+sudo cp icon/key.svg /var/www/html/swad/icon/
+sudo cp icon/calendar-minus.svg /var/www/html/swad/icon/
+sudo cp icon/calendar-plus.svg /var/www/html/swad/icon/
+sudo cp icon/lock.svg /var/www/html/swad/icon/
+sudo cp icon/lock-open.svg /var/www/html/swad/icon/
+sudo cp icon/first-day-of-week-0.png /var/www/html/swad/icon/
+sudo cp icon/first-day-of-week-6.png /var/www/html/swad/icon/
+sudo cp icon/check-circle.svg /var/www/html/swad/icon/
+sudo cp icon/rss-square.svg /var/www/html/swad/icon/
+sudo cp icon/flag.svg /var/www/html/swad/icon/
+sudo cp icon/link.svg /var/www/html/swad/icon/
+sudo cp icon/shield-alt.svg /var/www/html/swad/icon/
+sudo cp icon/holiday.png /var/www/html/swad/icon/
+sudo cp icon/exclamation-triangle.svg /var/www/html/swad/icon/
+sudo cp icon/recycle.svg /var/www/html/swad/icon/
+sudo cp icon/play.svg /var/www/html/swad/icon/
+sudo cp icon/step-forward.svg /var/www/html/swad/icon/
+sudo cp icon/folder-open-green.svg /var/www/html/swad/icon/
+sudo cp icon/folder-red.svg /var/www/html/swad/icon/
+sudo cp icon/angle-up.svg /var/www/html/swad/icon/
+sudo cp icon/angle-down.svg /var/www/html/swad/icon/
+sudo cp icon/share-alt-green.svg /var/www/html/swad/icon/
+sudo cp icon/star-yellow.svg /var/www/html/swad/icon/
+sudo cp icon/file-import.svg /var/www/html/swad/icon/
+sudo cp icon/file-export.svg /var/www/html/swad/icon/
+
+	Version 18.30.3:  Jan 10, 2019 	Some new SVG icons.
 				        Code refactoring in icons to add. (239466 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/info-circle.svg /var/www/html/swad/icon/

@@ -1545,12 +1545,12 @@ static void Grp_ListGroupsForEdition (void)
                    Grp->Open ? Txt_Group_X_open_click_to_close_it :
                                Txt_Group_X_closed_click_to_open_it,
                    Grp->GrpName);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
+         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"ICOx16\" />",
                   Gbl.Prefs.URLIcons,
-                  Grp->Open ? "unlock" :
-                	      "lock",
+                  Grp->Open ? "lock-open.svg" :
+                	      "lock.svg",
                   Gbl.Title,
                   Gbl.Title);
          Frm_EndForm ();
@@ -1566,12 +1566,12 @@ static void Grp_ListGroupsForEdition (void)
                    Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
                                     Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
                    Grp->GrpName);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
+         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"ICOx16\" />",
                   Gbl.Prefs.URLIcons,
-                  Grp->FileZones ? "folder-yes" :
-                	           "folder-no",
+                  Grp->FileZones ? "folder-open-green.svg" :
+                	           "folder-red.svg",
                   Gbl.Title,
                   Gbl.Title);
          Frm_EndForm ();
@@ -2467,14 +2467,14 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
-   fprintf (Gbl.F.Out,"\" style=\"width:15px;\">"
-	              "<img src=\"%s/%s-off64x64.png\""
+   fprintf (Gbl.F.Out,"\" style=\"width:20px;\">"
+	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
+	              " class=\"ICO_HIDDEN ICOx16\" />"
 	              "</td>",
             Gbl.Prefs.URLIcons,
-            Grp->Open ? "unlock" :
-        	        "lock",
+            Grp->Open ? "lock-open.svg" :
+        	        "lock.svg",
 	    Gbl.Title,Gbl.Title);
 
    /***** Group name *****/
@@ -2612,7 +2612,7 @@ static void Grp_PutFormToCreateGroupType (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Tbl_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/clock.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"%sICO16x16\" />"
@@ -2683,14 +2683,14 @@ static void Grp_PutFormToCreateGroup (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
                       "<td class=\"BM\">"
-                      "<img src=\"%s/lock-off64x64.png\""
+                      "<img src=\"%s/lock.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO_HIDDEN ICOx16\" />"
                       "</td>"
                       "<td class=\"BM\">"
-                      "<img src=\"%s/folder-no_off16x16.gif\""
+                      "<img src=\"%s/folder-red.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO_HIDDEN ICOx16\" />"
                       "</td>",
             Gbl.Prefs.URLIcons,
             Txt_Group_closed,
@@ -5096,7 +5096,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,
 	       WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :

@@ -181,8 +181,8 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
    Agd_Past__FutureEvents_t PstFut;
    static const char *Image[2] =
      {
-      "past64x64.png",		// Agd_PAST___EVENTS
-      "future64x64.png",	// Agd_FUTURE_EVENTS
+      "calendar-minus.svg",	// Agd_PAST___EVENTS
+      "calendar-plus.svg",	// Agd_FUTURE_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -201,7 +201,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
 		             -1L);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,
 	       Image[PstFut],
@@ -223,8 +223,8 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
    Agd_PrivatPublicEvents_t PrvPub;
    static const char *Image[2] =
      {
-      "lock-on64x64.png",	// Agd_PRIVAT_EVENTS
-      "unlock-on64x64.png",	// Agd_PUBLIC_EVENTS
+      "lock.svg",	// Agd_PRIVAT_EVENTS
+      "lock-open.svg",	// Agd_PUBLIC_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -243,7 +243,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
 		             -1L);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,
 	       Image[PrvPub],
@@ -285,7 +285,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 		             -1L);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.URLIcons,
 	       Image[HidVis],
@@ -866,12 +866,12 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)
       Lay_PutContextualLink (ActPrvEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-			     "unlock-on64x64.png",
+			     "lock-open.svg",
 			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
 			     NULL);
    else
       Lay_PutContextualLink (ActPubEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-			     "lock-on64x64.png",
+			     "lock.svg",
 			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
 			     NULL);
   }

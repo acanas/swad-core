@@ -1182,15 +1182,15 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    /***** Put an icon with post status *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CONTEXT_COL %s\">"
-                      "<img src=\"%s/%s16x16.gif\""
+                      "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "</td>",
             NewPst ? "MSG_TIT_BG_NEW" :
         	     "MSG_TIT_BG",
             Gbl.Prefs.URLIcons,
-            NewPst ? "msg-unread" :
-        	     "msg-open",
+            NewPst ? "envelope.svg" :
+        	     "envelope-open-text.svg",
             NewPst ? Txt_MSG_New :
         	     Txt_MSG_Open,
             NewPst ? Txt_MSG_New :
@@ -1239,12 +1239,12 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	        Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
 			  Txt_Post_X_banned_Click_to_unban_it,
 	        PstNum);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />",
+			 " class=\"ICO16x16\" />",
 	       Gbl.Prefs.URLIcons,
-	       Enabled ? "eye" :
-			 "eye-slash",
+	       Enabled ? "eye.svg" :
+			 "eye-slash.svg",
 	       Gbl.Title,
 	       Gbl.Title);
       Frm_EndForm ();
@@ -1256,14 +1256,14 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 			  Txt_Post_X_banned,
 	        PstNum);
       fprintf (Gbl.F.Out,"<span title=\"%s\">"
-			 "<img src=\"%s/%s-off64x64.png\""
+			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
+			 " class=\"ICO_HIDDEN ICO16x16\" />"
 			 "</span>",
 	       Gbl.Title,
 	       Gbl.Prefs.URLIcons,
-	       Enabled ? "eye" :
-			 "eye-slash",
+	       Enabled ? "eye.svg" :
+			 "eye-slash.svg",
 	       Gbl.Title,
 	       Gbl.Title);
      }
@@ -2039,7 +2039,6 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
-   extern const char *Txt_Paste_thread;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
    unsigned NumPosts;
@@ -2067,9 +2066,9 @@ static void For_WriteLinkToForum (struct Forum *Forum,
      {
       /* Check if thread to move is yet in current forum */
       if (For_CheckIfThrBelongsToForum (Gbl.Forum.ThreadToMove,Forum))
-         fprintf (Gbl.F.Out,"<img src=\"%s/paste_off16x16.gif\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/paste.svg\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />",
                   Gbl.Prefs.URLIcons,
                   Txt_Copy_not_allowed,Txt_Copy_not_allowed);
       else
@@ -2083,12 +2082,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
 				      Forum->Location,
 				      Gbl.Forum.ThreadToMove,
 				      -1L);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
-                  Gbl.Prefs.URLIcons,
-                  Txt_Paste_thread,
-                  Txt_Paste_thread);
+         Ico_PutIconPaste ();
          Frm_EndForm ();
         }
      }
@@ -2117,7 +2111,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          break;
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
-         fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.gif\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
                   Gbl.Prefs.URLIcons,ForumName,ForumName);
@@ -2136,7 +2130,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
                   Gbl.Prefs.URLIcons,ForumName,ForumName);
@@ -3379,7 +3373,6 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
-   extern const char *Txt_Move_thread;
    extern const char *Txt_Today;
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
@@ -3441,13 +3434,13 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Put an icon with thread status *****/
       fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
-                         "<img src=\"%s/%s16x16.gif\""
+                         "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
+	                 " class=\"ICO16x16\" />",
                BgColor,
 	       Gbl.Prefs.URLIcons,
-               Thr.NumUnreadPosts ? "msg-unread" :
-        	                    "msg-open",
+               Thr.NumUnreadPosts ? "envelope.svg" :
+        	                    "envelope-open-text.svg",
                Thr.NumUnreadPosts ? Txt_There_are_new_posts :
                                     Txt_No_new_posts,
                Thr.NumUnreadPosts ? Txt_There_are_new_posts :
@@ -3484,12 +3477,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 				      Gbl.Forum.ForumSelected.Location,
 				      Thr.ThrCod,
 				      -1L);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut16x16.gif\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
-                  Gbl.Prefs.URLIcons,
-                  Txt_Move_thread,
-                  Txt_Move_thread);
+         Ico_PutIconCut ();
          Frm_EndForm ();
         }
 

@@ -1776,14 +1776,14 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
                             "<img src=\"%s/",
                   Gbl.Prefs.URLIcons);
          if (TagHidden)
-            fprintf (Gbl.F.Out,"eye-slash-off64x64.png\" alt=\"%s\" title=\"%s",
+            fprintf (Gbl.F.Out,"eye-slash.svg\" alt=\"%s\" title=\"%s",
                      Txt_Tag_not_allowed,
                      Txt_Tag_not_allowed);
          else
-            fprintf (Gbl.F.Out,"eye-off64x64.png\" alt=\"%s\" title=\"%s",
+            fprintf (Gbl.F.Out,"eye.svg\" alt=\"%s\" title=\"%s",
                      Txt_Tag_allowed,
                      Txt_Tag_allowed);
-         fprintf (Gbl.F.Out,"\" class=\"ICO20x20\" />"
+         fprintf (Gbl.F.Out,"\" class=\"ICO_HIDDEN ICO16x16\" />"
                             "</td>");
         }
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"

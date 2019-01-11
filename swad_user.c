@@ -2420,7 +2420,7 @@ void Usr_PutLinkToLogin (void)
    extern const char *Txt_Log_in;
 
    Lay_PutContextualLink (ActFrmLogIn,NULL,NULL,
-                          "login-green64x64.png",
+                          "sign-in-alt-green.svg",
                           Txt_Log_in,Txt_Log_in,
 		          NULL);
   }
@@ -2460,14 +2460,14 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
-	              "<label>"
-                      "<img src=\"%s/user64x64.gif\" alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
-                      "<input type=\"text\" name=\"UsrId\""
+	              "<label for=\"UsrId\">"
+                      "<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_ICO\" />"
+	              "</label>"
+                      "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " value=\"%s\""
                       " autofocus=\"autofocus\" required=\"required\" />"
-	              "</label>"
 	              "</div>",
             Gbl.Prefs.URLIcons,
             Txt_User[Usr_SEX_UNKNOWN],
@@ -2478,12 +2478,12 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 
    /***** User's password *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
-	              "<label>"
-                      "<img src=\"%s/key64x64.gif\" alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
-		      "<input type=\"password\" name=\"UsrPwd\""
-		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
+	              "<label for=\"UsrPwd\">"
+                      "<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_ICO\" />"
 	              "</label>"
+		      "<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
+		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
 	              "</div>",
             Gbl.Prefs.URLIcons,
             Txt_Password,
@@ -2653,7 +2653,7 @@ void Usr_PutFormLogIn (void)
    /***** Link to log in form *****/
    Frm_StartForm (ActFrmLogIn);
    Frm_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/sign-in-alt-green.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
@@ -2722,7 +2722,7 @@ void Usr_PutFormLogOut (void)
 
    Frm_StartForm (ActLogOut);
    Frm_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/sign-out-alt-red.svg\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
@@ -3402,7 +3402,7 @@ static void Usr_PutLinkToLogOut (void)
 
    /***** Put form to log out *****/
    Lay_PutContextualLink (ActLogOut,NULL,NULL,
-                          "logout-red64x64.png",
+                          "sign-out-alt-red.svg",
                           Txt_Log_out,NULL,
 		          NULL);
   }

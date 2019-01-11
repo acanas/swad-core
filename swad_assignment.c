@@ -427,15 +427,15 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-                      "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+                      "<img src=\"%s/file.svg\""
+                      " alt=\"%s\" title=\"%s\" class=\"%sICO16x16\" />"
                       "<br />%s"
                       "</td>",
             Gbl.Prefs.URLIcons,
-            (Asg.SendWork == Asg_SEND_WORK) ? "file_on" :
-        	                              "file_off",
             Txt_ASSIGNMENT_TYPES[Asg.SendWork],
             Txt_ASSIGNMENT_TYPES[Asg.SendWork],
+            (Asg.SendWork == Asg_SEND_WORK) ? "" :
+        	                              "ICO_HIDDEN ",
             (Asg.SendWork == Asg_SEND_WORK) ? Txt_Yes :
         	                              Txt_No);
 

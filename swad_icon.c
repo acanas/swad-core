@@ -129,7 +129,7 @@ void Ico_PutIconsToSelectIconSet (void)
       Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/cog.svg\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICOx25\" />",
                Gbl.Prefs.URLIcons,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
@@ -399,7 +399,7 @@ void Ico_PutIconRemovalNotAllowed (void)
   }
 
 /*****************************************************************************/
-/******** Put an icon indicating that removal is not allowed *********/
+/************************ Put an icon to remove ******************************/
 /*****************************************************************************/
 
 void Ico_PutIconRemove (void)
@@ -412,4 +412,36 @@ void Ico_PutIconRemove (void)
 	    Gbl.Prefs.URLIcons,
 	    Txt_Remove,
 	    Txt_Remove);
+  }
+
+/*****************************************************************************/
+/*************************** Put an icon to cut ******************************/
+/*****************************************************************************/
+
+void Ico_PutIconCut (void)
+  {
+   extern const char *Txt_Cut;
+
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut.svg\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
+	    Gbl.Prefs.URLIcons,
+	    Txt_Cut,
+	    Txt_Cut);
+  }
+
+/*****************************************************************************/
+/************************** Put an icon to paste *****************************/
+/*****************************************************************************/
+
+void Ico_PutIconPaste (void)
+  {
+   extern const char *Txt_Paste;
+
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste.svg\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
+	    Gbl.Prefs.URLIcons,
+	    Txt_Paste,
+	    Txt_Paste);
   }

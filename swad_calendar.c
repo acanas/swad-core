@@ -89,7 +89,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 
    Box_StartBox (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
                  Hlp_PROFILE_Preferences_calendar,Box_NOT_CLOSABLE);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO25x25");
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICOx25");
    Box_EndBox ();
   }
 
@@ -128,7 +128,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams ();
-	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u-64x64.png\""
+	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u.png\""
 			    " alt=\"%s\" title=\"%s: %s\" class=\"%s\" />",
 		  Gbl.Prefs.URLIcons,
 		  FirstDayOfWeek,
@@ -324,7 +324,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
-      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL,"ICO25x25");
+      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL,"ICOx25");
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"
@@ -378,7 +378,7 @@ static void Cal_PutIconToPrintCalendarIns (void)
    if (Gbl.Hlds.Num ||					// There are holidays
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin
       Lay_PutContextualLink (ActSeeHld,NULL,NULL,
-			     "holiday64x64.png",
+			     "holiday.png",
 			     Txt_Holidays,NULL,
 			     NULL);
   }

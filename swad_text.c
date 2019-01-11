@@ -6752,6 +6752,27 @@ const char *Txt_Current_password =
 	"Senha atual";
 #endif
 
+const char *Txt_Cut =	// First part of "Cut-Paste"
+#if   L==1	// ca
+	"Tallar";
+#elif L==2	// de
+	"Ausschneiden";
+#elif L==3	// en
+	"Cut";
+#elif L==4	// es
+	"Cortar";
+#elif L==5	// fr
+	"Couper";
+#elif L==6	// gn
+	"Ikyt&itilde;";
+#elif L==7	// it
+	"Taglia";
+#elif L==8	// pl
+	"Wytnij";
+#elif L==9	// pt
+	"Cortar";
+#endif
+
 const char *Txt_Data =	// Project data
 #if   L==1	// ca
 	"Dades";
@@ -22859,27 +22880,6 @@ const char *Txt_Move_down_X_and_its_subsections =	// Warning: it is very importa
 	"Mover %s e suas subse&ccedil;&otilde;es para baixo";
 #endif
 
-const char *Txt_Move_thread =
-#if   L==1	// ca
-	"Mover discusi&oacute;n";	// Necessita traduccio
-#elif L==2	// de
-	"Verschieben Thread";
-#elif L==3	// en
-	"Move thread";
-#elif L==4	// es
-	"Mover discusi&oacute;n";
-#elif L==5	// fr
-	"D&eacute;placer fil";
-#elif L==6	// gn
-	"Mover discusi&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Sposta discussione";
-#elif L==8	// pl
-	"Przenies watku";
-#elif L==9	// pt
-	"Mover discuss&atilde;o";
-#endif
-
 const char *Txt_Movement_not_allowed =
 #if   L==1	// ca
 	"Moviment no perm&egrave;s";
@@ -28555,27 +28555,6 @@ const char *Txt_Paste_in_X =	// Warning: it is very important to include %s in t
 	"Wklej w %s";
 #elif L==9	// pt
 	"Colar em %s";
-#endif
-
-const char *Txt_Paste_thread =
-#if   L==1	// ca
-	"Pegar discusi&oacute;n";	// Necessita traduccio
-#elif L==2	// de
-	"Einf&uuml;gen Thread";
-#elif L==3	// en
-	"Paste thread";
-#elif L==4	// es
-	"Pegar discusi&oacute;n";
-#elif L==5	// fr
-	"Coller fil";
-#elif L==6	// gn
-	"Pegar discusi&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Incolla discussione";
-#elif L==8	// pl
-	"Wklej watku";
-#elif L==9	// pt
-	"Colar discuss&atilde;o";
 #endif
 
 const char *Txt_PERCENT_of_users =

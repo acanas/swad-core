@@ -825,7 +825,7 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
 
    /***** Put icon to reset game *****/
    Lay_PutContextualLink (ActReqRstGam,NULL,Gam_PutParams,
-                          "recycle64x64.png",
+                          "recycle.svg",
                           Txt_Reset,NULL,
 		          NULL);
 
@@ -841,13 +841,13 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
    if (ShowOnlyThisGame)
       /***** Put icon to show first question *****/
       Lay_PutContextualLink (ActPlyGam1stQst,NULL,Gam_PutParamsToPlayGame1stQst,
-			     "play64x64.png",
+			     "play.svg",
 			     Txt_Play,NULL,
 			     NULL);
    else
       /***** Put icon to play game *****/
       Lay_PutContextualLink (ActPlyGam,NULL,Gam_PutParams,
-			     "play64x64.png",
+			     "play.svg",
 			     Txt_Play,NULL,
 			     NULL);
   }
@@ -2902,12 +2902,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 	           Txt_Move_up_X,
 		   StrNumQst);
 	 Lay_PutContextualLink (ActUp_GamQst,NULL,Gam_PutParamsOneQst,
-				"up_on16x16.gif",
+				"arrow-up.svg",
 				Gbl.Title,NULL,
 				NULL);
 	}
       else
-         Ico_PutIconOff ("up_off16x16.gif",Txt_Movement_not_allowed);
+         Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
 
       /* Put icon to move down the question */
       if (NumQst + 1 < NumQsts)
@@ -2916,12 +2916,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 	           Txt_Move_down_X,
 		   StrNumQst);
 	 Lay_PutContextualLink (ActDwnGamQst,NULL,Gam_PutParamsOneQst,
-				"down_on16x16.gif",
+				"arrow-down.svg",
 				Gbl.Title,NULL,
 				NULL);
 	}
       else
-         Ico_PutIconOff ("down_off16x16.gif",Txt_Movement_not_allowed);
+         Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
 
       /* Put icon to edit the question */
       Gbl.Test.QstCod = QstCod;
@@ -3509,7 +3509,8 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
 
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/play64x64.png\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/play.svg\""
+		      " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
             Gbl.Prefs.URLIcons,Txt_Play,Txt_Play);
    fprintf (Gbl.F.Out,"</a>");
@@ -3656,7 +3657,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Txt_Continue,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/step-forward64x64.png\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/step-forward.svg\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
 	              "%s",

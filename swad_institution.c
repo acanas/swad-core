@@ -264,7 +264,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw institution logo *****/
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,20,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);

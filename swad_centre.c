@@ -251,7 +251,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw centre logo *****/
-   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShrtName,20,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);

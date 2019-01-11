@@ -812,7 +812,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    /***** Put form to reset survey *****/
    Lay_PutContextualLink (ActReqRstSvy,NULL,Svy_PutParams,
-                          "recycle64x64.png",
+                          "recycle.svg",
                           Txt_Reset,NULL,
 		          NULL);
 

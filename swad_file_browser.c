@@ -6587,9 +6587,9 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
       /* Put icon to make public/private file */
       if (IsPublic)
-         fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/unlock-on64x64.png\""
+         fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/lock-open.svg\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
+                            " class=\"ICO16x16\" />",
                   Gbl.Prefs.URLIcons,
                   Txt_Public_open_educational_resource_OER_for_everyone,
                   Txt_Public_open_educational_resource_OER_for_everyone);

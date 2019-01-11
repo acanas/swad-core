@@ -459,11 +459,11 @@ static void Crs_Configuration (bool PrintView)
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
       fprintf (Gbl.F.Out,"%s "
                          "<img src=\"%s/%s\" alt=\"%s\""
-                         " class=\"ICO20x20\" />",
+                         " class=\"ICO16x16\" />",
                Gbl.Title,
                Gbl.Prefs.URLIcons,
-               (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green16x16.gif" :
-        	                                                  "warning64x64.png",
+               (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
+        	                                                  "exclamation-triangle.svg",
                Gbl.Title);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
@@ -748,9 +748,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Frm_LinkFormSubmit (Gbl.Title,
 		                      Highlight ? ClassHighlight :
         	                                  ClassNormal,NULL);
-		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
+		  fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
 			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICO20x20\" />"
+			             " class=\"ICO16x16\" />"
 			             "&nbsp;%s"
 			             "</a>",
 		           Gbl.Prefs.URLIcons,
@@ -1261,7 +1261,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			    "<td class=\"CENTER_MIDDLE %s\">"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />"
+			    " class=\"ICO16x16\" />"
 			    "</td>",
 		  BgColor,
 		  Gbl.Prefs.URLIcons,

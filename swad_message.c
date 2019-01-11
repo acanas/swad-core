@@ -365,7 +365,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActReqMsgUsr,NULL,
                           Msg_PutParamsShowMorePotentialRecipients,
-			  "users",
+			  "users.svg",
 			  Txt_Show_more_recipients,Txt_Show_more_recipients,
                           "CopyMessageToHiddenFields()");
    fprintf (Gbl.F.Out,"</div>");
@@ -1873,7 +1873,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
    extern const char *Txt_Banned_users;
 
    Lay_PutContextualLink (ActLstBanUsr,NULL,NULL,
-                          "stop16x16.gif",
+                          "lock.svg",
                           Txt_Banned_users,Txt_Banned_users,
                           NULL);
   }
@@ -2960,18 +2960,18 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CONTEXT_COL %s\">"
-                      "<img src=\"%s/msg-%s16x16.gif\""
+                      "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />",
+                      " class=\"ICO16x16\" />",
             Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
         	                                                      "BG_MSG_GREEN") :
                                                               "BG_MSG_BLUE",
 
             Gbl.Prefs.URLIcons,
-            Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "replied" :
-        	                                                                 "open") :
-                                                                      "unread") :
-                                                              "fwd",
+            Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
+        	                                                                 "envelope-open-text.svg") :
+                                                                      "envelope.svg") :
+                                                              "share.svg",
             Title,Title);
 
    /***** Form to delete message *****/
@@ -3336,12 +3336,13 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
    /****** Link and form end *****/
-   Ico_PutIconLink ("reply16x16.gif",
+   Ico_PutIconLink ("reply.svg",
                     FromThisCrs ? (Replied ? Txt_Reply_again :
 				             Txt_Reply) :
 				  (Replied ? Txt_Go_to_course_and_reply_again :
 				             Txt_Go_to_course_and_reply),
 	            NULL,NULL,NULL);
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3360,13 +3361,13 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
-                      "<img src=\"%s/%s16x16.gif\""
+                      "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
                       "</td>",
             Gbl.Prefs.URLIcons,
-            Deleted ? "msg-fwd-del" :
-        	      "msg-fwd",
+            Deleted ? "share-red.svg" :
+        	      "share.svg",
             Deleted ? Txt_MSG_Sent_and_deleted :
                       Txt_MSG_Sent,
             Deleted ? Txt_MSG_Sent_and_deleted :
@@ -3520,15 +3521,15 @@ static void Msg_WriteMsgTo (long MsgCod)
                                         Txt_MSG_Unopened);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
-                            "<img src=\"%s/%s16x16.gif\""
+                            "<img src=\"%s/%s\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />"
+                            " class=\"ICO16x16\" />"
                             "</td>",
                   Gbl.Prefs.URLIcons,
-                  OpenByDst ? (Deleted ? "msg-open-del"   :
-                	                 "msg-open") :
-                              (Deleted ? "msg-unread-del" :
-                        	         "msg-unread"),
+                  OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
+                	                 "envelope-open-text.svg") :
+                              (Deleted ? "envelope-red.svg" :
+                        	         "envelope.svg"),
                   Title,Title);
 
          /* Put user's photo */
@@ -3673,9 +3674,9 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/unlock-on64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock-open.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
+	              " class=\"ICOx16\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.URLIcons,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
@@ -3695,9 +3696,9 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock-on64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
+	              " class=\"ICOx16\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.URLIcons,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
@@ -3875,9 +3876,9 @@ void Msg_ListBannedUsrs (void)
             Frm_StartForm (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             fprintf (Gbl.F.Out,"<input type=\"image\""
-        	               " src=\"%s/lock-on64x64.png\""
+        	               " src=\"%s/lock.svg\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICO20x20\" />",
+        	               " class=\"ICOx16\" />",
                      Gbl.Prefs.URLIcons,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);

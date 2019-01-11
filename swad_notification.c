@@ -231,42 +231,42 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 // Icons for notification events
 static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "question.svg",		// Ntf_EVENT_UNKNOWN
+   "question.svg",	// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "file.svg",			// Ntf_EVENT_DOCUMENT_FILE
-   "file.svg",			// Ntf_EVENT_TEACHERS_FILE
-   "file.svg",			// Ntf_EVENT_SHARED_FILE
+   "file.svg",		// Ntf_EVENT_DOCUMENT_FILE
+   "file.svg",		// Ntf_EVENT_TEACHERS_FILE
+   "file.svg",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "desk16x16.gif",		// Ntf_EVENT_ASSIGNMENT
-   "bullhorn.svg",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "grades16x16.gif",		// Ntf_EVENT_MARKS_FILE
+   "edit.svg",		// Ntf_EVENT_ASSIGNMENT
+   "bullhorn.svg",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "clipboard-list.svg",// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "adduser16x16.gif",		// Ntf_EVENT_ENROLMENT_STD
-   "adduser16x16.gif",		// Ntf_EVENT_ENROLMENT_TCH
-   "enrollmentrequest16x16.gif",// Ntf_EVENT_ENROLMENT_REQUEST
+   "user.svg",		// Ntf_EVENT_ENROLMENT_STD
+   "user-tie.svg",	// Ntf_EVENT_ENROLMENT_TCH
+   "hand-point-up.svg",	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
-   "comment-dots.svg",		// Ntf_EVENT_TIMELINE_COMMENT
-   "fav64x64.png",		// Ntf_EVENT_TIMELINE_FAV
-   "share64x64.png",		// Ntf_EVENT_TIMELINE_SHARE
-   "at.svg",			// Ntf_EVENT_TIMELINE_MENTION
-   "user-plus.svg",		// Ntf_EVENT_FOLLOWER
-   "comments.svg",		// Ntf_EVENT_FORUM_POST_COURSE
-   "comments.svg",		// Ntf_EVENT_FORUM_REPLY
+   "comment-dots.svg",	// Ntf_EVENT_TIMELINE_COMMENT
+   "star.svg",		// Ntf_EVENT_TIMELINE_FAV
+   "share-alt.svg",	// Ntf_EVENT_TIMELINE_SHARE
+   "at.svg",		// Ntf_EVENT_TIMELINE_MENTION
+   "user-plus.svg",	// Ntf_EVENT_FOLLOWER
+   "comments.svg",	// Ntf_EVENT_FORUM_POST_COURSE
+   "comments.svg",	// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "sticky-note.svg",		// Ntf_EVENT_NOTICE
-   "envelope.svg",		// Ntf_EVENT_MESSAGE
+   "sticky-note.svg",	// Ntf_EVENT_NOTICE
+   "envelope.svg",	// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
 
    /* Profile tab */
 
-   "poll.svg",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-   "adduser16x16.gif",		// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+   "poll.svg",		// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   "user-tie.svg",	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
@@ -511,7 +511,7 @@ void Ntf_ShowMyNotifications (void)
            {
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO20x20\" />",
+			       " class=\"ICO16x16\" />",
 		     Gbl.Prefs.URLIcons,
 		     Ntf_Icons[NotifyEvent],
 		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
@@ -521,7 +521,7 @@ void Ntf_ShowMyNotifications (void)
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICO20x20\" />",
+        	               " class=\"ICO16x16\" />",
                      Gbl.Prefs.URLIcons,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
@@ -2095,7 +2095,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    if (NumNewNtfs)
       fprintf (Gbl.F.Out,"<img src=\"%s/bell.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
+			 " class=\"ICO16x16\" />"
 			 "&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
 	       Gbl.Prefs.URLTheme,
 	       Txt_Notifications,

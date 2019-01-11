@@ -243,7 +243,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		   TabStr,MenuStr);
 
          /* Icon and text */
-         fprintf (Gbl.F.Out,"<li>");
+         fprintf (Gbl.F.Out,"<li class=\"ICO_HIGHLIGHT\">");
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
@@ -306,7 +306,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		   TabStr,MenuStr);
 
          /* Icon and text */
-         fprintf (Gbl.F.Out,"<li>");
+         fprintf (Gbl.F.Out,"<li class=\"ICO_HIGHLIGHT\">");
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
