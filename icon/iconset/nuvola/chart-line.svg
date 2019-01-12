@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="120" width="120" viewBox="0 0 512 512">
+<g transform="scale(2)">
+<path opacity=".2" d="m44 15.5c-9.374 0-17 7.626-17 17v200c0 9.37 7.626 17 17 17h176c9.38 0 17-7.63 17-17v-200c0-9.374-7.62-17-17-17h-176z"/>
+<path opacity=".2" d="m42 13.5c-9.374 0-17 7.626-17 17v200c0 9.37 7.626 17 17 17h176c9.38 0 17-7.63 17-17v-200c0-9.374-7.62-17-17-17h-176z"/>
+<path opacity=".2" d="m40 12.5c-9.374 0-17 7.626-17 17v200c0 9.37 7.626 17 17 17h176c9.38 0 17-7.63 17-17v-200c0-9.374-7.62-17-17-17h-176z"/>
+<linearGradient id="XMLID_7_" x1="-406.5" gradientUnits="userSpaceOnUse" y1="512.5" gradientTransform="matrix(1,0,0,-1,535.5,523.5)" x2="-406.5" y2="278.5">
+<stop stop-color="#494949" offset="0"/>
+<stop offset="1"/>
+</linearGradient>
+<path d="m41 11c-9.374 0-17 7.626-17 17v200c0 9.37 7.626 17 17 17h176c9.38 0 17-7.63 17-17v-200c0-9.374-7.62-17-17-17h-176z" fill="url(#XMLID_7_)"/>
+<path d="m28 228c0 6.63 5.373 12 12 12h176c6.63 0 12-5.37 12-12v-200c0-6.627-5.37-12-12-12h-176c-6.627 0-12 5.373-12 12v200z" fill="#fff"/>
+<linearGradient id="XMLID_8_" x1="-506.4" gradientUnits="userSpaceOnUse" y1="494.4" gradientTransform="matrix(1,0,0,-1,535.5,523.5)" x2="-308.6" y2="296.6">
+<stop stop-color="#fff" offset="0"/>
+<stop stop-color="#DADADA" offset="1"/>
+</linearGradient>
+<path d="m40 21c-3.86 0-7 3.14-7 7v200c0 3.86 3.14 7 7 7h176c3.86 0 7-3.14 7-7v-200c0-3.86-3.14-7-7-7h-176z" fill="url(#XMLID_8_)"/>
+<rect id="_x3C_Slice_x3E_" height="256" width="256" y="0" x="0" fill="none"/>
+</g>
+<path stroke="#a2a2a2" stroke-width="9.4" d="m91.47 324.9 25.18-44.3 24.27 32.74 48.55-107.4 39.08 77.87 18.95-47.74 40.97 123.6 64.24-207.9 71.26 155.7" fill="none"/>
+<path stroke="#f00" stroke-width="9.4" d="m84.57 319.5 25.18-44.31 24.27 32.75 48.55-107.4 39.07 77.87 18.95-47.74 40.97 123.6 64.25-207.9 71.25 155.7" fill="none"/>
+</svg>
