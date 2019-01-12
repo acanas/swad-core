@@ -997,7 +997,6 @@ void Rec_PutLinkToEditRecordFields (void)
    /***** Link to edit record fields *****/
    Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,NULL,
 				  "pen.svg",
-				  Txt_Edit_record_fields,
 				  Txt_Edit_record_fields);
   }
 
@@ -1562,7 +1561,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    unsigned i;
 
    Frm_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconWithText ("print.svg",Txt_Print,Txt_Print);
+   Ico_PutIconTextLink ("print.svg",
+			Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
                       "<label class=\"%s\">"
                       "(<select name=\"RecsPerPag\">",

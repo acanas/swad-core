@@ -367,7 +367,6 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
-   extern const char *Txt_Update_users_according_to_selected_groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
    bool ICanEdit;
@@ -413,11 +412,10 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
       /***** Submit button *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 			 " style=\"padding-top:12px;\">");
-      Frm_LinkFormSubmitAnimated (Txt_Update_users_according_to_selected_groups,
+      Frm_LinkFormSubmitAnimated (Txt_Update_users,
 				  The_ClassFormBold[Gbl.Prefs.Theme],
 				  "CopyMessageToHiddenFields()");
-      Ico_PutCalculateIconWithText (Txt_Update_users_according_to_selected_groups,
-				    Txt_Update_users);
+      Ico_PutCalculateIconWithText (Txt_Update_users);
       fprintf (Gbl.F.Out,"</div>");
 
       /***** End form *****/
@@ -1385,7 +1383,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                          "<img src=\"%s/clock.svg\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"%sICO16x16\" />"
+                         " class=\"%sCONTEXT_ICO_16x16\" />"
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
                Gbl.Prefs.URLIcons,
@@ -1545,7 +1543,7 @@ static void Grp_ListGroupsForEdition (void)
                    Grp->Open ? Txt_Group_X_open_click_to_close_it :
                                Txt_Group_X_closed_click_to_open_it,
                    Grp->GrpName);
-	 Ico_PutIconLink (Grp->Open ? "lock-open.svg" :
+	 Ico_PutIconLink (Grp->Open ? "unlock.svg" :
                 	              "lock.svg",
                           Gbl.Title);
          Frm_EndForm ();
@@ -2454,18 +2452,14 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	     Grp->Open ? Txt_Group_X_open :
 	                 Txt_Group_X_closed,
              Grp->GrpName);
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
+   fprintf (Gbl.F.Out,"<td class=\"BM");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
-   fprintf (Gbl.F.Out,"\" style=\"width:20px;\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIDDEN ICOx16\" />"
-	              "</td>",
-            Gbl.Prefs.URLIcons,
-            Grp->Open ? "lock-open.svg" :
-        	        "lock.svg",
-	    Gbl.Title,Gbl.Title);
+   fprintf (Gbl.F.Out,"\" >");
+   Ico_PutIconOff (Grp->Open ? "unlock.svg" :
+        	               "lock.svg",
+	           Gbl.Title);
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Group name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
@@ -2605,7 +2599,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/clock.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"%sICO16x16\" />"
+                      " class=\"%sCONTEXT_ICO_16x16\" />"
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
             Gbl.Prefs.URLIcons,
@@ -2669,25 +2663,19 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();
 
-   /***** Put disabled icons to open group and archive zone *****/
+   /***** Empty column to remove *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"BM\">"
-                      "<img src=\"%s/lock.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO_HIDDEN ICOx16\" />"
-                      "</td>"
-                      "<td class=\"BM\">"
-                      "<img src=\"%s/folder-red.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO_HIDDEN ICOx16\" />"
-                      "</td>",
-            Gbl.Prefs.URLIcons,
-            Txt_Group_closed,
-            Txt_Group_closed,
-            Gbl.Prefs.URLIcons,
-            Txt_File_zones_disabled,
-            Txt_File_zones_disabled);
+                      "<td class=\"BM\"></td>");
+
+   /***** Disabled icon to open group *****/
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Ico_PutIconOff ("lock.svg",Txt_Group_closed);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Disabled icon for archive zone *****/
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Ico_PutIconOff ("folder-red.svg",Txt_File_zones_disabled);
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Group type *****/
    /* Start selector */

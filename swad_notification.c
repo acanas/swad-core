@@ -302,11 +302,8 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
 void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_MESSAGES_Notifications;
-   extern const char *Txt_Change_preferences;
    extern const char *Txt_Settings;
-   extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_Domains;
-   extern const char *Txt_Mark_all_notifications_as_read;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Notifications;
    extern const char *Txt_Date;
@@ -373,19 +370,16 @@ void Ntf_ShowMyNotifications (void)
       /* Put form to change notification preferences */
       Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,NULL,
 				     "eye.svg",
-				     Txt_Mark_all_notifications_as_read,
 				     Txt_Mark_all_NOTIFICATIONS_as_read);
 
    /* Put form to change notification preferences */
    Lay_PutContextualLinkIconText (ActEdiPrf,NULL,NULL,
 				  "cog.svg",
-				  Txt_Change_preferences,
 				  Txt_Settings);
 
    /* Put form to view allowed mail domains */
    Lay_PutContextualLinkIconText (ActSeeMai,NULL,NULL,
 				  "envelope.svg",
-				  Txt_Email_domains_allowed_for_notifications,
 				  Txt_Domains);
 
    fprintf (Gbl.F.Out,"</div>");

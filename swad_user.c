@@ -2421,7 +2421,6 @@ void Usr_PutLinkToLogin (void)
 
    Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,NULL,
 				  "sign-in-alt-green.svg",
-				  Txt_Log_in,
 				  Txt_Log_in);
   }
 
@@ -2647,21 +2646,11 @@ static void Usr_InsertMyBirthday (void)
 
 void Usr_PutFormLogIn (void)
   {
-   extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *Txt_Log_in;
 
    /***** Link to log in form *****/
    Frm_StartForm (ActFrmLogIn);
-   Frm_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/sign-in-alt-green.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
-                      "<span id=\"login_txt\">&nbsp;%s</span>"
-                      "</a>",
-            Gbl.Prefs.URLIcons,
-            Txt_Log_in,
-            Txt_Log_in,
-            Txt_Log_in);
+   Ico_PutIconLink ("sign-in-alt-green.svg",Txt_Log_in);
    Frm_EndForm ();
   }
 
@@ -2672,7 +2661,6 @@ void Usr_PutFormLogIn (void)
 void Usr_WriteLoggedUsrHead (void)
   {
    extern const char *The_ClassUsr[The_NUM_THEMES];
-   extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
@@ -2717,20 +2705,11 @@ void Usr_WriteLoggedUsrHead (void)
 
 void Usr_PutFormLogOut (void)
   {
-   extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *Txt_Log_out;
 
+   /***** Link to log out form *****/
    Frm_StartForm (ActLogOut);
-   Frm_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/sign-out-alt-red.svg\""
-	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
-                      "<span id=\"login_txt\">&nbsp;%s</span>"
-                      "</a>",
-            Gbl.Prefs.URLIcons,
-            Txt_Log_out,
-            Txt_Log_out,
-            Txt_Log_out);
+   Ico_PutIconLink ("sign-out-alt-red.svg",Txt_Log_out);
    Frm_EndForm ();
   }
 
@@ -7531,7 +7510,6 @@ static void Usr_PutLinkToSeeAdmins (void)
    /***** Put form to list admins *****/
    Lay_PutContextualLinkIconText (ActLstOth,NULL,NULL,
 				  "user-tie.svg",
-				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
 				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
   }
 
@@ -7546,7 +7524,6 @@ static void Usr_PutLinkToSeeGuests (void)
    /***** Put form to list guests *****/
    Lay_PutContextualLinkIconText (ActLstGst,NULL,NULL,
 				  "users.svg",
-				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
 				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
   }
 

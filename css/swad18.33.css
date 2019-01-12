@@ -246,17 +246,6 @@ a:hover						/* Default ==> underlined */
 	display:inline;
 	padding:0 10px;
 	}
-@media only screen and (max-width: 1024px)
-	{	/* For mobile phones and tablets */
-	#login_txt
-		{
-		display:none;
-    		}
-	}
-.WHITE_HEAD	{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
-.GREY_HEAD	{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
-.BLUE_HEAD	{color:white;   font-size:12pt; white-space:nowrap;}
-.YELLOW_HEAD	{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
 
 /************************ Layout (second heading row) ************************/
 #head_row_2
@@ -1564,13 +1553,11 @@ a:hover						/* Default ==> underlined */
 	}
 
 /*********************************** Icons ***********************************/
-.ICO20x15	{width:20px; height:15px; vertical-align:middle;}
-.ICOx16		{	     height:16px; vertical-align:middle;}
+.ICOx16		{height:16px; vertical-align:middle;}
 .ICO16x16	{width:16px; height:16px; vertical-align:middle;}
 .ICO20x20	{width:20px; height:20px; vertical-align:middle;}
 .ICO25x25	{width:25px; height:25px; vertical-align:middle;}
-.ICOx25		{	     height:25px; vertical-align:middle;}
-.ICO40x25	{width:40px; height:25px; vertical-align:middle;}
+.ICOx25		{height:25px; vertical-align:middle; margin:0 auto;}
 .ICO40x40	{width:40px; height:40px; vertical-align:middle;}
 .ICO64x64	{width:64px; height:64px; vertical-align:middle;}
 .ICO160x160	{width:160px; height:160px; vertical-align:middle;}
@@ -1956,15 +1943,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .USR_LIST_NUM_N	{color:#404040; font-size:15pt; font-weight:bold;}
 
 /*****************************************************************************/
-.WHITE_TITLE		{color:#505050; font-size:18pt;}
+.WHITE_TITLE	{color:#505050; font-size:18pt;}
 .GREY_TITLE		{color:#505050; font-size:18pt;}
 .BLUE_TITLE		{color:#4D88A1; font-size:18pt;}
-.YELLOW_TITLE		{color:#BD4815; font-size:18pt;}
+.YELLOW_TITLE	{color:#BD4815; font-size:18pt;}
 
 /*********************** Icon and checkbox highlighting **********************/
 .ICO_HIDDEN
 	{
-	opacity:0.2;
+	opacity:0.3;
 	}
 .ICO_HIGHLIGHT, .CHECKBOX_UNCHECKED
 	{

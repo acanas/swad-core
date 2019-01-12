@@ -280,7 +280,6 @@ void Log_RequestLogo (Sco_Scope_t Scope)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Lay_PutContextualLinkIconText (ActionRem,NULL,NULL,
 				     "trash.svg",
-				     Txt_Remove_logo,
 				     Txt_Remove_logo);
       fprintf (Gbl.F.Out,"</div>");
      }

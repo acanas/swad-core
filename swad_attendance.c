@@ -537,7 +537,6 @@ static void Att_PutFormToListMyAttendance (void)
 
    Lay_PutContextualLinkIconText (ActSeeLstMyAtt,NULL,NULL,
 				  "list-ol.svg",
-				  Txt_Attendance_list,
 				  Txt_Attendance_list);
   }
 
@@ -552,7 +551,6 @@ static void Att_PutFormToListStdsAttendance (void)
    Lay_PutContextualLinkIconText (ActReqLstStdAtt,NULL,
 				  Att_PutFormToListStdsParams,
 				  "list-ol.svg",
-				  Txt_Attendance_list,
 				  Txt_Attendance_list);
   }
 
@@ -2094,14 +2092,15 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%u\">"
                       "<label for=\"Std%u\">"
-	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+	              "<img src=\"%s/%s\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_ICO_16x16\" />"
                       "</label>"
 	              "</td>",
             Gbl.RowEvenOdd,NumStd,
             Gbl.Prefs.URLIcons,
-            Present ? "check" :
-        	      "check-empty",
+            Present ? "check-square.svg" :
+        	      "square.svg",
             Present ? Txt_Present :
         	      Txt_Absent,
             Present ? Txt_Present :
@@ -3168,7 +3167,6 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Today;
-   extern const char *Txt_Update_attendance_according_to_selected_events;
    extern const char *Txt_Update_attendance;
    unsigned UniqueId;
    unsigned NumAttEvent;
@@ -3259,11 +3257,10 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" class=\"CENTER_MIDDLE\">");
-      Frm_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,
+      Frm_LinkFormSubmitAnimated (Txt_Update_attendance,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);
-      Ico_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,
-                                    Txt_Update_attendance);
+      Ico_PutCalculateIconWithText (Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -3496,13 +3493,14 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	 Present = Att_CheckIfUsrIsPresentInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod);
 
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
-	                    "<img src=\"%s/%s16x16.gif\""
-	                    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+	                    "<img src=\"%s/%s\""
+	                    " alt=\"%s\" title=\"%s\""
+	                    " class=\"CONTEXT_ICO_16X16\" />"
 	                    "</td>",
 		  Gbl.RowEvenOdd,
 		  Gbl.Prefs.URLIcons,
-		  Present ? "check" :
-			    "check-empty",
+		  Present ? "check-square.svg" :
+			    "square.svg",
 		  Present ? Txt_Present :
 			    Txt_Absent,
 		  Present ? Txt_Present :
@@ -3658,8 +3656,9 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    "%u:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
-	                    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+	                    "<img src=\"%s/%s\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"CONTEXT_ICO_16x16\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
@@ -3672,8 +3671,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 		  NumAttEvent + 1,
 	          Gbl.RowEvenOdd,
 		  Gbl.Prefs.URLIcons,
-		  Present ? "check" :
-			    "check-empty",
+		  Present ? "check-square.svg" :
+			    "square.svg",
 		  Present ? Txt_Present :
 			    Txt_Absent,
 		  Present ? Txt_Present :

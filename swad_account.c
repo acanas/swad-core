@@ -99,7 +99,6 @@ void Acc_PutLinkToCreateAccount (void)
 
    Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,NULL,
 				  "at.svg",
-				  Txt_Create_account,
 				  Txt_Create_account);
   }
 

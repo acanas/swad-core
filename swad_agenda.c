@@ -218,7 +218,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
    static const char *Image[2] =
      {
       "lock.svg",	// Agd_PRIVAT_EVENTS
-      "lock-open.svg",	// Agd_PUBLIC_EVENTS
+      "unlock.svg",	// Agd_PUBLIC_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -846,7 +846,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
    if (AgdEvent->Public)
       Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
 				     Agd_PutCurrentParamsMyAgenda,
-			             "lock-open.svg",
+			             "unlock.svg",
 			             Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private);
    else
       Lay_PutContextualLinkOnlyIcon (ActPubEvtMyAgd,NULL,

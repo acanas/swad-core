@@ -754,7 +754,6 @@ static void Sta_PutLinkToCourseHits (void)
 	 case Rol_SYS_ADM:
 	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,NULL,
 					   "chart-line.svg",
-					   Txt_Visits_to_course,
 					   Txt_Visits_to_course);
 	    break;
 	 default:
@@ -772,7 +771,6 @@ static void Sta_PutLinkToGlobalHits (void)
 
    Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,NULL,
 				  "chart-line.svg",
-				  Txt_Global_visits,
 				  Txt_Global_visits);
   }
 
@@ -9666,7 +9664,6 @@ void Con_PutLinkToLastClicks (void)
 
    Lay_PutContextualLinkIconText (ActLstClk,NULL,NULL,
 				  "mouse-pointer.svg",
-				  Txt_Last_clicks,
 				  Txt_Last_clicks);
   }
 

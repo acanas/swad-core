@@ -6402,7 +6402,7 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	 fprintf (Gbl.F.Out,"xxx%ux%u.gif\" alt=\"\"",
 	          Size,Size);
      }
-   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"ICO20x20\"/>" :
+   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"CONTEXT_ICO_16x16\"/>" :
 	                             " class=\"ICO40x40\"/>");
   }
 
@@ -6500,16 +6500,11 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
       /* Put icon to make public/private file */
       if (IsPublic)
-         fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/lock-open.svg\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO16x16\" />",
-                  Gbl.Prefs.URLIcons,
-                  Txt_Public_open_educational_resource_OER_for_everyone,
-                  Txt_Public_open_educational_resource_OER_for_everyone);
+         Ico_PutIconOff ("unlock.svg",
+                         Txt_Public_open_educational_resource_OER_for_everyone);
 
-      fprintf (Gbl.F.Out,"</div>");
-
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</div>"
+			 "</td>");
      }
   }
 
@@ -6573,46 +6568,35 @@ static void Brw_WriteDatesAssignment (void)
    static unsigned UniqueId = 0;
 
    fprintf (Gbl.F.Out,"<td colspan=\"2\""
-	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE COLOR%u\">",
-            Gbl.RowEvenOdd);
+	              " class=\"%s RIGHT_MIDDLE COLOR%u\">",
+            Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
+                                       "ASG_LST_DATE_RED",
+	    Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.Asg.AsgCod > 0)
      {
       UniqueId++;
 
-      /***** Write start date *****/
-      fprintf (Gbl.F.Out,"<span id=\"asg_start_date_%u\" class=\"%s RIGHT_MIDDLE\">",
-               UniqueId,
-               Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
-                                          "ASG_LST_DATE_RED");
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+      /***** Write start and end dates *****/
+      fprintf (Gbl.F.Out,"<span id=\"asg_start_date_%u\">"
+			 "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('asg_start_date_%u',%ld,"
 			 "%u,',&nbsp;','%s',true,false,0x7);"
-			 "</script>",
-               UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      fprintf (Gbl.F.Out,"</span>");
-
-      /***** Arrow *****/
-      fprintf (Gbl.F.Out,"<img src=\"%s/arrow%s16x12.gif\""
-                         " alt=\"\" title=\"\""
-                         " class=\"ICO20x15\" />",
-               Gbl.Prefs.URLIcons,
-               Gbl.FileBrowser.Asg.Open ? "green" :
-        	                          "red");
-
-      /***** Write end date *****/
-      fprintf (Gbl.F.Out,"<span id=\"asg_end_date_%u\" class=\"%s RIGHT_MIDDLE\">",
-               UniqueId,
-               Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
-                                          "ASG_LST_DATE_RED");
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "</script>"
+			 "</span>"
+                         "&rarr;"
+                         "<span id=\"asg_end_date_%u\">"
+                         "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('asg_end_date_%u',%ld,"
 			 "%u,',&nbsp;','%s',false,false,0x7);"
-			 "</script>",
+			 "</script>"
+			 "</span>",
+               UniqueId,
+               UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today,
+               UniqueId,
                UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      fprintf (Gbl.F.Out,"</span>");
      }
    else
       fprintf (Gbl.F.Out,"&nbsp;(%s)",
@@ -12500,7 +12484,6 @@ static void Brw_PutLinkToAskRemOldFiles (void)
    Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
 				  Brw_PutHiddenParamFullTreeIfSelected,
 				  "trash.svg",
-				  Txt_Remove_old_files,
 				  Txt_Remove_old_files);
   }
 

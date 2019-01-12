@@ -101,7 +101,6 @@ void Fol_PutLinkWhoToFollow (void)
 
    Lay_PutContextualLinkIconText (ActSeeSocPrf,NULL,NULL,
 				  "user-plus.svg",
-				  Txt_Who_to_follow,
 				  Txt_Who_to_follow);
   }
 

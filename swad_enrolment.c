@@ -200,7 +200,6 @@ void Enr_PutLinkToRequestSignUp (void)
    /***** Show the form *****/
    Lay_PutContextualLinkIconText (ActReqSignUp,NULL,NULL,
 				  "hand-point-up.svg",
-				  Txt_Sign_up,
 				  Txt_Sign_up);
   }
 
@@ -782,7 +781,6 @@ void Enr_PutLinkToRemOldUsrs (void)
    /***** Put form to remove old users *****/
    Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,NULL,
 				  "trash.svg",
-				  Txt_Eliminate_old_users,
 				  Txt_Eliminate_old_users);
   }
 
@@ -1864,7 +1862,6 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    /***** Put form to remove all the students in the current course *****/
    Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,NULL,
 				  "trash.svg",
-				  Txt_Remove_all_students,
 				  Txt_Remove_all_students);
   }
 
@@ -3090,7 +3087,6 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 
    Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
 				  "user-cog.svg",
-				  TitleText,
 				  TitleText);
   }
 
@@ -3127,7 +3123,6 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
      }
    Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
 				  "users-cog.svg",
-				  TitleText,
 				  TitleText);
   }
 

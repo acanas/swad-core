@@ -139,7 +139,6 @@ void Prf_PutLinkMyPublicProfile (void)
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
 				  Usr_PutParamMyUsrCodEncrypted,
 				  "user.svg",
-				  Txt_My_public_profile,
 				  Txt_My_public_profile);
   }
 
@@ -153,7 +152,6 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
 
    Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,NULL,
 				  "user.svg",
-				  Txt_Another_user_s_profile,
 				  Txt_Another_user_s_profile);
   }
 
@@ -613,7 +611,7 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
    Frm_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
                                NULL);
-   Ico_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
+   Ico_PutCalculateIconWithText (Txt_Calculate);
    Frm_EndForm ();
   }
 

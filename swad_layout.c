@@ -831,7 +831,6 @@ static void Lay_WriteScriptCustomDropzone (void)
 
 static void Lay_WritePageTopHeading (void)
   {
-   extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *The_ClassTagline[The_NUM_THEMES];
    extern const char *Txt_System;
    extern const char *Txt_TAGLINE;
@@ -902,8 +901,7 @@ static void Lay_WritePageTopHeading (void)
 
    /* 1st. row, 3rd. column: logged user or language selection,
       and link to open/close session */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_right\" class=\"%s\">",
-            The_ClassHead[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_right\">");
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
@@ -1113,7 +1111,6 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (),
 				    const char *Icon,
-				    const char *Title,
 				    const char *Text)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -1128,8 +1125,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
       FuncParams ();
 
    /***** Put icon and text with link *****/
-   Frm_LinkFormSubmit (Title,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconWithText (Icon,Title,Text);
+   Frm_LinkFormSubmit (Text,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+   Ico_PutIconTextLink (Icon,Text);
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
@@ -1147,7 +1144,6 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,
 					       void (*FuncParams) (),
 					       const char *Icon,
-					       const char *Title,
 					       const char *Text,
 					       const char *OnSubmit)
   {
@@ -1163,8 +1159,8 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
       FuncParams ();
 
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Title,The_ClassFormBold[Gbl.Prefs.Theme],OnSubmit);
-   Ico_PutIconWithText (Icon,Title,Text);
+   Frm_LinkFormSubmit (Text,The_ClassFormBold[Gbl.Prefs.Theme],OnSubmit);
+   Ico_PutIconTextLink (Icon,Text);
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/

@@ -1993,7 +1993,6 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Calculate_average_photo_of_a_degree;
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
@@ -2020,11 +2019,10 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Pho_PutHiddenParamPhotoSize ();
       Pho_PutHiddenParamOrderDegrees ();
       Usr_PutParamsPrefsAboutUsrList ();
-      Frm_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,
+      Frm_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_THE_DEGREE_X,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);
-      Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,
-                                    Txt_Calculate_average_photo_of_THE_DEGREE_X);
+      Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees with students *****/
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");

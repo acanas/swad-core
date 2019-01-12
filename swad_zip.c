@@ -127,7 +127,6 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
    Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
 				  ZIP_PutLinkToCreateZIPAsgWrkParams,
 				  "download.svg",
-				  Txt_Create_ZIP_file,
 				  Txt_Create_ZIP_file);
   }
 

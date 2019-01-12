@@ -367,7 +367,6 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
 					  Msg_PutParamsShowMorePotentialRecipients,
 					  "users.svg",
 					  Txt_Show_more_recipients,
-					  Txt_Show_more_recipients,
 					  "CopyMessageToHiddenFields()");
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1773,7 +1772,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Frm_LinkFormSubmitAnimated (Txt_Update_messages,
                                The_ClassFormBold[Gbl.Prefs.Theme],
                                NULL);
-   Ico_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
+   Ico_PutCalculateIconWithText (Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
    Frm_EndForm ();
@@ -1875,7 +1874,6 @@ static void Msg_PutLinkToViewBannedUsers(void)
 
    Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,NULL,
 				  "lock.svg",
-				  Txt_Banned_users,
 				  Txt_Banned_users);
   }
 
@@ -3675,7 +3673,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   Ico_PutIconLink ("lock-open.svg",Txt_Sender_permitted_click_to_ban_him);
+   Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
 

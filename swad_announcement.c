@@ -360,7 +360,6 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       /***** Put form to mark announcement as seen *****/
       Lay_PutContextualLinkIconText (ActAnnSee,NULL,Ann_PutParams,
 				     "trash.svg",
-				     Txt_Do_not_show_again,
 				     Txt_Do_not_show_again);
 
    fprintf (Gbl.F.Out,"</div>");

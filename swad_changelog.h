@@ -253,7 +253,6 @@
 // pero si el usuario ya existe en la asignatura, debe salir siempre el rol actual
 // (para no cambiarlo sin querer si lo único que queremos hacer es cambiar la inscripción a grupos)
 
-// TODO: No se ve bien la lista de usuarios conectados (en Usuarios > Conectados). El ancho de la tabla no es correcto debido a la fecha demasiado ancha (por ej. los miércoles)
 // TODO: Fix bug: Un superusuario se apunta a grupos, cuando pulsa "Cambiar de grupos" no ocurre nada.
 
 // TODO: "Administrar varios profesores no editores" -> debería poder hacerlo un profesor (Perico)
@@ -348,6 +347,10 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Chequear todas las directivas <label>
 
+// TODO: Fix bug: Al mostrar una orla con todos los profesores de SWAD, se muestran primeros los profesores y luego los no editores (repetidos algunos)
+
+// TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser y los de redes sociales
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -367,10 +370,20 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.32.1 (2019-01-12)"
-#define CSS_FILE		"swad18.32.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.33 (2019-01-12)"
+#define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.33:    Jan 11, 2019 	Code refactoring related to icons. (239066 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/square.svg /var/www/html/swad/icon/
+sudo cp icon/check-square.svg /var/www/html/swad/icon/
+
+	Version 18.32.2:  Jan 11, 2019 	Changes in open lock icon.
+				        Code refactoring related to icons. (239308 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/unlock.svg /var/www/html/swad/icon/
+
 	Version 18.32.1:  Jan 12, 2019 	Fixed bug in JavaScript related to writing dates. (239320 lines)
 	Version 18.32:    Jan 12, 2019 	Code refactoring related to icons. (239311 lines)
 	Version 18.31.6:  Jan 11, 2019 	Fixed bug in user administration. (239587 lines)

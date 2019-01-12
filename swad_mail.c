@@ -985,8 +985,7 @@ void Mai_ListEmails (void)
 	          StrAddresses,
                   Txt_Create_email_message,
                   The_ClassFormBold[Gbl.Prefs.Theme]);
-         Ico_PutIconWithText ("pen.svg",
-                              Txt_Create_email_message,
+         Ico_PutIconTextLink ("pen.svg",
                               Txt_Create_email_message);
          fprintf (Gbl.F.Out,"</a>"
                             "</div>");

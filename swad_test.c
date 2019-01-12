@@ -414,7 +414,6 @@ static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
-				  Txt_Test_results,
 				  Txt_Test_results);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -3440,9 +3439,9 @@ static void Tst_WriteAnswersEdit (long QstCod)
         	               "<td class=\"BT%u\">",
         	     Gbl.RowEvenOdd);
             if (row[6][0] == 'Y')
-               fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
+               fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICO20x20\" />",
+        	                  " class=\"CONTEXT_ICO_16x16\" />",
                         Gbl.Prefs.URLIcons,
                         Txt_TST_Answer_given_by_the_teachers,
                         Txt_TST_Answer_given_by_the_teachers);

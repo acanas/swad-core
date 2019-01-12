@@ -79,7 +79,6 @@ void Lan_PutLinkToChangeLanguage (void)
   {
    Lay_PutContextualLinkIconText (ActEdiPrf,NULL,NULL,
 			          "globe.svg",
-				  "Change language",
 				  "Change language");
   }
 

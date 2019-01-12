@@ -91,7 +91,7 @@ static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
 static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
   {
    "lock.svg",		// Prj_PREASSIGNED
-   "lock-open.svg",	// Prj_NONPREASSIG
+   "unlock.svg",	// Prj_NONPREASSIG
   };
 
 /*****************************************************************************/
@@ -1045,18 +1045,15 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          break;
      }
    fprintf (Gbl.F.Out," %s\">"
-                      "%s&nbsp;"
-                      "<img src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
-                      "</td>"
-                      "</tr>",
+                      "%s&nbsp;",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
-        	                                    Txt_No,
-	    Gbl.Prefs.URLIcons,PreassignedNonpreassigImage[Prj->Preassigned],
-	    Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned],
-	    Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
+        	                                    Txt_No);
+   Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Preassigned],
+		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
 
    /***** Number of students *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -1204,7 +1201,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
                       " onclick=\"toggleProject('%u');return false;\" />",
             Text,The_ClassForm[Gbl.Prefs.Theme],
             UniqueId);
-   Ico_PutIconWithText (Icon,Text,Text);
+   Ico_PutIconTextLink (Icon,Text);
    fprintf (Gbl.F.Out,"</a>");
   }
 

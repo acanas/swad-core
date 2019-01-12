@@ -311,15 +311,9 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
 
 void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-		      "<input type=\"image\""
-		      " src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16\" />"
-		      "</div>",
-	    DivClass,
-	    Gbl.Prefs.URLIcons,Icon,
-	    Title,Title);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",DivClass);
+   Ico_PutIconLink (Icon,Title);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -336,6 +330,22 @@ void Ico_PutIconLink (const char *Icon,const char *Title)
   }
 
 /*****************************************************************************/
+/******************* Show an icon with a link (with text) ********************/
+/*****************************************************************************/
+
+void Ico_PutIconTextLink (const char *Icon,const char *Text)
+  {
+   /***** Print icon and optional text *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
+	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_ICO_x16\" />"
+	              "&nbsp;%s"
+	              "</div>",
+            Gbl.Prefs.URLIcons,Icon,Text,Text,
+	    Text);
+  }
+
+/*****************************************************************************/
 /************************** Show a preference selector ***********************/
 /*****************************************************************************/
 
@@ -343,8 +353,7 @@ void Ico_PutPrefIconLink (const char *Icon,const char *Title)
   {
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO_HIGHLIGHT ICOx25\""
-		      " style=\"margin:0 auto;\"\" />",
+		      " class=\"ICO_HIGHLIGHT ICOx25\" />",
 	    Gbl.Prefs.URLIcons,Icon,
 	    Title,Title);
   }
@@ -353,29 +362,11 @@ void Ico_PutPrefIconLink (const char *Icon,const char *Title)
 /********************** Put an inactive/disabled icon ************************/
 /*****************************************************************************/
 
-void Ico_PutIconOff (const char *Icon,const char *Alt)
+void Ico_PutIconOff (const char *Icon,const char *Title)
   {
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16\" />",
-            Gbl.Prefs.URLIcons,Icon,Alt,Alt);
-  }
-
-/*****************************************************************************/
-/**************** Put a icon with a text to submit a form ********************/
-/*****************************************************************************/
-
-void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
-  {
-   /***** Print icon and optional text *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO_x16\" />",
-            Gbl.Prefs.URLIcons,Icon,Alt,Text ? Text :
-        	                               Alt);
-   if (Text)
-      if (Text[0])
-	 fprintf (Gbl.F.Out,"&nbsp;%s",Text);
-   fprintf (Gbl.F.Out,"</div>");
+            Gbl.Prefs.URLIcons,Icon,Title,Title);
   }
 
 /*****************************************************************************/
@@ -383,7 +374,7 @@ void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
 /********** When clicked, the icon will be replaced by an animation **********/
 /*****************************************************************************/
 
-void Ico_PutCalculateIcon (const char *Alt)
+void Ico_PutCalculateIcon (const char *Title)
   {
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
@@ -394,8 +385,8 @@ void Ico_PutCalculateIcon (const char *Alt)
 		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />"	// Animated icon hidden
 		      "</div>"
 		      "</a>",
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Alt,Alt,
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Alt,Alt);
+	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Title,Title,
+	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Title,Title);
   }
 
 /*****************************************************************************/
@@ -403,7 +394,7 @@ void Ico_PutCalculateIcon (const char *Alt)
 /********** When clicked, the icon will be replaced by an animation **********/
 /*****************************************************************************/
 
-void Ico_PutCalculateIconWithText (const char *Alt,const char *Text)
+void Ico_PutCalculateIconWithText (const char *Text)
   {
    fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 	              " style=\"margin:0 6px 0 0; display:inline;\">"
@@ -416,8 +407,8 @@ void Ico_PutCalculateIconWithText (const char *Alt,const char *Text)
 		      "&nbsp;%s"
 		      "</div>"
 		      "</a>",
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Alt,Text,
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Alt,Text,
+	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Text,Text,
+	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Text,Text,
 	    Text);
   }
 

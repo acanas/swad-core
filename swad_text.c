@@ -2954,27 +2954,6 @@ const char *Txt_Calculate =
 	"Calcular";
 #endif
 
-const char *Txt_Calculate_average_photo_of_a_degree =
-#if   L==1	// ca
-	"Calcular fotografia mitjana d'una titulaci&oacute;";
-#elif L==2	// de
-	"Calculate average photo of a degree";				// Need Übersetzung
-#elif L==3	// en
-	"Calculate average photo of a degree";
-#elif L==4	// es
-	"Calcular fotograf&iacute;a promedio de una titulaci&oacute;n";
-#elif L==5	// fr
-	"Calculate average photo of a degree";				// Besoin de traduction
-#elif L==6	// gn
-	"Calcular fotograf&iacute;a promedio de una titulaci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Calcolare la media delle foto di laurea";
-#elif L==8	// pl
-	"Obliczyc &sacute;rednia zdjec stopnia";
-#elif L==9	// pt
-	"Calcular a foto m&eacute;dia de um grau";
-#endif
-
 const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
 #if   L==1	// ca
 	"Calcular fotografia mitjana de";
@@ -3724,27 +3703,6 @@ const char *Txt_Change_photo =
 	"Zmie&nacute; zdjecie";
 #elif L==9	// pt
 	"Alterar foto";
-#endif
-
-const char *Txt_Change_preferences =
-#if   L==1	// ca
-	"Canviar prefer&egrave;ncies";
-#elif L==2	// de
-	"Einstellungen &auml;ndern";
-#elif L==3	// en
-	"Change preferences";
-#elif L==4	// es
-	"Cambiar preferencias";
-#elif L==5	// fr
-	"Changer mes pr&eacute;f&eacute;rences";
-#elif L==6	// gn
-	"Cambiar preferencias";	// Okoteve traducción
-#elif L==7	// it
-	"Cambiare preferenze";
-#elif L==8	// pl
-	"Zmiana preferencji";
-#elif L==9	// pt
-	"Alterar prefer&ecirc;ncias";
 #endif
 
 const char *Txt_CHAT_Room =
@@ -11273,27 +11231,6 @@ const char *Txt_Export_questions =
 	"Exportar perguntas";
 #endif
 
-const char *Txt_Export_questions_to_XML_file =
-#if   L==1	// ca
-	"Exportar preguntas a un archivo XML";	// Necessita traduccio
-#elif L==2	// de
-	"Export questions to XML file";		// Need Übersetzung
-#elif L==3	// en
-	"Export questions to XML file";
-#elif L==4	// es
-	"Exportar preguntas a un archivo XML";
-#elif L==5	// fr
-	"Exporter des questions vers un fichier XML";
-#elif L==6	// gn
-	"Exportar preguntas a un archivo XML";	// Okoteve traducción
-#elif L==7	// it
-	"Export questions to XML file";		// Bisogno di traduzione
-#elif L==8	// pl
-	"Export questions to XML file";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Exportar perguntas para um arquivo XML";
-#endif
-
 const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_ =	// Warning: it is very important to include two %u in the following sentences
 #if   L==1	// ca
 	"Se han detectado %u rostros en posici&oacute;n frontal:<br />"
@@ -15192,27 +15129,6 @@ const char *Txt_Import_questions =
 	"Importar perguntas";
 #endif
 
-const char *Txt_Import_questions_from_XML_file =
-#if   L==1	// ca
-	"Importar preguntas de un archivo XML";	// Necessita traduccio
-#elif L==2	// de
-	"Import questions from XML file";	// Need Übersetzung
-#elif L==3	// en
-	"Import questions from XML file";
-#elif L==4	// es
-	"Importar preguntas de un archivo XML";
-#elif L==5	// fr
-	"Import questions from XML file";	// Besoin de traduction
-#elif L==6	// gn
-	"Importar preguntas de un archivo XML";	// Okoteve traducción
-#elif L==7	// it
-	"Import questions from XML file";	// Bisogno di traduzione
-#elif L==8	// pl
-	"Import questions from XML file";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Importar perguntas de um arquivo XML";
-#endif
-
 const char *Txt_Imported_questions =
 #if   L==1	// ca
 	"Preguntas importadas";	// Necessita traduccio
@@ -17509,27 +17425,6 @@ const char *Txt_Mark_all_NOTIFICATIONS_as_read =
 	"Oznacz wszystko jako czytasz";
 #elif L==9	// pt
 	"Marcar todas como lidas";
-#endif
-
-const char *Txt_Mark_all_notifications_as_read =
-#if   L==1	// ca
-	"Marca totes les notificacions com llegides";
-#elif L==2	// de
-	"Markieren Sie alle Anmeldungen als gelesen";
-#elif L==3	// en
-	"Mark all notifications as read";
-#elif L==4	// es
-	"Marcar todas las notificaciones como le&iacute;das";
-#elif L==5	// fr
-	"Marquer tous les notifications comme lus";
-#elif L==6	// gn
-	"Marcar todas las notificaciones como le&iacute;das";	// Okoteve traducción
-#elif L==7	// it
-	"Segnare tutte le notifiche come gi&grave; letti";
-#elif L==8	// pl
-	"Mark all notifications as read";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Marcar todas as notifica&ccedil;&otilde;es como lidas";
 #endif
 
 const char *Txt_Mark_as_favourite =
@@ -51364,27 +51259,6 @@ const char *Txt_Update_attendance =
 	"Atualizar presen&ccedil;a";
 #endif
 
-const char *Txt_Update_attendance_according_to_selected_events =
-#if   L==1	// ca
-	"Actualitzar assist&egrave;ncia segons els esdeveniments seleccionats";
-#elif L==2	// de
-	"Update Anwesenheit nach ausgew&auml;hlten Ereignisse";
-#elif L==3	// en
-	"Update attendance according to selected events";
-#elif L==4	// es
-	"Actualizar asistencia seg&uacute;n los eventos seleccionados";
-#elif L==5	// fr
-	"Mise &agrave; jour pr&eacute;sence en fonction d'&eacute;v&eacute;nements s&eacute;lectionnes";
-#elif L==6	// gn
-	"Actualizar asistencia seg&uacute;n los eventos seleccionados";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiornamento presenza in base a eventi selezionati";
-#elif L==8	// pl
-	"Update bytno&sacute;&cacute; according to selected events";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Atualizar presen&ccedil;a de acordo com eventos selecionados";
-#endif
-
 const char *Txt_Update_messages =
 #if   L==1	// ca
 	"Actualitzar missatges";
@@ -51425,27 +51299,6 @@ const char *Txt_Update_users =
 	"Zaktualizuj u&zdot;ytkownik&oacute;w";
 #elif L==9	// pt
 	"Atualizar os utilizadores";
-#endif
-
-const char *Txt_Update_users_according_to_selected_groups =
-#if   L==1	// ca
-	"Actualitzar usuaris segons els grups seleccionats";
-#elif L==2	// de
-	"Update Benutzer nach ausgew&auml;hlten Gruppen";
-#elif L==3	// en
-	"Update users according to selected groups";
-#elif L==4	// es
-	"Actualizar usuarios seg&uacute;n los grupos seleccionados";
-#elif L==5	// fr
-	"Mise &agrave; jour des &eacute;tudiants en fonction de groupes s&eacute;lectionnes";
-#elif L==6	// gn
-	"Actualizar usuarios seg&uacute;n los grupos seleccionados";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiornamento utenti in base a gruppi selezionati";
-#elif L==8	// pl
-	"Zaktualizuj u&zdot;ytkownik&oacute;w wed&lstrok;ug wybranych grup";
-#elif L==9	// pt
-	"Atualizar os utilizadores de acordo com grupos selecionados";
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_link =

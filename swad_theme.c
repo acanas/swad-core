@@ -82,14 +82,6 @@ const char *The_TabOffBgColors[The_NUM_THEMES] =
    "TAB_OFF_YELLOW",
   };
 
-const char *The_ClassHead[The_NUM_THEMES] =
-  {
-   "WHITE_HEAD",
-   "GREY_HEAD",
-   "BLUE_HEAD",
-   "YELLOW_HEAD",
-  };
-
 const char *The_ClassTagline[The_NUM_THEMES] =
   {
    "WHITE_TAGLINE",

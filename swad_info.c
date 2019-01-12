@@ -1050,8 +1050,7 @@ static void Inf_ShowPage (const char *URL)
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
 	    URL,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Ico_PutIconWithText ("expand-arrows-alt.svg",
-		        Txt_View_in_a_new_window,
+   Ico_PutIconTextLink ("expand-arrows-alt.svg",
 		        Txt_View_in_a_new_window);
    fprintf (Gbl.F.Out,"</a>");
 

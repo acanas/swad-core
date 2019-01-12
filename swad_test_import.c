@@ -87,13 +87,11 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
 void TsI_PutFormToExportQuestions (void)
   {
-   extern const char *Txt_Export_questions_to_XML_file;
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkIconText (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
 				  "file-import.svg",
-		         	  Txt_Export_questions_to_XML_file,
 				  Txt_Export_questions);
   }
 
@@ -116,13 +114,11 @@ static void TsI_PutParamsExportQsts (void)
 
 void TsI_PutFormToImportQuestions (void)
   {
-   extern const char *Txt_Import_questions_from_XML_file;
    extern const char *Txt_Import_questions;
 
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkIconText (ActReqImpTstQst,NULL,NULL,
 				  "file-export.svg",
-				  Txt_Import_questions_from_XML_file,
 				  Txt_Import_questions);
   }
 
@@ -268,7 +264,8 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,
             The_ClassFormBold[Gbl.Prefs.Theme]);
-   Ico_PutIconWithText ("file.svg",Txt_XML_file,Txt_XML_file);
+   Ico_PutIconTextLink ("file.svg",
+			Txt_XML_file);
    fprintf (Gbl.F.Out,"</a>");
   }
 
@@ -1028,7 +1025,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	              "<td class=\"BT%u CENTER_TOP\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"CONTEXT_ICO_16x16\" />"
                       "</td>",
             Gbl.RowEvenOdd,
             Gbl.Prefs.URLIcons,
@@ -1155,16 +1152,17 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Put an icon that indicates whether the answer is correct or wrong */
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+        	               "<td class=\"BT%u\">",
+		     Gbl.RowEvenOdd);
             if (Gbl.Test.Answer.Options[NumOpt].Correct)
-               fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
+               fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICO20x20\" />",
+        	                  " class=\"%sCONTEXT_ICO_16x16\" />",
                         Gbl.Prefs.URLIcons,
-                        QuestionExists ? "ok_off" :
-                                         "ok_on",
                         Txt_TST_Answer_given_by_the_teachers,
-                        Txt_TST_Answer_given_by_the_teachers);
+                        Txt_TST_Answer_given_by_the_teachers,
+                        QuestionExists ? "ICO_HIDDEN " :
+                                         "");
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */
