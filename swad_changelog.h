@@ -367,10 +367,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.32 (2019-01-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.32.1 (2019-01-12)"
 #define CSS_FILE		"swad18.32.css"
-#define JS_FILE			"swad17.17.1.js"
+#define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.32.1:  Jan 12, 2019 	Fixed bug in JavaScript related to writing dates. (239320 lines)
 	Version 18.32:    Jan 12, 2019 	Code refactoring related to icons. (239311 lines)
 	Version 18.31.6:  Jan 11, 2019 	Fixed bug in user administration. (239587 lines)
 	Version 18.31.5:  Jan 11, 2019 	Fixed bug in link to my courses. (239583 lines)

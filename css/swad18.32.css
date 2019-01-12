@@ -1154,7 +1154,7 @@ a:hover						/* Default ==> underlined */
 	}
 .CON_USR_WIDE
 	{
-	width:340px;
+	width:360px;
 	text-align:left;
 	vertical-align:middle;
 	}
@@ -1167,7 +1167,7 @@ a:hover						/* Default ==> underlined */
 	}
 .CON_NAME_WIDE
 	{
-	max-width:340px;
+	max-width:360px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;

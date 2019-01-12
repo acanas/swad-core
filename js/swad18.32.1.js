@@ -44,6 +44,9 @@ var countClockConnected = 0;
 // 	Dat_FORMAT_DD_MONTH_YYYY	= 1
 // 	Dat_FORMAT_MONTH_DD_YYYY	= 2
 // separator is HTML code to write between date and time
+// StrToday is a string in current language ('today', 'hoy'...)
+// WriteDateOnSameDay = false ==> don't write date if it's the same day than the last call
+// WriteWeekDay = true ==> write day of the week ('monday', 'tuesday'...)
 // WriteHMS = 3 least significant bits for hour, minute and second
 
 function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
@@ -74,15 +77,19 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	Yea = d.getFullYear();
 	Mon = d.getMonth() + 1;
 	Day = d.getDate();
-
+	
 	if (WriteDateOnSameDay)
+		WriteDate = true;
+	// Check to see if the last date has been initialized
+	else if (typeof writeLocalDateHMSFromUTC.lastd == 'undefined')	// Static variable to remember current date for the next call
+		// Not initialized
 		WriteDate = true;
 	else
 		WriteDate = (Yea != writeLocalDateHMSFromUTC.lastd.getFullYear()	||
 					 Mon != writeLocalDateHMSFromUTC.lastd.getMonth() + 1	||
 					 Day != writeLocalDateHMSFromUTC.lastd.getDate())
 
-	writeLocalDateHMSFromUTC.lastd = d;	// Static variable to remember current date for the next call
+	writeLocalDateHMSFromUTC.lastd = d;	// Update last date for the next call
 
 	/* Set date */
 	if (WriteDate) {
