@@ -2419,10 +2419,10 @@ void Usr_PutLinkToLogin (void)
   {
    extern const char *Txt_Log_in;
 
-   Lay_PutContextualLink (ActFrmLogIn,NULL,NULL,
-                          "sign-in-alt-green.svg",
-                          Txt_Log_in,Txt_Log_in,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,NULL,
+				  "sign-in-alt-green.svg",
+				  Txt_Log_in,
+				  Txt_Log_in);
   }
 
 /*****************************************************************************/
@@ -2462,7 +2462,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
 	              "<label for=\"UsrId\">"
                       "<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO\" />"
+	              " class=\"CONTEXT_ICO_16x16\" />"
 	              "</label>"
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
@@ -2480,7 +2480,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
 	              "<label for=\"UsrPwd\">"
                       "<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO\" />"
+	              " class=\"CONTEXT_ICO_16x16\" />"
 	              "</label>"
 		      "<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
 		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
@@ -3401,10 +3401,9 @@ static void Usr_PutLinkToLogOut (void)
    extern const char *Txt_Log_out;
 
    /***** Put form to log out *****/
-   Lay_PutContextualLink (ActLogOut,NULL,NULL,
-                          "sign-out-alt-red.svg",
-                          Txt_Log_out,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,NULL,
+				  "sign-out-alt-red.svg",
+				  Txt_Log_out);
   }
 
 /*****************************************************************************/
@@ -7530,11 +7529,10 @@ static void Usr_PutLinkToSeeAdmins (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
-   Lay_PutContextualLink (ActLstOth,NULL,NULL,
-                          "user-tie.svg",
-                          Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
-                          Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
-		          NULL);
+   Lay_PutContextualLinkIconText (ActLstOth,NULL,NULL,
+				  "user-tie.svg",
+				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
+				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/
@@ -7546,11 +7544,10 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list guests *****/
-   Lay_PutContextualLink (ActLstGst,NULL,NULL,
-                          "users.svg",
-                          Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
-                          Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
-		          NULL);
+   Lay_PutContextualLinkIconText (ActLstGst,NULL,NULL,
+				  "users.svg",
+				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
+				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/
@@ -8133,30 +8130,27 @@ static void Usr_PutIconToShowGstsAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLink (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
-			  "table.svg",
-			  Txt_Show_all_data_in_a_table,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
+				  "table.svg",
+				  Txt_Show_all_data_in_a_table);
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLink (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
-			  "table.svg",
-			  Txt_Show_all_data_in_a_table,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
+			          "table.svg",
+				  Txt_Show_all_data_in_a_table);
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLink (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
-			  "table.svg",
-			  Txt_Show_all_data_in_a_table,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
+			          "table.svg",
+				  Txt_Show_all_data_in_a_table);
   }
 
 static void Usr_ShowGstsAllDataParams (void)

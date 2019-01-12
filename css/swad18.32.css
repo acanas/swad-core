@@ -1123,6 +1123,7 @@ a:hover						/* Default ==> underlined */
 .CONNECTED_LIST
 	{
 	box-sizing:border-box;
+	width:100%;
 	margin-top:2px;
 	padding-top:2px;
 	border-style:solid;
@@ -1153,7 +1154,7 @@ a:hover						/* Default ==> underlined */
 	}
 .CON_USR_WIDE
 	{
-	width:320px;
+	width:340px;
 	text-align:left;
 	vertical-align:middle;
 	}
@@ -1166,7 +1167,7 @@ a:hover						/* Default ==> underlined */
 	}
 .CON_NAME_WIDE
 	{
-	max-width:320px;
+	max-width:340px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -1595,18 +1596,15 @@ a:hover						/* Default ==> underlined */
 	text-align:center;
 	vertical-align:top;
 	}
-/*
-.CONTEXT_ICO
+.CONTEXT_ICO_16x16
 	{
 	width:16px;
 	height:16px;
 	margin-top:-2px;
 	vertical-align:middle;
 	}
-*/
-.CONTEXT_ICO
+.CONTEXT_ICO_x16
 	{
-	/* width:16px; */
 	height:16px;
 	margin-top:-2px;
 	vertical-align:middle;

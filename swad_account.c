@@ -97,10 +97,10 @@ void Acc_PutLinkToCreateAccount (void)
   {
    extern const char *Txt_Create_account;
 
-   Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
-                          "at.svg",
-                          Txt_Create_account,Txt_Create_account,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,NULL,
+				  "at.svg",
+				  Txt_Create_account,
+				  Txt_Create_account);
   }
 
 /*****************************************************************************/
@@ -532,10 +532,10 @@ void Acc_PutLinkToRemoveMyAccount (void)
    extern const char *Txt_Remove_account;
 
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
-      Lay_PutContextualLink (ActReqRemMyAcc,NULL,Acc_PutParamsToRemoveMyAccount,
-			     "trash.svg",
-			     Txt_Remove_account,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
+	                             Acc_PutParamsToRemoveMyAccount,
+			             "trash.svg",
+			             Txt_Remove_account);
   }
 
 static void Acc_PutParamsToRemoveMyAccount (void)
@@ -1213,10 +1213,9 @@ void Acc_PutIconToChangeUsrAccount (void)
 
    /***** Link for changing the account *****/
    if (ItsMe)
-      Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
-			     "at.svg",
-			     Txt_Change_account,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,NULL,
+			             "at.svg",
+			             Txt_Change_account);
    else	// Not me
       if (Usr_ICanEditOtherUsr (Gbl.Record.UsrDat))
 	{
@@ -1233,9 +1232,9 @@ void Acc_PutIconToChangeUsrAccount (void)
 	       NextAction = ActFrmAccOth;
 	       break;
 	   }
-	 Lay_PutContextualLink (NextAction,NULL,Rec_PutParamUsrCodEncrypted,
-	                        "at.svg",
-				Txt_Change_account,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+	                                Rec_PutParamUsrCodEncrypted,
+	                                "at.svg",
+				        Txt_Change_account);
 	}
   }

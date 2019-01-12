@@ -1250,15 +1250,12 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
                                          const char PathInTree[PATH_MAX + 1],
                                          const char *FileName,const char *FileNameToShow);
 static bool Brw_CheckIfCanPasteIn (unsigned Level);
-static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
-                                   const char *FileName,const char *FileNameToShow);
-static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
-                                  const char *FileName,const char *FileNameToShow);
+static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
+                               const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
                              const char *FileName,const char *FileNameShow);
-static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
-                                const char *FileName,const char *FileNameToShow);
-static void Brw_PutIconPasteOff (void);
+static void Brw_PutIconPaste (unsigned Level,const char PathInTree[PATH_MAX + 1],
+                              const char *FileName,const char *FileNameToShow);
 static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow,
@@ -5773,43 +5770,13 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
                                          const char *FileName,const char *FileNameToShow)
   {
    /***** Icon to remove folder, file or link *****/
-   switch (Gbl.FileBrowser.FileType)
-     {
-      case Brw_IS_FILE:
-      case Brw_IS_LINK:
-	 /* Icon to remove a file or link */
-	 Brw_PutIconRemoveFile (PathInTree,FileName,FileNameToShow);
-         break;
-      case Brw_IS_FOLDER:
-	 /* Icon to remove a folder */
-	 Brw_PutIconRemoveDir (PathInTree,FileName,FileNameToShow);
-         break;
-      default:
-	 break;
-     }
+   Brw_PutIconRemove (PathInTree,FileName,FileNameToShow);
 
    /***** Icon to copy *****/
    Brw_PutIconCopy (PathInTree,FileName,FileNameToShow);
 
    /***** Icon to paste *****/
-   switch (Gbl.FileBrowser.FileType)
-     {
-      case Brw_IS_FILE:
-      case Brw_IS_LINK:
-         /* File or link. Can't paste in a file or link */
-         fprintf (Gbl.F.Out,"<td class=\"BM%u\"></td>",Gbl.RowEvenOdd);
-         break;
-      case Brw_IS_FOLDER:
-	 if (Brw_CheckIfCanPasteIn (Level))
-	    /* Icon to paste active */
-	    Brw_PutIconPasteOn (PathInTree,FileName,FileNameToShow);
-	 else
-	    /* Icon to paste inactive */
-	    Brw_PutIconPasteOff ();
-         break;
-      default:
-	 break;
-     }
+   Brw_PutIconPaste (Level,PathInTree,FileName,FileNameToShow);
   }
 
 /*****************************************************************************/
@@ -5856,72 +5823,49 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
   }
 
 /*****************************************************************************/
-/******************* Write link e icon to remove a file **********************/
+/********** Write link and icon to remove a file, link or folder *************/
 /*****************************************************************************/
-// Gbl.FileBrowser.FileType can be Brw_IS_FILE or Brw_IS_LINK
 
-static void Brw_PutIconRemoveFile (const char PathInTree[PATH_MAX + 1],
-                                   const char *FileName,const char *FileNameToShow)
+static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
+                               const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Remove_FILE_OR_LINK_X;
-
-   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-
-   if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this file?
-     {
-      /***** Form to remove a file *****/
-      Frm_StartForm (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
-      Brw_PutParamsFileBrowser (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
-                                PathInTree,FileName,
-                                Gbl.FileBrowser.FileType,-1L);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Remove_FILE_OR_LINK_X,
-		FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-               Gbl.Prefs.URLIcons,
-               Gbl.Title,
-               Gbl.Title);
-      Frm_EndForm ();
-     }
-   else
-      // Ico_PutIconBRemovalNotAllowed ();
-      Ico_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/****************** Write link and icon to remove a folder *******************/
-/*****************************************************************************/
-
-static void Brw_PutIconRemoveDir (const char PathInTree[PATH_MAX + 1],
-                                  const char *FileName,const char *FileNameToShow)
-  {
    extern const char *Txt_Remove_folder_X;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this folder?
-     {
-      /***** Form to remove a folder *****/
-      Frm_StartForm (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
-      Brw_PutParamsFileBrowser (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
-                                PathInTree,FileName,
-                                Brw_IS_FOLDER,-1L);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Remove_folder_X,
-		FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-               Gbl.Prefs.URLIcons,
-               Gbl.Title,
-               Gbl.Title);
-      Frm_EndForm ();
-     }
+   if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this?
+      switch (Gbl.FileBrowser.FileType)
+	{
+	 case Brw_IS_FILE:
+	 case Brw_IS_LINK:
+	    /***** Form to remove a file or link *****/
+	    Frm_StartForm (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
+	    Brw_PutParamsFileBrowser (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
+				      PathInTree,FileName,
+				      Gbl.FileBrowser.FileType,-1L);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      Txt_Remove_FILE_OR_LINK_X,
+		      FileNameToShow);
+	    Ico_PutIconLink ("trash.svg",Gbl.Title);
+	    Frm_EndForm ();
+	    break;
+	 case Brw_IS_FOLDER:
+	    /***** Form to remove a folder *****/
+	    Frm_StartForm (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
+	    Brw_PutParamsFileBrowser (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
+				      PathInTree,FileName,
+				      Gbl.FileBrowser.FileType,-1L);
+	    snprintf (Gbl.Title,sizeof (Gbl.Title),
+		      Txt_Remove_folder_X,
+		      FileNameToShow);
+	    Ico_PutIconLink ("trash.svg",Gbl.Title);
+	    Frm_EndForm ();
+	    break;
+	 default:
+	    break;
+	}
    else
-      // Ico_PutIconBRemovalNotAllowed ();
       Ico_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -5945,12 +5889,7 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Copy_FOLDER_FILE_OR_LINK_X,
 	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-	    Gbl.Prefs.URLIcons,
-	    Gbl.Title,
-	    Gbl.Title);
+   Ico_PutIconLink ("copy.svg",Gbl.Title);
    Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</td>");
@@ -5960,47 +5899,36 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
 /************** Write link e icon to paste a file or a folder ****************/
 /*****************************************************************************/
 
-static void Brw_PutIconPasteOn (const char PathInTree[PATH_MAX + 1],
-                                const char *FileName,const char *FileNameToShow)
+static void Brw_PutIconPaste (unsigned Level,const char PathInTree[PATH_MAX + 1],
+                              const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Paste_in_X;
+   extern const char *Txt_Copy_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
-   /***** Form to paste the content of the clipboard *****/
-   Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
-                             PathInTree,FileName,
-                             Brw_IS_FOLDER,-1L);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Paste_in_X,
-	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-            Gbl.Prefs.URLIcons,
-            Gbl.Title,
-            Gbl.Title);
-   Frm_EndForm ();
+   if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)	// Can't paste in a file or link
+     {
+      /* Icon to paste */
+      if (Brw_CheckIfCanPasteIn (Level))
+	{
+	 /***** Form to paste the content of the clipboard *****/
+	 Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
+	 Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
+				   PathInTree,FileName,
+				   Brw_IS_FOLDER,-1L);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+		   Txt_Paste_in_X,
+		   FileNameToShow);
+	 Ico_PutIconLink ("paste.svg",Gbl.Title);
+	 Frm_EndForm ();
+	}
+      else
+	 /* Icon to paste inactive */
+	 Ico_PutIconOff ("paste.svg",Txt_Copy_not_allowed);
+     }
+
    fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/**************** Write link e icon to paste a file o a folder ***************/
-/*****************************************************************************/
-
-static void Brw_PutIconPasteOff (void)
-  {
-   extern const char *Txt_Copy_not_allowed;
-
-   fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
-	              "<img src=\"%s/paste.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />"
-	              "</td>",
-            Gbl.RowEvenOdd,Gbl.Prefs.URLIcons,
-            Txt_Copy_not_allowed,
-            Txt_Copy_not_allowed);
   }
 
 /*****************************************************************************/
@@ -6026,7 +5954,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
       case Brw_ICON_TREE_NOTHING:
 	 fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
 			    " alt=\"\" title=\"\""
-			    " class=\"ICO16x16\" />",
+			    " class=\"ICO20x20\" />",
 		  Gbl.Prefs.URLIcons);
 	 break;
       case Brw_ICON_TREE_EXPAND:
@@ -6070,12 +5998,13 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
    for (i = 1;
 	i < Level;
 	i++)
-      fprintf (Gbl.F.Out,"<td style=\"width:20px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	                 "<img src=\"%s/tr16x16.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " class=\"ICO16x16\" />"
+	                 " class=\"ICO20x20\" />"
 	                 "</td>",
-               Gbl.Prefs.URLIcons);
+               Gbl.RowEvenOdd,
+	       Gbl.Prefs.URLIcons);
   }
 
 /*****************************************************************************/
@@ -6111,12 +6040,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%s %s",
 	     Txt_Expand,FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/caret-right.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO16x16\" />",
-	    Gbl.Prefs.URLIcons,
-	    Gbl.Title,
-	    Gbl.Title);
+   Ico_PutIconLink ("caret-right.svg",Gbl.Title);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -6156,12 +6080,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%s %s",
 	     Txt_Contract,FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/caret-down.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO16x16\" />",
-	    Gbl.Prefs.URLIcons,
-	    Gbl.Title,
-	    Gbl.Title);
+   Ico_PutIconLink ("caret-down.svg",Gbl.Title);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -6186,11 +6105,11 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
 	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16%s\" />",
+	              " class=\"%sCONTEXT_ICO\" />",
             Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title,
-            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? " ICO_HIDDEN" :
+            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN " :
         	                                       "");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
@@ -6214,11 +6133,11 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
 	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16%s\" />",
+	              " class=\"%sCONTEXT_ICO\" />",
             Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title,
-            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? " ICO_HIDDEN" :
+            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN " :
         	                                       "");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
@@ -6383,15 +6302,9 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Upload_file_or_create_folder_in_FOLDER,
 	     FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\""
-		      " src=\"%s/folder-%s-plus16x16.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
-	    Gbl.Prefs.URLIcons,
-	    Open ? "open" :
-		   "closed",
-	    Gbl.Title,
-	    Gbl.Title);
+   Ico_PutIconLink (Open ? "folder-open-plus16x16.gif" :
+	                   "folder-closed-plus16x16.gif",
+	            Gbl.Title);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -12584,11 +12497,11 @@ static void Brw_PutLinkToAskRemOldFiles (void)
   {
    extern const char *Txt_Remove_old_files;
 
-   Lay_PutContextualLink (ActReqRemOldBrf,NULL,
-                          Brw_PutHiddenParamFullTreeIfSelected,
-			  "trash.svg",
-			  Txt_Remove_old_files,Txt_Remove_old_files,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
+				  Brw_PutHiddenParamFullTreeIfSelected,
+				  "trash.svg",
+				  Txt_Remove_old_files,
+				  Txt_Remove_old_files);
   }
 
 /*****************************************************************************/

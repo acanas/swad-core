@@ -99,10 +99,10 @@ void Fol_PutLinkWhoToFollow (void)
   {
    extern const char *Txt_Who_to_follow;
 
-   Lay_PutContextualLink (ActSeeSocPrf,NULL,NULL,
-                          "user-plus.svg",
-                          Txt_Who_to_follow,Txt_Who_to_follow,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActSeeSocPrf,NULL,NULL,
+				  "user-plus.svg",
+				  Txt_Who_to_follow,
+				  Txt_Who_to_follow);
   }
 
 /*****************************************************************************/

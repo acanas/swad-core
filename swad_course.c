@@ -571,7 +571,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                   ClassNormal,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />&nbsp;%s</a>",
+                      " class=\"ICO16x16\" />&nbsp;%s</a>",
 	    Gbl.Prefs.URLIcons,
 	    Txt_System,
 	    Txt_System,
@@ -609,7 +609,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO20x20\" />&nbsp;%s</a>",
+                         " class=\"ICO16x16\" />&nbsp;%s</a>",
 	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -647,7 +647,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
-	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
+	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</li>");
@@ -680,7 +680,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
-	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
+	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr.FullName);
 	    Frm_EndForm ();
 	    fprintf (Gbl.F.Out,"</li>");
@@ -713,7 +713,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
-	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
+	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	       Frm_EndForm ();
 	       fprintf (Gbl.F.Out,"</li>");
@@ -1388,10 +1388,9 @@ static void Crs_PutIconToViewCourses (void)
   {
    extern const char *Txt_Courses;
 
-   Lay_PutContextualLink (ActSeeCrs,NULL,NULL,
-                          "list-ol.svg",
-                          Txt_Courses,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,NULL,
+                                  "list-ol.svg",
+                                  Txt_Courses);
   }
 
 /*****************************************************************************/
@@ -2962,16 +2961,15 @@ static void Crs_PutIconToSearchCourses (void)
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
-   Lay_PutContextualLink ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsReqSch :
-                          (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegReqSch :
-                          (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrReqSch :
-                          (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
-                          (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
-                                                           ActSysReqSch)))),
-                          NULL,Sch_PutLinkToSearchCoursesParams,
-			  "search.svg",
-			  Txt_Search_courses,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsReqSch :
+                                  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegReqSch :
+                                  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrReqSch :
+                                  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
+                                  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
+                                                                   ActSysReqSch)))),
+				  NULL,Sch_PutLinkToSearchCoursesParams,
+			          "search.svg",
+			          Txt_Search_courses);
   }
 
 static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search module
@@ -3017,10 +3015,9 @@ void Crs_PutIconToSelectMyCourses (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
       /***** Put icon with link *****/
-      Lay_PutContextualLink (ActMyCrs,NULL,NULL,
-			     "sitemap.svg",
-			     Txt_My_courses,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,NULL,
+				     "sitemap.svg",
+				     Txt_My_courses);
   }
 
 /*****************************************************************************/
@@ -3390,10 +3387,10 @@ void Crs_PutLinkToRemoveOldCrss (void)
    extern const char *Txt_Eliminate_old_courses;
 
    /***** Put form to remove old courses *****/
-   Lay_PutContextualLink (ActReqRemOldCrs,NULL,NULL,
-                          "trash.svg",
-                          Txt_Eliminate_old_courses,Txt_Eliminate_old_courses,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,NULL,
+				  "trash.svg",
+				  Txt_Eliminate_old_courses,
+				  Txt_Eliminate_old_courses);
   }
 
 /*****************************************************************************/

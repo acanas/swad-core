@@ -182,10 +182,9 @@ void Pho_PutIconToChangeUsrPhoto (void)
      {
       TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 			                      Txt_Upload_photo;
-      Lay_PutContextualLink (ActReqMyPho,NULL,NULL,
-			     "camera.svg",
-			     TitleText,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,NULL,
+				     "camera.svg",
+				     TitleText);
      }
    else	// Not me
       if (Pho_ICanChangeOtherUsrPhoto (Gbl.Record.UsrDat))
@@ -206,10 +205,10 @@ void Pho_PutIconToChangeUsrPhoto (void)
 	       NextAction = ActReqOthPho;
 	       break;
 	   }
-	 Lay_PutContextualLink (NextAction,NULL,Rec_PutParamUsrCodEncrypted,
-	                        "camera.svg",
-				TitleText,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+				        Rec_PutParamUsrCodEncrypted,
+	                                "camera.svg",
+				        TitleText);
 	}
   }
 
@@ -223,10 +222,9 @@ static void Pho_PutIconToRequestRemoveMyPhoto (void)
 
    /***** Link to request the removal of my photo *****/
    if (Gbl.Usrs.Me.MyPhotoExists)
-      Lay_PutContextualLink (ActReqRemMyPho,NULL,NULL,
-                             "trash.svg",
-			     Txt_Remove_photo,NULL,
-		             NULL);
+      Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,NULL,
+				     "trash.svg",
+				     Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -257,11 +255,10 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
 	    NextAction = ActReqRemOthPho;
 	    break;
 	}
-      Lay_PutContextualLink (NextAction,NULL,
-                             Usr_PutParamOtherUsrCodEncrypted,
-			     "trash.svg",
-			     Txt_Remove_photo,NULL,
-		             NULL);
+      Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+				     Usr_PutParamOtherUsrCodEncrypted,
+				     "trash.svg",
+				     Txt_Remove_photo);
      }
   }
 

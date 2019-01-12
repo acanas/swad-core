@@ -124,11 +124,11 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
   {
    extern const char *Txt_Create_ZIP_file;
 
-   Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,
-                          ZIP_PutLinkToCreateZIPAsgWrkParams,
-                          "download.svg",
-                          Txt_Create_ZIP_file,Txt_Create_ZIP_file,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
+				  ZIP_PutLinkToCreateZIPAsgWrkParams,
+				  "download.svg",
+				  Txt_Create_ZIP_file,
+				  Txt_Create_ZIP_file);
   }
 
 static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)

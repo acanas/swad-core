@@ -91,10 +91,10 @@ void TsI_PutFormToExportQuestions (void)
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
-   Lay_PutContextualLink (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
-		          "file-import.svg",
-		          Txt_Export_questions_to_XML_file,Txt_Export_questions,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActLstTstQst,NULL,TsI_PutParamsExportQsts,
+				  "file-import.svg",
+		         	  Txt_Export_questions_to_XML_file,
+				  Txt_Export_questions);
   }
 
 /*****************************************************************************/
@@ -120,11 +120,10 @@ void TsI_PutFormToImportQuestions (void)
    extern const char *Txt_Import_questions;
 
    /***** Put a link to create a file with questions *****/
-   Lay_PutContextualLink (ActReqImpTstQst,NULL,NULL,
-		          "file-export.svg",
-		          Txt_Import_questions_from_XML_file,
-                          Txt_Import_questions,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActReqImpTstQst,NULL,NULL,
+				  "file-export.svg",
+				  Txt_Import_questions_from_XML_file,
+				  Txt_Import_questions);
   }
 
 /*****************************************************************************/

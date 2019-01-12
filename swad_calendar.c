@@ -89,7 +89,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 
    Box_StartBox (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
                  Hlp_PROFILE_Preferences_calendar,Box_NOT_CLOSABLE);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICOx25");
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL);
    Box_EndBox ();
   }
 
@@ -108,12 +108,12 @@ static void Cal_PutIconsFirstDayOfWeek (void)
 /************** Show form to select the first day of the week ****************/
 /*****************************************************************************/
 
-void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
-                                      const char *ClassIcon)
+void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) ())
   {
    extern const char *Txt_First_day_of_the_week;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
+   char Icon[32 + 1];
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (FirstDayOfWeek = 0;	// Monday
@@ -128,13 +128,13 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams ();
-	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u.png\""
-			    " alt=\"%s\" title=\"%s: %s\" class=\"%s\" />",
-		  Gbl.Prefs.URLIcons,
-		  FirstDayOfWeek,
-		  Txt_DAYS_SMALL[FirstDayOfWeek],
-		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
-		  ClassIcon);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           "%s: %s",
+	           Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]);
+	 snprintf (Icon,sizeof (Icon),
+	           "first-day-of-week-%u.png",
+	           FirstDayOfWeek);
+	 Ico_PutPrefIconLink (Icon,Gbl.Title);
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
         }
@@ -324,7 +324,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
-      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL,"ICOx25");
+      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL);
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"
@@ -375,12 +375,11 @@ static void Cal_PutIconToPrintCalendarIns (void)
    Ico_PutContextualIconToPrint (ActPrnCalIns,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hlds.Num ||					// There are holidays
+   if (Gbl.Hlds.Num ||				// There are holidays
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin
-      Lay_PutContextualLink (ActSeeHld,NULL,NULL,
-			     "holiday.png",
-			     Txt_Holidays,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,NULL,
+			             "holiday.png",
+			             Txt_Holidays);
   }
 
 static void Cal_PutIconToPrintCalendarCtr (void)

@@ -69,10 +69,9 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) ())
    extern const char *Txt_QR_code;
 
    /***** Link to print QR *****/
-   Lay_PutContextualLink (Action,NULL,FuncParams,
-                          "qrcode.svg",
-                          Txt_QR_code,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (Action,NULL,FuncParams,
+				  "qrcode.svg",
+				  Txt_QR_code);
   }
 
 /*****************************************************************************/

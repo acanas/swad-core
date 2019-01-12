@@ -77,10 +77,10 @@ static void Lan_PutParamLanguage (void);
 
 void Lan_PutLinkToChangeLanguage (void)
   {
-   Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
-                          "globe.svg",
-                          "Change language","Change language",
-		          NULL);
+   Lay_PutContextualLinkIconText (ActEdiPrf,NULL,NULL,
+			          "globe.svg",
+				  "Change language",
+				  "Change language");
   }
 
 /*****************************************************************************/

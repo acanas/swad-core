@@ -259,11 +259,11 @@ void Pwd_PutLinkToSendNewPasswd (void)
   {
    extern const char *Txt_Forgotten_password;
 
-   Lay_PutContextualLink (ActReqSndNewPwd,NULL,
-                          Pwd_PutLinkToSendNewPasswdParams,
-                          "key.svg",
-                          Txt_Forgotten_password,Txt_Forgotten_password,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqSndNewPwd,NULL,
+				  Pwd_PutLinkToSendNewPasswdParams,
+				  "key.svg",
+				  Txt_Forgotten_password,
+				  Txt_Forgotten_password);
   }
 
 static void Pwd_PutLinkToSendNewPasswdParams (void)

@@ -824,10 +824,9 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
 
    /***** Put icon to reset game *****/
-   Lay_PutContextualLink (ActReqRstGam,NULL,Gam_PutParams,
-                          "recycle.svg",
-                          Txt_Reset,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActReqRstGam,NULL,Gam_PutParams,
+				  "recycle.svg",
+				  Txt_Reset);
 
    /***** Put icon to hide/show game *****/
    if (Visible)
@@ -840,16 +839,15 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
 
    if (ShowOnlyThisGame)
       /***** Put icon to show first question *****/
-      Lay_PutContextualLink (ActPlyGam1stQst,NULL,Gam_PutParamsToPlayGame1stQst,
-			     "play.svg",
-			     Txt_Play,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActPlyGam1stQst,NULL,
+				     Gam_PutParamsToPlayGame1stQst,
+				     "play.svg",
+				     Txt_Play);
    else
       /***** Put icon to play game *****/
-      Lay_PutContextualLink (ActPlyGam,NULL,Gam_PutParams,
-			     "play.svg",
-			     Txt_Play,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActPlyGam,NULL,Gam_PutParams,
+				     "play.svg",
+				     Txt_Play);
   }
 
 /*****************************************************************************/
@@ -2901,10 +2899,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Move_up_X,
 		   StrNumQst);
-	 Lay_PutContextualLink (ActUp_GamQst,NULL,Gam_PutParamsOneQst,
-				"arrow-up.svg",
-				Gbl.Title,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,NULL,Gam_PutParamsOneQst,
+				        "arrow-up.svg",
+					Gbl.Title);
 	}
       else
          Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -2915,10 +2912,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Move_down_X,
 		   StrNumQst);
-	 Lay_PutContextualLink (ActDwnGamQst,NULL,Gam_PutParamsOneQst,
-				"arrow-down.svg",
-				Gbl.Title,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,NULL,Gam_PutParamsOneQst,
+				        "arrow-down.svg",
+					Gbl.Title);
 	}
       else
          Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);

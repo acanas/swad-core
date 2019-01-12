@@ -412,10 +412,10 @@ static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action)
    extern const char *Txt_Test_results;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,NULL,NULL,
-                          "tasks.svg",
-	                  Txt_Test_results,Txt_Test_results,
-		          NULL);
+   Lay_PutContextualLinkIconText (Action,NULL,NULL,
+				  "tasks.svg",
+				  Txt_Test_results,
+				  Txt_Test_results);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1454,10 +1454,9 @@ static void Tst_PutIconsTests (void)
 
       /***** Put form to go to test configuration *****/
       if (Gbl.Action.Act != ActCfgTst)
-	 Lay_PutContextualLink (ActCfgTst,NULL,NULL,
-				"cog.svg",
-				Txt_Configure,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActCfgTst,NULL,NULL,
+				        "cog.svg",
+					Txt_Configure);
      }
 
    /***** Put icon to show a figure *****/
@@ -1888,12 +1887,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Tag_X_not_allowed_Click_to_allow_it,
 	     TagTxt);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />",
-            Gbl.Prefs.URLIcons,
-            Gbl.Title,
-            Gbl.Title);
+   Ico_PutIconLink ("eye-slash.svg",Gbl.Title);
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -1912,12 +1906,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Tag_X_allowed_Click_to_disable_it,
 	     TagTxt);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />",
-            Gbl.Prefs.URLIcons,
-            Gbl.Title,
-            Gbl.Title);
+   Ico_PutIconLink ("eye.svg",Gbl.Title);
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -7966,12 +7955,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
 						              ActSeeOneTstResOth);
 	    Tst_PutParamTstCod (TstCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/tasks.svg\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO16x16\" />",
-		     Gbl.Prefs.URLIcons,
-		     Txt_View_test,
-		     Txt_View_test);
+	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
 	    Frm_EndForm ();
 	   }
 	 fprintf (Gbl.F.Out,"</td>"

@@ -269,10 +269,9 @@ void Cla_PutIconToViewClassrooms (void)
   {
    extern const char *Txt_Classrooms;
 
-   Lay_PutContextualLink (ActSeeCla,NULL,NULL,
-                          "classroom.svg",
-                          Txt_Classrooms,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeCla,NULL,NULL,
+                                  "classroom.svg",
+                                  Txt_Classrooms);
   }
 
 /*****************************************************************************/

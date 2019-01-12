@@ -136,10 +136,11 @@ void Prf_PutLinkMyPublicProfile (void)
   {
    extern const char *Txt_My_public_profile;
 
-   Lay_PutContextualLink (ActSeeOthPubPrf,NULL,Usr_PutParamMyUsrCodEncrypted,
-                          "user.svg",
-                          Txt_My_public_profile,Txt_My_public_profile,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
+				  Usr_PutParamMyUsrCodEncrypted,
+				  "user.svg",
+				  Txt_My_public_profile,
+				  Txt_My_public_profile);
   }
 
 /*****************************************************************************/
@@ -150,10 +151,10 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
   {
    extern const char *Txt_Another_user_s_profile;
 
-   Lay_PutContextualLink (ActReqOthPubPrf,NULL,NULL,
-                          "user.svg",
-                          Txt_Another_user_s_profile,Txt_Another_user_s_profile,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,NULL,
+				  "user.svg",
+				  Txt_Another_user_s_profile,
+				  Txt_Another_user_s_profile);
   }
 
 /*****************************************************************************/

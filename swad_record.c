@@ -995,10 +995,10 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Lay_PutContextualLink (ActEdiRecFie,NULL,NULL,
-                          "pen.svg",
-                          Txt_Edit_record_fields,Txt_Edit_record_fields,
-		          NULL);
+   Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,NULL,
+				  "pen.svg",
+				  Txt_Edit_record_fields,
+				  Txt_Edit_record_fields);
   }
 
 /*****************************************************************************/
@@ -2549,45 +2549,40 @@ static void Rec_PutIconsCommands (void)
 
       if (ItsMe)
          /***** Button to edit my record card *****/
-	 Lay_PutContextualLink (ActReqEdiRecSha,NULL,NULL,
-	                        "pen.svg",
-			        Txt_Edit_my_personal_data,NULL,
-		                NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,NULL,
+					"pen.svg",
+					Txt_Edit_my_personal_data);
       if (ICanViewUsrProfile)
          /***** Button to view user's profile *****/
-         Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
-			        Rec_PutParamUsrCodEncrypted,
-				"user.svg",
-				ItsMe ? Txt_My_public_profile :
-			                Txt_Another_user_s_profile,NULL,
-				NULL);
+         Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
+				        Rec_PutParamUsrCodEncrypted,
+					"user.svg",
+					ItsMe ? Txt_My_public_profile :
+					        Txt_Another_user_s_profile);
 
       /***** Button to view user's record card *****/
       if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
 	 /* View student's records: common record card and course record card */
-         Lay_PutContextualLink (ActSeeRecOneStd,NULL,
-			        Rec_PutParamUsrCodEncrypted,
-				"card.svg",
-				Txt_View_record_for_this_course,NULL,
-				NULL);
+         Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
+				        Rec_PutParamUsrCodEncrypted,
+					"card.svg",
+					Txt_View_record_for_this_course);
       else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
-	 Lay_PutContextualLink (ActSeeRecOneTch,NULL,
-				Rec_PutParamUsrCodEncrypted,
-				"card.svg",
-				Txt_View_record_and_office_hours,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
+				        Rec_PutParamUsrCodEncrypted,
+					"card.svg",
+					Txt_View_record_and_office_hours);
 
       /***** Button to view user's agenda *****/
       if (ItsMe)
-	 Lay_PutContextualLink (ActSeeMyAgd,NULL,NULL,
-				"calendar.svg",
-				Txt_Show_agenda,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,NULL,
+				        "calendar.svg",
+					Txt_Show_agenda);
       else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
-	 Lay_PutContextualLink (ActSeeUsrAgd,NULL,Rec_PutParamUsrCodEncrypted,
-				"calendar.svg",
-				Txt_Show_agenda,NULL,
-				NULL);
+	 Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
+				        Rec_PutParamUsrCodEncrypted,
+				        "calendar.svg",
+				        Txt_Show_agenda);
 
       /***** Button to admin user *****/
       if (ItsMe ||
@@ -2612,11 +2607,10 @@ static void Rec_PutIconsCommands (void)
 	       NextAction = ActReqMdfOth;
 	       break;
 	   }
-	 Lay_PutContextualLink (NextAction,NULL,
-	                        Rec_PutParamUsrCodEncrypted,
-				"user-cog.svg",
-			        Txt_Administer_user,NULL,
-		                NULL);
+	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+				        Rec_PutParamUsrCodEncrypted,
+					"user-cog.svg",
+					Txt_Administer_user);
 	}
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// A course is selected
@@ -2627,45 +2621,42 @@ static void Rec_PutIconsCommands (void)
 	    if (Usr_CheckIfICanViewTst (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
-		  Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
-					 "check.svg",
-					 Txt_View_test_results,NULL,
-					 NULL);
+		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,NULL,
+					         "check.svg",
+						 Txt_View_test_results);
 	       else	// Not me
-		  Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
-					 "check.svg",
-					 Txt_View_test_results,NULL,
-					 NULL);
+		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstRes,NULL,
+						 Rec_PutParamsStudent,
+					         "check.svg",
+						 Txt_View_test_results);
 	      }
 
 	    /***** Button to view student's assignments and works *****/
 	    if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
-		  Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
-					 "folder-open.svg",
-					 Txt_View_homework,NULL,
-					 NULL);
-	       else	// Not me						// I am not a student in current course
-		  Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
-					 "folder-open.svg",
-					 Txt_View_homework,NULL,
-					 NULL);
+		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,NULL,
+						 "folder-open.svg",
+						 Txt_View_homework);
+	       else	// Not me, I am not a student in current course
+		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
+						 Rec_PutParamsWorks,
+					         "folder-open.svg",
+						 Txt_View_homework);
 	      }
 
 	    /***** Button to view student's attendance *****/
 	    if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
-		  Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
-					 "calendar-check.svg",
-					 Txt_View_attendance,NULL,
-					 NULL);
+		  Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,NULL,
+						 "calendar-check.svg",
+						 Txt_View_attendance);
 	       else	// Not me
-		  Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
-					 "calendar-check.svg",
-					 Txt_View_attendance,NULL,
-					 NULL);
+		  Lay_PutContextualLinkOnlyIcon (ActSeeLstStdAtt,NULL,
+						 Rec_PutParamsStudent,
+						 "calendar-check.svg",
+						 Txt_View_attendance);
 	      }
            }
 	}
@@ -2674,10 +2665,9 @@ static void Rec_PutIconsCommands (void)
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,Rec_PutParamUsrCodEncrypted);
 
       /***** Button to send a message *****/
-      Lay_PutContextualLink (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
-			     "envelope.svg",
-			     Txt_Write_a_message,NULL,
-		             NULL);
+      Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
+				     "envelope.svg",
+				     Txt_Write_a_message);
 
       /***** Button to follow / unfollow *****/
       if (!ItsMe)	// Not me
@@ -2685,15 +2675,15 @@ static void Rec_PutIconsCommands (void)
 	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 				       Gbl.Record.UsrDat->UsrCod))
 	    // I follow user
-	    Lay_PutContextualLink (ActUnfUsr,NULL,Rec_PutParamUsrCodEncrypted,
-				   "user-check.svg",
-				   Txt_Following_unfollow,NULL,
-				   NULL);	// Put button to unfollow, even if I can not view user's profile
+	    Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
+					   Rec_PutParamUsrCodEncrypted,
+					   "user-check.svg",
+					   Txt_Following_unfollow);	// Put button to unfollow, even if I can not view user's profile
 	 else if (ICanViewUsrProfile)
-	    Lay_PutContextualLink (ActFolUsr,NULL,Rec_PutParamUsrCodEncrypted,
-				   "user-plus.svg",
-				   Txt_Follow,NULL,
-				   NULL);	// Put button to follow
+	    Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
+					   Rec_PutParamUsrCodEncrypted,
+					   "user-plus.svg",
+					   Txt_Follow);			// Put button to follow
 	}
 
       /***** Button to change user's photo *****/

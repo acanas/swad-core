@@ -198,10 +198,10 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLink (ActReqSignUp,NULL,NULL,
-                          "hand-point-up.svg",
-                          Txt_Sign_up,Txt_Sign_up,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqSignUp,NULL,NULL,
+				  "hand-point-up.svg",
+				  Txt_Sign_up,
+				  Txt_Sign_up);
   }
 
 /*****************************************************************************/
@@ -780,10 +780,10 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLink (ActReqRemOldUsr,NULL,NULL,
-                          "trash.svg",
-                          Txt_Eliminate_old_users,Txt_Eliminate_old_users,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,NULL,
+				  "trash.svg",
+				  Txt_Eliminate_old_users,
+				  Txt_Eliminate_old_users);
   }
 
 /*****************************************************************************/
@@ -1862,10 +1862,10 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
-   Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,NULL,
-                          "trash.svg",
-                          Txt_Remove_all_students,Txt_Remove_all_students,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,NULL,
+				  "trash.svg",
+				  Txt_Remove_all_students,
+				  Txt_Remove_all_students);
   }
 
 /*****************************************************************************/
@@ -3088,10 +3088,10 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    const char *TitleText = Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged] ? Txt_Administer_one_user :
                         	                                             Txt_Administer_me;
 
-   Lay_PutContextualLink (NextAction,NULL,NULL,
-                          "user-cog.svg",
-                          TitleText,TitleText,
-                          NULL);
+   Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
+				  "user-cog.svg",
+				  TitleText,
+				  TitleText);
   }
 
 /*****************************************************************************/
@@ -3125,10 +3125,10 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 	 TitleText = NULL;
 	 Lay_ShowErrorAndExit ("Wrong role.");
      }
-   Lay_PutContextualLink (NextAction,NULL,NULL,
-	                  "users-cog.svg",
-	                  TitleText,TitleText,
-                          NULL);
+   Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
+				  "users-cog.svg",
+				  TitleText,
+				  TitleText);
   }
 
 /*****************************************************************************/

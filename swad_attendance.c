@@ -535,10 +535,10 @@ static void Att_PutFormToListMyAttendance (void)
   {
    extern const char *Txt_Attendance_list;
 
-   Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
-                          "list-ol.svg",
-                          Txt_Attendance_list,Txt_Attendance_list,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActSeeLstMyAtt,NULL,NULL,
+				  "list-ol.svg",
+				  Txt_Attendance_list,
+				  Txt_Attendance_list);
   }
 
 /*****************************************************************************/
@@ -549,10 +549,11 @@ static void Att_PutFormToListStdsAttendance (void)
   {
    extern const char *Txt_Attendance_list;
 
-   Lay_PutContextualLink (ActReqLstStdAtt,NULL,Att_PutFormToListStdsParams,
-                          "list-ol.svg",
-                          Txt_Attendance_list,Txt_Attendance_list,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActReqLstStdAtt,NULL,
+				  Att_PutFormToListStdsParams,
+				  "list-ol.svg",
+				  Txt_Attendance_list,
+				  Txt_Attendance_list);
   }
 
 static void Att_PutFormToListStdsParams (void)

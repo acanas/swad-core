@@ -192,7 +192,6 @@ static void Asg_PutHeadForSeeing (bool PrintView)
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Assignment;
-   extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
 
@@ -228,15 +227,11 @@ static void Asg_PutHeadForSeeing (bool PrintView)
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"CENTER_MIDDLE\">"
-		      "%s"
-		      "</th>"
 		      "<th class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "</tr>",
 	    Txt_Assignment,
-	    Txt_Upload_files_QUESTION,
 	    Txt_Folder);
   }
 
@@ -347,9 +342,6 @@ void Asg_PrintOneAssignment (void)
 static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK];
-   extern const char *Txt_Yes;
-   extern const char *Txt_No;
    static unsigned UniqueId = 0;
    struct Assignment Asg;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -420,25 +412,6 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
             Asg.Title);
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Send work? */
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",
-            (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
-        	                              "DAT");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<img src=\"%s/file.svg\""
-                      " alt=\"%s\" title=\"%s\" class=\"%sICO16x16\" />"
-                      "<br />%s"
-                      "</td>",
-            Gbl.Prefs.URLIcons,
-            Txt_ASSIGNMENT_TYPES[Asg.SendWork],
-            Txt_ASSIGNMENT_TYPES[Asg.SendWork],
-            (Asg.SendWork == Asg_SEND_WORK) ? "" :
-        	                              "ICO_HIDDEN ",
-            (Asg.SendWork == Asg_SEND_WORK) ? Txt_Yes :
-        	                              Txt_No);
-
    /* Assignment folder */
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP");
    if (!PrintView)
@@ -466,7 +439,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -524,21 +497,13 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Upload_file_or_create_folder_in_FOLDER,
 	        Asg->Folder);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-			 " src=\"%s/folder-open-plus16x16.gif\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
-	       Gbl.Prefs.URLIcons,
-	       Gbl.Title,
-	       Gbl.Title);
+      Ico_PutIconLink ("folder-open-green.svg",Gbl.Title);
       Frm_EndForm ();
      }
-   else				// I can't send files to this assignment folder
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20\" />",
-	       Gbl.Prefs.URLIcons,
-	       ICanSendFiles ? "folder-open16x16.gif" :
-		               "folder-closed16x16.gif",
-	       Txt_Folder,Txt_Folder);
+   else			// Sending of files disabled
+      Ico_PutIconOff (ICanSendFiles ? "folder-open-green.svg" :
+				      "folder-red.svg",
+		      Txt_Folder);
 
    /***** Folder name *****/
    fprintf (Gbl.F.Out,"%s",Asg->Folder);

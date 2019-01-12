@@ -982,10 +982,9 @@ static void Ins_PutIconToViewInstitutions (void)
   {
    extern const char *Txt_Institutions;
 
-   Lay_PutContextualLink (ActSeeIns,NULL,NULL,
-                          "university.svg",
-                          Txt_Institutions,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeIns,NULL,NULL,
+				  "university.svg",
+				  Txt_Institutions);
   }
 
 /*****************************************************************************/

@@ -380,12 +380,8 @@ static void Prj_ShowFormToFilterByMy_All (void)
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,WhoseProjectsImage[My_All],
-	       Txt_PROJECT_MY_ALL_PROJECTS[My_All],
-	       Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
+      Ico_PutPrefIconLink (WhoseProjectsImage[My_All],
+	                   Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -419,12 +415,8 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,PreassignedNonpreassigImage[PreNon],
-	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon],
-	       Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon]);
+      Ico_PutPrefIconLink (PreassignedNonpreassigImage[PreNon],
+	                   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -463,13 +455,8 @@ static void Prj_ShowFormToFilterByHidden (void)
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,
-	       HiddenVisiblImage[HidVis],
-	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis],
-	       Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
+      Ico_PutPrefIconLink (HiddenVisiblImage[HidVis],
+	                   Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -847,10 +834,9 @@ static void Prj_PutIconToShowAllData (void)
   {
    extern const char *Txt_Show_all_data_in_a_table;
 
-   Lay_PutContextualLink (ActSeeTblAllPrj,NULL,Prj_PutCurrentParams,
-			  "table.svg",
-			  Txt_Show_all_data_in_a_table,NULL,
-		          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,Prj_PutCurrentParams,
+			          "table.svg",
+				  Txt_Show_all_data_in_a_table);
   }
 
 /*****************************************************************************/
@@ -1677,10 +1663,10 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
 	      {
 	       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-	       Lay_PutContextualLink (ActionReqRemUsr[RoleInProject],NULL,Prj_PutCurrentParams,
-				      "trash.svg",
-				      Txt_Remove,NULL,
-				      NULL);
+	       Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
+					      Prj_PutCurrentParams,
+					      "trash.svg",
+					      Txt_Remove);
 	       fprintf (Gbl.F.Out,"</td>");
 	      }
 

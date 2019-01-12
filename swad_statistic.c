@@ -752,10 +752,10 @@ static void Sta_PutLinkToCourseHits (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
-				   "chart-line.svg",
-				   Txt_Visits_to_course,Txt_Visits_to_course,
-				   NULL);
+	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,NULL,
+					   "chart-line.svg",
+					   Txt_Visits_to_course,
+					   Txt_Visits_to_course);
 	    break;
 	 default:
 	    break;
@@ -770,10 +770,10 @@ static void Sta_PutLinkToGlobalHits (void)
   {
    extern const char *Txt_Global_visits;
 
-   Lay_PutContextualLink (ActReqAccGbl,NULL,NULL,
-			  "chart-line.svg",
-			  Txt_Global_visits,Txt_Global_visits,
-			  NULL);
+   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,NULL,
+				  "chart-line.svg",
+				  Txt_Global_visits,
+				  Txt_Global_visits);
   }
 
 /*****************************************************************************/
@@ -4133,10 +4133,9 @@ void Sta_PutIconToShowFigure (void)
   {
    extern const char *Txt_Show_statistic;
 
-   Lay_PutContextualLink (ActSeeUseGbl,NULL,Sta_PutParamsToShowFigure,
-                          "chart-pie.svg",
-                          Txt_Show_statistic,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,Sta_PutParamsToShowFigure,
+				  "chart-pie.svg",
+				  Txt_Show_statistic);
   }
 
 /*****************************************************************************/
@@ -9665,10 +9664,10 @@ void Con_PutLinkToLastClicks (void)
   {
    extern const char *Txt_Last_clicks;
 
-   Lay_PutContextualLink (ActLstClk,NULL,NULL,
-                          "mouse-pointer.svg",
-                          Txt_Last_clicks,Txt_Last_clicks,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActLstClk,NULL,NULL,
+				  "mouse-pointer.svg",
+				  Txt_Last_clicks,
+				  Txt_Last_clicks);
   }
 
 /*****************************************************************************/

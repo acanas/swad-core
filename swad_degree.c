@@ -1418,10 +1418,9 @@ void Deg_PutIconToViewDegrees (void)
   {
    extern const char *Txt_Degrees;
 
-   Lay_PutContextualLink (ActSeeDeg,NULL,NULL,
-                          "graduation-cap.svg",
-                          Txt_Degrees,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeDeg,NULL,NULL,
+				  "graduation-cap.svg",
+				  Txt_Degrees);
   }
 
 /*****************************************************************************/

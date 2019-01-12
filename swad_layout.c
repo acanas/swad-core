@@ -1089,17 +1089,72 @@ static void Lay_ShowRightColumn (void)
 /**************** Show an icon with a link in contextual menu ****************/
 /*****************************************************************************/
 
-void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
-                            void (*FuncParams) (),
-                            const char *Icon,
-                            const char *Title,const char *Text,
-                            const char *OnSubmit)
+void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
+				    void (*FuncParams) (),
+				    const char *Icon,
+				    const char *Title)
+  {
+   /***** Start form *****/
+   Frm_StartFormAnchor (NextAction,Anchor);
+   if (FuncParams)
+      FuncParams ();
+
+   /***** Put icon with link *****/
+   Ico_PutIconLink (Icon,Title);
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/**************** Show an icon with a link in contextual menu ****************/
+/*****************************************************************************/
+
+void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
+				    void (*FuncParams) (),
+				    const char *Icon,
+				    const char *Title,
+				    const char *Text)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
    /***** Separator *****/
-   if (Text)
-      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+				// jumping to the next line on narrow screens
+
+   /***** Start form *****/
+   Frm_StartFormAnchor (NextAction,Anchor);
+   if (FuncParams)
+      FuncParams ();
+
+   /***** Put icon and text with link *****/
+   Frm_LinkFormSubmit (Title,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+   Ico_PutIconWithText (Icon,Title,Text);
+   fprintf (Gbl.F.Out,"</a>");
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** Separator *****/
+   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+				// jumping to the next line on narrow screens
+  }
+
+/*****************************************************************************/
+/**************** Show an icon with a link in contextual menu ****************/
+/*****************************************************************************/
+
+void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,
+					       void (*FuncParams) (),
+					       const char *Icon,
+					       const char *Title,
+					       const char *Text,
+					       const char *OnSubmit)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+
+   /***** Separator *****/
+   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
    /***** Start form *****/
@@ -1108,17 +1163,15 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
       FuncParams ();
 
    /***** Put icon with link *****/
-   Ico_PutIconLink (Icon,Title,Text,
-                    Text ? The_ClassFormBold[Gbl.Prefs.Theme] :
-                	   NULL,
-                    OnSubmit);
+   Frm_LinkFormSubmit (Title,The_ClassFormBold[Gbl.Prefs.Theme],OnSubmit);
+   Ico_PutIconWithText (Icon,Title,Text);
+   fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
    Frm_EndForm ();
 
    /***** Separator *****/
-   if (Text)
-      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+   fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
   }
 

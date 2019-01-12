@@ -288,10 +288,9 @@ void DT_PutIconToViewDegreeTypes (void)
   {
    extern const char *Txt_Types_of_degree;
 
-   Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
-                          "sitemap.svg",
-                          Txt_Types_of_degree,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,NULL,
+				  "sitemap.svg",
+				  Txt_Types_of_degree);
   }
 
 /*****************************************************************************/

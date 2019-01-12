@@ -371,23 +371,22 @@ void Ntf_ShowMyNotifications (void)
 
    if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
       /* Put form to change notification preferences */
-      Lay_PutContextualLink (ActMrkNtfSee,NULL,NULL,
-                             "eye.svg",
-			     Txt_Mark_all_notifications_as_read,
-			     Txt_Mark_all_NOTIFICATIONS_as_read,
-                             NULL);
+      Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,NULL,
+				     "eye.svg",
+				     Txt_Mark_all_notifications_as_read,
+				     Txt_Mark_all_NOTIFICATIONS_as_read);
 
    /* Put form to change notification preferences */
-   Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
-                          "cog.svg",
-			  Txt_Change_preferences,Txt_Settings,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActEdiPrf,NULL,NULL,
+				  "cog.svg",
+				  Txt_Change_preferences,
+				  Txt_Settings);
 
    /* Put form to view allowed mail domains */
-   Lay_PutContextualLink (ActSeeMai,NULL,NULL,
-                          "envelope.svg",
-			  Txt_Email_domains_allowed_for_notifications,Txt_Domains,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActSeeMai,NULL,NULL,
+				  "envelope.svg",
+				  Txt_Email_domains_allowed_for_notifications,
+				  Txt_Domains);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -509,23 +508,13 @@ void Ntf_ShowMyNotifications (void)
 
          if (PutLink)
            {
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO16x16\" />",
-		     Gbl.Prefs.URLIcons,
-		     Ntf_Icons[NotifyEvent],
-		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            Ico_PutIconLink (Ntf_Icons[NotifyEvent],
+        	             Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 	    Frm_EndForm ();
            }
          else
-            fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICO16x16\" />",
-                     Gbl.Prefs.URLIcons,
-                     Ntf_Icons[NotifyEvent],
-                     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-                     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            Ico_PutIconOff (Ntf_Icons[NotifyEvent],
+        	            Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write event type */

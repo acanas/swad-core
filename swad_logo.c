@@ -219,11 +219,10 @@ void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
-   Lay_PutContextualLink (Action,NULL,NULL,
-                          "shield-alt.svg",
-                          LogoExists ? Txt_Change_logo :
-		                       Txt_Upload_logo,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (Action,NULL,NULL,
+				  "shield-alt.svg",
+				  LogoExists ? Txt_Change_logo :
+					       Txt_Upload_logo);
   }
 
 /*****************************************************************************/
@@ -279,10 +278,10 @@ void Log_RequestLogo (Sco_Scope_t Scope)
      {
       /***** Form to remove photo *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Lay_PutContextualLink (ActionRem,NULL,NULL,
-                             "trash.svg",
-                             Txt_Remove_logo,Txt_Remove_logo,
-                             NULL);
+      Lay_PutContextualLinkIconText (ActionRem,NULL,NULL,
+				     "trash.svg",
+				     Txt_Remove_logo,
+				     Txt_Remove_logo);
       fprintf (Gbl.F.Out,"</div>");
      }
 

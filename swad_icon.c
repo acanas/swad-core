@@ -115,6 +115,7 @@ void Ico_PutIconsToSelectIconSet (void)
    extern const char *Hlp_PROFILE_Preferences_icons;
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
+   char Icon[PATH_MAX + 1];
 
    Box_StartBox (NULL,Txt_Icons,Ico_PutIconsIconSet,
                  Hlp_PROFILE_Preferences_icons,Box_NOT_CLOSABLE);
@@ -128,13 +129,11 @@ void Ico_PutIconsToSelectIconSet (void)
         	                              "PREF_OFF");
       Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/cog.svg\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICOx25\" />",
-               Gbl.Prefs.URLIcons,
-               Cfg_ICON_FOLDER_ICON_SETS,
-               Ico_IconSetId[IconSet],
-               Ico_IconSetNames[IconSet],
-               Ico_IconSetNames[IconSet]);
+      snprintf (Icon,sizeof (Icon),
+		"%s/%s/cog.svg",
+		Cfg_ICON_FOLDER_ICON_SETS,
+                Ico_IconSetId[IconSet]);
+      Ico_PutPrefIconLink (Icon,Ico_IconSetNames[IconSet]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -222,97 +221,132 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
 				 void (*FuncParams) (),
 				 const char *Txt)
   {
-   Lay_PutContextualLink (NextAction,Anchor,FuncParams,
-                          "plus.svg",
-                          Txt,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
+				  "plus.svg",
+				  Txt);
   }
 
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Remove;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "trash.svg",
-                          Txt_Remove,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "trash.svg",
+				  Txt_Remove);
   }
 
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "pen.svg",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "pen.svg",
+				  Txt_Edit);
   }
 
 void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Files;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-			  "folder-open.svg",
-			  Txt_Files,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "folder-open.svg",
+				  Txt_Files);
   }
 
 void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_View;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-			  "eye.svg",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "eye.svg",
+				  Txt_View);
   }
 
 void Ico_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Hide;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "eye.svg",
-                          Txt_Hide,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "eye.svg",
+				  Txt_Hide);
   }
 
 void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Show;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "eye-slash.svg",
-                          Txt_Show,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "eye-slash.svg",
+				  Txt_Show);
   }
 
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (NextAction,NULL,FuncParams,
-                          "print.svg",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "print.svg",
+				  Txt_Print);
+  }
+
+/*****************************************************************************/
+/**************** Show an icon inside a div (without text) *******************/
+/*****************************************************************************/
+
+void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+		      "<img src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"CONTEXT_ICO_16x16\" />"
+		      "</div>",
+	    DivClass,
+	    Gbl.Prefs.URLIcons,Icon,
+	    Title,Title);
+  }
+
+/*****************************************************************************/
+/*********** Show an icon with a link inside a div (without text) ************/
+/*****************************************************************************/
+
+void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+		      "<input type=\"image\""
+		      " src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16\" />"
+		      "</div>",
+	    DivClass,
+	    Gbl.Prefs.URLIcons,Icon,
+	    Title,Title);
   }
 
 /*****************************************************************************/
 /****************** Show an icon with a link (without text) ******************/
 /*****************************************************************************/
 
-void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
-                      const char *LinkStyle,const char *OnSubmit)
+void Ico_PutIconLink (const char *Icon,const char *Title)
   {
-   Frm_LinkFormSubmit (Title,LinkStyle,OnSubmit);
-   if (Text)
-      Ico_PutIconWithText (Icon,Title,Text);
-   else
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-			 " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO\" />",
-	       Gbl.Prefs.URLIcons,Icon,Title,Title);
-   fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16\" />",
+	    Gbl.Prefs.URLIcons,Icon,
+	    Title,Title);
+  }
+
+/*****************************************************************************/
+/************************** Show a preference selector ***********************/
+/*****************************************************************************/
+
+void Ico_PutPrefIconLink (const char *Icon,const char *Title)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO_HIGHLIGHT ICOx25\""
+		      " style=\"margin:0 auto;\"\" />",
+	    Gbl.Prefs.URLIcons,Icon,
+	    Title,Title);
   }
 
 /*****************************************************************************/
@@ -322,7 +356,7 @@ void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
 void Ico_PutIconOff (const char *Icon,const char *Alt)
   {
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO\" />",
+	              " class=\"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16\" />",
             Gbl.Prefs.URLIcons,Icon,Alt,Alt);
   }
 
@@ -335,7 +369,7 @@ void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
    /***** Print icon and optional text *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO\" />",
+	              " class=\"CONTEXT_ICO_x16\" />",
             Gbl.Prefs.URLIcons,Icon,Alt,Text ? Text :
         	                               Alt);
    if (Text)
@@ -354,10 +388,10 @@ void Ico_PutCalculateIcon (const char *Alt)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
+		      " class=\"CONTEXT_ICO_16x16\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" style=\"display:none;\" />"	// Animated icon hidden
+		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />"	// Animated icon hidden
 		      "</div>"
 		      "</a>",
 	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Alt,Alt,
@@ -406,12 +440,7 @@ void Ico_PutIconRemove (void)
   {
    extern const char *Txt_Remove;
 
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/trash.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Remove,
-	    Txt_Remove);
+   Ico_PutIconLink ("trash.svg",Txt_Remove);
   }
 
 /*****************************************************************************/
@@ -422,12 +451,7 @@ void Ico_PutIconCut (void)
   {
    extern const char *Txt_Cut;
 
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Cut,
-	    Txt_Cut);
+   Ico_PutIconLink ("cut.svg",Txt_Cut);
   }
 
 /*****************************************************************************/
@@ -438,10 +462,5 @@ void Ico_PutIconPaste (void)
   {
    extern const char *Txt_Paste;
 
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO16x16\" />",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Paste,
-	    Txt_Paste);
+   Ico_PutIconLink ("paste.svg",Txt_Paste);
   }

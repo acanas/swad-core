@@ -148,29 +148,23 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_RIGHT\">");
 
    if (HelpLink)	// Link to help
-      fprintf (Gbl.F.Out,"<a href=\"%s%s\" target=\"_blank\">"
-                         "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
-	                 "<img src=\"%s/question.svg\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_ICO\" />"
-                         "</div>"
-                         "</a>",
-	       Hlp_WIKI,HelpLink,
-               Gbl.Prefs.URLIcons,
-               Txt_Help,Txt_Help);
+     {
+      fprintf (Gbl.F.Out,"<a href=\"%s%s\" target=\"_blank\">",
+	       Hlp_WIKI,HelpLink);
+      Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
+		      "question.svg",Txt_Help);
+      fprintf (Gbl.F.Out,"</a>");
+     }
 
    if (Closable == Box_CLOSABLE)	// Icon to close the box
+     {
       fprintf (Gbl.F.Out,"<a href=\"\""
-			 " onclick=\"toggleDisplay('%s');return false;\" />"
-                         "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
-			 "<img src=\"%s/close.svg\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"CONTEXT_ICO\" />"
-                         "</div>"
-			 "</a>",
-	       IdFrame,
-	       Gbl.Prefs.URLIcons,
-	       Txt_Close,Txt_Close);
+			 " onclick=\"toggleDisplay('%s');return false;\" />",
+	       IdFrame);
+      Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
+		      "close.svg",Txt_Close);
+      fprintf (Gbl.F.Out,"</a>");
+     }
 
    fprintf (Gbl.F.Out,"</div>");
 

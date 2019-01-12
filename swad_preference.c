@@ -232,6 +232,7 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
+   char Icon[32 + 1];
 
    Box_StartBox (NULL,Txt_Columns,Pre_PutIconsSideColumns,
                  Hlp_PROFILE_Preferences_columns,Box_NOT_CLOSABLE);
@@ -245,12 +246,10 @@ static void Pre_PutIconsToSelectSideCols (void)
         	                                "PREF_OFF");
       Frm_StartForm (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x25\" />",
-               Gbl.Prefs.URLIcons,
-               SideCols >> 1,SideCols & 1,
-               Txt_LAYOUT_SIDE_COLUMNS[SideCols],
-               Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+      snprintf (Icon,sizeof (Icon),
+		"layout%u%u_32x20.gif",
+                SideCols >> 1,SideCols & 1);
+      Ico_PutPrefIconLink (Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }

@@ -1545,14 +1545,9 @@ static void Grp_ListGroupsForEdition (void)
                    Grp->Open ? Txt_Group_X_open_click_to_close_it :
                                Txt_Group_X_closed_click_to_open_it,
                    Grp->GrpName);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICOx16\" />",
-                  Gbl.Prefs.URLIcons,
-                  Grp->Open ? "lock-open.svg" :
-                	      "lock.svg",
-                  Gbl.Title,
-                  Gbl.Title);
+	 Ico_PutIconLink (Grp->Open ? "lock-open.svg" :
+                	              "lock.svg",
+                          Gbl.Title);
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -1566,14 +1561,9 @@ static void Grp_ListGroupsForEdition (void)
                    Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
                                     Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
                    Grp->GrpName);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICOx16\" />",
-                  Gbl.Prefs.URLIcons,
-                  Grp->FileZones ? "folder-open-green.svg" :
-                	           "folder-red.svg",
-                  Gbl.Title,
-                  Gbl.Title);
+	 Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
+                	                   "folder-red.svg",
+                          Gbl.Title);
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -5095,14 +5085,9 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
       Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,
-	       WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :
-		                                 "sitemap.svg",
-	       Txt_GROUP_WHICH_GROUPS[WhichGrps],
-	       Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+      Ico_PutPrefIconLink (WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :
+		                                             "sitemap.svg",
+			   Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }

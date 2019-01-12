@@ -2082,7 +2082,7 @@ const char *Txt_Assignment =
 #elif L==9	// pt
 	"Atividade";
 #endif
-
+/*
 const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK] =
 	{
 #if   L==1	// ca
@@ -2125,7 +2125,7 @@ const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK] =
 	"&Eacute; obrigat&oacute;ria a apresenta&ccedil;&atilde;o de trabalhos (arquivos)"
 #endif
 	};
-
+*/
 const char *Txt_Assignment_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La activitat <strong>%s</strong> ara est&agrave; oculta.";

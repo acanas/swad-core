@@ -346,6 +346,8 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Un administrador de centro ahora no tiene permisos para editar horario asignatura, pero le sale el icono de editar
 //	 O le damos permisos o quitamos el icono de editar. Comprobar para admin. de titulaciones.
 
+// TODO: Chequear todas las directivas <label>
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -365,10 +367,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.31.6 (2019-01-11)"
-#define CSS_FILE		"swad18.31.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.32 (2019-01-12)"
+#define CSS_FILE		"swad18.32.css"
 #define JS_FILE			"swad17.17.1.js"
 /*
+	Version 18.32:    Jan 12, 2019 	Code refactoring related to icons. (239311 lines)
 	Version 18.31.6:  Jan 11, 2019 	Fixed bug in user administration. (239587 lines)
 	Version 18.31.5:  Jan 11, 2019 	Fixed bug in link to my courses. (239583 lines)
 	Version 18.31.4:  Jan 11, 2019 	Option for last clicks is moved to analytics tab. (239587 lines)

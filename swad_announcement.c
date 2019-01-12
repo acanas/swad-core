@@ -316,16 +316,14 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       switch (Status)
 	{
 	 case Ann_ACTIVE_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActHidAnn,NULL,Ann_PutParams,
-				   "eye.svg",
-				   Txt_NOTICE_Active_Mark_as_obsolete,NULL,
-				   NULL);
+	    Lay_PutContextualLinkOnlyIcon (ActHidAnn,NULL,Ann_PutParams,
+				           "eye.svg",
+				           Txt_NOTICE_Active_Mark_as_obsolete);
 	    break;
 	 case Ann_OBSOLETE_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActRevAnn,NULL,Ann_PutParams,
-				   "eye-slash.svg",
-				   Txt_NOTICE_Obsolete_Mark_as_active,NULL,
-				   NULL);
+	    Lay_PutContextualLinkOnlyIcon (ActRevAnn,NULL,Ann_PutParams,
+				           "eye-slash.svg",
+				           Txt_NOTICE_Obsolete_Mark_as_active);
 	    break;
 	}
      }
@@ -360,10 +358,10 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      }
    else
       /***** Put form to mark announcement as seen *****/
-      Lay_PutContextualLink (ActAnnSee,NULL,Ann_PutParams,
-			     "trash.svg",
-			     Txt_Do_not_show_again,Txt_Do_not_show_again,
-			     NULL);
+      Lay_PutContextualLinkIconText (ActAnnSee,NULL,Ann_PutParams,
+				     "trash.svg",
+				     Txt_Do_not_show_again,
+				     Txt_Do_not_show_again);
 
    fprintf (Gbl.F.Out,"</div>");
 

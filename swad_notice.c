@@ -652,16 +652,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
          switch (Status)
            {
             case Not_ACTIVE_NOTICE:
-	       Lay_PutContextualLink (ActHidNot,NULL,Not_PutParams,
-				      "eye.svg",
-				      Txt_NOTICE_Active_Mark_as_obsolete,NULL,
-				      NULL);
+	       Lay_PutContextualLinkOnlyIcon (ActHidNot,NULL,Not_PutParams,
+					      "eye.svg",
+					      Txt_NOTICE_Active_Mark_as_obsolete);
                break;
             case Not_OBSOLETE_NOTICE:
-	       Lay_PutContextualLink (ActRevNot,NULL,Not_PutParams,
-				      "eye-slash.svg",
-				      Txt_NOTICE_Obsolete_Mark_as_active,NULL,
-				      NULL);
+	       Lay_PutContextualLinkOnlyIcon (ActRevNot,NULL,Not_PutParams,
+					      "eye-slash.svg",
+					      Txt_NOTICE_Obsolete_Mark_as_active);
                break;
            }
          Frm_EndForm ();
@@ -728,10 +726,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Put form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Lay_PutContextualLink (ActSeeOneNot,NULL,Not_PutParams,
-			     "ellipsis-h.svg",
-			     Txt_See_full_notice,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,NULL,Not_PutParams,
+				     "ellipsis-h.svg",
+				     Txt_See_full_notice);
       fprintf (Gbl.F.Out,"</div>");
      }
    else

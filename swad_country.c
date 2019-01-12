@@ -1001,10 +1001,9 @@ static void Cty_PutIconToViewCountries (void)
   {
    extern const char *Txt_Countries;
 
-   Lay_PutContextualLink (ActSeeCty,NULL,NULL,
-                          "globe.svg",
-                          Txt_Countries,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeCty,NULL,NULL,
+                                  "globe.svg",
+                                  Txt_Countries);
   }
 
 /*****************************************************************************/

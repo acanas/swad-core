@@ -363,11 +363,12 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
    extern const char *Txt_Show_more_recipients;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActReqMsgUsr,NULL,
-                          Msg_PutParamsShowMorePotentialRecipients,
-			  "users.svg",
-			  Txt_Show_more_recipients,Txt_Show_more_recipients,
-                          "CopyMessageToHiddenFields()");
+   Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
+					  Msg_PutParamsShowMorePotentialRecipients,
+					  "users.svg",
+					  Txt_Show_more_recipients,
+					  Txt_Show_more_recipients,
+					  "CopyMessageToHiddenFields()");
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1872,10 +1873,10 @@ static void Msg_PutLinkToViewBannedUsers(void)
   {
    extern const char *Txt_Banned_users;
 
-   Lay_PutContextualLink (ActLstBanUsr,NULL,NULL,
-                          "lock.svg",
-                          Txt_Banned_users,Txt_Banned_users,
-                          NULL);
+   Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,NULL,
+				  "lock.svg",
+				  Txt_Banned_users,
+				  Txt_Banned_users);
   }
 
 /*****************************************************************************/
@@ -3340,8 +3341,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
                     FromThisCrs ? (Replied ? Txt_Reply_again :
 				             Txt_Reply) :
 				  (Replied ? Txt_Go_to_course_and_reply_again :
-				             Txt_Go_to_course_and_reply),
-	            NULL,NULL,NULL);
+				             Txt_Go_to_course_and_reply));
    Frm_EndForm ();
   }
 
@@ -3388,6 +3388,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
       fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 	{
+         fprintf (Gbl.F.Out,"&nbsp;");
          if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
             // Sender is banned
             Msg_PutFormToUnbanSender (UsrDat);
@@ -3674,12 +3675,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock-open.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICOx16\" style=\"margin-left:12px;\" />",
-            Gbl.Prefs.URLIcons,
-            Txt_Sender_permitted_click_to_ban_him,
-            Txt_Sender_permitted_click_to_ban_him);
+   Ico_PutIconLink ("lock-open.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
 
@@ -3696,12 +3692,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
 	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICOx16\" style=\"margin-left:12px;\" />",
-            Gbl.Prefs.URLIcons,
-            Txt_Sender_banned_click_to_unban_him,
-            Txt_Sender_banned_click_to_unban_him);
+   Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
   }
 
@@ -3875,13 +3866,7 @@ void Msg_ListBannedUsrs (void)
                                "<td class=\"BM\">");
             Frm_StartForm (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            fprintf (Gbl.F.Out,"<input type=\"image\""
-        	               " src=\"%s/lock.svg\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICOx16\" />",
-                     Gbl.Prefs.URLIcons,
-                     Txt_Sender_banned_click_to_unban_him,
-                     Txt_Sender_banned_click_to_unban_him);
+            Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
             Frm_EndForm ();
             fprintf (Gbl.F.Out,"</td>");
 

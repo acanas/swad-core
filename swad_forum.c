@@ -1239,14 +1239,9 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	        Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
 			  Txt_Post_X_banned_Click_to_unban_it,
 	        PstNum);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO16x16\" />",
-	       Gbl.Prefs.URLIcons,
-	       Enabled ? "eye.svg" :
-			 "eye-slash.svg",
-	       Gbl.Title,
-	       Gbl.Title);
+      Ico_PutIconLink (Enabled ? "eye.svg" :
+			         "eye-slash.svg",
+	               Gbl.Title);
       Frm_EndForm ();
      }
    else

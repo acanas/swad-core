@@ -256,10 +256,9 @@ void Lnk_PutIconToViewLinks (void)
   {
    extern const char *Txt_Links;
 
-   Lay_PutContextualLink (ActSeeLnk,NULL,NULL,
-                          "link.svg",
-                          Txt_Links,NULL,
-                          NULL);
+   Lay_PutContextualLinkOnlyIcon (ActSeeLnk,NULL,NULL,
+				  "link.svg",
+				  Txt_Links);
   }
 
 /*****************************************************************************/

@@ -66,8 +66,10 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) (
 void Ico_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ());
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ());
 
-void Ico_PutIconLink (const char *Icon,const char *Title,const char *Text,
-                      const char *LinkStyle,const char *OnSubmit);
+void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title);
+void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title);
+void Ico_PutIconLink (const char *Icon,const char *Title);
+void Ico_PutPrefIconLink (const char *Icon,const char *Title);
 void Ico_PutIconOff (const char *Icon,const char *Alt);
 void Ico_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
 

@@ -199,14 +199,8 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents,
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,
-	       Image[PstFut],
-	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut],
-	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
+      Ico_PutPrefIconLink (Image[PstFut],
+	                   Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -241,14 +235,8 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents,
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,
-	       Image[PrvPub],
-	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub],
-	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
+      Ico_PutPrefIconLink (Image[PrvPub],
+	                   Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -283,14 +271,8 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICOx25\""
-			 " style=\"margin:0 auto;\" />",
-	       Gbl.Prefs.URLIcons,
-	       Image[HidVis],
-	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis],
-	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
+      Ico_PutPrefIconLink (Image[HidVis],
+	                   Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -686,26 +668,23 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    /***** Button to view user's public profile *****/
    if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
 		             &Gbl.Usrs.Other.UsrDat))
-      Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
-                             Usr_PutParamOtherUsrCodEncrypted,
-			     "user.svg",
-			     Txt_Another_user_s_profile,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
+                                     Usr_PutParamOtherUsrCodEncrypted,
+			             "user.svg",
+			             Txt_Another_user_s_profile);
 
    /***** Button to view user's record card *****/
    if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
       /* View student's records: common record card and course record card */
-      Lay_PutContextualLink (ActSeeRecOneStd,NULL,
-                             Usr_PutParamOtherUsrCodEncrypted,
-			     "card.svg",
-			     Txt_View_record_for_this_course,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
+                                     Usr_PutParamOtherUsrCodEncrypted,
+			             "card.svg",
+			             Txt_View_record_for_this_course);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
-      Lay_PutContextualLink (ActSeeRecOneTch,NULL,
-			     Usr_PutParamOtherUsrCodEncrypted,
-			     "card.svg",
-			     Txt_View_record_and_office_hours,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
+			             Usr_PutParamOtherUsrCodEncrypted,
+			             "card.svg",
+			             Txt_View_record_and_office_hours);
   }
 
 /*****************************************************************************/
@@ -865,15 +844,15 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
 
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)
-      Lay_PutContextualLink (ActPrvEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-			     "lock-open.svg",
-			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
+				     Agd_PutCurrentParamsMyAgenda,
+			             "lock-open.svg",
+			             Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private);
    else
-      Lay_PutContextualLink (ActPubEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-			     "lock.svg",
-			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
-			     NULL);
+      Lay_PutContextualLinkOnlyIcon (ActPubEvtMyAgd,NULL,
+	                             Agd_PutCurrentParamsMyAgenda,
+			             "lock.svg",
+			             Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses);
   }
 
 /*****************************************************************************/

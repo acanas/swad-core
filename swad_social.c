@@ -1879,7 +1879,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       Frm_LinkFormSubmitUnique (Txt_SOCIAL_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_ICO\" />"
+	                 " class=\"CONTEXT_ICO_x16\" />"
 	                 "&nbsp;%s"
 	                 "</a>",
             Gbl.Prefs.URLIcons,Soc_Icons[SocNot->NoteType],
@@ -2360,7 +2360,7 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BY
                       " onclick=\"toggleDisplay('%s');return false;\" />"
                       "<img src=\"%s/edit.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO\" />"
+                      " class=\"CONTEXT_ICO_x16\" />"
                       "</a>"
                       "</div>",
             UniqueId,
@@ -2672,15 +2672,8 @@ static void Soc_PutFormToRemoveComment (long PubCod)
    /***** Form to remove social publishing *****/
    Soc_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_REMOVE ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/trash.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Remove,
-	    Txt_Remove);
+   Ico_PutDivIconLink ("SOCIAL_ICO_REMOVE",
+		       "trash.svg",Txt_Remove);
    Frm_EndForm ();
   }
 
@@ -2696,14 +2689,8 @@ static void Soc_PutFormToFavSocialComment (long PubCod)
    /***** Form to mark social comment as favourite *****/
    Soc_FormStart (ActFavSocComGbl,ActFavSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/star.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
+   Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
+		       "star.svg",Txt_Mark_as_favourite);
    Frm_EndForm ();
   }
 
@@ -2725,13 +2712,8 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
                 Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to share *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_SHARE_DISABLED\">"
-		      "<img src=\"%s/share-alt.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Gbl.Title,Gbl.Title);
+   Ico_PutDivIcon ("SOCIAL_ICO_SHARE_DISABLED",
+		   "share-alt.svg",Gbl.Title);
   }
 
 /*****************************************************************************/
@@ -2752,13 +2734,8 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
                 Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to mark as favourite *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV_DISABLED\">"
-		      "<img src=\"%s/star.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Gbl.Title,Gbl.Title);
+   Ico_PutDivIcon ("SOCIAL_ICO_FAV_DISABLED",
+		   "star.svg",Gbl.Title);
   }
 
 /*****************************************************************************/
@@ -2773,14 +2750,8 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
    /***** Form to share social note *****/
    Soc_FormStart (ActShaSocNotGbl,ActShaSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_SHARE ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/share-alt.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Share,Txt_Share);
+   Ico_PutDivIconLink ("SOCIAL_ICO_SHARE",
+		       "share-alt.svg",Txt_Share);
    Frm_EndForm ();
   }
 
@@ -2796,14 +2767,8 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
    /***** Form to mark social note as favourite *****/
    Soc_FormStart (ActFavSocNotGbl,ActFavSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/star.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
+   Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
+		       "star.svg",Txt_Mark_as_favourite);
    Frm_EndForm ();
   }
 
@@ -2819,14 +2784,8 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
    /***** Form to share social publishing *****/
    Soc_FormStart (ActUnsSocNotGbl,ActUnsSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_SHARE ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/share-alt-green.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_SOCIAL_NOTE_Shared,Txt_SOCIAL_NOTE_Shared);
+   Ico_PutDivIconLink ("SOCIAL_ICO_SHARE",
+		       "share-alt-green.svg",Txt_SOCIAL_NOTE_Shared);
    Frm_EndForm ();
   }
 
@@ -2842,14 +2801,8 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
    /***** Form to unfav social note *****/
    Soc_FormStart (ActUnfSocNotGbl,ActUnfSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/star-yellow.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
+   Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
+		       "star-yellow.svg",Txt_SOCIAL_NOTE_Favourite);
    Frm_EndForm ();
   }
 
@@ -2865,14 +2818,8 @@ static void Soc_PutFormToUnfavSocialComment (long PubCod)
    /***** Form to unfav social comment *****/
    Soc_FormStart (ActUnfSocComGbl,ActUnfSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/star-yellow.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
+   Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
+		       "star-yellow.svg",Txt_SOCIAL_NOTE_Favourite);
    Frm_EndForm ();
   }
 
@@ -2888,15 +2835,8 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
    /***** Form to remove social publishing *****/
    Soc_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_REMOVE ICO_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/trash.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO\" />"
-		      "</div>",
-	    Gbl.Prefs.URLIcons,
-	    Txt_Remove,
-	    Txt_Remove);
+   Ico_PutDivIconLink ("SOCIAL_ICO_REMOVE",
+		       "trash.svg",Txt_Remove);
    Frm_EndForm ();
   }
 

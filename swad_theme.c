@@ -233,6 +233,7 @@ void The_PutIconsToSelectTheme (void)
    extern const char *Hlp_PROFILE_Preferences_theme;
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
+   char Icon[PATH_MAX + 1];
 
    Box_StartBox (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
                  Hlp_PROFILE_Preferences_theme,Box_NOT_CLOSABLE);
@@ -246,14 +247,11 @@ void The_PutIconsToSelectTheme (void)
         	                          "PREF_OFF");
       Frm_StartForm (ActChgThe);
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICO40x25\" />",
-               Gbl.Prefs.URLIcons,
-               Cfg_ICON_FOLDER_THEMES,
-               The_ThemeId[Theme],
-               The_ThemeNames[Theme],
-               The_ThemeNames[Theme]);
+      snprintf (Icon,sizeof (Icon),
+		"%s/%s/theme_32x20.gif",
+		Cfg_ICON_FOLDER_THEMES,
+                The_ThemeId[Theme]);
+      Ico_PutPrefIconLink (Icon,The_ThemeNames[Theme]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
