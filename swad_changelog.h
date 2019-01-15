@@ -345,6 +345,8 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Un administrador de centro ahora no tiene permisos para editar horario asignatura, pero le sale el icono de editar
 //	 O le damos permisos o quitamos el icono de editar. Comprobar para admin. de titulaciones.
 
+// TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
+
 // TODO: Chequear todas las directivas <label>
 
 // TODO: Fix bug: Al mostrar una orla con todos los profesores de SWAD, se muestran primeros los profesores y luego los no editores (repetidos algunos)
@@ -370,12 +372,20 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.33 (2019-01-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.33.1 (2019-01-15)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.33.1:  Jan 15, 2019 	Fixed bug in file browser, reported by Miguel Damas.
+					SVG icons for folders in file browser. (239076 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/folder-yellow.png /var/www/html/swad/icon/
+sudo cp icon/folder-open-yellow.png /var/www/html/swad/icon/
+sudo cp icon/folder-yellow-plus.png /var/www/html/swad/icon/
+sudo cp icon/folder-open-yellow-plus.png /var/www/html/swad/icon/
+
 	Version 18.33:    Jan 11, 2019 	Code refactoring related to icons. (239066 lines)
-					Copy the following icon to icon public directory:
+					Copy the following icons to icon public directory:
 sudo cp icon/square.svg /var/www/html/swad/icon/
 sudo cp icon/check-square.svg /var/www/html/swad/icon/
 

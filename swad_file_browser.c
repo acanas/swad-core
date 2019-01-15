@@ -6105,12 +6105,12 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
 	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"%sCONTEXT_ICO\" />",
+	              " class=\"CONTEXT_OPT %s CONTEXT_ICO_16x16\" />",
             Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title,
-            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN " :
-        	                                       "");
+            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN" :
+        	                                       "ICO_HIGHLIGHT");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -6133,12 +6133,12 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
 	     FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"%sCONTEXT_ICO\" />",
+	              " class=\"CONTEXT_OPT %s CONTEXT_ICO_16x16\" />",
             Gbl.Prefs.URLIcons,
             Gbl.Title,
             Gbl.Title,
-            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN " :
-        	                                       "");
+            Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN" :
+        	                                       "ICO_HIGHLIGHT");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -6260,14 +6260,14 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
    fprintf (Gbl.F.Out,">");
 
    /***** Form and icon *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.URLIcons,
-		  Open ? "open" :
-			 "closed",
-		  Txt_Folder,
-		  Txt_Folder);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"CONTEXT_OPT CONTEXT_ICO_16x16\" />",
+	    Gbl.Prefs.URLIcons,
+	    Open ? "folder-open-yellow.png" :
+	           "folder-yellow.png",
+	    Txt_Folder,
+	    Txt_Folder);
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -6302,8 +6302,8 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Upload_file_or_create_folder_in_FOLDER,
 	     FileNameToShow);
-   Ico_PutIconLink (Open ? "folder-open-plus16x16.gif" :
-	                   "folder-closed-plus16x16.gif",
+   Ico_PutIconLink (Open ? "folder-open-yellow-plus.png" :
+	                   "folder-yellow-plus.png",
 	            Gbl.Title);
    Frm_EndForm ();
 
@@ -6377,15 +6377,16 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
    bool NotFound;
 
    /***** Icon depending on the file extension *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s%ux%u/",
-            Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_FILEXT,
-            Size,Size);
    if (FileType == Brw_IS_LINK)
-      fprintf (Gbl.F.Out,"url%ux%u.gif\" alt=\"%s\" title=\"%s\"",
-	       Size,Size,
+      fprintf (Gbl.F.Out,"<img src=\"%s/link.svg\""
+	                 " alt=\"%s\" title=\"%s\"",
+	       Gbl.Prefs.URLIcons,
 	       Txt_Link,Txt_Link);
    else	// FileType == Brw_IS_FILE
      {
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s%ux%u/",
+	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_FILEXT,
+	       Size,Size);
       for (DocType = 0, NotFound = true;
 	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
 	   DocType++)
@@ -6402,8 +6403,9 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	 fprintf (Gbl.F.Out,"xxx%ux%u.gif\" alt=\"\"",
 	          Size,Size);
      }
-   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"CONTEXT_ICO_16x16\"/>" :
-	                             " class=\"ICO40x40\"/>");
+   fprintf (Gbl.F.Out," class=\"CONTEXT_OPT ICO_HIGHLIGHT %s\"/>",
+	    (Size == 16) ? "CONTEXT_ICO_16x16" :
+		           "ICO40x40");
   }
 
 /*****************************************************************************/
