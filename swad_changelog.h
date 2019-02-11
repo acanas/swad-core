@@ -353,7 +353,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Mensajes > Anuncios cuando no estás identificado, deberían salir algunos, ¿por qué no indicar que se muestren para todos?
 
-// TODO: En el timeline, cambiar el icono de favorito de estrella a corazón (¿cambiar a "Me gusta"?
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
@@ -384,10 +383,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.34.1 (2019-02-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.34.2 (2019-02-11)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.34.2:  Feb 11, 2019 	Fav icon in timeline changed from star to heart. (239108 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/heart-red.svg /var/www/html/swad/icon/
+
 	Version 18.34.1:  Feb 11, 2019 	Fixed problem in students attendance. (239106 lines)
 	Version 18.34:    Feb 11, 2019 	Fixed bug in test results. (239110 lines)
 	Version 18.33.3:  Feb 11, 2019 	Changed Type to Role in some stats. (239093 lines)

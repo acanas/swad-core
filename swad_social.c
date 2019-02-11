@@ -2690,7 +2690,7 @@ static void Soc_PutFormToFavSocialComment (long PubCod)
    Soc_FormStart (ActFavSocComGbl,ActFavSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
    Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
-		       "star.svg",Txt_Mark_as_favourite);
+		       "heart.svg",Txt_Mark_as_favourite);
    Frm_EndForm ();
   }
 
@@ -2735,7 +2735,7 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
 
    /***** Disabled icon to mark as favourite *****/
    Ico_PutDivIcon ("SOCIAL_ICO_FAV_DISABLED",
-		   "star.svg",Gbl.Title);
+		   "heart.svg",Gbl.Title);
   }
 
 /*****************************************************************************/
@@ -2768,7 +2768,7 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
    Soc_FormStart (ActFavSocNotGbl,ActFavSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
-		       "star.svg",Txt_Mark_as_favourite);
+		       "heart.svg",Txt_Mark_as_favourite);
    Frm_EndForm ();
   }
 
@@ -2802,7 +2802,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
    Soc_FormStart (ActUnfSocNotGbl,ActUnfSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
-		       "star-yellow.svg",Txt_SOCIAL_NOTE_Favourite);
+		       "heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
    Frm_EndForm ();
   }
 
@@ -2819,7 +2819,7 @@ static void Soc_PutFormToUnfavSocialComment (long PubCod)
    Soc_FormStart (ActUnfSocComGbl,ActUnfSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
    Ico_PutDivIconLink ("SOCIAL_ICO_FAV",
-		       "star-yellow.svg",Txt_SOCIAL_NOTE_Favourite);
+		       "heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
    Frm_EndForm ();
   }
 
