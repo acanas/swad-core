@@ -1297,17 +1297,6 @@ static void Tst_UpdateLastAccTst (void)
   }
 
 /*****************************************************************************/
-/************ Set end date to current date                        ************/
-/************ and set initial date to end date minus several days ************/
-/*****************************************************************************/
-
-void Tst_SetIniEndDates (void)
-  {
-   Gbl.DateRange.TimeUTC[0] = (time_t) 0;
-   Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
-  }
-
-/*****************************************************************************/
 /******* Select tags and dates for edition of the self-assessment test *******/
 /*****************************************************************************/
 
@@ -2908,7 +2897,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       if (NumRows > 1)
         {
          Frm_StartForm (ActLstTstQst);
-         Sta_WriteParamsDatesSeeAccesses ();
+         Dat_WriteParamsIniEndDates ();
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
          Frm_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
@@ -2966,7 +2955,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Tst_PutParamQstCod ();
       if (NumRows == 1)
          Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
-      Sta_WriteParamsDatesSeeAccesses ();
+      Dat_WriteParamsIniEndDates ();
       Tst_WriteParamEditQst ();
       Ico_PutIconRemove ();
       Frm_EndForm ();
@@ -3021,7 +3010,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
         {
          Frm_StartForm (ActShfTstQst);
          Tst_PutParamQstCod ();
-         Sta_WriteParamsDatesSeeAccesses ();
+         Dat_WriteParamsIniEndDates ();
          Tst_WriteParamEditQst ();
          if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
@@ -6425,7 +6414,7 @@ static void Tst_PutParamsRemoveOneQst (void)
 static void Tst_PutParamsRemoveQst (void)
   {
    Tst_PutParamQstCod ();
-   Sta_WriteParamsDatesSeeAccesses ();
+   Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
   }
 
@@ -7806,6 +7795,11 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    bool ICanViewScore;
    time_t TimeUTC;
    char *ClassDat;
+
+   sprintf (Gbl.Alert.Txt,"Gbl.DateRange.TimeUTC[0] = %ld / Gbl.DateRange.TimeUTC[1] = %ld",
+	    (long) Gbl.DateRange.TimeUTC[0],
+	    (long) Gbl.DateRange.TimeUTC[1]);
+   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Make database query *****/
    NumExams =

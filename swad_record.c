@@ -106,6 +106,8 @@ static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
 static void Rec_PutIconsCommands (void);
+static void Rec_PutParamsMyTsts (void);
+static void Rec_PutParamsStdTsts (void);
 static void Rec_PutParamsWorks (void);
 static void Rec_PutParamsStudent (void);
 static void Rec_PutParamsMsgUsr (void);
@@ -2621,12 +2623,13 @@ static void Rec_PutIconsCommands (void)
 	    if (Usr_CheckIfICanViewTst (Gbl.Record.UsrDat))
 	      {
 	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,NULL,
+		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstRes,NULL,
+						 Rec_PutParamsMyTsts,
 					         "check.svg",
 						 Txt_View_test_results);
 	       else	// Not me
 		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstRes,NULL,
-						 Rec_PutParamsStudent,
+						 Rec_PutParamsStdTsts,
 					         "check.svg",
 						 Txt_View_test_results);
 	      }
@@ -2700,6 +2703,19 @@ static void Rec_PutIconsCommands (void)
 void Rec_PutParamUsrCodEncrypted (void)
   {
    Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EncryptedUsrCod);
+  }
+
+static void Rec_PutParamsMyTsts (void)
+  {
+   Dat_SetIniEndDates ();
+   Dat_WriteParamsIniEndDates ();
+  }
+
+static void Rec_PutParamsStdTsts (void)
+  {
+   Rec_PutParamsStudent ();
+   Dat_SetIniEndDates ();
+   Dat_WriteParamsIniEndDates ();
   }
 
 static void Rec_PutParamsWorks (void)

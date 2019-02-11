@@ -1703,7 +1703,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    if (FirstRow > 1)
      {
       Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
-      Sta_WriteParamsDatesSeeAccesses ();
+      Dat_WriteParamsIniEndDates ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
       Par_PutHiddenParamLong ("FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
@@ -1739,7 +1739,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    if (LastRow < NumRows)
      {
       Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
-      Sta_WriteParamsDatesSeeAccesses ();
+      Dat_WriteParamsIniEndDates ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
       Par_PutHiddenParamUnsigned ("FirstRow" ,(unsigned) (LastRow + 1));
@@ -2215,7 +2215,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 	              "<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
 
    Frm_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
-   Sta_WriteParamsDatesSeeAccesses ();
+   Dat_WriteParamsIniEndDates ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
    Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
@@ -4047,16 +4047,6 @@ static void Sta_DrawBarNumHits (char Color,
    fprintf (Gbl.F.Out,"%%)&nbsp;"
 	              "</td>"
 	              "</tr>");
-  }
-
-/*****************************************************************************/
-/**** Write parameters of initial and final dates in the query of clicks *****/
-/*****************************************************************************/
-
-void Sta_WriteParamsDatesSeeAccesses (void)
-  {
-   Par_PutHiddenParamUnsigned ("StartTimeUTC",Gbl.DateRange.TimeUTC[0]);
-   Par_PutHiddenParamUnsigned ("EndTimeUTC"  ,Gbl.DateRange.TimeUTC[1]);
   }
 
 /*****************************************************************************/

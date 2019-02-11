@@ -918,6 +918,26 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
   }
 
 /*****************************************************************************/
+/******* Set initial date to distant past and end date to current date *******/
+/*****************************************************************************/
+
+void Dat_SetIniEndDates (void)
+  {
+   Gbl.DateRange.TimeUTC[0] = (time_t) 0;
+   Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
+  }
+
+/*****************************************************************************/
+/******** Write parameters of initial and final dates *****/
+/*****************************************************************************/
+
+void Dat_WriteParamsIniEndDates (void)
+  {
+   Par_PutHiddenParamUnsigned ("StartTimeUTC",Gbl.DateRange.TimeUTC[0]);
+   Par_PutHiddenParamUnsigned ("EndTimeUTC"  ,Gbl.DateRange.TimeUTC[1]);
+  }
+
+/*****************************************************************************/
 /************************** Get initial and end dates ************************/
 /*****************************************************************************/
 

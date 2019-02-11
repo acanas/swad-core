@@ -184,8 +184,6 @@ void Sta_PutIconToShowFigure (void);
 void Sta_PutHiddenParamFigures (void);
 void Sta_ShowFigures (void);
 
-void Sta_WriteParamsDatesSeeAccesses (void);
-
 void Sta_ComputeTimeToGeneratePage (void);
 void Sta_ComputeTimeToSendPage (void);
 void Sta_WriteTimeToGenerateAndSendPage (void);

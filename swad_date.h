@@ -160,6 +160,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
 
+void Dat_SetIniEndDates (void);
+void Dat_WriteParamsIniEndDates (void);
 void Dat_GetIniEndDatesFromForm (void);
 
 void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm);

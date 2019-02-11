@@ -151,7 +151,6 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
-void Tst_SetIniEndDates (void);
 void Tst_ShowFormAskEditTsts (void);
 void Tst_ShowFormAskSelectTstsForGame (long GamCod);
 void Tst_ListQuestionsToEdit (void);

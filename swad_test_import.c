@@ -101,7 +101,7 @@ void TsI_PutFormToExportQuestions (void)
 
 static void TsI_PutParamsExportQsts (void)
   {
-   Sta_WriteParamsDatesSeeAccesses ();
+   Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
    Par_PutHiddenParamChar ("OnlyThisQst",'N');
    Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrder);
