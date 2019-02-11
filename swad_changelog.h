@@ -347,12 +347,7 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Un administrador de centro ahora no tiene permisos para editar horario asignatura, pero le sale el icono de editar
 //	 O le damos permisos o quitamos el icono de editar. Comprobar para admin. de titulaciones.
 
-// TODO: "No mostrar de nuevo" debería llevar un icono aspa en lugar de una papelera
-
-// TODO: Cifras > Jearquía: cambiar ejes X e Y en la tabla para que se vea más estrecho -> mejor en móviles
-
 // TODO: Mensajes > Anuncios cuando no estás identificado, deberían salir algunos, ¿por qué no indicar que se muestren para todos?
-
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
@@ -363,6 +358,10 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser y los de redes sociales
 
 // TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
+
+// TODO: Cifras > Jearquía: cambiar ejes X e Y en la tabla para que se vea más estrecho -> mejor en móviles
+
+// TODO: Cambiar Favorito a "Me gusta"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -383,10 +382,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.34.2 (2019-02-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.34.3 (2019-02-12)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.34.3:  Feb 12, 2019 	Changed icon remove to close in announcements. (239109 lines)
 	Version 18.34.2:  Feb 11, 2019 	Fav icon in timeline changed from star to heart. (239108 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/heart-red.svg /var/www/html/swad/icon/
