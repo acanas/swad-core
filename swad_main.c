@@ -109,6 +109,11 @@ int main (void)
      {
       Par_CreateListOfParams ();
       Par_GetMainParameters ();
+      /*
+      if (!strcmp (Gbl.IP,"83.50.221.168"))
+         fprintf (stdout,"Status: 403\r\n\r\n");
+*/
+
       Hie_InitHierarchy ();
       if (!Gbl.WebService.IsWebService)
 	{

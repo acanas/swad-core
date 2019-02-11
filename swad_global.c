@@ -104,6 +104,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.TimeGenerationInMicroseconds = Gbl.TimeSendInMicroseconds = 0L;
    Gbl.PID = getpid ();
    Sta_GetRemoteAddr ();
+
    Cry_CreateUniqueNameEncrypted (Gbl.UniqueNameEncrypted);
 
    srand ((unsigned int) Gbl.StartExecutionTimeUTC);	// Initialize seed for rand()

@@ -81,6 +81,8 @@ static void Cla_CreateClassroom (struct Classroom *Cla);
 /************************* List all the classrooms ***************************/
 /*****************************************************************************/
 
+#define A SIZE_MAX
+
 void Cla_SeeClassrooms (void)
   {
    extern const char *Hlp_CENTRE_Classrooms;

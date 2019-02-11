@@ -338,12 +338,22 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
 
+// TODO: Cuando se muestre un usuario duplicado, que SWAD calcvule automáticamente sus cifras no calculadas sin tener que pulsar en Calcular
+
 // TODO: Miguel Damas Hermoso sugiere poder editar texto enriquecido (Markdown) en las preguntas de tipo test
 
 // TODO: No se puede pulsar sobre la foto de un remitente de un mensaje recibido.
 
 // TODO: Un administrador de centro ahora no tiene permisos para editar horario asignatura, pero le sale el icono de editar
 //	 O le damos permisos o quitamos el icono de editar. Comprobar para admin. de titulaciones.
+
+// TODO: "No mostrar de nuevo" debería llevar un icono aspa en lugar de una papelera
+
+// TODO: Cifras > Jearquía: cambiar ejes X e Y en la tabla para que se vea más estrecho -> mejor en móviles
+
+// TODO: Mensajes > Anuncios cuando no estás identificado, deberían salir algunos, ¿por qué no indicar que se muestren para todos?
+
+// TODO: En el timeline, cambiar el icono de favorito de estrella a corazón (¿cambiar a "Me gusta"?
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
@@ -352,6 +362,14 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Fix bug: Al mostrar una orla con todos los profesores de SWAD, se muestran primeros los profesores y luego los no editores (repetidos algunos)
 
 // TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser y los de redes sociales
+
+// TODO: Arreglar tamaño de iconos al ver la asistencia de un estudiante.
+
+// TODO: Fix bug: En una ficha de un alumno, al pulsar sobre "Ver test" no se ven los test que ha hecho
+
+// TODO: En Accesos por usuario de una asignatura: cambiar "Tipo" -> "Rol"
+
+// TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -372,10 +390,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.33.1 (2019-01-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.33.2 (2019-02-11)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.33.2:  Feb 11, 2019 	Icon to view places in centre configuration. (239093 lines)
 	Version 18.33.1:  Jan 15, 2019 	Fixed bug in file browser, reported by Miguel Damas.
 					SVG icons for folders in file browser. (239076 lines)
 					Copy the following icons to icon public directory:

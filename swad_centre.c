@@ -82,7 +82,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ctr_Configuration (bool PrintView);
-static void Ctr_PutIconsToPrintAndUpload (void);
+static void Ctr_PutIconsCtrConfig (void);
 static void Ctr_PutIconToChangePhoto (void);
 static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role);
 
@@ -326,7 +326,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Box_StartBox (NULL,NULL,NULL,
 		       NULL,Box_NOT_CLOSABLE);
       else
-	 Box_StartBox (NULL,NULL,Ctr_PutIconsToPrintAndUpload,
+	 Box_StartBox (NULL,NULL,Ctr_PutIconsCtrConfig,
 		       Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
       /***** Title *****/
@@ -686,19 +686,22 @@ static void Ctr_Configuration (bool PrintView)
 /************ Put contextual icons in configuration of a centre **************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsToPrintAndUpload (void)
+static void Ctr_PutIconsCtrConfig (void)
   {
-   /***** Link to print info about centre *****/
+   /***** Put icon to print info about centre *****/
    Ico_PutContextualIconToPrint (ActPrnCtrInf,NULL);
+
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
       // have permission to upload logo and photo of the centre
      {
-      /***** Link to upload logo of centre *****/
+      /***** Put icon to upload logo of centre *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_CTR);
 
-      /***** Link to upload photo of centre *****/
+      /***** Put icon to upload photo of centre *****/
       Ctr_PutIconToChangePhoto ();
      }
   }
