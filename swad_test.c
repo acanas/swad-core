@@ -7796,11 +7796,6 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    time_t TimeUTC;
    char *ClassDat;
 
-   sprintf (Gbl.Alert.Txt,"Gbl.DateRange.TimeUTC[0] = %ld / Gbl.DateRange.TimeUTC[1] = %ld",
-	    (long) Gbl.DateRange.TimeUTC[0],
-	    (long) Gbl.DateRange.TimeUTC[1]);
-   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
-
    /***** Make database query *****/
    NumExams =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",

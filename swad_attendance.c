@@ -3495,7 +3495,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	                    "<img src=\"%s/%s\""
 	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"CONTEXT_ICO_16X16\" />"
+	                    " class=\"CONTEXT_ICO_16x16\" />"
 	                    "</td>",
 		  Gbl.RowEvenOdd,
 		  Gbl.Prefs.URLIcons,
