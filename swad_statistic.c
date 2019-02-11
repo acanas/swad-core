@@ -1640,7 +1640,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    extern const char *Txt_No_INDEX;
    extern const char *Txt_User_ID;
    extern const char *Txt_Name;
-   extern const char *Txt_Type;
+   extern const char *Txt_Role;
    extern const char *Txt_Date;
    extern const char *Txt_Action;
    extern const char *Txt_LOG_More_info;
@@ -1794,7 +1794,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
             Txt_No_INDEX,
             Txt_User_ID,
             Txt_Name,
-            Txt_Type,
+            Txt_Role,
             Txt_Date,
             Txt_Action,
             Txt_LOG_More_info);
@@ -1916,7 +1916,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
    extern const char *Txt_Photo;
    extern const char *Txt_ID;
    extern const char *Txt_Name;
-   extern const char *Txt_Type;
+   extern const char *Txt_Role;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_ROW row;
@@ -1955,7 +1955,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
             Txt_Photo,
             Txt_ID,
             Txt_Name,
-            Txt_Type,
+            Txt_Role,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Write rows *****/

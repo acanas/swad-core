@@ -367,8 +367,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Fix bug: En una ficha de un alumno, al pulsar sobre "Ver test" no se ven los test que ha hecho
 
-// TODO: En Accesos por usuario de una asignatura: cambiar "Tipo" -> "Rol"
-
 // TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
 
 /*****************************************************************************/
@@ -390,10 +388,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.33.2 (2019-02-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.33.3 (2019-02-11)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.33.3:  Feb 11, 2019 	Changed Type to Role in some stats. (239093 lines)
 	Version 18.33.2:  Feb 11, 2019 	Icon to view places in centre configuration. (239093 lines)
 	Version 18.33.1:  Jan 15, 2019 	Fixed bug in file browser, reported by Miguel Damas.
 					SVG icons for folders in file browser. (239076 lines)
