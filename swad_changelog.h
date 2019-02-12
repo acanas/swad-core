@@ -338,7 +338,7 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
 
-// TODO: Cuando se muestre un usuario duplicado, que SWAD calcvule automáticamente sus cifras no calculadas sin tener que pulsar en Calcular
+// TODO: Cuando se muestre un usuario duplicado, que SWAD calcule automáticamente sus cifras no calculadas sin tener que pulsar en Calcular
 
 // TODO: Miguel Damas Hermoso sugiere poder editar texto enriquecido (Markdown) en las preguntas de tipo test
 
@@ -355,11 +355,9 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Fix bug: Al mostrar una orla con todos los profesores de SWAD, se muestran primeros los profesores y luego los no editores (repetidos algunos)
 
-// TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser y los de redes sociales
+// TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser
 
 // TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
-
-// TODO: Cambiar Favorito a "Me gusta"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -380,10 +378,46 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.37 (2019-02-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.38 (2019-02-13)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.38:    Feb 13, 2019 	New icons for social networks. (? lines)
+					2 changes necessary in database:
+DELETE FROM usr_webs WHERE Web='quitter';
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+
+					Copy the following icons to icon public directory:
+sudo cp icon/swad64x64.png /var/www/html/swad/icon/
+sudo cp icon/500px-brands.svg /var/www/html/swad/icon/
+sudo cp icon/delicious-brands.svg /var/www/html/swad/icon/
+sudo cp icon/deviantart-brands.svg /var/www/html/swad/icon/
+sudo cp icon/diaspora-brands.svg /var/www/html/swad/icon/
+sudo cp icon/edmodo64x64.png /var/www/html/swad/icon/
+sudo cp icon/facebook-brands.svg /var/www/html/swad/icon/
+sudo cp icon/flickr-brands.svg /var/www/html/swad/icon/
+sudo cp icon/foursquare-brands.svg /var/www/html/swad/icon/
+sudo cp icon/github-brands.svg /var/www/html/swad/icon/
+sudo cp icon/gnusocial64x64.png /var/www/html/swad/icon/
+sudo cp icon/google-plus-brands.svg /var/www/html/swad/icon/
+sudo cp icon/googlescholar.svg /var/www/html/swad/icon/
+sudo cp icon/identica64x64.png /var/www/html/swad/icon/
+sudo cp icon/instagram-brands.svg /var/www/html/swad/icon/
+sudo cp icon/linkedin-brands.svg /var/www/html/swad/icon/
+sudo cp icon/orcid64x64.png /var/www/html/swad/icon/
+sudo cp icon/paperli64x64.png /var/www/html/swad/icon/
+sudo cp icon/pinterest-brands.svg /var/www/html/swad/icon/
+sudo cp icon/researchgate-brands.svg /var/www/html/swad/icon/
+sudo cp icon/researcherid64x64.png /var/www/html/swad/icon/
+sudo cp icon/scoopit64x64.png /var/www/html/swad/icon/
+sudo cp icon/slideshare-brands.svg /var/www/html/swad/icon/
+sudo cp icon/stack-overflow-brands.svg /var/www/html/swad/icon/
+sudo cp icon/storify64x64.png /var/www/html/swad/icon/
+sudo cp icon/tumblr-brands.svg /var/www/html/swad/icon/
+sudo cp icon/twitter-brands.svg /var/www/html/swad/icon/
+sudo cp icon/wikipedia-w-brands.svg /var/www/html/swad/icon/
+sudo cp icon/youtube-brands.svg /var/www/html/swad/icon/
+
 	Version 18.37:    Feb 12, 2019 	New layout for figure about folders and files. (238913 lines)
 	Version 18.36:    Feb 12, 2019 	New module swad_figure for global big figures (stats). (238839 lines)
 	Version 18.35.2:  Feb 12, 2019 	Code refactoring in hierarchy stats. (238761 lines)

@@ -47,7 +47,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 30
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 29
 typedef enum
   {
    Net_WWW,		// Personal web page
@@ -69,7 +69,6 @@ typedef enum
    Net_ORCID,
    Net_PAPERLI,
    Net_PINTEREST,
-   Net_QUITTER,
    Net_RESEARCH_GATE,
    Net_RESEARCHERID,
    Net_SCOOPIT,
@@ -106,7 +105,6 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "orcid",		// Net_ORCID
    "paperli",		// Net_PAPERLI
    "pinterest",		// Net_PINTEREST
-   "quitter",		// Net_QUITTER
    "researchgate",	// Net_RESEARCH_GATE
    "researcherid",	// Net_RESEARCHERID
    "scoopit",		// Net_SCOOPIT
@@ -121,36 +119,35 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
 
 const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
-   "www16x16.gif",		// Net_WWW
-   "500px16x16.gif",		// Net_500PX
-   "delicious16x16.gif",	// Net_DELICIOUS
-   "deviantart16x16.gif",	// Net_DEVIANTART
-   "diaspora16x16.gif",		// Net_DIASPORA
-   "edmodo16x16.gif",		// Net_EDMODO
-   "facebook16x16.gif",		// Net_FACEBOOK
-   "flickr16x16.gif",		// Net_FLICKR
-   "foursquare16x16.gif",	// Net_FOURSQUAREhub
-   "github16x16.gif",		// Net_GITHUB
-   "gnusocial16x16.gif",	// Net_GNU_SOCIAL
-   "googleplus16x16.gif",	// Net_GOOGLE_PLUS
-   "googlescholar16x16.gif",	// Net_GOOGLE_SCHOLAR
-   "identica16x16.gif",		// Net_IDENTICA
-   "instagram16x16.gif",	// Net_INSTAGRAM
-   "linkedin16x16.gif",		// Net_LINKEDIN
-   "orcid16x16.gif",		// Net_ORCID
-   "paperli16x16.gif",		// Net_PAPERLI
-   "pinterest16x16.gif",	// Net_PINTEREST
-   "quitter16x16.gif",		// Net_QUITTER
-   "researchgate16x16.gif",	// Net_RESEARCH_GATE
-   "researcherid16x16.gif",	// Net_RESEARCHERID
-   "scoopit16x16.gif",		// Net_SCOOPIT
-   "slideshare16x16.gif",	// Net_SLIDESHARE
-   "stackoverflow64x64.png",	// Net_STACK_OVERFLOW
-   "storify16x16.gif",		// Net_STORIFY
-   "tumblr16x16.gif",		// Net_TUMBLR
-   "twitter16x16.gif",		// Net_TWITTER
-   "wikipedia16x16.gif",	// Net_WIKIPEDIA
-   "youtube16x16.gif",		// Net_YOUTUBE
+   "globe.svg",			// Net_WWW
+   "500px-brands.svg",		// Net_500PX
+   "delicious-brands.svg",	// Net_DELICIOUS
+   "deviantart-brands.svg",	// Net_DEVIANTART
+   "diaspora-brands.svg",	// Net_DIASPORA
+   "edmodo64x64.png",		// Net_EDMODO
+   "facebook-brands.svg",	// Net_FACEBOOK
+   "flickr-brands.svg",		// Net_FLICKR
+   "foursquare-brands.svg",	// Net_FOURSQUAREhub
+   "github-brands.svg",		// Net_GITHUB
+   "gnusocial64x64.png",	// Net_GNU_SOCIAL
+   "google-plus-brands.svg",	// Net_GOOGLE_PLUS
+   "googlescholar.svg",		// Net_GOOGLE_SCHOLAR
+   "identica64x64.png",		// Net_IDENTICA
+   "instagram-brands.svg",	// Net_INSTAGRAM
+   "linkedin-brands.svg",	// Net_LINKEDIN
+   "orcid64x64.png",		// Net_ORCID
+   "paperli64x64.png",		// Net_PAPERLI
+   "pinterest-brands.svg",	// Net_PINTEREST
+   "researchgate-brands.svg",	// Net_RESEARCH_GATE
+   "researcherid64x64.png",	// Net_RESEARCHERID
+   "scoopit64x64.png",		// Net_SCOOPIT
+   "slideshare-brands.svg",	// Net_SLIDESHARE
+   "stack-overflow-brands.svg",	// Net_STACK_OVERFLOW
+   "storify64x64.png",		// Net_STORIFY
+   "tumblr-brands.svg",		// Net_TUMBLR
+   "twitter-brands.svg",	// Net_TWITTER
+   "wikipedia-w-brands.svg",	// Net_WIKIPEDIA
+   "youtube-brands.svg",	// Net_YOUTUBE
   };
 
 const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
@@ -174,7 +171,6 @@ const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "ORCID",		// Net_ORCID
    "Paper.li",		// Net_PAPERLI
    "Pinterest",		// Net_PINTEREST
-   "quitter",		// Net_QUITTER
    "Research Gate",	// Net_RESEARCH_GATE
    "ResearcherID",	// Net_RESEARCHERID
    "Scoop.it",		// Net_SCOOPIT
@@ -261,7 +257,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
+                      " class=\"ICO16x16\" />"
 		      "</a>"
 		      "</div>",
 	    URL,Title,
@@ -325,7 +321,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO20x20\""
+                         " class=\"CONTEXT_ICO_16x16\""
 			 " style=\"margin-right:6px;\" />"
 			 "%s:"
 			 "</label>"
@@ -582,8 +578,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\""
-			    " style=\"margin-right:12px;\" />"
+                            " class=\"CONTEXT_ICO_16x16\""
+			    " style=\"margin-right:6px;\" />"
 			    "%s</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"
