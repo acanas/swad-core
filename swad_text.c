@@ -35932,7 +35932,6 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #endif
 	};
 
-
 const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 {
 	{
@@ -53110,6 +53109,27 @@ const char *Txt_Who_to_follow =
 	"Quem seguir";
 #endif
 
+const char *Txt_With =
+#if   L==1	// ca
+	"Amb";
+#elif L==2	// de
+	"Mit";
+#elif L==3	// en
+	"With";
+#elif L==4	// es
+	"Con";
+#elif L==5	// fr
+	"Avec";
+#elif L==6	// gn
+	"Con";	// Okoteve traducción
+#elif L==7	// it
+	"Con";
+#elif L==8	// pl
+	"Z";
+#elif L==9	// pt
+	"Com";
+#endif
+
 const char *Txt_With_centres =
 #if   L==1	// ca
 	"Amb centres";
@@ -53213,69 +53233,6 @@ const char *Txt_with_new_posts =
 	"with new posts";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"com novas posts";
-#endif
-
-const char *Txt_With_non_editing_teachers =
-#if   L==1	// ca
-	"Amb prof. no edit.";
-#elif L==2	// de
-	"Mit nicht bearb. Lehr.";
-#elif L==3	// en
-	"With non-edit. teach.";
-#elif L==4	// es
-	"Con prof. no edit.";
-#elif L==5	// fr
-	"Avec ens. non-&eacute;dit.";
-#elif L==6	// gn
-	"Con prof. no edit.";	// Okoteve traducción
-#elif L==7	// it
-	"Con prof. non-edit.";
-#elif L==8	// pl
-	"Z nauc. nie edyt.";
-#elif L==9	// pt
-	"Com prof. n&atilde;o edit.";
-#endif
-
-const char *Txt_With_students =
-#if   L==1	// ca
-	"Amb estudiants";
-#elif L==2	// de
-	"Mit Teilnehmern";
-#elif L==3	// en
-	"With students";
-#elif L==4	// es
-	"Con estudiantes";
-#elif L==5	// fr
-	"Avec &eacute;tudiants";
-#elif L==6	// gn
-	"Con estudiantes";	// Okoteve traducción
-#elif L==7	// it
-	"Con studenti";
-#elif L==8	// pl
-	"Z student&oacute;w";
-#elif L==9	// pt
-	"Com estudantes";
-#endif
-
-const char *Txt_With_teachers =
-#if   L==1	// ca
-	"Amb professors";
-#elif L==2	// de
-	"Mit Lehrkr&auml;ften";
-#elif L==3	// en
-	"With teachers";
-#elif L==4	// es
-	"Con profesores";
-#elif L==5	// fr
-	"Avec enseignants";
-#elif L==6	// gn
-	"Con profesores";	// Okoteve traducción
-#elif L==7	// it
-	"Con professori";
-#elif L==8	// pl
-	"Z nauczycielami";
-#elif L==9	// pt
-	"Com professores";
 #endif
 
 const char *Txt_works_ZIP_FILE_NAME =	// Name (without extension) of the ZIP file for works. Must be a valid filename in small letters!

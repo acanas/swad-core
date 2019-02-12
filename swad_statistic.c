@@ -205,9 +205,7 @@ static void Sta_GetAndShowHierarchyWithInss (void);
 static void Sta_GetAndShowHierarchyWithCtrs (void);
 static void Sta_GetAndShowHierarchyWithDegs (void);
 static void Sta_GetAndShowHierarchyWithCrss (void);
-static void Sta_GetAndShowHierarchyWithTchs (void);
-static void Sta_GetAndShowHierarchyWithNETs (void);
-static void Sta_GetAndShowHierarchyWithStds (void);
+static void Sta_GetAndShowHierarchyWithUsrs (Rol_Role_t Role);
 static void Sta_GetAndShowHierarchyTotal (void);
 
 static void Sta_GetAndShowInstitutionsStats (void);
@@ -4445,9 +4443,9 @@ static void Sta_GetAndShowHierarchyStats (void)
    Sta_GetAndShowHierarchyWithCtrs ();
    Sta_GetAndShowHierarchyWithDegs ();
    Sta_GetAndShowHierarchyWithCrss ();
-   Sta_GetAndShowHierarchyWithTchs ();
-   Sta_GetAndShowHierarchyWithNETs ();
-   Sta_GetAndShowHierarchyWithStds ();
+   Sta_GetAndShowHierarchyWithUsrs (Rol_TCH);
+   Sta_GetAndShowHierarchyWithUsrs (Rol_NET);
+   Sta_GetAndShowHierarchyWithUsrs (Rol_STD);
    Sta_GetAndShowHierarchyTotal ();
 
    /***** End table and box *****/
@@ -4765,279 +4763,74 @@ static void Sta_GetAndShowHierarchyWithCrss (void)
   }
 
 /*****************************************************************************/
-/******** Get and show number of elements in hierarchy with teachers *********/
+/********** Get and show number of elements in hierarchy with users **********/
 /*****************************************************************************/
 
-static void Sta_GetAndShowHierarchyWithTchs (void)
+static void Sta_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
   {
-   extern const char *Txt_With_teachers;
+   extern const char *Txt_With;
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char SubQuery[128];
-   unsigned NumCtysWithTchs = 0;
-   unsigned NumInssWithTchs = 0;
-   unsigned NumCtrsWithTchs = 0;
-   unsigned NumDegsWithTchs = 0;
-   unsigned NumCrssWithTchs = 0;
-
-   /***** Get number of elements with teachers *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Sco_SCOPE_SYS:
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,"");
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,"");
-	 NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,"");
-	 NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,"");
-	 NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,"");
-         break;
-      case Sco_SCOPE_CTY:
-         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
-                  Gbl.CurrentCty.Cty.CtyCod);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
-	 NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
-	 NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
-	 NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
-         break;
-      case Sco_SCOPE_INS:
-         sprintf (SubQuery,"centres.InsCod=%ld AND ",
-                  Gbl.CurrentIns.Ins.InsCod);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
-	 NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
-	 NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
-	 NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
-         break;
-      case Sco_SCOPE_CTR:
-         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
-	 NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
-	 NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
-	 NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
-	 break;
-      case Sco_SCOPE_DEG:
-         sprintf (SubQuery,"courses.DegCod=%ld AND ",
-                  Gbl.CurrentDeg.Deg.DegCod);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
-	 NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
-	 NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
-	 NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
-	 break;
-     case Sco_SCOPE_CRS:
-         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
-	 NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
-	 NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
-	 NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
-	 break;
-      default:
-	 Lay_WrongScopeExit ();
-	 break;
-     }
-
-   /***** Write number of elements with teachers *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-	    Txt_With_teachers,
-            NumCtysWithTchs,
-            NumInssWithTchs,
-            NumCtrsWithTchs,
-            NumDegsWithTchs,
-            NumCrssWithTchs);
-  }
-
-/*****************************************************************************/
-/** Get and show number of elements in hierarchy with non editing teachers ***/
-/*****************************************************************************/
-
-static void Sta_GetAndShowHierarchyWithNETs (void)
-  {
-   extern const char *Txt_With_non_editing_teachers;
-   char SubQuery[128];
-   unsigned NumCtysWithNETs = 0;
-   unsigned NumInssWithNETs = 0;
-   unsigned NumCtrsWithNETs = 0;
-   unsigned NumDegsWithNETs = 0;
-   unsigned NumCrssWithNETs = 0;
-
-   /***** Get number of elements with non editing teachers *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Sco_SCOPE_SYS:
-         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,"");
-         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,"");
-	 NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,"");
-	 NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,"");
-	 NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,"");
-         break;
-      case Sco_SCOPE_CTY:
-         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
-                  Gbl.CurrentCty.Cty.CtyCod);
-         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
-         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
-	 NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
-	 NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
-	 NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
-         break;
-      case Sco_SCOPE_INS:
-         sprintf (SubQuery,"centres.InsCod=%ld AND ",
-                  Gbl.CurrentIns.Ins.InsCod);
-         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
-         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
-	 NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
-	 NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
-	 NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
-         break;
-      case Sco_SCOPE_CTR:
-         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
-         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
-         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
-	 NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
-	 NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
-	 NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
-	 break;
-      case Sco_SCOPE_DEG:
-         sprintf (SubQuery,"courses.DegCod=%ld AND ",
-                  Gbl.CurrentDeg.Deg.DegCod);
-         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
-         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
-	 NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
-	 NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
-	 NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
-	 break;
-     case Sco_SCOPE_CRS:
-         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
-         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
-	 NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
-	 NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
-	 NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
-	 break;
-      default:
-	 Lay_WrongScopeExit ();
-	 break;
-     }
-
-   /***** Write number of elements with non editing teachers *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-	    Txt_With_non_editing_teachers,
-            NumCtysWithNETs,
-            NumInssWithNETs,
-            NumCtrsWithNETs,
-            NumDegsWithNETs,
-            NumCrssWithNETs);
-  }
-
-/*****************************************************************************/
-/******** Get and show number of elements in hierarchy with students *********/
-/*****************************************************************************/
-
-static void Sta_GetAndShowHierarchyWithStds (void)
-  {
-   extern const char *Txt_With_students;
-   char SubQuery[128];
-   unsigned NumCtysWithStds = 0;
-   unsigned NumInssWithStds = 0;
-   unsigned NumCtrsWithStds = 0;
-   unsigned NumDegsWithStds = 0;
-   unsigned NumCrssWithStds = 0;
+   unsigned NumCtysWithUsrs = 0;
+   unsigned NumInssWithUsrs = 0;
+   unsigned NumCtrsWithUsrs = 0;
+   unsigned NumDegsWithUsrs = 0;
+   unsigned NumCrssWithUsrs = 0;
 
    /***** Get number of elements with students *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,"");
-         NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,"");
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,"");
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,"");
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,"");
+         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,"");
+         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,"");
+	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,"");
+	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,"");
+	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,"");
          break;
       case Sco_SCOPE_CTY:
          sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
-         NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
-         NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
+         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
+         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
+	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
+	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
+	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
          break;
       case Sco_SCOPE_INS:
          sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
-         NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
-         NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
+         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
+         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
+	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
+	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
+	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
          break;
       case Sco_SCOPE_CTR:
          sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
-         NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
-         NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
+         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
+         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
+	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
+	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
+	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
-         NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
-         NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
+         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
+         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
+	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
+	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
+	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
-         NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
-         NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
+         NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
+         NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
+	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
+	 NumDegsWithUsrs = Deg_GetNumDegsWithUsrs (Role,SubQuery);
+	 NumCrssWithUsrs = Crs_GetNumCrssWithUsrs (Role,SubQuery);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
@@ -5047,7 +4840,7 @@ static void Sta_GetAndShowHierarchyWithStds (void)
    /***** Write number of elements with students *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
+		      "%s %s"
 		      "</td>"
 		      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
@@ -5065,12 +4858,12 @@ static void Sta_GetAndShowHierarchyWithStds (void)
                       "%u"
                       "</td>"
                       "</tr>",
-	    Txt_With_students,
-            NumCtysWithStds,
-            NumInssWithStds,
-            NumCtrsWithStds,
-            NumDegsWithStds,
-            NumCrssWithStds);
+	    Txt_With,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
+            NumCtysWithUsrs,
+            NumInssWithUsrs,
+            NumCtrsWithUsrs,
+            NumDegsWithUsrs,
+            NumCrssWithUsrs);
   }
 
 /*****************************************************************************/
