@@ -135,8 +135,8 @@ void Pri_EditMyPrivacy (void)
 static void Pri_PutIconsPrivacy (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_PRIVACY;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_PRIVACY;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

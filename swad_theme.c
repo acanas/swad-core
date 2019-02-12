@@ -258,8 +258,8 @@ void The_PutIconsToSelectTheme (void)
 static void The_PutIconsTheme (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_THEMES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_THEMES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

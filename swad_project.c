@@ -793,8 +793,8 @@ static void Prj_PutIconsListProjects (void)
    Prj_PutIconToShowAllData ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_PROJECTS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_PROJECTS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

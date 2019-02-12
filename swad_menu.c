@@ -441,8 +441,8 @@ void Mnu_PutIconsToSelectMenu (void)
 static void Mnu_PutIconsMenu (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_MENUS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_MENUS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

@@ -1240,8 +1240,8 @@ static void Deg_PutIconsListingDegrees (void)
    DT_PutIconToViewDegreeTypes ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_HIERARCHY;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_HIERARCHY;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -1406,8 +1406,8 @@ static void Deg_PutIconsEditingDegrees (void)
    DT_PutIconToViewDegreeTypes ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_HIERARCHY;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_HIERARCHY;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

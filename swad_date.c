@@ -150,8 +150,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 static void Dat_PutIconsDateFormat (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_DATE_FORMAT;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_DATE_FORMAT;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

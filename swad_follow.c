@@ -415,8 +415,8 @@ static void Fol_PutIconsWhoToFollow (void)
    Fol_PutIconToUpdateWhoToFollow ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_FOLLOW;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_FOLLOW;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

@@ -647,8 +647,8 @@ void Ntf_ShowMyNotifications (void)
 static void Ntf_PutIconsNotif (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_NOTIFY_EVENTS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_NOTIFY_EVENTS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

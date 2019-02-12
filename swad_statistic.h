@@ -106,39 +106,6 @@ typedef enum
   } Sta_ClicksGroupedBy_t;
 #define Sta_CLICKS_GROUPED_BY_DEFAULT Sta_CLICKS_CRS_PER_USR
 
-#define Sta_NUM_FIGURES 27
-typedef enum
-  {
-   Sta_USERS,			// Number of users
-   Sta_USERS_RANKING,		// Users' ranking
-   Sta_HIERARCHY,		// Number of countries, institutions, centres, degrees and courses
-   Sta_INSTITS,			// Number of users in each institution
-   Sta_DEGREE_TYPES,		// Number of degrees in each type of degree
-   Sta_FOLDERS_AND_FILES,	// Number of folders and files
-   Sta_OER,			// Number of OERs (Open Educational Resources)
-   Sta_ASSIGNMENTS,		// Number of assignments
-   Sta_PROJECTS,		// Number of projects
-   Sta_TESTS,			// Number of test questions
-   Sta_GAMES,			// Number of games
-   Sta_SURVEYS,			// Number of surveys
-   Sta_SOCIAL_ACTIVITY,		// Number of social notes
-   Sta_FOLLOW,			// Number of following and followers
-   Sta_FORUMS,			// Number of forums, threads and posts
-   Sta_NOTIFY_EVENTS,		// Number of users per notify event
-   Sta_NOTICES,			// Number of notices
-   Sta_MESSAGES,		// Number of users' (sent and received) messages
-   Sta_SOCIAL_NETWORKS,		// Number of users in social networks
-   Sta_LANGUAGES,		// Number of users per language
-   Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week
-   Sta_DATE_FORMAT,		// Number of users per date format
-   Sta_ICON_SETS,		// Number of users per icon set
-   Sta_MENUS,			// Number of users per menu
-   Sta_THEMES,			// Number of users per theme
-   Sta_SIDE_COLUMNS,		// Number of users per layout of columns
-   Sta_PRIVACY,			// Number of users per privacity
-  } Sta_FigureType_t;
-#define Sta_FIGURE_TYPE_DEF Sta_USERS
-
 #define Sta_MIN_ROWS_PER_PAGE 10
 #define Sta_MAX_ROWS_PER_PAGE (Sta_MIN_ROWS_PER_PAGE * 10000)
 #define Sta_DEF_ROWS_PER_PAGE (Sta_MIN_ROWS_PER_PAGE * 5)
@@ -151,8 +118,6 @@ typedef enum
    Sta_WHITE_TO_BLACK,
   } Sta_ColorType_t;
 #define Sta_COLOR_TYPE_DEF Sta_COLOR
-
-#define Sta_NUM_STAT_CRS_FILE_ZONES 11
 
 struct Sta_Hits
   {
@@ -179,17 +144,12 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
                                  MYSQL_RES *mysql_res,unsigned Field,
                                  unsigned Divisor);
 
-void Sta_ReqShowFigures (void);
-void Sta_PutIconToShowFigure (void);
-void Sta_PutHiddenParamFigures (void);
-void Sta_ShowFigures (void);
-
 void Sta_ComputeTimeToGeneratePage (void);
 void Sta_ComputeTimeToSendPage (void);
 void Sta_WriteTimeToGenerateAndSendPage (void);
 void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds);
 
-void Con_PutLinkToLastClicks (void);
+void Sta_PutLinkToLastClicks (void);
 void Sta_ShowLastClicks (void);
 void Sta_GetAndShowLastClicks (void);
 

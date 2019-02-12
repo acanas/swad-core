@@ -3791,8 +3791,8 @@ static void Brw_PutIconsFileBrowser (void)
 
 static void Brw_PutIconShowFigure (void)
   {
-   Gbl.Stat.FigureType = Sta_FOLDERS_AND_FILES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_FOLDERS_AND_FILES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

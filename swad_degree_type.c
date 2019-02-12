@@ -276,8 +276,8 @@ static void DT_PutIconsEditingDegreeTypes (void)
    Deg_PutIconToViewDegrees ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_DEGREE_TYPES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -348,8 +348,8 @@ static void DT_PutIconsListingDegTypes (void)
    Deg_PutIconToViewDegrees ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_DEGREE_TYPES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_DEGREE_TYPES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -507,7 +507,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       /* Start form to change order */
       Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
-         Sta_PutHiddenParamFigures ();
+         Fig_PutHiddenParamFigures ();
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 
       /* Link with the head of this column */

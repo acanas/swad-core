@@ -364,8 +364,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 static void Net_PutIconsWebsSocialNetworks (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_SOCIAL_NETWORKS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_SOCIAL_NETWORKS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -424,7 +424,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 void Net_ShowWebAndSocialNetworksStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_webs_social_networks;
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
@@ -537,7 +537,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
      }
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],NULL,
+   Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],NULL,
                       Hlp_ANALYTICS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

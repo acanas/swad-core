@@ -1448,8 +1448,8 @@ static void Tst_PutIconsTests (void)
      }
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_TESTS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_TESTS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

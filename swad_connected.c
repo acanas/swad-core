@@ -87,7 +87,7 @@ void Con_ShowConnectedUsrs (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Con_PutLinkToLastClicks ();
+      Sta_PutLinkToLastClicks ();
       fprintf (Gbl.F.Out,"</div>");
      }
 

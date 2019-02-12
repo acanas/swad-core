@@ -67,6 +67,7 @@
 #include "swad_degree.h"
 #include "swad_degree_type.h"
 #include "swad_department.h"
+#include "swad_figure.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
 #include "swad_holiday.h"
@@ -6603,27 +6604,6 @@ const char *Txt_Creating_database_tables_if_they_do_not_exist =
 	"Utw&oacute;rz tabel bazy danych, jesli ich nie ma &hellip;";
 #elif L==9	// pt
 	"Criando tabelas da base de dados, se elas n&atilde;o existirem&hellip;";
-#endif
-
-const char *Txt_crs =	// Abbreviation of "course" (three characters + dot)
-#if   L==1	// ca
-	"asg.";		// Necessita traduccio
-#elif L==2	// de
-	"Ver.";
-#elif L==3	// en
-	"crs.";
-#elif L==4	// es
-	"asg.";
-#elif L==5	// fr
-	"mat.";
-#elif L==6	// gn
-	"mbo'esyry";
-#elif L==7	// it
-	"crs.";
-#elif L==8	// pl
-	"Oczywiscie.";
-#elif L==9	// pt
-	"crs.";
 #endif
 
 const char *Txt_Current_email =
@@ -40346,7 +40326,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #endif
 	};
 
-const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
+const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
 	 {
 #if   L==1	// ca	// Brw_ADMI_DOC_CRS
 	 "Documents&nbsp;(ass.)"
@@ -40566,6 +40546,26 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	"Ca&lstrok;kowity"
 #elif L==9	// pt
 	"Total"
+#endif
+	,
+#if   L==1	// ca	// Brw_ADMI_BRF_USR
+	"Maletins"
+#elif L==2	// de
+	"Aktentasche"
+#elif L==3	// en
+	"Briefcases"
+#elif L==4	// es
+	"Maletines"
+#elif L==5	// fr
+	"Porte-documents"
+#elif L==6	// gn
+	"Maletines"	// Okoteve traducción
+#elif L==7	// it
+	"Penna USB"
+#elif L==8	// pl
+	"Briefcases"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Pasta"
 #endif
 	};
 
@@ -40941,9 +40941,9 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #endif
 	};
 
-const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
+const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
    {
-#if   L==1	// ca				// Sta_USERS
+#if   L==1	// ca				// Fig_USERS
 	 "Usuaris"
 #elif L==2	// de
 	 "Benutzer"
@@ -40963,7 +40963,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Utilizadores"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_USERS_RANKING
+#if   L==1	// ca				// Fig_USERS_RANKING
 	 "R&agrave;nquing"
 #elif L==2	// de
 	 "Rang"
@@ -40983,7 +40983,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Posi&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_HIERARCHY
+#if   L==1	// ca				// Fig_HIERARCHY
 	 "Jerarquia"
 #elif L==2	// de
 	 "Hierarchie"
@@ -41003,7 +41003,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Hierarquia"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_INSTITS
+#if   L==1	// ca				// Fig_INSTITS
 	"Institucions"
 #elif L==2	// de
 	"Hochschulen"
@@ -41023,7 +41023,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_DEGREE_TYPES
+#if   L==1	// ca				// Fig_DEGREE_TYPES
 	"Tipus de titulaci&oacute;"
 #elif L==2	// de
 	"Abschlussart"
@@ -41043,7 +41043,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Tipos de grau"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_FOLDERS_AND_FILES
+#if   L==1	// ca				// Fig_FOLDERS_AND_FILES
 	 "Carpetes i fitxers"
 #elif L==2	// de
 	 "Verzeichnisse und Dateien"
@@ -41063,7 +41063,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Diret&oacute;rios e arquivos"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_OER
+#if   L==1	// ca				// Fig_OER
 	 "Recursos Educatius Oberts (OER)"
 #elif L==2	// de
 	 "Open Educational Resources (OER)"
@@ -41083,7 +41083,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Recursos Educacionais Abertos (OER)"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_ASSIGNMENTS
+#if   L==1	// ca				// Fig_ASSIGNMENTS
 	 "Activitats"
 #elif L==2	// de
 	 "Aufgaben"
@@ -41103,7 +41103,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Atividades"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_PROJECTS
+#if   L==1	// ca				// Fig_PROJECTS
 	"Projectes"
 #elif L==2	// de
 	"Projekte"
@@ -41123,7 +41123,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Projetos"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_TESTS
+#if   L==1	// ca				// Fig_TESTS
 	 "Tests"
 #elif L==2	// de
 	 "Tests"
@@ -41143,7 +41143,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Testes"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_GAMES
+#if   L==1	// ca				// Fig_GAMES
 	"Jocs"
 #elif L==2	// de
 	"Spiele"
@@ -41163,7 +41163,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Jogos"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_SURVEYS
+#if   L==1	// ca				// Fig_SURVEYS
 	 "Enquestes"
 #elif L==2	// de
 	 "Umfragen"
@@ -41183,7 +41183,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Inqu&eacute;ritos"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_SOCIAL_ACTIVITY
+#if   L==1	// ca				// Fig_SOCIAL_ACTIVITY
 	 "Timeline"
 #elif L==2	// de
 	 "Timeline"
@@ -41203,7 +41203,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Timeline"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_FOLLOW
+#if   L==1	// ca				// Fig_FOLLOW
 	"Seguits / Seguidors"
 #elif L==2	// de
 	"Gefolgt / Anh&auml;nger"
@@ -41223,7 +41223,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Seguidos / Seguidores"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_FORUMS
+#if   L==1	// ca				// Fig_FORUMS
 	 "F&ograve;rums"
 #elif L==2	// de
 	 "Foren"
@@ -41243,7 +41243,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "F&oacute;runs"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_NOTIFY_EVENTS
+#if   L==1	// ca				// Fig_NOTIFY_EVENTS
 	"Notificacions enviades per correu"
 #elif L==2	// de
 	"Anmeldungen per E-Mail gesendet"
@@ -41263,7 +41263,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Notifica&ccedil;&otilde;es enviadas por email"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_NOTICES
+#if   L==1	// ca				// Fig_NOTICES
 	 "Avisos"
 #elif L==2	// de
 	 "Ank&uuml;ndigungen"
@@ -41283,7 +41283,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Avisos"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_MESSAGES
+#if   L==1	// ca				// Fig_MESSAGES
 	 "Missatges"
 #elif L==2	// de
 	 "Nachrichten"
@@ -41303,7 +41303,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Mensagens"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_SOCIAL_NETWORKS
+#if   L==1	// ca				// Fig_SOCIAL_NETWORKS
 	 "Webs / xarxes socials"
 #elif L==2	// de
 	 "Webs / Social Networks"
@@ -41323,7 +41323,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Webs / redes sociais"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_LANGUAGES
+#if   L==1	// ca				// Fig_LANGUAGES
 	 "Idioma"
 #elif L==2	// de
 	 "Sprache"
@@ -41343,7 +41343,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Lingua"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_FIRST_DAY_OF_WEEK
+#if   L==1	// ca				// Fig_FIRST_DAY_OF_WEEK
 	"Calendari"
 #elif L==2	// de
 	"Kalender"
@@ -41363,7 +41363,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Calend&aacute;rio"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_DATE_FORMAT
+#if   L==1	// ca				// Fig_DATE_FORMAT
 	"Dates"
 #elif L==2	// de
 	"Datum"
@@ -41383,7 +41383,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Datas"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_ICON_SETS
+#if   L==1	// ca				// Fig_ICON_SETS
 	 "Icones"
 #elif L==2	// de
 	 "Symbole"
@@ -41403,7 +41403,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "&Iacute;cones"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_MENUS
+#if   L==1	// ca				// Fig_MENUS
 	"Men&uacute;"
 #elif L==2	// de
 	"Men&uuml;"
@@ -41423,7 +41423,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Menu"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_THEMES
+#if   L==1	// ca				// Fig_THEMES
 	 "Tema (colors)"
 #elif L==2	// de
 	 "Skin"
@@ -41443,7 +41443,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Skin"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_SIDE_COLUMNS
+#if   L==1	// ca				// Fig_SIDE_COLUMNS
 	 "Columnes"
 #elif L==2	// de
 	 "Spalten"
@@ -41463,7 +41463,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Colunas"
 #endif
 	 ,
-#if   L==1	// ca				// Sta_PRIVACY
+#if   L==1	// ca				// Fig_PRIVACY
 	"Privacitat"
 #elif L==2	// de
 	"Geheimhaltung"
@@ -52141,27 +52141,6 @@ const char *Txt_users_with_no_group =
 	"u&zdot;ytkownik&oacute;w w ka&zdot;dej grupie";
 #elif L==9	// pt
 	"utilizadores com nenhum grupo";
-#endif
-
-const char *Txt_usr =		// Abbreviation of user (three characters + dot)
-#if   L==1	// ca
-	"usr.";	// Necessita traduccio
-#elif L==2	// de
-	"Ben.";
-#elif L==3	// en
-	"usr.";
-#elif L==4	// es
-	"usr.";
-#elif L==5	// fr
-	"uti.";
-#elif L==6	// gn
-	"usr.";	// Okoteve traducción
-#elif L==7	// it
-	"ute.";
-#elif L==8	// pl
-	"usr.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"uti.";
 #endif
 
 const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =

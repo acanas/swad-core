@@ -6008,7 +6008,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
       case ActSeeUseGbl:
 	 /* Used in selector of "Class photo"/"List"
 	    in STATS > Figures > Institutions */
-         Sta_PutHiddenParamFigures ();
+         Fig_PutHiddenParamFigures ();
          break;
       case ActSeePhoDeg:
          Pho_PutHiddenParamTypeOfAvg ();
@@ -8024,8 +8024,8 @@ static void Usr_PutIconsListGsts (void)
      }
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_USERS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_USERS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -8050,8 +8050,8 @@ static void Usr_PutIconsListStds (void)
      }
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_USERS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_USERS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -8076,8 +8076,8 @@ static void Usr_PutIconsListTchs (void)
      }
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_USERS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_USERS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

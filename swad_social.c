@@ -1011,8 +1011,8 @@ static void Soc_ShowTimeline (char *Query,
 static void Soc_PutIconsTimeline (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_SOCIAL_ACTIVITY;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_SOCIAL_ACTIVITY;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

@@ -509,8 +509,8 @@ static void Not_PutIconsListNotices (void)
       Not_PutIconToAddNewNotice ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_NOTICES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_NOTICES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

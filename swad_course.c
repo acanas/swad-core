@@ -1199,8 +1199,8 @@ static void Crs_PutIconsListCourses (void)
       Crs_PutIconToEditCourses ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_HIERARCHY;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_HIERARCHY;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -1376,8 +1376,8 @@ static void Crs_PutIconsEditingCourses (void)
    Crs_PutIconToViewCourses ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_HIERARCHY;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_HIERARCHY;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

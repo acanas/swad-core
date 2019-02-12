@@ -742,8 +742,8 @@ static void Ins_PutIconsListingInstitutions (void)
       Ins_PutIconToEditInstitutions ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_INSTITS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_INSTITS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -970,8 +970,8 @@ static void Ins_PutIconsEditingInstitutions (void)
    Ins_PutIconToViewInstitutions ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_INSTITS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_INSTITS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

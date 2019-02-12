@@ -48,6 +48,7 @@
 #include "swad_degree_type.h"
 #include "swad_enrolment.h"
 #include "swad_exam.h"
+#include "swad_figure.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
@@ -754,8 +755,11 @@ struct Globals
      } Svys;
    struct
      {
+      Fig_FigureType_t FigureType;
+     } Figures;
+   struct
+     {
       Sta_ClicksGroupedBy_t ClicksGroupedBy;
-      Sta_FigureType_t FigureType;
       Sta_Role_t Role;
       Sta_CountType_t CountType;
       Act_Action_t NumAction;

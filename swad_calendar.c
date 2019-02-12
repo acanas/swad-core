@@ -100,8 +100,8 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 static void Cal_PutIconsFirstDayOfWeek (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_FIRST_DAY_OF_WEEK;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_FIRST_DAY_OF_WEEK;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

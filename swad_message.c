@@ -2497,8 +2497,8 @@ static void Msg_PutIconsListMsgs (void)
                                   Msg_PutHiddenParamsMsgsFilters);
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_MESSAGES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_MESSAGES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

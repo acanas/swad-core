@@ -264,8 +264,8 @@ static void Pre_PutIconsToSelectSideCols (void)
 static void Pre_PutIconsSideColumns (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_SIDE_COLUMNS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_SIDE_COLUMNS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

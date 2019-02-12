@@ -331,8 +331,8 @@ static void Gam_PutIconsListGames (void)
       Gam_PutIconToCreateNewGame ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_GAMES;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_GAMES;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

@@ -33,6 +33,7 @@
 #include "swad_assignment.h"
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -256,8 +257,8 @@ static void Asg_PutIconsListAssignments (void)
       Asg_PutIconToCreateNewAsg ();
 
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_ASSIGNMENTS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_ASSIGNMENTS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

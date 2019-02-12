@@ -380,10 +380,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.35.2 (2019-02-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.37 (2019-02-12)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.37:    Feb 12, 2019 	New layout for figure about folders and files. (238913 lines)
+	Version 18.36:    Feb 12, 2019 	New module swad_figure for global big figures (stats). (238839 lines)
 	Version 18.35.2:  Feb 12, 2019 	Code refactoring in hierarchy stats. (238761 lines)
 	Version 18.35.1:  Feb 12, 2019 	Code refactoring in hierarchy stats. (238894 lines)
 	Version 18.35:    Feb 12, 2019 	New layout of hierarchy stats. (239132 lines)

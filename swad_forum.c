@@ -1741,8 +1741,8 @@ static void For_ShowForumList (void)
 static void For_PutIconsForums (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_FORUMS;
-   Sta_PutIconToShowFigure ();
+   Gbl.Figures.FigureType = Fig_FORUMS;
+   Fig_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
