@@ -207,6 +207,14 @@ static void Sta_GetAndShowHierarchyWithDegs (void);
 static void Sta_GetAndShowHierarchyWithCrss (void);
 static void Sta_GetAndShowHierarchyWithUsrs (Rol_Role_t Role);
 static void Sta_GetAndShowHierarchyTotal (void);
+static void Sta_ShowHierarchyRow (const char *Text1,const char *Text2,
+				  const char *ClassTxt,
+				  int NumCtys,	// < 0 ==> do not show number
+				  int NumInss,	// < 0 ==> do not show number
+				  int NumCtrs,	// < 0 ==> do not show number
+				  int NumDegs,	// < 0 ==> do not show number
+				  int NumCrss);	// < 0 ==> do not show number
+static void Sta_ShowHierarchyCell (const char *ClassTxt,int Num);
 
 static void Sta_GetAndShowInstitutionsStats (void);
 static void Sta_GetAndShowInssOrderedByNumCtrs (void);
@@ -4433,6 +4441,7 @@ static void Sta_GetAndShowHierarchyStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_hierarchy;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   Rol_Role_t Role;
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY],NULL,
@@ -4443,9 +4452,10 @@ static void Sta_GetAndShowHierarchyStats (void)
    Sta_GetAndShowHierarchyWithCtrs ();
    Sta_GetAndShowHierarchyWithDegs ();
    Sta_GetAndShowHierarchyWithCrss ();
-   Sta_GetAndShowHierarchyWithUsrs (Rol_TCH);
-   Sta_GetAndShowHierarchyWithUsrs (Rol_NET);
-   Sta_GetAndShowHierarchyWithUsrs (Rol_STD);
+   for (Role =  Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+      Sta_GetAndShowHierarchyWithUsrs (Role);
    Sta_GetAndShowHierarchyTotal ();
 
    /***** End table and box *****/
@@ -4515,7 +4525,8 @@ static void Sta_WriteHeadHierarchy (void)
 
 static void Sta_GetAndShowHierarchyWithInss (void)
   {
-   extern const char *Txt_With_institutions;
+   extern const char *Txt_With_;
+   extern const char *Txt_institutions;
    unsigned NumCtysWithInss = 1;
 
    /***** Get number of elements with institutions *****/
@@ -4536,28 +4547,13 @@ static void Sta_GetAndShowHierarchyWithInss (void)
      }
 
    /***** Write number of elements with institutions *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "</tr>",
-	    Txt_With_institutions,
-            NumCtysWithInss);
+   Sta_ShowHierarchyRow (Txt_With_,Txt_institutions,
+			 "DAT",
+                         (int) NumCtysWithInss,
+                         -1,		// < 0 ==> do not show number
+                         -1,		// < 0 ==> do not show number
+                         -1,		// < 0 ==> do not show number
+			 -1);		// < 0 ==> do not show number
   }
 
 /*****************************************************************************/
@@ -4566,7 +4562,8 @@ static void Sta_GetAndShowHierarchyWithInss (void)
 
 static void Sta_GetAndShowHierarchyWithCtrs (void)
   {
-   extern const char *Txt_With_centres;
+   extern const char *Txt_With_;
+   extern const char *Txt_centres;
    char SubQuery[128];
    unsigned NumCtysWithCtrs = 1;
    unsigned NumInssWithCtrs = 1;
@@ -4594,29 +4591,13 @@ static void Sta_GetAndShowHierarchyWithCtrs (void)
      }
 
    /***** Write number of elements with centres *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "</tr>",
-	    Txt_With_centres,
-            NumCtysWithCtrs,
-            NumInssWithCtrs);
+   Sta_ShowHierarchyRow (Txt_With_,Txt_centres,
+			 "DAT",
+                         (int) NumCtysWithCtrs,
+                         (int) NumInssWithCtrs,
+                         -1,		// < 0 ==> do not show number
+                         -1,		// < 0 ==> do not show number
+			 -1);		// < 0 ==> do not show number
   }
 
 /*****************************************************************************/
@@ -4625,7 +4606,8 @@ static void Sta_GetAndShowHierarchyWithCtrs (void)
 
 static void Sta_GetAndShowHierarchyWithDegs (void)
   {
-   extern const char *Txt_With_degrees;
+   extern const char *Txt_With_;
+   extern const char *Txt_degrees;
    char SubQuery[128];
    unsigned NumCtysWithDegs = 1;
    unsigned NumInssWithDegs = 1;
@@ -4660,30 +4642,13 @@ static void Sta_GetAndShowHierarchyWithDegs (void)
      }
 
    /***** Write number of elements with degrees *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "</tr>",
-	    Txt_With_degrees,
-            NumCtysWithDegs,
-            NumInssWithDegs,
-            NumCtrsWithDegs);
+   Sta_ShowHierarchyRow (Txt_With_,Txt_degrees,
+			 "DAT",
+                         (int) NumCtysWithDegs,
+                         (int) NumInssWithDegs,
+                         (int) NumCtrsWithDegs,
+                         -1,		// < 0 ==> do not show number
+			 -1);		// < 0 ==> do not show number
   }
 
 /*****************************************************************************/
@@ -4692,7 +4657,8 @@ static void Sta_GetAndShowHierarchyWithDegs (void)
 
 static void Sta_GetAndShowHierarchyWithCrss (void)
   {
-   extern const char *Txt_With_courses;
+   extern const char *Txt_With_;
+   extern const char *Txt_courses;
    char SubQuery[128];
    unsigned NumCtysWithCrss = 1;
    unsigned NumInssWithCrss = 1;
@@ -4735,31 +4701,13 @@ static void Sta_GetAndShowHierarchyWithCrss (void)
      }
 
    /***** Write number of elements with courses *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "</tr>",
-	    Txt_With_courses,
-            NumCtysWithCrss,
-            NumInssWithCrss,
-            NumCtrsWithCrss,
-            NumDegsWithCrss);
+   Sta_ShowHierarchyRow (Txt_With_,Txt_courses,
+			 "DAT",
+                         (int) NumCtysWithCrss,
+                         (int) NumInssWithCrss,
+                         (int) NumCtrsWithCrss,
+                         (int) NumDegsWithCrss,
+			 -1);		// < 0 ==> do not show number
   }
 
 /*****************************************************************************/
@@ -4768,7 +4716,7 @@ static void Sta_GetAndShowHierarchyWithCrss (void)
 
 static void Sta_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
   {
-   extern const char *Txt_With;
+   extern const char *Txt_With_;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char SubQuery[128];
    unsigned NumCtysWithUsrs = 0;
@@ -4838,32 +4786,13 @@ static void Sta_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
      }
 
    /***** Write number of elements with students *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s %s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-	    Txt_With,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
-            NumCtysWithUsrs,
-            NumInssWithUsrs,
-            NumCtrsWithUsrs,
-            NumDegsWithUsrs,
-            NumCrssWithUsrs);
+   Sta_ShowHierarchyRow (Txt_With_,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
+			 "DAT",
+                         (int) NumCtysWithUsrs,
+                         (int) NumInssWithUsrs,
+                         (int) NumCtrsWithUsrs,
+                         (int) NumDegsWithUsrs,
+			 (int) NumCrssWithUsrs);
   }
 
 /*****************************************************************************/
@@ -4915,32 +4844,54 @@ static void Sta_GetAndShowHierarchyTotal (void)
      }
 
    /***** Write total number of elements *****/
+   Sta_ShowHierarchyRow ("",Txt_Total,
+			 "DAT_N_LINE_TOP",
+                         (int) NumCtysTotal,
+                         (int) NumInssTotal,
+                         (int) NumCtrsTotal,
+                         (int) NumDegsTotal,
+			 (int) NumCrssTotal);
+  }
+
+/*****************************************************************************/
+/************** Show row with number of elements in hierarchy ****************/
+/*****************************************************************************/
+
+static void Sta_ShowHierarchyRow (const char *Text1,const char *Text2,
+				  const char *ClassTxt,
+				  int NumCtys,	// < 0 ==> do not show number
+				  int NumInss,	// < 0 ==> do not show number
+				  int NumCtrs,	// < 0 ==> do not show number
+				  int NumDegs,	// < 0 ==> do not show number
+				  int NumCrss)	// < 0 ==> do not show number
+  {
+   /***** Start row and write text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-	    Txt_Total,
-            NumCtysTotal,
-            NumInssTotal,
-            NumCtrsTotal,
-            NumDegsTotal,
-            NumCrssTotal);
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s%s"
+		      "</td>",
+	    ClassTxt,Text1,Text2);
+
+   /***** Write number of countries *****/
+   Sta_ShowHierarchyCell (ClassTxt,NumCtys);
+   Sta_ShowHierarchyCell (ClassTxt,NumInss);
+   Sta_ShowHierarchyCell (ClassTxt,NumCtrs);
+   Sta_ShowHierarchyCell (ClassTxt,NumDegs);
+   Sta_ShowHierarchyCell (ClassTxt,NumCrss);
+
+   /***** End row *****/
+   fprintf (Gbl.F.Out,"</tr>");
+  }
+
+static void Sta_ShowHierarchyCell (const char *ClassTxt,int Num)
+  {
+   /***** Write number *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",ClassTxt);
+   if (Num >= 0)
+      fprintf (Gbl.F.Out,"%d",Num);
+   else		// < 0 ==> do not show number
+      fprintf (Gbl.F.Out,"-");
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/

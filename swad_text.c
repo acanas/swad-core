@@ -53109,109 +53109,25 @@ const char *Txt_Who_to_follow =
 	"Quem seguir";
 #endif
 
-const char *Txt_With =
+const char *Txt_With_ =	// Example: "With students"
 #if   L==1	// ca
-	"Amb";
+	"Amb ";
 #elif L==2	// de
-	"Mit";
+	"Mit ";
 #elif L==3	// en
-	"With";
+	"With ";
 #elif L==4	// es
-	"Con";
+	"Con ";
 #elif L==5	// fr
-	"Avec";
+	"Avec ";
 #elif L==6	// gn
-	"Con";	// Okoteve traducción
+	"Con ";	// Okoteve traducción
 #elif L==7	// it
-	"Con";
+	"Con ";
 #elif L==8	// pl
-	"Z";
+	"Z ";
 #elif L==9	// pt
-	"Com";
-#endif
-
-const char *Txt_With_centres =
-#if   L==1	// ca
-	"Amb centres";
-#elif L==2	// de
-	"Mit Lehrinstitute";
-#elif L==3	// en
-	"With centres";
-#elif L==4	// es
-	"Con centros";
-#elif L==5	// fr
-	"Avec centres";
-#elif L==6	// gn
-	"Con centros";	// Okoteve traducción
-#elif L==7	// it
-	"Con centri";
-#elif L==8	// pl
-	"Z centra";
-#elif L==9	// pt
-	"Com centros";
-#endif
-
-const char *Txt_With_courses =
-#if   L==1	// ca
-	"Amb assignatures";
-#elif L==2	// de
-	"Mit Kursen";
-#elif L==3	// en
-	"With courses";
-#elif L==4	// es
-	"Con asignaturas";
-#elif L==5	// fr
-	"Avec mati&egrave;res";
-#elif L==6	// gn
-	"Con asignaturas";	// Okoteve traducción
-#elif L==7	// it
-	"Con corsi";
-#elif L==8	// pl
-	"Z kurs&oacute;w";
-#elif L==9	// pt
-	"Com disciplinas";
-#endif
-
-const char *Txt_With_degrees =
-#if   L==1	// ca
-	"Amb titulacions";
-#elif L==2	// de
-	"Mit Studiengang";
-#elif L==3	// en
-	"With degrees";
-#elif L==4	// es
-	"Con titulaciones";
-#elif L==5	// fr
-	"Avec &eacute;tudes";
-#elif L==6	// gn
-	"Con titulaciones";	// Okoteve traducción
-#elif L==7	// it
-	"Con lauree";
-#elif L==8	// pl
-	"Z stopnie";
-#elif L==9	// pt
-	"Com graus";
-#endif
-
-const char *Txt_With_institutions =
-#if   L==1	// ca
-	"Amb institucions";
-#elif L==2	// de
-	"Mit Hochschulen";
-#elif L==3	// en
-	"With institutions";
-#elif L==4	// es
-	"Con instituciones";
-#elif L==5	// fr
-	"Avec &eacute;tablissements";
-#elif L==6	// gn
-	"Con instituciones";	// Okoteve traducción
-#elif L==7	// it
-	"Con istituzioni";
-#elif L==8	// pl
-	"Z instytucje";
-#elif L==9	// pt
-	"Com institu&ccedil;&otilde;es";
+	"Com ";
 #endif
 
 const char *Txt_with_new_posts =
