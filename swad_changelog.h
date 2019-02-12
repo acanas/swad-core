@@ -359,8 +359,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
 
-// TODO: Cifras > Jearquía: cambiar ejes X e Y en la tabla para que se vea más estrecho -> mejor en móviles
-
 // TODO: Cambiar Favorito a "Me gusta"
 
 /*****************************************************************************/
@@ -382,10 +380,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.34.3 (2019-02-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.35 (2019-02-12)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.35:    Feb 12, 2019 	New layout of hierarchy stats. (239132 lines)
 	Version 18.34.3:  Feb 12, 2019 	Changed icon remove to close in announcements. (239109 lines)
 	Version 18.34.2:  Feb 11, 2019 	Fav icon in timeline changed from star to heart. (239108 lines)
 					Copy the following icon to icon public directory:

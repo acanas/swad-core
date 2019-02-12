@@ -53217,23 +53217,23 @@ const char *Txt_with_new_posts =
 
 const char *Txt_With_non_editing_teachers =
 #if   L==1	// ca
-	"Amb professors no editors";
+	"Amb prof. no edit.";
 #elif L==2	// de
-	"Mit nicht bearbeiteter Lehrkr&auml;ften";
+	"Mit nicht bearb. Lehr.";
 #elif L==3	// en
-	"With non-editing teachers";
+	"With non-edit. teach.";
 #elif L==4	// es
-	"Con profesores no editores";
+	"Con prof. no edit.";
 #elif L==5	// fr
-	"Avec enseignants non-&eacute;diteurs";
+	"Avec ens. non-&eacute;dit.";
 #elif L==6	// gn
-	"Con profesores no editores";	// Okoteve traducción
+	"Con prof. no edit.";	// Okoteve traducción
 #elif L==7	// it
-	"Con professori non-editing";
+	"Con prof. non-edit.";
 #elif L==8	// pl
-	"Z nauczycielami nie edytuj&aogon;cy";
+	"Z nauc. nie edyt.";
 #elif L==9	// pt
-	"Com professores n&atilde;o editores";
+	"Com prof. n&atilde;o edit.";
 #endif
 
 const char *Txt_With_students =
