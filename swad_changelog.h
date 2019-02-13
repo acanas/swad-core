@@ -386,10 +386,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.40 (2019-02-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.40.1 (2019-02-13)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.40.1:  Feb 13, 2019 	Code refactorization in firewall. (239201 lines)
 	Version 18.40:    Feb 13, 2019 	New table for banned IPs to mitigate DoS attacks. (239198 lines)
 					2 changes necessary in database:
 RENAME TABLE firewall TO firewall_log;

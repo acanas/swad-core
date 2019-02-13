@@ -58,6 +58,8 @@ extern struct Globals Gbl;
 
 static void FW_BanIP (void);
 
+static void FW_WriteHTML (const char *Title,const char *H1);
+
 /*****************************************************************************/
 /************************** Log access into firewall *************************/
 /*****************************************************************************/
@@ -108,15 +110,8 @@ void FW_CheckFirewallAndExitIfBanned (void)
      {
       /* Return status 403 Forbidden */
       fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
-	              "Status: 403\r\n\r\n"
-                      "<html>"
-                      "<head>"
-                      "<title>Forbidden</title>"
-                      "</head>"
-                      "<body>"
-                      "<h1>You are banned temporarily</h1>"
-                      "</body>"
-                      "</html>\n");
+	              "Status: 403\r\n\r\n");
+      FW_WriteHTML ("Forbidden","You are temporarily banned");
 
       /* Close database connection and exit */
       DB_CloseDBConnection ();
@@ -152,16 +147,9 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
       /* Return status 429 Too Many Requests */
       fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
                       "Retry-After: %lu\n"
-	              "Status: 429\r\n\r\n"
-                      "<html>"
-                      "<head>"
-                      "<title>Too Many Requests</title>"
-                      "</head>"
-                      "<body>"
-                      "<h1>Please stop that</h1>"
-                      "</body>"
-                      "</html>\n",
+	              "Status: 429\r\n\r\n",
 	       (unsigned long) Fw_TIME_BANNED);
+      FW_WriteHTML ("Too Many Requests","Please stop that");
 
       /* Close database connection and exit */
       DB_CloseDBConnection ();
@@ -182,4 +170,21 @@ static void FW_BanIP (void)
 		   " VALUES"
 		   " ('%s',NOW(),FROM_UNIXTIME(UNIX_TIMESTAMP()+%lu))",
 		   Gbl.IP,(unsigned long) Fw_TIME_BANNED);
+  }
+
+/*****************************************************************************/
+/********************************* Ban an IP *********************************/
+/*****************************************************************************/
+
+static void FW_WriteHTML (const char *Title,const char *H1)
+  {
+   fprintf (stdout,"<html>"
+		   "<head>"
+		   "<title>%s</title>"
+		   "</head>"
+		   "<body>"
+		   "<h1>%s</h1>"
+		   "</body>"
+		   "</html>\n",
+	    Title,H1);
   }
