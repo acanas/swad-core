@@ -356,8 +356,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
 
-// TODO: Tabla de asistencia con símbolos tip ok como entidades HTML
-
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
 
@@ -386,10 +384,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.40.1 (2019-02-13)"
-#define CSS_FILE		"swad18.33.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.41 (2019-02-13)"
+#define CSS_FILE		"swad18.41.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.41:    Feb 13, 2019 	Changes in attendance marks for present/absent. (239203 lines)
 	Version 18.40.1:  Feb 13, 2019 	Code refactorization in firewall. (239201 lines)
 	Version 18.40:    Feb 13, 2019 	New table for banned IPs to mitigate DoS attacks. (239198 lines)
 					2 changes necessary in database:

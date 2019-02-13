@@ -148,6 +148,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                                          long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
+static void Att_PutCheckOrCross (bool Present);
 static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,
                                               long *LstSelectedUsrCods);
 static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
@@ -2044,8 +2045,6 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
                                           struct UsrData *UsrDat,
                                           struct AttendanceEvent *Att)
   {
-   extern const char *Txt_Present;
-   extern const char *Txt_Absent;
    bool Present;
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
@@ -2085,26 +2084,17 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
 	 break;
      }
 
-   /***** Check if this student is already registered in the current event *****/
+   /***** Check if this student is already present in the current event *****/
    Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
 
-   /***** Icon to show if the user is already registered *****/
+   /***** Icon to show if the user is already present *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%u\">"
-                      "<label for=\"Std%u\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO_16x16\" />"
-                      "</label>"
-	              "</td>",
-            Gbl.RowEvenOdd,NumStd,
-            Gbl.Prefs.URLIcons,
-            Present ? "check-square.svg" :
-        	      "square.svg",
-            Present ? Txt_Present :
-        	      Txt_Absent,
-            Present ? Txt_Present :
-        	      Txt_Absent);
+                      "<label for=\"Std%u\">",
+            Gbl.RowEvenOdd,NumStd);
+   Att_PutCheckOrCross (Present);
+   fprintf (Gbl.F.Out,"</label>"
+	              "</td>");
 
    /***** Checkbox to select user *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">"
@@ -3431,8 +3421,6 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat)
   {
-   extern const char *Txt_Present;
-   extern const char *Txt_Absent;
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    unsigned NumAttEvent;
@@ -3482,29 +3470,22 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
    fprintf (Gbl.F.Out,", %s</td>",
 	    UsrDat->FirstName);
 
-   /***** Icon to show if the user is already registered *****/
+   /***** Check/cross to show if the user is present/absent *****/
    for (NumAttEvent = 0, NumTimesPresent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
       if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
-	 /***** Check if this student is already registered in the current event *****/
+	 /* Check if this student is already registered in the current event */
 	 // Here it is not necessary to get comments
-	 Present = Att_CheckIfUsrIsPresentInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod);
+	 Present = Att_CheckIfUsrIsPresentInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+	                                              UsrDat->UsrCod);
 
-	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
-	                    "<img src=\"%s/%s\""
-	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"CONTEXT_ICO_16x16\" />"
-	                    "</td>",
-		  Gbl.RowEvenOdd,
-		  Gbl.Prefs.URLIcons,
-		  Present ? "check-square.svg" :
-			    "square.svg",
-		  Present ? Txt_Present :
-			    Txt_Absent,
-		  Present ? Txt_Present :
-			    Txt_Absent);
+	 /* Write check or cross */
+	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",
+		  Gbl.RowEvenOdd);
+	 Att_PutCheckOrCross (Present);
+	 fprintf (Gbl.F.Out,"</td>");
 
 	 if (Present)
 	    NumTimesPresent++;
@@ -3519,6 +3500,29 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	    NumTimesPresent);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/*********************** Put check or cross character ************************/
+/*****************************************************************************/
+
+static void Att_PutCheckOrCross (bool Present)
+  {
+   extern const char *Txt_Present;
+   extern const char *Txt_Absent;
+
+   fprintf (Gbl.F.Out,"<div class=\"");
+
+   if (Present)
+      fprintf (Gbl.F.Out,"ATT_CHECK\" title=\"%s\">"
+			 "&check;",
+	       Txt_Present);
+   else
+      fprintf (Gbl.F.Out,"ATT_CROSS\" title=\"%s\">"
+			 "&cross;",
+	       Txt_Absent);
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3573,8 +3577,6 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,
 static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_Present;
-   extern const char *Txt_Absent;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    char PhotoURL[PATH_MAX + 1];
@@ -3652,31 +3654,22 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	 /***** Write a row for this event *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 		            "<td class=\"COLOR%u\"></td>"
-			    "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
+			    "<td class=\"DAT RIGHT_TOP COLOR%u\">"
 			    "%u:"
 			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
-	                    "<img src=\"%s/%s\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"CONTEXT_ICO_16x16\" />"
-	                    "<span id=\"att_date_start_%u\"></span> %s"
+			    "<td class=\"DAT LEFT_TOP COLOR%u\">",
+	          Gbl.RowEvenOdd,
+	          Gbl.RowEvenOdd,
+		  NumAttEvent + 1,
+	          Gbl.RowEvenOdd);
+         Att_PutCheckOrCross (Present);
+	 fprintf (Gbl.F.Out,"<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
 			    "%u,',&nbsp;','%s',true,true,0x7);"
 			    "</script>"
 	                    "</td>"
 			    "</tr>",
-	          Gbl.RowEvenOdd,
-	          Gbl.RowEvenOdd,
-		  NumAttEvent + 1,
-	          Gbl.RowEvenOdd,
-		  Gbl.Prefs.URLIcons,
-		  Present ? "check-square.svg" :
-			    "square.svg",
-		  Present ? Txt_Present :
-			    Txt_Absent,
-		  Present ? Txt_Present :
-			    Txt_Absent,
 	          UniqueId,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title,
                   UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],

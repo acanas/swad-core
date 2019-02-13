@@ -2701,6 +2701,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-overflow:ellipsis;
 	}
 
+/********************************* Attendance ********************************/
+.ATT_CHECK
+	{
+	display:inline-block;
+	font-size:16pt;
+	color:darkgreen;
+	}
+.ATT_CROSS
+	{
+	display:inline-block;
+	font-size:16pt;
+	color:darkred;
+	opacity:0.2;
+	}
+
 /**************************** Enrolment requests *****************************/
 .REQUESTER_NAME
 	{
@@ -3074,8 +3089,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BT		{width:20px; text-align:center; vertical-align:top;}
 .BT0		{width:20px; text-align:center; vertical-align:top; background-color:#F4F2EA;}
 .BT1		{width:20px; text-align:center; vertical-align:top; background-color:#FBFAF7;}
+
 .BM		{width:20px; text-align:center; vertical-align:middle;}
 .BM_SEL		{width:20px; text-align:center; vertical-align:middle; background-color:#C0FF40;}
+
 .BM0		{width:20px; text-align:center; vertical-align:middle; background-color:#F4F2EA;}
 .BM1		{width:20px; text-align:center; vertical-align:middle; background-color:#FBFAF7;}
 
