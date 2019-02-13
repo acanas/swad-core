@@ -3470,7 +3470,7 @@ void Crs_RemoveOldCrss (void)
    /***** Get old courses from database *****/
    NumCrss = DB_QuerySELECT (&mysql_res,"can not get old courses",
 			     "SELECT CrsCod FROM crs_last WHERE"
-			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 			     " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
 			     SecondsWithoutAccess);
    if (NumCrss)

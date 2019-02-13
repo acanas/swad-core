@@ -522,6 +522,14 @@ CREATE TABLE IF NOT EXISTS files (
 	INDEX(ZoneUsrCod),
 	INDEX(PublisherUsrCod));
 --
+-- Table firewall: stores the most recent IPs in order to mitigate denial of service attacks
+--
+CREATE TABLE IF NOT EXISTS firewall (
+	ClickTime DATETIME NOT NULL,
+	IP CHAR(15) NOT NULL,
+	INDEX(ClickTime),
+	INDEX(IP));
+--
 -- Table forum_disabled_post: stores the forum post that have been disabled
 --
 CREATE TABLE IF NOT EXISTS forum_disabled_post (

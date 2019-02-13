@@ -239,11 +239,11 @@ void Ses_RemoveExpiredSessions (void)
           and last refresh is too old (browser probably was closed)) */
    DB_QueryDELETE ("can not remove expired sessions",
 		   "DELETE LOW_PRIORITY FROM sessions WHERE"
-                   " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+                   " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
                    " OR "
                    "(LastRefresh>LastTime+INTERVAL 1 SECOND"
                    " AND"
-                   " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu'))",
+                   " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu))",
                    Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
                    Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
   }

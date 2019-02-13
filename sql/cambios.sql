@@ -12593,19 +12593,8 @@ ALTER TABLE ws_keys ENGINE=MyISAM;
 OPTIMIZE TABLE ws_keys;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 SELECT Weekday,TIME_TO_SEC(StartTime) AS S,TIME_TO_SEC(Duration) AS D,Place,ClassType,GrpCod FROM timetable_crs WHERE CrsCod=19 ORDER BY Weekday,S,ClassType,GrpCod,Place,D DESC;
+
+
+CREATE TABLE IF NOT EXISTS firewall (ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,INDEX(ClickTime),INDEX(IP));
+

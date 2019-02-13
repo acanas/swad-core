@@ -1149,6 +1149,23 @@ mysql> DESCRIBE files;
 		   "INDEX(ZoneUsrCod),"
 		   "INDEX(PublisherUsrCod))");
 
+   /***** Table firewall *****/
+/*
+mysql> DESCRIBE firewall;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| ClickTime | datetime | NO   | MUL | NULL    |       |
+| IP        | char(15) | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS firewall ("
+			"ClickTime DATETIME NOT NULL,"
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
+		   "INDEX(ClickTime),"
+		   "INDEX(IP))");
+
    /***** Table forum_disabled_post *****/
 /*
 mysql> DESCRIBE forum_disabled_post;
@@ -1543,7 +1560,7 @@ mysql> DESCRIBE log_full;
 			"ClickTime DATETIME NOT NULL,"
 			"TimeToGenerate INT NOT NULL,"
 			"TimeToSend INT NOT NULL,"
-			"IP CHAR(15) NOT NULL,"	// Cns_MAX_CHARS_IP
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(LogCod),"
 		   "INDEX(ActCod),"
 		   "INDEX(CtyCod),"
@@ -1590,7 +1607,7 @@ mysql> DESCRIBE log_recent;
 			"ClickTime DATETIME NOT NULL,"
 			"TimeToGenerate INT NOT NULL,"
 			"TimeToSend INT NOT NULL,"
-			"IP CHAR(15) NOT NULL,"	// Cns_MAX_CHARS_IP
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(LogCod),"
 		   "INDEX(ActCod),"
 		   "INDEX(CtyCod),"

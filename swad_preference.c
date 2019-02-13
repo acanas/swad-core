@@ -218,7 +218,7 @@ void Pre_RemoveOldPrefsFromIP (void)
    /***** Remove old preferences *****/
    DB_QueryDELETE ("can not remove old preferences",
 		   "DELETE LOW_PRIORITY FROM IP_prefs"
-		   " WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   " WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_IP_PREFS);
   }
 

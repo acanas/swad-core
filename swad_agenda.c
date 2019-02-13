@@ -1125,7 +1125,7 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
 	               "SELECT AgdCod,Public,Hidden,"
 		       "UNIX_TIMESTAMP(StartTime),"
 		       "UNIX_TIMESTAMP(EndTime),"
-		       "NOW()>EndTime,"	// Past event?
+		       "NOW()>EndTime,"		// Past event?
 		       "NOW()<StartTime,"	// Future event?
 		       "Event,Location"
 		       " FROM agendas"

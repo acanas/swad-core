@@ -514,8 +514,8 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
 
    /***** Remove expired pending passwords from database *****/
    DB_QueryDELETE ("can not remove expired pending passwords",
-		   "DELETE FROM pending_passwd"
-		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   "DELETE LOW_PRIORITY FROM pending_passwd"
+		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
 
    /***** Update my current password in database *****/

@@ -862,7 +862,7 @@ void Enr_RemoveOldUsrs (void)
 			     "SELECT UsrCod FROM"
 			     "("
 			     "SELECT UsrCod FROM usr_last WHERE"
-			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+			     " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 			     " UNION "
 			     "SELECT UsrCod FROM usr_data WHERE"
 			     " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
@@ -3062,15 +3062,15 @@ static void Enr_RemoveExpiredEnrolmentRequests (void)
 		   " SET notif.Status=(notif.Status | %u)"
 		   " WHERE notif.NotifyEvent=%u"
 		   " AND notif.Cod=crs_usr_requests.ReqCod"
-		   " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 	           (unsigned) Ntf_STATUS_BIT_REMOVED,
 	           (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
 	           Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
 
    /***** Remove expired requests for enrolment *****/
    DB_QueryDELETE ("can not remove expired requests for enrolment",
-		   "DELETE FROM crs_usr_requests"
-		   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   "DELETE LOW_PRIORITY FROM crs_usr_requests"
+		   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
   }
 

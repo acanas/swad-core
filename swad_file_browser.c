@@ -7860,7 +7860,7 @@ void Brw_RemoveExpiredExpandedFolders (void)
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old expanded folders",
 		   "DELETE LOW_PRIORITY FROM expanded_folders"
-		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS);
   }
 
@@ -7873,7 +7873,7 @@ static void Brw_RemoveExpiredClipboards (void)
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old paths from clipboard",
 		   "DELETE LOW_PRIORITY FROM clipboard"
-		   " WHERE CopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   " WHERE CopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD);
   }
 

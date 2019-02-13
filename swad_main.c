@@ -34,6 +34,7 @@
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
+#include "swad_firewall.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_MFU.h"
@@ -109,10 +110,10 @@ int main (void)
      {
       Par_CreateListOfParams ();
       Par_GetMainParameters ();
-      /*
-      if (!strcmp (Gbl.IP,"83.50.221.168"))
-         fprintf (stdout,"Status: 403\r\n\r\n");
-*/
+
+      /***** Mitigate DoS attacks *****/
+      FW_LogAccess ();
+      FW_CheckFirewallAndExitIfTooManyRequests ();
 
       Hie_InitHierarchy ();
       if (!Gbl.WebService.IsWebService)

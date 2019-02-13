@@ -37,6 +37,7 @@
 #include "swad_connected.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_firewall.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -1405,9 +1406,12 @@ void Lay_RefreshNotifsAndConnected (void)
    bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
                         Gbl.CurrentCrs.Crs.CrsCod > 0;	// Right column visible && There is a course selected
 
-   // Sometimes, someone must do this work, so who best than processes that refresh via AJAX?
+   /***** Sometimes, someone must do this work,
+          so who best than processes that refresh via AJAX? *****/
    if (!(Gbl.PID % 11))		// Do this only one of   11 times (  11 is prime)
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
+   else if (!(Gbl.PID % 19))	// Do this only one of   19 times (  19 is prime)
+      FW_PurgeFirewall ();
    else if (!(Gbl.PID % 1013))	// Do this only one of 1013 times (1013 is prime)
       Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 1019))	// Do this only one of 1019 times (1019 is prime)
@@ -1415,7 +1419,7 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 1021))	// Do this only one of 1021 times (1021 is prime)
       Sta_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
 
-   // Send, before the HTML, the refresh time
+   /***** Send, before the HTML, the refresh time *****/
    fprintf (Gbl.F.Out,"%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
    if (Gbl.Usrs.Me.Logged)
       Ntf_WriteNumberOfNewNtfs ();

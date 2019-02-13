@@ -1469,7 +1469,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 				"SELECT sta_degrees.DegCod"
 				" FROM sta_degrees,courses,crs_usr"
 				" WHERE sta_degrees.TimeAvgPhoto<"
-				"FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+				"FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 				" AND sta_degrees.DegCod=courses.DegCod"
 				" AND courses.CrsCod=crs_usr.CrsCod"
 				" AND crs_usr.Role=%u"

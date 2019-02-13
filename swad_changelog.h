@@ -359,6 +359,8 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
 
+// TODO: Tabla de asistencia con símbolos tip ok como entidades HTML
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -378,11 +380,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.38 (2019-02-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.39 (2019-02-13)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
-	Version 18.38:    Feb 13, 2019 	New icons for social networks. (? lines)
+	Version 18.39:    Feb 13, 2019 	New module swad_firewall to mitigate mitigate DoS attacks. (239101 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS firewall (ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,INDEX(ClickTime),INDEX(IP));
+
+	Version 18.38:    Feb 13, 2019 	New icons for social networks. (238940 lines)
 					2 changes necessary in database:
 DELETE FROM usr_webs WHERE Web='quitter';
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;

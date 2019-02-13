@@ -1774,8 +1774,8 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
   {
    /***** Remove expired pending emails from database *****/
    DB_QueryDELETE ("can not remove old pending mail keys",
-		   "DELETE FROM pending_emails"
-		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   "DELETE LOW_PRIORITY FROM pending_emails"
+		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);
 
    /***** Insert mail key in database *****/

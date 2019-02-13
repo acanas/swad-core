@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
+#include <stdlib.h>		// For getenv, malloc
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -274,7 +275,7 @@ void Sta_RemoveOldEntriesRecentLog (void)
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old entries from recent log",
 		   "DELETE LOW_PRIORITY FROM log_recent"
-                   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+                   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Sta_SECONDS_IN_RECENT_LOG);
   }
 

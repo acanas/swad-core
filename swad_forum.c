@@ -4557,7 +4557,7 @@ static void For_RemoveExpiredThrsClipboards (void)
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old threads from clipboards",
 		   "DELETE LOW_PRIORITY FROM forum_thr_clip"
-		   " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD);
   }
 

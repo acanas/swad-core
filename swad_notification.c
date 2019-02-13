@@ -1535,7 +1535,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    if ((NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
 					     " who must be notified",
 				  "SELECT DISTINCT ToUsrCod FROM notif"
-				  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+				  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 				  " AND (Status & %u)<>0"
 				  " AND (Status & %u)=0"
 				  " AND (Status & %u)=0",
@@ -1578,7 +1578,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    /***** Delete old notifications ******/
    DB_QueryDELETE ("can not remove old notifications",
 		   "DELETE LOW_PRIORITY FROM notif"
-		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_OLD_NOTIF);
   }
 
