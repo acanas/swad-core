@@ -384,10 +384,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.41 (2019-02-13)"
-#define CSS_FILE		"swad18.41.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.41.1 (2019-02-14)"
+#define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.41.1:  Feb 14, 2019 	Fixed bug in attendance list.
+					Changes in layout of attendance list. (239218 lines)
 	Version 18.41:    Feb 13, 2019 	Changes in attendance marks for present/absent. (239203 lines)
 	Version 18.40.1:  Feb 13, 2019 	Code refactorization in firewall. (239201 lines)
 	Version 18.40:    Feb 13, 2019 	New table for banned IPs to mitigate DoS attacks. (239198 lines)

@@ -2113,8 +2113,8 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">"
 	              "%u"
 	              "</td>",
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL",
+            UsrDat->Accepted ? "DAT_N" :
+        	               "DAT",
             Gbl.RowEvenOdd,
             NumStd);
 
@@ -3206,7 +3206,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
       /* Write a row for this event */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT CENTER_MIDDLE COLOR%u\">"
+			 "<td class=\"DAT CENTER_TOP COLOR%u\">"
 			 "<input type=\"checkbox\""
 			 " id=\"Att%u\" name=\"AttCods\" value=\"%ld\"",
 	       Gbl.RowEvenOdd,
@@ -3216,10 +3216,10 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
+			 "<td class=\"DAT RIGHT_TOP COLOR%u\">"
 			 "<label for=\"Att%u\">%u:</label>"
 			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
+			 "<td class=\"DAT LEFT_TOP COLOR%u\">"
 			 "<label for=\"Att%u\">"
                          "<span id=\"att_date_start_%u\"></span>&nbsp;%s"
                          "</label>"
@@ -3228,7 +3228,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "%u,',&nbsp;','%s',true,true,0x7);"
 			 "</script>"
 			 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
+			 "<td class=\"DAT RIGHT_TOP COLOR%u\">"
 			 "%u"
 			 "</td>"
 			 "</tr>",
@@ -3432,8 +3432,8 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	              "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
 	              "%u"
 	              "</td>",
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL",
+            UsrDat->Accepted ? "DAT_N" :
+        	               "DAT",
             Gbl.RowEvenOdd,
             NumStd + 1);
 
@@ -3590,18 +3590,18 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Write number of student in the list *****/
+   NumStd++;
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
 	              "%u:"
 	              "</td>",
-	    UsrDat->Accepted ? "DAT_SMALL_N" :
-			       "DAT_SMALL",
+	    UsrDat->Accepted ? "DAT_N" :
+			       "DAT",
 	    Gbl.RowEvenOdd,
-	    NumStd + 1);
+	    NumStd);
 
    /***** Show student's photo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\""
-	              " style=\"width:22px;\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -3615,8 +3615,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
                       "<tr>"
                       "<td class=\"%s LEFT_MIDDLE\">",
             Gbl.RowEvenOdd,
-	    UsrDat->Accepted ? "DAT_SMALL_N" :
-			       "DAT_SMALL");
+	    UsrDat->Accepted ? "DAT_N" :
+			       "DAT");
    ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -3654,25 +3654,32 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	 /***** Write a row for this event *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 		            "<td class=\"COLOR%u\"></td>"
-			    "<td class=\"DAT RIGHT_TOP COLOR%u\">"
+			    "<td class=\"%s RIGHT_TOP COLOR%u\">"
 			    "%u:"
 			    "</td>"
-			    "<td class=\"DAT LEFT_TOP COLOR%u\">",
+			    "<td class=\"BT%u\">",
 	          Gbl.RowEvenOdd,
+		  Present ? "DAT_GREEN" :
+			    "DAT_RED",
 	          Gbl.RowEvenOdd,
 		  NumAttEvent + 1,
 	          Gbl.RowEvenOdd);
          Att_PutCheckOrCross (Present);
-	 fprintf (Gbl.F.Out,"<span id=\"att_date_start_%u\"></span> %s"
+	 fprintf (Gbl.F.Out,"</td>"
+			    "<td class=\"DAT LEFT_TOP COLOR%u\">"
+	                    "<span id=\"att_date_start_%u_%u\"></span>"
+	                    "<br />%s"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
+			    "writeLocalDateHMSFromUTC('att_date_start_%u_%u',%ld,"
 			    "%u,',&nbsp;','%s',true,true,0x7);"
 			    "</script>"
 	                    "</td>"
 			    "</tr>",
-	          UniqueId,
+	          Gbl.RowEvenOdd,
+	          NumStd,UniqueId,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title,
-                  UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+                  NumStd,UniqueId,
+		  Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
                   (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
 	 /***** Write comments for this student *****/
@@ -3681,8 +3688,10 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td class=\"COLOR%u\"></td>"
 			       "<td class=\"COLOR%u\"></td>"
+			       "<td class=\"BT%u\"></td>"
 			       "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
 	                       "<dl>",
+	             Gbl.RowEvenOdd,
 	             Gbl.RowEvenOdd,
 	             Gbl.RowEvenOdd,
 	             Gbl.RowEvenOdd);

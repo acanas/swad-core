@@ -2105,7 +2105,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT			{color:#606060; font-size:13pt;}
 .DAT_NOBR		{color:#606060; font-size:13pt; white-space:nowrap;}
 .DAT_BOLD		{color:#606060; font-size:13pt; font-weight:bold;}
-.DAT_GREEN		{color:#008000; font-size:13pt;}
+.DAT_GREEN		{color:darkgreen; font-size:13pt;}
+.DAT_RED		{color:darkred; font-size:13pt;}
 .DAT_LIGHT		{color:#A0A0A0; font-size:13pt;}
 .DAT_N			{color:black;   font-size:13pt;}
 .DAT_NOBR_N		{color:black;   font-size:13pt; white-space:nowrap;}
@@ -2705,15 +2706,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ATT_CHECK
 	{
 	display:inline-block;
-	font-size:16pt;
+	font-size:13pt;
+	font-weight:bold;
 	color:darkgreen;
 	}
 .ATT_CROSS
 	{
 	display:inline-block;
-	font-size:16pt;
+	font-size:13pt;
+	font-weight:bold;
 	color:darkred;
-	opacity:0.2;
+	opacity:0.1;
 	}
 
 /**************************** Enrolment requests *****************************/
