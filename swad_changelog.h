@@ -335,9 +335,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // TODO: Que la opción por defecto en "Permitir que los profesores vean este examen" la configuren los profesores en cada asignatura"
 // TODO: URGENTE: Bego del Pino, una columna en resultados de test que indique los descriptores de ese examen
 
-// TODO: Pedro Villar Castro:
-// Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
-
 // TODO: Cuando se muestre un usuario duplicado, que SWAD calcule automáticamente sus cifras no calculadas sin tener que pulsar en Calcular
 
 // TODO: Miguel Damas Hermoso sugiere poder editar texto enriquecido (Markdown) en las preguntas de tipo test
@@ -361,6 +358,15 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Tabla de asistencia con símbolos tip ok como entidades HTML
 
+// TODO: Pedro Villar Castro:
+// Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
+
+// TODO: Pedro Villar Castro:
+// Bloquear individualmente la edición con una casilla de configuración para cada TFG, sólo el profesor de la asignatura (Perico) podría bloquear/desbloquear
+// Que haya una opción general que los bloquee todos y que los desbloquee todos
+// Para bloquear/desbloquear se usará un icono candado
+// Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -380,11 +386,16 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.39 (2019-02-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.40 (2019-02-13)"
 #define CSS_FILE		"swad18.33.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
-	Version 18.39:    Feb 13, 2019 	New module swad_firewall to mitigate mitigate DoS attacks. (239101 lines)
+	Version 18.40:    Feb 13, 2019 	New table for banned IPs to mitigate DoS attacks. (239198 lines)
+					2 changes necessary in database:
+RENAME TABLE firewall TO firewall_log;
+CREATE TABLE IF NOT EXISTS firewall_banned (IP CHAR(15) NOT NULL,BanTime DATETIME NOT NULL,UnbanTime DATETIME NOT NULL,INDEX(IP,UnbanTime),INDEX(BanTime),INDEX(UnbanTime));
+
+	Version 18.39:    Feb 13, 2019 	New module swad_firewall to mitigate DoS attacks. (239101 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS firewall (ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,INDEX(ClickTime),INDEX(IP));
 

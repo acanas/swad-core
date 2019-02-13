@@ -36,7 +36,9 @@
 /*****************************************************************************/
 
 void FW_LogAccess (void);
-void FW_CheckFirewallAndExitIfTooManyRequests (void);
 void FW_PurgeFirewall (void);
+
+void FW_CheckFirewallAndExitIfBanned (void);
+void FW_CheckFirewallAndExitIfTooManyRequests (void);
 
 #endif

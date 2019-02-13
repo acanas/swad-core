@@ -1149,9 +1149,29 @@ mysql> DESCRIBE files;
 		   "INDEX(ZoneUsrCod),"
 		   "INDEX(PublisherUsrCod))");
 
-   /***** Table firewall *****/
+   /***** Table firewall_banned *****/
 /*
-mysql> DESCRIBE firewall;
+mysql> DESCRIBE firewall_banned;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| IP        | char(15) | NO   | MUL | NULL    |       |
+| BanTime   | datetime | NO   | MUL | NULL    |       |
+| UnbanTime | datetime | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS firewall_banned ("
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
+			"BanTime DATETIME NOT NULL,"
+			"UnbanTime DATETIME NOT NULL,"
+		   "INDEX(IP,UnbanTime),"
+		   "INDEX(BanTime),"
+		   "INDEX(UnbanTime));");
+
+   /***** Table firewall_log *****/
+/*
+mysql> DESCRIBE firewall_log;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -1160,7 +1180,7 @@ mysql> DESCRIBE firewall;
 +-----------+----------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS firewall ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS firewall_log ("
 			"ClickTime DATETIME NOT NULL,"
 			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
 		   "INDEX(ClickTime),"

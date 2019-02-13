@@ -38,8 +38,13 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+/* The maximum number of clicks in the interval
+   should be large enough to prevent an IP from being banned
+   due to automatic refresh when the user is viewing the last clicks. */
 #define Fw_CHECK_INTERVAL		((time_t)(10UL))	// Check clicks in the last 10 seconds
 #define Fw_MAX_CLICKS_IN_INTERVAL	30			// Maximum of 30 clicks allowed in 10 seconds
+
+#define Fw_TIME_BANNED			((time_t)(60UL*60UL))	// Ban IP for 1 hour
 
 #define Fw_TIME_TO_DELETE_OLD_CLICKS	Fw_CHECK_INTERVAL	// Remove clicks older than these seconds
 
@@ -51,6 +56,8 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void FW_BanIP (void);
+
 /*****************************************************************************/
 /************************** Log access into firewall *************************/
 /*****************************************************************************/
@@ -58,13 +65,67 @@ extern struct Globals Gbl;
 void FW_LogAccess (void)
   {
    /***** Log access in firewall recent log *****/
-   DB_QueryINSERT ("can not log access into firewall",
-		   "INSERT INTO firewall (ClickTime,IP) VALUES (NOW(),'%s')",
+   DB_QueryINSERT ("can not log access into firewall_log",
+		   "INSERT INTO firewall_log"
+		   " (ClickTime,IP)"
+		   " VALUES"
+		   " (NOW(),'%s')",
 		   Gbl.IP);
   }
 
 /*****************************************************************************/
-/************************** Log access into firewall *************************/
+/********************** Remove old clicks from firewall **********************/
+/*****************************************************************************/
+
+void FW_PurgeFirewall (void)
+  {
+   /***** Remove old clicks *****/
+   DB_QueryDELETE ("can not purge firewall log",
+		   "DELETE LOW_PRIORITY FROM firewall_log"
+		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+                   (unsigned long) Fw_TIME_TO_DELETE_OLD_CLICKS);
+  }
+
+/*****************************************************************************/
+/*************************** Check if IP is banned ***************************/
+/*****************************************************************************/
+
+void FW_CheckFirewallAndExitIfBanned (void)
+  {
+   unsigned long NumCurrentBans;
+
+   /***** Get number of current bans from database *****/
+   NumCurrentBans = DB_QueryCOUNT ("can not check firewall log",
+		                   "SELECT COUNT(*) FROM firewall_banned"
+			           " WHERE IP='%s' AND UnbanTime>NOW()",
+			           Gbl.IP);
+
+   /***** Exit with status 403 if banned *****/
+   /* RFC 6585 suggests "429 Too Many Requests", according to
+      https://stackoverflow.com/questions/7447283/proper-http-status-to-return-for-hacking-attempts
+      https://tools.ietf.org/html/rfc2616#section-10.4.4 */
+   if (NumCurrentBans)
+     {
+      /* Return status 403 Forbidden */
+      fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
+	              "Status: 403\r\n\r\n"
+                      "<html>"
+                      "<head>"
+                      "<title>Forbidden</title>"
+                      "</head>"
+                      "<body>"
+                      "<h1>You are banned temporarily</h1>"
+                      "</body>"
+                      "</html>\n");
+
+      /* Close database connection and exit */
+      DB_CloseDBConnection ();
+      exit (0);
+     }
+  }
+
+/*****************************************************************************/
+/**************** Check if too many connections from this IP *****************/
 /*****************************************************************************/
 
 void FW_CheckFirewallAndExitIfTooManyRequests (void)
@@ -72,8 +133,8 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
    unsigned long NumClicks;
 
    /***** Get number of clicks from database *****/
-   NumClicks = DB_QueryCOUNT ("can not check firewall",
-		              "SELECT COUNT(*) FROM firewall"
+   NumClicks = DB_QueryCOUNT ("can not check firewall log",
+		              "SELECT COUNT(*) FROM firewall_log"
 			      " WHERE IP='%s'"
 			      " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 			      Gbl.IP,
@@ -85,9 +146,12 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
       https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429 */
    if (NumClicks > Fw_MAX_CLICKS_IN_INTERVAL)
      {
+      /* Ban this IP */
+      FW_BanIP ();
+
       /* Return status 429 Too Many Requests */
       fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
-                      "Retry-After: 3600\n"
+                      "Retry-After: %lu\n"
 	              "Status: 429\r\n\r\n"
                       "<html>"
                       "<head>"
@@ -96,7 +160,8 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
                       "<body>"
                       "<h1>Please stop that</h1>"
                       "</body>"
-                      "</html>\n");
+                      "</html>\n",
+	       (unsigned long) Fw_TIME_BANNED);
 
       /* Close database connection and exit */
       DB_CloseDBConnection ();
@@ -105,14 +170,16 @@ void FW_CheckFirewallAndExitIfTooManyRequests (void)
   }
 
 /*****************************************************************************/
-/********************** Remove old clicks from firewall **********************/
+/********************************* Ban an IP *********************************/
 /*****************************************************************************/
 
-void FW_PurgeFirewall (void)
+static void FW_BanIP (void)
   {
-   /***** Remove old clicks *****/
-   DB_QueryDELETE ("can not purge firewall",
-		   "DELETE LOW_PRIORITY FROM firewall"
-		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Fw_TIME_TO_DELETE_OLD_CLICKS);
+   /***** Insert IP into table of banned IPs *****/
+   DB_QueryINSERT ("can not ban IP",
+		   "INSERT INTO firewall_banned"
+		   " (IP,BanTime,UnbanTime)"
+		   " VALUES"
+		   " ('%s',NOW(),FROM_UNIXTIME(UNIX_TIMESTAMP()+%lu))",
+		   Gbl.IP,(unsigned long) Fw_TIME_BANNED);
   }

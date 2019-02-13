@@ -522,9 +522,19 @@ CREATE TABLE IF NOT EXISTS files (
 	INDEX(ZoneUsrCod),
 	INDEX(PublisherUsrCod));
 --
--- Table firewall: stores the most recent IPs in order to mitigate denial of service attacks
+-- Table firewall_banned: stores the banned IPs in order to mitigate denial of service attacks
 --
-CREATE TABLE IF NOT EXISTS firewall (
+CREATE TABLE IF NOT EXISTS firewall_banned (
+	IP CHAR(15) NOT NULL,
+	BanTime DATETIME NOT NULL,
+	UnbanTime DATETIME NOT NULL,
+	INDEX(IP,UnbanTime),
+	INDEX(BanTime),
+	INDEX(UnbanTime));
+--
+-- Table firewall_log: stores the most recent IPs in order to mitigate denial of service attacks
+--
+CREATE TABLE IF NOT EXISTS firewall_log (
 	ClickTime DATETIME NOT NULL,
 	IP CHAR(15) NOT NULL,
 	INDEX(ClickTime),

@@ -112,6 +112,7 @@ int main (void)
       Par_GetMainParameters ();
 
       /***** Mitigate DoS attacks *****/
+      FW_CheckFirewallAndExitIfBanned ();
       FW_LogAccess ();
       FW_CheckFirewallAndExitIfTooManyRequests ();
 
