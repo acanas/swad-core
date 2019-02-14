@@ -13905,25 +13905,25 @@ const char *Txt_Guided_academic_assignments =
 	"Atividades acad&eacute;micas guided";
 #endif
 
-const char *Txt_Happy_birthday =
+const char *Txt_Happy_birthday_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Feli&ccedil; aniversari!";
+	"Feli&ccedil; aniversari, %s!";
 #elif L==2	// de
-	"Gute zum Geburtstag!";
+	"Gute zum Geburtstag, %s!";
 #elif L==3	// en
-	"Happy birthday!";
+	"Happy birthday, %s!";
 #elif L==4	// es
-	"&iexcl;Feliz cumplea&ntilde;os!";
+	"&iexcl;Feliz cumplea&ntilde;os, %s!";
 #elif L==5	// fr
-	"Joyeux anniversaire!";
+	"Joyeux anniversaire, %s!";
 #elif L==6	// gn
-	"&iexcl;Feliz cumplea&ntilde;os!";	// Okoteve traducción
+	"&iexcl;Feliz cumplea&ntilde;os, %s!";	// Okoteve traducción
 #elif L==7	// it
-	"Buon compleanno!";
+	"Buon compleanno, %s!";
 #elif L==8	// pl
-	"Wszystkiego najlepszego!";
+	"Wszystkiego najlepszego, %s!";
 #elif L==9	// pt
-	"Feliz anivers&aacute;rio!";
+	"Feliz anivers&aacute;rio, %s!";
 #endif
 
 const char *Txt_Help =
@@ -17784,7 +17784,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,	//  5
+	//  5: ActSeeNtf
+#if   L==1	// ca
+	"Notificacions"
+#elif L==2	// de
+	"Anmeldungen"
+#elif L==3	// en
+	"Notifications"
+#elif L==4	// es
+	"Notificaciones"
+#elif L==5	// fr
+	"Notifications"
+#elif L==6	// gn
+	"Momarandu"
+#elif L==7	// it
+	"Notifiche"
+#elif L==8	// pl
+	"Powiadomienia"
+#elif L==9	// pt
+	"Notifica&ccedil;&otilde;es"
+#endif
+	,
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -19198,28 +19218,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabMsg *****************************************************
-	//  0: ActSeeNtf
-#if   L==1	// ca
-	"Notificacions"
-#elif L==2	// de
-	"Anmeldungen"
-#elif L==3	// en
-	"Notifications"
-#elif L==4	// es
-	"Notificaciones"
-#elif L==5	// fr
-	"Notifications"
-#elif L==6	// gn
-	"Momarandu"
-#elif L==7	// it
-	"Notifiche"
-#elif L==8	// pl
-	"Powiadomienia"
-#elif L==9	// pt
-	"Notifica&ccedil;&otilde;es"
-#endif
-	,
-	//  1: ActSeeAnn
+	//  0: ActSeeAnn
 #if   L==1	// ca
 	"Anuncis"
 #elif L==2	// de
@@ -19240,7 +19239,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"An&uacute;ncios"
 #endif
 	,
-	//  2: ActSeeAllNot
+	//  1: ActSeeAllNot
 #if   L==1	// ca
 	"Avisos"
 #elif L==2	// de
@@ -19261,7 +19260,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Avisos"
 #endif
 	,
-	//  3: ActReqMsgUsr
+	//  2: ActReqMsgUsr
 #if   L==1	// ca
 	"Redactar"
 #elif L==2	// de
@@ -19282,7 +19281,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Escrever"
 #endif
 	,
-	//  4: ActSeeRcvMsg
+	//  3: ActSeeRcvMsg
 #if   L==1	// ca
 	"Rebuts"
 #elif L==2	// de
@@ -19303,7 +19302,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Recebidas"
 #endif
 	,
-	//  5: ActSeeSntMsg
+	//  4: ActSeeSntMsg
 #if   L==1	// ca
 	"Enviats"
 #elif L==2	// de
@@ -19324,7 +19323,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	//  6: ActMaiStd
+	//  5: ActMaiStd
 #if   L==1	// ca
 	"Correu"
 #elif L==2	// de
@@ -19345,6 +19344,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -19774,7 +19774,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,	//  5
+	//  5: ActSeeNtf
+#if   L==1	// ca
+	"Esdeveniments recents que han estat o seran notificats"
+#elif L==2	// de
+	"Die j&uuml;ngsten Ereignisse wurden oder werden benachrichtigt"
+#elif L==3	// en
+	"Recent events that have been or will be notified"
+#elif L==4	// es
+	"Eventos recientes que han sido o ser&aacute;n notificados"
+#elif L==5	// fr
+	"Les &eacute;v&eacute;nements r&eacute;cents qui ont &eacute;t&eacute; ou seront avis&eacute;s"
+#elif L==6	// gn
+	"Eventos recientes que han sido o ser&aacute;n notificados"// Okoteve traducción
+#elif L==7	// it
+	"Recenti eventi che sono stati o saranno notificati"
+#elif L==8	// pl
+	"Ostatnie wydarzenia, kt&oacute;re zostaly lub zostana powiadomieni"
+#elif L==9	// pt
+	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
+#endif
+	,
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -21238,28 +21258,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabMsg *****************************************************
-	//  0: ActSeeNtf
-#if   L==1	// ca
-	"Esdeveniments recents que han estat o seran notificats"
-#elif L==2	// de
-	"Die j&uuml;ngsten Ereignisse wurden oder werden benachrichtigt"
-#elif L==3	// en
-	"Recent events that have been or will be notified"
-#elif L==4	// es
-	"Eventos recientes que han sido o ser&aacute;n notificados"
-#elif L==5	// fr
-	"Les &eacute;v&eacute;nements r&eacute;cents qui ont &eacute;t&eacute; ou seront avis&eacute;s"
-#elif L==6	// gn
-	"Eventos recientes que han sido o ser&aacute;n notificados"// Okoteve traducción
-#elif L==7	// it
-	"Recenti eventi che sono stati o saranno notificati"
-#elif L==8	// pl
-	"Ostatnie wydarzenia, kt&oacute;re zostaly lub zostana powiadomieni"
-#elif L==9	// pt
-	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
-#endif
-	,
-	//  1: ActSeeAnn
+	//  0: ActSeeAnn
 #if   L==1	// ca
 	"Anuncis globals mostrat en iniciar sessi&oacute;"
 #elif L==2	// de
@@ -21280,7 +21279,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"An&uacute;ncios globais vis&iacute;veis no in&iacute;cio da sess&atilde;o"
 #endif
 	,
-	//  2: ActSeeAllNot
+	//  1: ActSeeAllNot
 #if   L==1	// ca
 	"Breus avisos relacionats amb aquesta assignatura,"
 	" visibles per qualsevol visitant, encara que no estigui identificat"
@@ -21304,7 +21303,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Avisos"
 #endif
 	,
-	//  3: ActReqMsgUsr
+	//  2: ActReqMsgUsr
 #if   L==1	// ca
 	"Enviament d'un nou missatge a altres usuaris"
 #elif L==2	// de
@@ -21325,7 +21324,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Envio de uma nova mensagem para outros usu&aacute;rios"
 #endif
 	,
-	//  4: ActSeeRcvMsg
+	//  3: ActSeeRcvMsg
 #if   L==1	// ca
 	"Missatges rebuts d'altres usuaris"
 #elif L==2	// de
@@ -21346,7 +21345,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens recebidas de outros usu&aacute;rios"
 #endif
 	,
-	//  5: ActSeeSntMsg
+	//  4: ActSeeSntMsg
 #if   L==1	// ca
 	"Missatges enviats per mi a altres usuaris"
 #elif L==2	// de
@@ -21367,7 +21366,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens enviadas por mim para outros usu&aacute;rios"
 #endif
 	,
-	//  6: ActMaiStd
+	//  5: ActMaiStd
 #if   L==1	// ca
 	"Creaci&oacute; d'un missatge de correu"
 	" per enviar-lo a estudiants d'aquesta assignatura"
@@ -21394,6 +21393,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -52797,255 +52797,6 @@ const char *Txt_Week =
 #elif L==9	// pt
 	"Semana";
 #endif
-
-const char *Txt_Welcome[Usr_NUM_SEXS] =
-	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
-	 "Benvingut/da."
-#elif L==2	// de
-	 "Willkommen."
-#elif L==3	// en
-	 "Welcome."
-#elif L==4	// es
-	 "Bienvenido/a."
-#elif L==5	// fr
-	 "Bienvenu(e)."
-#elif L==6	// gn
-	 "Bienvenido/a."	// Okoteve traducción
-#elif L==7	// it
-	 "Benvenuto/a."
-#elif L==8	// pl
-	 "Witamy."
-#elif L==9	// pt
-	 "Bem-vindo/a."
-#endif
-	 ,
-#if   L==1	// ca	// Usr_SEX_FEMALE
-	 "Benvinguda."
-#elif L==2	// de
-	 "Willkommen."
-#elif L==3	// en
-	 "Welcome."
-#elif L==4	// es
-	 "Bienvenida."
-#elif L==5	// fr
-	 "Bienvenue."
-#elif L==6	// gn
-	 "Bienvenida."	// Okoteve traducción
-#elif L==7	// it
-	 "Benvenuta."
-#elif L==8	// pl
-	 "Witamy."
-#elif L==9	// pt
-	 "Bem-vinda."
-#endif
-	 ,
-#if   L==1	// ca	// Usr_SEX_MALE
-	 "Benvingut."
-#elif L==2	// de
-	 "Willkommen."
-#elif L==3	// en
-	 "Welcome."
-#elif L==4	// es
-	 "Bienvenido."
-#elif L==5	// fr
-	 "Bienvenu."
-#elif L==6	// gn
-	 "Bienvenido."	// Okoteve traducción
-#elif L==7	// it
-	 "Benvenuto."
-#elif L==8	// pl
-	 "Witamy."
-#elif L==9	// pt
-	 "Bem-vindo."
-#endif
-	 ,
-#if   L==1	// ca	// Usr_SEX_ALL
-	 "Benvingut/da."
-#elif L==2	// de
-	 "Willkommen."
-#elif L==3	// en
-	 "Welcome."
-#elif L==4	// es
-	 "Bienvenido/a."
-#elif L==5	// fr
-	 "Bienvenu(e)."
-#elif L==6	// gn
-	 "Bienvenido/a."	// Okoteve traducción
-#elif L==7	// it
-	 "Benvenuto/a."
-#elif L==8	// pl
-	 "Witamy."
-#elif L==9	// pt
-	 "Bem-vindo/a."
-#endif
-	};
-
-const char *Txt_Welcome_X[Usr_NUM_SEXS] =	// Warning: it is very important to include %s in the following sentences
-	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
-	"Benvingut/da, %s."
-#elif L==2	// de
-	"Willkommen, %s."
-#elif L==3	// en
-	"Welcome, %s."
-#elif L==4	// es
-	"Bienvenido/a, %s."
-#elif L==5	// fr
-	"Bienvenu(e), %s."
-#elif L==6	// gn
-	"Bienvenido/a, %s."	// Okoteve traducción
-#elif L==7	// it
-	"Benvenuto/a, %s."
-#elif L==8	// pl
-	"Witamy, %s."
-#elif L==9	// pt
-	"Bem-vindo/a, %s."
-#endif
-	,
-#if   L==1	// ca	// Usr_SEX_FEMALE
-	"Benvinguda, %s."
-#elif L==2	// de
-	"Willkommen, %s."
-#elif L==3	// en
-	"Welcome, %s."
-#elif L==4	// es
-	"Bienvenida, %s."
-#elif L==5	// fr
-	"Bienvenue, %s."
-#elif L==6	// gn
-	"Bienvenida, %s."	// Okoteve traducción
-#elif L==7	// it
-	"Benvenuta, %s."
-#elif L==8	// pl
-	"Witamy, %s."
-#elif L==9	// pt
-	"Bem-vinda, %s."
-#endif
-	,
-#if   L==1	// ca	// Usr_SEX_MALE
-	"Benvingut, %s."
-#elif L==2	// de
-	"Willkommen, %s."
-#elif L==3	// en
-	"Welcome, %s."
-#elif L==4	// es
-	"Bienvenido, %s."
-#elif L==5	// fr
-	"Bienvenu, %s."
-#elif L==6	// gn
-	"Bienvenido, %s."	// Okoteve traducción
-#elif L==7	// it
-	"Benvenuto, %s."
-#elif L==8	// pl
-	"Witamy, %s."
-#elif L==9	// pt
-	"Bem-vindo, %s."
-#endif
-	,
-#if   L==1	// ca	// Usr_SEX_ALL
-	"Benvingut/da, %s."
-#elif L==2	// de
-	"Willkommen, %s."
-#elif L==3	// en
-	"Welcome, %s."
-#elif L==4	// es
-	"Bienvenido/a, %s."
-#elif L==5	// fr
-	"Bienvenu(e), %s."
-#elif L==6	// gn
-	"Bienvenido/a, %s."	// Okoteve traducción
-#elif L==7	// it
-	"Benvenuto/a, %s."
-#elif L==8	// pl
-	"Witamy, %s."
-#elif L==9	// pt
-	"Bem-vindo/a, %s."
-#endif
-	};
-
-const char *Txt_Welcome_X_happy_birthday[Usr_NUM_SEXS] =	// Warning: it is very important to include %s in the following sentences
-	{
-#if   L==1	// ca	// Usr_SEX_UNKNOWN
-	"Benvingut/da, %s, feli&ccedil; aniversari!"
-#elif L==2	// de
-	"Willkommen, %s, alles Gute zum Geburtstag!"
-#elif L==3	// en
-	"Welcome, %s, happy birthday!"
-#elif L==4	// es
-	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"
-#elif L==5	// fr
-	"Bienvenu(e), %s, joyeux anniversaire!"
-#elif L==6	// gn
-	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
-#elif L==7	// it
-	"Benvenuto/a, %s, buon compleanno!"
-#elif L==8	// pl
-	"Witamy, %s, wszystkiego najlepszego!"
-#elif L==9	// pt
-	"Bem-vindo/a, %s, feliz anivers&aacute;rio!"
-#endif
-	,
-#if   L==1	// ca	// Usr_SEX_FEMALE
-	"Benvinguda, %s, feli&ccedil; aniversari!"
-#elif L==2	// de
-	"Willkommen, %s, alles Gute zum Geburtstag!"
-#elif L==3	// en
-	"Welcome, %s, happy birthday!"
-#elif L==4	// es
-	"Bienvenida, %s, &iexcl;feliz cumplea&ntilde;os!"
-#elif L==5	// fr
-	"Bienvenue, %s, joyeux anniversaire!"
-#elif L==6	// gn
-	"Bienvenida, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
-#elif L==7	// it
-	"Benvenuta, %s, buon compleanno!"
-#elif L==8	// pl
-	"Witamy, %s, wszystkiego najlepszego!"
-#elif L==9	// pt
-	"Bem-vinda, %s, feliz anivers&aacute;rio!"
-#endif
-	,
-#if   L==1	// ca	// Usr_SEX_MALE
-	"Benvingut, %s, feli&ccedil; aniversari!"
-#elif L==2	// de
-	"Willkommen, %s, alles Gute zum Geburtstag!"
-#elif L==3	// en
-	"Welcome, %s, happy birthday!"
-#elif L==4	// es
-	"Bienvenido, %s, &iexcl;feliz cumplea&ntilde;os!"
-#elif L==5	// fr
-	"Bienvenu, %s, joyeux anniversaire!"
-#elif L==6	// gn
-	"Bienvenido, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
-#elif L==7	// it
-	"Benvenuto, %s, buon compleanno!"
-#elif L==8	// pl
-	"Witamy, %s, wszystkiego najlepszego!"
-#elif L==9	// pt
-	"Bem-vindo, %s, feliz anivers&aacute;rio!"
-#endif
-	,
-#if   L==1	// ca	// Usr_SEX_ALL
-	"Benvingut/da, %s, feli&ccedil; aniversari!"
-#elif L==2	// de
-	"Willkommen, %s, alles Gute zum Geburtstag!"
-#elif L==3	// en
-	"Welcome, %s, happy birthday!"
-#elif L==4	// es
-	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"
-#elif L==5	// fr
-	"Bienvenu(e), %s, joyeux anniversaire!"
-#elif L==6	// gn
-	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
-#elif L==7	// it
-	"Benvenuto/a, %s, buon compleanno!"
-#elif L==8	// pl
-	"Witamy, %s, wszystkiego najlepszego!"
-#elif L==9	// pt
-	"Bem-vindo/a, %s, feliz anivers&aacute;rio!"
-#endif
-	};
 
 const char *Txt_What_would_you_like_to_do =
 #if   L==1	// ca

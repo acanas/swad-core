@@ -2508,22 +2508,13 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 void Usr_WelcomeUsr (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
-   extern const char *Txt_Happy_birthday;
-   extern const char *Txt_Welcome_X_happy_birthday[Usr_NUM_SEXS];
-   extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
-   extern const char *Txt_Welcome[Usr_NUM_SEXS];
+   extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_check_your_email_address;
    extern const char *Txt_Check;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
-   char *WelcomeTxt;
-   bool EmailNeedsToBeConfirmed;
-   bool CongratulateMyBirthday;
 
    if (Gbl.Usrs.Me.Logged)
      {
-      EmailNeedsToBeConfirmed = (Gbl.Usrs.Me.UsrDat.Email[0] &&
-				!Gbl.Usrs.Me.UsrDat.EmailConfirmed);
-
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
@@ -2532,48 +2523,30 @@ void Usr_WelcomeUsr (void)
          /***** Welcome to a user *****/
          if (Gbl.Usrs.Me.UsrDat.FirstName[0])
            {
-            CongratulateMyBirthday = false;
             if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == Gbl.Now.Date.Day &&
                 Gbl.Usrs.Me.UsrDat.Birthday.Month == Gbl.Now.Date.Month)
-               if ((CongratulateMyBirthday = Usr_CheckIfMyBirthdayHasNotBeenCongratulated ()))
+               if (Usr_CheckIfMyBirthdayHasNotBeenCongratulated ())
                  {
                   Usr_InsertMyBirthday ();
-                  fprintf (Gbl.F.Out,"<img src=\"%s/birthday-cake.svg\""
+		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+			    Txt_Happy_birthday_X,
+			    Gbl.Usrs.Me.UsrDat.FirstName);
+		  fprintf (Gbl.F.Out,"<img src=\"%s/birthday-cake.svg\""
                 	             " alt=\"%s\" title=\"%s\""
                                      " class=\"ICO160x160\" />",
                            Gbl.Prefs.URLIconSet,
-                           Txt_Happy_birthday,
-                           Txt_Happy_birthday);
-	          if (asprintf (&WelcomeTxt,Txt_Welcome_X_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
-                                Gbl.Usrs.Me.UsrDat.FirstName) < 0)
-		     Lay_NotEnoughMemoryExit ();
+                           Gbl.Alert.Txt,
+                           Gbl.Alert.Txt);
+                  Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
                  }
-            if (!CongratulateMyBirthday)
-               if (asprintf (&WelcomeTxt,Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
-                             Gbl.Usrs.Me.UsrDat.FirstName) < 0)
-		  Lay_NotEnoughMemoryExit ();
 
-	    if (EmailNeedsToBeConfirmed)
-	      {
-	       /* Welcome alert with button to check email address */
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-			 "%s<br />%s",
-			 WelcomeTxt,
-			 Txt_Please_check_your_email_address);
-	       Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
+	    if ( Gbl.Usrs.Me.UsrDat.Email[0] &&
+		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
+	       /* Alert with button to check email address */
+	       Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_your_email_address,
 				       ActFrmMyAcc,NULL,NULL,NULL,
 				       Btn_CONFIRM_BUTTON,Txt_Check);
-	      }
-	    else
-	       /* Welcome alert */
-               Ale_ShowAlert (Ale_INFO,WelcomeTxt);
-
-	    /* Free allocated memory for subquery */
-	    free ((void *) WelcomeTxt);
            }
-         else
-	    /* Welcome alert */
-            Ale_ShowAlert (Ale_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
          /***** Institutional video *****/
          /*
