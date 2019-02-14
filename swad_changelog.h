@@ -367,8 +367,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Check -> /* Write new year greeting */
 
-// TODO: Quitar "Contraseña olvidada" de la opción "Perfil > Cuenta"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -388,10 +386,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.43.4 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.43.5 (2019-02-14)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.43.5:  Feb 14, 2019 	Contextual link removed in account. (239011 lines)
 	Version 18.43.4:  Feb 14, 2019 	Notifications are moved to start tab. (239012 lines)
 	Version 18.43.3:  Feb 14, 2019 	Removed welcome message. (239010 lines)
 	Version 18.43.2:  Feb 14, 2019 	Changes in form to send a new password by email. (239280 lines)

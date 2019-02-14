@@ -117,7 +117,6 @@ void Acc_ShowFormMyAccount (void)
       /***** Links to other actions *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Usr_PutLinkToLogin ();
-      Pwd_PutLinkToSendNewPasswd ();
       Lan_PutLinkToChangeLanguage ();
       fprintf (Gbl.F.Out,"</div>");
 
