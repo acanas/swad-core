@@ -283,11 +283,8 @@ void Pwd_ShowFormSendNewPwd (void)
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Get_a_new_password;
 
-   /***** Start section *****/
-   Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
-
    /***** Start form *****/
-   Frm_StartFormAnchor (ActSndNewPwd,Pwd_PASSWORD_SECTION_ID);
+   Frm_StartForm (ActSndNewPwd);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Forgotten_password,NULL,
@@ -300,7 +297,8 @@ void Pwd_ShowFormSendNewPwd (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s:&nbsp;"
                       "<input type=\"text\" name=\"UsrId\""
-                      " size=\"8\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"8\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
                       "</label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
@@ -310,9 +308,6 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** End form *****/
    Frm_EndForm ();
-
-   /***** End section *****/
-   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -324,8 +319,8 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    extern const char *Txt_You_must_enter_your_nick_email_or_ID;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
    extern const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_;
-   extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
    struct ListUsrCods ListUsrCods;
+   unsigned NumUsr;
    char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    int ReturnCode;
 
@@ -385,53 +380,41 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
      }
 
    /***** Send a new password via email when user exists *****/
-   if (ListUsrCods.NumUsrs)
+   for (NumUsr = 0;
+	NumUsr < ListUsrCods.NumUsrs;
+	NumUsr++)
      {
-      if (ListUsrCods.NumUsrs == 1)
-	{
-	 Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);	// Get my data
+      Gbl.Usrs.Me.UsrDat.UsrCod = ListUsrCods.Lst[NumUsr];
+      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);	// Get my data
 
-	 if (Gbl.Usrs.Me.UsrDat.Email[0])
-	    switch ((ReturnCode = Pwd_SendNewPasswordByEmail (NewRandomPlainPassword)))
-	      {
-	       case 0: // Message sent successfully
-		  Pwd_SetMyPendingPassword (NewRandomPlainPassword);
-		  Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
-		  break;
-	       case 1:
-		  Ale_ShowAlert (Ale_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
-		  break;
-	       default:
-		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    "Internal error: an email message has not been sent successfully."
-		            " Error code returned by the script: %d",
-			    ReturnCode);
-		  Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
-		  break;
-	      }
-	 else	// I have no email address
-	    /***** Help message *****/
-	    Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
-	}
-      else	// ListUsrCods.NumUsrs > 1
-	{
-	 /***** Help message *****/
-	 // TODO: This message allows to know if a ID exists in database (when no unique).
-	 // This should be hidden!
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-		   Gbl.Usrs.Me.UsrIdLogin);
-	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
-
-	 Pwd_ShowFormSendNewPwd ();
-	}
-
-      /***** Free list of users' codes *****/
-      Usr_FreeListUsrCods (&ListUsrCods);
+      if (Gbl.Usrs.Me.UsrDat.Email[0])
+	 switch ((ReturnCode = Pwd_SendNewPasswordByEmail (NewRandomPlainPassword)))
+	   {
+	    case 0: // Message sent successfully
+	       Pwd_SetMyPendingPassword (NewRandomPlainPassword);
+	       Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+	       break;
+	    case 1:
+	       Lay_ShowErrorAndExit (Txt_There_was_a_problem_sending_an_email_automatically);
+	       break;
+	    default:
+	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+			 "Internal error: an email message has not been sent successfully."
+			 " Error code returned by the script: %d",
+			 ReturnCode);
+	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	       break;
+	   }
      }
-   else        // ListUsrCods.NumUsrs == 0 ==> user does not exist
-      /***** Help message *****/
-      Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+
+   /***** Free list of users' codes *****/
+   Usr_FreeListUsrCods (&ListUsrCods);
+
+   /***** Help message *****/
+   Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+
+   /**** Show forms to login / create account again *****/
+   Usr_WriteLandingPage ();
   }
 
 /*****************************************************************************/
