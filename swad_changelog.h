@@ -384,10 +384,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.41.2 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.41.3 (2019-02-14)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.41.3:  Feb 14, 2019 	Chat is temporarily disabled because modern browsers don't allow Java. (239228 lines)
 	Version 18.41.2:  Feb 14, 2019 	Change in layout of attendance list.
 					Fixed bug in search of files. (239225 lines)
 	Version 18.41.1:  Feb 14, 2019 	Fixed bug in attendance list.
