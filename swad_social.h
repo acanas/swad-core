@@ -43,7 +43,7 @@ typedef enum
    Soc_FOLLOWED	= 0,
    Soc_ALL_USRS = 1,
   } Soc_WhichUsrs_t;	// Which users I want to see: only users I follow or all users
-#define Soc_DEFAULT_WHICH_USRS Soc_FOLLOWED
+#define Soc_DEFAULT_WHICH_USRS Soc_ALL_USRS
 
 #define Soc_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
