@@ -87,6 +87,22 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			// 11
 		0,			// 12
 		},
+		// TabSta *******************
+		{
+		ActSeeSocTmlGbl,	//  0
+		ActSeeSocPrf,		//  1
+		ActSeeFor,		//  2
+		ActSeeChtRms,		//  3
+		0,			//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
+		0,			// 11
+		0,			// 12
+		},
 		// TabSys *******************
 		{
 		ActSysReqSch,		//  0
@@ -225,22 +241,6 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActReqSignUp,		//  5
 		ActSeeSignUpReq,	//  6
 		ActLstCon,		//  7
-		0,			//  8
-		0,			//  9
-		0,			// 10
-		0,			// 11
-		0,			// 12
-		},
-		// TabSoc *******************
-		{
-		ActSeeSocTmlGbl,	//  0
-		ActSeeSocPrf,		//  1
-		ActSeeFor,		//  2
-		ActSeeChtRms,		//  3
-		0,			//  4
-		0,			//  5
-		0,			//  6
-		0,			//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10

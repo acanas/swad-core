@@ -99,6 +99,186 @@ extern struct Globals Gbl;
 	  8. ActRefOldSocPubUsr		View old social timeline of a user via AJAX
 	  9. ActWebSvc			Call plugin function
 
+Start:
+       1057. ActSeeSocTmlGbl		Show social timeline (global)
+       1058. ActSeeSocPrf		Suggest list of users to follow
+       1059. ActSeeFor			Show the level superior of the forums
+       1060. ActSeeChtRms		Show the chat rooms
+
+       1061. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
+       1062. ActRcvSocComGbl		Comment a social note in the timeline (global)
+       1063. ActShaSocNotGbl		Share a social note in the timeline (global)
+       1064. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
+       1065. ActFavSocNotGbl		Favourite a social note in the timeline (global)
+       1066. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
+       1067. ActFavSocComGbl		Favourite a social comment in the timeline (global)
+       1068. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
+       1069. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
+       1070. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
+       1071. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
+       1072. ActRemSocComGbl		Remove of a comment in a social note (global)
+
+       1073. ActReqOthPubPrf		Request @nickname to show a public user's profile
+
+       1074. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
+       1075. ActRcvSocComUsr		Comment a social note in the timeline (user)
+       1076. ActShaSocNotUsr		Share a social note in the timeline (user)
+       1077. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
+       1078. ActFavSocNotUsr		Favourite a social note in the timeline (user)
+       1079. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
+       1080. ActFavSocComUsr		Favourite a social comment in the timeline (user)
+       1081. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
+       1082. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
+       1083. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
+       1084. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
+       1085. ActRemSocComUsr		Remove of a comment in a social note (user)
+
+       1086. ActCal1stClkTim		Calculate first click time from log and store into user's figures
+       1087. ActCalNumClk		Calculate number of clicks from log and store into user's figures
+       1088. ActCalNumFileViews		Calculate number of file views and store into user's figures
+       1089. ActCalNumForPst		Calculate number of forum posts and store into user's figures
+       1090. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
+
+       1091. ActFolUsr			Follow another user
+       1092. ActUnfUsr			Unfollow another user
+       1093. ActSeeFlg			Show following
+       1094. ActSeeFlr			Show followers
+
+       1095. ActSeeForCrsUsr		Show top level of forum of users of the course
+       1096. ActSeeForCrsTch		Show top level of forum of teachers of the course
+       1097. ActSeeForDegUsr		Show top level of forum of users of the degree
+       1098. ActSeeForDegTch		Show top level of forum of teachers of the degree
+       1099. ActSeeForCtrUsr		Show top level of forum of users of the centre
+       1100. ActSeeForCtrTch		Show top level of forum of teachers of the centre
+       1101. ActSeeForInsUsr		Show top level of forum of users of the institution
+       1102. ActSeeForInsTch		Show top level of forum of teachers of the institution
+       1103. ActSeeForGenUsr		Show top level of forum of users general
+       1104. ActSeeForGenTch		Show top level of forum of teachers general
+       1105. ActSeeForSWAUsr		Show top level of forum of users of the platform
+       1106. ActSeeForSWATch		Show top level of forum of teachers of the platform
+       1107. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
+       1108. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
+       1109. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
+       1110. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
+       1111. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
+       1112. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
+       1113. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
+       1114. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
+       1115. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
+       1116. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
+       1117. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
+       1118. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
+       1119. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
+       1120. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
+       1121. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
+       1122. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
+       1123. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
+       1124. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
+       1125. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
+       1126. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
+       1127. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
+       1128. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
+       1129. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
+       1130. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
+       1131. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
+       1132. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
+       1133. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
+       1134. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
+       1135. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
+       1136. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
+       1137. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
+       1138. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
+       1139. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
+       1140. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
+       1141. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
+       1142. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
+       1143. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
+       1144. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
+       1145. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
+       1146. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
+       1147. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
+       1148. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
+       1149. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
+       1150. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
+       1151. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
+       1152. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
+       1153. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
+       1154. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
+       1155. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
+       1156. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
+       1157. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
+       1158. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
+       1159. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
+       1160. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
+       1161. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
+       1162. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
+       1163. ActDelThrForGenUsr		Remove a thread of forum of users general
+       1164. ActDelThrForGenTch		Remove a thread of forum of teachers general
+       1165. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
+       1166. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
+       1167. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
+       1168. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
+       1169. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
+       1170. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
+       1171. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
+       1172. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
+       1173. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
+       1174. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
+       1175. ActCutThrForGenUsr		Cut a thread of forum of users general
+       1176. ActCutThrForGenTch		Cut a thread of forum of teachers general
+       1177. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
+       1178. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
+       1179. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
+       1180. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
+       1181. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
+       1182. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
+       1183. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
+       1184. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
+       1185. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
+       1186. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
+       1187. ActPasThrForGenUsr		Paste a thread of forum of users general
+       1188. ActPasThrForGenTch		Paste a thread of forum of teachers general
+       1189. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
+       1190. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
+       1191. ActDelPstForCrsUsr		Remove a message of forum of users of the course
+       1192. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
+       1193. ActDelPstForDegUsr		Remove a message of forum of users of the degree
+       1194. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
+       1195. ActDelPstForCtrUsr		Remove a message of forum of users of centre
+       1196. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
+       1197. ActDelPstForInsUsr		Remove a message of forum of users of the institution
+       1198. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
+       1199. ActDelPstForGenUsr		Remove a message of forum of users general
+       1200. ActDelPstForGenTch		Remove a message of forum of teachers general
+       1201. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
+       1202. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
+       1203. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
+       1204. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
+       1205. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
+       1206. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
+       1207. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
+       1208. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
+       1209. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
+       1210. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
+       1211. ActEnbPstForGenUsr		Enable a message of forum of users general
+       1212. ActEnbPstForGenTch		Enable a message of forum of teachers general
+       1213. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
+       1214. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
+       1215. ActDisPstForCrsUsr		Disable a message of forum of users of the course
+       1216. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
+       1217. ActDisPstForDegUsr		Disable a message of forum of users of the degree
+       1218. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
+       1219. ActDisPstForCtrUsr		Disable a message of forum of users of centre
+       1220. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
+       1221. ActDisPstForInsUsr		Disable a message of forum of users of the institution
+       1222. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
+       1223. ActDisPstForGenUsr		Disable a message of forum of users general
+       1224. ActDisPstForGenTch		Disable a message of forum of teachers general
+       1225. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
+       1226. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
+
+       1227. ActCht			Enter in a chat room to chat
+
 System:
 	 10. ActSysReqSch		Request search in system tab
 	 11. ActSeeCty			List countries
@@ -1258,186 +1438,6 @@ Users:
        1055. ActLstSimUsr		List users similar to a given one (possible duplicates)
        1056. ActRemDupUsr		Remove user from list of possible duplicate users
 
-Social:
-       1057. ActSeeSocTmlGbl		Show social timeline (global)
-       1058. ActSeeSocPrf		Suggest list of users to follow
-       1059. ActSeeFor			Show the level superior of the forums
-       1060. ActSeeChtRms		Show the chat rooms
-
-       1061. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
-       1062. ActRcvSocComGbl		Comment a social note in the timeline (global)
-       1063. ActShaSocNotGbl		Share a social note in the timeline (global)
-       1064. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
-       1065. ActFavSocNotGbl		Favourite a social note in the timeline (global)
-       1066. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
-       1067. ActFavSocComGbl		Favourite a social comment in the timeline (global)
-       1068. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
-       1069. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
-       1070. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
-       1071. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
-       1072. ActRemSocComGbl		Remove of a comment in a social note (global)
-
-       1073. ActReqOthPubPrf		Request @nickname to show a public user's profile
-
-       1074. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
-       1075. ActRcvSocComUsr		Comment a social note in the timeline (user)
-       1076. ActShaSocNotUsr		Share a social note in the timeline (user)
-       1077. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
-       1078. ActFavSocNotUsr		Favourite a social note in the timeline (user)
-       1079. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
-       1080. ActFavSocComUsr		Favourite a social comment in the timeline (user)
-       1081. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
-       1082. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
-       1083. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
-       1084. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
-       1085. ActRemSocComUsr		Remove of a comment in a social note (user)
-
-       1086. ActCal1stClkTim		Calculate first click time from log and store into user's figures
-       1087. ActCalNumClk		Calculate number of clicks from log and store into user's figures
-       1088. ActCalNumFileViews		Calculate number of file views and store into user's figures
-       1089. ActCalNumForPst		Calculate number of forum posts and store into user's figures
-       1090. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
-
-       1091. ActFolUsr			Follow another user
-       1092. ActUnfUsr			Unfollow another user
-       1093. ActSeeFlg			Show following
-       1094. ActSeeFlr			Show followers
-
-       1095. ActSeeForCrsUsr		Show top level of forum of users of the course
-       1096. ActSeeForCrsTch		Show top level of forum of teachers of the course
-       1097. ActSeeForDegUsr		Show top level of forum of users of the degree
-       1098. ActSeeForDegTch		Show top level of forum of teachers of the degree
-       1099. ActSeeForCtrUsr		Show top level of forum of users of the centre
-       1100. ActSeeForCtrTch		Show top level of forum of teachers of the centre
-       1101. ActSeeForInsUsr		Show top level of forum of users of the institution
-       1102. ActSeeForInsTch		Show top level of forum of teachers of the institution
-       1103. ActSeeForGenUsr		Show top level of forum of users general
-       1104. ActSeeForGenTch		Show top level of forum of teachers general
-       1105. ActSeeForSWAUsr		Show top level of forum of users of the platform
-       1106. ActSeeForSWATch		Show top level of forum of teachers of the platform
-       1107. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
-       1108. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
-       1109. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
-       1110. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
-       1111. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
-       1112. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
-       1113. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
-       1114. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
-       1115. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
-       1116. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
-       1117. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
-       1118. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
-       1119. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
-       1120. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
-       1121. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
-       1122. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
-       1123. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
-       1124. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
-       1125. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
-       1126. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
-       1127. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
-       1128. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
-       1129. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
-       1130. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
-       1131. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
-       1132. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
-       1133. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
-       1134. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
-       1135. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
-       1136. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
-       1137. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
-       1138. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
-       1139. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
-       1140. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
-       1141. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
-       1142. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
-       1143. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
-       1144. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
-       1145. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
-       1146. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
-       1147. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
-       1148. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
-       1149. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
-       1150. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
-       1151. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
-       1152. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
-       1153. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
-       1154. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
-       1155. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
-       1156. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
-       1157. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
-       1158. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
-       1159. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
-       1160. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
-       1161. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
-       1162. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
-       1163. ActDelThrForGenUsr		Remove a thread of forum of users general
-       1164. ActDelThrForGenTch		Remove a thread of forum of teachers general
-       1165. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
-       1166. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
-       1167. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
-       1168. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
-       1169. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
-       1170. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
-       1171. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
-       1172. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
-       1173. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
-       1174. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
-       1175. ActCutThrForGenUsr		Cut a thread of forum of users general
-       1176. ActCutThrForGenTch		Cut a thread of forum of teachers general
-       1177. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
-       1178. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
-       1179. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
-       1180. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
-       1181. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
-       1182. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
-       1183. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
-       1184. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
-       1185. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
-       1186. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
-       1187. ActPasThrForGenUsr		Paste a thread of forum of users general
-       1188. ActPasThrForGenTch		Paste a thread of forum of teachers general
-       1189. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
-       1190. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
-       1191. ActDelPstForCrsUsr		Remove a message of forum of users of the course
-       1192. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
-       1193. ActDelPstForDegUsr		Remove a message of forum of users of the degree
-       1194. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
-       1195. ActDelPstForCtrUsr		Remove a message of forum of users of centre
-       1196. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
-       1197. ActDelPstForInsUsr		Remove a message of forum of users of the institution
-       1198. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
-       1199. ActDelPstForGenUsr		Remove a message of forum of users general
-       1200. ActDelPstForGenTch		Remove a message of forum of teachers general
-       1201. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
-       1202. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
-       1203. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
-       1204. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
-       1205. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
-       1206. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
-       1207. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
-       1208. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
-       1209. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
-       1210. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
-       1211. ActEnbPstForGenUsr		Enable a message of forum of users general
-       1212. ActEnbPstForGenTch		Enable a message of forum of teachers general
-       1213. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
-       1214. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
-       1215. ActDisPstForCrsUsr		Disable a message of forum of users of the course
-       1216. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
-       1217. ActDisPstForDegUsr		Disable a message of forum of users of the degree
-       1218. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
-       1219. ActDisPstForCtrUsr		Disable a message of forum of users of centre
-       1220. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
-       1221. ActDisPstForInsUsr		Disable a message of forum of users of the institution
-       1222. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
-       1223. ActDisPstForGenUsr		Disable a message of forum of users general
-       1224. ActDisPstForGenTch		Disable a message of forum of teachers general
-       1225. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
-       1226. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
-
-       1227. ActCht			Enter in a chat room to chat
-
 Messages:
        1228. ActSeeNtf			Show my recent notifications
        1229. ActSeeAnn			Show global announcements
@@ -1629,6 +1629,199 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActRefOldSocPubGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RefreshOldTimelineGbl	,NULL},
    /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActRefOldSocPubUsr	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RefreshOldTimelineUsr	,NULL},
    /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_WebService			,NULL},
+
+   // TabSta ******************************************************************
+   /* ActSeeSocTmlGbl	*/{1490, 0,TabSta,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
+   /* ActSeeSocPrf	*/{1520, 1,TabSta,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
+   /* ActSeeFor		*/{  95, 2,TabSta,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,"comments"		},
+// /* ActSeeChtRms	*/{  51, 3,TabSta,ActSeeChtRms		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
+   /* ActSeeChtRms	*/{  51, 3,TabSta,ActSeeChtRms		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
+
+   /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveSocialPostGbl	,NULL},
+   /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveCommentGbl		,NULL},
+   /* ActShaSocNotGbl	*/{1495,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShareSocialNoteGbl		,NULL},
+   /* ActUnsSocNotGbl	*/{1496,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_UnshareSocialNoteGbl	,NULL},
+   /* ActFavSocNotGbl	*/{1512,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_FavSocialNoteGbl		,NULL},
+   /* ActUnfSocNotGbl	*/{1513,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_UnfavSocialNoteGbl		,NULL},
+   /* ActFavSocComGbl	*/{1516,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_FavSocialCommentGbl	,NULL},
+   /* ActUnfSocComGbl	*/{1517,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_UnfavSocialCommentGbl	,NULL},
+   /* ActReqRemSocPubGbl*/{1494,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RequestRemSocialNoteGbl	,NULL},
+   /* ActRemSocPubGbl	*/{1493,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RemoveSocialNoteGbl	,NULL},
+   /* ActReqRemSocComGbl*/{1505,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RequestRemSocialComGbl	,NULL},
+   /* ActRemSocComGbl	*/{1507,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RemoveSocialComGbl		,NULL},
+
+   /* ActReqOthPubPrf	*/{1401,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_RequestUserProfile		,NULL},
+
+   /* ActRcvSocPstUsr	*/{1498,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Soc_ReceiveSocialPostUsr	,NULL},
+   /* ActRcvSocComUsr	*/{1504,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Soc_ReceiveCommentUsr		,NULL},
+   /* ActShaSocNotUsr	*/{1499,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_ShareSocialNoteUsr		,NULL},
+   /* ActUnsSocNotUsr	*/{1500,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_UnshareSocialNoteUsr	,NULL},
+   /* ActFavSocNotUsr	*/{1514,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_FavSocialNoteUsr		,NULL},
+   /* ActUnfSocNotUsr	*/{1515,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_UnfavSocialNoteUsr		,NULL},
+   /* ActFavSocComUsr	*/{1518,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_FavSocialCommentUsr	,NULL},
+   /* ActUnfSocComUsr	*/{1519,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_UnfavSocialCommentUsr	,NULL},
+   /* ActReqRemSocPubUsr*/{1501,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RequestRemSocialNoteUsr	,NULL},
+   /* ActRemSocPubUsr	*/{1502,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RemoveSocialNoteUsr	,NULL},
+   /* ActReqRemSocComGbl*/{1506,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RequestRemSocialComUsr	,NULL},
+   /* ActRemSocComGbl	*/{1508,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RemoveSocialComUsr		,NULL},
+
+   /* ActSeeOthPubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
+   /* ActCal1stClkTim	*/{1405,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumClk	*/{1406,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumFilVie	*/{1409,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumForPst	*/{1408,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+
+   /* ActFolUsr		*/{1410,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Fol_FollowUsr1			,Fol_FollowUsr2			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Fol_UnfollowUsr1		,Fol_UnfollowUsr2		,NULL},
+   /* ActSeeFlg		*/{1412,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowing		,NULL},
+   /* ActSeeFlr		*/{1413,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowers		,NULL},
+
+   /* ActSeeForCrsUsr	*/{ 345,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForCrsTch	*/{ 431,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForDegUsr	*/{ 241,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForDegTch	*/{ 243,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForCtrUsr	*/{ 901,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForCtrTch	*/{ 430,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForInsUsr	*/{ 725,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForInsTch	*/{ 724,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForGenUsr	*/{ 726,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForGenTch	*/{ 723,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForSWAUsr	*/{ 242,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+   /* ActSeeForSWATch	*/{ 245,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
+
+   /* ActSeePstForCrsUsr*/{ 346,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForCrsTch*/{ 347,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForDegUsr*/{ 255,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForDegTch*/{ 291,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForCtrUsr*/{ 348,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForCtrTch*/{ 902,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForInsUsr*/{ 730,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForInsTch*/{ 746,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForGenUsr*/{ 727,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForGenTch*/{ 731,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForSWAUsr*/{ 244,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+   /* ActSeePstForSWATch*/{ 246,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
+
+   /* ActRcvThrForCrsUsr*/{ 350,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForCrsTch*/{ 754,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForDegUsr*/{ 252,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForDegTch*/{ 247,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForCtrUsr*/{ 903,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForCtrTch*/{ 904,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForInsUsr*/{ 737,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForInsTch*/{ 769,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForGenUsr*/{ 736,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForGenTch*/{ 765,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForSWAUsr*/{ 258,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvThrForSWATch*/{ 259,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+
+   /* ActRcvRepForCrsUsr*/{ 599,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForCrsTch*/{ 755,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForDegUsr*/{ 606,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForDegTch*/{ 617,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForCtrUsr*/{ 905,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForCtrTch*/{ 906,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForInsUsr*/{ 740,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForInsTch*/{ 770,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForGenUsr*/{ 747,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForGenTch*/{ 816,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForSWAUsr*/{ 603,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+   /* ActRcvRepForSWATch*/{ 622,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
+
+   /* ActReqDelThrCrsUsr*/{ 867,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrCrsTch*/{ 869,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrDegUsr*/{ 907,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrDegTch*/{ 908,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrCtrUsr*/{ 909,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrCtrTch*/{ 910,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrInsUsr*/{ 911,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrInsTch*/{ 912,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrGenUsr*/{ 913,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrGenTch*/{ 914,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrSWAUsr*/{ 881,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+   /* ActReqDelThrSWATch*/{ 915,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
+
+   /* ActDelThrForCrsUsr*/{ 868,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForCrsTch*/{ 876,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForDegUsr*/{ 916,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForDegTch*/{ 917,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForCtrUsr*/{ 918,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForCtrTch*/{ 919,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForInsUsr*/{ 920,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForInsTch*/{ 921,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForGenUsr*/{ 922,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForGenTch*/{ 923,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForSWAUsr*/{ 882,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+   /* ActDelThrForSWATch*/{ 924,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
+
+   /* ActCutThrForCrsUsr*/{ 926,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForCrsTch*/{ 927,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForDegUsr*/{ 928,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForDegTch*/{ 929,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForCtrUsr*/{ 930,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForCtrTch*/{ 931,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForInsUsr*/{ 932,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForInsTch*/{ 933,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForGenUsr*/{ 934,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForGenTch*/{ 935,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForSWAUsr*/{ 890,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+   /* ActCutThrForSWATch*/{ 936,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
+
+   /* ActPasThrForCrsUsr*/{ 891,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForCrsTch*/{ 937,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForDegUsr*/{ 938,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForDegTch*/{ 939,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForCtrUsr*/{ 940,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForCtrTch*/{ 941,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForInsUsr*/{ 942,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForInsTch*/{ 943,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForGenUsr*/{ 944,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForGenTch*/{ 945,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForSWAUsr*/{ 946,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+   /* ActPasThrForSWATch*/{ 947,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
+
+   /* ActDelPstForCrsUsr*/{ 602,-1,TabUnk,ActSeeFor		,0x238,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForCrsTch*/{ 756,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForDegUsr*/{ 608,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForDegTch*/{ 680,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForCtrUsr*/{ 948,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForCtrTch*/{ 949,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForInsUsr*/{ 743,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForInsTch*/{ 772,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForGenUsr*/{ 735,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForGenTch*/{ 950,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForSWAUsr*/{ 613,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+   /* ActDelPstForSWATch*/{ 623,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
+
+   /* ActEnbPstForCrsUsr*/{ 624,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForCrsTch*/{ 951,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForDegUsr*/{ 616,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForDegTch*/{ 619,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForCtrUsr*/{ 952,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForCtrTch*/{ 953,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForInsUsr*/{ 954,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForInsTch*/{ 955,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForGenUsr*/{ 956,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForGenTch*/{ 957,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForSWAUsr*/{ 632,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+   /* ActEnbPstForSWATch*/{ 634,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
+
+   /* ActDisPstForCrsUsr*/{ 610,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForCrsTch*/{ 958,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForDegUsr*/{ 615,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForDegTch*/{ 618,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForCtrUsr*/{ 959,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForCtrTch*/{ 960,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForInsUsr*/{ 961,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForInsTch*/{ 962,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForGenUsr*/{ 963,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForGenTch*/{ 925,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForSWAUsr*/{ 625,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+   /* ActDisPstForSWATch*/{ 635,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
+
+// /* ActCht		*/{  52,-1,TabUnk,ActSeeChtRms		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
+   /* ActCht		*/{  52,-1,TabUnk,ActSeeChtRms		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
 
    // TabSys ******************************************************************
    // Actions in menu:
@@ -2844,199 +3037,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstDupUsr	*/{1578,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_ListDuplicateUsrs		,NULL},
    /* ActLstSimUsr	*/{1579,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_GetUsrCodAndListSimilarUsrs,NULL},
    /* ActRemDupUsr	*/{1580,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_RemoveUsrFromListDupUsrs	,NULL},
-
-   // TabSoc ******************************************************************
-   /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
-   /* ActSeeSocPrf	*/{1520, 1,TabSoc,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
-   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,"comments"		},
-// /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
-   /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
-
-   /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveSocialPostGbl	,NULL},
-   /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveCommentGbl		,NULL},
-   /* ActShaSocNotGbl	*/{1495,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShareSocialNoteGbl		,NULL},
-   /* ActUnsSocNotGbl	*/{1496,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_UnshareSocialNoteGbl	,NULL},
-   /* ActFavSocNotGbl	*/{1512,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_FavSocialNoteGbl		,NULL},
-   /* ActUnfSocNotGbl	*/{1513,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_UnfavSocialNoteGbl		,NULL},
-   /* ActFavSocComGbl	*/{1516,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_FavSocialCommentGbl	,NULL},
-   /* ActUnfSocComGbl	*/{1517,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_UnfavSocialCommentGbl	,NULL},
-   /* ActReqRemSocPubGbl*/{1494,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RequestRemSocialNoteGbl	,NULL},
-   /* ActRemSocPubGbl	*/{1493,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RemoveSocialNoteGbl	,NULL},
-   /* ActReqRemSocComGbl*/{1505,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RequestRemSocialComGbl	,NULL},
-   /* ActRemSocComGbl	*/{1507,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_RemoveSocialComGbl		,NULL},
-
-   /* ActReqOthPubPrf	*/{1401,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_RequestUserProfile		,NULL},
-
-   /* ActRcvSocPstUsr	*/{1498,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Soc_ReceiveSocialPostUsr	,NULL},
-   /* ActRcvSocComUsr	*/{1504,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Soc_ReceiveCommentUsr		,NULL},
-   /* ActShaSocNotUsr	*/{1499,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_ShareSocialNoteUsr		,NULL},
-   /* ActUnsSocNotUsr	*/{1500,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_UnshareSocialNoteUsr	,NULL},
-   /* ActFavSocNotUsr	*/{1514,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_FavSocialNoteUsr		,NULL},
-   /* ActUnfSocNotUsr	*/{1515,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_UnfavSocialNoteUsr		,NULL},
-   /* ActFavSocComUsr	*/{1518,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_FavSocialCommentUsr	,NULL},
-   /* ActUnfSocComUsr	*/{1519,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_UnfavSocialCommentUsr	,NULL},
-   /* ActReqRemSocPubUsr*/{1501,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RequestRemSocialNoteUsr	,NULL},
-   /* ActRemSocPubUsr	*/{1502,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RemoveSocialNoteUsr	,NULL},
-   /* ActReqRemSocComGbl*/{1506,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RequestRemSocialComUsr	,NULL},
-   /* ActRemSocComGbl	*/{1508,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RemoveSocialComUsr		,NULL},
-
-   /* ActSeeOthPubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-
-   /* ActFolUsr		*/{1410,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Fol_FollowUsr1			,Fol_FollowUsr2			,NULL},
-   /* ActUnfUsr		*/{1411,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Fol_UnfollowUsr1		,Fol_UnfollowUsr2		,NULL},
-   /* ActSeeFlg		*/{1412,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowing		,NULL},
-   /* ActSeeFlr		*/{1413,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowers		,NULL},
-
-   /* ActSeeForCrsUsr	*/{ 345,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForCrsTch	*/{ 431,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForDegUsr	*/{ 241,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForDegTch	*/{ 243,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForCtrUsr	*/{ 901,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForCtrTch	*/{ 430,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForInsUsr	*/{ 725,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForInsTch	*/{ 724,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForGenUsr	*/{ 726,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForGenTch	*/{ 723,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForSWAUsr	*/{ 242,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-   /* ActSeeForSWATch	*/{ 245,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,NULL},
-
-   /* ActSeePstForCrsUsr*/{ 346,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForCrsTch*/{ 347,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForDegUsr*/{ 255,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForDegTch*/{ 291,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForCtrUsr*/{ 348,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForCtrTch*/{ 902,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForInsUsr*/{ 730,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForInsTch*/{ 746,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForGenUsr*/{ 727,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForGenTch*/{ 731,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForSWAUsr*/{ 244,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-   /* ActSeePstForSWATch*/{ 246,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowThreadPosts		,NULL},
-
-   /* ActRcvThrForCrsUsr*/{ 350,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForCrsTch*/{ 754,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForDegUsr*/{ 252,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForDegTch*/{ 247,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForCtrUsr*/{ 903,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForCtrTch*/{ 904,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForInsUsr*/{ 737,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForInsTch*/{ 769,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForGenUsr*/{ 736,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForGenTch*/{ 765,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForSWAUsr*/{ 258,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvThrForSWATch*/{ 259,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-
-   /* ActRcvRepForCrsUsr*/{ 599,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForCrsTch*/{ 755,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForDegUsr*/{ 606,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForDegTch*/{ 617,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForCtrUsr*/{ 905,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForCtrTch*/{ 906,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForInsUsr*/{ 740,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForInsTch*/{ 770,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForGenUsr*/{ 747,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForGenTch*/{ 816,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForSWAUsr*/{ 603,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-   /* ActRcvRepForSWATch*/{ 622,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,For_ReceiveForumPost		,NULL},
-
-   /* ActReqDelThrCrsUsr*/{ 867,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrCrsTch*/{ 869,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrDegUsr*/{ 907,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrDegTch*/{ 908,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrCtrUsr*/{ 909,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrCtrTch*/{ 910,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrInsUsr*/{ 911,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrInsTch*/{ 912,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrGenUsr*/{ 913,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrGenTch*/{ 914,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrSWAUsr*/{ 881,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-   /* ActReqDelThrSWATch*/{ 915,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RequestRemoveThread	,NULL},
-
-   /* ActDelThrForCrsUsr*/{ 868,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForCrsTch*/{ 876,-1,TabUnk,ActSeeFor		,0x220,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForDegUsr*/{ 916,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForDegTch*/{ 917,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForCtrUsr*/{ 918,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForCtrTch*/{ 919,-1,TabUnk,ActSeeFor		,0x3C0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForInsUsr*/{ 920,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForInsTch*/{ 921,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForGenUsr*/{ 922,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForGenTch*/{ 923,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForSWAUsr*/{ 882,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-   /* ActDelThrForSWATch*/{ 924,-1,TabUnk,ActSeeFor		,0x200,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemoveThread		,NULL},
-
-   /* ActCutThrForCrsUsr*/{ 926,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForCrsTch*/{ 927,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForDegUsr*/{ 928,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForDegTch*/{ 929,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForCtrUsr*/{ 930,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForCtrTch*/{ 931,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForInsUsr*/{ 932,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForInsTch*/{ 933,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForGenUsr*/{ 934,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForGenTch*/{ 935,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForSWAUsr*/{ 890,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-   /* ActCutThrForSWATch*/{ 936,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_CutThread			,NULL},
-
-   /* ActPasThrForCrsUsr*/{ 891,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForCrsTch*/{ 937,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForDegUsr*/{ 938,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForDegTch*/{ 939,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForCtrUsr*/{ 940,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForCtrTch*/{ 941,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForInsUsr*/{ 942,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForInsTch*/{ 943,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForGenUsr*/{ 944,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForGenTch*/{ 945,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForSWAUsr*/{ 946,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-   /* ActPasThrForSWATch*/{ 947,-1,TabUnk,ActSeeFor		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_PasteThread		,NULL},
-
-   /* ActDelPstForCrsUsr*/{ 602,-1,TabUnk,ActSeeFor		,0x238,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForCrsTch*/{ 756,-1,TabUnk,ActSeeFor		,0x230,0x204,0x204,0x204,0x204,0x204,0x204,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForDegUsr*/{ 608,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForDegTch*/{ 680,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForCtrUsr*/{ 948,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForCtrTch*/{ 949,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForInsUsr*/{ 743,-1,TabUnk,ActSeeFor		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForInsTch*/{ 772,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForGenUsr*/{ 735,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForGenTch*/{ 950,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForSWAUsr*/{ 613,-1,TabUnk,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-   /* ActDelPstForSWATch*/{ 623,-1,TabUnk,ActSeeFor		,0x3F0,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_RemovePost			,NULL},
-
-   /* ActEnbPstForCrsUsr*/{ 624,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForCrsTch*/{ 951,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForDegUsr*/{ 616,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForDegTch*/{ 619,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForCtrUsr*/{ 952,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForCtrTch*/{ 953,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForInsUsr*/{ 954,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForInsTch*/{ 955,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForGenUsr*/{ 956,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForGenTch*/{ 957,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForSWAUsr*/{ 632,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-   /* ActEnbPstForSWATch*/{ 634,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_EnablePost			,NULL},
-
-   /* ActDisPstForCrsUsr*/{ 610,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForCrsTch*/{ 958,-1,TabUnk,ActSeeFor		,0x220,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForDegUsr*/{ 615,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForDegTch*/{ 618,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForCtrUsr*/{ 959,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForCtrTch*/{ 960,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForInsUsr*/{ 961,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForInsTch*/{ 962,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForGenUsr*/{ 963,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForGenTch*/{ 925,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForSWAUsr*/{ 625,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-   /* ActDisPstForSWATch*/{ 635,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
-
-// /* ActCht		*/{  52,-1,TabUnk,ActSeeChtRms		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
-   /* ActCht		*/{  52,-1,TabUnk,ActSeeChtRms		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
@@ -5202,8 +5202,8 @@ void Act_AdjustCurrentAction (void)
    bool IAmATeacher;
 
    /***** Don't adjust anything when current action is not a menu option *****/
-   if (Gbl.Action.Act != Act_GetSuperAction (Gbl.Action.Act))	// It is not a menu option
-      return;
+   // if (Gbl.Action.Act != Act_GetSuperAction (Gbl.Action.Act))	// It is not a menu option
+   //   return;
 
    /***** Don't adjust anything when refreshing users or on a web service *****/
    if (Gbl.Action.UsesAJAX ||
@@ -5225,9 +5225,11 @@ void Act_AdjustCurrentAction (void)
         }
      }
 
-   /***** If my login password is not enough secure, the only action possible is show a form to change my password *****/
+   /***** Just after login *****/
    if (Gbl.Action.Act == ActLogIn)
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+         /* If my login password is not enough secure,
+            the only action possible is show a form to change my password */
         {
          Gbl.Action.Act = ActFrmChgMyPwd;
          Tab_SetCurrentTab ();
@@ -5271,7 +5273,7 @@ void Act_AdjustCurrentAction (void)
    /***** Check if I am a teacher *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |	// I am a non-editing teacher...
-	                                      (1 << Rol_TCH)));	// ...or a teacher in any course
+	                                             (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** If I haven't filled my institution,
           or if I'm a teacher and I haven't filled my centre or department,
@@ -5402,5 +5404,18 @@ void Act_AdjustCurrentAction (void)
          default:
             break;
         }
+     }
+
+   /***** Just after login with all checks OK ==> go to timeline *****/
+   switch (Gbl.Action.Act)
+     {
+      case ActLogIn:
+      case ActLogInLan:
+      case ActAnnSee:
+	 Gbl.Action.Act = ActSeeSocTmlGbl;
+	 Tab_SetCurrentTab ();
+	 return;
+      default:
+            break;
      }
   }

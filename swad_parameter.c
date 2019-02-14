@@ -675,13 +675,13 @@ void Par_GetMainParameters (void)
    /***** Get action to perform *****/
    if (Gbl.WebService.IsWebService)
      {
-      Gbl.Action.Act = ActWebSvc;
+      Gbl.Action.Act = Gbl.Action.Original = ActWebSvc;
       Tab_SetCurrentTab ();
       return;
      }
 
    /***** Set default action *****/
-   Gbl.Action.Act = ActUnk;
+   Gbl.Action.Act = Gbl.Action.Original = ActUnk;
 
    /***** Get another user's nickname, if exists
           (this nickname is used to go to another user's profile,
@@ -699,7 +699,7 @@ void Par_GetMainParameters (void)
 	 // and to refresh old publishings in user's timeline
 	 // If user does not exist ==> UsrCod = -1
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Other.UsrDat.Nickname);
-         Gbl.Action.Act = ActSeeOthPubPrf;	// Set default action if no other is specified
+         Gbl.Action.Act = Gbl.Action.Original = ActSeeOthPubPrf;	// Set default action if no other is specified
 	}
      }
    else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICKNAME_FROM_FORM))
@@ -714,7 +714,7 @@ void Par_GetMainParameters (void)
 	 // This user's code is used to go to public agenda
 	 // If user does not exist ==> UsrCod = -1
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Other.UsrDat.Nickname);
-	 Gbl.Action.Act = ActFrmLogInUsrAgd;	// Set default action if no other is specified
+	 Gbl.Action.Act = Gbl.Action.Original = ActFrmLogInUsrAgd;	// Set default action if no other is specified
 	}
      }
 
@@ -723,7 +723,7 @@ void Par_GetMainParameters (void)
    // if (ActCod < 0)
    //   ActCod = Par_GetParToLong ("ActCod");	// Obsolete, old parameter now replaced by "act"
    if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
-      Gbl.Action.Act = Act_FromActCodToAction[ActCod];
+      Gbl.Action.Act = Gbl.Action.Original = Act_FromActCodToAction[ActCod];
 
    /***** Some preliminary adjusts depending on action *****/
    Gbl.Action.UsesAJAX = false;

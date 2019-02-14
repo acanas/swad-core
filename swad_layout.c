@@ -158,8 +158,8 @@ void Lay_WriteStartOfPage (void)
    // in httpd.conf to enable meta tag
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
-"<meta http-equiv=\"Page-Enter\" content=\"blendTrans(Duration=0)\">\n"
-"<meta http-equiv=\"Page-Exit\" content=\"blendTrans(Duration=0)\">\n"
+// "<meta http-equiv=\"Page-Enter\" content=\"blendTrans(Duration=0)\">\n"
+// "<meta http-equiv=\"Page-Exit\" content=\"blendTrans(Duration=0)\">\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
                       "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
                       "<meta name=\"keywords\" content=\""
@@ -240,10 +240,10 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.Usrs.Me.Logged &&							// I am logged
        Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
      {
-      if (Gbl.Action.Act == ActLogIn ||		// Regular log in
-	  Gbl.Action.Act == ActLogInNew)		// Log in when checking account
+      if (Gbl.Action.Original == ActLogIn ||	// Regular log in
+	  Gbl.Action.Original == ActLogInNew)	// Log in when checking account
          Lay_WriteRedirToMyLangOnLogIn ();
-      else if (Gbl.Action.Act == ActLogInUsrAgd)	// Log in to view another user's public agenda
+      else if (Gbl.Action.Original == ActLogInUsrAgd)	// Log in to view another user's public agenda
          Lay_WriteRedirToMyLangOnViewUsrAgd ();
      }
 
@@ -360,7 +360,6 @@ void Lay_WriteStartOfPage (void)
    /* Write message indicating number of clicks allowed before sending my photo */
    Usr_InformAboutNumClicksBeforePhoto ();
   }
-
 
 /*****************************************************************************/
 /*********************** Write status 204 No Content *************************/

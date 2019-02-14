@@ -122,13 +122,13 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_COMMENT
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_FAV
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_SHARE
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_MENTION
-   ActSeeFlr,		// Ntf_EVENT_FOLLOWER
-   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE
-   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY
+   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_COMMENT	// TODO: Change position
+   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_FAV	// TODO: Change position
+   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_SHARE	// TODO: Change position
+   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_MENTION	// TODO: Change position
+   ActSeeFlr,		// Ntf_EVENT_FOLLOWER		// TODO: Change position
+   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE	// TODO: Change position
+   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY	// TODO: Change position
 
    /* Messages tab */
    ActSeeOneNot,	// Ntf_EVENT_NOTICE

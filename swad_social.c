@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 #include <sys/types.h>		// For time_t
 
+#include "swad_announcement.h"
 #include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
@@ -330,6 +331,20 @@ void Soc_ShowTimelineGbl2 (void)
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
      };
+
+   /***** If I am been redirected from another action... *****/
+   switch (Gbl.Action.Original)
+     {
+      case ActLogIn:
+      case ActLogInLan:
+         Usr_WelcomeUsr ();
+         break;
+      case ActAnnSee:
+	 Ann_MarkAnnouncementAsSeen ();
+	 break;
+      default:
+         break;
+     }
 
    /***** Initialize social note code to -1 ==> no highlighted note *****/
    SocNot.NotCod = -1L;

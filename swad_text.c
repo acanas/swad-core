@@ -17678,6 +17678,102 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	},
 	{
+	// TabSta *****************************************************
+	//  0: ActSeeSocTmlGbl
+#if   L==1	// ca
+	 "Timeline"
+#elif L==2	// de
+	 "Timeline"
+#elif L==3	// en
+	 "Timeline"
+#elif L==4	// es
+	 "Timeline"
+#elif L==5	// fr
+	 "Chronologie"
+#elif L==6	// gn
+	 "Timeline"	// Okoteve traducción
+#elif L==7	// it
+	 "Timeline"
+#elif L==8	// pl
+	 "Timeline"
+#elif L==9	// pt
+	 "Timeline"
+#endif
+	,
+	//  1: ActSeeSocPrf
+#if   L==1	// ca
+	 "Perfils"
+#elif L==2	// de
+	 "Profiles"
+#elif L==3	// en
+	 "Profiles"
+#elif L==4	// es
+	 "Perfiles"
+#elif L==5	// fr
+	 "Profils"
+#elif L==6	// gn
+	 "Che"
+#elif L==7	// it
+	 "Profili"
+#elif L==8	// pl
+	 "Profile"
+#elif L==9	// pt
+	 "Perfiles"
+#endif
+	,
+	//  2: ActSeeFor
+#if   L==1	// ca
+	"F&ograve;rums"
+#elif L==2	// de
+	"Foren"
+#elif L==3	// en
+	"Forums"
+#elif L==4	// es
+	"Foros"
+#elif L==5	// fr
+	"Forums"
+#elif L==6	// gn
+	"Foros"	// Okoteve traducción
+#elif L==7	// it
+	"Forum"
+#elif L==8	// pl
+	"Forum"
+#elif L==9	// pt
+	"F&oacute;runs"
+#endif
+	,
+	//  3: ActSeeChtRms
+#if   L==1	// ca
+	"Xat"
+#elif L==2	// de
+	"Chat"
+#elif L==3	// en
+	"Chat"
+#elif L==4	// es
+	"Chat"
+#elif L==5	// fr
+	"Chat"
+#elif L==6	// gn
+	"&Ntilde;omongeta"
+#elif L==7	// it
+	"Chat"
+#elif L==8	// pl
+	"Chat"
+#elif L==9	// pt
+	"Chat"
+#endif
+	,
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	NULL,	// 12
+	},
+	{
 	// TabSys *****************************************************
 	//  0: ActSysReqSch
 #if   L==1	// ca
@@ -19081,102 +19177,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabSoc *****************************************************
-	//  0: ActSeeSocTmlGbl
-#if   L==1	// ca
-	 "Timeline"
-#elif L==2	// de
-	 "Timeline"
-#elif L==3	// en
-	 "Timeline"
-#elif L==4	// es
-	 "Timeline"
-#elif L==5	// fr
-	 "Chronologie"
-#elif L==6	// gn
-	 "Timeline"	// Okoteve traducción
-#elif L==7	// it
-	 "Timeline"
-#elif L==8	// pl
-	 "Timeline"
-#elif L==9	// pt
-	 "Timeline"
-#endif
-	,
-	//  1: ActSeeSocPrf
-#if   L==1	// ca
-	 "Perfils"
-#elif L==2	// de
-	 "Profiles"
-#elif L==3	// en
-	 "Profiles"
-#elif L==4	// es
-	 "Perfiles"
-#elif L==5	// fr
-	 "Profils"
-#elif L==6	// gn
-	 "Che"
-#elif L==7	// it
-	 "Profili"
-#elif L==8	// pl
-	 "Profile"
-#elif L==9	// pt
-	 "Perfiles"
-#endif
-	,
-	//  2: ActSeeFor
-#if   L==1	// ca
-	"F&ograve;rums"
-#elif L==2	// de
-	"Foren"
-#elif L==3	// en
-	"Forums"
-#elif L==4	// es
-	"Foros"
-#elif L==5	// fr
-	"Forums"
-#elif L==6	// gn
-	"Foros"	// Okoteve traducción
-#elif L==7	// it
-	"Forum"
-#elif L==8	// pl
-	"Forum"
-#elif L==9	// pt
-	"F&oacute;runs"
-#endif
-	,
-	//  3: ActSeeChtRms
-#if   L==1	// ca
-	"Xat"
-#elif L==2	// de
-	"Chat"
-#elif L==3	// en
-	"Chat"
-#elif L==4	// es
-	"Chat"
-#elif L==5	// fr
-	"Chat"
-#elif L==6	// gn
-	"&Ntilde;omongeta"
-#elif L==7	// it
-	"Chat"
-#elif L==8	// pl
-	"Chat"
-#elif L==9	// pt
-	"Chat"
-#endif
-	,
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
-	{
 	// TabMsg *****************************************************
 	//  0: ActSeeNtf
 #if   L==1	// ca
@@ -19654,6 +19654,105 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  1
 	NULL,	//  2
 	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	NULL,	// 12
+	},
+	{
+	// TabSta *****************************************************
+	//  0: ActSeeSocTmlGbl
+#if   L==1	// ca
+	 "Timeline dels usuaris que segueixo o de tots els usuaris"
+#elif L==2	// de
+	 "Timeline der Benutzer Ich folge oder alle Benutzern"
+#elif L==3	// en
+	 "Timeline of users I follow or all users"
+#elif L==4	// es
+	 "Timeline de los usuarios que sigo o de todos los usuarios"
+#elif L==5	// fr
+	 "Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
+#elif L==6	// gn
+	 "Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
+#elif L==7	// it
+	 "Timeline degli utenti che seguo o tutti gli utenti"
+#elif L==8	// pl
+	 "Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
+#elif L==9	// pt
+	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
+#endif
+	,
+	 //  1: ActSeeSocPrf
+#if   L==1	// ca
+	 "Perfils p&uacute;blics"
+#elif L==2	// de
+	 "&Ouml;ffentliche Profile"
+#elif L==3	// en
+	 "Public profiles"
+#elif L==4	// es
+	 "Perfiles p&uacute;blicos de usuarios"
+#elif L==5	// fr
+	 "Profils publics"
+#elif L==6	// gn
+	 "Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
+#elif L==7	// it
+	 "Profili pubblici"
+#elif L==8	// pl
+	 "Profile publiczne"
+#elif L==9	// pt
+	 "Perfis p&uacute;blicos"
+#endif
+	,
+	//  2: ActSeeFor
+#if   L==1	// ca
+	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
+	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
+#elif L==2	// de
+	"Foren"
+#elif L==3	// en
+	"Forums"
+#elif L==4	// es
+	"Foros de discusi&oacute;n, distribuidos"
+	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"
+#elif L==5	// fr
+	"Forums"
+#elif L==6	// gn
+	"Foros de discusi&oacute;n, distribuidos"
+	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"// Okoteve traducción
+#elif L==7	// it
+	"Forum"
+#elif L==8	// pl
+	"Forum"
+#elif L==9	// pt
+	"F&oacute;runs"
+#endif
+	,
+	//  3: ActSeeChtRms
+#if   L==1	// ca
+	"Conversa en temps real amb altres usuaris"
+#elif L==2	// de
+	"Chat"
+#elif L==3	// en
+	"Chat"
+#elif L==4	// es
+	"Conversaci&oacute;n en tiempo real con otros usuarios"
+#elif L==5	// fr
+	"Chat"
+#elif L==6	// gn
+	"Conversaci&oacute;n en tiempo real con otros usuarios"	// Okoteve traducción
+#elif L==7	// it
+	"Chat"
+#elif L==8	// pl
+	"Chat"
+#elif L==9	// pt
+	"Chat"
+#endif
+	,
 	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
@@ -21111,105 +21210,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
-	{
-	// TabSoc *****************************************************
-	//  0: ActSeeSocTmlGbl
-#if   L==1	// ca
-	 "Timeline dels usuaris que segueixo o de tots els usuaris"
-#elif L==2	// de
-	 "Timeline der Benutzer Ich folge oder alle Benutzern"
-#elif L==3	// en
-	 "Timeline of users I follow or all users"
-#elif L==4	// es
-	 "Timeline de los usuarios que sigo o de todos los usuarios"
-#elif L==5	// fr
-	 "Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
-#elif L==6	// gn
-	 "Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
-#elif L==7	// it
-	 "Timeline degli utenti che seguo o tutti gli utenti"
-#elif L==8	// pl
-	 "Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
-#elif L==9	// pt
-	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
-#endif
-	,
-	 //  1: ActSeeSocPrf
-#if   L==1	// ca
-	 "Perfils p&uacute;blics"
-#elif L==2	// de
-	 "&Ouml;ffentliche Profile"
-#elif L==3	// en
-	 "Public profiles"
-#elif L==4	// es
-	 "Perfiles p&uacute;blicos de usuarios"
-#elif L==5	// fr
-	 "Profils publics"
-#elif L==6	// gn
-	 "Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
-#elif L==7	// it
-	 "Profili pubblici"
-#elif L==8	// pl
-	 "Profile publiczne"
-#elif L==9	// pt
-	 "Perfis p&uacute;blicos"
-#endif
-	,
-	//  2: ActSeeFor
-#if   L==1	// ca
-	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
-	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
-#elif L==2	// de
-	"Foren"
-#elif L==3	// en
-	"Forums"
-#elif L==4	// es
-	"Foros de discusi&oacute;n, distribuidos"
-	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"
-#elif L==5	// fr
-	"Forums"
-#elif L==6	// gn
-	"Foros de discusi&oacute;n, distribuidos"
-	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"// Okoteve traducción
-#elif L==7	// it
-	"Forum"
-#elif L==8	// pl
-	"Forum"
-#elif L==9	// pt
-	"F&oacute;runs"
-#endif
-	,
-	//  3: ActSeeChtRms
-#if   L==1	// ca
-	"Conversa en temps real amb altres usuaris"
-#elif L==2	// de
-	"Chat"
-#elif L==3	// en
-	"Chat"
-#elif L==4	// es
-	"Conversaci&oacute;n en tiempo real con otros usuarios"
-#elif L==5	// fr
-	"Chat"
-#elif L==6	// gn
-	"Conversaci&oacute;n en tiempo real con otros usuarios"	// Okoteve traducción
-#elif L==7	// it
-	"Chat"
-#elif L==8	// pl
-	"Chat"
-#elif L==9	// pt
-	"Chat"
-#endif
-	,
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
@@ -42413,7 +42413,29 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
    {
 	// TabUnk
-	NULL,
+	NULL
+	,
+	// TabSta
+#if   L==1	// ca
+	"Inici"
+#elif L==2	// de
+	"Start"
+#elif L==3	// en
+	"Start"
+#elif L==4	// es
+	"Inicio"
+#elif L==5	// fr
+	"D&eacute;marrer"
+#elif L==6	// gn
+	"&Ntilde;epyr&utilde;"
+#elif L==7	// it
+	"Inizio"
+#elif L==8	// pl
+	"Start"
+#elif L==9	// pt
+	"Inicio"
+#endif
+	,
 	// TabSys
 #if   L==1	// ca
 	"Plataforma"
@@ -42601,27 +42623,6 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"U&zdot;ytkownicy"
 #elif L==9	// pt
 	"Utilizadores"
-#endif
-	,
-	// TabSoc
-#if   L==1	// ca
-	"Social"
-#elif L==2	// de
-	"Soziales"
-#elif L==3	// en
-	"Social"
-#elif L==4	// es
-	"Social"
-#elif L==5	// fr
-	"Social"
-#elif L==6	// gn
-	"Social"	// Okoteve traducción
-#elif L==7	// it
-	"Social"
-#elif L==8	// pl
-	"Spo&lstrok;eczna"
-#elif L==9	// pt
-	"Social"
 #endif
 	,
 	// TabMsg
@@ -47242,7 +47243,7 @@ const char *Txt_The_search_text_must_be_longer =
 #elif L==9	// pt
 	"O texto de pesquisa deve ser mais longo.";
 #endif
-
+/*
 const char *Txt_The_session_has_been_closed =	// Closed by user
 #if   L==1	// ca
 	"La sessi&oacute; ha finalitzat.";
@@ -47263,7 +47264,7 @@ const char *Txt_The_session_has_been_closed =	// Closed by user
 #elif L==9	// pt
 	"A sess&atilde;o foi encerrada.";
 #endif
-
+*/
 const char *Txt_The_session_has_expired =
 #if   L==1	// ca
 	"La sessi&oacute; ha expirat.";

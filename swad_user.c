@@ -2401,10 +2401,10 @@ void Usr_WriteFormLogout (void)
 
 void Usr_Logout (void)
   {
-   extern const char *Txt_The_session_has_been_closed;
+   // extern const char *Txt_The_session_has_been_closed;
 
    /***** Confirmation message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_The_session_has_been_closed);
+   // Ale_ShowAlert (Ale_INFO,Txt_The_session_has_been_closed);
 
    /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);
@@ -2557,7 +2557,7 @@ void Usr_WelcomeUsr (void)
 	      {
 	       /* Welcome alert with button to check email address */
 	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-			 "%s %s",
+			 "%s<br />%s",
 			 WelcomeTxt,
 			 Txt_Please_check_your_email_address);
 	       Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,

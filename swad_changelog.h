@@ -365,6 +365,8 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
 
+// TODO: Check -> /* Write new year greeting */
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -384,10 +386,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.41.5 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.43 (2019-02-14)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.43:    Feb 14, 2019 	Social tab is renamed as start tab and moved to the first position. (239294 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/iconset/awesome/home.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/home.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/building.svg /var/www/html/swad/icon/iconset/nuvola/
+
+	Version 18.42:    Feb 14, 2019 	Redirection to timeline after login. (239288 lines)
 	Version 18.41.5:  Feb 14, 2019 	Changes in welcome alert. (239256 lines)
 	Version 18.41.4:  Feb 14, 2019 	By default, timeline now shows all users. (239229 lines)
 	Version 18.41.3:  Feb 14, 2019 	Chat is temporarily disabled because modern browsers don't allow Java. (239228 lines)

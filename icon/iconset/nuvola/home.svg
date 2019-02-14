@@ -127,12 +127,21 @@
    <feGaussianBlur id="feGaussianBlur4371" stdDeviation="1.0895152"/>
   </filter>
  </defs>
-
  <g id="layer1" transform="translate(-382.7 -406.51)">
   <path id="path4367" opacity=".5" d="m412.36 426.36c-0.66-0.01-1.1 0.4-1.41 0.75-0.3 0.35-0.51 0.73-0.71 1.12-0.42 0.79-0.82 1.64-1.07 1.97l-23.47 31c-0.56 0.75-0.83 1.66-0.56 2.56 0.27 0.91 1.27 1.6 2.38 1.6h10.93v39.37c0 0.41 0.25 0.79 0.63 0.94l38.03 15.28c0.2 0.08 0.42 0.09 0.63 0.03l55.46-14.34c0.45-0.11 0.75-0.51 0.75-0.97v-37.5l13.41-0.84c0.36-0.03 0.68-0.26 0.83-0.59s0.11-0.72-0.11-1.01l-29.03-38.25c-0.19-0.25-0.49-0.41-0.81-0.4l-65.88-0.72z" fill-rule="evenodd" filter="url(#filter4369)"/>
   <path id="rect10542" d="m410.01 435.91h26.49v81.19l-37.54-14-0.42-58.47 11.47-8.72z" fill-rule="evenodd" fill="url(#linearGradient2938)"/>
   <path id="rect10012" d="m436.03 462.97h55.93v40.13l-55.93 13.84v-53.97z" fill-rule="evenodd" fill="url(#linearGradient2935)"/>
+  <path id="path10619" d="m410.66 479.23c-0.08 0.02-0.16 0.05-0.22 0.1-0.12 0.1-0.19 0.28-0.19 0.43v27.25l0.5 0.19 13.13 5.06 0.5 0.19v-30.12c0-0.3-0.19-0.57-0.5-0.63l-13-2.47c-0.08-0.01-0.15-0.01-0.22 0z" fill-rule="evenodd" fill="url(#linearGradient2932)"/>
+  <path id="rect10553" d="m410.38 477.45c-1.05 0.03-1.85 0.82-1.85 1.94v26.97l1.97 0.75v-27.35c0-0.2 0.15-0.31 0.35-0.28l12.96 2.47c0.2 0.04 0.32 0.18 0.32 0.38v30.03l2 0.75v-30.41c0-1.28-1.05-2.51-2.32-2.75l-12.96-2.47c-0.16-0.03-0.32-0.03-0.47-0.03z" fill-rule="evenodd" fill="url(#linearGradient2929)"/>
+  <path id="path10603" d="m410.38 477.2c-1.17 0.04-2.1 0.95-2.1 2.19v26.87l0.5 0.19v-27.06c0-1.15 0.87-1.87 2-1.66l13 2.44c1.13 0.21 2.1 1.38 2.1 2.53v30.31l0.5 0.19v-30.5c0-1.42-1.11-2.74-2.5-3l-13-2.47c-0.18-0.03-0.34-0.03-0.5-0.03zm0.28 2.03c-0.08 0.02-0.16 0.05-0.22 0.1-0.12 0.1-0.19 0.28-0.19 0.43v27.25l0.5 0.19v-27.44c0-0.04 0.01-0.03 0-0.03 0 0.01-0.01 0 0.03 0l13 2.44c0.09 0.02 0.1 0.05 0.1 0.16v29.93l0.5 0.19v-30.12c0-0.3-0.19-0.57-0.5-0.63l-13-2.47c-0.08-0.01-0.15-0.01-0.22 0z" fill-rule="evenodd" fill="url(#linearGradient2926)"/>
+  <path id="path10649" d="m40.984 89.478a2.3006 2.3006 0 1 1 -4.602 0 2.3006 2.3006 0 1 1 4.602 0z" fill-rule="evenodd" transform="matrix(.89535 .087698 0 .86345 386.51 415.88)" fill="url(#radialGradient2940)"/>
+  <path id="rect10671" d="m446.54 476.8l11.26-1.24v19.67l-11.26 2.67v-21.1z" fill-rule="evenodd" fill="url(#linearGradient2922)"/>
+  <path id="path10716" opacity=".5" stroke-linejoin="round" d="m447.02 477.24l10.28-1.14v18.75l-10.28 2.42v-20.03z" stroke-dashoffset="7.2" stroke="#000080" stroke-width="2" fill="none"/>
+  <path id="path10714" d="m446.54 476.8l11.26-1.24v19.67l-11.26 2.67v-21.1z" stroke-dashoffset="7.2" stroke="url(#linearGradient2918)" fill="none"/>
+  <path id="path10736" d="m473.32 474.18l10.08-1.12v17.62l-10.08 2.39v-18.89z" fill-rule="evenodd" fill="url(#linearGradient2915)"/>
   <path id="path4341" d="m53.989 59.762l2.353 9.674c16.653-2.658 44.188-2.963 53.468-4.837l0.78-13.857-54.902 5.36-1.699 3.66z" fill-rule="evenodd" transform="translate(382.7 406.51)" fill="url(#linearGradient4357)"/>
+  <path id="path10738" opacity=".5" stroke-linejoin="round" d="m473.75 474.57l9.21-1.01v16.78l-9.21 2.17v-17.94z" stroke-dashoffset="7.2" stroke="#000080" stroke-width="1.7909" fill="none"/>
+  <path id="path10740" d="m473.32 474.18l10.08-1.12v17.62l-10.08 2.39v-18.89z" stroke-dashoffset="7.2" stroke="url(#linearGradient2911)" stroke-width=".89545" fill="none"/>
   <path id="path4321" d="m18.457 97.073v-51.301" transform="translate(382.7 406.51)" stroke="url(#linearGradient4337)" stroke-width="1px" fill="none"/>
   <path id="path10746" d="m400.45 461.74v-7.75l21.1-26.41h-11.05l-24.76 32.74c-0.63 0.83 0.08 1.42 0.79 1.42h13.92z" fill-rule="evenodd" stroke="url(#linearGradient2908)" stroke-width=".5" fill="url(#linearGradient2906)"/>
   <path id="path10764" d="m387.38 460.57l24.15-32.19" stroke="#fa9e9e" stroke-width="0.8" fill="none"/>
