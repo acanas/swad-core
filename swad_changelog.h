@@ -386,10 +386,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.43.6 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.43.7 (2019-02-14)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.43.7:  Feb 14, 2019 	Option system search is moved to start tab. (239027 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Solicitar b&uacute;squeda' WHERE ActCod='627' AND Language='es';
+UPDATE actions SET Txt='Buscar' WHERE ActCod='628' AND Language='es';
+
 	Version 18.43.6:  Feb 14, 2019 	Forums option is moved to messages tab. (239013 lines)
 	Version 18.43.5:  Feb 14, 2019 	Contextual link removed in account. (239011 lines)
 	Version 18.43.4:  Feb 14, 2019 	Notifications are moved to start tab. (239012 lines)

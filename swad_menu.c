@@ -90,10 +90,10 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		// TabSta *******************
 		{
 		ActFrmLogIn,		//  0
-		ActSeeSocTmlGbl,	//  1
-		ActSeeSocPrf,		//  2
-		ActSeeNtf,		//  3
-		0,			//  4
+		ActSysReqSch,		//  1
+		ActSeeSocTmlGbl,	//  2
+		ActSeeSocPrf,		//  3
+		ActSeeNtf,		//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
@@ -105,13 +105,13 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabSys *******************
 		{
-		ActSysReqSch,		//  0
-		ActSeeCty,		//  1
-		ActSeePen,		//  2
-		ActSeeLnk,		//  3
-		ActLstPlg,		//  4
-		ActSetUp,		//  5
-		ActSeeCalSys,		//  6
+		ActSeeCty,		//  0
+		ActSeePen,		//  1
+		ActSeeLnk,		//  2
+		ActLstPlg,		//  3
+		ActSetUp,		//  4
+		ActSeeCalSys,		//  5
+		0,			//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9

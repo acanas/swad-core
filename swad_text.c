@@ -17701,82 +17701,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Entrar"
 #endif
 	,
-	//  1: ActSeeSocTmlGbl
-#if   L==1	// ca
-	 "Timeline"
-#elif L==2	// de
-	 "Timeline"
-#elif L==3	// en
-	 "Timeline"
-#elif L==4	// es
-	 "Timeline"
-#elif L==5	// fr
-	 "Chronologie"
-#elif L==6	// gn
-	 "Timeline"	// Okoteve traducción
-#elif L==7	// it
-	 "Timeline"
-#elif L==8	// pl
-	 "Timeline"
-#elif L==9	// pt
-	 "Timeline"
-#endif
-	,
-	//  2: ActSeeSocPrf
-#if   L==1	// ca
-	 "Perfils"
-#elif L==2	// de
-	 "Profiles"
-#elif L==3	// en
-	 "Profiles"
-#elif L==4	// es
-	 "Perfiles"
-#elif L==5	// fr
-	 "Profils"
-#elif L==6	// gn
-	 "Che"
-#elif L==7	// it
-	 "Profili"
-#elif L==8	// pl
-	 "Profile"
-#elif L==9	// pt
-	 "Perfiles"
-#endif
-	,
-	//  3: ActSeeNtf
-#if   L==1	// ca
-	"Notificacions"
-#elif L==2	// de
-	"Anmeldungen"
-#elif L==3	// en
-	"Notifications"
-#elif L==4	// es
-	"Notificaciones"
-#elif L==5	// fr
-	"Notifications"
-#elif L==6	// gn
-	"Momarandu"
-#elif L==7	// it
-	"Notifiche"
-#elif L==8	// pl
-	"Powiadomienia"
-#elif L==9	// pt
-	"Notifica&ccedil;&otilde;es"
-#endif
-	,
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
-	{
-	// TabSys *****************************************************
-	//  0: ActSysReqSch
+	//  1: ActSysReqSch
 #if   L==1	// ca
 	"Cercar"
 #elif L==2	// de
@@ -17797,7 +17722,81 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	//  1: ActSeeCty
+	//  2: ActSeeSocTmlGbl
+#if   L==1	// ca
+	 "Timeline"
+#elif L==2	// de
+	 "Timeline"
+#elif L==3	// en
+	 "Timeline"
+#elif L==4	// es
+	 "Timeline"
+#elif L==5	// fr
+	 "Chronologie"
+#elif L==6	// gn
+	 "Timeline"	// Okoteve traducción
+#elif L==7	// it
+	 "Timeline"
+#elif L==8	// pl
+	 "Timeline"
+#elif L==9	// pt
+	 "Timeline"
+#endif
+	,
+	//  3: ActSeeSocPrf
+#if   L==1	// ca
+	 "Perfils"
+#elif L==2	// de
+	 "Profiles"
+#elif L==3	// en
+	 "Profiles"
+#elif L==4	// es
+	 "Perfiles"
+#elif L==5	// fr
+	 "Profils"
+#elif L==6	// gn
+	 "Che"
+#elif L==7	// it
+	 "Profili"
+#elif L==8	// pl
+	 "Profile"
+#elif L==9	// pt
+	 "Perfiles"
+#endif
+	,
+	//  4: ActSeeNtf
+#if   L==1	// ca
+	"Notificacions"
+#elif L==2	// de
+	"Anmeldungen"
+#elif L==3	// en
+	"Notifications"
+#elif L==4	// es
+	"Notificaciones"
+#elif L==5	// fr
+	"Notifications"
+#elif L==6	// gn
+	"Momarandu"
+#elif L==7	// it
+	"Notifiche"
+#elif L==8	// pl
+	"Powiadomienia"
+#elif L==9	// pt
+	"Notifica&ccedil;&otilde;es"
+#endif
+	,
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	NULL,	// 12
+	},
+	{
+	// TabSys *****************************************************
+	//  0: ActSeeCty
 #if   L==1	// ca
 	"Pa&iuml;sos"
 #elif L==2	// de
@@ -17818,7 +17817,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pa&iacute;ses"
 #endif
 	,
-	//  2: ActSeePen
+	//  1: ActSeePen
 #if   L==1	// ca
 	 "Jerarquia"
 #elif L==2	// de
@@ -17839,7 +17838,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Hierarquia"
 #endif
 	,
-	//  3: ActSeeLnk
+	//  2: ActSeeLnk
 #if   L==1	// ca
 	"Enlla&ccedil;os"
 #elif L==2	// de
@@ -17860,7 +17859,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  4: ActLstPlg
+	//  3: ActLstPlg
 #if   L==1	// ca
 	"Complements"
 #elif L==2	// de
@@ -17881,7 +17880,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	//  5: ActSetUp
+	//  4: ActSetUp
 #if   L==1	// ca
 	"Instal lar"
 #elif L==2	// de
@@ -17902,7 +17901,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  6: ActSeeCalSys
+	//  5: ActSeeCalSys
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -17923,6 +17922,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -19688,82 +19688,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Papel nesta sess&atilde;o"
 #endif
 	,
-	//  1: ActSeeSocTmlGbl
-#if   L==1	// ca
-	 "Timeline dels usuaris que segueixo o de tots els usuaris"
-#elif L==2	// de
-	 "Timeline der Benutzer Ich folge oder alle Benutzern"
-#elif L==3	// en
-	 "Timeline of users I follow or all users"
-#elif L==4	// es
-	 "Timeline de los usuarios que sigo o de todos los usuarios"
-#elif L==5	// fr
-	 "Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
-#elif L==6	// gn
-	 "Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
-#elif L==7	// it
-	 "Timeline degli utenti che seguo o tutti gli utenti"
-#elif L==8	// pl
-	 "Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
-#elif L==9	// pt
-	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
-#endif
-	,
-	 //  2: ActSeeSocPrf
-#if   L==1	// ca
-	 "Perfils p&uacute;blics"
-#elif L==2	// de
-	 "&Ouml;ffentliche Profile"
-#elif L==3	// en
-	 "Public profiles"
-#elif L==4	// es
-	 "Perfiles p&uacute;blicos de usuarios"
-#elif L==5	// fr
-	 "Profils publics"
-#elif L==6	// gn
-	 "Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
-#elif L==7	// it
-	 "Profili pubblici"
-#elif L==8	// pl
-	 "Profile publiczne"
-#elif L==9	// pt
-	 "Perfis p&uacute;blicos"
-#endif
-	,
-	//  3: ActSeeNtf
-#if   L==1	// ca
-	"Esdeveniments recents que han estat o seran notificats"
-#elif L==2	// de
-	"Die j&uuml;ngsten Ereignisse wurden oder werden benachrichtigt"
-#elif L==3	// en
-	"Recent events that have been or will be notified"
-#elif L==4	// es
-	"Eventos recientes que han sido o ser&aacute;n notificados"
-#elif L==5	// fr
-	"Les &eacute;v&eacute;nements r&eacute;cents qui ont &eacute;t&eacute; ou seront avis&eacute;s"
-#elif L==6	// gn
-	"Eventos recientes que han sido o ser&aacute;n notificados"// Okoteve traducción
-#elif L==7	// it
-	"Recenti eventi che sono stati o saranno notificati"
-#elif L==8	// pl
-	"Ostatnie wydarzenia, kt&oacute;re zostaly lub zostana powiadomieni"
-#elif L==9	// pt
-	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
-#endif
-	,
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
-	{
-	// TabSys *****************************************************
-	//  0: ActSysReqSch
+	//  1: ActSysReqSch
 #if   L==1	// ca
 	"Cerca d'assignatures, professors i documents"
 #elif L==2	// de
@@ -19784,7 +19709,81 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	//  1: ActSeeCty
+	//  2: ActSeeSocTmlGbl
+#if   L==1	// ca
+	 "Timeline dels usuaris que segueixo o de tots els usuaris"
+#elif L==2	// de
+	 "Timeline der Benutzer Ich folge oder alle Benutzern"
+#elif L==3	// en
+	 "Timeline of users I follow or all users"
+#elif L==4	// es
+	 "Timeline de los usuarios que sigo o de todos los usuarios"
+#elif L==5	// fr
+	 "Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
+#elif L==6	// gn
+	 "Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
+#elif L==7	// it
+	 "Timeline degli utenti che seguo o tutti gli utenti"
+#elif L==8	// pl
+	 "Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
+#elif L==9	// pt
+	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
+#endif
+	,
+	 //  3: ActSeeSocPrf
+#if   L==1	// ca
+	 "Perfils p&uacute;blics"
+#elif L==2	// de
+	 "&Ouml;ffentliche Profile"
+#elif L==3	// en
+	 "Public profiles"
+#elif L==4	// es
+	 "Perfiles p&uacute;blicos de usuarios"
+#elif L==5	// fr
+	 "Profils publics"
+#elif L==6	// gn
+	 "Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
+#elif L==7	// it
+	 "Profili pubblici"
+#elif L==8	// pl
+	 "Profile publiczne"
+#elif L==9	// pt
+	 "Perfis p&uacute;blicos"
+#endif
+	,
+	//  4: ActSeeNtf
+#if   L==1	// ca
+	"Esdeveniments recents que han estat o seran notificats"
+#elif L==2	// de
+	"Die j&uuml;ngsten Ereignisse wurden oder werden benachrichtigt"
+#elif L==3	// en
+	"Recent events that have been or will be notified"
+#elif L==4	// es
+	"Eventos recientes que han sido o ser&aacute;n notificados"
+#elif L==5	// fr
+	"Les &eacute;v&eacute;nements r&eacute;cents qui ont &eacute;t&eacute; ou seront avis&eacute;s"
+#elif L==6	// gn
+	"Eventos recientes que han sido o ser&aacute;n notificados"// Okoteve traducción
+#elif L==7	// it
+	"Recenti eventi che sono stati o saranno notificati"
+#elif L==8	// pl
+	"Ostatnie wydarzenia, kt&oacute;re zostaly lub zostana powiadomieni"
+#elif L==9	// pt
+	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
+#endif
+	,
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	NULL,	// 12
+	},
+	{
+	// TabSys *****************************************************
+	//  0: ActSeeCty
 #if   L==1	// ca
 	"Llista de pa&iuml;sos i del nombre d'usuaris de cada pa&iacute;s"
 #elif L==2	// de
@@ -19805,7 +19804,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pa&iacute;ses"
 #endif
 	,
-	//  2: ActSeePen
+	//  1: ActSeePen
 #if   L==1	// ca
 	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==2	// de
@@ -19826,7 +19825,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
 #endif
 	,
-	//  3: ActSeeLnk
+	//  2: ActSeeLnk
 #if   L==1	// ca
 	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2	// de
@@ -19847,7 +19846,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es institucionais"
 #endif
 	,
-	//  4: ActLstPlg
+	//  3: ActLstPlg
 #if   L==1	// ca
 	"Llista de complements (versi&oacute; beta)"
 #elif L==2	// de
@@ -19868,7 +19867,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	//  5: ActSetUp
+	//  4: ActSetUp
 #if   L==1	// ca
 	"Instal laci&oacute; de la plataforma (en proves)"
 #elif L==2	// de
@@ -19889,7 +19888,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  6: ActSeeCalSys
+	//  5: ActSeeCalSys
 #if   L==1	// ca
 	"Calendari acad&egrave;mic"
 #elif L==2	// de
@@ -19910,6 +19909,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
