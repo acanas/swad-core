@@ -100,10 +100,16 @@ extern struct Globals Gbl;
 	  9. ActWebSvc			Call plugin function
 
 Start:
+       1285. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
+
        1057. ActSeeSocTmlGbl		Show social timeline (global)
        1058. ActSeeSocPrf		Suggest list of users to follow
        1059. ActSeeFor			Show the level superior of the forums
        1060. ActSeeChtRms		Show the chat rooms
+
+       1293. ActReqSndNewPwd		Show form to send a new password via email
+       1294. ActSndNewPwd		Send a new password via email
+       1295. ActLogOut			Close session
 
        1061. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
        1062. ActRcvSocComGbl		Comment a social note in the timeline (global)
@@ -1505,7 +1511,6 @@ Statistics:
        1284. ActSeeMyUsgRep		Show my usage report
 
 Profile:
-       1285. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
        1286. ActFrmRolSes		Show form to log out and to change current role in this session
        1287. ActMyCrs			Select one of my courses
        1288. ActSeeMyTT			Show the timetable of all courses of the logged user
@@ -1513,10 +1518,6 @@ Profile:
        1290. ActFrmMyAcc		Show form to the creation or change of user's account
        1291. ActReqEdiRecSha		Request the edition of the record with the personal data of the user
        1292. ActEdiPrf			Show forms to edit preferences
-
-       1293. ActReqSndNewPwd		Show form to send a new password via email
-       1294. ActSndNewPwd		Send a new password via email
-       1295. ActLogOut			Close session
 
        1296. ActLogIn			Authentify user internally (directly from the platform)
        1297. ActLogInNew		Authentify user internally (directly from the platform, only if user has not password)
@@ -1631,11 +1632,16 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_WebService			,NULL},
 
    // TabSta ******************************************************************
-   /* ActSeeSocTmlGbl	*/{1490, 0,TabSta,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
-   /* ActSeeSocPrf	*/{1520, 1,TabSta,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
-   /* ActSeeFor		*/{  95, 2,TabSta,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,"comments"		},
-// /* ActSeeChtRms	*/{  51, 3,TabSta,ActSeeChtRms		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
-   /* ActSeeChtRms	*/{  51, 3,TabSta,ActSeeChtRms		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
+   /* ActFrmLogIn	*/{1521, 0,TabSta,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteLandingPage		,"power-off"		},
+   /* ActSeeSocTmlGbl	*/{1490, 1,TabSta,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
+   /* ActSeeSocPrf	*/{1520, 2,TabSta,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
+   /* ActSeeFor		*/{  95, 3,TabSta,ActSeeFor		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_ShowForumTheads		,"comments"		},
+// /* ActSeeChtRms	*/{  51, 4,TabSta,ActSeeChtRms		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
+   /* ActSeeChtRms	*/{  51, 4,TabSta,ActSeeChtRms		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cht_ShowChatRooms		,"comments"		},
+
+   /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
+   /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
+   /* ActLogOut		*/{  10,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ses_CloseSession		,Usr_Logout			,NULL},
 
    /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveSocialPostGbl	,NULL},
    /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveCommentGbl		,NULL},
@@ -3114,20 +3120,15 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabPrf ******************************************************************
    // Actions in menu:
-   /* ActFrmLogIn	*/{1521, 0,TabPrf,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteLandingPage		,"power-off"		},
-   /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteFormLogout		,"power-off"		},
-   /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ReqSelectOneOfMyCourses	,"sitemap"		},
-   /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
-   /* ActSeeMyAgd	*/{1602, 4,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowMyAgenda		,"calendar"		},
-   /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"at"			},
-   /* ActReqEdiRecSha	*/{ 285, 6,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"card"			},
-   /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,"cog"			},
+   /* ActFrmRolSes	*/{ 843, 0,TabPrf,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteFormLogout		,"power-off"		},
+   /* ActMyCrs		*/{ 987, 1,TabPrf,ActMyCrs		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ReqSelectOneOfMyCourses	,"sitemap"		},
+   /* ActSeeMyTT	*/{ 408, 2,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TT_ShowClassTimeTable		,"clock"		},
+   /* ActSeeMyAgd	*/{1602, 3,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowMyAgenda		,"calendar"		},
+   /* ActFrmMyAcc	*/{  36, 4,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"at"			},
+   /* ActReqEdiRecSha	*/{ 285, 5,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"card"			},
+   /* ActEdiPrf		*/{ 673, 6,TabPrf,ActEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,"cog"			},
 
    // Actions not in menu:
-   /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
-   /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
-   /* ActLogOut		*/{  10,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ses_CloseSession		,Usr_Logout			,NULL},
-
    /* ActLogIn		*/{   6,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
    /* ActLogInNew	*/{1585,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
    /* ActLogInLan	*/{1077,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},

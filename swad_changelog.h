@@ -386,10 +386,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.43 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.43.1 (2019-02-14)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.43.1:  Feb 14, 2019 	Form to login is moved from profile tab to start tab. (239295 lines)
 	Version 18.43:    Feb 14, 2019 	Social tab is renamed as start tab and moved to the first position. (239294 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/iconset/awesome/home.svg /var/www/html/swad/icon/iconset/awesome/

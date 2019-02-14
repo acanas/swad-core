@@ -17679,7 +17679,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSta *****************************************************
-	//  0: ActSeeSocTmlGbl
+	//  0: ActFrmLogIn
+#if   L==1	// ca
+	"Entrar"
+#elif L==2	// de
+	"Einloggen"
+#elif L==3	// en
+	"Log in"
+#elif L==4	// es
+	"Entrar"
+#elif L==5	// fr
+	"S'identifier"
+#elif L==6	// gn
+	"Entrar"	// Okoteve traducción
+#elif L==7	// it
+	"Accesso"
+#elif L==8	// pl
+	"Zaloguj Si&eogon;"
+#elif L==9	// pt
+	"Entrar"
+#endif
+	,
+	//  1: ActSeeSocTmlGbl
 #if   L==1	// ca
 	 "Timeline"
 #elif L==2	// de
@@ -17700,7 +17721,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Timeline"
 #endif
 	,
-	//  1: ActSeeSocPrf
+	//  2: ActSeeSocPrf
 #if   L==1	// ca
 	 "Perfils"
 #elif L==2	// de
@@ -17721,7 +17742,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
-	//  2: ActSeeFor
+	//  3: ActSeeFor
 #if   L==1	// ca
 	"F&ograve;rums"
 #elif L==2	// de
@@ -17742,7 +17763,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&oacute;runs"
 #endif
 	,
-	//  3: ActSeeChtRms
+	//  4: ActSeeChtRms
 #if   L==1	// ca
 	"Xat"
 #elif L==2	// de
@@ -17763,7 +17784,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
@@ -19470,28 +19490,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabPrf *****************************************************
-	//  0: ActFrmLogIn
-#if   L==1	// ca
-	"Entrar"
-#elif L==2	// de
-	"Einloggen"
-#elif L==3	// en
-	"Log in"
-#elif L==4	// es
-	"Entrar"
-#elif L==5	// fr
-	"S'identifier"
-#elif L==6	// gn
-	"Entrar"	// Okoteve traducción
-#elif L==7	// it
-	"Accesso"
-#elif L==8	// pl
-	"Zaloguj Si&eogon;"
-#elif L==9	// pt
-	"Entrar"
-#endif
-	,
-	//  1: ActFrmRolSes
+	//  0: ActFrmRolSes
 #if   L==1	// ca
 	"Sessi&oacute;"
 #elif L==2	// de
@@ -19512,7 +19511,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sess&atilde;o"
 #endif
 	,
-	//  2: ActMyCrs
+	//  1: ActMyCrs
 #if   L==1	// ca
 	"Assignatures"
 #elif L==2	// de
@@ -19533,7 +19532,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	//  3: ActSeeMyTT
+	//  2: ActSeeMyTT
 #if   L==1	// ca
 	"Horari"
 #elif L==2	// de
@@ -19554,7 +19553,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	//  4: ActSeeMyAgd
+	//  3: ActSeeMyAgd
 #if   L==1	// ca
 	"Agenda"
 #elif L==2	// de
@@ -19575,7 +19574,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Agenda"
 #endif
 	,
-	//  5: ActFrmMyAcc
+	//  4: ActFrmMyAcc
 #if   L==1	// ca
 	"Compte"
 #elif L==2	// de
@@ -19596,7 +19595,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conta"
 #endif
 	,
-	//  6: ActReqEdiRecSha
+	//  5: ActReqEdiRecSha
 #if   L==1	// ca
 	"Fitxa"
 #elif L==2	// de
@@ -19617,7 +19616,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	//  7: ActEdiPrf
+	//  6: ActEdiPrf
 #if   L==1	// ca
 	"Configuraci&oacute;"
 #elif L==2	// de
@@ -19638,6 +19637,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Configura&ccedil;&atilde;o"
 #endif
 	,
+	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
@@ -19666,7 +19666,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSta *****************************************************
-	//  0: ActSeeSocTmlGbl
+	//  0: ActFrmLogIn
+#if   L==1	// ca
+	"Rol en aquesta sessi&oacute;"
+#elif L==2	// de
+	"Rolle in dieser Sitzung"
+#elif L==3	// en
+	"Role in this session"
+#elif L==4	// es
+	"Rol en esta sesi&oacute;n"
+#elif L==5	// fr
+	"R&ocirc;le dans cette session"
+#elif L==6	// gn
+	"Rol en esta sesi&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Ruolo in questa sessione"
+#elif L==8	// pl
+	"Rola w tej sesji"
+#elif L==9	// pt
+	"Papel nesta sess&atilde;o"
+#endif
+	,
+	//  1: ActSeeSocTmlGbl
 #if   L==1	// ca
 	 "Timeline dels usuaris que segueixo o de tots els usuaris"
 #elif L==2	// de
@@ -19687,7 +19708,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
 #endif
 	,
-	 //  1: ActSeeSocPrf
+	 //  2: ActSeeSocPrf
 #if   L==1	// ca
 	 "Perfils p&uacute;blics"
 #elif L==2	// de
@@ -19708,7 +19729,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfis p&uacute;blicos"
 #endif
 	,
-	//  2: ActSeeFor
+	//  3: ActSeeFor
 #if   L==1	// ca
 	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
 	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
@@ -19732,7 +19753,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&oacute;runs"
 #endif
 	,
-	//  3: ActSeeChtRms
+	//  4: ActSeeChtRms
 #if   L==1	// ca
 	"Conversa en temps real amb altres usuaris"
 #elif L==2	// de
@@ -19753,7 +19774,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
@@ -21526,7 +21546,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabPrf *****************************************************
-	//  0: ActFrmLogIn
+	//  0: ActFrmRolSes
 #if   L==1	// ca
 	"Rol en aquesta sessi&oacute;"
 #elif L==2	// de
@@ -21547,28 +21567,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Papel nesta sess&atilde;o"
 #endif
 	,
-	//  1: ActFrmRolSes
-#if   L==1	// ca
-	"Rol en aquesta sessi&oacute;"
-#elif L==2	// de
-	"Rolle in dieser Sitzung"
-#elif L==3	// en
-	"Role in this session"
-#elif L==4	// es
-	"Rol en esta sesi&oacute;n"
-#elif L==5	// fr
-	"R&ocirc;le dans cette session"
-#elif L==6	// gn
-	"Rol en esta sesi&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Ruolo in questa sessione"
-#elif L==8	// pl
-	"Rola w tej sesji"
-#elif L==9	// pt
-	"Papel nesta sess&atilde;o"
-#endif
-	,
-	//  2: ActMyCrs
+	//  1: ActMyCrs
 #if   L==1	// ca
 	"Assignatures a les quals pertanyo"
 #elif L==2	// de
@@ -21589,7 +21588,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas a que perten&ccedil;o"
 #endif
 	,
-	//  3: ActSeeMyTT
+	//  2: ActSeeMyTT
 #if   L==1	// ca
 	"Horari conjunt de totes les meves assignatures a la plataforma"
 #elif L==2	// de
@@ -21610,7 +21609,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
-	//  4: ActSeeMyAgd
+	//  3: ActSeeMyAgd
 #if   L==1	// ca
 	"Agenda"
 #elif L==2	// de
@@ -21631,7 +21630,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Agenda"
 #endif
 	,
-	//  5: ActFrmMyAcc
+	//  4: ActFrmMyAcc
 #if   L==1	// ca
 	"Creaci&oacute; o edici&oacute; del meu compte d'usuari"
 #elif L==2	// de
@@ -21652,7 +21651,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Criar ou editar minha conta de usu&aacute;rio"
 #endif
 	,
-	//  6: ActReqEdiRecSha
+	//  5: ActReqEdiRecSha
 #if   L==1	// ca
 	"Dades personals, comuns per a totes les assignatures"
 #elif L==2	// de
@@ -21673,7 +21672,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	//  7: ActEdiPrf
+	//  6: ActEdiPrf
 #if   L==1	// ca
 	"Les meves prefer&egrave;ncies (idioma, colors, notificacions &hellip;)"
 #elif L==2	// de
@@ -21694,6 +21693,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Prefer&ecirc;ncias"
 #endif
 	,
+	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
