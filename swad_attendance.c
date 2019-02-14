@@ -3185,7 +3185,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"3\" class=\"LEFT_MIDDLE\">"
+		      "<th colspan=\"4\" class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "<th class=\"RIGHT_MIDDLE\">"
@@ -3221,12 +3221,15 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP COLOR%u\">"
 			 "<label for=\"Att%u\">"
-                         "<span id=\"att_date_start_%u\"></span>&nbsp;%s"
+                         "<span id=\"att_date_start_%u\"></span>"
                          "</label>"
 			 "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
 			 "%u,',&nbsp;','%s',true,true,0x7);"
 			 "</script>"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP COLOR%u\">"
+			 "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_TOP COLOR%u\">"
 			 "%u"
@@ -3235,9 +3238,11 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	       Gbl.RowEvenOdd,
 	       NumAttEvent,NumAttEvent + 1,
 	       Gbl.RowEvenOdd,
-	       NumAttEvent,UniqueId,Gbl.AttEvents.Lst[NumAttEvent].Title,
+	       NumAttEvent,UniqueId,
                UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
                (unsigned) Gbl.Prefs.DateFormat,Txt_Today,
+	       Gbl.RowEvenOdd,
+	       Gbl.AttEvents.Lst[NumAttEvent].Title,
 	       Gbl.RowEvenOdd,
 	       Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
      }
@@ -3246,7 +3251,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    if (NormalView)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"4\" class=\"CENTER_MIDDLE\">");
+			 "<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
       Frm_LinkFormSubmitAnimated (Txt_Update_attendance,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);

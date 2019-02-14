@@ -6259,7 +6259,7 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
       fprintf (Gbl.F.Out," style=\"display:none;\"");
    fprintf (Gbl.F.Out,">");
 
-   /***** Form and icon *****/
+   /***** Icon *****/
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_OPT CONTEXT_ICO_16x16\" />",
@@ -12414,30 +12414,30 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       /* Start form */
       Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
 
-      if (CrsCod > 0 && CrsCod != Gbl.CurrentCrs.Crs.CrsCod)		// Not the current course
+      if (CrsCod > 0)
+        {
+	 Frm_StartFormGoTo (Action);
+	 Crs_PutParamCrsCod (CrsCod);	// Go to course
+	 if (GrpCod > 0)
+	    Grp_PutParamGrpCod (GrpCod);
+        }
+      else if (DegCod > 0)
 	{
-         Frm_StartFormGoTo (Action);
-	 Crs_PutParamCrsCod (CrsCod);	// Go to another course
+	 Frm_StartFormGoTo (Action);
+	 Deg_PutParamDegCod (DegCod);	// Go to degree
 	}
-      else if (DegCod > 0 && DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+      else if (CtrCod > 0)
 	{
-         Frm_StartFormGoTo (Action);
-	 Deg_PutParamDegCod (DegCod);	// Go to another degree
+	 Frm_StartFormGoTo (Action);
+	 Ctr_PutParamCtrCod (CtrCod);	// Go to centre
 	}
-      else if (CtrCod > 0 && CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+      else if (InsCod > 0)
 	{
-         Frm_StartFormGoTo (Action);
-	 Ctr_PutParamCtrCod (CtrCod);	// Go to another centre
-	}
-      else if (InsCod > 0 && InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
-	{
-         Frm_StartFormGoTo (Action);
-	 Ins_PutParamInsCod (InsCod);	// Go to another institution
+	 Frm_StartFormGoTo (Action);
+	 Ins_PutParamInsCod (InsCod);	// Go to institution
 	}
       else
          Frm_StartForm (Action);
-      if (GrpCod > 0)
-	 Grp_PutParamGrpCod (GrpCod);
 
       /* Parameters to go to file / folder */
       Brw_PutParamsFileBrowser (ActUnk,
@@ -12453,9 +12453,9 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       Frm_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
       if (FileMetadata.FileType == Brw_IS_FOLDER)
 	 /* Icon with folder */
-	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-yellow.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />",
+			    " class=\"CONTEXT_ICO_16x16\" />",
 		  Gbl.Prefs.URLIcons,
 		  Txt_Folder,Txt_Folder);
       else
