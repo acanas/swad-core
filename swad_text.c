@@ -17676,6 +17676,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
+	NULL,	// 12
 	},
 	{
 	// TabSta *****************************************************
@@ -17742,49 +17743,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
-	//  3: ActSeeFor
-#if   L==1	// ca
-	"F&ograve;rums"
-#elif L==2	// de
-	"Foren"
-#elif L==3	// en
-	"Forums"
-#elif L==4	// es
-	"Foros"
-#elif L==5	// fr
-	"Forums"
-#elif L==6	// gn
-	"Foros"	// Okoteve traducción
-#elif L==7	// it
-	"Forum"
-#elif L==8	// pl
-	"Forum"
-#elif L==9	// pt
-	"F&oacute;runs"
-#endif
-	,
-	//  4: ActSeeChtRms
-#if   L==1	// ca
-	"Xat"
-#elif L==2	// de
-	"Chat"
-#elif L==3	// en
-	"Chat"
-#elif L==4	// es
-	"Chat"
-#elif L==5	// fr
-	"Chat"
-#elif L==6	// gn
-	"&Ntilde;omongeta"
-#elif L==7	// it
-	"Chat"
-#elif L==8	// pl
-	"Chat"
-#elif L==9	// pt
-	"Chat"
-#endif
-	,
-	//  5: ActSeeNtf
+	//  3: ActSeeNtf
 #if   L==1	// ca
 	"Notificacions"
 #elif L==2	// de
@@ -17805,6 +17764,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Notifica&ccedil;&otilde;es"
 #endif
 	,
+	NULL,	//  4
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -19260,7 +19221,49 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Avisos"
 #endif
 	,
-	//  2: ActReqMsgUsr
+	//  2: ActSeeFor
+#if   L==1	// ca
+	"F&ograve;rums"
+#elif L==2	// de
+	"Foren"
+#elif L==3	// en
+	"Forums"
+#elif L==4	// es
+	"Foros"
+#elif L==5	// fr
+	"Forums"
+#elif L==6	// gn
+	"Foros"	// Okoteve traducción
+#elif L==7	// it
+	"Forum"
+#elif L==8	// pl
+	"Forum"
+#elif L==9	// pt
+	"F&oacute;runs"
+#endif
+	,
+	//  3: ActSeeChtRms
+#if   L==1	// ca
+	"Xat"
+#elif L==2	// de
+	"Chat"
+#elif L==3	// en
+	"Chat"
+#elif L==4	// es
+	"Chat"
+#elif L==5	// fr
+	"Chat"
+#elif L==6	// gn
+	"&Ntilde;omongeta"
+#elif L==7	// it
+	"Chat"
+#elif L==8	// pl
+	"Chat"
+#elif L==9	// pt
+	"Chat"
+#endif
+	,
+	//  4: ActReqMsgUsr
 #if   L==1	// ca
 	"Redactar"
 #elif L==2	// de
@@ -19281,7 +19284,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Escrever"
 #endif
 	,
-	//  3: ActSeeRcvMsg
+	//  5: ActSeeRcvMsg
 #if   L==1	// ca
 	"Rebuts"
 #elif L==2	// de
@@ -19302,7 +19305,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Recebidas"
 #endif
 	,
-	//  4: ActSeeSntMsg
+	//  6: ActSeeSntMsg
 #if   L==1	// ca
 	"Enviats"
 #elif L==2	// de
@@ -19323,7 +19326,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	//  5: ActMaiStd
+	//  7: ActMaiStd
 #if   L==1	// ca
 	"Correu"
 #elif L==2	// de
@@ -19344,8 +19347,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
-	NULL,	//  6
-	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
@@ -19729,52 +19730,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfis p&uacute;blicos"
 #endif
 	,
-	//  3: ActSeeFor
-#if   L==1	// ca
-	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
-	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
-#elif L==2	// de
-	"Foren"
-#elif L==3	// en
-	"Forums"
-#elif L==4	// es
-	"Foros de discusi&oacute;n, distribuidos"
-	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"
-#elif L==5	// fr
-	"Forums"
-#elif L==6	// gn
-	"Foros de discusi&oacute;n, distribuidos"
-	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"// Okoteve traducción
-#elif L==7	// it
-	"Forum"
-#elif L==8	// pl
-	"Forum"
-#elif L==9	// pt
-	"F&oacute;runs"
-#endif
-	,
-	//  4: ActSeeChtRms
-#if   L==1	// ca
-	"Conversa en temps real amb altres usuaris"
-#elif L==2	// de
-	"Chat"
-#elif L==3	// en
-	"Chat"
-#elif L==4	// es
-	"Conversaci&oacute;n en tiempo real con otros usuarios"
-#elif L==5	// fr
-	"Chat"
-#elif L==6	// gn
-	"Conversaci&oacute;n en tiempo real con otros usuarios"	// Okoteve traducción
-#elif L==7	// it
-	"Chat"
-#elif L==8	// pl
-	"Chat"
-#elif L==9	// pt
-	"Chat"
-#endif
-	,
-	//  5: ActSeeNtf
+	//  3: ActSeeNtf
 #if   L==1	// ca
 	"Esdeveniments recents que han estat o seran notificats"
 #elif L==2	// de
@@ -19795,6 +19751,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
 #endif
 	,
+	NULL,	//  4
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -21303,7 +21261,52 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Avisos"
 #endif
 	,
-	//  2: ActReqMsgUsr
+	//  2: ActSeeFor
+#if   L==1	// ca
+	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
+	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
+#elif L==2	// de
+	"Foren"
+#elif L==3	// en
+	"Forums"
+#elif L==4	// es
+	"Foros de discusi&oacute;n, distribuidos"
+	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"
+#elif L==5	// fr
+	"Forums"
+#elif L==6	// gn
+	"Foros de discusi&oacute;n, distribuidos"
+	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"// Okoteve traducción
+#elif L==7	// it
+	"Forum"
+#elif L==8	// pl
+	"Forum"
+#elif L==9	// pt
+	"F&oacute;runs"
+#endif
+	,
+	//  3: ActSeeChtRms
+#if   L==1	// ca
+	"Conversa en temps real amb altres usuaris"
+#elif L==2	// de
+	"Chat"
+#elif L==3	// en
+	"Chat"
+#elif L==4	// es
+	"Conversaci&oacute;n en tiempo real con otros usuarios"
+#elif L==5	// fr
+	"Chat"
+#elif L==6	// gn
+	"Conversaci&oacute;n en tiempo real con otros usuarios"	// Okoteve traducción
+#elif L==7	// it
+	"Chat"
+#elif L==8	// pl
+	"Chat"
+#elif L==9	// pt
+	"Chat"
+#endif
+	,
+	//  4: ActReqMsgUsr
 #if   L==1	// ca
 	"Enviament d'un nou missatge a altres usuaris"
 #elif L==2	// de
@@ -21324,7 +21327,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Envio de uma nova mensagem para outros usu&aacute;rios"
 #endif
 	,
-	//  3: ActSeeRcvMsg
+	//  5: ActSeeRcvMsg
 #if   L==1	// ca
 	"Missatges rebuts d'altres usuaris"
 #elif L==2	// de
@@ -21345,7 +21348,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens recebidas de outros usu&aacute;rios"
 #endif
 	,
-	//  4: ActSeeSntMsg
+	//  6: ActSeeSntMsg
 #if   L==1	// ca
 	"Missatges enviats per mi a altres usuaris"
 #elif L==2	// de
@@ -21366,7 +21369,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens enviadas por mim para outros usu&aacute;rios"
 #endif
 	,
-	//  5: ActMaiStd
+	//  7: ActMaiStd
 #if   L==1	// ca
 	"Creaci&oacute; d'un missatge de correu"
 	" per enviar-lo a estudiants d'aquesta assignatura"
@@ -21393,8 +21396,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #endif
 	,
-	NULL,	//  6
-	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10

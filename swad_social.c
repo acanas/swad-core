@@ -1763,8 +1763,8 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       /* Users tab */
 
       /* Social tab */
-      ActUnk,			// Soc_NOTE_SOCIAL_POST (action not used)
-      ActSeeFor,		// Soc_NOTE_FORUM_POST
+      ActUnk,			// Soc_NOTE_SOCIAL_POST (action not used)	// TODO: Move to start tab
+      ActSeeFor,		// Soc_NOTE_FORUM_POST				// TODO: Move to messages tab
 
       /* Messages tab */
       ActSeeOneNot,		// Soc_NOTE_NOTICE

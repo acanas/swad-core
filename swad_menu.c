@@ -92,9 +92,9 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActFrmLogIn,		//  0
 		ActSeeSocTmlGbl,	//  1
 		ActSeeSocPrf,		//  2
-		ActSeeFor,		//  3
-		ActSeeChtRms,		//  4
-		ActSeeNtf,		//  5
+		ActSeeNtf,		//  3
+		0,			//  4
+		0,			//  5
 		0,			//  6
 		0,			//  7
 		0,			//  8
@@ -251,12 +251,12 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		{
 		ActSeeAnn,		//  0
 		ActSeeAllNot,		//  1
-		ActReqMsgUsr,		//  2
-		ActSeeRcvMsg,		//  3
-		ActSeeSntMsg,		//  4
-		ActMaiStd,		//  5
-		0,			//  6
-		0,			//  7
+		ActSeeFor,		//  2
+		ActSeeChtRms,		//  3
+		ActReqMsgUsr,		//  4
+		ActSeeRcvMsg,		//  5
+		ActSeeSntMsg,		//  6
+		ActMaiStd,		//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10
