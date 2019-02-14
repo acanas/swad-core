@@ -86,7 +86,6 @@ void May_NewMyUsrEmail (void);
 void Mai_NewOtherUsrEmail (void);
 bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
-void Mai_PutButtonToCheckEmailAddress (void);
 bool Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);
 

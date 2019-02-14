@@ -3205,7 +3205,7 @@ const char *Hlp_PROFILE_Account =
 #elif L==9
 	"PROFILE.Account.en";
 #endif
-
+/*
 const char *Hlp_PROFILE_Account_email =
 #if   L==1
 	"PROFILE.Account.es#correo";
@@ -3226,7 +3226,7 @@ const char *Hlp_PROFILE_Account_email =
 #elif L==9
 	"PROFILE.Account.en#email";
 #endif
-
+*/
 const char *Hlp_PROFILE_Session_role =
 #if   L==1
 	"PROFILE.Session.es#rol";

@@ -25,10 +25,12 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <ctype.h>		// For isalnum, isdigit, etc.
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -2507,14 +2509,21 @@ void Usr_WelcomeUsr (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Happy_birthday;
-   extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
+   extern const char *Txt_Welcome_X_happy_birthday[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome[Usr_NUM_SEXS];
+   extern const char *Txt_Please_check_your_email_address;
+   extern const char *Txt_Check;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   char *WelcomeTxt;
+   bool EmailNeedsToBeConfirmed;
    bool CongratulateMyBirthday;
 
    if (Gbl.Usrs.Me.Logged)
      {
+      EmailNeedsToBeConfirmed = (Gbl.Usrs.Me.UsrDat.Email[0] &&
+				!Gbl.Usrs.Me.UsrDat.EmailConfirmed);
+
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
@@ -2535,17 +2544,35 @@ void Usr_WelcomeUsr (void)
                            Gbl.Prefs.URLIconSet,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
-                  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
-                            Gbl.Usrs.Me.UsrDat.FirstName);
+	          if (asprintf (&WelcomeTxt,Txt_Welcome_X_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
+                                Gbl.Usrs.Me.UsrDat.FirstName) < 0)
+		     Lay_NotEnoughMemoryExit ();
                  }
             if (!CongratulateMyBirthday)
-               snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
-                         Gbl.Usrs.Me.UsrDat.FirstName);
-            Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+               if (asprintf (&WelcomeTxt,Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
+                             Gbl.Usrs.Me.UsrDat.FirstName) < 0)
+		  Lay_NotEnoughMemoryExit ();
+
+	    if (EmailNeedsToBeConfirmed)
+	      {
+	       /* Welcome alert with button to check email address */
+	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+			 "%s %s",
+			 WelcomeTxt,
+			 Txt_Please_check_your_email_address);
+	       Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
+				       ActFrmMyAcc,NULL,NULL,NULL,
+				       Btn_CONFIRM_BUTTON,Txt_Check);
+	      }
+	    else
+	       /* Welcome alert */
+               Ale_ShowAlert (Ale_INFO,WelcomeTxt);
+
+	    /* Free allocated memory for subquery */
+	    free ((void *) WelcomeTxt);
            }
          else
+	    /* Welcome alert */
             Ale_ShowAlert (Ale_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
          /***** Institutional video *****/
@@ -2567,13 +2594,8 @@ void Usr_WelcomeUsr (void)
 	                "</video>");
 	 */
 
-         /***** Warning to confirm my email address *****/
-         if (Gbl.Usrs.Me.UsrDat.Email[0] &&
-             !Gbl.Usrs.Me.UsrDat.EmailConfirmed)
-            Mai_PutButtonToCheckEmailAddress ();
-
 	 /***** Show help to enrol me *****/
-	 Hlp_ShowHelpWhatWouldYouLikeToDo ();
+	 // Hlp_ShowHelpWhatWouldYouLikeToDo ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 

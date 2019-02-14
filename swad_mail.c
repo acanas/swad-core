@@ -1659,26 +1659,6 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
   }
 
 /*****************************************************************************/
-/********** Put button to go to check and confirm my email address ***********/
-/*****************************************************************************/
-
-void Mai_PutButtonToCheckEmailAddress (void)
-  {
-   extern const char *Hlp_PROFILE_Account_email;
-   extern const char *Txt_Email_unconfirmed;
-   extern const char *Txt_Please_confirm_your_email_address;
-   extern const char *Txt_Check;
-
-   /***** Box with button to check email address *****/
-   Box_StartBox (NULL,Txt_Email_unconfirmed,NULL,
-                 Hlp_PROFILE_Account_email,Box_CLOSABLE);
-   Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_confirm_your_email_address,
-                           ActFrmMyAcc,NULL,NULL,NULL,
-                           Btn_CONFIRM_BUTTON,Txt_Check);
-   Box_EndBox ();
-  }
-
-/*****************************************************************************/
 /************** Send mail message to confirm my email address ****************/
 /*****************************************************************************/
 // Return true on success

@@ -384,10 +384,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.41.4 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.41.5 (2019-02-14)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.41.5:  Feb 14, 2019 	Changes in welcome alert. (239256 lines)
 	Version 18.41.4:  Feb 14, 2019 	By default, timeline now shows all users. (239229 lines)
 	Version 18.41.3:  Feb 14, 2019 	Chat is temporarily disabled because modern browsers don't allow Java. (239228 lines)
 	Version 18.41.2:  Feb 14, 2019 	Change in layout of attendance list.

@@ -10340,7 +10340,7 @@ const char *Txt_Email_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Email <strong>%s</strong> removido.";
 #endif
-
+/*
 const char *Txt_Email_unconfirmed =
 #if   L==1	// ca
 	"Correo no confirmado";	// Necessita traduccio
@@ -10361,7 +10361,7 @@ const char *Txt_Email_unconfirmed =
 #elif L==9	// pt
 	"Email n&atilde;o confirmado";
 #endif
-
+*/
 const char *Txt_End_date =
 #if   L==1	// ca
 	"Data final";
@@ -28938,11 +28938,32 @@ const char *Txt_Play =	// To play a game
 	"Jogar";
 #endif
 
+const char *Txt_Please_check_your_email_address =
+#if   L==1	// ca
+	"Si us plau, comproveu la seva adre&ccedil;a de correu.";
+#elif L==2	// de
+	"Bitte &uuml;berpr&uuml;fen Ihre E-Mail-Adresse.";
+#elif L==3	// en
+	"Please check your email address.";
+#elif L==4	// es
+	"Por favor, compruebe su direcci&oacute;n de correo.";
+#elif L==5	// fr
+	"S'il vous pla&iacute;t, v&eaxcute;rifiez votre adresse email.";
+#elif L==6	// gn
+	"Por favor, compruebe su direcci&oacute;n de correo.";	// Okoteve traducción
+#elif L==7	// it
+	"Per favore, verifica il tuo indirizzo email.";
+#elif L==8	// pl
+	"Prosz&eogon; sprawd&zacute; sw&oacute;j adres email.";
+#elif L==9	// pt
+	"Por favor, verifique seu endere&ccedil;o de email.";
+#endif
+
 const char *Txt_Please_confirm_your_email_address =
 #if   L==1	// ca
 	"Si us plau, confirmeu la seva adre&ccedil;a de correu.";
 #elif L==2	// de
-	"Bitte Ihre E-Mail-Adresse best&auml;tigen.";
+	"Bitte best&auml;tige Ihre E-Mail-Adressen.";
 #elif L==3	// en
 	"Please confirm your email address.";
 #elif L==4	// es
@@ -28956,7 +28977,7 @@ const char *Txt_Please_confirm_your_email_address =
 #elif L==8	// pl
 	"Prosz&eogon; potwierdzi&cacute; sw&oacute;j adres email.";
 #elif L==9	// pt
-	"Por favor, confirmar o seu endere&ccedil;o de email.";
+	"Por favor, confirme seu endere&ccedil;o de email.";
 #endif
 
 const char *Txt_Please_enter_your_ID =
@@ -52942,86 +52963,86 @@ const char *Txt_Welcome_X[Usr_NUM_SEXS] =	// Warning: it is very important to in
 #endif
 	};
 
-const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS] =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Welcome_X_happy_birthday[Usr_NUM_SEXS] =	// Warning: it is very important to include %s in the following sentences
 	{
 #if   L==1	// ca	// Usr_SEX_UNKNOWN
-	"Benvingut/da, %s, i feli&ccedil; aniversari!"
+	"Benvingut/da, %s, feli&ccedil; aniversari!"
 #elif L==2	// de
-	"Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, alles Gute zum Geburtstag!"
 #elif L==3	// en
-	"Welcome, %s, and happy birthday!"
+	"Welcome, %s, happy birthday!"
 #elif L==4	// es
-	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"
 #elif L==5	// fr
-	"Bienvenu(e), %s, et joyeux anniversaire!"
+	"Bienvenu(e), %s, joyeux anniversaire!"
 #elif L==6	// gn
-	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7	// it
-	"Benvenuto/a, %s, e buon compleanno!"
+	"Benvenuto/a, %s, buon compleanno!"
 #elif L==8	// pl
-	"Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, wszystkiego najlepszego!"
 #elif L==9	// pt
-	"Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
+	"Bem-vindo/a, %s, feliz anivers&aacute;rio!"
 #endif
 	,
 #if   L==1	// ca	// Usr_SEX_FEMALE
-	"Benvinguda, %s, i feli&ccedil; aniversari!"
+	"Benvinguda, %s, feli&ccedil; aniversari!"
 #elif L==2	// de
-	"Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, alles Gute zum Geburtstag!"
 #elif L==3	// en
-	"Welcome, %s, and happy birthday!"
+	"Welcome, %s, happy birthday!"
 #elif L==4	// es
-	"Bienvenida, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenida, %s, &iexcl;feliz cumplea&ntilde;os!"
 #elif L==5	// fr
-	"Bienvenue, %s, et joyeux anniversaire!"
+	"Bienvenue, %s, joyeux anniversaire!"
 #elif L==6	// gn
-	"Bienvenida, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenida, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7	// it
-	"Benvenuta, %s, e buon compleanno!"
+	"Benvenuta, %s, buon compleanno!"
 #elif L==8	// pl
-	"Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, wszystkiego najlepszego!"
 #elif L==9	// pt
-	"Bem-vinda, %s, e feliz anivers&aacute;rio!"
+	"Bem-vinda, %s, feliz anivers&aacute;rio!"
 #endif
 	,
 #if   L==1	// ca	// Usr_SEX_MALE
-	"Benvingut, %s, i feli&ccedil; aniversari!"
+	"Benvingut, %s, feli&ccedil; aniversari!"
 #elif L==2	// de
-	"Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, alles Gute zum Geburtstag!"
 #elif L==3	// en
-	"Welcome, %s, and happy birthday!"
+	"Welcome, %s, happy birthday!"
 #elif L==4	// es
-	"Bienvenido, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenido, %s, &iexcl;feliz cumplea&ntilde;os!"
 #elif L==5	// fr
-	"Bienvenu, %s, et joyeux anniversaire!"
+	"Bienvenu, %s, joyeux anniversaire!"
 #elif L==6	// gn
-	"Bienvenido, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenido, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7	// it
-	"Benvenuto, %s, e buon compleanno!"
+	"Benvenuto, %s, buon compleanno!"
 #elif L==8	// pl
-	"Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, wszystkiego najlepszego!"
 #elif L==9	// pt
-	"Bem-vindo, %s, e feliz anivers&aacute;rio!"
+	"Bem-vindo, %s, feliz anivers&aacute;rio!"
 #endif
 	,
 #if   L==1	// ca	// Usr_SEX_ALL
-	"Benvingut/da, %s, i feli&ccedil; aniversari!"
+	"Benvingut/da, %s, feli&ccedil; aniversari!"
 #elif L==2	// de
-	"Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, alles Gute zum Geburtstag!"
 #elif L==3	// en
-	"Welcome, %s, and happy birthday!"
+	"Welcome, %s, happy birthday!"
 #elif L==4	// es
-	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"
 #elif L==5	// fr
-	"Bienvenu(e), %s, et joyeux anniversaire!"
+	"Bienvenu(e), %s, joyeux anniversaire!"
 #elif L==6	// gn
-	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenido/a, %s, &iexcl;feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7	// it
-	"Benvenuto/a, %s, e buon compleanno!"
+	"Benvenuto/a, %s, buon compleanno!"
 #elif L==8	// pl
-	"Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, wszystkiego najlepszego!"
 #elif L==9	// pt
-	"Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
+	"Bem-vindo/a, %s, feliz anivers&aacute;rio!"
 #endif
 	};
 
