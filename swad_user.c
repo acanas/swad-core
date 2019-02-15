@@ -2508,6 +2508,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 void Usr_WelcomeUsr (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_check_your_email_address;
    extern const char *Txt_Check;
@@ -2519,6 +2520,16 @@ void Usr_WelcomeUsr (void)
         {
          if (Gbl.Usrs.Me.UsrDat.FirstName[0])
            {
+	    /***** New year greeting *****/
+	    if (Gbl.Now.Date.Day   == 1 &&
+		Gbl.Now.Date.Month == 1)
+	      {
+	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	                 Txt_NEW_YEAR_GREETING,
+			 Gbl.Now.Date.Year);
+	       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+	      }
+
             /***** Birthday congratulation *****/
             if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == Gbl.Now.Date.Day &&
                 Gbl.Usrs.Me.UsrDat.Birthday.Month == Gbl.Now.Date.Month)

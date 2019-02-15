@@ -112,7 +112,6 @@ void Lay_WriteStartOfPage (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   extern const char *Txt_NEW_YEAR_GREETING;
    const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
       "main_horizontal",	// Mnu_MENU_HORIZONTAL
@@ -343,19 +342,6 @@ void Lay_WriteStartOfPage (void)
 
    Gbl.Layout.WritingHTMLStart = false;
    Gbl.Layout.HTMLStartWritten = true;
-
-   /* Write new year greeting */
-   if (Gbl.Action.Act == ActLogIn ||
-       Gbl.Action.Act == ActLogInNew ||
-       Gbl.Action.Act == ActLogInLan)
-      if (Gbl.Now.Date.Month == 1 &&
-	  Gbl.Now.Date.Day == 1)
-        {
-         fprintf (Gbl.F.Out,"<div class=\"ASG_TITLE CENTER_MIDDLE\""
-                            " style=\"margin:62px;\">");
-         fprintf (Gbl.F.Out,Txt_NEW_YEAR_GREETING,Gbl.Now.Date.Year);
-         fprintf (Gbl.F.Out,"</div>");
-        }
 
    /* Write message indicating number of clicks allowed before sending my photo */
    Usr_InformAboutNumClicksBeforePhoto ();
