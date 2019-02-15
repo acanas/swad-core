@@ -315,6 +315,6 @@ static void Cal_PutIconToPrintCalendarSys (void)
        (Gbl.Hlds.Num ||					// There are holidays
         Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
       Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,NULL,
-			             "holiday.png",
+			             "calendar-day.svg",
 			             Txt_Holidays);
   }

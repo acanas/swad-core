@@ -386,10 +386,23 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.45.1 (2019-02-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.45.2 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.45.2:  Feb 15, 2019 	Changed holidays icon. (? lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/calendar.svg /var/www/html/swad/icon/
+sudo cp icon/calendar-minus.svg /var/www/html/swad/icon/
+sudo cp icon/calendar-plus.svg /var/www/html/swad/icon/
+sudo cp icon/calendar-day.svg /var/www/html/swad/icon/
+sudo cp icon/first-day-of-week-0.png /var/www/html/swad/icon/
+sudo cp icon/first-day-of-week-6.png /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/calendar.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/calendar-check.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/calendar-day.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/calendar-day.svg /var/www/html/swad/icon/iconset/nuvola/
+
 	Version 18.45.1:  Feb 15, 2019 	Changes in birthday congratulation. (238399 lines)
 	Version 18.45:    Feb 15, 2019 	Removed calendar options from country, institution, centre, degree and course.
 				        Holidays action is shown in menu. (238398 lines)
