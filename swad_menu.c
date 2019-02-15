@@ -123,7 +123,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		{
 		ActSeeCtyInf,		//  0
 		ActSeeIns,		//  1
-		ActSeeCalCty,		//  2
+		0,			//  2
 		0,			//  3
 		0,			//  4
 		0,			//  5
@@ -141,7 +141,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeCtr,		//  1
 		ActSeePlc,		//  2
 		ActSeeDpt,		//  3
-		ActSeeCalIns,		//  4
+		ActSeeHld,		//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
@@ -156,7 +156,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeCtrInf,		//  0
 		ActSeeDeg,		//  1
 		ActSeeCla,		//  2
-		ActSeeCalCtr,		//  3
+		0,			//  3
 		0,			//  4
 		0,			//  5
 		0,			//  6
@@ -171,7 +171,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		{
 		ActSeeDegInf,		//  0
 		ActSeeCrs,		//  1
-		ActSeeCalDeg,		//  2
+		0,			//  2
 		0,			//  3
 		0,			//  4
 		0,			//  5
@@ -192,7 +192,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeFAQ,		//  4
 		ActSeeCrsLnk,		//  5
 		ActSeeCrsTT,		//  6
-		ActSeeCalCrs,		//  7
+		0,			//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10

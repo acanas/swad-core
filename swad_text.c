@@ -17974,27 +17974,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	,
-	//  2: ActSeeCalCty
-#if   L==1	// ca
-	"Calendari"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Calendar"
-#elif L==4	// es
-	"Calendario"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Arapapaha"
-#elif L==7	// it
-	"Calendario"
-#elif L==8	// pl
-	"Kalendarz"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  2
 	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
@@ -18092,25 +18072,25 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  4: ActSeeCalIns
+	//  4: ActSeeHld
 #if   L==1	// ca
-	"Calendari"
+	"Festius"
 #elif L==2	// de
-	"Kalender"
+	"Feiertage"
 #elif L==3	// en
-	"Calendar"
+	"Holidays"
 #elif L==4	// es
-	"Calendario"
+	"Festivos"
 #elif L==5	// fr
-	"Calendrier"
+	"F&eacute;ri&eacute;s"
 #elif L==6	// gn
-	"Arapapaha"
+	"Arete"
 #elif L==7	// it
-	"Calendario"
+	"Festivit&agrave;"
 #elif L==8	// pl
-	"Kalendarz"
+	"Noclegi"
 #elif L==9	// pt
-	"Calend&aacute;rio"
+	"F&eacute;rias"
 #endif
 	,
 	NULL,	//  5
@@ -18187,27 +18167,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Salas"
 #endif
 	,
-	//  3: ActSeeCalCtr
-#if   L==1	// ca
-	"Calendari"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Calendar"
-#elif L==4	// es
-	"Calendario"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Arapapaha"
-#elif L==7	// it
-	"Calendario"
-#elif L==8	// pl
-	"Kalendarz"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
@@ -18262,27 +18222,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	//  2: ActSeeCalDeg
-#if   L==1	// ca
-	"Calendari"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Calendar"
-#elif L==4	// es
-	"Calendario"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Arapapaha"
-#elif L==7	// it
-	"Calendario"
-#elif L==8	// pl
-	"Kalendarz"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  2
 	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
@@ -18443,27 +18383,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	//  7: ActSeeCalCrs
-#if   L==1	// ca
-	"Calendari"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Calendar"
-#elif L==4	// es
-	"Calendario"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Arapapaha"
-#elif L==7	// it
-	"Calendario"
-#elif L==8	// pl
-	"Kalendarz"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
@@ -19861,27 +19781,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	,
-	//  2: ActSeeCalCty
-#if   L==1	// ca
-	"Calendari acad&egrave;mic"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Academic calendar"
-#elif L==4	// es
-	"Calendario acad&eacute;mico"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Calendario acad&eacute;mico"// Okoteve traducción
-#elif L==7	// it
-	"Calendario del corso"
-#elif L==8	// pl
-	"Kalendarz akademicki"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  2
 	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
@@ -19988,25 +19888,25 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  4: ActSeeCalIns
+	//  4: ActSeeHld
 #if   L==1	// ca
-	"Calendari acad&egrave;mic"
+	"Dies festius"
 #elif L==2	// de
-	"Kalender"
+	"Feiertage"
 #elif L==3	// en
-	"Academic calendar"
+	"Holidays"
 #elif L==4	// es
-	"Calendario acad&eacute;mico"
+	"D&iacute;as festivos"
 #elif L==5	// fr
-	"Calendrier"
+	"Jours f&eacute;ri&eacute;s"
 #elif L==6	// gn
-	"Calendario acad&eacute;mico"	// Okoteve traducción
+	"Arete"
 #elif L==7	// it
-	"Calendario del corso"
+	"Festivit&agrave;"
 #elif L==8	// pl
-	"Kalendarz akademicki"
+	"Noclegi"
 #elif L==9	// pt
-	"Calend&aacute;rio"
+	"F&eacute;rias"
 #endif
 	,
 	NULL,	//  5
@@ -20083,30 +19983,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Salas de aula, laborat&oacute;rios ou outros locais onde as aulas s&atilde;o ministradas"
 #endif
 	,
-	//  3: ActSeeCalCtr
-#if   L==1	// ca
-	"Calendari acad&egrave;mic (els dies festius"
-	" corresponen al lloc del centre seleccionada)"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Academic calendar"
-#elif L==4	// es
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
-#elif L==7	// it
-	"Calendario del corso"
-#elif L==8	// pl
-	"Kalendarz akademicki"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
@@ -20161,30 +20038,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas deste grau"
 #endif
 	,
-	//  2: ActSeeCalDeg
-#if   L==1	// ca
-	"Calendari acad&egrave;mic (els dies festius"
-	" corresponen al lloc del centre seleccionada)"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Academic calendar"
-#elif L==4	// es
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
-#elif L==7	// it
-	"Calendario del corso"
-#elif L==8	// pl
-	"Kalendarz akademicki"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  2
 	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
@@ -20345,30 +20199,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	//  7: ActSeeCalCrs
-#if   L==1	// ca
-	"Calendari acad&egrave;mic (els dies festius"
-	" corresponen al lloc del centre seleccionada)"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Academic calendar"
-#elif L==4	// es
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
-#elif L==7	// it
-	"Calendario del corso"
-#elif L==8	// pl
-	"Kalendarz akademicki"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
