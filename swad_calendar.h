@@ -50,7 +50,9 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str);
 
 void Cal_DrawCurrentMonth (void);
 
-void Cal_DrawCalendarSys (void);
+void Cal_ShowCalendar (void);
 void Cal_PrintCalendar (void);
+
+void Cal_PutIconToSeeCalendar (void);
 
 #endif

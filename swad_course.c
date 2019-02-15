@@ -1064,7 +1064,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Start form *****/
    Frm_StartFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
-                                               ActSysReqSch);
+                                               ActReqSch);
 
    /***** Start selector of courses *****/
    fprintf (Gbl.F.Out,"<select id=\"my_courses\" name=\"crs\""
@@ -2961,7 +2961,7 @@ static void Crs_PutIconToSearchCourses (void)
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
-   Lay_PutContextualLinkOnlyIcon (ActSysReqSch,
+   Lay_PutContextualLinkOnlyIcon (ActReqSch,
 				  NULL,Sch_PutLinkToSearchCoursesParams,
 			          "search.svg",
 			          Txt_Search_courses);

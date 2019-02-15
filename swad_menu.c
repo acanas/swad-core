@@ -90,10 +90,10 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		// TabSta *******************
 		{
 		ActFrmLogIn,		//  0
-		ActSysReqSch,		//  1
+		ActReqSch,		//  1
 		ActSeeSocTmlGbl,	//  2
 		ActSeeSocPrf,		//  3
-		ActSeeCalSys,		//  4
+		ActSeeCal,		//  4
 		ActSeeNtf,		//  5
 		0,			//  6
 		0,			//  7

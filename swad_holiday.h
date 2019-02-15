@@ -75,6 +75,7 @@ typedef enum
 /*****************************************************************************/
 
 void Hld_SeeHolidays (void);
+void Hld_PutIconToSeeHlds (void);
 void Hld_EditHolidays (void);
 void Hld_GetListHolidays (void);
 void Hld_FreeListHolidays (void);

@@ -90,10 +90,10 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 /*****************************************************************************/
 // Actions in menu
 #define ActFrmLogIn		(ActWebSvc +   1)
-#define ActSysReqSch		(ActWebSvc +   2)
+#define ActReqSch		(ActWebSvc +   2)
 #define ActSeeSocTmlGbl		(ActWebSvc +   3)
 #define ActSeeSocPrf		(ActWebSvc +   4)
-#define ActSeeCalSys		(ActWebSvc +   5)
+#define ActSeeCal		(ActWebSvc +   5)
 #define ActSeeNtf		(ActWebSvc +   6)
 
 // Secondary actions
@@ -101,7 +101,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSndNewPwd		(ActWebSvc +   8)
 #define ActLogOut		(ActWebSvc +   9)
 
-#define ActSysSch		(ActWebSvc +  10)
+#define ActSch		(ActWebSvc +  10)
 
 #define ActRcvSocPstGbl		(ActWebSvc +  11)
 #define ActRcvSocComGbl		(ActWebSvc +  12)
@@ -143,8 +143,8 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeFlg		(ActWebSvc +  44)
 #define ActSeeFlr		(ActWebSvc +  45)
 
-#define ActPrnCalSys		(ActWebSvc +  46)
-#define ActChgCalSys1stDay	(ActWebSvc +  47)
+#define ActPrnCal		(ActWebSvc +  46)
+#define ActChgCal1stDay		(ActWebSvc +  47)
 
 #define ActSeeNewNtf		(ActWebSvc +  48)
 #define ActMrkNtfSee		(ActWebSvc +  49)

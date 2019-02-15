@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -63,7 +64,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Hld_GetParamHldOrder (void);
-static void Hld_PutIconToEditHlds (void);
+static void Hld_PutIconsSeeHolidays (void);
 
 static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
 
@@ -104,9 +105,7 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Table head *****/
-      Box_StartBox (NULL,Txt_Holidays,
-                    Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
-                                                             NULL,
+      Box_StartBox (NULL,Txt_Holidays,Hld_PutIconsSeeHolidays,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
       if (Gbl.Hlds.Num)
 	 {
@@ -209,12 +208,30 @@ static void Hld_GetParamHldOrder (void)
   }
 
 /*****************************************************************************/
-/************************* Put icon to edit holidays *************************/
+/******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Hld_PutIconToEditHlds (void)
+static void Hld_PutIconsSeeHolidays (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiHld,NULL);
+   /***** Edit holidays calendar *****/
+   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      Ico_PutContextualIconToEdit (ActEdiHld,NULL);
+
+   /***** View calendar *****/
+   Cal_PutIconToSeeCalendar ();
+  }
+
+/*****************************************************************************/
+/************************** Put icon to see holidays *************************/
+/*****************************************************************************/
+
+void Hld_PutIconToSeeHlds (void)
+  {
+   extern const char *Txt_Holidays;
+
+   Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,NULL,
+				  "calendar-day.svg",
+				  Txt_Holidays);
   }
 
 /*****************************************************************************/
@@ -514,7 +531,7 @@ static void Hld_ListHolidaysForEdition (void)
    Hld_HolidayType_t HolidayType;
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Holidays,NULL,
+   Box_StartBoxTable (NULL,Txt_Holidays,Cal_PutIconToSeeCalendar,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/

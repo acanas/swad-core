@@ -386,11 +386,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.45.2 (2019-02-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.45.3 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
-	Version 18.45.2:  Feb 15, 2019 	Changed holidays icon. (? lines)
+	Version 18.45.3:  Feb 15, 2019 	Contextual icon to see calendar from holidays. (238434 lines)
+	Version 18.45.2:  Feb 15, 2019 	Changed holidays icon. (238411 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/calendar.svg /var/www/html/swad/icon/
 sudo cp icon/calendar-minus.svg /var/www/html/swad/icon/

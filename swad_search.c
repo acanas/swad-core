@@ -89,7 +89,7 @@ void Sch_ReqSysSearch (void)
   {
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_SYS);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,Sco_SCOPE_SYS);
   }
 
 /*****************************************************************************/
@@ -230,7 +230,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
   {
    /***** Put form *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
-   Frm_StartForm (ActSysSch);
+   Frm_StartForm (ActSch);
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white.svg");
@@ -329,7 +329,7 @@ void Sch_SysSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_SYS);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,Sco_SCOPE_SYS);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();

@@ -101,17 +101,17 @@ extern struct Globals Gbl;
 
 Start:
        1285. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
-	 10. ActSysReqSch		Request search in system tab
+	 10. ActReqSch			Request search in system tab
        1057. ActSeeSocTmlGbl		Show social timeline (global)
        1058. ActSeeSocPrf		Suggest list of users to follow
-	 16. ActSeeCalSys		Show the academic calendar
+	 16. ActSeeCal			Show the academic calendar
        1228. ActSeeNtf			Show my recent notifications
 
        1293. ActReqSndNewPwd		Show form to send a new password via email
        1294. ActSndNewPwd		Send a new password via email
        1295. ActLogOut			Close session
 
-	 17. ActSysSch			Search for courses, teachers, documents...
+	 17. ActSch			Search for courses, teachers, documents...
 
        1061. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
        1062. ActRcvSocComGbl		Comment a social note in the timeline (global)
@@ -1601,17 +1601,17 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabSta ******************************************************************
    /* ActFrmLogIn	*/{1521, 0,TabSta,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteLandingPage		,"power-off"		},
-   /* ActSysReqSch	*/{ 627, 1,TabSta,ActSysReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqSysSearch		,"search"		},
+   /* ActReqSch		*/{ 627, 1,TabSta,ActReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqSysSearch		,"search"		},
    /* ActSeeSocTmlGbl	*/{1490, 2,TabSta,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
    /* ActSeeSocPrf	*/{1520, 3,TabSta,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
-   /* ActSeeCalSys	*/{1622, 4,TabSta,ActSeeCalSys		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarSys		,"calendar"		},
+   /* ActSeeCal		*/{1622, 4,TabSta,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_ShowCalendar		,"calendar"		},
    /* ActSeeNtf         */{ 990, 5,TabSta,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,"bell"			},
 
    /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
    /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
    /* ActLogOut		*/{  10,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ses_CloseSession		,Usr_Logout			,NULL},
 
-   /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
+   /* ActSch		*/{ 628,-1,TabUnk,ActReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
 
    /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveSocialPostGbl	,NULL},
    /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ReceiveCommentGbl		,NULL},
@@ -1653,8 +1653,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeFlg		*/{1412,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowing		,NULL},
    /* ActSeeFlr		*/{1413,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowers		,NULL},
 
-   /* ActPrnCalSys	*/{1623,-1,TabUnk,ActSeeCalSys		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
-   /* ActChgCalSys1stDay*/{1624,-1,TabUnk,ActSeeCalSys		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarSys		,NULL},
+   /* ActPrnCal		*/{1623,-1,TabUnk,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCal1stDay	*/{1624,-1,TabUnk,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_ShowCalendar		,NULL},
 
    /* ActSeeNewNtf	*/{ 991,-1,TabUnk,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,NULL},
    /* ActMrkNtfSee	*/{1146,-1,TabUnk,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_MarkAllNotifAsSeen		,NULL},
@@ -1737,7 +1737,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCtr		*/{ 676, 1,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowCtrsOfCurrentIns	,"building"		},
    /* ActSeePlc		*/{ 703, 2,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"map-marker-alt"	},
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"users"		},
-   /* ActSeeHld		*/{ 707,-1,TabIns,ActSeeHld		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_SeeHolidays		,"calendar-day"		},
+   /* ActSeeHld		*/{ 707, 4,TabIns,ActSeeHld		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_SeeHolidays		,"calendar-day"		},
 
    // Actions not in menu:
    /* ActPrnInsInf	*/{1154,-1,TabUnk,ActSeeInsInf		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ins_PrintConfiguration		,NULL},
@@ -3774,8 +3774,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActEnbPstForCrsUsr,	// #624
 	ActDisPstForSWAUsr,	// #625
 	-1,			// #626 (obsolete action)
-	ActSysReqSch,		// #627
-	ActSysSch,		// #628
+	ActReqSch,		// #627
+	ActSch,			// #628
 	-1,			// #629 (obsolete action)
 	-1,			// #630 (obsolete action)
 	ActExpAdmMrkGrp,	// #631
@@ -4769,9 +4769,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemExaAnn,	// #1619
 	ActHidExaAnn,		// #1620
 	ActShoExaAnn,		// #1621
-	ActSeeCalSys,		// #1622
-	ActPrnCalSys,		// #1623
-	ActChgCalSys1stDay,	// #1624
+	ActSeeCal,		// #1622
+	ActPrnCal,		// #1623
+	ActChgCal1stDay,	// #1624
 	-1,			// #1625 (obsolete action)
 	-1,			// #1626 (obsolete action)
 	-1,			// #1627 (obsolete action)

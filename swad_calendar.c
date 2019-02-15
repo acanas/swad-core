@@ -71,7 +71,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
                               void (*FunctionToDrawContextualIcons) (void),
                               bool PrintView);
-static void Cal_PutIconToPrintCalendarSys (void);
+static void Cal_PutIconsCalendar (void);
 
 /*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
@@ -221,7 +221,7 @@ void Cal_DrawCurrentMonth (void)
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-   Frm_SetParamsForm (ParamsStr,ActSeeCalSys,true);
+   Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
    Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
@@ -232,9 +232,9 @@ void Cal_DrawCurrentMonth (void)
 /************************ Draw an academic calendar **************************/
 /*****************************************************************************/
 
-void Cal_DrawCalendarSys (void)
+void Cal_ShowCalendar (void)
   {
-   Cal_DrawCalendar (ActSeeCalSys,ActChgCalSys1stDay,Cal_PutIconToPrintCalendarSys,false);
+   Cal_DrawCalendar (ActSeeCal,ActChgCal1stDay,Cal_PutIconsCalendar,false);
   }
 
 void Cal_PrintCalendar (void)
@@ -300,21 +300,30 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
   }
 
 /*****************************************************************************/
-/************************ Put icon to print calendar *************************/
+/******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Cal_PutIconToPrintCalendarSys (void)
+static void Cal_PutIconsCalendar (void)
   {
-   extern const char *Txt_Holidays;
-
    /***** Print calendar *****/
-   Ico_PutContextualIconToPrint (ActPrnCalSys,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCal,NULL);
 
    /***** View holidays *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0 &&			// Institution selected
        (Gbl.Hlds.Num ||					// There are holidays
         Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
-      Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,NULL,
-			             "calendar-day.svg",
-			             Txt_Holidays);
+      Hld_PutIconToSeeHlds ();
+  }
+
+/*****************************************************************************/
+/************************** Put icon to see calendar *************************/
+/*****************************************************************************/
+
+void Cal_PutIconToSeeCalendar (void)
+  {
+   extern const char *Txt_Calendar;
+
+   Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,NULL,
+				  "calendar.svg",
+				  Txt_Calendar);
   }

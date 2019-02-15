@@ -17701,7 +17701,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Entrar"
 #endif
 	,
-	//  1: ActSysReqSch
+	//  1: ActReqSch
 #if   L==1	// ca
 	"Cercar"
 #elif L==2	// de
@@ -17764,7 +17764,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
-	//  4: ActSeeCalSys
+	//  4: ActSeeCal
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -19508,7 +19508,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Papel nesta sess&atilde;o"
 #endif
 	,
-	//  1: ActSysReqSch
+	//  1: ActReqSch
 #if   L==1	// ca
 	"Cerca d'assignatures, professors i documents"
 #elif L==2	// de
@@ -19571,7 +19571,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfis p&uacute;blicos"
 #endif
 	,
-	//  4: ActSeeCalSys
+	//  4: ActSeeCal
 #if   L==1	// ca
 	"Calendari acad&egrave;mic"
 #elif L==2	// de
