@@ -121,10 +121,10 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabCty *******************
 		{
-		ActCtyReqSch,		//  0
-		ActSeeCtyInf,		//  1
-		ActSeeIns,		//  2
-		ActSeeCalCty,		//  3
+		ActSeeCtyInf,		//  0
+		ActSeeIns,		//  1
+		ActSeeCalCty,		//  2
+		0,			//  3
 		0,			//  4
 		0,			//  5
 		0,			//  6
@@ -137,12 +137,12 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabIns *******************
 		{
-		ActInsReqSch,		//  0
-		ActSeeInsInf,		//  1
-		ActSeeCtr,		//  2
-		ActSeePlc,		//  3
-		ActSeeDpt,		//  4
-		ActSeeCalIns,		//  5
+		ActSeeInsInf,		//  0
+		ActSeeCtr,		//  1
+		ActSeePlc,		//  2
+		ActSeeDpt,		//  3
+		ActSeeCalIns,		//  4
+		0,			//  5
 		0,			//  6
 		0,			//  7
 		0,			//  8
@@ -153,11 +153,11 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabCtr *******************
 		{
-		ActCtrReqSch,		//  0
-		ActSeeCtrInf,		//  1
-		ActSeeDeg,		//  2
-		ActSeeCla,		//  3
-		ActSeeCalCtr,		//  4
+		ActSeeCtrInf,		//  0
+		ActSeeDeg,		//  1
+		ActSeeCla,		//  2
+		ActSeeCalCtr,		//  3
+		0,			//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
@@ -169,10 +169,10 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabDeg *******************
 		{
-		ActDegReqSch,		//  0
-		ActSeeDegInf,		//  1
-		ActSeeCrs,		//  2
-		ActSeeCalDeg,		//  3
+		ActSeeDegInf,		//  0
+		ActSeeCrs,		//  1
+		ActSeeCalDeg,		//  2
+		0,			//  3
 		0,			//  4
 		0,			//  5
 		0,			//  6
@@ -185,15 +185,15 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabCrs *******************
 		{
-		ActCrsReqSch,		//  0
-		ActSeeCrsInf,		//  1
-		ActSeeTchGui,		//  2
-		ActSeeSyl,		//  3
-		ActSeeBib,		//  4
-		ActSeeFAQ,		//  5
-		ActSeeCrsLnk,		//  6
-		ActSeeCrsTT,		//  7
-		ActSeeCalCrs,		//  8
+		ActSeeCrsInf,		//  0
+		ActSeeTchGui,		//  1
+		ActSeeSyl,		//  2
+		ActSeeBib,		//  3
+		ActSeeFAQ,		//  4
+		ActSeeCrsLnk,		//  5
+		ActSeeCrsTT,		//  6
+		ActSeeCalCrs,		//  7
+		0,			//  8
 		0,			//  9
 		0,			// 10
 		0,			// 11

@@ -93,61 +93,6 @@ void Sch_ReqSysSearch (void)
   }
 
 /*****************************************************************************/
-/********************** Request search in country tab ************************/
-/*****************************************************************************/
-
-void Sch_ReqCtySearch (void)
-  {
-   /***** Search courses, teachers, documents... *****/
-   Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_CTY);
-  }
-
-/*****************************************************************************/
-/******************** Request search in institution tab **********************/
-/*****************************************************************************/
-
-void Sch_ReqInsSearch (void)
-  {
-   /***** Search courses, teachers, documents... *****/
-   Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INS);
-  }
-
-/*****************************************************************************/
-/*********************** Request search in centre tab ************************/
-/*****************************************************************************/
-
-void Sch_ReqCtrSearch (void)
-  {
-   /***** Search courses, teachers, documents... *****/
-   Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CTR);
-  }
-
-/*****************************************************************************/
-/*********************** Request search in degree tab ************************/
-/*****************************************************************************/
-
-void Sch_ReqDegSearch (void)
-  {
-   /***** Search courses, teachers, documents... *****/
-   Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEG);
-  }
-
-/*****************************************************************************/
-/*********************** Request search in course tab ************************/
-/*****************************************************************************/
-
-void Sch_ReqCrsSearch (void)
-  {
-   /***** Search courses, teachers, documents... *****/
-   Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_CRS);
-  }
-
-/*****************************************************************************/
 /****************** Put a form to search, including scope ********************/
 /*****************************************************************************/
 
@@ -283,17 +228,9 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
 
 void Sch_PutFormToSearchInPageTopHeading (void)
   {
-   Act_Action_t ActionSearch =
-      (Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
-      (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
-      (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
-      (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
-      (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
-                                       ActSysSch)))));
-
    /***** Put form *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
-   Frm_StartForm (ActionSearch);
+   Frm_StartForm (ActSysSch);
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white.svg");
@@ -400,102 +337,6 @@ void Sch_SysSearch (void)
    else
       /***** Show search form and selectors *****/
       Sch_ReqSysSearch ();
-  }
-
-/*****************************************************************************/
-/****************** Search courses, teachers, documents... *******************/
-/*****************************************************************************/
-
-void Sch_CtySearch (void)
-  {
-   if (Gbl.Search.Str[0])
-     {
-      /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_CTY);
-
-      /***** Show results of search *****/
-      Sch_SearchInDB ();
-     }
-   else
-      /***** Show search form and selectors *****/
-      Sch_ReqCtySearch ();
-  }
-
-/*****************************************************************************/
-/****************** Search courses, teachers, documents... *******************/
-/*****************************************************************************/
-
-void Sch_InsSearch (void)
-  {
-   if (Gbl.Search.Str[0])
-     {
-      /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INS);
-
-      /***** Show results of search *****/
-      Sch_SearchInDB ();
-     }
-   else
-      /***** Show search form and selectors *****/
-      Sch_ReqInsSearch ();
-  }
-
-/*****************************************************************************/
-/****************** Search courses, teachers, documents... *******************/
-/*****************************************************************************/
-
-void Sch_CtrSearch (void)
-  {
-   if (Gbl.Search.Str[0])
-     {
-      /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CTR);
-
-      /***** Show results of search *****/
-      Sch_SearchInDB ();
-     }
-   else
-      /***** Show search form and selectors *****/
-      Sch_ReqCtrSearch ();
-  }
-
-
-/*****************************************************************************/
-/****************** Search courses, teachers, documents... *******************/
-/*****************************************************************************/
-
-void Sch_DegSearch (void)
-  {
-   if (Gbl.Search.Str[0])
-     {
-      /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEG);
-
-      /***** Show results of search *****/
-      Sch_SearchInDB ();
-     }
-   else
-      /***** Show search form and selectors *****/
-      Sch_ReqDegSearch ();
-  }
-
-/*****************************************************************************/
-/****************** Search courses, teachers, documents... *******************/
-/*****************************************************************************/
-
-void Sch_CrsSearch (void)
-  {
-   if (Gbl.Search.Str[0])
-     {
-      /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_CRS);
-
-      /***** Show results of search *****/
-      Sch_SearchInDB ();
-     }
-   else
-      /***** Show search form and selectors *****/
-      Sch_ReqCrsSearch ();
   }
 
 /*****************************************************************************/

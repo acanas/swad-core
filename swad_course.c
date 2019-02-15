@@ -2961,12 +2961,7 @@ static void Crs_PutIconToSearchCourses (void)
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
-   Lay_PutContextualLinkOnlyIcon ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsReqSch :
-                                  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegReqSch :
-                                  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrReqSch :
-                                  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
-                                  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
-                                                                   ActSysReqSch)))),
+   Lay_PutContextualLinkOnlyIcon (ActSysReqSch,
 				  NULL,Sch_PutLinkToSearchCoursesParams,
 			          "search.svg",
 			          Txt_Search_courses);

@@ -386,11 +386,24 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.43.7 (2019-02-14)"
+#define Log_PLATFORM_VERSION	"SWAD 18.44 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
-	Version 18.43.7:  Feb 14, 2019 	Option system search is moved to start tab. (239027 lines)
+	Version 18.44:    Feb 15, 2019 	Removed options to search from country, institution, centre, degree and course. (238652 lines)
+					10 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1176';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1177';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1178';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1179';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1180';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1181';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1182';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1183';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1184';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1185';
+
+	Version 18.43.7:  Feb 15, 2019 	Option system search is moved to start tab. (239027 lines)
 					2 changes necessary in database:
 UPDATE actions SET Txt='Solicitar b&uacute;squeda' WHERE ActCod='627' AND Language='es';
 UPDATE actions SET Txt='Buscar' WHERE ActCod='628' AND Language='es';

@@ -70,11 +70,6 @@ typedef enum
 /*****************************************************************************/
 
 void Sch_ReqSysSearch (void);
-void Sch_ReqCtySearch (void);
-void Sch_ReqInsSearch (void);
-void Sch_ReqCtrSearch (void);
-void Sch_ReqDegSearch (void);
-void Sch_ReqCrsSearch (void);
 
 void Sch_PutFormToSearchInPageTopHeading (void);
 
@@ -83,11 +78,6 @@ void Sch_PutMagnifyingGlassButton (const char *Icon);
 void Sch_GetParamWhatToSearch (void);
 void Sch_GetParamsSearch (void);
 void Sch_SysSearch (void);
-void Sch_CtySearch (void);
-void Sch_InsSearch (void);
-void Sch_CtrSearch (void);
-void Sch_DegSearch (void);
-void Sch_CrsSearch (void);
 
 bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                            const char *FieldName,

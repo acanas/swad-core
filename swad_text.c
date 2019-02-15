@@ -17932,28 +17932,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabCty *****************************************************
-	//  0: ActCtyReqSch
-#if   L==1	// ca
-	"Cercar"
-#elif L==2	// de
-	"Suchen"
-#elif L==3	// en
-	"Search"
-#elif L==4	// es
-	"Buscar"
-#elif L==5	// fr
-	"Chercher"
-#elif L==6	// gn
-	"Heka"
-#elif L==7	// it
-	"Cercare"
-#elif L==8	// pl
-	"Szukaj"
-#elif L==9	// pt
-	"Procurar"
-#endif
-	,
-	//  1: ActSeeCtyInf
+	//  0: ActSeeCtyInf
 #if   L==1	// ca
 	"Informaci&oacute;"
 #elif L==2	// de
@@ -17974,7 +17953,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	//  2: ActSeeIns
+	//  1: ActSeeIns
 #if   L==1	// ca
 	"Institucions"
 #elif L==2	// de
@@ -17995,7 +17974,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	,
-	//  3: ActSeeCalCty
+	//  2: ActSeeCalCty
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -18016,6 +17995,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
@@ -18028,28 +18008,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabIns *****************************************************
-	//  0: ActInsReqSch
-#if   L==1	// ca
-	"Cercar"
-#elif L==2	// de
-	"Suchen"
-#elif L==3	// en
-	"Search"
-#elif L==4	// es
-	"Buscar"
-#elif L==5	// fr
-	"Chercher"
-#elif L==6	// gn
-	"Heka"
-#elif L==7	// it
-	"Cercare"
-#elif L==8	// pl
-	"Szukaj"
-#elif L==9	// pt
-	"Procurar"
-#endif
-	,
-	//  1: ActSeeInsInf
+	//  0: ActSeeInsInf
 #if   L==1	// ca
 	"Informaci&oacute;"
 #elif L==2	// de
@@ -18070,7 +18029,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	//  2: ActSeeCtr
+	//  1: ActSeeCtr
 #if   L==1	// ca
 	"Centres"
 #elif L==2	// de
@@ -18091,7 +18050,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Centros"
 #endif
 	,
-	//  3: ActSeePlc
+	//  2: ActSeePlc
 #if   L==1	// ca
 	"Llocs"
 #elif L==2	// de
@@ -18112,7 +18071,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Localiza&ccedil;oes"
 #endif
 	,
-	//  4: ActSeeDpt
+	//  3: ActSeeDpt
 #if   L==1	// ca
 	"Departaments"
 #elif L==2	// de
@@ -18133,122 +18092,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  5: ActSeeCalIns
-#if   L==1	// ca
-	"Calendari"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Calendar"
-#elif L==4	// es
-	"Calendario"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Arapapaha"
-#elif L==7	// it
-	"Calendario"
-#elif L==8	// pl
-	"Kalendarz"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
-	{
-	// TabCtr *****************************************************
-	//  0: ActCtrReqSch
-#if   L==1	// ca
-	"Cercar"
-#elif L==2	// de
-	"Suchen"
-#elif L==3	// en
-	"Search"
-#elif L==4	// es
-	"Buscar"
-#elif L==5	// fr
-	"Chercher"
-#elif L==6	// gn
-	"Heka"
-#elif L==7	// it
-	"Cercare"
-#elif L==8	// pl
-	"Szukaj"
-#elif L==9	// pt
-	"Procurar"
-#endif
-	,
-	//  1: ActSeeCtrInf
-#if   L==1	// ca
-	"Informaci&oacute;"
-#elif L==2	// de
-	"Information"
-#elif L==3	// en
-	"Information"
-#elif L==4	// es
-	"Informaci&oacute;n"
-#elif L==5	// fr
-	"Information"
-#elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Informazione"
-#elif L==8	// pl
-	"Informacja"
-#elif L==9	// pt
-	"Informa&ccedil;&atilde;o"
-#endif
-	,
-	//  2: ActSeeDeg
-#if   L==1	// ca
-	"Titulacions"
-#elif L==2	// de
-	"Studiengang"
-#elif L==3	// en
-	"Degrees"
-#elif L==4	// es
-	"Titulaciones"
-#elif L==5	// fr
-	"&Eacute;tudes"
-#elif L==6	// gn
-	"Arandur&atilde;"
-#elif L==7	// it
-	"Lauree"
-#elif L==8	// pl
-	"Stopnie"
-#elif L==9	// pt
-	"Graus"
-#endif
-	,
-	//  3: ActSeeCla
-#if   L==1	// ca
-	"Aules"
-#elif L==2	// de
-	"Klassenzimmer"
-#elif L==3	// en
-	"Classrooms"
-#elif L==4	// es
-	"Aulas"
-#elif L==5	// fr
-	"Salles"
-#elif L==6	// gn
-	"Mbo'ehakoty"
-#elif L==7	// it
-	"Aule"
-#elif L==8	// pl
-	"Sale"
-#elif L==9	// pt
-	"Salas"
-#endif
-	,
-	//  4: ActSeeCalCtr
+	//  4: ActSeeCalIns
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -18279,29 +18123,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabDeg *****************************************************
-	//  0: ActDegReqSch
-#if   L==1	// ca
-	"Cercar"
-#elif L==2	// de
-	"Suchen"
-#elif L==3	// en
-	"Search"
-#elif L==4	// es
-	"Buscar"
-#elif L==5	// fr
-	"Chercher"
-#elif L==6	// gn
-	"Heka"
-#elif L==7	// it
-	"Cercare"
-#elif L==8	// pl
-	"Szukaj"
-#elif L==9	// pt
-	"Procurar"
-#endif
-	,
-	//  1: ActSeeDegInf
+	// TabCtr *****************************************************
+	//  0: ActSeeCtrInf
 #if   L==1	// ca
 	"Informaci&oacute;"
 #elif L==2	// de
@@ -18322,28 +18145,49 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	//  2: ActSeeCrs
+	//  1: ActSeeDeg
 #if   L==1	// ca
-	"Assignatures"
+	"Titulacions"
 #elif L==2	// de
-	"Kursen"
+	"Studiengang"
 #elif L==3	// en
-	"Courses"
+	"Degrees"
 #elif L==4	// es
-	"Asignaturas"
+	"Titulaciones"
 #elif L==5	// fr
-	"Mati&egrave;res"
+	"&Eacute;tudes"
 #elif L==6	// gn
-	"Mbo'esyry"
+	"Arandur&atilde;"
 #elif L==7	// it
-	"Corsi"
+	"Lauree"
 #elif L==8	// pl
-	"Kurs&oacute;w"
+	"Stopnie"
 #elif L==9	// pt
-	"Disciplinas"
+	"Graus"
 #endif
 	,
-	//  3: ActSeeCalDeg
+	//  2: ActSeeCla
+#if   L==1	// ca
+	"Aules"
+#elif L==2	// de
+	"Klassenzimmer"
+#elif L==3	// en
+	"Classrooms"
+#elif L==4	// es
+	"Aulas"
+#elif L==5	// fr
+	"Salles"
+#elif L==6	// gn
+	"Mbo'ehakoty"
+#elif L==7	// it
+	"Aule"
+#elif L==8	// pl
+	"Sale"
+#elif L==9	// pt
+	"Salas"
+#endif
+	,
+	//  3: ActSeeCalCtr
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -18375,29 +18219,8 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabCrs *****************************************************
-	//  0: ActCtrReqSch
-#if   L==1	// ca
-	"Cercar"
-#elif L==2	// de
-	"Suchen"
-#elif L==3	// en
-	"Search"
-#elif L==4	// es
-	"Buscar"
-#elif L==5	// fr
-	"Chercher"
-#elif L==6	// gn
-	"Heka"
-#elif L==7	// it
-	"Cercare"
-#elif L==8	// pl
-	"Szukaj"
-#elif L==9	// pt
-	"Procurar"
-#endif
-	,
-	//  1: ActSeeCrsInf
+	// TabDeg *****************************************************
+	//  0: ActSeeDegInf
 #if   L==1	// ca
 	"Informaci&oacute;"
 #elif L==2	// de
@@ -18418,133 +18241,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	//  2: ActSeeTchGui
+	//  1: ActSeeCrs
 #if   L==1	// ca
-	"Guia"
+	"Assignatures"
 #elif L==2	// de
-	"Hinweise"
+	"Kursen"
 #elif L==3	// en
-	"Guide"
+	"Courses"
 #elif L==4	// es
-	"Gu&iacute;a"
+	"Asignaturas"
 #elif L==5	// fr
-	"Guide"
+	"Mati&egrave;res"
 #elif L==6	// gn
-	"Gu&iacute;a"	// Okoteve traducción
+	"Mbo'esyry"
 #elif L==7	// it
-	"Guida"
+	"Corsi"
 #elif L==8	// pl
-	"Podr&eogon;cznik"
+	"Kurs&oacute;w"
 #elif L==9	// pt
-	"Guia"
+	"Disciplinas"
 #endif
 	,
-	//  3: ActSeeSyl
-#if   L==1	// ca
-	"Programa"
-#elif L==2	// de
-	"Studienplan"
-#elif L==3	// en
-	"Syllabus"
-#elif L==4	// es
-	"Programa"
-#elif L==5	// fr
-	"Plan"
-#elif L==6	// gn
-	"Programa"	// Okoteve traducción
-#elif L==7	// it
-	"Programma"
-#elif L==8	// pl
-	"Syllabus"
-#elif L==9	// pt
-	"Programa"
-#endif
-	,
-	//  4: ActSeeBib
-#if   L==1	// ca
-	"Bibliografia"
-#elif L==2	// de
-	"Literatur"
-#elif L==3	// en
-	"Bibliography"
-#elif L==4	// es
-	"Bibliograf&iacute;a"
-#elif L==5	// fr
-	"Bibliographie"
-#elif L==6	// gn
-	"Arandukapurupyre"
-#elif L==7	// it
-	"Bibliografia"
-#elif L==8	// pl
-	"Bibliografia"
-#elif L==9	// pt
-	"Bibliografia"
-#endif
-	,
-	//  5: ActSeeFAQ
-#if   L==1	// ca
-	"FAQ"	// Necessita traduccio
-#elif L==2	// de
-	"FAQ"
-#elif L==3	// en
-	"FAQ"
-#elif L==4	// es
-	"FAQ"
-#elif L==5	// fr
-	"FAQ"
-#elif L==6	// gn
-	"FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"FAQ"
-#elif L==8	// pl
-	"FAQ"
-#elif L==9	// pt
-	"FAQ"
-#endif
-	,
-	//  6: ActSeeCrsLnk
-#if   L==1	// ca
-	"Enlla&ccedil;os"
-#elif L==2	// de
-	"Links"
-#elif L==3	// en
-	"Links"
-#elif L==4	// es
-	"Enlaces"
-#elif L==5	// fr
-	"Liens"
-#elif L==6	// gn
-	"Ambu&eacute;re"
-#elif L==7	// it
-	"Link"
-#elif L==8	// pl
-	"Linki"
-#elif L==9	// pt
-	"Liga&ccedil;&otilde;es"
-#endif
-	,
-	//  7: ActSeeCrsTT
-#if   L==1	// ca
-	"Horari"
-#elif L==2	// de
-	"Stundenplan"
-#elif L==3	// en
-	"Timetable"
-#elif L==4	// es
-	"Horario"
-#elif L==5	// fr
-	"Horaire"
-#elif L==6	// gn
-	"Horario"	// Okoteve traducción
-#elif L==7	// it
-	"Orario"
-#elif L==8	// pl
-	"Plan"
-#elif L==9	// pt
-	"Hor&aacute;rio"
-#endif
-	,
-	//  8: ActSeeCalCrs
+	//  2: ActSeeCalDeg
 #if   L==1	// ca
 	"Calendari"
 #elif L==2	// de
@@ -18565,6 +18283,188 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	NULL,	// 12
+	},
+	{
+	// TabCrs *****************************************************
+	//  0: ActSeeCrsInf
+#if   L==1	// ca
+	"Informaci&oacute;"
+#elif L==2	// de
+	"Information"
+#elif L==3	// en
+	"Information"
+#elif L==4	// es
+	"Informaci&oacute;n"
+#elif L==5	// fr
+	"Information"
+#elif L==6	// gn
+	"Informaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Informazione"
+#elif L==8	// pl
+	"Informacja"
+#elif L==9	// pt
+	"Informa&ccedil;&atilde;o"
+#endif
+	,
+	//  1: ActSeeTchGui
+#if   L==1	// ca
+	"Guia"
+#elif L==2	// de
+	"Hinweise"
+#elif L==3	// en
+	"Guide"
+#elif L==4	// es
+	"Gu&iacute;a"
+#elif L==5	// fr
+	"Guide"
+#elif L==6	// gn
+	"Gu&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Guida"
+#elif L==8	// pl
+	"Podr&eogon;cznik"
+#elif L==9	// pt
+	"Guia"
+#endif
+	,
+	//  2: ActSeeSyl
+#if   L==1	// ca
+	"Programa"
+#elif L==2	// de
+	"Studienplan"
+#elif L==3	// en
+	"Syllabus"
+#elif L==4	// es
+	"Programa"
+#elif L==5	// fr
+	"Plan"
+#elif L==6	// gn
+	"Programa"	// Okoteve traducción
+#elif L==7	// it
+	"Programma"
+#elif L==8	// pl
+	"Syllabus"
+#elif L==9	// pt
+	"Programa"
+#endif
+	,
+	//  3: ActSeeBib
+#if   L==1	// ca
+	"Bibliografia"
+#elif L==2	// de
+	"Literatur"
+#elif L==3	// en
+	"Bibliography"
+#elif L==4	// es
+	"Bibliograf&iacute;a"
+#elif L==5	// fr
+	"Bibliographie"
+#elif L==6	// gn
+	"Arandukapurupyre"
+#elif L==7	// it
+	"Bibliografia"
+#elif L==8	// pl
+	"Bibliografia"
+#elif L==9	// pt
+	"Bibliografia"
+#endif
+	,
+	//  4: ActSeeFAQ
+#if   L==1	// ca
+	"FAQ"	// Necessita traduccio
+#elif L==2	// de
+	"FAQ"
+#elif L==3	// en
+	"FAQ"
+#elif L==4	// es
+	"FAQ"
+#elif L==5	// fr
+	"FAQ"
+#elif L==6	// gn
+	"FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"FAQ"
+#elif L==8	// pl
+	"FAQ"
+#elif L==9	// pt
+	"FAQ"
+#endif
+	,
+	//  5: ActSeeCrsLnk
+#if   L==1	// ca
+	"Enlla&ccedil;os"
+#elif L==2	// de
+	"Links"
+#elif L==3	// en
+	"Links"
+#elif L==4	// es
+	"Enlaces"
+#elif L==5	// fr
+	"Liens"
+#elif L==6	// gn
+	"Ambu&eacute;re"
+#elif L==7	// it
+	"Link"
+#elif L==8	// pl
+	"Linki"
+#elif L==9	// pt
+	"Liga&ccedil;&otilde;es"
+#endif
+	,
+	//  6: ActSeeCrsTT
+#if   L==1	// ca
+	"Horari"
+#elif L==2	// de
+	"Stundenplan"
+#elif L==3	// en
+	"Timetable"
+#elif L==4	// es
+	"Horario"
+#elif L==5	// fr
+	"Horaire"
+#elif L==6	// gn
+	"Horario"	// Okoteve traducción
+#elif L==7	// it
+	"Orario"
+#elif L==8	// pl
+	"Plan"
+#elif L==9	// pt
+	"Hor&aacute;rio"
+#endif
+	,
+	//  7: ActSeeCalCrs
+#if   L==1	// ca
+	"Calendari"
+#elif L==2	// de
+	"Kalender"
+#elif L==3	// en
+	"Calendar"
+#elif L==4	// es
+	"Calendario"
+#elif L==5	// fr
+	"Calendrier"
+#elif L==6	// gn
+	"Arapapaha"
+#elif L==7	// it
+	"Calendario"
+#elif L==8	// pl
+	"Kalendarz"
+#elif L==9	// pt
+	"Calend&aacute;rio"
+#endif
+	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -19919,28 +19819,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabCty *****************************************************
-	//  0: ActCtyReqSch
-#if   L==1	// ca
-	"Cerca d'assignatures, professors i documents"
-#elif L==2	// de
-	"Suche Kursen, Lehrer und Dokumente"
-#elif L==3	// en
-	"Search subjects, teachers and documents"
-#elif L==4	// es
-	"B&uacute;squeda de asignaturas, profesores y documentos"
-#elif L==5	// fr
-	"Rechercher des mati&egrave;res, des enseignants et des documents"
-#elif L==6	// gn
-	"B&uacute;squeda de asignaturas, profesores y documentos"// Okoteve traducción
-#elif L==7	// it
-	"Cercare corsi, professori e documenti"
-#elif L==8	// pl
-	"Szukaj przedmiot&oacute;w, nauczycieli i dokumenty"
-#elif L==9	// pt
-	"Procurar disciplinas, professores e documentos"
-#endif
-	,
-	//  1: ActSeeCtyInf
+	//  0: ActSeeCtyInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquest pa&iacute;s"
 #elif L==2	// de
@@ -19961,7 +19840,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o deste pa&iacute;s"
 #endif
 	,
-	//  2: ActSeeIns
+	//  1: ActSeeIns
 #if   L==1	// ca
 	"Llista d'institucions"
 #elif L==2	// de
@@ -19982,7 +19861,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	,
-	//  3: ActSeeCalCty
+	//  2: ActSeeCalCty
 #if   L==1	// ca
 	"Calendari acad&egrave;mic"
 #elif L==2	// de
@@ -20003,6 +19882,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  3
 	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
@@ -20015,28 +19895,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabIns *****************************************************
-	//  0: ActInsReqSch
-#if   L==1	// ca
-	"Cerca d'assignatures, professors i documents"
-#elif L==2	// de
-	"Suche Kursen, Lehrer und Dokumente"
-#elif L==3	// en
-	"Search subjects, teachers and documents"
-#elif L==4	// es
-	"B&uacute;squeda de asignaturas, profesores y documentos"
-#elif L==5	// fr
-	"Rechercher des mati&egrave;res, des enseignants et des documents"
-#elif L==6	// gn
-	"B&uacute;squeda de asignaturas, profesores y documentos"// Okoteve traducción
-#elif L==7	// it
-	"Cercare corsi, professori e documenti"
-#elif L==8	// pl
-	"Szukaj przedmiot&oacute;w, nauczycieli i dokumenty"
-#elif L==9	// pt
-	"Procurar disciplinas, professores e documentos"
-#endif
-	,
-	//  1: ActSeeInsInf
+	//  0: ActSeeInsInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquesta instituci&oacute;"
 #elif L==2	// de
@@ -20057,7 +19916,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o desta institu&ccedil;&atilde;o"
 #endif
 	,
-	//  2: ActSeeCtr
+	//  1: ActSeeCtr
 #if   L==1	// ca
 	"Llista de centres"
 #elif L==2	// de
@@ -20078,7 +19937,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Centros"
 #endif
 	,
-	//  3: ActSeePlc
+	//  2: ActSeePlc
 #if   L==1	// ca
 	"Llocs o seus de la instituci&oacute;"
 	" on s'ubica cada un dels centres."
@@ -20108,7 +19967,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	" onde cada um dos centros est&aacute; localizado."
 #endif
 	,
-	//  4: ActSeeDpt
+	//  3: ActSeeDpt
 #if   L==1	// ca
 	"Llista de tots els departaments d'aquesta instituci&oacute;"
 #elif L==2	// de
@@ -20129,7 +19988,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  5: ActSeeCalIns
+	//  4: ActSeeCalIns
 #if   L==1	// ca
 	"Calendari acad&egrave;mic"
 #elif L==2	// de
@@ -20150,6 +20009,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -20160,28 +20020,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabCtr *****************************************************
-	//  0: ActCtrReqSch
-#if   L==1	// ca
-	"Cerca d'assignatures, professors i documents"
-#elif L==2	// de
-	"Suche Kursen, Lehrer und Dokumente"
-#elif L==3	// en
-	"Search subjects, teachers and documents"
-#elif L==4	// es
-	"B&uacute;squeda de asignaturas, profesores y documentos"
-#elif L==5	// fr
-	"Rechercher des mati&egrave;res, des enseignants et des documents"
-#elif L==6	// gn
-	"B&uacute;squeda de asignaturas, profesores y documentos"// Okoteve traducción
-#elif L==7	// it
-	"Cercare corsi, professori e documenti"
-#elif L==8	// pl
-	"Szukaj przedmiot&oacute;w, nauczycieli i dokumenty"
-#elif L==9	// pt
-	"Procurar disciplinas, professores e documentos"
-#endif
-	,
-	//  1: ActSeeCtrInf
+	//  0: ActSeeCtrInf
 #if   L==1	// ca
 	"Informaci&oacute; d'aquest centre"
 #elif L==2	// de
@@ -20202,7 +20041,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o deste centro"
 #endif
 	,
-	//  2: ActSeeDeg
+	//  1: ActSeeDeg
 #if   L==1	// ca
 	"Titulacions d'aquest centre"
 #elif L==2	// de
@@ -20223,7 +20062,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Graus"
 #endif
 	,
-	//  3: ActSeeCla
+	//  2: ActSeeCla
 #if   L==1	// ca
 	"Aules, laboratoris o altres llocs on s'imparteixen classes"
 #elif L==2	// de
@@ -20244,105 +20083,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Salas de aula, laborat&oacute;rios ou outros locais onde as aulas s&atilde;o ministradas"
 #endif
 	,
-	//  4: ActSeeCalCtr
-#if   L==1	// ca
-	"Calendari acad&egrave;mic (els dies festius"
-	" corresponen al lloc del centre seleccionada)"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Academic calendar"
-#elif L==4	// es
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
-#elif L==7	// it
-	"Calendario del corso"
-#elif L==8	// pl
-	"Kalendarz akademicki"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
-	{
-	// TabDeg *****************************************************
-	//  0: ActDegReqSch
-#if   L==1	// ca
-	"Cerca d'assignatures, professors i documents"
-#elif L==2	// de
-	"Suche Kursen, Lehrer und Dokumente"
-#elif L==3	// en
-	"Search subjects, teachers and documents"
-#elif L==4	// es
-	"B&uacute;squeda de asignaturas, profesores y documentos"
-#elif L==5	// fr
-	"Rechercher des mati&egrave;res, des enseignants et des documents"
-#elif L==6	// gn
-	"B&uacute;squeda de asignaturas, profesores y documentos"// Okoteve traducción
-#elif L==7	// it
-	"Cercare corsi, professori e documenti"
-#elif L==8	// pl
-	"Szukaj przedmiot&oacute;w, nauczycieli i dokumenty"
-#elif L==9	// pt
-	"Procurar disciplinas, professores e documentos"
-#endif
-	,
-	//  1: ActSeeDegInf
-#if   L==1	// ca
-	"Informaci&oacute; d'aquesta titulaci&oacute;"
-#elif L==2	// de
-	"Information dieses Studiengang"
-#elif L==3	// en
-	"Information on this degree"
-#elif L==4	// es
-	"Informaci&oacute;n sobre esta titulaci&oacute;n"
-#elif L==5	// fr
-	"Information de cet &eacute;tude"
-#elif L==6	// gn
-	"Informaci&oacute;n sobre esta titulaci&oacute;n"// Okoteve traducción
-#elif L==7	// it
-	"Informazione di questa laurea"
-#elif L==8	// pl
-	"Informacja na ten stopie&nacute;"
-#elif L==9	// pt
-	"Informa&ccedil;&atilde;o sobre este grau"
-#endif
-	,
-	//  2: ActSeeCrs
-#if   L==1	// ca
-	"Assignatures d'aquesta titulaci&oacute;"
-#elif L==2	// de
-	"Kursen in diesem Studiengang"
-#elif L==3	// en
-	"List of courses of the current degree"
-#elif L==4	// es
-	"Lista de asignaturas de esta titulaci&oacute;n"
-#elif L==5	// fr
-	"Mati&egrave;res dans cet &eacute;tude"
-#elif L==6	// gn
-	"Lista de asignaturas de esta titulaci&oacute;n"// Okoteve traducción
-#elif L==7	// it
-	"Corsi di questa laurea"
-#elif L==8	// pl
-	"Kurs&oacute;w w tym stopie&nacute;"
-#elif L==9	// pt
-	"Disciplinas deste grau"
-#endif
-	,
-	//  3: ActSeeCalDeg
+	//  3: ActSeeCalCtr
 #if   L==1	// ca
 	"Calendari acad&egrave;mic (els dies festius"
 	" corresponen al lloc del centre seleccionada)"
@@ -20377,176 +20118,50 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabCrs *****************************************************
-	//  0: ActCrsReqSch
+	// TabDeg *****************************************************
+	//  0: ActSeeDegInf
 #if   L==1	// ca
-	"Cerca de professors i documents"
+	"Informaci&oacute; d'aquesta titulaci&oacute;"
 #elif L==2	// de
-	"Suche Lehrer und Dokumente"
+	"Information dieses Studiengang"
 #elif L==3	// en
-	"Search teachers and documents"
+	"Information on this degree"
 #elif L==4	// es
-	"B&uacute;squeda de profesores y documentos"
+	"Informaci&oacute;n sobre esta titulaci&oacute;n"
 #elif L==5	// fr
-	"Rechercher des enseignants et des documents"
+	"Information de cet &eacute;tude"
 #elif L==6	// gn
-	"B&uacute;squeda de profesores y documentos"// Okoteve traducción
+	"Informaci&oacute;n sobre esta titulaci&oacute;n"// Okoteve traducción
 #elif L==7	// it
-	"Cercare professori e documenti"
+	"Informazione di questa laurea"
 #elif L==8	// pl
-	"Szukaj nauczycieli i dokumenty"
+	"Informacja na ten stopie&nacute;"
 #elif L==9	// pt
-	"Procurar professores e documentos"
+	"Informa&ccedil;&atilde;o sobre este grau"
 #endif
 	,
-	//  1: ActSeeCrsInf
+	//  1: ActSeeCrs
 #if   L==1	// ca
-	"Informaci&oacute; d'aquesta assignatura"
+	"Assignatures d'aquesta titulaci&oacute;"
 #elif L==2	// de
-	"Information dieses Kurs"
+	"Kursen in diesem Studiengang"
 #elif L==3	// en
-	"Information on this course"
+	"List of courses of the current degree"
 #elif L==4	// es
-	"Informaci&oacute;n sobre esta asignatura"
+	"Lista de asignaturas de esta titulaci&oacute;n"
 #elif L==5	// fr
-	"Information de cette mati&egrave;re"
+	"Mati&egrave;res dans cet &eacute;tude"
 #elif L==6	// gn
-	"Informaci&oacute;n sobre esta asignatura"// Okoteve traducción
+	"Lista de asignaturas de esta titulaci&oacute;n"// Okoteve traducción
 #elif L==7	// it
-	"Informazione di questo corso"
+	"Corsi di questa laurea"
 #elif L==8	// pl
-	"Informacja na ten kurs"
+	"Kurs&oacute;w w tym stopie&nacute;"
 #elif L==9	// pt
-	"Informa&ccedil;&atilde;o desta disciplina"
+	"Disciplinas deste grau"
 #endif
 	,
-	//  2: ActSeeTchGui
-#if   L==1	// ca
-	"Guia docent de l'assignatura"
-#elif L==2	// de
-	"Hinweise zur Kurs"
-#elif L==3	// en
-	"Teaching guide"
-#elif L==4	// es
-	"Gu&iacute;a docente de la asignatura"
-#elif L==5	// fr
-	"Guide p&eacute;dagogique de la mati&egrave;re"
-#elif L==6	// gn
-	"Gu&iacute;a docente de la asignatura"// Okoteve traducción
-#elif L==7	// it
-	"Guida didattica del corso"
-#elif L==8	// pl
-	"Nauczanie przypomnienie"
-#elif L==9	// pt
-	"Guia de ensino"
-#endif
-	,
-	//  3: ActSeeSyl
-#if   L==1	// ca
-	"Programa de l'assignatura"
-#elif L==2	// de
-	"Studienplan"
-#elif L==3	// en
-	"Syllabus"
-#elif L==4	// es
-	"Programa de la asignatura"
-#elif L==5	// fr
-	"Plan"
-#elif L==6	// gn
-	"Programa de la asignatura"// Okoteve traducción
-#elif L==7	// it
-	"Programma"
-#elif L==8	// pl
-	"Syllabus"
-#elif L==9	// pt
-	"Programa"
-#endif
-	,
-	//  4: ActSeeBib
-#if   L==1	// ca
-	"Bibliografia relacionada amb els continguts de l'assignatura"
-#elif L==2	// de
-	"Literatur"
-#elif L==3	// en
-	"Bibliography"
-#elif L==4	// es
-	"Bibliograf&iacute;a relacionada con los contenidos de la asignatura"
-#elif L==5	// fr
-	"Bibliographie"
-#elif L==6	// gn
-	"Bibliograf&iacute;a relacionada con los contenidos de la asignatura"// Okoteve traducción
-#elif L==7	// it
-	"Bibliografia"
-#elif L==8	// pl
-	"Bibliografia"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Bibliografia"
-#endif
-	,
-	//  5: ActSeeFAQ
-#if   L==1	// ca
-	"FAQ (preguntes freq&uuml;entment formulades i les seves respostes)"
-#elif L==2	// de
-	"FAQ"
-#elif L==3	// en
-	"FAQ (Frequently Asked Questions)"
-#elif L==4	// es
-	"FAQ (preguntas frecuentemente formuladas y sus respuestas)"
-#elif L==5	// fr
-	"FAQ"
-#elif L==6	// gn
-	"FAQ (preguntas frecuentemente formuladas y sus respuestas)"// Okoteve traducción
-#elif L==7	// it
-	"FAQ"
-#elif L==8	// pl
-	"FAQ (Frequently Asked Questions)"
-#elif L==9	// pt
-	"FAQ"
-#endif
-	,
-	//  6: ActSeeCrsLnk
-#if   L==1	// ca
-	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
-#elif L==2	// de
-	"Links"
-#elif L==3	// en
-	"Links"
-#elif L==4	// es
-	"Enlaces relacionados con los contenidos de la asignatura"
-#elif L==5	// fr
-	"Liens"
-#elif L==6	// gn
-	"Enlaces relacionados con los contenidos de la asignatura"// Okoteve traducción
-#elif L==7	// it
-	"Link"
-#elif L==8	// pl
-	"Linki"
-#elif L==9	// pt
-	"Liga&ccedil;&otilde;es"
-#endif
-	,
-	//  7: ActSeeCrsTT
-#if   L==1	// ca
-	"Horari de classes de l'assignatura"
-#elif L==2	// de
-	"Stundenplan"
-#elif L==3	// en
-	"Class timetable"
-#elif L==4	// es
-	"Horario de clases de la asignatura"
-#elif L==5	// fr
-	"Horaire"
-#elif L==6	// gn
-	"Horario de clases de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Orario del corso"
-#elif L==8	// pl
-	"Harmonogram klasy"
-#elif L==9	// pt
-	"Hor&aacute;rio"
-#endif
-	,
-	//  8: ActSeeCalCrs
+	//  2: ActSeeCalDeg
 #if   L==1	// ca
 	"Calendari acad&egrave;mic (els dies festius"
 	" corresponen al lloc del centre seleccionada)"
@@ -20570,6 +20185,191 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	NULL,	// 12
+	},
+	{
+	// TabCrs *****************************************************
+	//  0: ActSeeCrsInf
+#if   L==1	// ca
+	"Informaci&oacute; d'aquesta assignatura"
+#elif L==2	// de
+	"Information dieses Kurs"
+#elif L==3	// en
+	"Information on this course"
+#elif L==4	// es
+	"Informaci&oacute;n sobre esta asignatura"
+#elif L==5	// fr
+	"Information de cette mati&egrave;re"
+#elif L==6	// gn
+	"Informaci&oacute;n sobre esta asignatura"// Okoteve traducción
+#elif L==7	// it
+	"Informazione di questo corso"
+#elif L==8	// pl
+	"Informacja na ten kurs"
+#elif L==9	// pt
+	"Informa&ccedil;&atilde;o desta disciplina"
+#endif
+	,
+	//  1: ActSeeTchGui
+#if   L==1	// ca
+	"Guia docent de l'assignatura"
+#elif L==2	// de
+	"Hinweise zur Kurs"
+#elif L==3	// en
+	"Teaching guide"
+#elif L==4	// es
+	"Gu&iacute;a docente de la asignatura"
+#elif L==5	// fr
+	"Guide p&eacute;dagogique de la mati&egrave;re"
+#elif L==6	// gn
+	"Gu&iacute;a docente de la asignatura"// Okoteve traducción
+#elif L==7	// it
+	"Guida didattica del corso"
+#elif L==8	// pl
+	"Nauczanie przypomnienie"
+#elif L==9	// pt
+	"Guia de ensino"
+#endif
+	,
+	//  2: ActSeeSyl
+#if   L==1	// ca
+	"Programa de l'assignatura"
+#elif L==2	// de
+	"Studienplan"
+#elif L==3	// en
+	"Syllabus"
+#elif L==4	// es
+	"Programa de la asignatura"
+#elif L==5	// fr
+	"Plan"
+#elif L==6	// gn
+	"Programa de la asignatura"// Okoteve traducción
+#elif L==7	// it
+	"Programma"
+#elif L==8	// pl
+	"Syllabus"
+#elif L==9	// pt
+	"Programa"
+#endif
+	,
+	//  3: ActSeeBib
+#if   L==1	// ca
+	"Bibliografia relacionada amb els continguts de l'assignatura"
+#elif L==2	// de
+	"Literatur"
+#elif L==3	// en
+	"Bibliography"
+#elif L==4	// es
+	"Bibliograf&iacute;a relacionada con los contenidos de la asignatura"
+#elif L==5	// fr
+	"Bibliographie"
+#elif L==6	// gn
+	"Bibliograf&iacute;a relacionada con los contenidos de la asignatura"// Okoteve traducción
+#elif L==7	// it
+	"Bibliografia"
+#elif L==8	// pl
+	"Bibliografia"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Bibliografia"
+#endif
+	,
+	//  4: ActSeeFAQ
+#if   L==1	// ca
+	"FAQ (preguntes freq&uuml;entment formulades i les seves respostes)"
+#elif L==2	// de
+	"FAQ"
+#elif L==3	// en
+	"FAQ (Frequently Asked Questions)"
+#elif L==4	// es
+	"FAQ (preguntas frecuentemente formuladas y sus respuestas)"
+#elif L==5	// fr
+	"FAQ"
+#elif L==6	// gn
+	"FAQ (preguntas frecuentemente formuladas y sus respuestas)"// Okoteve traducción
+#elif L==7	// it
+	"FAQ"
+#elif L==8	// pl
+	"FAQ (Frequently Asked Questions)"
+#elif L==9	// pt
+	"FAQ"
+#endif
+	,
+	//  5: ActSeeCrsLnk
+#if   L==1	// ca
+	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
+#elif L==2	// de
+	"Links"
+#elif L==3	// en
+	"Links"
+#elif L==4	// es
+	"Enlaces relacionados con los contenidos de la asignatura"
+#elif L==5	// fr
+	"Liens"
+#elif L==6	// gn
+	"Enlaces relacionados con los contenidos de la asignatura"// Okoteve traducción
+#elif L==7	// it
+	"Link"
+#elif L==8	// pl
+	"Linki"
+#elif L==9	// pt
+	"Liga&ccedil;&otilde;es"
+#endif
+	,
+	//  6: ActSeeCrsTT
+#if   L==1	// ca
+	"Horari de classes de l'assignatura"
+#elif L==2	// de
+	"Stundenplan"
+#elif L==3	// en
+	"Class timetable"
+#elif L==4	// es
+	"Horario de clases de la asignatura"
+#elif L==5	// fr
+	"Horaire"
+#elif L==6	// gn
+	"Horario de clases de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Orario del corso"
+#elif L==8	// pl
+	"Harmonogram klasy"
+#elif L==9	// pt
+	"Hor&aacute;rio"
+#endif
+	,
+	//  7: ActSeeCalCrs
+#if   L==1	// ca
+	"Calendari acad&egrave;mic (els dies festius"
+	" corresponen al lloc del centre seleccionada)"
+#elif L==2	// de
+	"Kalender"
+#elif L==3	// en
+	"Academic calendar"
+#elif L==4	// es
+	"Calendario acad&eacute;mico (los d&iacute;as festivos"
+	" corresponden al lugar del centro seleccionado)"
+#elif L==5	// fr
+	"Calendrier"
+#elif L==6	// gn
+	"Calendario acad&eacute;mico (los d&iacute;as festivos"
+	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
+#elif L==7	// it
+	"Calendario del corso"
+#elif L==8	// pl
+	"Kalendarz akademicki"
+#elif L==9	// pt
+	"Calend&aacute;rio"
+#endif
+	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
