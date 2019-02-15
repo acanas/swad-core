@@ -702,14 +702,14 @@ void Msg_RecMsgFromUsr (void)
           NumRecipients > Cfg_MAX_RECIPIENTS)
         {
          /* Write warning message */
-         Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_send_a_message_to_so_many_recipients_);
+         Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_send_a_message_to_so_many_recipients_);
          Error = true;
         }
      }
    else	// No recipients selected
      {
       /* Write warning message */
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_recipients);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_recipients);
       Error = true;
      }
 
@@ -757,7 +757,7 @@ void Msg_RecMsgFromUsr (void)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_message_not_sent_to_X,
 		      UsrDstData.FullName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -796,7 +796,7 @@ void Msg_RecMsgFromUsr (void)
 	              NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
                                       Txt_message_sent_to_X_not_notified_by_email,
                       UsrDstData.FullName);
-            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
             /***** Increment number of recipients *****/
             if (NotifyByEmail)
@@ -806,7 +806,7 @@ void Msg_RecMsgFromUsr (void)
         }
       else
         {
-         Ale_ShowAlert (Ale_ERROR,Txt_Error_getting_data_from_a_recipient);
+         Ale_ShowA_old (Ale_ERROR,Txt_Error_getting_data_from_a_recipient);
          NumErrors++;
         }
      }
@@ -830,17 +830,17 @@ void Msg_RecMsgFromUsr (void)
    if (NumRecipients)
      {
       if (NumRecipients == 1)
-         Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
+         Ale_ShowA_old (Ale_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
       else
         {
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_message_has_been_sent_to_X_recipients,
                    (unsigned) NumRecipients);
-         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
         }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);
 
    /***** Show alert about errors on sending message *****/
    if (NumErrors > 1)
@@ -848,7 +848,7 @@ void Msg_RecMsgFromUsr (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_There_have_been_X_errors_in_sending_the_message,
                 (unsigned) NumErrors);
-      Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
      }
   }
 
@@ -1010,13 +1010,13 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
    extern const char *Txt_X_messages_have_been_deleted;
 
    if (NumMsgs == 1)
-      Ale_ShowAlert (Ale_SUCCESS,Txt_One_message_has_been_deleted);
+      Ale_ShowA_old (Ale_SUCCESS,Txt_One_message_has_been_deleted);
    else
      {
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_X_messages_have_been_deleted,
                 NumMsgs);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
   }
 
@@ -1115,7 +1115,7 @@ void Msg_DelSntMsg (void)
    /***** Delete the message *****/
    /* Delete the sent message */
    Msg_MoveSentMsgToDeleted (MsgCod);
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Message_deleted);
+   Ale_ShowA_old (Ale_SUCCESS,Txt_Message_deleted);
 
    /* Show the remaining messages */
    Msg_ShowSntMsgs ();
@@ -1137,7 +1137,7 @@ void Msg_DelRecMsg (void)
    /***** Delete the message *****/
    /* Delete the received message */
    Msg_MoveReceivedMsgToDeleted (MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Message_deleted);
+   Ale_ShowA_old (Ale_SUCCESS,Txt_Message_deleted);
 
    /* Show the remaining messages */
    Msg_ShowRecMsgs ();
@@ -3721,7 +3721,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_From_this_time_you_will_not_receive_messages_from_X,
              Gbl.Usrs.Other.UsrDat.FullName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /**** Show received messages again */
    Msg_ShowRecMsgs ();
@@ -3778,7 +3778,7 @@ static void Msg_UnbanSender (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_From_this_time_you_can_receive_messages_from_X,
              Gbl.Usrs.Other.UsrDat.FullName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -3836,7 +3836,7 @@ void Msg_ListBannedUsrs (void)
 				        Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (NumUsrs == 0)   // If not result ==> sent message is deleted
-      Ale_ShowAlert (Ale_INFO,Txt_You_have_not_banned_any_sender);
+      Ale_ShowA_old (Ale_INFO,Txt_You_have_not_banned_any_sender);
    else
      {
       /***** Initialize structure with user's data *****/

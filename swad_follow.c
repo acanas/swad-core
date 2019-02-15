@@ -167,7 +167,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
+      Ale_ShowA_old (Ale_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -653,7 +653,7 @@ void Fol_ListFollowing (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else				// If user not specified, view my profile
       Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);
@@ -719,7 +719,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -738,7 +738,7 @@ void Fol_ListFollowers (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else				// If user not specified, view my profile
       Fol_ListFollowersUsr (&Gbl.Usrs.Me.UsrDat);
@@ -812,7 +812,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

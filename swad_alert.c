@@ -25,7 +25,11 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For vasprintf
 #include <linux/stddef.h>	// For NULL
+#include <stdarg.h>		// For va_start, va_end
+#include <stdio.h>		// For FILE, fprintf, vasprintf
+#include <stdlib.h>		// For free
 
 #include "swad_alert.h"
 #include "swad_form.h"
@@ -86,7 +90,7 @@ void Ale_ShowPendingAlert (void)
    /***** Anything to show? *****/
    if (Gbl.Alert.Type != Ale_NONE)
       /***** Show alert *****/
-      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    Ale_ResetAlert ();
   }
@@ -95,7 +99,39 @@ void Ale_ShowPendingAlert (void)
 /******************** Show an alert message to the user **********************/
 /*****************************************************************************/
 
-void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *Txt)
+void Ale_ShowA_fmt (Ale_AlertType_t AlertType,
+                    const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Txt;
+
+   if (AlertType != Ale_NONE)
+     {
+      va_start (ap,fmt);
+      NumBytesPrinted = vasprintf (&Txt,fmt,ap);
+      va_end (ap);
+
+      if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				   // or some other error occurs,
+				   // vasprintf will return -1
+	 Lay_NotEnoughMemoryExit ();
+
+      Ale_ShowAlertAndButton (AlertType,Txt,
+                              ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+
+      free ((void *) Txt);
+     }
+  }
+
+void Ale_ShowA_new (Ale_AlertType_t AlertType,const char *Txt)
+  {
+   if (AlertType != Ale_NONE)
+      Ale_ShowAlertAndButton (AlertType,Txt,
+                              ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+  }
+
+void Ale_ShowA_old (Ale_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Ale_NONE)
       Ale_ShowAlertAndButton (AlertType,Txt,

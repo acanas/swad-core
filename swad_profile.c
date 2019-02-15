@@ -238,7 +238,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    if (!ProfileShown)
      {
       /* Show error message */
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
       /* Request a user's profile */
       Prf_RequestUserProfile ();

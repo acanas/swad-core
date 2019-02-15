@@ -586,7 +586,7 @@ void Cla_RemoveClassroom (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Classroom_X_removed,
 	     Cla->FullName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Cla_EditClassrooms ();
@@ -674,7 +674,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_classroom_X_empty,
                 CurrentClaName);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -688,7 +688,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_classroom_X_already_exists,
                       NewClaName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -699,7 +699,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_classroom_X_has_been_renamed_as_Y,
                       CurrentClaName,NewClaName);
-            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
@@ -707,7 +707,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_classroom_X_has_not_changed,
                    CurrentClaName);
-         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -804,7 +804,7 @@ void Cla_ChangeCapacity (void)
 	           Txt_The_capacity_of_classroom_X_is_now_Y,
                    Cla->FullName,NewCapacity);
      }
-   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+   Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Cla_EditClassrooms ();
@@ -868,7 +868,7 @@ void Cla_ChangeClassroomLocation (void)
      }
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+   Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Cla_EditClassrooms ();
@@ -1020,20 +1020,20 @@ void Cla_RecFormNewClassroom (void)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_classroom_X_already_exists,
                    Cla->ShrtName);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Cla_CheckIfClassroomNameExists ("FullName",Cla->FullName,-1L))
         {
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_classroom_X_already_exists,
                    Cla->FullName);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
       else	// Add new classroom to database
          Cla_CreateClassroom (Cla);
      }
    else	// If there is not a classroom name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom);
 
    /***** Show the form again *****/
    Cla_EditClassrooms ();
@@ -1060,5 +1060,5 @@ static void Cla_CreateClassroom (struct Classroom *Cla)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_classroom_X,
              Cla->FullName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }

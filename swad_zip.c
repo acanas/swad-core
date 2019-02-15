@@ -454,9 +454,9 @@ static void ZIP_CompressFolderIntoZIP (void)
    UncompressedSize = ZIP_CloneDir (Path,PathCompression,Gbl.FileBrowser.Priv.FullPathInTree);
 
    if (UncompressedSize == 0)					// Nothing to compress
-      Ale_ShowAlert (Ale_WARNING,Txt_The_folder_is_empty);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_folder_is_empty);
    else if (UncompressedSize > ZIP_MAX_SIZE_UNCOMPRESSED)	// Uncompressed size is too big
-      Ale_ShowAlert (Ale_WARNING,Txt_The_contents_of_the_folder_are_too_big);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_contents_of_the_folder_are_too_big);
    else
      {
       /***** Change to directory of the clone folder

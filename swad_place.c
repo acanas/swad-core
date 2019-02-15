@@ -601,7 +601,7 @@ void Plc_RemovePlace (void)
 
    /***** Check if this place has centres *****/
    if (Plc.NumCtrs)	// Place has centres ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
+      Ale_ShowA_old (Ale_WARNING,Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
@@ -613,7 +613,7 @@ void Plc_RemovePlace (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Place_X_removed,
                 Plc.FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -689,7 +689,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_place_X_empty,
                 CurrentPlcName);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -703,7 +703,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_place_X_already_exists,
                       NewPlcName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -714,7 +714,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_place_X_has_been_renamed_as_Y,
                       CurrentPlcName,NewPlcName);
-            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
@@ -722,7 +722,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_place_X_has_not_changed,
                    CurrentPlcName);
-         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -880,20 +880,20 @@ void Plc_RecFormNewPlace (void)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_place_X_already_exists,
                    Plc->ShrtName);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Plc_CheckIfPlaceNameExists ("FullName",Plc->FullName,-1L))
         {
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_place_X_already_exists,
                    Plc->FullName);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
       else	// Add new place to database
          Plc_CreatePlace (Plc);
      }
    else	// If there is not a place name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
 
    /***** Show the form again *****/
    Plc_EditPlaces ();
@@ -919,5 +919,5 @@ static void Plc_CreatePlace (struct Place *Plc)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_place_X,
              Plc->FullName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }

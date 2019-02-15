@@ -201,10 +201,10 @@ void Pwd_UpdateOtherUsrPwd (void)
          /***** Check and update password *****/
 	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -291,7 +291,7 @@ void Pwd_ShowFormSendNewPwd (void)
                  Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
    /***** Help text *****/
-   Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
+   Ale_ShowA_old (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -327,7 +327,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    /***** Check if user's ID or nickname is not empty *****/
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_your_nick_email_or_ID);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_enter_your_nick_email_or_ID);
       Pwd_ShowFormSendNewPwd ();
       return;
      }
@@ -392,7 +392,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	   {
 	    case 0: // Message sent successfully
 	       Pwd_SetMyPendingPassword (NewRandomPlainPassword);
-	       Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+	       Ale_ShowA_old (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
 	       break;
 	    case 1:
 	       Lay_ShowErrorAndExit (Txt_There_was_a_problem_sending_an_email_automatically);
@@ -411,7 +411,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    Usr_FreeListUsrCods (&ListUsrCods);
 
    /***** Help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+   Ale_ShowA_old (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
 
    /**** Show forms to login / create account again *****/
    Usr_WriteLandingPage ();
@@ -692,16 +692,16 @@ void Pwd_ShowFormChgMyPwd (void)
 
    /***** Show possible alert *****/
    if (Gbl.Alert.Section == Pwd_PASSWORD_SECTION_ID)
-      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Help message *****/
    if (!IHaveAPasswordInDB) // If I don't have a password in database...
-      Ale_ShowAlert (Ale_WARNING,
+      Ale_ShowA_old (Ale_WARNING,
 		     Txt_Before_going_to_any_other_option_you_must_create_your_password);
    else if (Gbl.Usrs.Me.LoginPlainPassword[0])
      {
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
-	 Ale_ShowAlert (Ale_WARNING,
+	 Ale_ShowA_old (Ale_WARNING,
 			Txt_Your_password_is_not_secure_enough);
      }
 
@@ -731,7 +731,7 @@ void Pwd_ShowFormChgMyPwd (void)
    if (asprintf (&Txt,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
 	         Pwd_MIN_CHARS_PLAIN_PASSWORD) < 0)
       Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_INFO,Txt);
+   Ale_ShowA_old (Ale_INFO,Txt);
    free ((void *) Txt);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -861,7 +861,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
    /***** Show possible alert *****/
    if (Gbl.Alert.Section == (const char *) Pwd_PASSWORD_SECTION_ID)
-      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Form to change password *****/
    /* Start form */
@@ -942,7 +942,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    /***** Get if consent has been done *****/
    if (!Par_GetParToBool ("Consent"))
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_confirmed_the_action);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_have_not_confirmed_the_action);
       return false;
      }
 
@@ -956,7 +956,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    /* Compare passwords */
    if (strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,EncryptedPassword))
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_entered_your_password_correctly);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_have_not_entered_your_password_correctly);
       return false;
      }
 

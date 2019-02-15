@@ -1125,7 +1125,7 @@ static void Soc_ShowWarningYouDontFollowAnyUser (void)
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /***** Show warning if I do not follow anyone *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_You_dont_follow_any_user);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_dont_follow_any_user);
 
       /***** Put link to show users to follow *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -1331,7 +1331,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    if (SocNot->NotCod   <= 0 ||
        SocNot->NoteType == Soc_NOTE_UNKNOWN ||
        SocNot->UsrCod   <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in social note.");
+      Ale_ShowA_old (Ale_ERROR,"Error in social note.");
    else
      {
       /***** Initialize location in hierarchy *****/
@@ -2571,7 +2571,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    if (SocCom->PubCod <= 0 ||
        SocCom->NotCod <= 0 ||
        SocCom->UsrCod <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in social comment.");
+      Ale_ShowA_old (Ale_ERROR,"Error in social comment.");
    else
      {
       /***** Get author's data *****/
@@ -3004,7 +3004,7 @@ static long Soc_ReceiveComment (void)
       Img_ImageDestructor (&Image);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
   }
@@ -3083,7 +3083,7 @@ static long Soc_ShareSocialNote (void)
 	   }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
   }
@@ -3169,7 +3169,7 @@ static long Soc_FavSocialNote (void)
 	   }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
   }
@@ -3255,7 +3255,7 @@ static long Soc_FavSocialComment (void)
 	   }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
    Img_ImageDestructor (&SocCom.Image);
@@ -3381,7 +3381,7 @@ static long Soc_UnshareSocialNote (void)
 	   }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
   }
@@ -3465,7 +3465,7 @@ static long Soc_UnfavSocialNote (void)
 	   }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
   }
@@ -3549,7 +3549,7 @@ static long Soc_UnfavSocialComment (void)
 	   }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
    Img_ImageDestructor (&SocCom.Image);
@@ -3630,7 +3630,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	}
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
   }
 
 /*****************************************************************************/
@@ -3704,11 +3704,11 @@ static void Soc_RemoveSocialNote (void)
 	 Soc_RemoveASocialNoteFromDB (&SocNot);
 
 	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Post_removed);
+	 Ale_ShowA_old (Ale_SUCCESS,Txt_Post_removed);
 	}
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_original_post_no_longer_exists);
   }
 
 /*****************************************************************************/
@@ -3964,7 +3964,7 @@ static void Soc_RequestRemovalSocialComment (void)
 	}
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
    Img_ImageDestructor (&SocCom.Image);
@@ -4043,11 +4043,11 @@ static void Soc_RemoveSocialComment (void)
 	 Soc_RemoveASocialCommentFromDB (&SocCom);
 
 	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
+	 Ale_ShowA_old (Ale_SUCCESS,Txt_Comment_removed);
 	}
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
+      Ale_ShowA_old (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
    Img_ImageDestructor (&SocCom.Image);

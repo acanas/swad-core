@@ -277,7 +277,7 @@ static void Gam_ListAllGames (void)
       Tbl_EndTable ();
      }
    else	// No games created
-      Ale_ShowAlert (Ale_INFO,Txt_No_games);
+      Ale_ShowA_old (Ale_INFO,Txt_No_games);
 
    /***** Button to create a new game *****/
    if (Gam_CheckIfICanCreateGame ())
@@ -1552,7 +1552,7 @@ void Gam_RemoveGame (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_removed,
              Game.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -1585,7 +1585,7 @@ void Gam_AskResetGame (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Do_you_really_want_to_reset_the_game_X,
              Game.Title);
-   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
 
    /***** Button of confirmation of reset *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
@@ -1644,7 +1644,7 @@ void Gam_ResetGame (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_reset,
              Game.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -1677,7 +1677,7 @@ void Gam_HideGame (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_is_now_hidden,
              Game.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -1710,7 +1710,7 @@ void Gam_UnhideGame (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Game_X_is_now_visible,
              Game.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -2153,13 +2153,13 @@ void Gam_RecFormGame (void)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Already_existed_a_game_with_the_title_X,
                    NewGame.Title);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
      }
    else	// If there is not a game title
      {
       NewGameIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
      }
 
    /***** Create a new game or update an existing one *****/
@@ -2217,7 +2217,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_game_X,
              Game->Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -2254,7 +2254,7 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
+   Ale_ShowA_old (Ale_SUCCESS,Txt_The_game_has_been_modified);
   }
 
 /*****************************************************************************/
@@ -2792,7 +2792,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 	}
      }
    else	// This game has no questions
-      Ale_ShowAlert (Ale_INFO,Txt_This_game_has_no_questions);
+      Ale_ShowA_old (Ale_INFO,Txt_This_game_has_no_questions);
 
    if (Game->Status.ICanEdit &&	// I can edit
        (!NumQsts ||		// This game has no questions
@@ -3034,7 +3034,7 @@ void Gam_AddTstQuestionsToGame (void)
    /* Check number of questions */
    if (Gam_CountNumQuestionsInList () == 0)	// If no questions selected...
      {						// ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
 
       // TODO: Show form again!!!
      }
@@ -3307,7 +3307,7 @@ void Gam_RemoveQst (void)
                    Game.GamCod,QstInd);
 
    /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
+   Ale_ShowA_old (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -3353,7 +3353,7 @@ void Gam_MoveUpQst (void)
 			     (unsigned) QstIndTop,(unsigned) QstIndBottom);
 
       /* Success alert */
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
+      Ale_ShowA_old (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
      }
 
    /***** Show current game *****/
@@ -3405,7 +3405,7 @@ void Gam_MoveDownQst (void)
 	                        (unsigned) QstIndTop,(unsigned) QstIndBottom);
 
          /* Success alert */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
+	 Ale_ShowA_old (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
 	}
 
    /***** Show current game *****/
@@ -3576,7 +3576,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 			" AND gam_questions.QstInd=%u"
 			" AND gam_questions.QstCod=tst_questions.QstCod",
 			Game.GamCod,QstInd))
-      Ale_ShowAlert (Ale_WARNING,"Questions doesn't exist.");
+      Ale_ShowA_old (Ale_WARNING,"Questions doesn't exist.");
    row = mysql_fetch_row (mysql_res);
 
    /***** Show question *****/
@@ -3687,12 +3687,12 @@ void Gam_ReceiveGameAnswers (void)
 
    /***** Check if I have no answered this game formerly *****/
    if (Game.Status.IHaveAnswered)
-      Ale_ShowAlert (Ale_WARNING,Txt_You_already_played_this_game_before);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_already_played_this_game_before);
    else
      {
       /***** Receive and store user's answers *****/
       Gam_ReceiveAndStoreUserAnswersToAGame (Game.GamCod);
-      Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_playing_the_game);
+      Ale_ShowA_old (Ale_INFO,Txt_Thanks_for_playing_the_game);
      }
 
    /***** Show current game *****/

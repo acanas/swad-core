@@ -627,7 +627,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else
-      Ale_ShowAlert (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
+      Ale_ShowA_old (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
 	                                         Txt_You_have_no_unread_notifications);
 
    /***** End box *****/
@@ -2040,7 +2040,7 @@ void Ntf_ChangeNotifyEvents (void)
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_preferences_about_notifications_have_changed);
+   Ale_ShowA_old (Ale_SUCCESS,Txt_Your_preferences_about_notifications_have_changed);
   }
 
 /*****************************************************************************/

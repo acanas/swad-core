@@ -167,7 +167,7 @@ static void Asg_ShowAllAssignments (void)
       Tbl_EndTable ();
      }
    else	// No assignments created
-      Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_assignments);
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())
@@ -965,7 +965,6 @@ void Asg_RemoveAssignment (void)
   {
    extern const char *Txt_Assignment_X_removed;
    struct Assignment Asg;
-   char *Txt;
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -990,11 +989,8 @@ void Asg_RemoveAssignment (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Assignment_X_removed,
-                 Asg.Title) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Assignment_X_removed,
+                  Asg.Title);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1008,7 +1004,6 @@ void Asg_HideAssignment (void)
   {
    extern const char *Txt_Assignment_X_is_now_hidden;
    struct Assignment Asg;
-   char *Txt;
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -1024,11 +1019,8 @@ void Asg_HideAssignment (void)
                    Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Assignment_X_is_now_hidden,
-                 Asg.Title) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Assignment_X_is_now_hidden,
+                  Asg.Title);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1042,7 +1034,6 @@ void Asg_ShowAssignment (void)
   {
    extern const char *Txt_Assignment_X_is_now_visible;
    struct Assignment Asg;
-   char *Txt;
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -1058,11 +1049,8 @@ void Asg_ShowAssignment (void)
                    Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Assignment_X_is_now_visible,
-                 Asg.Title) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Assignment_X_is_now_visible,
+                  Asg.Title);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1302,7 +1290,6 @@ void Asg_RecFormAssignment (void)
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Description[Cns_MAX_BYTES_TEXT + 1];
-   char *Txt;
 
    /***** Get the code of the assignment *****/
    NewAsg.AsgCod = Asg_GetParamAsgCod ();
@@ -1350,11 +1337,8 @@ void Asg_RecFormAssignment (void)
         {
          NewAssignmentIsCorrect = false;
 
-	 if (asprintf (&Txt,Txt_Already_existed_an_assignment_with_the_title_X,
-                       NewAsg.Title) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Ale_ShowAlert (Ale_WARNING,Txt);
-	 free ((void *) Txt);
+	 Ale_ShowA_fmt (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_title_X,
+                        NewAsg.Title);
         }
       else	// Title is correct
         {
@@ -1365,16 +1349,15 @@ void Asg_RecFormAssignment (void)
                if (Asg_CheckIfSimilarAssignmentExists ("Folder",NewAsg.Folder,NewAsg.AsgCod))	// If folder of assignment was in database...
                  {
                   NewAssignmentIsCorrect = false;
-                  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    Txt_Already_existed_an_assignment_with_the_folder_X,
-                            NewAsg.Folder);
-                  Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+
+		  Ale_ShowA_fmt (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_folder_X,
+                                 NewAsg.Folder);
                  }
               }
             else	// Folder name not valid
               {
                NewAssignmentIsCorrect = false;
-               Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+               Ale_ShowA_new (Ale_WARNING,Gbl.AlertToShowLater.Txt);
               }
            }
          else	// NewAsg.SendWork == Asg_DO_NOT_SEND_WORK
@@ -1384,7 +1367,7 @@ void Asg_RecFormAssignment (void)
                if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
                  {
                   NewAssignmentIsCorrect = false;
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
+                  Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
                  }
               }
            }
@@ -1393,7 +1376,7 @@ void Asg_RecFormAssignment (void)
    else	// If there is not an assignment title
      {
       NewAssignmentIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
      }
 
    /***** Create a new assignment or update an existing one *****/
@@ -1407,10 +1390,8 @@ void Asg_RecFormAssignment (void)
          Asg_CreateAssignment (&NewAsg,Description);	// Add new assignment to database
 
 	 /***** Write success message *****/
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Created_new_assignment_X,
-		   NewAsg.Title);
-	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_assignment_X,
+		        NewAsg.Title);
 	}
       else
         {
@@ -1422,7 +1403,7 @@ void Asg_RecFormAssignment (void)
             Asg_UpdateAssignment (&NewAsg,Description);
 
 	    /***** Write success message *****/
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
+	    Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
            }
         }
 

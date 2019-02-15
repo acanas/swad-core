@@ -127,7 +127,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	        Txt_You_are_not_enroled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
 	        Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them,
 	        Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
-      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
      }
 
    /***** Start box and table *****/

@@ -953,7 +953,7 @@ void Str_SetDecimalPointToUS (void)
   {
    if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get/print the floating point as a dot
       if (Gbl.Layout.HTMLStartWritten)
-         Ale_ShowAlert (Ale_ERROR,"Can not set locale to en_US.");
+         Ale_ShowA_old (Ale_ERROR,"Can not set locale to en_US.");
   }
 
 /*****************************************************************************/
@@ -965,7 +965,7 @@ void Str_SetDecimalPointToLocal (void)
    // TODO: this should be internationalized!!!!!!!
    if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to local system
       if (Gbl.Layout.HTMLStartWritten)
-         Ale_ShowAlert (Ale_ERROR,"Can not set locale to es_ES.");
+         Ale_ShowA_old (Ale_ERROR,"Can not set locale to es_ES.");
   }
 
 /*****************************************************************************/
@@ -2706,7 +2706,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 /****** Convert invalid characters in a file name to valid characters ********/
 /*****************************************************************************/
 // Return true if the name of the file o folder is valid
-// If the name is not valid, Gbl.Alert.Txt will contain feedback text
+// If the name is not valid, Gbl.AlertToShowLater.Txt will contain feedback text
 // File names with heading and trailing spaces are allowed
 
 bool Str_ConvertFilFolLnkNameToValid (char *FileName)
@@ -2797,13 +2797,13 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         snprintf (Gbl.AlertToShowLater.Txt,sizeof (Gbl.AlertToShowLater.Txt),
                    Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
                 	                                   Txt_UPLOAD_FILE_X_invalid_name,
 		   FileName);
      }
    else	// FileName is empty
-      Str_Copy (Gbl.Alert.Txt,
+      Str_Copy (Gbl.AlertToShowLater.Txt,
 	        Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
 						        Txt_UPLOAD_FILE_Invalid_name,
 		Ale_MAX_BYTES_ALERT);

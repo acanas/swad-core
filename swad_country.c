@@ -197,7 +197,7 @@ void Cty_SeeCtyWithPendingInss (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
+      Ale_ShowA_old (Ale_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1740,7 +1740,7 @@ void Cty_RemoveCountry (void)
    if (Cty.NumInss ||
        Cty.NumUsrsWhoClaimToBelongToCty ||
        Cty.NumUsrs)	// Country has institutions or users ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
@@ -1758,7 +1758,7 @@ void Cty_RemoveCountry (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Country_X_removed,
 	        Cty.Name[Gbl.Prefs.Language]);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1801,7 +1801,7 @@ void Cty_RenameCountry (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_country_X_empty,
 	        Cty->Name[Language]);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -1815,7 +1815,7 @@ void Cty_RenameCountry (void)
 	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_country_X_already_exists,
 		      NewCtyName);
-	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	    Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
 	   }
 	 else
 	   {
@@ -1829,7 +1829,7 @@ void Cty_RenameCountry (void)
 	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_country_X_has_been_renamed_as_Y,
 		      Cty->Name[Language],NewCtyName);
-	    Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	    Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
 	    /* Update country name */
 	    Str_Copy (Cty->Name[Language],NewCtyName,
@@ -1841,7 +1841,7 @@ void Cty_RenameCountry (void)
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_country_X_has_not_changed,
 		   Cty->Name[Language]);
-	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+	 Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
 	}
      }
 
@@ -1946,7 +1946,7 @@ void Cty_ChangeCtyWWW (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_The_new_web_address_is_X,
 	     NewWWW);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Cty_EditCountries ();
@@ -2149,7 +2149,7 @@ void Cty_RecFormNewCountry (void)
    /* Get numeric country code */
    if ((Cty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_numerical_code_of_the_new_country);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_numerical_code_of_the_new_country);
       CreateCountry = false;
      }
    else if (Cty_CheckIfNumericCountryCodeExists (Cty->CtyCod))
@@ -2157,7 +2157,7 @@ void Cty_RecFormNewCountry (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	       Txt_The_numerical_code_X_already_exists,
                Cty->CtyCod);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
       CreateCountry = false;
      }
    else	// Numeric code correct
@@ -2174,7 +2174,7 @@ void Cty_RecFormNewCountry (void)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_alphabetical_code_X_is_not_correct,
                       Cty->Alpha2);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
             CreateCountry = false;
            }
       if (CreateCountry)
@@ -2184,7 +2184,7 @@ void Cty_RecFormNewCountry (void)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_alphabetical_code_X_already_exists,
                       Cty->Alpha2);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
             CreateCountry = false;
            }
          else	// Alphabetic code correct
@@ -2207,14 +2207,14 @@ void Cty_RecFormNewCountry (void)
                      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                       Txt_The_country_X_already_exists,
                                Cty->Name[Lan]);
-                     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+                     Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
                      CreateCountry = false;
                      break;
                     }
                  }
                else	// If there is not a country name
                  {
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
+                  Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
                   CreateCountry = false;
                   break;
                  }
@@ -2300,7 +2300,7 @@ static void Cty_CreateCountry (struct Country *Cty)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_country_X,
              Cty->Name);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

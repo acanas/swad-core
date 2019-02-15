@@ -104,7 +104,7 @@ void Lnk_SeeLinks (void)
    if (Gbl.Links.Num)	// There are links
       Lnk_WriteListOfLinks ();
    else			// No links created
-      Ale_ShowAlert (Ale_INFO,Txt_No_links);
+      Ale_ShowA_old (Ale_INFO,Txt_No_links);
 
    /***** Button to create link *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -510,7 +510,7 @@ void Lnk_RemoveLink (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Link_X_removed,
              Lnk.ShrtName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Lnk_EditLinks ();
@@ -585,7 +585,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_link_X_empty,
                 CurrentLnkName);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -599,7 +599,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_link_X_already_exists,
                       NewLnkName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -610,7 +610,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_link_X_has_been_renamed_as_Y,
                       CurrentLnkName,NewLnkName);
-            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
@@ -618,7 +618,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_name_of_the_link_X_has_not_changed,
                    CurrentLnkName);
-         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -687,10 +687,10 @@ void Lnk_ChangeLinkWWW (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_web_address_is_X,
                 NewWWW);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+     Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Str_Copy (Lnk->WWW,NewWWW,
@@ -824,22 +824,22 @@ void Lnk_RecFormNewLink (void)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_link_X_already_exists,
                    Lnk->ShrtName);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk->FullName,-1L))
         {
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_link_X_already_exists,
                    Lnk->FullName);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (!Lnk->WWW[0])
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_link);
+         Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_link);
       else	// Add new link to database
          Lnk_CreateLink (Lnk);
      }
    else	// If there is not a link name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
 
    /***** Show the form again *****/
    Lnk_EditLinks ();
@@ -865,5 +865,5 @@ static void Lnk_CreateLink (struct Link *Lnk)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_link_X,
              Lnk->ShrtName);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }

@@ -268,7 +268,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
+         Ale_ShowA_old (Ale_WARNING,Txt_You_must_send_your_photo_because_);
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
         {
          snprintf (Message,sizeof (Message),
@@ -2527,7 +2527,7 @@ void Usr_WelcomeUsr (void)
 	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                 Txt_NEW_YEAR_GREETING,
 			 Gbl.Now.Date.Year);
-	       Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+	       Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
 	      }
 
             /***** Birthday congratulation *****/
@@ -2589,7 +2589,7 @@ void Usr_WelcomeUsr (void)
       else
 	 /* The current language is not my preferred language
 	    ==> change automatically to my language */
-         Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+         Ale_ShowA_old (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
      }
   }
 
@@ -2819,7 +2819,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_ID_nickname_or_email_X_is_not_valid,
 	        Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
      }
 
    return ListUsrCods->NumUsrs;
@@ -2922,7 +2922,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	{
 	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_session_has_expired);
+	 Ale_ShowA_old (Ale_WARNING,Txt_The_session_has_expired);
 	 FormLogin.PutForm = true;
 	}
      }
@@ -3237,7 +3237,7 @@ static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void)
 
    // Gbl.Action.Act = ActFrmLogIn;
    // Tab_SetCurrentTab ();
-   Ale_ShowAlert (Ale_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+   Ale_ShowA_old (Ale_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
   }
 
 /*****************************************************************************/
@@ -3253,7 +3253,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 	     Gbl.Usrs.Me.UsrIdLogin);
-   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -3352,7 +3352,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	        Txt_You_are_now_LOGGED_IN_as_X,
 	        Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
 	        Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Start box *****/
@@ -5263,7 +5263,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Sco_Scope_t Sc
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_The_list_of_X_users_is_too_large_to_be_displayed,
 		   Gbl.Usrs.LstUsrs[Role].NumUsrs);
-	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
          Abort = true;
         }
       else
@@ -5662,7 +5662,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                       Txt_There_is_no_user_with_nickname_X,
 			       UsrIDNickOrEmail);
-		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+		     Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -5682,7 +5682,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                       Txt_There_is_no_user_with_email_X,
 			       UsrIDNickOrEmail);
-		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+		     Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -5711,7 +5711,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 			   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                             Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 				     UsrIDNickOrEmail);
-			   Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
+			   Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
 			  }
 			Error = true;
 		       }
@@ -5723,7 +5723,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 			snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                          Txt_There_is_no_user_with_ID_nick_or_email_X,
 				  UsrIDNickOrEmail);
-			Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
+			Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
 		       }
 		     Error = true;
 		    }
@@ -5735,7 +5735,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	                       Txt_The_ID_nickname_or_email_X_is_not_valid,
 			       UsrIDNickOrEmail);
-		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+		     Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -8539,7 +8539,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
                               Btn_CREATE_BUTTON,Txt_Register_teacher);
    else
       /***** Show alert *****/
-      Ale_ShowAlert (Ale_INFO,Txt_No_users_found[Role]);
+      Ale_ShowA_old (Ale_INFO,Txt_No_users_found[Role]);
   }
 
 /*****************************************************************************/
@@ -9135,7 +9135,7 @@ void Usr_PrintUsrQRCode (void)
       Box_EndBox ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

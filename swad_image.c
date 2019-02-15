@@ -545,7 +545,7 @@ void Img_MoveImageToDefinitiveDirectory (struct Image *Image)
 
    /***** Move file *****/
    if (rename (FileNameImgTmp,FileNameImg))	// Fail
-      Ale_ShowAlert (Ale_ERROR,"Can not move file.");
+      Ale_ShowA_old (Ale_ERROR,"Can not move file.");
    else						// Success
       Image->Status = Img_FILE_MOVED;
   }
@@ -628,7 +628,7 @@ void Img_ShowImage (struct Image *Image,
       fprintf (Gbl.F.Out,"</div>");
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_Image_not_found);
+      Ale_ShowA_old (Ale_WARNING,Txt_Image_not_found);
   }
 
 /*****************************************************************************/

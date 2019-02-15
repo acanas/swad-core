@@ -380,6 +380,9 @@ SHOW TABLE STATUS WHERE Name = 'debug';
 ALTER TABLE debug ENGINE=MyISAM;
 OPTIMIZE TABLE debug;
 */
+
+// TODO: Revisar todos los Ale_ShowAlertAndButton
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -399,10 +402,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.46 (2019-02-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.46.1 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.46.1:  Feb 15, 2019 	Refactoring code related to alerts. (238355 lines)
 	Version 18.46:    Feb 15, 2019 	Removed unused code related to tabs.
 					Fixed bug in actions related to login.
 					Refactoring code related to alerts. (238468 lines)

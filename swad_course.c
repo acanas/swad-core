@@ -1164,7 +1164,7 @@ static void Crs_ListCourses (void)
       Tbl_EndTable ();
      }
    else	// No courses created in the current degree
-      Ale_ShowAlert (Ale_INFO,Txt_No_courses);
+      Ale_ShowA_old (Ale_INFO,Txt_No_courses);
 
    /***** Button to create course *****/
    if (Crs_CheckIfICanCreateCourses ())
@@ -1998,7 +1998,7 @@ void Crs_RemoveCourse (void)
      {
       /***** Check if this course has users *****/
       if (Crs.NumUsrs[Rol_UNK])	// Course has users ==> don't remove
-         Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
+         Ale_ShowA_old (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
       else			// Course has no users ==> remove it
         {
          /***** Remove course *****/
@@ -2008,11 +2008,11 @@ void Crs_RemoveCourse (void)
          snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	           Txt_Course_X_removed,
                    Crs.FullName);
-         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+         Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
         }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
 
    /***** Show the form again *****/
    Crs_EditCourses ();
@@ -3475,7 +3475,7 @@ void Crs_RemoveOldCrss (void)
                 NumCrss,
                 MonthsWithoutAccess,
                 Cfg_PLATFORM_SHORT_NAME);
-      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
 
       /***** Remove courses *****/
       for (NumCrs = 0;
@@ -3496,5 +3496,5 @@ void Crs_RemoveOldCrss (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_X_courses_have_been_eliminated,
              NumCrssRemoved);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }

@@ -547,7 +547,7 @@ void TT_ShowTimeTable (long UsrCod)
    if (Gbl.TimeTable.Config.HoursPerDay)
       TT_DrawTimeTable ();
    else
-      Ale_ShowAlert (Ale_INFO,Txt_The_timetable_is_empty);
+      Ale_ShowA_old (Ale_INFO,Txt_The_timetable_is_empty);
 
    /***** Free internal timetable in memory *****/
    TT_FreeTimeTable ();
@@ -1001,7 +1001,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
    DB_FreeMySQLResult (&mysql_res);
 
    if (TimeTableIsIncomplete)
-      Ale_ShowAlert (Ale_INFO,Txt_Incomplete_timetable_for_lack_of_space);
+      Ale_ShowA_old (Ale_INFO,Txt_Incomplete_timetable_for_lack_of_space);
   }
 
 /*****************************************************************************/

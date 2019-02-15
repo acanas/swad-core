@@ -86,12 +86,12 @@ void Cht_ShowChatRooms (void)
 	     Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_,
              Cfg_JAVA_URL,Cfg_JAVA_NAME,
              Cfg_PLATFORM_SERVER);
-   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+   Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
 
    /***** List available chat rooms *****/
    Cht_ShowListOfAvailableChatRooms ();
 
-   Ale_ShowAlert (Ale_WARNING,Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_);
+   Ale_ShowA_old (Ale_WARNING,Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_);
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Cht_ShowListOfChatRoomsWithUsrs ();

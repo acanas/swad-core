@@ -276,7 +276,7 @@ static void Att_ShowAllAttEvents (void)
       Tbl_EndTable ();
      }
    else	// No events created
-      Ale_ShowAlert (Ale_INFO,Txt_No_events);
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_events);
 
    /***** Button to create a new attendance event *****/
    if (ICanEdit)
@@ -896,11 +896,10 @@ void Att_AskRemAttEvent (void)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
-   /***** Ask for confirmation of removing *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_event_X,
-             Att.Title);
-   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+   /* Ask for confirmation of removing */
+   Ale_ShowA_fmt (Ale_WARNING,Txt_Do_you_really_want_to_remove_the_event_X,
+                  Att.Title);
+
    Btn_PutRemoveButton (Txt_Remove_event);
    Frm_EndForm ();
 
@@ -929,10 +928,8 @@ void Att_GetAndRemAttEvent (void)
    Att_RemoveAttEventFromDB (Att.AttCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_removed,
-	     Att.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_removed,
+	          Att.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -977,10 +974,8 @@ void Att_HideAttEvent (void)
                    Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_is_now_hidden,
-             Att.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_is_now_hidden,
+                  Att.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1009,10 +1004,8 @@ void Att_ShowAttEvent (void)
                    Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_is_now_visible,
-             Att.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_is_now_visible,
+                  Att.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1296,16 +1289,15 @@ void Att_RecFormAttEvent (void)
       if (Att_CheckIfSimilarAttEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
         {
          ReceivedAttEventIsCorrect = false;
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Already_existed_an_event_with_the_title_X,
-                   ReceivedAtt.Title);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+
+	 Ale_ShowA_fmt (Ale_WARNING,Txt_Already_existed_an_event_with_the_title_X,
+                        ReceivedAtt.Title);
         }
      }
    else	// If there is not an attendance event title
      {
       ReceivedAttEventIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Create a new attendance event or update an existing one *****/
@@ -1320,17 +1312,15 @@ void Att_RecFormAttEvent (void)
          Att_CreateAttEvent (&ReceivedAtt,Description);	// Add new attendance event to database
 
          /***** Write success message *****/
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Created_new_event_X,
-		   ReceivedAtt.Title);
-	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_event_X,
+		        ReceivedAtt.Title);
 	}
       else
 	{
          Att_UpdateAttEvent (&ReceivedAtt,Description);
 
 	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_event_has_been_modified);
 	}
 
       /* Free memory for list of selected groups */
@@ -2292,7 +2282,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
 	 Att_RemoveUsrFromAttEvent (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Write final message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Your_comment_has_been_updated);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Your_comment_has_been_updated);
      }
 
    /***** Show the attendance event again *****/
@@ -2417,12 +2407,10 @@ void Att_RegisterStudentsInAttEvent (void)
       Usr_FreeUsrsList (Rol_STD);
 
       /***** Write final message *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        "%s: %u<br />"
-	        "%s: %u",
-	        Txt_Presents,NumStdsPresent,
-		Txt_Absents ,NumStdsAbsent );
-      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_INFO,"%s: %u<br />"
+		              "%s: %u",
+		     Txt_Presents,NumStdsPresent,
+		     Txt_Absents ,NumStdsAbsent );
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -2928,7 +2916,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
      }
    else	// No students selected
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
       Usr_ReqListStdsAttendanceCrs ();		// ...show again the form
      }
 

@@ -176,7 +176,7 @@ void Hld_SeeHolidays (void)
 	 Tbl_EndTable ();
 	}
       else	// No holidays created in the current institution
-	 Ale_ShowAlert (Ale_INFO,Txt_No_holidays);
+	 Ale_ShowA_old (Ale_INFO,Txt_No_holidays);
 
       /***** Button to create centre *****/
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin

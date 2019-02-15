@@ -331,7 +331,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
      }
 
    /***** Show help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
+   Ale_ShowA_old (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
    /***** Form to upload photo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -375,10 +375,10 @@ void Pho_SendPhotoUsr (void)
 	    Pho_ReqOtherUsrPhoto ();
 	}
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -417,7 +417,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
       Rec_ShowPublicSharedRecordOtherUsr ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -446,7 +446,7 @@ void Pho_ReqRemoveMyPhoto (void)
                                Btn_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+      Ale_ShowA_old (Ale_INFO,Txt_The_photo_no_longer_exists);
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -529,13 +529,13 @@ void Pho_ReqRemoveUsrPhoto (void)
 				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
-	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+	    Ale_ShowA_old (Ale_INFO,Txt_The_photo_no_longer_exists);
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -560,7 +560,7 @@ void Pho_RemoveUsrPhoto (void)
          Ale_ShowPendingAlert ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -652,7 +652,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_file_is_not_X,
 		"jpg");
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
       return false;
      }
 
@@ -663,7 +663,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
              Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
    if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
      {
-      Ale_ShowAlert (Ale_WARNING,"Error copying file.");
+      Ale_ShowA_old (Ale_WARNING,"Error copying file.");
       return false;
      }
 
@@ -881,7 +881,7 @@ void Pho_UpdateUsrPhoto1 (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Pho_UpdatePhoto1 (&Gbl.Usrs.Other.UsrDat);
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 void Pho_UpdateUsrPhoto2 (void)

@@ -1269,7 +1269,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
 
       /***** Write possible error message *****/
       if (Txt)
-         Ale_ShowAlert (Ale_ERROR,Txt);
+         Ale_ShowA_old (Ale_ERROR,Txt);
 
       /***** Finish the page, except </body> and </html> *****/
       Lay_WriteEndOfPage ();

@@ -371,7 +371,7 @@ void Agd_ShowUsrAgenda (void)
 	}
 
    if (Error)
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -415,12 +415,12 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Box_EndBox ();
            }
 	 else
-	    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	    Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
        }
       else
 	 /* The current language is not my preferred language
 	    ==> change automatically to my language */
-         Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+         Ale_ShowA_fmt (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
      }
   }
 
@@ -480,7 +480,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       Tbl_EndTable ();
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_No_events);
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_events);
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1296,7 +1296,6 @@ void Agd_RemoveEvent (void)
   {
    extern const char *Txt_Event_X_removed;
    struct AgendaEvent AgdEvent;
-   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1312,11 +1311,8 @@ void Agd_RemoveEvent (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Event_X_removed,
-	         AgdEvent.Event) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_removed,
+	          AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1330,7 +1326,6 @@ void Agd_HideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
    struct AgendaEvent AgdEvent;
-   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1347,11 +1342,8 @@ void Agd_HideEvent (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Event_X_is_now_hidden,
-	         AgdEvent.Event) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_is_now_hidden,
+	          AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1365,7 +1357,6 @@ void Agd_UnhideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
    struct AgendaEvent AgdEvent;
-   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1382,11 +1373,8 @@ void Agd_UnhideEvent (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Event_X_is_now_visible,
-                 AgdEvent.Event) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_is_now_visible,
+                  AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1400,7 +1388,6 @@ void Agd_MakeEventPrivate (void)
   {
    extern const char *Txt_Event_X_is_now_private;
    struct AgendaEvent AgdEvent;
-   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1417,11 +1404,8 @@ void Agd_MakeEventPrivate (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Event_X_is_now_private,
-	         AgdEvent.Event) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_is_now_private,
+	          AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1435,7 +1419,6 @@ void Agd_MakeEventPublic (void)
   {
    extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
    struct AgendaEvent AgdEvent;
-   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1452,11 +1435,8 @@ void Agd_MakeEventPublic (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   if (asprintf (&Txt,Txt_Event_X_is_now_visible_to_users_of_your_courses,
-                 AgdEvent.Event) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt);
-   free ((void *) Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Event_X_is_now_visible_to_users_of_your_courses,
+                  AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1606,7 +1586,6 @@ void Agd_RecFormEvent (void)
    bool ItsANewEvent;
    bool NewEventIsCorrect = true;
    char EventTxt[Cns_MAX_BYTES_TEXT + 1];
-   char *Txt;
 
    /***** Set author of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1637,14 +1616,14 @@ void Agd_RecFormEvent (void)
    if (!AgdEvent.Location[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Event[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Create a new event or update an existing one *****/
@@ -1655,18 +1634,15 @@ void Agd_RecFormEvent (void)
          Agd_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
 
 	 /***** Write success message *****/
-	 if (asprintf (&Txt,Txt_Created_new_event_X,
-		       AgdEvent.Event) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Ale_ShowAlert (Ale_SUCCESS,Txt);
-	 free ((void *) Txt);
+	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_event_X,
+		        AgdEvent.Event);
 	}
       else
         {
 	 Agd_UpdateEvent (&AgdEvent,EventTxt);
 
 	 /***** Write success message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_event_has_been_modified);
         }
 
       /* Free memory for list of selected groups */

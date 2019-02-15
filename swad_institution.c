@@ -215,7 +215,7 @@ void Ins_SeeInsWithPendingCtrs (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
+      Ale_ShowA_old (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -708,7 +708,7 @@ static void Ins_ListInstitutions (void)
       Tbl_EndTable ();
      }
    else	// No insrtitutions created in the current country
-      Ale_ShowAlert (Ale_INFO,Txt_No_institutions);
+      Ale_ShowA_old (Ale_INFO,Txt_No_institutions);
 
    /***** Button to create institution *****/
    if (Ins_CheckIfICanCreateInstitutions ())
@@ -1731,7 +1731,7 @@ void Ins_RemoveInstitution (void)
    else if (Ins.NumCtrs ||
             Ins.NumUsrsWhoClaimToBelongToIns ||
             Ins.NumUsrs)	// Institution has centres or users ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+      Ale_ShowA_old (Ale_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
@@ -1764,7 +1764,7 @@ void Ins_RemoveInstitution (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_Institution_X_removed,
                 Ins.FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -2032,7 +2032,7 @@ void Ins_ChangeInsWWW (void)
       Ins_ShowAlertAndButtonToGoToIns ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
@@ -2060,10 +2060,10 @@ void Ins_ChangeInsWWWInConfig (void)
       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Ins_ShowConfiguration ();
@@ -2165,7 +2165,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
      }
    else
       /***** Alert *****/
-      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
   }
 
 static void Ins_PutParamGoToIns (void)
@@ -2403,23 +2403,23 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_institution_X_already_exists,
                       Gbl.Inss.EditingIns.ShrtName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
            }
          else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Inss.EditingIns.FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
            {
             snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	              Txt_The_institution_X_already_exists,
                       Gbl.Inss.EditingIns.FullName);
-            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new institution to database
             Ins_CreateInstitution (Status);
         }
       else	// If there is not a web
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
+         Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
      }
    else	// If there is not a institution name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution);
+      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution);
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
