@@ -2841,7 +2841,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 	" m&uuml;ssen Sie Ihr Benutzernamen erstellen.";
 #elif L==3	// en
 	"Before going to any other option"
-	" you must fill your nickname.";
+	" you must create your nickname.";
 #elif L==4	// es
 	"Antes de acceder a cualquier otra opci&oacute;n"
 	" debe crear su apodo.";
@@ -2885,11 +2885,41 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	"Prima di scegliere qualsiasi altra opzione"
 	" devi creare una password.";
 #elif L==8	// pl
-	"Przed p&oacute;jsciem do jakiejkolwiek"
-	" innej opcji nalezy utworzy&cacute; has&lstrok;o.";
+	"Przed p&oacute;jsciem do jakiejkolwiek innej opcji"
+	" nalezy utworzy&cacute; has&lstrok;o.";
 #elif L==9	// pt
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve criar sua senha.";
+#endif
+
+const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address =
+#if   L==1	// ca
+	"Abans d'accedir a qualsevol altra opci&oacute;"
+	" ha de omplir la seva adre&ccedil;a de correu.";
+#elif L==2	// de
+	"Bevor ich auf jede andere Option"
+	" m&uuml;ssen Sie Ihr E-Mail-Adresse ausf&uuml;llen.";
+#elif L==3	// en
+	"Before going to any other option"
+	" you must fill in your email address.";
+#elif L==4	// es
+	"Antes de acceder a cualquier otra opci&oacute;n"
+	" debe rellenar su direcci&oacute;n de correo.";
+#elif L==5	// fr
+	"Avant d'aller &agrave; une autre option"
+	" vous devez indiquer votre adresse email.";
+#elif L==6	// gn
+	"Antes de acceder a cualquier otra opci&oacute;n"
+	" debe rellenar su direcci&oacute;n de correo.";	// Okoteve traducción
+#elif L==7	// it
+	"Prima di scegliere qualsiasi altra opzione"
+	" devi inserire il tuo indirizzo email.";
+#elif L==8	// pl
+	"Przed p&oacute;jsciem do jakiejkolwiek innej opcji"
+	" wype&lstrok;ni&cacute; sw&oacute;j adres e-mail.";
+#elif L==9	// pt
+	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
+	"voc&ecirc; deve preencher seu endere&ccedil;o de email.";
 #endif
 
 const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -28673,27 +28703,6 @@ const char *Txt_Please_fill_in_your_department =
 	"Prosz&eogon;, wpisz swoje tym dzia&lstrok;u.";
 #elif L==9	// pt
 	"Por favor, preencha o seu departamento.";
-#endif
-
-const char *Txt_Please_fill_in_your_email_address =
-#if   L==1	// ca
-	"Si us plau, ompli la seva adre&ccedil;a de correu.";
-#elif L==2	// de
-	"Bitte geben Sie Ihre E-Mail-Adresse ein.";
-#elif L==3	// en
-	"Please fill in your email address.";
-#elif L==4	// es
-	"Por favor, rellene su direcci&oacute;n de correo.";
-#elif L==5	// fr
-	"S'il vous pla&iacute;t, indiquez votre adresse email.";
-#elif L==6	// gn
-	"Por favor, rellene su direcci&oacute;n de correo.";	// Okoteve traducción
-#elif L==7	// it
-	"Per favore, inserisci il tuo indirizzo email.";
-#elif L==8	// pl
-	"Prosz&eogon;, wpisz swoje w tym adresu email.";
-#elif L==9	// pt
-	"Por favor, preencha o seu endere&ccedil;o de email.";
 #endif
 
 const char *Txt_Please_fill_in_your_ID =

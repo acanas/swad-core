@@ -61,7 +61,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 55 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 165 + 168 + 15 + 72)
+#define Act_NUM_ACTIONS	(1 + 8 + 59 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 165 + 168 + 15 + 67)
 
 #define Act_MAX_ACTION_COD 1752
 
@@ -73,17 +73,16 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActAll			 0
 
 #define ActUnk			 1
-#define ActHom			 2
-#define ActMnu			 3
+#define ActMnu			 2
 
 // The following 5 actions use AJAX to refresh only a part of the page
-#define ActRefCon		 4
-#define ActRefLstClk		 5
-#define ActRefNewSocPubGbl	 6
-#define ActRefOldSocPubGbl	 7
-#define ActRefOldSocPubUsr	 8
+#define ActRefCon		 3
+#define ActRefLstClk		 4
+#define ActRefNewSocPubGbl	 5
+#define ActRefOldSocPubGbl	 6
+#define ActRefOldSocPubUsr	 7
 
-#define ActWebSvc		 9
+#define ActWebSvc		 8
 
 /*****************************************************************************/
 /********************************* Start tab *********************************/
@@ -97,63 +96,67 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeNtf		(ActWebSvc +   6)
 
 // Secondary actions
-#define ActReqSndNewPwd		(ActWebSvc +   7)
-#define ActSndNewPwd		(ActWebSvc +   8)
-#define ActLogOut		(ActWebSvc +   9)
+#define ActLogIn		(ActWebSvc +   7)
+#define ActLogInNew		(ActWebSvc +   8)
+#define ActLogInLan		(ActWebSvc +   9)
+#define ActAnnSee		(ActWebSvc +  10)
+#define ActReqSndNewPwd		(ActWebSvc +  11)
+#define ActSndNewPwd		(ActWebSvc +  12)
+#define ActLogOut		(ActWebSvc +  13)
 
-#define ActSch		(ActWebSvc +  10)
+#define ActSch			(ActWebSvc +  14)
 
-#define ActRcvSocPstGbl		(ActWebSvc +  11)
-#define ActRcvSocComGbl		(ActWebSvc +  12)
-#define ActShaSocNotGbl		(ActWebSvc +  13)
-#define ActUnsSocNotGbl		(ActWebSvc +  14)
-#define ActFavSocNotGbl		(ActWebSvc +  15)
-#define ActUnfSocNotGbl		(ActWebSvc +  16)
-#define ActFavSocComGbl		(ActWebSvc +  17)
-#define ActUnfSocComGbl		(ActWebSvc +  18)
-#define ActReqRemSocPubGbl	(ActWebSvc +  19)
-#define ActRemSocPubGbl		(ActWebSvc +  20)
-#define ActReqRemSocComGbl	(ActWebSvc +  21)
-#define ActRemSocComGbl		(ActWebSvc +  22)
+#define ActRcvSocPstGbl		(ActWebSvc +  15)
+#define ActRcvSocComGbl		(ActWebSvc +  16)
+#define ActShaSocNotGbl		(ActWebSvc +  17)
+#define ActUnsSocNotGbl		(ActWebSvc +  18)
+#define ActFavSocNotGbl		(ActWebSvc +  19)
+#define ActUnfSocNotGbl		(ActWebSvc +  20)
+#define ActFavSocComGbl		(ActWebSvc +  21)
+#define ActUnfSocComGbl		(ActWebSvc +  22)
+#define ActReqRemSocPubGbl	(ActWebSvc +  23)
+#define ActRemSocPubGbl		(ActWebSvc +  24)
+#define ActReqRemSocComGbl	(ActWebSvc +  25)
+#define ActRemSocComGbl		(ActWebSvc +  26)
 
-#define ActReqOthPubPrf		(ActWebSvc +  23)
+#define ActReqOthPubPrf		(ActWebSvc +  27)
 
-#define ActRcvSocPstUsr		(ActWebSvc +  24)
-#define ActRcvSocComUsr		(ActWebSvc +  25)
-#define ActShaSocNotUsr		(ActWebSvc +  26)
-#define ActUnsSocNotUsr		(ActWebSvc +  27)
-#define ActFavSocNotUsr		(ActWebSvc +  28)
-#define ActUnfSocNotUsr		(ActWebSvc +  29)
-#define ActFavSocComUsr		(ActWebSvc +  30)
-#define ActUnfSocComUsr		(ActWebSvc +  31)
-#define ActReqRemSocPubUsr	(ActWebSvc +  32)
-#define ActRemSocPubUsr		(ActWebSvc +  33)
-#define ActReqRemSocComUsr	(ActWebSvc +  34)
-#define ActRemSocComUsr		(ActWebSvc +  35)
+#define ActRcvSocPstUsr		(ActWebSvc +  28)
+#define ActRcvSocComUsr		(ActWebSvc +  29)
+#define ActShaSocNotUsr		(ActWebSvc +  30)
+#define ActUnsSocNotUsr		(ActWebSvc +  31)
+#define ActFavSocNotUsr		(ActWebSvc +  32)
+#define ActUnfSocNotUsr		(ActWebSvc +  33)
+#define ActFavSocComUsr		(ActWebSvc +  34)
+#define ActUnfSocComUsr		(ActWebSvc +  35)
+#define ActReqRemSocPubUsr	(ActWebSvc +  36)
+#define ActRemSocPubUsr		(ActWebSvc +  37)
+#define ActReqRemSocComUsr	(ActWebSvc +  38)
+#define ActRemSocComUsr		(ActWebSvc +  39)
 
-#define ActSeeOthPubPrf		(ActWebSvc +  36)
-#define ActCal1stClkTim		(ActWebSvc +  37)
-#define ActCalNumClk		(ActWebSvc +  38)
-#define ActCalNumFilVie		(ActWebSvc +  39)
-#define ActCalNumForPst		(ActWebSvc +  40)
-#define ActCalNumMsgSnt		(ActWebSvc +  41)
+#define ActSeeOthPubPrf		(ActWebSvc +  40)
+#define ActCal1stClkTim		(ActWebSvc +  41)
+#define ActCalNumClk		(ActWebSvc +  42)
+#define ActCalNumFilVie		(ActWebSvc +  43)
+#define ActCalNumForPst		(ActWebSvc +  44)
+#define ActCalNumMsgSnt		(ActWebSvc +  45)
 
-#define ActFolUsr		(ActWebSvc +  42)
-#define ActUnfUsr		(ActWebSvc +  43)
-#define ActSeeFlg		(ActWebSvc +  44)
-#define ActSeeFlr		(ActWebSvc +  45)
+#define ActFolUsr		(ActWebSvc +  46)
+#define ActUnfUsr		(ActWebSvc +  47)
+#define ActSeeFlg		(ActWebSvc +  48)
+#define ActSeeFlr		(ActWebSvc +  49)
 
-#define ActPrnCal		(ActWebSvc +  46)
-#define ActChgCal1stDay		(ActWebSvc +  47)
+#define ActPrnCal		(ActWebSvc +  50)
+#define ActChgCal1stDay		(ActWebSvc +  51)
 
-#define ActSeeNewNtf		(ActWebSvc +  48)
-#define ActMrkNtfSee		(ActWebSvc +  49)
-#define ActSeeMai		(ActWebSvc +  50)
-#define ActEdiMai		(ActWebSvc +  51)
-#define ActNewMai		(ActWebSvc +  52)
-#define ActRemMai		(ActWebSvc +  53)
-#define ActRenMaiSho		(ActWebSvc +  54)
-#define ActRenMaiFul		(ActWebSvc +  55)
+#define ActSeeNewNtf		(ActWebSvc +  52)
+#define ActMrkNtfSee		(ActWebSvc +  53)
+#define ActSeeMai		(ActWebSvc +  54)
+#define ActEdiMai		(ActWebSvc +  55)
+#define ActNewMai		(ActWebSvc +  56)
+#define ActRemMai		(ActWebSvc +  57)
+#define ActRenMaiSho		(ActWebSvc +  58)
+#define ActRenMaiFul		(ActWebSvc +  59)
 
 /*****************************************************************************/
 /******************************** System tab *********************************/
@@ -1521,80 +1524,75 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActReqEdiRecSha		(ActSeeMyUsgRep +  6)
 #define ActEdiPrf		(ActSeeMyUsgRep +  7)
 // Secondary actions
-#define ActLogIn		(ActSeeMyUsgRep +  8)
-#define ActLogInNew		(ActSeeMyUsgRep +  9)
-#define ActLogInLan		(ActSeeMyUsgRep + 10)
-#define ActAnnSee		(ActSeeMyUsgRep + 11)
-#define ActChgMyRol		(ActSeeMyUsgRep + 12)
-#define ActFrmNewEvtMyAgd	(ActSeeMyUsgRep + 13)
-#define ActEdiOneEvtMyAgd	(ActSeeMyUsgRep + 14)
-#define ActNewEvtMyAgd		(ActSeeMyUsgRep + 15)
-#define ActChgEvtMyAgd		(ActSeeMyUsgRep + 16)
-#define ActReqRemEvtMyAgd	(ActSeeMyUsgRep + 17)
-#define ActRemEvtMyAgd		(ActSeeMyUsgRep + 18)
-#define ActHidEvtMyAgd		(ActSeeMyUsgRep + 19)
-#define ActShoEvtMyAgd		(ActSeeMyUsgRep + 20)
-#define ActPrvEvtMyAgd		(ActSeeMyUsgRep + 21)
-#define ActPubEvtMyAgd		(ActSeeMyUsgRep + 22)
-#define ActPrnAgdQR		(ActSeeMyUsgRep + 23)
+#define ActChgMyRol		(ActSeeMyUsgRep +  8)
+#define ActFrmNewEvtMyAgd	(ActSeeMyUsgRep +  9)
+#define ActEdiOneEvtMyAgd	(ActSeeMyUsgRep + 10)
+#define ActNewEvtMyAgd		(ActSeeMyUsgRep + 11)
+#define ActChgEvtMyAgd		(ActSeeMyUsgRep + 12)
+#define ActReqRemEvtMyAgd	(ActSeeMyUsgRep + 13)
+#define ActRemEvtMyAgd		(ActSeeMyUsgRep + 14)
+#define ActHidEvtMyAgd		(ActSeeMyUsgRep + 15)
+#define ActShoEvtMyAgd		(ActSeeMyUsgRep + 16)
+#define ActPrvEvtMyAgd		(ActSeeMyUsgRep + 17)
+#define ActPubEvtMyAgd		(ActSeeMyUsgRep + 18)
+#define ActPrnAgdQR		(ActSeeMyUsgRep + 19)
 
-#define ActChkUsrAcc		(ActSeeMyUsgRep + 24)
-#define ActCreUsrAcc		(ActSeeMyUsgRep + 25)
-#define ActRemID_Me		(ActSeeMyUsgRep + 26)
-#define ActNewIDMe		(ActSeeMyUsgRep + 27)
-#define ActRemOldNicMe		(ActSeeMyUsgRep + 28)
-#define ActChgNicMe		(ActSeeMyUsgRep + 29)
-#define ActRemMaiMe		(ActSeeMyUsgRep + 30)
-#define ActNewMaiMe		(ActSeeMyUsgRep + 31)
-#define ActCnfMai		(ActSeeMyUsgRep + 32)
-#define ActFrmChgMyPwd		(ActSeeMyUsgRep + 33)
-#define ActChgPwd		(ActSeeMyUsgRep + 34)
-#define ActReqRemMyAcc		(ActSeeMyUsgRep + 35)
-#define ActRemMyAcc		(ActSeeMyUsgRep + 36)
+#define ActChkUsrAcc		(ActSeeMyUsgRep + 20)
+#define ActCreUsrAcc		(ActSeeMyUsgRep + 21)
+#define ActRemMyID		(ActSeeMyUsgRep + 22)
+#define ActChgMyID		(ActSeeMyUsgRep + 23)
+#define ActRemMyNck		(ActSeeMyUsgRep + 24)
+#define ActChgMyNck		(ActSeeMyUsgRep + 25)
+#define ActRemMyMai		(ActSeeMyUsgRep + 26)
+#define ActChgMyMai		(ActSeeMyUsgRep + 27)
+#define ActCnfMai		(ActSeeMyUsgRep + 28)
+#define ActChgMyPwd		(ActSeeMyUsgRep + 29)
+#define ActReqRemMyAcc		(ActSeeMyUsgRep + 30)
+#define ActRemMyAcc		(ActSeeMyUsgRep + 31)
 
-#define ActChgMyData		(ActSeeMyUsgRep + 37)
+#define ActChgMyData		(ActSeeMyUsgRep + 32)
 
-#define ActReqMyPho		(ActSeeMyUsgRep + 38)
-#define ActDetMyPho		(ActSeeMyUsgRep + 39)
-#define ActUpdMyPho		(ActSeeMyUsgRep + 40)
-#define ActReqRemMyPho		(ActSeeMyUsgRep + 41)
-#define ActRemMyPho		(ActSeeMyUsgRep + 42)
+#define ActReqMyPho		(ActSeeMyUsgRep + 33)
+#define ActDetMyPho		(ActSeeMyUsgRep + 34)
+#define ActUpdMyPho		(ActSeeMyUsgRep + 35)
+#define ActReqRemMyPho		(ActSeeMyUsgRep + 36)
+#define ActRemMyPho		(ActSeeMyUsgRep + 37)
 
-#define ActEdiPri		(ActSeeMyUsgRep + 43)
-#define ActChgPriPho		(ActSeeMyUsgRep + 44)
-#define ActChgPriPrf		(ActSeeMyUsgRep + 45)
+#define ActEdiPri		(ActSeeMyUsgRep + 38)
+#define ActChgPriPho		(ActSeeMyUsgRep + 39)
+#define ActChgPriPrf		(ActSeeMyUsgRep + 40)
 
-#define ActReqEdiMyIns		(ActSeeMyUsgRep + 46)
-#define ActChgCtyMyIns		(ActSeeMyUsgRep + 47)
-#define ActChgMyIns		(ActSeeMyUsgRep + 48)
-#define ActChgMyCtr		(ActSeeMyUsgRep + 49)
-#define ActChgMyDpt		(ActSeeMyUsgRep + 50)
-#define ActChgMyOff		(ActSeeMyUsgRep + 51)
-#define ActChgMyOffPho		(ActSeeMyUsgRep + 52)
+#define ActReqEdiMyIns		(ActSeeMyUsgRep + 41)
+#define ActChgCtyMyIns		(ActSeeMyUsgRep + 42)
+#define ActChgMyIns		(ActSeeMyUsgRep + 43)
+#define ActChgMyCtr		(ActSeeMyUsgRep + 44)
+#define ActChgMyDpt		(ActSeeMyUsgRep + 45)
+#define ActChgMyOff		(ActSeeMyUsgRep + 46)
+#define ActChgMyOffPho		(ActSeeMyUsgRep + 47)
 
-#define ActReqEdiMyNet		(ActSeeMyUsgRep + 53)
-#define ActChgMyNet		(ActSeeMyUsgRep + 54)
+#define ActReqEdiMyNet		(ActSeeMyUsgRep + 48)
+#define ActChgMyNet		(ActSeeMyUsgRep + 49)
 
-#define ActChgThe		(ActSeeMyUsgRep + 55)
-#define ActReqChgLan		(ActSeeMyUsgRep + 56)
-#define ActChgLan		(ActSeeMyUsgRep + 57)
-#define ActChg1stDay		(ActSeeMyUsgRep + 58)
-#define ActChgDatFmt		(ActSeeMyUsgRep + 59)
-#define ActChgCol		(ActSeeMyUsgRep + 60)
-#define ActHidLftCol		(ActSeeMyUsgRep + 61)
-#define ActHidRgtCol		(ActSeeMyUsgRep + 62)
-#define ActShoLftCol		(ActSeeMyUsgRep + 63)
-#define ActShoRgtCol		(ActSeeMyUsgRep + 64)
-#define ActChgIco		(ActSeeMyUsgRep + 65)
-#define ActChgMnu		(ActSeeMyUsgRep + 66)
-#define ActChgNtfPrf		(ActSeeMyUsgRep + 67)
+#define ActChgThe		(ActSeeMyUsgRep + 50)
+#define ActReqChgLan		(ActSeeMyUsgRep + 51)
+#define ActChgLan		(ActSeeMyUsgRep + 52)
+#define ActChg1stDay		(ActSeeMyUsgRep + 53)
+#define ActChgDatFmt		(ActSeeMyUsgRep + 54)
+#define ActChgCol		(ActSeeMyUsgRep + 55)
+#define ActHidLftCol		(ActSeeMyUsgRep + 56)
+#define ActHidRgtCol		(ActSeeMyUsgRep + 57)
+#define ActShoLftCol		(ActSeeMyUsgRep + 58)
+#define ActShoRgtCol		(ActSeeMyUsgRep + 59)
+#define ActChgIco		(ActSeeMyUsgRep + 60)
+#define ActChgMnu		(ActSeeMyUsgRep + 61)
+#define ActChgNtfPrf		(ActSeeMyUsgRep + 62)
 
-#define ActPrnUsrQR		(ActSeeMyUsgRep + 68)
+#define ActPrnUsrQR		(ActSeeMyUsgRep + 63)
 
-#define ActPrnMyTT		(ActSeeMyUsgRep + 69)
-#define ActEdiTut		(ActSeeMyUsgRep + 70)
-#define ActChgTut		(ActSeeMyUsgRep + 71)
-#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 72)
+#define ActPrnMyTT		(ActSeeMyUsgRep + 64)
+#define ActEdiTut		(ActSeeMyUsgRep + 65)
+#define ActChgTut		(ActSeeMyUsgRep + 66)
+#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 67)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

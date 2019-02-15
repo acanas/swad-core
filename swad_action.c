@@ -90,7 +90,6 @@ extern struct Globals Gbl;
 1360 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
-	  2. ActHom			Show home menu
 	  3. ActMnu			Show menu of a tab
 	  4. ActRefCon			Refresh number of notifications and connected users via AJAX
 	  5. ActRefLstClk		Refresh last clicks in log via AJAX
@@ -107,6 +106,10 @@ Start:
 	 16. ActSeeCal			Show the academic calendar
        1228. ActSeeNtf			Show my recent notifications
 
+       1296. ActLogIn			Authentify user internally (directly from the platform)
+       1297. ActLogInNew		Authentify user internally (directly from the platform, only if user has not password)
+       1298. ActLogInLan		Change language to my language just after authentication
+       1299. ActAnnSee			Mark announcement as seen
        1293. ActReqSndNewPwd		Show form to send a new password via email
        1294. ActSndNewPwd		Send a new password via email
        1295. ActLogOut			Close session
@@ -1487,10 +1490,6 @@ Profile:
        1291. ActReqEdiRecSha		Request the edition of the record with the personal data of the user
        1292. ActEdiPrf			Show forms to edit preferences
 
-       1296. ActLogIn			Authentify user internally (directly from the platform)
-       1297. ActLogInNew		Authentify user internally (directly from the platform, only if user has not password)
-       1298. ActLogInLan		Change language to my language just after authentication
-       1299. ActAnnSee			Mark announcement as seen
        1300. ActChgMyRol		Change type of logged user
 
        1301. ActFrmNewEvtMyAgd		Form to create a new event in my agenda
@@ -1507,15 +1506,14 @@ Profile:
 
        1312. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
        1313. ActCreUsrAcc		Create new user account
-       1314. ActRemID_Me		Remove one of my user's IDs
-       1315. ActNewIDMe			Create a new user's ID for me
-       1316. ActRemOldNicMe		Remove one of my old nicknames
-       1317. ActChgNicMe		Change my nickname
-       1318. ActRemMaiMe		Remove one of my old emails
-       1319. ActNewMaiMe		Change my email address
+       1314. ActRemMyID		Remove one of my user's IDs
+       1315. ActChgMyID			Create a new user's ID for me
+       1316. ActRemMyNck		Remove one of my old nicknames
+       1317. ActChgMyNck		Change my nickname
+       1318. ActRemMyMai		Remove one of my old emails
+       1319. ActChgMyMai		Change my email address
        1320. ActCnfMai			Confirm email address
-       1321. ActFrmChgMyPwd		Show form to the change of the password
-       1322. ActChgPwd			Change the password
+       1322. ActChgMyPwd		Change my password
        1323. ActReqRemMyAcc		Request the removal of my account
        1324. ActRemMyAcc		Remove my account
 
@@ -1590,7 +1588,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions not in menu:
    /* ActAll		*/{ 645,-1,TabUnk,ActAll		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,NULL				,NULL},	// Used for statistics
    /* ActUnk		*/{ 194,-1,TabUnk,ActUnk		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,NULL				,NULL},
-   /* ActHom		*/{ 844,-1,TabUnk,ActHom		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,NULL				,NULL},
    /* ActMnu		*/{   2,-1,TabUnk,ActMnu		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,NULL				,NULL},
    /* ActRefCon		*/{ 845,-1,TabUnk,ActRefCon		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lay_RefreshNotifsAndConnected	,NULL},
    /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lay_RefreshLastClicks		,NULL},
@@ -1607,6 +1604,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCal		*/{1622, 4,TabSta,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_ShowCalendar		,"calendar"		},
    /* ActSeeNtf         */{ 990, 5,TabSta,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,"bell"			},
 
+   /* ActLogIn		*/{   6,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActLogInNew	*/{1585,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActLogInLan	*/{1077,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActAnnSee		*/{1234,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
    /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
    /* ActLogOut		*/{  10,-1,TabUnk,ActFrmLogIn		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ses_CloseSession		,Usr_Logout			,NULL},
@@ -3063,10 +3064,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActEdiPrf		*/{ 673, 6,TabPrf,ActEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,"cog"			},
 
    // Actions not in menu:
-   /* ActLogIn		*/{   6,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
-   /* ActLogInNew	*/{1585,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
-   /* ActLogInLan	*/{1077,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WelcomeUsr			,NULL},
-   /* ActAnnSee		*/{1234,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
    /* ActFrmNewEvtMyAgd	*/{1603,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
@@ -3084,18 +3081,17 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_AfterCreationNewAccount	,NULL},
 
-   /* ActRemID_Me	*/{1147,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_RemoveMyUsrID		,NULL},
-   /* ActNewIDMe	*/{1148,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_NewMyUsrID			,NULL},
+   /* ActRemMyID	*/{1147,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_RemoveMyUsrID		,NULL},
+   /* ActChgMyID	*/{1148,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_NewMyUsrID			,NULL},
 
-   /* ActRemOldNicMe	*/{1089,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveMyNick		,NULL},
-   /* ActChgNicMe	*/{  37,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_UpdateMyNick		,NULL},
+   /* ActRemMyNck	*/{1089,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveMyNick		,NULL},
+   /* ActChgMyNck	*/{  37,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_UpdateMyNick		,NULL},
 
-   /* ActRemMaiMe	*/{1090,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RemoveMyUsrEmail		,NULL},
-   /* ActNewMaiMe	*/{1088,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,May_NewMyUsrEmail		,NULL},
+   /* ActRemMyMai	*/{1090,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RemoveMyUsrEmail		,NULL},
+   /* ActChgMyMai	*/{1088,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,May_NewMyUsrEmail		,NULL},
    /* ActCnfMai		*/{1091,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ConfirmEmail		,NULL},
 
-   /* ActFrmChgMyPwd	*/{  34,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormChgMyAccount	,NULL},
-   /* ActChgPwd		*/{  35,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateMyPwd		,Acc_ShowFormChgMyAccount	,NULL},
+   /* ActChgMyPwd	*/{  35,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateMyPwd		,Acc_ShowFormChgMyAccount	,NULL},
 
    /* ActReqRemMyAcc	*/{1430,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_AskIfRemoveMyAccount	,NULL},
    /* ActRemMyAcc	*/{1431,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_RemoveMyAccount		,NULL},
@@ -3181,10 +3177,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #31 (obsolete action)
 	ActSeeBib,		// #32
 	-1,			// #33 (obsolete action)
-	ActFrmChgMyPwd,		// #34
-	ActChgPwd,		// #35
+	-1,			// #34 (obsolete action)
+	ActChgMyPwd,		// #35
 	ActFrmMyAcc,		// #36
-	ActChgNicMe,		// #37
+	ActChgMyNck,		// #37
 	-1,			// #38 (obsolete action)
 	-1,			// #39 (obsolete action)
 	-1,			// #40 (obsolete action)
@@ -3991,7 +3987,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgThe,		// #841
 	-1,			// #842 (obsolete action)
 	ActFrmRolSes,		// #843
-	ActHom,			// #844
+	-1,			// #844 (obsolete action)
 	ActRefCon,		// #845
 	ActRcvFilAsgCrsCla,	// #846
 	ActSeeCrsInf,		// #847
@@ -4235,9 +4231,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeOneTstResMe,	// #1085
 	ActReqDatSeeMrkCrs,	// #1086
 	ActReqDatSeeMrkGrp,	// #1087
-	ActNewMaiMe,		// #1088
-	ActRemOldNicMe,		// #1089
-	ActRemMaiMe,		// #1090
+	ActChgMyMai,		// #1088
+	ActRemMyNck,		// #1089
+	ActRemMyMai,		// #1090
 	ActCnfMai,		// #1091
 	ActChgIco,		// #1092
 	ActRchTxtEdiCrsInf,	// #1093
@@ -4294,8 +4290,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgBanImg,		// #1144
 	ActClkBan,		// #1145
 	ActMrkNtfSee,		// #1146
-	ActRemID_Me,		// #1147
-	ActNewIDMe,		// #1148
+	ActRemMyID,		// #1147
+	ActChgMyID,		// #1148
 	ActSeeDegInf,		// #1149
 	ActPrnDegInf,		// #1150
 	ActSeeCtrInf,		// #1151
@@ -5146,15 +5142,17 @@ void Act_AdjustCurrentAction (void)
       return;
 
    /***** If I have no password in database,
-          the only action possible is show a form to change my password *****/
+          the only action possible is show a form to change my account *****/
    if (!Gbl.Usrs.Me.UsrDat.Password[0])
      {
       switch (Gbl.Action.Act)
         {
-         case ActHom: case ActLogOut:
+         case ActLogOut:
+         case ActFrmMyAcc:
+         case ActChgMyPwd:
             break;
          default:
-	    Gbl.Action.Act = ActFrmChgMyPwd;
+	    Gbl.Action.Act = ActFrmMyAcc;
 	    Tab_SetCurrentTab ();
             return;
         }
@@ -5164,9 +5162,9 @@ void Act_AdjustCurrentAction (void)
    if (Gbl.Action.Act == ActLogIn)
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
          /* If my login password is not enough secure,
-            the only action possible is show a form to change my password */
+            the only action possible is show a form to change my account */
         {
-         Gbl.Action.Act = ActFrmChgMyPwd;
+         Gbl.Action.Act = ActFrmMyAcc;
          Tab_SetCurrentTab ();
          return;
         }
@@ -5178,8 +5176,10 @@ void Act_AdjustCurrentAction (void)
      {
       switch (Gbl.Action.Act)
         {
-         case ActHom: case ActLogOut:
-         case ActFrmChgMyPwd:
+         case ActLogOut:
+         case ActFrmMyAcc:
+         case ActChgMyPwd:
+         case ActChgMyNck:
             break;
          default:
 	    Gbl.Action.Act = ActFrmMyAcc;
@@ -5196,8 +5196,10 @@ void Act_AdjustCurrentAction (void)
         Gbl.Usrs.Me.UsrDat.CtyCod <= 0)
       switch (Gbl.Action.Act)
         {
-         case ActHom: case ActLogOut:
-         case ActFrmMyAcc: case ActFrmChgMyPwd:
+         case ActLogOut:
+         case ActFrmMyAcc:
+         case ActChgMyPwd:
+         case ActChgMyNck:
             break;
          default:
 	    Gbl.Action.Act = ActReqEdiRecSha;
@@ -5218,8 +5220,10 @@ void Act_AdjustCurrentAction (void)
                         Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
       switch (Gbl.Action.Act)
         {
-         case ActHom: case ActLogOut:
-         case ActFrmMyAcc: case ActFrmChgMyPwd:
+         case ActLogOut:
+         case ActFrmMyAcc:
+         case ActChgMyPwd:
+         case ActChgMyNck:
          case ActReqEdiRecSha:
             break;
          default:
@@ -5233,9 +5237,12 @@ void Act_AdjustCurrentAction (void)
        Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
       switch (Gbl.Action.Act)
         {
-         case ActHom: case ActLogOut:
-         case ActFrmMyAcc: case ActFrmChgMyPwd:
-         case ActReqEdiRecSha: case ActReqEdiMyIns:
+         case ActLogOut:
+         case ActFrmMyAcc:
+         case ActChgMyPwd:
+         case ActChgMyNck:
+         case ActReqEdiRecSha:
+         case ActReqEdiMyIns:
             break;
          default:
 	    Gbl.Action.Act = ActEdiPri;
@@ -5276,11 +5283,11 @@ void Act_AdjustCurrentAction (void)
               {
                case ActLogIn:
                case ActLogInNew:
-               case ActHom:
                case ActMnu:
                case ActLogOut:
                case ActFrmMyAcc:
-               case ActFrmChgMyPwd:
+               case ActChgMyPwd:
+               case ActChgMyNck:
                case ActReqEdiRecSha:
                case ActReqEdiMyIns:
                case ActEdiPri:

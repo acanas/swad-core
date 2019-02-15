@@ -1260,6 +1260,7 @@ void Agd_AskRemEvent (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    extern const char *Txt_Remove_event;
    struct AgendaEvent AgdEvent;
+   char *Txt;
 
    /***** Get parameters *****/
    Agd_GetParams (Agd_MY_AGENDA);
@@ -1274,13 +1275,14 @@ void Agd_AskRemEvent (void)
 
    /***** Show question and button to remove event *****/
    Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_event_X,
-	     AgdEvent.Event);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
+   if (asprintf (&Txt,Txt_Do_you_really_want_to_remove_the_event_X,
+	         AgdEvent.Event) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlertAndButton (Ale_QUESTION,Txt,
                            ActRemEvtMyAgd,NULL,NULL,
                            Agd_PutCurrentParamsMyAgenda,
 			   Btn_REMOVE_BUTTON,Txt_Remove_event);
+   free ((void *) Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1294,6 +1296,7 @@ void Agd_RemoveEvent (void)
   {
    extern const char *Txt_Event_X_removed;
    struct AgendaEvent AgdEvent;
+   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1309,10 +1312,11 @@ void Agd_RemoveEvent (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_removed,
-	     AgdEvent.Event);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Event_X_removed,
+	         AgdEvent.Event) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1326,6 +1330,7 @@ void Agd_HideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
    struct AgendaEvent AgdEvent;
+   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1342,10 +1347,11 @@ void Agd_HideEvent (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_is_now_hidden,
-	     AgdEvent.Event);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Event_X_is_now_hidden,
+	         AgdEvent.Event) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1359,6 +1365,7 @@ void Agd_UnhideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
    struct AgendaEvent AgdEvent;
+   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1375,10 +1382,11 @@ void Agd_UnhideEvent (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_is_now_visible,
-             AgdEvent.Event);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Event_X_is_now_visible,
+                 AgdEvent.Event) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1392,6 +1400,7 @@ void Agd_MakeEventPrivate (void)
   {
    extern const char *Txt_Event_X_is_now_private;
    struct AgendaEvent AgdEvent;
+   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1408,10 +1417,11 @@ void Agd_MakeEventPrivate (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_is_now_private,
-	     AgdEvent.Event);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Event_X_is_now_private,
+	         AgdEvent.Event) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1425,6 +1435,7 @@ void Agd_MakeEventPublic (void)
   {
    extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
    struct AgendaEvent AgdEvent;
+   char *Txt;
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1441,10 +1452,11 @@ void Agd_MakeEventPublic (void)
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Event_X_is_now_visible_to_users_of_your_courses,
-             AgdEvent.Event);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Event_X_is_now_visible_to_users_of_your_courses,
+                 AgdEvent.Event) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1593,7 +1605,8 @@ void Agd_RecFormEvent (void)
    struct AgendaEvent AgdEvent;
    bool ItsANewEvent;
    bool NewEventIsCorrect = true;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   char EventTxt[Cns_MAX_BYTES_TEXT + 1];
+   char *Txt;
 
    /***** Set author of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1612,7 +1625,7 @@ void Agd_RecFormEvent (void)
    Par_GetParToText ("Event",AgdEvent.Event,Agd_MAX_BYTES_EVENT);
 
    /***** Get text *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Txt",EventTxt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (AgdEvent.TimeUTC[Agd_START_TIME] == 0)
@@ -1639,17 +1652,18 @@ void Agd_RecFormEvent (void)
      {
       if (ItsANewEvent)
 	{
-         Agd_CreateEvent (&AgdEvent,Txt);	// Add new event to database
+         Agd_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
 
 	 /***** Write success message *****/
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Created_new_event_X,
-		   AgdEvent.Event);
-	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+	 if (asprintf (&Txt,Txt_Created_new_event_X,
+		       AgdEvent.Event) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Ale_ShowAlert (Ale_SUCCESS,Txt);
+	 free ((void *) Txt);
 	}
       else
         {
-	 Agd_UpdateEvent (&AgdEvent,Txt);
+	 Agd_UpdateEvent (&AgdEvent,EventTxt);
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);

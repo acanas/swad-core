@@ -35,6 +35,17 @@
  */
 
 /*****************************************************************************/
+/****************************** Debug example ********************************/
+/*****************************************************************************/
+/*
+      DB_QueryINSERT ("can not debug",
+		      "INSERT INTO debug"
+		      " (DebugTime,Txt)"
+		      " VALUES"
+		      " (NOW(),'ActCod = %ld')",
+		      Act_GetActCod (Gbl.Action.Act));
+*/
+/*****************************************************************************/
 /*********************************** TODO ************************************/
 /*****************************************************************************/
 
@@ -364,7 +375,11 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // Que haya una opción general que los bloquee todos y que los desbloquee todos
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
-
+/*
+SHOW TABLE STATUS WHERE Name = 'debug';
+ALTER TABLE debug ENGINE=MyISAM;
+OPTIMIZE TABLE debug;
+*/
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -384,10 +399,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.45.4 (2019-02-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.46 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.46:    Feb 15, 2019 	Removed unused code related to tabs.
+					Fixed bug in actions related to login.
+					Refactoring code related to alerts. (238468 lines)
+					2 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='34';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='844';
+
 	Version 18.45.4:  Feb 15, 2019 	Changes in new year greeting. (238431 lines)
 	Version 18.45.3:  Feb 15, 2019 	Contextual icon to see calendar from holidays. (238434 lines)
 	Version 18.45.2:  Feb 15, 2019 	Changed holidays icon. (238411 lines)

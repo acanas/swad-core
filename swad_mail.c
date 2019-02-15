@@ -89,7 +89,7 @@ static void Mai_PutHeadMailDomains (void);
 static void Mai_CreateMailDomain (struct Mail *Mai);
 
 static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
-				        bool IMustFillEmail,bool IShouldConfirmEmail);
+				        bool IMustFillInEmail,bool IShouldConfirmEmail);
 
 static void Mai_RemoveEmail (struct UsrData *UsrDat);
 static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
@@ -1144,7 +1144,7 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
 /*********************** Show form to change my email ************************/
 /*****************************************************************************/
 
-void Mai_ShowFormChangeMyEmail (bool IMustFillEmail,bool IShouldConfirmEmail)
+void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Email;
@@ -1163,7 +1163,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillEmail,bool IShouldConfirmEmail)
    /***** Show form to change email *****/
    Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,
 			       true,	// ItsMe
-			       IMustFillEmail,IShouldConfirmEmail);
+			       IMustFillInEmail,IShouldConfirmEmail);
 
    /***** End box *****/
    Box_EndBox ();
@@ -1195,7 +1195,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    /***** Show form to change email *****/
    Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
 			       false,	// ItsMe
-			       false,	// IMustFillEmail
+			       false,	// IMustFillInEmail
 			       false);	// IShouldConfirmEmail
 
    /***** End box *****/
@@ -1210,10 +1210,10 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 /*****************************************************************************/
 
 static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
-				        bool IMustFillEmail,bool IShouldConfirmEmail)
+				        bool IMustFillInEmail,bool IShouldConfirmEmail)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Please_fill_in_your_email_address;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
    extern const char *Txt_Other_emails;
@@ -1236,8 +1236,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Help message *****/
-   if (IMustFillEmail)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_email_address);
+   if (IMustFillInEmail)
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
    else if (IShouldConfirmEmail)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
@@ -1291,7 +1291,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 
       /* Form to remove email */
       if (ItsMe)
-	 Frm_StartFormAnchor (ActRemMaiMe,Mai_EMAIL_SECTION_ID);
+	 Frm_StartFormAnchor (ActRemMyMai,Mai_EMAIL_SECTION_ID);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -1337,7 +1337,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	{
          fprintf (Gbl.F.Out,"<br />");
 	 if (ItsMe)
-	    Frm_StartFormAnchor (ActNewMaiMe,Mai_EMAIL_SECTION_ID);
+	    Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -1378,7 +1378,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
             NumEmails ? Txt_New_email :	// A new email
         	        Txt_Email);	// The first email
    if (ItsMe)
-      Frm_StartFormAnchor (ActNewMaiMe,Mai_EMAIL_SECTION_ID);
+      Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
    else
      {
       switch (UsrDat->Roles.InCurrentCrs.Role)

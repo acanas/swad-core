@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -182,6 +184,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    struct UsrData UsrDat;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   char *Txt;
 
    /***** Links to other actions *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -244,10 +247,11 @@ void Acc_CheckIfEmptyAccountExists (void)
 	}
       else
 	{
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_There_is_no_empty_account_associated_with_your_ID_X,
-		   ID);
-	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+	 if (asprintf (&Txt,Txt_There_is_no_empty_account_associated_with_your_ID_X,
+		       ID) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Ale_ShowAlert (Ale_INFO,Txt);
+	 free ((void *) Txt);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -431,13 +435,12 @@ void Acc_ShowFormChgMyAccount (void)
   {
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
-   extern const char *Txt_Please_fill_in_your_email_address;
-   bool IMustFillPassword   = (Gbl.Usrs.Me.UsrDat.Password[0] == '\0');
-   bool IMustFillNickname   = (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0');
-   bool IMustFillEmail      = (Gbl.Usrs.Me.UsrDat.Email[0] == '\0');
-   bool IShouldConfirmEmail = (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&		// Email not yet confirmed
-	                       !Gbl.Usrs.Me.ConfirmEmailJustSent);		// Do not ask for email confirmation when confirmation email is just sent
-   bool IShouldFillID       = (Gbl.Usrs.Me.UsrDat.IDs.Num == 0);
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
+   bool IMustCreateMyPasswordNow = false;
+   bool IMustCreateMyNicknameNow = false;
+   bool IMustFillInMyEmailNow    = false;
+   bool IShouldConfirmMyEmailNow = false;
+   bool IShouldFillInMyIDNow     = false;
 
    /***** Get current user's nickname and email address
           It's necessary because current nickname or email could be just updated *****/
@@ -445,29 +448,44 @@ void Acc_ShowFormChgMyAccount (void)
    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check nickname, email and ID *****/
-   if (IMustFillPassword)
+   IMustCreateMyPasswordNow = (Gbl.Usrs.Me.UsrDat.Password[0] == '\0');
+   if (IMustCreateMyPasswordNow)
       Ale_ShowAlert (Ale_WARNING,
 	             Txt_Before_going_to_any_other_option_you_must_create_your_password);
-   if (IMustFillNickname)
-      Ale_ShowAlert (Ale_WARNING,
-	             Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
-   if (IMustFillEmail)
-      Ale_ShowAlert (Ale_WARNING,
-	             Txt_Please_fill_in_your_email_address);
+   else
+     {
+      IMustCreateMyNicknameNow = (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0');
+      if (IMustCreateMyNicknameNow)
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+      else
+        {
+	 IMustFillInMyEmailNow = (Gbl.Usrs.Me.UsrDat.Email[0] == '\0');
+	 if (IMustFillInMyEmailNow)
+	    Ale_ShowAlert (Ale_WARNING,
+			   Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
+	 else
+	   {
+	    IShouldConfirmMyEmailNow = (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&	// Email not yet confirmed
+	                                !Gbl.Usrs.Me.ConfirmEmailJustSent);		// Do not ask for email confirmation when confirmation email is just sent
+            IShouldFillInMyIDNow = (Gbl.Usrs.Me.UsrDat.IDs.Num == 0);
+	   }
+        }
+     }
 
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
-   /***** Show form to change my nickname and my email *****/
+   /***** Show form to change my password *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
-   Nck_ShowFormChangeMyNickname (IMustFillNickname);
-   Mai_ShowFormChangeMyEmail (IMustFillEmail,IShouldConfirmEmail);
+   Pwd_ShowFormChgMyPwd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Show form to change my ID and my password *****/
+   /***** Show form to change my nickname, my email and my ID *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
-   ID_ShowFormChangeMyID (IShouldFillID);
-   Pwd_ShowFormChgMyPwd ();
+   Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
+   Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
+   ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start container for this user *****/
@@ -609,6 +627,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
+   char *Txt;
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
@@ -636,21 +655,23 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 			 Gbl.Usrs.Me.UsrDat.UsrCod))	// A nickname of another user is the same that this nickname
 	{
 	 Error = true;
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_nickname_X_had_been_registered_by_another_user,
-		   NewNicknameWithoutArroba);
-	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	 if (asprintf (&Txt,Txt_The_nickname_X_had_been_registered_by_another_user,
+		       NewNicknameWithoutArroba) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Ale_ShowAlert (Ale_WARNING,Txt);
+	 free ((void *) Txt);
 	}
      }
    else        // New nickname is not valid
      {
       Error = true;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_nickname_entered_X_is_not_valid_,
-                NewNicknameWithArroba,
-                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
-                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_The_nickname_entered_X_is_not_valid_,
+		    NewNicknameWithArroba,
+		    Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
+		    Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_WARNING,Txt);
+      free ((void *) Txt);
      }
 
    /***** Step 2/3: Get new email from form *****/
@@ -666,19 +687,21 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 	                 NewEmail))	// An email of another user is the same that my email
 	{
 	 Error = true;
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_email_address_X_had_been_registered_by_another_user,
-		   NewEmail);
-	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+	 if (asprintf (&Txt,Txt_The_email_address_X_had_been_registered_by_another_user,
+		       NewEmail) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Ale_ShowAlert (Ale_WARNING,Txt);
+	 free ((void *) Txt);
 	}
      }
    else	// New email is not valid
      {
       Error = true;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_email_address_entered_X_is_not_valid,
-                NewEmail);
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_The_email_address_entered_X_is_not_valid,
+                    NewEmail) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_WARNING,Txt);
+      free ((void *) Txt);
      }
 
    /***** Step 3/3: Get new password from form *****/
@@ -687,7 +710,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {
       Error = true;
-      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);	// Error message is set in Usr_SlowCheckIfPasswordIsGood
+      Ale_ShowAlert (Ale_WARNING,Gbl.AlertToShowLater.Txt);	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
      }
 
    return !Error;
@@ -828,15 +851,17 @@ static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
 void Acc_AfterCreationNewAccount (void)
   {
    extern const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_;
+   char *Txt;
 
    if (Gbl.Usrs.Me.Logged)	// If account has been created without problem, I am logged
      {
       /***** Show message of success *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
-	        Gbl.Usrs.Me.UsrDat.Nickname,
-	        Cfg_PLATFORM_SHORT_NAME);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
+	            Gbl.Usrs.Me.UsrDat.Nickname,
+	            Cfg_PLATFORM_SHORT_NAME) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
 
       /***** Show form with account data *****/
       Acc_ShowFormChgMyAccount ();
@@ -1002,6 +1027,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    extern const char *Txt_Briefcase_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Photo_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Record_card_of_THE_USER_X_has_been_removed;
+   char *Txt;
    bool PhotoRemoved = false;
 
    /***** Remove the works zones of the user in all courses *****/
@@ -1034,10 +1060,11 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
-                UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
+                    UsrDat->FullName) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
      }
 
    /***** Remove user as administrator of any degree *****/
@@ -1047,10 +1074,11 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_been_removed_as_administrator,
-                UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_THE_USER_X_has_been_removed_as_administrator,
+                    UsrDat->FullName) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
      }
 
    /***** Remove user's clipboard in forums *****/
@@ -1063,10 +1091,11 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Acc_RemoveUsrBriefcase (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Briefcase_of_THE_USER_X_has_been_removed,
-                UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_Briefcase_of_THE_USER_X_has_been_removed,
+                    UsrDat->FullName) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
      }
 
    /***** Remove test results made by user in all courses *****/
@@ -1080,10 +1109,11 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Msg_DelAllRecAndSntMsgsUsr (UsrDat->UsrCod);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Messages_of_THE_USER_X_have_been_deleted,
-                UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_Messages_of_THE_USER_X_have_been_deleted,
+                    UsrDat->FullName) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
      }
 
    /***** Remove user from tables of banned users *****/
@@ -1128,20 +1158,22 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
    if (PhotoRemoved && QuietOrVerbose == Cns_VERBOSE)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Photo_of_THE_USER_X_has_been_removed,
-                UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_Photo_of_THE_USER_X_has_been_removed,
+                    UsrDat->FullName) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
      }
 
    /***** Remove user *****/
    Acc_RemoveUsr (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Record_card_of_THE_USER_X_has_been_removed,
-                UsrDat->FullName);
-      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+      if (asprintf (&Txt,Txt_Record_card_of_THE_USER_X_has_been_removed,
+                    UsrDat->FullName) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Ale_ShowAlert (Ale_SUCCESS,Txt);
+      free ((void *) Txt);
      }
   }
 

@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -927,6 +929,7 @@ void Asg_ReqRemAssignment (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
    extern const char *Txt_Remove_assignment;
    struct Assignment Asg;
+   char *Txt;
 
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
@@ -942,12 +945,13 @@ void Asg_ReqRemAssignment (void)
 
    /***** Show question and button to remove the assignment *****/
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_assignment_X,
-             Asg.Title);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
+   if (asprintf (&Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
+                 Asg.Title) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlertAndButton (Ale_QUESTION,Txt,
                            ActRemAsg,NULL,NULL,Asg_PutParams,
                            Btn_REMOVE_BUTTON,Txt_Remove_assignment);
+   free ((void *) Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -961,6 +965,7 @@ void Asg_RemoveAssignment (void)
   {
    extern const char *Txt_Assignment_X_removed;
    struct Assignment Asg;
+   char *Txt;
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -985,10 +990,11 @@ void Asg_RemoveAssignment (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Assignment_X_removed,
-             Asg.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Assignment_X_removed,
+                 Asg.Title) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1002,6 +1008,7 @@ void Asg_HideAssignment (void)
   {
    extern const char *Txt_Assignment_X_is_now_hidden;
    struct Assignment Asg;
+   char *Txt;
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -1017,10 +1024,11 @@ void Asg_HideAssignment (void)
                    Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Assignment_X_is_now_hidden,
-             Asg.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Assignment_X_is_now_hidden,
+                 Asg.Title) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1034,6 +1042,7 @@ void Asg_ShowAssignment (void)
   {
    extern const char *Txt_Assignment_X_is_now_visible;
    struct Assignment Asg;
+   char *Txt;
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -1049,10 +1058,11 @@ void Asg_ShowAssignment (void)
                    Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Assignment_X_is_now_visible,
-             Asg.Title);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   if (asprintf (&Txt,Txt_Assignment_X_is_now_visible,
+                 Asg.Title) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt);
+   free ((void *) Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1291,7 +1301,8 @@ void Asg_RecFormAssignment (void)
    bool ItsANewAssignment;
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   char Description[Cns_MAX_BYTES_TEXT + 1];
+   char *Txt;
 
    /***** Get the code of the assignment *****/
    NewAsg.AsgCod = Asg_GetParamAsgCod ();
@@ -1323,7 +1334,7 @@ void Asg_RecFormAssignment (void)
 	                                  Asg_DO_NOT_SEND_WORK;
 
    /***** Get assignment text *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (NewAsg.TimeUTC[Dat_START_TIME] == 0)
@@ -1338,10 +1349,12 @@ void Asg_RecFormAssignment (void)
       if (Asg_CheckIfSimilarAssignmentExists ("Title",NewAsg.Title,NewAsg.AsgCod))
         {
          NewAssignmentIsCorrect = false;
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Already_existed_an_assignment_with_the_title_X,
-                   NewAsg.Title);
-         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+
+	 if (asprintf (&Txt,Txt_Already_existed_an_assignment_with_the_title_X,
+                       NewAsg.Title) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Ale_ShowAlert (Ale_WARNING,Txt);
+	 free ((void *) Txt);
         }
       else	// Title is correct
         {
@@ -1391,7 +1404,7 @@ void Asg_RecFormAssignment (void)
 
       if (ItsANewAssignment)
 	{
-         Asg_CreateAssignment (&NewAsg,Txt);	// Add new assignment to database
+         Asg_CreateAssignment (&NewAsg,Description);	// Add new assignment to database
 
 	 /***** Write success message *****/
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1406,7 +1419,7 @@ void Asg_RecFormAssignment (void)
                NewAssignmentIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,NewAsg.Folder);
          if (NewAssignmentIsCorrect)
            {
-            Asg_UpdateAssignment (&NewAsg,Txt);
+            Asg_UpdateAssignment (&NewAsg,Description);
 
 	    /***** Write success message *****/
 	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);

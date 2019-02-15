@@ -72,7 +72,7 @@ bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor);
 bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat);
 
-void ID_ShowFormChangeMyID (bool IShouldFillID);
+void ID_ShowFormChangeMyID (bool IShouldFillInID);
 void ID_ShowFormChangeOtherUsrID (void);
 
 void ID_RemoveMyUsrID (void);

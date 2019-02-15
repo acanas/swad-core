@@ -300,7 +300,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
 	 /* Form to remove old nickname */
 	 if (ItsMe)
-	    Frm_StartFormAnchor (ActRemOldNicMe,Nck_NICKNAME_SECTION_ID);
+	    Frm_StartFormAnchor (ActRemMyNck,Nck_NICKNAME_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -338,7 +338,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	{
          fprintf (Gbl.F.Out,"<br />");
 	 if (ItsMe)
-	    Frm_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
+	    Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -380,7 +380,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    if (ItsMe)
-      Frm_StartFormAnchor (ActChgNicMe,Nck_NICKNAME_SECTION_ID);
+      Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
    else
      {
       switch (UsrDat->Roles.InCurrentCrs.Role)

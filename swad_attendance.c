@@ -98,7 +98,7 @@ static void Att_PutParams (void);
 static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
 static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att);
-static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
 static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod);
@@ -378,7 +378,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    extern const char *Txt_Today;
    extern const char *Txt_View_event;
    static unsigned UniqueId = 0;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this attendance event *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (Att);
@@ -474,10 +474,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    fprintf (Gbl.F.Out,"</td>");
 
    /* Text of the attendance event */
-   Att_GetAttEventTxtFromDB (Att->AttCod,Txt);
+   Att_GetAttEventDescriptionFromDB (Att->AttCod,Description);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+                     Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+   Str_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -489,7 +489,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
             Att->Hidden ? "DAT_LIGHT" :
         	          "DAT",
-            Txt);
+            Description);
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -816,7 +816,7 @@ void Att_FreeListAttEvents (void)
 /***************** Get attendance event text from database *******************/
 /*****************************************************************************/
 
-static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -835,11 +835,11 @@ static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 
       row = mysql_fetch_row (mysql_res);
 
       /* Get info text */
-      Str_Copy (Txt,row[0],
+      Str_Copy (Description,row[0],
                 Cns_MAX_BYTES_TEXT);
      }
    else
-      Txt[0] = '\0';
+      Description[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1054,7 +1054,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Save;
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
@@ -1085,7 +1085,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
       /* Get text of the attendance event from database */
-      Att_GetAttEventTxtFromDB (Att.AttCod,Txt);
+      Att_GetAttEventDescriptionFromDB (Att.AttCod,Description);
      }
 
    /***** Start form *****/
@@ -1163,7 +1163,7 @@ void Att_RequestCreatOrEditAttEvent (void)
                       " cols=\"60\" rows=\"5\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewAttEvent)
-      fprintf (Gbl.F.Out,"%s",Txt);
+      fprintf (Gbl.F.Out,"%s",Description);
    fprintf (Gbl.F.Out,"</textarea>"
                       "</td>"
                       "</tr>");
@@ -1257,7 +1257,7 @@ void Att_RecFormAttEvent (void)
    struct AttendanceEvent ReceivedAtt;
    bool ItsANewAttEvent;
    bool ReceivedAttEventIsCorrect = true;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
    ItsANewAttEvent = ((ReceivedAtt.AttCod = Att_GetParamAttCod ()) == -1L);
@@ -1280,8 +1280,8 @@ void Att_RecFormAttEvent (void)
    /***** Get attendance event title *****/
    Par_GetParToText ("Title",ReceivedAtt.Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
 
-   /***** Get attendance event text *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   /***** Get attendance event description *****/
+   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (ReceivedAtt.TimeUTC[Att_START_TIME] == 0)
@@ -1317,7 +1317,7 @@ void Att_RecFormAttEvent (void)
       if (ItsANewAttEvent)
 	{
 	 ReceivedAtt.Hidden = false;	// New attendance events are visible by default
-         Att_CreateAttEvent (&ReceivedAtt,Txt);	// Add new attendance event to database
+         Att_CreateAttEvent (&ReceivedAtt,Description);	// Add new attendance event to database
 
          /***** Write success message *****/
 	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
@@ -1327,7 +1327,7 @@ void Att_RecFormAttEvent (void)
 	}
       else
 	{
-         Att_UpdateAttEvent (&ReceivedAtt,Txt);
+         Att_UpdateAttEvent (&ReceivedAtt,Description);
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
@@ -1347,7 +1347,7 @@ void Att_RecFormAttEvent (void)
 /********************* Create a new attendance event *************************/
 /*****************************************************************************/
 
-void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
+void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Description)
   {
    /***** Create a new attendance event *****/
    Att->AttCod =
@@ -1367,7 +1367,7 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 				Att->CommentTchVisible ? 'Y' :
 							 'N',
 				Att->Title,
-				Txt);
+				Description);
 
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
@@ -1378,7 +1378,7 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 /****************** Update an existing attendance event **********************/
 /*****************************************************************************/
 
-void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
+void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Description)
   {
    /***** Update the data of the attendance event *****/
    DB_QueryUPDATE ("can not update attendance event",
@@ -1395,7 +1395,7 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
                    Att->CommentTchVisible ? 'Y' :
         	                            'N',
                    Att->Title,
-                   Txt,
+                   Description,
                    Att->AttCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Update groups *****/

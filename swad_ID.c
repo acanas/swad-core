@@ -75,7 +75,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor);
 
 static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
-			            bool ItsMe,bool IShouldFillID);
+			            bool ItsMe,bool IShouldFillInID);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
@@ -511,7 +511,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-void ID_ShowFormChangeMyID (bool IShouldFillID)
+void ID_ShowFormChangeMyID (bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID;
@@ -530,7 +530,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillID)
    /***** Show form to change ID *****/
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,
 			   true,	// ItsMe
-			   IShouldFillID);
+			   IShouldFillInID);
 
    /***** End box *****/
    Box_EndBox ();
@@ -562,7 +562,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    /***** Show form to change ID *****/
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
 			   false,	// ItsMe
-			   false);	// IShouldFillID
+			   false);	// IShouldFillInID
 
    /***** End box *****/
    Box_EndBox ();
@@ -576,7 +576,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 /*****************************************************************************/
 
 static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
-			            bool ItsMe,bool IShouldFillID)
+			            bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -595,7 +595,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Help message *****/
-   if (IShouldFillID)
+   if (IShouldFillInID)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Start table *****/
@@ -627,7 +627,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	   {
 	    /* Form to remove user's ID */
 	    if (ItsMe)
-	       Frm_StartFormAnchor (ActRemID_Me,ID_ID_SECTION_ID);
+	       Frm_StartFormAnchor (ActRemMyID,ID_ID_SECTION_ID);
 	    else
 	      {
 	       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -690,7 +690,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
       if (ItsMe)
-	 Frm_StartFormAnchor (ActNewIDMe,ID_ID_SECTION_ID);
+	 Frm_StartFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs.Role)

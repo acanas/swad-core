@@ -60,7 +60,6 @@ typedef enum
 /*****************************************************************************/
 
 void Tab_DrawTabs (void);
-void Tab_DrawBreadcrumb (void);
 
 void Tab_SetCurrentTab (void);
 void Tab_DisableIncompatibleTabs (void);

@@ -108,6 +108,7 @@ int main (void)
    /***** Read parameters *****/
    if (Par_GetQueryString ())
      {
+      /***** Get parameters *****/
       Par_CreateListOfParams ();
       Par_GetMainParameters ();
 

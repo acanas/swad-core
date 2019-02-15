@@ -73,10 +73,6 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
 static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab);
 static const char *Tab_GetIcon (Tab_Tab_t Tab);
 
-static void Tab_WriteBreadcrumbHome (void);
-static void Tab_WriteBreadcrumbTab (void);
-static void Tab_WriteBreadcrumbAction (void);
-
 /*****************************************************************************/
 /**************** Draw tabs with the current tab highlighted *****************/
 /*****************************************************************************/
@@ -209,96 +205,6 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
       return NULL;
 
    return Ico_GetIcon (Tab_TabIcons[NumTab]);
-  }
-
-/*****************************************************************************/
-/********************* Draw breadcrumb with tab and action *******************/
-/*****************************************************************************/
-
-void Tab_DrawBreadcrumb (void)
-  {
-   extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   signed int IndexInMenu;
-
-   fprintf (Gbl.F.Out,"<div id=\"breadcrumb_container\" class=\"%s\">",
-	    The_TabOnBgColors[Gbl.Prefs.Theme]);
-
-   /***** Home *****/
-   Tab_WriteBreadcrumbHome ();
-
-   IndexInMenu = Act_GetIndexInMenu (Gbl.Action.Act);
-   if (Gbl.Action.Act == ActMnu || IndexInMenu >= 0)
-     {
-      /***** Tab *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-               The_ClassTxtTabOn[Gbl.Prefs.Theme]);
-      Tab_WriteBreadcrumbTab ();
-
-      if (IndexInMenu >= 0)
-        {
-         /***** Menu *****/
-         fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-                  The_ClassTxtTabOn[Gbl.Prefs.Theme]);
-         Tab_WriteBreadcrumbAction ();
-        }
-     }
-
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/************************ Write home in breadcrumb ***************************/
-/*****************************************************************************/
-
-static void Tab_WriteBreadcrumbHome (void)
-  {
-   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   extern const char *Txt_Home_PAGE;
-
-   Frm_StartForm (ActHom);
-   Frm_LinkFormSubmit (Txt_Home_PAGE,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"%s</a>",
-	    Txt_Home_PAGE);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/************ Write icon and title associated to the current tab *************/
-/*****************************************************************************/
-
-static void Tab_WriteBreadcrumbTab (void)
-  {
-   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
-
-   /***** Start form *****/
-   Frm_StartForm (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.Action.Tab);
-   Frm_LinkFormSubmit (Txt_TABS_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
-
-   /***** Title and end form *****/
-   fprintf (Gbl.F.Out,"%s</a>",Txt_TABS_TXT[Gbl.Action.Tab]);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/***************** Write title associated to the current action **************/
-/*****************************************************************************/
-
-static void Tab_WriteBreadcrumbAction (void)
-  {
-   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   const char *Title = Act_GetTitleAction (Gbl.Action.Act);
-
-   /***** Start form *****/
-   Frm_StartForm (Act_GetSuperAction (Gbl.Action.Act));
-   Frm_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
-
-   /***** Title and end form *****/
-   fprintf (Gbl.F.Out,"%s</a>",
-	    Title);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
