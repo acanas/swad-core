@@ -104,6 +104,7 @@ Start:
 	 10. ActSysReqSch		Request search in system tab
        1057. ActSeeSocTmlGbl		Show social timeline (global)
        1058. ActSeeSocPrf		Suggest list of users to follow
+	 16. ActSeeCalSys		Show the academic calendar
        1228. ActSeeNtf			Show my recent notifications
 
        1293. ActReqSndNewPwd		Show form to send a new password via email
@@ -151,13 +152,24 @@ Start:
        1093. ActSeeFlg			Show following
        1094. ActSeeFlr			Show followers
 
+	 56. ActPrnSysCrs		Show print view of the academic calendar
+	 57. ActChgSysCrs1stDay		Change first day of week and show academic calendar
+
+       1247. ActSeeNewNtf		Show my recent notifications (link in top heading)
+       1248. ActMrkNtfSee		Mark all my notifications as seen
+       1249. ActSeeMai			See mail domains
+       1250. ActEdiMai			Edit mail domains
+       1251. ActNewMai			Request the creation of a mail domain
+       1252. ActRemMai			Request the removal of a mail domain
+       1253. ActRenMaiSho		Request the change of a mail domain
+       1254. ActRenMaiFul		Request the change of the info of a mail domain
+
 System:
 	 11. ActSeeCty			List countries
 	 12. ActSeePen			List pending institutions, centres, degrees and courses in hierarchy
 	 13. ActSeeLnk			See institutional links
 	 14. ActLstPlg			List plugins
 	 15. ActSetUp			Initial set up
-	 16. ActSeeCalSys		Show the academic calendar
 
 	 18. ActEdiCty			Edit countries
 	 19. ActNewCty			Request the creation of a country
@@ -201,9 +213,6 @@ System:
 	 53. ActChgPlgAppKey		Change the application key of a plugin
 	 54. ActChgPlgURL		Change the URL of a plugin
 	 55. ActChgPlgIP		Change the IP address of a plugin
-
-	 56. ActPrnSysCrs		Show print view of the academic calendar
-	 57. ActChgSysCrs1stDay		Change first day of week and show academic calendar
 
 Country:
 	 59. ActSeeCtyInf		Show information on the current country
@@ -1312,15 +1321,6 @@ Messages:
        1245. ActReqRemNot		Request removal of a notice
        1246. ActRemNot			Remove a notice
 
-       1247. ActSeeNewNtf		Show my recent notifications (link in top heading)
-       1248. ActMrkNtfSee		Mark all my notifications as seen
-       1249. ActSeeMai			See mail domains
-       1250. ActEdiMai			Edit mail domains
-       1251. ActNewMai			Request the creation of a mail domain
-       1252. ActRemMai			Request the removal of a mail domain
-       1253. ActRenMaiSho		Request the change of a mail domain
-       1254. ActRenMaiFul		Request the change of the info of a mail domain
-
        1095. ActSeeForCrsUsr		Show top level of forum of users of the course
        1096. ActSeeForCrsTch		Show top level of forum of teachers of the course
        1097. ActSeeForDegUsr		Show top level of forum of users of the degree
@@ -1618,7 +1618,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSysReqSch	*/{ 627, 1,TabSta,ActSysReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sch_ReqSysSearch		,"search"		},
    /* ActSeeSocTmlGbl	*/{1490, 2,TabSta,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"comment-dots"		},
    /* ActSeeSocPrf	*/{1520, 3,TabSta,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_SeeSocialProfiles		,"user-check"		},
-   /* ActSeeNtf         */{ 990, 4,TabSta,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,"bell"			},
+   /* ActSeeCalSys	*/{1622, 4,TabSta,ActSeeCalSys		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarSys		,"calendar"		},
+// /* ActSeeCalCty	*/{1625, 2,TabCty,ActSeeCalCty		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCty		,"calendar"		},
+// /* ActSeeCalIns	*/{1628, 4,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarIns		,"calendar"		},
+// /* ActSeeCalCtr	*/{1631, 3,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCtr		,"calendar"		},
+// /* ActSeeCalDeg	*/{1634, 2,TabDeg,ActSeeCalDeg		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarDeg		,"calendar"		},
+// /* ActSeeCalCrs	*/{  16, 7,TabCrs,ActSeeCalCrs		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarCrs		,"calendar"		},
+   /* ActSeeNtf         */{ 990, 5,TabSta,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,"bell"			},
 
    /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
    /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
@@ -1666,6 +1672,19 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeFlg		*/{1412,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowing		,NULL},
    /* ActSeeFlr		*/{1413,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowers		,NULL},
 
+   /* ActPrnCalSys	*/{1623,-1,TabUnk,ActSeeCalSys		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+// /* ActPrnCalCty	*/{1626,-1,TabUnk,ActSeeCalCty		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+// /* ActPrnCalIns	*/{1629,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+// /* ActPrnCalCtr	*/{1632,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+// /* ActPrnCalDeg	*/{1635,-1,TabUnk,ActSeeCalDeg		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+// /* ActPrnCalCrs	*/{  71,-1,TabUnk,ActSeeCalCrs		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalSys1stDay*/{1624,-1,TabUnk,ActSeeCalSys		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarSys		,NULL},
+// /* ActChgCalCty1stDay*/{1627,-1,TabUnk,ActSeeCalCty		,    0,    0,    0,    0,    0,0x3C7,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCty		,NULL},
+// /* ActChgCalIns1stDay*/{1630,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarIns		,NULL},
+// /* ActChgCalCtr1stDay*/{1633,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCtr		,NULL},
+// /* ActChgCalDeg1stDay*/{1636,-1,TabUnk,ActSeeCalDeg		,    0,    0,0x3C7,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarDeg		,NULL},
+// /* ActChgCalCrs1stDay*/{1485,-1,TabUnk,ActSeeCalCrs		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCrs		,NULL},
+
    /* ActSeeNewNtf	*/{ 991,-1,TabUnk,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_ShowMyNotifications	,NULL},
    /* ActMrkNtfSee	*/{1146,-1,TabUnk,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ntf_MarkAllNotifAsSeen		,NULL},
 
@@ -1683,7 +1702,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeLnk		*/{ 748, 2,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_SeeLinks			,"link"			},
    /* ActLstPlg		*/{ 777, 3,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
    /* ActSetUp		*/{ 840, 4,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Set_Setup			,"bolt"			},
-   /* ActSeeCalSys	*/{1622, 5,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cal_DrawCalendarSys		,"calendar"		},
 
    // Actions not in menu:
    /* ActEdiCty		*/{ 863,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_EditCountries		,NULL},
@@ -1723,9 +1741,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgPlgAppKey	*/{ 986,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ChangePlgAppKey		,NULL},
    /* ActChgPlgURL	*/{ 783,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ChangePlgURL		,NULL},
    /* ActChgPlgIP	*/{ 780,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ChangePlgIP		,NULL},
-
-   /* ActPrnCalSys	*/{1623,-1,TabUnk,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
-   /* ActChgCalSys1stDay*/{1624,-1,TabUnk,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarSys		,NULL},
 
    // TabCty ******************************************************************
    // Actions in menu:

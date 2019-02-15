@@ -386,10 +386,16 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.44 (2019-02-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.44.1 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.44.1:  Feb 15, 2019 	Option system calendar is moved to start tab. (238654 lines)
+					3 changes necessary in database:
+UPDATE actions SET Txt='Ver calendario' WHERE ActCod='1622' AND Language='es';
+UPDATE actions SET Txt='Imprimir calendario' WHERE ActCod='1623' AND Language='es';
+UPDATE actions SET Txt='Cambiar 1er. d&iacute;a calendario' WHERE ActCod='1624' AND Language='es';
+
 	Version 18.44:    Feb 15, 2019 	Removed options to search from country, institution, centre, degree and course. (238652 lines)
 					10 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='1176';

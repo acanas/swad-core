@@ -49,7 +49,6 @@ void Cal_ChangeFirstDayOfWeek (void);
 unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str);
 
 void Cal_DrawCurrentMonth (void);
-Act_Action_t Cal_GetActionToSeeCalendar ();
 
 void Cal_DrawCalendarSys (void);
 void Cal_DrawCalendarCty (void);

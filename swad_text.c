@@ -17764,7 +17764,28 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
-	//  4: ActSeeNtf
+	//  4: ActSeeCalSys
+#if   L==1	// ca
+	"Calendari"
+#elif L==2	// de
+	"Kalender"
+#elif L==3	// en
+	"Calendar"
+#elif L==4	// es
+	"Calendario"
+#elif L==5	// fr
+	"Calendrier"
+#elif L==6	// gn
+	"Arapapaha"
+#elif L==7	// it
+	"Calendario"
+#elif L==8	// pl
+	"Kalendarz"
+#elif L==9	// pt
+	"Calend&aacute;rio"
+#endif
+	,
+	//  5: ActSeeNtf
 #if   L==1	// ca
 	"Notificacions"
 #elif L==2	// de
@@ -17785,7 +17806,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Notifica&ccedil;&otilde;es"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -17901,27 +17921,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  5: ActSeeCalSys
-#if   L==1	// ca
-	"Calendari"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Calendar"
-#elif L==4	// es
-	"Calendario"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Arapapaha"
-#elif L==7	// it
-	"Calendario"
-#elif L==8	// pl
-	"Kalendarz"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -19651,7 +19651,28 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfis p&uacute;blicos"
 #endif
 	,
-	//  4: ActSeeNtf
+	//  4: ActSeeCalSys
+#if   L==1	// ca
+	"Calendari acad&egrave;mic"
+#elif L==2	// de
+	"Kalender"
+#elif L==3	// en
+	"Academic calendar"
+#elif L==4	// es
+	"Calendario acad&eacute;mico"
+#elif L==5	// fr
+	"Calendrier"
+#elif L==6	// gn
+	"Calendario acad&eacute;mico"// Okoteve traducción
+#elif L==7	// it
+	"Calendario del corso"
+#elif L==8	// pl
+	"Kalendarz akademicki"
+#elif L==9	// pt
+	"Calend&aacute;rio"
+#endif
+	,
+	//  5: ActSeeNtf
 #if   L==1	// ca
 	"Esdeveniments recents que han estat o seran notificats"
 #elif L==2	// de
@@ -19672,7 +19693,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
 #endif
 	,
-	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -19788,27 +19808,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  5: ActSeeCalSys
-#if   L==1	// ca
-	"Calendari acad&egrave;mic"
-#elif L==2	// de
-	"Kalender"
-#elif L==3	// en
-	"Academic calendar"
-#elif L==4	// es
-	"Calendario acad&eacute;mico"
-#elif L==5	// fr
-	"Calendrier"
-#elif L==6	// gn
-	"Calendario acad&eacute;mico"// Okoteve traducción
-#elif L==7	// it
-	"Calendario del corso"
-#elif L==8	// pl
-	"Kalendarz akademicki"
-#elif L==9	// pt
-	"Calend&aacute;rio"
-#endif
-	,
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
