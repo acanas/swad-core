@@ -2517,32 +2517,37 @@ void Usr_WelcomeUsr (void)
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                    " style=\"margin:12px;\">");
-
-         /***** Welcome to a user *****/
          if (Gbl.Usrs.Me.UsrDat.FirstName[0])
            {
+            /***** Birthday congratulation *****/
             if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == Gbl.Now.Date.Day &&
                 Gbl.Usrs.Me.UsrDat.Birthday.Month == Gbl.Now.Date.Month)
                if (Usr_CheckIfMyBirthdayHasNotBeenCongratulated ())
                  {
+                  /* Mark my birthday as already congratulated */
                   Usr_InsertMyBirthday ();
 		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 			    Txt_Happy_birthday_X,
 			    Gbl.Usrs.Me.UsrDat.FirstName);
+
+		  /* Start alert */
+		  Ale_ShowAlertAndButton1 (Ale_INFO,Gbl.Alert.Txt);
+
+		  /* Show cake icon */
 		  fprintf (Gbl.F.Out,"<img src=\"%s/birthday-cake.svg\""
                 	             " alt=\"%s\" title=\"%s\""
                                      " class=\"ICO160x160\" />",
                            Gbl.Prefs.URLIconSet,
                            Gbl.Alert.Txt,
                            Gbl.Alert.Txt);
-                  Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
+
+		  /* End alert */
+		  Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
                  }
 
+	    /***** Alert with button to check email address *****/
 	    if ( Gbl.Usrs.Me.UsrDat.Email[0] &&
 		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
-	       /* Alert with button to check email address */
 	       Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_your_email_address,
 				       ActFrmMyAcc,NULL,NULL,NULL,
 				       Btn_CONFIRM_BUTTON,Txt_Check);
@@ -2566,11 +2571,6 @@ void Usr_WelcomeUsr (void)
 	                " alt=\"Responsive image\">"
 	                "</video>");
 	 */
-
-	 /***** Show help to enrol me *****/
-	 // Hlp_ShowHelpWhatWouldYouLikeToDo ();
-
-	 fprintf (Gbl.F.Out,"</div>");
 
          /***** Show the global announcements I have not seen *****/
          Ann_ShowMyAnnouncementsNotMarkedAsSeen ();
@@ -2617,7 +2617,7 @@ static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void)
   }
 
 /*****************************************************************************/
-/******** Insert my user's code in table of birthdays already wished *********/
+/*** Insert my user's code in the table of birthdays already congratulated ***/
 /*****************************************************************************/
 
 static void Usr_InsertMyBirthday (void)

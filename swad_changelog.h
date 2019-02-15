@@ -386,10 +386,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.45 (2019-02-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.45.1 (2019-02-15)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.45.1:  Feb 15, 2019 	Changes in birthday congratulation. (238399 lines)
 	Version 18.45:    Feb 15, 2019 	Removed calendar options from country, institution, centre, degree and course.
 				        Holidays action is shown in menu. (238398 lines)
 					15 changes necessary in database:
