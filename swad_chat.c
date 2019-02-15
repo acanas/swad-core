@@ -82,16 +82,14 @@ void Cht_ShowChatRooms (void)
    extern const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_;
 
    /***** Help message about software needed to use the whiteboard/chat *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_,
-             Cfg_JAVA_URL,Cfg_JAVA_NAME,
-             Cfg_PLATFORM_SERVER);
-   Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_INFO,Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_,
+                  Cfg_JAVA_URL,Cfg_JAVA_NAME,
+                  Cfg_PLATFORM_SERVER);
 
    /***** List available chat rooms *****/
    Cht_ShowListOfAvailableChatRooms ();
 
-   Ale_ShowA_old (Ale_WARNING,Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_);
+   Ale_ShowA_fmt (Ale_WARNING,Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_);
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Cht_ShowListOfChatRoomsWithUsrs ();
