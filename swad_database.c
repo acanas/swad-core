@@ -88,7 +88,7 @@ void DB_CreateTablesIfNotExist (void)
    extern const char *Txt_Created_tables_in_the_database_that_did_not_exist;
 
    /***** Information message *****/
-   Ale_ShowA_old (Ale_INFO,Txt_Creating_database_tables_if_they_do_not_exist);
+   Ale_ShowA_fmt (Ale_INFO,Txt_Creating_database_tables_if_they_do_not_exist);
    fprintf (Gbl.F.Out,"<ol>");
 
    /***** Table IP_prefs *****/
@@ -3086,7 +3086,7 @@ mysql> DESCRIBE ws_keys;
 
    /***** Show success message *****/
    fprintf (Gbl.F.Out,"</ol>");
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Created_tables_in_the_database_that_did_not_exist);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_tables_in_the_database_that_did_not_exist);
   }
 
 /*****************************************************************************/

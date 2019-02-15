@@ -218,7 +218,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
       Tbl_EndTable ();
      }
    else	// No degree types created
-      Ale_ShowA_old (Ale_INFO,Txt_No_types_of_degree);
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_types_of_degree);
 
    /***** Button to create degree type  *****/
    if (DT_CheckIfICanCreateDegreeTypes ())
@@ -567,10 +567,8 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
                    DegTyp->DegTypName);
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Created_new_type_of_degree_X,
-             DegTyp->DegTypName);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_type_of_degree_X,
+                  DegTyp->DegTypName);
   }
 
 /*****************************************************************************/
@@ -741,17 +739,13 @@ void DT_RecFormNewDegreeType (void)
      {
       /***** If name of degree type was in database... *****/
       if (DT_CheckIfDegreeTypeNameExists (DegTyp->DegTypName,-1L))
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_type_of_degree_X_already_exists,
-                   DegTyp->DegTypName);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowA_fmt (Ale_WARNING,Txt_The_type_of_degree_X_already_exists,
+                        DegTyp->DegTypName);
       else	// Add new degree type to database
          DT_CreateDegreeType (DegTyp);
      }
    else	// If there is not a degree type name
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_type_of_degree);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_type_of_degree);
 
    /***** Show the form again *****/
    DT_EditDegreeTypes ();
@@ -776,17 +770,15 @@ void DT_RemoveDegreeType (void)
 
    /***** Check if this degree type has degrees *****/
    if (DegTyp.NumDegs)	// Degree type has degrees => don't remove
-      Ale_ShowA_old (Ale_WARNING,Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type);
    else	// Degree type has no degrees => remove it
      {
       /***** Remove degree type *****/
       DT_RemoveDegreeTypeCompletely (DegTyp.DegTypCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Type_of_degree_X_removed,
-                DegTyp.DegTypName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Type_of_degree_X_removed,
+                     DegTyp.DegTypName);
      }
 
    /***** Show the form again *****/
@@ -954,12 +946,8 @@ void DT_RenameDegreeType (void)
 
    /***** Check if new name is empty *****/
    if (!NewNameDegTyp[0])
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty,
-                DegTyp->DegTypName);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty,
+                     DegTyp->DegTypName);
    else
      {
       /***** Check if old and new names are the same
@@ -968,12 +956,8 @@ void DT_RenameDegreeType (void)
         {
          /***** If degree type was in database... *****/
          if (DT_CheckIfDegreeTypeNameExists (NewNameDegTyp,DegTyp->DegTypCod))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_type_of_degree_X_already_exists,
-                      NewNameDegTyp);
-            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-           }
+            Ale_ShowA_fmt (Ale_WARNING,Txt_The_type_of_degree_X_already_exists,
+                           NewNameDegTyp);
          else
            {
             /* Update the table changing old name by new name */
@@ -983,19 +967,13 @@ void DT_RenameDegreeType (void)
                             NewNameDegTyp,DegTyp->DegTypCod);
 
             /* Write message to show the change made */
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_type_of_degree_X_has_been_renamed_as_Y,
-                      DegTyp->DegTypName,NewNameDegTyp);
-            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_type_of_degree_X_has_been_renamed_as_Y,
+                           DegTyp->DegTypName,NewNameDegTyp);
            }
         }
       else	// The same name
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_name_of_the_type_of_degree_X_has_not_changed,
-                   NewNameDegTyp);
-         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-        }
+         Ale_ShowA_fmt (Ale_INFO,Txt_The_name_of_the_type_of_degree_X_has_not_changed,
+                        NewNameDegTyp);
      }
 
    /***** Show the form again *****/

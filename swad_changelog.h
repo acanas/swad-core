@@ -402,10 +402,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.46.2 (2019-02-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.46.3 (2019-02-16)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.46.3:  Feb 16, 2019 	Refactoring code related to alerts. (238243 lines)
 	Version 18.46.2:  Feb 16, 2019 	Refactoring code related to alerts. (238298 lines)
 	Version 18.46.1:  Feb 15, 2019 	Refactoring code related to alerts. (238355 lines)
 	Version 18.46:    Feb 15, 2019 	Removed unused code related to tabs.
