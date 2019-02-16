@@ -389,7 +389,7 @@ void Tst_ShowFormAskTst (void)
    else
      {
       /***** Warning message *****/
-      Ale_ShowA_old (Ale_INFO,Txt_No_test_questions);
+      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
 
       /***** Button to create a new question *****/
       if (Tst_CheckIfICanEditTests ())
@@ -445,7 +445,7 @@ void Tst_ShowNewTest (void)
          /***** Get questions *****/
          if ((NumRows = Tst_GetQuestionsForTest (&mysql_res)) == 0)	// Query database
            {
-            Ale_ShowA_old (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
+            Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
             Tst_ShowFormAskTst ();					// Show the form again
            }
          else
@@ -590,16 +590,12 @@ void Tst_AssessTest (void)
          Tst_SetTstStatus (NumTst,Tst_STATUS_ASSESSED);
          break;
       case Tst_STATUS_ASSESSED:
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_test_X_has_already_been_assessed_previously,
-                   NumTst);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Txt_The_test_X_has_already_been_assessed_previously,
+                        NumTst);
          break;
       case Tst_STATUS_ERROR:
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_There_was_an_error_in_assessing_the_test_X,
-                   NumTst);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Txt_There_was_an_error_in_assessing_the_test_X,
+                        NumTst);
          break;
      }
   }
@@ -712,16 +708,14 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Write warning *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        "%s:<br /><span id=\"date_next_test\"></span>."
-                "<script type=\"text/javascript\">"
-		"writeLocalDateHMSFromUTC('date_next_test',%ld,"
-		"%u,',&nbsp;','%s',true,true,0x7);"
-		"</script>",
-	        Txt_You_can_not_take_a_new_test_until,
-	        (long) TimeNextTestUTC,
-	        (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,"%s:<br /><span id=\"date_next_test\"></span>."
+		     "<script type=\"text/javascript\">"
+		     "writeLocalDateHMSFromUTC('date_next_test',%ld,"
+		     "%u,',&nbsp;','%s',true,true,0x7);"
+		     "</script>",
+		     Txt_You_can_not_take_a_new_test_until,
+		     (long) TimeNextTestUTC,
+		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       return false;
      }
@@ -1344,7 +1338,7 @@ void Tst_ShowFormAskEditTsts (void)
    else	// No test questions
      {
       /***** Warning message *****/
-      Ale_ShowA_old (Ale_INFO,Txt_No_test_questions);
+      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
 
       /***** Button to create a new question *****/
       Tst_PutButtonToAddQuestion ();
@@ -1397,7 +1391,7 @@ void Tst_ShowFormAskSelectTstsForGame (long GamCod)
    else	// No test questions
      {
       /***** Warning message *****/
-      Ale_ShowA_old (Ale_INFO,Txt_No_test_questions);
+      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
 
       /***** Button to create a new question *****/
       Tst_PutButtonToAddQuestion ();
@@ -1475,7 +1469,7 @@ void Tst_ShowFormConfig (void)
 
    /***** If current course has tests and pluggable is unknown... *****/
    if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
-      Ale_ShowA_old (Ale_WARNING,Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications);
 
    /***** Form to configure test *****/
    Tst_ShowFormConfigTst ();
@@ -1550,12 +1544,8 @@ void Tst_RenameTag (void)
 
    /***** Check that the new tag is not empty *****/
    if (!NewTagTxt[0])	// New tag empty
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
-                OldTagTxt);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
+                     OldTagTxt);
    else			// New tag not empty
      {
       /***** Check if the old tag is equal to the new one *****/
@@ -1563,12 +1553,8 @@ void Tst_RenameTag (void)
 						// are exactly the same (case sensitively).
 						// This happens when user press INTRO
 						// without changing anything in the form.
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_tag_X_has_not_changed,
-                   NewTagTxt);
-         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_INFO,Txt_The_tag_X_has_not_changed,
+                        NewTagTxt);
       else					// The old and the new tag
 						// are not exactly the same (case sensitively).
 	{
@@ -1647,10 +1633,8 @@ void Tst_RenameTag (void)
 	   }
 
 	 /***** Write message to show the change made *****/
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_tag_X_has_been_renamed_as_Y,
-		   OldTagTxt,NewTagTxt);
-	 Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_tag_X_has_been_renamed_as_Y,
+		        OldTagTxt,NewTagTxt);
 	}
      }
 
@@ -1855,7 +1839,7 @@ static void Tst_ShowFormEditTags (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowA_old (Ale_INFO,Txt_No_test_questions);
+      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -2257,7 +2241,7 @@ void Tst_ReceiveConfigTst (void)
 		    Tst_FeedbackDB[Gbl.Test.Config.Feedback]);
 
    /***** Show confirmation message *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);
 
    /***** Show again the form to configure test *****/
    Tst_ShowFormConfig ();
@@ -2641,7 +2625,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 			     Query);
 
    if (NumRows == 0)
-      Ale_ShowA_old (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
+      Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
 
    return NumRows;
   }
@@ -3324,7 +3308,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
 			     Shuffle ? "RAND(NOW())" :
 				       "AnsInd");
    if (!NumRows)
-      Ale_ShowA_old (Ale_ERROR,"Error when getting answers of a question.");
+      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
   }
@@ -3574,7 +3558,7 @@ void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod,
       case Tst_ANS_FLOAT:
       case Tst_ANS_TRUE_FALSE:
       case Tst_ANS_TEXT:
-         Ale_ShowA_old (Ale_WARNING,"Type of answer not valid in a game.");
+         Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -4758,7 +4742,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
    /* Check number of tags selected */
    if (Tst_CountNumTagsInList () == 0)	// If no tags selected...
      {					// ...write alert
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
       Error = true;
      }
 
@@ -4776,7 +4760,7 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 	 /* Check number of types of answer */
 	 if (Tst_CountNumAnswerTypesInList () == 0)	// If no types of answer selected...
 	   {						// ...write warning alert
-	    Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
+	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
 	    Error = true;
 	   }
 	 break;
@@ -4799,10 +4783,8 @@ static bool Tst_GetParamsTst (Tst_ActionToDoWithQuestions_t ActionToDoWithQuesti
 	 if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
 	     Gbl.Test.NumQsts > Gbl.Test.Config.Max)
 	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_number_of_questions_must_be_in_the_interval_X,
-		      Gbl.Test.Config.Min,Gbl.Test.Config.Max);
-	    Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_number_of_questions_must_be_in_the_interval_X,
+		           Gbl.Test.Config.Min,Gbl.Test.Config.Max);
 	    Error = true;
 	   }
 	 break;
@@ -6009,7 +5991,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
         Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
        Gbl.Test.Image.Status != Img_FILE_PROCESSED)
      {
-      Ale_ShowA_old (Ale_WARNING,Txt_Error_receiving_or_processing_image);
+      Ale_ShowAlert (Ale_WARNING,Txt_Error_receiving_or_processing_image);
       return false;
      }
 
@@ -6019,14 +6001,14 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    /***** A question must have at least one tag *****/
    if (!Gbl.Test.Tags.Num) // There are no tags with text
      {
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_at_least_one_tag_for_the_question);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_one_tag_for_the_question);
       return false;
      }
 
    /***** A question must have a stem*****/
    if (!Gbl.Test.Stem.Length)
      {
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
       return false;
      }
 
@@ -6036,12 +6018,12 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
       case Tst_ANS_INT:
          if (!Gbl.Test.Answer.Options[0].Text)
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
             return false;
            }
          if (!Gbl.Test.Answer.Options[0].Text[0])
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
             return false;
            }
          Gbl.Test.Answer.Integer = Tst_GetIntAnsFromStr (Gbl.Test.Answer.Options[0].Text);
@@ -6051,13 +6033,13 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
          if (!Gbl.Test.Answer.Options[0].Text ||
              !Gbl.Test.Answer.Options[1].Text)
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
             return false;
            }
          if (!Gbl.Test.Answer.Options[0].Text[0] ||
              !Gbl.Test.Answer.Options[1].Text[0])
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
             return false;
            }
          for (i = 0;
@@ -6067,7 +6049,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
          if (Gbl.Test.Answer.FloatingPoint[0] >
              Gbl.Test.Answer.FloatingPoint[1])
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
+            Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
             return false;
            }
          Gbl.Test.Answer.NumOptions = 2;
@@ -6076,7 +6058,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
          if (Gbl.Test.Answer.TF != 'T' &&
              Gbl.Test.Answer.TF != 'F')
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
             return false;
            }
          Gbl.Test.Answer.NumOptions = 1;
@@ -6085,12 +6067,12 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
       case Tst_ANS_MULTIPLE_CHOICE:
          if (!Gbl.Test.Answer.Options[0].Text)		// If the first answer is empty
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
             return false;
            }
          if (!Gbl.Test.Answer.Options[0].Text[0])	// If the first answer is empty
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
             return false;
            }
 
@@ -6103,7 +6085,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
                  {
                   if (ThereIsEndOfAnswers)
                     {
-                     Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
+                     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
                      return false;
                     }
                   NumLastOpt = NumOpt;
@@ -6117,7 +6099,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
 
          if (NumLastOpt < 1)
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
             return false;
            }
 
@@ -6128,19 +6110,19 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
                break;
          if (NumOpt > NumLastOpt)
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_mark_an_answer_as_correct);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_mark_an_answer_as_correct);
             return false;
            }
          break;
       case Tst_ANS_TEXT:
          if (!Gbl.Test.Answer.Options[0].Text)		// If the first answer is empty
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
             return false;
            }
          if (!Gbl.Test.Answer.Options[0].Text[0])  // If the first answer is empty
            {
-            Ale_ShowA_old (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
             return false;
            }
 
@@ -6153,7 +6135,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
                  {
                   if (ThereIsEndOfAnswers)
                     {
-                     Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
+                     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
                      return false;
                     }
                   Gbl.Test.Answer.NumOptions++;
@@ -6456,7 +6438,7 @@ void Tst_RemoveQst (void)
       Lay_ShowErrorAndExit ("The question to be removed does not exist or belongs to another course.");
 
    /***** Write message *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Question_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Continue editing questions *****/
    if (!EditingOnlyThisQst)
@@ -6495,11 +6477,9 @@ void Tst_ChangeShuffleQst (void)
 		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
-                       Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
-             Gbl.Test.QstCod);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
+                                        Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
+                  Gbl.Test.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
@@ -7685,7 +7665,7 @@ void Tst_ShowUsrsTestResults (void)
    else	// If no users are selected...
      {
       // ...write warning alert
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
       Tst_SelUsrsToSeeUsrsTestResults ();
      }

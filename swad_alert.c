@@ -92,7 +92,7 @@ void Ale_ShowPendingAlert (void)
    /***** Anything to show? *****/
    if (Gbl.Alert.Type != Ale_NONE)
       /***** Show alert *****/
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    Ale_ResetAlert ();
   }
@@ -131,13 +131,6 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
   }
 
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
-  {
-   if (AlertType != Ale_NONE)
-      Ale_ShowAlertAndButton (AlertType,Txt,
-                              ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
-  }
-
-void Ale_ShowA_old (Ale_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Ale_NONE)
       Ale_ShowAlertAndButton (AlertType,Txt,

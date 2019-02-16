@@ -405,22 +405,23 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.46.9 (2019-02-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.46.10 (2019-02-16)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
-	Version 18.46.9:  Feb 16, 2019 	Refactoring code related to alerts. (237809 lines)
-	Version 18.46.8:  Feb 16, 2019 	Refactoring code related to alerts. (237863 lines)
-	Version 18.46.7:  Feb 16, 2019 	Refactoring code related to alerts. (237953 lines)
-	Version 18.46.6:  Feb 16, 2019 	Refactoring code related to alerts. (238019 lines)
-	Version 18.46.5:  Feb 16, 2019 	Refactoring code related to alerts. (238062 lines)
-	Version 18.46.4:  Feb 16, 2019 	Refactoring code related to alerts. (238061 lines)
-	Version 18.46.3:  Feb 16, 2019 	Refactoring code related to alerts. (238243 lines)
-	Version 18.46.2:  Feb 16, 2019 	Refactoring code related to alerts. (238298 lines)
-	Version 18.46.1:  Feb 15, 2019 	Refactoring code related to alerts. (238355 lines)
+	Version 18.46.10: Feb 16, 2019 	Code refactoring related to alerts. (237729 lines)
+	Version 18.46.9:  Feb 16, 2019 	Code refactoring related to alerts. (237809 lines)
+	Version 18.46.8:  Feb 16, 2019 	Code refactoring related to alerts. (237863 lines)
+	Version 18.46.7:  Feb 16, 2019 	Code refactoring related to alerts. (237953 lines)
+	Version 18.46.6:  Feb 16, 2019 	Code refactoring related to alerts. (238019 lines)
+	Version 18.46.5:  Feb 16, 2019 	Code refactoring related to alerts. (238062 lines)
+	Version 18.46.4:  Feb 16, 2019 	Code refactoring related to alerts. (238061 lines)
+	Version 18.46.3:  Feb 16, 2019 	Code refactoring related to alerts. (238243 lines)
+	Version 18.46.2:  Feb 16, 2019 	Code refactoring related to alerts. (238298 lines)
+	Version 18.46.1:  Feb 15, 2019 	Code refactoring related to alerts. (238355 lines)
 	Version 18.46:    Feb 15, 2019 	Removed unused code related to tabs.
 					Fixed bug in actions related to login.
-					Refactoring code related to alerts. (238468 lines)
+					Code refactoring related to alerts. (238468 lines)
 					2 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='34';
 UPDATE actions SET Obsolete='Y' WHERE ActCod='844';
@@ -5261,8 +5262,8 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart',
         Version 14.113.3: Apr 15, 2015	New welcome message after creating an account. (184536 lines)
         Version 14.113.2: Apr 14, 2015	Fixed bug when compressing users' works. (184486 lines)
         Version 14.113.1: Apr 14, 2015	Fixed bug when compressing users' works, reported by José Martínez Aroza. (184484 lines)
-        Version 14.113:   Apr 12, 2015	Refactoring code related to frames. (184462 lines)
-        Version 14.112.1: Apr 12, 2015	Refactoring code related to frames with ending buttons. (184583 lines)
+        Version 14.113:   Apr 12, 2015	Code refactoring related to frames. (184462 lines)
+        Version 14.112.1: Apr 12, 2015	Code refactoring related to frames with ending buttons. (184583 lines)
         Version 14.112:   Apr 12, 2015	Optimization in frames with ending buttons.
 					Changes in form to upload logo.
 					Changes in form to photo of centre.
