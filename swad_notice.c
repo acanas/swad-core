@@ -98,10 +98,8 @@ void Not_ShowFormNotice (void)
    extern const char *Txt_Create_notice;
 
    /***** Help message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_The_notice_will_appear_as_a_yellow_note_,
-             Gbl.CurrentCrs.Crs.FullName);
-   Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
+                  Gbl.CurrentCrs.Crs.FullName);
 
    /***** Start form *****/
    Frm_StartForm (ActRcvNot);
@@ -148,7 +146,7 @@ void Not_ReceiveNotice (void)
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
 
    /***** Write message of success *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Notice_created);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
 
    /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
@@ -198,7 +196,7 @@ void Not_ListNoticesAfterRemoval (void)
    extern const char *Txt_Notice_removed;
 
    /***** Message of success *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Notice_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_removed);
 
    /***** List remaining notices *****/
    Not_ListFullNotices ();
@@ -404,7 +402,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 		       Not_PutIconsListNotices,
 		       Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
          if (!NumNotices)
-	    Ale_ShowA_old (Ale_INFO,Txt_No_notices);
+	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
 	}
 
       /***** Show the notices *****/

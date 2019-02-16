@@ -91,7 +91,7 @@ void Pri_EditMyPrivacy (void)
    /***** If any of my preferences about privacy is unknown *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
-      Ale_ShowA_old (Ale_WARNING,Txt_Please_review_your_privacy_preferences);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,

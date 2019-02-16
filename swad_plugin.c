@@ -86,7 +86,7 @@ void Plg_ListPlugins (void)
 
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
      {
-      Ale_ShowA_old (Ale_WARNING,Txt_Option_under_development);
+      Ale_ShowAlert (Ale_WARNING,Txt_Option_under_development);
       return;
      }
 
@@ -502,10 +502,8 @@ void Plg_RemovePlugin (void)
 		   Plg.PlgCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Plugin_X_removed,
-             Plg.Name);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Plugin_X_removed,
+                  Plg.Name);
 
    /***** Show the form again *****/
    Plg_EditPlugins ();
@@ -539,12 +537,8 @@ void Plg_RenamePlugin (void)
 
    /***** Check if new name is empty *****/
    if (!NewPlgName[0])
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
-                Plg->Name);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
+                     Plg->Name);
    else
      {
       /***** Check if old and new names are the same
@@ -553,12 +547,8 @@ void Plg_RenamePlugin (void)
         {
          /***** If plugin was in database... *****/
          if (Plg_CheckIfPluginNameExists (NewPlgName,Plg->PlgCod))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_plugin_X_already_exists,
-                      NewPlgName);
-            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-           }
+            Ale_ShowAlert (Ale_WARNING,Txt_The_plugin_X_already_exists,
+                           NewPlgName);
          else
            {
             /* Update the table changing old name by new name */
@@ -567,19 +557,13 @@ void Plg_RenamePlugin (void)
                             NewPlgName,Plg->PlgCod);
 
             /***** Write message to show the change made *****/
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_plugin_X_has_been_renamed_as_Y,
-                      Plg->Name,NewPlgName);
-            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_plugin_X_has_been_renamed_as_Y,
+                           Plg->Name,NewPlgName);
            }
         }
       else	// The same name
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_name_of_the_plugin_X_has_not_changed,
-                   Plg->Name);
-         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_plugin_X_has_not_changed,
+                        Plg->Name);
      }
 
    /***** Show the form again *****/
@@ -632,13 +616,11 @@ void Plg_ChangePlgDescription (void)
                       NewDescription,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_description_is_X,
-                NewDescription);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_description_is_X,
+                     NewDescription);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_description_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_description_empty);
 
    /***** Show the form again *****/
    Str_Copy (Plg->Description,NewDescription,
@@ -676,13 +658,11 @@ void Plg_ChangePlgLogo (void)
                       NewLogo,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_logo_is_X,
-                NewLogo);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_logo_is_X,
+                     NewLogo);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_logo_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_logo_empty);
 
    /***** Show the form again *****/
    Str_Copy (Plg->Logo,NewLogo,
@@ -720,13 +700,11 @@ void Plg_ChangePlgAppKey (void)
                       NewAppKey,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_logo_is_X,	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                NewAppKey);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_logo_is_X,	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                     NewAppKey);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
    /***** Show the form again *****/
    Str_Copy (Plg->AppKey,NewAppKey,
@@ -764,13 +742,11 @@ void Plg_ChangePlgURL (void)
                       NewURL,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_URL_is_X,
-                NewURL);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_URL_is_X,
+                     NewURL);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_URL_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_URL_empty);
 
    /***** Show the form again *****/
    Str_Copy (Plg->URL,NewURL,
@@ -808,13 +784,11 @@ void Plg_ChangePlgIP (void)
                       NewIP,Plg->PlgCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_IP_address_is_X,
-                NewIP);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_IP_address_is_X,
+                     NewIP);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_IP_address_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_IP_address_empty);
 
    /***** Show the form again *****/
    Str_Copy (Plg->IP,NewIP,
@@ -1017,20 +991,16 @@ void Plg_RecFormNewPlg (void)
         {
          /***** If name of plugin was in database... *****/
          if (Plg_CheckIfPluginNameExists (Plg->Name,-1L))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_plugin_X_already_exists,
-                      Plg->Name);
-            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-           }
+            Ale_ShowAlert (Ale_WARNING,Txt_The_plugin_X_already_exists,
+                           Plg->Name);
          else	// Add new plugin to database
             Plg_CreatePlugin (Plg);
         }
       else	// If there is not a logo, a URL or a IP
-         Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin);
      }
    else	// If there is not a plugin name
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin);
 
    /***** Show the form again *****/
    Plg_EditPlugins ();
@@ -1056,10 +1026,8 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
 		   Plg->AppKey,Plg->URL,Plg->IP);
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Created_new_plugin_X,
-             Plg->Name);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_plugin_X,
+                  Plg->Name);
   }
 
 /*****************************************************************************/

@@ -601,7 +601,7 @@ void Plc_RemovePlace (void)
 
    /***** Check if this place has centres *****/
    if (Plc.NumCtrs)	// Place has centres ==> don't remove
-      Ale_ShowA_old (Ale_WARNING,Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
+      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
@@ -610,10 +610,8 @@ void Plc_RemovePlace (void)
 		      Plc.PlcCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Place_X_removed,
-                Plc.FullName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Place_X_removed,
+                     Plc.FullName);
      }
 
    /***** Show the form again *****/
@@ -685,12 +683,8 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Check if new name is empty *****/
    if (!NewPlcName[0])
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_place_X_empty,
-                CurrentPlcName);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_place_X_empty,
+                     CurrentPlcName);
    else
      {
       /***** Check if old and new names are the same
@@ -699,31 +693,21 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If place was in database... *****/
          if (Plc_CheckIfPlaceNameExists (ParamName,NewPlcName,Plc->PlcCod))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_place_X_already_exists,
-                      NewPlcName);
-            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-           }
+            Ale_ShowAlert (Ale_WARNING,Txt_The_place_X_already_exists,
+                           NewPlcName);
          else
            {
             /* Update the table changing old name by new name */
             Plc_UpdatePlcNameDB (Plc->PlcCod,FieldName,NewPlcName);
 
             /* Write message to show the change made */
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_place_X_has_been_renamed_as_Y,
-                      CurrentPlcName,NewPlcName);
-            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_X_has_been_renamed_as_Y,
+                           CurrentPlcName,NewPlcName);
            }
         }
       else	// The same name
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_name_of_the_place_X_has_not_changed,
-                   CurrentPlcName);
-         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_place_X_has_not_changed,
+                        CurrentPlcName);
      }
 
    /***** Show the form again *****/
@@ -876,24 +860,16 @@ void Plc_RecFormNewPlace (void)
      {
       /***** If name of place was in database... *****/
       if (Plc_CheckIfPlaceNameExists ("ShortName",Plc->ShrtName,-1L))
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_place_X_already_exists,
-                   Plc->ShrtName);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_WARNING,Txt_The_place_X_already_exists,
+                        Plc->ShrtName);
       else if (Plc_CheckIfPlaceNameExists ("FullName",Plc->FullName,-1L))
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_place_X_already_exists,
-                   Plc->FullName);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_WARNING,Txt_The_place_X_already_exists,
+                        Plc->FullName);
       else	// Add new place to database
          Plc_CreatePlace (Plc);
      }
    else	// If there is not a place name
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
 
    /***** Show the form again *****/
    Plc_EditPlaces ();
@@ -916,8 +892,6 @@ static void Plc_CreatePlace (struct Place *Plc)
                    Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Created_new_place_X,
-             Plc->FullName);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_place_X,
+                  Plc->FullName);
   }

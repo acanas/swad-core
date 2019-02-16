@@ -254,12 +254,11 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
    /***** Show possible alert *****/
    if (Gbl.Alert.Section == (const char *) Nck_NICKNAME_SECTION_ID)
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowDelayedAlert ();
 
    /***** Help message *****/
    if (IMustFillNickname)
-      Ale_ShowA_old (Ale_WARNING,
-	             Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
 
    /***** Start table *****/
    Tbl_StartTableWide (2);
@@ -488,10 +487,10 @@ void Nck_RemoveOtherUsrNick (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -540,10 +539,10 @@ void Nck_UpdateOtherUsrNick (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
