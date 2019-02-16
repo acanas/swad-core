@@ -2021,7 +2021,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
      }
 
    if (!ICanEdit)
-      Lay_ShowErrorAndExit ("You don't have permission to edit surveys here.");
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

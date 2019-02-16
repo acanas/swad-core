@@ -1972,7 +1972,7 @@ static void Gam_SetDefaultAndAllowedScope (struct Game *Game)
      }
 
    if (!ICanEdit)
-      Lay_ShowErrorAndExit ("You don't have permission to edit games here.");
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

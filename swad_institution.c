@@ -1727,7 +1727,7 @@ void Ins_RemoveInstitution (void)
 
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (&Ins))
-      Lay_ShowErrorAndExit ("You don't have permission to remove institution.");
+      Lay_NoPermissionExit ();
    else if (Ins.NumCtrs ||
             Ins.NumUsrsWhoClaimToBelongToIns ||
             Ins.NumUsrs)	// Institution has centres or users ==> don't remove

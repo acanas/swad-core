@@ -2685,7 +2685,7 @@ void Prj_ReqRemProject (void)
 			      Btn_REMOVE_BUTTON,Txt_Remove_project);
      }
    else
-      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2748,7 +2748,7 @@ void Prj_RemoveProject (void)
 	             Prj.Title);
      }
    else
-      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2790,7 +2790,7 @@ void Prj_HideProject (void)
 	             Prj.Title);
      }
    else
-      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2832,7 +2832,7 @@ void Prj_ShowProject (void)
 	             Prj.Title);
      }
    else
-      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3266,7 +3266,7 @@ void Prj_RecFormProject (void)
       Prj_RequestCreatOrEditPrj (Prj.PrjCod);
      }
    else
-      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

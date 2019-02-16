@@ -3423,7 +3423,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
       else if (!Grp_GetIfIBelongToGrp (GrpDat->GrpCod))
         {
          if (AbortOnError)
-            Lay_ShowErrorAndExit ("You don't have permission to access this group.");
+            Lay_NoPermissionExit ();
          GrpDat->GrpCod = -1L;
         }
      }
@@ -10402,7 +10402,6 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 void Brw_ChgFileMetadata (void)
   {
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
-   extern const char *Txt_You_dont_have_permission_to_change_the_properties_of_file_X;
    struct FileMetadata FileMetadata;
    bool IAmTheOwner;
    bool PublicFileBeforeEdition;
@@ -10511,9 +10510,8 @@ void Brw_ChgFileMetadata (void)
                      Gbl.FileBrowser.FilFolLnkName);
      }
    else
-      /***** Write error message *****/
-      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_change_the_properties_of_file_X,
-                     Gbl.FileBrowser.FilFolLnkName);
+      /***** Write error message and exit *****/
+      Lay_NoPermissionExit ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();

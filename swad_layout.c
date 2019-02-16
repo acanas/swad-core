@@ -1249,6 +1249,17 @@ void Lay_WrongScopeExit (void)
   }
 
 /*****************************************************************************/
+/*** Write error message and exit when no permission to perform an action ****/
+/*****************************************************************************/
+
+void Lay_NoPermissionExit (void)
+  {
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+
+   Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+  }
+
+/*****************************************************************************/
 /******* Write error message, close files, remove lock file, and exit ********/
 /*****************************************************************************/
 

@@ -231,7 +231,7 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
   }
 
 /*****************************************************************************/
-/***************** Show form to change another user's account ****************/
+/*** Show alert when user not found or no permission to perform an action ****/
 /*****************************************************************************/
 
 void Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)

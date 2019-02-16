@@ -54516,69 +54516,6 @@ const char *Txt_You_dont_follow_any_user =
 	"Voc&ecirc; n&atilde;o segue nenhum usu&aacute;rio.";
 #endif
 
-const char *Txt_You_dont_have_permission_to_access_to_this_forum =
-#if   L==1	// ca
-	"No t&eacute; perm&iacute;s per accedir a aquest f&ograve;rum.";
-#elif L==2	// de
-	"Sie haben keine Berechtigung, dieses Forum benutzen.";
-#elif L==3	// en
-	"You don't have permission to access to this forum.";
-#elif L==4	// es
-	"Usted no tiene permiso para acceder a este foro.";
-#elif L==5	// fr
-	"Vous n'avez pas la permission d'acc&eacute;der &agrave; ce forum.";
-#elif L==6	// gn
-	"Usted no tiene permiso para acceder a este foro.";	// Okoteve traducción
-#elif L==7	// it
-	"Non si dispone dell'autorizzazione per accedere a questo forum.";
-#elif L==8	// pl
-	"Nie masz dost&eogon;pu do tej forum.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar este f&oacute;rum.";
-#endif
-
-const char *Txt_You_dont_have_permission_to_change_the_properties_of_file_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Usted no tiene permiso para cambiar las propiedades del archivo %s.";		// Necessita traduccio
-#elif L==2	// de
-	"You don't have permission to change the properties of file %s.";		// Need Übersetzung
-#elif L==3	// en
-	"You don't have permission to change the properties of file %s.";
-#elif L==4	// es
-	"Usted no tiene permiso para cambiar las propiedades del archivo %s.";
-#elif L==5	// fr
-	"You don't have permission to change the properties of file %s.";		// Besoin de traduction
-#elif L==6	// gn
-	"Usted no tiene permiso para cambiar las propiedades del archivo %s.";		// Okoteve traducción
-#elif L==7	// it
-	"You don't have permission to change the properties of file %s.";		// Bisogno di traduzione
-#elif L==8	// pl
-	"You don't have permission to change the properties of file %s.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o tem permiss&atilde;o para alterar as propriedades do arquivo %s.";
-#endif
-
-const char *Txt_You_dont_have_permission_to_edit_this_course =
-#if   L==1	// ca
-	"Usted no tiene permiso para editar esta asignatura.";		// Necessita traduccio
-#elif L==2	// de
-	"You don't have permission to edit this course.";		// Need Übersetzung
-#elif L==3	// en
-	"You don't have permission to edit this course.";
-#elif L==4	// es
-	"Usted no tiene permiso para editar esta asignatura.";
-#elif L==5	// fr
-	"You don't have permission to edit this course.";		// Besoin de traduction
-#elif L==6	// gn
-	"Usted no tiene permiso para editar esta asignatura.";		// Okoteve traducción
-#elif L==7	// it
-	"Non hai l'autorizzazione di editare questo corso.";
-#elif L==8	// pl
-	"You don't have permission to edit this course.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o tem permiss&atilde;o para editar esta disciplina.";
-#endif
-
 const char *Txt_You_dont_have_permission_to_perform_this_action =
 #if   L==1	// ca
 	"Vost&egrave; no t&eacute; perm&iacute;s"

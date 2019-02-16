@@ -1698,7 +1698,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
   {
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
@@ -1741,7 +1740,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       case Rec_CRS_PRINT_SEVERAL_RECORDS:
 		  break;
 	       default:
-		  Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+		  Lay_NoPermissionExit ();
 		  break;
 	      }
 
@@ -1758,7 +1757,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		    }
 	   }
 	 else	// Not me ==> I am a student trying to do something forbidden
-	    Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+	    Lay_NoPermissionExit ();
 	 break;
       case Rol_NET:
 	 break;

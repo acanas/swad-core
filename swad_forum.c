@@ -3845,7 +3845,6 @@ static void For_SetForumType (void)
 
 static void For_RestrictAccess (void)
   {
-   extern const char *Txt_You_dont_have_permission_to_access_to_this_forum;
    Rol_Role_t MaxRole;
    bool ICanSeeForum;
 
@@ -3919,7 +3918,7 @@ static void For_RestrictAccess (void)
 	 break;
      }
    if (!ICanSeeForum)
-      Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_access_to_this_forum);
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

@@ -1985,7 +1985,6 @@ void Crs_RemoveCourse (void)
   {
    extern const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course;
    extern const char *Txt_Course_X_removed;
-   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    struct Course Crs;
 
    /***** Get course code *****/
@@ -2010,7 +2009,7 @@ void Crs_RemoveCourse (void)
         }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
+      Lay_NoPermissionExit ();
 
    /***** Show the form again *****/
    Crs_EditCourses ();
@@ -2321,7 +2320,6 @@ void Crs_ChangeInsCrsCodInConfig (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
-   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
 
    /***** Get institutional code from form *****/
@@ -2350,7 +2348,6 @@ void Crs_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
-   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
 
    /***** Get parameters from form *****/
@@ -2383,11 +2380,7 @@ void Crs_ChangeInsCrsCod (void)
 	}
      }
    else
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_You_dont_have_permission_to_edit_this_course,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2541,7 +2534,6 @@ void Crs_ChangeCrsYear (void)
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
-   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    struct Degree Deg;
    char YearStr[2 + 1];
    unsigned NewYear;
@@ -2601,11 +2593,7 @@ void Crs_ChangeCrsYear (void)
         }
      }
    else
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_You_dont_have_permission_to_edit_this_course,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2680,7 +2668,6 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_course_X_has_not_changed;
-   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -2761,11 +2748,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
         }
      }
    else
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_You_dont_have_permission_to_edit_this_course,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

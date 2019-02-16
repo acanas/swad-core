@@ -70,7 +70,6 @@ extern struct Globals Gbl;
 
 int main (void)
   {
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    void (*FunctionPriori) (void);
    void (*FunctionPosteriori) (void);
 
@@ -139,7 +138,7 @@ int main (void)
 
       /***** Check if the user have permission to execute the action *****/
       if (!Act_CheckIfIHavePermissionToExecuteAction (Gbl.Action.Act))
-	 Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+	 Lay_NoPermissionExit ();
 
       /***** Update most frequently used actions *****/
       MFU_UpdateMFUActions ();

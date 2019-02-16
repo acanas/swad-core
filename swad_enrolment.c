@@ -599,8 +599,6 @@ void Enr_ReqAdminTchs (void)
 
 static void Enr_ReqAdminUsrs (Rol_Role_t Role)
   {
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_GST:
@@ -625,7 +623,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
-	 Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+	 Lay_NoPermissionExit ();
 	 break;
      }
   }
@@ -2218,7 +2216,7 @@ void Enr_ShowEnrolmentRequests (void)
 			                      (1 << Rol_TCH));
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+	 Lay_NoPermissionExit ();
 	 break;
      }
   }
@@ -2424,7 +2422,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2546,7 +2544,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2642,7 +2640,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2714,7 +2712,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2764,7 +2762,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2789,7 +2787,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+               Lay_NoPermissionExit ();
                break;
            }
          break;
