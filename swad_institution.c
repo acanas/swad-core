@@ -215,7 +215,7 @@ void Ins_SeeInsWithPendingCtrs (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowA_old (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -708,7 +708,7 @@ static void Ins_ListInstitutions (void)
       Tbl_EndTable ();
      }
    else	// No insrtitutions created in the current country
-      Ale_ShowA_old (Ale_INFO,Txt_No_institutions);
+      Ale_ShowAlert (Ale_INFO,Txt_No_institutions);
 
    /***** Button to create institution *****/
    if (Ins_CheckIfICanCreateInstitutions ())
@@ -1731,7 +1731,7 @@ void Ins_RemoveInstitution (void)
    else if (Ins.NumCtrs ||
             Ins.NumUsrsWhoClaimToBelongToIns ||
             Ins.NumUsrs)	// Institution has centres or users ==> don't remove
-      Ale_ShowA_old (Ale_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/

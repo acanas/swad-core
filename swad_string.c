@@ -2797,16 +2797,22 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
+        {
+	 Gbl.DelayedAlert.Type = Ale_WARNING;
          snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
                    Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
                 	                                   Txt_UPLOAD_FILE_X_invalid_name,
 		   FileName);
+        }
      }
    else	// FileName is empty
+     {
+      Gbl.DelayedAlert.Type = Ale_WARNING;
       Str_Copy (Gbl.DelayedAlert.Txt,
 	        Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
 						        Txt_UPLOAD_FILE_Invalid_name,
 		Ale_MAX_BYTES_ALERT);
+     }
 
    return FileNameIsOK;
   }

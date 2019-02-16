@@ -121,14 +121,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
        !Gbl.Usrs.Me.MyCrss.Num)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        "%s<br />%s<br />%s",
-	        Txt_You_are_not_enroled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
-	        Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them,
-	        Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_INFO,"%s<br />%s<br />%s",
+	             Txt_You_are_not_enroled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
+	             Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them,
+	             Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_What_would_you_like_to_do,NULL,

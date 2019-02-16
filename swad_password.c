@@ -692,7 +692,7 @@ void Pwd_ShowFormChgMyPwd (void)
 
    /***** Show possible alert *****/
    if (Gbl.Alert.Section == Pwd_PASSWORD_SECTION_ID)
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowA_old (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
 
    /***** Help message *****/
    if (!IHaveAPasswordInDB) // If I don't have a password in database...

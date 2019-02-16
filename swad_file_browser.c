@@ -8869,7 +8869,7 @@ void Brw_RecFolderFileBrowser (void)
 	   }
         }
       else	// Folder name not valid
-         Ale_ShowDelayedAlert (Ale_WARNING,Gbl.DelayedAlert.Txt);
+         Ale_ShowDelayedAlert ();
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_create_folders_here);	// It's difficult, but not impossible that a user sees this message
@@ -8982,7 +8982,7 @@ void Brw_RenFolderFileBrowser (void)
                            Gbl.FileBrowser.FilFolLnkName);
         }
       else	// Folder name not valid
-         Ale_ShowDelayedAlert (Ale_WARNING,Gbl.DelayedAlert.Txt);
+         Ale_ShowDelayedAlert ();
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);

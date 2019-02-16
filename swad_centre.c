@@ -2259,7 +2259,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
      }
    else
       /***** Alert *****/
-      Ale_ShowDelayedAlert (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+      Ale_ShowDelayedAlert ();
   }
 
 static void Ctr_PutParamGoToCtr (void)

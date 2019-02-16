@@ -3490,7 +3490,7 @@ void Enr_RemUsrFromCrs1 (void)
 
 void Enr_RemUsrFromCrs2 (void)
   {
-   Ale_ShowDelayedAlert (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+   Ale_ShowDelayedAlert ();
   }
 
 /*****************************************************************************/

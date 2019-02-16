@@ -466,8 +466,8 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",	// TODO: Need translation!
+      Gbl.Alert.Type = Ale_ERROR;
+      Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",
 		Ale_MAX_BYTES_ALERT);
       return false;
      }
@@ -881,8 +881,8 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	      }
 	    else
 	      {
-	       Gbl.Alert.Type = Ale_WARNING;
-	       Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",	// TODO: Need translation!
+	       Gbl.Alert.Type = Ale_ERROR;
+	       Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",
 			 Ale_MAX_BYTES_ALERT);
 	       if (asprintf (ContentStr,"<![CDATA[%s]]>",
 			     Gbl.Alert.Txt) < 0)
@@ -892,8 +892,8 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   }
 	 else
 	   {
-	    Gbl.Alert.Type = Ale_WARNING;
-	    Str_Copy (Gbl.Alert.Txt,"User's IDs not found!",	// TODO: Need translation!
+	    Gbl.Alert.Type = Ale_ERROR;
+	    Str_Copy (Gbl.Alert.Txt,"User's IDs not found!",
 		      Ale_MAX_BYTES_ALERT);
 	    if (asprintf (ContentStr,"<![CDATA[%s]]>",
 			  Gbl.Alert.Txt) < 0)

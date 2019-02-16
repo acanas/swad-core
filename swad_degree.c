@@ -2295,7 +2295,7 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
      }
    else
       /***** Alert *****/
-      Ale_ShowDelayedAlert (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+      Ale_ShowDelayedAlert ();
   }
 
 static void Deg_PutParamGoToDeg (void)

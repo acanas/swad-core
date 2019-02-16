@@ -592,11 +592,11 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 
    /***** Show possible alert *****/
    if (Gbl.Alert.Section == (const char *) ID_ID_SECTION_ID)
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowDelayedAlert ();
 
    /***** Help message *****/
    if (IShouldFillInID)
-      Ale_ShowA_old (Ale_WARNING,Txt_Please_fill_in_your_ID);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Start table *****/
    Tbl_StartTableWide (2);
@@ -676,7 +676,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       /***** Write help text *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"2\" class=\"DAT CENTER_MIDDLE\">");
-      Ale_ShowA_old (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
+      Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
       fprintf (Gbl.F.Out,"</td>"
 	                  "</tr>");
 
@@ -767,10 +767,10 @@ void ID_RemoveOtherUsrID (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -898,10 +898,10 @@ void ID_NewOtherUsrID (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

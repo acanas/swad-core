@@ -238,7 +238,7 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,cons
    /***** Show optional alert *****/
    if (MessageGroupTypes)
       if (MessageGroupTypes[0])
-         Ale_ShowA_old (AlertTypeGroupTypes,MessageGroupTypes);
+         Ale_ShowAlert (AlertTypeGroupTypes,MessageGroupTypes);
 
    /***** Put form to edit group types *****/
    Grp_EditGroupTypes ();
@@ -255,7 +255,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,const ch
    /***** Show optional alert *****/
    if (MessageGroups)
       if (MessageGroups[0])
-         Ale_ShowA_old (AlertTypeGroups,MessageGroups);
+         Ale_ShowAlert (AlertTypeGroups,MessageGroups);
 
    /***** Put form to edit groups *****/
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num) // If there are group types...
@@ -292,12 +292,8 @@ static void Grp_EditGroupTypes (void)
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num)	// Group types found...
       Grp_ListGroupTypesForEdition ();
    else	// No group types found in this course
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_There_are_no_types_of_group_in_the_course_X,
-                Gbl.CurrentCrs.Crs.ShrtName);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_types_of_group_in_the_course_X,
+                     Gbl.CurrentCrs.Crs.ShrtName);
 
    /***** End box *****/
    Box_EndBox ();
@@ -324,12 +320,8 @@ static void Grp_EditGroups (void)
    if (Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
       Grp_ListGroupsForEdition ();
    else	// There are group types, but there aren't groups
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_No_groups_have_been_created_in_the_course_X,
-                Gbl.CurrentCrs.Crs.ShrtName);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
+                     Gbl.CurrentCrs.Crs.ShrtName);
 
    /***** End box *****/
    Box_EndBox ();
@@ -1125,20 +1117,16 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
                      /* If the enrolment is single and the group to which the user belongs is different from the selected ==>
                         remove user from the group to which he belongs */
                      Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
-                     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                       Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
-			       UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
-                     Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+                     Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
+			            UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                     }
 
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
                   Grp_AddUsrToGroup (UsrDat,LstGrps->GrpCods[NumGrpSel]);
-                  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
-		            UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
-                  Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+                  Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
+		                 UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
+                                 Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
                  }
 
                break;	// Once we know the type of a selected group, it's not necessary to check the rest of types
@@ -1186,18 +1174,14 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 
    /***** Write message to inform about how many groups the student has been removed from *****/
    if (NumGrpsHeIsRemoved == 0)
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_not_been_removed_from_any_group,
-                UsrDat->FullName);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_not_been_removed_from_any_group,
+                     UsrDat->FullName);
    else if (NumGrpsHeIsRemoved == 1)
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_been_removed_from_one_group,
-                UsrDat->FullName);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_one_group,
+                     UsrDat->FullName);
    else	// NumGrpsHeIsRemoved > 1
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_been_removed_from_Y_groups,
-                UsrDat->FullName,NumGrpsHeIsRemoved);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_Y_groups,
+                     UsrDat->FullName,NumGrpsHeIsRemoved);
 
    /***** Free the list of groups of this type to which the user belonged *****/
    Grp_FreeListCodGrp (&LstGrpsHeBelongs);
@@ -1866,10 +1850,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
    else	// This course has no groups
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_No_groups_have_been_created_in_the_course_X,
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
+                     Gbl.CurrentCrs.Crs.FullName);
 
       /***** Button to create group *****/
       if (ICanEdit)
@@ -1920,21 +1902,13 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 	    if (Grp_GetIfGrpIsAvailable (GrpTyp->GrpTypCod))		// If there is any group of this type available
 	      {
 	       if (GrpTyp->MandatoryEnrolment)
-		 {
-		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
-						        Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,
-			    GrpTyp->GrpTypName);
-		  Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-		 }
+		  Ale_ShowAlert (Ale_WARNING,GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
+						                         Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,
+			         GrpTyp->GrpTypName);
 	       else
-		 {
-		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    GrpTyp->MultipleEnrolment ? Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X :
-						        Txt_You_can_register_voluntarily_in_one_group_of_type_X,
-			    GrpTyp->GrpTypName);
-		  Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-		 }
+		  Ale_ShowAlert (Ale_INFO,GrpTyp->MultipleEnrolment ? Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X :
+						                      Txt_You_can_register_voluntarily_in_one_group_of_type_X,
+			         GrpTyp->GrpTypName);
 	      }
      }
   }
@@ -4644,7 +4618,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
                    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,Gbl.Alert.Txt,
