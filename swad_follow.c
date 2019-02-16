@@ -643,8 +643,6 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
 void Fol_ListFollowing (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user to view user he/she follows *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
@@ -653,7 +651,7 @@ void Fol_ListFollowing (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else				// If user not specified, view my profile
       Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);
@@ -662,7 +660,6 @@ void Fol_ListFollowing (void)
 static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
   {
    extern const char *Txt_Following;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumUsrs;
@@ -719,7 +716,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -728,8 +725,6 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 
 void Fol_ListFollowers (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user to view user he/she follows *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
@@ -738,7 +733,7 @@ void Fol_ListFollowers (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else				// If user not specified, view my profile
       Fol_ListFollowersUsr (&Gbl.Usrs.Me.UsrDat);
@@ -747,7 +742,6 @@ void Fol_ListFollowers (void)
 static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
   {
    extern const char *Txt_Followers;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumUsrs;
@@ -812,7 +806,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

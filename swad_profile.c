@@ -210,7 +210,6 @@ void Prf_RequestUserProfile (void)
 
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
    bool ProfileShown = false;
 
@@ -238,7 +237,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    if (!ProfileShown)
      {
       /* Show error message */
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
       /* Request a user's profile */
       Prf_RequestUserProfile ();

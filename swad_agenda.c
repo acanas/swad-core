@@ -340,7 +340,6 @@ void Agd_ShowUsrAgenda (void)
   {
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const char *Txt_Public_agenda_USER;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
    bool Error = true;
 
@@ -371,7 +370,7 @@ void Agd_ShowUsrAgenda (void)
 	}
 
    if (Error)
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -383,7 +382,6 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    bool ItsMe;
 
@@ -415,7 +413,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Box_EndBox ();
            }
 	 else
-	    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	    Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
        }
       else
 	 /* The current language is not my preferred language

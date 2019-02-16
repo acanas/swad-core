@@ -1924,7 +1924,6 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    long PrjCod;
    struct ListUsrCods ListUsrCods;
    unsigned NumUsr;
@@ -1972,7 +1971,7 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
       Usr_FreeListUsrCods (&ListUsrCods);
      }
    else	// No users found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (PrjCod);
@@ -2004,7 +2003,6 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove_me_from_this_project;
    extern const char *Txt_Remove_user_from_this_project;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
@@ -2057,10 +2055,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 	}
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2092,7 +2090,6 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    struct Project Prj;
    bool ItsMe;
 
@@ -2133,10 +2130,10 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 		        Prj.Title);
 	}
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

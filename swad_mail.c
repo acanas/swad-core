@@ -1417,8 +1417,6 @@ void Mai_RemoveMyUsrEmail (void)
 
 void Mai_RemoveOtherUsrEmail (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -1431,10 +1429,10 @@ void Mai_RemoveOtherUsrEmail (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1444,7 +1442,6 @@ void Mai_RemoveOtherUsrEmail (void)
 static void Mai_RemoveEmail (struct UsrData *UsrDat)
   {
    extern const char *Txt_Email_X_removed;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
    if (Usr_ICanEditOtherUsr (UsrDat))
@@ -1466,7 +1463,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
       Mai_GetEmailFromUsrCod (UsrDat);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1502,7 +1499,6 @@ void May_NewMyUsrEmail (void)
 
 void Mai_NewOtherUsrEmail (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
 
    /***** Get other user's code from form and get user's data *****/
@@ -1518,10 +1514,10 @@ void Mai_NewOtherUsrEmail (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

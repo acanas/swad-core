@@ -9077,7 +9077,6 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -9099,7 +9098,7 @@ void Usr_PrintUsrQRCode (void)
       Box_EndBox ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

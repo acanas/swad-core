@@ -487,8 +487,6 @@ void Acc_ShowFormChgMyAccount (void)
 
 void Acc_ShowFormChgOtherUsrAccount (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user whose account must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -522,10 +520,10 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 fprintf (Gbl.F.Out,"</div>");
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -846,7 +844,6 @@ void Acc_AfterCreationNewAccount (void)
 
 void Acc_GetUsrCodAndRemUsrGbl (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool Error = false;
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -860,7 +857,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
       Error = true;
 
    if (Error)
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -948,7 +945,6 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
    extern const char *Txt_Eliminate_user_account;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
@@ -970,7 +966,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

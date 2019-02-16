@@ -461,7 +461,6 @@ void Nck_RemoveMyNick (void)
 void Nck_RemoveOtherUsrNick (void)
   {
    extern const char *Txt_Nickname_X_removed;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
    /***** Get user whose nick must be removed *****/
@@ -487,10 +486,10 @@ void Nck_RemoveOtherUsrNick (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -525,8 +524,6 @@ void Nck_UpdateMyNick (void)
 
 void Nck_UpdateOtherUsrNick (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user whose nick must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -539,10 +536,10 @@ void Nck_UpdateOtherUsrNick (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

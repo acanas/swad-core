@@ -82,7 +82,6 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat
 void Dup_ReportUsrAsPossibleDuplicate (void)
   {
    extern const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
 
    /***** Get user to be reported as possible duplicate *****/
@@ -105,10 +104,10 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
          Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
 	}
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -244,13 +243,11 @@ void Dup_ListDuplicateUsrs (void)
 
 void Dup_GetUsrCodAndListSimilarUsrs (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user to be removed from list of possible duplicates *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Dup_ListSimilarUsrs ();
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 static void Dup_ListSimilarUsrs (void)
@@ -444,8 +441,6 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat
 
 void Dup_RemoveUsrFromListDupUsrs (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user to be removed from list of possible duplicates *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -459,7 +454,7 @@ void Dup_RemoveUsrFromListDupUsrs (void)
       Dup_ListDuplicateUsrs ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

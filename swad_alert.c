@@ -229,3 +229,14 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
    fprintf (Gbl.F.Out,"</div>"
 	              "</div>");
   }
+
+/*****************************************************************************/
+/***************** Show form to change another user's account ****************/
+/*****************************************************************************/
+
+void Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }

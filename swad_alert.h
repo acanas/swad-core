@@ -72,4 +72,6 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
                               void (*FuncParams) (),
                               Btn_Button_t Button,const char *TxtButton);
 
+void Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
+
 #endif

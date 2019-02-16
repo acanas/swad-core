@@ -357,7 +357,6 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 
 void Pho_SendPhotoUsr (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
 
    /***** Get user whose photo must be sent or removed *****/
@@ -375,10 +374,10 @@ void Pho_SendPhotoUsr (void)
 	    Pho_ReqOtherUsrPhoto ();
 	}
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -401,8 +400,6 @@ void Pho_RecMyPhotoDetFaces (void)
 
 void Pho_RecOtherUsrPhotoDetFaces (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
@@ -417,7 +414,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
       Rec_ShowPublicSharedRecordOtherUsr ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -484,7 +481,6 @@ void Pho_ReqRemoveUsrPhoto (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char PhotoURL[PATH_MAX + 1];
    Act_Action_t NextAction;
 
@@ -532,10 +528,10 @@ void Pho_ReqRemoveUsrPhoto (void)
 	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -547,8 +543,6 @@ void Pho_ReqRemoveUsrPhoto (void)
 
 void Pho_RemoveUsrPhoto (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
@@ -560,7 +554,7 @@ void Pho_RemoveUsrPhoto (void)
          Ale_ShowPendingAlert ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -873,13 +867,11 @@ void Pho_UpdateMyPhoto2 (void)
 
 void Pho_UpdateUsrPhoto1 (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user's code from form and user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Pho_UpdatePhoto1 (&Gbl.Usrs.Other.UsrDat);
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 void Pho_UpdateUsrPhoto2 (void)

@@ -2110,7 +2110,6 @@ void Enr_AskIfRejectSignUp (void)
    extern const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Reject;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    Rol_Role_t Role;
 
@@ -2158,7 +2157,7 @@ void Enr_AskIfRejectSignUp (void)
         }
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -2169,7 +2168,6 @@ void Enr_RejectSignUp (void)
   {
    extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
    extern const char *Txt_Enrolment_of_X_rejected;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -2192,7 +2190,7 @@ void Enr_RejectSignUp (void)
                      Gbl.Usrs.Other.UsrDat.FullName);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /* Show again the rest of registrarion requests */
    Enr_ShowEnrolmentRequests ();
@@ -3369,7 +3367,6 @@ void Enr_AddAdmToDeg (void)
 
 static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ICanRegister;
 
    if (Cod > 0)
@@ -3391,10 +3388,10 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
            }
          else
-            Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+            Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
         }
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
@@ -3442,18 +3439,16 @@ void Enr_ReqRemMeFromCrs (void)
 
 void Enr_ReqRemUsrFromCrs (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Enr_CheckIfICanRemUsrFromCrs ())
 	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -3588,7 +3583,6 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
                                 long Cod,const char *InsCtrDegName)
   {
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
    bool ICanRemove;
 
@@ -3624,10 +3618,10 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
                               Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
            }
          else
-            Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+            Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
         }
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
@@ -3640,7 +3634,6 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X;
    extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    static const Act_Action_t Enr_ActNewAdm[Sco_NUM_SCOPES] =
      {
       ActUnk,		// Sco_SCOPE_UNK
@@ -3689,10 +3682,10 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
               }
            }
          else
-            Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+            Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
         }
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
@@ -4005,10 +3998,8 @@ void Enr_ModifyUsr1 (void)
 
 void Enr_ModifyUsr2 (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    if (Gbl.Alert.Type == Ale_WARNING)
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
    else // No error
       switch (Gbl.Usrs.RegRemAction)
 	{
@@ -4078,7 +4069,6 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X;
    extern const char *Txt_Remove_me_from_this_course;
    extern const char *Txt_Remove_user_from_this_course;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
    Act_Action_t NextAction;
 
@@ -4125,7 +4115,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else	      // User does not belong to current course
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

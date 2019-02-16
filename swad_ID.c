@@ -748,7 +748,6 @@ void ID_RemoveMyUsrID (void)
 
 void ID_RemoveOtherUsrID (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
 
    /***** Get other user's code from form and get user's data *****/
@@ -767,10 +766,10 @@ void ID_RemoveOtherUsrID (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -898,10 +897,10 @@ void ID_NewOtherUsrID (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

@@ -192,8 +192,6 @@ void Pwd_UpdateMyPwd (void)
 
 void Pwd_UpdateOtherUsrPwd (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
@@ -201,10 +199,10 @@ void Pwd_UpdateOtherUsrPwd (void)
          /***** Check and update password *****/
 	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
       else
-	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
