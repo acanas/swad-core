@@ -283,10 +283,8 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 		      Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Write message of success *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_number_of_rows_is_now_X,
-                NumRows);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_number_of_rows_is_now_X,
+                     NumRows);
      }
    else
       Lay_ShowErrorAndExit ("Wrong number of rows.");
@@ -466,8 +464,8 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
-      Gbl.Alert.Type = Ale_ERROR;
-      Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Can not open file of marks.",
 		Ale_MAX_BYTES_ALERT);
       return false;
      }
@@ -603,7 +601,8 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
    /***** User's ID not found in table *****/
    fclose (FileAllMarks);
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+   Gbl.DelayedAlert.Type = Ale_WARNING;
+   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	     Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
 	     UsrDat->FullName);
    return false;
@@ -715,7 +714,7 @@ void Mrk_ShowMyMarks (void)
       else	// Problems in table of marks or user's ID not found
         {
          fclose (FileUsrMarks);
-	 Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowDelayedAlert ();
         }
 
       unlink (FileNameUsrMarks);	// File with marks is no longer necessary

@@ -1761,10 +1761,8 @@ void Ins_RemoveInstitution (void)
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Institution_X_removed,
-                Ins.FullName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Institution_X_removed,
+                     Ins.FullName);
      }
 
    /***** Show the form again *****/
@@ -2025,14 +2023,14 @@ void Ins_ChangeInsWWW (void)
 
       /***** Write message to show the change made
 	     and put button to go to institution changed *****/
-      Gbl.Alert.Type = Ale_SUCCESS;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      Gbl.DelayedAlert.Type = Ale_SUCCESS;
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
       Ins_ShowAlertAndButtonToGoToIns ();
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
@@ -2057,13 +2055,11 @@ void Ins_ChangeInsWWWInConfig (void)
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_web_address_is_X,
-		NewWWW);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
+		     NewWWW);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Ins_ShowConfiguration ();
@@ -2117,8 +2113,8 @@ void Ins_ChangeInsStatus (void)
 
    /***** Write message to show the change made
 	  and put button to go to institution changed *****/
-   Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+   Gbl.DelayedAlert.Type = Ale_SUCCESS;
+   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	     Txt_The_status_of_the_institution_X_has_changed,
              Gbl.Inss.EditingIns.ShrtName);
    Ins_ShowAlertAndButtonToGoToIns ();
@@ -2165,7 +2161,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
      }
    else
       /***** Alert *****/
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowDelayedAlert ();
   }
 
 static void Ins_PutParamGoToIns (void)
@@ -2399,27 +2395,19 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
         {
          /***** If name of institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Inss.EditingIns.ShrtName,-1L,Gbl.CurrentCty.Cty.CtyCod))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_institution_X_already_exists,
-                      Gbl.Inss.EditingIns.ShrtName);
-            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-           }
+            Ale_ShowAlert (Ale_WARNING,Txt_The_institution_X_already_exists,
+                           Gbl.Inss.EditingIns.ShrtName);
          else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Inss.EditingIns.FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_institution_X_already_exists,
-                      Gbl.Inss.EditingIns.FullName);
-            Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-           }
+            Ale_ShowAlert (Ale_WARNING,Txt_The_institution_X_already_exists,
+                           Gbl.Inss.EditingIns.FullName);
          else	// Add new institution to database
             Ins_CreateInstitution (Status);
         }
       else	// If there is not a web
-         Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
      }
    else	// If there is not a institution name
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution);
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
@@ -2450,8 +2438,8 @@ static void Ins_CreateInstitution (unsigned Status)
 
    /***** Write message to show the change made
 	  and put button to go to institution created *****/
-   Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+   Gbl.DelayedAlert.Type = Ale_SUCCESS;
+   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	     Txt_Created_new_institution_X,
              Gbl.Inss.EditingIns.FullName);
    Ins_ShowAlertAndButtonToGoToIns ();

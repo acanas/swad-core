@@ -375,14 +375,12 @@ void Mai_WriteWarningEmailNotifications (void)
    Tab_Tab_t TabMyAccount   = Act_GetTab (ActFrmMyAcc  );
    Tab_Tab_t TabMailDomains = Act_GetTab (ActSeeMai);
 
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_You_can_only_receive_email_notifications_if_,
-	     Txt_TABS_TXT  [TabMyAccount  ],
-	     Txt_MENU_TITLE[TabMyAccount  ][Act_GetIndexInMenu (ActFrmMyAcc)],
-             Txt_TABS_TXT  [TabMailDomains],
-	     Txt_MENU_TITLE[TabMailDomains][Act_GetIndexInMenu (ActSeeMai  )],
-	     Txt_Domains);
-   Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_WARNING,Txt_You_can_only_receive_email_notifications_if_,
+	          Txt_TABS_TXT  [TabMyAccount  ],
+	          Txt_MENU_TITLE[TabMyAccount  ][Act_GetIndexInMenu (ActFrmMyAcc)],
+                  Txt_TABS_TXT  [TabMailDomains],
+	          Txt_MENU_TITLE[TabMailDomains][Act_GetIndexInMenu (ActSeeMai  )],
+	          Txt_Domains);
   }
 
 /*****************************************************************************/
@@ -559,10 +557,8 @@ void Mai_RemoveMailDomain (void)
 		   Mai.MaiCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Email_domain_X_removed,
-             Mai.Domain);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Email_domain_X_removed,
+                  Mai.Domain);
 
    /***** Show the form again *****/
    Mai_EditMailDomains ();
@@ -823,24 +819,16 @@ void Mai_RecFormNewMailDomain (void)
      {
       /***** If name of mail was in database... *****/
       if (Mai_CheckIfMailDomainNameExists ("Domain",Mai->Domain,-1L))
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_email_domain_X_already_exists,
-                   Mai->Domain);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_WARNING,Txt_The_email_domain_X_already_exists,
+                        Mai->Domain);
       else if (Mai_CheckIfMailDomainNameExists ("Info",Mai->Info,-1L))
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_email_domain_X_already_exists,
-                   Mai->Info);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_WARNING,Txt_The_email_domain_X_already_exists,
+                        Mai->Info);
       else	// Add new mail to database
          Mai_CreateMailDomain (Mai);
      }
    else	// If there is not a mail name
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
 
    /***** Show the form again *****/
    Mai_EditMailDomains ();
@@ -863,10 +851,8 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 	           Mai->Domain,Mai->Info);
 
    /***** Write success message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Created_new_email_domain_X,
-             Mai->Domain);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_email_domain_X,
+                  Mai->Domain);
   }
 
 /*****************************************************************************/
@@ -1233,13 +1219,13 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 
    /***** Show possible alert *****/
    if (Gbl.Alert.Section == (const char *) Mai_EMAIL_SECTION_ID)
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowDelayedAlert ();
 
    /***** Help message *****/
    if (IMustFillInEmail)
-      Ale_ShowA_old (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
    else if (IShouldConfirmEmail)
-      Ale_ShowA_old (Ale_WARNING,Txt_Please_confirm_your_email_address);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
    NumEmails = (unsigned) DB_QuerySELECT (&mysql_res,"can not get"
@@ -1445,10 +1431,10 @@ void Mai_RemoveOtherUsrEmail (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1480,11 +1466,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
       Mai_GetEmailFromUsrCod (UsrDat);
      }
    else
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Mai_EMAIL_SECTION_ID;
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1536,10 +1518,10 @@ void Mai_NewOtherUsrEmail (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1838,9 +1820,8 @@ void Mai_ConfirmEmail (void)
 
          /***** Confirm email *****/
          if (Confirmed)
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_Email_X_has_already_been_confirmed_before,
-		      Email);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_Email_X_has_already_been_confirmed_before,
+		           Email);
          else
            {
 	    DB_QueryUPDATE ("can not confirm email",
@@ -1849,20 +1830,18 @@ void Mai_ConfirmEmail (void)
 			    " AND usr_emails.E_mail='%s'",
 		            UsrCod,Email);
 
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_email_X_has_been_confirmed,
-		      Email);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_email_X_has_been_confirmed,
+		           Email);
            }
-         Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
-	 Ale_ShowA_old (Ale_WARNING,Txt_The_email_address_has_not_been_confirmed);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_has_not_been_confirmed);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_Failed_email_confirmation_key);
+      Ale_ShowAlert (Ale_WARNING,Txt_Failed_email_confirmation_key);
 
    /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);

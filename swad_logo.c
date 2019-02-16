@@ -292,10 +292,8 @@ void Log_RequestLogo (Sco_Scope_t Scope)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
-	     64,64);
-   Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
+	          64,64);
 
    /***** Upload logo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -385,12 +383,8 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
                if (strcmp (MIMEType,"application/octet"))
                   WrongType = true;
    if (WrongType)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_file_is_not_X,
-		"png");
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_WARNING,Txt_The_file_is_not_X,
+		     "png");
    else
      {
       /* End the reception of logo in a temporary file */
@@ -401,7 +395,7 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
 	        (unsigned) Cod,
 	        (unsigned) Cod);
       if (!Fil_EndReceptionOfFile (FileNameLogo,Param))
-	 Ale_ShowA_old (Ale_WARNING,"Error copying file.");
+	 Ale_ShowAlert (Ale_ERROR,"Error copying file.");
      }
   }
 

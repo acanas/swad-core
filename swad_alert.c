@@ -124,7 +124,7 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
 				// vasprintf will return -1
 	 Lay_NotEnoughMemoryExit ();
 
-      Ale_ShowAlert (AlertType,Txt);
+      Ale_ShowFixAlert (AlertType,Txt);
 
       free ((void *) Txt);
      }
