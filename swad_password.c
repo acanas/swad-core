@@ -527,9 +527,9 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.AlertToShowLater.Txt,Txt_The_password_is_too_trivial_,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_is_too_trivial_,
 		Ale_MAX_BYTES_ALERT);
       return false;
      }
@@ -538,9 +538,9 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.AlertToShowLater.Txt,Txt_The_password_is_too_trivial_,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_is_too_trivial_,
 		Ale_MAX_BYTES_ALERT);
       return false;
      }
@@ -622,9 +622,9 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check length of password *****/
    if (LengthPassword < Pwd_MIN_BYTES_PLAIN_PASSWORD)	// PlainPassword too short
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.Alert.Txt),
 	        Txt_The_password_must_be_at_least_X_characters,
                 Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
@@ -633,9 +633,9 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check spaces in password *****/
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.Alert.Txt,Txt_The_password_can_not_contain_spaces,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_can_not_contain_spaces,
 		Ale_MAX_BYTES_ALERT);
       return false;
      }
@@ -648,9 +648,9 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
          ItsANumber = false;
    if (ItsANumber)
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.Alert.Txt,Txt_The_password_can_not_consist_only_of_digits,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_can_not_consist_only_of_digits,
 		Ale_MAX_BYTES_ALERT);
       return false;
      }

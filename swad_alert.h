@@ -61,9 +61,8 @@ typedef enum
 void Ale_ResetAlert (void);
 
 void Ale_ShowPendingAlert (void);
-void Ale_ShowA_fmt (Ale_AlertType_t AlertType,
-                    const char *fmt,...);
-void Ale_ShowA_new (Ale_AlertType_t AlertType,const char *Txt);
+void Ale_ShowDelayedAlert (void);
+void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowA_old (Ale_AlertType_t AlertType,const char *Txt);
 void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,
                              Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,

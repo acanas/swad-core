@@ -583,7 +583,7 @@ void Cla_RemoveClassroom (void)
 		   Cla->ClaCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Classroom_X_removed,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Classroom_X_removed,
 	          Cla->FullName);
 
    /***** Show the form again *****/
@@ -668,7 +668,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Check if new name is empty *****/
    if (!NewClaName[0])
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_classroom_X_empty,
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_classroom_X_empty,
                      CurrentClaName);
    else
      {
@@ -678,7 +678,7 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If classroom was in database... *****/
          if (Cla_CheckIfClassroomNameExists (ParamName,NewClaName,Cla->ClaCod))
-            Ale_ShowA_fmt (Ale_WARNING,Txt_The_classroom_X_already_exists,
+            Ale_ShowAlert (Ale_WARNING,Txt_The_classroom_X_already_exists,
                            NewClaName);
          else
            {
@@ -686,12 +686,12 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
             Cla_UpdateClaNameDB (Cla->ClaCod,FieldName,NewClaName);
 
             /* Write message to show the change made */
-            Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_classroom_X_has_been_renamed_as_Y,
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_classroom_X_has_been_renamed_as_Y,
                            CurrentClaName,NewClaName);
            }
         }
       else	// The same name
-         Ale_ShowA_fmt (Ale_INFO,Txt_The_name_of_the_classroom_X_has_not_changed,
+         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_classroom_X_has_not_changed,
                         CurrentClaName);
      }
 
@@ -763,7 +763,7 @@ void Cla_ChangeCapacity (void)
           (this happens when return is pressed without changes) *****/
    if (Cla->Capacity == NewCapacity)
       /***** Message to show no changes made *****/
-      Ale_ShowA_fmt (Ale_INFO,Txt_The_capacity_of_classroom_X_has_not_changed,
+      Ale_ShowAlert (Ale_INFO,Txt_The_capacity_of_classroom_X_has_not_changed,
 		     Cla->FullName);
    else
      {
@@ -775,10 +775,10 @@ void Cla_ChangeCapacity (void)
 
       /***** Message to show the change made *****/
       if (NewCapacity > Grp_MAX_STUDENTS_IN_A_GROUP)
-         Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_classroom_X_does_not_have_a_limited_capacity_now,
+         Ale_ShowAlert (Ale_SUCCESS,Txt_The_classroom_X_does_not_have_a_limited_capacity_now,
                         Cla->FullName);
       else
-         Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_capacity_of_classroom_X_is_now_Y,
+         Ale_ShowAlert (Ale_SUCCESS,Txt_The_capacity_of_classroom_X_is_now_Y,
                         Cla->FullName,NewCapacity);
      }
 
@@ -830,11 +830,11 @@ void Cla_ChangeClassroomLocation (void)
 		Cla_MAX_BYTES_LOCATION);
 
       /* Write message to show the change made */
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_location_of_the_classroom_X_has_changed_to_Y,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_location_of_the_classroom_X_has_changed_to_Y,
 		     Cla->FullName,NewLocation);
      }
    else	// The same location
-      Ale_ShowA_fmt (Ale_INFO,Txt_The_location_of_the_classroom_X_has_not_changed,
+      Ale_ShowAlert (Ale_INFO,Txt_The_location_of_the_classroom_X_has_not_changed,
 		     Cla->FullName);
 
    /***** Show the form again *****/
@@ -983,16 +983,16 @@ void Cla_RecFormNewClassroom (void)
      {
       /***** If name of classroom was in database... *****/
       if (Cla_CheckIfClassroomNameExists ("ShortName",Cla->ShrtName,-1L))
-         Ale_ShowA_fmt (Ale_WARNING,Txt_The_classroom_X_already_exists,
+         Ale_ShowAlert (Ale_WARNING,Txt_The_classroom_X_already_exists,
                         Cla->ShrtName);
       else if (Cla_CheckIfClassroomNameExists ("FullName",Cla->FullName,-1L))
-         Ale_ShowA_fmt (Ale_WARNING,Txt_The_classroom_X_already_exists,
+         Ale_ShowAlert (Ale_WARNING,Txt_The_classroom_X_already_exists,
                         Cla->FullName);
       else	// Add new classroom to database
          Cla_CreateClassroom (Cla);
      }
    else	// If there is not a classroom name
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom);
 
    /***** Show the form again *****/
    Cla_EditClassrooms ();
@@ -1016,6 +1016,6 @@ static void Cla_CreateClassroom (struct Classroom *Cla)
 		   Cla->ShrtName,Cla->FullName,Cla->Capacity,Cla->Location);
 
    /***** Write success message *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_classroom_X,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_classroom_X,
                   Cla->FullName);
   }

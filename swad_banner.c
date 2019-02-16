@@ -111,7 +111,7 @@ void Ban_SeeBanners (void)
    if (Gbl.Banners.Num)	// There are banners
       Ban_WriteListOfBanners ();
    else			// No banners created
-      Ale_ShowA_fmt (Ale_INFO,Txt_No_banners);
+      Ale_ShowAlert (Ale_INFO,Txt_No_banners);
 
    /***** Button to create banner *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -521,7 +521,7 @@ void Ban_RemoveBanner (void)
 		   Ban.BanCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Banner_X_removed,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Banner_X_removed,
                   Ban.ShrtName);
 
    /***** Show the form again *****/
@@ -575,7 +575,7 @@ static void Ban_ShowOrHideBanner (bool Hide)
 	              Ban.BanCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Hide ? Txt_The_banner_X_is_now_hidden :
+   Ale_ShowAlert (Ale_SUCCESS,Hide ? Txt_The_banner_X_is_now_hidden :
 	                             Txt_The_banner_X_is_now_visible,
 	          Ban.ShrtName);
 
@@ -648,7 +648,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Check if new name is empty *****/
    if (!NewBanName[0])
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_banner_X_empty,
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_banner_X_empty,
                      CurrentBanName);
    else
      {
@@ -658,7 +658,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If banner was in database... *****/
          if (Ban_CheckIfBannerNameExists (ParamName,NewBanName,Ban->BanCod))
-	    Ale_ShowA_fmt (Ale_WARNING,Txt_The_banner_X_already_exists,
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_banner_X_already_exists,
                            NewBanName);
          else
            {
@@ -666,12 +666,12 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
             Ban_UpdateBanNameDB (Ban->BanCod,FieldName,NewBanName);
 
             /* Write message to show the change made */
-	    Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_banner_X_has_been_renamed_as_Y,
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_banner_X_has_been_renamed_as_Y,
                            CurrentBanName,NewBanName);
            }
         }
       else	// The same name
-	 Ale_ShowA_fmt (Ale_INFO,Txt_The_name_of_the_banner_X_has_not_changed,
+	 Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_banner_X_has_not_changed,
                         CurrentBanName);
      }
 
@@ -739,11 +739,11 @@ void Ban_ChangeBannerImg (void)
                       NewImg,Ban->BanCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_new_image_is_X,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_image_is_X,
                      NewImg);
      }
    else
-     Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_image_empty);
+     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_image_empty);
 
    /***** Show the form again *****/
    Str_Copy (Ban->Img,NewImg,
@@ -782,11 +782,11 @@ void Ban_ChangeBannerWWW (void)
                       NewWWW,Ban->BanCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_new_web_address_is_X,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
                      NewWWW);
      }
    else
-     Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Str_Copy (Ban->WWW,NewWWW,
@@ -926,20 +926,20 @@ void Ban_RecFormNewBanner (void)
      {
       /***** If name of banner was in database... *****/
       if (Ban_CheckIfBannerNameExists ("ShortName",Ban->ShrtName,-1L))
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_The_banner_X_already_exists,
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_banner_X_already_exists,
                         Ban->ShrtName);
       else if (Ban_CheckIfBannerNameExists ("FullName",Ban->FullName,-1L))
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_The_banner_X_already_exists,
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_banner_X_already_exists,
                         Ban->FullName);
       else if (!Ban->Img[0])
-         Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_image_of_the_new_banner);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_image_of_the_new_banner);
       else if (!Ban->WWW[0])
-         Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_banner);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_banner);
       else	// Add new banner to database
          Ban_CreateBanner (Ban);
      }
    else	// If there is not a banner name
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner);
 
    /***** Show the form again *****/
    Ban_EditBanners ();
@@ -962,7 +962,7 @@ static void Ban_CreateBanner (struct Banner *Ban)
                    Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
 
    /***** Write success message *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_banner_X,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
                   Ban->ShrtName);
   }
 

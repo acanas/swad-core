@@ -1379,7 +1379,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Write query for debug *****/
    /*
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowAlert (Ale_INFO,Query);
+      Ale_ShowFixedAlert (Ale_INFO,Query);
    */
    /***** Make the query *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get clicks",

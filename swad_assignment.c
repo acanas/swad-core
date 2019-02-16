@@ -167,7 +167,7 @@ static void Asg_ShowAllAssignments (void)
       Tbl_EndTable ();
      }
    else	// No assignments created
-      Ale_ShowA_fmt (Ale_INFO,Txt_No_assignments);
+      Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())
@@ -989,7 +989,7 @@ void Asg_RemoveAssignment (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Assignment_X_removed,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,
                   Asg.Title);
 
    /***** Show assignments again *****/
@@ -1019,7 +1019,7 @@ void Asg_HideAssignment (void)
                    Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Assignment_X_is_now_hidden,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_is_now_hidden,
                   Asg.Title);
 
    /***** Show assignments again *****/
@@ -1049,7 +1049,7 @@ void Asg_ShowAssignment (void)
                    Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Assignment_X_is_now_visible,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_is_now_visible,
                   Asg.Title);
 
    /***** Show assignments again *****/
@@ -1337,7 +1337,7 @@ void Asg_RecFormAssignment (void)
         {
          NewAssignmentIsCorrect = false;
 
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_title_X,
+	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_title_X,
                         NewAsg.Title);
         }
       else	// Title is correct
@@ -1350,14 +1350,14 @@ void Asg_RecFormAssignment (void)
                  {
                   NewAssignmentIsCorrect = false;
 
-		  Ale_ShowA_fmt (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_folder_X,
+		  Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_assignment_with_the_folder_X,
                                  NewAsg.Folder);
                  }
               }
             else	// Folder name not valid
               {
                NewAssignmentIsCorrect = false;
-               Ale_ShowA_new (Ale_WARNING,Gbl.AlertToShowLater.Txt);
+               Ale_ShowDelayedAlert (Ale_WARNING,Gbl.DelayedAlert.Txt);
               }
            }
          else	// NewAsg.SendWork == Asg_DO_NOT_SEND_WORK
@@ -1367,7 +1367,7 @@ void Asg_RecFormAssignment (void)
                if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
                  {
                   NewAssignmentIsCorrect = false;
-                  Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
+                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
                  }
               }
            }
@@ -1376,7 +1376,7 @@ void Asg_RecFormAssignment (void)
    else	// If there is not an assignment title
      {
       NewAssignmentIsCorrect = false;
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
      }
 
    /***** Create a new assignment or update an existing one *****/
@@ -1390,7 +1390,7 @@ void Asg_RecFormAssignment (void)
          Asg_CreateAssignment (&NewAsg,Description);	// Add new assignment to database
 
 	 /***** Write success message *****/
-	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_assignment_X,
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_assignment_X,
 		        NewAsg.Title);
 	}
       else
@@ -1403,7 +1403,7 @@ void Asg_RecFormAssignment (void)
             Asg_UpdateAssignment (&NewAsg,Description);
 
 	    /***** Write success message *****/
-	    Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
            }
         }
 

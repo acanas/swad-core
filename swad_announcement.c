@@ -131,7 +131,7 @@ void Ann_ShowAllAnnouncements (void)
 			    NULL,
 		 Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE);
    if (!NumAnnouncements)
-      Ale_ShowA_fmt (Ale_INFO,Txt_No_announcements);
+      Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
 
    /***** Show the announcements *****/
    for (NumAnn = 0;
@@ -495,7 +495,7 @@ void Ann_ReceiveAnnouncement (void)
    Ann_CreateAnnouncement (Roles,Subject,Content);
 
    /***** Write message of success *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Announcement_created);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_created);
 
    /***** Refresh list of announcements *****/
    Ann_ShowAllAnnouncements ();
@@ -575,7 +575,7 @@ void Ann_RemoveAnnouncement (void)
 		   AnnCod);
 
    /***** Write message of success *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Announcement_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_removed);
 
    /***** Refresh list of announcements *****/
    Ann_ShowAllAnnouncements ();

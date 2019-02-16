@@ -1164,7 +1164,7 @@ static void Crs_ListCourses (void)
       Tbl_EndTable ();
      }
    else	// No courses created in the current degree
-      Ale_ShowA_fmt (Ale_INFO,Txt_No_courses);
+      Ale_ShowAlert (Ale_INFO,Txt_No_courses);
 
    /***** Button to create course *****/
    if (Crs_CheckIfICanCreateCourses ())
@@ -1998,19 +1998,19 @@ void Crs_RemoveCourse (void)
      {
       /***** Check if this course has users *****/
       if (Crs.NumUsrs[Rol_UNK])	// Course has users ==> don't remove
-         Ale_ShowA_fmt (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
+         Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
       else			// Course has no users ==> remove it
         {
          /***** Remove course *****/
          Crs_RemoveCourseCompletely (Crs.CrsCod);
 
          /***** Write message to show the change made *****/
-         Ale_ShowA_fmt (Ale_SUCCESS,Txt_Course_X_removed,
+         Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
                         Crs.FullName);
         }
      }
    else
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
 
    /***** Show the form again *****/
    Crs_EditCourses ();
@@ -3468,7 +3468,7 @@ void Crs_RemoveOldCrss (void)
 			     SecondsWithoutAccess);
    if (NumCrss)
      {
-      Ale_ShowA_fmt (Ale_INFO,Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,
+      Ale_ShowAlert (Ale_INFO,Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,
 		     NumCrss,
 		     MonthsWithoutAccess,
 		     Cfg_PLATFORM_SHORT_NAME);
@@ -3489,6 +3489,6 @@ void Crs_RemoveOldCrss (void)
      }
 
    /***** Write end message *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_X_courses_have_been_eliminated,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_X_courses_have_been_eliminated,
                   NumCrssRemoved);
   }

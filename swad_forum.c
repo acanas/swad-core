@@ -972,7 +972,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    Lay_StartSection (For_FORUM_POSTS_SECTION_ID);
    if (Message)
       if (Message[0])
-         Ale_ShowA_old (AlertType,Message);
+         Ale_ShowAlert (AlertType,Message);
 
    /***** Start box *****/
    snprintf (FrameTitle,sizeof (FrameTitle),
@@ -2541,7 +2541,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    Lay_StartSection (For_FORUM_THREADS_SECTION_ID);
    if (Message)
       if (Message[0])
-         Ale_ShowA_old (AlertType,Message);
+         Ale_ShowAlert (AlertType,Message);
 
    /***** Start box for threads of this forum *****/
    snprintf (FrameTitle,sizeof (FrameTitle),

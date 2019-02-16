@@ -197,7 +197,7 @@ void Cty_SeeCtyWithPendingInss (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowA_fmt (Ale_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1740,7 +1740,7 @@ void Cty_RemoveCountry (void)
    if (Cty.NumInss ||
        Cty.NumUsrsWhoClaimToBelongToCty ||
        Cty.NumUsrs)	// Country has institutions or users ==> don't remove
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
@@ -1755,7 +1755,7 @@ void Cty_RemoveCountry (void)
       Cty_FlushCacheCountryName ();
 
       /***** Write message to show the change made *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Country_X_removed,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Country_X_removed,
 	             Cty.Name[Gbl.Prefs.Language]);
      }
 
@@ -1795,7 +1795,7 @@ void Cty_RenameCountry (void)
 
    /***** Check if new name is empty *****/
    if (!NewCtyName[0])
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_country_X_empty,
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_country_X_empty,
 	             Cty->Name[Language]);
    else
      {
@@ -1805,7 +1805,7 @@ void Cty_RenameCountry (void)
 	{
 	 /***** If country was in database... *****/
 	 if (Cty_CheckIfCountryNameExists (Language,NewCtyName,Cty->CtyCod))
-	    Ale_ShowA_fmt (Ale_WARNING,Txt_The_country_X_already_exists,
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_country_X_already_exists,
 		           NewCtyName);
 	 else
 	   {
@@ -1816,7 +1816,7 @@ void Cty_RenameCountry (void)
 	    Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
 
 	    /* Write message to show the change made */
-	    Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_country_X_has_been_renamed_as_Y,
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_country_X_has_been_renamed_as_Y,
 		           Cty->Name[Language],NewCtyName);
 
 	    /* Update country name */
@@ -1825,7 +1825,7 @@ void Cty_RenameCountry (void)
 	   }
 	}
       else	// The same name
-	 Ale_ShowA_fmt (Ale_INFO,Txt_The_name_of_the_country_X_has_not_changed,
+	 Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_country_X_has_not_changed,
 		        Cty->Name[Language]);
      }
 
@@ -1927,7 +1927,7 @@ void Cty_ChangeCtyWWW (void)
 	     Cns_MAX_BYTES_WWW);
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_new_web_address_is_X,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
 	          NewWWW);
 
    /***** Show the form again *****/
@@ -2131,12 +2131,12 @@ void Cty_RecFormNewCountry (void)
    /* Get numeric country code */
    if ((Cty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
      {
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_numerical_code_of_the_new_country);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_numerical_code_of_the_new_country);
       CreateCountry = false;
      }
    else if (Cty_CheckIfNumericCountryCodeExists (Cty->CtyCod))
      {
-      Ale_ShowA_fmt (Ale_WARNING,Txt_The_numerical_code_X_already_exists,
+      Ale_ShowAlert (Ale_WARNING,Txt_The_numerical_code_X_already_exists,
                      Cty->CtyCod);
       CreateCountry = false;
      }
@@ -2151,7 +2151,7 @@ void Cty_RecFormNewCountry (void)
          if (Cty->Alpha2[i] < 'A' ||
              Cty->Alpha2[i] > 'Z')
            {
-            Ale_ShowA_fmt (Ale_WARNING,Txt_The_alphabetical_code_X_is_not_correct,
+            Ale_ShowAlert (Ale_WARNING,Txt_The_alphabetical_code_X_is_not_correct,
                            Cty->Alpha2);
             CreateCountry = false;
            }
@@ -2159,7 +2159,7 @@ void Cty_RecFormNewCountry (void)
         {
          if (Cty_CheckIfAlpha2CountryCodeExists (Cty->Alpha2))
            {
-            Ale_ShowA_fmt (Ale_WARNING,Txt_The_alphabetical_code_X_already_exists,
+            Ale_ShowAlert (Ale_WARNING,Txt_The_alphabetical_code_X_already_exists,
                            Cty->Alpha2);
             CreateCountry = false;
            }
@@ -2180,7 +2180,7 @@ void Cty_RecFormNewCountry (void)
                   /***** If name of country was in database... *****/
                   if (Cty_CheckIfCountryNameExists (Lan,Cty->Name[Lan],-1L))
                     {
-                     Ale_ShowA_fmt (Ale_WARNING,Txt_The_country_X_already_exists,
+                     Ale_ShowAlert (Ale_WARNING,Txt_The_country_X_already_exists,
                                     Cty->Name[Lan]);
                      CreateCountry = false;
                      break;
@@ -2188,7 +2188,7 @@ void Cty_RecFormNewCountry (void)
                  }
                else	// If there is not a country name
                  {
-                  Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
+                  Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
                   CreateCountry = false;
                   break;
                  }
@@ -2271,7 +2271,7 @@ static void Cty_CreateCountry (struct Country *Cty)
                    Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
 
    /***** Write success message *****/
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Created_new_country_X,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_country_X,
                   Cty->Name);
   }
 

@@ -68,6 +68,8 @@ static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt);
+
 /*****************************************************************************/
 /******************************** Reset alert ********************************/
 /*****************************************************************************/
@@ -99,8 +101,13 @@ void Ale_ShowPendingAlert (void)
 /******************** Show an alert message to the user **********************/
 /*****************************************************************************/
 
-void Ale_ShowA_fmt (Ale_AlertType_t AlertType,
-                    const char *fmt,...)
+void Ale_ShowDelayedAlert (void)
+  {
+   if (Gbl.DelayedAlert.Type != Ale_NONE)
+      Ale_ShowFixAlert (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+  }
+
+void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -113,18 +120,17 @@ void Ale_ShowA_fmt (Ale_AlertType_t AlertType,
       va_end (ap);
 
       if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-				   // or some other error occurs,
-				   // vasprintf will return -1
+				// or some other error occurs,
+				// vasprintf will return -1
 	 Lay_NotEnoughMemoryExit ();
 
-      Ale_ShowAlertAndButton (AlertType,Txt,
-                              ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+      Ale_ShowAlert (AlertType,Txt);
 
       free ((void *) Txt);
      }
   }
 
-void Ale_ShowA_new (Ale_AlertType_t AlertType,const char *Txt)
+static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Ale_NONE)
       Ale_ShowAlertAndButton (AlertType,Txt,

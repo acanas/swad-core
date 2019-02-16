@@ -102,13 +102,13 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
                          Gbl.Usrs.Me.UsrDat.UsrCod);
 
          /***** Show feedback message *****/
-         Ale_ShowA_fmt (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
+         Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
 	}
       else
-         Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -250,7 +250,7 @@ void Dup_GetUsrCodAndListSimilarUsrs (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Dup_ListSimilarUsrs ();
    else
-      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 static void Dup_ListSimilarUsrs (void)
@@ -459,7 +459,7 @@ void Dup_RemoveUsrFromListDupUsrs (void)
       Dup_ListDuplicateUsrs ();
      }
    else
-      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

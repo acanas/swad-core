@@ -2404,7 +2404,7 @@ void Usr_Logout (void)
    // extern const char *Txt_The_session_has_been_closed;
 
    /***** Confirmation message *****/
-   // Ale_ShowAlert (Ale_INFO,Txt_The_session_has_been_closed);
+   // Ale_ShowFixedAlert (Ale_INFO,Txt_The_session_has_been_closed);
 
    /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);
@@ -2566,7 +2566,7 @@ void Usr_WelcomeUsr (void)
 
          /***** Institutional video *****/
          /*
-         Ale_ShowAlert (Ale_INFO,
+         Ale_ShowFixedAlert (Ale_INFO,
 			"<a href=\"https://abierta.ugr.es/creative_commons/\" target=\"_blank\">"
 			"Curso MOOC LICENCIAS CREATIVE COMMONS Y OER</a><br />"
 			"Reconocimiento de 1 cr&eacute;dito por actividades universitarias<br />"

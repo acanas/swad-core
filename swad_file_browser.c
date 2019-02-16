@@ -2820,7 +2820,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
                       NewFolderName);
             if (rename (PathOldFolder,PathNewFolder))	// Fail
 	      {
-               Ale_ShowA_fmt (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
+               Ale_ShowAlert (Ale_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
                NumUsrsError++;
 	      }
             else					// Success
@@ -2847,7 +2847,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
         }
 
       /***** Summary message *****/
-      Ale_ShowA_fmt (Ale_INFO,"%s: %u<br />"
+      Ale_ShowAlert (Ale_INFO,"%s: %u<br />"
                               "%s: %u<br />"
                               "%s: %u.",
                      Txt_Users,NumUsrs,
@@ -2856,7 +2856,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
      }
    else
       /***** Warning message *****/
-      Ale_ShowA_fmt (Ale_WARNING,Txt_Can_not_rename_a_folder_of_assignment);
+      Ale_ShowAlert (Ale_WARNING,Txt_Can_not_rename_a_folder_of_assignment);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2921,7 +2921,7 @@ static void Brw_SetAndCheckQuota (void)
    Brw_SetMaxQuota ();
    Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
    if (Brw_CheckIfQuotaExceded ())
-      Ale_ShowA_fmt (Ale_WARNING,Txt_Quota_exceeded);
+      Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
   }
 
 /*****************************************************************************/
@@ -3206,7 +3206,7 @@ static void Brw_ShowFileBrowserProject (void)
 	}
      }
    else
-      Ale_ShowA_fmt (Ale_WARNING,"You have no access to project files.");
+      Ale_ShowAlert (Ale_WARNING,"You have no access to project files.");
 
    /***** End box *****/
    Box_EndBox ();
@@ -3278,7 +3278,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    else	// If no users are selected...
      {
       // ...write warning alert
-      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
       Brw_AskEditWorksCrs ();
      }
@@ -3533,14 +3533,14 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
      {
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
-         Ale_ShowA_fmt (Ale_INFO,Txt_Files_of_marks_must_contain_a_table_in_HTML_format_);
+         Ale_ShowAlert (Ale_INFO,Txt_Files_of_marks_must_contain_a_table_in_HTML_format_);
          break;
       default:
          break;
      }
 
    /***** Legal notice *****/
-   Ale_ShowA_fmt (Ale_INFO,Txt_Disclaimer_the_files_hosted_here_,
+   Ale_ShowAlert (Ale_INFO,Txt_Disclaimer_the_files_hosted_here_,
                   Cfg_PLATFORM_SHORT_NAME,
                   Cfg_PLATFORM_RESPONSIBLE_EMAIL);
   }
@@ -6784,7 +6784,7 @@ void Brw_RemFileFromTree (void)
 				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Message of confirmation of removing */
-         Ale_ShowA_fmt (Ale_SUCCESS,Txt_FILE_X_removed,
+         Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,
 		        FileNameToShow);
         }
       else		// File / link not found
@@ -6841,7 +6841,7 @@ void Brw_RemFolderFromTree (void)
                                           Gbl.Usrs.Other.UsrDat.UsrCod);
 
             /* Message of confirmation of successfull removing */
-            Ale_ShowA_fmt (Ale_SUCCESS,Txt_Folder_X_removed,
+            Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,
                            Gbl.FileBrowser.FilFolLnkName);
            }
       else		// Folder not found
@@ -6920,7 +6920,7 @@ void Brw_RemSubtreeInFileBrowser (void)
       Brw_RemoveAffectedExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Write message of confirmation *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Folder_X_and_all_its_contents_removed,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_and_all_its_contents_removed,
                      Gbl.FileBrowser.FilFolLnkName);
      }
 
@@ -7232,14 +7232,14 @@ static void Brw_WriteCurrentClipboard (void)
                                              Gbl.FileBrowser.Clipboard.FileName,
                                              FileNameToShow);
 
-      Ale_ShowA_fmt (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
+      Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
                      Txt_Copy_source,TxtClipboardZone,
                      TxtFileType[Gbl.FileBrowser.Clipboard.FileType],
                      FileNameToShow);
      }
    else
       // The root folder
-      Ale_ShowA_fmt (Ale_CLIPBOARD,"%s: %s, %s.",
+      Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s.",
                      Txt_Copy_source,TxtClipboardZone,
                      Txt_all_files_inside_the_root_folder);
   }
@@ -7989,7 +7989,7 @@ void Brw_PasteIntoFileBrowser (void)
      }
    else
       /***** Write message ******/
-      Ale_ShowA_fmt (Ale_WARNING,Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_);
+      Ale_ShowAlert (Ale_WARNING,Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -8180,7 +8180,7 @@ static void Brw_PasteClipboard (void)
 	                           &FirstFilCod))
         {
          /***** Write message of success *****/
-         Ale_ShowA_fmt (Ale_SUCCESS,"%s<br />"
+         Ale_ShowAlert (Ale_SUCCESS,"%s<br />"
                                     "%s: %u<br />"
                                     "%s: %u<br />"
                                     "%s: %u",
@@ -8330,15 +8330,15 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
       switch (FileType)
         {
 	 case Brw_IS_FILE:
-            Ale_ShowA_fmt (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
+            Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
 		           FileNameToShow);
 	    break;
 	 case Brw_IS_FOLDER:
-            Ale_ShowA_fmt (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
+            Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
 		           FileNameToShow);
 	    break;
 	 case Brw_IS_LINK:
-            Ale_ShowA_fmt (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
+            Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
 		           FileNameToShow);
 	    break;
 	 default:
@@ -8355,7 +8355,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	 /***** Check if exists the destination file */
 	 if (Fil_CheckIfPathExists (PathDstWithFile))
 	   {
-	    Ale_ShowA_fmt (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name :
+	    Ale_ShowAlert (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name :
 					                         Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name,
 		           FileNameToShow);
 	    CopyIsGoingSuccessful = false;
@@ -8372,7 +8372,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 		  Mrk_CheckFileOfMarks (PathOrg,&Marks);	// Gbl.Alert.Txt contains feedback text
 	       else
 		 {
-		  Ale_ShowA_fmt (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
 			         FileNameToShow);
 	          CopyIsGoingSuccessful = false;
 		 }
@@ -8385,7 +8385,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
 	       if (Brw_CheckIfQuotaExceded ())
 		 {
-		  Ale_ShowA_fmt (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota :
+		  Ale_ShowAlert (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota :
 						                       Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota,
 			         FileNameToShow);
 		  CopyIsGoingSuccessful = false;
@@ -8427,7 +8427,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
 	       if (Brw_CheckIfQuotaExceded ())
 		 {
-		  Ale_ShowA_fmt (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota,
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota,
 			         FileNameToShow);
 		  CopyIsGoingSuccessful = false;
 		 }
@@ -8555,7 +8555,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_folder,NULL,
                  NULL,Box_NOT_CLOSABLE);
-   Ale_ShowA_fmt (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
+   Ale_ShowAlert (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
 	          FileNameToShow);
 
    /***** Folder *****/
@@ -8593,7 +8593,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
-   Ale_ShowA_fmt (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
+   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
 	          FileNameToShow);
 
    /***** Form to upload files using the library Dropzone.js *****/
@@ -8654,7 +8654,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
-   Ale_ShowA_fmt (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
+   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
 	          FileNameToShow);
 
    /***** Form to upload one files using the classic way *****/
@@ -8696,7 +8696,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
-   Ale_ShowA_fmt (Ale_INFO,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
+   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
 	          FileNameToShow);
 
    /***** Send button and end box *****/
@@ -8731,7 +8731,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
-   Ale_ShowA_fmt (Ale_INFO,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
+   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
 	          FileNameToShow);
 
    /***** URL *****/
@@ -8820,7 +8820,7 @@ void Brw_RecFolderFileBrowser (void)
             if (Brw_CheckIfQuotaExceded ())
 	      {
 	       Fil_RemoveTree (Path);
-               Ale_ShowA_fmt (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
+               Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
                               Gbl.FileBrowser.NewFilFolLnkName);
 	      }
 	    else
@@ -8847,7 +8847,7 @@ void Brw_RecFolderFileBrowser (void)
                                                       Brw_IS_FOLDER,
                                                       Gbl.FileBrowser.FilFolLnkName,
                                                       FileNameToShow);
-               Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
+               Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
 		              Gbl.FileBrowser.NewFilFolLnkName,FileNameToShow);
               }
 	   }
@@ -8856,7 +8856,7 @@ void Brw_RecFolderFileBrowser (void)
 	    switch (errno)
 	      {
 	       case EEXIST:
-                  Ale_ShowA_fmt (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
+                  Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
 		   	         Gbl.FileBrowser.NewFilFolLnkName);
 	          break;
 	       case EACCES:
@@ -8869,7 +8869,7 @@ void Brw_RecFolderFileBrowser (void)
 	   }
         }
       else	// Folder name not valid
-         Ale_ShowA_new (Ale_WARNING,Gbl.AlertToShowLater.Txt);
+         Ale_ShowDelayedAlert (Ale_WARNING,Gbl.DelayedAlert.Txt);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_create_folders_here);	// It's difficult, but not impossible that a user sees this message
@@ -8937,7 +8937,7 @@ void Brw_RenFolderFileBrowser (void)
 	          case ENOTEMPTY:
 	          case EEXIST:
 	          case ENOTDIR:
-                     Ale_ShowA_fmt (Ale_WARNING,Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
+                     Ale_ShowAlert (Ale_WARNING,Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
 			            Gbl.FileBrowser.FilFolLnkName,Gbl.FileBrowser.NewFilFolLnkName);
 	             break;
 	          case EACCES:
@@ -8971,18 +8971,18 @@ void Brw_RenFolderFileBrowser (void)
         	                                  NewPathInTree);
 
                /* Write message of confirmation */
-               Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_folder_name_X_has_changed_to_Y,
+               Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_name_X_has_changed_to_Y,
                               Gbl.FileBrowser.FilFolLnkName,
                               Gbl.FileBrowser.NewFilFolLnkName);
               }
 
            }
          else	// Names are equal. This may happens if we have press INTRO without changing the name
-            Ale_ShowA_fmt (Ale_INFO,Txt_The_folder_name_X_has_not_changed,
+            Ale_ShowAlert (Ale_INFO,Txt_The_folder_name_X_has_not_changed,
                            Gbl.FileBrowser.FilFolLnkName);
         }
       else	// Folder name not valid
-         Ale_ShowA_new (Ale_WARNING,Gbl.AlertToShowLater.Txt);
+         Ale_ShowDelayedAlert (Ale_WARNING,Gbl.DelayedAlert.Txt);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
@@ -9086,7 +9086,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
          /***** Check if uploading this kind of file is allowed *****/
 	 if (Brw_CheckIfUploadIsAllowed (MIMEType))	// Gbl.Alert.Txt contains feedback text
            {
-            if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))	// Gbl.AlertToShowLater.Txt contains feedback text
+            if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))	// Gbl.DelayedAlert.Txt contains feedback text
               {
                /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
                snprintf (Path,sizeof (Path),
@@ -9320,7 +9320,7 @@ void Brw_RecLinkFileBrowser (void)
 
 	    /* Check if the URL file exists */
 	    if (Fil_CheckIfPathExists (Path))
-	       Ale_ShowA_fmt (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
+	       Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
 			      FileName);
 	    else	// URL file does not exist
 	      {
@@ -9339,7 +9339,7 @@ void Brw_RecLinkFileBrowser (void)
 		  if (Brw_CheckIfQuotaExceded ())
 		    {
 		     Fil_RemoveTree (Path);
-		     Ale_ShowA_fmt (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
+		     Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
 			            FileName);
 		    }
 		  else
@@ -9367,7 +9367,7 @@ void Brw_RecLinkFileBrowser (void)
 		                                            Brw_IS_FOLDER,
 					                    Gbl.FileBrowser.FilFolLnkName,
 					                    FileNameToShow);
-		     Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
+		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
 			            FileName,FileNameToShow);
 
 		     FileMetadata.FilCod = FilCod;
@@ -9401,10 +9401,10 @@ void Brw_RecLinkFileBrowser (void)
 	      }
 	   }
 	 else	// Link URL not valid
-	    Ale_ShowA_fmt (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
+	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
 	}
       else	// Link URL not valid
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
+	 Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_create_links_here);	// It's difficult, but not impossible that a user sees this message
@@ -9504,7 +9504,7 @@ void Brw_SetDocumentAsVisible (void)
                                           Gbl.FileBrowser.FileType,
                                           Gbl.FileBrowser.FilFolLnkName,
                                           FileNameToShow);
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_FILE_FOLDER_OR_LINK_X_is_now_visible,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_FOLDER_OR_LINK_X_is_now_visible,
                   FileNameToShow);
 
    /***** Show again the file browser *****/
@@ -9540,7 +9540,7 @@ void Brw_SetDocumentAsHidden (void)
                                           Gbl.FileBrowser.FileType,
                                           Gbl.FileBrowser.FilFolLnkName,
                                           FileNameToShow);
-   Ale_ShowA_fmt (Ale_SUCCESS,Txt_FILE_FOLDER_OR_LINK_X_is_now_hidden,
+   Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_FOLDER_OR_LINK_X_is_now_hidden,
 	          FileNameToShow);
 
    /***** Show again the file browser *****/
@@ -10024,7 +10024,7 @@ void Brw_ShowFileMetadata (void)
 	    break;
 	}
 
-      Ale_ShowA_fmt (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
      }
 
    /***** Show again the file browser *****/
@@ -10183,7 +10183,7 @@ void Brw_DownloadFile (void)
 	    break;
 	}
 
-      Ale_ShowA_fmt (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+      Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
 
       /***** Show again the file browser *****/
       Brw_ShowAgainFileBrowserOrWorks ();
@@ -10507,12 +10507,12 @@ void Brw_ChgFileMetadata (void)
 	   }
 
       /***** Write sucess message *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
                      Gbl.FileBrowser.FilFolLnkName);
      }
    else
       /***** Write error message *****/
-      Ale_ShowA_fmt (Ale_ERROR,Txt_You_dont_have_permission_to_change_the_properties_of_file_X,
+      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_change_the_properties_of_file_X,
                      Gbl.FileBrowser.FilFolLnkName);
 
    /***** Show again the file browser *****/
@@ -12500,7 +12500,7 @@ void Brw_RemoveOldFilesBriefcase (void)
       Brw_RemoveOldFilesInBrowser (Months,&Removed);
 
       /***** Success message *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,"%s: %u<br />"
+      Ale_ShowAlert (Ale_SUCCESS,"%s: %u<br />"
 		                 "%s: %u<br />"
 		                 "%s: %u",
 	             Txt_Files_removed  ,Removed.NumFiles,

@@ -145,7 +145,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
                  Hlp_PROFILE_SignUp,Box_CLOSABLE);
 
    /***** Help alert *****/
-   Ale_ShowA_fmt (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
+   Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
 
    /***** Form to request user's ID for possible account already created *****/
    Frm_StartForm (ActChkUsrAcc);
@@ -243,7 +243,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Box_EndBoxTable ();
 	}
       else
-	 Ale_ShowA_fmt (Ale_INFO,Txt_There_is_no_empty_account_associated_with_your_ID_X,
+	 Ale_ShowAlert (Ale_INFO,Txt_There_is_no_empty_account_associated_with_your_ID_X,
 		        ID);
 
       /***** Free structure that stores the query result *****/
@@ -255,7 +255,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    else	// ID not valid
      {
       /**** Show again form to check if I have an account *****/
-      Ale_ShowA_fmt (Ale_WARNING,Txt_Please_enter_your_ID);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_enter_your_ID);
 
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
      }
@@ -442,20 +442,17 @@ void Acc_ShowFormChgMyAccount (void)
    /***** Check nickname, email and ID *****/
    IMustCreateMyPasswordNow = (Gbl.Usrs.Me.UsrDat.Password[0] == '\0');
    if (IMustCreateMyPasswordNow)
-      Ale_ShowA_fmt (Ale_WARNING,
-	             Txt_Before_going_to_any_other_option_you_must_create_your_password);
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
    else
      {
       IMustCreateMyNicknameNow = (Gbl.Usrs.Me.UsrDat.Nickname[0] == '\0');
       if (IMustCreateMyNicknameNow)
-	 Ale_ShowA_fmt (Ale_WARNING,
-			Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+	 Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
       else
         {
 	 IMustFillInMyEmailNow = (Gbl.Usrs.Me.UsrDat.Email[0] == '\0');
 	 if (IMustFillInMyEmailNow)
-	    Ale_ShowA_fmt (Ale_WARNING,
-			   Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
+	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address);
 	 else
 	   {
 	    IShouldConfirmMyEmailNow = (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&	// Email not yet confirmed
@@ -525,10 +522,10 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 fprintf (Gbl.F.Out,"</div>");
 	}
       else
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -646,14 +643,14 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 			 Gbl.Usrs.Me.UsrDat.UsrCod))	// A nickname of another user is the same that this nickname
 	{
 	 Error = true;
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_The_nickname_X_had_been_registered_by_another_user,
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_X_had_been_registered_by_another_user,
 		        NewNicknameWithoutArroba);
 	}
      }
    else        // New nickname is not valid
      {
       Error = true;
-      Ale_ShowA_fmt (Ale_WARNING,Txt_The_nickname_entered_X_is_not_valid_,
+      Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_entered_X_is_not_valid_,
 		     NewNicknameWithArroba,
 		     Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
 		     Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
@@ -672,14 +669,14 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 	                 NewEmail))	// An email of another user is the same that my email
 	{
 	 Error = true;
-	 Ale_ShowA_fmt (Ale_WARNING,Txt_The_email_address_X_had_been_registered_by_another_user,
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_X_had_been_registered_by_another_user,
 		        NewEmail);
 	}
      }
    else	// New email is not valid
      {
       Error = true;
-      Ale_ShowA_fmt (Ale_WARNING,Txt_The_email_address_entered_X_is_not_valid,
+      Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_entered_X_is_not_valid,
                      NewEmail);
      }
 
@@ -689,7 +686,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {
       Error = true;
-      Ale_ShowA_new (Ale_WARNING,Gbl.AlertToShowLater.Txt);	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
+      Ale_ShowDelayedAlert ();	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
      }
 
    return !Error;
@@ -834,7 +831,7 @@ void Acc_AfterCreationNewAccount (void)
    if (Gbl.Usrs.Me.Logged)	// If account has been created without problem, I am logged
      {
       /***** Show message of success *****/
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
 	             Gbl.Usrs.Me.UsrDat.Nickname,
 	             Cfg_PLATFORM_SHORT_NAME);
 
@@ -863,7 +860,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
       Error = true;
 
    if (Error)
-      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -973,7 +970,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else
-      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1033,7 +1030,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 		   UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
                      UsrDat->FullName);
 
    /***** Remove user as administrator of any degree *****/
@@ -1042,7 +1039,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                    UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator,
                      UsrDat->FullName);
 
    /***** Remove user's clipboard in forums *****/
@@ -1054,7 +1051,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove the file tree of a user *****/
    Acc_RemoveUsrBriefcase (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Briefcase_of_THE_USER_X_has_been_removed,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Briefcase_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 
    /***** Remove test results made by user in all courses *****/
@@ -1067,7 +1064,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Gbl.Msg.FilterContent[0] = '\0';
    Msg_DelAllRecAndSntMsgsUsr (UsrDat->UsrCod);
    if (QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Messages_of_THE_USER_X_have_been_deleted,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Messages_of_THE_USER_X_have_been_deleted,
                      UsrDat->FullName);
 
    /***** Remove user from tables of banned users *****/
@@ -1111,13 +1108,13 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove user's photo *****/
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
    if (PhotoRemoved && QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Photo_of_THE_USER_X_has_been_removed,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Photo_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 
    /***** Remove user *****/
    Acc_RemoveUsr (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
-      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Record_card_of_THE_USER_X_has_been_removed,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Record_card_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
   }
 
