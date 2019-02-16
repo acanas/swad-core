@@ -235,7 +235,7 @@ void Prj_ShowTableAllProjects (void)
       Prj_FreeMemProject (&Prj);
      }
    else	// No projects created
-      Ale_ShowA_old (Ale_INFO,Txt_No_projects);
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
   }
 
 /*****************************************************************************/
@@ -335,7 +335,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
 					&Pagination);
      }
    else	// No projects created
-      Ale_ShowA_old (Ale_INFO,Txt_No_projects);
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
    /***** Button to create a new project *****/
    if (Prj_CheckIfICanCreateProjects ())
@@ -1963,18 +1963,16 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 	    Prj_FlushCacheMyRoleInProject ();
 
 	 /* Show success alert */
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
-		   Gbl.Usrs.Other.UsrDat.FullName,
-		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
-	 Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
+		        Gbl.Usrs.Other.UsrDat.FullName,
+		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
 	}
 
       /***** Free list of users' codes *****/
       Usr_FreeListUsrCods (&ListUsrCods);
      }
    else	// No users found
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (PrjCod);
@@ -2059,10 +2057,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 	}
       else
-         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2129,18 +2127,16 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	    Prj_FlushCacheMyRoleInProject ();
 
 	 /***** Show success alert *****/
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
-		   Gbl.Usrs.Other.UsrDat.FullName,
-		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
-		   Prj.Title);
-         Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
+		        Gbl.Usrs.Other.UsrDat.FullName,
+		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
+		        Prj.Title);
 	}
       else
-         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2692,7 +2688,7 @@ void Prj_ReqRemProject (void)
 			      Btn_REMOVE_BUTTON,Txt_Remove_project);
      }
    else
-      Ale_ShowA_old (Ale_ERROR,"You don't have permission to edit this project.");
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2751,13 +2747,11 @@ void Prj_RemoveProject (void)
       Fil_RemoveTree (PathRelPrj);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Project_X_removed,
-	        Prj.Title);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_removed,
+	             Prj.Title);
      }
    else
-      Ale_ShowA_old (Ale_ERROR,"You don't have permission to edit this project.");
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2795,13 +2789,11 @@ void Prj_HideProject (void)
 	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Project_X_is_now_hidden,
-	        Prj.Title);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_hidden,
+	             Prj.Title);
      }
    else
-      Ale_ShowA_old (Ale_ERROR,"You don't have permission to edit this project.");
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2839,13 +2831,11 @@ void Prj_ShowProject (void)
 	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Project_X_is_now_visible,
-	        Prj.Title);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_visible,
+	             Prj.Title);
      }
    else
-      Ale_ShowA_old (Ale_ERROR,"You don't have permission to edit this project.");
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3248,7 +3238,7 @@ void Prj_RecFormProject (void)
       if (!Prj.Title[0])	// If there is not a project title
 	{
 	 NewProjectIsCorrect = false;
-	 Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
 	}
 
       /***** Create a new project or update an existing one *****/
@@ -3260,10 +3250,8 @@ void Prj_RecFormProject (void)
 	    Prj_CreateProject (&Prj);	// Add new project to database
 
 	    /* Write success message */
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_Created_new_project_X,
-		      Prj.Title);
-	    Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
+		           Prj.Title);
 	   }
 	 else if (NewProjectIsCorrect)
 	   {
@@ -3271,7 +3259,7 @@ void Prj_RecFormProject (void)
 	    Prj_UpdateProject (&Prj);
 
 	    /* Write success message */
-	    Ale_ShowA_old (Ale_SUCCESS,Txt_The_project_has_been_modified);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
 	   }
 	}
       else
@@ -3281,7 +3269,7 @@ void Prj_RecFormProject (void)
       Prj_RequestCreatOrEditPrj (Prj.PrjCod);
      }
    else
-      Ale_ShowA_old (Ale_ERROR,"You don't have permission to edit this project.");
+      Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

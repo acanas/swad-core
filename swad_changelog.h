@@ -384,6 +384,7 @@ OPTIMIZE TABLE debug;
 // TODO: Revisar todos los Ale_ShowAlertAndButton
 
 // TODO: Pasar a una función Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+// TODO: Pasar a una función Ale_ShowAlert (Ale_ERROR,"You don't have permission to edit this project.");
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -404,10 +405,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.46.8 (2019-02-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.46.9 (2019-02-16)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.46.9:  Feb 16, 2019 	Refactoring code related to alerts. (237809 lines)
 	Version 18.46.8:  Feb 16, 2019 	Refactoring code related to alerts. (237863 lines)
 	Version 18.46.7:  Feb 16, 2019 	Refactoring code related to alerts. (237953 lines)
 	Version 18.46.6:  Feb 16, 2019 	Refactoring code related to alerts. (238019 lines)

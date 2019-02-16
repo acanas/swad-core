@@ -953,7 +953,7 @@ void Str_SetDecimalPointToUS (void)
   {
    if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get/print the floating point as a dot
       if (Gbl.Layout.HTMLStartWritten)
-         Ale_ShowA_old (Ale_ERROR,"Can not set locale to en_US.");
+         Ale_ShowAlert (Ale_ERROR,"Can not set locale to en_US.");
   }
 
 /*****************************************************************************/
@@ -965,7 +965,7 @@ void Str_SetDecimalPointToLocal (void)
    // TODO: this should be internationalized!!!!!!!
    if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to local system
       if (Gbl.Layout.HTMLStartWritten)
-         Ale_ShowA_old (Ale_ERROR,"Can not set locale to es_ES.");
+         Ale_ShowAlert (Ale_ERROR,"Can not set locale to es_ES.");
   }
 
 /*****************************************************************************/

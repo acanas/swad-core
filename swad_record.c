@@ -206,12 +206,8 @@ void Rec_ReqEditRecordFields (void)
       Box_EndBoxTable ();
      }
    else	// No fields of records found for current course in the database
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_There_are_no_record_fields_in_the_course_X,
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_record_fields_in_the_course_X,
+                     Gbl.CurrentCrs.Crs.FullName);
 
    /***** Put a form to create a new record field *****/
    Rec_ShowFormCreateRecordField ();
@@ -488,17 +484,13 @@ void Rec_ReceiveFormField (void)
      {
       /***** If the field already was in the database... *****/
       if (Rec_CheckIfRecordFieldIsRepeated (Gbl.CurrentCrs.Records.Field.Name))
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_record_field_X_already_exists,
-                   Gbl.CurrentCrs.Records.Field.Name);
-         Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_ERROR,Txt_The_record_field_X_already_exists,
+                        Gbl.CurrentCrs.Records.Field.Name);
       else	// Add the new field to the database
          Rec_CreateRecordField ();
      }
    else		// If there is not name
-      Ale_ShowA_old (Ale_ERROR,Txt_You_must_specify_the_name_of_the_new_record_field);
+      Ale_ShowAlert (Ale_ERROR,Txt_You_must_specify_the_name_of_the_new_record_field);
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();
@@ -594,7 +586,7 @@ void Rec_CreateRecordField (void)
    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
 	     Txt_Created_new_record_field_X,
              Gbl.CurrentCrs.Records.Field.Name);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -707,10 +699,8 @@ void Rec_RemoveFieldFromDB (void)
                    Gbl.CurrentCrs.Records.Field.FieldCod);
 
    /***** Write message to show the change made *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Record_field_X_removed,
-             Gbl.CurrentCrs.Records.Field.Name);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Record_field_X_removed,
+                  Gbl.CurrentCrs.Records.Field.Name);
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();
@@ -813,12 +803,8 @@ void Rec_RenameField (void)
 
    /***** Check if new name is empty *****/
    if (!NewFieldName[0])
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_field_X_empty,
-                Gbl.CurrentCrs.Records.Field.Name);
-      Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_leave_the_name_of_the_field_X_empty,
+                     Gbl.CurrentCrs.Records.Field.Name);
    else
      {
       /***** Check if the name of the olde field match the new one
@@ -827,12 +813,8 @@ void Rec_RenameField (void)
         {
          /***** If the group ya estaba in the database... *****/
          if (Rec_CheckIfRecordFieldIsRepeated (NewFieldName))
-           {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_record_field_X_already_exists,
-                      NewFieldName);
-            Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
-           }
+            Ale_ShowAlert (Ale_ERROR,Txt_The_record_field_X_already_exists,
+                           NewFieldName);
          else
            {
             /* Update the table of fields changing then old name by the new one */
@@ -842,19 +824,13 @@ void Rec_RenameField (void)
                             NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod);
 
             /***** Write message to show the change made *****/
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_record_field_X_has_been_renamed_as_Y,
-                      Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
-            Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_record_field_X_has_been_renamed_as_Y,
+                           Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
            }
         }
       else	// The same name
-        {
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_name_of_the_field_X_has_not_changed,
-                   NewFieldName);
-         Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-        }
+         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_field_X_has_not_changed,
+                        NewFieldName);
      }
 
    /***** Show the form again *****/
@@ -891,12 +867,8 @@ void Rec_ChangeLinesField (void)
    /***** Check if the old number of rows matches the new one
           (this happens when return is pressed without changes) *****/
    if (Gbl.CurrentCrs.Records.Field.NumLines == NewNumLines)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
-                Gbl.CurrentCrs.Records.Field.Name);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_INFO,Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
+                     Gbl.CurrentCrs.Records.Field.Name);
    else
      {
       /***** Update of the table of fields changing the old maximum of students by the new one *****/
@@ -906,10 +878,8 @@ void Rec_ChangeLinesField (void)
                       NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
-	        Gbl.CurrentCrs.Records.Field.Name,NewNumLines);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
+	             Gbl.CurrentCrs.Records.Field.Name,NewNumLines);
      }
 
    /***** Show the form again *****/
@@ -945,12 +915,8 @@ void Rec_ChangeVisibilityField (void)
    /***** Check if the old visibility matches the new one
           (this happens when return is pressed without changes) *****/
    if (Gbl.CurrentCrs.Records.Field.Visibility == NewVisibility)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_visibility_of_the_record_field_X_has_not_changed,
-                Gbl.CurrentCrs.Records.Field.Name);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowAlert (Ale_INFO,Txt_The_visibility_of_the_record_field_X_has_not_changed,
+                     Gbl.CurrentCrs.Records.Field.Name);
    else
      {
       /***** Update of the table of fields changing the old visibility by the new *****/
@@ -961,10 +927,8 @@ void Rec_ChangeVisibilityField (void)
 		      Gbl.CurrentCrs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
-	        Gbl.CurrentCrs.Records.Field.Name);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
+	             Gbl.CurrentCrs.Records.Field.Name);
      }
 
    /***** Show the form again *****/
@@ -1038,7 +1002,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    /* Check the number of students to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
      {						// ...write warning notice
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       Usr_SeeGuests ();			// ...show again the form
       return;
      }
@@ -1236,7 +1200,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    /* Check the number of students to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
      {						// ...write warning notice
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
       Usr_SeeStudents ();			// ...show again the form
       return;
      }
@@ -1460,7 +1424,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    /* Check the number of teachers to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no teachers selected...
      {						// ...write warning notice
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_teachers);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_teachers);
       Usr_SeeTeachers ();			// ...show again the form
       return;
      }
@@ -2062,8 +2026,8 @@ static void Rec_ShowMyCrsRecordUpdated (void)
   {
    extern const char *Txt_Your_record_card_in_this_course_has_been_updated;
 
-   /***** Write mensaje of success *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
+   /***** Write success message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
 
    /***** Shared record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Me.UsrDat,NULL);
@@ -2157,7 +2121,7 @@ void Rec_ShowMySharedRecordUpd (void)
    extern const char *Txt_Your_personal_data_have_been_updated;
 
    /***** Write alert *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Your_personal_data_have_been_updated);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -3964,28 +3928,21 @@ void Rec_ShowMySharedRecordAndMore (void)
    /***** If user has no name and surname, sex... *****/
    if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
        !Gbl.Usrs.Me.UsrDat.Surname1[0])			// 1. No name
-      Ale_ShowA_old (Ale_WARNING,
-		     Txt_Please_fill_in_your_record_card_including_your_name);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
    else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)	// 2. No sex
-      Ale_ShowA_old (Ale_WARNING,
-		     Txt_Please_fill_in_your_record_card_including_your_sex);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
    else if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)		// 3. No country
-      Ale_ShowA_old (Ale_WARNING,
-		     Txt_Please_fill_in_your_record_card_including_your_country_nationality);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
    else if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)		// 4. No institution country
-      Ale_ShowA_old (Ale_WARNING,
-		     Txt_Please_select_the_country_of_your_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
    else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)		// 5. No institution
-      Ale_ShowA_old (Ale_WARNING,
-		     Txt_Please_fill_in_your_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
    else if (IAmATeacher)
      {
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)		// 6. No centre
-	 Ale_ShowA_old (Ale_WARNING,
-			Txt_Please_fill_in_your_centre);
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre);
       else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
-	 Ale_ShowA_old (Ale_WARNING,
-			Txt_Please_fill_in_your_department);
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_department);
      }
 
    /***** Start container *****/

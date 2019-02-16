@@ -478,7 +478,7 @@ void Sta_AskShowCrsHits (void)
         }
      }
    else	// No teachers nor students found
-      Ale_ShowA_old (Ale_WARNING,Txt_No_teachers_or_students_found);
+      Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
 
    /***** End section with user list *****/
    Lay_EndSection ();
@@ -861,7 +861,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
 	   {
 	    /* Write warning message and abort */
-	    Ale_ShowA_old (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
+	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
 	    return;
 	   }
 	 break;
@@ -900,7 +900,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// Error: there are no users selected
 	   {
 	    /* Write warning message, clean and abort */
-	    Ale_ShowA_old (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
             Usr_FreeListsSelectedUsrsCods ();
 	    return;
 	   }
@@ -910,23 +910,22 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date);
    ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
 			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Sco_SCOPE_DEG   ||
-			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			                                             Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
 			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Sco_SCOPE_CTR   ||
-			                                            Gbl.Scope.Current == Sco_SCOPE_DEG   ||
-			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			                                             Gbl.Scope.Current == Sco_SCOPE_DEG   ||
+			                                             Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
 			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Sco_SCOPE_INS   ||
-			                                            Gbl.Scope.Current == Sco_SCOPE_CTR   ||
-			                                            Gbl.Scope.Current == Sco_SCOPE_DEG   ||
-			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			                                             Gbl.Scope.Current == Sco_SCOPE_CTR   ||
+			                                             Gbl.Scope.Current == Sco_SCOPE_DEG   ||
+			                                             Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
 			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
-	        Cfg_DAYS_IN_RECENT_LOG);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);	// ...write warning message and show the form again
+      /* ...write warning message and show the form again */
+      Ale_ShowAlert (Ale_WARNING,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
+	             Cfg_DAYS_IN_RECENT_LOG);
       return;
      }
 
@@ -1388,7 +1387,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Count the number of rows in result *****/
    if (NumRows == 0)
-      Ale_ShowA_old (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
    else
      {
       /***** Put the table with the clicks *****/
