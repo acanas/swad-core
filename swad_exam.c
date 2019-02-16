@@ -295,9 +295,9 @@ void Exa_ReceiveExamAnnouncement2 (void)
    struct SocialPublishing SocPub;
 
    /***** Show message *****/
-   Ale_ShowA_old (Ale_SUCCESS,
+   Ale_ShowA_fmt (Ale_SUCCESS,
                   Gbl.ExamAnns.NewExamAnnouncement ? Txt_Created_new_announcement_of_exam :
-                                                              Txt_The_announcement_of_exam_has_been_successfully_updated);
+                                                     Txt_The_announcement_of_exam_has_been_successfully_updated);
 
    /***** Notify by email about the new exam announcement *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,Gbl.ExamAnns.ExaDat.ExaCod)))
@@ -414,7 +414,7 @@ void Exa_RemoveExamAnnouncement2 (void)
    extern const char *Txt_Announcement_of_exam_removed;
 
    /***** Write message *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_Announcement_of_exam_removed);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_Announcement_of_exam_removed);
 
    /***** List again all the remaining exam announcements *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -447,7 +447,7 @@ void Exa_HideExamAnnouncement2 (void)
    extern const char *Txt_The_announcement_of_exam_is_now_hidden;
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_The_announcement_of_exam_is_now_hidden);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_announcement_of_exam_is_now_hidden);
 
    /***** Show exam announcements again *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -480,7 +480,7 @@ void Exa_UnhideExamAnnouncement2 (void)
    extern const char *Txt_The_announcement_of_exam_is_now_visible;
 
    /***** Write message to show the change made *****/
-   Ale_ShowA_old (Ale_SUCCESS,Txt_The_announcement_of_exam_is_now_visible);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_announcement_of_exam_is_now_visible);
 
    /***** Show exam announcements again *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -657,12 +657,8 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_No_announcements_of_exams_of_X,
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-     }
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_announcements_of_exams_of_X,
+                     Gbl.CurrentCrs.Crs.FullName);
 
    /***** List the existing exam announcements *****/
    for (NumExaAnn = 0;

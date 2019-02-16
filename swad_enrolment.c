@@ -394,11 +394,9 @@ void Enr_ReqAcceptRegisterInCrs (void)
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
    /***** Show message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
-             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
-             Gbl.CurrentCrs.Crs.FullName);
-   Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_INFO,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
+                  Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                  Gbl.CurrentCrs.Crs.FullName);
 
    /***** Send button to accept register in the current course *****/
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
@@ -627,7 +625,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
-	 Ale_ShowA_old (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+	 Ale_ShowA_fmt (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
 	 break;
      }
   }
@@ -721,7 +719,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_1_Provide_a_list_of_users);
 
-   Ale_ShowA_old (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
+   Ale_ShowA_fmt (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
    Enr_PutAreaToEnterUsrsIDs ();
 
    /***** Step 2: Put different actions to register/remove users to/from current course *****/
@@ -742,17 +740,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      {
       if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
 	{
-	 Ale_ShowA_old (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_);
+	 Ale_ShowA_fmt (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_);
 	 Grp_ShowLstGrpsToChgOtherUsrsGrps (-1L);
 	}
       else
-	{
 	 /* Write help message */
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
-		   Gbl.CurrentCrs.Crs.FullName);
-	 Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-	}
+	 Ale_ShowA_fmt (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
+		        Gbl.CurrentCrs.Crs.FullName);
      }
 
    /***** Step 4: Confirm register / remove students *****/
@@ -871,12 +865,10 @@ void Enr_RemoveOldUsrs (void)
 			     (unsigned long) SecondsWithoutAccess);
    if (NumUsrs)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
-                NumUsrs,
-                MonthsWithoutAccess,
-                Cfg_PLATFORM_SHORT_NAME);
-      Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_INFO,Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
+                     NumUsrs,
+                     MonthsWithoutAccess,
+                     Cfg_PLATFORM_SHORT_NAME);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -906,10 +898,8 @@ void Enr_RemoveOldUsrs (void)
      }
 
    /***** Write end message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_X_users_have_been_eliminated,
-             NumUsrsEliminated);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_X_users_have_been_eliminated,
+                  NumUsrsEliminated);
   }
 
 /*****************************************************************************/
@@ -1509,7 +1499,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	 if (!Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Role,&LstGrps))
 	   {
 	    /* Show warning message and exit */
-	    Ale_ShowA_old (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+	    Ale_ShowA_fmt (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
 
 	    /* Free memory used by lists of groups and abort */
 	    Grp_FreeListCodGrp (&LstGrps);
@@ -1746,32 +1736,28 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	 switch (NumUsrsEliminated)
 	   {
 	    case 0:
-	       Ale_ShowA_old (Ale_INFO,Txt_No_user_has_been_eliminated);
+	       Ale_ShowA_fmt (Ale_INFO,Txt_No_user_has_been_eliminated);
 	       break;
 	    case 1:
-	       Ale_ShowA_old (Ale_SUCCESS,Txt_One_user_has_been_eliminated);
+	       Ale_ShowA_fmt (Ale_SUCCESS,Txt_One_user_has_been_eliminated);
 	       break;
 	    default:
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_X_users_have_been_eliminated,
-			 NumUsrsEliminated);
-	       Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+	       Ale_ShowA_fmt (Ale_SUCCESS,Txt_X_users_have_been_eliminated,
+			      NumUsrsEliminated);
 	       break;
 	   }
       else                        // Only remove from course / groups
 	 switch (NumUsrsRemoved)
 	   {
 	    case 0:
-	       Ale_ShowA_old (Ale_INFO,Txt_No_user_has_been_removed);
+	       Ale_ShowA_fmt (Ale_INFO,Txt_No_user_has_been_removed);
 	       break;
 	    case 1:
-	       Ale_ShowA_old (Ale_SUCCESS,Txt_One_user_has_been_removed);
+	       Ale_ShowA_fmt (Ale_SUCCESS,Txt_One_user_has_been_removed);
 	       break;
 	    default:
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_X_users_have_been_removed,
-			 NumUsrsRemoved);
-	       Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+	       Ale_ShowA_fmt (Ale_SUCCESS,Txt_X_users_have_been_removed,
+			      NumUsrsRemoved);
 	       break;
 	   }
      }
@@ -1779,16 +1765,14 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       switch (NumUsrsRegistered)
 	{
 	 case 0:
-	    Ale_ShowA_old (Ale_INFO,Txt_No_user_has_been_enroled);
+	    Ale_ShowA_fmt (Ale_INFO,Txt_No_user_has_been_enroled);
 	    break;
 	 case 1:
-	    Ale_ShowA_old (Ale_SUCCESS,Txt_One_user_has_been_enroled);
+	    Ale_ShowA_fmt (Ale_SUCCESS,Txt_One_user_has_been_enroled);
 	    break;
 	 default:
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_X_users_have_been_enroled_including_possible_repetitions,
-		      NumUsrsRegistered);
-	    Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+	    Ale_ShowA_fmt (Ale_SUCCESS,Txt_X_users_have_been_enroled_including_possible_repetitions,
+		           NumUsrsRegistered);
 	    break;
 	}
 
@@ -1919,12 +1903,8 @@ void Enr_RemAllStdsThisCrs (void)
    if (Pwd_GetConfirmationOnDangerousAction ())
      {
       if ((NumStdsInCrs = Enr_RemAllStdsInCrs (&Gbl.CurrentCrs.Crs)))
-	{
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
-		   NumStdsInCrs,Gbl.CurrentCrs.Crs.FullName);
-	 Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
-	}
+	 Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it,
+		        NumStdsInCrs,Gbl.CurrentCrs.Crs.FullName);
       else	// NumStdsInCrs == 0
 	 /***** Show warning indicating no students found *****/
 	 Usr_ShowWarningNoUsersFound (Rol_STD);
@@ -1973,13 +1953,9 @@ void Enr_ReqSignUpInCrs (void)
 
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_were_already_enroled_as_X_in_the_course_Y,
-                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_were_already_enroled_as_X_in_the_course_Y,
+                     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                     Gbl.CurrentCrs.Crs.FullName);
    else if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
 	    Gbl.Usrs.Me.Role.Logged == Rol_USR)
       /***** Show form to modify only the user's role or the user's data *****/
@@ -2004,13 +1980,9 @@ void Enr_SignUpInCrs (void)
 
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role >= Rol_STD)
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_You_were_already_enroled_as_X_in_the_course_Y,
-                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-     }
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_were_already_enroled_as_X_in_the_course_Y,
+                     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Me.UsrDat.Sex],
+                     Gbl.CurrentCrs.Crs.FullName);
    else
      {
       /***** Get new role from record form *****/
@@ -2061,11 +2033,9 @@ void Enr_SignUpInCrs (void)
 				      (unsigned) RoleFromForm);
 
       /***** Show confirmation message *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing,
-                Txt_ROLES_SINGUL_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing,
+                     Txt_ROLES_SINGUL_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
+                     Gbl.CurrentCrs.Crs.FullName);
 
       /***** Notify teachers or admins by email about the new enrolment request *****/
       // If this course has teachers ==> send notification to teachers
@@ -2152,10 +2122,8 @@ void Enr_AskIfRejectSignUp (void)
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_fmt (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
          /* Remove inscription request because it has not sense */
@@ -2190,7 +2158,7 @@ void Enr_AskIfRejectSignUp (void)
         }
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -2211,10 +2179,8 @@ void Enr_RejectSignUp (void)
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-         Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+         Ale_ShowA_fmt (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
         }
 
@@ -2222,13 +2188,11 @@ void Enr_RejectSignUp (void)
       Enr_RemoveEnrolmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Confirmation message */
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Enrolment_of_X_rejected,
-                Gbl.Usrs.Other.UsrDat.FullName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Enrolment_of_X_rejected,
+                     Gbl.Usrs.Other.UsrDat.FullName);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /* Show again the rest of registrarion requests */
    Enr_ShowEnrolmentRequests ();
@@ -3008,7 +2972,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else	// There are no requests
-      Ale_ShowA_old (Ale_INFO,Txt_No_enrolment_requests);
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_enrolment_requests);
 
    /***** End box *****/
    Box_EndBox ();
@@ -3287,12 +3251,8 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
      {
       /***** Warning if more than one user found *****/
       if (ListUsrCods->NumUsrs > 1)
-	{
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_There_are_X_users_with_the_ID_Y,
-		   ListUsrCods->NumUsrs,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-	 Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
-	}
+	 Ale_ShowA_fmt (Ale_INFO,Txt_There_are_X_users_with_the_ID_Y,
+		        ListUsrCods->NumUsrs,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
 
       /***** For each user found... *****/
       for (NumUsr = 0;
@@ -3310,34 +3270,27 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       if (Gbl.Usrs.Other.UsrDat.Accepted)
-		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-			    Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+	          Ale_ShowA_fmt (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+			         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 	       else        // Enrolment not yet accepted
-		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                    Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-			    Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-	       Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+	          Ale_ShowA_fmt (Ale_INFO,Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
+			         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 
 	       Enr_ShowFormToEditOtherUsr ();
 	      }
 	    else        // User does not belong to the current course
 	      {
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
-			 Gbl.Usrs.Other.UsrDat.FullName,
-			 Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
-	       Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+	       Ale_ShowA_fmt (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
+			      Gbl.Usrs.Other.UsrDat.FullName,
+			      Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
 
 	       Enr_ShowFormToEditOtherUsr ();
 	      }
 	   }
 	 else	// No course selected
 	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_THE_USER_X_already_exists_in_Y,
-		      Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
-	    Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+	    Ale_ShowA_fmt (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
+		           Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
 
 	    Enr_ShowFormToEditOtherUsr ();
 	   }
@@ -3358,19 +3311,15 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
       if (NewUsrIDValid)
 	{
 	 /***** Show form to enter the data of a new user *****/
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_The_user_is_new_not_yet_in_X,
-		   Cfg_PLATFORM_SHORT_NAME);
-	 Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+	 Ale_ShowA_fmt (Ale_INFO,Txt_The_user_is_new_not_yet_in_X,
+		        Cfg_PLATFORM_SHORT_NAME);
 	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat,Role);
 	}
       else        // User's ID is not valid
 	{
 	 /* Write message and request a new user's ID */
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
-		   Cfg_PLATFORM_SHORT_NAME);
-	 Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowA_fmt (Ale_WARNING,Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
+		        Cfg_PLATFORM_SHORT_NAME);
 	 Enr_ReqRegRemUsr (Role);
 	}
      }
@@ -3442,10 +3391,10 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
            }
          else
-            Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+            Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
         }
       else
-         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
 
@@ -3461,9 +3410,8 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
 
    /***** Check if user was and administrator of current institution/centre/degree *****/
    if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_is_already_an_administrator_of_Y,
-                UsrDat->FullName,InsCtrDegName);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_THE_USER_X_is_already_an_administrator_of_Y,
+                     UsrDat->FullName,InsCtrDegName);
    else        // User was not administrator of current institution/centre/degree
      {
       /***** Insert or replace administrator in current institution/centre/degree *****/
@@ -3474,11 +3422,9 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
 		       " (%ld,'%s',%ld)",
                        UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
 
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
-                UsrDat->FullName,InsCtrDegName);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
+                     UsrDat->FullName,InsCtrDegName);
      }
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -3504,10 +3450,10 @@ void Enr_ReqRemUsrFromCrs (void)
       if (Enr_CheckIfICanRemUsrFromCrs ())
 	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
       else
-         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -3528,15 +3474,15 @@ void Enr_RemUsrFromCrs1 (void)
 					  Enr_REMOVE_WORKS,Cns_VERBOSE);
 	 else
 	   {
-	    Gbl.Alert.Type = Ale_WARNING;
-	    Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+	    Gbl.AlertToShowLater.Type = Ale_WARNING;
+	    Str_Copy (Gbl.AlertToShowLater.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
 		      Ale_MAX_BYTES_ALERT);
 	   }
 	}
       else
 	{
-	 Gbl.Alert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+	 Gbl.AlertToShowLater.Type = Ale_WARNING;
+	 Str_Copy (Gbl.AlertToShowLater.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
 		   Ale_MAX_BYTES_ALERT);
 	}
      }
@@ -3544,7 +3490,7 @@ void Enr_RemUsrFromCrs1 (void)
 
 void Enr_RemUsrFromCrs2 (void)
   {
-   Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+   Ale_ShowA_new (Gbl.AlertToShowLater.Type,Gbl.AlertToShowLater.Txt);
   }
 
 /*****************************************************************************/
@@ -3674,18 +3620,14 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
                  }
               }
             else        // The other user is not an administrator of current institution
-              {
-               snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_THE_USER_X_is_not_an_administrator_of_Y,
-                         Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
-               Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-              }
+               Ale_ShowA_fmt (Ale_WARNING,Txt_THE_USER_X_is_not_an_administrator_of_Y,
+                              Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
            }
          else
-            Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+            Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
         }
       else
-         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
 
@@ -3724,10 +3666,8 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
            {
             if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/centre/degree
               {
-               snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_THE_USER_X_is_already_an_administrator_of_Y,
-                         Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
-               Ale_ShowA_old (Ale_INFO,Gbl.Alert.Txt);
+               Ale_ShowA_fmt (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
+                              Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
               }
             else
@@ -3749,10 +3689,10 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
               }
            }
          else
-            Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+            Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
         }
       else
-         Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
 
@@ -3775,10 +3715,8 @@ void Enr_AcceptRegisterMeInCrs (void)
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_You_have_confirmed_your_enrolment_in_the_course_X,
-             Gbl.CurrentCrs.Crs.FullName);
-   Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowA_fmt (Ale_SUCCESS,Txt_You_have_confirmed_your_enrolment_in_the_course_X,
+                  Gbl.CurrentCrs.Crs.FullName);
   }
 
 /*****************************************************************************/
@@ -4070,7 +4008,7 @@ void Enr_ModifyUsr2 (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    if (Gbl.Alert.Type == Ale_WARNING)
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
    else // No error
       switch (Gbl.Usrs.RegRemAction)
 	{
@@ -4187,7 +4125,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else	      // User does not belong to current course
-      Ale_ShowA_old (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -4347,16 +4285,10 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
 		      " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
                       UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
 
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
-                UsrDat->FullName,InsCtrDegName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
+                     UsrDat->FullName,InsCtrDegName);
      }
    else        // User is not an administrator of the current institution/centre/degree
-     {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_THE_USER_X_is_not_an_administrator_of_Y,
-                UsrDat->FullName,InsCtrDegName);
-      Ale_ShowA_old (Ale_ERROR,Gbl.Alert.Txt);
-     }
+      Ale_ShowA_fmt (Ale_ERROR,Txt_THE_USER_X_is_not_an_administrator_of_Y,
+                     UsrDat->FullName,InsCtrDegName);
   }

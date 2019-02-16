@@ -228,7 +228,7 @@ void Deg_SeeDegWithPendingCrss (void)
       Box_EndBoxTable ();
      }
    else
-      Ale_ShowA_old (Ale_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
+      Ale_ShowA_fmt (Ale_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1202,7 +1202,7 @@ static void Deg_ListDegrees (void)
       Tbl_EndTable ();
      }
    else	// No degrees created in the current centre
-      Ale_ShowA_old (Ale_INFO,Txt_No_degrees);
+      Ale_ShowA_fmt (Ale_INFO,Txt_No_degrees);
 
    /***** Button to create degree *****/
    if (Deg_CheckIfICanCreateDegrees ())
@@ -1376,7 +1376,7 @@ void Deg_EditDegrees (void)
    else	// No degree types
      {
       /***** Warning message *****/
-      Ale_ShowA_old (Ale_WARNING,Txt_No_types_of_degree);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_No_types_of_degree);
 
       /***** Form to create the first degree type *****/
       if (DT_CheckIfICanCreateDegreeTypes ())
@@ -1579,27 +1579,19 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 	{
 	 /***** If name of degree was in database... *****/
 	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Degs.EditingDeg.ShrtName,-1L,Gbl.Degs.EditingDeg.CtrCod))
-	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_degree_X_already_exists,
-		      Gbl.Degs.EditingDeg.ShrtName);
-	    Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-	   }
+	    Ale_ShowA_fmt (Ale_WARNING,Txt_The_degree_X_already_exists,
+		           Gbl.Degs.EditingDeg.ShrtName);
 	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Degs.EditingDeg.FullName,-1L,Gbl.Degs.EditingDeg.CtrCod))
-	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_The_degree_X_already_exists,
-		      Gbl.Degs.EditingDeg.FullName);
-	    Ale_ShowA_old (Ale_WARNING,Gbl.Alert.Txt);
-	   }
+	    Ale_ShowA_fmt (Ale_WARNING,Txt_The_degree_X_already_exists,
+		           Gbl.Degs.EditingDeg.FullName);
 	 else	// Add new degree to database
 	    Deg_CreateDegree (Status);
 	}
       else	// If there is not a degree logo or web
-	 Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_degree);
+	 Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_degree);
      }
    else	// If there is not a degree name
-      Ale_ShowA_old (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
@@ -1623,17 +1615,15 @@ void Deg_RemoveDegree (void)
 
    /***** Check if this degree has courses *****/
    if (Crs_GetNumCrssInDeg (Deg.DegCod))	// Degree has courses ==> don't remove
-      Ale_ShowA_old (Ale_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
      {
       /***** Remove degree *****/
       Deg_RemoveDegreeCompletely (Deg.DegCod);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Degree_X_removed,
-                Deg.FullName);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_Degree_X_removed,
+                     Deg.FullName);
      }
 
    /***** Show the form again *****/
@@ -2173,7 +2163,7 @@ void Deg_ChangeDegWWW (void)
       Deg_ShowAlertAndButtonToGoToDeg ();
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
@@ -2198,13 +2188,11 @@ void Deg_ChangeDegWWWInConfig (void)
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_The_new_web_address_is_X,
-		NewWWW);
-      Ale_ShowA_old (Ale_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowA_fmt (Ale_SUCCESS,Txt_The_new_web_address_is_X,
+		     NewWWW);
      }
    else
-      Ale_ShowA_old (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowA_fmt (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Deg_ShowConfiguration ();
@@ -2307,7 +2295,7 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
      }
    else
       /***** Alert *****/
-      Ale_ShowA_old (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowA_new (Gbl.AlertToShowLater.Type,Gbl.AlertToShowLater.Txt);
   }
 
 static void Deg_PutParamGoToDeg (void)
