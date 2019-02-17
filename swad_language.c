@@ -150,12 +150,11 @@ void Lan_AskChangeLanguage (void)
    Gbl.Prefs.Language = Lan_GetParamLanguage ();	// Change temporarily language to set form action
 
    /***** Request confirmation *****/
-   Ale_ShowAlertAndButton (Ale_QUESTION,
-                           Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
-	                                        Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language],
-                           ActChgLan,NULL,NULL,Lan_PutParamLanguage,
+   Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,Lan_PutParamLanguage,
                            Btn_CONFIRM_BUTTON,
-                           Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
+                           Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
+                           Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
+	                                                     Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
 
    Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
 

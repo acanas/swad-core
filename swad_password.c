@@ -179,9 +179,9 @@ void Pwd_UpdateMyPwd (void)
       Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Me.UsrDat);
    else
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.Alert.Txt,Txt_You_have_not_entered_your_password_correctly,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_have_not_entered_your_password_correctly,
 		Ale_MAX_BYTES_ALERT);
      }
   }
@@ -223,9 +223,9 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
    if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
      {
       // Passwords don't match
-      Gbl.Alert.Type = Ale_WARNING;
-      Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.Alert.Txt,Txt_You_have_not_written_twice_the_same_new_password,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_have_not_written_twice_the_same_new_password,
 		Ale_MAX_BYTES_ALERT);
      }
    else
@@ -241,9 +241,9 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
 	 Ses_UpdateSessionDataInDB ();
 	 Enr_UpdateUsrData (UsrDat);
 
-	 Gbl.Alert.Type = Ale_SUCCESS;
-	 Gbl.Alert.Section = Pwd_PASSWORD_SECTION_ID;
-	 Str_Copy (Gbl.Alert.Txt,Txt_The_password_has_been_changed_successfully,
+	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
+	 Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
+	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_has_been_changed_successfully,
 		   Ale_MAX_BYTES_ALERT);
 	}
      }
@@ -321,6 +321,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    unsigned NumUsr;
    char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    int ReturnCode;
+   char ErrorTxt[256];
 
    /***** Check if user's ID or nickname is not empty *****/
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
@@ -396,11 +397,11 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	       Lay_ShowErrorAndExit (Txt_There_was_a_problem_sending_an_email_automatically);
 	       break;
 	    default:
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	       snprintf (ErrorTxt,sizeof (ErrorTxt),
 			 "Internal error: an email message has not been sent successfully."
 			 " Error code returned by the script: %d",
 			 ReturnCode);
-	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	       Lay_ShowErrorAndExit (ErrorTxt);
 	       break;
 	   }
      }
@@ -622,7 +623,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
      {
       Gbl.DelayedAlert.Type = Ale_WARNING;
       Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	        Txt_The_password_must_be_at_least_X_characters,
                 Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
@@ -688,7 +689,7 @@ void Pwd_ShowFormChgMyPwd (void)
 		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
    /***** Show possible alert *****/
-   if (Gbl.Alert.Section == Pwd_PASSWORD_SECTION_ID)
+   if (Gbl.DelayedAlert.Section == Pwd_PASSWORD_SECTION_ID)
       Ale_ShowDelayedAlert ();
 
    /***** Help message *****/
@@ -852,7 +853,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
    /***** Show possible alert *****/
-   if (Gbl.Alert.Section == (const char *) Pwd_PASSWORD_SECTION_ID)
+   if (Gbl.DelayedAlert.Section == (const char *) Pwd_PASSWORD_SECTION_ID)
       Ale_ShowDelayedAlert ();
 
    /***** Form to change password *****/

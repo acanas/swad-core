@@ -1865,11 +1865,9 @@ void Enr_AskRemAllStdsThisCrs (void)
      {
       /***** Show question and button to remove students *****/
       /* Start alert */
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
-                Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD],
-                Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
+                               Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD],
+                               Gbl.CurrentCrs.Crs.FullName);
 
       /* Show form to request confirmation */
       Frm_StartForm (ActRemAllStdCrs);
@@ -2135,12 +2133,10 @@ void Enr_AskIfRejectSignUp (void)
            {
 	    /***** Show question and button to reject user's enrolment request *****/
 	    /* Start alert */
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_Do_you_really_want_to_reject_the_enrolment_request_,
-                      Gbl.Usrs.Other.UsrDat.FullName,
-                      Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
-                      Gbl.CurrentCrs.Crs.FullName);
-	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
+				     Gbl.Usrs.Other.UsrDat.FullName,
+				     Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
+				     Gbl.CurrentCrs.Crs.FullName);
 
 	    /* Show user's record */
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -3665,10 +3661,8 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
               {
 	       /***** Show question and button to register user as administrator *****/
 	       /* Start alert */
-               snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	                 Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
-                         InsCtrDegName);
-	       Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+	       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
+                                        InsCtrDegName);
 
 	       /* Show user's record */
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -3727,7 +3721,7 @@ void Enr_CreateNewUsr1 (void)
    ID_GetParamOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
 
    /***** Initialize alert type and message *****/
-   Gbl.Alert.Type = Ale_NONE;	// Do not show alert
+   Gbl.DelayedAlert.Type = Ale_NONE;	// Do not show alert
 
    if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))        // User's ID valid
      {
@@ -3756,8 +3750,8 @@ void Enr_CreateNewUsr1 (void)
 	       Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
 	       /* Success message */
-               Gbl.Alert.Type = Ale_SUCCESS;
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+               Gbl.DelayedAlert.Type = Ale_SUCCESS;
+	       snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                 Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
 			 Gbl.Usrs.Other.UsrDat.FullName,
 			 Gbl.CurrentCrs.Crs.FullName,
@@ -3772,8 +3766,8 @@ void Enr_CreateNewUsr1 (void)
 	                                 Enr_SET_ACCEPTED_TO_FALSE);
 
 	    /* Success message */
-            Gbl.Alert.Type = Ale_SUCCESS;
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+            Gbl.DelayedAlert.Type = Ale_SUCCESS;
+	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	              Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 		      Gbl.Usrs.Other.UsrDat.FullName,
 		      Gbl.CurrentCrs.Crs.FullName);
@@ -3808,8 +3802,8 @@ void Enr_CreateNewUsr1 (void)
    else        // User's ID not valid
      {
       /***** Error message *****/
-      Gbl.Alert.Type = Ale_ERROR;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	        Txt_The_ID_X_is_not_valid,
                 Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
      }
@@ -3817,13 +3811,13 @@ void Enr_CreateNewUsr1 (void)
 
 void Enr_CreateNewUsr2 (void)
   {
-   if (Gbl.Alert.Type == Ale_ERROR)	// User's ID not valid
-      Ale_ShowPendingAlert ();
+   if (Gbl.DelayedAlert.Type == Ale_ERROR)	// User's ID not valid
+      Ale_ShowDelayedAlert ();
    else					// User's ID valid
      {
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	 /***** Show optional alert *****/
-         Ale_ShowPendingAlert ();
+         Ale_ShowDelayedAlert ();
 
       /***** Show user's record *****/
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -3844,7 +3838,7 @@ void Enr_ModifyUsr1 (void)
    Rol_Role_t NewRole;
 
    /***** Initialize alert type and message *****/
-   Gbl.Alert.Type = Ale_NONE;	// Do not show alert
+   Gbl.DelayedAlert.Type = Ale_NONE;	// Do not show alert
 
    /***** Get user from form *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -3884,8 +3878,8 @@ void Enr_ModifyUsr1 (void)
 			Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
 			/* Set success message */
-			Gbl.Alert.Type = Ale_SUCCESS;
-			snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+			Gbl.DelayedAlert.Type = Ale_SUCCESS;
+			snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                          Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
 				  Gbl.Usrs.Other.UsrDat.FullName,
 				  Gbl.CurrentCrs.Crs.FullName,
@@ -3900,8 +3894,8 @@ void Enr_ModifyUsr1 (void)
 						  Enr_SET_ACCEPTED_TO_FALSE);
 
 		     /* Set success message */
-	             Gbl.Alert.Type = Ale_SUCCESS;
-		     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	             Gbl.DelayedAlert.Type = Ale_SUCCESS;
+		     snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                       Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 			       Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 		    }
@@ -3947,56 +3941,56 @@ void Enr_ModifyUsr1 (void)
 		 }
 	      }
 	    else
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REGISTER_ONE_CENTRE_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    if (ItsMe || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REMOVE_ONE_USR_FROM_CRS:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REMOVE_ONE_CENTRE_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
 	    if (!Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
-	       Gbl.Alert.Type = Ale_WARNING;
+	       Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	 default:
-	    Gbl.Alert.Type = Ale_WARNING;
+	    Gbl.DelayedAlert.Type = Ale_WARNING;
 	    break;
 	}
      }
    else
-      Gbl.Alert.Type = Ale_WARNING;
+      Gbl.DelayedAlert.Type = Ale_WARNING;
   }
 
 void Enr_ModifyUsr2 (void)
   {
-   if (Gbl.Alert.Type == Ale_WARNING)
+   if (Gbl.DelayedAlert.Type == Ale_WARNING)
       Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
    else // No error
       switch (Gbl.Usrs.RegRemAction)
@@ -4004,7 +3998,7 @@ void Enr_ModifyUsr2 (void)
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
                /***** Show optional alert *****/
-               Ale_ShowPendingAlert ();
+               Ale_ShowDelayedAlert ();
 
 	    /***** Show user's record *****/
 	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -4076,11 +4070,9 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 
       /***** Show question and button to remove user as administrator *****/
       /* Start alert */
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
-		        Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
-	        Gbl.CurrentCrs.Crs.FullName);
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
+		                                    Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
+	                       Gbl.CurrentCrs.Crs.FullName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
@@ -4193,8 +4185,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 
       if (QuietOrVerbose == Cns_VERBOSE)
         {
-	 Gbl.Alert.Type = Ale_SUCCESS;
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
+         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_THE_USER_X_has_been_removed_from_the_course_Y,
                    UsrDat->FullName,Crs->FullName);
         }
@@ -4202,8 +4194,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
    else        // User does not belong to course
       if (QuietOrVerbose == Cns_VERBOSE)
 	{
-	 Gbl.Alert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+	 Gbl.DelayedAlert.Type = Ale_WARNING;
+	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
 		   Ale_MAX_BYTES_ALERT);
 	}
   }
@@ -4234,11 +4226,9 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,
      {
       /***** Show question and button to remove user as administrator *****/
       /* Start alert */
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
-                        Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
-                InsCtrDegName);
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
+                                                    Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
+                               InsCtrDegName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);

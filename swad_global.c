@@ -124,7 +124,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Form.Num = -1;		// Number of form. It's increased by 1 at the begin of each form
    Gbl.Form.Inside = false;	// Set to true inside a form to avoid nested forms
 
-   Ale_ResetAlert ();
+   Ale_ResetDelayedAlert ();
 
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;

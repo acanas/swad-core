@@ -487,6 +487,7 @@ static void Img_ProcessImage (struct Image *Image,
   {
    char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
+   char ErrorMsg[256];
 
    snprintf (Command,sizeof (Command),
 	     "convert %s -resize '%ux%u>' -quality %u %s",
@@ -503,11 +504,11 @@ static void Img_ProcessImage (struct Image *Image,
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode != 0)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Image could not be processed successfully.<br />"
 		"Error code returned by the program of processing: %d",
 	        ReturnCode);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorMsg);
      }
   }
 

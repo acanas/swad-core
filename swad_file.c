@@ -143,27 +143,25 @@ bool Fil_ReadStdinIntoTmpFile (void)
    if (FileIsTooBig || TimeExceeded)
      {
       Fil_EndOfReadingStdin ();  // If stdin were not fully read, there will be problems with buffers
+
+      /* Start HTTP response */
+      fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
+
+      /* Status code and message */
+      fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n");
       if (FileIsTooBig)
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
-                   (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
+         fprintf (stdout,Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
+                  (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
       else
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
-                   (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
+         fprintf (stdout,Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML,
+                  (unsigned long) (Cfg_TIME_TO_ABORT_FILE_UPLOAD / 60UL));
+      fprintf (stdout,"\n");
 
       /* Don't write HTML at all */
       Gbl.Layout.HTMLStartWritten =
       Gbl.Layout.DivsEndWritten   =
       Gbl.Layout.HTMLEndWritten   = true;
 
-      /* Start HTTP response */
-      fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
-
-      /* Status code and message */
-      fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"
-		      "%s\n",
-	       Gbl.Alert.Txt);
       return false;
      }
    rewind (Gbl.F.Tmp);
@@ -330,6 +328,7 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
                            FILE **NewFile)
   {
    size_t LengthFileRoot = Str_GetLengthRootFileName (CurrentName);
+   char ErrorMsg[128 + PATH_MAX];
 
    Str_Copy (NewName,CurrentName,
              PATH_MAX);
@@ -348,10 +347,10 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
    /* Open the new file */
    if ((*NewFile = fopen (NewName,"wb")) == NULL)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Can not create file <strong>%s</strong>.",
 		NewName);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorMsg);
      }
   }
 
@@ -359,64 +358,31 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
 /****************** Close and rename files related to an update **************/
 /*****************************************************************************/
 
-void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char *NewName,FILE *NewFile)
+void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
+                          const char OldName[PATH_MAX + 1],
+			  const char NewName[PATH_MAX + 1],
+			  FILE *NewFile)
   {
+   char ErrorMsg[128 + 2 * PATH_MAX];
+
    /* Close file */
    fclose (NewFile);
 
    /* Rename the old file and the new file */
    if (rename (CurrentName,OldName)) // mv CurrentName OldName Ej: mv file.html file.old
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
                 CurrentName,OldName);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorMsg);
      }
    if (rename (NewName,CurrentName)) // mv NewName CurrentName Ej: mv file.new file.html
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Can not rename the file <strong>%s</strong> as <strong>%s</strong>.",
                 NewName,CurrentName);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorMsg);
      }
-  }
-
-/*****************************************************************************/
-/*********************** Rename a file or directory **************************/
-/*****************************************************************************/
-
-bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew)
-  {
-   extern const char *Txt_There_is_already_a_non_empty_folder_named_X;
-   extern const char *Txt_There_is_already_a_file_named_X;
-
-   /* Rename the file or directory */
-   if (rename (PathOld,PathNew))	// Fail
-     {
-      switch (errno)
-        {
-	 case ENOTEMPTY:
-	 case EEXIST:
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_There_is_already_a_non_empty_folder_named_X,
-	              PathNew);
-	    break;
-	 case ENOTDIR:
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_There_is_already_a_file_named_X,
-	              PathNew);
-	    break;
-	 case EACCES:
-	    Lay_ShowErrorAndExit ("Write is forbidden.");
-	    break;
-         default:
-	    Lay_ShowErrorAndExit ("Can not rename file or folder.");
-	    break;
-	}
-      return false;
-     }
-   else					// Success
-      return true;
   }
 
 /*****************************************************************************/
@@ -434,15 +400,17 @@ bool Fil_CheckIfPathExists (const char *Path)
 /********** Check if a directory exists. If not exists, create it! ***********/
 /*****************************************************************************/
 
-void Fil_CreateDirIfNotExists (const char *Path)
+void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1])
   {
+   char ErrorMsg[128 + PATH_MAX];
+
    if (!Fil_CheckIfPathExists (Path))
       if (mkdir (Path,(mode_t) 0xFFF) != 0)
         {
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	 snprintf (ErrorMsg,sizeof (ErrorMsg),
 	           "Can not create folder <strong>%s</strong>.",
 		   Path);
-	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	 Lay_ShowErrorAndExit (ErrorMsg);
         }
   }
 
@@ -451,13 +419,14 @@ void Fil_CreateDirIfNotExists (const char *Path)
 /*****************************************************************************/
 // If the tree of directories and files exists, remove it
 
-void Fil_RemoveTree (const char *Path)
+void Fil_RemoveTree (const char Path[PATH_MAX + 1])
   {
    struct stat FileStatus;
    struct dirent **FileList;
    int NumFile,NumFiles;
    char PathFileRel[PATH_MAX + 1];
    bool Error;
+   char ErrorMsg[128 + PATH_MAX];
 
    if (Fil_CheckIfPathExists (Path))
      {
@@ -502,10 +471,10 @@ void Fil_RemoveTree (const char *Path)
 	       Error = true;
 	    if (Error)
 	      {
-	       snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	       snprintf (ErrorMsg,sizeof (ErrorMsg),
 	                 "Can not remove folder %s.",
 			 Path);
-	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	       Lay_ShowErrorAndExit (ErrorMsg);
 	      }
 	   }
 	}

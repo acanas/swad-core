@@ -2033,12 +2033,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 
 	 /***** Show question and button to remove user as administrator *****/
 	 /* Start alert */
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
-			   Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
-		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
-		   Prj.Title);
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+	 Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
+			                               Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
+				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
+				  Prj.Title);
 
 	 /* Show user's record */
 	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -2677,12 +2675,10 @@ void Prj_ReqRemProject (void)
      {
       /***** Show question and button to remove the project *****/
       Gbl.Prjs.PrjCod = Prj.PrjCod;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Do_you_really_want_to_remove_the_project_X,
-	        Prj.Title);
-      Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-			      ActRemPrj,NULL,NULL,Prj_PutCurrentParams,
-			      Btn_REMOVE_BUTTON,Txt_Remove_project);
+      Ale_ShowAlertAndButton (ActRemPrj,NULL,NULL,Prj_PutCurrentParams,
+			      Btn_REMOVE_BUTTON,Txt_Remove_project,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_project_X,
+	                      Prj.Title);
      }
    else
       Lay_NoPermissionExit ();

@@ -419,6 +419,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
    bool ParameterIsTooBig = false;
    unsigned NumTimes = 0;
    const char *Ptr;
+   char ErrorTxt[256];
 
    ParamValue[0] = '\0';
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
@@ -452,11 +453,11 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
 
    if (ParameterIsTooBig)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorTxt,sizeof (ErrorTxt),
 	        "Hidden parameter <strong>%s</strong> too large,"
                 " it exceed the maximum allowed size (%lu bytes).",
                 ParamName,(unsigned long) MaxBytes);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Count number of values of the parameter *****/

@@ -25,10 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -929,7 +927,6 @@ void Asg_ReqRemAssignment (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
    extern const char *Txt_Remove_assignment;
    struct Assignment Asg;
-   char *Txt;
 
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
@@ -945,13 +942,10 @@ void Asg_ReqRemAssignment (void)
 
    /***** Show question and button to remove the assignment *****/
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
-   if (asprintf (&Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
-                 Asg.Title) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlertAndButton (Ale_QUESTION,Txt,
-                           ActRemAsg,NULL,NULL,Asg_PutParams,
-                           Btn_REMOVE_BUTTON,Txt_Remove_assignment);
-   free ((void *) Txt);
+   Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,Asg_PutParams,
+                           Btn_REMOVE_BUTTON,Txt_Remove_assignment,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_assignment_X,
+                           Asg.Title);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();

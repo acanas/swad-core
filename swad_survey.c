@@ -1516,12 +1516,10 @@ void Svy_AskRemSurvey (void)
 
    /***** Show question and button to remove survey *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_survey_X,
-             Svy.Title);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemSvy,NULL,NULL,Svy_PutParams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_survey);
+   Ale_ShowAlertAndButton (ActRemSvy,NULL,NULL,Svy_PutParams,
+			   Btn_REMOVE_BUTTON,Txt_Remove_survey,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_survey_X,
+			   Svy.Title);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -2650,7 +2648,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
             if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
                Lay_ShowErrorAndExit ("Wrong answer.");
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
-               Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+               Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
             Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
                       Svy_MAX_BYTES_ANSWER);
@@ -2888,7 +2886,8 @@ static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = (char *) malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
-      Str_Copy (Gbl.Alert.Txt,"Not enough memory to store answer.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Not enough memory to store answer.",
 	        Ale_MAX_BYTES_ALERT);
       return false;
      }
@@ -2969,7 +2968,7 @@ void Svy_ReceiveQst (void)
 	NumAns++)
      {
       if (!Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns))
-	 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	 Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
       snprintf (AnsStr,sizeof (AnsStr),
 	        "AnsStr%u",
 		NumAns);
@@ -3400,7 +3399,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 
 	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
 	 if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 	 Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
 	           Svy_MAX_BYTES_ANSWER);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -3553,12 +3552,10 @@ void Svy_RequestRemoveQst (void)
    /***** Show question and button to remove question *****/
    Gbl.Svys.SvyCodToEdit    = SvyCod;
    Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_question_X,
-	     (unsigned long) (SvyQst.QstInd + 1));
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemSvyQst,NULL,NULL,Svy_PutParamsRemoveOneQst,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question);
+   Ale_ShowAlertAndButton (ActRemSvyQst,NULL,NULL,Svy_PutParamsRemoveOneQst,
+			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+	                   (unsigned long) (SvyQst.QstInd + 1));
 
    /***** Show current survey *****/
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);

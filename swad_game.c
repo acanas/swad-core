@@ -1501,12 +1501,10 @@ void Gam_AskRemGame (void)
 
    /***** Show question and button to remove game *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_game_X,
-             Game.Title);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGam,NULL,NULL,Gam_PutParams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_game);
+   Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,Gam_PutParams,
+			   Btn_REMOVE_BUTTON,Txt_Remove_game,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
+                           Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -3238,12 +3236,10 @@ void Gam_RequestRemoveQst (void)
    /***** Show question and button to remove question *****/
    Gbl.Games.CurrentGamCod = Game.GamCod;
    Gbl.Games.CurrentQstCod = QstCod;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_question_X,
-	     (unsigned long) (QstInd + 1));
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question);
+   Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
+			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+	                   (unsigned long) (QstInd + 1));
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,

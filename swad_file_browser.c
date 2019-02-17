@@ -6713,15 +6713,13 @@ void Brw_AskRemFileFromTree (void)
                                              Gbl.FileBrowser.FileType,
                                              Gbl.FileBrowser.FilFolLnkName,
                                              FileNameToShow);
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
-                FileNameToShow);
-      Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                              Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
+      Ale_ShowAlertAndButton (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
                               Brw_PutParamsRemFile,
                               Btn_REMOVE_BUTTON,
                               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
-        	                                                        Txt_Remove_link);
+        	                                                        Txt_Remove_link,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
+                              FileNameToShow);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
@@ -6828,7 +6826,7 @@ void Brw_RemFolderFromTree (void)
 	    if (errno == ENOTEMPTY)	// The directory is not empty
 	      {
 	       Brw_AskConfirmRemoveFolderNotEmpty ();
-	       Gbl.Alert.Txt[0] = '\0';
+	       // Gbl.Alert.Txt[0] = '\0';	// TODO: Remove this line
 	      }
 	    else	// The directory is empty
                Lay_ShowErrorAndExit ("Can not remove folder.");
@@ -6864,13 +6862,11 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    extern const char *Txt_Remove_folder;
 
    /***** Show question and button to remove not empty folder *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_folder_X,
-             Gbl.FileBrowser.FilFolLnkName);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
+   Ale_ShowAlertAndButton (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
 			   Brw_PutParamsRemFolder,
-			   Btn_REMOVE_BUTTON,Txt_Remove_folder);
+			   Btn_REMOVE_BUTTON,Txt_Remove_folder,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_folder_X,
+                           Gbl.FileBrowser.FilFolLnkName);
   }
 
 /*****************************************************************************/
@@ -9018,7 +9014,7 @@ void Brw_RcvFileInFileBrwDropzone (void)
    else
       fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"
 		      "%s\n",
-	       Gbl.Alert.Txt);
+	       Gbl.DelayedAlert.Txt);
   }
 
 /*****************************************************************************/
@@ -9031,7 +9027,7 @@ void Brw_RcvFileInFileBrwClassic (void)
    Brw_RcvFileInFileBrw (Brw_CLASSIC_UPLOAD);
 
    /***** Show possible alert *****/
-   Ale_ShowPendingAlert ();
+   Ale_ShowDelayedAlert ();
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -9105,8 +9101,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                /* Check if the destination file exists */
                if (Fil_CheckIfPathExists (Path))
                  {
-        	  Gbl.Alert.Type = Ale_WARNING;
-                  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+        	  Gbl.DelayedAlert.Type = Ale_WARNING;
+                  snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                    Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
                             Gbl.FileBrowser.NewFilFolLnkName);
                  }
@@ -9130,8 +9126,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                      if (rename (PathTmp,Path))	// Fail
 	               {
 	                Fil_RemoveTree (PathTmp);
-        	        Gbl.Alert.Type = Ale_WARNING;
-                        snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+        	        Gbl.DelayedAlert.Type = Ale_WARNING;
+                        snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                          Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
                                   Gbl.FileBrowser.NewFilFolLnkName);
 	               }
@@ -9143,8 +9139,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                         if (Brw_CheckIfQuotaExceded ())
 	                  {
 	                   Fil_RemoveTree (Path);
-        	           Gbl.Alert.Type = Ale_WARNING;
-	                   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+        	           Gbl.DelayedAlert.Type = Ale_WARNING;
+	                   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                             Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
 		                     Gbl.FileBrowser.NewFilFolLnkName);
 	                  }
@@ -9175,8 +9171,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 			                                             Brw_IS_FOLDER,
 			                                             Gbl.FileBrowser.FilFolLnkName,
 			                                             FileNameToShow);
-        	              Gbl.Alert.Type = Ale_SUCCESS;
-			      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+        	              Gbl.DelayedAlert.Type = Ale_SUCCESS;
+			      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	                                Txt_The_file_X_has_been_placed_inside_the_folder_Y,
 			                Gbl.FileBrowser.NewFilFolLnkName,
 			                FileNameToShow);
@@ -9224,15 +9220,15 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
         }
       else	// Empty filename
         {
-	 Gbl.Alert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.Alert.Txt,Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML,
+	 Gbl.DelayedAlert.Type = Ale_WARNING;
+	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML,
 		   Ale_MAX_BYTES_ALERT);
         }
      }
    else		// I do not have permission to create files here
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_UPLOAD_FILE_Forbidden_NO_HTML,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_UPLOAD_FILE_Forbidden_NO_HTML,
 		Ale_MAX_BYTES_ALERT);
      }
 
@@ -9433,7 +9429,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	 /* Check file extension */
 	 if (!Str_FileIsHTML (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	              Txt_UPLOAD_FILE_X_not_HTML_NO_HTML,
 		      Gbl.FileBrowser.NewFilFolLnkName);
 	    return false;
@@ -9446,7 +9442,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 		  if (strcmp (MIMEType,"application/octetstream"))
 		     if (strcmp (MIMEType,"application/octet"))
 		       {	// MIME type forbidden
-			snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+			snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 				  Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
 				  Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
 			return false;
@@ -9456,7 +9452,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	 /* Check file extension */
 	 if (!Ext_CheckIfFileExtensionIsAllowed (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	              Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML,
 		      Gbl.FileBrowser.NewFilFolLnkName);
 	    return false;
@@ -9465,7 +9461,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	 /* Check MIME type*/
 	 if (!MIM_CheckIfMIMETypeIsAllowed (MIMEType))
 	   {
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 		      Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
 		      Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
 	    return false;

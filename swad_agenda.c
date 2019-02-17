@@ -1258,7 +1258,6 @@ void Agd_AskRemEvent (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    extern const char *Txt_Remove_event;
    struct AgendaEvent AgdEvent;
-   char *Txt;
 
    /***** Get parameters *****/
    Agd_GetParams (Agd_MY_AGENDA);
@@ -1273,14 +1272,11 @@ void Agd_AskRemEvent (void)
 
    /***** Show question and button to remove event *****/
    Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
-   if (asprintf (&Txt,Txt_Do_you_really_want_to_remove_the_event_X,
-	         AgdEvent.Event) < 0)
-      Lay_NotEnoughMemoryExit ();
-   Ale_ShowAlertAndButton (Ale_QUESTION,Txt,
-                           ActRemEvtMyAgd,NULL,NULL,
+   Ale_ShowAlertAndButton (ActRemEvtMyAgd,NULL,NULL,
                            Agd_PutCurrentParamsMyAgenda,
-			   Btn_REMOVE_BUTTON,Txt_Remove_event);
-   free ((void *) Txt);
+			   Btn_REMOVE_BUTTON,Txt_Remove_event,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
+	                   AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();

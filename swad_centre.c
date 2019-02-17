@@ -1869,7 +1869,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 void Ctr_ContEditAfterChgCtrInConfig (void)
   {
    /***** Write error/success message *****/
-   Ale_ShowPendingAlert ();
+   Ale_ShowDelayedAlert ();
 
    /***** Show the form again *****/
    Ctr_ShowConfiguration ();
@@ -2122,7 +2122,7 @@ void Ctr_ChangeCtrWWW (void)
       /***** Write message to show the change made
 	     and put button to go to centre changed *****/
       Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	        Txt_The_new_web_address_is_X,
 		NewWWW);
       Ctr_ShowAlertAndButtonToGoToCtr ();
@@ -2212,7 +2212,7 @@ void Ctr_ChangeCtrStatus (void)
    /***** Write message to show the change made
 	  and put button to go to centre changed *****/
    Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.Alert.Txt),
+   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	     Txt_The_status_of_the_centre_X_has_changed,
 	     Gbl.Ctrs.EditingCtr.ShrtName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
@@ -2253,9 +2253,9 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
 		Gbl.Ctrs.EditingCtr.ShrtName);
-      Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
-                              ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
-                              Btn_CONFIRM_BUTTON,Gbl.Title);
+      Ale_ShowAlertAndButton (ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
+                              Btn_CONFIRM_BUTTON,Gbl.Title,
+			      Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
      }
    else
       /***** Alert *****/
@@ -2361,6 +2361,7 @@ void Ctr_ReceivePhoto (void)
    bool WrongType = false;
    char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
+   char ErrorMsg[256];
 
    /***** Copy in disk the file received *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -2457,11 +2458,11 @@ void Ctr_ReceivePhoto (void)
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode != 0)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorMsg,sizeof (ErrorMsg),
 	        "Image could not be processed successfully.<br />"
 		"Error code returned by the program of processing: %d",
 	        ReturnCode);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorMsg);
      }
 
    /***** Remove temporary file *****/

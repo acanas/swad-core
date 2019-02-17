@@ -326,8 +326,8 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
          // Only one table is allowed
          if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
            {
-            Gbl.Alert.Type = Ale_WARNING;
-            Str_Copy (Gbl.Alert.Txt,Txt_There_are_more_than_one_table_in_the_file_of_marks,
+            Gbl.DelayedAlert.Type = Ale_WARNING;
+            Str_Copy (Gbl.DelayedAlert.Txt,Txt_There_are_more_than_one_table_in_the_file_of_marks,
 		      Ale_MAX_BYTES_ALERT);
             FileIsCorrect = false;
            }
@@ -389,8 +389,8 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
         }
       else
         {
-         Gbl.Alert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.Alert.Txt,Txt_Table_not_found_in_the_file_of_marks,
+         Gbl.DelayedAlert.Type = Ale_WARNING;
+	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_Table_not_found_in_the_file_of_marks,
 		   Ale_MAX_BYTES_ALERT);
          FileIsCorrect = false;
         }
@@ -874,28 +874,28 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		 {
 		  fclose (FileUsrMarks);
 		  if (asprintf (ContentStr,"<![CDATA[%s]]>",
-				Gbl.Alert.Txt) < 0)
+				Gbl.DelayedAlert.Txt) < 0)
 		     Lay_NotEnoughMemoryExit ();
 		 }
 	      }
 	    else
 	      {
-	       Gbl.Alert.Type = Ale_ERROR;
-	       Str_Copy (Gbl.Alert.Txt,"Can not open file of marks.",
+	       Gbl.DelayedAlert.Type = Ale_ERROR;
+	       Str_Copy (Gbl.DelayedAlert.Txt,"Can not open file of marks.",
 			 Ale_MAX_BYTES_ALERT);
 	       if (asprintf (ContentStr,"<![CDATA[%s]]>",
-			     Gbl.Alert.Txt) < 0)
+			     Gbl.DelayedAlert.Txt) < 0)
 		  Lay_NotEnoughMemoryExit ();
 	      }
 	    unlink (FileNameUsrMarks);	// File with marks is no longer necessary
 	   }
 	 else
 	   {
-	    Gbl.Alert.Type = Ale_ERROR;
-	    Str_Copy (Gbl.Alert.Txt,"User's IDs not found!",
+	    Gbl.DelayedAlert.Type = Ale_ERROR;
+	    Str_Copy (Gbl.DelayedAlert.Txt,"User's IDs not found!",
 		      Ale_MAX_BYTES_ALERT);
 	    if (asprintf (ContentStr,"<![CDATA[%s]]>",
-			  Gbl.Alert.Txt) < 0)
+			  Gbl.DelayedAlert.Txt) < 0)
 	       Lay_NotEnoughMemoryExit ();
 	   }
 	}

@@ -1840,8 +1840,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
    /***** Check if new name is empty *****/
    if (!NewInsName[0])
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	        Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
                 CurrentInsName);
      }
@@ -1854,8 +1854,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
          /***** If institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,Gbl.CurrentCty.Cty.CtyCod))
            {
-            Gbl.Alert.Type = Ale_WARNING;
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+            Gbl.DelayedAlert.Type = Ale_WARNING;
+            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	              Txt_The_institution_X_already_exists,
                       NewInsName);
            }
@@ -1865,8 +1865,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
             Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
 
             /* Create message to show the change made */
-            Gbl.Alert.Type = Ale_SUCCESS;
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+            Gbl.DelayedAlert.Type = Ale_SUCCESS;
+            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	              Txt_The_institution_X_has_been_renamed_as_Y,
                       CurrentInsName,NewInsName);
 
@@ -1877,8 +1877,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
         }
       else	// The same name
 	{
-         Gbl.Alert.Type = Ale_INFO;
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         Gbl.DelayedAlert.Type = Ale_INFO;
+         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_The_name_of_the_institution_X_has_not_changed,
                    CurrentInsName);
 	}
@@ -1937,15 +1937,15 @@ void Ins_ChangeInsCtyInConfig (void)
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShrtName,-1L,NewCty.CtyCod))
 	{
-         Gbl.Alert.Type = Ale_WARNING;
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         Gbl.DelayedAlert.Type = Ale_WARNING;
+	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_The_institution_X_already_exists,
 		   Gbl.CurrentIns.Ins.ShrtName);
 	}
       else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
 	{
-         Gbl.Alert.Type = Ale_WARNING;
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         Gbl.DelayedAlert.Type = Ale_WARNING;
+	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_The_institution_X_already_exists,
 		   Gbl.CurrentIns.Ins.FullName);
 	}
@@ -1960,8 +1960,8 @@ void Ins_ChangeInsCtyInConfig (void)
 	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
-         Gbl.Alert.Type = Ale_SUCCESS;
-	 snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         Gbl.DelayedAlert.Type = Ale_SUCCESS;
+	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_The_country_of_the_institution_X_has_changed_to_Y,
 		   Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
 	}
@@ -1975,7 +1975,7 @@ void Ins_ChangeInsCtyInConfig (void)
 void Ins_ContEditAfterChgInsInConfig (void)
   {
    /***** Write success / warning message *****/
-   Ale_ShowPendingAlert ();
+   Ale_ShowDelayedAlert ();
 
    /***** Show the form again *****/
    Ins_ShowConfiguration ();
@@ -2150,15 +2150,10 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 
    // If the institution beeing edited is different to the current one...
    if (Gbl.Inss.EditingIns.InsCod != Gbl.CurrentIns.Ins.InsCod)
-     {
       /***** Alert with button to go to degree *****/
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Go_to_X,
-		Gbl.Inss.EditingIns.ShrtName);
-      Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
-                              ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
-                              Btn_CONFIRM_BUTTON,Gbl.Title);
-     }
+      Ale_ShowAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
+                              Btn_CONFIRM_BUTTON,Gbl.Title,
+			      Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
    else
       /***** Alert *****/
       Ale_ShowDelayedAlert ();

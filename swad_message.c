@@ -862,34 +862,29 @@ void Msg_ReqDelAllRecMsgs (void)
    if (Gbl.Msg.FilterContent[0])
      {
       if (Gbl.Msg.ShowOnlyUnreadMsgs)
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-                	                     Txt_any_user,
-                   Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
+         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+							    Txt_any_user,
+				  Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
       else
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-                	                     Txt_any_user,
-                   Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
+         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+							    Txt_any_user,
+				  Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
      }
    else
      {
       if (Gbl.Msg.ShowOnlyUnreadMsgs)
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
-                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-                	                     Txt_any_user,
-                   Gbl.Msg.FilterCrsShrtName);
+         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
+				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+							    Txt_any_user,
+				  Gbl.Msg.FilterCrsShrtName);
       else
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
-                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-                	                     Txt_any_user,
-                   Gbl.Msg.FilterCrsShrtName);
+         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
+				  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+							    Txt_any_user,
+				  Gbl.Msg.FilterCrsShrtName);
      }
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
    /* Show received messages again */
    Gbl.Msg.TypeOfMessages = Msg_MESSAGES_RECEIVED;
@@ -920,18 +915,15 @@ void Msg_ReqDelAllSntMsgs (void)
    /***** Show question and button to remove messages received *****/
    /* Start alert */
    if (Gbl.Msg.FilterContent[0])
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-	        Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-					  Txt_any_user,
-                Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+			       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+							 Txt_any_user,
+			       Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
    else
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
-	        Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-					  Txt_any_user,
-                Gbl.Msg.FilterCrsShrtName);
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
+			       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+							 Txt_any_user,
+			       Gbl.Msg.FilterCrsShrtName);
 
    /* Show sent messages again */
    Gbl.Msg.TypeOfMessages = Msg_MESSAGES_SENT;

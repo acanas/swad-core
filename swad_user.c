@@ -263,21 +263,16 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
    extern const char *Txt_You_must_send_your_photo_because_;
    extern const char *Txt_You_can_only_perform_X_further_actions_;
    extern const char *Txt_Upload_photo;
-   char Message[512];        // Don't use Gbl.Alert.Txt here, because it may be filled with another message and such message would be overwritten
 
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
       else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-        {
-         snprintf (Message,sizeof (Message),
-                   Txt_You_can_only_perform_X_further_actions_,
-                   Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
-         Ale_ShowAlertAndButton (Ale_WARNING,Message,
-                                 ActReqMyPho,NULL,NULL,NULL,
-                                 Btn_CONFIRM_BUTTON,Txt_Upload_photo);
-        }
+         Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,NULL,
+                                 Btn_CONFIRM_BUTTON,Txt_Upload_photo,
+				 Ale_WARNING,Txt_You_can_only_perform_X_further_actions_,
+                                 Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
      }
   }
 
@@ -2533,20 +2528,15 @@ void Usr_WelcomeUsr (void)
                  {
                   /* Mark my birthday as already congratulated */
                   Usr_InsertMyBirthday ();
-		  snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-			    Txt_Happy_birthday_X,
-			    Gbl.Usrs.Me.UsrDat.FirstName);
 
 		  /* Start alert */
-		  Ale_ShowAlertAndButton1 (Ale_INFO,Gbl.Alert.Txt);
+		  Ale_ShowAlertAndButton1 (Ale_INFO,Txt_Happy_birthday_X,
+			                   Gbl.Usrs.Me.UsrDat.FirstName);
 
 		  /* Show cake icon */
 		  fprintf (Gbl.F.Out,"<img src=\"%s/birthday-cake.svg\""
-                	             " alt=\"%s\" title=\"%s\""
-                                     " class=\"ICO160x160\" />",
-                           Gbl.Prefs.URLIconSet,
-                           Gbl.Alert.Txt,
-                           Gbl.Alert.Txt);
+                	             " alt=\"\" class=\"ICO160x160\" />",
+                           Gbl.Prefs.URLIconSet);
 
 		  /* End alert */
 		  Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
@@ -2555,9 +2545,9 @@ void Usr_WelcomeUsr (void)
 	    /***** Alert with button to check email address *****/
 	    if ( Gbl.Usrs.Me.UsrDat.Email[0] &&
 		!Gbl.Usrs.Me.UsrDat.EmailConfirmed)	// Email needs to be confirmed
-	       Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_your_email_address,
-				       ActFrmMyAcc,NULL,NULL,NULL,
-				       Btn_CONFIRM_BUTTON,Txt_Check);
+	       Ale_ShowAlertAndButton (ActFrmMyAcc,NULL,NULL,NULL,
+				       Btn_CONFIRM_BUTTON,Txt_Check,
+				       Ale_WARNING,Txt_Please_check_your_email_address);
            }
 
          /***** Institutional video *****/
@@ -2937,7 +2927,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 
 	    /* Send message via email to confirm the new email address */
 	    Mai_SendMailMsgToConfirmEmail ();
-	    Ale_ShowPendingAlert ();	// Show alert after sending email confirmation
+	    Ale_ShowDelayedAlert ();	// Show alert after sending email confirmation
 	   }
 	}
       else	// Gbl.Action.Act != ActCreUsrAcc
@@ -5497,13 +5487,11 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_The_list_of_X_users_is_too_large_to_be_displayed,
-             NumUsrs);
-   Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
-                           Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
+   Ale_ShowAlertAndButton (Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParamsConfirmIWantToSeeBigList,
-                           Btn_CONFIRM_BUTTON,Txt_Show_anyway);
+                           Btn_CONFIRM_BUTTON,Txt_Show_anyway,
+			   Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+                           NumUsrs);
   }
 
 static void Usr_PutParamsConfirmIWantToSeeBigList (void)
@@ -8489,18 +8477,18 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
        Role == Rol_STD &&			// No students found
        Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
-      Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_STD],
-                              ActReqEnrSevStd,NULL,NULL,NULL,
-                              Btn_CREATE_BUTTON,Txt_Register_students);
+      Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,NULL,
+                              Btn_CREATE_BUTTON,Txt_Register_students,
+			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
    else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
             Role == Rol_TCH &&				// No teachers found
             Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/
-      Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_TCH],
-                              ActReqMdfOneTch,NULL,NULL,NULL,
-                              Btn_CREATE_BUTTON,Txt_Register_teacher);
+      Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,NULL,
+                              Btn_CREATE_BUTTON,Txt_Register_teacher,
+			      Ale_WARNING,Txt_No_users_found[Rol_TCH]);
    else
       /***** Show alert *****/
       Ale_ShowAlert (Ale_INFO,Txt_No_users_found[Role]);

@@ -118,6 +118,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
    size_t ContentLength;
    size_t EndTagNameLength;
    size_t TagLength;
+   char ErrorTxt[128];
 
    /*
    <parent...>  element content  </parent>
@@ -151,17 +152,17 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          EndTagNameLength = strcspn (Gbl.XMLPtr,">");
          if (ParentElem->TagNameLength != EndTagNameLength)
            {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+            snprintf (ErrorTxt,sizeof (ErrorTxt),
 	              "XML syntax error. Expect end tag &lt;/%s&gt;.",
 		      ParentElem->TagName);
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (ErrorTxt);
            }
          if (strncmp (ParentElem->TagName,Gbl.XMLPtr,EndTagNameLength))	// XML tags are case sensitive
            {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+            snprintf (ErrorTxt,sizeof (ErrorTxt),
 	              "XML syntax error. Expect end tag &lt;/%s&gt;.",
 		      ParentElem->TagName);
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (ErrorTxt);
            }
 
          // End of parent element found!
@@ -288,6 +289,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
   {
    struct XMLAttribute *Attribute;
    bool EndOfStartTag = false;
+   char ErrorTxt[256];
 
    /*
    <parent><child attribute1="value" attribute2="value">...</child>...</parent>
@@ -364,10 +366,11 @@ static void XML_GetAttributes (struct XMLElement *Elem)
            }
          else
            {
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              "XML syntax error after attribute &quot;%s&quot; inside element &quot;%s&quot;.",
+            snprintf (ErrorTxt,sizeof (ErrorTxt),
+	              "XML syntax error after attribute &quot;%s&quot;"
+	              " inside element &quot;%s&quot;.",
                       Attribute->AttributeName,Elem->TagName);
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (ErrorTxt);
            }
 
          if ((Attribute->Content = (char *) malloc (Attribute->ContentLength + 1)) == NULL)

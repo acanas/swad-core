@@ -58,16 +58,15 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Ale_ResetAlert (void);
+void Ale_ResetDelayedAlert (void);
 
-void Ale_ShowPendingAlert (void);
 void Ale_ShowDelayedAlert (void);
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...);
-void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,
-                             Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
+void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                              void (*FuncParams) (),
-                             Btn_Button_t Button,const char *TxtButton);
-void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt);
+                             Btn_Button_t Button,const char *TxtButton,
+			     Ale_AlertType_t AlertType,const char *fmt,...);
+void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                               void (*FuncParams) (),
                               Btn_Button_t Button,const char *TxtButton);

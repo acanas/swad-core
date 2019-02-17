@@ -381,8 +381,6 @@ ALTER TABLE debug ENGINE=MyISAM;
 OPTIMIZE TABLE debug;
 */
 
-// TODO: Revisar todos los Ale_ShowAlertAndButton
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -402,10 +400,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.46.12 (2019-02-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.47 (2019-02-17)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.47:    Feb 17, 2019 	Code refactoring related to alerts. (237494 lines)
 	Version 18.46.12: Feb 16, 2019 	Code refactoring related to error and alerts. (237627 lines)
 	Version 18.46.11: Feb 16, 2019 	Code refactoring related to alerts. (237701 lines)
 	Version 18.46.10: Feb 16, 2019 	Code refactoring related to alerts. (237729 lines)

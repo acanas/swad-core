@@ -3734,7 +3734,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
       /***** Assign index (row[0]).
              Index is 0,1,2,3... if no shuffle
@@ -3853,7 +3853,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
       /***** Allocate memory for text in this choice option *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
       /***** Copy answer text (row[1]) and convert it,
              that is in HTML, to rigorous HTML ******/
@@ -4101,7 +4101,7 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
       /***** Assign index (row[0]).
              Index is 0,1,2,3... if no shuffle
@@ -4213,7 +4213,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
       /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
@@ -5446,14 +5446,16 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
    if ((Gbl.Test.Answer.Options[NumOpt].Text =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      Str_Copy (Gbl.Alert.Txt,"Not enough memory to store answer.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Not enough memory to store answer.",
 	        Ale_MAX_BYTES_ALERT);
       return 0;
      }
    if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      Str_Copy (Gbl.Alert.Txt,"Not enough memory to store feedback.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Not enough memory to store feedback.",
 	        Ale_MAX_BYTES_ALERT);
       return 0;
      }
@@ -5643,7 +5645,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	    if (Gbl.Test.Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
 	    if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+	       Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
 	    Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
 	              Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
@@ -5851,18 +5853,18 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
      {
       case Tst_ANS_INT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
 	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,1 + 10);
 	 break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 	 Par_GetParToText ("AnsFloatMin",Gbl.Test.Answer.Options[0].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 
          if (!Tst_AllocateTextChoiceAnswer (1))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
@@ -5883,7 +5885,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
               NumOpt++)
            {
             if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-               Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+               Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
             /* Get answer */
             snprintf (AnsStr,sizeof (AnsStr),
@@ -6261,30 +6263,30 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 			     " WHERE CrsCod=%ld AND TagTxt='%s'",
 			     Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
 
-   Gbl.Alert.Type = Ale_NONE;
+   Gbl.DelayedAlert.Type = Ale_NONE;
    if (NumRows == 1)
      {
       /***** Get tag code *****/
       row = mysql_fetch_row (mysql_res);
       if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
         {
-         Gbl.Alert.Type = Ale_ERROR;
-	 Str_Copy (Gbl.Alert.Txt,"Wrong code of tag.",
+         Gbl.DelayedAlert.Type = Ale_ERROR;
+	 Str_Copy (Gbl.DelayedAlert.Txt,"Wrong code of tag.",
 		   Ale_MAX_BYTES_ALERT);
         }
      }
    else if (NumRows > 1)
      {
-      Gbl.Alert.Type = Ale_ERROR;
-      Str_Copy (Gbl.Alert.Txt,"Duplicated tag.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Duplicated tag.",
 		Ale_MAX_BYTES_ALERT);
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (Gbl.Alert.Type == Ale_ERROR)
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+   if (Gbl.DelayedAlert.Type == Ale_ERROR)
+      Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
    return TagCod;
   }
@@ -6355,28 +6357,21 @@ void Tst_RequestRemoveQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_question_X,
-	     (unsigned long) Gbl.Test.QstCod);
-   if (EditingOnlyThisQst)
-      Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                              ActRemTstQst,NULL,NULL,
-			      Tst_PutParamsRemoveOneQst,
-			      Btn_REMOVE_BUTTON,Txt_Remove_question);
-   else
-     {
-      Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                              ActRemTstQst,NULL,NULL,
-			      Tst_PutParamsRemoveQst,
-			      Btn_REMOVE_BUTTON,Txt_Remove_question);
-      Tst_FreeTagsList ();
-     }
+   Ale_ShowAlertAndButton (ActRemTstQst,NULL,NULL,
+			   EditingOnlyThisQst ? Tst_PutParamsRemoveOneQst :
+						Tst_PutParamsRemoveQst,
+			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			   (unsigned long) Gbl.Test.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
       Tst_ListOneQstToEdit ();
    else
+     {
+      Tst_FreeTagsList ();
       Tst_ListQuestionsToEdit ();
+     }
   }
 
 /*****************************************************************************/

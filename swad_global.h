@@ -110,13 +110,7 @@ struct Globals
       Ale_AlertType_t Type;
       char Txt[Ale_MAX_BYTES_ALERT + 1];
       const char *Section;	// Where to display the alert
-     } Alert;	// TODO: Obsolete -> change progressively
-   struct
-     {
-      Ale_AlertType_t Type;
-      char Txt[Ale_MAX_BYTES_ALERT + 1];
-      const char *Section;	// Where to display the alert
-     } DelayedAlert;	// Used in a posteriori function to write success / warning message
+     } DelayedAlert;		// Alert message created in a function and printed in a subsequent function.
    struct
      {
       size_t ContentLength;

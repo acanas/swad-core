@@ -1022,8 +1022,8 @@ void DT_ChangeDegreeType (void)
 
    /***** Write message to show the change made
           and put button to go to degree changed *****/
-   Gbl.Alert.Type = Ale_SUCCESS;
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+   Gbl.DelayedAlert.Type = Ale_SUCCESS;
+   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	     Txt_The_type_of_degree_of_the_degree_X_has_changed,
 	     Gbl.Degs.EditingDeg.FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();

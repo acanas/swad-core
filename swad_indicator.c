@@ -560,13 +560,11 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
-             NumCrss);
-   Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
-                           Gbl.Action.Act,NULL,NULL,
+   Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
                            Ind_PutParamsConfirmIWantToSeeBigList,
-                           Btn_CONFIRM_BUTTON,Txt_Show_anyway);
+                           Btn_CONFIRM_BUTTON,Txt_Show_anyway,
+			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
+                           NumCrss);
   }
 
 static void Ind_PutParamsConfirmIWantToSeeBigList (void)

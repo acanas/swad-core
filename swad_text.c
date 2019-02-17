@@ -8557,34 +8557,43 @@ const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is ver
 	"Voc&ecirc; realmente deseja remover o evento <strong>%s</strong>?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_ =	// Warning: it is very important to include two %s and one %u in the following sentences
 #if   L==1	// ca
 	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
-	" de las fichas de <strong>%s</strong>?";	// Necessita traduccio
+	" de las fichas de <strong>%s</strong>"
+	" (dicho campo est&aacute; relleno en las fichas de %u estudiante(s))?";	// Necessita traduccio
 #elif L==2	// de
 	"Do you really want to remove the field <strong>%s</strong>"
-	" from the records of <strong>%s</strong>?";	// Need Übersetzung
+	" from the records of <strong>%s</strong>"
+	" (this field is filled in the records of %u student(s))?";		// Need Übersetzung
 #elif L==3	// en
 	"Do you really want to remove the field <strong>%s</strong>"
-	" from the records of <strong>%s</strong>?";
+	" from the records of <strong>%s</strong>"
+	" (this field is filled in the records of %u student(s))?";
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
-	" de las fichas de <strong>%s</strong>?";
+	" de las fichas de <strong>%s</strong>"
+	" (dicho campo est&aacute; relleno en las fichas de %u estudiante(s))?";
 #elif L==5	// fr
 	"Do you really want to remove the field <strong>%s</strong>"
-	" from the records of <strong>%s</strong>?";	// Besoin de traduction
+	" from the records of <strong>%s</strong>"
+	" (this field is filled in the records of %u student(s))?";		// Besoin de traduction
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
-	" de las fichas de <strong>%s</strong>?";	// Okoteve traducción
+	" de las fichas de <strong>%s</strong>"
+	" (dicho campo est&aacute; relleno en las fichas de %u estudiante(s))?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere il campo <strong>%s</strong>"
-	" dalle schede di <strong>%s</strong>?";
+	" dalle schede di <strong>%s</strong>"
+	" (questo campo &egrave; inserito nella scheda di %u studenti)?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac pole <strong>%s</strong>"
-	" z ewidencji <strong>%s</strong>?";
+	"Do you really want to remove the field <strong>%s</strong>"
+	" from the records of <strong>%s</strong>"
+	" (this field is filled in the records of %u student(s))?";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer remover o campo <strong>%s</strong>"
-	" dos cart&otilde;es de <strong>%s</strong>?";
+	" dos cart&otilde;es de <strong>%s</strong>"
+	" (este campo &eacute; preenchido nos cart&otilde;es de %u estudante(s))?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
@@ -48719,48 +48728,6 @@ const char *Txt_There_was_an_error_in_assessing_the_test_X =	// Warning: it is v
 	"There was an error in assessing the test %u.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Houve um erro ao avaliar o teste %u.";
-#endif
-
-const char *Txt_this_field_is_filled_in_the_record_of_one_student =
-#if   L==1	// ca
-	" (dicho campo est&aacute; relleno en la ficha de un estudiante)";	// Necessita traduccio
-#elif L==2	// de
-	" (this field is filled in the record of one student)";			// Need Übersetzung
-#elif L==3	// en
-	" (this field is filled in the record of one student)";
-#elif L==4	// es
-	" (dicho campo est&aacute; relleno en la ficha de un estudiante)";
-#elif L==5	// fr
-	" (this field is filled in the record of one student)";			// Besoin de traduction
-#elif L==6	// gn
-	" (dicho campo est&aacute; relleno en la ficha de un estudiante)";	// Okoteve traducción
-#elif L==7	// it
-	" (questo campo &egrave; inserito nella scheda di uno studente)";
-#elif L==8	// pl
-	" (this field is filled in the record of one student)";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	" (este campo &eacute; preenchido no cart&atilde;o de um estudante)";
-#endif
-
-const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	" (dicho campo est&aacute; relleno en las fichas de %u estudiantes)";	// Necessita traduccio
-#elif L==2	// de
-	" (this field is filled in the records of %u students)";		// Need Übersetzung
-#elif L==3	// en
-	" (this field is filled in the records of %u students)";
-#elif L==4	// es
-	" (dicho campo est&aacute; relleno en las fichas de %u estudiantes)";
-#elif L==5	// fr
-	" (this field is filled in the records of %u students)";		// Besoin de traduction
-#elif L==6	// gn
-	" (dicho campo est&aacute; relleno en las fichas de %u estudiantes)";	// Okoteve traducción
-#elif L==7	// it
-	" (questo campo &egrave; inserito nella scheda di %u studenti)";
-#elif L==8	// pl
-	" (this field is filled in the records of %u students)";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	" (este campo &eacute; preenchido nos cart&otilde;es de %u estudantes)";
 #endif
 
 const char *Txt_This_game_has_no_questions =

@@ -493,6 +493,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    bool ParamFound = false;
    unsigned ParamNameLength;
    bool FindMoreThanOneOcurrence;
+   char ErrorTxt[256];
 
    /***** Default values returned *****/
    if (ParamValue)
@@ -557,11 +558,11 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		  /* Check if there is space to copy separator */
 		  if (BytesAlreadyCopied + 1 > MaxBytes)
 		    {
-		     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+		     snprintf (ErrorTxt,sizeof (ErrorTxt),
 	                       "Multiple parameter <strong>%s</strong> too large,"
 			       " it exceed the maximum allowed size (%lu bytes).",
 			       ParamName,(unsigned long) MaxBytes);
-		     Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+		     Lay_ShowErrorAndExit (ErrorTxt);
 		    }
 
 		  /* Copy separator */
@@ -576,11 +577,11 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		  /* Check if there is space to copy the parameter value */
 		  if (BytesAlreadyCopied + Param->Value.Length > MaxBytes)
 		    {
-		     snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+		     snprintf (ErrorTxt,sizeof (ErrorTxt),
 	                       "Parameter <strong>%s</strong> too large,"
 			       " it exceed the maximum allowed size (%lu bytes).",
 			       ParamName,(unsigned long) MaxBytes);
-		     Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+		     Lay_ShowErrorAndExit (ErrorTxt);
 		    }
 
 		  /* Copy parameter value */

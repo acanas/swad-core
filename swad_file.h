@@ -71,11 +71,13 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
                            char OldName[PATH_MAX + 1],
                            char NewName[PATH_MAX + 1],
                            FILE **NewFile);
-void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char *NewName,FILE *NewFile);
+void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
+                          const char OldName[PATH_MAX + 1],
+			  const char NewName[PATH_MAX + 1],
+			  FILE *NewFile);
 
-bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew);
 bool Fil_CheckIfPathExists (const char *Path);
-void Fil_CreateDirIfNotExists (const char *Path);
+void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1]);
 void Fil_RemoveTree (const char *Path);
 
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDirectory);

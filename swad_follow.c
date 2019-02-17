@@ -1033,12 +1033,12 @@ void Fol_FollowUsr1 (void)
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }
-      Gbl.Alert.Type = Ale_SUCCESS;
+      Gbl.DelayedAlert.Type = Ale_SUCCESS;
      }
    else
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
 		Ale_MAX_BYTES_ALERT);
      }
   }
@@ -1047,17 +1047,17 @@ void Fol_FollowUsr2 (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   if (Gbl.Alert.Type == Ale_SUCCESS)
+   if (Gbl.DelayedAlert.Type == Ale_SUCCESS)
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
 	{
-	 Gbl.Alert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+	 Gbl.DelayedAlert.Type = Ale_WARNING;
+	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
 		   Ale_MAX_BYTES_ALERT);
 	}
 
-   if (Gbl.Alert.Type != Ale_SUCCESS)
-      Ale_ShowPendingAlert ();
+   if (Gbl.DelayedAlert.Type != Ale_SUCCESS)
+      Ale_ShowDelayedAlert ();
   }
 
 /*****************************************************************************/
@@ -1080,12 +1080,12 @@ void Fol_UnfollowUsr1 (void)
 			  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
 		          Gbl.Usrs.Me.UsrDat.UsrCod,
                           Gbl.Usrs.Other.UsrDat.UsrCod);
-      Gbl.Alert.Type = Ale_SUCCESS;
+      Gbl.DelayedAlert.Type = Ale_SUCCESS;
      }
    else
      {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
+      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
 		Ale_MAX_BYTES_ALERT);
      }
   }
@@ -1093,7 +1093,7 @@ void Fol_UnfollowUsr1 (void)
 void Fol_UnfollowUsr2 (void)
   {
    /***** Get user to be unfollowed *****/
-   if (Gbl.Alert.Type == Ale_SUCCESS)
+   if (Gbl.DelayedAlert.Type == Ale_SUCCESS)
      {
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
@@ -1103,7 +1103,7 @@ void Fol_UnfollowUsr2 (void)
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List users I follow
      }
    else
-      Ale_ShowPendingAlert ();
+      Ale_ShowDelayedAlert ();
   }
 
 /*****************************************************************************/

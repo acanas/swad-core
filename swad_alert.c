@@ -70,31 +70,17 @@ static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
 
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt);
 
+static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt);
+
 /*****************************************************************************/
-/******************************** Reset alert ********************************/
+/*************************** Reset delayed alert *****************************/
 /*****************************************************************************/
 
-void Ale_ResetAlert (void)
+void Ale_ResetDelayedAlert (void)
   {
-   Gbl.Alert.Type = Ale_NONE;	// Reset alert
-   Gbl.Alert.Section = NULL;
-   Gbl.Alert.Txt[0] = '\0';
-  }
-
-/*****************************************************************************/
-/*********************** Show a write-pending alert **************************/
-/*****************************************************************************/
-// Gbl.Alert.Type must be Ale_NONE or any type of alert
-// If Gbl.Alert.Type != Ale_NONE ==> Gbl.Alert.Txt must hold the message
-
-void Ale_ShowPendingAlert (void)
-  {
-   /***** Anything to show? *****/
-   if (Gbl.Alert.Type != Ale_NONE)
-      /***** Show alert *****/
-      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
-
-   Ale_ResetAlert ();
+   Gbl.DelayedAlert.Type = Ale_NONE;	// Reset alert
+   Gbl.DelayedAlert.Section = NULL;
+   Gbl.DelayedAlert.Txt[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -105,6 +91,8 @@ void Ale_ShowDelayedAlert (void)
   {
    if (Gbl.DelayedAlert.Type != Ale_NONE)
       Ale_ShowFixAlert (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+
+   Ale_ResetDelayedAlert ();
   }
 
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
@@ -115,17 +103,19 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
 
    if (AlertType != Ale_NONE)
      {
+      /***** Print format and list of variables into text *****/
       va_start (ap,fmt);
       NumBytesPrinted = vasprintf (&Txt,fmt,ap);
       va_end (ap);
-
       if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
 				// or some other error occurs,
 				// vasprintf will return -1
 	 Lay_NotEnoughMemoryExit ();
 
+      /***** Show alert *****/
       Ale_ShowFixAlert (AlertType,Txt);
 
+      /***** Free text *****/
       free ((void *) Txt);
      }
   }
@@ -133,21 +123,64 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Ale_NONE)
-      Ale_ShowAlertAndButton (AlertType,Txt,
-                              ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+     {
+      /****** Print fix alert and button ******/
+      Ale_ShowFixAlertAndButton1 (AlertType,Txt);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+			       NULL,Btn_NO_BUTTON,NULL);
+     }
   }
 
-void Ale_ShowAlertAndButton (Ale_AlertType_t AlertType,const char *Txt,
-                             Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
+void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                              void (*FuncParams) (),
-                             Btn_Button_t Button,const char *TxtButton)
+                             Btn_Button_t Button,const char *TxtButton,
+			     Ale_AlertType_t AlertType,const char *fmt,...)
   {
-   Ale_ShowAlertAndButton1 (AlertType,Txt);
+   va_list ap;
+   int NumBytesPrinted;
+   char *Txt;
+
+   /***** Print format and list of variables into text *****/
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Txt,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   /****** Print fix alert and button ******/
+   Ale_ShowFixAlertAndButton1 (AlertType,Txt);
    Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
                             FuncParams,Button,TxtButton);
+
+   /***** Free text *****/
+   free ((void *) Txt);
   }
 
-void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
+void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Txt;
+
+   /***** Print format and list of variables into text *****/
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Txt,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
+
+   /****** Print start of fix alert and button ******/
+   Ale_ShowFixAlertAndButton1 (AlertType,Txt);
+
+   /***** Free text *****/
+   free ((void *) Txt);
+  }
+
+static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
   {
    extern const char *Txt_Close;
    char IdAlert[Frm_MAX_BYTES_ID + 1];
@@ -196,10 +229,9 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
    if (AlertType != Ale_NONE)
       fprintf (Gbl.F.Out," style=\"background-image:url('%s/%s');\"",
 	       Gbl.Prefs.URLIcons,Ale_AlertIcons[AlertType]);
-   fprintf (Gbl.F.Out,">");
-   if (Txt)
-      fprintf (Gbl.F.Out,"%s",Txt);
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,">%s"
+	              "</div>",
+            Txt);
   }
 
 void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,

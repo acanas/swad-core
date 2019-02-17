@@ -4237,17 +4237,18 @@ void For_RequestRemoveThread (void)
    /***** Show question and button to remove the thread *****/
    Lay_StartSection (For_REMOVE_THREAD_SECTION_ID);
    if (Subject[0])
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_Do_you_really_want_to_remove_the_entire_thread_X,
-                Subject);
+      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
+			      For_FORUM_THREADS_SECTION_ID,NULL,
+			      For_PutAllHiddenParamsRemThread,
+			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
+                              Subject);
    else
-      Str_Copy (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread,
-		Ale_MAX_BYTES_ALERT);
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-			   For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
-			   For_FORUM_THREADS_SECTION_ID,NULL,
-			   For_PutAllHiddenParamsRemThread,
-			   Btn_REMOVE_BUTTON,Txt_Remove_thread);
+      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
+			      For_FORUM_THREADS_SECTION_ID,NULL,
+			      For_PutAllHiddenParamsRemThread,
+			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    Lay_EndSection ();
 
    /***** Show the threads again *****/
@@ -4294,10 +4295,10 @@ void For_RemoveThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
       	{
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_Thread_X_removed,Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-	                                            Ale_SUCCESS,Gbl.Alert.Txt);
+	                                            Ale_SUCCESS,Gbl.DelayedAlert.Txt);
       	}
       else
 	 For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4332,10 +4333,10 @@ void For_CutThread (void)
    /***** Show the threads again *****/
    if (Subject[0])
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	        Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						 Ale_SUCCESS,Gbl.Alert.Txt);
+						 Ale_SUCCESS,Gbl.DelayedAlert.Txt);
      }
    else
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4370,11 +4371,11 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_The_thread_X_is_already_in_this_forum,
                    Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						    Ale_WARNING,Gbl.Alert.Txt);
+						    Ale_WARNING,Gbl.DelayedAlert.Txt);
         }
       else
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4391,11 +4392,11 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
 	           Txt_Thread_X_moved_to_this_forum,
                    Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						    Ale_SUCCESS,Gbl.Alert.Txt);
+						    Ale_SUCCESS,Gbl.DelayedAlert.Txt);
 	}
       else
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,

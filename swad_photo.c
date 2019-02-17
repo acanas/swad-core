@@ -465,7 +465,7 @@ void Pho_RemoveMyPhoto1 (void)
 void Pho_RemoveMyPhoto2 (void)
   {
    /***** Write success / warning message *****/
-   Ale_ShowPendingAlert ();
+   Ale_ShowDelayedAlert ();
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -497,10 +497,8 @@ void Pho_ReqRemoveUsrPhoto (void)
 	   {
 	    /***** Show question and button to remove user's photo *****/
 	    /* Start alert */
-	    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_Do_you_really_want_to_remove_the_photo_of_X,
-	              Gbl.Usrs.Other.UsrDat.FullName);
-	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
+	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
+	                             Gbl.Usrs.Other.UsrDat.FullName);
 
 	    /* Show current photo */
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
@@ -551,7 +549,7 @@ void Pho_RemoveUsrPhoto (void)
      {
       /***** Remove photo *****/
       if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
-         Ale_ShowPendingAlert ();
+         Ale_ShowDelayedAlert ();
      }
    else
       Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -601,6 +599,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    unsigned BackgroundCode;
    char StrFileName[NAME_MAX + 1];
    Act_Action_t NextAction;
+   char ErrorTxt[256];
 
    /***** Creates directories if not exist *****/
    snprintf (PathPhotosPriv,sizeof (PathPhotosPriv),
@@ -730,68 +729,42 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          NumFacesTotal = NumFacesGreen = NumFacesRed = 0;
          break;
       default:        // Error
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+         snprintf (ErrorTxt,sizeof (ErrorTxt),
 	           "Photo could not be processed successfully.<br />"
                    "Error code returned by the program of processing: %d",
                    ReturnCode);
-         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+         Lay_ShowErrorAndExit (ErrorTxt);
          break;
      }
 
-   /***** Message to the user about the number of faces detected in the image*****/
+   /***** Start alert to the user about the number of faces detected in the image*****/
    if (NumFacesTotal == 0)
-     {
-      Gbl.Alert.Type = Ale_WARNING;
-      Str_Copy (Gbl.Alert.Txt,Txt_Could_not_detect_any_face_in_front_position_,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
    else if (NumFacesTotal == 1)
      {
       if (NumFacesGreen == 1)
-        {
-	 Gbl.Alert.Type = Ale_SUCCESS;
-	 Str_Copy (Gbl.Alert.Txt,Txt_A_face_marked_in_green_has_been_detected_,
-		   Ale_MAX_BYTES_ALERT);
-        }
+         Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
       else
-        {
-	 Gbl.Alert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.Alert.Txt,Txt_A_face_marked_in_red_has_been_detected_,
-		   Ale_MAX_BYTES_ALERT);
-        }
+         Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
      }
    else        // NumFacesTotal > 1
      {
       if (NumFacesRed == 0)
-        {
-         Gbl.Alert.Type = Ale_SUCCESS;
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_X_faces_marked_in_green_have_been_detected_,
-                   NumFacesGreen);
-        }
+         Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_marked_in_green_have_been_detected_,
+                                  NumFacesGreen);
       else if (NumFacesGreen == 0)
-        {
-         Gbl.Alert.Type = Ale_WARNING;
-         snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	           Txt_X_faces_marked_in_red_have_been_detected_,
-                   NumFacesRed);
-        }
+         Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_X_faces_marked_in_red_have_been_detected_,
+                                  NumFacesRed);
       else        // NumFacesGreen > 0
         {
-         Gbl.Alert.Type = Ale_SUCCESS;
          if (NumFacesGreen == 1)
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_X_faces_have_been_detected_in_front_position_1_Z_,
-                      NumFacesTotal,NumFacesRed);
+            Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
+                                     NumFacesTotal,NumFacesRed);
          else
-            snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	              Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
-                      NumFacesTotal,NumFacesGreen,NumFacesRed);
+            Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
+                                     NumFacesTotal,NumFacesGreen,NumFacesRed);
         }
      }
-
-   /***** Start alert *****/
-   Ale_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
 
    /***** Create map *****/
    fprintf (Gbl.F.Out,"<map name=\"faces_map\">\n");
@@ -914,14 +887,14 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Gbl.Alert.Type = Ale_SUCCESS;
-      Str_Copy (Gbl.Alert.Txt,Txt_Photo_has_been_updated,
+      Gbl.DelayedAlert.Type = Ale_SUCCESS;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_Photo_has_been_updated,
 		Ale_MAX_BYTES_ALERT);
      }
    else
      {
-      Gbl.Alert.Type = Ale_ERROR;
-      Str_Copy (Gbl.Alert.Txt,"Error updating photo.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Error updating photo.",
 		Ale_MAX_BYTES_ALERT);
      }
   }
@@ -932,7 +905,7 @@ static void Pho_UpdatePhoto2 (void)
    unsigned NumPhoto;
 
    /***** Start alert *****/
-   Ale_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
+   Ale_ShowAlertAndButton1 (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
 
    /***** Show the three images resulting of the processing *****/
    Tbl_StartTableWide (0);
@@ -1154,15 +1127,15 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 
    if (NumErrors)
      {
-      Gbl.Alert.Type = Ale_ERROR;
-      Str_Copy (Gbl.Alert.Txt,"Error removing photo.",
+      Gbl.DelayedAlert.Type = Ale_ERROR;
+      Str_Copy (Gbl.DelayedAlert.Txt,"Error removing photo.",
 		Ale_MAX_BYTES_ALERT);
       return false;
      }
    else
      {
-      Gbl.Alert.Type = Ale_SUCCESS;
-      Str_Copy (Gbl.Alert.Txt,Txt_Photo_removed,
+      Gbl.DelayedAlert.Type = Ale_SUCCESS;
+      Str_Copy (Gbl.DelayedAlert.Txt,Txt_Photo_removed,
 	        Ale_MAX_BYTES_ALERT);
       return true;
      }

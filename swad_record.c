@@ -583,10 +583,8 @@ void Rec_CreateRecordField (void)
 	           (unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Write message of success *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Created_new_record_field_X,
-             Gbl.CurrentCrs.Records.Field.Name);
-   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_record_field_X,
+                  Gbl.CurrentCrs.Records.Field.Name);
   }
 
 /*****************************************************************************/
@@ -639,11 +637,8 @@ unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
 
 void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X;
-   extern const char *Txt_this_field_is_filled_in_the_record_of_one_student;
-   extern const char *Txt_this_field_is_filled_in_the_records_of_X_students;
+   extern const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_;
    extern const char *Txt_Remove_record_field;
-   char Message_part2[512];
 
    /***** Get from the database the name of the field *****/
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
@@ -652,23 +647,11 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Show question and button to remove my photo *****/
-   snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	     Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
-             Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
-   if (NumRecords == 1)
-      Str_Concat (Gbl.Alert.Txt,Txt_this_field_is_filled_in_the_record_of_one_student,
-                  Ale_MAX_BYTES_ALERT);
-   else
-     {
-      snprintf (Message_part2,sizeof (Message_part2),
-	        Txt_this_field_is_filled_in_the_records_of_X_students,
-                NumRecords);
-      Str_Concat (Gbl.Alert.Txt,Message_part2,
-                  Ale_MAX_BYTES_ALERT);
-     }
-   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemFie,NULL,NULL,Rec_PutParamFielCod,
-			   Btn_REMOVE_BUTTON,Txt_Remove_record_field);
+   Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,Rec_PutParamFielCod,
+			   Btn_REMOVE_BUTTON,Txt_Remove_record_field,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
+		           Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName,
+		           NumRecords);
 
    /***** List record fields again *****/
    Rec_ReqEditRecordFields ();
@@ -1048,7 +1031,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Show optional alert */
 	 if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	    Ale_ShowPendingAlert ();
+	    Ale_ShowDelayedAlert ();
 
 	 /* Shared record */
 	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
@@ -1116,7 +1099,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Show optional alert (result of editing data in course record) *****/
-   Ale_ShowPendingAlert ();
+   Ale_ShowDelayedAlert ();
 
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
@@ -1255,7 +1238,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-               Ale_ShowPendingAlert ();
+               Ale_ShowDelayedAlert ();
 
             /* Shared record */
             fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
@@ -1481,7 +1464,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	       Ale_ShowPendingAlert ();
+	       Ale_ShowDelayedAlert ();
 
 	    /* Shared record */
             fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
@@ -1645,8 +1628,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
    long OriginalActCod;
 
-   /***** Initialize alert type and message *****/
-   Gbl.Alert.Type = Ale_NONE;	// Do not show alert
+   /***** Initialize alert type *****/
+   Gbl.DelayedAlert.Type = Ale_NONE;	// Do not show alert
 
    /***** Get where we came from *****/
    OriginalActCod = Par_GetParToLong ("OriginalActCod");
@@ -1667,8 +1650,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
-   Gbl.Alert.Type = Ale_SUCCESS;
-   Str_Copy (Gbl.Alert.Txt,Txt_Student_record_card_in_this_course_has_been_updated,
+   Gbl.DelayedAlert.Type = Ale_SUCCESS;
+   Str_Copy (Gbl.DelayedAlert.Txt,Txt_Student_record_card_in_this_course_has_been_updated,
 	     Ale_MAX_BYTES_ALERT);
 
    /***** Show one or multiple records *****/

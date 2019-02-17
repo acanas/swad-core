@@ -2892,15 +2892,16 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
 
 void Str_Copy (char *Dst,const char *Src,size_t DstSize)
   {
+   char ErrorTxt[128];
    size_t LengthSrc = strlen (Src);
 
    /***** Check if buffer has enough space for source *****/
    if (LengthSrc > DstSize)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorTxt,sizeof (ErrorTxt),
 	        "Trying to copy %lu chars into a %lu-chars buffer.",
                 LengthSrc,DstSize);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Copy source into destination *****/
@@ -2917,15 +2918,16 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    size_t LengthDst;
    size_t LengthSrc;
    size_t FreeSpace;
+   char ErrorTxt[256];
 
    /***** Check if buffer has already overflowed *****/
    LengthDst = strlen (Dst);
    if (LengthDst > DstSize)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
+      snprintf (ErrorTxt,sizeof (ErrorTxt),
 	        "%lu-chars buffer has %lu chars!",
                 DstSize,LengthDst);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Check if buffer has enough space for source *****/
@@ -2934,10 +2936,11 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthSrc = strlen (Src);
    if (FreeSpace < LengthSrc)
      {
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        "Trying to concatenate %lu chars to a %lu-chars buffer with free space for only %lu chars!",
+      snprintf (ErrorTxt,sizeof (ErrorTxt),
+	        "Trying to concatenate %lu chars to a %lu-chars buffer"
+	        " with free space for only %lu chars!",
                 LengthSrc,DstSize,FreeSpace);
-      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+      Lay_ShowErrorAndExit (ErrorTxt);
      }
 
    /***** Concatenate ******/

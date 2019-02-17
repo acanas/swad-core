@@ -826,7 +826,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
      {
       case Tst_ANS_INT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
          if (AnswerElem->Content)
             Str_Copy (Gbl.Test.Answer.Options[0].Text,AnswerElem->Content,
@@ -834,9 +834,9 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
          break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
          if (!Tst_AllocateTextChoiceAnswer (1))
-            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
          for (LowerUpperElem = AnswerElem->FirstChild;
               LowerUpperElem != NULL;
@@ -888,7 +888,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (OptionElem->TagName,"option"))
               {
                if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-                  Lay_ShowErrorAndExit (Gbl.Alert.Txt);
+                  Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
 
 	       for (TextElem = OptionElem->FirstChild;
 		    TextElem != NULL;
