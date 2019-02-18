@@ -5329,13 +5329,12 @@ void Act_AdjustCurrentAction (void)
                default:
                   /* If there are some group types with groups in wich I must register,
                      the the only action possible is show a form to register in groups */
-                  if (Gbl.Action.Act == ActLogIn)		// Only when login...
-		     if (Grp_ThereAreGrpTypesIMustRegister ())	// ...because this query is slow
-		       {
-			Gbl.Action.Act = ActReqSelGrp;
-			Tab_SetCurrentTab ();
-			return;
-		       }
+		  if (Grp_GetIfAnyMandatoryGrpTypIsAvailable ())	// This query may be slow
+		    {
+		     Gbl.Action.Act = ActReqSelGrp;
+		     Tab_SetCurrentTab ();
+		     return;
+		    }
 
                   /* If I have no photo, and current action is not available for unknown users,
                      then update number of clicks without photo */

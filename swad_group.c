@@ -131,7 +131,7 @@ static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static long Grp_GetTypeOfGroupOfAGroup (long GrpCod);
 static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 static long Grp_GetFirstCodGrpIBelongTo (long GrpTypCod);
-static bool Grp_GetIfGrpIsAvailable (long GrpTypCod);
+static bool Grp_GetIfGrpTypIsAvailable (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
                                          struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
@@ -1899,7 +1899,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
       GrpTyp = &Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
       if (GrpTyp->NumGrps)	 // If there are groups of this type
 	 if (Grp_GetFirstCodGrpIBelongTo (GrpTyp->GrpTypCod) < 0)	// If I don't belong to any group
-	    if (Grp_GetIfGrpIsAvailable (GrpTyp->GrpTypCod))		// If there is any group of this type available
+	    if (Grp_GetIfGrpTypIsAvailable (GrpTyp->GrpTypCod))		// If there is any group of this type available
 	      {
 	       if (GrpTyp->MandatoryEnrolment)
 		  Ale_ShowAlert (Ale_WARNING,GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
@@ -3360,10 +3360,11 @@ static long Grp_GetFirstCodGrpIBelongTo (long GrpTypCod)
 
    /***** Get a group which I belong to from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not check if you belong to a group",
-			     "SELECT crs_grp.GrpCod FROM crs_grp,crs_grp_usr"
+			     "SELECT crs_grp.GrpCod"
+			     " FROM crs_grp,crs_grp_usr"
 			     " WHERE crs_grp.GrpTypCod=%ld"
 			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-			     " AND crs_grp_usr.UsrCod=%ld",
+			     " AND crs_grp_usr.UsrCod=%ld",	// I belong
 			     GrpTypCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get the group *****/
@@ -3495,109 +3496,68 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/****** Are there any group types with groups in wich I must register? *******/
+/**** Query if any mandatory group in this course is open and has vacants ****/
 /*****************************************************************************/
 
-bool Grp_ThereAreGrpTypesIMustRegister (void)
+bool Grp_GetIfAnyMandatoryGrpTypIsAvailable (void)
   {
-   unsigned NumGrpTypesEmptyIMustRegister;
-   unsigned NumGrpTypesNotEmptyIMustRegister;
+   unsigned NumGrpTypes;
 
-   /*****
-   Number of group types:
-      - with mandatory registration
-      - with groups:
-         - open
-         - not full
-         - empty
-   *****/
-   NumGrpTypesEmptyIMustRegister =
-   (unsigned) DB_QueryCOUNT ("can not get group types I must register",
-			     // Mandatory group types open, which admit students
-			     " SELECT COUNT(DISTINCT crs_grp_types.GrpTypCod)"
-			     " FROM crs_grp_types,crs_grp"
-			     " WHERE crs_grp_types.CrsCod=%ld"
-			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
-			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"		// Open
-			     " AND crs_grp.MaxStudents>0"	// Admits students
-			     // Empty, without students
-			     " AND crs_grp_types.GrpTypCod NOT IN"
-			     // Mandatory group types open, which admit students, with students
-			     " (SELECT DISTINCT crs_grp_types.GrpTypCod"
-			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-			     " WHERE crs_grp_types.CrsCod=%ld"
-			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
-			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"		// Open
-			     " AND crs_grp.MaxStudents>0"	// Admits students
-			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-			     " AND crs_usr.Role=%u)",
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     (unsigned) Rol_STD);
-   if (NumGrpTypesEmptyIMustRegister)
-      return true;
+   /***** Get the number of types of group in this course
+          with one or more open groups with vacants, from database *****/
+   NumGrpTypes =
+   (unsigned) DB_QueryCOUNT ("can not check if there has available mandatory group types",
+			     "SELECT COUNT(GrpTypCod) FROM "
+			     "("
 
-   /*****
-   Number of group types:
-      - with mandatory registration
-      - with groups:
-         - open
-         - not full
-         - not empty
-         - to which I don't belong
-   *****/
-   NumGrpTypesNotEmptyIMustRegister =
-   (unsigned) DB_QueryCOUNT ("can not get group types I must register",
-			     // Number of group types
-			     "SELECT COUNT(DISTINCT GrpTypCod) FROM"
-
-			     // Mandatory group types open, which admit students, not full
-			     " (SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
+			     // Available groups with students
+			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
 			     "COUNT(*) AS NumStudents,"
 			     "crs_grp.MaxStudents as MaxStudents"
 			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-			     " WHERE crs_grp_types.CrsCod=%ld"
-			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
+			     " WHERE crs_grp_types.CrsCod=%ld"		// In this course
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"		// Open
-			     " AND crs_grp.MaxStudents>0"	// Admits students
+			     " AND crs_grp.Open='Y'"			// Open
+			     " AND crs_grp.MaxStudents > 0"		// Admits students
 			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
 			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-			     " AND crs_usr.Role=%u"
+			     " AND crs_usr.Role=%u"			// With some student
 			     " GROUP BY crs_grp.GrpCod"
-			     " HAVING NumStudents<MaxStudents)"	// Not full
-			     " AS mand_grp_types_open_not_full"
-			     " WHERE GrpTypCod NOT IN"
+			     " HAVING NumStudents<MaxStudents"		// Not full
 
-			     // Mandatory group types to which I already belong
-			     " (SELECT DISTINCT crs_grp_types.GrpTypCod"
-			     " FROM crs_grp_types,crs_grp,crs_grp_usr"
-			     " WHERE crs_grp_types.CrsCod=%ld"
-			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
+			     " UNION "
+
+			     // Available groups without students
+			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
+			     "0 AS NumStudents,"
+			     "crs_grp.MaxStudents as MaxStudents"
+			     " FROM crs_grp_types,crs_grp"
+			     " WHERE crs_grp_types.CrsCod=%ld"		// In this course
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"		// Open
-			     " AND crs_grp.MaxStudents>0"	// Admits students
-			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-			     " AND crs_grp_usr.UsrCod=%ld)",
+			     " AND crs_grp.Open='Y'"			// Open
+			     " AND crs_grp.MaxStudents > 0"		// Admits students
+			     " AND crs_grp.GrpCod NOT IN"		// Only if empty
+			     " (SELECT crs_grp_usr.GrpCod"
+			     " FROM crs_usr,crs_grp_usr"
+			     " WHERE crs_usr.CrsCod=%ld"
+			     " AND crs_usr.Role=%u"
+			     " AND crs_usr.UsrCod=crs_grp_usr.UsrCod)"
 
+			     ") AS available_grp_types",
+
+			     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Rol_STD,
 			     Gbl.CurrentCrs.Crs.CrsCod,
-			     (unsigned) Rol_STD,
-			     Gbl.CurrentCrs.Crs.CrsCod,
-			     Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (NumGrpTypesNotEmptyIMustRegister > 0);
+			     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Rol_STD);
+
+   return (NumGrpTypes != 0);
   }
 
 /*****************************************************************************/
 /********** Query if any group of a type is open and has vacants *************/
 /*****************************************************************************/
 
-static bool Grp_GetIfGrpIsAvailable (long GrpTypCod)
+static bool Grp_GetIfGrpTypIsAvailable (long GrpTypCod)
   {
    unsigned NumGrpTypes;
 
@@ -3607,33 +3567,35 @@ static bool Grp_GetIfGrpIsAvailable (long GrpTypCod)
    (unsigned) DB_QueryCOUNT ("can not check if a type of group has available groups",
 			     "SELECT COUNT(GrpTypCod) FROM "
 			     "("
-			     // Groups with students
+
+			     // Available groups with students
 			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
 			     "COUNT(*) AS NumStudents,"
 			     "crs_grp.MaxStudents as MaxStudents"
 			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-			     " WHERE crs_grp_types.GrpTypCod=%ld"
+			     " WHERE crs_grp_types.GrpTypCod=%ld"	// Of this type
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"
+			     " AND crs_grp.Open='Y'"			// Open
+			     " AND crs_grp.MaxStudents > 0"		// Admits students
 			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
 			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-			     " AND crs_usr.Role=%u"
+			     " AND crs_usr.Role=%u"			// With some student
 			     " GROUP BY crs_grp.GrpCod"
-			     " HAVING NumStudents<MaxStudents"
+			     " HAVING NumStudents<MaxStudents"		// Not full
 
 			     " UNION "
 
-			     // Groups without students
+			     // Available groups without students
 			     "SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
 			     "0 AS NumStudents,"
 			     "crs_grp.MaxStudents as MaxStudents"
 			     " FROM crs_grp_types,crs_grp"
-			     " WHERE crs_grp_types.GrpTypCod=%ld"
+			     " WHERE crs_grp_types.GrpTypCod=%ld"	// Of this type
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"
-			     " AND crs_grp.MaxStudents > 0"
-			     " AND crs_grp.GrpCod NOT IN"
+			     " AND crs_grp.Open='Y'"			// Open
+			     " AND crs_grp.MaxStudents > 0"		// Admits students
+			     " AND crs_grp.GrpCod NOT IN"		// Only if empty
 			     " (SELECT crs_grp_usr.GrpCod"
 			     " FROM crs_grp_types,crs_usr,crs_grp_usr"
 			     " WHERE crs_grp_types.GrpTypCod=%ld"
@@ -3642,6 +3604,7 @@ static bool Grp_GetIfGrpIsAvailable (long GrpTypCod)
 			     " AND crs_usr.UsrCod=crs_grp_usr.UsrCod)"
 
 			     ") AS available_grp_types",
+
 			     GrpTypCod,(unsigned) Rol_STD,
 			     GrpTypCod,
 			     GrpTypCod,(unsigned) Rol_STD);
