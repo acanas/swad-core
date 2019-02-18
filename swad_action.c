@@ -1529,7 +1529,6 @@ Profile:
        1332. ActChgPriPho		Change privacy of my photo
        1333. ActChgPriPrf		Change privacy of my public profile
 
-       1334. ActReqEdiMyIns		Request the edition of my institution, centre and department
        1335. ActChgCtyMyIns		Change the country of my institution
        1336. ActChgMyIns		Change my institution
        1337. ActChgMyCtr		Change my centre
@@ -3108,7 +3107,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgPriPho	*/{ 774,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
    /* ActChgPriPrf	*/{1404,-1,TabUnk,ActEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeProfileVisibility	,NULL},
 
-   /* ActReqEdiMyIns	*/{1165,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,NULL},
    /* ActChgCtyMyIns	*/{1166,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ChgCountryOfMyInstitution	,NULL},
    /* ActChgMyIns	*/{1167,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyInstitution	,NULL},
    /* ActChgMyCtr	*/{1168,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_UpdateMyCentre		,NULL},
@@ -4308,7 +4306,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1162 (obsolete action)
 	ActCreUsrAcc,		// #1163
 	ActSeeOneNot,		// #1164
-	ActReqEdiMyIns,		// #1165
+	-1,			// #1165 (obsolete action)
 	ActChgCtyMyIns,		// #1166
 	ActChgMyIns,		// #1167
 	ActChgMyCtr,		// #1168
@@ -5147,9 +5145,10 @@ void Act_AdjustCurrentAction (void)
      {
       switch (Gbl.Action.Act)
         {
+         /* Action to log out */
          case ActLogOut:
-         case ActFrmMyAcc:
-         case ActChgMyPwd:
+         /* Actions related with my account */
+         case ActFrmMyAcc: case ActChgMyPwd: case ActChgMyNck: case ActChgMyMai:
             break;
          default:
 	    Gbl.Action.Act = ActFrmMyAcc;
@@ -5158,7 +5157,7 @@ void Act_AdjustCurrentAction (void)
         }
      }
 
-   /***** Just after login *****/
+   /***** Just after login, check if my password seems good *****/
    if (Gbl.Action.Act == ActLogIn)
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
          /* If my login password is not enough secure,
@@ -5176,10 +5175,10 @@ void Act_AdjustCurrentAction (void)
      {
       switch (Gbl.Action.Act)
         {
+         /* Action to log out */
          case ActLogOut:
-         case ActFrmMyAcc:
-         case ActChgMyPwd:
-         case ActChgMyNck:
+         /* Actions related with my account */
+         case ActFrmMyAcc: case ActChgMyPwd: case ActChgMyNck: case ActChgMyMai:
             break;
          default:
 	    Gbl.Action.Act = ActFrmMyAcc;
@@ -5196,10 +5195,12 @@ void Act_AdjustCurrentAction (void)
         Gbl.Usrs.Me.UsrDat.CtyCod <= 0)
       switch (Gbl.Action.Act)
         {
+         /* Action to log out */
          case ActLogOut:
-         case ActFrmMyAcc:
-         case ActChgMyPwd:
-         case ActChgMyNck:
+         /* Actions related with my account */
+         case ActFrmMyAcc: case ActChgMyPwd: case ActChgMyNck: case ActChgMyMai:
+         /* Actions related with my record card */
+         case ActReqEdiRecSha: case ActChgMyData: case ActChgCtyMyIns: case ActChgMyIns:
             break;
          default:
 	    Gbl.Action.Act = ActReqEdiRecSha;
@@ -5220,14 +5221,15 @@ void Act_AdjustCurrentAction (void)
                         Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
       switch (Gbl.Action.Act)
         {
+         /* Action to log out */
          case ActLogOut:
-         case ActFrmMyAcc:
-         case ActChgMyPwd:
-         case ActChgMyNck:
-         case ActReqEdiRecSha:
+         /* Actions related with my account */
+         case ActFrmMyAcc: case ActChgMyPwd: case ActChgMyNck: case ActChgMyMai:
+         /* Actions related with my record card */
+         case ActReqEdiRecSha: case ActChgMyData: case ActChgCtyMyIns: case ActChgMyIns:
             break;
          default:
-	    Gbl.Action.Act = ActReqEdiMyIns;
+	    Gbl.Action.Act = ActReqEdiRecSha;
 	    Tab_SetCurrentTab ();
             return;
         }
@@ -5237,12 +5239,14 @@ void Act_AdjustCurrentAction (void)
        Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
       switch (Gbl.Action.Act)
         {
+         /* Action to log out */
          case ActLogOut:
-         case ActFrmMyAcc:
-         case ActChgMyPwd:
-         case ActChgMyNck:
-         case ActReqEdiRecSha:
-         case ActReqEdiMyIns:
+         /* Actions related with my account */
+         case ActFrmMyAcc: case ActChgMyPwd: case ActChgMyNck: case ActChgMyMai:
+         /* Actions related with my record card */
+         case ActReqEdiRecSha: case ActChgMyData: case ActChgCtyMyIns: case ActChgMyIns:
+	 /* Action to edit privacy */
+         case ActEdiPri:
             break;
          default:
 	    Gbl.Action.Act = ActEdiPri;
@@ -5260,19 +5264,44 @@ void Act_AdjustCurrentAction (void)
 	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
 	   {
 	    case Rol_STD:
-	       Gbl.Action.Act = ActReqAccEnrStd;
+               switch (Gbl.Action.Act)
+		 {
+		  /* Actions related with enrolment as student */
+		  case ActReqAccEnrStd: case ActAccEnrStd: case ActRemMe_Std:
+		     return;
+		  default:
+	             Gbl.Action.Act = ActReqAccEnrStd;
+		     Tab_SetCurrentTab ();
+		     return;
+		 }
 	       break;
 	    case Rol_NET:
-	       Gbl.Action.Act = ActReqAccEnrNET;
+               switch (Gbl.Action.Act)
+		 {
+		  /* Actions related with enrolment as non-editing teacher */
+		  case ActReqAccEnrNET: case ActAccEnrNET: case ActRemMe_NET:
+		     return;
+		  default:
+	             Gbl.Action.Act = ActReqAccEnrNET;
+		     Tab_SetCurrentTab ();
+		     return;
+		 }
 	       break;
 	    case Rol_TCH:
-	       Gbl.Action.Act = ActReqAccEnrTch;
+               switch (Gbl.Action.Act)
+		 {
+		  /* Actions related with enrolment as teacher */
+		  case ActReqAccEnrTch: case ActAccEnrTch: case ActRemMe_Tch:
+		     return;
+		  default:
+	             Gbl.Action.Act = ActReqAccEnrTch;
+		     Tab_SetCurrentTab ();
+		     return;
+		 }
 	       break;
 	    default:
-	       return;
+	       break;
 	   }
-	 Tab_SetCurrentTab ();
-	 return;
 	}
 
       /***** Depending on the role I am logged... *****/
@@ -5281,47 +5310,54 @@ void Act_AdjustCurrentAction (void)
          case Rol_STD:
             switch (Gbl.Action.Act)
               {
-               case ActLogIn:
                case ActLogInNew:
                case ActMnu:
+               /* Action to log out */
                case ActLogOut:
-               case ActFrmMyAcc:
-               case ActChgMyPwd:
-               case ActChgMyNck:
-               case ActReqEdiRecSha:
-               case ActReqEdiMyIns:
+               /* Actions related with my account */
+               case ActFrmMyAcc: case ActChgMyPwd: case ActChgMyNck: case ActChgMyMai:
+	       /* Actions related with my record card */
+               case ActReqEdiRecSha: case ActChgMyData: case ActChgCtyMyIns: case ActChgMyIns:
+ 	       /* Action to edit privacy */
                case ActEdiPri:
-               case ActReqSelGrp:
+	       /* Actions related with my group registration */
+               case ActReqSelGrp: case ActChgGrp:
                case ActReqMdfOneStd:	// A student use this action to remove him/herself from current course
-               case ActSeeCrsTT:
-               case ActPrnCrsTT:
-               case ActChgCrsTT1stDay:
-                  // These last actions are allowed in order to students could see/print timetable before register in groups
+               /* Actions allowed in order to students could see/print timetable before register in groups */
+               case ActSeeCrsTT: case ActPrnCrsTT: case ActChgCrsTT1stDay:
                   break;
                default:
-                  /* If there are some group types with mandatory enrolment and groups in this course,
-	             and I don't belong to any of those groups,
-	             the the only action possible is show a form to register in groups */
-                  if (Grp_NumGrpTypesMandatIDontBelongAsStd ())	// To do: if this query is too slow ==> put it only when login.
-                    {
-	             Gbl.Action.Act = ActReqSelGrp;
-	             Tab_SetCurrentTab ();
-                     return;
-	            }
+                  /* If there are some group types with groups in wich I must register,
+                     the the only action possible is show a form to register in groups */
+                  if (Gbl.Action.Act == ActLogIn)		// Only when login...
+		     if (Grp_ThereAreGrpTypesIMustRegister ())	// ...because this query is slow
+		       {
+			Gbl.Action.Act = ActReqSelGrp;
+			Tab_SetCurrentTab ();
+			return;
+		       }
 
                   /* If I have no photo, and current action is not available for unknown users,
                      then update number of clicks without photo */
                   if (!Gbl.Usrs.Me.MyPhotoExists)
-                     if (!(Act_Actions[Gbl.Action.Act].PermissionCrsIfIBelong & (1 << Rol_UNK)) &&	// If current action is not available for unknown users...
-                         Gbl.Action.Act != ActReqMyPho)	// ...and current action is not ActReqMyPho...
-                        if ((Gbl.Usrs.Me.NumAccWithoutPhoto = Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
-	                  {
-	                   /* If limit of clicks has been reached,
-	                      the only action possible is show a form to send my photo */
-	                   Gbl.Action.Act = ActReqMyPho;
-	                   Tab_SetCurrentTab ();
-                           return;
-	                 }
+                     if (!(Act_Actions[Gbl.Action.Act].PermissionCrsIfIBelong & (1 << Rol_UNK)))	// If current action is not available for unknown users...
+                	switch (Gbl.Action.Act)
+                	  {
+                	   /* Actions related to sending my photo */
+                	   case ActReqMyPho: case ActDetMyPho: case ActUpdMyPho:
+                              break;
+                	   default:
+			      if ((Gbl.Usrs.Me.NumAccWithoutPhoto =
+				   Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
+				{
+				 /* If limit of clicks has been reached,
+				    the only action possible is show a form to send my photo */
+				 Gbl.Action.Act = ActReqMyPho;
+				 Tab_SetCurrentTab ();
+				 return;
+			        }
+			      break;
+                	  }
                   break;
               }
 
@@ -5332,16 +5368,22 @@ void Act_AdjustCurrentAction (void)
          case Rol_NET:
             break;
          case Rol_TCH:
-            if (Gbl.Action.Act == ActReqTst ||
-                Gbl.Action.Act == ActEdiTstQst)
-               /***** If current course has tests and pluggable is unknown,
-                      the only action possible is configure tests *****/
-               if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
-                 {
-                  Gbl.Action.Act = ActCfgTst;
-                  Tab_SetCurrentTab ();
-                  return;
-                 }
+            switch (Gbl.Action.Act)
+              {
+	       /* Actions related with test configuration */
+               case ActCfgTst: case ActRcvCfgTst:
+        	  break;
+               default:
+		  /***** If current course has tests and pluggable is unknown,
+			 the only action possible is configure tests *****/
+		  if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
+		    {
+		     Gbl.Action.Act = ActCfgTst;
+		     Tab_SetCurrentTab ();
+		     return;
+		    }
+		  break;
+              }
             break;
          default:
             break;
@@ -5358,6 +5400,6 @@ void Act_AdjustCurrentAction (void)
 	 Tab_SetCurrentTab ();
 	 return;
       default:
-            break;
+         break;
      }
   }

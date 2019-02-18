@@ -3495,50 +3495,102 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**** Get the number of types of group with mandatory enrolment          *****/
-/**** that have any group open and with any vacant                       *****/
-/**** and I don't belong to any of these groups as student               *****/
+/****** Are there any group types with groups in wich I must register? *******/
 /*****************************************************************************/
 
-unsigned Grp_NumGrpTypesMandatIDontBelongAsStd (void)
+bool Grp_ThereAreGrpTypesIMustRegister (void)
   {
-   unsigned NumGrpTypes;
+   unsigned NumGrpTypesEmptyIMustRegister;
+   unsigned NumGrpTypesNotEmptyIMustRegister;
 
-   /***** Get the number of types of groups with mandatory enrolment
-          which I don't belong to as student, from database *****/
-   NumGrpTypes =
-   (unsigned) DB_QueryCOUNT ("can not get the number of types of group"
-	                     " of mandatory registration"
-	                     " to which you don't belong to",
+   /*****
+   Number of group types:
+      - with mandatory registration
+      - with groups:
+         - open
+         - not full
+         - empty
+   *****/
+   NumGrpTypesEmptyIMustRegister =
+   (unsigned) DB_QueryCOUNT ("can not get group types I must register",
+			     // Mandatory group types open, which admit students
+			     " SELECT COUNT(DISTINCT crs_grp_types.GrpTypCod)"
+			     " FROM crs_grp_types,crs_grp"
+			     " WHERE crs_grp_types.CrsCod=%ld"
+			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"		// Open
+			     " AND crs_grp.MaxStudents>0"	// Admits students
+			     // Empty, without students
+			     " AND crs_grp_types.GrpTypCod NOT IN"
+			     // Mandatory group types open, which admit students, with students
+			     " (SELECT DISTINCT crs_grp_types.GrpTypCod"
+			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
+			     " WHERE crs_grp_types.CrsCod=%ld"
+			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
+			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"		// Open
+			     " AND crs_grp.MaxStudents>0"	// Admits students
+			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
+			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+			     " AND crs_usr.Role=%u)",
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     Gbl.CurrentCrs.Crs.CrsCod,
+			     (unsigned) Rol_STD);
+   if (NumGrpTypesEmptyIMustRegister)
+      return true;
+
+   /*****
+   Number of group types:
+      - with mandatory registration
+      - with groups:
+         - open
+         - not full
+         - not empty
+         - to which I don't belong
+   *****/
+   NumGrpTypesNotEmptyIMustRegister =
+   (unsigned) DB_QueryCOUNT ("can not get group types I must register",
+			     // Number of group types
 			     "SELECT COUNT(DISTINCT GrpTypCod) FROM"
+
+			     // Mandatory group types open, which admit students, not full
 			     " (SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
 			     "COUNT(*) AS NumStudents,"
 			     "crs_grp.MaxStudents as MaxStudents"
 			     " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
 			     " WHERE crs_grp_types.CrsCod=%ld"
-			     " AND crs_grp_types.Mandatory='Y'"
+			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-			     " AND crs_grp.Open='Y'"
+			     " AND crs_grp.Open='Y'"		// Open
+			     " AND crs_grp.MaxStudents>0"	// Admits students
 			     " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
 			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 			     " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
 			     " AND crs_usr.Role=%u"
 			     " GROUP BY crs_grp.GrpCod"
-			     " HAVING NumStudents<MaxStudents) AS grp_types_open_not_full"
+			     " HAVING NumStudents<MaxStudents)"	// Not full
+			     " AS mand_grp_types_open_not_full"
 			     " WHERE GrpTypCod NOT IN"
+
+			     // Mandatory group types to which I already belong
 			     " (SELECT DISTINCT crs_grp_types.GrpTypCod"
 			     " FROM crs_grp_types,crs_grp,crs_grp_usr"
 			     " WHERE crs_grp_types.CrsCod=%ld"
-			     " AND crs_grp_types.Mandatory='Y'"
+			     " AND crs_grp_types.Mandatory='Y'"	// Mandatory registration
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"		// Open
+			     " AND crs_grp.MaxStudents>0"	// Admits students
 			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 			     " AND crs_grp_usr.UsrCod=%ld)",
+
 			     Gbl.CurrentCrs.Crs.CrsCod,
 			     (unsigned) Rol_STD,
 			     Gbl.CurrentCrs.Crs.CrsCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   return NumGrpTypes;
+   return (NumGrpTypesNotEmptyIMustRegister > 0);
   }
 
 /*****************************************************************************/

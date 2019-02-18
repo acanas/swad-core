@@ -381,6 +381,8 @@ ALTER TABLE debug ENGINE=MyISAM;
 OPTIMIZE TABLE debug;
 */
 
+// TODO: Editar todas mis webs al mismo tiempo poniendo al final un botón "Guardar cambios"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -400,10 +402,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.47 (2019-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.48 (2019-02-18)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.48:    Feb 18, 2019 	Fixed bugs in actions related to account.
+				        Fixed bug related with groups. (237589 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1165';
+
 	Version 18.47:    Feb 17, 2019 	Code refactoring related to alerts. (237494 lines)
 	Version 18.46.12: Feb 16, 2019 	Code refactoring related to error and alerts. (237627 lines)
 	Version 18.46.11: Feb 16, 2019 	Code refactoring related to alerts. (237701 lines)

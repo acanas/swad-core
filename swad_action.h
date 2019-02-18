@@ -61,7 +61,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 8 + 59 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 165 + 168 + 15 + 67)
+#define Act_NUM_ACTIONS	(1 + 8 + 59 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 165 + 168 + 15 + 66)
 
 #define Act_MAX_ACTION_COD 1752
 
@@ -1562,37 +1562,36 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActChgPriPho		(ActSeeMyUsgRep + 39)
 #define ActChgPriPrf		(ActSeeMyUsgRep + 40)
 
-#define ActReqEdiMyIns		(ActSeeMyUsgRep + 41)
-#define ActChgCtyMyIns		(ActSeeMyUsgRep + 42)
-#define ActChgMyIns		(ActSeeMyUsgRep + 43)
-#define ActChgMyCtr		(ActSeeMyUsgRep + 44)
-#define ActChgMyDpt		(ActSeeMyUsgRep + 45)
-#define ActChgMyOff		(ActSeeMyUsgRep + 46)
-#define ActChgMyOffPho		(ActSeeMyUsgRep + 47)
+#define ActChgCtyMyIns		(ActSeeMyUsgRep + 41)
+#define ActChgMyIns		(ActSeeMyUsgRep + 42)
+#define ActChgMyCtr		(ActSeeMyUsgRep + 43)
+#define ActChgMyDpt		(ActSeeMyUsgRep + 44)
+#define ActChgMyOff		(ActSeeMyUsgRep + 45)
+#define ActChgMyOffPho		(ActSeeMyUsgRep + 46)
 
-#define ActReqEdiMyNet		(ActSeeMyUsgRep + 48)
-#define ActChgMyNet		(ActSeeMyUsgRep + 49)
+#define ActReqEdiMyNet		(ActSeeMyUsgRep + 47)
+#define ActChgMyNet		(ActSeeMyUsgRep + 48)
 
-#define ActChgThe		(ActSeeMyUsgRep + 50)
-#define ActReqChgLan		(ActSeeMyUsgRep + 51)
-#define ActChgLan		(ActSeeMyUsgRep + 52)
-#define ActChg1stDay		(ActSeeMyUsgRep + 53)
-#define ActChgDatFmt		(ActSeeMyUsgRep + 54)
-#define ActChgCol		(ActSeeMyUsgRep + 55)
-#define ActHidLftCol		(ActSeeMyUsgRep + 56)
-#define ActHidRgtCol		(ActSeeMyUsgRep + 57)
-#define ActShoLftCol		(ActSeeMyUsgRep + 58)
-#define ActShoRgtCol		(ActSeeMyUsgRep + 59)
-#define ActChgIco		(ActSeeMyUsgRep + 60)
-#define ActChgMnu		(ActSeeMyUsgRep + 61)
-#define ActChgNtfPrf		(ActSeeMyUsgRep + 62)
+#define ActChgThe		(ActSeeMyUsgRep + 49)
+#define ActReqChgLan		(ActSeeMyUsgRep + 50)
+#define ActChgLan		(ActSeeMyUsgRep + 51)
+#define ActChg1stDay		(ActSeeMyUsgRep + 52)
+#define ActChgDatFmt		(ActSeeMyUsgRep + 53)
+#define ActChgCol		(ActSeeMyUsgRep + 54)
+#define ActHidLftCol		(ActSeeMyUsgRep + 55)
+#define ActHidRgtCol		(ActSeeMyUsgRep + 56)
+#define ActShoLftCol		(ActSeeMyUsgRep + 57)
+#define ActShoRgtCol		(ActSeeMyUsgRep + 58)
+#define ActChgIco		(ActSeeMyUsgRep + 59)
+#define ActChgMnu		(ActSeeMyUsgRep + 60)
+#define ActChgNtfPrf		(ActSeeMyUsgRep + 61)
 
-#define ActPrnUsrQR		(ActSeeMyUsgRep + 63)
+#define ActPrnUsrQR		(ActSeeMyUsgRep + 62)
 
-#define ActPrnMyTT		(ActSeeMyUsgRep + 64)
-#define ActEdiTut		(ActSeeMyUsgRep + 65)
-#define ActChgTut		(ActSeeMyUsgRep + 66)
-#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 67)
+#define ActPrnMyTT		(ActSeeMyUsgRep + 63)
+#define ActEdiTut		(ActSeeMyUsgRep + 64)
+#define ActChgTut		(ActSeeMyUsgRep + 65)
+#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 66)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
