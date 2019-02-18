@@ -338,8 +338,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
 			 "<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
 			 " maxlength=\"%u\" value=\"%s\""
-		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();\" />"
+		         " class=\"REC_C2_BOT_INPUT\" />"
 			 "</td>"
 
 			 "</tr>",
@@ -349,8 +348,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       (unsigned) NumURL,(unsigned) NumURL,
-	       Cns_MAX_CHARS_WWW,URL,
-	       Gbl.Form.Id);
+	       Cns_MAX_CHARS_WWW,URL);
      }
 
    /***** End table *****/

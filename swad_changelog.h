@@ -395,10 +395,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.50.2 (2019-02-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.50.3 (2019-02-18)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.50.3:  Feb 18, 2019 	Fixed bug in user's webs and social networks. (237275 lines)
 	Version 18.50.2:  Feb 18, 2019 	Changes in some messages. (237276 lines)
 	Version 18.50.1:  Feb 18, 2019 	Database engine optional optimizations. (237275 lines)
 					6 changes optional in database:
