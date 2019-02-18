@@ -1901,7 +1901,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 	 // If I don't belong to any group
 	 if (!Grp_CheckIfIBelongToGrpsOfType (GrpTyp->GrpTypCod))		// Fast check (not necesary, but avoid slow check)
 	    // If there is any group of this type available
-	    if (Grp_GetIfAnyMandatoryGrpTypIsAvailable (GrpTyp->GrpTypCod))	// Slow check
+	    if (Grp_GetIfAvailableGrpTyp (GrpTyp->GrpTypCod))	// Slow check
 	      {
 	       if (GrpTyp->MandatoryEnrolment)
 		  Ale_ShowAlert (Ale_WARNING,GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
@@ -3479,12 +3479,12 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**** Query if any mandatory group in this course is open and has vacants ****/
+/**** Get if any group in group-type/this-course is open and has vacants *****/
 /*****************************************************************************/
 // If GrpTypCod >  0 ==> restrict to the given group type, mandatory or not
 // If GrpTypCod <= 0 ==> all mandatory group types in the current course
 
-bool Grp_GetIfAnyMandatoryGrpTypIsAvailable (long GrpTypCod)
+bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
   {
    unsigned NumGrpTypes;
    char *SubQueryGrpTypes;
@@ -3554,6 +3554,8 @@ bool Grp_GetIfAnyMandatoryGrpTypIsAvailable (long GrpTypCod)
 			     " FROM crs_grp_types,crs_grp,crs_grp_usr"
 			     " WHERE %s"				// Which group types?
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+			     " AND crs_grp.Open='Y'"			// Open
+			     " AND crs_grp.MaxStudents>0"		// Admits students
 			     " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 			     " AND crs_grp_usr.UsrCod=%ld)",		// I belong
 

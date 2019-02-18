@@ -186,7 +186,7 @@ bool Grp_GetIfIBelongToGrp (long GrpCod);
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void);
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat);
 
-bool Grp_GetIfAnyMandatoryGrpTypIsAvailable (long GrpTypCod);
+bool Grp_GetIfAvailableGrpTyp (long GrpTypCod);
 
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GrpNames);

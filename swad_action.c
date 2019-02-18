@@ -5268,7 +5268,7 @@ void Act_AdjustCurrentAction (void)
 		   with available groups in which I must register,
 		   the only action possible
 		   is show a form to register in groups *****/
-	    if (Grp_GetIfAnyMandatoryGrpTypIsAvailable (-1L))	// This query may be slow
+	    if (Grp_GetIfAvailableGrpTyp (-1L))	// This query may be slow
 	      {
 	       Gbl.Action.Act = ActReqSelGrp;
 	       Tab_SetCurrentTab ();

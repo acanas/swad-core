@@ -403,10 +403,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.49 (2019-02-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.49.1 (2019-02-18)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.49.1:  Feb 18, 2019 	Optimization in query about available mandatory group types. (237381 lines)
 	Version 18.49:    Feb 18, 2019 	Optimizations adjusting actions.
 					Fixed bug in query about available mandatory group types. (237378 lines)
 					1 change necessary in database:
