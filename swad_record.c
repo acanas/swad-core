@@ -1915,7 +1915,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
 	NumField++)
       if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
         {
-         /* Get text of the form */
+         /* Get text from the form */
          snprintf (FieldParamName,sizeof (FieldParamName),
                    "Field%ld",
 		   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);

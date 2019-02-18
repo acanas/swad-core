@@ -33,6 +33,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -272,6 +273,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *Hlp_PROFILE_Webs;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
+   extern const char *Txt_Save_changes;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -281,14 +283,21 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    /***** Start section *****/
    Lay_StartSection (Net_MY_WEBS_ID);
 
-   /***** Start box and table *****/
+   /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBoxTable (StrRecordWidth,
-                      Txt_Webs_social_networks,Net_PutIconsWebsSocialNetworks,
-                      Hlp_PROFILE_Webs,Box_NOT_CLOSABLE,2);
+   Box_StartBox (StrRecordWidth,Txt_Webs_social_networks,
+	         Net_PutIconsWebsSocialNetworks,
+                 Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
+   /***** Start table *****/
+   Tbl_StartTable (2);
+
+   /***** Start form *****/
+   Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
+
+   /***** List webs and social networks *****/
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
 	NumURL++)
@@ -315,6 +324,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       fprintf (Gbl.F.Out,"<tr>"
+
 			 "<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
 			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
@@ -324,28 +334,36 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "%s:"
 			 "</label>"
 			 "</td>"
-			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
+
+			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
+			 "<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
+			 " maxlength=\"%u\" value=\"%s\""
+		         " class=\"REC_C2_BOT_INPUT\""
+			 " onchange=\"document.getElementById('%s').submit();\" />"
+			 "</td>"
+
+			 "</tr>",
 	       (unsigned) NumURL,The_ClassForm[Gbl.Prefs.Theme],
 	       Gbl.Prefs.URLIcons,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
-	       Net_WebsAndSocialNetworksTitle[NumURL]);
-      Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
-      Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
-      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL\""
-			 " maxlength=\"%u\" value=\"%s\""
-		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       (unsigned) NumURL,
+	       Net_WebsAndSocialNetworksTitle[NumURL],
+	       (unsigned) NumURL,(unsigned) NumURL,
 	       Cns_MAX_CHARS_WWW,URL,
 	       Gbl.Form.Id);
-      Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
      }
 
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** Confirm button *****/
+   Btn_PutConfirmButton (Txt_Save_changes);
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -381,34 +399,38 @@ void Net_UpdateMyWebsAndSocialNets (void)
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
-   Net_WebsAndSocialNetworks_t Web;
+   Net_WebsAndSocialNetworks_t NumURL;
+   char ParamName[3 + 10 + 1];
    char URL[Cns_MAX_BYTES_WWW + 1];
 
-   /***** Get parameter with the type of web / social network *****/
-   Web = (Net_WebsAndSocialNetworks_t)
-	 Par_GetParToUnsignedLong ("Web",
-                                   0,
-                                   Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1,
-                                   (unsigned long) Net_WEB_SOCIAL_NET_DEFAULT);
+   /***** Get URLs *****/
+   for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
+	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
+	NumURL++)
+     {
+      /***** Get URL from the form *****/
+      snprintf (ParamName,sizeof (ParamName),
+		"URL%u",
+		(unsigned) NumURL);
+      Par_GetParToText (ParamName,URL,Cns_MAX_BYTES_WWW);
 
-   /***** Get URL *****/
-   Par_GetParToText ("URL",URL,Cns_MAX_BYTES_WWW);
-   if (URL[0])
-      /***** Insert or replace web / social network *****/
-      DB_QueryREPLACE ("can not update user's web / social network",
-		       "REPLACE INTO usr_webs"
-		       " (UsrCod,Web,URL)"
-		       " VALUES"
-		       " (%ld,'%s','%s')",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       Net_WebsAndSocialNetworksDB[Web],
-		       URL);
-   else
-      /***** Remove web / social network *****/
-      DB_QueryDELETE ("can not remove user's web / social network",
-		      "DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Net_WebsAndSocialNetworksDB[Web]);
+      if (URL[0])
+	 /***** Insert or replace web / social network *****/
+	 DB_QueryREPLACE ("can not update user's web / social network",
+			  "REPLACE INTO usr_webs"
+			  " (UsrCod,Web,URL)"
+			  " VALUES"
+			  " (%ld,'%s','%s')",
+			  Gbl.Usrs.Me.UsrDat.UsrCod,
+			  Net_WebsAndSocialNetworksDB[NumURL],
+			  URL);
+      else
+	 /***** Remove web / social network *****/
+	 DB_QueryDELETE ("can not remove user's web / social network",
+			 "DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 Net_WebsAndSocialNetworksDB[NumURL]);
+     }
   }
 
 /*****************************************************************************/

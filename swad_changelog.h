@@ -375,13 +375,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // Que haya una opción general que los bloquee todos y que los desbloquee todos
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
-/*
-SHOW TABLE STATUS WHERE Name = 'debug';
-ALTER TABLE debug ENGINE=MyISAM;
-OPTIMIZE TABLE debug;
-*/
-
-// TODO: Editar todas mis webs al mismo tiempo poniendo al final un botón "Guardar cambios"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -402,10 +395,21 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.49.2 (2019-02-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.50.1 (2019-02-18)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.50.1:  Feb 18, 2019 	Database engine optional optimizations. (237275 lines)
+					6 changes optional in database:
+Only if you use MyISAM:
+ALTER TABLE classrooms ENGINE=MyISAM;
+OPTIMIZE TABLE classrooms;
+ALTER TABLE firewall_log ENGINE=MyISAM;
+OPTIMIZE TABLE firewall_log;
+ALTER TABLE firewall_banned ENGINE=MyISAM;
+OPTIMIZE TABLE firewall_banned;
+
+	Version 18.50:    Feb 18, 2019 	All user's webs and social networks are edited at once. (237271 lines)
 	Version 18.49.2:  Feb 18, 2019 	The warning message of compulsory enrolment in groups is only made after login.
 					Homogenization of buttons to save changes. (237257 lines)
 	Version 18.49.1:  Feb 18, 2019 	Optimization in query about available mandatory group types. (237381 lines)
