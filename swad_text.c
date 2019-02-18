@@ -28608,48 +28608,6 @@ const char *Txt_Please_enter_your_ID =
 	"Por favor, digite n&ordm; de identifica&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_Please_fill_in_your_centre =
-#if   L==1	// ca
-	"Si us plau, ompli el seu centre.";
-#elif L==2	// de
-	"Bitte geben Sie Ihre Zentrum zu f&uuml;llen.";
-#elif L==3	// en
-	"Please fill in your centre.";
-#elif L==4	// es
-	"Por favor, rellene su centro.";
-#elif L==5	// fr
-	"S'il vous pla&iacute;t, indiquez votre centre.";
-#elif L==6	// gn
-	"Por favor, rellene su centro.";	// Okoteve traducción
-#elif L==7	// it
-	"Per favore, inserisci il tuo centro.";
-#elif L==8	// pl
-	"Prosz&eogon;, wpisz swoje tym centrum.";
-#elif L==9	// pt
-	"Por favor, preencha o seu centro.";
-#endif
-
-const char *Txt_Please_fill_in_your_department =
-#if   L==1	// ca
-	"Si us plau, ompli el seu department.";
-#elif L==2	// de
-	"Bitte geben Sie Ihre Abteilung zu f&uuml;llen.";
-#elif L==3	// en
-	"Please fill in your department.";
-#elif L==4	// es
-	"Por favor, rellene su departamento.";
-#elif L==5	// fr
-	"S'il vous pla&iacute;t, indiquez votre d&eacute;partement.";
-#elif L==6	// gn
-	"Por favor, rellene su departamento.";	// Okoteve traducción
-#elif L==7	// it
-	"Per favore, inserisci il tuo dipartimento.";
-#elif L==8	// pl
-	"Prosz&eogon;, wpisz swoje tym dzia&lstrok;u.";
-#elif L==9	// pt
-	"Por favor, preencha o seu departamento.";
-#endif
-
 const char *Txt_Please_fill_in_your_ID =
 #if   L==1	// ca
 	"Si us plau, ompli el seu ID (DNI/c&egrave;dula)."
@@ -28704,27 +28662,6 @@ const char *Txt_Please_fill_in_your_ID =
 	" mas &eacute; recomend&aacute;vel que voc&ecirc; preench&ecirc;-lo,"
 	" pois facilita o processo de registro"
 	" de usu&aacute;rios nas disciplinas.";
-#endif
-
-const char *Txt_Please_fill_in_your_institution =
-#if   L==1	// ca
-	"Si us plau, ompli la seva instituci&oacute;.";
-#elif L==2	// de
-	"Bitte geben Sie Ihre Einrichtung zu f&uuml;llen.";
-#elif L==3	// en
-	"Please fill in your institution.";
-#elif L==4	// es
-	"Por favor, rellene su instituci&oacute;n.";
-#elif L==5	// fr
-	"S'il vous pla&iacute;t, indiquez votre &eacute;tablissement.";
-#elif L==6	// gn
-	"Por favor, rellene su instituci&oacute;n.";	// Okoteve traducción
-#elif L==7	// it
-	"Per favore, inserisci la tua istituzione accademica.";
-#elif L==8	// pl
-	"Prosz&eogon;, wpisz swoje tym instytucji.";
-#elif L==9	// pt
-	"Por favor, preencha sua institui&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality =
@@ -28841,9 +28778,9 @@ const char *Txt_Please_select_the_country_of_your_institution =
 #if   L==1	// ca
 	"Si us plau, seleccioneu el pa&iacute;s de la seva instituci&oacute;.";
 #elif L==2	// de
-	"Bitte w&auml;hlen Sie das Land Ihrer Einrichtung aus";
+	"Bitte w&auml;hlen Sie das Land Ihrer Hochschule aus";
 #elif L==3	// en
-	"Please select the country of your institution.";
+	"Please, select the country of your institution.";
 #elif L==4	// es
 	"Por favor, seleccione el pa&iacute;s de su instituci&oacute;n.";
 #elif L==5	// fr
@@ -28856,6 +28793,69 @@ const char *Txt_Please_select_the_country_of_your_institution =
 	"Prosz&eogon;, wybra&cacute; kraj swojej instytucji.";
 #elif L==9	// pt
 	"Por favor, selecione o pa&iacute;s da sua institui&ccedil;&atilde;o.";
+#endif
+
+const char *Txt_Please_select_your_centre =
+#if   L==1	// ca
+	"Si us plau, seleccioneu el seu centre.";
+#elif L==2	// de
+	"Bitte w&auml;hlen Sie Ihre Zentrum aus.";
+#elif L==3	// en
+	"Please, select your centre.";
+#elif L==4	// es
+	"Por favor, seleccione su centro.";
+#elif L==5	// fr
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre centre.";
+#elif L==6	// gn
+	"Por favor, seleccione su centro.";	// Okoteve traducción
+#elif L==7	// it
+	"Per favore, seleziona il tuo centro.";
+#elif L==8	// pl
+	"Prosz&eogon;, wybra&cacute; swoje tym centrum.";
+#elif L==9	// pt
+	"Por favor, selecione seu centro.";
+#endif
+
+const char *Txt_Please_select_your_department =
+#if   L==1	// ca
+	"Si us plau, seleccioneu el seu department.";
+#elif L==2	// de
+	"Bitte w&auml;hlen Sie Ihre Abteilung aus.";
+#elif L==3	// en
+	"Please, select your department.";
+#elif L==4	// es
+	"Por favor, seleccione su departamento.";
+#elif L==5	// fr
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre d&eacute;partement.";
+#elif L==6	// gn
+	"Por favor, seleccione su departamento.";	// Okoteve traducción
+#elif L==7	// it
+	"Per favore, seleziona il tuo dipartimento.";
+#elif L==8	// pl
+	"Prosz&eogon;, wybra&cacute; swoje tym dzia&lstrok;u.";
+#elif L==9	// pt
+	"Por favor, selecione seu departamento.";
+#endif
+
+const char *Txt_Please_select_your_institution =
+#if   L==1	// ca
+	"Si us plau, seleccioneu la seva instituci&oacute;.";
+#elif L==2	// de
+	"Bitte w&auml;hlen Sie Ihre Hochschule aus.";
+#elif L==3	// en
+	"Please, select your institution.";
+#elif L==4	// es
+	"Por favor, seleccione su instituci&oacute;n.";
+#elif L==5	// fr
+	"S'il vous pla&iacute;t, s&eacute;lectionnez votre &eacute;tablissement.";
+#elif L==6	// gn
+	"Por favor, seleccione su instituci&oacute;n.";	// Okoteve traducción
+#elif L==7	// it
+	"Per favore, seleziona la tua istituzione accademica.";
+#elif L==8	// pl
+	"Prosz&eogon;, wybra&cacute; swoj&aogon; instytucj&eogon;.";
+#elif L==9	// pt
+	"Por favor, selecione sua institui&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications =

@@ -3893,9 +3893,9 @@ void Rec_ShowMySharedRecordAndMore (void)
    extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
    extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
    extern const char *Txt_Please_select_the_country_of_your_institution;
-   extern const char *Txt_Please_fill_in_your_institution;
-   extern const char *Txt_Please_fill_in_your_centre;
-   extern const char *Txt_Please_fill_in_your_department;
+   extern const char *Txt_Please_select_your_institution;
+   extern const char *Txt_Please_select_your_centre;
+   extern const char *Txt_Please_select_your_department;
    bool IAmATeacher;
 
    /***** Get my roles if not yet got *****/
@@ -3916,13 +3916,13 @@ void Rec_ShowMySharedRecordAndMore (void)
    else if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)		// 4. No institution country
       Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
    else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)		// 5. No institution
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_institution);
    else if (IAmATeacher)
      {
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)		// 6. No centre
-	 Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre);
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_centre);
       else if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)	// 7. No deparment
-	 Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_department);
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_select_your_department);
      }
 
    /***** Start container *****/
