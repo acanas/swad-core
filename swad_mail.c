@@ -1207,7 +1207,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    extern const char *Txt_New_email;
    extern const char *Txt_Email;
    extern const char *Txt_Change_email;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumEmails;
@@ -1387,7 +1387,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Gbl.Usrs.Me.UsrDat.Email);
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
-        	                          Txt_Save);		// User has no email address yet
+        	                          Txt_Save_changes);		// User has no email address yet
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

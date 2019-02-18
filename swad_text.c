@@ -2083,50 +2083,7 @@ const char *Txt_Assignment =
 #elif L==9	// pt
 	"Atividade";
 #endif
-/*
-const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK] =
-	{
-#if   L==1	// ca
-	"No cal enviar treballs (fitxers)"
-#elif L==2	// de
-	"Keine Hausarbeiten vorgesehen (Dateien)"
-#elif L==3	// en
-	"No homework to be submitted (files)"
-#elif L==4	// es
-	"No hay que enviar trabajos (archivos)"
-#elif L==5	// fr
-	"Ne soumettez pas de travail (fichiers)"
-#elif L==6	// gn
-	"No hay que enviar trabajos (archivos)"	// Okoteve traducción
-#elif L==7	// it
-	"Non ci sono lavori da presentare (files)"
-#elif L==8	// pl
-	"Nie ma pracy domowej, kt&oacute;re nalezy przedlozyc (pliki)"
-#elif L==9	// pt
-	"N&atilde;o submeter trabalhos (arquivos)"
-#endif
-	,
-#if   L==1	// ca
-	"Es obligatori enviar treballs (fitxers)"
-#elif L==2	// de
-	"Hausarbeiten vorgesehen (files)"
-#elif L==3	// en
-	"It is mandatory to submit homework (files)"
-#elif L==4	// es
-	"Es obligatorio enviar trabajos (archivos)"
-#elif L==5	// fr
-	"Il est obligatoire de soumetter le travail (fichiers)"
-#elif L==6	// gn
-	"Es obligatorio enviar trabajos (archivos)"// Okoteve traducción
-#elif L==7	// it
-	"E' obbligatorio presentare il lavoro (files)"
-#elif L==8	// pl
-	"Jest to obowiazkowe do przedstawienia prac domowych (pliki)"
-#elif L==9	// pt
-	"&Eacute; obrigat&oacute;ria a apresenta&ccedil;&atilde;o de trabalhos (arquivos)"
-#endif
-	};
-*/
+
 const char *Txt_Assignment_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La activitat <strong>%s</strong> ara est&agrave; oculta.";
@@ -10379,28 +10336,7 @@ const char *Txt_Email_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Email <strong>%s</strong> removido.";
 #endif
-/*
-const char *Txt_Email_unconfirmed =
-#if   L==1	// ca
-	"Correo no confirmado";	// Necessita traduccio
-#elif L==2	// de
-	"Email unconfirmed";	// Need Übersetzung
-#elif L==3	// en
-	"Email unconfirmed";
-#elif L==4	// es
-	"Correo no confirmado";
-#elif L==5	// fr
-	"Email unconfirmed";	// Besoin de traduction
-#elif L==6	// gn
-	"Correo no confirmado";	// Okoteve traducción
-#elif L==7	// it
-	"Email unconfirmed";	// Bisogno di traduzione
-#elif L==8	// pl
-	"Email unconfirmed";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Email n&atilde;o confirmado";
-#endif
-*/
+
 const char *Txt_End_date =
 #if   L==1	// ca
 	"Data final";
@@ -37011,27 +36947,6 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #endif
 	};
 
-const char *Txt_Save =
-#if   L==1	// ca
-	"Guardar";
-#elif L==2	// de
-	"Speichern";
-#elif L==3	// en
-	"Save";
-#elif L==4	// es
-	"Guardar";
-#elif L==5	// fr
-	"Enregistrer";
-#elif L==6	// gn
-	"&Ntilde;ongatu";
-#elif L==7	// it
-	"Salvare";
-#elif L==8	// pl
-	"Zapisa&cacute;";
-#elif L==9	// pt
-	"Salvar";
-#endif
-
 const char *Txt_Save_as =
 #if   L==1	// ca
 	"Guardar com";
@@ -42296,28 +42211,6 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	"Mensagens"
 #endif
 	,
-	// TabAna
-/*
-#if   L==1	// ca
-	"Estad&iacute;stiques"
-#elif L==2	// de
-	"Statistik"
-#elif L==3	// en
-	"Statistics"
-#elif L==4	// es
-	"Estad&iacute;sticas"
-#elif L==5	// fr
-	"Statistiques"
-#elif L==6	// gn
-	"Papy'aporeko"
-#elif L==7	// it
-	"Statistiche"
-#elif L==8	// pl
-	"Statystyki"
-#elif L==9	// pt
-	"Estat&iacute;sticas"
-#endif
-*/
 #if   L==1	// ca
 	"An&agrave;lisi"
 #elif L==2	// de
@@ -46893,28 +46786,7 @@ const char *Txt_The_search_text_must_be_longer =
 #elif L==9	// pt
 	"O texto de pesquisa deve ser mais longo.";
 #endif
-/*
-const char *Txt_The_session_has_been_closed =	// Closed by user
-#if   L==1	// ca
-	"La sessi&oacute; ha finalitzat.";
-#elif L==2	// de
-	"Die Sitzung wurde beendet.";
-#elif L==3	// en
-	"The session has been closed.";
-#elif L==4	// es
-	"La sesi&oacute;n ha finalizado.";
-#elif L==5	// fr
-	"La session a &eacute;t&eacute; ferm&eacute;e.";
-#elif L==6	// gn
-	"La sesi&oacute;n ha finalizado.";	// Okoteve traducción
-#elif L==7	// it
-	"La sessione &egrave; stata chiusa.";
-#elif L==8	// pl
-	"Sesja wygas&lstrok;a.";
-#elif L==9	// pt
-	"A sess&atilde;o foi encerrada.";
-#endif
-*/
+
 const char *Txt_The_session_has_expired =
 #if   L==1	// ca
 	"La sessi&oacute; ha expirat.";

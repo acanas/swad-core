@@ -1901,7 +1901,7 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
    extern const char *Txt_Feedback_to_students;
    extern const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    Tst_Pluggable_t Pluggable;
    Tst_Feedback_t Feedback;
 
@@ -2004,7 +2004,7 @@ static void Tst_ShowFormConfigTst (void)
    Tbl_EndTable ();
 
    /***** Send button *****/
-   Btn_PutConfirmButton (Txt_Save);
+   Btn_PutConfirmButton (Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -4963,7 +4963,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    extern const char *Txt_Shuffle;
    extern const char *Txt_Expand;
    extern const char *Txt_Contract;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    extern const char *Txt_Create_question;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5333,7 +5333,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Send button *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Btn_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save_changes);
    else
       Btn_PutCreateButton (Txt_Create_question);
 

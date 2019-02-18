@@ -2916,7 +2916,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_No;
    extern const char *Txt_Yes;
    extern const char *Txt_Create_project;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    extern const char *Txt_Members;
    Prj_Proposal_t Proposal;
    unsigned NumRoleToShow;
@@ -3083,7 +3083,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    if (ItsANewProject)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_project);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /* End data form */
    Frm_EndForm ();

@@ -382,7 +382,6 @@ OPTIMIZE TABLE debug;
 */
 
 // TODO: Editar todas mis webs al mismo tiempo poniendo al final un botón "Guardar cambios"
-// TODO: Chequear login para ver agenda desde código QR
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -403,10 +402,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.49.1 (2019-02-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.49.2 (2019-02-18)"
 #define CSS_FILE		"swad18.41.1.css"
 #define JS_FILE			"swad18.32.1.js"
 /*
+	Version 18.49.2:  Feb 18, 2019 	The warning message of compulsory enrolment in groups is only made after login.
+					Homogenization of buttons to save changes. (237257 lines)
 	Version 18.49.1:  Feb 18, 2019 	Optimization in query about available mandatory group types. (237381 lines)
 	Version 18.49:    Feb 18, 2019 	Optimizations adjusting actions.
 					Fixed bug in query about available mandatory group types. (237378 lines)

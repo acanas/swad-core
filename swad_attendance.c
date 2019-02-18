@@ -1042,7 +1042,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Visible_MALE_PLURAL;
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -1166,7 +1166,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    if (ItsANewAttEvent)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1862,10 +1862,11 @@ void Att_SeeOneAttEvent (void)
 static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
   {
    extern const char *Hlp_USERS_Attendance;
+   extern const char *Txt_Attendance;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
 
    /***** Get my preference about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
@@ -1877,10 +1878,15 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
       Att_PutParamAttCod (Att->AttCod);
      }
 
-   /***** List students' data *****/
-   /* Start box and table */
-   Box_StartBoxTable (NULL,NULL,NULL,
-                      Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
+   /***** List students (only me) *****/
+   /* Start box */
+   Box_StartBox (NULL,Txt_Attendance,NULL,
+                 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
+
+   /* Start table */
+   Tbl_StartTableWideMargin (2);
+
+   /* Header */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th></th>"
@@ -1904,15 +1910,18 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /* List of students (only me) */
    Att_WriteRowStdToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Att);
 
-   /* End table and box */
-   Box_EndBoxTable ();
+   /* End table */
+   Tbl_EndTable ();
 
+   /* Send button */
    if (Att->Open)
      {
-      /***** Send button *****/
-      Btn_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save_changes);
       Frm_EndForm ();
      }
+
+   /* End box */
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -1927,7 +1936,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    unsigned NumStd;
    struct UsrData UsrDat;
 
@@ -1955,14 +1964,15 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start form *****/
+      /* Start form */
       Frm_StartForm (ActRecAttStd);
       Att_PutParamAttCod (Att->AttCod);
       Grp_PutParamsCodGrps ();
 
-      /***** List students' data *****/
+      /* Start table */
       Tbl_StartTableWideMargin (2);
 
+      /* Header */
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th></th>"
@@ -1997,10 +2007,11 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
          Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
         }
 
+      /* End table */
       Tbl_EndTable ();
 
       /* Send button */
-      Btn_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save_changes);
 
       /***** End form *****/
       Frm_EndForm ();

@@ -1737,7 +1737,7 @@ void Gam_RequestCreatOrEditGame (void)
    extern const char *Txt_Description;
    extern const char *Txt_Users;
    extern const char *Txt_Create_game;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    struct Game Game;
    bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -1873,7 +1873,7 @@ void Gam_RequestCreatOrEditGame (void)
    if (ItsANewGame)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();

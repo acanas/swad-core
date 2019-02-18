@@ -5129,17 +5129,17 @@ void Act_AdjustCurrentAction (void)
 	                 Gbl.Action.Act == ActLogInLan ||
 			 Gbl.Action.Act == ActAnnSee;
 
+   /***** Don't adjust anything when:
+          - refreshing
+          - web service *****/
+   if (Gbl.Action.UsesAJAX ||
+       Gbl.WebService.IsWebService)
+      return;
+
    /***** Don't adjust anything when current action is not a menu option
           (except some actions just after login) *****/
    if (!JustAfterLogin &&					// Not just after login
        Gbl.Action.Act != Act_GetSuperAction (Gbl.Action.Act))	// It is not a menu option
-      return;
-
-   /***** Don't adjust anything when:
-          - refreshing users
-          - web service *****/
-   if (Gbl.Action.UsesAJAX ||
-       Gbl.WebService.IsWebService)
       return;
 
    /***** Adjustment 1:
@@ -5257,23 +5257,19 @@ void Act_AdjustCurrentAction (void)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-	    /* Action allowed for students to see/print
-	       the timetable before registering in groups */
-            if (Gbl.Action.Act == ActSeeCrsTT)
-               return;
-
             /***** Adjustment 7:
 		   -------------
 		   If there are some group types
 		   with available groups in which I must register,
 		   the only action possible
 		   is show a form to register in groups *****/
-	    if (Grp_GetIfAvailableGrpTyp (-1L))	// This query may be slow
-	      {
-	       Gbl.Action.Act = ActReqSelGrp;
-	       Tab_SetCurrentTab ();
-	       return;
-	      }
+            if (JustAfterLogin)				// Only after login because the following query may be slow
+	       if (Grp_GetIfAvailableGrpTyp (-1L))	// This query may be slow
+		 {
+		  Gbl.Action.Act = ActReqSelGrp;
+		  Tab_SetCurrentTab ();
+		  return;
+		 }
 
 	    /***** Adjustment 8:
 		   -------------

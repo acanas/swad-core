@@ -1782,7 +1782,7 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Txt_Description;
    extern const char *Txt_Users;
    extern const char *Txt_Create_survey;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
@@ -1922,7 +1922,7 @@ void Svy_RequestCreatOrEditSvy (void)
    if (ItsANewSurvey)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_survey);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2602,7 +2602,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *Txt_Stem;
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    extern const char *Txt_Create_question;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2763,7 +2763,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Send button *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-      Btn_PutConfirmButton (Txt_Save);
+      Btn_PutConfirmButton (Txt_Save_changes);
    else
       Btn_PutCreateButton (Txt_Create_question);
 

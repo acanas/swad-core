@@ -224,7 +224,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrRecordWidth[10 + 1];
@@ -402,7 +402,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
-        	                         Txt_Save);		// I have no nickname yet);
+        	                         Txt_Save_changes);	// I have no nickname yet);
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

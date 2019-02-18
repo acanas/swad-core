@@ -465,14 +465,14 @@ void Acc_ShowFormChgMyAccount (void)
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
-   /***** Show form to change my password *****/
+   /***** Show form to change my password and my nickname ****/
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
    Pwd_ShowFormChgMyPwd ();
+   Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Show form to change my nickname, my email and my ID *****/
+   /***** Show form to change my email and my ID *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
-   Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
    Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
    ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
    fprintf (Gbl.F.Out,"</div>");
@@ -504,16 +504,16 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 /***** Start container for this user *****/
 	 fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
 
-	 /***** Show form to change nickname and email *****/
+	 /***** Show form to change password and nickname *****/
 	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+	 Pwd_ShowFormChgOtherUsrPwd ();
 	 Nck_ShowFormChangeOtherUsrNickname ();
-	 Mai_ShowFormChangeOtherUsrEmail ();
 	 fprintf (Gbl.F.Out,"</div>");
 
-	 /***** Show form to change ID and password *****/
+	 /***** Show form to change email and ID *****/
 	 fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	 Mai_ShowFormChangeOtherUsrEmail ();
 	 ID_ShowFormChangeOtherUsrID ();
-	 Pwd_ShowFormChgOtherUsrPwd ();
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /***** Start container for this user *****/

@@ -1680,7 +1680,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
      {
       Hlp_USERS_Students_course_record_card,	// Rec_CRS_MY_RECORD_AS_STUDENT_FORM
@@ -1877,7 +1877,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    if (ICanEdit)
      {
       /* End table, send button and end box */
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
       /* End form */
       Frm_EndForm ();

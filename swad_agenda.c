@@ -1451,7 +1451,7 @@ void Agd_RequestCreatOrEditEvent (void)
    extern const char *Txt_Event;
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    struct AgendaEvent AgdEvent;
    bool ItsANewEvent;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -1558,7 +1558,7 @@ void Agd_RequestCreatOrEditEvent (void)
    if (ItsANewEvent)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_event);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();

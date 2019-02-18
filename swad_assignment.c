@@ -1081,7 +1081,7 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Txt_Folder;
    extern const char *Txt_Description;
    extern const char *Txt_Create_assignment;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    struct Assignment Asg;
    bool ItsANewAssignment;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -1197,7 +1197,7 @@ void Asg_RequestCreatOrEditAsg (void)
    if (ItsANewAssignment)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_assignment);
    else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();

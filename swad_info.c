@@ -2044,7 +2044,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
 void Inf_EditPlainTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
@@ -2084,7 +2084,7 @@ void Inf_EditPlainTxtInfo (void)
             TxtHTML);
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
    Frm_EndForm ();
   }
 
@@ -2095,7 +2095,7 @@ void Inf_EditPlainTxtInfo (void)
 void Inf_EditRichTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
@@ -2135,7 +2135,7 @@ void Inf_EditRichTxtInfo (void)
             TxtHTML);
 
    /***** Send button and end box *****/
-   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save);
+   Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
    Frm_EndForm ();
   }
 
