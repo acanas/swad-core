@@ -25,9 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
-
 #include "swad_account.h"
 #include "swad_box.h"
 #include "swad_database.h"

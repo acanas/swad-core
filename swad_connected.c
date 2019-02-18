@@ -25,11 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <limits.h>		// For maximum values
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For fprintf, asprintf
+#include <stdio.h>		// For fprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"

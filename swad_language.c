@@ -25,9 +25,6 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
-
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_form.h"
@@ -77,7 +74,7 @@ static void Lan_PutParamLanguage (void);
 
 void Lan_PutLinkToChangeLanguage (void)
   {
-   Lay_PutContextualLinkIconText (ActEdiPrf,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqEdiPrf,NULL,NULL,
 			          "globe.svg",
 				  "Change language");
   }

@@ -19476,7 +19476,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	//  6: ActEdiPrf
+	//  6: ActReqEdiPrf
 #if   L==1	// ca
 	"Configuraci&oacute;"
 #elif L==2	// de
@@ -21343,7 +21343,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	//  6: ActEdiPrf
+	//  6: ActReqEdiPrf
 #if   L==1	// ca
 	"Les meves prefer&egrave;ncies (idioma, colors, notificacions &hellip;)"
 #elif L==2	// de

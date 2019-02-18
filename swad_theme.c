@@ -25,8 +25,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For fprintf, asprintf, etc.
+#include <stdio.h>		// For fprintf, etc.
 #include <string.h>
 
 #include "swad_box.h"

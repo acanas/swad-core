@@ -25,10 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For asprintf, fprintf, etc.
+#include <stdio.h>		// For fprintf, etc.
 #include <string.h>
 
 #include "swad_box.h"

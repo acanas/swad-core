@@ -25,11 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <ctype.h>		// For isprint, isspace, etc.
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For fprintf, asprintf, etc.
+#include <stdio.h>		// For fprintf, etc.
 #include <stdlib.h>		// For exit, system, calloc, free, etc.
 #include <string.h>		// For string functions
 #include <mysql/mysql.h>	// To access MySQL databases

@@ -25,9 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system
 #include <string.h>
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -373,7 +371,7 @@ void Ntf_ShowMyNotifications (void)
 				     Txt_Mark_all_NOTIFICATIONS_as_read);
 
    /* Put form to change notification preferences */
-   Lay_PutContextualLinkIconText (ActEdiPrf,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqEdiPrf,NULL,NULL,
 				  "cog.svg",
 				  Txt_Settings);
 

@@ -25,8 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf, fprintf, etc.
+#include <stdio.h>		// For fprintf, etc.
 
 #include "swad_box.h"
 #include "swad_database.h"
@@ -287,7 +286,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeMyAgd,		//  3
 		ActFrmMyAcc,		//  4
 		ActReqEdiRecSha,	//  5
-		ActEdiPrf,		//  6
+		ActReqEdiPrf,		//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9

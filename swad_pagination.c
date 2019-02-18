@@ -25,9 +25,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
-#include <stdio.h>		// For asprintf
 
 #include "swad_action.h"
 #include "swad_database.h"
