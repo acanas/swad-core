@@ -638,7 +638,7 @@ function readOldTimelineData () {
 						timeline.appendChild(oldTimeline.firstChild);
 				}
 				
-				if (countOldTimeline < 20)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
+				if (countOldTimeline < RefreshParamMaxOldPubsToGetAndShow)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
 					// No more old publishings
 					document.getElementById("view_old_posts_container").style.display = 'none';
 				else {

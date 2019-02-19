@@ -1579,7 +1579,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActShoLftCol		(ActSeeMyUsgRep + 54)
 #define ActShoRgtCol		(ActSeeMyUsgRep + 55)
 #define ActChgIco		(ActSeeMyUsgRep + 56)
-#define ActChgMnu		(ActSeeMyUsgRep + 67)
+#define ActChgMnu		(ActSeeMyUsgRep + 57)
 #define ActChgPriPho		(ActSeeMyUsgRep + 58)
 #define ActChgPriPrf		(ActSeeMyUsgRep + 59)
 #define ActChgNtfPrf		(ActSeeMyUsgRep + 60)

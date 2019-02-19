@@ -357,8 +357,6 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 
 // TODO: Mensajes > Anuncios cuando no estás identificado, deberían salir algunos, ¿por qué no indicar que se muestren para todos?
 
-// TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
-
 // TODO: Chequear todas las directivas <label>
 
 // TODO: Fix bug: Al mostrar una orla con todos los profesores de SWAD, se muestran primeros los profesores y luego los no editores (repetidos algunos)
@@ -375,6 +373,8 @@ Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más vers
 // Que haya una opción general que los bloquee todos y que los desbloquee todos
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
+
+// TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -395,10 +395,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.50.3 (2019-02-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.51 (2019-02-19)"
 #define CSS_FILE		"swad18.41.1.css"
-#define JS_FILE			"swad18.32.1.js"
+#define JS_FILE			"swad18.51.js"
 /*
+	Version 18.51:    Feb 19, 2019 	The number of publications by default in the timeline becomes 50 (before it was 20).
+					Changes in javascript related to timeline. (237281 lines)
+	Version 18.50.4:  Feb 18, 2019 	Fixed bug in actions. (237276 lines)
 	Version 18.50.3:  Feb 18, 2019 	Fixed bug in user's webs and social networks. (237275 lines)
 	Version 18.50.2:  Feb 18, 2019 	Changes in some messages. (237276 lines)
 	Version 18.50.1:  Feb 18, 2019 	Database engine optional optimizations. (237275 lines)

@@ -59,13 +59,6 @@
 
 #define Soc_MAX_CHARS_IN_POST	1000
 
-// Number of recent publishings got and shown the first time, before refreshing
-#define Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
-#define Soc_MAX_REC_PUBS_TO_GET_AND_SHOW	20	// Recent publishings to show (first time)
-#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW	20	// IMPORTANT: If you change this number,
-							// set also this constant to the new value
-							// in JavaScript function readOldTimelineData
-
 typedef enum
   {
    Soc_TIMELINE_USR,	// Show the timeline of a user
