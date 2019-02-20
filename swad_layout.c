@@ -829,15 +829,19 @@ static void Lay_WritePageTopHeading (void)
      {
       "HEAD_ROW_1_WHITE",	// The_THEME_WHITE
       "HEAD_ROW_1_GREY",	// The_THEME_GREY
+      "HEAD_ROW_1_PURPLE",	// The_THEME_PURPLE
       "HEAD_ROW_1_BLUE",	// The_THEME_BLUE
       "HEAD_ROW_1_YELLOW",	// The_THEME_YELLOW
+      "HEAD_ROW_1_PINK",	// The_THEME_PINK
       };
    const char *ClassHeadRow2[The_NUM_THEMES] =
      {
       "HEAD_ROW_2_WHITE",	// The_THEME_WHITE
       "HEAD_ROW_2_GREY",	// The_THEME_GREY
+      "HEAD_ROW_2_PURPLE",	// The_THEME_PURPLE
       "HEAD_ROW_2_BLUE",	// The_THEME_BLUE
       "HEAD_ROW_2_YELLOW",	// The_THEME_YELLOW
+      "HEAD_ROW_2_PINK",	// The_THEME_PINK
       };
 
    /***** Start header *****/

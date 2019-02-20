@@ -54,159 +54,189 @@ const char *The_ThemeId[The_NUM_THEMES] =
   {
    "white",
    "grey",
+   "purple",
    "blue",
    "yellow",
+   "pink",
   };
 
 const char *The_ThemeNames[The_NUM_THEMES] =
   {
    "White",
    "Grey",
+   "Purple",
    "Blue",
    "Yellow",
+   "Pink",
   };
 
 const char *The_TabOnBgColors[The_NUM_THEMES] =
   {
    "TAB_ON_WHITE",
    "TAB_ON_GREY",
+   "TAB_ON_PURPLE",
    "TAB_ON_BLUE",
    "TAB_ON_YELLOW",
+   "TAB_ON_PINK",
   };
 const char *The_TabOffBgColors[The_NUM_THEMES] =
   {
    "TAB_OFF_WHITE",
    "TAB_OFF_GREY",
+   "TAB_OFF_PURPLE",
    "TAB_OFF_BLUE",
    "TAB_OFF_YELLOW",
+   "TAB_OFF_PINK",
   };
 
 const char *The_ClassTagline[The_NUM_THEMES] =
   {
-   "WHITE_TAGLINE",
-   "GREY_TAGLINE",
-   "BLUE_TAGLINE",
-   "YELLOW_TAGLINE",
+   "TAGLINE_WHITE",
+   "TAGLINE_GREY",
+   "TAGLINE_PURPLE",
+   "TAGLINE_BLUE",
+   "TAGLINE_YELLOW",
+   "TAGLINE_PINK",
   };
 
 const char *The_ClassNotif[The_NUM_THEMES] =
   {
-   "WHITE_NOTIF",
-   "GREY_NOTIF",
-   "BLUE_NOTIF",
-   "YELLOW_NOTIF",
+   "NOTIF_WHITE",
+   "NOTIF_GREY",
+   "NOTIF_PURPLE",
+   "NOTIF_BLUE",
+   "NOTIF_YELLOW",
+   "NOTIF_PINK",
   };
 
 const char *The_ClassUsr[The_NUM_THEMES] =
   {
-   "WHITE_USR",
-   "GREY_USR",
-   "BLUE_USR",
-   "YELLOW_USR",
+   "USR_WHITE",
+   "USR_GREY",
+   "USR_PURPLE",
+   "USR_BLUE",
+   "USR_YELLOW",
+   "USR_PINK",
   };
 
 const char *The_ClassBreadcrumb[The_NUM_THEMES] =
   {
    "BC_WHITE",
    "BC_GREY",
+   "BC_PURPLE",
    "BC_BLUE",
    "BC_YELLOW",
+   "BC_PINK",
   };
 
 const char *The_ClassCourse[The_NUM_THEMES] =
   {
-   "WHITE_COURSE",
-   "GREY_COURSE",
-   "BLUE_COURSE",
-   "YELLOW_COURSE",
+   "MAIN_TITLE_WHITE",
+   "MAIN_TITLE_GREY",
+   "MAIN_TITLE_PURPLE",
+   "MAIN_TITLE_BLUE",
+   "MAIN_TITLE_YELLOW",
+   "MAIN_TITLE_PINK",
   };
 
-const char *The_ClassTxtMenuOff[The_NUM_THEMES] =
+const char *The_ClassTxtMenu[The_NUM_THEMES] =
   {
-   "WHITE_MENU_OFF",
-   "GREY_MENU_OFF",
-   "BLUE_MENU_OFF",
-   "YELLOW_MENU_OFF",
-  };
-
-const char *The_ClassTxtMenuOn[The_NUM_THEMES] =
-  {
-   "WHITE_MENU_ON",
-   "GREY_MENU_ON",
-   "BLUE_MENU_ON",
-   "YELLOW_MENU_ON",
+   "MENU_TXT_WHITE",
+   "MENU_TXT_GREY",
+   "MENU_TXT_PURPLE",
+   "MENU_TXT_BLUE",
+   "MENU_TXT_YELLOW",
+   "MENU_TXT_PINK",
   };
 
 const char *The_ClassTxtTabOff[The_NUM_THEMES] =
   {
-   "WHITE_TAB_OFF",
-   "GREY_TAB_OFF",
-   "BLUE_TAB_OFF",
-   "YELLOW_TAB_OFF",
+   "TAB_OFF_TXT_WHITE",
+   "TAB_OFF_TXT_GREY",
+   "TAB_OFF_TXT_PURPLE",
+   "TAB_OFF_TXT_BLUE",
+   "TAB_OFF_TXT_YELLOW",
+   "TAB_OFF_TXT_PINK",
   };
 
 const char *The_ClassTxtTabOn[The_NUM_THEMES] =
   {
-   "WHITE_TAB_ON",
-   "GREY_TAB_ON",
-   "BLUE_TAB_ON",
-   "YELLOW_TAB_ON",
+   "TAB_ON_TXT_WHITE",
+   "TAB_ON_TXT_GREY",
+   "TAB_ON_TXT_PURPLE",
+   "TAB_ON_TXT_BLUE",
+   "TAB_ON_TXT_YELLOW",
+   "TAB_ON_TXT_PINK",
   };
 
 const char *The_ClassTitleAction[The_NUM_THEMES] =
   {
-   "WHITE_TITLE_ACTION",
-   "GREY_TITLE_ACTION",
-   "BLUE_TITLE_ACTION",
-   "YELLOW_TITLE_ACTION",
+   "TITLE_ACTION_WHITE",
+   "TITLE_ACTION_GREY",
+   "TITLE_ACTION_PURPLE",
+   "TITLE_ACTION_BLUE",
+   "TITLE_ACTION_YELLOW",
+   "TITLE_ACTION_PINK",
   };
 
 const char *The_ClassSubtitleAction[The_NUM_THEMES] =
   {
-   "WHITE_SUBTITLE_ACTION",
-   "GREY_SUBTITLE_ACTION",
-   "BLUE_SUBTITLE_ACTION",
-   "YELLOW_SUBTITLE_ACTION",
+   "SUBTITLE_ACTION_WHITE",
+   "SUBTITLE_ACTION_GREY",
+   "SUBTITLE_ACTION_PURPLE",
+   "SUBTITLE_ACTION_BLUE",
+   "SUBTITLE_ACTION_YELLOW",
+   "SUBTITLE_ACTION_PINK",
   };
 
 const char *The_ClassTitle[The_NUM_THEMES] =
   {
-   "WHITE_TITLE",
-   "GREY_TITLE",
-   "BLUE_TITLE",
-   "YELLOW_TITLE",
+   "TITLE_WHITE",
+   "TITLE_GREY",
+   "TITLE_PURPLE",
+   "TITLE_BLUE",
+   "TITLE_YELLOW",
+   "TITLE_PINK",
   };
 
 const char *The_ClassForm[The_NUM_THEMES] =
   {
-   "WHITE_FORM",
-   "GREY_FORM",
-   "BLUE_FORM",
-   "YELLOW_FORM",
+   "FORM_WHITE",
+   "FORM_GREY",
+   "FORM_PURPLE",
+   "FORM_BLUE",
+   "FORM_YELLOW",
+   "FORM_PINK",
   };
 
 const char *The_ClassFormDark[The_NUM_THEMES] =
   {
-   "WHITE_FORM_DARK",
-   "GREY_FORM_DARK",
-   "BLUE_FORM_DARK",
-   "YELLOW_FORM_DARK",
+   "FORM_DARK_WHITE",
+   "FORM_DARK_GREY",
+   "FORM_DARK_PURPLE",
+   "FORM_DARK_BLUE",
+   "FORM_DARK_YELLOW",
+   "FORM_DARK_PINK",
   };
 
 const char *The_ClassFormNoWrap[The_NUM_THEMES] =
   {
-   "WHITE_FORM_NOWRAP",
-   "GREY_FORM_NOWRAP",
-   "BLUE_FORM_NOWRAP",
-   "YELLOW_FORM_NOWRAP",
+   "FORM_NOWRAP_WHITE",
+   "FORM_NOWRAP_GREY",
+   "FORM_NOWRAP_PURPLE",
+   "FORM_NOWRAP_BLUE",
+   "FORM_NOWRAP_YELLOW",
+   "FORM_NOWRAP_PINK",
   };
 
 const char *The_ClassFormBold[The_NUM_THEMES] =
   {
-   "WHITE_FORM_BOLD",
-   "GREY_FORM_BOLD",
-   "BLUE_FORM_BOLD",
-   "YELLOW_FORM_BOLD",
+   "FORM_BOLD_WHITE",
+   "FORM_BOLD_GREY",
+   "FORM_BOLD_PURPLE",
+   "FORM_BOLD_BLUE",
+   "FORM_BOLD_YELLOW",
+   "FORM_BOLD_PINK",
   };
 
 /*****************************************************************************/
@@ -286,7 +316,8 @@ void The_ChangeTheme (void)
       DB_QueryUPDATE ("can not update your preference about theme",
 		      "UPDATE usr_data SET Theme='%s'"
 		      " WHERE UsrCod=%ld",
-                      The_ThemeId[Gbl.Prefs.Theme],Gbl.Usrs.Me.UsrDat.UsrCod);
+                      The_ThemeId[Gbl.Prefs.Theme],
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();

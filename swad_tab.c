@@ -91,8 +91,10 @@ void Tab_DrawTabs (void)
      {
       "HEAD_ROW_3_WHITE",	// The_THEME_WHITE
       "HEAD_ROW_3_GREY",	// The_THEME_GREY
+      "HEAD_ROW_3_PURPLE",	// The_THEME_PURPLE
       "HEAD_ROW_3_BLUE",	// The_THEME_BLUE
       "HEAD_ROW_3_YELLOW",	// The_THEME_YELLOW
+      "HEAD_ROW_3_PINK",	// The_THEME_PINK
       };
 
    /***** Start tabs container *****/

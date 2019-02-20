@@ -2640,7 +2640,7 @@ void Usr_PutFormLogIn (void)
 
    /***** Link to log in form *****/
    Frm_StartForm (ActFrmLogIn);
-   Ico_PutIconLink ("sign-in-alt-green.svg",Txt_Log_in);
+   Ico_PutIconLink ("sign-in-alt-white.svg",Txt_Log_in);
    Frm_EndForm ();
   }
 
@@ -2699,7 +2699,7 @@ void Usr_PutFormLogOut (void)
 
    /***** Link to log out form *****/
    Frm_StartForm (ActLogOut);
-   Ico_PutIconLink ("sign-out-alt-red.svg",Txt_Log_out);
+   Ico_PutIconLink ("sign-out-alt-white.svg",Txt_Log_out);
    Frm_EndForm ();
   }
 

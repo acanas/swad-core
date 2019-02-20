@@ -31,7 +31,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define The_NUM_THEMES 4
+#define The_NUM_THEMES 6
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -41,11 +41,13 @@ typedef enum
   {
    The_THEME_WHITE   = 0,
    The_THEME_GREY    = 1,
-   The_THEME_BLUE    = 2,
-   The_THEME_YELLOW  = 3,
-   The_THEME_UNKNOWN = 4,
+   The_THEME_PURPLE  = 2,
+   The_THEME_BLUE    = 3,
+   The_THEME_YELLOW  = 4,
+   The_THEME_PINK    = 5,
+   The_THEME_UNKNOWN = 6,
    } The_Theme_t;
-#define The_THEME_DEFAULT The_THEME_WHITE
+#define The_THEME_DEFAULT The_THEME_GREY
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

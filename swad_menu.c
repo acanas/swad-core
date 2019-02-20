@@ -330,8 +330,7 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
-   extern const char *The_ClassTxtMenuOn[The_NUM_THEMES];
-   extern const char *The_ClassTxtMenuOff[The_NUM_THEMES];
+   extern const char *The_ClassTxtMenu[The_NUM_THEMES];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
@@ -366,9 +365,7 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Start form and link *****/
          Frm_StartForm (NumAct);
-         Frm_LinkFormSubmit (Title,
-                             IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
-                                                   The_ClassTxtMenuOff[Gbl.Prefs.Theme],NULL);
+         Frm_LinkFormSubmit (Title,The_ClassTxtMenu[Gbl.Prefs.Theme],NULL);
 
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICO\""
@@ -380,8 +377,7 @@ void Mnu_WriteMenuThisTab (void)
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">"
 	                    "%s"
 	                    "</div>",
-		  IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
-                                        The_ClassTxtMenuOff[Gbl.Prefs.Theme],
+		  The_ClassTxtMenu[Gbl.Prefs.Theme],
 		  Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 
          /***** End link and form *****/

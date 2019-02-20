@@ -340,6 +340,42 @@ Hola Antonio, he ampliado el evento y nos deja comentar. El problema es que el p
 Buenos días Profesor Cañas, sé que no es nada fácil, pero pudiera hacer más versátil las hojas de calificaciones que en pocos pasos se pudiera configurar para dar promedios, parciales y definitivas. Perdone la solicitud. Soy usuario agradecido de OpenSwad.
 */
 
+/* TODO: Mensaje del profesor Joaquín Manuel Durán Álvarez
+ * Estimado Antonio:
+Como todos los años te voy a preguntar si vais a implementar una opción, en donde yo pueda bloquear a un alumno sin necesidad de borrarlo de la asignatura. Si lo borro, pierdo todos sus datos sobre trabajos entregados y las notas que le haya puesto. Y algunas veces cuando la gente aprueba, prefiero bloquearlo pero que siga dado de alta para consultar cosas.
+O incluso para gente que pierde el derecho de examen por curso y puede recuperarlo. Son múltiples situaciones distintas en las que vendría muy bien esa opción.
+Gracias por todo. Seguimos en contacto
+---
+Respuesta:
+Hola, Joaquín, ¿qué tal?
+
+He estado discutiendo tu mensaje un buen rato con Javier Fernández @jfernand y más o menos entendemos que podrían ser interesantes distintos tipos de roles, cada uno con diferentes permisos:
+
+- estudiante bloqueado
+   Sería parecido a un usuario que visita otra asignatura, en el sentido de que no podría ver nada que no sea público, ni podría editar nada, pero aparecería como estudiante bloqueado en la lista de estudiantes de la asignatura.
+
+- estudiante antiguo / estudiante invitado
+   Podría acceder a (leer) los materiales de la asignatura, pero no recibiría notificaciones ni podría editar. Aparecería en las listas como estudiante invitado.
+
+En cualquier caso el estudiante siempre podría borrarse de la asignatura, como ya ocurre con cualquiera de los roles existentes.
+
+Anoto tu comentario y mi respuesta en la lista de mejoras por estudiar e implementar, aunque ahora mismo no puedo ponerla como la primera de la lista por haber otras con mayor prioridad y por la dificultad que supone crear un nuevo rol. Hace un tiempo creé el nuevo rol de profesor no editor y llevó meses dejarlo más o menos fino, ya que, aunque está bastante sistematizado, en la práctica supone cambiar miles de líneas de código por todo el programa (que ya va por las 240 000 líneas) donde se hacen comprobaciones sobre lo que puede hacer o no cada rol.
+
+Hablando con @jfernand se nos ocurre que para el primer caso (estudiante bloqueado) sólo hay dos opciones ahora:
+- Borrarlo de la asignatura (es lo que hace Javier) por ejemplo si desaparece de las actas. En este caso te sugiero que antes de borrarlo hagas dos copias de seguridad:
+  1. En Archivos > Trabajos, crea un zip de todo y guárdalo en tu ordenador.
+  2. En Usuarios > Estudiantes > Ver como lista > Botón superior izquierdo "Mostrar todos los datos en una tabla" > Guardar esa tabla como página web o (copiarla en una hoja de cálculo) en tu ordenador.
+- Dejarlo tal cual, como si fuera un alumno más
+
+Para el segundo caso (estudiantes antiguos o invitados) tienes dos opciones:
+- Crear una asignatura cada año y dejar más o menos congeladas las asignaturas de años anteriores. Tiene la desventaja de tener que subir todo el material cada año.
+- Crear grupos dentro de la asignatura con los estudiantes de cada curso. Seguirían recibiendo notificaciones de los cambios en la asignatura.
+
+He guardado tu correo y esta respuesta en mi lista de "TO DO" (por hacer).
+Saludos,
+Antonio
+ */
+
 // TODO: Eliminar todas las preguntas de test de un golpe
 // TODO: URGENTE: Cuando se cree un descriptor nuevo TIENE QUE ESTAR INHABILITADO porque si no los alumnos pueden ver el examen (Miguel Damas)
 
@@ -395,10 +431,32 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.51 (2019-02-19)"
-#define CSS_FILE		"swad18.41.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.52 (2019-02-20)"
+#define CSS_FILE		"swad18.52.css"
 #define JS_FILE			"swad18.51.js"
 /*
+	Version 18.52:    Feb 20, 2019 	Two new color themes: purple and pink. (237424 lines)
+					Copy the following icons to icon public directory:
+sudo mkdir /var/www/html/swad/icon/theme/purple
+sudo mkdir /var/www/html/swad/icon/theme/pink
+
+sudo cp icon/theme/purple/sitemap.svg /var/www/html/swad/icon/theme/purple
+sudo cp icon/theme/blue/sitemap.svg /var/www/html/swad/icon/theme/blue
+sudo cp icon/theme/yellow/sitemap.svg /var/www/html/swad/icon/theme/yellow
+sudo cp icon/theme/pink/sitemap.svg /var/www/html/swad/icon/theme/pink
+
+sudo cp icon/theme/purple/bell.svg /var/www/html/swad/icon/theme/purple
+sudo cp icon/theme/pink/bell.svg /var/www/html/swad/icon/theme/pink
+
+sudo cp icon/theme/purple/theme_32x20.gif /var/www/html/swad/icon/theme/purple
+sudo cp icon/theme/yellow/theme_32x20.gif /var/www/html/swad/icon/theme/yellow
+sudo cp icon/theme/pink/theme_32x20.gif /var/www/html/swad/icon/theme/pink
+
+sudo cp icon/sign-out-alt-red.svg /var/www/html/swad/icon/
+sudo cp icon/sign-out-alt-white.svg /var/www/html/swad/icon/
+sudo cp icon/sign-in-alt-green.svg /var/www/html/swad/icon/
+sudo cp icon/sign-in-alt-white.svg /var/www/html/swad/icon/
+
 	Version 18.51:    Feb 19, 2019 	The number of publications by default in the timeline becomes 50 (before it was 20).
 					Changes in javascript related to timeline. (237281 lines)
 	Version 18.50.4:  Feb 18, 2019 	Fixed bug in actions. (237276 lines)
