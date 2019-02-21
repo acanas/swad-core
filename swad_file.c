@@ -500,6 +500,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
           because it could have already been deleted *****/
    if (Fil_CheckIfPathExists (Path))
       if (!lstat (Path,&FileStatus))		// On success ==> 0 is returned
+        {
 	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	   {
 	    /***** Scan the directory and delete recursively *****/
@@ -531,8 +532,10 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
 	       Lay_ShowErrorAndExit ("Error while scanning directory.");
 	   }
 	 else					// Not a directory
+	   {
 	    if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
 	       unlink (Path);
+	   }
         }
   }
 
