@@ -49054,7 +49054,10 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 
 const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =
    {
-	 // Soc_FOLLOWED
+	 // Soc_USRS_UNKNOWN
+	 NULL
+	 ,
+	 // Soc_USRS_FOLLOWED
 #if   L==1	// ca
 	"Usuaris que segueixo"
 #elif L==2	// de
@@ -49075,7 +49078,7 @@ const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =
 	"Usu&aacute;rios que estou seguindo"
 #endif
 	 ,
-	 // Soc_ALL_USRS
+	 // Soc_USRS_ALL
 #if   L==1	// ca
 	 "Tots els usuaris"
 #elif L==2	// de

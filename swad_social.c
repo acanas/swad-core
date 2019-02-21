@@ -148,6 +148,8 @@ static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
 static void Soc_PutFormWhichUsrs (void);
 static void Soc_PutParamWhichUsrs (void);
 static void Soc_GetParamsWhichUsrs (void);
+static Soc_WhichUsrs_t Soc_GetWhichUsrsFromDB (void);
+static void Soc_SaveWhichUsersInDB (void);
 
 static void Soc_ShowWarningYouDontFollowAnyUser (void);
 
@@ -277,6 +279,10 @@ void Soc_ShowTimelineGbl1 (void)
 
    /***** Get which users *****/
    Soc_GetParamsWhichUsrs ();
+
+   /***** Save which users in database *****/
+   if (Gbl.Action.Act == ActSeeSocTmlGbl)	// Only in action to see global timeline
+      Soc_SaveWhichUsersInDB ();
   }
 
 void Soc_ShowTimelineGbl2 (void)
@@ -572,7 +578,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
       case Soc_TIMELINE_GBL:	// Show the global timeline
 	 switch (Gbl.Social.WhichUsrs)
 	   {
-	    case Soc_FOLLOWED:	// Show the timeline of the users I follow
+	    case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
 	       DB_Query ("can not create temporary table",
 		         "CREATE TEMPORARY TABLE publishers "
 			 "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
@@ -585,8 +591,11 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
 	       sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod AND ");
 	       break;
-	    case Soc_ALL_USRS:	// Show the timeline of all users
+	    case Soc_USRS_ALL:	// Show the timeline of all users
 	       SubQueryPublishers[0] = '\0';
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong parameter which users.");
 	       break;
 	   }
 	 break;
@@ -700,11 +709,14 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	    case Soc_TIMELINE_GBL:	// Show the global timeline
 	       switch (Gbl.Social.WhichUsrs)
 		 {
-		  case Soc_FOLLOWED:	// Show the timeline of the users I follow
+		  case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
 		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",RangePubsToGet.Bottom);
 		     break;
-		  case Soc_ALL_USRS:	// Show the timeline of all users
+		  case Soc_USRS_ALL:	// Show the timeline of all users
 		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",RangePubsToGet.Bottom);
+		     break;
+		  default:
+		     Lay_ShowErrorAndExit ("Wrong parameter which users.");
 		     break;
 		 }
 	       break;
@@ -721,11 +733,14 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	    case Soc_TIMELINE_GBL:	// Show the global timeline
 	       switch (Gbl.Social.WhichUsrs)
 		 {
-		  case Soc_FOLLOWED:	// Show the timeline of the users I follow
+		  case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
 		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<%ld AND ",RangePubsToGet.Top);
 		     break;
-		  case Soc_ALL_USRS:	// Show the timeline of all users
+		  case Soc_USRS_ALL:	// Show the timeline of all users
 		     sprintf (SubQueryRangeTop,"PubCod<%ld AND ",RangePubsToGet.Top);
+		     break;
+		  default:
+		     Lay_ShowErrorAndExit ("Wrong parameter which users.");
 		     break;
 		 }
 	       break;
@@ -750,7 +765,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	 case Soc_TIMELINE_GBL:	// Show the global timeline
 	    switch (Gbl.Social.WhichUsrs)
 	      {
-	       case Soc_FOLLOWED:	// Show the timeline of the users I follow
+	       case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
 				             "SELECT PubCod,NotCod FROM social_pubs,publishers"
@@ -760,7 +775,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 					     SubQueryPublishers,
 					     SubQueryAlreadyExists);
 		  break;
-	       case Soc_ALL_USRS:	// Show the timeline of all users
+	       case Soc_USRS_ALL:	// Show the timeline of all users
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
 				             "SELECT PubCod,NotCod FROM social_pubs"
@@ -768,6 +783,9 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 					     " ORDER BY PubCod DESC LIMIT 1",
 					     SubQueryRangeBottom,SubQueryRangeTop,
 					     SubQueryAlreadyExists);
+		  break;
+	       default:
+		  Lay_ShowErrorAndExit ("Wrong parameter which users.");
 		  break;
 	      }
 	    break;
@@ -1057,7 +1075,7 @@ static void Soc_PutFormWhichUsrs (void)
    fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
 	              "<ul>");
 
-   for (WhichUsrs = (Soc_WhichUsrs_t) 0;
+   for (WhichUsrs = (Soc_WhichUsrs_t) 1;
 	WhichUsrs < Soc_NUM_WHICH_USRS;
 	WhichUsrs++)
      {
@@ -1079,7 +1097,7 @@ static void Soc_PutFormWhichUsrs (void)
    Frm_EndForm ();
 
    /***** Show warning if I do not follow anyone *****/
-   if (Gbl.Social.WhichUsrs == Soc_FOLLOWED)
+   if (Gbl.Social.WhichUsrs == Soc_USRS_FOLLOWED)
       Soc_ShowWarningYouDontFollowAnyUser ();
   }
 
@@ -1101,9 +1119,68 @@ static void Soc_GetParamsWhichUsrs (void)
    /***** Get which users I want to see *****/
    Gbl.Social.WhichUsrs = (Soc_WhichUsrs_t)
 	                   Par_GetParToUnsignedLong ("WhichUsrs",
-                                                     0,
+                                                     1,
                                                      Soc_NUM_WHICH_USRS - 1,
-                                                     (unsigned long) Soc_DEFAULT_WHICH_USRS);
+                                                     (unsigned long) Soc_USRS_UNKNOWN);
+
+   /***** If parameter WhichUsrs is not present, get it from database *****/
+   if (Gbl.Social.WhichUsrs == Soc_USRS_UNKNOWN)
+      Gbl.Social.WhichUsrs = Soc_GetWhichUsrsFromDB ();
+
+   /***** If parameter WhichUsrs is unknown, set it to default *****/
+   if (Gbl.Social.WhichUsrs == Soc_USRS_UNKNOWN)
+      Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
+  }
+
+/*****************************************************************************/
+/********** Get user's last data from database giving a user's code **********/
+/*****************************************************************************/
+
+static Soc_WhichUsrs_t Soc_GetWhichUsrsFromDB (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+   Soc_WhichUsrs_t WhichUsrs = Soc_USRS_UNKNOWN;
+
+   /***** Get which users from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get timeline users from user's last data",
+		       "SELECT TimelineUsrs"		   // row[0]
+		       " FROM usr_last WHERE UsrCod=%ld",
+		       Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get which users */
+      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+         if (UnsignedNum < Soc_NUM_WHICH_USRS)
+            WhichUsrs = (Soc_WhichUsrs_t) UnsignedNum;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return WhichUsrs;
+  }
+
+/*****************************************************************************/
+/********************** Save which users into database ***********************/
+/*****************************************************************************/
+
+static void Soc_SaveWhichUsersInDB (void)
+  {
+   if (Gbl.Usrs.Me.Logged)
+     {
+      if (Gbl.Social.WhichUsrs == Soc_USRS_UNKNOWN)
+	 Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
+
+      /***** Update which users in database *****/
+      // WhichUsrs is stored in usr_last for next time I log in
+      DB_QueryUPDATE ("can not update timeline users in user's last data",
+		      "UPDATE usr_last SET TimelineUsrs=%u WHERE UsrCod=%ld",
+		      (unsigned) Gbl.Social.WhichUsrs,
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
+     }
   }
 
 /*****************************************************************************/

@@ -2969,8 +2969,9 @@ mysql> DESCRIBE usr_last;
 | LastTab      | tinyint(4) | NO   |     | NULL    |       |
 | LastTime     | datetime   | NO   | MUL | NULL    |       |
 | LastAccNotif | datetime   | NO   |     | NULL    |       |
+| TimelineUsrs | tinyint(4) | NO   |     | 0       |       |
 +--------------+------------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
 			"UsrCod INT NOT NULL,"
@@ -2979,6 +2980,7 @@ mysql> DESCRIBE usr_last;
 			"LastTab TINYINT NOT NULL,"
 			"LastTime DATETIME NOT NULL,"
 			"LastAccNotif DATETIME NOT NULL,"
+			"TimelineUsrs TINYINT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(LastTime))");
 

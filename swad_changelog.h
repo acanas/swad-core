@@ -429,11 +429,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.52.4 (2019-02-21)"
+#define Log_PLATFORM_VERSION	"SWAD 18.53 (2019-02-21)"
 #define CSS_FILE		"swad18.52.4.css"
 #define JS_FILE			"swad18.51.js"
 /*
-	Version 18.52.4:  Feb 21, 2019 	Changes in pink theme. (? lines)
+	Version 18.53:    Feb 21, 2019 	Last selection of users scope in timeline is saved in database. (237538 lines)
+					1 change necessary in database:
+ALTER TABLE usr_last ADD COLUMN TimelineUsrs TINYINT NOT NULL DEFAULT 0 AFTER LastAccNotif;
+
+	Version 18.52.4:  Feb 21, 2019 	Changes in pink theme. (237459 lines)
 	Version 18.52.3:  Feb 21, 2019 	Fixed bug in removing of old temporary files. (237458 lines)
 	Version 18.52.2:  Feb 20, 2019 	Fixed bug in reception of images. (237458 lines)
 	Version 18.52.1:  Feb 20, 2019 	Messages to debug problem with files. (237425 lines)
