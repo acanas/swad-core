@@ -133,8 +133,6 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL);
 void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
                            void (*GetImageFromDB) (int NumImgInForm,struct Image *Image));
 void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm);
-Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
-void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile);
 
 void Img_MoveImageToDefinitiveDirectory (struct Image *Image);
 void Img_ShowImage (struct Image *Image,

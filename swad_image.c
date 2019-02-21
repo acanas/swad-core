@@ -65,9 +65,13 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Img_ProcessImage (struct Image *Image,
-                              const char *FileNameImgOriginal,
-                              const char *FileNameImgProcessed);
+static Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
+static void Img_GetAndProcessImageFileFromForm (struct Image *Image,
+						const char *ParamFile);
+
+static int Img_ProcessImage (struct Image *Image,
+                             const char *FileNameImgOriginal,
+                             const char *FileNameImgProcessed);
 
 /*****************************************************************************/
 /*************************** Reset image fields ******************************/
@@ -381,7 +385,7 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
 /************************* Get image action from form ************************/
 /*****************************************************************************/
 
-Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
+static Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
   {
    /***** Get parameter with the action to perform on image *****/
    return (Img_Action_t)
@@ -395,8 +399,10 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
 /**************************** Get image from form ****************************/
 /*****************************************************************************/
 
-void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile)
+static void Img_GetAndProcessImageFileFromForm (struct Image *Image,
+						const char *ParamFile)
   {
+   extern const char *Txt_The_image_could_not_be_processed_successfully;
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
@@ -407,7 +413,7 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
    char FileNameImgTmp[PATH_MAX + 1];	// Full name of temporary processed file
    bool WrongType = false;
 
-   /***** Rest image file status *****/
+   /***** Set image file status *****/
    Image->Status = Img_FILE_NONE;
 
    /***** Get filename and MIME type *****/
@@ -418,6 +424,10 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
    /* Get filename extension */
    if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
       return;
+   // PtrExtension now points to last '.' in file
+
+   PtrExtension++;
+   // PtrExtension now points to first char in extension
 
    LengthExtension = strlen (PtrExtension);
    if (LengthExtension < Fil_MIN_BYTES_FILE_EXTENSION ||
@@ -453,7 +463,7 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
    Fil_RemoveOldTmpFiles (PathImgPriv,Cfg_TIME_TO_DELETE_IMAGES_TMP_FILES,false);
 
    /***** End the reception of original not processed image
-          (it can be very big) into a temporary file *****/
+          (it may be very big) into a temporary file *****/
    Image->Status = Img_FILE_NONE;
    snprintf (FileNameImgOrig,sizeof (FileNameImgOrig),
 	     "%s/%s/%s/%s_original.%s",
@@ -469,8 +479,18 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
 	        "%s/%s/%s/%s.jpg",
 	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
 	        Image->Name);
-      Img_ProcessImage (Image,FileNameImgOrig,FileNameImgTmp);
-      Image->Status = Img_FILE_PROCESSED;
+      if (Img_ProcessImage (Image,FileNameImgOrig,FileNameImgTmp) == 0)	// Return 0 on success
+	 /* Success */
+         Image->Status = Img_FILE_PROCESSED;
+      else // Error processing image
+        {
+	 /* Error ==> remove temporary destination image file */
+	 if (Fil_CheckIfPathExists (FileNameImgTmp))
+	    unlink (FileNameImgTmp);
+
+	 /* Show error alert */
+	 Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+        }
 
       /***** Remove temporary original file *****/
       unlink (FileNameImgOrig);
@@ -480,14 +500,16 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
 /*****************************************************************************/
 /************ Process original image generating processed image **************/
 /*****************************************************************************/
+// Return 0 on success
+// Return != 0 on error
 
-static void Img_ProcessImage (struct Image *Image,
-                              const char *FileNameImgOriginal,
-                              const char *FileNameImgProcessed)
+static int Img_ProcessImage (struct Image *Image,
+                             const char *FileNameImgOriginal,
+                             const char *FileNameImgProcessed)
   {
    char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
-   char ErrorMsg[256];
+   // char ErrorMsg[256];
 
    snprintf (Command,sizeof (Command),
 	     "convert %s -resize '%ux%u>' -quality %u %s",
@@ -500,16 +522,9 @@ static void Img_ProcessImage (struct Image *Image,
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running command to process image.");
 
-   /***** Write message depending on return code *****/
    ReturnCode = WEXITSTATUS(ReturnCode);
-   if (ReturnCode != 0)
-     {
-      snprintf (ErrorMsg,sizeof (ErrorMsg),
-	        "Image could not be processed successfully.<br />"
-		"Error code returned by the program of processing: %d",
-	        ReturnCode);
-      Lay_ShowErrorAndExit (ErrorMsg);
-     }
+
+   return ReturnCode;
   }
 
 /*****************************************************************************/

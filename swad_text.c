@@ -44888,6 +44888,27 @@ const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very im
 	" corresponde a um dos existentes.";
 #endif
 
+const char *Txt_The_image_could_not_be_processed_successfully =
+#if   L==1	// ca
+	"La imatge no s'ha pogut processar correctament.";
+#elif L==2	// de
+	"Das Bild konnte nicht erfolgreich verarbeitet werden.";
+#elif L==3	// en
+	"The image could not be processed successfully.";
+#elif L==4	// es
+	"La imagen no ha podido procesarse correctamente.";
+#elif L==5	// fr
+	"L'image n'a pas pu &ecirc;tre trait&eacute;e avec succ&egrave;s.";
+#elif L==6	// gn
+	"La imagen no ha podido procesarse correctamente.";	// Okoteve traducción
+#elif L==7	// it
+	"L'immagine non pu&ograve; essere elaborata con successo.";
+#elif L==8	// pl
+	"Obraz nie m&oacute;g&lstrok; zosta&cacute; pomy&sacute;lnie przetworzony.";
+#elif L==9	// pt
+	"A imagem n&atilde;o p&ocirc;de ser processada com sucesso.";
+#endif
+
 const char *Txt_The_institution_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La instituci&oacute;n <strong>%s</strong> ya existe.";	// Necessita traduccio

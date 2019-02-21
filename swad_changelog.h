@@ -431,10 +431,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.52 (2019-02-20)"
+#define Log_PLATFORM_VERSION	"SWAD 18.52.2 (2019-02-21)"
 #define CSS_FILE		"swad18.52.css"
 #define JS_FILE			"swad18.51.js"
 /*
+	Version 18.52.2:  Feb 20, 2019 	Fixed bug in reception of images. (237458 lines)
+	Version 18.52.1:  Feb 20, 2019 	Messages to debug problem with files. (237425 lines)
 	Version 18.52:    Feb 20, 2019 	Two new color themes: purple and pink. (237424 lines)
 					Copy the following icons to icon public directory:
 sudo mkdir /var/www/html/swad/icon/theme/purple
